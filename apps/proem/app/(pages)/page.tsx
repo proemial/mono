@@ -7,8 +7,6 @@ import logo from "@/app/images/logo.png";
 // import { queryClient } from "../state/react-query";
 // import { PaperFeed } from "./feed";
 
-export const revalidate = 1;
-
 export default function HomePage() {
   return (
     // <QueryClientProvider client={queryClient}>
