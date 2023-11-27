@@ -1,0 +1,16 @@
+
+### [DEV] Search OpenAlex
+POST http://localhost:8000/api/v1/search/edge HTTP/1.1
+content-type: application/json
+
+{
+    "q": "Chain of Density"
+}
+
+### [PROD] Search OpenAlex
+POST https://search.proem.ai/api/v1/search HTTP/1.1
+content-type: application/json
+
+{
+  "q": "Chain of Density"
+}
