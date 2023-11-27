@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Anek_Malayalam } from "next/font/google";
 import { ReactNode } from "react";
+import { AnalyticsClient } from "@/app/components/analytics";
 
 const font = Anek_Malayalam({ subsets: ["latin"], display: "swap" });
 const lightModeEnabled = false;
@@ -32,7 +33,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
           {/*<MainMenu />*/}
         </main>
-        {/*<AnalyticsClient />*/}
+        <AnalyticsClient />
       </body>
     </html>
     // </UserProvider>
