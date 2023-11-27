@@ -1,4 +1,3 @@
-"use client";
 // import dynamic from "next/dynamic";
 import logo from "@/app/images/logo.png";
 // import { QueryClientProvider } from "@tanstack/react-query";
