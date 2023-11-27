@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.katex {
+  font-size: inherit !important;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+h1,
+h2,
+h3 {
+  margin: 8px 0;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: x-large;
+}
+
+h2 {
+  font-size: larger;
+}
+
+h3 {
+  font-size: large;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 215 20.2% 65.1%;
+
+    --radius: 0.5rem;
+  }
+
+  /*
+  foreground: 0 0% 100% (#ffffff)
+
+  primary: 274 68% 42% (#7523B5)
+  Gradient: 274 68% 42% - 270 82% 27% (#7523B5 - #450D7D)
+
+  background: 0 0 0% (#000000)
+
+  secondary: 103 42% 41% (#55943D)
+  Gradient: 103 42% 41% - 147 98% 22% (#55943D - #016D31)
+
+  muted: 0 0 0% (#000000)
+  muted-foreground: 270 100% 90% (#E5CCFF)
+  muted-foreground-disabled: 0 0% 53% (#888888)
+
+  purple: 274 100% 72% (#C171FF)
+  turquise: 170 100% 50% (#00FFD5)
+  */
+
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+
+    --muted: 0 0% 100%;
+    --muted-foreground: 270 100% 90%;
+    --muted-foreground-disabled: 0 0% 53%;
+
+    --accent: 216 34% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --popover: 0 0% 0%;
+    --popover-foreground: 215 20.2% 65.1%;
+
+    --border: 0 0% 100%;
+    --input: 103 42% 41%;
+
+    --card: 0 0% 0%;
+    --card-foreground: 213 31% 91%;
+
+    /* TODO: Use gradient */
+    --primary: 274 68% 42%;
+    --primary-gradient-end: 270 82% 27%;
+    --primary-foreground: 0 0% 100%;
+
+    /* TODO: Use gradient */
+    --secondary: 103 42% 41%;
+    --secondary-gradient-end: 147 98% 22%;
+    --secondary-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --light-purple: 274 100% 72%;
+    --turquise: 170 100% 50%;
+
+    --ring: 170 100% 50%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  /** {*/
+  /*  @apply border-border;*/
+  /*}*/
+  body {
+    @apply bg-background text-foreground;
+  }
+}
