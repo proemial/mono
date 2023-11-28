@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { fetchPapers } from "@/app/api/v1/search/oapaper";
 import { Time } from "@proemial/utils/time";
+import { fetchPapers } from "@/app/api/v1/search/search";
 
 export const runtime = "edge";
 

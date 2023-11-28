@@ -91,6 +91,9 @@ importers:
         specifier: ^0.32.6
         version: 0.32.6
     devDependencies:
+      '@proemial/models':
+        specifier: workspace:*
+        version: link:../../packages/models
       '@proemial/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
@@ -115,6 +118,15 @@ importers:
       tailwindcss:
         specifier: ^3.3.0
         version: 3.3.5
+      typescript:
+        specifier: ^5
+        version: 5.3.2
+
+  packages/models:
+    devDependencies:
+      '@proemial/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
       typescript:
         specifier: ^5
         version: 5.3.2

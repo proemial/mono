@@ -1,0 +1,11 @@
+{
+  "name": "@proemial/models",
+  "version": "0.0.0",
+  "main": "./index.tsx",
+  "types": "./index.tsx",
+  "license": "MIT",
+  "devDependencies": {
+    "@proemial/typescript-config": "workspace:*",
+    "typescript": "^5"
+  }
+}
