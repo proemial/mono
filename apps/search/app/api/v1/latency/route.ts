@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { Log, Time } from "@/app/utils/time";
+import { Time } from "@proemial/utils/time";
 
 export async function POST(req: Request) {
   const begin = Time.now();
@@ -8,6 +8,6 @@ export async function POST(req: Request) {
     const body = await req.json();
     return NextResponse.json(body);
   } finally {
-    Log.metrics(begin, "api/v1/latency");
+    Time.log(begin, "api/v1/latency");
   }
 }

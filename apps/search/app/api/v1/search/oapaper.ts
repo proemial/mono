@@ -1,4 +1,5 @@
-import { Log, Time } from "@/app/utils/time";
+import { fetchSomeResults } from "@proemial/utils/fetch";
+import { fromInvertedIndex } from "@proemial/utils/string";
 
 export type OpenAlexPaper = {
   title: string;
@@ -15,49 +16,4 @@ export async function fetchPapers(q: string) {
     title: o.title,
     abstract: fromInvertedIndex(o.abstract_inverted_index),
   }));
-}
-
-function fromInvertedIndex(index: { [key: string]: number[] }) {
-  const begin = Time.now();
-
-  try {
-    const tokens = [] as string[];
-
-    // @ts-ignore
-    Object.keys(index).forEach((k) => index[k].forEach((a) => (tokens[a] = k)));
-
-    return tokens.join(" ");
-  } finally {
-    Log.metrics(begin, "fromInvertedIndex");
-  }
-}
-
-async function fetchSomeResults<T>(
-  query: string,
-  count: number,
-  selector?: (item: T) => object,
-) {
-  const begin = Time.now();
-
-  try {
-    const response = await fetchJson<{ results: Array<T> }>(query);
-    const some = response.results.slice(0, count);
-
-    return !selector ? some : some.map(selector);
-  } finally {
-    Log.metrics(begin, "fetchSomeResults");
-  }
-}
-
-async function fetchJson<T>(url: string) {
-  const begin = Time.now();
-
-  try {
-    const response = await fetch(url);
-    const json = await response.json();
-
-    return json as T;
-  } finally {
-    Log.metrics(begin, "fetchJson");
-  }
 }

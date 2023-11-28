@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { fetchPapers } from "@/app/api/v1/search/oapaper";
-import { Log, Time } from "@/app/utils/time";
+import { Time } from "@proemial/utils/time";
 
 export async function POST(req: Request) {
   const begin = Time.now();
@@ -12,6 +12,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json(response);
   } finally {
-    Log.metrics(begin, "api/v1/search");
+    Time.log(begin, "api/v1/search");
   }
 }

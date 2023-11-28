@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@proemial/typescript-config": "workspace:*",
+    "@proemial/utils": "workspace:*",
     "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",

@@ -1,0 +1,15 @@
+{
+  "name": "@proemial/utils",
+  "version": "0.0.0",
+  "main": "./index.tsx",
+  "types": "./index.tsx",
+  "license": "MIT",
+  "dependencies": {
+    "dayjs": "^1",
+    "dayjs-plugin-utc": "^0.1.2"
+  },
+  "devDependencies": {
+    "@proemial/typescript-config": "workspace:*",
+    "typescript": "^5"
+  }
+}
