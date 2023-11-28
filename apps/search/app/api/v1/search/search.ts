@@ -5,11 +5,36 @@ import { OpenAlexPaper } from "@proemial/models/open-alex";
 
 const baseUrl = "https://api.openalex.org/works?filter=is_oa:true";
 
-export async function fetchPapers(q: string) {
+export async function fetchPapers(
+  q: string,
+  count = 5,
+  includes = [] as string[],
+) {
   const query = `${baseUrl},abstract.search:${encodeURIComponent(q)}`;
 
-  return await fetchSomeResults<OpenAlexPaper>(query, 3, (o) => ({
-    title: o.title,
-    abstract: fromInvertedIndex(o.abstract_inverted_index),
-  }));
+  return await fetchSomeResults<OpenAlexPaper>(query, count, (o) =>
+    includes?.includes("raw")
+      ? o
+      : {
+          title: o.title,
+          abstract: fromInvertedIndex(o.abstract_inverted_index),
+          concepts: extractConcepts(o, includes),
+          ids: extractIds(o, includes),
+        },
+  );
+}
+
+function extractConcepts(paper: OpenAlexPaper, includes?: string[]) {
+  return !includes?.includes("concepts")
+    ? undefined
+    : paper.concepts
+        .sort((a, b) => a.level - b.level)
+        .map((c) => ({
+          name: c.display_name,
+          level: c.level,
+        }));
+}
+
+function extractIds(paper: OpenAlexPaper, includes: string[]) {
+  return !includes?.includes("ids") ? undefined : paper.ids;
 }
