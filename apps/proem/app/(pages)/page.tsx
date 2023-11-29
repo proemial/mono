@@ -1,15 +1,20 @@
 // import dynamic from "next/dynamic";
 import logo from "@/app/images/logo.png";
+import { Anek_Malayalam } from "next/font/google";
 // import { QueryClientProvider } from "@tanstack/react-query";
 // import { useAuthActions } from "../components/authentication";
 // import { Button } from "../components/shadcn-ui/button";
 // import { queryClient } from "../state/react-query";
 // import { PaperFeed } from "./feed";
 
+const font = Anek_Malayalam({ subsets: ["latin"], display: "swap" });
+
 export default function HomePage() {
   return (
     // <QueryClientProvider client={queryClient}>
-    <main className={`min-h-[calc(100dvh-48px)] flex flex-col justify-begin`}>
+    <main
+      className={`${font.className} min-h-[calc(100dvh-48px)] flex flex-col justify-begin`}
+    >
       <div
         className={`h-[calc(100dvh-48px)] max-h-screen flex flex-col justify-center items-center bg-zinc-900`}
       >
