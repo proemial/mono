@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Anek_Malayalam } from "next/font/google";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import { AnalyticsClient } from "@/app/components/analytics";
 
 const font = Anek_Malayalam({ subsets: ["latin"], display: "swap" });
@@ -28,12 +28,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           }}
         >
           <div className={`flex-1 overflow-y-scroll overflow-x-clip`}>
-            {children}
+            <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
           </div>
 
           {/*<MainMenu />*/}
         </main>
-        <AnalyticsClient />
+        <Suspense fallback={<div>Loading...</div>}>
+          <AnalyticsClient />
+        </Suspense>
       </body>
     </html>
     // </UserProvider>
