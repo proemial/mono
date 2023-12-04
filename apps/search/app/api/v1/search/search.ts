@@ -4,7 +4,7 @@ import { fromInvertedIndex } from "@proemial/utils/string";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import jp from "jsonpath";
 
-const baseUrl = "https://api.openalex.org/works?filter=is_oa:true";
+const baseUrl = "https://api.openalex.org/works?filter=has_abstract:true";
 
 export async function fetchPapers(
   q: string,
@@ -12,10 +12,12 @@ export async function fetchPapers(
   includes = [] as string[],
   filter = [] as string[],
 ) {
-  const filterStr = filter?.length ? `,${filter.join(",")}` : "";
-  const query = `${baseUrl},abstract.search:${encodeURIComponent(
-    q,
-  )}${filterStr}`;
+  const searchStr = `abstract.search:${encodeURIComponent(q)}`;
+  const filterStr = filter?.length
+    ? `,${filter.map(encodeURIComponent).join(",")}`
+    : "";
+  const query = `${baseUrl},${searchStr}${filterStr}`;
+  console.log("query", query);
 
   return await fetchSomeResults<OpenAlexPaper>(query, count, (o) => {
     const queryData = {};
