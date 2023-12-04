@@ -17,24 +17,25 @@ export async function fetchPapers(
       ? o
       : {
           title: o.title,
+          link: o.id.replace("openalex.org", "proem.ai/oa"),
           abstract: fromInvertedIndex(o.abstract_inverted_index),
-          concepts: extractConcepts(o, includes),
-          ids: extractIds(o, includes),
+          // concepts: extractConcepts(o, includes),
+          // ids: extractIds(o, includes),
         },
   );
 }
 
-function extractConcepts(paper: OpenAlexPaper, includes?: string[]) {
-  return !includes?.includes("concepts")
-    ? undefined
-    : paper.concepts
-        .sort((a, b) => a.level - b.level)
-        .map((c) => ({
-          name: c.display_name,
-          level: c.level,
-        }));
-}
-
-function extractIds(paper: OpenAlexPaper, includes: string[]) {
-  return !includes?.includes("ids") ? undefined : paper.ids;
-}
+// function extractConcepts(paper: OpenAlexPaper, includes?: string[]) {
+//   return !includes?.includes("concepts")
+//     ? undefined
+//     : paper.concepts
+//         .sort((a, b) => a.level - b.level)
+//         .map((c) => ({
+//           name: c.display_name,
+//           level: c.level,
+//         }));
+// }
+//
+// function extractIds(paper: OpenAlexPaper, includes: string[]) {
+//   return !includes?.includes("ids") ? undefined : paper.ids;
+// }
