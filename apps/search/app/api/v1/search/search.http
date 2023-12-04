@@ -27,11 +27,9 @@ content-type: application/json
 }
 
 ### [PROD] Search OpenAlex
-POST https://search.proem.ai/api/v1/search/edge HTTP/1.1
+POST https://search.proem.ai/api/v1/search HTTP/1.1
 content-type: application/json
 
 {
-  "q": "alcohol risk thrombus",
-  "count": 20,
-  "includes": ["$.publication_date"]
+  "q": "effect of limited alcohol consumption on thrombus risk"
 }

@@ -8,7 +8,7 @@ const baseUrl = "https://api.openalex.org/works?filter=has_abstract:true";
 
 export async function fetchPapers(
   q: string,
-  count = 5,
+  count = 3,
   includes = [] as string[],
   filter = [] as string[],
 ) {
