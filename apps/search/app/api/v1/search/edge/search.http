@@ -7,10 +7,30 @@ content-type: application/json
     "q": "Chain of Density"
 }
 
+### [DEV] Search OpenAlex with includes
+POST http://localhost:8000/api/v1/search/edge HTTP/1.1
+content-type: application/json
+
+{
+  "q": "Chain of Density",
+  "includes": ["$.id", "$.publication_year", "$.type", "$.primary_location.source.display_name"]
+}
+
+### [DEV] Search OpenAlex with filter
+POST http://localhost:8000/api/v1/search/edge HTTP/1.1
+content-type: application/json
+
+{
+  "q": "Chain of Density",
+  "includes": ["$.publication_date"],
+  "filter": ["publication_date:>2023-10-16", "publication_date:<2023-11-16"]
+}
+
 ### [PROD] Search OpenAlex
 POST https://search.proem.ai/api/v1/search/edge HTTP/1.1
 content-type: application/json
 
 {
-  "q": "Chain of Density"
+  "q": "alcohol risk thrombus",
+  "count": 20
 }

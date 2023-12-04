@@ -2,6 +2,7 @@
 import { fetchSomeResults } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
+import jp from "jsonpath";
 
 const baseUrl = "https://api.openalex.org/works?filter=is_oa:true";
 
@@ -9,33 +10,29 @@ export async function fetchPapers(
   q: string,
   count = 5,
   includes = [] as string[],
+  filter = [] as string[],
 ) {
-  const query = `${baseUrl},abstract.search:${encodeURIComponent(q)}`;
+  const filterStr = filter?.length ? `,${filter.join(",")}` : "";
+  const query = `${baseUrl},abstract.search:${encodeURIComponent(
+    q,
+  )}${filterStr}`;
 
-  return await fetchSomeResults<OpenAlexPaper>(query, count, (o) =>
-    includes?.includes("raw")
-      ? o
-      : {
-          title: o.title,
-          link: o.id.replace("openalex.org", "proem.ai/oa"),
-          abstract: fromInvertedIndex(o.abstract_inverted_index),
-          // concepts: extractConcepts(o, includes),
-          // ids: extractIds(o, includes),
-        },
-  );
+  return await fetchSomeResults<OpenAlexPaper>(query, count, (o) => {
+    const queryData = {};
+
+    includes.forEach((expr) => {
+      if (o && expr) {
+        const data = jp.query(o, expr);
+        // @ts-ignore
+        queryData[expr] = data.length > 1 ? data : data[0];
+      }
+    });
+
+    return {
+      ...queryData,
+      title: o.title,
+      link: o.id.replace("openalex.org", "proem.ai/oa"),
+      abstract: fromInvertedIndex(o.abstract_inverted_index),
+    };
+  });
 }
-
-// function extractConcepts(paper: OpenAlexPaper, includes?: string[]) {
-//   return !includes?.includes("concepts")
-//     ? undefined
-//     : paper.concepts
-//         .sort((a, b) => a.level - b.level)
-//         .map((c) => ({
-//           name: c.display_name,
-//           level: c.level,
-//         }));
-// }
-//
-// function extractIds(paper: OpenAlexPaper, includes: string[]) {
-//   return !includes?.includes("ids") ? undefined : paper.ids;
-// }

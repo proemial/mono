@@ -15,7 +15,8 @@
     "react-dom": "^18",
     "next": "14.0.3",
     "@vercel/analytics": "^1",
-    "sharp": "^0.32.6"
+    "sharp": "^0.32.6",
+    "jsonpath": "^1.1.1"
   },
   "devDependencies": {
     "@proemial/typescript-config": "workspace:*",
@@ -25,6 +26,7 @@
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
     "postcss": "^8",
-    "tailwindcss": "^3.3.0"
+    "tailwindcss": "^3.3.0",
+    "@types/jsonpath": "^0.2.4"
   }
 }
