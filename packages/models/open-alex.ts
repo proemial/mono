@@ -8,9 +8,11 @@ export type OpenAlexSearchResult = {
 };
 
 export type OpenAlexPaper = {
+  relevance_score: number;
   id: string;
   doi: string;
   title: string;
+  display_name: string;
   publication_date: string;
   updated_date: string;
   ids: {
