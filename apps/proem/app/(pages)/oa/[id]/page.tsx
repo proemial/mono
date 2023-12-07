@@ -22,7 +22,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
       type: "article",
       images: [
         {
-          url: `/api/og/${params.id}?text=${description}`,
+          url: `https://proem.ai/api/og/${params.id}?text=${description}`,
           width: 400,
           height: 200,
           alt: description,
