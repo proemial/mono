@@ -1,12 +1,12 @@
 type Props = {
   params: { id: string };
-  searchParams: { text?: string };
+  searchParams: { text?: string; title?: string };
 };
 
 export async function generateMetadata({ params, searchParams }: Props) {
   const title = `Proem - ${params.id}`;
 
-  let description = searchParams.text;
+  let description = searchParams.text || searchParams.title;
   // if(!description) {
   //     const { text } = await PapersDao.getGptSummary(params.id, 'sm');
   //     const {sanitized} = sanitize(text);
