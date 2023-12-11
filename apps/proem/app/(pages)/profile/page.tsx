@@ -8,7 +8,7 @@ import { Button } from "@/app/components/shadcn-ui/button";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import * as React from "react";
 
-export default function Page() {
+export default function ProfilePage() {
   const { user } = useUser();
   const initials = user?.name?.split(" ").map((name) => name.charAt(0));
 
