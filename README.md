@@ -1,52 +1,55 @@
-# Turborepo starter
+# Proem monorepo
 
-This is an official starter Turborepo.
+This monorepo is based on turborepo.
 
-## Using this example
+## Requirements
 
-Run the following command:
-
-```sh
-npx create-turbo@latest
+The latest LTS releases of:
+* node & pnpm
+* A `.env.local` file in the `/apps/proem` directory, containing the following keys:
+```
+SENTRY_URL=
+AUTH0_SECRET=
+AUTH0_ISSUER_BASE_URL=https://proem.eu.auth0.com
+AUTH0_BASE_URL=http://127.0.0.1/
+AUTH0_CLIENT_ID=
+AUTH0_CLIENT_SECRET=
+AUTH0_SCOPE=openid profile read:shows
+AUTH0_AUDIENCE=https://proem.eu.auth0.com/api/v2/
 ```
 
 ## What's inside?
 
-This Turborepo includes the following packages/apps:
-
 ### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `proem`: The main app
+- `search`: The search api, used by ChatGPT
+- `packages/data`: Helpers for accessing various api's
+- `packages/models`: Shared models
+- `packages/utils`: Pure TS utilities 
+- `packages/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+### Install
 
-### Utilities
+To install all dependencies, run the following command from the repository root:
 
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+```
+pnpm i
+```
 
 ### Build
 
-To build all apps and packages, run the following command:
+To build all apps and packages, run the following command from the repository root:
 
 ```
-cd my-turborepo
 pnpm build
 ```
 
 ### Develop
 
-To develop all apps and packages, run the following command:
+To develop all apps and packages, run the following command from the repository root:
 
 ```
-cd my-turborepo
 pnpm dev
 ```
 
@@ -57,7 +60,6 @@ Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo
 By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
 
 ```
-cd my-turborepo
 npx turbo login
 ```
 
