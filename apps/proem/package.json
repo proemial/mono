@@ -12,7 +12,17 @@
     "react": "^18",
     "react-dom": "^18",
     "@vercel/analytics": "^1",
-    "sharp": "^0.32.6"
+    "sharp": "^0.32.6",
+    "@auth0/nextjs-auth0": "^3",
+    "lucide-react": "^0.294.0",
+    "base64url": "^3",
+    "zustand": "^4",
+    "clsx": "^1",
+    "class-variance-authority": "^0.6.1",
+    "@radix-ui/react-slot": "^1",
+    "@radix-ui/react-toast": "^1",
+    "@radix-ui/react-avatar": "^1",
+    "cookies-next": "^2"
   },
   "devDependencies": {
     "@proemial/typescript-config": "workspace:*",

@@ -1,39 +1,43 @@
+import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { Anek_Malayalam } from "next/font/google";
+import { MainMenu } from "@/app/components/menu/menu";
 import "./globals.css";
-import type { Metadata } from "next";
-import { ReactNode, Suspense } from "react";
 import { AnalyticsClient } from "@/app/components/analytics";
+import { ReactNode } from "react";
 
 const lightModeEnabled = false;
 
-export const metadata: Metadata = {
-  title: "Proem",
+export const metadata = {
+  title: "proem",
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+type Props = {
+  children: ReactNode;
+};
+
+export default async function RootLayout({ children }: Props) {
   const light = lightModeEnabled ? "dark:dark" : "dark";
 
   return (
-    // <UserProvider>
-    <html lang="en">
-      <body className={`flex justify-center overflow-clip ${light}`}>
-        <main
-          className="min-h-screen max-h-screen w-full max-w-[640px] flex flex-col"
-          style={{
-            minHeight: "100dvh",
-            maxHeight: "100dvh",
-          }}
-        >
-          <div className={`flex-1 overflow-y-scroll overflow-x-clip`}>
-            <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
-          </div>
+    <UserProvider>
+      <html lang="en">
+        <body className={`flex justify-center overflow-clip ${light}`}>
+          <main
+            className="min-h-screen max-h-screen w-full max-w-[640px] flex flex-col"
+            style={{
+              minHeight: "100dvh",
+              maxHeight: "100dvh",
+            }}
+          >
+            <div className={`flex-1 overflow-y-scroll overflow-x-clip`}>
+              {children}
+            </div>
 
-          {/*<MainMenu />*/}
-        </main>
-        <Suspense fallback={<div>Loading...</div>}>
+            <MainMenu />
+          </main>
           <AnalyticsClient />
-        </Suspense>
-      </body>
-    </html>
-    // </UserProvider>
+        </body>
+      </html>
+    </UserProvider>
   );
 }

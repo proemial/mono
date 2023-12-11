@@ -1,4 +1,3 @@
-const { fontFamily } = require("tailwindcss/defaultTheme");
 const plugin = require("tailwindcss/plugin");
 
 /** @type {import('tailwindcss').Config} */
@@ -87,10 +86,7 @@ module.exports = {
         "2xl": ["20px", { lineHeight: "24px", fontWeight: "500" }],
         "3xl": ["32px", { lineHeight: "40px", fontWeight: "500" }],
       },
-      fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
-        heading: ["var(--font-heading)", ...fontFamily.sans],
-      },
+      fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
       keyframes: {
         "accordion-down": {
           from: { height: 0 },
