@@ -8,18 +8,22 @@ import logo from '../assets/proemial-logo.svg';
 <nav>
   <div class="nav-list-container">
   <div class="name">Proemial</div>
+
+
+  <div class="list-container">
   <ul>
     <li class="list-title">Products</li>
-    <li>Proem <span class="label">Coming soon</span></li>
-    <li>Proem for GPT <span class="label full">Try it now</span></li>
+    <li>Proem <span class="label">coming soon</span></li>
+    <li>Proem for GPT <span class="label">coming soon</span></li>
   </ul>
 
   <ul>
     <li class="list-title">Company</li>
-    <li>News</li>
-    <li>About</li>
-    <li>Jobs <span class="label">2</span></li>
+    <a href="#"><li>News</li></a>
+    <!-- <li>About</li> -->
+    <a href="#"></h><li>Jobs <span class="label">2</span></li></a>
   </ul>
+</div>
 </div>
 
   <div class="logo">
@@ -39,6 +43,19 @@ import logo from '../assets/proemial-logo.svg';
     font-weight:300;
     position: relative;
     z-index: 100;
+  }
+
+  a{
+    color:#fff;
+    text-decoration: none;
+  }
+
+  a:hover{
+   color: $color-primary-brand;
+  }
+
+  a:hover span{
+    border: 1px solid $color-primary-brand;
   }
 
   .name{
@@ -62,6 +79,11 @@ import logo from '../assets/proemial-logo.svg';
     padding: 0px;
   }
 
+  .list-container{
+    display: flex;
+    gap: 4rem;
+  }
+
   .list-title{
     color: $color-secondary-text;
   }
@@ -80,5 +102,31 @@ import logo from '../assets/proemial-logo.svg';
     border:none;
     color: $color-inverted-text;
   }
+
+  @media only screen and (max-width: 900px) {
+  
+    .list-container{
+      display: none;
+    }
+
+    .name{
+      font-size: $text-size-medium-small;
+    }
+
+    .logo img{
+      max-width: 14px;
+    }
+
+    .nav-list-container{
+      align-items: center;
+    }
+  
+
+    nav{
+      padding: 16px;
+    }
+  }
+
+
 
 </style>
