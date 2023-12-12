@@ -1,33 +1,35 @@
 ---
 import { Image } from 'astro:assets';
-import logo from '../assets/proemial-logo.svg';
+import logo from '../assets/logo-black.svg';
+import plus from '../assets/add-black.svg';
+import plusBlack from '../assets/add-black.svg';
 
 ---
 
 
 <nav>
+  
+  <div class="mobile-nav-button" id="nav-button">
+    <img id="open-icon" class="white" src={plus.src}>
+  </div>
   <div class="nav-list-container">
-  <div class="name">Proemial</div>
-
-
-  <div class="list-container">
-  <ul>
-    <li class="list-title">Products</li>
-    <li>Proem <span class="label">coming soon</span></li>
-    <li>Proem for GPT <span class="label">coming soon</span></li>
-  </ul>
-
-  <ul>
-    <li class="list-title">Company</li>
-    <a href="#"><li>News</li></a>
-    <!-- <li>About</li> -->
-    <a href="#"></h><li>Jobs <span class="label">2</span></li></a>
-  </ul>
-</div>
-</div>
-
+    <div id="name" class="name">Proemial</div>
+    <div id="list-container" class="list-container close">
+      <ul>
+        <li class="list-title">Products</li>
+        <li>Proem <span class="label">coming soon</span></li>
+        <li>Proem for GPT <span class="label">coming soon</span></li>
+      </ul>
+      <ul>
+        <li class="list-title">Company</li>
+        <a href="#"><li>News</li></a>
+        <!-- <li>About</li> -->
+        <a href="#"></h><li>Jobs <span class="label">2</span></li></a>
+      </ul>
+    </div>
+  </div>
   <div class="logo">
-    <img src={logo.src}>
+    <img id="logo" class="white" src={logo.src}>
   </div>
 </nav>
 
@@ -43,7 +45,9 @@ import logo from '../assets/proemial-logo.svg';
     font-weight:300;
     position: relative;
     z-index: 100;
+
   }
+
 
   a{
     color:#fff;
@@ -53,6 +57,8 @@ import logo from '../assets/proemial-logo.svg';
   a:hover{
    color: $color-primary-brand;
   }
+
+
 
   a:hover span{
     border: 1px solid $color-primary-brand;
@@ -103,30 +109,129 @@ import logo from '../assets/proemial-logo.svg';
     color: $color-inverted-text;
   }
 
+  .mobile-nav-button{
+    display: none;
+  }
+
+  .white{
+      filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(79deg) brightness(107%) contrast(102%);
+    }
+
   @media only screen and (max-width: 900px) {
-  
-    .list-container{
-      display: none;
+
+   
+
+    li{
+      color: $color-inverted-text !important;
+      font-size: 24px;
+    }
+    .close{
+      transform: translateY(calc((-100vh) - 100px));
+    }
+    .open{
+      transform: translateY(0);
     }
 
     .name{
       font-size: $text-size-medium-small;
     }
 
+    .logo{
+      z-index: 300;
+    }
+
+    .name{
+      z-index: 300;
+    }
+
     .logo img{
       max-width: 14px;
     }
 
-    .nav-list-container{
-      align-items: center;
+    .list-container{
+      left: 0px;
+      position: absolute;
+      display: flex;
+      flex-direction:column;
+      align-items: flex-start;
+      height: 100vh;
+      background-color: $color-primary-brand;
+      z-index: 210;
+      top:-1px;
+      padding: 64px 16px;
+      transition: all ease 0.4s;
+      width: 100vw;
     }
+
+    .label{
+      border: 1px solid black;
+    }
+
+  
   
 
     nav{
       padding: 16px;
     }
+
+    .rotate{
+      transform: rotate(45deg);
+    }
+
+    .mobile-nav-button{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position:absolute;
+      top: -5px;
+      width: 48px;
+      padding: 24px;
+      margin-left: auto;
+      margin-right: auto;
+      left: 0;
+      right: 0;
+      z-index: 300;
+      transition: all ease 0.25s;
+    }
+
+    .mobile-nav-button img{
+      width: 20px;
+    }
   }
-
-
-
 </style>
+
+<script>
+  const navButton = document.getElementById("nav-button");
+  const navBar = document.getElementById("list-container");
+  const name = document.getElementById("name");
+  const icon = document.getElementById("open-icon")
+  const logo = document.getElementById("logo")
+  let navIsOpen = true;
+
+  navButton.addEventListener("click", navToggle);
+
+  function navToggle(){
+
+    if(navIsOpen){
+      console.log(navIsOpen);
+      navBar.classList.remove("close")
+      navBar.classList.add("open")
+      icon.classList.add("rotate")  
+      name.style.color = "black"
+      icon.classList.remove("white");
+      logo.classList.remove("white");
+      navIsOpen = false;
+    }
+    else{
+      console.log(navIsOpen);
+      navBar.classList.remove("open")
+      navBar.classList.add("close")
+      icon.classList.remove("rotate")
+      icon.classList.add("white");
+      logo.classList.add("white");
+      name.style.color = "white"
+      navIsOpen = true;
+    }
+
+  }
+</script>

@@ -11,7 +11,7 @@
     <div class="g4"></div> -->
     <!-- <div class="transbox"></div> -->
   </div>
-  
+  <div class="bottom-gradient"></div>
 </div>
 
 
@@ -24,6 +24,7 @@
   overflow: hidden;
   top: 0;
   left: 0;
+  z-index: -10;
 
 }
 
@@ -104,6 +105,15 @@ svg{
   left: calc(30% - 400px / 2);
   top: calc(60% - 400px / 2);
   /* opacity: 0.5; */
+}
+
+.bottom-gradient{
+  width: 100vw;
+  height: 60vh;
+  background: rgb(26,26,26);
+background: linear-gradient(0deg, rgba(26,26,26,1) 0%, rgba(26,26,26,0) 100%);
+position: absolute;
+  bottom:0;
 }
 
 @keyframes moveAnimationOne {
