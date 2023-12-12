@@ -9,10 +9,16 @@ interface Props {
 const { title } = Astro.props;
 ---
 
-<form method="post" action="https://script.google.com/a/proemial.ai/macros/s/AKfycbxvMJigU-ItXTaz85I0oIN-Zu4wVmBOYz_j_tlS6npe/dev">
-  <input type="text" placeholder="Your name here" name="name" id="name"/>
-  <input type="text" placeholder="Your email here" name="email" id="email"/>
+<!-- <form method="post" action="https://script.google.com/a/proemial.ai/macros/s/AKfycbxvMJigU-ItXTaz85I0oIN-Zu4wVmBOYz_j_tlS6npe/dev">
+  <input type="text" placeholder="Your name here" name="name" id="name"/ required>
+  <input type="email" placeholder="Your email here" name="email" id="email"/ required>
   <button>{title} <img src={arrow.src}></button>
+</form> -->
+
+<form id="waitlist-form" method="post" action="https://script.google.com/a/proemial.ai/macros/s/AKfycbxvMJigU-ItXTaz85I0oIN-Zu4wVmBOYz_j_tlS6npe/dev">
+  <input id="form-name" type="text" placeholder="Your name here" name="name" required>
+  <input id="form-email" type="email" placeholder="Your email here" name="email" required>
+  <button id="submit-button" type="button">{title} <img src={arrow.src}></button>
 </form>
 
 
@@ -50,5 +56,33 @@ button{
   background-color: $color-primary-brand;
   color: $color-inverted-text;
 }
-
 </style>
+
+<script>
+
+  const submitButton = document.getElementById('submit-button');
+  const nameInput = document.getElementById("form-name")
+  const emailInput = document.getElementById("form-email")
+  submitButton.addEventListener('click', (submitForm))
+  
+  async function submitForm() {
+    emailInput.value;
+    nameInput.value;
+
+    try {
+      const response = await fetch('/api/submitForm.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nameInput, emailInput }),
+      });
+
+      const data = await response.json();
+      console.log('Success:', data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+   
+</script>
