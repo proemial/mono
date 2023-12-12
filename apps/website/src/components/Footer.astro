@@ -1,0 +1,132 @@
+---
+import { Image } from 'astro:assets';
+import graphic from '../assets/footer-asset.svg';
+import arrow from '../assets/arrow-white.svg';
+---
+
+<footer>
+<img src={graphic.src}>
+<div class="footer-container">
+  <div>
+    <h4>Proemial</h4>
+    <p class="description">Proem is the new platform for quickly reading and getting an understanding of research papers. We use large language models to analyze and distill papers into digestible summaries and even enable you to ask questions directly to the papers. Get all the info you need upfront before investing time to read a full paper</p>
+    <button>Join the waitlist <img class="arrow" src={arrow.src}></button>
+  </div>
+  <div>
+    <p>Products</p>
+    <ul>
+      <li>Proem <span class="label">Coming soon</span></li>
+      <li>Proem for GPT <span class="label full">Try it now</span></li>
+    </ul>
+  </div>
+  <div>
+    <p>Company</p>
+    <ul>
+      <li>News</li>
+      <li>About</li>
+      <li>Jobs <span class="label">2</span></li>
+    </ul>
+  </div>
+  <div>
+    <p>Connect</p>
+    <ul>
+      <li>X</li>
+      <li>LinkedIn</li>
+      <li>hi@proemial.ai</li>
+
+    </ul>
+  </div>
+</div>
+</footer>
+<style lang="scss">
+	@import "../variables/global.scss";
+
+  footer{
+    color: $color-inverted-text;
+    width: 100%;
+
+  }
+
+  .footer-container{
+    background-color: $color-primary-brand;
+    padding:64px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 94px;
+  }
+
+  h4{
+    font-weight: 400;
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+
+  .description{
+    line-height: 24px;
+    margin: 0;
+    margin-bottom: 24px;
+  }
+
+.arrow{
+  width: 16px;
+}
+
+  button{
+    display: flex;
+    gap: 8px;
+    padding: 16px 24px;
+    background-color: black;
+    border: none;
+    color: $color-primary-text;
+    border-radius:$border-radius-standard;
+    font-size: $text-size-small;
+  }
+
+  img{
+    width: 100%;
+    margin-bottom: -4px;
+  }
+
+  li{
+    list-style-type: none;
+  }
+
+  p{
+    color: rgba(0,0,0,0.5);
+  }
+
+  ul{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .label{
+    font-size: $text-size-xtra-small;
+    margin-left: 4px;
+    padding: 4px 8px;
+    border: 1px solid black;
+    border-radius: $border-radius-standard;
+    white-space: nowrap;
+  }
+
+  .full{
+    background-color: black;
+    border: none;
+    color: $color-primary-text;
+  }
+
+  @media only screen and (max-width: 900px) {
+  
+.footer-container{
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+}
+
+
+</style>

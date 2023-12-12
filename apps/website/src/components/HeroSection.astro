@@ -1,0 +1,91 @@
+---
+import { Image } from 'astro:assets';
+import iphone from '../assets/iphone-mock-6.png';
+import EmailCapture from './EmailCapture.astro';
+
+---
+
+
+<section>
+  <div class="hero-container">
+  <h1>We're making <mark>research</mark> accessible to all powered by <mark>AI</mark></h1>
+  <EmailCapture title="Join the waitlist"></EmailCapture>
+
+  <img class="asset" src={iphone.src}>
+</div>
+</section>
+
+<style lang="scss">
+	@import "../variables/global.scss";
+
+  section{
+    position: relative;
+    z-index: 100;
+  }
+
+.hero-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 48px;
+  gap: 48px;
+  padding: 24px;
+
+
+}
+
+
+.asset{
+  max-width: 100%
+}
+
+
+h1{
+  margin: 0px;
+  padding: 0px;
+  color: $color-primary-text;
+  font-size: $text-size-huge;
+  font-weight:300;
+  text-align: center;
+  max-width: 900px;
+
+}
+
+p{
+  margin-top: 24px;
+  color: $color-secondary-text;
+  max-width: 550px;
+  line-height: 24px;
+  font-size: $text-size-small;
+  font-weight:300;
+  
+}
+
+mark{
+  background-color: rgba(49,49,49,0.4);
+  border-radius:$border-radius-standard;
+  color: $color-primary-text;
+  padding:8px;
+}
+
+@media only screen and (max-width: 900px) {
+
+  .hero-container{
+  max-width: 600px;
+  margin-top: 32px;
+  gap: 32px;
+
+
+}
+  h1{
+  font-size: $text-size-large;
+  max-width: 100%;
+
+
+}
+}
+
+</style>

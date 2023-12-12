@@ -1,0 +1,97 @@
+---
+import { Image } from 'astro:assets';
+import werner from '../assets/werner.jpg';
+import amazon from '../assets/amazon.png';
+
+---
+
+<section>
+  <h3>“One of the hardest issues Amazon engineers have to deal with is to understand which research is most applicable to the problem they are trying to solve.”</h3>
+  <h4>“Proemial, with their innovative use of cutting edge AI, conversational design and a deep understanding of science dissemination, are creating a product that will help us dig through the mountains of publications”</h4>
+  
+  <div class="author-container">
+    <img class="avatar" src={werner.src}>
+    <div class="info-container">
+      <p>Werner Vogels</p>
+      <span>CTO @ Amazon</span>
+      <img class="author-logo" src={amazon.src}>
+    </div>
+  </div>
+
+</section>
+
+<style lang="scss">
+	@import "../variables/global.scss";
+
+  section{
+    color: $color-primary-text;
+    max-width:1200px;
+    margin-left: auto;
+    margin-right:auto;
+    margin-top:164px;
+    padding: 24px;
+  }
+
+  h3{
+  font-size: $text-size-large;
+  font-weight:400;
+  line-height: 64px;
+  margin-bottom:64px;
+  }
+
+  p{
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  span{
+    display: block;
+  }
+
+  h4{
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 32px;
+    color: $color-secondary-text;
+    margin-bottom: 64px;
+  }
+
+  .author-container{
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .info-container{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+.avatar{
+  width: 86px;
+  height: 86px;
+  border-radius: 100rem;
+}
+
+.author-logo{
+  height: 24px;
+  align-self: flex-start;
+}
+
+@media only screen and (max-width: 900px) {
+  
+  h3{
+  font-size: $text-size-medium;
+  line-height: 40px;
+  margin-bottom:24px;
+  }
+
+  h4{
+    font-size: 1rem;
+    line-height: 22px;
+    margin-bottom: 32px;
+  }
+
+}
+</style>

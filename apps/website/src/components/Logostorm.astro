@@ -1,0 +1,80 @@
+---
+import { Image } from 'astro:assets';
+import amazon from '../assets/amazon.png';
+import google from '../assets/google.png';
+import apple from '../assets/apple.png';
+import metaLogo from '../assets/meta.png';
+import lyft from '../assets/lyft.png';
+import cornell from '../assets/cornell.png';
+---
+
+<section>
+<h2>Backed by core members of the worlds leading tech companies</h2>
+<div class="logo-container">
+  <img src={amazon.src}>
+  <img src={google.src}>
+  <img src={apple.src}>
+  <img src={metaLogo.src}>
+  <img src={lyft.src}>
+  <img src={cornell.src}>
+</div>
+</section>
+
+<style lang="scss">
+	@import "../variables/global.scss";
+
+  section{
+    color: $color-primary-text;
+    max-width:1200px;
+    margin-left:auto;
+    margin-right:auto;
+    display: flex;
+    flex-direction:column;
+    gap: 32px;
+    align-items: center;
+    margin-top: 94px;
+    margin-bottom:164px;
+
+  }
+
+  .logo-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    place-items: center;
+
+  }
+
+
+  img{
+    max-width: 140px;
+    max-height: 57px;
+    padding: 0px 24px;
+  
+    
+  }
+
+  h2{
+    font-weight:300;
+    font-size: 1.5rem;
+    max-width: 600px;
+    text-align: center;
+  }
+
+  @media only screen and (max-width: 1000px) {
+    h2{
+    font-weight:300;
+    font-size: 1rem;
+    max-width: 600px;
+    text-align: center;
+  }
+
+  .logo-container{
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+
+  }
+
+}
+</style>

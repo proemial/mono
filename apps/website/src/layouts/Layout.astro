@@ -1,0 +1,46 @@
+---
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
+<style lang="scss" is:global>
+		@import "../variables/global.scss";
+
+		:root {
+			color-scheme: dark;
+}
+*{
+	box-sizing: border-box;
+}
+
+	html {
+		font-family: system-ui, sans-serif;
+		background: $color-primary-surface;
+
+	}
+
+	body{
+		margin: 0px;
+		padding: 0px;
+	// 	background-image: url("../assets/aurora.png");
+  // background-repeat: no-repeat;
+  // background-size: contain;
+	}
+</style>

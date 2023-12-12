@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+import arrow from '../assets/arrow-right-12px.svg';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<form method="post" action="https://script.google.com/a/proemial.ai/macros/s/AKfycbxvMJigU-ItXTaz85I0oIN-Zu4wVmBOYz_j_tlS6npe/dev">
+  <input type="text" placeholder="Your name here" name="name" id="name"/>
+  <input type="text" placeholder="Your email here" name="email" id="email"/>
+  <button>{title} <img src={arrow.src}></button>
+</form>
+
+
+
+<style lang="scss">
+	@import "../variables/global.scss";
+
+  form{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 32px;
+  width: fit-content;
+}
+
+input{
+  width: 325px;
+  border-radius: $border-radius-standard;
+  border: none;
+  padding: 12px;
+  font-size: $text-size-small;
+  background-color:#fff;
+  color: $color-inverted-text;
+}
+
+button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: $text-size-small;
+  padding: 16px;
+  border: none;
+  border-radius:$border-radius-standard;
+  background-color: $color-primary-brand;
+  color: $color-inverted-text;
+}
+
+</style>

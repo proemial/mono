@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Card from '../components/Card.astro';
+import Announcement from '../components/Announcement.astro'
+import Navbar from '../components/Navbar.astro'
+import HeroSection from '../components/HeroSection.astro'
+import Logostorm from '../components/Logostorm.astro';
+import FullWidthImage from '../components/FullWidthImage.astro';
+import Quote from '../components/Quote.astro';
+import SignUpSection from '../components/SignUpSection.astro';
+import Footer from '../components/Footer.astro';
+import AnimationBG from '../components/AnimationBG.astro';
+
+import { Image } from 'astro:assets';
+import proemUI from '../assets/interface-asset.png';
+import proemUI2 from '../assets/proemUI2.png';
+---
+
+<Layout title="Proemnial | Redefining Research">
+<Announcement title="We've just launched Proem for GPT - Try it now" href="test"></Announcement>
+<Navbar></Navbar>
+	<main>
+		<AnimationBG></AnimationBG>
+		<HeroSection></HeroSection>
+		<Logostorm></Logostorm>
+		<FullWidthImage src={proemUI.src}></FullWidthImage>
+		<Quote></Quote>
+		<!-- <FullWidthImage src={proemUI2.src}></FullWidthImage> -->
+		<SignUpSection title="Be the first to know"></SignUpSection>
+	</main>
+	<Footer></Footer>
+</Layout>
+
+<style>
+
+</style>

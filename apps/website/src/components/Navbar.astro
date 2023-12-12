@@ -1,0 +1,84 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/proemial-logo.svg';
+
+---
+
+
+<nav>
+  <div class="nav-list-container">
+  <div class="name">Proemial</div>
+  <ul>
+    <li class="list-title">Products</li>
+    <li>Proem <span class="label">Coming soon</span></li>
+    <li>Proem for GPT <span class="label full">Try it now</span></li>
+  </ul>
+
+  <ul>
+    <li class="list-title">Company</li>
+    <li>News</li>
+    <li>About</li>
+    <li>Jobs <span class="label">2</span></li>
+  </ul>
+</div>
+
+  <div class="logo">
+    <img src={logo.src}>
+  </div>
+</nav>
+
+<style lang="scss">
+	@import "../variables/global.scss";
+
+  nav{
+    display: flex;
+    justify-content: space-between;
+    color: $color-primary-text;
+    padding: 32px;
+    font-size: $text-size-small;
+    font-weight:300;
+    position: relative;
+    z-index: 100;
+  }
+
+  .name{
+    font-size: $text-size-medium;
+  }
+
+  .nav-list-container{
+    display: flex;
+    gap: 4rem;
+  }
+
+  li{
+    list-style-type: none;
+  }
+
+  ul{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .list-title{
+    color: $color-secondary-text;
+  }
+
+  .label{
+    font-size: $text-size-xtra-small;
+    margin-left: 4px;
+    padding: 4px 8px;
+    border: 1px solid white;
+    border-radius: $border-radius-standard;
+    white-space: nowrap;
+  }
+
+  .full{
+    background-color: $color-primary-brand;
+    border:none;
+    color: $color-inverted-text;
+  }
+
+</style>
