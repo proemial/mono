@@ -8,7 +8,7 @@ let status = undefined;
 if (Astro.request.method === "POST") {
     try {
         const data = await Astro.request.formData();
-        const name = data.get("name");
+        // const name = data.get("name");
         const email = data.get("email");
 
         const result = await fetch(
@@ -16,7 +16,7 @@ if (Astro.request.method === "POST") {
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email }),
+                body: JSON.stringify({ email }),
             },
         );
 
@@ -41,9 +41,9 @@ if (Astro.request.method === "POST") {
 
 {!status &&
 <form id="waitlist-form" method="POST">
-    <input type="text" placeholder="Your name here" name="name" id="name" required>
+
     <input type="email" placeholder="Your email here" name="email" id="email" required>
-    <button id="submit-button">Submit</button>
+    <button id="submit-button">{title}</button>
 </form>
 }
 
@@ -52,15 +52,14 @@ if (Astro.request.method === "POST") {
 
   form{
   display: flex;
-  flex-direction: column;
-  gap: 8px;
   margin-top: 32px;
   width: fit-content;
+
 }
 
 input{
   width: 325px;
-  border-radius: $border-radius-standard;
+  border-radius: 8px 0px 0px 8px;
   border: none;
   padding: 12px;
   font-size: $text-size-small;
@@ -76,8 +75,20 @@ button{
   font-size: $text-size-small;
   padding: 16px;
   border: none;
-  border-radius:$border-radius-standard;
+  border-radius:0px 8px 8px 0px;
   background-color: $color-primary-brand;
   color: $color-inverted-text;
+}
+
+@media only screen and (max-width: 900px) {
+  input{
+  width: 200px;
+  border-radius: 8px 0px 0px 8px;
+  border: none;
+  padding: 12px;
+  font-size: $text-size-small;
+  background-color:#fff;
+  color: $color-inverted-text;
+}
 }
 </style>
