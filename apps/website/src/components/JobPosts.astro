@@ -1,0 +1,133 @@
+---
+
+---
+
+<section>
+  <div class="title-container">
+    <h3>we're hiring </h3><span>3</span>
+  </div>
+  <div class="job-post-container">
+    <div class="job-post">
+      <div class="tags">
+        <span>full time</span>
+        <span>hybrid</span>
+      </div>
+      <a href="#">
+        <h4 class="headline">
+          Full stack engineer experienced in AI and modern web technologies
+        </h4>
+      </a>
+    </div>
+    <div class="job-post">
+      <div class="tags">
+        <span>full time</span>
+        <span>hybrid</span>
+      </div>
+      <a href="#">
+        <h4 class="headline">
+          Full stack engineer experienced in AI and modern web technologies
+        </h4>
+      </a>
+    </div>
+    <div class="job-post">
+      <div class="tags">
+        <span>full time</span>
+        <span>hybrid</span>
+      </div>
+      <a href="#">
+        <h4 class="headline">
+          Full stack engineer experienced in AI and modern web technologies
+        </h4>
+      </a>
+    </div>
+  
+  </div>
+</section>
+<style lang="scss">
+	@import "../variables/global.scss";
+
+  section{
+    max-width:1200px;
+    margin-left: auto;
+    margin-right:auto;
+    margin-top:164px;
+    padding: 24px;
+  }
+
+  .job-post-container{
+    display: flex;
+    color: $color-primary-text;
+    gap:24px;
+  }
+
+  a{
+    color: $color-primary-text;
+    text-decoration: none;
+  }
+
+  a:hover{
+    color: $color-primary-brand;
+  }
+
+  span{
+    font-size: 12px;
+    border: 1px solid #fff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    margin-right: 8px;
+  }
+
+  .job-post{
+    padding: 24px;
+    background-color: #313131;
+    border-radius: 8px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #414141;
+    
+  }
+
+  .headline{
+    font-weight: 300;
+    font-size: 28px;
+    margin: 0;
+  }
+
+  .title-container{
+    display: flex;
+    gap: 16px;
+    align-items:flex-start
+  }
+
+  .title-container h3{
+    font-size: 64px;
+    font-weight: 300;
+    margin: 0;
+    margin-bottom: 48px;
+  }
+
+  @media only screen and (max-width: 900px) {
+
+    section{
+    margin-top:0px;
+  }
+
+    .job-post-container{
+    flex-direction: column;
+    gap:24px;
+  }
+
+  .title-container h3{
+    font-size: 48px;
+  }
+
+
+}
+
+
+
+
+  
+</style>
