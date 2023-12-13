@@ -1,27 +1,51 @@
 ---
-import { Image } from 'astro:assets';
-import arrow from '../assets/arrow-right-12px.svg';
-
-interface Props {
-	title: string;
-}
 
 const { title } = Astro.props;
+
+// TODO: Replace with cookie
+let status = undefined;
+
+if (Astro.request.method === "POST") {
+    try {
+        const data = await Astro.request.formData();
+        const name = data.get("name");
+        const email = data.get("email");
+
+        const result = await fetch(
+            "https://script.google.com/macros/s/AKfycbzudweoL5CeKI9DlbZfAC-O-BLUWhHZTnxFgNbLfITjlv0gs7r3W-E1Fp0gXS8YWly8cw/exec",
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email }),
+            },
+        );
+
+        if(result.status === 200){
+            status = "You are on the waitlist!";
+            // Astro.cookies.set(
+            //     "status",
+            //     "waitlist"
+            // );
+        } else {
+            console.error("Error: ", result.status);
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error.message);
+        }
+    }
+
+}
 ---
+{status && <div>{status}</div>}
 
-<form id="waitlist-form">
-  <input type="text" placeholder="Your name here" name="name" id="name" required>
-  <input type="email" placeholder="Your email here" name="email" id="email" required>
-  <button id="submit-button" type="button">Submit</button>
+{!status &&
+<form id="waitlist-form" method="POST">
+    <input type="text" placeholder="Your name here" name="name" id="name" required>
+    <input type="email" placeholder="Your email here" name="email" id="email" required>
+    <button id="submit-button">Submit</button>
 </form>
-
-<!-- <form id="waitlist-form" method="post" action="https://script.google.com/a/proemial.ai/macros/s/AKfycbxvMJigU-ItXTaz85I0oIN-Zu4wVmBOYz_j_tlS6npe/dev">
-  <input id="form-name" type="text" placeholder="Your name here" name="name" required>
-  <input id="form-email" type="email" placeholder="Your email here" name="email" required>
-  <button id="submit-button" type="button">{title} <img src={arrow.src}></button>
-</form> -->
-
-
+}
 
 <style lang="scss">
 	@import "../variables/global.scss";
@@ -57,34 +81,3 @@ button{
   color: $color-inverted-text;
 }
 </style>
-
-<script>
-  const submitButton = document.getElementById("submit-button");
-  submitButton.addEventListener("click", submitForm);
-
-function submitForm() {
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      
-
-      // Create a FormData object and append form data
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('email', email);
-
-      // Make a POST request using fetch
-      fetch('https://script.google.com/a/proemial.ai/macros/s/AKfycbxvMJigU-ItXTaz85I0oIN-Zu4wVmBOYz_j_tlS6npe/dev', {
-        method: 'POST',
-        body: formData,
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-        // Handle the success response as needed
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        // Handle the error as needed
-      });
-    }
-</script>

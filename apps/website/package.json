@@ -10,14 +10,11 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/react": "^3.0.7",
     "@astrojs/vercel": "^6",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.17",
     "@vercel/analytics": "^1",
-    "astro": "^4.0.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "astro": "^4.0.4"
   },
   "devDependencies": {
     "sass": "^1.69.5",
