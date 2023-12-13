@@ -1,0 +1,110 @@
+---
+import geet from '../assets/geet-avatar.png';
+interface Props {
+	title: string;
+
+}
+
+const { title } = Astro.props;
+---
+<div class="container">
+  <div class="header-container">
+      <h1>{ title }</h1>
+      <div class="author-container">
+        <img src={geet.src}>
+        <p>Geet Khosla, CEO @ proemnial</p>
+      </div>
+      <div class="tag-container">
+      <span>14.12.2023</span>
+      <span>press release</span>
+    </div>
+  </div>
+  <div class="content-container">
+  <p>a trailblazing leader in artificial intelligence technology, celebrates the one-year anniversary of its groundbreaking digital product, [Product Name]. This cutting-edge solution is designed to transform the way researchers, academics, and professionals engage with scientific literature by providing efficient and insightful summarizations of complex papers.
+    [Product Name] leverages state-of-the-art natural language processing algorithms to sift through intricate scientific texts, distilling key information and presenting it in a concise and digestible format. With the exponential growth of research output in various fields, [Product Name] emerges as an indispensable tool, enabling users to stay abreast of the latest developments in their respective domains without the overwhelming task of navigating through lengthy papers.
+    
+    a trailblazing leader in artificial intelligence technology, celebrates the one-year anniversary of its groundbreaking digital product, [Product Name]. This cutting-edge solution is designed to transform the way researchers, academics, and professionals engage with scientific literature by providing efficient and insightful summarizations of complex papers.
+    [Product Name] leverages state-of-the-art natural language processing algorithms to sift through intricate scientific texts, distilling key information and presenting it in a concise and digestible format. With the exponential growth of research output in various fields, [Product Name] emerges as an indispensable tool, enabling users to stay abreast of the latest developments in their respective domains without the overwhelming task of navigating through lengthy papers.</p>
+  </div>
+</div>
+<style lang="scss">
+	@import "../variables/global.scss";
+
+  .container{
+    max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 48px;
+  padding: 24px;
+  
+  }
+  .header-container{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-bottom: 1px solid #fff;
+  
+  
+}
+
+.content-container{
+  margin-bottom: 94px;
+  margin-top: 48px;
+  max-width: 700px;
+  font-size: 1.5rem;
+  line-height: 36px;
+
+}
+  
+.author-container{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.author-container img{
+  width: 32px;
+  border-radius: 100rem;
+}
+
+.tag-container{
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+  h1{
+    font-size: $text-size-huge;
+    margin:0px;
+    font-weight:300;
+  }
+
+  p{
+    font-weight: 300;
+  }
+
+  span{
+    border: 1px solid #fff;
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 8px;
+  }
+
+  @media only screen and (max-width: 900px) {
+    .content-container{
+
+  font-size: 1rem;
+  line-height: 28px;
+
+}
+
+h1{
+    font-size: $text-size-large;
+    margin:0px;
+    font-weight:300;
+  }
+
+}
+
+ 
+</style>
