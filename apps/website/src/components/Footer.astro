@@ -10,7 +10,6 @@ import arrow from '../assets/arrow-white.svg';
   <div>
     <h4>Proemial</h4>
     <p class="description">Proem is the new platform for quickly reading and getting an understanding of research papers. We use large language models to analyze and distill papers into digestible summaries and even enable you to ask questions directly to the papers. Get all the info you need upfront before investing time to read a full paper</p>
-    <button>Join the waitlist <img class="arrow" src={arrow.src}></button>
   </div>
   <div>
     <p>Products</p>
@@ -31,7 +30,7 @@ import arrow from '../assets/arrow-white.svg';
     <p>Connect</p>
     <ul>
       <li>X</li>
-      <li>LinkedIn</li>
+      <a href="https://www.linkedin.com/company/proemial/about/" target="_blank"><li>LinkedIn</li></a>
       <li>hi@proemial.ai</li>
 
     </ul>
@@ -45,6 +44,15 @@ import arrow from '../assets/arrow-white.svg';
     color: $color-inverted-text;
     width: 100%;
 
+  }
+
+  a{
+    color:#000;
+    text-decoration: none;
+  }
+  a:hover{
+    color:#000;
+    text-decoration: underline;
   }
 
   .footer-container{
