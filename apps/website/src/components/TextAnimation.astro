@@ -7,7 +7,9 @@
         easy to
         <div id="items-container">
           <div class="animated">understand</div>
+          <div class="animated">read</div>
           <div class="animated">share</div>
+          <div class="animated">discuss</div>
           <div class="animated">understand</div>
         </div>
       </div>
@@ -20,7 +22,7 @@
     flex-direction: column;
     gap: 16px;
     color: $color-primary-text;
-  font-size:140px;
+  font-size:120px;
   font-weight:300;
   }
 
@@ -45,7 +47,7 @@
     flex-direction: column;
     gap: 16px;
     animation-name: textAnimation;
-    animation-duration: 4s;
+    animation-duration: 5s;
     animation-delay: 1s;
     animation-iteration-count: infinite;
   }
@@ -56,26 +58,67 @@
 
   @keyframes textAnimation {
   0%   {transform: translateY(0)}
-  25%  {transform: translateY(-92px)}
-  50%  {transform: translateY(-92px)}
-  75%  {transform: translateY(-184px)}
-  100% {transform: translateY(-208px)}
+  12%  {transform: translateY(-160px)}
+  24%  {transform: translateY(-160px)}
+  36%  {transform: translateY(-310px)}
+  48% {transform: translateY(-310px)}
+  60% {transform: translateY(-474px)}
+  72% {transform: translateY(-474px)}
+  84% {transform: translateY(-632px)}
+  100% {transform: translateY(-632px)}
+}
+
+@media only screen and (max-width: 1100px) {
+  
+  @keyframes textAnimation {
+  0%   {transform: translateY(0)}
+  12%  {transform: translateY(-128px)}
+  24%  {transform: translateY(-128px)}
+  36%  {transform: translateY(-257px)}
+  48% {transform: translateY(-257px)}
+  60% {transform: translateY(-385px)}
+  72% {transform: translateY(-385px)}
+  84% {transform: translateY(-512px)}
+  100% {transform: translateY(-512px)}
+}
+
+  .headline{
+    gap: 8px;
+  font-size: 94px;
+  }
+
+  .animation-container{
+    display: flex;
+    gap: 16px;
+    overflow: hidden;
+    height: 120px;
+  }
 }
 
 @media only screen and (max-width: 900px) {
   
   @keyframes textAnimation {
   0%   {transform: translateY(0)}
-  25%  {transform: translateY(-25px)}
-  50%  {transform: translateY(-25px)}
-  75%  {transform: translateY(-184px)}
-  100% {transform: translateY(-208px)}
-  
-  }
+  12%  {transform: translateY(-64px)}
+  24%  {transform: translateY(-64px)}
+  36%  {transform: translateY(-128px)}
+  48% {transform: translateY(-128px)}
+  60% {transform: translateY(-194px)}
+  72% {transform: translateY(-194px)}
+  84% {transform: translateY(-260px)}
+  100% {transform: translateY(-260px)}
+}
 
   .headline{
     gap: 8px;
   font-size: 40px;
+  }
+
+  .animation-container{
+    display: flex;
+    gap: 8px;
+    overflow: hidden;
+    height: 48px;
   }
 }
   
@@ -83,12 +126,7 @@
 </style>
 
 <script>
-  import { gsap } from "gsap";
-  import { CustomEase } from "gsap/CustomEase";
-  import { RoughEase, ExpoScaleEase } from "gsap/EasePack";
 
-  const animationContainer = document.getElementById('items-container');
-  gsap.registerPlugin(RoughEase,ExpoScaleEase,CustomEase);
  
   
   // let tl = gsap.timeline({repeat: Infinity, repeatDelay: 0.5});
