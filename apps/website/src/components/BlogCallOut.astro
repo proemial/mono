@@ -1,0 +1,116 @@
+---
+import arrow from '../assets/arrow-white.svg';
+import geet from '../assets/geet-avatar.png';
+---
+
+<section>
+  <div class="title-container">
+    <h3>read our manifesto</h3><img class="arrow" src={arrow.src}>
+  </div>
+
+    <div class="blog-post-container">
+      <div class="tag-container">
+        <span>14.12.2023</span>
+        <span>press release</span>
+      </div>
+      <div class="content-container">
+        <a href="/manifesto"><h4>manifesto 0.5</h4></a>
+        <div class="author-container">
+          <img src={geet.src}>
+          <p>Geet Khosla, CEO @ proemial</p>
+        </div>
+      </div>
+    </div>
+    
+</section>
+<style lang="scss">
+	@import "../variables/global.scss";
+  section{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  align-items: center;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 48px;
+  gap: 48px;
+  padding: 24px;
+  }
+
+  a{
+    color: $color-primary-text;
+    text-decoration: none;
+  }
+
+  a:hover{
+    color: $color-primary-brand;
+  }
+
+  .arrow{
+    width: 32px;
+    margin-top: 10px;
+  }
+
+  h3{
+    margin: 0;
+    font-size: 48px;
+    font-weight: 300;
+  }
+
+  h4{
+    font-size: 48px;
+    font-weight: 300;
+    margin: 0;
+  }
+
+  span{
+    font-size: 12px;
+    border: 1px solid #fff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    margin-right: 8px;
+  }
+
+  .author-container{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.author-container img{
+  width: 32px;
+  border-radius: 100rem;
+}
+
+  .blog-post-container{
+    padding: 24px;
+
+    border-radius: 8px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #fff;
+    
+  }
+
+  .title-container{
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  @media only screen and (max-width: 900px) {
+    
+    section{
+    grid-template-columns: 1fr;
+  }
+
+  .arrow{
+    display: none;
+  }
+
+
+}
+  
+</style>
