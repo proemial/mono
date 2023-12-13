@@ -1,0 +1,131 @@
+---
+import features1 from '../assets/features1.png';
+import features2 from '../assets/feature2.png';
+import features3 from '../assets/feature3.png';
+
+---
+
+<section>
+  <div class="even">
+    <div class="headline-container">
+      <span>01</span>
+      <h3>cutting edge research</h3>
+    </div>
+    <div class="asset-container">
+      <img class="asset" src={features1.src}>
+    </div>
+  </div>
+
+  <div class="odd">
+    <div class="asset-container-odd">
+      <img class="asset" src={features2.src}>
+    </div>
+    <div class="headline-container">
+      <span>02</span>
+      <h3>ask questions to the paper</h3>
+    </div>
+  </div>
+
+  <div class="even">
+    <div class="headline-container">
+      <span>03</span>
+      <h3>learn from others</h3>
+    </div>
+    <div class="asset-container">
+      <img class="asset" src={features3.src}>
+    </div>
+  </div>
+
+</section>
+<style lang="scss">
+	@import "../variables/global.scss";
+
+  section{
+    max-width:1200px;
+    margin-left: auto;
+    margin-right:auto;
+    margin-top:164px;
+    padding: 24px;
+  }
+
+
+
+  h3{
+    font-size: 64px;
+    font-weight: 300;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  span{
+    padding: 6px 12px;
+    font-size: 14px;
+    border: 1px solid #fff;
+    text-align: center;
+    border-radius: 8px;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+
+  .even{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .odd{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: -64px;
+  }
+
+  .asset-container{
+    justify-self: flex-end;
+  }
+
+  .asset-container-odd{
+    justify-self: flex-start;
+  }
+
+  .asset{
+    max-width: 375px;
+    justify-self: flex-end;
+  }
+
+  @media only screen and (max-width: 900px) {
+    .even{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 48px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 64px;
+  }
+  
+  .odd{
+    display: flex;
+    gap: 48px;
+    margin-top: 0px;
+    margin-bottom: 64px;
+    flex-direction: column-reverse;
+  }
+
+  .asset{
+    max-width: 100%;
+    justify-self: center;
+  }
+
+  h3{
+    font-size: 48px;
+    font-weight: 300;
+    margin: 0;
+    max-width: 100%;
+  }
+
+}
+</style>
