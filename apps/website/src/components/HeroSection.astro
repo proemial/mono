@@ -2,16 +2,18 @@
 import { Image } from 'astro:assets';
 import iphone from '../assets/feed2.png';
 import EmailCapture from './EmailCapture.astro';
+import TextAnimation from './TextAnimation.astro';
 
 ---
 
 
 <section>
   <div class="hero-container">
-  <h1>we're making <mark>research</mark> accessible to all powered by <mark>AI</mark></h1>
-  <EmailCapture title="Join the waitlist"></EmailCapture>
+    <TextAnimation></TextAnimation>
+  <!-- <h1>we're making <mark>research</mark> accessible to all powered by <mark>AI</mark></h1> -->
+  <!-- <EmailCapture title="Join the waitlist"></EmailCapture> -->
 
-  <img class="asset" src={iphone.src}>
+  <!-- <img class="asset" src={iphone.src}> -->
 </div>
 </section>
 
@@ -50,7 +52,7 @@ h1{
   color: $color-primary-text;
   font-size: $text-size-huge;
   font-weight:300;
-  text-align: center;
+  // text-align: center;
   max-width: 900px;
 
 }

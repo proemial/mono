@@ -1,0 +1,99 @@
+---
+
+---
+
+    <div class="headline"><div>we make research</div>
+      <div class="animation-container">
+        easy to
+        <div id="items-container">
+          <div class="animated">understand</div>
+          <div class="animated">share</div>
+          <div class="animated">understand</div>
+        </div>
+      </div>
+    </div>
+
+<style lang="scss">
+	@import "../variables/global.scss";
+  .headline{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: $color-primary-text;
+  font-size:140px;
+  font-weight:300;
+  }
+
+
+  h1{
+  margin: 0px;
+  padding: 0px;
+
+ 
+
+}
+
+  .animation-container{
+    display: flex;
+    gap: 32px;
+    overflow: hidden;
+    height: 160px;
+  }
+
+  #items-container{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    animation-name: textAnimation;
+    animation-duration: 4s;
+    animation-delay: 1s;
+    animation-iteration-count: infinite;
+  }
+
+  .animated{
+
+  }
+
+  @keyframes textAnimation {
+  0%   {transform: translateY(0)}
+  25%  {transform: translateY(-92px)}
+  50%  {transform: translateY(-92px)}
+  75%  {transform: translateY(-184px)}
+  100% {transform: translateY(-208px)}
+}
+
+@media only screen and (max-width: 900px) {
+  
+  @keyframes textAnimation {
+  0%   {transform: translateY(0)}
+  25%  {transform: translateY(-25px)}
+  50%  {transform: translateY(-25px)}
+  75%  {transform: translateY(-184px)}
+  100% {transform: translateY(-208px)}
+  
+  }
+
+  .headline{
+    gap: 8px;
+  font-size: 40px;
+  }
+}
+  
+ 
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { CustomEase } from "gsap/CustomEase";
+  import { RoughEase, ExpoScaleEase } from "gsap/EasePack";
+
+  const animationContainer = document.getElementById('items-container');
+  gsap.registerPlugin(RoughEase,ExpoScaleEase,CustomEase);
+ 
+  
+  // let tl = gsap.timeline({repeat: Infinity, repeatDelay: 0.5});
+  // tl.to("#items-container", {x: 0, duration: 0.5, delay: 1});
+  // tl.to("#items-container", {y: -92, duration: 0.5, delay: 1});
+  // tl.to("#items-container", {y: -184, duration: 0.5, delay: 1});
+
+</script>

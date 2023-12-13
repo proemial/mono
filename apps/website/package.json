@@ -14,7 +14,14 @@
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.17",
     "@vercel/analytics": "^1",
+<<<<<<< HEAD
     "astro": "^4.0.4"
+=======
+    "astro": "^4.0.4",
+    "gsap": "^3.12.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+>>>>>>> fbe0626 (Starting to animate the hero section mission statement - still needs a lot of tweaking)
   },
   "devDependencies": {
     "sass": "^1.69.5",
