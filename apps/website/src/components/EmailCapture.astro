@@ -1,59 +1,52 @@
 ---
+
 const { title } = Astro.props;
 
+// TODO: Replace with cookie
+let status = undefined;
+
+if (Astro.request.method === "POST") {
+    try {
+        const data = await Astro.request.formData();
+        // const name = data.get("name");
+        const email = data.get("email");
+
+        const result = await fetch(
+            "https://script.google.com/macros/s/AKfycbzudweoL5CeKI9DlbZfAC-O-BLUWhHZTnxFgNbLfITjlv0gs7r3W-E1Fp0gXS8YWly8cw/exec",
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+            },
+        );
+
+        if(result.status === 200){
+            status = "You are on the waitlist!";
+            // Astro.cookies.set(
+            //     "status",
+            //     "waitlist"
+            // );
+        } else {
+            console.error("Error: ", result.status);
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error.message);
+        }
+    }
+
+}
 ---
+{status && <div>{status}</div>}
 
+{!status &&
+<form id="waitlist-form" method="POST">
 
-<!-- // // TODO: Replace with cookie
-// let status = undefined;
+    <input type="email" placeholder="Your email here" name="email" id="email" required>
+    <button id="submit-button">{title}</button>
+</form>
+}
 
-// if (Astro.request.method === "POST") { 
-//     try {
-//         const data = await Astro.request.formData();
-//         // const name = data.get("name");
-//         const email = data.get("email");
-
-//         const result = await fetch(
-//             "https://script.google.com/macros/s/AKfycbzudweoL5CeKI9DlbZfAC-O-BLUWhHZTnxFgNbLfITjlv0gs7r3W-E1Fp0gXS8YWly8cw/exec",
-//             {
-//                 method: "POST",
-//                 headers: { "Content-Type": "application/json" },
-//                 body: JSON.stringify({ email }),
-//             },
-//         );
-
-//         if(result.status === 200){
-//             status = "You are on the waitlist!";
-//             // Astro.cookies.set(
-//             //     "status",
-//             //     "waitlist"
-//             // );
-//         } else {
-//             console.error("Error: ", result.status);
-//         }
-//     } catch (error) {
-//         if (error instanceof Error) {
-//             console.error(error.message);
-//         }
-//     }
-
-// }
-// ---
-// {status && <div>{status}</div>}
-
-// {!status &&
-// <form id="waitlist-form" method="POST">
-
-//     <input type="email" placeholder="Your email here" name="email" id="email" required>
-//     <button id="submit-button">{title}</button>
-// </form>
-// }
-
-<-->
-
-<div>
-  <a target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSfHq2gBBNkzk4NCavkUIlQ-03i48-IZZNrYLxfSZYJG5vL9ww/viewform"><button>Join our waitlist</button></a>
-</div>
 <style lang="scss">
 	@import "../variables/global.scss";
 
@@ -62,12 +55,6 @@ const { title } = Astro.props;
   margin-top: 24px;
   width: fit-content;
 
-}
-
-a{
-  text-decoration: none;
-  color:#000;
-  cursor: pointer;
 }
 
 input{
@@ -85,14 +72,12 @@ button{
   align-items: center;
   justify-content: center;
   gap: 8px;
-  width: 400px;
   font-size: $text-size-small;
   padding: 16px;
   border: none;
-  border-radius: 8px;
+  border-radius:0px 8px 8px 0px;
   background-color: $color-primary-brand;
   color: $color-inverted-text;
-  cursor: pointer;
 }
 
 @media only screen and (max-width: 900px) {
@@ -104,12 +89,6 @@ button{
   font-size: $text-size-small;
   background-color:#fff;
   color: $color-inverted-text;
-}
-
-button{
-
-  width: 200px;
-  
 }
 }
 </style>
