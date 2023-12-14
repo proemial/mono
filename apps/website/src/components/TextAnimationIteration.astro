@@ -37,9 +37,6 @@ max-width:100%;
 h1{
 margin: 0px;
 padding: 0px;
-
-
-
 }
 
 .animation-container{
@@ -88,10 +85,25 @@ flex-direction: column;
 @media only screen and (max-width: 900px) {
 
 .headline{
-font-size: 48px;
+font-size: 40px;
+gap: 8px;
+}
 
+.animation-container{
+height: 64px;
+gap: 10px;
+}
 
-
+@keyframes textAnimation {
+0%   {transform: translateY(0)}
+12%  {transform: translateY(-64px)}
+24%  {transform: translateY(-64px)}
+36%  {transform: translateY(-130px)}
+48% {transform: translateY(-130px)}
+60% {transform: translateY(-194px)}
+72% {transform: translateY(-194px)}
+84% {transform: translateY(-260px)}
+100% {transform: translateY(-260px)}
 }
 }
 
@@ -125,17 +137,7 @@ font-size: 48px;
 
 // @media only screen and (max-width: 900px) {
 
-// @keyframes textAnimation {
-// 0%   {transform: translateY(0)}
-// 12%  {transform: translateY(-64px)}
-// 24%  {transform: translateY(-64px)}
-// 36%  {transform: translateY(-128px)}
-// 48% {transform: translateY(-128px)}
-// 60% {transform: translateY(-194px)}
-// 72% {transform: translateY(-194px)}
-// 84% {transform: translateY(-260px)}
-// 100% {transform: translateY(-260px)}
-// }
+
 
 // .headline{
 // gap: 8px;
