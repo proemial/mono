@@ -2,14 +2,16 @@
 import { Image } from 'astro:assets';
 import iphone from '../assets/feed2.png';
 import EmailCapture from './EmailCapture.astro';
-import TextAnimation from './TextAnimation.astro';
+// import TextAnimation from './TextAnimation.astro';
+import TextAnimationIteration from './TextAnimationIteration.astro';
 
 ---
 
 
 <section>
   <div class="hero-container">
-    <TextAnimation></TextAnimation>
+    <TextAnimationIteration></TextAnimationIteration>
+    <!-- <TextAnimation></TextAnimation> -->
   <!-- <h1>we're making <mark>research</mark> accessible to all powered by <mark>AI</mark></h1> -->
   <EmailCapture title="Join the waitlist"></EmailCapture>
 
@@ -32,7 +34,7 @@ import TextAnimation from './TextAnimation.astro';
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 0px;
+  margin-top: 94px;
   gap: 48px;
   padding: 0px 24px;
 
