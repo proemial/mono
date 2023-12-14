@@ -10,25 +10,26 @@ if (Astro.request.method === "POST") {
         const data = await Astro.request.formData();
         // const name = data.get("name");
         const email = data.get("email");
+        console.log('email', email);
 
-        const result = await fetch(
-            "https://script.google.com/macros/s/AKfycbzudweoL5CeKI9DlbZfAC-O-BLUWhHZTnxFgNbLfITjlv0gs7r3W-E1Fp0gXS8YWly8cw/exec",
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email }),
-            },
-        );
-
-        if(result.status === 200){
-            status = "You are on the waitlist!";
-            // Astro.cookies.set(
-            //     "status",
-            //     "waitlist"
-            // );
-        } else {
-            console.error("Error: ", result.status);
-        }
+        // const result = await fetch(
+        //     "https://script.google.com/macros/s/AKfycbzudweoL5CeKI9DlbZfAC-O-BLUWhHZTnxFgNbLfITjlv0gs7r3W-E1Fp0gXS8YWly8cw/exec",
+        //     {
+        //         method: "POST",
+        //         headers: { "Content-Type": "application/json" },
+        //         body: JSON.stringify({ email }),
+        //     },
+        // );
+        //
+        // if(result.status === 200){
+        //     status = "You are on the waitlist!";
+        //     // Astro.cookies.set(
+        //     //     "status",
+        //     //     "waitlist"
+        //     // );
+        // } else {
+        //     console.error("Error: ", result.status);
+        // }
     } catch (error) {
         if (error instanceof Error) {
             console.error(error.message);
