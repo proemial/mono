@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import logo from '../assets/logo.gif';
 import plus from '../assets/add-black.svg';
 import plusBlack from '../assets/add-black.svg';
+import headerLogo from '../assets/logo-header.svg';
 
 ---
 
@@ -14,7 +15,8 @@ import plusBlack from '../assets/add-black.svg';
   </div>
   <div class="nav-list-container">
 
-    <a href="/"><div id="name" class="name">proemial</div></a>
+    <!-- <a href="/"><div id="name" class="name">proemial</div></a> -->
+    <a id="home-link" href="/"><img id="name" class="white header-logo" src={headerLogo.src}></a>
     <div id="list-container" class="list-container close">
       <ul>
         <li class="list-title">products</li>
@@ -25,7 +27,7 @@ import plusBlack from '../assets/add-black.svg';
         <li class="list-title">company</li>
         <a href="/manifesto"><li>news</li></a>
         <!-- <li>About</li> -->
-        <a href="#"></h><li>jobs <span class="label">2</span></li></a>
+        <a href="#"></h><li>jobs <span class="label">3</span></li></a>
       </ul>
     </div>
   </div>
@@ -40,6 +42,7 @@ import plusBlack from '../assets/add-black.svg';
   nav{
     display: flex;
     justify-content: space-between;
+    align-items: center;
     color: $color-primary-text;
     padding: 32px 64px;
     font-size: $text-size-small;
@@ -47,6 +50,10 @@ import plusBlack from '../assets/add-black.svg';
     position: relative;
     z-index: 100;
 
+  }
+
+  .header-logo{
+    max-width: 100px;
   }
 
 
@@ -65,8 +72,8 @@ import plusBlack from '../assets/add-black.svg';
     border: 1px solid $color-primary-brand;
   }
 
-  .name{
-    font-size: $text-size-medium;
+  #home-link{
+    z-index: 300;
   }
 
   .nav-list-container{
@@ -128,8 +135,8 @@ import plusBlack from '../assets/add-black.svg';
       z-index: 300;
     }
 
-    .name{
-      z-index: 300;
+    #name{
+      z-index: 600;
     }
 
   
@@ -248,23 +255,21 @@ import plusBlack from '../assets/add-black.svg';
   function navToggle(){
 
     if(navIsOpen){
-      console.log(navIsOpen);
       navBar.classList.remove("close")
       navBar.classList.add("open")
       icon.classList.add("rotate")  
-      name.style.color = "black"
+      name.classList.remove("white"); 
       icon.classList.remove("white");
       logo.classList.remove("white");
       navIsOpen = false;
     }
     else{
-      console.log(navIsOpen);
       navBar.classList.remove("open")
       navBar.classList.add("close")
       icon.classList.remove("rotate")
       icon.classList.add("white");
       logo.classList.add("white");
-      name.style.color = "white"
+      name.classList.add("white"); 
       navIsOpen = true;
     }
 

@@ -4,13 +4,25 @@
 
 <section>
   <div class="title-container">
-    <h3>we're hiring </h3><span>3</span>
+    <h3>updates </h3><span>3</span>
   </div>
   <div class="job-post-container">
     <div class="job-post">
       <div class="tags">
+        <span>press release</span>
+        <span>announcement</span>
+      </div>
+      <a href="#">
+        <h4 class="headline">
+         manifesto 0.5
+        </h4>
+      </a>
+    </div>
+    <div class="job-post">
+      <div class="tags">
+        <span>job post</span>
         <span>full time</span>
-        <span>hybrid</span>
+        <span>denmark</span>
       </div>
       <a href="#">
         <h4 class="headline">
@@ -20,19 +32,9 @@
     </div>
     <div class="job-post">
       <div class="tags">
+        <span>job post</span>
         <span>full time</span>
-        <span>hybrid</span>
-      </div>
-      <a href="#">
-        <h4 class="headline">
-          Full stack engineer experienced in AI and modern web technologies
-        </h4>
-      </a>
-    </div>
-    <div class="job-post">
-      <div class="tags">
-        <span>full time</span>
-        <span>hybrid</span>
+        <span>denmark</span>
       </div>
       <a href="#">
         <h4 class="headline">
@@ -55,7 +57,8 @@
   }
 
   .job-post-container{
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     color: $color-primary-text;
     gap:24px;
   }
