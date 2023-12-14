@@ -5,7 +5,8 @@ import google from '../assets/google.png';
 import apple from '../assets/apple.png';
 import metaLogo from '../assets/meta.png';
 import grammarly from '../assets/grammarly.svg';
-import cornell from '../assets/cornell.png';
+import pcai from '../assets/pcai.svg';
+
 ---
 
 <section>
@@ -16,7 +17,7 @@ import cornell from '../assets/cornell.png';
   <img src={apple.src}>
   <img src={metaLogo.src}>
   <img src={grammarly.src}>
-  <img src={cornell.src}>
+  <img id="pcai" src={pcai.src}>
 </div>
 </section>
 
@@ -47,6 +48,7 @@ import cornell from '../assets/cornell.png';
 
   }
 
+  
 
   img{
     max-width: 140px;
@@ -54,6 +56,11 @@ import cornell from '../assets/cornell.png';
     padding: 0px 24px;
   
     
+  }
+
+  #pcai{
+    padding:0px;
+    max-width: 200px;
   }
 
   h2{
