@@ -3,7 +3,6 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { usePathname, useRouter } from "next/navigation";
 import { useDrawerState } from "@/app/components/login/state";
 
-//
 export function useAuthActions() {
   const { push } = useRouter();
   const pathname = usePathname();
