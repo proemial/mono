@@ -1,9 +1,7 @@
 ---
-
-const { title } = Astro.props;
-
 // TODO: Replace with cookie
 let status = undefined;
+let title = "Join our waitlist"
 
 if (Astro.request.method === "POST") {
     try {
@@ -22,6 +20,7 @@ if (Astro.request.method === "POST") {
 
         if(result.status === 200){
             status = "You are on the waitlist!";
+            title = "Thank you for joining!"
             // Astro.cookies.set(
             //     "status",
             //     "waitlist"
@@ -36,6 +35,8 @@ if (Astro.request.method === "POST") {
     }
 
 }
+
+
 ---
 {status && <div>{status}</div>}
 
