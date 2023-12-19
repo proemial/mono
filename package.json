@@ -4,7 +4,8 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "vercel-pull-env": "vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/proem --yes"
   },
   "devDependencies": {
     "prettier": "^3.1.0",

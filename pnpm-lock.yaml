@@ -93,6 +93,9 @@ importers:
       autoprefixer:
         specifier: ^10
         version: 10.4.16(postcss@8.4.31)
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
       drizzle-kit:
         specifier: ^0.20.7
         version: 0.20.7
@@ -201,9 +204,6 @@ importers:
       '@proemial/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
-      dotenv:
-        specifier: ^16.3.1
-        version: 16.3.1
       drizzle-kit:
         specifier: ^0.20.7
         version: 0.20.7
