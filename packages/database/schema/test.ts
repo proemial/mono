@@ -4,4 +4,6 @@ export const testTable = pgTable("test", {
   id: integer("id"),
   name: text("name"),
   value: real("value"),
+  newValue: real("newValue"),
+  next: real("next"),
 });

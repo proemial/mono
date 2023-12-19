@@ -7,7 +7,13 @@ export async function GET() {
   const number = Math.floor(Math.random() * 10000);
   const result = await db
     .insert(testTable)
-    .values({ name: "test", id: number, value: number })
+    .values({
+      id: number,
+      name: "test",
+      value: 1.0,
+      newValue: 2.0,
+      next: 3.0,
+    })
     .onConflictDoNothing()
     .returning();
 
