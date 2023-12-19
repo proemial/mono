@@ -1,4 +1,8 @@
 "use client";
+import { useSignIn, useUser } from "@clerk/nextjs";
+import base64url from "base64url";
+import { X } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Logo } from "../icons/logo";
 import Drawer from "../login/drawer";
@@ -9,15 +13,31 @@ import { BookmarksMenuItem } from "./menu-bookmarks";
 import { HistoryMenuItem } from "./menu-history";
 import { HomeMenuItem } from "./menu-home";
 import { ProfileMenuItem } from "./menu-profile";
-import { X } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import base64url from "base64url";
-import { useUser } from "@auth0/nextjs-auth0/client";
+
+const authProviders = [
+  {
+    oAuthStrategy: "oauth_google",
+    name: "Google",
+    icon: "google",
+  },
+  {
+    oAuthStrategy: "oauth_twitter",
+    name: "Twitter",
+    icon: "twitter",
+  },
+  {
+    oAuthStrategy: "oauth_github",
+    name: "GitHub",
+    icon: "github",
+  },
+] as const;
 
 export function MainMenu() {
   const { isOpen, close } = useDrawerState();
   const [accessToken, setAccessToken] = useState(useAccessToken());
   const { user } = useUser();
+  const { signIn } = useSignIn();
+  const returnTo = window.location.pathname + window.location.search;
 
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
@@ -31,7 +51,7 @@ export function MainMenu() {
 
   return (
     <div className="z-[1000]">
-      <div className="pb-4 pt-2">
+      <div className="pt-2 pb-4">
         <div
           className="flex justify-around"
           style={{ boxShadow: "0px -8px 8px 4px rgba(0, 0, 0, 0.85)" }}
@@ -48,23 +68,39 @@ export function MainMenu() {
           onClose={handleClose}
         >
           <div className="flex flex-col gap-2">
-            <div className="flex justify-between items-center my-2">
+            <div className="flex items-center justify-between my-2">
               <div className="w-2"></div>
-              <div className="text-center text-base">
+              <div className="text-base text-center">
                 Please log in to continue
               </div>
               <button
                 type="button"
                 onClick={handleClose}
-                className="border rounded-xl bg-primary border-primary p-1"
+                className="p-1 border rounded-xl bg-primary border-primary"
               >
                 <X className="h-4 w-4 stroke-[4]" />
               </button>
             </div>
-            <LoginButton variant="google" />
-            <LoginButton variant="twitter" />
-            <LoginButton variant="github" />
-            <div className="text-xxs text-center text-foreground/70">
+
+            {authProviders.map(({ name, icon, oAuthStrategy }) => {
+              return (
+                <Button
+                  key={name}
+                  onClick={() => {
+                    signIn?.authenticateWithRedirect({
+                      strategy: oAuthStrategy,
+                      redirectUrl: returnTo,
+                      redirectUrlComplete: returnTo,
+                    });
+                  }}
+                >
+                  <Logo variant={icon} className="mr-2" />
+                  Continue using {name}
+                </Button>
+              );
+            })}
+
+            <div className="text-center text-xxs text-foreground/70">
               Proemial is a non-profit foundation dedicated to promoting
               academic discourse and knowledge sharing. By using Proem, you
               consent to our <Link variant="privacy" /> and{" "}
@@ -84,32 +120,6 @@ function useAccessToken() {
   const isValid = decoded?.includes("@");
 
   return isValid && token;
-}
-
-type Props = {
-  variant: "google" | "twitter" | "github";
-};
-
-function LoginButton({ variant }: Props) {
-  const provider =
-    variant === "google"
-      ? "Google"
-      : variant === "twitter"
-        ? "Twitter"
-        : "GitHub";
-
-  const returnTo = window.location.pathname + window.location.search;
-
-  return (
-    <Button
-      onClick={() =>
-        (window.location.href = `/api/auth/login?returnTo=${returnTo}`)
-      }
-    >
-      <Logo variant={variant} className="mr-2" />
-      Continue using {provider}
-    </Button>
-  );
 }
 
 function Link({ variant }: { variant: "privacy" | "terms" }) {
