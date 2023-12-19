@@ -6,7 +6,7 @@
     "dev": "next dev --port 80",
     "build": "next build",
     "start": "next start",
-    "migrate": "echo hello world"
+    "migrateDatabaseSchema": "drizzle-kit push:pg"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3",

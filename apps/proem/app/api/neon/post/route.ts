@@ -13,6 +13,7 @@ export async function GET() {
       value: 1.0,
       newValue: 2.0,
       next: 3.0,
+      hello: number,
     })
     .onConflictDoNothing()
     .returning();
