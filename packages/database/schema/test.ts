@@ -7,5 +7,4 @@ export const testTable = pgTable("test", {
   newValue: real("newValue"),
   next: real("next"),
   hello: real("hello"),
-  world: real("world"),
 });
