@@ -1,8 +1,6 @@
 "use client";
-import { useSignIn, useUser } from "@clerk/nextjs";
-import base64url from "base64url";
+import { useSignIn } from "@clerk/nextjs";
 import { X } from "lucide-react";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Logo } from "../icons/logo";
 import Drawer from "../login/drawer";
@@ -34,8 +32,6 @@ const authProviders = [
 
 export function MainMenu() {
   const { isOpen, close } = useDrawerState();
-  const [accessToken, setAccessToken] = useState(useAccessToken());
-  const { user } = useUser();
   const { signIn } = useSignIn();
   const returnTo = window.location.pathname + window.location.search;
 
@@ -45,7 +41,6 @@ export function MainMenu() {
   }, []);
 
   const handleClose = () => {
-    setAccessToken(null);
     close();
   };
 
@@ -63,10 +58,7 @@ export function MainMenu() {
         </div>
       </div>
       {isMounted && (
-        <Drawer
-          isOpen={isOpen || (!!accessToken && !user)}
-          onClose={handleClose}
-        >
+        <Drawer isOpen={isOpen} onClose={handleClose}>
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between my-2">
               <div className="w-2"></div>
@@ -119,12 +111,4 @@ export function MainMenu() {
       <Toaster />
     </div>
   );
-}
-
-function useAccessToken() {
-  const token = useSearchParams().get("token");
-  const decoded = base64url.decode(token || "");
-  const isValid = decoded?.includes("@");
-
-  return isValid && token;
 }

@@ -38,9 +38,6 @@ importers:
       '@vercel/analytics':
         specifier: ^1
         version: 1.1.1
-      base64url:
-        specifier: ^3
-        version: 3.0.1
       class-variance-authority:
         specifier: ^0.6.1
         version: 0.6.1
@@ -2425,11 +2422,6 @@ packages:
 
   /base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
-    dev: false
-
-  /base64url@3.0.1:
-    resolution: {integrity: sha512-ir1UPr3dkwexU7FdV8qBBbNDRUhMmIekYMFZfi+C/sLNnRESKPl23nB9b2pltqfOQNnGzsDdId90AEtG5tCx4A==}
-    engines: {node: '>=6.0.0'}
     dev: false
 
   /binary-extensions@2.2.0:
