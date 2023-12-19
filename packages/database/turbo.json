@@ -1,6 +1,8 @@
 {
   "extends": ["//"],
   "pipeline": {
-    "push": {}
+    "push": {
+      "env": ["DATABASE_URL"]
+    }
   }
 }
