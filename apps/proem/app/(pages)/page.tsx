@@ -1,4 +1,4 @@
-import logo from "@/app/images/logo.png";
+import { Logo } from "../components/icons/logo";
 
 export default function HomePage() {
   return (
@@ -8,7 +8,7 @@ export default function HomePage() {
       >
         <div className="h-[30%]" />
         <div className="h-[50%] w-full flex flex-col justify-center items-center">
-          <img src={logo.src} style={{ maxHeight: "40%" }} alt="" />
+          <Logo className="h-22 w-22" />
           <div className="text-3xl md:text-6xl">proem</div>
         </div>
         <div className="h-[40%] w-full flex justify-center items-center" />
