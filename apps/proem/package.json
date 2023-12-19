@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev --port 80",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "migrate": "echo hello world"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3",
