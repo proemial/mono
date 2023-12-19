@@ -2,8 +2,7 @@
   "extends": ["//"],
   "pipeline": {
     "build": {
-      "dependsOn": ["pushDatabaseSchema"]
-    },
-    "pushDatabaseSchema": {}
+      "dependsOn": ["@proemial/database#push"]
+    }
   }
 }
