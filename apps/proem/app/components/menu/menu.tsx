@@ -103,8 +103,15 @@ export function MainMenu() {
             <div className="text-center text-xxs text-foreground/70">
               Proemial is a non-profit foundation dedicated to promoting
               academic discourse and knowledge sharing. By using Proem, you
-              consent to our <Link variant="privacy" /> and{" "}
-              <Link variant="terms" />.
+              consent to our{" "}
+              <a href="/privacy" className="text-primary-light">
+                Privacy Policy
+              </a>{" "}
+              and{" "}
+              <a href="/terms" className="text-primary-light">
+                Terms of Service
+              </a>
+              .
             </div>
           </div>
         </Drawer>
@@ -120,15 +127,4 @@ function useAccessToken() {
   const isValid = decoded?.includes("@");
 
   return isValid && token;
-}
-
-function Link({ variant }: { variant: "privacy" | "terms" }) {
-  const url = variant === "privacy" ? "/privacy" : "/terms";
-  const text = variant === "privacy" ? "Privacy Policy" : "Terms of Service";
-
-  return (
-    <a href={url} className="text-primary-light">
-      {text}
-    </a>
-  );
 }
