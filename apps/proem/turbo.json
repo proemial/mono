@@ -1,7 +1,9 @@
 {
   "extends": ["//"],
   "pipeline": {
-    "build": { "dependsOn": ["migrateDatabaseSchema"] },
-    "migrateDatabaseSchema": {}
+    "build": {
+      "dependsOn": ["pushDatabaseSchema"]
+    },
+    "pushDatabaseSchema": {}
   }
 }
