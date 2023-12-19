@@ -1,7 +1,7 @@
 {
   "extends": ["//"],
   "pipeline": {
-    "push": {
+    "schema:push": {
       "env": ["DATABASE_URL"]
     }
   }

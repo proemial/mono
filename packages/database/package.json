@@ -5,7 +5,7 @@
   "types": "./index.ts",
   "license": "MIT",
   "scripts": {
-    "push": "drizzle-kit push:pg"
+    "schema:push": "drizzle-kit push:pg"
   },
   "devDependencies": {
     "@proemial/typescript-config": "workspace:*",
