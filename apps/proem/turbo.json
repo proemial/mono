@@ -2,7 +2,8 @@
   "extends": ["//"],
   "pipeline": {
     "build": {
-      "dependsOn": ["@proemial/database#push"]
+      "dependsOn": ["@proemial/database#push"],
+      "env": ["DATABASE_URL"]
     }
   }
 }
