@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3",
+    "@clerk/nextjs": "^4.28.1",
     "@neondatabase/serverless": "^0.6.0",
     "@proemial/database": "workspace:*",
     "@radix-ui/react-avatar": "^1",
