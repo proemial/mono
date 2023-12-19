@@ -53,6 +53,14 @@ To develop all apps and packages, run the following command from the repository 
 pnpm dev
 ```
 
+### Link repo with Vercel
+
+To interact with the Vercel and ect. fetch en vars, run the following command from the repository root:
+
+```
+vercel link --repo
+```
+
 ### Remote Caching
 
 Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
