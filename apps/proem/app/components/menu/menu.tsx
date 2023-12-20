@@ -1,6 +1,5 @@
 "use client";
 import { useSignIn } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
 import { Bookmark, History, Home, User, X } from "lucide-react";
 import Link from "next/link";
 import { useAuthActions } from "../../authentication";
@@ -35,10 +34,6 @@ export function MainMenu() {
 
   const returnTo = getLocation();
 
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
   const { color } = useAuthActions();
 
   const handleClose = () => {
@@ -66,57 +61,54 @@ export function MainMenu() {
           </Link>
         </div>
       </div>
-      {isMounted && signInIsLoaded && (
-        <Drawer isOpen={isOpen} onClose={handleClose}>
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center justify-between my-2">
-              <div className="w-2"></div>
-              <div className="text-base text-center">
-                Please log in to continue
-              </div>
-              <button
-                type="button"
-                onClick={handleClose}
-                className="p-1 border rounded-xl bg-primary border-primary"
-              >
-                <X className="h-4 w-4 stroke-[4]" />
-              </button>
+      <Drawer isOpen={isOpen} onClose={handleClose}>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between my-2">
+            <div className="w-2"></div>
+            <div className="text-base text-center">
+              Please log in to continue
             </div>
-
-            {authProviders.map(({ name, icon, oAuthStrategy }) => {
-              return (
-                <Button
-                  key={name}
-                  onClick={() => {
-                    signIn.authenticateWithRedirect({
-                      strategy: oAuthStrategy,
-                      redirectUrl: "/sso-callback",
-                      redirectUrlComplete: returnTo,
-                    });
-                  }}
-                >
-                  <Logo variant={icon} className="mr-2" />
-                  Continue using {name}
-                </Button>
-              );
-            })}
-
-            <div className="text-center text-xxs text-foreground/70">
-              Proemial is a non-profit foundation dedicated to promoting
-              academic discourse and knowledge sharing. By using Proem, you
-              consent to our{" "}
-              <a href="/privacy" className="text-primary-light">
-                Privacy Policy
-              </a>{" "}
-              and{" "}
-              <a href="/terms" className="text-primary-light">
-                Terms of Service
-              </a>
-              .
-            </div>
+            <button
+              type="button"
+              onClick={handleClose}
+              className="p-1 border rounded-xl bg-primary border-primary"
+            >
+              <X className="h-4 w-4 stroke-[4]" />
+            </button>
           </div>
-        </Drawer>
-      )}
+
+          {authProviders.map(({ name, icon, oAuthStrategy }) => {
+            return (
+              <Button
+                key={name}
+                onClick={() => {
+                  signIn.authenticateWithRedirect({
+                    strategy: oAuthStrategy,
+                    redirectUrl: "/sso-callback",
+                    redirectUrlComplete: returnTo,
+                  });
+                }}
+              >
+                <Logo variant={icon} className="mr-2" />
+                Continue using {name}
+              </Button>
+            );
+          })}
+
+          <div className="text-center text-xxs text-foreground/70">
+            Proemial is a non-profit foundation dedicated to promoting academic
+            discourse and knowledge sharing. By using Proem, you consent to our{" "}
+            <a href="/privacy" className="text-primary-light">
+              Privacy Policy
+            </a>{" "}
+            and{" "}
+            <a href="/terms" className="text-primary-light">
+              Terms of Service
+            </a>
+            .
+          </div>
+        </div>
+      </Drawer>
       <Toaster />
     </div>
   );
