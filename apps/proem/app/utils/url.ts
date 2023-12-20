@@ -3,5 +3,5 @@ export function getLocation() {
   const location =
     isBrowser() && window.location.pathname + window.location.search;
 
-  return location ? location : "https://proemial.ai";
+  return location ? location : "/";
 }
