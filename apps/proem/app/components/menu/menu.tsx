@@ -1,14 +1,15 @@
 "use client";
-import { useSignIn } from "@clerk/nextjs";
+import { SignedOut, useSignIn } from "@clerk/nextjs";
 import { Bookmark, History, Home, User, X } from "lucide-react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useAuthActions } from "../../authentication";
 import { Logo } from "../icons/logo";
 import Drawer from "../login/drawer";
-import { useDrawerState } from "../login/state";
 import { Button } from "../shadcn-ui/button";
 import { Toaster } from "../shadcn-ui/toaster";
-import { getLocation } from "@/app/utils/url";
+import { useDrawerState } from "../login/state";
+import { getLocation } from "../../utils/url";
 
 const authProviders = [
   {
@@ -34,10 +35,15 @@ export function MainMenu() {
 
   const returnTo = getLocation();
 
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { color } = useAuthActions();
+  const redirectUrl = searchParams.get("redirect_url")!;
+  const drawerIsOpen = Boolean(redirectUrl);
 
   const handleClose = () => {
-    close();
+    router.push(pathname);
   };
 
   return (
@@ -61,54 +67,57 @@ export function MainMenu() {
           </Link>
         </div>
       </div>
-      <Drawer isOpen={isOpen} onClose={handleClose}>
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between my-2">
-            <div className="w-2"></div>
-            <div className="text-base text-center">
-              Please log in to continue
-            </div>
-            <button
-              type="button"
-              onClick={handleClose}
-              className="p-1 border rounded-xl bg-primary border-primary"
-            >
-              <X className="h-4 w-4 stroke-[4]" />
-            </button>
-          </div>
-
-          {authProviders.map(({ name, icon, oAuthStrategy }) => {
-            return (
-              <Button
-                key={name}
-                onClick={() => {
-                  signIn.authenticateWithRedirect({
-                    strategy: oAuthStrategy,
-                    redirectUrl: "/sso-callback",
-                    redirectUrlComplete: returnTo,
-                  });
-                }}
+      <SignedOut>
+        <Drawer isOpen={isOpen} onClose={handleClose}>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between my-2">
+              <div className="w-2"></div>
+              <div className="text-base text-center">
+                Please log in to continue
+              </div>
+              <button
+                type="button"
+                onClick={handleClose}
+                className="p-1 border rounded-xl bg-primary border-primary"
               >
-                <Logo variant={icon} className="mr-2" />
-                Continue using {name}
-              </Button>
-            );
-          })}
+                <X className="h-4 w-4 stroke-[4]" />
+              </button>
+            </div>
 
-          <div className="text-center text-xxs text-foreground/70">
-            Proemial is a non-profit foundation dedicated to promoting academic
-            discourse and knowledge sharing. By using Proem, you consent to our{" "}
-            <a href="/privacy" className="text-primary-light">
-              Privacy Policy
-            </a>{" "}
-            and{" "}
-            <a href="/terms" className="text-primary-light">
-              Terms of Service
-            </a>
-            .
+            {authProviders.map(({ name, icon, oAuthStrategy }) => {
+              return (
+                <Button
+                  key={name}
+                  onClick={() => {
+                    signIn?.authenticateWithRedirect({
+                      strategy: oAuthStrategy,
+                      redirectUrl: "/sso-callback",
+                      redirectUrlComplete: returnTo,
+                    });
+                  }}
+                >
+                  <Logo variant={icon} className="mr-2" />
+                  Continue using {name}
+                </Button>
+              );
+            })}
+
+            <div className="text-center text-xxs text-foreground/70">
+              Proemial is a non-profit foundation dedicated to promoting
+              academic discourse and knowledge sharing. By using Proem, you
+              consent to our{" "}
+              <a href="/privacy" className="text-primary-light">
+                Privacy Policy
+              </a>{" "}
+              and{" "}
+              <a href="/terms" className="text-primary-light">
+                Terms of Service
+              </a>
+              .
+            </div>
           </div>
-        </div>
-      </Drawer>
+        </Drawer>
+      </SignedOut>
       <Toaster />
     </div>
   );
