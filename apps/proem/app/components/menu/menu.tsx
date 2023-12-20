@@ -1,6 +1,5 @@
 "use client";
 import { useSignIn } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
 import { Bookmark, History, Home, User, X } from "lucide-react";
 import Link from "next/link";
 import { useAuthActions } from "../../authentication";
@@ -35,10 +34,6 @@ export function MainMenu() {
 
   const returnTo = getLocation();
 
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
   const { color } = useAuthActions();
 
   const handleClose = () => {
@@ -66,7 +61,6 @@ export function MainMenu() {
           </Link>
         </div>
       </div>
-      {isMounted && (
         <Drawer isOpen={isOpen} onClose={handleClose}>
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between my-2">
@@ -116,7 +110,6 @@ export function MainMenu() {
             </div>
           </div>
         </Drawer>
-      )}
       <Toaster />
     </div>
   );

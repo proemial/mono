@@ -8,8 +8,8 @@ import { cn } from "../shadcn-ui/utils";
 import useMountTransition from "../use-mount-transition";
 
 function createPortalRoot() {
-  const drawerRoot = document.createElement("div");
-  drawerRoot.setAttribute("id", "drawer-root");
+  const drawerRoot = globalThis.document?.createElement("div");
+  drawerRoot?.setAttribute("id", "drawer-root");
 
   return drawerRoot;
 }
@@ -32,10 +32,10 @@ function Drawer({
   removeWhenClosed = true,
 }: Props) {
   const bodyRef = useRef(
-    document.querySelector("body"),
+    globalThis.document?.querySelector("body")
   ) as MutableRefObject<HTMLBodyElement>;
   const portalRootRef = useRef(
-    document.getElementById("drawer-root") || createPortalRoot(),
+    globalThis.document?.getElementById("drawer-root") || createPortalRoot()
   );
 
   // Append portal root on mount
@@ -107,14 +107,14 @@ function Drawer({
               background: "rgba(0, 0, 0, 0.65)",
             }}
           >
-            <div className="w-full flex flex-col items-center">
+            <div className="flex flex-col items-center w-full">
               <div className="flex max-w-[420px]">{children}</div>
             </div>
           </div>
         </div>
       </div>
     </div>,
-    portalRootRef.current,
+    portalRootRef.current
   );
 }
 
