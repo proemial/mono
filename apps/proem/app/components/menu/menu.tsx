@@ -11,6 +11,7 @@ import { BookmarksMenuItem } from "./menu-bookmarks";
 import { HistoryMenuItem } from "./menu-history";
 import { HomeMenuItem } from "./menu-home";
 import { ProfileMenuItem } from "./menu-profile";
+import { getLocation } from "@/app/utils/url";
 
 const authProviders = [
   {
@@ -33,7 +34,8 @@ const authProviders = [
 export function MainMenu() {
   const { isOpen, close } = useDrawerState();
   const { signIn } = useSignIn();
-  const returnTo = window.location.pathname + window.location.search;
+
+  const returnTo = getLocation();
 
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
