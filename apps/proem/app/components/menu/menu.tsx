@@ -1,16 +1,14 @@
 "use client";
 import { useSignIn } from "@clerk/nextjs";
-import { X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Bookmark, History, Home, User, X } from "lucide-react";
+import Link from "next/link";
+import { useAuthActions } from "../../authentication";
 import { Logo } from "../icons/logo";
 import Drawer from "../login/drawer";
 import { useDrawerState } from "../login/state";
 import { Button } from "../shadcn-ui/button";
 import { Toaster } from "../shadcn-ui/toaster";
-import { BookmarksMenuItem } from "./menu-bookmarks";
-import { HistoryMenuItem } from "./menu-history";
-import { HomeMenuItem } from "./menu-home";
-import { ProfileMenuItem } from "./menu-profile";
 import { getLocation } from "@/app/utils/url";
 
 const authProviders = [
@@ -41,6 +39,7 @@ export function MainMenu() {
   useEffect(() => {
     setIsMounted(true);
   }, []);
+  const { color } = useAuthActions();
 
   const handleClose = () => {
     close();
@@ -53,10 +52,18 @@ export function MainMenu() {
           className="flex justify-around"
           style={{ boxShadow: "0px -8px 8px 4px rgba(0, 0, 0, 0.85)" }}
         >
-          <HomeMenuItem />
-          <HistoryMenuItem />
-          <BookmarksMenuItem />
-          <ProfileMenuItem />
+          <Link href={pathname === "/" ? "/" : "/?reload=true"}>
+            <Home className={color} />
+          </Link>
+          <Link href="/history">
+            <History className={color} />
+          </Link>
+          <Link href="/bookmarks">
+            <Bookmark className={color} />
+          </Link>
+          <Link href="/profile">
+            <User className={color} />
+          </Link>
         </div>
       </div>
       {isMounted && signInIsLoaded && (
