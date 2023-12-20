@@ -5,13 +5,10 @@ import {
   AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
 import { Button } from "@/app/components/shadcn-ui/button";
-import { useAuth, useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { SignOutButton, useUser } from "@clerk/nextjs";
 
 export default function ProfilePage() {
-  const router = useRouter();
   const { user } = useUser();
-  const { signOut } = useAuth();
   const initials = user?.fullName?.split(" ").map((name) => name.charAt(0));
 
   return (
@@ -27,12 +24,9 @@ export default function ProfilePage() {
           </Avatar>
           <div>{user?.fullName}</div>
         </div>
-        <Button
-          onClick={() => signOut().then(() => router.push("/"))}
-          className="mt-4"
-        >
-          Log out
-        </Button>
+        <SignOutButton>
+          <Button className="mt-4">Log out</Button>
+        </SignOutButton>
       </div>
     </main>
   );
