@@ -68,7 +68,7 @@ export function MainMenu() {
               Proemial is a non-profit foundation dedicated to promoting
               academic discourse and knowledge sharing. By using Proem, you
               consent to our <Link variant="privacy" /> and{" "}
-              <Link variant="privacy" />.
+              <Link variant="terms" />.
             </div>
           </div>
         </Drawer>
