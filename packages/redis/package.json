@@ -1,0 +1,15 @@
+{
+  "name": "@proemial/redis",
+  "version": "0.0.0",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "license": "MIT",
+  "dependencies": {
+    "@proemial/models": "workspace:*",
+    "@upstash/redis": "^1"
+  },
+  "devDependencies": {
+    "@proemial/typescript-config": "workspace:*",
+    "typescript": "^5"
+  }
+}
