@@ -8,14 +8,13 @@
     "start": "next start"
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^3",
+    "@clerk/nextjs": "^4.28.1",
     "@neondatabase/serverless": "^0.6.0",
     "@proemial/database": "workspace:*",
     "@radix-ui/react-avatar": "^1",
     "@radix-ui/react-slot": "^1",
     "@radix-ui/react-toast": "^1",
     "@vercel/analytics": "^1",
-    "base64url": "^3",
     "class-variance-authority": "^0.6.1",
     "clsx": "^1",
     "cookies-next": "^2",

@@ -1,6 +1,10 @@
-import { authMiddleware } from "./utils/middleware/authMiddleware";
-import { MiddlewareStack } from "./utils/middleware/middleware";
+import { authMiddleware } from "@clerk/nextjs";
 
-const middlewares = [authMiddleware];
+// This example protects all routes including api/trpc routes
+// Please edit this to allow other routes to be public as needed.
+// See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your Middleware
+export default authMiddleware({});
 
-export default MiddlewareStack(middlewares);
+export const config = {
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+};

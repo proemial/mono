@@ -1,9 +1,9 @@
-import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { Anek_Malayalam } from "next/font/google";
-import { MainMenu } from "@/app/components/menu/menu";
-import "./globals.css";
 import { AnalyticsClient } from "@/app/components/analytics";
+import { MainMenu } from "@/app/components/menu/menu";
+import { ClerkProvider } from "@clerk/nextjs";
 import { ReactNode } from "react";
+import "./globals.css";
 
 const lightModeEnabled = false;
 
@@ -19,7 +19,7 @@ export default async function RootLayout({ children }: Props) {
   const light = lightModeEnabled ? "dark:dark" : "dark";
 
   return (
-    <UserProvider>
+    <ClerkProvider>
       <html lang="en">
         <body className={`flex justify-center overflow-clip ${light}`}>
           <main
@@ -38,6 +38,6 @@ export default async function RootLayout({ children }: Props) {
           <AnalyticsClient />
         </body>
       </html>
-    </UserProvider>
+    </ClerkProvider>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useUser } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
 import { useDrawerState } from "@/app/components/login/state";
 
@@ -16,5 +16,5 @@ export function useAuthActions() {
   const toggleDrawer = !user ? toggle : () => {};
   const goto = user ? push : toggleDrawer;
 
-  return { user, goto, toggleDrawer, color, isHome };
+  return { goto, toggleDrawer, color, isHome };
 }

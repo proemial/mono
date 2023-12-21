@@ -5,33 +5,28 @@ import {
   AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
 import { Button } from "@/app/components/shadcn-ui/button";
-import { useUser } from "@auth0/nextjs-auth0/client";
-import * as React from "react";
+import { SignOutButton, useUser } from "@clerk/nextjs";
 
 export default function ProfilePage() {
   const { user } = useUser();
-  const initials = user?.name?.split(" ").map((name) => name.charAt(0));
-
-  const handleLogout = () => {
-    window.location.href = `/api/auth/logout`;
-  };
+  const initials = user?.fullName?.split(" ").map((name) => name.charAt(0));
 
   return (
-    <main className="flex min-h-screen flex-col justify-begin">
-      <div className="text-xl px-4 py-6 bg-background h-full top-0 sticky shadow">
+    <main className="flex flex-col min-h-screen justify-begin">
+      <div className="sticky top-0 h-full px-4 py-6 text-xl shadow bg-background">
         Profile
       </div>
-      <div className="p-4 pt-8 flex flex-col justify-begin text-lg font-medium items-begin ">
-        <div className="flex justify-begin gap-2 items-center mb-4">
+      <div className="flex flex-col p-4 pt-8 text-lg font-medium justify-begin items-begin ">
+        <div className="flex items-center gap-2 mb-4 justify-begin">
           <Avatar>
-            <AvatarImage src={user?.picture || ""} alt="avatar" />
+            <AvatarImage src={user?.imageUrl || ""} alt="avatar" />
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
-          <div>{user?.name}</div>
+          <div>{user?.fullName}</div>
         </div>
-        <Button onClick={handleLogout} className="mt-4">
-          Log out
-        </Button>
+        <SignOutButton>
+          <Button className="mt-4">Log out</Button>
+        </SignOutButton>
       </div>
     </main>
   );
