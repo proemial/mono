@@ -52,16 +52,6 @@
             "type": "string",
             "title": "query",
             "description": "The user query"
-          },
-          "count": {
-              "type": "integer",
-              "title": "count",
-              "description": "Max number of papers to return"
-          },
-          "tokens": {
-            "type": "integer",
-            "title": "tokens",
-            "description": "Approx. max number of tokens in each abstract"
           }
         }
       },
@@ -79,6 +69,9 @@
       "Paper": {
         "type": "object",
         "properties": {
+          "title": {
+            "type": "string"
+          },
           "abstract": {
             "type": "string"
           },

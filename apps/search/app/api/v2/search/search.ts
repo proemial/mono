@@ -16,6 +16,7 @@ export async function fetchPapers(q: string, count = 30, tokens = 350) {
   const result = response.results.map((o) => ({
     link: o.id.replace("openalex.org", "proem.ai/oa"),
     abstract: fromInvertedIndex(o.abstract_inverted_index, tokens), // avg 1,635 chars
+    title: o.display_name,
   }));
   console.log("result size:", JSON.stringify(result).length);
 
