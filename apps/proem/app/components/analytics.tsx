@@ -1,6 +1,7 @@
 "use client";
 
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 // import va from "@vercel/analytics";
 // import { usePathname } from "next/navigation";
 // import { useEffect, useState } from "react";
@@ -33,7 +34,12 @@ export function AnalyticsClient() {
   //   }
   // }, [initialized, pathname]);
 
-  return <VercelAnalytics />;
+  return (
+    <>
+      <SpeedInsights />
+      <VercelAnalytics />
+    </>
+  );
 }
 
 /*
