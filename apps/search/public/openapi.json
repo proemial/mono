@@ -27,7 +27,7 @@
         },
         "responses": {
           "200": {
-            "description": "Abstracts matching user query",
+            "description": "Papers matching user query",
             "content": {
               "application/json": {
                 "schema": {
