@@ -1,5 +1,5 @@
 "use client";
-import { SignedOut, useSignIn } from "@clerk/nextjs";
+import { SignedOut, useSignUp } from "@clerk/nextjs";
 import { Bookmark, History, Home, User, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -31,7 +31,7 @@ export function MainMenu() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { signIn } = useSignIn();
+  const { signUp } = useSignUp();
   const { color } = useAuthActions();
   const redirectUrl = searchParams.get("redirect_url")!;
   const drawerIsOpen = Boolean(redirectUrl);
@@ -83,9 +83,9 @@ export function MainMenu() {
                 <Button
                   key={name}
                   onClick={() => {
-                    signIn?.authenticateWithRedirect({
+                    signUp?.authenticateWithRedirect({
                       strategy: oAuthStrategy,
-                      redirectUrl: "/",
+                      redirectUrl: "/sso-callback",
                       redirectUrlComplete: redirectUrl,
                     });
                   }}
