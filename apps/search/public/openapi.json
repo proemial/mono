@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Research Papers",
-    "description": "Gets abstracts from scientific research papers",
+    "description": "Gets scientific research papers",
     "version": "v1.0.0"
   },
   "servers": [
