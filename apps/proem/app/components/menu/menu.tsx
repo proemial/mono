@@ -1,17 +1,13 @@
 "use client";
-import { useSignIn } from "@clerk/nextjs";
-import { X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { SignedOut, useSignIn } from "@clerk/nextjs";
+import { Bookmark, History, Home, User, X } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useAuthActions } from "../../authentication";
 import { Logo } from "../icons/logo";
 import Drawer from "../login/drawer";
-import { useDrawerState } from "../login/state";
 import { Button } from "../shadcn-ui/button";
 import { Toaster } from "../shadcn-ui/toaster";
-import { BookmarksMenuItem } from "./menu-bookmarks";
-import { HistoryMenuItem } from "./menu-history";
-import { HomeMenuItem } from "./menu-home";
-import { ProfileMenuItem } from "./menu-profile";
-import { getLocation } from "@/app/utils/url";
 
 const authProviders = [
   {
@@ -32,18 +28,16 @@ const authProviders = [
 ] as const;
 
 export function MainMenu() {
-  const { isOpen, close } = useDrawerState();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { signIn } = useSignIn();
-
-  const returnTo = getLocation();
-
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const { color } = useAuthActions();
+  const redirectUrl = searchParams.get("redirect_url")!;
+  const drawerIsOpen = Boolean(redirectUrl);
 
   const handleClose = () => {
-    close();
+    router.push(pathname);
   };
 
   return (
@@ -53,14 +47,22 @@ export function MainMenu() {
           className="flex justify-around"
           style={{ boxShadow: "0px -8px 8px 4px rgba(0, 0, 0, 0.85)" }}
         >
-          <HomeMenuItem />
-          <HistoryMenuItem />
-          <BookmarksMenuItem />
-          <ProfileMenuItem />
+          <Link href={pathname === "/" ? "/" : "/?reload=true"}>
+            <Home className={color} />
+          </Link>
+          <Link href="/history">
+            <History className={color} />
+          </Link>
+          <Link href="/bookmarks">
+            <Bookmark className={color} />
+          </Link>
+          <Link href="/profile">
+            <User className={color} />
+          </Link>
         </div>
       </div>
-      {isMounted && (
-        <Drawer isOpen={isOpen} onClose={handleClose}>
+      <SignedOut>
+        <Drawer isOpen={drawerIsOpen} onClose={handleClose}>
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between my-2">
               <div className="w-2"></div>
@@ -83,8 +85,8 @@ export function MainMenu() {
                   onClick={() => {
                     signIn?.authenticateWithRedirect({
                       strategy: oAuthStrategy,
-                      redirectUrl: returnTo,
-                      redirectUrlComplete: returnTo,
+                      redirectUrl: "/",
+                      redirectUrlComplete: redirectUrl,
                     });
                   }}
                 >
@@ -109,7 +111,7 @@ export function MainMenu() {
             </div>
           </div>
         </Drawer>
-      )}
+      </SignedOut>
       <Toaster />
     </div>
   );
