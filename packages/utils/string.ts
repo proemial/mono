@@ -1,7 +1,8 @@
 export function fromInvertedIndex(
-  index: { [key: string]: number[] },
+  index?: { [key: string]: number[] },
   tokenLimit?: number,
 ) {
+  if (!index) return undefined;
   const tokens = [] as string[];
 
   // @ts-ignore

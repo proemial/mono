@@ -11,6 +11,7 @@
   "dependencies": {
     "@proemial/utils": "workspace:*",
     "@proemial/models": "workspace:*",
+    "@proemial/redis": "workspace:*",
     "react": "^18",
     "react-dom": "^18",
     "next": "14.0.3",

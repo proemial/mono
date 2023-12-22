@@ -11,9 +11,18 @@ export const OpenAlexPapers = {
     }
   },
 
-  push: async (paper: OpenAlexPaper) => {
+  push: async (paper: OpenAlexPaper | Array<OpenAlexPaper>) => {
     try {
-      await UpStash.papers.set(`oa:${paper.id}`, paper);
+      if (!Array.isArray(paper)) {
+        await UpStash.papers.set(`oa:${paper.data.id}`, paper);
+      } else {
+        const pipeline = UpStash.papers.pipeline();
+        paper.forEach((paper) => {
+          pipeline.set(`oa:${paper.data.id.split("/").at(-1)}`, paper);
+        });
+
+        await pipeline.exec();
+      }
     } catch (error) {
       console.error(error);
       throw error;

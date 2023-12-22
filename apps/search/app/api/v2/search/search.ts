@@ -1,24 +1,57 @@
 // ,publication_date:>2023-10-16,publication_date:<2023-11-16
 import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
-import { OpenAlexPaper } from "@proemial/models/open-alex";
+import {
+  OpenAlexWorksHit,
+  OpenAlexWorksSearchResult,
+} from "@proemial/models/open-alex";
+import { Redis } from "@proemial/redis/redis";
 
-const fields = "select=relevance_score,id,display_name,abstract_inverted_index";
+const fields = `
+relevance_score,
+id,
+ids,
+publication_date,
+title,
+language,
+has_fulltext,
+open_access,
+primary_location,
+authorships,
+related_works,
+abstract_inverted_index
+`;
+
 const filter = "filter=type:article,cited_by_count:>10,cited_by_count:<1000";
-const baseUrl = `https://api.openalex.org/works?${fields}&${filter}`;
+const baseUrl = `https://api.openalex.org/works?select=${fields}&${filter}`;
 
 export async function fetchPapers(q: string, count = 30, tokens = 350) {
-  const query = `${baseUrl},${q}&per-page=${count}`;
-  console.log("query", query);
+  const data = await fetchWithAbstract(q, count, tokens);
 
-  const response = await fetchJson<{ results: Array<OpenAlexPaper> }>(query);
+  await Redis.papers.push(data.map((o) => ({ data: o })));
 
-  const result = response.results.map((o) => ({
+  return data.map((o) => ({
     link: o.id.replace("openalex.org", "proem.ai/oa"),
-    abstract: fromInvertedIndex(o.abstract_inverted_index, tokens), // avg 1,635 chars
-    title: o.display_name,
+    abstract: o.abstract,
+    title: o.title,
   }));
-  console.log("result size:", JSON.stringify(result).length);
+}
 
-  return result;
+type WithAbstract = OpenAlexWorksHit & { abstract?: string };
+
+async function fetchWithAbstract(q: string, count: number, tokens: number) {
+  const query = `${baseUrl},${q}&per-page=${count}`;
+
+  const response = await fetchJson<OpenAlexWorksSearchResult>(query);
+  console.log(`${response.results.length} papers returned matching ${q}`);
+
+  return response.results.map((paper) => {
+    // Remove the abstract_inverted_index and relevance_score from the response
+    const { abstract_inverted_index, relevance_score, ...rest } = paper;
+
+    return {
+      ...rest,
+      abstract: fromInvertedIndex(abstract_inverted_index, tokens),
+    } as WithAbstract;
+  });
 }

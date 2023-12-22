@@ -1,70 +1,92 @@
-export type OpenAlexSearchResult = {
+// https://docs.openalex.org/api-entities/works/search-works
+export type OpenAlexWorksSearchResult = {
   meta: {
     count: number;
     page: number;
     per_page: number;
   };
-  results: OpenAlexPaper[];
+  results: OpenAlexWorksHit[];
 };
 
-export type OpenAlexPaper = {
+export type OpenAlexWorksHit = OpenAlexWorkCoreMetadata & {
   relevance_score: number;
-  id: string;
-  doi: string;
-  title: string;
-  display_name: string;
-  publication_date: string;
-  updated_date: string;
-  ids: {
-    doi: string;
-    pmid: string;
-    pmcid: string;
-    arxiv: string;
-    jstor: string;
-    ark: string;
-    mag: string;
-    hdl: string;
-    purl: string;
-    uri: string;
+};
+
+// Parsed version of work
+export type OpenAlexPaper = {
+  data: (OpenAlexWorkMetadata | OpenAlexWorkCoreMetadata) & {
+    abstract?: string;
   };
+  generated?: {
+    title: string;
+    abstract?: string;
+    tags?: string[];
+    starters?: string[];
+  };
+};
+
+// Fields to request from OpenAlex (the ones from OpenAlexWorkMetadata)
+// export const OpenAlexSearchFields =
+//   "id,doi,title,display_name,publication_date,updated_date,ids,language,primary_location,best_oa_location,locations,open_access,authorships,corresponding_author_ids,corresponding_institution_ids,has_fulltext,fulltext_origin,cited_by_count,cited_by_percentile_year,keywords,concepts,referenced_works,related_works,ngrams_url,cited_by_api_url,counts_by_year,abstract_inverted_index";
+
+export type OpenAlexWorkCoreMetadata = {
+  id: string;
+  ids: {
+    [K in PaperId]: string;
+  };
+  publication_date: string;
+  title: string;
   language: string;
-  primary_location: OpenAlexLocation;
-  type: string;
+  has_fulltext: boolean;
+
   open_access: {
     is_oa: boolean;
     oa_status: string;
     oa_url: string;
     any_repository_has_fulltext: boolean;
   };
+
+  primary_location: OpenAlexLocation;
   authorships: OpenAlexAuthorship[];
+  related_works: string[];
+
+  abstract_inverted_index?: { [key: string]: number[] };
+};
+
+export type OpenAlexWorkMetadata = OpenAlexWorkCoreMetadata & {
+  doi: string;
+
+  updated_date: string;
+  best_oa_location: OpenAlexLocation;
+  locations: OpenAlexLocation[];
+
   corresponding_author_ids: string[];
   corresponding_institution_ids: string[];
-  has_fulltext: boolean;
   fulltext_origin: string;
   cited_by_count: number;
   cited_by_percentile_year: {
     min: number;
     max: number;
   };
-  biblio: {
-    volume: string;
-    issue: string;
-    first_page: string;
-    last_page: string;
-  };
   keywords: OpenAlexKeyword[];
   concepts: OpenAlexConcept[];
-  mesh: OpenAlexMeshNode[];
-  locations: OpenAlexLocation[];
-  best_oa_location: OpenAlexLocation;
   referenced_works: string[];
-  related_works: string[];
   ngrams_url: string;
   cited_by_api_url: string;
   counts_by_year: OpenAlexCitationCount[];
-
-  abstract_inverted_index: { [key: string]: number[] };
 };
+
+export type PaperId =
+  | "doi"
+  | "pmid"
+  | "pmcid"
+  | "arxiv"
+  | "jstor"
+  | "ark"
+  | "mag"
+  | "hdl"
+  | "purl"
+  | "uri";
 
 export type OpenAlexCitationCount = {
   year: number;

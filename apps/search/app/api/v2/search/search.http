@@ -4,5 +4,6 @@ POST http://localhost:8000/api/v2/search HTTP/1.1
 content-type: application/json
 
 {
-    "q": "title.search:(%22dysmenorrhea%22),abstract.search:(%22period%20pain%22%20OR%20%22menstrual%20cramps%22%20OR%20%22dysmenorrhea%22%20OR%20%22terrible%22%20OR%20%22severe%22%20OR%20%22intense%22%20OR%20%22management%22%20OR%20%22treatment%22%20OR%20%22relief%22)"
+    "q": "title.search:(%22dysmenorrhea%22),abstract.search:(%22period%20pain%22%20OR%20%22menstrual%20cramps%22%20OR%20%22dysmenorrhea%22%20OR%20%22terrible%22%20OR%20%22severe%22%20OR%20%22intense%22%20OR%20%22management%22%20OR%20%22treatment%22%20OR%20%22relief%22)",
+    "count": 3
 }

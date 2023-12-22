@@ -120,6 +120,9 @@ importers:
       '@proemial/models':
         specifier: workspace:*
         version: link:../../packages/models
+      '@proemial/redis':
+        specifier: workspace:*
+        version: link:../../packages/redis
       '@proemial/utils':
         specifier: workspace:*
         version: link:../../packages/utils
