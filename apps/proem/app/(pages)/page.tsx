@@ -1,6 +1,9 @@
 import { Logo } from "../components/icons/logo";
+import { isBeta } from "@/app/beta";
 
 export default function HomePage() {
+  const beta = isBeta();
+
   return (
     <main className={`min-h-[calc(100dvh-48px)] flex flex-col justify-begin`}>
       <div
@@ -13,6 +16,7 @@ export default function HomePage() {
         </div>
         <div className="h-[40%] w-full flex justify-center items-center" />
       </div>
+      {beta && <div>FEED</div>}
     </main>
   );
 }

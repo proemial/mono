@@ -1,9 +1,9 @@
-import { Anek_Malayalam } from "next/font/google";
 import { AnalyticsClient } from "@/app/components/analytics";
 import { MainMenu } from "@/app/components/menu/menu";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ReactNode } from "react";
 import "./globals.css";
+import { isBeta } from "@/app/beta";
 
 const lightModeEnabled = false;
 
@@ -17,6 +17,7 @@ type Props = {
 
 export default async function RootLayout({ children }: Props) {
   const light = lightModeEnabled ? "dark:dark" : "dark";
+  const beta = isBeta();
 
   return (
     <ClerkProvider>
@@ -33,7 +34,7 @@ export default async function RootLayout({ children }: Props) {
               {children}
             </div>
 
-            <MainMenu />
+            {beta && <MainMenu />}
           </main>
           <AnalyticsClient />
         </body>
