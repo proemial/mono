@@ -18,16 +18,21 @@ export type OpenAlexPaper = {
     abstract?: string;
   };
   generated?: {
-    title: string;
+    title?: string;
     abstract?: string;
     tags?: string[];
     starters?: string[];
   };
 };
 
+export const baseOaUrl = "https://api.openalex.org/works";
+
 // Fields to request from OpenAlex (the ones from OpenAlexWorkMetadata)
-// export const OpenAlexSearchFields =
-//   "id,doi,title,display_name,publication_date,updated_date,ids,language,primary_location,best_oa_location,locations,open_access,authorships,corresponding_author_ids,corresponding_institution_ids,has_fulltext,fulltext_origin,cited_by_count,cited_by_percentile_year,keywords,concepts,referenced_works,related_works,ngrams_url,cited_by_api_url,counts_by_year,abstract_inverted_index";
+export const openAlexFields = {
+  all: "id,doi,title,display_name,publication_date,updated_date,ids,language,primary_location,best_oa_location,locations,open_access,authorships,corresponding_author_ids,corresponding_institution_ids,has_fulltext,fulltext_origin,cited_by_count,cited_by_percentile_year,keywords,concepts,referenced_works,related_works,ngrams_url,cited_by_api_url,counts_by_year,abstract_inverted_index",
+  search:
+    "relevance_score,id,ids,publication_date,title,language,has_fulltext,open_access,primary_location,authorships,related_works,abstract_inverted_index",
+};
 
 export type OpenAlexWorkCoreMetadata = {
   id: string;

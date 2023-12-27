@@ -13,6 +13,7 @@
     "@proemial/database": "workspace:*",
     "@proemial/redis": "workspace:*",
     "@proemial/models": "workspace:*",
+    "@proemial/utils": "workspace:*",
     "@radix-ui/react-avatar": "^1",
     "@radix-ui/react-slot": "^1",
     "@radix-ui/react-toast": "^1",

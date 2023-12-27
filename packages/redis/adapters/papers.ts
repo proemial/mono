@@ -28,4 +28,33 @@ export const OpenAlexPapers = {
       throw error;
     }
   },
+
+  upsert: async (id: string, title?: string, paper?: OpenAlexPaper) => {
+    console.log(`Upserting paper ${id}`);
+    try {
+      const redisPaper =
+        ((await UpStash.papers.get(`oa:${id}`)) as OpenAlexPaper) || {};
+
+      if (paper) {
+        const mergedPaper = {
+          ...redisPaper,
+          ...paper,
+        };
+        await UpStash.papers.set(`oa:${id}`, mergedPaper);
+
+        return mergedPaper;
+      }
+
+      redisPaper.generated = redisPaper.generated
+        ? { ...redisPaper.generated, title }
+        : { title };
+
+      await UpStash.papers.set(`oa:${id}`, redisPaper);
+
+      return redisPaper;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
 };

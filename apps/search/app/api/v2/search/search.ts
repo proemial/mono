@@ -2,28 +2,15 @@
 import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
 import {
+  baseOaUrl,
+  openAlexFields,
   OpenAlexWorksHit,
   OpenAlexWorksSearchResult,
 } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
 
-const fields = `
-relevance_score,
-id,
-ids,
-publication_date,
-title,
-language,
-has_fulltext,
-open_access,
-primary_location,
-authorships,
-related_works,
-abstract_inverted_index
-`;
-
 const filter = "filter=type:article,cited_by_count:>10,cited_by_count:<1000";
-const baseUrl = `https://api.openalex.org/works?select=${fields}&${filter}`;
+const baseUrl = `${baseOaUrl}?select=${openAlexFields.search}&${filter}`;
 
 export async function fetchPapers(q: string, count = 30, tokens = 350) {
   const data = await fetchWithAbstract(q, count, tokens);
@@ -45,6 +32,7 @@ async function fetchWithAbstract(q: string, count: number, tokens: number) {
   const response = await fetchJson<OpenAlexWorksSearchResult>(query);
   console.log(`${response.results.length} papers returned matching ${q}`);
 
+  // TODO: Move to share transform function
   return response.results.map((paper) => {
     // Remove the abstract_inverted_index and relevance_score from the response
     const { abstract_inverted_index, relevance_score, ...rest } = paper;

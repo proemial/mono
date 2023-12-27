@@ -1,19 +1,16 @@
 import { fetchPaper } from "@/app/(pages)/oa/[id]/fetch-paper";
+import { Redis } from "@proemial/redis/redis";
 
-export async function getDescription(
-  id: string,
-  searchParams: { text?: string; title?: string },
-) {
-  let description = searchParams.text || searchParams.title;
-  if (!description) {
-    const paper = await fetchPaper(id);
-    if (paper?.generated?.title) {
-      description = paper.generated.title;
-    } else {
-      description = paper?.data?.title;
-    }
+export async function getDescription(id: string, title?: string) {
+  console.log("getDescription");
+  if (title) {
+    await Redis.papers.upsert(id, title);
+
+    return title;
   }
-  return description;
+
+  const paper = await fetchPaper(id);
+  return paper?.generated?.title ? paper.generated.title : paper?.data?.title;
 }
 
 export function formatMetadata(id: string, description?: string) {

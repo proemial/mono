@@ -3,16 +3,19 @@ import { fetchPaper } from "@/app/(pages)/oa/[id]/fetch-paper";
 
 type Props = {
   params: { id: string };
-  searchParams: { text?: string; title?: string };
+  searchParams: { title?: string };
 };
 
-export async function generateMetadata({ params, searchParams }: Props) {
-  const description = await metadata.getDescription(params.id, searchParams);
-  return metadata.formatMetadata(params.id, description);
+export async function generateMetadata({ params: p, searchParams: s }: Props) {
+  console.log("generateMetadata");
+  const description = await metadata.getDescription(p.id, s.title);
+
+  return metadata.formatMetadata(p.id, description);
 }
 
 export default async function ReaderPage({ params, searchParams }: Props) {
-  let titleFromParams = searchParams.text || searchParams.title || "";
+  console.log("ReaderPage");
+  let titleFromParams = searchParams.title || "";
   const paper = await fetchPaper(params.id);
 
   return (
