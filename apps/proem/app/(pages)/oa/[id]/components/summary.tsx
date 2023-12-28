@@ -2,6 +2,7 @@ import OpenAI from "openai";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
 import { Env } from "@proemial/utils/env";
+import Markdown from "./markdown";
 
 export default async function Summary({ paper }: { paper: OpenAlexPaper }) {
   const title = paper?.data?.title;
@@ -22,10 +23,10 @@ export default async function Summary({ paper }: { paper: OpenAlexPaper }) {
       };
     });
 
-    return <div>New microtitle: {response}</div>;
+    return <Markdown>{response as string}</Markdown>;
   }
 
-  return <div>Existing microtitle: {paper?.generated?.title}</div>;
+  return <Markdown>{paper?.generated?.title as string}</Markdown>;
 }
 
 async function summarise(title: string, abstract: string) {

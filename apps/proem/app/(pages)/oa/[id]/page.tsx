@@ -1,8 +1,9 @@
-import * as metadata from "@/app/(pages)/oa/[id]/page-metadata";
-import { fetchPaper } from "@/app/(pages)/oa/[id]/fetch-paper";
+import * as metadata from "./page-metadata";
+import { fetchPaper } from "./fetch-paper";
 import Summary from "./components/summary";
 import { Suspense } from "react";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
+import { PaperCard } from "./components/paper-card";
 
 type Props = {
   params: { id: string };
@@ -20,18 +21,19 @@ export default async function ReaderPage({ params, searchParams }: Props) {
   const paper = await fetchPaper(params.id);
 
   return (
-    <div>
-      <div>id: {params.id}</div>
-      <Suspense fallback={<SummaryFallback paper={paper} />}>
-        <Summary paper={paper} />
-      </Suspense>
-      <div>
-        Authors:
-        {paper?.data?.authorships?.map((author, i) => (
-          <div key={i}>author: {author.author.display_name}</div>
-        ))}
-      </div>
-    </div>
+    <main className="flex min-h-screen flex-col justify-start">
+      <PaperCard
+        id={params.id}
+        date={paper.data.publication_date}
+        organisation={
+          paper.data.primary_location?.source?.host_organization_name
+        }
+      >
+        <Suspense fallback={<SummaryFallback paper={paper} />}>
+          <Summary paper={paper} />
+        </Suspense>
+      </PaperCard>
+    </main>
   );
 }
 
