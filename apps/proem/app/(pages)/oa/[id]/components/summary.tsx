@@ -5,12 +5,12 @@ import { Env } from "@proemial/utils/env";
 import Markdown from "./markdown";
 
 export default async function Summary({ paper }: { paper: OpenAlexPaper }) {
-  const title = paper?.data?.title;
+  const paperTitle = paper?.data?.title;
   const abstract = paper?.data?.abstract;
   const generatedTitle = paper?.generated?.title;
 
-  if (!generatedTitle && title && abstract) {
-    const response = await summarise(title, abstract);
+  if (!generatedTitle && paperTitle && abstract) {
+    const title = (await summarise(paperTitle, abstract)) as string;
 
     await Redis.papers.upsert(paper.id, (existingPaper) => {
       const generated = existingPaper.generated
@@ -23,10 +23,11 @@ export default async function Summary({ paper }: { paper: OpenAlexPaper }) {
       };
     });
 
-    return <Markdown>{response as string}</Markdown>;
+    console.log("response", title);
+    return <Markdown>{title as string}</Markdown>;
   }
 
-  return <Markdown>{paper?.generated?.title as string}</Markdown>;
+  return <Markdown>{generatedTitle as string}</Markdown>;
 }
 
 async function summarise(title: string, abstract: string) {

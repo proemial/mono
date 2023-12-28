@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { PaperCard } from "./components/paper-card";
 import { ActionsMenu } from "@/app/(pages)/oa/[id]/components/menu/actions-menu";
+import { MetadataPanel } from "@/app/(pages)/oa/[id]/components/panels/metadata";
 
 type Props = {
   params: { id: string };
@@ -39,10 +40,16 @@ export default async function ReaderPage({ params }: Props) {
         url={paper.data.primary_location?.landing_page_url}
         className="p-4 top-0 sticky bg-background z-50"
       />
+
+      <div className="px-4 pt-2">
+        <div className="flex flex-col gap-6 text-base">
+          <MetadataPanel paper={paper} closed />
+        </div>
+      </div>
     </main>
   );
 }
 
 function SummaryFallback({ paper }: { paper?: OpenAlexPaper }) {
-  return <div>Paper title: {paper?.generated?.title}</div>;
+  return <div>Paper title: {paper?.data?.title}</div>;
 }
