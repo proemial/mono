@@ -17,8 +17,7 @@ export async function generateMetadata({ params: p, searchParams: s }: Props) {
   return metadata.formatMetadata(p.id, description);
 }
 
-export default async function ReaderPage({ params, searchParams }: Props) {
-  let titleFromParams = searchParams.title || "";
+export default async function ReaderPage({ params }: Props) {
   const paper = await fetchPaper(params.id);
 
   return (
