@@ -27,8 +27,8 @@ export default async function ReaderPage({ params, searchParams }: Props) {
       </Suspense>
       <div>
         Authors:
-        {paper?.data?.authorships?.map((author) => (
-          <div>author: {author.author.display_name}</div>
+        {paper?.data?.authorships?.map((author, i) => (
+          <div key={i}>author: {author.author.display_name}</div>
         ))}
       </div>
     </div>
