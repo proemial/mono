@@ -22,7 +22,7 @@ export default async function ReaderPage({ params, searchParams }: Props) {
   return (
     <div>
       <div>id: {params.id}</div>
-      <Suspense fallback={<SummariyFallback paper={paper} />}>
+      <Suspense fallback={<SummaryFallback paper={paper} />}>
         <Summary paper={paper} />
       </Suspense>
       <div>
@@ -35,6 +35,6 @@ export default async function ReaderPage({ params, searchParams }: Props) {
   );
 }
 
-function SummariyFallback({ paper }: { paper?: OpenAlexPaper }) {
+function SummaryFallback({ paper }: { paper?: OpenAlexPaper }) {
   return <div>Paper title: {paper?.generated?.title}</div>;
 }
