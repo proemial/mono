@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "@proemial/models": "workspace:*",
+    "@proemial/utils": "workspace:*",
     "@upstash/redis": "^1"
   },
   "devDependencies": {

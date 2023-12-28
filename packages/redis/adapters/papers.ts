@@ -1,5 +1,11 @@
 import { UpStash } from "./upstash-client";
-import { OpenAlexPaper } from "@proemial/models/open-alex";
+import {
+  getIdFromOpenAlexPaper,
+  OpenAlexPaper,
+  OpenAlexWorkCoreMetadata,
+  WithAbstract,
+  WithData,
+} from "@proemial/models/open-alex";
 
 export const OpenAlexPapers = {
   get: async (id: string) => {
@@ -11,14 +17,16 @@ export const OpenAlexPapers = {
     }
   },
 
-  push: async (paper: OpenAlexPaper | Array<OpenAlexPaper>) => {
+  pushAll: async (papers: WithData | Array<WithData>) => {
     try {
-      if (!Array.isArray(paper)) {
-        await UpStash.papers.set(`oa:${paper.data.id}`, paper);
+      if (!Array.isArray(papers)) {
+        const id = getIdFromOpenAlexPaper(papers);
+        await UpStash.papers.set(`oa:${id}`, { id, paper: papers });
       } else {
         const pipeline = UpStash.papers.pipeline();
-        paper.forEach((paper) => {
-          pipeline.set(`oa:${paper.data.id.split("/").at(-1)}`, paper);
+        papers.forEach((paper) => {
+          const id = getIdFromOpenAlexPaper(paper);
+          pipeline.set(`oa:${id}`, { ...paper, id });
         });
 
         await pipeline.exec();
@@ -29,29 +37,20 @@ export const OpenAlexPapers = {
     }
   },
 
-  upsert: async (id: string, title?: string, paper?: OpenAlexPaper) => {
-    console.log(`Upserting paper ${id}`);
+  upsert: async (
+    id: string,
+    appendFn: (existingPaper: OpenAlexPaper) => OpenAlexPaper,
+  ) => {
     try {
-      const redisPaper =
-        ((await UpStash.papers.get(`oa:${id}`)) as OpenAlexPaper) || {};
+      const redisPaper = (await UpStash.papers.get(
+        `oa:${id}`,
+      )) as OpenAlexPaper;
 
-      if (paper) {
-        const mergedPaper = {
-          ...redisPaper,
-          ...paper,
-        };
-        await UpStash.papers.set(`oa:${id}`, mergedPaper);
+      const updatedPaper = appendFn(redisPaper || {});
 
-        return mergedPaper;
-      }
+      await UpStash.papers.set(`oa:${id}`, updatedPaper);
 
-      redisPaper.generated = redisPaper.generated
-        ? { ...redisPaper.generated, title }
-        : { title };
-
-      await UpStash.papers.set(`oa:${id}`, redisPaper);
-
-      return redisPaper;
+      return updatedPaper;
     } catch (error) {
       console.error(error);
       throw error;

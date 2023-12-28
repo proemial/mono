@@ -28,7 +28,8 @@
     "react": "^18",
     "react-dom": "^18",
     "sharp": "^0.32.6",
-    "zustand": "^4"
+    "zustand": "^4",
+    "openai": "^4"
   },
   "devDependencies": {
     "@proemial/typescript-config": "workspace:*",

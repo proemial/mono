@@ -12,20 +12,28 @@ export type OpenAlexWorksHit = OpenAlexWorkCoreMetadata & {
   relevance_score: number;
 };
 
+export type WithData = { data: WithAbstract };
+
+export type WithAbstract = (OpenAlexWorkMetadata | OpenAlexWorkCoreMetadata) & {
+  abstract?: string;
+};
+
 // Parsed version of work
 export type OpenAlexPaper = {
-  data: (OpenAlexWorkMetadata | OpenAlexWorkCoreMetadata) & {
-    abstract?: string;
-  };
+  id: string;
+  data: WithAbstract;
   generated?: {
     title?: string;
-    abstract?: string;
     tags?: string[];
     starters?: string[];
   };
 };
 
 export const baseOaUrl = "https://api.openalex.org/works";
+
+export function getIdFromOpenAlexPaper(paper: WithData) {
+  return paper.data.id.split("/").at(-1) as string;
+}
 
 // Fields to request from OpenAlex (the ones from OpenAlexWorkMetadata)
 export const openAlexFields = {

@@ -3,8 +3,8 @@ import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
 import {
   baseOaUrl,
+  WithAbstract,
   openAlexFields,
-  OpenAlexWorksHit,
   OpenAlexWorksSearchResult,
 } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
@@ -13,18 +13,16 @@ const filter = "filter=type:article,cited_by_count:>10,cited_by_count:<1000";
 const baseUrl = `${baseOaUrl}?select=${openAlexFields.search}&${filter}`;
 
 export async function fetchPapers(q: string, count = 30, tokens = 350) {
-  const data = await fetchWithAbstract(q, count, tokens);
+  const papers = await fetchWithAbstract(q, count, tokens);
 
-  await Redis.papers.push(data.map((o) => ({ data: o })));
+  await Redis.papers.pushAll(papers.map((data) => ({ data })));
 
-  return data.map((o) => ({
+  return papers.map((o) => ({
     link: o.id.replace("openalex.org", "proem.ai/oa"),
     abstract: o.abstract,
     title: o.title,
   }));
 }
-
-type WithAbstract = OpenAlexWorksHit & { abstract?: string };
 
 async function fetchWithAbstract(q: string, count: number, tokens: number) {
   const query = `${baseUrl},${q}&per-page=${count}`;

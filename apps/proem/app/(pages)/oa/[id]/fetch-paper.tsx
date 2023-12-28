@@ -22,7 +22,13 @@ export const fetchPaper = cache(async (id: string): Promise<OpenAlexPaper> => {
       abstract: fromInvertedIndex(oaPaperJson.abstract_inverted_index, 350),
     };
 
-    return await Redis.papers.upsert(id, undefined, { data });
+    return await Redis.papers.upsert(id, (existingPaper) => {
+      return {
+        ...existingPaper,
+        data,
+        id,
+      };
+    });
   }
   return paper;
 });

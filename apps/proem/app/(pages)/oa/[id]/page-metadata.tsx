@@ -2,9 +2,18 @@ import { fetchPaper } from "@/app/(pages)/oa/[id]/fetch-paper";
 import { Redis } from "@proemial/redis/redis";
 
 export async function getDescription(id: string, title?: string) {
-  console.log("getDescription");
   if (title) {
-    await Redis.papers.upsert(id, title);
+    await Redis.papers.upsert(id, (existingPaper) => {
+      const generated = existingPaper.generated
+        ? { ...existingPaper.generated, title }
+        : { title };
+
+      return {
+        ...existingPaper,
+        generated,
+        id,
+      };
+    });
 
     return title;
   }
