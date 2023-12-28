@@ -4,6 +4,7 @@ import Summary from "./components/summary";
 import { Suspense } from "react";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { PaperCard } from "./components/paper-card";
+import { ActionsMenu } from "@/app/(pages)/oa/[id]/components/menu/actions-menu";
 
 type Props = {
   params: { id: string };
@@ -33,6 +34,12 @@ export default async function ReaderPage({ params, searchParams }: Props) {
           <Summary paper={paper} />
         </Suspense>
       </PaperCard>
+
+      <ActionsMenu
+        id={params.id}
+        url={paper.data.primary_location?.landing_page_url}
+        className="p-4 top-0 sticky bg-background z-50"
+      />
     </main>
   );
 }

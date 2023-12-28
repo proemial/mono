@@ -2,7 +2,7 @@
 
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-// import va from "@vercel/analytics";
+import va from "@vercel/analytics";
 // import { usePathname } from "next/navigation";
 // import { useEffect, useState } from "react";
 // import ReactGA from "react-ga4";
@@ -64,14 +64,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
  */
 
-// export const Analytics = {
-//   track: (event: string, properties?: Record<string, any>) => {
-//     va.track(event, properties);
-//
-//     // ReactGA.event(event, properties);
-//     console.log("[AnalyticsClient] event:", event, properties);
-//   },
-// };
+export const Analytics = {
+  track: (event: string, properties?: Record<string, any>) => {
+    va.track(event, properties);
+
+    // ReactGA.event(event, properties);
+    console.log("[AnalyticsClient] event:", event, properties);
+  },
+};
 
 // function useGoogleAnalytics() {
 //   const { user } = useUser();
