@@ -22,6 +22,11 @@ export function MetadataPanel({ paper, closed }: Props) {
           </div>
         </div>
         <Markdown>{paper.data.title}</Markdown>
+        {paper.data.abstract && (
+          <div className=" font-light">
+            <Markdown>{paper.data.abstract}</Markdown>
+          </div>
+        )}
       </div>
       <div className="text-purple-500 mt-2">Authors</div>
       <div className="flex py-2 gap-10 flex-nowrap overflow-scroll no-scrollbar">
