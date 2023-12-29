@@ -32,7 +32,7 @@ export default async function ReaderPage({ params }: Props) {
           paper.data.primary_location?.source?.host_organization_name
         }
       >
-        <Suspense fallback={<SummaryFallback paper={paper} />}>
+        <Suspense fallback={<Spinner />}>
           <Summary paper={paper} />
         </Suspense>
       </PaperCard>
@@ -53,8 +53,4 @@ export default async function ReaderPage({ params }: Props) {
       </div>
     </main>
   );
-}
-
-function SummaryFallback({ paper }: { paper?: OpenAlexPaper }) {
-  return <div>Paper title: {paper?.data?.title}</div>;
 }
