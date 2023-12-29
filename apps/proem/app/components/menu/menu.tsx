@@ -3,7 +3,6 @@ import { SignedOut, useSignUp } from "@clerk/nextjs";
 import { Bookmark, History, Home, User, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useAuthActions } from "../../authentication";
 import { Logo } from "../icons/logo";
 import Drawer from "../login/drawer";
 import { Button } from "../shadcn-ui/button";
@@ -35,7 +34,6 @@ export function MainMenu() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { signUp } = useSignUp();
-  const { color } = useAuthActions();
 
   useEffect(() => {
     if (isOpen) {
@@ -61,16 +59,16 @@ export function MainMenu() {
           style={{ boxShadow: "0px -8px 8px 4px rgba(0, 0, 0, 0.85)" }}
         >
           <Link href={pathname === "/" ? "/" : "/?reload=true"}>
-            <Home className={color} />
+            <Home className="stroke-muted-foreground" />
           </Link>
           <Link href="/history">
-            <History className={color} />
+            <History className="stroke-muted-foreground" />
           </Link>
           <Link href="/bookmarks">
-            <Bookmark className={color} />
+            <Bookmark className="stroke-muted-foreground" />
           </Link>
           <Link href="/profile">
-            <User className={color} />
+            <User className="stroke-muted-foreground" />
           </Link>
         </div>
       </div>
