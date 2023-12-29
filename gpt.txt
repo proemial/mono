@@ -1,10 +1,10 @@
 Name
 ------------------------------------------------------
-Science Proems v2
+Science Proems
 
 Description
 ------------------------------------------------------
-Accelerating insights from scientific research papers.
+Science backed answers.
 
 Instructions
 ------------------------------------------------------
@@ -37,12 +37,12 @@ Instructions
 
 Starters
 ------------------------------------------------------
+How often should I be going to the toilet?
+How do you spot the signs of skin cancer?
+I get terrible period pain, what can I do about it?
 Why are my feet itchy?
 How can I relieve a sore back from sitting at a desk all day?
-How often should I be going to the toilet?
 How do I know if I have hay fever and what can I do about it?
-I get terrible period pain, what can I do about it?
-How do you spot the signs of skin cancer?
 
 Actions
 ------------------------------------------------------
