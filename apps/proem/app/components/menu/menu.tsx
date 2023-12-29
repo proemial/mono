@@ -36,7 +36,6 @@ export function MainMenu() {
   const { signIn } = useSignIn();
 
   const returnTo = getLocation();
-  console.log(returnTo);
 
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
