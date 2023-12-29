@@ -3,7 +3,6 @@ import { MainMenu } from "@/app/components/menu/menu";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ReactNode } from "react";
 import "./globals.css";
-import { isBeta } from "@/app/beta";
 
 const lightModeEnabled = false;
 
@@ -17,7 +16,6 @@ type Props = {
 
 export default async function RootLayout({ children }: Props) {
   const light = lightModeEnabled ? "dark:dark" : "dark";
-  const beta = isBeta();
 
   return (
     <ClerkProvider>
@@ -34,7 +32,7 @@ export default async function RootLayout({ children }: Props) {
               {children}
             </div>
 
-            {beta && <MainMenu />}
+            <MainMenu />
           </main>
           <AnalyticsClient />
         </body>
