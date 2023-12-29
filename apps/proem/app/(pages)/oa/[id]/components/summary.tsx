@@ -1,8 +1,7 @@
-import OpenAI from "openai";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
-import { Env } from "@proemial/utils/env";
 import Markdown from "./markdown";
+import { summarise } from "@/app/prompts/summariser";
 
 export default async function Summary({ paper }: { paper: OpenAlexPaper }) {
   const paperTitle = paper?.data?.title;
@@ -28,31 +27,4 @@ export default async function Summary({ paper }: { paper: OpenAlexPaper }) {
   }
 
   return <Markdown>{generatedTitle as string}</Markdown>;
-}
-
-async function summarise(title: string, abstract: string) {
-  const openai = new OpenAI({
-    apiKey: Env.get("OPENAI_API_KEY"),
-  });
-
-  const completion = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
-    messages: [
-      {
-        role: "assistant",
-        content:
-          "You are a helpful assistant who can explain scientific concepts in terms that allow researchers from one scientific domain to grasp and be inspired by ideas from another domain.",
-      },
-      {
-        role: "system",
-        content: `Analyse the following scientific article with title: \"${title}\" and abstract: \"${abstract}\"`,
-      },
-      {
-        role: "user",
-        content:
-          'Write a captivating summary in 20 words or less of the most significant finding for an engaging tweet that will capture the minds of other researchers, using layman\'s terminology, and without mentioning abstract entities like "you", "researchers", "authors", "propose", or "study" but rather stating the finding as a statement of fact. Make sure to use 20 words or less.',
-      },
-    ],
-  });
-  return completion.choices[0]?.message.content;
 }
