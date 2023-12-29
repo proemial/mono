@@ -8,6 +8,8 @@ import { Logo } from "../icons/logo";
 import Drawer from "../login/drawer";
 import { Button } from "../shadcn-ui/button";
 import { Toaster } from "../shadcn-ui/toaster";
+import { useDrawerState } from "@/app/components/login/state";
+import { useEffect } from "react";
 
 const authProviders = [
   {
@@ -28,16 +30,27 @@ const authProviders = [
 ] as const;
 
 export function MainMenu() {
+  const { isOpen, close } = useDrawerState();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { signUp } = useSignUp();
   const { color } = useAuthActions();
+
+  useEffect(() => {
+    if (isOpen) {
+      const searchParams = new URLSearchParams(window.location.search);
+      searchParams.set("redirect_url", window.location.toString());
+      window.location.search = searchParams.toString();
+    }
+  }, [isOpen]);
+
   const redirectUrl = searchParams.get("redirect_url")!;
   const drawerIsOpen = Boolean(redirectUrl);
 
   const handleClose = () => {
     router.push(pathname);
+    close();
   };
 
   return (
