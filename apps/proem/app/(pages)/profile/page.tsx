@@ -5,8 +5,7 @@ import {
   AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
 import { Button } from "@/app/components/shadcn-ui/button";
-import { SignOutButton, useAuth, useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { SignOutButton, useUser } from "@clerk/nextjs";
 
 export default function ProfilePage() {
   const { user } = useUser();
