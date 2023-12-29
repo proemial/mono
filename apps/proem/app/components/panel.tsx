@@ -4,7 +4,7 @@ import { ReactNode, useState } from "react";
 import { Analytics } from "./analytics";
 
 type Props = {
-  title: "metadata";
+  title: "metadata" | "question";
   children: ReactNode | string;
   closed?: boolean;
   className?: string;
@@ -12,6 +12,7 @@ type Props = {
 
 const titles = {
   metadata: "Article Metadata",
+  question: "Ask a question",
 };
 
 export function Panel({ title, children, closed, className }: Props) {

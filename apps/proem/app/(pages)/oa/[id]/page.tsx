@@ -6,6 +6,8 @@ import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { PaperCard } from "./components/paper-card";
 import { ActionsMenu } from "@/app/(pages)/oa/[id]/components/menu/actions-menu";
 import { MetadataPanel } from "@/app/(pages)/oa/[id]/components/panels/metadata";
+import { QuestionsPanel } from "@/app/(pages)/oa/[id]/components/panels/questions";
+import { Spinner } from "@/app/components/spinner";
 
 type Props = {
   params: { id: string };
@@ -44,6 +46,9 @@ export default async function ReaderPage({ params }: Props) {
       <div className="px-4 pt-2">
         <div className="flex flex-col gap-6 text-base">
           <MetadataPanel paper={paper} closed />
+          <Suspense fallback={<Spinner />}>
+            <QuestionsPanel paper={paper} />
+          </Suspense>
         </div>
       </div>
     </main>

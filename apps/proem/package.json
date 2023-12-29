@@ -35,7 +35,9 @@
     "react-markdown": "^8.0.7",
     "rehype-katex": "^6.0.3",
     "remark-math": "^5.1.1",
-    "katex": "^0.16.8"
+    "katex": "^0.16.8",
+    "ai": "^2",
+    "openai-edge": "^1"
   },
   "devDependencies": {
     "@proemial/typescript-config": "workspace:*",
