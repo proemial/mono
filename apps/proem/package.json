@@ -8,7 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.28.1",
+    "@clerk/nextjs": "^4.29.1",
     "@neondatabase/serverless": "^0.6.0",
     "@proemial/database": "workspace:*",
     "@proemial/redis": "workspace:*",
