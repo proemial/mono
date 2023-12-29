@@ -61,12 +61,8 @@ export function MainMenu() {
           <Link href={pathname === "/" ? "/" : "/?reload=true"}>
             <Home className="stroke-muted-foreground" />
           </Link>
-          <Link href="/history">
-            <History className="stroke-muted-foreground" />
-          </Link>
-          <Link href="/bookmarks">
-            <Bookmark className="stroke-muted-foreground" />
-          </Link>
+          <History className="stroke-[#444444]" />
+          <Bookmark className="stroke-[#444444]" />
           <Link href="/profile">
             <User className="stroke-muted-foreground" />
           </Link>
