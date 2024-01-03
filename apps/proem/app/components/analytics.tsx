@@ -58,14 +58,13 @@ function useGoogleAnalytics() {
 
   useEffect(() => {
     if (user) {
-      // const email = user["https://paperflow.ai/email"] as string;//NEXT_PUBLIC_GA_ID
+      // const email = user?.primaryEmailAddress?.emailAddress as string;
       ReactGA.initialize(
         Env.validate("NEXT_PUBLIC_GA_ID", process.env.NEXT_PUBLIC_GA_ID),
         {
-          // TODO: Add user properties
-          // gaOptions: {
-          //   userId: user.sub,
-          // },
+          gaOptions: {
+            userId: user.id,
+          },
         },
       );
       console.log("[GA] init");
@@ -83,7 +82,10 @@ function useSentry() {
   useEffect(() => {
     if (!initialized && Env.isProd) {
       Sentry.init({
-        dsn: "https://fb202b3beb8868961ff9dfb3970f3913@o4506308159340544.ingest.sentry.io/4506308163207168",
+        dsn: Env.validate(
+          "NEXT_PUBLIC_SENTRY_DSN",
+          process.env.NEXT_PUBLIC_SENTRY_DSN,
+        ),
         integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
         // Performance Monitoring
         tracesSampleRate: 1.0, // Capture 100% of the transactions, reduce in production!
