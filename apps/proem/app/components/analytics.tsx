@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Env } from "@proemial/utils/env";
 import * as process from "process";
-// import * as Sentry from "@sentry/nextjs";
+import * as Sentry from "@sentry/nextjs";
 
 // https://www.npmjs.com/package/react-ga4
 // https://vercel.com/docs/concepts/analytics/custom-events
@@ -17,7 +17,7 @@ import * as process from "process";
 export function AnalyticsClient() {
   const pathname = usePathname();
   const initialized = useGoogleAnalytics();
-  // useSentry();
+  useSentry();
 
   const getViewName = (path: string) => {
     if (path === "/") return "home";
@@ -76,25 +76,26 @@ function useGoogleAnalytics() {
 
   return initialized;
 }
-//
-// function useSentry() {
-//   const [initialized, setInitialized] = useState(false);
-//
-//   useEffect(() => {
-//     if (!initialized && Env.isProd) {
-//       Sentry.init({
-//         dsn: "https://e2c9474531c243f9aae26fb24b1b8653@o4505557013168128.ingest.sentry.io/4505557015199744",
-//         integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
-//         // Performance Monitoring
-//         tracesSampleRate: 1.0, // Capture 100% of the transactions, reduce in production!
-//         // Session Replay
-//         replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
-//         replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
-//       });
-//
-//       setInitialized(true);
-//     }
-//   }, [setInitialized]);
-//
-//   return initialized;
-// }
+
+function useSentry() {
+  const [initialized, setInitialized] = useState(false);
+
+  useEffect(() => {
+    if (!initialized && Env.isProd) {
+      Sentry.init({
+        dsn: "https://fb202b3beb8868961ff9dfb3970f3913@o4506308159340544.ingest.sentry.io/4506308163207168",
+        integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
+        // Performance Monitoring
+        tracesSampleRate: 1.0, // Capture 100% of the transactions, reduce in production!
+        // Session Replay
+        replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
+        replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
+      });
+      console.log("[Sentry] init");
+
+      setInitialized(true);
+    }
+  }, [setInitialized]);
+
+  return initialized;
+}

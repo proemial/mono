@@ -1,4 +1,7 @@
 export const Env = {
+  isDev: process.env.NODE_ENV === "development",
+  isProd: process.env.NODE_ENV !== "development",
+
   get: (key: string): string => {
     if (!process.env[key]) fail(key);
 
