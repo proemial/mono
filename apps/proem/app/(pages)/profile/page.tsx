@@ -6,9 +6,11 @@ import {
 } from "@/app/components/shadcn-ui/Avatar";
 import { Button } from "@/app/components/shadcn-ui/button";
 import { SignOutButton, useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
   const { user } = useUser();
+  const router = useRouter();
   const initials = user?.fullName?.split(" ").map((name) => name.charAt(0));
 
   return (
@@ -24,7 +26,7 @@ export default function ProfilePage() {
           </Avatar>
           <div>{user?.fullName}</div>
         </div>
-        <SignOutButton>
+        <SignOutButton signOutCallback={() => router.push("/")}>
           <Button className="mt-4">Log out</Button>
         </SignOutButton>
       </div>
