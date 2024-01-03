@@ -23,3 +23,23 @@ export function Spinner() {
     </div>
   );
 }
+
+export function EmptySpinner() {
+  return <div className="w-full flex justify-center"></div>;
+}
+
+export function NothingHereYet() {
+  return (
+    <div className="h-full w-full flex justify-center items-center">
+      <div>Nothing here yet.</div>
+    </div>
+  );
+}
+
+export function CenteredSpinner() {
+  return (
+    <div className="flex min-h-screen flex-col justify-center">
+      <Spinner />
+    </div>
+  );
+}
