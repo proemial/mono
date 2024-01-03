@@ -83,7 +83,7 @@ export function MainMenu() {
                   onClick={() => {
                     signIn.authenticateWithRedirect({
                       strategy: oAuthStrategy,
-                      redirectUrl: returnTo,
+                      redirectUrl: "/sso-callback",
                       redirectUrlComplete: returnTo,
                     });
                   }}
