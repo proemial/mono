@@ -33,7 +33,7 @@ const authProviders = [
 
 export function MainMenu() {
   const { isOpen, close } = useDrawerState();
-  const { signIn } = useSignIn();
+  const { signIn, isLoaded: signInIsLoaded } = useSignIn();
 
   const returnTo = getLocation();
 
@@ -59,7 +59,7 @@ export function MainMenu() {
           <ProfileMenuItem />
         </div>
       </div>
-      {isMounted && (
+      {isMounted && signInIsLoaded && (
         <Drawer isOpen={isOpen} onClose={handleClose}>
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between my-2">
@@ -81,7 +81,7 @@ export function MainMenu() {
                 <Button
                   key={name}
                   onClick={() => {
-                    signIn?.authenticateWithRedirect({
+                    signIn.authenticateWithRedirect({
                       strategy: oAuthStrategy,
                       redirectUrl: returnTo,
                       redirectUrlComplete: returnTo,
