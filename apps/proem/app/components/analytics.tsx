@@ -3,36 +3,37 @@
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import va from "@vercel/analytics";
-// import { usePathname } from "next/navigation";
-// import { useEffect, useState } from "react";
-// import ReactGA from "react-ga4";
-// import { useUser } from "@auth0/nextjs-auth0/client";
+import ReactGA from "react-ga4";
+import { useUser } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { Env } from "@proemial/utils/env";
+import * as process from "process";
 // import * as Sentry from "@sentry/nextjs";
-// import {Env} from "data/adapters/env";
 
 // https://www.npmjs.com/package/react-ga4
 // https://vercel.com/docs/concepts/analytics/custom-events
 
 export function AnalyticsClient() {
-  // const pathname = usePathname();
-  // const initialized = useGoogleAnalytics();
+  const pathname = usePathname();
+  const initialized = useGoogleAnalytics();
   // useSentry();
 
-  // const getViewName = (path: string) => {
-  //   if (path === "/") return "home";
-  //   if (path.startsWith("/arxiv")) return "reader";
-  //   return path.slice(1);
-  // };
+  const getViewName = (path: string) => {
+    if (path === "/") return "home";
+    if (path.startsWith("/oa")) return "reader";
+    return path.slice(1);
+  };
 
-  // useEffect(() => {
-  //   if (initialized) {
-  //     ReactGA.send({ hitType: "pageview", page: pathname, title: pathname });
-  //     console.log("[AnalyticsClient] ", `view:${getViewName(pathname)}`);
-  //     Analytics.track(`view:${getViewName(pathname)}`, {
-  //       path: pathname,
-  //     });
-  //   }
-  // }, [initialized, pathname]);
+  useEffect(() => {
+    if (initialized) {
+      ReactGA.send({ hitType: "pageview", page: pathname, title: pathname });
+      console.log("[AnalyticsClient] ", `view:${getViewName(pathname)}`);
+      Analytics.track(`view:${getViewName(pathname)}`, {
+        path: pathname,
+      });
+    }
+  }, [initialized, pathname]);
 
   return (
     <>
@@ -42,57 +43,39 @@ export function AnalyticsClient() {
   );
 }
 
-/*
-
-// Paste this code as high in the <head> of the page as possible:
-
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-WWZ6WDTF');</script>
-<!-- End Google Tag Manager -->
-
-
-// Additionally, paste this code immediately after the opening <body> tag:
-
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WWZ6WDTF"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
- */
-
 export const Analytics = {
   track: (event: string, properties?: Record<string, any>) => {
     va.track(event, properties);
 
-    // ReactGA.event(event, properties);
+    ReactGA.event(event, properties);
     console.log("[AnalyticsClient] event:", event, properties);
   },
 };
 
-// function useGoogleAnalytics() {
-//   const { user } = useUser();
-//   const [initialized, setInitialized] = useState(false);
-//
-//   useEffect(() => {
-//     if (user) {
-//       // const email = user["https://paperflow.ai/email"] as string;
-//       ReactGA.initialize("G-2H4D1N8XGN", {
-//         gaOptions: {
-//           userId: user.sub,
-//         },
-//       });
-//       console.log("[AnalyticsClient] init");
-//
-//       setInitialized(true);
-//     }
-//   }, [setInitialized, user]);
-//
-//   return initialized;
-// }
+function useGoogleAnalytics() {
+  const { user } = useUser();
+  const [initialized, setInitialized] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      // const email = user["https://paperflow.ai/email"] as string;//NEXT_PUBLIC_GA_ID
+      ReactGA.initialize(
+        Env.validate("NEXT_PUBLIC_GA_ID", process.env.NEXT_PUBLIC_GA_ID),
+        {
+          // TODO: Add user properties
+          // gaOptions: {
+          //   userId: user.sub,
+          // },
+        },
+      );
+      console.log("[GA] init");
+
+      setInitialized(true);
+    }
+  }, [setInitialized, user]);
+
+  return initialized;
+}
 //
 // function useSentry() {
 //   const [initialized, setInitialized] = useState(false);

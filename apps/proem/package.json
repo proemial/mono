@@ -37,7 +37,8 @@
     "remark-math": "^5.1.1",
     "katex": "^0.16.8",
     "ai": "^2",
-    "openai-edge": "^1"
+    "openai-edge": "^1",
+    "react-ga4": "^2"
   },
   "devDependencies": {
     "@proemial/typescript-config": "workspace:*",
