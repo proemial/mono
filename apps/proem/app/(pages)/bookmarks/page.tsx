@@ -1,23 +1,22 @@
-import { Suspense } from "react";
+import { PaperCard } from "@/app/components/card/card";
+import { PageHeader } from "@/app/components/page-header";
 import {
   CenteredSpinner,
   EmptySpinner,
   NothingHereYet,
 } from "@/app/components/spinner";
-import { PaperCard } from "@/app/components/card/card";
+import { Suspense } from "react";
 
 export const revalidate = 1;
 
-export default async function HistoryPage() {
+export default async function BookmarksPage() {
   return (
-    <main className="flex min-h-screen flex-col justify-begin">
-      <div className="text-xl px-4 py-6 bg-background h-full top-0 sticky shadow">
-        Bookmarks
-      </div>
+    <div className="flex flex-col min-h-screen justify-begin">
+      <PageHeader>Bookmarks</PageHeader>
       <Suspense fallback={<CenteredSpinner />}>
         <PageContent />
       </Suspense>
-    </main>
+    </div>
   );
 }
 

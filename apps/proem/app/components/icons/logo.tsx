@@ -3,7 +3,7 @@ import proem from "@/app/images/logo.png";
 import google from "@/app/images/google.svg";
 import twitter from "@/app/images/twitter.svg";
 import github from "@/app/images/github.svg";
-import { cn } from "../shadcn-ui/utils";
+import { cn } from "@/app/components/shadcn-ui/utils";
 
 const logos = { proem, google, twitter, github };
 
