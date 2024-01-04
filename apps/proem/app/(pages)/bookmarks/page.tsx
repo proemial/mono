@@ -1,11 +1,11 @@
-import { Suspense } from "react";
+import { PaperCard } from "@/app/components/card/card";
+import { PageHeader } from "@/app/components/page-header";
 import {
   CenteredSpinner,
   EmptySpinner,
   NothingHereYet,
 } from "@/app/components/spinner";
-import { PaperCard } from "@/app/components/card/card";
-import { PageHeader } from "../../components/page-header";
+import { Suspense } from "react";
 
 export const revalidate = 1;
 

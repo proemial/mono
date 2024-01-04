@@ -1,9 +1,6 @@
-import { Logo } from "../components/icons/logo";
-import { isBeta } from "@/app/beta";
+import { Logo } from "@/app/components/icons/logo";
 
 export default function HomePage() {
-  const beta = isBeta();
-
   return (
     <div className={`min-h-[calc(100dvh-48px)] flex flex-col justify-begin`}>
       <div

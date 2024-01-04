@@ -1,11 +1,11 @@
 "use client";
 // https://letsbuildui.dev/articles/building-a-drawer-component-with-react-portals
 
+import { cn } from "@/app/components/shadcn-ui/utils";
+import useMountTransition from "@/app/components/use-mount-transition";
+import "@/app/drawer.css";
 import { MutableRefObject, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import "@/app/drawer.css";
-import { cn } from "../shadcn-ui/utils";
-import useMountTransition from "../use-mount-transition";
 
 function createPortalRoot() {
   const drawerRoot = document.createElement("div");
@@ -32,10 +32,10 @@ function Drawer({
   removeWhenClosed = true,
 }: Props) {
   const bodyRef = useRef(
-    document.querySelector("body"),
+    document.querySelector("body")
   ) as MutableRefObject<HTMLBodyElement>;
   const portalRootRef = useRef(
-    document.getElementById("drawer-root") || createPortalRoot(),
+    document.getElementById("drawer-root") || createPortalRoot()
   );
 
   // Append portal root on mount
@@ -107,14 +107,14 @@ function Drawer({
               background: "rgba(0, 0, 0, 0.65)",
             }}
           >
-            <div className="w-full flex flex-col items-center">
+            <div className="flex flex-col items-center w-full">
               <div className="flex max-w-[420px]">{children}</div>
             </div>
           </div>
         </div>
       </div>
     </div>,
-    portalRootRef.current,
+    portalRootRef.current
   );
 }
 

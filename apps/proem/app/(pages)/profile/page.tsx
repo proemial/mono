@@ -1,4 +1,5 @@
 "use client";
+import { PageHeader } from "@/app/components/page-header";
 import {
   Avatar,
   AvatarFallback,
@@ -7,7 +8,6 @@ import {
 import { Button } from "@/app/components/shadcn-ui/button";
 import { SignOutButton, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { PageHeader } from "../../components/page-header";
 
 export default function ProfilePage() {
   const { user } = useUser();

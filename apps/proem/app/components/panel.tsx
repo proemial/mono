@@ -1,7 +1,7 @@
 "use client";
 
+import { Analytics } from "@/app/components/analytics";
 import { ReactNode, useState } from "react";
-import { Analytics } from "./analytics";
 
 type Props = {
   title: "metadata" | "question";

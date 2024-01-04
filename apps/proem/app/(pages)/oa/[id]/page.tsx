@@ -1,13 +1,12 @@
-import * as metadata from "./page-metadata";
-import { fetchPaper } from "./fetch-paper";
-import Summary from "./components/summary";
-import { Suspense } from "react";
-import { OpenAlexPaper } from "@proemial/models/open-alex";
-import { PaperCard } from "./components/paper-card";
 import { ActionsMenu } from "@/app/(pages)/oa/[id]/components/menu/actions-menu";
 import { MetadataPanel } from "@/app/(pages)/oa/[id]/components/panels/metadata";
 import { QuestionsPanel } from "@/app/(pages)/oa/[id]/components/panels/questions";
 import { Spinner } from "@/app/components/spinner";
+import { Suspense } from "react";
+import { PaperCard } from "./components/paper-card";
+import Summary from "./components/summary";
+import { fetchPaper } from "./fetch-paper";
+import * as metadata from "./page-metadata";
 
 type Props = {
   params: { id: string };
@@ -24,7 +23,7 @@ export default async function ReaderPage({ params }: Props) {
   const paper = await fetchPaper(params.id);
 
   return (
-    <main className="flex min-h-screen flex-col justify-start">
+    <main className="flex flex-col justify-start min-h-screen">
       <PaperCard
         id={params.id}
         date={paper.data.publication_date}
@@ -40,7 +39,7 @@ export default async function ReaderPage({ params }: Props) {
       <ActionsMenu
         id={params.id}
         url={paper.data.primary_location?.landing_page_url}
-        className="p-4 top-0 sticky bg-background z-50"
+        className="sticky top-0 z-50 p-4 bg-background"
       />
 
       <div className="px-4 pt-2">
