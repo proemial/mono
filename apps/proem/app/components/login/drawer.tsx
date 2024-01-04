@@ -8,8 +8,8 @@ import { cn } from "../shadcn-ui/utils";
 import useMountTransition from "../use-mount-transition";
 
 function createPortalRoot() {
-  const drawerRoot = globalThis.document?.createElement("div");
-  drawerRoot?.setAttribute("id", "drawer-root");
+  const drawerRoot = document.createElement("div");
+  drawerRoot.setAttribute("id", "drawer-root");
 
   return drawerRoot;
 }
@@ -32,10 +32,10 @@ function Drawer({
   removeWhenClosed = true,
 }: Props) {
   const bodyRef = useRef(
-    globalThis.document?.querySelector("body")
+    document.querySelector("body")
   ) as MutableRefObject<HTMLBodyElement>;
   const portalRootRef = useRef(
-    globalThis.document?.getElementById("drawer-root") || createPortalRoot()
+    document.getElementById("drawer-root") || createPortalRoot()
   );
 
   // Append portal root on mount
