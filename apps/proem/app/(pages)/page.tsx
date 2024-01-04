@@ -16,7 +16,6 @@ export default function HomePage() {
         </div>
         <div className="h-[40%] w-full flex justify-center items-center" />
       </div>
-      {beta && <div>FEED</div>}
     </main>
   );
 }
