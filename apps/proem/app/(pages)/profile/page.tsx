@@ -22,7 +22,7 @@ export default function ProfilePage() {
         <div className="flex items-center gap-2 mb-4 justify-begin">
           <Avatar>
             <AvatarImage src={user?.imageUrl || ""} alt="avatar" />
-            <AvatarFallback>{initials}</AvatarFallback>
+            <AvatarFallback className="bg-gray-600">{initials}</AvatarFallback>
           </Avatar>
           <div>{user?.fullName}</div>
         </div>
