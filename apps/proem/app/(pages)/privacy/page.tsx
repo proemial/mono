@@ -5,7 +5,7 @@ export const metadata = {
 
 export default function PrivacyPage() {
   return (
-    <main className="flex flex-col items-center justify-between min-h-screen p-24">
+    <div className="flex flex-col items-center justify-between min-h-screen p-24">
       <div className="relative flex flex-col place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2">
         <div>
           <h1>Privacy Policy for Proem</h1>
@@ -163,6 +163,6 @@ export default function PrivacyPage() {
           <p className="mt-4 italic text-right">Proem Foundation</p>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

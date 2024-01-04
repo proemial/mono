@@ -5,7 +5,7 @@ export const metadata = {
 
 export default function TermsPage() {
   return (
-    <main className="flex flex-col items-center justify-between min-h-screen p-24">
+    <div className="flex flex-col items-center justify-between min-h-screen p-24">
       <div className="relative flex flex-col place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2">
         <div>
           <h1>Proemial Foundation Terms of Service</h1>
@@ -65,6 +65,6 @@ export default function TermsPage() {
           </p>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

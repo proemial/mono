@@ -7,6 +7,7 @@ import {
 import { Button } from "@/app/components/shadcn-ui/button";
 import { SignOutButton, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { PageHeader } from "../../components/page-header";
 
 export default function ProfilePage() {
   const { user } = useUser();
@@ -14,10 +15,8 @@ export default function ProfilePage() {
   const initials = user?.fullName?.split(" ").map((name) => name.charAt(0));
 
   return (
-    <main className="flex flex-col min-h-screen justify-begin">
-      <div className="sticky top-0 h-full px-4 py-6 text-xl shadow bg-background">
-        Profile
-      </div>
+    <div className="flex flex-col min-h-screen justify-begin">
+      <PageHeader>Profile</PageHeader>
       <div className="flex flex-col p-4 pt-8 text-lg font-medium justify-begin items-begin ">
         <div className="flex items-center gap-2 mb-4 justify-begin">
           <Avatar>
@@ -30,6 +29,6 @@ export default function ProfilePage() {
           <Button className="mt-4">Log out</Button>
         </SignOutButton>
       </div>
-    </main>
+    </div>
   );
 }

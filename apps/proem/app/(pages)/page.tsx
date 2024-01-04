@@ -5,7 +5,7 @@ export default function HomePage() {
   const beta = isBeta();
 
   return (
-    <main className={`min-h-[calc(100dvh-48px)] flex flex-col justify-begin`}>
+    <div className={`min-h-[calc(100dvh-48px)] flex flex-col justify-begin`}>
       <div
         className={`h-[calc(100dvh-48px)] max-h-screen flex flex-col justify-center items-center bg-zinc-900`}
       >
@@ -16,6 +16,6 @@ export default function HomePage() {
         </div>
         <div className="h-[40%] w-full flex justify-center items-center" />
       </div>
-    </main>
+    </div>
   );
 }
