@@ -23,7 +23,7 @@ export function VaClient() {
     }
   }, [pathname, disabled]);
 
-  if (disabled) return <></>;
+  if (disabled) return <SpeedInsights />;
 
   return (
     <>
