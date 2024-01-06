@@ -1,8 +1,13 @@
-import { Logo } from "../components/icons/logo";
-import { isBeta } from "@/app/beta";
+import { Logo } from "@/app/components/icons/logo";
 
 export default function HomePage() {
-  const beta = isBeta();
+  // async function create() {
+  //   console.log("send event");
+  //   await inngest.send({
+  //     name: "demo/event.sent",
+  //   });
+  // }
+  // create();
 
   return (
     <div className={`min-h-[calc(100dvh-48px)] flex flex-col justify-begin`}>
@@ -13,6 +18,13 @@ export default function HomePage() {
         <div className="h-[50%] w-full flex flex-col justify-center items-center">
           <Logo className="h-22 w-22" />
           <div className="text-3xl md:text-6xl">proem</div>
+          {/* <button
+            onClick={async () => {
+              create();
+            }}
+          >
+            click me
+          </button> */}
         </div>
         <div className="h-[40%] w-full flex justify-center items-center" />
       </div>

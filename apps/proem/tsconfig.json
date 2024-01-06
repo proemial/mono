@@ -17,7 +17,9 @@
     "**/*.ts",
     "**/*.tsx",
     "../../packages/database/**/*.ts",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "../../packages/events/inngest/client.ts",
+    "../../packages/events/inngest/hello-world.ts"
   ],
   "exclude": ["node_modules"]
 }
