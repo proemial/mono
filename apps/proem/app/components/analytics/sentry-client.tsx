@@ -5,11 +5,11 @@ import process from "process";
 
 export function SentryClient() {
   const [initialized, setInitialized] = useState(false);
-  console.log("[AnalyticsClient] sentry");
+  console.log("[SentryClient] sentry");
 
   useEffect(() => {
     if (!initialized && Env.isProd) {
-      console.log("[AnalyticsClient] sentry.init");
+      console.log("[SentryClient] init");
       Sentry.init({
         dsn: Env.validate(
           "NEXT_PUBLIC_SENTRY_DSN",
