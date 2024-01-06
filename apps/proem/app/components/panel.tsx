@@ -1,6 +1,6 @@
 "use client";
 
-import { Tracker } from "@/app/components/analytics";
+import { Tracker } from "@/app/components/analytics/analytics";
 import { ReactNode, useState } from "react";
 
 type Props = {

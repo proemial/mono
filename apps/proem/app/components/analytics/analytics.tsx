@@ -1,5 +1,4 @@
 "use client";
-
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import va from "@vercel/analytics";
@@ -24,7 +23,11 @@ export function AnalyticsClient() {
 
   useEffect(() => {
     if (gaInitialized) {
-      console.log("[AnalyticsClient] trackPage:", `view:${viewName}`, pathname);
+      console.log(
+        "[AnalyticsClient] ga.trackPage:",
+        `view:${viewName}`,
+        pathname,
+      );
       ReactGA.send({ hitType: "pageview", page: pathname, title: pathname });
       Tracker.track(`view:${viewName}`, {
         path: pathname,

@@ -1,4 +1,4 @@
-import { AnalyticsClient } from "@/app/components/analytics";
+import { AnalyticsClient } from "@/app/components/analytics/analytics";
 import { MainMenu } from "@/app/components/menu/menu";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ReactNode } from "react";
