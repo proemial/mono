@@ -1,8 +1,14 @@
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { Configuration, OpenAIApi } from "openai-edge";
-import { context, question, model, apiKey } from "@/app/prompts/chat";
+import {
+  context,
+  question,
+  model,
+  apiKey,
+  organization,
+} from "@/app/prompts/chat";
 
-const config = new Configuration({ apiKey });
+const config = new Configuration({ apiKey, organization });
 const openai = new OpenAIApi(config);
 
 export const runtime = "edge";

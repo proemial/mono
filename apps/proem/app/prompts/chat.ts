@@ -1,6 +1,8 @@
 import { Env } from "@proemial/utils/env";
 
 export const apiKey = Env.get("OPENAI_API_KEY");
+// Explicitly use the `Proemial Bot organisation, instead of the default `Proemial Summarisation`
+export const organization = "org-igYkjAypLUMGZ32zgikAg46E";
 
 export const model = "gpt-4-1106-preview";
 
