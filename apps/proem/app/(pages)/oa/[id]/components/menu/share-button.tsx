@@ -1,6 +1,6 @@
 "use client";
 import { Forward } from "lucide-react";
-import { Tracker } from "@/app/components/analytics/analytics";
+import { Tracker } from "@/app//components/analytics/tracker";
 import { toast } from "@/app/components/shadcn-ui/toast-hook";
 
 export function ShareButton() {

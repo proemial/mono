@@ -1,6 +1,6 @@
 import { Message as AiMessage, CreateMessage } from "ai";
 import { Message, Question } from "./message";
-import { Tracker } from "@/app/components/analytics/analytics";
+import { Tracker } from "@/app//components/analytics/tracker";
 
 type Props = {
   messages: AiMessage[];

@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { Env } from "@proemial/utils/env";
 import * as Sentry from "@sentry/nextjs";
@@ -5,7 +6,7 @@ import process from "process";
 
 export function SentryClient() {
   const [initialized, setInitialized] = useState(false);
-  console.log("[SentryClient] sentry");
+  console.log("[SentryClient]");
 
   useEffect(() => {
     if (!initialized && Env.isProd) {

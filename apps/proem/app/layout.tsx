@@ -1,10 +1,9 @@
-import { AnalyticsClient } from "@/app/components/analytics/analytics";
 import { MainMenu } from "@/app/components/menu/menu";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ReactNode } from "react";
 import "./globals.css";
 import { isBeta } from "@/app/beta";
-import { SentryClient } from "@/app/components/analytics/sentry-client";
+import { AnalyticsClient } from "@/app/components/analytics/analytics";
 
 const lightModeEnabled = false;
 
@@ -38,7 +37,6 @@ export default async function RootLayout({ children }: Props) {
             {beta && <MainMenu />}
           </main>
           <AnalyticsClient />
-          <SentryClient />
         </body>
       </html>
     </ClerkProvider>
