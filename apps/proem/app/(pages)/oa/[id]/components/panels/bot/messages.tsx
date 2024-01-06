@@ -1,6 +1,6 @@
 import { Message as AiMessage, CreateMessage } from "ai";
 import { Message, Question } from "./message";
-import { Analytics } from "@/app/components/analytics";
+import { Tracker } from "@/app/components/analytics";
 
 type Props = {
   messages: AiMessage[];
@@ -15,12 +15,12 @@ export function BotMessages({ messages, suggestions, append }: Props) {
     append({ role: "user", content: question });
 
   const explainConcept = (msg: string) => {
-    Analytics.track("click:question-explainer", { msg });
+    Tracker.track("click:question-explainer", { msg });
     appendQuestion(`What is ${msg}?`);
   };
 
   const handleSuggestionClick = (question: string) => {
-    Analytics.track("click:question-suggestion", { question });
+    Tracker.track("click:question-suggestion", { question });
     appendQuestion(question);
   };
 

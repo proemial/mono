@@ -1,9 +1,9 @@
 "use client";
 
-import { Analytics } from "@/app/components/analytics";
+import { Tracker } from "@/app/components/analytics";
 
 export function LinkButton({ url }: { id: string; url: string }) {
-  const track = () => Analytics.track("click:full_paper", { url });
+  const track = () => Tracker.track("click:full_paper", { url });
 
   return (
     <a

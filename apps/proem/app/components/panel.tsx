@@ -1,6 +1,6 @@
 "use client";
 
-import { Analytics } from "@/app/components/analytics";
+import { Tracker } from "@/app/components/analytics";
 import { ReactNode, useState } from "react";
 
 type Props = {
@@ -20,7 +20,7 @@ export function Panel({ title, children, closed, className }: Props) {
 
   const handleClick = () => {
     const prefix = isClosed ? "show" : "hide";
-    Analytics.track(`click:panel-${prefix}-${title}`);
+    Tracker.track(`click:panel-${prefix}-${title}`);
     setClosed(!isClosed);
   };
 

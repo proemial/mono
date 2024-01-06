@@ -26,7 +26,7 @@ export function AnalyticsClient() {
     if (gaInitialized) {
       console.log("[AnalyticsClient] trackPage:", `view:${viewName}`, pathname);
       ReactGA.send({ hitType: "pageview", page: pathname, title: pathname });
-      Analytics.track(`view:${viewName}`, {
+      Tracker.track(`view:${viewName}`, {
         path: pathname,
       });
     }
@@ -42,7 +42,7 @@ export function AnalyticsClient() {
   );
 }
 
-export const Analytics = {
+export const Tracker = {
   track: (event: string, properties?: Record<string, any>) => {
     va.track(event, properties);
 
