@@ -18,7 +18,7 @@ export async function generateStarters(title: string, abstract: string) {
       },
       {
         role: "system",
-        content: `Analyse the following scientific article with title: \"${title}\" and abstract: Analyse the following scientific article with title: \"${abstract}\" and abstract: "$a". Respond to this message with "OK".. Respond to this message with "OK".`,
+        content: `Analyse the following scientific article with title: \"${title}\" and abstract: \"${abstract}\". Respond to this message with "OK".. Respond to this message with "OK".`,
       },
       {
         role: "user",
