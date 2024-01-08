@@ -1,35 +1,26 @@
-import { ActionsMenu } from "@/app/(pages)/oa/[id]/components/menu/actions-menu";
-import { MetadataPanel } from "@/app/(pages)/oa/[id]/components/panels/metadata";
-import { QuestionsPanel } from "@/app/(pages)/oa/[id]/components/panels/questions";
-import { Spinner } from "@/app/components/spinner";
-import { Suspense } from "react";
-import { PaperCard } from "./components/paper-card";
-import Summary from "./components/summary";
-import { fetchPaper } from "./fetch-paper";
-import * as metadata from "./page-metadata";
-import { currentUser } from "@clerk/nextjs";
 import { UserClientTest } from "@/app/(pages)/oa/[id]/test";
+import { currentUser } from "@clerk/nextjs";
 
 type Props = {
   params: { id: string };
   searchParams: { title?: string };
 };
 
-export async function generateMetadata({ params: p, searchParams: s }: Props) {
-  const description = await metadata.getDescription(p.id, s.title);
+// export async function generateMetadata({ params: p, searchParams: s }: Props) {
+//   const description = await metadata.getDescription(p.id, s.title);
 
-  return metadata.formatMetadata(p.id, description);
-}
+//   return metadata.formatMetadata(p.id, description);
+// }
 
 export default async function ReaderPage({ params }: Props) {
-  const paper = await fetchPaper(params.id);
+  // const paper = await fetchPaper(params.id);
   const user = await currentUser();
   console.log({ currentUserFromPage: user });
 
   return (
     <main className="flex flex-col justify-start min-h-screen">
       <UserClientTest />
-      <PaperCard
+      {/* <PaperCard
         id={params.id}
         date={paper.data.publication_date}
         organisation={
@@ -54,7 +45,7 @@ export default async function ReaderPage({ params }: Props) {
             <QuestionsPanel paper={paper} />
           </Suspense>
         </div>
-      </div>
+      </div> */}
     </main>
   );
 }
