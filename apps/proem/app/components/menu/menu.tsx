@@ -1,5 +1,5 @@
 "use client";
-import { SignedOut, useSignIn, useUser } from "@clerk/nextjs";
+import { SignedOut, useAuth, useSignIn, useUser } from "@clerk/nextjs";
 import { Bookmark, History, Home, User, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -55,7 +55,7 @@ const menuItems = [
 export function MainMenu() {
   const { isOpen, close, open } = useDrawerState();
   const { signIn, isLoaded: signInIsLoaded } = useSignIn();
-  const { user } = useUser();
+  const { userId } = useAuth();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -68,7 +68,7 @@ export function MainMenu() {
         >
           {menuItems.map(({ icon: Icon, href, hasLoginDrawer }) => {
             //  If the user is not signed in, we're open the drawer with a query parameter to handle redirects
-            const linkProps: Parameters<typeof Link>[0] = user
+            const linkProps: Parameters<typeof Link>[0] = userId
               ? { href }
               : {
                   href: hasLoginDrawer

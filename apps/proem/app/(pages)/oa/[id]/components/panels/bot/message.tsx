@@ -70,7 +70,7 @@ export function Question({ children, onClick, className }: QuestionProps) {
   const { open } = useDrawerState();
 
   const handleClick = () => {
-    if (!user) {
+    if (!userId) {
       open();
       return;
     }
