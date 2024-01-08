@@ -1,20 +1,16 @@
-"use client";
+import { ProfileButtons } from "@/app/(pages)/profile/profile-buttons";
 import { PageHeader } from "@/app/components/page-header";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
-import { Button } from "@/app/components/shadcn-ui/button";
-import { SignOutButton, SignedIn, useAuth, useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { SignedIn, currentUser } from "@clerk/nextjs";
 
-export default function ProfilePage() {
-  const { user } = useUser();
-  const auth = useAuth();
-  console.log({ profile: { user, auth } });
-  const router = useRouter();
-  const initials = user?.fullName?.split(" ").map((name) => name.charAt(0));
+export default async function ProfilePage() {
+  const user = await currentUser();
+  const fullName = user ? `${user.firstName} ${user.lastName}` : "";
+  const initials = fullName.split(" ").map((name) => name.charAt(0));
 
   return (
     <div className="flex flex-col min-h-screen justify-begin">
@@ -29,11 +25,10 @@ export default function ProfilePage() {
                 {initials}
               </AvatarFallback>
             </Avatar>
-            <div>{user?.fullName}</div>
+            <div>{fullName}</div>
           </div>
-          <SignOutButton signOutCallback={() => router.push("/")}>
-            <Button className="mt-4">Log out</Button>
-          </SignOutButton>
+
+          <ProfileButtons />
         </div>
       </SignedIn>
     </div>

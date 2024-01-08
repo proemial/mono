@@ -1,8 +1,8 @@
+import { AnalyticsClient } from "@/app/components/analytics/analytics";
 import { MainMenu } from "@/app/components/menu/menu";
-import { ClerkProvider, currentUser } from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import { ReactNode } from "react";
 import "./globals.css";
-import { AnalyticsClient } from "@/app/components/analytics/analytics";
 
 const lightModeEnabled = false;
 
