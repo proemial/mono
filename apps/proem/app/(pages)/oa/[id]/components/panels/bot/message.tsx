@@ -21,7 +21,7 @@ export function Message({ role, content, explain }: Props) {
 
 function applyExplainLinks(
   msg: string,
-  onClick: (concept: string) => void,
+  onClick: (concept: string) => void
 ): React.ReactNode {
   const re = /\(\(.*?\)\)/gi;
 
@@ -30,7 +30,7 @@ function applyExplainLinks(
 
     return (
       <span
-        className="underline cursor-pointer text-primary font-medium"
+        className="font-medium underline cursor-pointer text-primary"
         onClick={() => onClick(sanitized)}
       >
         {sanitized}
@@ -65,6 +65,7 @@ type QuestionProps = {
 
 export function Question({ children, onClick, className }: QuestionProps) {
   const { user } = useUser();
+  console.log(user);
   const { open } = useDrawerState();
 
   const handleClick = () => {

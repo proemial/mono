@@ -7,6 +7,7 @@ import { PaperCard } from "./components/paper-card";
 import Summary from "./components/summary";
 import { fetchPaper } from "./fetch-paper";
 import * as metadata from "./page-metadata";
+import { currentUser } from "@clerk/nextjs";
 
 type Props = {
   params: { id: string };
@@ -21,6 +22,8 @@ export async function generateMetadata({ params: p, searchParams: s }: Props) {
 
 export default async function ReaderPage({ params }: Props) {
   const paper = await fetchPaper(params.id);
+  const user = await currentUser();
+  console.log({ currentUserFromPage: user });
 
   return (
     <main className="flex flex-col justify-start min-h-screen">

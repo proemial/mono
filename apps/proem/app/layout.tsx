@@ -1,5 +1,5 @@
 import { MainMenu } from "@/app/components/menu/menu";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkProvider, currentUser } from "@clerk/nextjs";
 import { ReactNode } from "react";
 import "./globals.css";
 import { AnalyticsClient } from "@/app/components/analytics/analytics";
@@ -16,6 +16,8 @@ type Props = {
 
 export default async function RootLayout({ children }: Props) {
   const light = lightModeEnabled ? "dark:dark" : "dark";
+  const user = await currentUser();
+  console.log({ currentUserFromRootLayout: user });
 
   return (
     <ClerkProvider>
