@@ -1,8 +1,8 @@
 "use client";
-import { FormEvent, MutableRefObject } from "react";
-import { useUser } from "@clerk/nextjs";
-import { useDrawerState } from "@/app/components/login/state";
 import { PaperPlaneIcon } from "@/app/components/icons/paperplane";
+import { useDrawerState } from "@/app/components/login/state";
+import { useAuth } from "@clerk/nextjs";
+import { FormEvent, MutableRefObject } from "react";
 
 type Props = {
   value: string;
@@ -12,17 +12,17 @@ type Props = {
 };
 
 export function BotForm({ value, onSubmit, onChange, inputFieldRef }: Props) {
-  const { user } = useUser();
+  const { userId } = useAuth();
   const { open } = useDrawerState();
 
   return (
     <form onSubmit={onSubmit} className="flex items-center">
       <input
-        readOnly={!user}
-        onFocus={() => !user && open()}
+        readOnly={!userId}
+        onFocus={() => !userId && open()}
         type="text"
         placeholder="Ask your own question"
-        className="w-full bg-black border-input border-l-2 border-y-2 rounded-tl-lg rounded-bl-lg p-3 focus-visible:outline-none"
+        className="w-full p-3 bg-black border-l-2 rounded-tl-lg rounded-bl-lg border-input border-y-2 focus-visible:outline-none"
         style={{
           borderTopRightRadius: 0,
           borderBottomRightRadius: 0,
@@ -33,9 +33,9 @@ export function BotForm({ value, onSubmit, onChange, inputFieldRef }: Props) {
         ref={inputFieldRef}
       />
       <button
-        onClick={() => !user && open()}
+        onClick={() => !userId && open()}
         type="submit"
-        className="p-3 pt-4 border-input border-r-2 border-y-2 rounded-tr-lg rounded-br-lg"
+        className="p-3 pt-4 border-r-2 rounded-tr-lg rounded-br-lg border-input border-y-2"
       >
         <PaperPlaneIcon />
       </button>

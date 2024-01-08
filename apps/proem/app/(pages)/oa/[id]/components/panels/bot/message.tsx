@@ -1,6 +1,6 @@
 "use client";
 import { useDrawerState } from "@/app/components/login/state";
-import { useAuth, useUser } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 
 type Role = "function" | "data" | "system" | "user" | "assistant" | "tool";
 
@@ -64,20 +64,7 @@ type QuestionProps = {
 };
 
 export function Question({ children, onClick, className }: QuestionProps) {
-  const { isLoaded, userId, sessionId } = useAuth();
-  const {
-    user,
-    isLoaded: userIsLoaded,
-    isSignedIn: userIsSignedIn,
-  } = useUser();
-  console.log({
-    user,
-    userIsLoaded,
-    userIsSignedIn,
-    userId,
-    isLoaded,
-    sessionId,
-  });
+  const { userId } = useAuth();
   const { open } = useDrawerState();
 
   const handleClick = () => {

@@ -1,5 +1,5 @@
 "use client";
-import { SignedOut, useAuth, useSignIn, useUser } from "@clerk/nextjs";
+import { SignedOut, useAuth, useSignIn } from "@clerk/nextjs";
 import { Bookmark, History, Home, User, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
