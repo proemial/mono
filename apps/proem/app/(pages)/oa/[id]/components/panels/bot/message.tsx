@@ -47,7 +47,7 @@ function applyExplainLinks(
 }
 
 const style =
-  "inline-block mb-4 rounded-b-2xl py-2 px-4 shadow bg-gradient-to-r";
+  "inline-block mb-4 rounded-b-sm py-2 px-4 shadow bg-gradient-to-r";
 
 export function Answer({ children }: { children: React.ReactNode }) {
   return (
@@ -77,7 +77,7 @@ export function Question({ children, onClick, className }: QuestionProps) {
 
   return (
     <div
-      className={`${className} ${style} from-primary to-primary-gradient rounded-tr-2xl self-start`}
+      className={`${className} ${style} bg-[#2F2F2F] mb-2 py-2 px-4 text-[16px] font-sans font-normal rounded-sm border border-[#3C3C3C] self-start`}
       onClick={handleClick}
     >
       {children}

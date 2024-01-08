@@ -13,7 +13,7 @@ export default async function ProfilePage() {
   const initials = fullName.split(" ").map((name) => name.charAt(0));
 
   return (
-    <div className="flex flex-col min-h-screen justify-begin">
+    <div className="flex flex-colw justify-begin">
       <PageHeader>Profile</PageHeader>
 
       <SignedIn>

@@ -1,8 +1,11 @@
+"use client"
+
 import assetImg1 from "@/app/images/asset-bg-1.png";
 import assetImg2 from "@/app/images/asset-bg-2.png";
 import assetImg3 from "@/app/images/asset-bg-3.png";
 import dayjs from "dayjs";
 import { ReactNode } from "react";
+import { useRouter } from 'next/navigation'
 
 type Props = {
   id: string;
@@ -12,19 +15,39 @@ type Props = {
 };
 
 export function PaperCard({ id, date, organisation, children }: Props) {
+
+  const router = useRouter()
+
   return (
     <div
-      className={`min-h-[228px] px-4 pb-4 pt-16 flex flex-col justify-end items-begin`}
+      className={`p-6 flex flex-col justify-start items-begin`}
       style={{
-        backgroundImage: `url(${image(id)})`,
+        // backgroundImage: `url(${image(id)})`,
+        backgroundColor: "#1A1A1A",
         backgroundSize: "cover",
-        boxShadow: "inset 0 -40px 60px -10px #000000",
+        // boxShadow: "inset 0 -40px 60px -10px #000000",
       }}
     >
-      <div className="mb-2 text-sm text-primary-light text-shadow-purple">
-        {organisation} - {dayjs(date).format("MMM DD, YYYY")}
+
+      <div className="sticky top-0 z-50 w-full bg-background mb-6">
+        <button
+          className="flex flex-row gap-2 font-sans text-left"
+          type="button"
+          onClick={() => router.back()}>
+          <svg className="fill-white" width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.7071 5.29289C12.0976 5.68342 12.0976 6.31658 11.7071 6.70711L7.41421 11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H7.41421L11.7071 17.2929C12.0976 17.6834 12.0976 18.3166 11.7071 18.7071C11.3166 19.0976 10.6834 19.0976 10.2929 18.7071L4.29289 12.7071C4.10536 12.5196 4 12.2652 4 12C4 11.7348 4.10536 11.4804 4.29289 11.2929L10.2929 5.29289C10.6834 4.90237 11.3166 4.90237 11.7071 5.29289Z" />
+          </svg>
+          <p>Back</p>
+        </button>
       </div>
-      <div className={`text-3xl text-shadow-shine`}>{children}</div>
+
+      <div className="text-[12px] mb-1 font-sans text-white font-normal tracking-wide">
+        #data-science #ai #3dmodels
+      </div>
+      <div className="mb-2 text-[12px] font-sans font-normal uppercase tracking-wide opacity-50">
+        PUBLISHED ON {organisation} — {dayjs(date).format("M.D.YYYY")}
+      </div>
+      <div className={`text-[24px] font-sans font-normal leading-[32px]`}>{children}</div>
     </div>
   );
 }

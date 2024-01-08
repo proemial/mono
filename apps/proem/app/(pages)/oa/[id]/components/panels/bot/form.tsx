@@ -22,7 +22,7 @@ export function BotForm({ value, onSubmit, onChange, inputFieldRef }: Props) {
         onFocus={() => !userId && open()}
         type="text"
         placeholder="Ask your own question"
-        className="w-full p-3 bg-black border-l-2 rounded-tl-lg rounded-bl-lg border-input border-y-2 focus-visible:outline-none"
+        className="w-full bg-black border-input border-l-2 border-y-2 rounded-tl-lg rounded-bl-lg p-3 focus-visible:outline-none"
         style={{
           borderTopRightRadius: 0,
           borderBottomRightRadius: 0,
@@ -35,7 +35,7 @@ export function BotForm({ value, onSubmit, onChange, inputFieldRef }: Props) {
       <button
         onClick={() => !userId && open()}
         type="submit"
-        className="p-3 pt-4 border-r-2 rounded-tr-lg rounded-br-lg border-input border-y-2"
+        className="p-3 pt-4 border-input border-r-2 border-y-2 rounded-tr-lg rounded-br-lg"
       >
         <PaperPlaneIcon />
       </button>

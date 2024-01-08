@@ -11,7 +11,7 @@ export const revalidate = 1;
 
 export default async function BookmarksPage() {
   return (
-    <div className="flex flex-col min-h-screen justify-begin">
+    <div className="flex flex-col justify-begin">
       <PageHeader>Bookmarks</PageHeader>
       <Suspense fallback={<CenteredSpinner />}>
         <PageContent />

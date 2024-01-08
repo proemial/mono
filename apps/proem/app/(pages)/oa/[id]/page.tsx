@@ -23,7 +23,7 @@ export default async function ReaderPage({ params }: Props) {
   const paper = await fetchPaper(params.id);
 
   return (
-    <main className="flex flex-col justify-start min-h-screen">
+    <main className="flex flex-col overflow-hidden">
       <PaperCard
         id={params.id}
         date={paper.data.publication_date}
@@ -36,15 +36,16 @@ export default async function ReaderPage({ params }: Props) {
         </Suspense>
       </PaperCard>
 
-      <ActionsMenu
+      <hr className="h-0.5 border-t-0 bg-neutral-100 opacity-20 dark:opacity-50" />
+
+      {/* <ActionsMenu
         id={params.id}
         url={paper.data.primary_location?.landing_page_url}
         className="sticky top-0 z-50 p-4 bg-background"
-      />
+      /> */}
 
-      <div className="px-4 pt-2">
+      <div className="px-4">
         <div className="flex flex-col gap-6 text-base">
-          <MetadataPanel paper={paper} closed />
           <Suspense fallback={<Spinner />}>
             <QuestionsPanel paper={paper} />
           </Suspense>
