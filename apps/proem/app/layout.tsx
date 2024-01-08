@@ -16,8 +16,6 @@ type Props = {
 
 export default async function RootLayout({ children }: Props) {
   const light = lightModeEnabled ? "dark:dark" : "dark";
-  const user = await currentUser();
-  console.log({ currentUserFromRootLayout: user });
 
   return (
     <ClerkProvider>
