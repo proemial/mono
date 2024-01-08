@@ -6,6 +6,7 @@ import assetImg3 from "@/app/images/asset-bg-3.png";
 import dayjs from "dayjs";
 import { ReactNode } from "react";
 import { useRouter } from 'next/navigation'
+import Image from "next/image";
 
 type Props = {
   id: string;
@@ -29,7 +30,7 @@ export function PaperCard({ id, date, organisation, children }: Props) {
       }}
     >
 
-      <div className="sticky top-0 z-50 w-full bg-background mb-6">
+      <div className="sticky top-0 z-50 w-full bg-transparent mb-6">
         <button
           className="flex flex-row gap-2 font-sans text-left"
           type="button"
@@ -41,11 +42,11 @@ export function PaperCard({ id, date, organisation, children }: Props) {
         </button>
       </div>
 
-      <div className="text-[12px] mb-1 font-sans text-white font-normal tracking-wide">
-        #data-science #ai #3dmodels
-      </div>
-      <div className="mb-2 text-[12px] font-sans font-normal uppercase tracking-wide opacity-50">
+      <div className="mb-1 text-[12px] text-white font-sans font-normal uppercase tracking-wide">
         PUBLISHED ON {organisation} — {dayjs(date).format("M.D.YYYY")}
+      </div>
+      <div className="text-[12px] mb-2 font-sans opacity-50 font-normal tracking-wide">
+        #data-science #ai #3dmodels
       </div>
       <div className={`text-[24px] font-sans font-normal leading-[32px]`}>{children}</div>
     </div>

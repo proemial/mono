@@ -51,7 +51,7 @@ const style =
 
 export function Answer({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`${style} bg-[#60A040] rounded-tr-2xl self-start`}>
+    <div className={`${style} bg-[#464545] leading-snug mb-2 py-2 px-4 text-[16px] font-sans font-normal rounded-sm self-start`}>
       {children}
     </div>
   );
@@ -77,7 +77,7 @@ export function Question({ children, onClick, className }: QuestionProps) {
 
   return (
     <div
-      className={`${className} ${style} bg-[#2F2F2F] mb-2 py-2 px-4 text-[16px] font-sans font-normal rounded-sm border border-[#3C3C3C] self-start`}
+      className={`${className} ${style} bg-[#2F2F2F] leading-snug mb-2 py-2 px-4 text-[16px] font-sans font-normal rounded-sm border border-[#3C3C3C] self-start`}
       onClick={handleClick}
     >
       {children}

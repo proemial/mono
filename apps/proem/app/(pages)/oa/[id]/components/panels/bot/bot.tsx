@@ -27,7 +27,7 @@ export function InsightsBot({ paper, suggestions }: Props) {
   }, [messages]);
 
   return (
-    <div className="pt-4 flex flex-col justify-start">
+    <div className="flex flex-col">
       {!suggestions && (
         <div className="mb-4">
           <Spinner />

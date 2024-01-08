@@ -1,4 +1,5 @@
 "use client";
+import { Send } from "@/app/components/icons/functional/send";
 import { PaperPlaneIcon } from "@/app/components/icons/paperplane";
 import { useDrawerState } from "@/app/components/login/state";
 import { useAuth } from "@clerk/nextjs";
@@ -16,13 +17,13 @@ export function BotForm({ value, onSubmit, onChange, inputFieldRef }: Props) {
   const { open } = useDrawerState();
 
   return (
-    <form onSubmit={onSubmit} className="flex items-center">
+    <form onSubmit={onSubmit} className="flex items-center border border-[#3C3C3C] rounded-lg justify-end">
       <input
         readOnly={!userId}
         onFocus={() => !userId && open()}
         type="text"
         placeholder="Ask your own question"
-        className="w-full bg-black border-input border-l-2 border-y-2 rounded-tl-lg rounded-bl-lg p-3 focus-visible:outline-none"
+        className="w-full bg-transparent text-[16px] font-normal pl-3 py-2 focus-visible:outline-none"
         style={{
           borderTopRightRadius: 0,
           borderBottomRightRadius: 0,
@@ -35,9 +36,9 @@ export function BotForm({ value, onSubmit, onChange, inputFieldRef }: Props) {
       <button
         onClick={() => !userId && open()}
         type="submit"
-        className="p-3 pt-4 border-input border-r-2 border-y-2 rounded-tr-lg rounded-br-lg"
+        className="pr-3"
       >
-        <PaperPlaneIcon />
+        <Send />
       </button>
     </form>
   );

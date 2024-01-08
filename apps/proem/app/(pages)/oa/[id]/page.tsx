@@ -23,20 +23,21 @@ export default async function ReaderPage({ params }: Props) {
   const paper = await fetchPaper(params.id);
 
   return (
-    <main className="flex flex-col overflow-hidden">
-      <PaperCard
-        id={params.id}
-        date={paper.data.publication_date}
-        organisation={
-          paper.data.primary_location?.source?.host_organization_name
-        }
-      >
-        <Suspense fallback={<Spinner />}>
-          <Summary paper={paper} />
-        </Suspense>
-      </PaperCard>
-
-      <hr className="h-0.5 border-t-0 bg-neutral-100 opacity-20 dark:opacity-50" />
+    <main className="flex flex-col overflow-hidden h-full justify-between">
+      <div>
+        <PaperCard
+          id={params.id}
+          date={paper.data.publication_date}
+          organisation={
+            paper.data.primary_location?.source?.host_organization_name
+          }
+        >
+          <Suspense fallback={<Spinner />}>
+            <Summary paper={paper} />
+          </Suspense>
+        </PaperCard>
+        <hr className="h-0.5 border-t-0 bg-neutral-100 opacity-20" />
+      </div>
 
       {/* <ActionsMenu
         id={params.id}
@@ -44,7 +45,7 @@ export default async function ReaderPage({ params }: Props) {
         className="sticky top-0 z-50 p-4 bg-background"
       /> */}
 
-      <div className="px-4">
+      <div className="p-6">
         <div className="flex flex-col gap-6 text-base">
           <Suspense fallback={<Spinner />}>
             <QuestionsPanel paper={paper} />

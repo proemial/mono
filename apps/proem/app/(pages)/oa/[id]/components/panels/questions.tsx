@@ -17,7 +17,7 @@ export async function QuestionsPanel(props: Props) {
 
   return (
     <Panel title="question" closed={props.closed}>
-      <div className="pt-4 flex flex-col">
+      <div className="flex flex-col">
         <InsightsBot {...props} suggestions={starters} />
       </div>
     </Panel>
