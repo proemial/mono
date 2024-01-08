@@ -64,9 +64,20 @@ type QuestionProps = {
 };
 
 export function Question({ children, onClick, className }: QuestionProps) {
-  const { isLoaded, userId, sessionId, getToken } = useAuth();
-  const { user } = useUser();
-  console.log({ user, userId, isLoaded, sessionId });
+  const { isLoaded, userId, sessionId } = useAuth();
+  const {
+    user,
+    isLoaded: userIsLoaded,
+    isSignedIn: userIsSignedIn,
+  } = useUser();
+  console.log({
+    user,
+    userIsLoaded,
+    userIsSignedIn,
+    userId,
+    isLoaded,
+    sessionId,
+  });
   const { open } = useDrawerState();
 
   const handleClick = () => {
