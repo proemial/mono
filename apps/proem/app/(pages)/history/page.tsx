@@ -25,13 +25,13 @@ async function PageContent() {
   const latestIds = ["W10438119", "W125463860", "W2180080828", "W1971798103"];
 
   return (
-    <>
+    <div className="p-6">
       {latestIds.length === 0 && <NothingHereYet />}
       {latestIds.map((id, index) => (
         <Suspense key={index} fallback={<EmptySpinner />}>
           <PaperCard id={id} />
         </Suspense>
       ))}
-    </>
+    </div>
   );
 }

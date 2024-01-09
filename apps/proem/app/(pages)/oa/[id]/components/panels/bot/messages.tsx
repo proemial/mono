@@ -11,6 +11,7 @@ type Props = {
 };
 
 export function BotMessages({ messages, suggestions, append }: Props) {
+  
   const appendQuestion = (question: string) =>
     append({ role: "user", content: question });
 
@@ -25,13 +26,13 @@ export function BotMessages({ messages, suggestions, append }: Props) {
   };
 
   return (
-    <>
+    <div className="flex flex-col justify-end">
       {messages.length === 0 &&
         suggestions?.map((question, i) => (
           <Question
             key={i}
             onClick={() => handleSuggestionClick(question)}
-            className="cursor-pointer"
+            className="cursor-pointer max-w-xl scale-100 active:scale-[0.99] transition-all duration-100"
           >
             {question}
           </Question>
@@ -44,6 +45,6 @@ export function BotMessages({ messages, suggestions, append }: Props) {
           explain={explainConcept}
         />
       ))}
-    </>
+    </div>
   );
 }

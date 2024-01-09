@@ -28,7 +28,7 @@ function Drawer({
   children,
   className,
   onClose,
-  position = "bottom",
+  position = "right",
   removeWhenClosed = true,
 }: Props) {
   const bodyRef = useRef(
@@ -101,14 +101,11 @@ function Drawer({
           role="dialog"
         >
           <div className="flex-1 w-full" onClick={onClose} />
-          <div
-            className="h-fit w-full p-4 border border-black rounded-tl-[1.5rem] rounded-tr-[1.5rem] max-w-[640px]"
-            style={{
-              background: "rgba(0, 0, 0, 0.65)",
-            }}
-          >
+          <div className="w-full p-4 bg-[#2F2F2F] border-[#3C3C3C] rounded-t-2xl max-w-[640px]">
             <div className="flex flex-col items-center w-full">
-              <div className="flex max-w-[420px]">{children}</div>
+              <div className="flex max-w-[420px]">
+                {children}
+              </div>
             </div>
           </div>
         </div>

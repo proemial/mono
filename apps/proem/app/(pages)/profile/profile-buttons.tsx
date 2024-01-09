@@ -8,7 +8,7 @@ export function ProfileButtons() {
 
   return (
     <SignOutButton signOutCallback={() => router.push("/")}>
-      <Button className="mt-4">Log out</Button>
+      <Button variant={"danger"}><span className="text-xs font-semibold font-sans">Log out</span></Button>
     </SignOutButton>
   );
 }

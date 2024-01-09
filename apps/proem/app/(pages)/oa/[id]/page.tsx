@@ -23,8 +23,8 @@ export default async function ReaderPage({ params }: Props) {
   const paper = await fetchPaper(params.id);
 
   return (
-    <main className="flex flex-col overflow-hidden h-full justify-between">
-      <div>
+    <main className="flex flex-col">
+      <div className="z-50 sticky top-0">
         <PaperCard
           id={params.id}
           date={paper.data.publication_date}
@@ -38,6 +38,8 @@ export default async function ReaderPage({ params }: Props) {
         </PaperCard>
         <hr className="h-0.5 border-t-0 bg-neutral-100 opacity-20" />
       </div>
+
+      {/* ↓↓↓ "Read the full article" & "Copy to clipboard" ↓↓↓ */}
 
       {/* <ActionsMenu
         id={params.id}

@@ -8,6 +8,7 @@ import Drawer from "../login/drawer";
 import { useDrawerState } from "../login/state";
 import { Button } from "../shadcn-ui/button";
 import { Toaster } from "../shadcn-ui/toaster";
+import { Proem } from "../icons/brand/proem";
 
 const REDIRECT_URL = "redirect_url";
 
@@ -31,28 +32,13 @@ const authProviders = [
 
 const menuItems = [
   {
-    icon: Home,
-    href: "/?reload=true",
-    hasLoginDrawer: false,
-  },
-  {
-    icon: History,
-    href: "/history",
-    hasLoginDrawer: true,
-  },
-  {
-    icon: Bookmark,
-    href: "/bookmarks",
-    hasLoginDrawer: true,
-  },
-  {
     icon: User,
     href: "/profile",
     hasLoginDrawer: true,
   },
 ] as const;
 
-export function MainMenu() {
+export function MainMenuNew() {
   const { isOpen, close, open } = useDrawerState();
   const { signIn, isLoaded: signInIsLoaded } = useSignIn();
   const { userId } = useAuth();
@@ -61,7 +47,7 @@ export function MainMenu() {
 
   return (
     <div className="z-[1000]">
-      <div className="pt-2 pb-4">
+      <div>
         <div
           className="flex justify-around"
           style={{ boxShadow: "0px -8px 8px 4px rgba(0, 0, 0, 0.85)" }}
@@ -79,7 +65,7 @@ export function MainMenu() {
 
             return (
               <Link {...linkProps} key={href}>
-                <Icon className="stroke-muted-foreground" />
+                <Icon />
               </Link>
             );
           })}
@@ -90,18 +76,18 @@ export function MainMenu() {
         <SignedOut>
           <Drawer isOpen={isOpen} onClose={close} removeWhenClosed={false}>
             <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between my-2">
-                <div className="w-2"></div>
-                <div className="text-base text-center">
-                  Please log in to continue
+              <div className="flex flex-col justify-center my-2">
+                <Proem />
+                <div className="mt-3 text-xl text-left font-sans font-semibold">
+                  Get started with Proem
                 </div>
-                <button
+                {/* <button
                   type="button"
                   onClick={close}
-                  className="p-1 border rounded-xl bg-primary border-primary"
+                  className="p-1 border rounded-xl bg-transparent border-transparent"
                 >
-                  <X className="h-4 w-4 stroke-[4]" />
-                </button>
+                  <X className="h-4 w-4 stroke-[3]" />
+                </button> */}
               </div>
 
               {authProviders.map(({ name, icon, oAuthStrategy }) => {
@@ -118,20 +104,20 @@ export function MainMenu() {
                     }}
                   >
                     <Logo variant={icon} className="mr-2" />
-                    Continue using {name}
+                    <span className="text-xs font-semibold font-sans">Continue using {name}</span>
                   </Button>
                 );
               })}
 
-              <div className="text-center text-xxs text-foreground/70">
+              <div className="text-xs text-left font-normal text-gray-600 leading-tight">
                 Proemial is a non-profit foundation dedicated to promoting
                 academic discourse and knowledge sharing. By using Proem, you
                 consent to our{" "}
-                <a href="/privacy" className="text-primary-light">
+                <a href="/privacy" className="text-gray-600 underline">
                   Privacy Policy
                 </a>{" "}
                 and{" "}
-                <a href="/terms" className="text-primary-light">
+                <a href="/terms" className="text-gray-600 underline">
                   Terms of Service
                 </a>
                 .

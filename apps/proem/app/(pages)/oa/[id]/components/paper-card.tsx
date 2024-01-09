@@ -20,17 +20,8 @@ export function PaperCard({ id, date, organisation, children }: Props) {
   const router = useRouter()
 
   return (
-    <div
-      className={`p-6 flex flex-col justify-start items-begin`}
-      style={{
-        // backgroundImage: `url(${image(id)})`,
-        backgroundColor: "#1A1A1A",
-        backgroundSize: "cover",
-        // boxShadow: "inset 0 -40px 60px -10px #000000",
-      }}
-    >
-
-      <div className="sticky top-0 z-50 w-full bg-transparent mb-6">
+    <div className="flex p-6 bg-[#1A1A1A] flex-col">
+      <div className="w-full bg-transparent mb-6">
         <button
           className="flex flex-row gap-2 font-sans text-left"
           type="button"
@@ -43,12 +34,20 @@ export function PaperCard({ id, date, organisation, children }: Props) {
       </div>
 
       <div className="mb-1 text-[12px] text-white font-sans font-normal uppercase tracking-wide">
-        PUBLISHED ON {organisation} — {dayjs(date).format("M.D.YYYY")}
+        PUBLISHED ON {organisation} <span className="text-white/50"> — {dayjs(date).format("M.D.YYYY")}</span>
       </div>
+
+      {/* ↓↓↓ We should pull tags here ↓↓↓
+
       <div className="text-[12px] mb-2 font-sans opacity-50 font-normal tracking-wide">
         #data-science #ai #3dmodels
       </div>
-      <div className={`text-[24px] font-sans font-normal leading-[32px]`}>{children}</div>
+      
+      */}
+
+      <div className={`text-[24px] font-sans font-normal leading-[32px]`}>
+        {children}
+      </div>
     </div>
   );
 }
