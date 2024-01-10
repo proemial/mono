@@ -2,7 +2,7 @@
 
 import { Tracker } from "@/app/components/analytics/tracker";
 
-export function LinkButton({ url }: { id: string; url: string }) {
+export function LinkButton({ url }: { url: string }) {
   const track = () => Tracker.track("click:full_paper", { url });
 
   return (

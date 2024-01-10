@@ -13,7 +13,7 @@ export function ActionsMenu({ id, url, className }: Props) {
     <div
       className={`${className} w-full flex justify-between items-center shadow`}
     >
-      <LinkButton id={id} url={url} />
+      <LinkButton url={url} />
       <div className="flex gap-4">
         {/*<BookmarkButton id={id} />*/}
         <ShareButton />
