@@ -13,6 +13,8 @@ import {
 type Props = {
   paper: OpenAlexPaper;
   closed?: boolean;
+  id: string;
+  url: string;
 };
 
 export async function QuestionsPanel(props: Props) {
