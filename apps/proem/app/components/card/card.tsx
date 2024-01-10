@@ -1,27 +1,25 @@
-import { fetchPaper } from "@/app/(pages)/oa/[id]/fetch-paper";
-import dayjs from "dayjs";
-import { Spinner } from "@/app/components/spinner";
 import Summary from "@/app/(pages)/oa/[id]/components/summary";
-import { Suspense } from "react";
+import { fetchPaper } from "@/app/(pages)/oa/[id]/fetch-paper";
+import { Spinner } from "@/app/components/spinner";
 import assetImg1 from "@/app/images/asset-bg-1.png";
 import assetImg2 from "@/app/images/asset-bg-2.png";
 import assetImg3 from "@/app/images/asset-bg-3.png";
-import Link from "next/link";
+import dayjs from "dayjs";
+import { Suspense } from "react";
 
 export async function PaperCard({ id }: { id: string }) {
   const paper = await fetchPaper(id);
 
-  const organisation =
-    paper.data.primary_location?.source?.host_organization_name;
+  // const organisation =
+  //   paper.data.primary_location?.source?.host_organization_name;
   const date = paper.data.publication_date;
 
   return (
     <div>
       <a href={`/oa/${id}`}>
         <div className="bg-[#2F2F2F] mb-3 rounded-sm border border-[#3C3C3C] scale-100 active:scale-[0.99] transition-all duration-100">
-          <div className="p-4 flex flex-col justify-between text-lg font-medium items-left h-full">
-            <div className="w-full flex">
-
+          <div className="flex flex-col justify-between h-full p-4 text-lg font-medium items-left">
+            <div className="flex w-full">
               <div className="text-[12px] mb-3 leading-snug font-normal font-sans items-end uppercase tracking-wide">
                 RESEARCH PAPER FROM ARXIV{" "}
                 <span className="text-white/50">
@@ -37,7 +35,6 @@ export async function PaperCard({ id }: { id: string }) {
       </div>
       
       */}
-
             </div>
             <div>
               <div className="text-[20px] font-sans font-normal leading-[26px]">
