@@ -78,7 +78,9 @@ export default async function ProfilePage() {
                 </a>
                 <a
                   className="hover:bg-[#2F2F2F] p-2 outline-none outline-transparent transition duration-300 ease-in-out font-sans select-none items-center relative group justify-center text-center rounded-sm cursor-point active:scale-95 origin-center whitespace-nowrap inline-flex font-medium"
-                  href="/"
+                  href="https://tally.so/r/wAv8Ve"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <div className="flex items-center justify-center gap-3 leading-none">
                     <MegaPhone />
