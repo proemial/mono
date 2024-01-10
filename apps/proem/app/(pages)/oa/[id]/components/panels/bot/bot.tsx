@@ -1,4 +1,5 @@
 "use client";
+import { LinkButton } from "@/app/(pages)/oa/[id]/components/menu/link-button";
 import { VerifiedStar } from "@/app/components/icons/other/star";
 import { Button } from "@/app/components/shadcn-ui/button";
 import {
@@ -10,12 +11,10 @@ import {
 import { Spinner } from "@/app/components/spinner";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { useChat } from "ai/react";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { BotForm } from "./form";
 import { BotMessages } from "./messages";
-import { LinkButton } from "@/app/(pages)/oa/[id]/components/menu/link-button";
 
 type Props = {
   paper: OpenAlexPaper;
@@ -98,7 +97,7 @@ export function InsightsBot({ paper, suggestions }: Props) {
           </div>
         </TabsContent>
         <TabsContent value="authors">
-          <div className="bg-[#2F2F2F] flex flex-col leading-snug gap-3 mb-2 py-4 px-4 rounded-sm border border-[#3C3C3C] self-end">
+          {/* <div className="bg-[#2F2F2F] flex flex-col leading-snug gap-3 mb-2 py-4 px-4 rounded-sm border border-[#3C3C3C] self-end">
             <div className="flex flex-row items-center gap-3">
               <Image
                 src="/avatars/sara.png"
@@ -126,7 +125,7 @@ export function InsightsBot({ paper, suggestions }: Props) {
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* TODO! For Rasmus: Render out a list of authors with this styling inside of
           the div with bg - (2F2F2F) */}
