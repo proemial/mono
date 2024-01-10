@@ -11,7 +11,7 @@ module.exports = {
           has: [
             {
               type: "host",
-              value: "gpt.proem.ai",
+              value: "(?<gpt>.*)\\..*",
             },
           ],
           destination: "https://chat.openai.com/g/g-SxYGBAT0I-science-proems",
