@@ -21,7 +21,7 @@ export async function PaperCard({ id }: { id: string }) {
           <div className="flex flex-col justify-between h-full p-4 text-lg font-medium items-left">
             <div className="flex w-full">
               <div className="text-[12px] mb-3 leading-snug font-normal font-sans items-end uppercase tracking-wide">
-                RESEARCH PAPER FROM ARXIV{" "}
+                RESEARCH PAPER{" "}
                 <span className="text-white/50">
                   {" "}
                   — {dayjs(date).format("M.D.YYYY")}

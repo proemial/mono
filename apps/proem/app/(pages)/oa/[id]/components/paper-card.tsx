@@ -40,7 +40,7 @@ export function PaperCard({ date, children }: Props) {
       </div>
 
       <div className="mb-1 text-[12px] text-white font-sans font-normal uppercase tracking-wide">
-        RESEARCH PAPER FROM ARXIV
+        RESEARCH PAPER
         <span className="text-white/50">
           {" "}
           — {dayjs(date).format("M.D.YYYY")}
