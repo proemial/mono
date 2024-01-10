@@ -15,13 +15,16 @@ import Link from "next/link";
 import React from "react";
 import { BotForm } from "./form";
 import { BotMessages } from "./messages";
+import { LinkButton } from "@/app/(pages)/oa/[id]/components/menu/link-button";
 
 type Props = {
   paper: OpenAlexPaper;
   suggestions: string[];
+  id: string;
+  url: string;
 };
 
-export function InsightsBot({ paper, suggestions }: Props) {
+export function InsightsBot({ id, url, paper, suggestions }: Props) {
   const { title, abstract } = paper.data;
 
   const { messages, input, handleInputChange, handleSubmit, append } = useChat({
@@ -43,6 +46,7 @@ export function InsightsBot({ paper, suggestions }: Props) {
           <TabsTrigger value="QA">QA</TabsTrigger>
           <TabsTrigger value="publicquestions">Public Q&A</TabsTrigger>
           <TabsTrigger value="authors">Authors</TabsTrigger>
+          <TabsTrigger value="metadata">Metadata</TabsTrigger>
         </TabsList>
         <TabsContent value="QA">
           <div className="flex flex-col">
@@ -125,6 +129,7 @@ export function InsightsBot({ paper, suggestions }: Props) {
               </div>
             </div>
           </div>
+
           {/* TODO! For Rasmus: Render out a list of authors with this styling inside of
           the div with bg - (2F2F2F) */}
 
@@ -134,6 +139,16 @@ export function InsightsBot({ paper, suggestions }: Props) {
             <Button asChild className="text-xs font-sans font-medium text-black scale-100 active:scale-[0.99] transition-all duration-100"><Link href="https://tally.so/r/w2PLAL" target="_blank" rel="noopener noreferrer">Claim this paper</Link></Button>
           </div>
 
+        </TabsContent>
+        <TabsContent value="metadata">
+          <div className="bg-[#2F2F2F] flex flex-col leading-snug gap-3 mb-2 py-4 px-4 rounded-sm border border-[#3C3C3C] self-end">
+
+            <LinkButton
+              id={id}
+              url={paper.data.primary_location?.landing_page_url}
+            />
+
+          </div>
         </TabsContent>
       </Tabs>
     </>
