@@ -104,7 +104,7 @@ export default async function ProfilePage() {
           </Link>
         </p>
         <p className="text-xs font-normal leading-snug text-left text-gray-500">
-          Proemial A/S. DK-8000 Aarhus C. CVR no.: 44250543. Email:
+          Proemial ApS. DK-8000 Aarhus C. CVR no.: 44250543. Email:
           hi@proemial.ai.
         </p>
       </div>
