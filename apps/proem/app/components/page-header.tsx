@@ -29,7 +29,7 @@ export function PageHeader({ title = "Proem", isLoggedIn = false }: Props) {
         </Link>
       ) : (
         <Link
-          href={{ query: { [LOGIN_REDIRECT_URL_PARAM_NAME]: "profile" } }}
+          href={{ query: { [LOGIN_REDIRECT_URL_PARAM_NAME]: "/profile" } }}
           onClick={open}
         >
           {/* TODO! Improve styling */}
