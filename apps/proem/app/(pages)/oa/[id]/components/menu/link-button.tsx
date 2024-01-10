@@ -2,7 +2,7 @@
 
 import { Tracker } from "@/app/components/analytics/tracker";
 
-export function LinkButton({ url }: { id: string; url: string }) {
+export function LinkButton({ url }: { url: string }) {
   const track = () => Tracker.track("click:full_paper", { url });
 
   return (
@@ -10,7 +10,7 @@ export function LinkButton({ url }: { id: string; url: string }) {
       href={url}
       onClick={track}
       target="_blank"
-      className="rounded-md bg-gradient-to-r from-primary to-primary-gradient text-primary-foreground hover:from-primary/90 hover:to-primary-gradient/90 text-base py-2 px-4 h-10 flex items-center"
+      className="rounded-sm bg-[#7DFA86] text-black text-xs py-2 px-4 text-center"
     >
       Read the full article
     </a>

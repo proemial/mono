@@ -15,6 +15,7 @@ import Link from "next/link";
 import React from "react";
 import { BotForm } from "./form";
 import { BotMessages } from "./messages";
+import { LinkButton } from "@/app/(pages)/oa/[id]/components/menu/link-button";
 
 type Props = {
   paper: OpenAlexPaper;
@@ -43,6 +44,7 @@ export function InsightsBot({ paper, suggestions }: Props) {
           <TabsTrigger value="QA">QA</TabsTrigger>
           <TabsTrigger value="publicquestions">Public Q&A</TabsTrigger>
           <TabsTrigger value="authors">Authors</TabsTrigger>
+          <TabsTrigger value="metadata">Metadata</TabsTrigger>
         </TabsList>
         <TabsContent value="QA">
           <div className="flex flex-col">
@@ -125,15 +127,35 @@ export function InsightsBot({ paper, suggestions }: Props) {
               </div>
             </div>
           </div>
+
           {/* TODO! For Rasmus: Render out a list of authors with this styling inside of
           the div with bg - (2F2F2F) */}
 
           <div className="bg-[#2F2F2F] rounded-sm border border-[#3C3C3C] flex flex-col py-4 px-4 items-left m-auto">
-            <p className="text-white text-[18px] font-sans font-normal">No one has claimed this paper yet</p>
-            <p className="text-white/50 text-[14px] font-sans font-light mb-2">Are you the author of this paper?</p>
-            <Button asChild className="text-xs font-sans font-medium text-black scale-100 active:scale-[0.99] transition-all duration-100"><Link href="https://tally.so/r/w2PLAL" target="_blank" rel="noopener noreferrer">Claim this paper</Link></Button>
+            <p className="text-white text-[18px] font-sans font-normal">
+              No one has claimed this paper yet
+            </p>
+            <p className="text-white/50 text-[14px] font-sans font-light mb-2">
+              Are you the author of this paper?
+            </p>
+            <Button
+              asChild
+              className="text-xs font-sans font-medium text-black scale-100 active:scale-[0.99] transition-all duration-100"
+            >
+              <Link
+                href="https://tally.so/r/w2PLAL"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Claim this paper
+              </Link>
+            </Button>
           </div>
-
+        </TabsContent>
+        <TabsContent value="metadata">
+          <div className="bg-[#2F2F2F] flex flex-col leading-snug gap-3 mb-2 py-4 px-4 rounded-sm border border-[#3C3C3C] self-end">
+            <LinkButton url={paper.data.primary_location?.landing_page_url} />
+          </div>
         </TabsContent>
       </Tabs>
     </>
