@@ -23,8 +23,11 @@ export async function PaperCard({ id }: { id: string }) {
             <div className="w-full flex">
 
               <div className="text-[12px] mb-3 leading-snug font-normal font-sans items-end uppercase tracking-wide">
-                RESEARCH PAPER FROM ARXIV
-                {/* PUBLISHED ON {organisation} <span className="text-white/50"> — {dayjs(date).format("M.D.YYYY")}</span> */}
+                RESEARCH PAPER FROM ARXIV{" "}
+                <span className="text-white/50">
+                  {" "}
+                  — {dayjs(date).format("M.D.YYYY")}
+                </span>
               </div>
 
               {/* ↓↓↓ We should pull tags here ↓↓↓
