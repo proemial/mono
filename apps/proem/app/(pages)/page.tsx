@@ -10,7 +10,7 @@ export const revalidate = 1;
 
 export default async function FrontPage() {
   return (
-    <div className="flex flex-col max-w-screen-md min-h-full mx-auto justify-begin">
+    <div className="flex flex-col max-w-screen-sm min-h-full mx-auto justify-begin">
       <Suspense fallback={<CenteredSpinner />}>
         <PageContent />
       </Suspense>
