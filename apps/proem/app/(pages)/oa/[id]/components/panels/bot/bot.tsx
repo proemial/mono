@@ -1,11 +1,10 @@
 "use client";
+import { Spinner } from "@/app/components/spinner";
+import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { useChat } from "ai/react";
-import React, { useEffect } from "react";
+import React from "react";
 import { BotForm } from "./form";
 import { BotMessages } from "./messages";
-import { OpenAlexPaper } from "@proemial/models/open-alex";
-import { Spinner } from "@/app/components/spinner";
-import { useRef } from "react";
 
 type Props = {
   paper: OpenAlexPaper;
@@ -13,7 +12,6 @@ type Props = {
 };
 
 export function InsightsBot({ paper, suggestions }: Props) {
-
   const { title, abstract } = paper.data;
 
   const { messages, input, handleInputChange, handleSubmit, append } = useChat({
@@ -44,7 +42,8 @@ export function InsightsBot({ paper, suggestions }: Props) {
             append={append}
           />
         )}
-        <div className="bg-black fixed bottom-0 max-w-screen-md mx-auto inset-x-0 z-50 py-4">
+
+        <div className="fixed inset-x-0 bottom-0 z-50 max-w-screen-md py-4 mx-auto bg-black">
           <BotForm
             value={input}
             onChange={handleInputChange}

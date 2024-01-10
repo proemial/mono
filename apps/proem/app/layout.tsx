@@ -1,5 +1,6 @@
 import { AnalyticsClient } from "@/app/components/analytics/analytics";
-import { MainMenu } from "@/app/components/menu/menu";
+import { LoginDrawer } from "@/app/components/login/login-drawer";
+import { Toaster } from "@/app/components/shadcn-ui/toaster";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ReactNode } from "react";
 import "./globals.css";
@@ -22,17 +23,21 @@ export default async function RootLayout({ children }: Props) {
       <html lang="en">
         <body className={`flex justify-center overflow-clip ${light}`}>
           <main
-            className="min-h-screen max-h-screen w-full flex flex-col"
+            className="flex flex-col w-full max-h-screen min-h-screen"
             style={{
               minHeight: "100dvh",
               maxHeight: "100dvh",
             }}
           >
-            <div className={`flex-1 overflow-y-scroll overflow-x-clip no-scrollbar`}>
+            <div
+              className={`flex-1 overflow-y-scroll overflow-x-clip no-scrollbar`}
+            >
               {children}
             </div>
             {/* <MainMenu /> */}
           </main>
+          <LoginDrawer />
+          <Toaster />
           <AnalyticsClient />
         </body>
       </html>
