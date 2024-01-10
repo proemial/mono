@@ -3,6 +3,7 @@ import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Panel } from "@/app/components/panel";
 import { Redis } from "@proemial/redis/redis";
 import { generateStarters } from "@/app/prompts/starters";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/shadcn-ui/tab";
 
 type Props = {
   paper: OpenAlexPaper;

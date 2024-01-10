@@ -30,7 +30,7 @@ export function BotMessages({ messages, suggestions, append }: Props) {
           <Question
             key={question}
             onClick={() => handleSuggestionClick(question)}
-            className="cursor-pointer max-w-xl scale-100 active:scale-[0.99] transition-all duration-100"
+            className="cursor-pointer max-w-full sm:max-w-lg scale-100 active:scale-[0.99] transition-all duration-100"
           >
             {question}
           </Question>
