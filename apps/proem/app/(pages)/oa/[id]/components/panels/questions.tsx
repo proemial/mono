@@ -8,8 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/shadc
 type Props = {
   paper: OpenAlexPaper;
   closed?: boolean;
-  id: string;
-  url: string;
 };
 
 export async function QuestionsPanel(props: Props) {

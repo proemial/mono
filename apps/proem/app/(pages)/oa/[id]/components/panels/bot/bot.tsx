@@ -20,11 +20,9 @@ import { LinkButton } from "@/app/(pages)/oa/[id]/components/menu/link-button";
 type Props = {
   paper: OpenAlexPaper;
   suggestions: string[];
-  id: string;
-  url: string;
 };
 
-export function InsightsBot({ id, url, paper, suggestions }: Props) {
+export function InsightsBot({ paper, suggestions }: Props) {
   const { title, abstract } = paper.data;
 
   const { messages, input, handleInputChange, handleSubmit, append } = useChat({
@@ -143,10 +141,10 @@ export function InsightsBot({ id, url, paper, suggestions }: Props) {
         <TabsContent value="metadata">
           <div className="bg-[#2F2F2F] flex flex-col leading-snug gap-3 mb-2 py-4 px-4 rounded-sm border border-[#3C3C3C] self-end">
 
-            <LinkButton
+            {/* <LinkButton
               id={id}
               url={paper.data.primary_location?.landing_page_url}
-            />
+            /> */}
 
           </div>
         </TabsContent>
