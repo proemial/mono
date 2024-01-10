@@ -1,4 +1,6 @@
 "use client";
+import { VerifiedStar } from "@/app/components/icons/other/star";
+import { Button } from "@/app/components/shadcn-ui/button";
 import {
   Tabs,
   TabsContent,
@@ -9,6 +11,7 @@ import { Spinner } from "@/app/components/spinner";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { useChat } from "ai/react";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { BotForm } from "./form";
 import { BotMessages } from "./messages";
@@ -38,6 +41,7 @@ export function InsightsBot({ paper, suggestions }: Props) {
       <Tabs defaultValue="QA" className="w-full">
         <TabsList>
           <TabsTrigger value="QA">QA</TabsTrigger>
+          <TabsTrigger value="publicquestions">Public Q&A</TabsTrigger>
           <TabsTrigger value="authors">Authors</TabsTrigger>
         </TabsList>
         <TabsContent value="QA">
@@ -63,6 +67,31 @@ export function InsightsBot({ paper, suggestions }: Props) {
                 onSubmit={handleSubmit}
                 inputFieldRef={inputFieldRef}
               />
+            </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="publicquestions">
+          <div className="flex flex-col gap-3 px-4 py-4 mb-2 leading-snug">
+            <div className="flex flex-col items-center m-auto">
+              <VerifiedStar />
+              <p className="text-white text-[18px] mb-1 mt-4 font-sans font-normal">
+                There are no verified questions yet
+              </p>
+              <p className="text-white/50 text-[14px] font-sans font-light mb-4">
+                Want to try out public Q&A?
+              </p>
+              <Button
+                asChild
+                className="font-sans text-xs font-medium text-black"
+              >
+                <Link
+                  href="https://tally.so/r/wkE5lR"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Sign up as a beta tester
+                </Link>
+              </Button>
             </div>
           </div>
         </TabsContent>
@@ -96,8 +125,8 @@ export function InsightsBot({ paper, suggestions }: Props) {
               </div>
             </div>
           </div>
-          For Rasmus: Render out a list of authors with this styling inside of
-          the box (2F2F2F)
+          {/* TODO! For Rasmus: Render out a list of authors with this styling inside of
+          the div with bg - (2F2F2F) */}
         </TabsContent>
       </Tabs>
     </>
