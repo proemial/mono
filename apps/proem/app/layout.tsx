@@ -22,22 +22,23 @@ export default async function RootLayout({ children }: Props) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`flex justify-center overflow-clip ${light}`}>
-          <main
+        <body className={`flex justify-center h-full ${light} bg-blue-200`}>
+          {/* <main
             className="flex flex-col w-full max-h-screen min-h-screen"
             style={{
               minHeight: "100dvh",
               maxHeight: "100dvh",
             }}
           >
-            <PageHeader />
-            <div
+            {/* <PageHeader /> */}
+          {/* <div
               className={`flex-1 overflow-y-scroll overflow-x-clip no-scrollbar`}
-            >
-              {children}
-            </div>
-            {/* <MainMenu /> */}
-          </main>
+            > */}
+          {children}
+          {/* </div> */}
+          {/* </main> */}
+
+          {/* <MainMenu /> */}
           <LoginDrawer />
           <Toaster />
           <AnalyticsClient />

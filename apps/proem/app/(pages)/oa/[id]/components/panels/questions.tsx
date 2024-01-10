@@ -15,12 +15,14 @@ export async function QuestionsPanel(props: Props) {
     ? paper?.generated?.starters
     : await generate(paper);
 
+  console.log(starters);
+
   return (
-    <Panel title="question" closed={props.closed}>
-      <div className="flex flex-col">
-        <InsightsBot {...props} suggestions={starters} />
-      </div>
-    </Panel>
+    // <Panel title="question" closed={props.closed}>
+    // <div className="flex flex-col">
+    <InsightsBot {...props} suggestions={starters} />
+    // </div>
+    // </Panel>
   );
 }
 

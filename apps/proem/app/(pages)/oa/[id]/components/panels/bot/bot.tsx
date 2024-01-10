@@ -28,29 +28,27 @@ export function InsightsBot({ paper, suggestions }: Props) {
 
   return (
     <>
-      <div className="flex flex-col">
-        {!suggestions && (
-          <div className="mb-4">
-            <Spinner />
-          </div>
-        )}
-
-        {suggestions && (
-          <BotMessages
-            messages={messages}
-            suggestions={suggestions}
-            append={append}
-          />
-        )}
-
-        <div className="fixed inset-x-0 bottom-0 z-50 max-w-screen-md py-4 mx-auto bg-black">
-          <BotForm
-            value={input}
-            onChange={handleInputChange}
-            onSubmit={handleSubmit}
-            inputFieldRef={inputFieldRef}
-          />
+      {!suggestions && (
+        <div className="mb-4">
+          <Spinner />
         </div>
+      )}
+
+      {suggestions && (
+        <BotMessages
+          messages={messages}
+          suggestions={suggestions}
+          append={append}
+        />
+      )}
+
+      <div className="inset-x-0 bottom-0 z-50 max-w-screen-md py-4 mx-auto bg-yellow-100">
+        <BotForm
+          value={input}
+          onChange={handleInputChange}
+          onSubmit={handleSubmit}
+          inputFieldRef={inputFieldRef}
+        />
       </div>
     </>
   );
