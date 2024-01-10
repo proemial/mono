@@ -5,37 +5,28 @@ This monorepo is based on turborepo.
 ## Requirements
 
 The latest LTS releases of:
-* node & pnpm
-* A `.env.local` file in the `/apps/proem` directory, containing the following keys:
-```
-SENTRY_URL=
-AUTH0_SECRET=
-AUTH0_ISSUER_BASE_URL=https://proem.eu.auth0.com
-AUTH0_BASE_URL=http://127.0.0.1/
-AUTH0_CLIENT_ID=
-AUTH0_CLIENT_SECRET=
-AUTH0_SCOPE=openid profile read:shows
-AUTH0_AUDIENCE=https://proem.eu.auth0.com/api/v2/
-```
 
-## What's inside?
+- node & pnpm
 
 ### Apps and Packages
 
-- `proem`: The main app
-- `search`: The search api, used by ChatGPT
+- `apps/proem`: The main app
+- `apps/search`: The search api, used by ChatGPT
+- `apps/website`: The website for proemial.ai
 - `packages/data`: Helpers for accessing various api's
 - `packages/models`: Shared models
-- `packages/utils`: Pure TS utilities 
+- `packages/utils`: Pure TS utilities
 - `packages/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
-### Install
+### Getting started
 
-To install all dependencies, run the following command from the repository root:
+1. To interact with the (Vercel)[https://vercel.com/docs/cli] run the following commands from the repository root:
+   1.1. install cli: `pnpm i -g vercel`
+   1.2. login with your user: `vercel login`
+   1.3. link the repository: `vercel link --repo`
 
-```
-pnpm i
-```
+2. Install dependencies: `pnpm i`
+3. To develop all apps and packages, run the following command from the repository root: `pnpm dev` or filter to application like `pnpm dev --filter proem`
 
 ### Build
 
@@ -43,22 +34,6 @@ To build all apps and packages, run the following command from the repository ro
 
 ```
 pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command from the repository root:
-
-```
-pnpm dev
-```
-
-### Link repo with Vercel
-
-To interact with the Vercel and ect. fetch en vars, run the following command from the repository root:
-
-```
-vercel link --repo
 ```
 
 ### Remote Caching
