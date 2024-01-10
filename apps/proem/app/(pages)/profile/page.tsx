@@ -1,6 +1,5 @@
 import { ProfileButtons } from "@/app/(pages)/profile/profile-buttons";
 import { MegaPhone } from "@/app/components/icons/objects/megaphone";
-import { PageHeader } from "@/app/components/page-header";
 import {
   Avatar,
   AvatarFallback,
@@ -16,8 +15,6 @@ export default async function ProfilePage() {
 
   return (
     <div className="flex flex-col max-w-screen-md min-h-full mx-auto">
-      <PageHeader>Profile</PageHeader>
-
       <SignedIn>
         <div className="px-4 my-8 space-y-6">
           <div className="relative flex flex-col overflow-hidden bg-[#1A1A1A] rounded-sm border border-[#3C3C3C]">

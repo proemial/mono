@@ -1,5 +1,4 @@
 import { PaperCard } from "@/app/components/card/card";
-import { PageHeader } from "@/app/components/page-header";
 import {
   CenteredSpinner,
   EmptySpinner,
@@ -12,7 +11,6 @@ export const revalidate = 1;
 export default async function FrontPage() {
   return (
     <div className="flex flex-col max-w-screen-md min-h-full mx-auto justify-begin">
-      <PageHeader>Proem</PageHeader>
       <Suspense fallback={<CenteredSpinner />}>
         <PageContent />
       </Suspense>
