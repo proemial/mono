@@ -44,7 +44,7 @@ export function InsightsBot({ paper, suggestions }: Props) {
             append={append}
           />
         )}
-        <div className="bg-black fixed bottom-0 max-w-full inset-x-0 z-50 mx-6 py-4">
+        <div className="bg-black fixed bottom-0 max-w-screen-md mx-auto inset-x-0 z-50 py-4">
           <BotForm
             value={input}
             onChange={handleInputChange}

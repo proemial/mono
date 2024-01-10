@@ -23,7 +23,7 @@ export default async function ReaderPage({ params }: Props) {
   const paper = await fetchPaper(params.id);
 
   return (
-    <main className="flex flex-col">
+    <main className="flex flex-col min-h-full max-w-screen-md mx-auto">
       <div className="z-50 sticky top-0">
         <PaperCard
           id={params.id}

@@ -77,7 +77,7 @@ export function Question({ children, onClick, className }: QuestionProps) {
 
   return (
     <div
-      className={`${className} ${style} bg-[#2F2F2F] leading-snug mb-2 py-2 px-4 text-[16px] font-sans font-normal text-left rounded-sm border border-[#3C3C3C] self-end`}
+      className={`${className} ${style} bg-[#2F2F2F] flex flex-row leading-snug mb-2 py-2 px-4 text-[16px] font-sans font-normal text-left rounded-sm border border-[#3C3C3C] self-end`}
       onClick={handleClick}
     >
       {children}
