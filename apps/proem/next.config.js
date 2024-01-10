@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
   transpilePackages: ["@repo/utils"],
-  async rewrites() {
+  async redirects() {
     return {
       beforeFiles: [
         {
