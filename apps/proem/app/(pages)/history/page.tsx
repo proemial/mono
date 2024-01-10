@@ -12,7 +12,6 @@ export const revalidate = 1;
 export default async function HistoryPage() {
   return (
     <div className="flex flex-col justify-begin">
-      <PageHeader>History</PageHeader>
       <Suspense fallback={<CenteredSpinner />}>
         <PageContent />
       </Suspense>

@@ -46,12 +46,13 @@ function applyExplainLinks(
   ));
 }
 
-const style =
-  "inline-block mb-4";
+const style = "inline-block mb-4";
 
 export function Answer({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`${style} bg-[#464545] max-w-md leading-snug mb-2 py-2 px-4 text-[16px] font-sans font-normal rounded-sm self-start`}>
+    <div
+      className={`${style} bg-[#464545] max-w-md leading-snug mb-2 py-2 px-4 text-[16px] font-sans font-normal rounded-sm self-start`}
+    >
       {children}
     </div>
   );
