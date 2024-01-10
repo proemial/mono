@@ -86,7 +86,7 @@ module.exports = {
         "2xl": ["20px", { lineHeight: "24px", fontWeight: "500" }],
         "3xl": ["32px", { lineHeight: "40px", fontWeight: "500" }],
       },
-      fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
+      fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif, Source Code Pro",
       keyframes: {
         "accordion-down": {
           from: { height: 0 },

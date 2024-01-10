@@ -30,7 +30,7 @@ function applyExplainLinks(
 
     return (
       <span
-        className="font-medium underline cursor-pointer text-primary"
+        className="font-normal underline text-[#7DFA86] cursor-pointer"
         onClick={() => onClick(sanitized)}
       >
         {sanitized}
@@ -47,11 +47,11 @@ function applyExplainLinks(
 }
 
 const style =
-  "inline-block mb-4 rounded-b-2xl py-2 px-4 shadow bg-gradient-to-r";
+  "inline-block mb-4";
 
 export function Answer({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`${style} bg-[#60A040] rounded-tr-2xl self-start`}>
+    <div className={`${style} bg-[#464545] max-w-md leading-snug mb-2 py-2 px-4 text-[16px] font-sans font-normal rounded-sm self-start`}>
       {children}
     </div>
   );
@@ -77,7 +77,7 @@ export function Question({ children, onClick, className }: QuestionProps) {
 
   return (
     <div
-      className={`${className} ${style} from-primary to-primary-gradient rounded-tr-2xl self-start`}
+      className={`${className} ${style} bg-[#2F2F2F] flex flex-row leading-snug mb-2 py-2 px-4 text-[16px] font-sans font-normal text-left rounded-sm border border-[#3C3C3C] self-end`}
       onClick={handleClick}
     >
       {children}

@@ -1,18 +1,37 @@
-import { Logo } from "@/app/components/icons/logo";
+import { PaperCard } from "@/app/components/card/card";
+import { PageHeader } from "@/app/components/page-header";
+import {
+  CenteredSpinner,
+  EmptySpinner,
+  NothingHereYet,
+} from "@/app/components/spinner";
+import { Suspense } from "react";
 
-export default function HomePage() {
+export const revalidate = 1;
+
+export default async function HistoryPage() {
   return (
-    <div className={`min-h-[calc(100dvh-48px)] flex flex-col justify-begin`}>
-      <div
-        className={`h-[calc(100dvh-48px)] max-h-screen flex flex-col justify-center items-center bg-zinc-900`}
-      >
-        <div className="h-[30%]" />
-        <div className="h-[50%] w-full flex flex-col justify-center items-center">
-          <Logo className="h-22 w-22" />
-          <div className="text-3xl md:text-6xl">proem</div>
-        </div>
-        <div className="h-[40%] w-full flex justify-center items-center" />
-      </div>
+    <div className="flex flex-col justify-begin min-h-full max-w-screen-md mx-auto">
+      <PageHeader>Proem</PageHeader>
+      <Suspense fallback={<CenteredSpinner />}>
+        <PageContent />
+      </Suspense>
+    </div>
+  );
+}
+
+async function PageContent() {
+  // TODO: Fetch history
+  const latestIds = ["W10438119", "W125463860", "W2180080828", "W1971798103", "W1971798103", "W2180080828",];
+
+  return (
+    <div className="p-6 flex flex-col md:grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 md:gap-4">
+      {latestIds.length === 0 && <NothingHereYet />}
+      {latestIds.map((id, index) => (
+        <Suspense key={index} fallback={<EmptySpinner />}>
+          <PaperCard id={id} />
+        </Suspense>
+      ))}
     </div>
   );
 }

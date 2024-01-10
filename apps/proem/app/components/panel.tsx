@@ -26,13 +26,13 @@ export function Panel({ title, children, closed, className }: Props) {
 
   return (
     <div>
-      <div
+      {/* <div
         className={`${className} flex justify-between`}
         onClick={handleClick}
       >
         <div className={`text-xl`}>{titles[title]}</div>
         <ToggleButton closed={isClosed} />
-      </div>
+      </div> */}
       <div className={`${isClosed ? "hidden" : ""}`}>{children}</div>
     </div>
   );

@@ -11,9 +11,8 @@ export const revalidate = 1;
 
 export default async function HistoryPage() {
   return (
-    <div className="flex flex-col min-h-screen justify-begin">
+    <div className="flex flex-col justify-begin">
       <PageHeader>History</PageHeader>
-
       <Suspense fallback={<CenteredSpinner />}>
         <PageContent />
       </Suspense>
@@ -23,16 +22,16 @@ export default async function HistoryPage() {
 
 async function PageContent() {
   // TODO: Fetch history
-  const latestIds = ["W10438119", "W125463860", "W2180080828"];
+  const latestIds = ["W10438119", "W125463860", "W2180080828", "W1971798103"];
 
   return (
-    <>
+    <div className="p-6">
       {latestIds.length === 0 && <NothingHereYet />}
       {latestIds.map((id, index) => (
         <Suspense key={index} fallback={<EmptySpinner />}>
           <PaperCard id={id} />
         </Suspense>
       ))}
-    </>
+    </div>
   );
 }

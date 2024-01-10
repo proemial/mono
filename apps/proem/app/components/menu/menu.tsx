@@ -71,11 +71,11 @@ export function MainMenu() {
             const linkProps: Parameters<typeof Link>[0] = userId
               ? { href }
               : {
-                  href: hasLoginDrawer
-                    ? { query: { [REDIRECT_URL]: href } }
-                    : href,
-                  onClick: hasLoginDrawer ? open : close,
-                };
+                href: hasLoginDrawer
+                  ? { query: { [REDIRECT_URL]: href } }
+                  : href,
+                onClick: hasLoginDrawer ? open : close,
+              };
 
             return (
               <Link {...linkProps} key={href}>

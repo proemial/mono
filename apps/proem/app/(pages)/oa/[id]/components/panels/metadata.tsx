@@ -15,7 +15,7 @@ export function MetadataPanel({ paper, closed }: Props) {
     <Panel title="metadata" closed={closed}>
       <div>
         <div>
-          <div className="text-purple-500">
+          <div className="text-white">
             {paper.data.primary_location?.source?.host_organization_name}
             {" - "}
             {dayjs(paper.data.publication_date).format("MMM DD, YYYY")}
@@ -28,7 +28,7 @@ export function MetadataPanel({ paper, closed }: Props) {
           </div>
         )}
       </div>
-      <div className="text-purple-500 mt-2">Authors</div>
+      <div className="text-white mt-2">Authors</div>
       <div className="flex py-2 gap-10 flex-nowrap overflow-scroll no-scrollbar">
         {paper.data.authorships.map((author, index) => (
           <Author key={index} name={author.author.display_name} />
