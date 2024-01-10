@@ -34,7 +34,8 @@ export function PaperCard({ id, date, organisation, children }: Props) {
       </div>
 
       <div className="mb-1 text-[12px] text-white font-sans font-normal uppercase tracking-wide">
-        PUBLISHED ON {organisation} <span className="text-white/50"> — {dayjs(date).format("M.D.YYYY")}</span>
+        RESEARCH PAPER FROM ARXIV
+        {/* {organisation} <span className="text-white/50"> — {dayjs(date).format("M.D.YYYY")}</span> */}
       </div>
 
       {/* ↓↓↓ We should pull tags here ↓↓↓

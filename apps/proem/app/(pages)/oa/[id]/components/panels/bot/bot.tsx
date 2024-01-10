@@ -1,4 +1,5 @@
 "use client";
+import { LinkButton } from "@/app/(pages)/oa/[id]/components/menu/link-button";
 import { VerifiedStar } from "@/app/components/icons/other/star";
 import { Button } from "@/app/components/shadcn-ui/button";
 import {
@@ -10,12 +11,10 @@ import {
 import { Spinner } from "@/app/components/spinner";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { useChat } from "ai/react";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { BotForm } from "./form";
 import { BotMessages } from "./messages";
-import { LinkButton } from "@/app/(pages)/oa/[id]/components/menu/link-button";
 
 type Props = {
   paper: OpenAlexPaper;
