@@ -44,7 +44,7 @@ export default async function ReaderPage({ params }: Props) {
       {/* <ActionsMenu
         id={params.id}
         url={paper.data.primary_location?.landing_page_url}
-        className="sticky top-0 z-50 p-4 bg-background"
+        className="z-50 p-4 bg-background"
       /> */}
 
       <div className="p-6">
