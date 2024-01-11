@@ -8,7 +8,7 @@ import headerLogo from "../assets/logo-header.svg";
 
 <nav class="flex flex-row">
   <div class="mobile-nav-button" id="nav-button">
-    <img id="open-icon" class="white" src={plus.src} />
+    <img id="open-icon" class="white max-w-[unset]" src={plus.src} />
   </div>
 
   <div class="nav-list-container">
@@ -228,11 +228,11 @@ import headerLogo from "../assets/logo-header.svg";
 </style>
 
 <script>
-  const navButton = document.getElementById("nav-button");
-  const navBar = document.getElementById("list-container");
-  const name = document.getElementById("name");
-  const icon = document.getElementById("open-icon");
-  const logo = document.getElementById("logo");
+  const navButton = document.getElementById("nav-button")!;
+  const navBar = document.getElementById("list-container")!;
+  const name = document.getElementById("name")!;
+  const icon = document.getElementById("open-icon")!;
+  const logo = document.getElementById("logo")!;
   let navIsOpen = true;
 
   navButton.addEventListener("click", navToggle);
