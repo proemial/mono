@@ -31,9 +31,9 @@ export async function POST(req: Request) {
 
 export const dynamic = "force-dynamic"; // defaults to auto
 export async function GET(req: NextRequest) {
-  const q = req.nextUrl.searchParams.get("q");
-  const count = req.nextUrl.searchParams.get("count");
-  const tokens = req.nextUrl.searchParams.get("tokens");
+  const q = req.nextUrl.searchParams.get("q")!;
+  const count = req.nextUrl.searchParams.get("count") as any as number;
+  const tokens = req.nextUrl.searchParams.get("tokens") as any as number;
   // const apiKey = req.headers.get("authorization");
   // // console.log({ auth: apiKey });
 
