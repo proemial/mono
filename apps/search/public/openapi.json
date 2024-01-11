@@ -13,6 +13,7 @@
   "paths": {
     "/v2/search": {
       "post": {
+        "x-openai-isConsequential": "false",
         "description": "Find research papers matching a user query",
         "operationId": "SearchPapers",
         "requestBody": {
@@ -44,9 +45,7 @@
     "schemas": {
       "SearchPapersRequest": {
         "type": "object",
-        "required": [
-          "q"
-        ],
+        "required": ["q"],
         "properties": {
           "q": {
             "type": "string",
