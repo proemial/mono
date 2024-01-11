@@ -4,8 +4,8 @@
 
 <div class="headline">
   <div class="text-container">we make research</div>
-    <div class="animation-container">
-      easy to
+  <div class="animation-container">
+    easy to
     <div id="items-container">
       <div class="animated">understand</div>
       <div class="animated">read</div>
@@ -17,151 +17,176 @@
 </div>
 
 <style lang="scss">
-@import "../variables/global.scss";
-.headline{
-display: flex;
-gap: 16px;
-color: $color-primary-text;
-font-size:64px;
-font-weight:300;
-max-width:100%;
+  @import "../variables/global.scss";
+  .headline {
+    display: flex;
+    color: $color-primary-text;
+    font-size: 64px;
+    line-height: 94px;
+    font-weight: 300;
+    max-width: 100%;
+    @media only screen and (max-width: 900px) {
+        line-height: 64px;
+    }
+  }
 
+  .text-container {
+    white-space: nowrap;
+  }
 
-}
+  h1 {
+    margin: 0px;
+    padding: 0px;
+  }
 
-.text-container{
-  white-space: nowrap;
-}
+  .animation-container {
+    display: flex;
+    gap: 16px;
+    overflow: hidden;
+    height: 94px;
+    white-space: nowrap;
+    @media only screen and (max-width: 900px) {
+      height: 64px;
+      gap: 10px;
+    }
+  }
 
+  #items-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    animation-name: textAnimation;
+    animation-duration: 5s;
+    animation-delay: 1s;
+    animation-iteration-count: infinite;
+  }
 
-h1{
-margin: 0px;
-padding: 0px;
-}
+  .animated {
+    color: $color-primary-brand;
+    line-height: 92px;
+    @media only screen and (max-width: 900px) {
+      line-height: 64px;
+    }
+  }
 
-.animation-container{
-display: flex;
-gap: 16px;
-overflow: hidden;
-height: 94px;
-white-space: nowrap;
-}
+  @keyframes textAnimation {
+    0% {
+      transform: translateY(0);
+    }
+    12% {
+      transform: translateY(-92px);
+    }
+    24% {
+      transform: translateY(-92px);
+    }
+    36% {
+      transform: translateY(-184px);
+    }
+    48% {
+      transform: translateY(-184px);
+    }
+    60% {
+      transform: translateY(-276px);
+    }
+    72% {
+      transform: translateY(-276px);
+    }
+    84% {
+      transform: translateY(-368px);
+    }
+    100% {
+      transform: translateY(-368px);
+    }
+  }
+  @media only screen and (max-width: 1200px) {
+    .headline {
+      flex-direction: column;
+    }
+  }
 
-#items-container{
-display: flex;
-flex-direction: column;
-gap: 16px;
-animation-name: textAnimation;
-animation-duration: 5s;
-animation-delay: 1s;
-animation-iteration-count: infinite;
-}
+  @media only screen and (max-width: 900px) {
+    .headline {
+      font-size: 40px;
+      gap: 8px;
+    }
 
-.animated{
-color: $color-primary-brand;
-}
+    @keyframes textAnimation {
+      0% {
+        transform: translateY(0);
+      }
+      12% {
+        transform: translateY(-64px);
+      }
+      24% {
+        transform: translateY(-64px);
+      }
+      36% {
+        transform: translateY(-128px);
+      }
+      48% {
+        transform: translateY(-128px);
+      }
+      60% {
+        transform: translateY(-192px);
+      }
+      72% {
+        transform: translateY(-192px);
+      }
+      84% {
+        transform: translateY(-256px);
+      }
+      100% {
+        transform: translateY(-256px);
+      }
+    }
+  }
 
-@keyframes textAnimation {
-0%   {transform: translateY(0)}
-12%  {transform: translateY(-92px)}
-24%  {transform: translateY(-92px)}
-36%  {transform: translateY(-184px)}
-48% {transform: translateY(-184px)}
-60% {transform: translateY(-276px)}
-72% {transform: translateY(-276px)}
-84% {transform: translateY(-368px)}
-100% {transform: translateY(-368px)}
-}
-@media only screen and (max-width: 1200px) {
+  // @media only screen and (max-width: 1100px) {
 
-  .headline{
-flex-direction: column;
+  // @keyframes textAnimation {
+  // 0%   {transform: translateY(0)}
+  // 12%  {transform: translateY(-128px)}
+  // 24%  {transform: translateY(-128px)}
+  // 36%  {transform: translateY(-257px)}
+  // 48% {transform: translateY(-257px)}
+  // 60% {transform: translateY(-385px)}
+  // 72% {transform: translateY(-385px)}
+  // 84% {transform: translateY(-512px)}
+  // 100% {transform: translateY(-512px)}
+  // }
 
+  // .headline{
+  // gap: 8px;
+  // font-size: 94px;
+  // }
 
+  // .animation-container{
+  // display: flex;
+  // gap: 16px;
+  // overflow: hidden;
+  // height: 120px;
+  // }
+  // }
 
-}
-}
+  // @media only screen and (max-width: 900px) {
 
-@media only screen and (max-width: 900px) {
+  // .headline{
+  // gap: 8px;
+  // font-size: 40px;
+  // }
 
-.headline{
-font-size: 40px;
-gap: 8px;
-}
-
-.animation-container{
-height: 64px;
-gap: 10px;
-}
-
-@keyframes textAnimation {
-0%   {transform: translateY(0)}
-12%  {transform: translateY(-64px)}
-24%  {transform: translateY(-64px)}
-36%  {transform: translateY(-130px)}
-48% {transform: translateY(-130px)}
-60% {transform: translateY(-194px)}
-72% {transform: translateY(-194px)}
-84% {transform: translateY(-260px)}
-100% {transform: translateY(-260px)}
-}
-}
-
-
-// @media only screen and (max-width: 1100px) {
-
-// @keyframes textAnimation {
-// 0%   {transform: translateY(0)}
-// 12%  {transform: translateY(-128px)}
-// 24%  {transform: translateY(-128px)}
-// 36%  {transform: translateY(-257px)}
-// 48% {transform: translateY(-257px)}
-// 60% {transform: translateY(-385px)}
-// 72% {transform: translateY(-385px)}
-// 84% {transform: translateY(-512px)}
-// 100% {transform: translateY(-512px)}
-// }
-
-// .headline{
-// gap: 8px;
-// font-size: 94px;
-// }
-
-// .animation-container{
-// display: flex;
-// gap: 16px;
-// overflow: hidden;
-// height: 120px;
-// }
-// }
-
-// @media only screen and (max-width: 900px) {
-
-
-
-// .headline{
-// gap: 8px;
-// font-size: 40px;
-// }
-
-// .animation-container{
-// display: flex;
-// gap: 8px;
-// overflow: hidden;
-// height: 48px;
-// }
-// }
-
-
+  // .animation-container{
+  // display: flex;
+  // gap: 8px;
+  // overflow: hidden;
+  // height: 48px;
+  // }
+  // }
 </style>
 
 <script>
-
-
-
-// let tl = gsap.timeline({repeat: Infinity, repeatDelay: 0.5});
-// tl.to("#items-container", {x: 0, duration: 0.5, delay: 1});
-// tl.to("#items-container", {y: -92, duration: 0.5, delay: 1});
-// tl.to("#items-container", {y: -184, duration: 0.5, delay: 1});
-
+  // let tl = gsap.timeline({repeat: Infinity, repeatDelay: 0.5});
+  // tl.to("#items-container", {x: 0, duration: 0.5, delay: 1});
+  // tl.to("#items-container", {y: -92, duration: 0.5, delay: 1});
+  // tl.to("#items-container", {y: -184, duration: 0.5, delay: 1});
 </script>

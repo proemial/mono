@@ -13,52 +13,61 @@ const { title } = Astro.props;
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-  <!-- HTML Meta Tags -->
-  <title>proemial | read science, fast</title>
-  <meta name="description" content="proemial is building an open platform that connects researchers to a larger and more diverse audience through personalized summaries of the latest research papers. The mission is to make it easy to read, discuss, understand and engage with recent discoveries, the researchers that produce them, and the companies that commercialize them.">
+		<!-- HTML Meta Tags -->
+		<title>proemial | read science, fast</title>
+		<meta
+			name="description"
+			content="proemial is building an open platform that connects researchers to a larger and more diverse audience through personalized summaries of the latest research papers. The mission is to make it easy to read, discuss, understand and engage with recent discoveries, the researchers that produce them, and the companies that commercialize them."
+		/>
 
-  <!-- Facebook Meta Tags -->
-  <meta property="og:url" content="https://proemial.ai/">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="proemial | read science, fast">
-  <meta property="og:description" content="Proemial is building an open platform that connects researchers to a larger and more diverse audience through personalized summaries of the latest research papers. The mission is to make it easy to read, discuss, understand and engage with recent discoveries, the researchers that produce them, and the companies that commercialize them.">
-  <meta property="og:image" content="https://proemial.ai/opengraph.png">
+		<!-- Facebook Meta Tags -->
+		<meta property="og:url" content="https://proemial.ai/" />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="proemial | read science, fast" />
+		<meta
+			property="og:description"
+			content="Proemial is building an open platform that connects researchers to a larger and more diverse audience through personalized summaries of the latest research papers. The mission is to make it easy to read, discuss, understand and engage with recent discoveries, the researchers that produce them, and the companies that commercialize them."
+		/>
+		<meta property="og:image" content="https://proemial.ai/opengraph.png" />
 
-  <!-- Twitter Meta Tags -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta property="twitter:domain" content="proemial.ai">
-  <meta property="twitter:url" content="https://proemial.ai/">
-  <meta name="twitter:title" content="proemial | read science, fast">
-  <meta name="twitter:description" content="Proemial is building an open platform that connects researchers to a larger and more diverse audience through personalized summaries of the latest research papers. The mission is to make it easy to read, discuss, understand and engage with recent discoveries, the researchers that produce them, and the companies that commercialize them.">
-  <meta name="twitter:image" content="https://proemial.ai/opengraph.png">
-
-        
+		<!-- Twitter Meta Tags -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta property="twitter:domain" content="proemial.ai" />
+		<meta property="twitter:url" content="https://proemial.ai/" />
+		<meta name="twitter:title" content="proemial | read science, fast" />
+		<meta
+			name="twitter:description"
+			content="Proemial is building an open platform that connects researchers to a larger and more diverse audience through personalized summaries of the latest research papers. The mission is to make it easy to read, discuss, understand and engage with recent discoveries, the researchers that produce them, and the companies that commercialize them."
+		/>
+		<meta
+			name="twitter:image"
+			content="https://proemial.ai/opengraph.png"
+		/>
 	</head>
 	<body>
 		<slot />
 	</body>
 </html>
 <style lang="scss" is:global>
-		@import "../variables/global.scss";
+	@import "../variables/global.scss";
 
-		:root {
-			color-scheme: dark;
-}
-*{
-	box-sizing: border-box;
-}
+	:root {
+		color-scheme: dark;
+	}
+	* {
+		box-sizing: border-box;
+	}
 
 	html {
 		font-family: system-ui, sans-serif;
 		background: $color-primary-surface;
-
 	}
 
-	body{
+	body {
 		margin: 0px;
 		padding: 0px;
-	// 	background-image: url("../assets/aurora.png");
-  // background-repeat: no-repeat;
-  // background-size: contain;
+		// 	background-image: url("../assets/aurora.png");
+		// background-repeat: no-repeat;
+		// background-size: contain;
 	}
 </style>

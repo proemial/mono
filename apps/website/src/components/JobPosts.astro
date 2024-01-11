@@ -4,28 +4,28 @@
 
 <section>
   <div class="title-container">
-    <h3>updates </h3><span>3</span>
+    <h3>updates</h3><span>3</span>
   </div>
   <div class="job-post-container">
-
-        <div class="job-post bg-[#7DFA86]">
+    <div class="job-post bg-[#7DFA86]">
       <div class="tags">
         <span class="text-black">announcement</span>
       </div>
-      <a target="_blank" href="https://proem.ai/">
-        <h4 class="headline text-black">
-          We launched our first product: Proem
-        </h4>
+      <a
+        target="_blank"
+        href="https://www.linkedin.com/posts/khosla_httpsgptproemai-our-team-proemial-activity-7151141613124157440-uX_g?utm_source=share&utm_medium=member_desktop"
+      >
+        <h4 class="headline text-black">A short message from our CEO</h4>
       </a>
     </div>
 
-      <div class="job-post bg-[#7DFA86]">
+    <div class="job-post bg-[#7DFA86]">
       <div class="tags">
         <span class="text-black">announcement</span>
       </div>
       <a target="_blank" href="https://gpt.proem.ai/ ">
         <h4 class="headline text-black">
-          We're live with our GPT
+          We're live with our custom GPT - Science Proems
         </h4>
       </a>
     </div>
@@ -35,42 +35,39 @@
         <span>announcement</span>
       </div>
       <a href="/manifesto">
-        <h4 class="headline">
-        Solving Society's Greatest Challenges
-        </h4>
+        <h4 class="headline">Solving Society's Greatest Challenges</h4>
       </a>
     </div>
-  
   </div>
 </section>
 <style lang="scss">
-	@import "../variables/global.scss";
+  @import "../variables/global.scss";
 
-  section{
-    max-width:1200px;
+  section {
+    max-width: 1200px;
     margin-left: auto;
-    margin-right:auto;
-    margin-top:164px;
+    margin-right: auto;
+    margin-top: 164px;
     padding: 24px;
   }
 
-  .job-post-container{
+  .job-post-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     color: $color-primary-text;
-    gap:24px;
+    gap: 24px;
   }
 
-  a{
+  a {
     color: $color-primary-text;
     text-decoration: none;
   }
 
-  a:hover{
+  a:hover {
     color: $color-primary-brand;
   }
 
-  span{
+  span {
     font-size: 12px;
     border: 1px solid #fff;
     padding: 6px 12px;
@@ -78,7 +75,7 @@
     margin-right: 8px;
   }
 
-  .job-post{
+  .job-post {
     padding: 24px;
     border-radius: 8px;
     height: 400px;
@@ -86,23 +83,22 @@
     flex-direction: column;
     justify-content: space-between;
     border: 1px solid #fff;
-    
   }
 
-  .headline{
+  .headline {
     font-weight: 300;
     font-size: 28px;
     margin: 0;
   }
 
-  .title-container{
+  .title-container {
     display: flex;
     gap: 16px;
-    align-items:flex-start;
+    align-items: flex-start;
     justify-content: center;
   }
 
-  .title-container h3{
+  .title-container h3 {
     font-size: 64px;
     font-weight: 300;
     margin: 0;
@@ -110,37 +106,28 @@
   }
 
   @media only screen and (max-width: 900px) {
+    section {
+      margin-top: 0px;
+    }
 
-    section{
-    margin-top:0px;
+    .job-post-container {
+      grid-template-columns: 1fr;
+    }
+
+    .title-container h3 {
+      font-size: 48px;
+    }
+
+    .job-post {
+      padding: 24px;
+      border-radius: 8px;
+      height: fit-content;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid #fff;
+      gap: 48px;
+    }
   }
-
-    .job-post-container{
-    grid-template-columns: 1fr;
-  }
-
-  .title-container h3{
-    font-size: 48px;
-  }
-
-  .job-post{
-    padding: 24px;
-    border-radius: 8px;
-    height: fit-content;
-    min-height: 200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border: 1px solid #fff;
-    gap: 48px;
-    
-  }
-
-
-}
-
-
-
-
-  
 </style>

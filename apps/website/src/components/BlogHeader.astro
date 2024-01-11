@@ -1,109 +1,133 @@
 ---
-import geet from '../assets/geet-avatar.jpg';
-import mads from '../assets/mads-avatar.jpg';
-import brian from '../assets/brian-avatar.jpg';
+import geet from "../assets/geet-avatar.jpg";
+import mads from "../assets/mads-avatar.jpg";
+import brian from "../assets/brian-avatar.jpg";
 interface Props {
-	title: string;
-
+  title: string;
 }
 
 const { title } = Astro.props;
 ---
+
 <div class="container">
   <div class="header-container">
-      <h1>{ title }</h1>
-      <div class="authors">
+    <h1>{title}</h1>
+    <div class="authors">
       <div class="author-container">
-        <img src={geet.src}>
+        <img src={geet.src} />
         <p>Geet Khosla, CEO @ proemial</p>
       </div>
 
       <div class="author-container">
-        <img src={mads.src}>
+        <img src={mads.src} />
         <p>Mads Rydahl, CPO @ proemial</p>
       </div>
 
       <div class="author-container">
-        <img src={brian.src}>
+        <img src={brian.src} />
         <p>Brian Pedersen, CTO @ proemial</p>
       </div>
     </div>
-      <div class="tag-container">
+    <div class="tag-container">
       <span>14.12.2023</span>
       <span>press release</span>
     </div>
   </div>
   <div class="content-container">
-  <p>No one can read everything. More than 5M academic articles are published every year, and the number is only growing. Today we rely on the ranking algorithms of our social feeds to show us the most relevant content. And trying to please us, they are increasingly shielding us from what we find controversial, and trapping us in silos of group-think. But outside perspectives are important. Not only for democracy, but also to sow the seeds of truly transformative innovation.<br><br>
-    We strongly believe that research must have a large and diverse readership. But we live in a world where the most brilliant minds have the smallest platform. In the public discourse, researchers are being labeled as elitist or biased, and politicians are increasingly allowed to ignore established facts. Researchers document their work in scientific papers, but most papers are only read by close colleagues of the authors. That is perhaps the most wasteful use of resources in the world today.<br><br>
-    Proemial is building a new digital commons for research. Our platform provides a streamlined and efficient reading experience with access to the very latest research preprints. We leverage both open source and proprietary AI models to summarize, explain, and interrogate research papers, recommend related papers, and facilitate discussions in a public forum, with the goal to connect people around the process of discovery, innovation, and knowledge creation.<br><br>
-    Society needs to reconnect with academia. Researchers should present and discuss breakthroughs openly and transparently, and their papers should be read by a large and diverse audience. You may have heard that Chinese authorities are promoting science content on social media platforms. We imagine a world where the latest scientific discoveries are addictive reels, that inspire the deep type two thinking we need to solve society’s greatest challenges, and trigger a Cambrian explosion of innovation and inquisitive public discourse.<br><br>
-    We would like to thank our investors, advisors and supporters, we look forward to the journey ahead.<br><br>
-    Let’s go build.</p>
+    <p>
+      No one can read everything. More than 5M academic articles are published
+      every year, and the number is only growing. Today we rely on the ranking
+      algorithms of our social feeds to show us the most relevant content. And
+      trying to please us, they are increasingly shielding us from what we find
+      controversial, and trapping us in silos of group-think. But outside
+      perspectives are important. Not only for democracy, but also to sow the
+      seeds of truly transformative innovation.<br /><br />
+      We strongly believe that research must have a large and diverse readership.
+      But we live in a world where the most brilliant minds have the smallest platform.
+      In the public discourse, researchers are being labeled as elitist or biased,
+      and politicians are increasingly allowed to ignore established facts. Researchers
+      document their work in scientific papers, but most papers are only read by
+      close colleagues of the authors. That is perhaps the most wasteful use of resources
+      in the world today.<br /><br />
+      Proemial is building a new digital commons for research. Our platform provides
+      a streamlined and efficient reading experience with access to the very latest
+      research preprints. We leverage both open source and proprietary AI models
+      to summarize, explain, and interrogate research papers, recommend related papers,
+      and facilitate discussions in a public forum, with the goal to connect people
+      around the process of discovery, innovation, and knowledge creation.<br
+      /><br />
+      Society needs to reconnect with academia. Researchers should present and discuss
+      breakthroughs openly and transparently, and their papers should be read by
+      a large and diverse audience. You may have heard that Chinese authorities are
+      promoting science content on social media platforms. We imagine a world where
+      the latest scientific discoveries are addictive reels, that inspire the deep
+      type two thinking we need to solve society’s greatest challenges, and trigger
+      a Cambrian explosion of innovation and inquisitive public discourse.<br
+      /><br />
+      We would like to thank our investors, advisors and supporters, we look forward
+      to the journey ahead.<br /><br />
+      Let’s go build.
+    </p>
   </div>
 </div>
 <style lang="scss">
-	@import "../variables/global.scss";
+  @import "../variables/global.scss";
 
-  .container{
+  .container {
     max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 48px;
-  padding: 24px;
-  
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 48px;
+    padding: 24px;
   }
-  .header-container{
+  .header-container {
     display: flex;
     flex-direction: column;
     gap: 8px;
     border-bottom: 1px solid #fff;
-  
-  
-}
-
-.authors{
-  display: flex;
-  gap: 24px;
-}
-
-.content-container{
-  margin-bottom: 94px;
-  margin-top: 48px;
-  max-width: 700px;
-  font-size: 1.5rem;
-  line-height: 36px;
-
-}
-  
-.author-container{
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.author-container img{
-  width: 32px;
-  border-radius: 100rem;
-}
-
-.tag-container{
-  display: flex;
-  gap: 8px;
-  margin-bottom: 24px;
-}
-
-  h1{
-    font-size: $text-size-huge;
-    margin:0px;
-    font-weight:300;
   }
 
-  p{
+  .authors {
+    display: flex;
+    gap: 24px;
+  }
+
+  .content-container {
+    margin-bottom: 94px;
+    margin-top: 48px;
+    max-width: 700px;
+    font-size: 1.5rem;
+    line-height: 36px;
+  }
+
+  .author-container {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .author-container img {
+    width: 32px;
+    border-radius: 100rem;
+  }
+
+  .tag-container {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-size: $text-size-huge;
+    margin: 0px;
     font-weight: 300;
   }
 
-  span{
+  p {
+    font-weight: 300;
+  }
+
+  span {
     border: 1px solid #fff;
     padding: 6px 12px;
     font-size: 12px;
@@ -111,26 +135,21 @@ const { title } = Astro.props;
   }
 
   @media only screen and (max-width: 900px) {
-    .content-container{
+    .content-container {
+      font-size: 1rem;
+      line-height: 28px;
+    }
 
-  font-size: 1rem;
-  line-height: 28px;
+    .authors {
+      display: flex;
+      gap: 0px;
+      flex-direction: column;
+    }
 
-}
-
-.authors{
-  display: flex;
-  gap: 0px;
-  flex-direction: column;
-}
-
-h1{
-    font-size: $text-size-large;
-    margin:0px;
-    font-weight:300;
+    h1 {
+      font-size: $text-size-large;
+      margin: 0px;
+      font-weight: 300;
+    }
   }
-
-}
-
- 
 </style>
