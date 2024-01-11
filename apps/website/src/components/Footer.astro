@@ -1,109 +1,122 @@
 ---
-import { Image } from 'astro:assets';
-import graphic from '../assets/footer-asset.svg';
-import arrow from '../assets/arrow-white.svg';
+import { Image } from "astro:assets";
+import graphic from "../assets/footer-asset.svg";
+import arrow from "../assets/arrow-white.svg";
 ---
 
 <footer>
-<!-- <img src={graphic.src}> -->
-<div class="footer-container">
-  <div>
-    <h4>proemial</h4>
-    <p class="description">proemial is building an open platform that connects researchers to a larger and more diverse audience through personalized summaries of the latest research papers. The mission is to make it easy to read, discuss, understand and engage with recent discoveries, the researchers that produce them, and the companies that commercialize them.</p>
+  <!-- <img src={graphic.src}> -->
+  <div class="footer-container">
+    <div>
+      <h4>proemial</h4>
+      <p class="description">
+        proemial is building an open platform that connects researchers to a
+        larger and more diverse audience through personalized summaries of the
+        latest research papers. The mission is to make it easy to read, discuss,
+        understand and engage with recent discoveries, the researchers that
+        produce them, and the companies that commercialize them.
+      </p>
+    </div>
+    <div>
+      <p>products</p>
+      <ul>
+        <a target="_blank" href="https://wellfound.com/company/proemial"
+          ><li>proem <span class="label">Live</span></li></a
+        >
+        <a target="_blank" href="https://wellfound.com/company/proemial"
+          ><li>proem for GPT <span class="label">Live</span></li></a
+        >
+      </ul>
+    </div>
+    <div>
+      <p>company</p>
+      <ul>
+        <a href="/manifesto"><li>manifesto</li></a>
+        <a target="_blank" href="https://wellfound.com/company/proemial"
+          ><li>jobs</li></a
+        >
+      </ul>
+    </div>
+    <div>
+      <p>connect</p>
+      <ul>
+        <a href="https://twitter.com/proemialai" target="_blank"><li>X</li></a>
+        <a
+          href="https://www.linkedin.com/company/proemial/about/"
+          target="_blank"><li>LinkedIn</li></a
+        >
+        <a href="mailto:hi@proemial.ai"><li>hi@proemial.ai</li></a>
+      </ul>
+    </div>
   </div>
-  <div>
-    <p>products</p>
-    <ul>
-      <a target="_blank" href="https://wellfound.com/company/proemial"><li>proem <span class="label">Live</span></li></a>
-      <a target="_blank" href="https://wellfound.com/company/proemial"><li>proem for GPT <span class="label">Live</span></li></a>
-    </ul>
-  </div>
-  <div>
-    <p>company</p>
-    <ul>
-      <a href="/manifesto"><li>manifesto</li></a>
-      <a target="_blank" href="https://wellfound.com/company/proemial"><li>jobs</li></a>
-    </ul>
-  </div>
-  <div>
-    <p>connect</p>
-    <ul>
-      <a href="https://twitter.com/proemialai" target="_blank"><li>X</li></a>
-      <a href="https://www.linkedin.com/company/proemial/about/" target="_blank"><li>LinkedIn</li></a>
-      <a href="mailto:hi@proemial.ai"><li>hi@proemial.ai</li></a>
-
-    </ul>
-  </div>
-</div>
 </footer>
 <style lang="scss">
-	@import "../variables/global.scss";
+  @import "../variables/global.scss";
 
-  footer{
+  footer {
     color: $color-inverted-text;
     width: 100%;
-
   }
 
-  a{
-    color:#000;
+  a {
+    color: #000;
     text-decoration: none;
   }
-  a:hover{
-    color:#000;
+  a:hover {
+    color: #000;
     text-decoration: underline;
   }
 
-  .footer-container{
+  .footer-container {
     background-color: $color-primary-brand;
-    padding:64px;
+    padding: 64px;
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr;
     gap: 94px;
   }
 
-  h4{
+  h4 {
     font-weight: 400;
     font-size: 1.5rem;
     margin-top: 0;
     margin-bottom: 20px;
   }
 
-  .description{
+  .description {
     line-height: 24px;
     margin: 0;
     margin-bottom: 24px;
   }
 
-.arrow{
-  width: 16px;
-}
+  .arrow {
+    width: 16px;
+  }
 
-  button{
+  button {
     display: flex;
     gap: 8px;
     padding: 16px 24px;
     background-color: black;
     border: none;
     color: $color-primary-text;
-    border-radius:$border-radius-standard;
+    border-radius: $border-radius-standard;
     font-size: $text-size-small;
   }
 
-  img{
+  img {
     width: 100%;
     margin-bottom: -4px;
   }
 
-  li{
+  li {
     list-style-type: none;
   }
 
-  p{
-    color: rgba(0,0,0,0.5);
+  p {
+    color: rgba(0, 0, 0, 0.5);
   }
 
-  ul{
+  ul {
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -111,7 +124,7 @@ import arrow from '../assets/arrow-white.svg';
     padding: 0px;
   }
 
-  .label{
+  .label {
     font-size: $text-size-xtra-small;
     margin-left: 4px;
     padding: 4px 8px;
@@ -120,21 +133,17 @@ import arrow from '../assets/arrow-white.svg';
     white-space: nowrap;
   }
 
-  .full{
+  .full {
     background-color: black;
     border: none;
     color: $color-primary-text;
   }
 
   @media only screen and (max-width: 900px) {
-  
-.footer-container{
-  grid-template-columns: 1fr;
-  gap: 24px;
-  padding: 16px;
-}
-
-}
-
-
+    .footer-container {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 16px;
+    }
+  }
 </style>

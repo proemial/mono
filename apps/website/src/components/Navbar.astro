@@ -1,91 +1,102 @@
 ---
-import { Image } from 'astro:assets';
-import logo from '../assets/logo.gif';
-import plus from '../assets/add-black.svg';
-import plusBlack from '../assets/add-black.svg';
-import headerLogo from '../assets/logo-header.svg';
-
+import { Image } from "astro:assets";
+import logo from "../assets/logo.gif";
+import plus from "../assets/add-black.svg";
+import plusBlack from "../assets/add-black.svg";
+import headerLogo from "../assets/logo-header.svg";
 ---
 
-
-<nav>
-  
+<nav class="flex flex-row">
   <div class="mobile-nav-button" id="nav-button">
-    <img id="open-icon" class="white" src={plus.src}>
+    <svg
+      class="fill-white"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12 4C12.5523 4 13 4.44772 13 5V11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H13V19C13 19.5523 12.5523 20 12 20C11.4477 20 11 19.5523 11 19V13H5C4.44772 13 4 12.5523 4 12C4 11.4477 4.44772 11 5 11H11V5C11 4.44772 11.4477 4 12 4Z"
+      ></path>
+    </svg>
+    <img id="open-icon" class="white" src={plus.src} />
   </div>
   <div class="nav-list-container">
-
     <!-- <a href="/"><div id="name" class="name">proemial</div></a> -->
-    <a id="home-link" href="/"><img id="name" class="white header-logo" src={headerLogo.src}></a>
+    <a id="home-link" href="/"
+      ><img id="name" class="white header-logo" src={headerLogo.src} /></a
+    >
     <div id="list-container" class="list-container close">
       <ul>
         <li class="list-title">products</li>
         <a id="proem-link" href="https://proem.ai/"><li>proem</li></a>
-        <a id="proem-gpt-link" href="https://gpt.proem.ai/"><li>proem for GPT</li></a>
+        <a id="proem-gpt-link" href="https://gpt.proem.ai/"
+          ><li>proem for GPT</li></a
+        >
       </ul>
       <ul>
         <li class="list-title">company</li>
         <a href="/manifesto"><li>manifesto</li></a>
         <!-- <li>About</li> -->
-        <a target="_blank" href="https://wellfound.com/company/proemial"></h><li>jobs</li></a>
+        <a target="_blank" href="https://wellfound.com/company/proemial"></a><li
+        >
+          jobs
+        </li>
       </ul>
     </div>
   </div>
   <div class="logo">
-    <a href="/"><img id="logo" class="white" src={logo.src}></a>
+    <a href="/"><img id="logo" class="white" src={logo.src} /></a>
   </div>
 </nav>
 
 <style lang="scss">
-	@import "../variables/global.scss";
+  @import "../variables/global.scss";
 
-  nav{
+  nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: $color-primary-text;
     padding: 32px 64px;
     font-size: $text-size-small;
-    font-weight:300;
+    font-weight: 300;
     position: relative;
     z-index: 100;
-
   }
 
-  .header-logo{
+  .header-logo {
     max-width: 100px;
   }
 
-
-  a{
-    color:#fff;
+  a {
+    color: #fff;
     text-decoration: none;
   }
 
-  a:hover{
-   color: $color-primary-brand;
+  a:hover {
+    color: $color-primary-brand;
   }
 
-
-
-  a:hover span{
+  a:hover span {
     border: 1px solid $color-primary-brand;
   }
 
-  #home-link{
+  #home-link {
     z-index: 300;
   }
 
-  .nav-list-container{
+  .nav-list-container {
     display: flex;
     gap: 4rem;
   }
 
-  li{
+  li {
     list-style-type: none;
   }
 
-  ul{
+  ul {
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -93,14 +104,12 @@ import headerLogo from '../assets/logo-header.svg';
     padding: 0px;
   }
 
-
-
-  .list-title{
+  .list-title {
     color: $color-secondary-text;
     opacity: 0.5;
   }
 
-  .label{
+  .label {
     font-size: $text-size-xtra-small;
     margin-left: 4px;
     padding: 4px 8px;
@@ -109,93 +118,84 @@ import headerLogo from '../assets/logo-header.svg';
     white-space: nowrap;
   }
 
-  .full{
+  .full {
     background-color: $color-primary-brand;
-    border:none;
+    border: none;
     color: $color-inverted-text;
   }
 
-  .white{
-      filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(79deg) brightness(107%) contrast(102%);
-    }
+  .white {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(79deg)
+      brightness(107%) contrast(102%);
+  }
 
-    li{
-      color: $color-inverted-text !important;
-      font-size: 24px;
-    }
-    .close{
-      transform: translateY(calc((-100vh) - 100px));
-    }
-    .open{
-      transform: translateY(0);
-    }
+  li {
+    color: $color-inverted-text !important;
+    font-size: 24px;
+  }
+  .close {
+    transform: translateY(calc((-100vh) - 100px));
+  }
+  .open {
+    transform: translateY(0);
+  }
 
- 
-    .logo{
-      z-index: 300;
-    }
+  .logo {
+    z-index: 300;
+  }
 
-    #name{
-      z-index: 600;
-    }
+  #name {
+    z-index: 600;
+  }
 
-  
-    .list-container{
-      left: 0px;
-      position: absolute;
-      display: flex;
-      flex-direction:column;
-      align-items: flex-start;
-      height: 80vh;
-      gap: 64px;
-      background-color: $color-primary-brand;
-      z-index: 210;
-      top:-1px;
-      padding: 120px 64px;
-      transition: all ease 0.4s;
-      width: 100%;
-      border-radius: 0px 0px 8px 8px;
-    }
+  .list-container {
+    left: 0px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 80vh;
+    gap: 64px;
+    background-color: $color-primary-brand;
+    z-index: 210;
+    top: -1px;
+    padding: 120px 64px;
+    transition: all ease 0.4s;
+    width: 100%;
+    border-radius: 0px 0px 8px 8px;
+  }
 
-    .label{
-      border: 1px solid black;
-    }
+  .label {
+    border: 1px solid black;
+  }
 
-  
-    .mobile-nav-button{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position:absolute;
-      top: 20px;
-      width: 48px;
-      padding: 24px;
-      margin-left: auto;
-      margin-right: auto;
-      left: 0;
-      right: 0;
-      z-index: 300;
-      transition: all ease 0.25s;
-      cursor: pointer;
-    }
+  .mobile-nav-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 20px;
+    width: 48px;
+    padding: 24px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    z-index: 300;
+    transition: all ease 0.25s;
+    cursor: pointer;
+  }
 
-
-
-    .rotate{
-      transform: rotate(45deg);
-    }
-
-    
-  
+  .rotate {
+    transform: rotate(45deg);
+  }
 
   @media only screen and (max-width: 900px) {
-
-
-    .mobile-nav-button{
+    .mobile-nav-button {
       display: flex;
       align-items: center;
       justify-content: center;
-      position:absolute;
+      position: absolute;
       top: -5px;
       width: 48px;
       padding: 24px;
@@ -207,39 +207,35 @@ import headerLogo from '../assets/logo-header.svg';
       transition: all ease 0.25s;
     }
 
-    .list-container{
+    .list-container {
       left: 0px;
       position: absolute;
       display: flex;
-      flex-direction:column;
+      flex-direction: column;
       align-items: flex-start;
       height: 100vh;
       background-color: $color-primary-brand;
       z-index: 210;
-      top:-1px;
+      top: -1px;
       padding: 64px 16px;
       transition: all ease 0.4s;
       width: 100%;
     }
 
-    .name{
+    .name {
       font-size: $text-size-medium-small;
     }
 
-    nav{
+    nav {
       padding: 16px;
     }
-    .logo img{
+    .logo img {
       max-width: 14px;
     }
 
-    .mobile-nav-button img{
+    .mobile-nav-button img {
       width: 20px;
     }
-
-   
-
-    
   }
 </style>
 
@@ -247,32 +243,29 @@ import headerLogo from '../assets/logo-header.svg';
   const navButton = document.getElementById("nav-button");
   const navBar = document.getElementById("list-container");
   const name = document.getElementById("name");
-  const icon = document.getElementById("open-icon")
-  const logo = document.getElementById("logo")
+  const icon = document.getElementById("open-icon");
+  const logo = document.getElementById("logo");
   let navIsOpen = true;
 
   navButton.addEventListener("click", navToggle);
 
-  function navToggle(){
-
-    if(navIsOpen){
-      navBar.classList.remove("close")
-      navBar.classList.add("open")
-      icon.classList.add("rotate")  
-      name.classList.remove("white"); 
+  function navToggle() {
+    if (navIsOpen) {
+      navBar.classList.remove("close");
+      navBar.classList.add("open");
+      icon.classList.add("rotate");
+      name.classList.remove("white");
       icon.classList.remove("white");
       logo.classList.remove("white");
       navIsOpen = false;
-    }
-    else{
-      navBar.classList.remove("open")
-      navBar.classList.add("close")
-      icon.classList.remove("rotate")
+    } else {
+      navBar.classList.remove("open");
+      navBar.classList.add("close");
+      icon.classList.remove("rotate");
       icon.classList.add("white");
       logo.classList.add("white");
-      name.classList.add("white"); 
+      name.classList.add("white");
       navIsOpen = true;
     }
-
   }
 </script>
