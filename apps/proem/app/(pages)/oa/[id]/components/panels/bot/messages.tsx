@@ -2,13 +2,20 @@ import { Message as AiMessage, CreateMessage } from "ai";
 import { Message, Question } from "./message";
 import { Tracker } from "@/app//components/analytics/tracker";
 import { UseChatHelpers } from "ai/react";
+import { MutableRefObject } from "react";
 
 type Props = Pick<UseChatHelpers, "append"> & {
   messages: AiMessage[];
   suggestions: string[];
+  chatWrapperRef: MutableRefObject<HTMLInputElement | null>;
 };
 
-export function BotMessages({ messages, suggestions, append }: Props) {
+export function BotMessages({
+  messages,
+  suggestions,
+  append,
+  chatWrapperRef,
+}: Props) {
   const appendQuestion = (question: string) =>
     append({ role: "user", content: question });
 
@@ -23,7 +30,10 @@ export function BotMessages({ messages, suggestions, append }: Props) {
   };
 
   return (
-    <div className="flex flex-col justify-end pb-14">
+    <div
+      className="flex flex-col justify-end pb-14 scroll-mb-14"
+      ref={chatWrapperRef}
+    >
       {messages.length === 0 &&
         // TODO! Filter out empty strings as a hack for now until the data consistensy is fixed
         suggestions?.filter(Boolean).map((question) => (

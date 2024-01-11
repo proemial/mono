@@ -29,10 +29,10 @@ export function InsightsBot({ paper, suggestions }: Props) {
     api: "/api/bot/chat",
   });
 
-  const inputFieldRef = React.useRef<HTMLInputElement>(null);
+  const chatWrapperRef = React.useRef<HTMLInputElement>(null);
   React.useEffect(() => {
-    if (messages?.length > 0 && inputFieldRef.current) {
-      inputFieldRef.current.scrollIntoView(false);
+    if (messages?.length > 0 && chatWrapperRef.current) {
+      chatWrapperRef.current.scrollIntoView(false);
     }
   }, [messages]);
 
@@ -58,6 +58,7 @@ export function InsightsBot({ paper, suggestions }: Props) {
                 messages={messages}
                 suggestions={suggestions}
                 append={append}
+                chatWrapperRef={chatWrapperRef}
               />
             )}
 
@@ -66,7 +67,6 @@ export function InsightsBot({ paper, suggestions }: Props) {
                 value={input}
                 onChange={handleInputChange}
                 onSubmit={handleSubmit}
-                inputFieldRef={inputFieldRef}
               />
             </div>
           </div>

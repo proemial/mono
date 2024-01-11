@@ -1,16 +1,15 @@
 "use client";
 import { useDrawerState } from "@/app/components/login/state";
 import { useAuth } from "@clerk/nextjs";
-import { FormEvent, MutableRefObject } from "react";
+import { FormEvent } from "react";
 
 type Props = {
   value: string;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   onChange: (e: any) => void;
-  inputFieldRef: MutableRefObject<HTMLInputElement | null>;
 };
 
-export function BotForm({ value, onSubmit, onChange, inputFieldRef }: Props) {
+export function BotForm({ value, onSubmit, onChange }: Props) {
   const { userId } = useAuth();
   const { open } = useDrawerState();
 
@@ -32,7 +31,6 @@ export function BotForm({ value, onSubmit, onChange, inputFieldRef }: Props) {
         }}
         value={value}
         onChange={onChange}
-        ref={inputFieldRef}
       />
     </form>
   );
