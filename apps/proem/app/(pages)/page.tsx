@@ -46,7 +46,7 @@ async function PageContent() {
   ];
 
   return (
-    <div className="flex flex-col p-6 md:grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 md:gap-4">
+    <div className="p-6">
       {latestIds.length === 0 && <NothingHereYet />}
       {latestIds.map((id, index) => (
         <Suspense key={index} fallback={<EmptySpinner />}>

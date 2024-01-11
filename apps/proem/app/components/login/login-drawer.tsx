@@ -5,6 +5,7 @@ import { Logo } from "@/app/components/icons/logo";
 import { useDrawerState } from "@/app/components/login/state";
 import { Button } from "@/app/components/shadcn-ui/button";
 import { SignedOut, useSignIn } from "@clerk/nextjs";
+import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
 export const LOGIN_REDIRECT_URL_PARAM_NAME = "redirect_url";
@@ -72,13 +73,13 @@ export function LoginDrawer() {
                 Proemial is a non-profit foundation dedicated to promoting
                 academic discourse and knowledge sharing. By using Proem, you
                 consent to our{" "}
-                <a href="/privacy" className="text-gray-600 underline">
+                <Link href="/privacy" className="text-gray-600 underline">
                   Privacy Policy
-                </a>{" "}
+                </Link>{" "}
                 and{" "}
-                <a href="/terms" className="text-gray-600 underline">
+                <Link href="/terms" className="text-gray-600 underline">
                   Terms of Service
-                </a>
+                </Link>
                 .
               </div>
             </div>

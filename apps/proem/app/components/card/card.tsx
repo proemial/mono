@@ -5,6 +5,7 @@ import assetImg1 from "@/app/images/asset-bg-1.png";
 import assetImg2 from "@/app/images/asset-bg-2.png";
 import assetImg3 from "@/app/images/asset-bg-3.png";
 import dayjs from "dayjs";
+import Link from "next/link";
 import { Suspense } from "react";
 
 export async function PaperCard({ id }: { id: string }) {
@@ -16,7 +17,7 @@ export async function PaperCard({ id }: { id: string }) {
 
   return (
     <div>
-      <a href={`/oa/${id}`}>
+      <Link href={`/oa/${id}`}>
         <div className="bg-[#2F2F2F] mb-3 rounded-sm border border-[#3C3C3C] scale-100 active:scale-[0.99] transition-all duration-100">
           <div className="flex flex-col justify-between h-full p-4 text-lg font-medium items-left">
             <div className="flex w-full">
@@ -45,14 +46,7 @@ export async function PaperCard({ id }: { id: string }) {
             </div>
           </div>
         </div>
-      </a>
+      </Link>
     </div>
   );
-}
-
-function image(id: string) {
-  const lastNum = Number(id.charAt(id.length - 1));
-  if (lastNum < 3) return assetImg1.src;
-  if (lastNum < 6) return assetImg2.src;
-  return assetImg3.src;
 }
