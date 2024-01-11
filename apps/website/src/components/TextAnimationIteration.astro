@@ -20,11 +20,14 @@
   @import "../variables/global.scss";
   .headline {
     display: flex;
-    gap: 16px;
     color: $color-primary-text;
     font-size: 64px;
+    line-height: 94px;
     font-weight: 300;
     max-width: 100%;
+    @media only screen and (max-width: 900px) {
+        line-height: 64px;
+    }
   }
 
   .text-container {
@@ -42,6 +45,10 @@
     overflow: hidden;
     height: 94px;
     white-space: nowrap;
+    @media only screen and (max-width: 900px) {
+      height: 64px;
+      gap: 10px;
+    }
   }
 
   #items-container {
@@ -56,7 +63,10 @@
 
   .animated {
     color: $color-primary-brand;
-    height: 92px;
+    line-height: 92px;
+    @media only screen and (max-width: 900px) {
+      line-height: 64px;
+    }
   }
 
   @keyframes textAnimation {
@@ -98,16 +108,6 @@
     .headline {
       font-size: 40px;
       gap: 8px;
-    }
-
-    .animation-container {
-      height: 64px;
-      gap: 10px;
-    }
-
-    .animated {
-      color: $color-primary-brand;
-      line-height: 64px;
     }
 
     @keyframes textAnimation {
