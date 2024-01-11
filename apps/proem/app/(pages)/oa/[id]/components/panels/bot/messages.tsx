@@ -23,7 +23,7 @@ export function BotMessages({ messages, suggestions, append }: Props) {
   };
 
   return (
-    <div className="flex flex-col justify-end">
+    <div className="flex flex-col justify-end pb-14">
       {messages.length === 0 &&
         // TODO! Filter out empty strings as a hack for now until the data consistensy is fixed
         suggestions?.filter(Boolean).map((question) => (
