@@ -7,6 +7,8 @@ export const runtime = "edge";
 
 export async function POST(req: Request) {
   const { q, count, tokens } = await req.json();
+  const auth = req.headers.get("authorization");
+  console.log({ auth });
 
   const begin = Time.now();
   try {
