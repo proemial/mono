@@ -2,7 +2,7 @@
 
 ---
 
-<div class="headline leading-[1.20]">
+<div class="headline">
   <div class="text-container">we make research</div>
   <div class="animation-container">
     easy to
@@ -47,7 +47,7 @@
   #items-container {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 0px;
     animation-name: textAnimation;
     animation-duration: 5s;
     animation-delay: 1s;
@@ -56,6 +56,7 @@
 
   .animated {
     color: $color-primary-brand;
+    height: 92px;
   }
 
   @keyframes textAnimation {
@@ -104,6 +105,11 @@
       gap: 10px;
     }
 
+    .animated {
+      color: $color-primary-brand;
+      line-height: 64px;
+    }
+
     @keyframes textAnimation {
       0% {
         transform: translateY(0);
@@ -115,22 +121,22 @@
         transform: translateY(-64px);
       }
       36% {
-        transform: translateY(-130px);
+        transform: translateY(-128px);
       }
       48% {
-        transform: translateY(-130px);
+        transform: translateY(-128px);
       }
       60% {
-        transform: translateY(-194px);
+        transform: translateY(-192px);
       }
       72% {
-        transform: translateY(-194px);
+        transform: translateY(-192px);
       }
       84% {
-        transform: translateY(-260px);
+        transform: translateY(-256px);
       }
       100% {
-        transform: translateY(-260px);
+        transform: translateY(-256px);
       }
     }
   }
