@@ -73,11 +73,19 @@ export function LoginDrawer() {
                 Proemial is a non-profit foundation dedicated to promoting
                 academic discourse and knowledge sharing. By using Proem, you
                 consent to our{" "}
-                <Link href="/privacy" className="text-gray-600 underline">
+                <Link
+                  href="/privacy"
+                  onClick={close}
+                  className="text-gray-600 underline"
+                >
                   Privacy Policy
                 </Link>{" "}
                 and{" "}
-                <Link href="/terms" className="text-gray-600 underline">
+                <Link
+                  href="/terms"
+                  onClick={close}
+                  className="text-gray-600 underline"
+                >
                   Terms of Service
                 </Link>
                 .
