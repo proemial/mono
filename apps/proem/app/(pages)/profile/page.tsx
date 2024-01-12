@@ -45,7 +45,7 @@ export default async function ProfilePage() {
                   </h4>
                 </div>
                 <h4 className="mt-1 font-sans text-sm font-normal leading-none text-white">
-                  Free member
+                  Registered member
                 </h4>
               </div>
             </div>
