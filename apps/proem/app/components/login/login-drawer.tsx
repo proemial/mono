@@ -70,9 +70,7 @@ export function LoginDrawer() {
               })}
 
               <div className="text-xs font-normal leading-tight text-left text-gray-600">
-                Proemial is a non-profit foundation dedicated to promoting
-                academic discourse and knowledge sharing. By using Proem, you
-                consent to our{" "}
+                By using Proem, you consent to our{" "}
                 <Link
                   href="/privacy"
                   onClick={close}
