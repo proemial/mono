@@ -24,7 +24,7 @@ export default async function ReaderPage({ params }: Props) {
 
   return (
     <main className="flex flex-col min-h-full max-w-screen-md mx-auto overflow-x-hidden overflow-y-hidden">
-      <div className="z-50 sticky top-0 overflow-x-hidden">
+      <div className="z-50 overflow-x-hidden">
         <PaperCard
           id={params.id}
           date={paper.data.publication_date}
