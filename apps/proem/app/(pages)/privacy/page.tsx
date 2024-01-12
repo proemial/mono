@@ -12,7 +12,7 @@ export default function PrivacyPage() {
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="relative mx-auto sm:max-w-[37.5rem] pt-20 text-center pb-24">
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Privacy policy</h1>
-            <p className="mt-4 text-base leading-7 text-white">Last updated on Jnauary 12, 2024</p>
+            <p className="mt-4 text-base leading-7 text-white">Last updated on January 12, 2024</p>
           </div>
         </div>
 
