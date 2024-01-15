@@ -1,8 +1,5 @@
 "use client";
 
-import assetImg1 from "@/app/images/asset-bg-1.png";
-import assetImg2 from "@/app/images/asset-bg-2.png";
-import assetImg3 from "@/app/images/asset-bg-3.png";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
@@ -18,7 +15,7 @@ export function PaperCard({ date, children }: Props) {
   const router = useRouter();
 
   return (
-    <div className="flex p-6 bg-[#1A1A1A] flex-col">
+    <div className="flex p-6 bg-[#1A1A1A] flex-col before:absolute before:-inset-0  relative before:top-[-100%] before:bg-[#1A1A1A] before:-z-10 border-b shadow border-neutral-100/10">
       <div className="w-full mb-6 bg-transparent">
         <button
           className="flex flex-row gap-2 font-sans text-left"

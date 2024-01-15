@@ -1,8 +1,7 @@
-import { InsightsBot } from "./bot/bot";
-import { OpenAlexPaper } from "@proemial/models/open-alex";
-import { Panel } from "@/app/components/panel";
-import { Redis } from "@proemial/redis/redis";
 import { generateStarters } from "@/app/prompts/starters";
+import { OpenAlexPaper } from "@proemial/models/open-alex";
+import { Redis } from "@proemial/redis/redis";
+import { InsightsBot } from "./bot/bot";
 
 type Props = {
   paper: OpenAlexPaper;
@@ -15,13 +14,7 @@ export async function QuestionsPanel(props: Props) {
     ? paper?.generated?.starters
     : await generate(paper);
 
-  return (
-    <Panel title="question" closed={props.closed}>
-      <div className="flex flex-col">
-        <InsightsBot {...props} suggestions={starters} />
-      </div>
-    </Panel>
-  );
+  return <InsightsBot {...props} suggestions={starters} />;
 }
 
 async function generate(paper: OpenAlexPaper) {
