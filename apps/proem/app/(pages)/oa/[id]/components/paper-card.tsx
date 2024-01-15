@@ -36,9 +36,9 @@ export function PaperCard({ date, children }: Props) {
         </button>
       </div>
 
-      <div className="mb-1 text-[12px] text-white font-sans font-normal uppercase tracking-wide">
+      <div className="mb-1 text-[12px] text-white/50 font-SourceCodePro font-normal uppercase tracking-wide">
         RESEARCH PAPER
-        <span className="text-white/50">
+        <span>
           {" "}
           — {dayjs(date).format("M.D.YYYY")}
         </span>
