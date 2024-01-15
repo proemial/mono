@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^4.29.3",
+    "@langchain/core": "0.1.12",
+    "@langchain/openai": "^0.0.11",
     "@neondatabase/serverless": "^0.6.0",
     "@proemial/database": "workspace:*",
     "@proemial/models": "workspace:*",
@@ -28,6 +30,7 @@
     "dayjs": "^1",
     "drizzle-orm": "^0.29.1",
     "katex": "^0.16.8",
+    "langchain": "^0.1.2",
     "lucide-react": "^0.294.0",
     "next": "^14.0.3",
     "openai": "^4",
