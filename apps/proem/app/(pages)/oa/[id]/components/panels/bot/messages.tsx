@@ -53,6 +53,10 @@ export function BotMessages({
           explain={explainConcept}
         />
       ))}
+
+      {/* Will scroll user to bottom after scroll up */}
+      {/* <ScrollToBottom /> */}
+
     </div>
   );
 }

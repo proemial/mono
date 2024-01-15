@@ -10,7 +10,7 @@ export function LinkButton({ url }: { url: string }) {
       href={url}
       onClick={track}
       target="_blank"
-      className="rounded-sm bg-[#7DFA86] text-black text-xs py-2 px-4 text-center scale-100 active:scale-[0.98] transition-all duration-100"
+      className="rounded-sm bg-[#7DFA86] text-black font-normal text-xs py-2 px-4 text-center scale-100 active:scale-[0.98] transition-all duration-100"
     >
       Read the full article
     </a>

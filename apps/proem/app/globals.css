@@ -29,6 +29,18 @@ body::-webkit-scrollbar {
   /* Firefox */
 }
 
+.scrollToTopButton {
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  position: fixed;
+  z-index: 50;
+}
+
+.scrollToTopButton.visible {
+  opacity: 1;
+}
+
 h1,
 h2,
 h3 {

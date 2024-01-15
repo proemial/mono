@@ -1,7 +1,7 @@
 "use client";
+
 import { useDrawerState } from "@/app/components/login/state";
 import { useAuth } from "@clerk/nextjs";
-import Image from "next/image";
 
 type Role = "function" | "data" | "system" | "user" | "assistant" | "tool";
 
