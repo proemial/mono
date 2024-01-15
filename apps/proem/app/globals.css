@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -21,8 +23,10 @@ body::-webkit-scrollbar {
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 h1,
@@ -140,6 +144,7 @@ h3 {
 }
 
 @layer base {
+
   /** {*/
   /*  @apply border-border;*/
   /*}*/

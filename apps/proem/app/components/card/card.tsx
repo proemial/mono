@@ -1,9 +1,6 @@
 import Summary from "@/app/(pages)/oa/[id]/components/summary";
 import { fetchPaper } from "@/app/(pages)/oa/[id]/fetch-paper";
 import { Spinner } from "@/app/components/spinner";
-import assetImg1 from "@/app/images/asset-bg-1.png";
-import assetImg2 from "@/app/images/asset-bg-2.png";
-import assetImg3 from "@/app/images/asset-bg-3.png";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { Suspense } from "react";

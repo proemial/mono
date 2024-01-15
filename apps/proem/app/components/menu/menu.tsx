@@ -43,11 +43,11 @@ export function MainMenu() {
           const linkProps: Parameters<typeof Link>[0] = userId
             ? { href }
             : {
-                href: hasLoginDrawer
-                  ? { query: { [LOGIN_REDIRECT_URL_PARAM_NAME]: href } }
-                  : href,
-                onClick: hasLoginDrawer ? open : close,
-              };
+              href: hasLoginDrawer
+                ? { query: { [LOGIN_REDIRECT_URL_PARAM_NAME]: href } }
+                : href,
+              onClick: hasLoginDrawer ? open : close,
+            };
 
           return (
             <Link {...linkProps} key={href}>
