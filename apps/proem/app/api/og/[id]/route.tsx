@@ -17,7 +17,7 @@ export async function GET(
       : "placeholder";
 
     const fontData = await fetch(
-      new URL("@/assets/AnekMalayalam-SemiBold.ttf", import.meta.url),
+      new URL("@/assets/fonts/anek-malayalam/AnekMalayalam-SemiBold.ttf", import.meta.url),
     ).then((res) => res.arrayBuffer());
 
     return new ImageResponse(
