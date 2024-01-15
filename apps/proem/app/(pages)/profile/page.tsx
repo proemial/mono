@@ -14,9 +14,9 @@ export default async function ProfilePage() {
   const initials = fullName.split(" ").map((name) => name.charAt(0));
 
   return (
-    <div className="flex flex-col max-w-screen-md min-h-full mx-auto">
+    <>
       <SignedIn>
-        <div className="px-4 my-8 space-y-6">
+        <div className="w-full px-4 my-8 space-y-6">
           <div className="relative flex flex-col overflow-hidden bg-[#1A1A1A] rounded-sm border border-[#3C3C3C]">
             <div className="absolute inset-0 w-full h-full">
               <div className="w-full h-full bg-pattern-amie animate-backgroundScroll"></div>
@@ -110,6 +110,6 @@ export default async function ProfilePage() {
           hi@proemial.ai.
         </p>
       </div>
-    </div>
+    </>
   );
 }

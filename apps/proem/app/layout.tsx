@@ -23,22 +23,10 @@ export default async function RootLayout({ children }: Props) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`flex justify-center overflow-clip ${light}`}>
-          <main
-            className="flex flex-col w-full max-h-screen min-h-screen"
-            style={{
-              minHeight: "100dvh",
-              maxHeight: "100dvh",
-            }}
-          >
-            <PageHeader isLoggedIn={Boolean(user)} />
-            <div
-              className={`flex-1 overflow-y-scroll overflow-x-clip no-scrollbar`}
-            >
-              {children}
-            </div>
-            {/* <MainMenu /> */}
-          </main>
+        <body className={`flex relative flex-col justify-center ${light}`}>
+          <PageHeader isLoggedIn={Boolean(user)} />
+          <div className="max-w-screen-md mx-auto">{children}</div>
+          {/* <MainMenu /> */}
           <LoginDrawer />
           <Toaster />
           <AnalyticsClient />
