@@ -33,7 +33,8 @@ export function formatMetadata(id: string, description?: string) {
       type: "article",
       images: [
         {
-          url: `https://proem.ai/api/og/${id}?text=${description}`,
+          url: `apps/proem/assets/proembanner.webp`,
+          // url: `https://proem.ai/api/og/${id}?text=${description}`,
           width: 400,
           height: 200,
           alt: description,
