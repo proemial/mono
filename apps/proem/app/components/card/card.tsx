@@ -35,7 +35,7 @@ export async function PaperCard({ id }: { id: string }) {
       */}
             </div>
             <div>
-              <div className="text-[20px] font-sans font-normal leading-[26px]">
+              <div className="text-[20px] font-sans font-normal leading-[28px]">
                 <Suspense fallback={<Spinner />}>
                   <Summary paper={paper} />
                 </Suspense>
