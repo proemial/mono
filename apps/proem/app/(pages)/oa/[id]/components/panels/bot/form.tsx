@@ -23,7 +23,7 @@ export function BotForm({ value, onSubmit, onChange }: Props) {
         onFocus={() => !userId && open()}
         type="text"
         placeholder="Ask your own question"
-        className="w-full bg-transparent text-[16px] font-normal pl-3 py-2 focus-visible:outline-none"
+        className="w-full font-sans bg-transparent text-[16px] font-normal pl-3 py-2 focus-visible:outline-none"
         style={{
           borderTopRightRadius: 0,
           borderBottomRightRadius: 0,
