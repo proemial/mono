@@ -35,7 +35,15 @@ export async function POST(req: Request) {
 export async function GET(req: NextRequest) {
   const apiKey = req.headers.get("authorization");
 
-  if (apiKey !== `Basic ${Env.get("GPT_API_KEY")}`) {
+  if (
+    !(
+      apiKey &&
+      [
+        `Basic ${Env.get("GPT_API_KEY")}`,
+        `Bearer ${Env.get("GPT_API_KEY")}`,
+      ].includes(apiKey)
+    )
+  ) {
     return Response.json({ success: false }, { status: 401 });
   }
 
