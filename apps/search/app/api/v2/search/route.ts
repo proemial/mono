@@ -1,4 +1,5 @@
 import { fetchPapers } from "@/app/api/v2/search/search";
+import { Env } from "@proemial/utils/env";
 import { Time } from "@proemial/utils/time";
 import { track } from "@vercel/analytics/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -32,22 +33,22 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: NextRequest) {
+  const apiKey = req.headers.get("authorization");
+
+  if (apiKey !== `Basic ${Env.get("GPT_API_KEY")}`) {
+    return Response.json({ success: false }, { status: 401 });
+  }
+
   const q = req.nextUrl.searchParams.get("q")!;
   const count = req.nextUrl.searchParams.get("count") as any as number;
   const tokens = req.nextUrl.searchParams.get("tokens") as any as number;
 
   if (!q) {
     return Response.json(
-      { status: "error", message: "missing q param" },
+      { success: "false", message: "missing q param" },
       { status: 400 }
     );
   }
-  // const apiKey = req.headers.get("authorization");
-  // // console.log({ auth: apiKey });
-
-  // // if (apiKey !== `Basic ${Env.get("GPT_API_KEY")}`) {
-  // //   console.log("auth failed");
-  // // }
 
   const begin = Time.now();
   try {
