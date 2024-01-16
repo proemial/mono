@@ -1,0 +1,81 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Research Papers",
+    "description": "Gets scientific research papers",
+    "version": "v1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://search.proem.ai/api"
+    }
+  ],
+  "paths": {
+    "/v2/search": {
+      "get": {
+        "x-openai-isConsequential": "false",
+        "description": "Find research papers matching a user query",
+        "operationId": "SearchPapers",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Papers matching user query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchPapersResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SearchPapersResponse": {
+        "type": "object",
+        "properties": {
+          "papers": {
+            "type": "array",
+            "items": {
+              "type": "#/components/schemas/Paper"
+            }
+          }
+        }
+      },
+      "Paper": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "abstract": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
