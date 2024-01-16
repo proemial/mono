@@ -2,13 +2,12 @@ import { ImageResponse } from "next/og";
 import assetImg1 from "@/assets/asset-bg-1.png";
 import assetImg2 from "@/assets/asset-bg-2.png";
 import assetImg3 from "@/assets/asset-bg-3.png";
-import proembanner from "@/assets/proembanner.webp"
 
 export const runtime = "edge";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: { id: string } }
 ) {
   try {
     const url = new URL(request.url);
@@ -18,7 +17,10 @@ export async function GET(
       : "placeholder";
 
     const fontData = await fetch(
-      new URL("@/assets/fonts/anek-malayalam/AnekMalayalam-SemiBold.ttf", import.meta.url),
+      new URL(
+        "@/assets/fonts/anek-malayalam/AnekMalayalam-SemiBold.ttf",
+        import.meta.url
+      )
     ).then((res) => res.arrayBuffer());
 
     return new ImageResponse(
@@ -26,10 +28,9 @@ export async function GET(
         <div
           tw="flex flex-col w-full h-full items-center justify-center text-white"
           style={{
-            backgroundImage: `url(${proembanner.src})`,
-            // backgroundImage: `url("${url.protocol}//${url.host}${image(
-            //   params.id,
-            // )}")`,
+            backgroundImage: `url("${url.protocol}//${url.host}${image(
+              params.id
+            )}")`,
             backgroundSize: "cover",
             backgroundRepeat: "none",
             fontFamily: "AnekMalayalam",
@@ -56,7 +57,7 @@ export async function GET(
             style: "normal",
           },
         ],
-      },
+      }
     );
   } catch (e: any) {
     return new Response("Failed to generate image", { status: 500 });
