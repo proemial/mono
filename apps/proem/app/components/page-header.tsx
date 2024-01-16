@@ -15,7 +15,7 @@ export function PageHeader({ title = "Proem", isLoggedIn = false }: Props) {
 
   return (
     <>
-      <div className="sticky top-0 z-50 flex flex-row items-center justify-between px-6 py-4 bg-[1A1A1A]">
+      <div className="sticky top-0 z-50 flex flex-row items-center justify-between px-6 py-4 bg-[#1A1A1A]">
         <Link href="/">
           <div className="flex flex-row gap-3">
             <Proem />
@@ -37,8 +37,7 @@ export function PageHeader({ title = "Proem", isLoggedIn = false }: Props) {
           </Link>
         )}
       </div>
-      <hr
-        className="mx-6 h-[1px] border-t-0 bg-white/10" />
+      <hr className="mx-6 h-[1px] border-t-0 bg-white/10" />
     </>
   );
 }
