@@ -28,12 +28,9 @@ export function PaperCard({ date, children }: Props) {
         </button>
       </div>
 
-      <div className="mb-2 text-[12px] text-white/50 font-SourceCodePro font-normal uppercase tracking-wide">
+      <div className="mb-2 text-[12px] text-white/50 font-sourceCodePro font-normal uppercase tracking-wide">
         RESEARCH PAPER
-        <span>
-          {" "}
-          — {dayjs(date).format("M.D.YYYY")}
-        </span>
+        <span> — {dayjs(date).format("M.D.YYYY")}</span>
       </div>
 
       {/* ↓↓↓ We should pull tags here ↓↓↓

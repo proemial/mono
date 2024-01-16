@@ -18,7 +18,7 @@ export async function PaperCard({ id }: { id: string }) {
         <div className="bg-[#2F2F2F] mb-3 rounded-sm border border-[#3C3C3C] scale-100 active:scale-[0.99] transition-all duration-100">
           <div className="flex flex-col justify-between h-full p-4 text-lg font-medium items-left">
             <div className="flex w-full">
-              <div className="mb-1 text-[12px] text-white/50 font-SourceCodePro font-normal uppercase tracking-wide">
+              <div className="mb-1 text-[12px] text-white/50 font-sourceCodePro font-normal uppercase tracking-wide">
                 RESEARCH PAPER{" "}
                 <span className="text-white/50">
                   {" "}

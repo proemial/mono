@@ -87,8 +87,8 @@ module.exports = {
         "3xl": ["32px", { lineHeight: "40px", fontWeight: "500" }],
       },
       fontFamily: {
-        sans: ['"Helvetica"', 'system-ui',],
-        SourceCodePro: ['Source Code Pro'],
+        sans: ['"Helvetica"', "system-ui"],
+        sourceCodePro: [" var(--font-source-code-pro)"],
       },
       keyframes: {
         "accordion-down": {
@@ -114,7 +114,7 @@ module.exports = {
             textShadow: value,
           }),
         },
-        { values: theme("textShadow") },
+        { values: theme("textShadow") }
       );
     }),
     require("tailwindcss-animate"),
