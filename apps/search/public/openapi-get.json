@@ -24,14 +24,6 @@
               "type": "string"
             },
             "required": true
-          },
-          {
-            "name": "count",
-            "in": "query",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true
           }
         ],
         "responses": {
