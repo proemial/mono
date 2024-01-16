@@ -4,6 +4,7 @@ import { track } from "@vercel/analytics/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge";
+export const dynamic = "force-dynamic"; // defaults to auto
 
 export async function POST(req: Request) {
   const { q, count, tokens } = await req.json();
@@ -13,6 +14,7 @@ export async function POST(req: Request) {
   // if (apiKey !== `Basic ${Env.get("GPT_API_KEY")}`) {
   //   console.log("auth failed");
   // }
+  console.log({ q, count, tokens });
 
   const begin = Time.now();
   try {
@@ -29,11 +31,17 @@ export async function POST(req: Request) {
   }
 }
 
-export const dynamic = "force-dynamic"; // defaults to auto
 export async function GET(req: NextRequest) {
   const q = req.nextUrl.searchParams.get("q")!;
   const count = req.nextUrl.searchParams.get("count") as any as number;
   const tokens = req.nextUrl.searchParams.get("tokens") as any as number;
+
+  if (!q) {
+    return Response.json(
+      { status: "error", message: "missing q param" },
+      { status: 400 }
+    );
+  }
   // const apiKey = req.headers.get("authorization");
   // // console.log({ auth: apiKey });
 
@@ -50,7 +58,7 @@ export async function GET(req: NextRequest) {
       tokens,
     });
 
-    return NextResponse.json(response);
+    return Response.json(response);
   } finally {
     Time.log(begin, "api/v2/search");
   }
