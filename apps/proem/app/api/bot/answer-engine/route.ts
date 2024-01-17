@@ -2,9 +2,15 @@ import { NextRequest } from "next/server";
 import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
 
 import { ChatOpenAI } from "langchain/chat_models/openai";
-import { BytesOutputParser } from "langchain/schema/output_parser";
-import { PromptTemplate } from "langchain/prompts";
+import { BytesOutputParser } from "@langchain/core/output_parsers";
+import { PromptTemplate } from "@langchain/core/prompts";
+import {
+  RunnablePassthrough,
+  RunnableSequence,
+} from "@langchain/core/runnables";
+import { StringOutputParser } from "@langchain/core/output_parsers";
 import { scienceAnswersGPTPrompt } from "@/app/prompts/science-answers-gpt";
+import { question } from "@/app/prompts/chat";
 
 export const runtime = "edge";
 
@@ -41,18 +47,36 @@ export async function POST(req: NextRequest) {
    * output parser handles serialization and encoding.
    */
   const outputParser = new BytesOutputParser();
+  const prompt1 = PromptTemplate.fromTemplate(
+    `What is the city {person} is from? Only respond with the name of the city.`
+  );
+  const prompt2 = PromptTemplate.fromTemplate(
+    `What country is the city {city} in? Respond in {language}.`
+  );
 
-  /*
-   * Can also initialize as:
-   *
-   * import { RunnableSequence } from "langchain/schema/runnable";
-   * const chain = RunnableSequence.from([prompt, model, outputParser]);
-   */
-  const chain = scienceAnswersGPTPrompt.pipe(model).pipe(outputParser);
+  const chain2 = prompt1.pipe(model).pipe(new StringOutputParser());
 
-  const stream = await chain.stream({
-    chat_history: formattedPreviousMessages.join("\n"),
-    input: currentMessageContent,
+  const combinedChain = RunnableSequence.from([
+    {
+      city: chain2,
+      language: (input) => input.language,
+    },
+    prompt2,
+    model,
+    new StringOutputParser(),
+  ]);
+
+  const chain = RunnableSequence.from([
+    scienceAnswersGPTPrompt,
+    model,
+    outputParser,
+  ]);
+
+  const stream = await combinedChain.stream({
+    // chat_history: formattedPreviousMessages.join("\n"),
+    // input: currentMessageContent,
+    person: "Obama",
+    language: "English",
   });
 
   return new StreamingTextResponse(stream);
