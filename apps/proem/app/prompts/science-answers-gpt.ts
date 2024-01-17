@@ -1,4 +1,4 @@
-import { PromptTemplate } from "langchain/prompts";
+import { PromptTemplate } from "@langchain/core/prompts";
 
 const TEMPLATE = `# PERSONA
 - You will provide conclusive answers to user questions, based on relevant research articles, retrieved using the provided SearchPapers API.
