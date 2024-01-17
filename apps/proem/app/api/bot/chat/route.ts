@@ -1,3 +1,4 @@
+import { NextRequest } from "next/server";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { Configuration, OpenAIApi } from "openai-edge";
 import {
@@ -13,7 +14,7 @@ const openai = new OpenAIApi(config);
 
 export const runtime = "edge";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const { messages, title, abstract } = await req.json();
 
   const moddedMessages = [context(title, abstract), ...messages];
@@ -21,6 +22,7 @@ export async function POST(req: Request) {
 
   const lastMessage = moddedMessages.at(-1);
   if (lastMessage.role === "user") {
+    // TODO: Why does is start with `!!`?
     if (!lastMessage.content.startsWith("!!"))
       lastMessage.content = `${prompt} ${lastMessage.content}`;
     else lastMessage.content = lastMessage.content.substring(2); // Remove the `!!`
