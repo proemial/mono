@@ -1,5 +1,6 @@
 "use client";
 
+import SearchInput from "@/app/(pages)/answer-engine/search-input";
 import { useChat } from "ai/react";
 
 export default function Chat() {
@@ -16,17 +17,11 @@ export default function Chat() {
         </div>
       ))}
 
-      <form onSubmit={handleSubmit} className="flex">
-        <label className="text-white">
-          Say something...
-          <input
-            className="w-full max-w-md p-2 mb-8 text-black border border-gray-300 rounded shadow-xl "
-            value={input}
-            onChange={handleInputChange}
-          />
-        </label>
-        <button type="submit">Send</button>
-      </form>
+      <SearchInput
+        handleSubmit={handleSubmit}
+        input={input}
+        handleInputChange={handleInputChange}
+      />
     </div>
   );
 }
