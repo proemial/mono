@@ -15,7 +15,7 @@ export async function fetchJson<T>(url: string) {
   const begin = Time.now();
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { headers: { 'Content-Type': 'application/json' }});
     const json = await response.json();
 
     return json as T;
