@@ -13,7 +13,7 @@
   "paths": {
     "/v2/search": {
       "post": {
-        "x-openai-isConsequential": "false",
+        "x-openai-isConsequential": false,
         "description": "Find research papers matching a user query",
         "operationId": "SearchPapers",
         "requestBody": {
