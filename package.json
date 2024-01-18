@@ -5,11 +5,15 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "vercel-pull-env": "vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/proem --yes && vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/search --yes"
+    "vercel-pull-env": "vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/proem --yes && vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/search --yes",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^1.2.1",
     "prettier": "^3.1.0",
-    "turbo": "latest"
+    "turbo": "latest",
+    "vitest": "^1.2.1"
   },
   "packageManager": "pnpm@8.9.0",
   "engines": {
