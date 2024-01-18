@@ -15,27 +15,29 @@ export function PageHeader({ title = "Proem", isLoggedIn = false }: Props) {
 
   return (
     <>
-      <div className="sticky top-0 z-50 flex flex-row items-center justify-between px-6 py-4 bg-[#1A1A1A]">
-        <Link href="/">
-          <div className="flex flex-row gap-3">
-            <Proem />
-            <span className="text-[16px] font-sans font-normal">{title}</span>
-          </div>
-        </Link>
+      <div className="sticky top-0 z-50 bg-[#1A1A1A]">
+        <div className="flex flex-row items-center justify-between max-w-screen-md px-6 py-4 mx-auto">
+          <Link href="/">
+            <div className="flex flex-row gap-3">
+              <Proem />
+              <span className="text-[16px] font-sans font-normal">{title}</span>
+            </div>
+          </Link>
 
-        {isLoggedIn ? (
-          <Link href="/profile">
-            <User />
-          </Link>
-        ) : (
-          <Link
-            href={{ query: { [LOGIN_REDIRECT_URL_PARAM_NAME]: "/profile" } }}
-            onClick={open}
-          >
-            {/* TODO! Improve styling */}
-            Login
-          </Link>
-        )}
+          {isLoggedIn ? (
+            <Link href="/profile">
+              <User />
+            </Link>
+          ) : (
+            <Link
+              href={{ query: { [LOGIN_REDIRECT_URL_PARAM_NAME]: "/profile" } }}
+              onClick={open}
+            >
+              {/* TODO! Improve styling */}
+              Login
+            </Link>
+          )}
+        </div>
       </div>
       <hr className="mx-6 h-[1px] border-t-0 bg-white/10" />
     </>

@@ -7,6 +7,7 @@ import { ReactNode } from "react";
 import "./globals.css";
 
 import { Source_Code_Pro } from "next/font/google";
+import { MainMenu } from "@/app/components/menu/menu";
 
 // If loading a variable font, you don't need to specify the font weight
 const sourceCodePro = Source_Code_Pro({
@@ -39,8 +40,9 @@ export default async function RootLayout({ children }: Props) {
           <div className="w-full h-full max-w-screen-md mx-auto">
             {children}
           </div>
-          {/* <MainMenu /> */}
+
           <LoginDrawer />
+          <MainMenu />
           <Toaster />
           <AnalyticsClient />
         </body>
