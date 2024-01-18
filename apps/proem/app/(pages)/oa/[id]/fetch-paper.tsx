@@ -13,7 +13,7 @@ import { fetchJson } from "@proemial/utils/fetch";
 import { Env } from "@proemial/utils/env";
 import dayjs from "dayjs";
 
-export const fetchPaper = cache(async (id: string): Promise<OpenAlexPaper> => {
+export const fetchPaper = cache(async (id: string): Promise<OpenAlexPaper | undefined> => {
   console.log("fetchPaper");
   const paper = await Redis.papers.get(id);
 
@@ -21,6 +21,10 @@ export const fetchPaper = cache(async (id: string): Promise<OpenAlexPaper> => {
     const oaPaper = await fetch(
       `${baseOaUrl}/${id}?select=${openAlexFields.all}`,
     );
+    if (!oaPaper.ok) {
+      console.error(`Failed to fetch paper ${id} from OpenAlex (${oaPaper.status}: ${oaPaper.statusText})`)
+      return undefined
+    }
     const oaPaperJson = (await oaPaper.json()) as OpenAlexWorkMetadata;
     const data = {
       ...oaPaperJson,
@@ -40,7 +44,7 @@ export const fetchPaper = cache(async (id: string): Promise<OpenAlexPaper> => {
 
 export const fetchLatestPaperIds = async (): Promise<string[]> => {
   const today = dayjs().format('YYYY-MM-DD')
-  const twoWeeksAgo = dayjs(today).subtract(2, 'week').format('YYYY-MM-DD')
+  const twoWeeksAgo = dayjs(today).subtract(3, 'week').format('YYYY-MM-DD')
   const select = [
     'id',
     'publication_date',
