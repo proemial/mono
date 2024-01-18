@@ -32,9 +32,13 @@ export default async function RootLayout({ children }: Props) {
   return (
     <ClerkProvider>
       <html lang="en" className={sourceCodePro.className}>
-        <body className={`flex relative flex-col justify-center ${light}`}>
+        <body
+          className={`flex relative flex-col justify-center ${light} h-dvh`}
+        >
           <PageHeader isLoggedIn={Boolean(user)} />
-          <div className="w-full max-w-screen-md mx-auto">{children}</div>
+          <div className="w-full h-full max-w-screen-md mx-auto">
+            {children}
+          </div>
           {/* <MainMenu /> */}
           <LoginDrawer />
           <Toaster />
