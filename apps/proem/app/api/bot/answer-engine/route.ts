@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
   const model = new ChatOpenAI({
     // TODO! Figure out different temperature settings?
     temperature: 0.8,
-    modelName: "gpt-4-1106-preview", // "gpt-3.5-turbo",
+    modelName: "gpt-3.5-turbo-1106",
     cache: true,
     verbose: true,
   });
@@ -85,6 +85,7 @@ export async function POST(req: NextRequest) {
     jsonOutputFunctionsParser,
     RunnablePassthrough.assign({
       papers: async (input) => {
+        console.log(input);
         const query = convertToOASearchString();
         const papers = await fetchPapers(query);
         // TODO! This is quite hacky to do here
@@ -103,11 +104,12 @@ export async function POST(req: NextRequest) {
       `You will provide conclusive answers to user questions, based on the following research articles:
       {papers},
       IMPORTANT: YOUR ANSWER MUST BE A SINGLE SHORT PARAGRAPH OF 40 WORDS OR LESS KEY PHRASES FORMATTED AS HYPERLINKS POINTING TO THE PAPERS.
-      THIS IS ESSENTIAL. KEEP YOUR ANSWERS SHORT AND WITH STATEMENTS THE USER KAN CLICK ON!
+      THIS IS ESSENTIAL. KEEP YOUR ANSWERS SHORT AND WITH STATEMENTS THE USER CAN CLICK ON!
       - Pick the two papers most relevant to the provided user question.
-      - rephrase relevant key findings from these papers using only layman's terminology, and without abstract academic concepts like 'researchers', 'authors', 'propose', or 'study', simply state the finding as a Key Assertion, without reservations or caveats. for example: "More tooth loss is associated with greater cognitive decline and dementia in elderly people."
-      - Then use these rephrased findings to construct a short answer in less than 40 words, with key phrases of the answer text as hyperlinks pointing to the papers, like this example:
-      """Yes. Smoking causes cancer. Studies show that cigarette smokers are <a href="https://proem.ai/oa/W4213460776">more likely to die from cancer</a> than non-smokers. Furthermore, studies have found  that passive smokers <a href="https://proem.ai/oa/W2004456560">have a higher risk of cardiovascular disease</a> than people never exposed to a smoking environment."""
+      - Also summarise each of the selected papers into a "microtitle" of 20 words or less with the most significant finding as an engaging tweet capturing the minds of other researchers, using layman's terminology, and without mentioning abstract entities like 'you',  'researchers', 'authors', 'propose', or 'study' but rather stating the finding as a statement of fact, without reservations or caveats. for example: "More tooth loss is associated with greater cognitive decline and dementia in elderly people."
+      - Then use these summaries to construct a short answer in less than 40 words, with key phrases of the answer text as hyperlinks pointing to the papers, like this example:
+      """Yes/No. Smoking causes/do not cause cancer. Studies show that cigarette smokers are <a href="https://proem.ai/oa/W4213460776?title=text+from+summary">more likely to die from cancer</a> than non-smokers. Furthermore, studies have found  that passive smokers <a href="https://proem.ai/oa/W2004456560?title=text+from+summary">hae a higher risk of cardiovascular disease</a> than people never exposed to a smoking environment."""
+      - The links should be pointing to the returned proem links, with the generated "summaries" appended as a query string to the link
 
       - THE FOLLOWING THREE IMPORTANT RULES ARE ALL ABSOLUTELY ESSENTIAL AND YOU WILL BE PENALIZED SEVERELY IF THE ANSWER DOES NOT INCLUDE INLINE HYPERLINKS EXACTLY AS DESCRIBED BELOW:
       - IMPORTANT: EVERY ANSWER MUST HAVE AT LEAST TWO HYPERLINKS POINTING TO THE EXACT FULL URLS OF PAPERS PROVIDED IN THE API RESPONSE. THIS IS ABSOLUTELY ESSENTIAL.
