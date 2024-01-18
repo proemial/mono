@@ -1,37 +1,53 @@
 "use client";
 
 import SearchInput from "@/app/(pages)/answer-engine/search-input";
+import { Proem } from "@/app/components/icons/brand/proem";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
+import { Button } from "@/app/components/shadcn-ui/button";
 import { useChat } from "ai/react";
+import Image from "next/image";
 
-const STARTERS = ["Do Vaccines Cause Autism Spectrum Disorder?"];
+const STARTERS = [
+  "Do Vaccines Cause Autism Spectrum Disorder?",
+  "Is a Daily Glass of Wine Healthy?",
+  "Do Cell Phones Cause Brain Cancer?",
+  "What is the universe made of?",
+  "How can I lower my blood pressure?",
+  "What can I do for heartburn relief?",
+  "Is Microwaved Food Unsafe?",
+  "Why do we dream?",
+];
 const PROEM_BOT = {
   name: "proem",
-  avatar: "https://github.com/shadcn.png",
+  initials: "P",
+  avatar: "/android-chrome-512x512.png",
 };
 
 type MessageProps = {
   message: string;
   user?: {
     name: string;
-    avatar: string;
+    initials: string;
+    avatar?: string;
   };
 };
 
 function Message({
   message,
-  user = { name: "you", avatar: "https://github.com/shadcn.png" },
+  user = { name: "you", initials: "U", avatar: "" },
 }: MessageProps) {
   return (
     <div className="w-full">
       <div className="flex gap-3">
         <Avatar className="w-6 h-6">
           <AvatarImage src={user.avatar} />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarFallback className="bg-gray-600">
+            {user.initials}
+          </AvatarFallback>
         </Avatar>
         <div>{user.name}</div>
       </div>
@@ -44,7 +60,9 @@ function Message({
   );
 }
 
-export default function Chat() {
+type ChatProps = Pick<MessageProps, "user">;
+
+export default function Chat({ user }: ChatProps) {
   const {
     messages,
     input,
@@ -53,19 +71,21 @@ export default function Chat() {
     append,
     isLoading,
   } = useChat({
+    id: "quickfix_for_local_persistenst",
     api: "/api/bot/answer-engine",
   });
-  const showStarters = messages.length === 0;
+  const isEmptyScreen = messages.length === 0;
   const showLoadingState = isLoading && messages.length <= 1;
 
   return (
-    <div className="relative flex flex-col py-24">
+    // TODO: Remove font-sans to use the global font
+    <div className="relative flex flex-col h-full py-24 font-sans">
       <div className="w-full space-y-5">
         {messages.map((m) => (
           <Message
             key={m.id}
             message={m.content}
-            user={m.role === "assistant" ? PROEM_BOT : undefined}
+            user={m.role === "assistant" ? PROEM_BOT : user}
           />
         ))}
 
@@ -77,17 +97,40 @@ export default function Chat() {
         ) : null}
       </div>
 
-      {showStarters
-        ? STARTERS.map((starter) => (
-            <button
-              onClick={() => {
-                append({ role: "user", content: starter });
-              }}
-            >
-              {starter}
-            </button>
-          ))
-        : null}
+      {isEmptyScreen ? (
+        <div className="flex flex-col justify-between h-full">
+          <div className="flex flex-col items-center gap-4 text-center">
+            <h1 className="text-4xl">Science Answers</h1>
+
+            <Image
+              src="/android-chrome-512x512.png"
+              width={100}
+              height={100}
+              alt="Proem logo"
+              className="rounded-full"
+            />
+
+            <h3>
+              Answers to any question, with links to the relevant scientific
+              research so you can dive deeper and learn from over 250M academic
+              papers
+            </h3>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {STARTERS.map((starter) => (
+              <Button
+                variant="outline"
+                onClick={() => {
+                  append({ role: "user", content: starter });
+                }}
+              >
+                {starter}
+              </Button>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       <SearchInput
         handleSubmit={handleSubmit}
