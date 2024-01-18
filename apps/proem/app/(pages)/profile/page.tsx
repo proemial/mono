@@ -1,3 +1,4 @@
+import { getProfileFromUser } from "@/app/(pages)/profile/getProfileFromUser";
 import { ProfileButtons } from "@/app/(pages)/profile/profile-buttons";
 import { MegaPhone } from "@/app/components/icons/objects/megaphone";
 import {
@@ -10,8 +11,7 @@ import Link from "next/link";
 
 export default async function ProfilePage() {
   const user = await currentUser();
-  const fullName = user ? `${user.firstName} ${user.lastName}` : "";
-  const initials = fullName.split(" ").map((name) => name.charAt(0));
+  const { fullName, initials } = getProfileFromUser(user);
 
   return (
     <>
