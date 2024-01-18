@@ -2,17 +2,16 @@
 import { Send } from "@/app/components/icons/functional/send";
 import { Button } from "@/app/components/shadcn-ui/button";
 import { Input } from "@/app/components/shadcn-ui/input";
-import { cn } from "@/app/components/shadcn-ui/utils";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
-const linearGradient = "bg-gradient-to-t from-80% from-black";
 
 type SearchInputProps = {
   handleSubmit?: (e: any) => void;
   input?: string;
   handleInputChange?: (e: any) => void;
 };
+
+// TODO: Remove logic from the component
 export default function SearchInput({
   handleSubmit,
   input,
@@ -22,7 +21,7 @@ export default function SearchInput({
   const router = useRouter();
 
   return (
-    <div className={cn("fixed bottom-0 left-0 w-full p-6 ", linearGradient)}>
+    <div className="w-full py-6">
       <form
         className="relative"
         onSubmit={

@@ -79,7 +79,7 @@ export default function Chat({ user }: ChatProps) {
 
   return (
     // TODO: Remove font-sans to use the global font
-    <div className="relative flex flex-col h-full py-24 font-sans">
+    <div className="relative flex flex-col h-full p-6 font-sans">
       <div className="w-full space-y-5">
         {messages.map((m) => (
           <Message
@@ -110,7 +110,7 @@ export default function Chat({ user }: ChatProps) {
               className="rounded-full"
             />
 
-            <h3>
+            <h3 className="max-w-md">
               Answers to any question, with links to the relevant scientific
               research so you can dive deeper and learn from over 250M academic
               papers
@@ -121,6 +121,7 @@ export default function Chat({ user }: ChatProps) {
             {STARTERS.map((starter) => (
               <Button
                 variant="outline"
+                size="sm"
                 onClick={() => {
                   append({ role: "user", content: starter });
                 }}
@@ -132,11 +133,13 @@ export default function Chat({ user }: ChatProps) {
         </div>
       ) : null}
 
-      <SearchInput
-        handleSubmit={handleSubmit}
-        input={input}
-        handleInputChange={handleInputChange}
-      />
+      <div className="absolute bottom-0 left-0 w-full px-6 bg-gradient-to-t from-80% from-black">
+        <SearchInput
+          handleSubmit={handleSubmit}
+          input={input}
+          handleInputChange={handleInputChange}
+        />
+      </div>
     </div>
   );
 }

@@ -34,64 +34,63 @@ export function LoginDrawer() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  if (!isLoaded) {
+    return null;
+  }
   return (
-    <div className="z-[1000]">
-      {isLoaded && (
-        <SignedOut>
-          <Drawer isOpen={isOpen} onClose={close} removeWhenClosed={false}>
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-col justify-center my-2">
-                <Proem />
-                <div className="mt-3 font-sans text-xl font-semibold text-left">
-                  Get started with Proem
-                </div>
-              </div>
-
-              {authProviders.map(({ name, icon, oAuthStrategy }) => {
-                return (
-                  <Button
-                    key={name}
-                    onClick={() => {
-                      signIn.authenticateWithRedirect({
-                        strategy: oAuthStrategy,
-                        redirectUrl: "/sso-callback",
-                        redirectUrlComplete:
-                          searchParams.get(LOGIN_REDIRECT_URL_PARAM_NAME) ||
-                          pathname,
-                      });
-                    }}
-                  >
-                    <Logo variant={icon} className="mr-2" />
-                    <span className="font-sans text-xs font-semibold">
-                      Continue using {name}
-                    </span>
-                  </Button>
-                );
-              })}
-
-              <div className="text-xs font-normal leading-tight text-left text-gray-600">
-                By using Proem, you consent to our{" "}
-                <Link
-                  href="/privacy"
-                  onClick={close}
-                  className="text-gray-600 underline"
-                >
-                  Privacy Policy
-                </Link>{" "}
-                and{" "}
-                <Link
-                  href="/terms"
-                  onClick={close}
-                  className="text-gray-600 underline"
-                >
-                  Terms of Service
-                </Link>
-                .
-              </div>
+    <SignedOut>
+      <Drawer isOpen={isOpen} onClose={close} removeWhenClosed={false}>
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-col justify-center my-2">
+            <Proem />
+            <div className="mt-3 font-sans text-xl font-semibold text-left">
+              Get started with Proem
             </div>
-          </Drawer>
-        </SignedOut>
-      )}
-    </div>
+          </div>
+
+          {authProviders.map(({ name, icon, oAuthStrategy }) => {
+            return (
+              <Button
+                key={name}
+                onClick={() => {
+                  signIn.authenticateWithRedirect({
+                    strategy: oAuthStrategy,
+                    redirectUrl: "/sso-callback",
+                    redirectUrlComplete:
+                      searchParams.get(LOGIN_REDIRECT_URL_PARAM_NAME) ||
+                      pathname,
+                  });
+                }}
+              >
+                <Logo variant={icon} className="mr-2" />
+                <span className="font-sans text-xs font-semibold">
+                  Continue using {name}
+                </span>
+              </Button>
+            );
+          })}
+
+          <div className="text-xs font-normal leading-tight text-left text-gray-600">
+            By using Proem, you consent to our{" "}
+            <Link
+              href="/privacy"
+              onClick={close}
+              className="text-gray-600 underline"
+            >
+              Privacy Policy
+            </Link>{" "}
+            and{" "}
+            <Link
+              href="/terms"
+              onClick={close}
+              className="text-gray-600 underline"
+            >
+              Terms of Service
+            </Link>
+            .
+          </div>
+        </div>
+      </Drawer>
+    </SignedOut>
   );
 }

@@ -33,9 +33,9 @@ export function MainMenu() {
   const { userId } = useAuth();
 
   return (
-    <div className="pt-2 pb-4 z-[1000]">
+    <div className="sticky bottom-0 z-50 w-full max-w-screen-md px-6 py-2 mx-auto">
       <div
-        className="flex justify-around"
+        className="flex justify-between"
         style={{ boxShadow: "0px -8px 8px 4px rgba(0, 0, 0, 0.85)" }}
       >
         {menuItems.map(({ icon: Icon, href, hasLoginDrawer }) => {
@@ -43,11 +43,11 @@ export function MainMenu() {
           const linkProps: Parameters<typeof Link>[0] = userId
             ? { href }
             : {
-              href: hasLoginDrawer
-                ? { query: { [LOGIN_REDIRECT_URL_PARAM_NAME]: href } }
-                : href,
-              onClick: hasLoginDrawer ? open : close,
-            };
+                href: hasLoginDrawer
+                  ? { query: { [LOGIN_REDIRECT_URL_PARAM_NAME]: href } }
+                  : href,
+                onClick: hasLoginDrawer ? open : close,
+              };
 
           return (
             <Link {...linkProps} key={href}>
