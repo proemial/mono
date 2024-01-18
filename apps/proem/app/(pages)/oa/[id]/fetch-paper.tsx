@@ -44,7 +44,7 @@ export const fetchPaper = cache(async (id: string): Promise<OpenAlexPaper | unde
 
 export const fetchLatestPaperIds = async (): Promise<string[]> => {
   const today = dayjs().format('YYYY-MM-DD')
-  const twoWeeksAgo = dayjs(today).subtract(3, 'week').format('YYYY-MM-DD')
+  const twoWeeksAgo = dayjs(today).subtract(2, 'week').format('YYYY-MM-DD')
   const select = [
     'id',
     'publication_date',
