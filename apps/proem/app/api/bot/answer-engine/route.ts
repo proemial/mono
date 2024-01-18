@@ -25,10 +25,17 @@ const formatMessage = (message: VercelChatMessage) => {
 };
 
 const searchParametersSchema = z.object({
-  searchParameters: z
+  keyConcept: z
+    .string()
+    .describe(
+      "A single common noun that is VERY likely to occur in the title of a research paper relevant to answering the original user question"
+    ),
+  relatedConcepts: z
     .string()
     .array()
-    .describe("An string array of search parameters"),
+    .describe(
+      "The most closely related scientific concepts as well as two or three synonyms for the key concept"
+    ),
 });
 
 // Format the messages
@@ -76,7 +83,8 @@ export async function POST(req: NextRequest) {
       functions: [
         {
           name: "searchParameters",
-          description: "An string array of search parameters",
+          description:
+            "Search parameters to fetch papers related to the users question",
           parameters: zodToJsonSchema(searchParametersSchema),
         },
       ],
@@ -86,8 +94,13 @@ export async function POST(req: NextRequest) {
     RunnablePassthrough.assign({
       papers: async (input) => {
         console.log(input);
-        const query = convertToOASearchString();
+        const query = convertToOASearchString(
+          input.keyConcept,
+          input.relatedConcepts
+        );
+        console.log({ query });
         const papers = await fetchPapers(query);
+        console.log(papers.length);
         // TODO! This is quite hacky to do here
         const papersWithRelativeLinks = papers?.map((paper) => ({
           ...paper,
@@ -97,6 +110,8 @@ export async function POST(req: NextRequest) {
       },
     }),
   ]);
+
+  // const fetchPapersChain = RunnableSequence.from([])
 
   const chatPrompt = ChatPromptTemplate.fromMessages([
     [
