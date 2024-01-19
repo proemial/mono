@@ -1,5 +1,6 @@
 "use client";
 
+import { applyExplainLinks } from "@/app/(pages)/oa/[id]/components/panels/bot/apply-links";
 import { useDrawerState } from "@/app/components/login/state";
 import { useAuth } from "@clerk/nextjs";
 
@@ -18,33 +19,6 @@ export function Message({ role, content, explain }: Props) {
   } else {
     return <Answer>{withLinks}</Answer>;
   }
-}
-
-function applyExplainLinks(
-  msg: string,
-  onClick: (concept: string) => void
-): React.ReactNode {
-  const re = /\(\(.*?\)\)/gi;
-
-  const asLink = (input: string) => {
-    const sanitized = input.replace("((", "").replace("))", "");
-
-    return (
-      <span
-        className="font-normal underline text-[#7DFA86] cursor-pointer"
-        onClick={() => onClick(sanitized)}
-      >
-        {sanitized}
-      </span>
-    );
-  };
-
-  const arr = msg.replace(re, "~~$&~~").split("~~");
-  return arr.map((s, i) => (
-    <span key={i}>
-      {s.match(re) ? <span>{s.match(re) ? asLink(s) : s}</span> : s}
-    </span>
-  ));
 }
 
 const style = "inline-block";
