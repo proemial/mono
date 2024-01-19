@@ -9,8 +9,8 @@ import {
 } from "@/app/components/shadcn-ui/Avatar";
 import { Button } from "@/app/components/shadcn-ui/button";
 import { useChat } from "ai/react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
 
 const STARTERS = [
   "Do Vaccines Cause Autism Spectrum Disorder?",
@@ -75,12 +75,23 @@ export default function Chat({ user }: ChatProps) {
     id: "quickfix_for_local_persistenst",
     api: "/api/bot/answer-engine",
   });
+
+  const chatWrapperRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (messages?.length > 0 && chatWrapperRef.current) {
+      chatWrapperRef.current.scrollIntoView(false);
+    }
+  }, [messages]);
+
   const isEmptyScreen = messages.length === 0;
   const showLoadingState = isLoading && messages.length <= 1;
 
   return (
     // TODO: Remove font-sans to use the global font
-    <div className="relative flex flex-col px-4 pt-6 pb-24 font-sans">
+    <div
+      className="relative flex flex-col px-4 pt-6 pb-12 font-sans"
+      ref={chatWrapperRef}
+    >
       <div className="w-full pb-20 space-y-5">
         {messages.map((m) => (
           <Message
