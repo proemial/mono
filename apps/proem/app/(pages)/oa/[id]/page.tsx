@@ -33,11 +33,11 @@ export default async function ReaderPage({ params }: Props) {
   const paper = await fetchPaper(params.id);
 
   if (!paper) {
-    notFound()
+    notFound();
   }
 
   return (
-    <>
+    <div className="relative w-full pb-32">
       <PaperCard
         id={params.id}
         date={paper.data.publication_date}
@@ -58,7 +58,7 @@ export default async function ReaderPage({ params }: Props) {
           <TabsTrigger value="metadata">Metadata</TabsTrigger>
         </TabsList>
         <TabsContent value="QA">
-          <div className="flex flex-col gap-6 px-6 py-3 text-base">
+          <div className="flex flex-col h-full gap-6 px-6 py-3 text-base">
             <Suspense fallback={<Spinner />}>
               <QuestionsPanel paper={paper} />
             </Suspense>
@@ -90,7 +90,6 @@ export default async function ReaderPage({ params }: Props) {
           </div>
         </TabsContent>
         <TabsContent value="authors">
-
           {/* TODO! For Rasmus: Render out a list of authors with this styling inside of
           the div with bg - (2F2F2F) */}
 
@@ -126,6 +125,6 @@ export default async function ReaderPage({ params }: Props) {
           </div>
         </TabsContent>
       </Tabs>
-    </>
+    </div>
   );
 }

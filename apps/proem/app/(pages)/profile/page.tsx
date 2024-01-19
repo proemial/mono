@@ -1,3 +1,4 @@
+import { getProfileFromUser } from "@/app/(pages)/profile/getProfileFromUser";
 import { ProfileButtons } from "@/app/(pages)/profile/profile-buttons";
 import { MegaPhone } from "@/app/components/icons/objects/megaphone";
 import {
@@ -10,13 +11,12 @@ import Link from "next/link";
 
 export default async function ProfilePage() {
   const user = await currentUser();
-  const fullName = user ? `${user.firstName} ${user.lastName}` : "";
-  const initials = fullName.split(" ").map((name) => name.charAt(0));
+  const { fullName, initials } = getProfileFromUser(user);
 
   return (
     <>
       <SignedIn>
-        <div className="w-full px-4 my-8 space-y-6">
+        <div className="w-full p-6 space-y-6">
           <div className="relative flex flex-col overflow-hidden bg-[#1A1A1A] rounded-sm border border-[#3C3C3C]">
             <div className="absolute inset-0 w-full h-full">
               <div className="w-full h-full bg-pattern-amie animate-backgroundScroll"></div>
@@ -99,13 +99,13 @@ export default async function ProfilePage() {
       </SignedIn>
 
       <div className="inset-x-0 px-4 bottom-5">
-        <p className="text-xs font-normal leading-snug text-left text-gray-500">
+        <p className="font-sans text-xs font-normal leading-snug text-left text-gray-500">
           Proemial reserves all rights. Read our{" "}
           <Link href="" className="underline">
             Privacy Policy.
           </Link>
         </p>
-        <p className="text-xs font-normal leading-snug text-left text-gray-500">
+        <p className="font-sans text-xs font-normal leading-snug text-left text-gray-500">
           Proemial ApS. DK-8000 Aarhus C. CVR no.: 44250543. Email:
           hi@proemial.ai.
         </p>

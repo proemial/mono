@@ -1,13 +1,10 @@
 "use client";
 import { Button } from "@/app/components/shadcn-ui/button";
 import { SignOutButton } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 
 export function ProfileButtons() {
-  const router = useRouter();
-
   return (
-    <SignOutButton signOutCallback={() => router.push("/")}>
+    <SignOutButton signOutCallback={() => window.location.replace("/")}>
       <Button variant="danger">
         <span className="font-sans text-xs font-semibold">Log out</span>
       </Button>
