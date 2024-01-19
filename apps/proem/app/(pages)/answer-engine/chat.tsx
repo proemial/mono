@@ -89,29 +89,12 @@ export default function Chat({ user }: ChatProps) {
   return (
     // TODO: Remove font-sans to use the global font
     <div
-      className="relative flex flex-col px-4 pt-6 pb-12 font-sans"
+      className="relative flex flex-col min-h-full px-4 pt-6 pb-12 font-sans"
       ref={chatWrapperRef}
     >
-      <div className="w-full pb-20 space-y-5">
-        {messages.map((m) => (
-          <Message
-            key={m.id}
-            message={m.content}
-            user={m.role === "assistant" ? PROEM_BOT : user}
-          />
-        ))}
-
-        {showLoadingState ? (
-          <Message
-            message="Searching for relevant scientific papers..."
-            user={PROEM_BOT}
-          />
-        ) : null}
-      </div>
-
       {isEmptyScreen ? (
-        <div className="flex flex-col justify-end h-full">
-          <div className="flex flex-wrap gap-[6px] mb-12">
+        <div className="flex flex-col mt-auto mb-5">
+          <div className="flex flex-wrap gap-[6px] ">
             {STARTERS.map((starter) => (
               <Button
                 key={starter}
@@ -126,14 +109,33 @@ export default function Chat({ user }: ChatProps) {
             ))}
           </div>
         </div>
-      ) : null}
+      ) : (
+        <div className="w-full pb-20 space-y-5">
+          {messages.map((m) => (
+            <Message
+              key={m.id}
+              message={m.content}
+              user={m.role === "assistant" ? PROEM_BOT : user}
+            />
+          ))}
 
-      <div className="fixed left-0 w-full px-4 py-3 bg-black bottom-14">
-        <SearchInput
-          handleSubmit={handleSubmit}
-          input={input}
-          handleInputChange={handleInputChange}
-        />
+          {showLoadingState ? (
+            <Message
+              message="Searching for relevant scientific papers..."
+              user={PROEM_BOT}
+            />
+          ) : null}
+        </div>
+      )}
+
+      <div className="fixed left-0 w-full bg-black bottom-14">
+        <div className="w-full max-w-screen-md px-4 py-3 mx-auto">
+          <SearchInput
+            handleSubmit={handleSubmit}
+            input={input}
+            handleInputChange={handleInputChange}
+          />
+        </div>
       </div>
     </div>
   );

@@ -21,22 +21,22 @@ export default function SearchInput({
   const router = useRouter();
 
   return (
-    <div className="w-full">
+    <div className="relative w-full">
       <form
         className="flex flex-row items-center break-words"
         onSubmit={
           handleSubmit
             ? handleSubmit
             : (event) => {
-              event.preventDefault();
-              router.push(`/search?q=${searchValue}`);
-            }
+                event.preventDefault();
+                router.push(`/search?q=${searchValue}`);
+              }
         }
       >
         <Input
           type="textarea"
           placeholder="Ask anything"
-          className="relative stretch break-words"
+          className="relative break-words stretch"
           value={input ? input : searchValue}
           onChange={
             handleInputChange
@@ -48,7 +48,7 @@ export default function SearchInput({
           variant="send_button"
           size="sm"
           type="submit"
-          className="bg-transparent absolute right-7 justify-center"
+          className="absolute justify-center bg-transparent right-2"
         >
           <Send />
         </Button>
