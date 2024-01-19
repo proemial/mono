@@ -1,5 +1,6 @@
 import { fetchPaper } from "@/app/(pages)/oa/[id]/fetch-paper";
 import { Redis } from "@proemial/redis/redis";
+import { headers } from "next/headers";
 
 export async function getDescription(id: string, title?: string) {
   if (title) {
@@ -23,6 +24,9 @@ export async function getDescription(id: string, title?: string) {
 }
 
 export function formatMetadata(id: string, description?: string) {
+  const requestHeaders = headers()
+  const host = requestHeaders.get('host')
+
   const title = `${description}`;
   return {
     title,
@@ -33,7 +37,7 @@ export function formatMetadata(id: string, description?: string) {
       type: "article",
       images: [
         {
-          url: `api/og/${id}?text=${description}`,
+          url: `https://${host}/api/og/${id}?text=${description}`,
           width: 400,
           height: 200,
           alt: description,
