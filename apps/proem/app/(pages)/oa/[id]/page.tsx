@@ -16,6 +16,7 @@ import { VerifiedStar } from "@/app/components/icons/other/star";
 import { LinkButton } from "@/app/(pages)/oa/[id]/components/menu/link-button";
 import { Button } from "@/app/components/shadcn-ui/button";
 import { DocumentEmpty } from "@/app/components/icons/objects/document-empty";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: { id: string };
@@ -30,6 +31,10 @@ export async function generateMetadata({ params: p, searchParams: s }: Props) {
 
 export default async function ReaderPage({ params }: Props) {
   const paper = await fetchPaper(params.id);
+
+  if (!paper) {
+    notFound()
+  }
 
   return (
     <>

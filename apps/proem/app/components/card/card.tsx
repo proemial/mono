@@ -8,6 +8,10 @@ import { Suspense } from "react";
 export async function PaperCard({ id }: { id: string }) {
   const paper = await fetchPaper(id);
 
+  if (!paper) {
+    return undefined
+  }
+
   // const organisation =
   //   paper.data.primary_location?.source?.host_organization_name;
   const date = paper.data.publication_date;

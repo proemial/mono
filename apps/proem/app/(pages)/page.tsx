@@ -5,46 +5,23 @@ import {
   NothingHereYet,
 } from "@/app/components/spinner";
 import { Suspense } from "react";
+import { fetchLatestPaperIds } from "./oa/[id]/fetch-paper";
 
 export const revalidate = 1;
 
 export default async function FrontPage() {
+  const latestIds = await fetchLatestPaperIds()
+
   return (
     <div className="flex flex-col max-w-screen-sm min-h-full mx-auto justify-begin">
       <Suspense fallback={<CenteredSpinner />}>
-        <PageContent />
+        <PageContent latestIds={latestIds} />
       </Suspense>
     </div>
   );
 }
 
-async function PageContent() {
-  // TODO: Fetch history
-  const latestIds = [
-    "W10438119",
-    "W125463860",
-    "W2180080828",
-    "W1971798103",
-    "W1971798103",
-    "W2180080828",
-    "W2063436182",
-    "W2009065480",
-    "W2109166831",
-    "W1972268296",
-    "W2159667899",
-    "W2025926911",
-    "W1938528378",
-    "W2028329146",
-    "W1971798103",
-    "W1963581370",
-    "W2159874741",
-    "W2133059852",
-    "W2221567553",
-    "W2094187658",
-    "W2980759431",
-    "W2060152915",
-  ];
-
+async function PageContent({ latestIds }: { latestIds: string[] }) {
   return (
     <div className="p-6">
       {latestIds.length === 0 && <NothingHereYet />}
