@@ -1,0 +1,14 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`applyLinks 1`] = `
+[
+  "No. Vaccines are ",
+  <span
+    className="font-normal underline text-[#7DFA86] cursor-pointer"
+    onClick={[Function]}
+  >
+    not associated with the development of autism or autism spectrum disorder
+  </span>,
+  ". Multiple studies have found no relationship between vaccination and autism or ASD.",
+]
+`;
