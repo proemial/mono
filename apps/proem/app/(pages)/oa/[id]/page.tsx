@@ -32,7 +32,7 @@ export default async function ReaderPage({ params }: Props) {
   const paper = await fetchPaper(params.id);
 
   return (
-    <>
+    <div className="w-full">
       <PaperCard
         id={params.id}
         date={paper.data.publication_date}
@@ -85,7 +85,6 @@ export default async function ReaderPage({ params }: Props) {
           </div>
         </TabsContent>
         <TabsContent value="authors">
-
           {/* TODO! For Rasmus: Render out a list of authors with this styling inside of
           the div with bg - (2F2F2F) */}
 
@@ -121,6 +120,6 @@ export default async function ReaderPage({ params }: Props) {
           </div>
         </TabsContent>
       </Tabs>
-    </>
+    </div>
   );
 }

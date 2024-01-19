@@ -1,7 +1,7 @@
 "use client";
 
 import SearchInput from "@/app/(pages)/answer-engine/search-input";
-import { Proem } from "@/app/components/icons/brand/proem";
+import { applyLinks } from "@/app/(pages)/oa/[id]/components/panels/bot/apply-links";
 import {
   Avatar,
   AvatarFallback,
@@ -10,6 +10,7 @@ import {
 import { Button } from "@/app/components/shadcn-ui/button";
 import { useChat } from "ai/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const STARTERS = [
   "Do Vaccines Cause Autism Spectrum Disorder?",
@@ -40,6 +41,9 @@ function Message({
   message,
   user = { name: "you", initials: "U", avatar: "" },
 }: MessageProps) {
+  const router = useRouter();
+  const onClickHandle = router.push;
+  const content = applyLinks(message, onClickHandle);
   return (
     <div className="w-full">
       <div className="flex gap-3">
@@ -52,10 +56,7 @@ function Message({
         <div>{user.name}</div>
       </div>
 
-      <div
-        className="flex-1 prose ml-9 prose-invert"
-        dangerouslySetInnerHTML={{ __html: message }}
-      />
+      <div className="flex-1 prose ml-9 prose-invert">{content}</div>
     </div>
   );
 }
@@ -102,7 +103,12 @@ export default function Chat({ user }: ChatProps) {
           <div className="flex flex-wrap gap-[6px] mb-12">
             {STARTERS.map((starter) => (
               <Button
+<<<<<<< HEAD
                 variant="ae_starter"
+=======
+                key={starter}
+                variant="outline"
+>>>>>>> 14deb580420fd6b6cf45b5ff4efd67b94e17d2d4
                 size="sm"
                 onClick={() => {
                   append({ role: "user", content: starter });
