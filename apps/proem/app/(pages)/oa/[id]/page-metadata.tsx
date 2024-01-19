@@ -23,7 +23,7 @@ export async function getDescription(id: string, title?: string) {
 }
 
 export function formatMetadata(id: string, description?: string) {
-  const title = `Proem - ${description}`;
+  const title = `${description}`;
   return {
     title,
     description,
