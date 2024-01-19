@@ -79,7 +79,7 @@ export default function Chat({ user }: ChatProps) {
 
   return (
     // TODO: Remove font-sans to use the global font
-    <div className="relative flex flex-col h-full p-6 font-sans">
+    <div className="relative flex flex-col h-full p-4 font-sans">
       <div className="w-full space-y-5">
         {messages.map((m) => (
           <Message
@@ -98,29 +98,11 @@ export default function Chat({ user }: ChatProps) {
       </div>
 
       {isEmptyScreen ? (
-        <div className="flex flex-col justify-between h-full">
-          <div className="flex flex-col items-center gap-4 text-center">
-            <h1 className="text-4xl">Science Answers</h1>
-
-            <Image
-              src="/android-chrome-512x512.png"
-              width={100}
-              height={100}
-              alt="Proem logo"
-              className="rounded-full"
-            />
-
-            <h3 className="max-w-md">
-              Answers to any question, with links to the relevant scientific
-              research so you can dive deeper and learn from over 250M academic
-              papers
-            </h3>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
+        <div className="flex flex-col h-full justify-end">
+          <div className="flex flex-wrap gap-[6px] mb-12">
             {STARTERS.map((starter) => (
               <Button
-                variant="outline"
+                variant="ae_starter"
                 size="sm"
                 onClick={() => {
                   append({ role: "user", content: starter });
@@ -131,15 +113,16 @@ export default function Chat({ user }: ChatProps) {
             ))}
           </div>
         </div>
-      ) : null}
+      ) : null
+      }
 
-      <div className="absolute bottom-0 left-0 w-full px-6 bg-gradient-to-t from-80% from-black">
+      <div className="bg-black absolute bottom-0 w-full left-0 px-4 py-3">
         <SearchInput
           handleSubmit={handleSubmit}
           input={input}
           handleInputChange={handleInputChange}
         />
       </div>
-    </div>
+    </div >
   );
 }

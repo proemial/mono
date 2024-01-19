@@ -24,22 +24,23 @@ export function PageHeader({ title = "Proem", isLoggedIn = false }: Props) {
             </div>
           </Link>
 
-          {isLoggedIn ? (
-            <Link href="/profile">
-              <User />
-            </Link>
-          ) : (
-            <Link
-              href={{ query: { [LOGIN_REDIRECT_URL_PARAM_NAME]: "/profile" } }}
-              onClick={open}
-            >
-              {/* TODO! Improve styling */}
-              Login
-            </Link>
-          )}
         </div>
       </div>
       <hr className="mx-6 h-[1px] border-t-0 bg-white/10" />
     </>
   );
 }
+
+// {isLoggedIn ? (
+//   <Link href="/profile">
+//     <User />
+//   </Link>
+// ) : (
+//   <Link
+//     href={{ query: { [LOGIN_REDIRECT_URL_PARAM_NAME]: "/profile" } }}
+//     onClick={open}
+//   >
+//     {/* TODO! Improve styling */}
+//     Login
+//   </Link>
+// )}

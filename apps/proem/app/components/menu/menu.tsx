@@ -33,25 +33,24 @@ export function MainMenu() {
   const { userId } = useAuth();
 
   return (
-    <div className="sticky bottom-0 z-50 w-full max-w-screen-md px-6 py-2 mx-auto">
+    <div className="bg-[#1A1A1A] sticky bottom-0 z-50 w-full max-w-screen-md px-6 py-3 mx-auto">
       <div
-        className="flex justify-between"
-        style={{ boxShadow: "0px -8px 8px 4px rgba(0, 0, 0, 0.85)" }}
-      >
+        className="flex justify-between">
         {menuItems.map(({ icon: Icon, href, hasLoginDrawer }) => {
           //  If the user is not signed in, we're open the drawer with a query parameter to handle redirects
           const linkProps: Parameters<typeof Link>[0] = userId
             ? { href }
             : {
-                href: hasLoginDrawer
-                  ? { query: { [LOGIN_REDIRECT_URL_PARAM_NAME]: href } }
-                  : href,
-                onClick: hasLoginDrawer ? open : close,
-              };
+              href: hasLoginDrawer
+                ? { query: { [LOGIN_REDIRECT_URL_PARAM_NAME]: href } }
+                : href,
+              onClick: hasLoginDrawer ? open : close,
+            };
 
           return (
-            <Link {...linkProps} key={href}>
-              <Icon className="stroke-muted-foreground" />
+            <Link {...linkProps} key={href}
+              className="p-2 cursor-pointer">
+              <Icon className="stroke-white" />
             </Link>
           );
         })}
