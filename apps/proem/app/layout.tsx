@@ -2,12 +2,12 @@ import { AnalyticsClient } from "@/app/components/analytics/analytics";
 import { LoginDrawer } from "@/app/components/login/login-drawer";
 import { PageHeader } from "@/app/components/page-header";
 import { Toaster } from "@/app/components/shadcn-ui/toaster";
-import { ClerkProvider, currentUser } from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import { ReactNode } from "react";
 import "./globals.css";
 
-import { Source_Code_Pro } from "next/font/google";
 import { MainMenu } from "@/app/components/menu/menu";
+import { Source_Code_Pro } from "next/font/google";
 
 // If loading a variable font, you don't need to specify the font weight
 const sourceCodePro = Source_Code_Pro({
@@ -28,7 +28,6 @@ type Props = {
 
 export default async function RootLayout({ children }: Props) {
   const light = lightModeEnabled ? "dark:dark" : "dark";
-  const user = await currentUser();
 
   return (
     <ClerkProvider>
@@ -36,8 +35,8 @@ export default async function RootLayout({ children }: Props) {
         <body
           className={`flex relative flex-col justify-center ${light} h-dvh`}
         >
-          <PageHeader isLoggedIn={Boolean(user)} />
-          <div className="w-full h-full max-w-screen-md mx-auto">
+          <PageHeader />
+          <div className="w-full h-full max-w-screen-md pb-16 mx-auto pt-14">
             {children}
           </div>
 

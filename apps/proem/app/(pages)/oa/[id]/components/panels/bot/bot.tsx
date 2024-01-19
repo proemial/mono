@@ -28,7 +28,7 @@ export function InsightsBot({ paper, suggestions }: Props) {
   }, [messages]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-full">
       {!suggestions && (
         <div className="mb-4">
           <Spinner />
@@ -44,7 +44,7 @@ export function InsightsBot({ paper, suggestions }: Props) {
         />
       )}
 
-      <div className="fixed inset-x-0 bottom-0 z-50 max-w-screen-md px-3 py-2 mx-auto bg-black">
+      <div className="absolute inset-x-0 bottom-0 z-50 w-full max-w-screen-md px-3 py-2 mx-auto bg-black">
         <BotForm
           value={input}
           onChange={handleInputChange}

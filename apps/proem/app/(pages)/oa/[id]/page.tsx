@@ -33,11 +33,11 @@ export default async function ReaderPage({ params }: Props) {
   const paper = await fetchPaper(params.id);
 
   if (!paper) {
-    notFound()
+    notFound();
   }
 
   return (
-    <div className="w-full">
+    <div className="relative w-full h-full">
       <PaperCard
         id={params.id}
         date={paper.data.publication_date}
@@ -58,7 +58,7 @@ export default async function ReaderPage({ params }: Props) {
           <TabsTrigger value="metadata">Metadata</TabsTrigger>
         </TabsList>
         <TabsContent value="QA">
-          <div className="flex flex-col gap-6 px-6 py-3 text-base">
+          <div className="flex flex-col h-full gap-6 px-6 py-3 text-base">
             <Suspense fallback={<Spinner />}>
               <QuestionsPanel paper={paper} />
             </Suspense>

@@ -80,8 +80,8 @@ export default function Chat({ user }: ChatProps) {
 
   return (
     // TODO: Remove font-sans to use the global font
-    <div className="relative flex flex-col h-full p-4 font-sans">
-      <div className="w-full space-y-5">
+    <div className="relative flex flex-col h-full px-4 py-6 font-sans">
+      <div className="w-full pb-20 space-y-5">
         {messages.map((m) => (
           <Message
             key={m.id}

@@ -9,7 +9,7 @@ type PageHeaderProps = {
 export function PageHeader({ title = "Proem" }: PageHeaderProps) {
   return (
     <>
-      <div className="sticky top-0 z-50 bg-[#1A1A1A]">
+      <div className="fixed w-full top-0 z-50 bg-[#1A1A1A]">
         <div className="flex flex-row items-center justify-between max-w-screen-md px-6 py-4 mx-auto">
           <Link href="/">
             <div className="flex flex-row gap-3">
