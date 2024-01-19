@@ -37,7 +37,7 @@ export default async function ReaderPage({ params }: Props) {
   }
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full pb-32">
       <PaperCard
         id={params.id}
         date={paper.data.publication_date}

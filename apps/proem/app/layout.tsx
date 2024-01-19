@@ -28,7 +28,7 @@ type Props = {
 
 export default async function RootLayout({ children }: Props) {
   const light = lightModeEnabled ? "dark:dark" : "dark";
-  o;
+
   return (
     <ClerkProvider>
       <html lang="en" className={sourceCodePro.className}>
