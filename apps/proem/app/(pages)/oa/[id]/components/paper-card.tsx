@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowLeft } from "@/app/components/icons/arrows/arrow-left";
+import { OpenAlexConcept } from "@proemial/models/open-alex";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
@@ -8,11 +9,12 @@ import { ReactNode } from "react";
 type Props = {
   id: string;
   date: string;
+  concepts: OpenAlexConcept[]
   organisation: string;
   children: string | ReactNode;
 };
 
-export function PaperCard({ date, children }: Props) {
+export function PaperCard({ date, concepts, children }: Props) {
   const router = useRouter();
 
   return (
@@ -43,6 +45,9 @@ export function PaperCard({ date, children }: Props) {
 
       <div className={`text-[24px] font-sans font-normal leading-[32px]`}>
         {children}
+      </div>
+      <div className="mt-1 flex text-[12px] text-white/50 font-sourceCodePro uppercase tracking-wide">
+        {concepts.map((concept) => concept.display_name).join(', ')}
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ export type OpenAlexWorksHit = OpenAlexWorkCoreMetadata & {
 
 export type WithData = { data: WithAbstract };
 
-export type WithAbstract = (OpenAlexWorkMetadata | OpenAlexWorkCoreMetadata) & {
+export type WithAbstract = (OpenAlexWorkMetadata & OpenAlexWorkCoreMetadata) & {
   abstract?: string;
 };
 

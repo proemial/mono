@@ -1,6 +1,7 @@
 import Summary from "@/app/(pages)/oa/[id]/components/summary";
 import { fetchPaper } from "@/app/(pages)/oa/[id]/fetch-paper";
 import { Spinner } from "@/app/components/spinner";
+import { OpenAlexConcept } from "@proemial/models/open-alex";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -15,6 +16,7 @@ export async function PaperCard({ id }: { id: string }) {
   // const organisation =
   //   paper.data.primary_location?.source?.host_organization_name;
   const date = paper.data.publication_date;
+  const concepts = onlyDeepLevelConcepts(paper.data.concepts)
 
   return (
     <div>
@@ -44,10 +46,20 @@ export async function PaperCard({ id }: { id: string }) {
                   <Summary paper={paper} />
                 </Suspense>
               </div>
+              <div className="flex text-[12px] text-white/50 font-sourceCodePro uppercase tracking-wide">
+                {concepts.map((concept) => concept.display_name).join(', ')}
+              </div>
             </div>
           </div>
         </div>
       </Link>
     </div>
   );
+}
+
+export const onlyDeepLevelConcepts = (concepts: OpenAlexConcept[]): OpenAlexConcept[] => {
+  const nonTopLevelConcepts = concepts.filter((concept) => concept.level > 0)
+  const deepestLevel = Math.max(...nonTopLevelConcepts.map((concepts) => concepts.level))
+  return nonTopLevelConcepts.filter((concept) =>
+    [deepestLevel, deepestLevel-1].includes(concept.level))
 }
