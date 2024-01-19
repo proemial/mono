@@ -80,7 +80,7 @@ export default function Chat({ user }: ChatProps) {
 
   return (
     // TODO: Remove font-sans to use the global font
-    <div className="relative flex flex-col h-full px-4 py-6 font-sans">
+    <div className="relative flex flex-col px-4 pt-6 pb-24 font-sans">
       <div className="w-full pb-20 space-y-5">
         {messages.map((m) => (
           <Message
@@ -117,7 +117,7 @@ export default function Chat({ user }: ChatProps) {
         </div>
       ) : null}
 
-      <div className="absolute bottom-0 left-0 w-full px-4 py-3 bg-black">
+      <div className="fixed left-0 w-full px-4 py-3 bg-black bottom-14">
         <SearchInput
           handleSubmit={handleSubmit}
           input={input}

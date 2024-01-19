@@ -28,7 +28,7 @@ type Props = {
 
 export default async function RootLayout({ children }: Props) {
   const light = lightModeEnabled ? "dark:dark" : "dark";
-
+  o;
   return (
     <ClerkProvider>
       <html lang="en" className={sourceCodePro.className}>
@@ -36,7 +36,7 @@ export default async function RootLayout({ children }: Props) {
           className={`flex relative flex-col justify-center ${light} h-dvh`}
         >
           <PageHeader />
-          <div className="w-full h-full max-w-screen-md pb-16 mx-auto pt-14">
+          <div className="w-full h-full max-w-screen-md mx-auto py-14">
             {children}
           </div>
 
