@@ -1,10 +1,10 @@
 import { AnalyticsClient } from "@/app/components/analytics/analytics";
 import { LoginDrawer } from "@/app/components/login/login-drawer";
 import { PageHeader } from "@/app/components/page-header";
-import { Toaster } from "@/app/components/shadcn-ui/toaster";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ReactNode } from "react";
 import "./globals.css";
+import { Toaster, toast } from 'sonner';
 
 import { MainMenu } from "@/app/components/menu/menu";
 import { Source_Code_Pro } from "next/font/google";
