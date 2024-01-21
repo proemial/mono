@@ -2,6 +2,8 @@
 import { useDrawerState } from "@/app/components/login/state";
 import { useAuth } from "@clerk/nextjs";
 import { FormEvent } from "react";
+import { Button } from "@/app/components/shadcn-ui/button";
+import { Send } from "@/app/components/icons/functional/send";
 
 type Props = {
   value: string;
@@ -14,24 +16,29 @@ export function BotForm({ value, onSubmit, onChange }: Props) {
   const { open } = useDrawerState();
 
   return (
-    <form
-      onSubmit={onSubmit}
-      className="flex bg-black items-center border border-[#3C3C3C] rounded-lg justify-end"
-    >
-      <input
-        readOnly={!userId}
-        onFocus={() => !userId && open()}
-        type="text"
-        placeholder="Ask your own question"
-        className="w-full font-sans bg-transparent text-[16px] font-normal pl-3 py-2 focus-visible:outline-none"
-        style={{
-          borderTopRightRadius: 0,
-          borderBottomRightRadius: 0,
-          scrollMargin: 16,
-        }}
-        value={value}
-        onChange={onChange}
-      />
-    </form>
+    <div className="relative w-full">
+      <form
+        onSubmit={onSubmit}
+        className="flex flex-row items-center"
+      >
+        <input
+          readOnly={!userId}
+          onFocus={() => !userId && open()}
+          type="text"
+          placeholder="Ask anything"
+          className="flex w-full h-[42px] text-[16px] font-sans font-normal rounded bg-[#1A1A1A] border border-[#4E4E4E] text-white placeholder:text-white/50 px-3 py-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 relative break-words stretch"
+          value={value}
+          onChange={onChange}
+        />
+        <Button
+          variant="send_button"
+          size="sm"
+          type="submit"
+          className="absolute justify-center bg-transparent right-2"
+        >
+          <Send />
+        </Button>
+      </form>
+    </div>
   );
 }
