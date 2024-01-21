@@ -16,7 +16,7 @@ export default async function ProfilePage() {
   return (
     <>
       <SignedIn>
-        <div className="w-full p-6 space-y-6">
+        <div className="w-full p-4 space-y-4">
           <div className="relative flex flex-col overflow-hidden bg-[#1A1A1A] rounded-sm border border-[#3C3C3C]">
             <div className="absolute inset-0 w-full h-full">
               <div className="w-full h-full bg-pattern-amie animate-backgroundScroll"></div>

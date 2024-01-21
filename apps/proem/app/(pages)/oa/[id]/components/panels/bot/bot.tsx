@@ -44,13 +44,16 @@ export function InsightsBot({ paper, suggestions }: Props) {
         />
       )}
 
-      <div className="fixed inset-x-0 z-50 w-full max-w-screen-md px-3 py-2 mx-auto bg-black bottom-14">
-        <BotForm
-          value={input}
-          onChange={handleInputChange}
-          onSubmit={handleSubmit}
-        />
+      <div className="fixed left-0 w-full bg-black bottom-14">
+        <div className="w-full max-w-screen-md px-4 py-3 mx-auto">
+          <BotForm
+            value={input}
+            onChange={handleInputChange}
+            onSubmit={handleSubmit}
+          />
+        </div>
       </div>
+
     </div>
   );
 }

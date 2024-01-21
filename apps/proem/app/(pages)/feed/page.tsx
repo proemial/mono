@@ -23,7 +23,7 @@ export default async function FrontPage() {
 
 async function PageContent({ latestIds }: { latestIds: string[] }) {
   return (
-    <div className="p-6">
+    <div className="p-4">
       {latestIds.length === 0 && <NothingHereYet />}
       {latestIds.map((id, index) => (
         <Suspense key={index} fallback={<EmptySpinner />}>

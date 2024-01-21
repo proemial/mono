@@ -19,7 +19,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "underline-offset-4 hover:underline text-primary",
         danger: "bg-[#F93B25]/20 text-[#F93B25] font-semibold font-sans",
-        ae_starter: "bg-[#2F2F2F] border border-[#4E4E4E] text-[14px] font-sans font-normal text-[#D5D5D5]",
+        ae_starter: "bg-[#2F2F2F] border border-[#3C3C3C] text-[14px] font-sans font-normal text-white",
         send_button: "bg-[#2F2F2F] cursor-pointer scale-100 active:scale-[0.95] transition-all duration-100"
       },
       size: {
