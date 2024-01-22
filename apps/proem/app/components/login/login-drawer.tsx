@@ -1,4 +1,5 @@
 "use client";
+
 import Drawer from "@/app/components/drawer/drawer";
 import { Proem } from "@/app/components/icons/brand/proem";
 import { Logo } from "@/app/components/icons/logo";
@@ -70,7 +71,7 @@ export function LoginDrawer() {
             );
           })}
 
-          <div className="text-xs font-normal leading-tight text-left text-gray-600">
+          <div className="text-xs font-normal font-sans leading-tight text-left text-gray-600">
             By using Proem, you consent to our{" "}
             <Link
               href="/privacy"

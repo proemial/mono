@@ -1,11 +1,13 @@
 import { fetchLatestPaperIds } from "@/app/(pages)/oa/[id]/fetch-paper";
 import { PaperCard } from "@/app/components/card/card";
+import { ProemDrawer } from "@/app/components/card/proem-drawer";
 import {
   CenteredSpinner,
   EmptySpinner,
   NothingHereYet,
 } from "@/app/components/spinner";
 import { Suspense } from "react";
+
 
 export const revalidate = 1;
 
@@ -14,6 +16,9 @@ export default async function FrontPage() {
 
   return (
     <div className="flex flex-col max-w-screen-sm pb-20 mx-auto justify-begin">
+
+      <ProemDrawer />
+
       <Suspense fallback={<CenteredSpinner />}>
         <PageContent latestIds={latestIds} />
       </Suspense>
@@ -23,7 +28,7 @@ export default async function FrontPage() {
 
 async function PageContent({ latestIds }: { latestIds: string[] }) {
   return (
-    <div className="p-4">
+    <div className="px-4 pt-3">
       {latestIds.length === 0 && <NothingHereYet />}
       {latestIds.map((id, index) => (
         <Suspense key={index} fallback={<EmptySpinner />}>
