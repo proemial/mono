@@ -9,7 +9,6 @@ async function migrateRedisPaperToNeon(redisPaper: OpenAlexPaper) {
     await db.insert(papers).values({
       id: redisPaper.id,
       data: redisPaper.data,
-      datab: redisPaper.data,
       generated: redisPaper.generated,
     });
   } catch (e) {
@@ -27,7 +26,7 @@ export async function speedTestPaper(paperId: string) {
   await migrateRedisPaperToNeon(redisPaper);
 
   const neonTimerStart = Date.now();
-  const neonPaper = await db
+  const [neonPaper] = await db
     .select()
     .from(papers)
     .where(eq(papers.id, paperId));
@@ -37,6 +36,8 @@ export async function speedTestPaper(paperId: string) {
   return {
     redisDuration,
     neonDuration,
+    winner: redisDuration < neonDuration ? "redis" : "neon",
+    isEqual: JSON.stringify(redisPaper) === JSON.stringify(neonPaper),
     redis: redisPaper,
     neon: neonPaper,
   };
