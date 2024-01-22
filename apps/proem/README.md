@@ -19,3 +19,19 @@ New connections strings is then added in Vercel and can be pulled local as follo
 
 Because Vercel only have custom branches for the preview enviroment and the Neon integrations relies on that, we're currently running the exact same environment variables for both preview environment on Vercel & local development.
 Note: Right after installing the integration the `DATABASE_URL` & `PGHOST` env vars is only set to "Development"."Preview" has been added manually.
+
+## Answer Engine AI streaming
+
+```mermaid
+sequenceDiagram
+    Client->> Server: Ask Question
+    Server->> AI: Send prompt with Question
+    Note right of AI: AI thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
+    Note right of AI: AI understands if<br/>it need to fetch<br/>papers to answer the<br/>question.
+    AI-->>Server: Function: Ask for paper search
+    Server--x Client: Send data to client
+    Server-->>OpenAlex: Fetch papers for AI
+    Server-->>AI: Function: return fetched papers
+    AI-->Server: Stream response
+    Server-->Client: Stream response
+```
