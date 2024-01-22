@@ -28,7 +28,7 @@ sequenceDiagram
     Server->> AI: Send prompt with Question
     Note left of AI: AI understands if<br/>it need to fetch<br/>papers to answer<br/>the question.
     AI-->>Server: Function: Ask for paper search
-    Server--x Client: Send data to client
+    Server-->> Client: Potentially push data
     Server-->>OpenAlex: Fetch papers based on AI generated query
     OpenAlex-->>Server: Return papers from Open Alex's search
     Server-->>AI: Function: return fetched papers
