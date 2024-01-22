@@ -17,7 +17,7 @@ import { LinkButton } from "@/app/(pages)/oa/[id]/components/menu/link-button";
 import { Button } from "@/app/components/shadcn-ui/button";
 import { DocumentEmpty } from "@/app/components/icons/objects/document-empty";
 import { notFound } from "next/navigation";
-import { onlyDeepLevelConcepts } from "@/app/components/card/card";
+import { onlyDeepLevelConcepts } from "@/app/utils/oa-utils";
 
 type Props = {
   params: { id: string };
@@ -37,7 +37,7 @@ export default async function ReaderPage({ params }: Props) {
     notFound();
   }
 
-  const concepts = onlyDeepLevelConcepts(paper.data.concepts)
+  const concepts = onlyDeepLevelConcepts(paper.data.concepts);
 
   return (
     <div className="relative w-full pb-32">
