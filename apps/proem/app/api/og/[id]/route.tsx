@@ -1,8 +1,4 @@
 import { ImageResponse } from "next/og";
-import assetImg1 from "@/assets/asset-bg-1.png";
-import assetImg2 from "@/assets/asset-bg-2.png";
-import assetImg3 from "@/assets/asset-bg-3.png";
-import assetGreen from "@/assets/bg-asset-green.png";
 import assetDark from "@/assets/bg-asset-dark.png";
 
 export const runtime = "edge";
