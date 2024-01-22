@@ -16,18 +16,7 @@ export function PaperCard({ date, children }: Props) {
   const router = useRouter();
 
   return (
-    <div className="flex p-6 bg-[#1A1A1A] flex-col before:absolute before:-inset-0  relative before:top-[-100%] before:bg-[#1A1A1A] before:-z-10 border-b shadow border-neutral-100/10 w-full">
-      <div className="w-full mb-5 bg-transparent">
-        <button
-          className="flex text-[14px] flex-row gap-1 font-sans text-left items-center"
-          type="button"
-          onClick={() => router.back()}
-        >
-          <ArrowLeft />
-          <p>Back</p>
-        </button>
-      </div>
-
+    <div className="flex p-4 bg-[#1A1A1A] flex-col before:absolute before:-inset-0 relative before:top-[-100%] before:bg-[#1A1A1A] before:-z-10 w-full">
       <div className="mb-2 text-[12px] text-white/50 font-sourceCodePro font-normal uppercase tracking-wide">
         RESEARCH PAPER
         <span> — {dayjs(date).format("M.D.YYYY")}</span>

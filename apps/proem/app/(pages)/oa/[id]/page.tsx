@@ -102,7 +102,7 @@ export default async function ReaderPage({ params }: Props) {
                 No one has claimed this paper yet
               </p>
               <p className="text-white/50 text-[14px] font-sans font-light mb-4">
-                Are you the auther of this paper?
+                Are you the author of this paper?
               </p>
               <Button
                 asChild
