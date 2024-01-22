@@ -21,15 +21,6 @@ export function PaperCard({ date, children }: Props) {
         RESEARCH PAPER
         <span> — {dayjs(date).format("M.D.YYYY")}</span>
       </div>
-
-      {/* ↓↓↓ We should pull tags here ↓↓↓
-
-      <div className="text-[12px] mb-2 font-sans opacity-50 font-normal tracking-wide">
-        #data-science #ai #3dmodels
-      </div>
-
-      */}
-
       <div className={`text-[24px] font-sans font-normal leading-[32px]`}>
         {children}
       </div>
