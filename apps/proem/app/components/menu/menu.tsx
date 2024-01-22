@@ -34,7 +34,7 @@ export function MainMenu() {
 
   return (
     <div className="bg-[#1A1A1A] fixed bottom-0 z-50 w-full">
-      <div className="flex justify-between w-full max-w-screen-md px-12 py-2 mx-auto">
+      <div className="flex justify-between w-full max-w-screen-md px-8 py-2 mx-auto">
         {menuItems.map(({ icon: Icon, href, hasLoginDrawer }) => {
           //  If the user is not signed in, we're open the drawer with a query parameter to handle redirects
           const linkProps: Parameters<typeof Link>[0] = userId
