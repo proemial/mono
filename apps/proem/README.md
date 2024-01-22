@@ -26,12 +26,12 @@ Note: Right after installing the integration the `DATABASE_URL` & `PGHOST` env v
 sequenceDiagram
     Client->> Server: Ask Question
     Server->> AI: Send prompt with Question
-    Note right of AI: AI thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
-    Note right of AI: AI understands if<br/>it need to fetch<br/>papers to answer the<br/>question.
+    Note left of AI: AI understands if<br/>it need to fetch<br/>papers to answer<br/>the question.
     AI-->>Server: Function: Ask for paper search
     Server--x Client: Send data to client
-    Server-->>OpenAlex: Fetch papers for AI
+    Server-->>OpenAlex: Fetch papers based on AI generated query
+    OpenAlex-->>Server: Return papers from Open Alex's search
     Server-->>AI: Function: return fetched papers
-    AI-->Server: Stream response
-    Server-->Client: Stream response
+    AI->>Server: Stream response
+    Server->>Client: Stream response
 ```
