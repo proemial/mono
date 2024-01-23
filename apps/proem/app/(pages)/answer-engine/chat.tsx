@@ -89,7 +89,7 @@ export default function Chat({ user }: ChatProps) {
   return (
     // TODO: Remove font-sans to use the global font
     <div
-      className="relative flex flex-col min-h-full px-4 pt-6 pb-12 font-sans"
+      className="relative flex flex-col min-h-full px-4 sm:px-0 pt-6 pb-12 mx-auto font-sans max-w-screen-sm"
       ref={chatWrapperRef}
     >
       {isEmptyScreen ? (

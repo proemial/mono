@@ -14,7 +14,7 @@ export function ProemDrawer() {
         <>
             <div
                 onClick={open}
-                className="bg-[url('https://images.unsplash.com/photo-1567359781514-3b964e2b04d6?q=80&w=1768&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-left-top flex flex-col mx-4 mt-3 p-6 h-64 cursor-pointer bg-[#322040] rounded-sm justify-between">
+                className="bg-[url('https://images.unsplash.com/photo-1567359781514-3b964e2b04d6?q=80&w=1768&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-left-top flex flex-col mx-4 mt-3 p-6 h-48 cursor-pointer bg-[#322040] rounded-sm justify-between">
                 <div className="flex flex-col font-sans font-normal text-white gap-1">
                     <p className="text-xl leading-tight font-sans font-medium">Learn more about <span className="text-[#7DFA86]">proemial</span> and understand our mission.</p>
                 </div>

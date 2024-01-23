@@ -18,7 +18,7 @@ const menuItems = [
   },
   {
     icon: GalleryHorizontalEnd,
-    href: "/history",
+    href: "/library",
     hasLoginDrawer: false,
   },
   {

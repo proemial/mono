@@ -21,7 +21,7 @@ export default function SearchInput({
   const router = useRouter();
 
   return (
-    <div className="relative w-full">
+    <div className="relative max-w-screen-sm mx-auto">
       <form
         className="flex flex-row items-center"
         onSubmit={

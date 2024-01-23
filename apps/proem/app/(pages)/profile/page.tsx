@@ -1,5 +1,6 @@
 import { getProfileFromUser } from "@/app/(pages)/profile/getProfileFromUser";
 import { ProfileButtons } from "@/app/(pages)/profile/profile-buttons";
+import { ProemDrawer } from "@/app/components/card/proem-drawer";
 import { MegaPhone } from "@/app/components/icons/objects/megaphone";
 import {
   Avatar,
@@ -14,9 +15,12 @@ export default async function ProfilePage() {
   const { fullName, initials } = getProfileFromUser(user);
 
   return (
-    <>
+    <div className="max-w-screen-sm mx-auto">
+
+      <ProemDrawer />
+
       <SignedIn>
-        <div className="w-full p-4 space-y-4">
+        <div className="w-full pt-3 px-4">
           <div className="relative flex flex-col overflow-hidden bg-[#1A1A1A] rounded-sm border border-[#3C3C3C]">
             <div className="absolute inset-0 w-full h-full">
               <div className="w-full h-full bg-pattern-amie animate-backgroundScroll"></div>
@@ -50,7 +54,11 @@ export default async function ProfilePage() {
               </div>
             </div>
           </div>
+        </div>
+      </SignedIn>
 
+      <SignedIn>
+        <div className="w-full pt-3 p-4">
           <div className="bg-[#1A1A1A] rounded-sm border border-[#3C3C3C] p-4 divide-y">
             <div className="flex flex-wrap items-center justify-between py-md gap-md">
               <div className="flex">
@@ -98,7 +106,7 @@ export default async function ProfilePage() {
         </div>
       </SignedIn>
 
-      <div className="inset-x-0 px-4 bottom-5">
+      <div className="inset-x-0 px-4 bottom-5 pb-20">
         <p className="font-sans text-xs font-normal leading-snug text-left text-gray-500">
           Proemial reserves all rights. Read our{" "}
           <Link href="" className="underline">
@@ -110,6 +118,6 @@ export default async function ProfilePage() {
           hi@proemial.ai.
         </p>
       </div>
-    </>
+    </div>
   );
 }

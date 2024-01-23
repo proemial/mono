@@ -1,6 +1,5 @@
 import { fetchLatestPaperIds } from "@/app/(pages)/oa/[id]/fetch-paper";
 import { PaperCard } from "@/app/components/card/card";
-import { ProemDrawer } from "@/app/components/card/proem-drawer";
 import {
   CenteredSpinner,
   EmptySpinner,
@@ -16,9 +15,6 @@ export default async function FrontPage() {
 
   return (
     <div className="flex flex-col max-w-screen-sm pb-20 mx-auto justify-begin">
-
-      <ProemDrawer />
-
       <Suspense fallback={<CenteredSpinner />}>
         <PageContent latestIds={latestIds} />
       </Suspense>
