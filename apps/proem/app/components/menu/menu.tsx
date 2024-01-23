@@ -2,7 +2,7 @@
 import { LOGIN_REDIRECT_URL_PARAM_NAME } from "@/app/components/login/login-drawer";
 import { useDrawerState } from "@/app/components/login/state";
 import { useAuth } from "@clerk/nextjs";
-import { Compass, GalleryHorizontal, GalleryHorizontalEnd, History, Library, MenuSquare, MessageSquare, User } from "lucide-react";
+import { Compass, GalleryHorizontalEnd, MessageSquare, User } from "lucide-react";
 import Link from "next/link";
 
 const menuItems = [

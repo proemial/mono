@@ -55,9 +55,6 @@ export default async function ProfilePage() {
             </div>
           </div>
         </div>
-      </SignedIn>
-
-      <SignedIn>
         <div className="w-full pt-3 p-4">
           <div className="bg-[#1A1A1A] rounded-sm border border-[#3C3C3C] p-4 divide-y">
             <div className="flex flex-wrap items-center justify-between py-md gap-md">
