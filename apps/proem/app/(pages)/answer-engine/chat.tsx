@@ -2,6 +2,7 @@
 
 import SearchInput from "@/app/(pages)/answer-engine/search-input";
 import { applyLinks } from "@/app/(pages)/oa/[id]/components/panels/bot/apply-links";
+import { InfinityScroll } from "@/app/components/infinity-scroll";
 import {
   Avatar,
   AvatarFallback,
@@ -22,6 +23,7 @@ const STARTERS = [
   "Is Microwaved Food Unsafe?",
   "Why do we dream?",
 ];
+
 const PROEM_BOT = {
   name: "proem",
   initials: "P",
@@ -94,19 +96,22 @@ export default function Chat({ user }: ChatProps) {
     >
       {isEmptyScreen ? (
         <div className="flex flex-col mt-auto mb-5">
-          <div className="flex flex-wrap gap-[6px] ">
-            {STARTERS.map((starter) => (
-              <Button
-                key={starter}
-                variant="ae_starter"
-                size="sm"
-                onClick={() => {
-                  append({ role: "user", content: starter });
-                }}
-              >
-                {starter}
-              </Button>
-            ))}
+          <div className="flex flex-wrap gap-[6px]">
+            <InfinityScroll>
+              {STARTERS.map((starter) => (
+                <Button
+                  key={starter}
+                  variant="ae_starter"
+                  size="sm"
+                  className="whitespace-nowrap"
+                  onClick={() => {
+                    append({ role: "user", content: starter });
+                  }}
+                >
+                  {starter}
+                </Button>
+              ))}
+            </InfinityScroll>
           </div>
         </div>
       ) : (
