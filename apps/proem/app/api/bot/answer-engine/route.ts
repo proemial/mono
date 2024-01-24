@@ -1,11 +1,13 @@
 import { StreamingTextResponse, Message as VercelChatMessage } from "ai";
 import { NextRequest } from "next/server";
 
-import { convertToOASearchString } from "@/app/api/bot/answer-engine/convert-query-parameters";
-import { fetchPapers } from "@/app/api/paper-search/search";
-import { BytesOutputParser } from "@langchain/core/output_parsers";
+import {
+  BytesOutputParser,
+  StringOutputParser,
+} from "@langchain/core/output_parsers";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import {
+  RunnableBranch,
   RunnablePassthrough,
   RunnableSequence,
 } from "@langchain/core/runnables";
@@ -13,6 +15,9 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 import { JsonOutputFunctionsParser } from "langchain/output_parsers";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
+import { convertToOASearchString } from "@/app/api/bot/answer-engine/convert-query-parameters";
+import { fetchPapers } from "@/app/api/paper-search/search";
+import { json } from "stream/consumers";
 
 export const runtime = "edge";
 
@@ -20,7 +25,7 @@ export const runtime = "edge";
  * Basic memory formatter that stringifies and passes
  * message history directly into the model.
  */
-const formatMessage = (message: VercelChatMessage) => {
+export const formatMessage = (message: VercelChatMessage) => {
   return `${message.role}: ${message.content}`;
 };
 
@@ -50,56 +55,49 @@ export async function POST(req: NextRequest) {
   const messages = body.messages ?? [];
   const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
   const currentMessageContent = messages[messages.length - 1].content as string;
-
-  /**
-   * See a full list of supported models at:
-   * https://js.langchain.com/docs/modules/model_io/models/
-   */
-  const model = new ChatOpenAI({
-    // TODO! Figure out different temperature settings?
-    temperature: 0.8,
-    modelName: "gpt-3.5-turbo-1106",
-    cache: true,
-    verbose: true,
+  console.log(messages);
+  console.log(formattedPreviousMessages);
+  console.log(currentMessageContent);
+  const chain = callAI();
+  const stream = await chain.stream({
+    chat_history: formattedPreviousMessages.join("\n"),
+    question: currentMessageContent,
   });
 
+  return new StreamingTextResponse(stream);
+}
+/**
+ * See a full list of supported models at:
+ * https://js.langchain.com/docs/modules/model_io/models/
+ */
+const model = new ChatOpenAI({
+  // TODO! Figure out different temperature settings?
+  temperature: 0.8,
+  modelName: "gpt-3.5-turbo-1106",
+  cache: true,
+  verbose: true,
+  openAIApiKey: "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",
+});
+
+const searchQueryPrompt = ChatPromptTemplate.fromMessages([
+  [
+    "system",
+    `Based on the user question, construct an array of strings for each of the key concepts and verbs in the original user question, the most closely related scientific concept as well as two or three synonyms. Both the scientific concepts and synonyms should preferably be two-grams or longer.
+    For example, given the user question: "does smoking cause lung cancer", you would construct an string array in the following format, which includes the original terms from the question ["smoking", "cause", "cancer"] plus a few related scientific concepts and synonyms: ["smoking", "tobacco use", "nicotine exposure", "cause", "induce", "trigger", "lead to", "lung cancer", "lung malignancy", "lung neoplasm"].
+    Then, you should identify A SINGLE COMMON NOUN that is VERY likely to occur in the title of a research paper relevant to answering the original user question. For the above example, that could simply be "smoking". It is very important that you pick a SINGLE NOUN, not a noun phrase. Just ONE common word. No spaces or hyphens.
+    `,
+  ],
+  ["human", `{question}`],
+]);
+
+export function callAI() {
   const bytesOutputParser = new BytesOutputParser();
   const jsonOutputFunctionsParser = new JsonOutputFunctionsParser();
-
-  const searchQueryPrompt = ChatPromptTemplate.fromMessages([
-    [
-      "system",
-      `Based on the user question, construct an array of strings for each of the key concepts and verbs in the original user question, the most closely related scientific concept as well as two or three synonyms. Both the scientific concepts and synonyms should preferably be two-grams or longer.
-      For example, given the user question: "does smoking cause lung cancer", you would construct an string array in the following format, which includes the original terms from the question ["smoking", "cause", "cancer"] plus a few related scientific concepts and synonyms: ["smoking", "tobacco use", "nicotine exposure", "cause", "induce", "trigger", "lead to", "lung cancer", "lung malignancy", "lung neoplasm"].
-      Then, you should identify A SINGLE COMMON NOUN that is VERY likely to occur in the title of a research paper relevant to answering the original user question. For the above example, that could simply be "smoking". It is very important that you pick a SINGLE NOUN, not a noun phrase. Just ONE common word. No spaces or hyphens.
-      `,
-    ],
-    ["human", `{question}`],
-  ]);
-
-  const fetchPapersChain = RunnableSequence.from([
-    searchQueryPrompt,
-    model.bind({
-      functions: [
-        {
-          name: "searchParameters",
-          description:
-            "Search parameters to fetch papers related to the users question",
-          parameters: zodToJsonSchema(searchParametersSchema),
-        },
-      ],
-      function_call: { name: "searchParameters" },
-    }),
-    jsonOutputFunctionsParser,
-  ]);
-
-  // const fetchPapersChain = RunnableSequence.from([])
 
   const chatPrompt = ChatPromptTemplate.fromMessages([
     [
       "system",
       `You will provide conclusive answers to user questions, based on the following research articles:
-      {papers},
       IMPORTANT: YOUR ANSWER MUST BE A SINGLE SHORT PARAGRAPH OF 40 WORDS OR LESS KEY PHRASES FORMATTED AS HYPERLINKS POINTING TO THE PAPERS.
       THIS IS ESSENTIAL. KEEP YOUR ANSWERS SHORT AND WITH STATEMENTS THE USER CAN CLICK ON!
       - Pick the two papers most relevant to the provided user question.
@@ -116,40 +114,111 @@ export async function POST(req: NextRequest) {
     ],
     ["human", `{question}`],
   ]);
-  const conversationalAnswerEngineChain = RunnableSequence.from([
-    {
-      // invoking searchQuery chain to prevent streaming in the result
-      searchQuery: (input) => fetchPapersChain.invoke(input),
-      question: (input) => input.question,
-    },
+
+  const chatChain = RunnableSequence.from([chatPrompt, model]);
+
+  const fetchPapersChain = RunnableSequence.from([
     RunnablePassthrough.assign({
       papers: async (input) => {
         console.log(input);
-        const query = convertToOASearchString(
-          input.searchQuery.keyConcept,
-          input.searchQuery.relatedConcepts
-        );
-        const papers = await fetchPapers(query);
-        // TODO! This is quite hacky to do here
-        const papersWithRelativeLinks = papers?.map((paper) => ({
-          ...paper,
-          link: paper.link.replace("https://proem.ai", ""),
-        }));
-        return JSON.stringify(papersWithRelativeLinks);
+        // const query = convertToOASearchString(
+        //   input.keyConcept,
+        //   input.relatedConcepts
+        // );
+        // const papers = await fetchPapers(query);
+        // // TODO! This is quite hacky to do here
+        // const papersWithRelativeLinks = papers?.map((paper) => ({
+        //   ...paper,
+        //   link: paper.link.replace("https://proem.ai", ""),
+        // }));
+        // return JSON.stringify(papersWithRelativeLinks);
       },
     }),
-    chatPrompt,
+    chatChain,
     model,
-    bytesOutputParser,
   ]);
+
+  type FunctionCallResponse = {
+    lc_kwargs: {
+      content: string;
+      additional_kwargs: {
+        function_call?: {
+          name: "getPapersBySearchQuery";
+        };
+      };
+    };
+  };
+
+  const branch = RunnableBranch.from([
+    [
+      (response: FunctionCallResponse) => {
+        console.log({ function: response });
+        return hasFunctionCall(response);
+      },
+      fetchPapersChain, // Fetch Papers & Rerun
+    ],
+    [
+      (response: any) => {
+        console.log({ withOutFunction: response });
+        return !hasFunctionCall(response);
+      },
+      chatChain,
+    ],
+    chatChain,
+  ]);
+
+  const answerEngineChain = RunnableSequence.from([
+    searchQueryPrompt,
+    model.bind({
+      functions: [
+        {
+          name: "getPapersBySearchQuery",
+          description:
+            "Search parameters to fetch papers related to the users question",
+          parameters: zodToJsonSchema(searchParametersSchema),
+        },
+      ],
+    }),
+    // branch,
+    // {
+    //   chat_history: (input) => {
+    //     console.log(input);
+    //     return input.chat_history;
+    //   },
+    //   // question: (input) => input.question,
+    //   question: new RunnablePassthrough(),
+    // },
+    new StringOutputParser(),
+    // jsonOutputFunctionsParser,
+    RunnablePassthrough.assign({
+      question: (input) => {
+        console.log(input);
+        return input.question;
+      },
+      chat_history: (input) => input.chat_history,
+    }),
+    // bytesOutputParser,
+  ]);
+
+  const finalChain = answerEngineChain.pipe(chatChain);
 
   // const conversationalAnswerEngineChain =
   //   fetchPapersChain.pipe(chatAnswerChain);
 
-  const stream = await conversationalAnswerEngineChain.stream({
-    chat_history: formattedPreviousMessages.join("\n"),
-    question: currentMessageContent,
-  });
-
-  return new StreamingTextResponse(stream);
+  return finalChain;
+}
+function hasFunctionCall(response: {
+  lc_kwargs: {
+    content: string;
+    additional_kwargs: {
+      function_call?: {
+        name: "getPapersBySearchQuery";
+      };
+    };
+  };
+}) {
+  return (
+    response.lc_kwargs.additional_kwargs.function_call?.name ===
+    "getPapersBySearchQuery"
+  );
 }
