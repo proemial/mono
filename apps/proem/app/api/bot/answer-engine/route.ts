@@ -1,4 +1,4 @@
-import { StreamingTextResponse, Message as VercelChatMessage } from "ai";
+import { StreamingTextResponse } from "ai";
 import { NextRequest } from "next/server";
 
 import { convertToOASearchString } from "@/app/api/bot/answer-engine/convert-query-parameters";
@@ -11,14 +11,6 @@ import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
 export const runtime = "edge";
-
-/**
- * Basic memory formatter that stringifies and passes
- * message history directly into the model.
- */
-const formatMessage = (message: VercelChatMessage) => {
-  return `${message.role}: ${message.content}`;
-};
 
 const constructSearchParametersSchema = z.object({
   keyConcept: z.string()
@@ -38,9 +30,9 @@ const constructSearchParametersSchema = z.object({
  */
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const messages = body.messages ?? [];
-  const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
-  const currentMessageContent = messages[messages.length - 1].content as string;
+  const messages: { role: string; content: string }[] = body.messages ?? [];
+  const currentMessageContent = messages[messages.length - 1]?.content;
+  console.log(messages);
 
   /**
    * See a full list of supported models at:
@@ -51,7 +43,7 @@ export async function POST(req: NextRequest) {
     temperature: 0.8,
     modelName: "gpt-3.5-turbo-1106",
     cache: true,
-    verbose: true,
+    verbose: false,
   });
 
   const bytesOutputParser = new BytesOutputParser();
@@ -80,8 +72,10 @@ export async function POST(req: NextRequest) {
     }),
   ]);
 
-  // const fetchPapersChain = RunnableSequence.from([])
-
+  /**
+   * TODO! remove papers from system prompt so system prestine without variables
+   * ! has to be prestine between questions and follow ups
+   */
   const chatPrompt = ChatPromptTemplate.fromMessages([
     [
       "system",
@@ -130,7 +124,11 @@ LINKS INSIDE THE ANSWER.
 WITH HYPERLINKS ON TWO KEY PHRASES. THIS IS ESSENTIAL. KEEP YOUR ANSWERS SHORT
 AND SIMPLE!`,
     ],
-    ["human", `{question}`],
+    // TODO! Hacky with hack-hack
+    // ! fix langchain pipe
+    // ! fix TS errors
+    // @ts-expect-error
+    ...messages.map((message) => [message.role, message.content]), // ["human", `{question}`],
   ]);
   const conversationalAnswerEngineChain = RunnableSequence.from([
     {
@@ -166,11 +164,7 @@ AND SIMPLE!`,
     bytesOutputParser,
   ]);
 
-  // const conversationalAnswerEngineChain =
-  //   fetchPapersChain.pipe(chatAnswerChain);
-
   const stream = await conversationalAnswerEngineChain.stream({
-    chat_history: formattedPreviousMessages.join("\n"),
     question: currentMessageContent,
   });
 
@@ -189,6 +183,9 @@ type ParseFunctionCallType = {
   };
 };
 
+/**
+ * hacky way to handle optional JsonOutputFunctionsParser
+ */
 function parseFunctionCall<T extends ParseFunctionCallType>(response: T) {
   const args = response?.lc_kwargs?.additional_kwargs?.function_call?.arguments;
   return args && JSON.parse(args);
