@@ -12,6 +12,14 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 
 export const runtime = "edge";
 
+const model = new ChatOpenAI({
+  // TODO! Figure out different temperature settings?
+  temperature: 0.8,
+  modelName: "gpt-3.5-turbo-1106",
+  cache: true,
+  verbose: false,
+});
+
 const constructSearchParametersSchema = z.object({
   keyConcept: z.string()
     .describe(`A single common noun that is VERY likely to occur in the title of
@@ -38,13 +46,6 @@ export async function POST(req: NextRequest) {
    * See a full list of supported models at:
    * https://js.langchain.com/docs/modules/model_io/models/
    */
-  const model = new ChatOpenAI({
-    // TODO! Figure out different temperature settings?
-    temperature: 0.8,
-    modelName: "gpt-3.5-turbo-1106",
-    cache: true,
-    verbose: false,
-  });
 
   const bytesOutputParser = new BytesOutputParser();
 
@@ -165,6 +166,7 @@ AND SIMPLE!`,
   ]);
 
   const stream = await conversationalAnswerEngineChain.stream({
+    chat_history: messages.join("/n"),
     question: currentMessageContent,
   });
 
