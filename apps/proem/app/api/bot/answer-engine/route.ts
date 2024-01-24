@@ -5,12 +5,8 @@ import { convertToOASearchString } from "@/app/api/bot/answer-engine/convert-que
 import { fetchPapers } from "@/app/api/paper-search/search";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import {
-  RunnablePassthrough,
-  RunnableSequence,
-} from "@langchain/core/runnables";
+import { RunnableSequence } from "@langchain/core/runnables";
 import { ChatOpenAI } from "langchain/chat_models/openai";
-import { JsonOutputFunctionsParser } from "langchain/output_parsers";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
@@ -25,13 +21,10 @@ const formatMessage = (message: VercelChatMessage) => {
 };
 
 const constructSearchParametersSchema = z.object({
-  keyConcept: z
-    .string()
+  keyConcept: z.string()
     .describe(`A single common noun that is VERY likely to occur in the title of
     a research paper that contains the answer to the user's question.`),
-  relatedConcepts: z
-    .string()
-    .array()
+  relatedConcepts: z.string().array()
     .describe(`The most closely related scientific concepts as well as two or
     three synonyms for the key concept. Preferrably two-grams or longer.`),
 });
@@ -62,7 +55,6 @@ export async function POST(req: NextRequest) {
   });
 
   const bytesOutputParser = new BytesOutputParser();
-  const jsonOutputFunctionsParser = new JsonOutputFunctionsParser();
 
   const searchQueryPrompt = ChatPromptTemplate.fromMessages([
     [
@@ -85,9 +77,7 @@ export async function POST(req: NextRequest) {
           parameters: zodToJsonSchema(constructSearchParametersSchema),
         },
       ],
-      function_call: { name: "constructSearchParameters" },
     }),
-    jsonOutputFunctionsParser,
   ]);
 
   // const fetchPapersChain = RunnableSequence.from([])
@@ -144,17 +134,24 @@ AND SIMPLE!`,
   ]);
   const conversationalAnswerEngineChain = RunnableSequence.from([
     {
-      // invoking searchQuery chain to prevent streaming in the result
-      searchQuery: (input) => fetchPapersChain.invoke(input),
       question: (input) => input.question,
-    },
-    RunnablePassthrough.assign({
       papers: async (input) => {
-        console.log(input);
-        const query = convertToOASearchString(
-          input.searchQuery.keyConcept,
-          input.searchQuery.relatedConcepts
+        // TODO! type!
+        const searchQuery = parseFunctionCall(
+          // invoking searchQuery chain to prevent streaming in the result
+          // @ts-expect-error TODO!!!
+          await fetchPapersChain.invoke(input)
         );
+
+        if (!searchQuery) {
+          return;
+        }
+
+        const query = convertToOASearchString(
+          searchQuery.keyConcept,
+          searchQuery.relatedConcepts
+        );
+
         const papers = await fetchPapers(query);
         // TODO! This is quite hacky to do here
         const papersWithRelativeLinks = papers?.map((paper) => ({
@@ -163,7 +160,7 @@ AND SIMPLE!`,
         }));
         return JSON.stringify(papersWithRelativeLinks);
       },
-    }),
+    },
     chatPrompt,
     model,
     bytesOutputParser,
@@ -178,4 +175,21 @@ AND SIMPLE!`,
   });
 
   return new StreamingTextResponse(stream);
+}
+
+type ParseFunctionCallType = {
+  lc_kwargs: {
+    additional_kwargs: {
+      function_call: {
+        // name: string;
+        arguments: string;
+      };
+      tool_calls: undefined;
+    };
+  };
+};
+
+function parseFunctionCall<T extends ParseFunctionCallType>(response: T) {
+  const args = response?.lc_kwargs?.additional_kwargs?.function_call?.arguments;
+  return args && JSON.parse(args);
 }
