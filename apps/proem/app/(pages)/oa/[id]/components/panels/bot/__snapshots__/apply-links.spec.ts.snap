@@ -2,13 +2,19 @@
 
 exports[`applyLinks 1`] = `
 [
-  "No. Vaccines are ",
-  <span
-    className="font-normal underline text-[#7DFA86] cursor-pointer"
-    onClick={[Function]}
-  >
-    not associated with the development of autism or autism spectrum disorder
+  <span>
+    No. Vaccines are 
   </span>,
-  ". Multiple studies have found no relationship between vaccination and autism or ASD.",
+  <span>
+    <span
+      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      onClick={[Function]}
+    >
+      not associated with the development of autism or autism spectrum disorder
+    </span>
+  </span>,
+  <span>
+    . Multiple studies have found no relationship between vaccination and autism or ASD.
+  </span>,
 ]
 `;

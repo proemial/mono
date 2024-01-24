@@ -54,9 +54,10 @@ export function applyLinks(
   return arr.map((messagePart, i) => {
     const [_fullTag, href, innerContent] =
       linkCheckReqex.exec(messagePart) ?? [];
+    const hrefWithoutQueryParameters = href?.split("?")[0];
     const content =
-      href && innerContent
-        ? asLink(innerContent, () => onClick(href))
+      hrefWithoutQueryParameters && innerContent
+        ? asLink(innerContent, () => onClick(hrefWithoutQueryParameters))
         : messagePart;
 
     return <span key={i}>{content}</span>;
