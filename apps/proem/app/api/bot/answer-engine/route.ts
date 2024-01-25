@@ -3,8 +3,9 @@ import { NextRequest } from "next/server";
 
 import { convertToOASearchString } from "@/app/api/bot/answer-engine/convert-query-parameters";
 import { fetchPapers } from "@/app/api/paper-search/search";
+import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
-import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { z } from "zod";
@@ -23,13 +24,13 @@ const model = new ChatOpenAI({
 const constructSearchParametersSchema = z.object({
   keyConcept: z.string()
     .describe(`A single common noun that is VERY likely to occur in the title of
-    a research paper that contains the answer to the user's question.`),
+    a research paper that contains the answer to the user's question. The
+    argument MUST be a single word.`),
   relatedConcepts: z.string().array()
     .describe(`The most closely related scientific concepts as well as two or
     three synonyms for the key concept. Preferrably two-grams or longer.`),
 });
 
-// Format the messages
 /*
  * This handler initializes and calls a simple chain with a prompt,
  * chat model, and output parser. See the docs for more information:
@@ -51,8 +52,11 @@ export async function POST(req: NextRequest) {
   const searchQueryPrompt = ChatPromptTemplate.fromMessages([
     [
       "system",
-      `Construct a set of search parameters that can be used retrieve one or
-      more scientific research papers related to the user's question.`,
+      `You are a helpful research assistant that answers questions. If a
+      question is of scientific nature, you strongly prefer your answers to be
+      based upon scientific research. To access scientific research, you can
+      construct a set of search parameters that can be used retrieve one or more
+      scientific research papers related to the questions.`,
     ],
     ["human", `{question}`],
   ]);
@@ -72,16 +76,11 @@ export async function POST(req: NextRequest) {
     }),
   ]);
 
-  /**
-   * TODO! remove papers from system prompt so system prestine without variables
-   * ! has to be prestine between questions and follow ups
-   */
   const chatPrompt = ChatPromptTemplate.fromMessages([
     [
       "system",
       `
-You will provide conclusive answers to user questions, based on the following
-research articles: {papers},
+You will provide conclusive answers to user questions, based on research papers.
 IMPORTANT: YOUR ANSWER MUST BE A SINGLE SHORT PARAGRAPH OF 40 WORDS OR LESS KEY
 PHRASES FORMATTED AS HYPERLINKS POINTING TO THE PAPERS. THIS IS ESSENTIAL. KEEP
 YOUR ANSWERS SHORT AND WITH STATEMENTS THE USER CAN CLICK ON!
@@ -126,13 +125,25 @@ AND SIMPLE!`,
     ],
     // TODO! Hacky with hack-hack
     // ! fix langchain pipe
-    // ! fix TS errors
-    // @ts-expect-error
-    ...messages.map((message) => [message.role, message.content]), // includes ["human", `{question}`]
+    new MessagesPlaceholder('chat_history'),
+    new MessagesPlaceholder('papers'),
+    ["human", `{question}`],
   ]);
+
   const conversationalAnswerEngineChain = RunnableSequence.from([
     {
       question: (input) => input.question,
+      chat_history: () =>
+        messages.slice(0, -1).map((message) => {
+          switch(message.role) {
+            case 'user':
+              return new HumanMessage({content: message.content})
+            case 'assistant':
+              return new AIMessage({content: message.content})
+            default:
+              throw new Error('Unexpected role')
+          }
+        }),
       papers: async (input) => {
         // TODO! type!
         const searchQuery = parseFunctionCall(
@@ -142,7 +153,9 @@ AND SIMPLE!`,
         );
 
         if (!searchQuery) {
-          return;
+          // Here we choose a system message to not make the model believe it
+          // gave an empty answer, when going through the chat history.
+          return new SystemMessage({content: ''})
         }
 
         const query = convertToOASearchString(
@@ -150,13 +163,16 @@ AND SIMPLE!`,
           searchQuery.relatedConcepts
         );
 
+        // TODO: Fix case where 0 results from OA causes the pipeline to fail.
+
         const papers = await fetchPapers(query);
         // TODO! This is quite hacky to do here
         const papersWithRelativeLinks = papers?.map((paper) => ({
           ...paper,
           link: paper.link.replace("https://proem.ai", ""),
         }));
-        return JSON.stringify(papersWithRelativeLinks);
+
+        return new AIMessage({content: JSON.stringify(papersWithRelativeLinks)})
       },
     },
     chatPrompt,
