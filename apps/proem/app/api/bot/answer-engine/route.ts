@@ -17,7 +17,7 @@ const model = new ChatOpenAI({
   temperature: 0.8,
   modelName: "gpt-3.5-turbo-1106",
   cache: true,
-  verbose: false,
+  verbose: true,
 });
 
 const constructSearchParametersSchema = z.object({
@@ -40,7 +40,6 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const messages: { role: string; content: string }[] = body.messages ?? [];
   const currentMessageContent = messages[messages.length - 1]?.content;
-  console.log(messages);
 
   /**
    * See a full list of supported models at:
@@ -129,7 +128,7 @@ AND SIMPLE!`,
     // ! fix langchain pipe
     // ! fix TS errors
     // @ts-expect-error
-    ...messages.map((message) => [message.role, message.content]), // ["human", `{question}`],
+    ...messages.map((message) => [message.role, message.content]), // includes ["human", `{question}`]
   ]);
   const conversationalAnswerEngineChain = RunnableSequence.from([
     {
@@ -166,7 +165,7 @@ AND SIMPLE!`,
   ]);
 
   const stream = await conversationalAnswerEngineChain.stream({
-    chat_history: messages.join("/n"),
+    chat_history: messages.join("\n"),
     question: currentMessageContent,
   });
 
