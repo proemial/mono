@@ -1,10 +1,11 @@
-import { StreamingTextResponse, Message as VercelChatMessage } from "ai";
+import { StreamingTextResponse } from "ai";
 import { NextRequest } from "next/server";
 
 import { convertToOASearchString } from "@/app/api/bot/answer-engine/convert-query-parameters";
 import { fetchPapers } from "@/app/api/paper-search/search";
+import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
-import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { z } from "zod";
@@ -12,24 +13,24 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 
 export const runtime = "edge";
 
-/**
- * Basic memory formatter that stringifies and passes
- * message history directly into the model.
- */
-const formatMessage = (message: VercelChatMessage) => {
-  return `${message.role}: ${message.content}`;
-};
+const model = new ChatOpenAI({
+  // TODO! Figure out different temperature settings?
+  temperature: 0.8,
+  modelName: "gpt-3.5-turbo-1106",
+  cache: true,
+  verbose: true,
+});
 
 const constructSearchParametersSchema = z.object({
   keyConcept: z.string()
     .describe(`A single common noun that is VERY likely to occur in the title of
-    a research paper that contains the answer to the user's question.`),
+    a research paper that contains the answer to the user's question. The
+    argument MUST be a single word.`),
   relatedConcepts: z.string().array()
     .describe(`The most closely related scientific concepts as well as two or
     three synonyms for the key concept. Preferrably two-grams or longer.`),
 });
 
-// Format the messages
 /*
  * This handler initializes and calls a simple chain with a prompt,
  * chat model, and output parser. See the docs for more information:
@@ -38,29 +39,24 @@ const constructSearchParametersSchema = z.object({
  */
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const messages = body.messages ?? [];
-  const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
-  const currentMessageContent = messages[messages.length - 1].content as string;
+  const messages: { role: string; content: string }[] = body.messages ?? [];
+  const currentMessageContent = messages[messages.length - 1]?.content;
 
   /**
    * See a full list of supported models at:
    * https://js.langchain.com/docs/modules/model_io/models/
    */
-  const model = new ChatOpenAI({
-    // TODO! Figure out different temperature settings?
-    temperature: 0.8,
-    modelName: "gpt-3.5-turbo-1106",
-    cache: true,
-    verbose: true,
-  });
 
   const bytesOutputParser = new BytesOutputParser();
 
   const searchQueryPrompt = ChatPromptTemplate.fromMessages([
     [
       "system",
-      `Construct a set of search parameters that can be used retrieve one or
-      more scientific research papers related to the user's question.`,
+      `You are a helpful research assistant that answers questions. If a
+      question is of scientific nature, you strongly prefer your answers to be
+      based upon scientific research. To access scientific research, you can
+      construct a set of search parameters that can be used retrieve one or more
+      scientific research papers related to the questions.`,
     ],
     ["human", `{question}`],
   ]);
@@ -80,61 +76,90 @@ export async function POST(req: NextRequest) {
     }),
   ]);
 
-  // const fetchPapersChain = RunnableSequence.from([])
-
   const chatPrompt = ChatPromptTemplate.fromMessages([
     [
       "system",
       `
-You will provide conclusive answers to user questions, based on the following
-research articles: {papers},
-IMPORTANT: YOUR ANSWER MUST BE A SINGLE SHORT PARAGRAPH OF 40 WORDS OR LESS KEY
-PHRASES FORMATTED AS HYPERLINKS POINTING TO THE PAPERS. THIS IS ESSENTIAL. KEEP
-YOUR ANSWERS SHORT AND WITH STATEMENTS THE USER CAN CLICK ON!
-- Pick the two papers most relevant to the provided user question.
-- Also summarise each of the selected papers into a "title" of 20 words or less
-with the most significant finding as an engaging tweet capturing the minds of
-other researchers, using layman's terminology, and without mentioning abstract
-entities like 'you', 'researchers', 'authors', 'propose', or 'study' but rather
-stating the finding as a statement of fact, without reservations or caveats. for
-example: "More tooth loss is associated with greater cognitive decline and
-dementia in elderly people."
-- Then use these summaries to construct a short answer in less than 40 words,
-with key phrases of the answer text as hyperlinks pointing to the papers, like
-this example:
+You are a helpful research assistant that provides conclusive answers to user
+questions. If a question is of scientific nature, you strongly prefer your
+answers to be backed by relevant scientific research available in the research
+papers you have retrieved, strictly adhering to the following guide lines:
 
-"""Smoking causes/does not cause cancer. Studies show that cigarette smokers are
+Identify two research papers most relevant to the user's question.
+
+Create a summary for each of the selected papers into a "title" of 20 words or
+less, with the most significant finding as an engaging tweet capturing the minds
+of other researchers, using layman's terminology. Do not include abstract
+entities like "you", "researchers", "authors", "propose", or "study" in the
+title, but rather stating the finding as a statement of fact, without
+reservations or caveats.
+
+Example of a title:
+
+"""
+More tooth loss is associated with greater cognitive decline and dementia in
+elderly people
+"""
+
+Important: Each research paper you retrieved has a "link" property associated
+with it. Your answer must be a single paragraph of 40 words or less, with key
+phrases formatted as hyperlinks pointing to the research paper from which they
+came. This is essential! A hyperlink is of the format
+"<a href="https://proem.ai[link]?title=[text+from+summary]">[key phrases]</a>",
+where "[link]" is the link of the research paper, and "[text+from+summary]" is
+the summary you generated, delimited by "+", and "[key phrases]" are key phrases
+from the research paper.
+
+Example of the format:
+
+"""
+Smoking causes cancer. Studies show that cigarette smokers are
 <a href="https://proem.ai/oa/W4213460776?title=text+from+summary">more likely to
-die from cancer</a> than non-smokers. Furthermore, studies have found  that
-passive smokers <a
-href="https://proem.ai/oa/W2004456560?title=text+from+summary">hae a higher risk
-of cardiovascular disease</a> than people never exposed to a smoking
-environment."""
+die from cancer</a> than non-smokers. Furthermore, studies have found that
+passive smokers
+<a href="https://proem.ai/oa/W2004456560?title=text+from+summary">have a higher
+risk of cardiovascular disease</a> than people never exposed to a smoking
+environment.
+"""
 
-- The links should be pointing to the returned proem links, with the generated
-"summaries" appended as a query string to the link
-- If the user's question is a binary question, begin the answer with "Yes" or
-"No", otherwise DO NOT.
+In this example, "/oa/W2004456560" and "/oa/W2004456560" are the links from the
+retrieved papers, and "text+from+summary" are the summaries you generated,
+appended as a query strings. Hyperlinks must match this format.
 
-- THE FOLLOWING THREE IMPORTANT RULES ARE ALL ABSOLUTELY ESSENTIAL AND YOU WILL
-BE PENALIZED SEVERELY IF THE ANSWER DOES NOT INCLUDE INLINE HYPERLINKS EXACTLY
-AS DESCRIBED BELOW:
-- IMPORTANT: EVERY ANSWER MUST HAVE AT LEAST TWO HYPERLINKS POINTING TO THE
-EXACT FULL URLS OF PAPERS PROVIDED IN THE API RESPONSE. THIS IS ABSOLUTELY
-ESSENTIAL.
-- IMPORTANT: ALWAYS PLACE HYPERLINKS ON A KEY PHRASE OF THREE TO SIX WORDS
-INSIDE THE ANSWER. THIS IS ABSOLUTELY ESSENTIAL. NEVER PLACE URLS AFTER THE
-ANSWER.  NEVER EVER CREATE LINKS THAT LOOK LIKE FOOTNOTES. ALWAYS PLACE FULL URL
-LINKS INSIDE THE ANSWER.
-- IMPORTANT: YOUR ANSWER MUST BE A SINGLE SHORT PARAGRAPH OF 40 WORDS OR LESS
-WITH HYPERLINKS ON TWO KEY PHRASES. THIS IS ESSENTIAL. KEEP YOUR ANSWERS SHORT
-AND SIMPLE!`,
+If the user's question is a binary question, begin your answer with "Yes" or
+"No", depending on whether or not your answer respectively confirms or denies
+the user's question.
+
+Finally, the following two important rules are all absolutely essential and you
+will be penalized severely if the answer does not include inline hyperlinks
+exactly as described below:
+1. Every answer must have at least two hyperlinks pointing to the exact full
+URLs of the retrieved research papers.
+2. Your answer must not exceed 40 words.
+3. Always place hyperlinks on a key phrase of three to six words inside the
+answer. Never place URLs after the answer. Never create links that look like
+footnotes. Always place full URL links inside the answer.`,
     ],
+    // TODO! Hacky with hack-hack
+    // ! fix langchain pipe
+    new MessagesPlaceholder('chat_history'),
+    new MessagesPlaceholder('papers'),
     ["human", `{question}`],
   ]);
+
   const conversationalAnswerEngineChain = RunnableSequence.from([
     {
       question: (input) => input.question,
+      chat_history: () =>
+        messages.slice(0, -1).map((message) => {
+          switch(message.role) {
+            case 'user':
+              return new HumanMessage({content: message.content})
+            default:
+            case 'assistant':
+              return new AIMessage({content: message.content})
+          }
+        }),
       papers: async (input) => {
         // TODO! type!
         const searchQuery = parseFunctionCall(
@@ -144,7 +169,9 @@ AND SIMPLE!`,
         );
 
         if (!searchQuery) {
-          return;
+          // Here we use a system message to not make the model believe it gave
+          // an empty answer, when going through the chat history.
+          return new SystemMessage({content: ''})
         }
 
         const query = convertToOASearchString(
@@ -152,13 +179,16 @@ AND SIMPLE!`,
           searchQuery.relatedConcepts
         );
 
+        // TODO: Fix case where 0 results from OA causes the pipeline to fail.
+
         const papers = await fetchPapers(query);
         // TODO! This is quite hacky to do here
         const papersWithRelativeLinks = papers?.map((paper) => ({
           ...paper,
           link: paper.link.replace("https://proem.ai", ""),
         }));
-        return JSON.stringify(papersWithRelativeLinks);
+
+        return new AIMessage({content: JSON.stringify(papersWithRelativeLinks)})
       },
     },
     chatPrompt,
@@ -166,11 +196,8 @@ AND SIMPLE!`,
     bytesOutputParser,
   ]);
 
-  // const conversationalAnswerEngineChain =
-  //   fetchPapersChain.pipe(chatAnswerChain);
-
   const stream = await conversationalAnswerEngineChain.stream({
-    chat_history: formattedPreviousMessages.join("\n"),
+    chat_history: messages.join("\n"),
     question: currentMessageContent,
   });
 
@@ -189,6 +216,9 @@ type ParseFunctionCallType = {
   };
 };
 
+/**
+ * hacky way to handle optional JsonOutputFunctionsParser
+ */
 function parseFunctionCall<T extends ParseFunctionCallType>(response: T) {
   const args = response?.lc_kwargs?.additional_kwargs?.function_call?.arguments;
   return args && JSON.parse(args);
