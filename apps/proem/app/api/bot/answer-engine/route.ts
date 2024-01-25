@@ -134,7 +134,8 @@ will be penalized severely if the answer does not include inline hyperlinks
 exactly as described below:
 1. Every answer must have at least two hyperlinks pointing to the exact full
 URLs of the retrieved research papers.
-2. Always place hyperlinks on a key phrase of three to six words inside the
+2. Your answer must not exceed 40 words.
+3. Always place hyperlinks on a key phrase of three to six words inside the
 answer. Never place URLs after the answer. Never create links that look like
 footnotes. Always place full URL links inside the answer.`,
     ],
