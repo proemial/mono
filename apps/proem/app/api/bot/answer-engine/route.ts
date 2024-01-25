@@ -104,7 +104,11 @@ elderly people
 Important: Each research paper you retrieved has a "link" property associated
 with it. Your answer must be a single paragraph of 40 words or less, with key
 phrases formatted as hyperlinks pointing to the research paper from which they
-came. This is essential.
+came. This is essential! A hyperlink is of the format
+"<a href="https://proem.ai[link]?title=[text+from+summary]">[key phrases]</a>",
+where "[link]" is the link of the research paper, and "[text+from+summary]" is
+the summary you generated, delimited by "+", and "[key phrases]" are key phrases
+from the research paper.
 
 Example of the format:
 
@@ -149,10 +153,9 @@ footnotes. Always place full URL links inside the answer.`,
           switch(message.role) {
             case 'user':
               return new HumanMessage({content: message.content})
+            default:
             case 'assistant':
               return new AIMessage({content: message.content})
-            default:
-              throw new Error('Unexpected role')
           }
         }),
       papers: async (input) => {
