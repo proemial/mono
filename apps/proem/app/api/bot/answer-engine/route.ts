@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 
 import { convertToOASearchString } from "@/app/api/bot/answer-engine/convert-query-parameters";
 import { fetchPapers } from "@/app/api/paper-search/search";
-import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
+import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
@@ -52,11 +52,8 @@ export async function POST(req: NextRequest) {
   const searchQueryPrompt = ChatPromptTemplate.fromMessages([
     [
       "system",
-      `You are a helpful research assistant that answers questions. If a
-      question is of scientific nature, you strongly prefer your answers to be
-      based upon scientific research. To access scientific research, you can
-      construct a set of search parameters that can be used retrieve one or more
-      scientific research papers related to the questions.`,
+      `Construct a set of search parameters that can be used retrieve one or
+      more scientific research papers related to the user's question.`,
     ],
     ["human", `{question}`],
   ]);
@@ -80,72 +77,53 @@ export async function POST(req: NextRequest) {
     [
       "system",
       `
-You are a helpful research assistant that provides conclusive answers to user
-questions. If a question is of scientific nature, you strongly prefer your
-answers to be backed by relevant scientific research available in the research
-papers you have retrieved, strictly adhering to the following guide lines:
+You will provide conclusive answers to user questions, based on the following
+research articles: {papers},
+IMPORTANT: YOUR ANSWER MUST BE A SINGLE SHORT PARAGRAPH OF 40 WORDS OR LESS KEY
+PHRASES FORMATTED AS HYPERLINKS POINTING TO THE PAPERS. THIS IS ESSENTIAL. KEEP
+YOUR ANSWERS SHORT AND WITH STATEMENTS THE USER CAN CLICK ON!
+- Pick the two papers most relevant to the provided user question.
+- Also summarise each of the selected papers into a "title" of 20 words or less
+with the most significant finding as an engaging tweet capturing the minds of
+other researchers, using layman's terminology, and without mentioning abstract
+entities like 'you', 'researchers', 'authors', 'propose', or 'study' but rather
+stating the finding as a statement of fact, without reservations or caveats. for
+example: "More tooth loss is associated with greater cognitive decline and
+dementia in elderly people."
+- Then use these summaries to construct a short answer in less than 40 words,
+with key phrases of the answer text as hyperlinks pointing to the papers, like
+this example:
 
-Identify two research papers most relevant to the user's question.
-
-Create a summary for each of the selected papers into a "title" of 20 words or
-less, with the most significant finding as an engaging tweet capturing the minds
-of other researchers, using layman's terminology. Do not include abstract
-entities like "you", "researchers", "authors", "propose", or "study" in the
-title, but rather stating the finding as a statement of fact, without
-reservations or caveats.
-
-Example of a title:
-
-"""
-More tooth loss is associated with greater cognitive decline and dementia in
-elderly people
-"""
-
-Important: Each research paper you retrieved has a "link" property associated
-with it. Your answer must be a single paragraph of 40 words or less, with key
-phrases formatted as hyperlinks pointing to the research paper from which they
-came. This is essential! A hyperlink is of the format
-"<a href="https://proem.ai[link]?title=[text+from+summary]">[key phrases]</a>",
-where "[link]" is the link of the research paper, and "[text+from+summary]" is
-the summary you generated, delimited by "+", and "[key phrases]" are key phrases
-from the research paper.
-
-Example of the format:
-
-"""
-Smoking causes cancer. Studies show that cigarette smokers are
-<a href="https://proem.ai/oa/W4213460776?title=text+from+summary">more likely to
-die from cancer</a> than non-smokers. Furthermore, studies have found that
-passive smokers
-<a href="https://proem.ai/oa/W2004456560?title=text+from+summary">have a higher
+"""Yes/No. Smoking causes/does not cause cancer. Studies show that cigarette
+smokers are <a href="https://proem.ai/oa/W4213460776?title=text+from+summary">
+more likely todie from cancer</a> than non-smokers. Furthermore, studies have
+found  that passive smokers
+<a href="https://proem.ai/oa/W2004456560?title=text+from+summary">hae a higher
 risk of cardiovascular disease</a> than people never exposed to a smoking
-environment.
-"""
+environment."""
 
-In this example, "/oa/W2004456560" and "/oa/W2004456560" are the links from the
-retrieved papers, and "text+from+summary" are the summaries you generated,
-appended as a query strings. Hyperlinks must match this format.
+- The links should be pointing to the returned proem links, with the generated
+"summaries" appended as a query string to the link
 
-If the user's question is a binary question, begin your answer with "Yes" or
-"No", depending on whether or not your answer respectively confirms or denies
-the user's question.
-
-Finally, the following two important rules are all absolutely essential and you
-will be penalized severely if the answer does not include inline hyperlinks
-exactly as described below:
-1. Every answer must have at least two hyperlinks pointing to the exact full
-URLs of the retrieved research papers.
-2. Your answer must not exceed 40 words.
-3. Always place hyperlinks on a key phrase of three to six words inside the
-answer. Never place URLs after the answer. Never create links that look like
-footnotes. Always place full URL links inside the answer.`,
+- THE FOLLOWING THREE IMPORTANT RULES ARE ALL ABSOLUTELY ESSENTIAL AND YOU WILL
+BE PENALIZED SEVERELY IF THE ANSWER DOES NOT INCLUDE INLINE HYPERLINKS EXACTLY
+AS DESCRIBED BELOW:
+- IMPORTANT: EVERY ANSWER MUST HAVE AT LEAST TWO HYPERLINKS POINTING TO THE
+EXACT FULL URLS OF PAPERS PROVIDED IN THE API RESPONSE. THIS IS ABSOLUTELY
+ESSENTIAL.
+- IMPORTANT: ALWAYS PLACE HYPERLINKS ON A KEY PHRASE OF THREE TO SIX WORDS
+INSIDE THE ANSWER. THIS IS ABSOLUTELY ESSENTIAL. NEVER PLACE URLS AFTER THE
+ANSWER.  NEVER EVER CREATE LINKS THAT LOOK LIKE FOOTNOTES. ALWAYS PLACE FULL URL
+LINKS INSIDE THE ANSWER.
+- IMPORTANT: YOUR ANSWER MUST BE A SINGLE SHORT PARAGRAPH OF 40 WORDS OR LESS
+WITH HYPERLINKS ON TWO KEY PHRASES. THIS IS ESSENTIAL. KEEP YOUR ANSWERS SHORT
+AND SIMPLE!`,
     ],
     // TODO! Hacky with hack-hack
     // ! fix langchain pipe
     new MessagesPlaceholder('chat_history'),
-    new MessagesPlaceholder('papers'),
-    ["human", `{question}`],
-  ]);
+    ['human', `{question}`],
+]);
 
   const conversationalAnswerEngineChain = RunnableSequence.from([
     {
@@ -169,9 +147,7 @@ footnotes. Always place full URL links inside the answer.`,
         );
 
         if (!searchQuery) {
-          // Here we use a system message to not make the model believe it gave
-          // an empty answer, when going through the chat history.
-          return new SystemMessage({content: ''})
+          return
         }
 
         const query = convertToOASearchString(
@@ -188,7 +164,7 @@ footnotes. Always place full URL links inside the answer.`,
           link: paper.link.replace("https://proem.ai", ""),
         }));
 
-        return new AIMessage({content: JSON.stringify(papersWithRelativeLinks)})
+        return JSON.stringify(papersWithRelativeLinks)
       },
     },
     chatPrompt,
