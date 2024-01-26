@@ -3,9 +3,16 @@ import { NextRequest } from "next/server";
 
 import { convertToOASearchString } from "@/app/api/bot/answer-engine/convert-query-parameters";
 import { fetchPapers } from "@/app/api/paper-search/search";
-import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
+import {
+  AIMessage,
+  HumanMessage,
+  SystemMessage,
+} from "@langchain/core/messages";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
-import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
+import {
+  ChatPromptTemplate,
+  MessagesPlaceholder,
+} from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { z } from "zod";
@@ -31,6 +38,12 @@ const constructSearchParametersSchema = z.object({
     three synonyms for the key concept. Preferrably two-grams or longer.`),
 });
 
+type ChatHistory = { role: string; content: string }[];
+
+type AnswerEngineChainInput = {
+  question: string;
+  chatHistory: ChatHistory;
+};
 /*
  * This handler initializes and calls a simple chain with a prompt,
  * chat model, and output parser. See the docs for more information:
@@ -39,8 +52,9 @@ const constructSearchParametersSchema = z.object({
  */
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const messages: Message[] = body.messages ?? [];
-  const currentMessageContent = messages[messages.length - 1]?.content;
+  const messages: ChatHistory = body.messages ?? [];
+  const chatHistory = messages.slice(0, -1);
+  const currentMessageContent = messages[messages.length - 1]!.content;
 
   /**
    * See a full list of supported models at:
@@ -76,7 +90,7 @@ export async function POST(req: NextRequest) {
     }),
   ]);
 
-  const chatPrompt = ChatPromptTemplate.fromMessages([
+  const chatPrompt = ChatPromptTemplate.fromMessages<AnswerEngineChainInput>([
     [
       "system",
       `
@@ -142,65 +156,65 @@ footnotes. Always place full URL links inside the answer.`,
     ],
     // TODO! Hacky with hack-hack
     // ! fix langchain pipe
-    new MessagesPlaceholder('chat_history'),
-    new MessagesPlaceholder('papers'),
+    new MessagesPlaceholder("chatHistory"),
+    new MessagesPlaceholder("papers"),
     ["human", `{question}`],
   ]);
 
-  const conversationalAnswerEngineChain = RunnableSequence.from([
-    {
-      question: (input) => input.question,
-      chat_history: (input) => {
-        return (input.chat_history as Message[])
-          .slice(0, -1)
-          .map((message) => {
-            switch(message.role) {
-              case 'user':
-                return new HumanMessage({content: message.content})
+  const conversationalAnswerEngineChain =
+    RunnableSequence.from<AnswerEngineChainInput>([
+      {
+        question: (input) => input.question,
+        chatHistory: (input) =>
+          input.chatHistory.map((message) => {
+            switch (message.role) {
+              case "user":
+                return new HumanMessage({ content: message.content });
+              case "assistant":
               default:
-              case 'assistant':
-                return new AIMessage({content: message.content})
+                return new AIMessage({ content: message.content });
             }
-          })
+          }),
+        papers: async (input) => {
+          // TODO! type!
+          const searchQuery = parseFunctionCall(
+            // invoking searchQuery chain to prevent streaming in the result
+            // @ts-expect-error TODO!!!
+            await fetchPapersChain.invoke(input)
+          );
+
+          if (!searchQuery) {
+            // Here we use a system message to not make the model believe it gave
+            // an empty answer, when going through the chat history.
+            return new SystemMessage({ content: "" });
+          }
+
+          const query = convertToOASearchString(
+            searchQuery.keyConcept,
+            searchQuery.relatedConcepts
+          );
+
+          // TODO: Fix case where 0 results from OA causes the pipeline to fail.
+
+          const papers = await fetchPapers(query);
+          // TODO! This is quite hacky to do here
+          const papersWithRelativeLinks = papers?.map((paper) => ({
+            ...paper,
+            link: paper.link.replace("https://proem.ai", ""),
+          }));
+
+          return new AIMessage({
+            content: JSON.stringify(papersWithRelativeLinks),
+          });
+        },
       },
-      papers: async (input) => {
-        // TODO! type!
-        const searchQuery = parseFunctionCall(
-          // invoking searchQuery chain to prevent streaming in the result
-          // @ts-expect-error TODO!!!
-          await fetchPapersChain.invoke(input)
-        );
-
-        if (!searchQuery) {
-          // Here we use a system message to not make the model believe it gave
-          // an empty answer, when going through the chat history.
-          return new SystemMessage({content: ''})
-        }
-
-        const query = convertToOASearchString(
-          searchQuery.keyConcept,
-          searchQuery.relatedConcepts
-        );
-
-        // TODO: Fix case where 0 results from OA causes the pipeline to fail.
-
-        const papers = await fetchPapers(query);
-        // TODO! This is quite hacky to do here
-        const papersWithRelativeLinks = papers?.map((paper) => ({
-          ...paper,
-          link: paper.link.replace("https://proem.ai", ""),
-        }));
-
-        return new AIMessage({content: JSON.stringify(papersWithRelativeLinks)})
-      },
-    },
-    chatPrompt,
-    model,
-    bytesOutputParser,
-  ]);
+      chatPrompt,
+      model,
+      bytesOutputParser,
+    ]);
 
   const stream = await conversationalAnswerEngineChain.stream({
-    chat_history: messages,
+    chatHistory,
     question: currentMessageContent,
   });
 
