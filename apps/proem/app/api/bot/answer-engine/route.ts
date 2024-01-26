@@ -1,4 +1,4 @@
-import { StreamingTextResponse } from "ai";
+import { Message, StreamingTextResponse } from "ai";
 import { NextRequest } from "next/server";
 
 import { convertToOASearchString } from "@/app/api/bot/answer-engine/convert-query-parameters";
@@ -39,7 +39,7 @@ const constructSearchParametersSchema = z.object({
  */
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const messages: { role: string; content: string }[] = body.messages ?? [];
+  const messages: Message[] = body.messages ?? [];
   const currentMessageContent = messages[messages.length - 1]?.content;
 
   /**
@@ -150,16 +150,19 @@ footnotes. Always place full URL links inside the answer.`,
   const conversationalAnswerEngineChain = RunnableSequence.from([
     {
       question: (input) => input.question,
-      chat_history: () =>
-        messages.slice(0, -1).map((message) => {
-          switch(message.role) {
-            case 'user':
-              return new HumanMessage({content: message.content})
-            default:
-            case 'assistant':
-              return new AIMessage({content: message.content})
-          }
-        }),
+      chat_history: (input) => {
+        return (input.chat_history as Message[])
+          .slice(0, -1)
+          .map((message) => {
+            switch(message.role) {
+              case 'user':
+                return new HumanMessage({content: message.content})
+              default:
+              case 'assistant':
+                return new AIMessage({content: message.content})
+            }
+          })
+      },
       papers: async (input) => {
         // TODO! type!
         const searchQuery = parseFunctionCall(
@@ -197,7 +200,7 @@ footnotes. Always place full URL links inside the answer.`,
   ]);
 
   const stream = await conversationalAnswerEngineChain.stream({
-    chat_history: messages.join("\n"),
+    chat_history: messages,
     question: currentMessageContent,
   });
 
