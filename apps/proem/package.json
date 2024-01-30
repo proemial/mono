@@ -12,7 +12,7 @@
     "@langchain/core": "0.1.12",
     "@langchain/openai": "^0.0.11",
     "@neondatabase/serverless": "^0.6.0",
-    "@proemial/database": "workspace:*",
+    "@proemial/data": "workspace:*",
     "@proemial/models": "workspace:*",
     "@proemial/redis": "workspace:*",
     "@proemial/utils": "workspace:*",

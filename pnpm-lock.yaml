@@ -38,9 +38,9 @@ importers:
       '@neondatabase/serverless':
         specifier: ^0.6.0
         version: 0.6.0
-      '@proemial/database':
+      '@proemial/data':
         specifier: workspace:*
-        version: link:../../packages/database
+        version: link:../../packages/data
       '@proemial/models':
         specifier: workspace:*
         version: link:../../packages/models
@@ -267,7 +267,7 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
 
-  packages/database:
+  packages/data:
     dependencies:
       '@neondatabase/serverless':
         specifier: ^0.6.0
