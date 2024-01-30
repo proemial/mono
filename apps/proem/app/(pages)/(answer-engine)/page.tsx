@@ -1,14 +1,6 @@
-import Chat from "@/app/(pages)/answer-engine/chat";
 import { getProfileFromUser } from "@/app/(pages)/profile/getProfileFromUser";
-import { PaperCard } from "@/app/components/card/card";
-import {
-  CenteredSpinner,
-  EmptySpinner,
-  NothingHereYet,
-} from "@/app/components/spinner";
 import { currentUser } from "@clerk/nextjs";
-import { Suspense } from "react";
-import { fetchLatestPaperIds } from "./oa/[id]/fetch-paper";
+import Chat from "@/app/(pages)/(answer-engine)/chat";
 
 export const revalidate = 1;
 
