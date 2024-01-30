@@ -11,7 +11,7 @@ export default function AskInput() {
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // TODO! convert to id
-    Router.push(`/answer?q=${searchValue}`);
+    Router.push(`/answer/${searchValue}`);
   };
 
   const onInputChange = (event: FormEvent<HTMLInputElement>) => {
