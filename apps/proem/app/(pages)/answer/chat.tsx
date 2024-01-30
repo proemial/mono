@@ -17,16 +17,6 @@ import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
-const STARTERS = [
-  "Do Vaccines Cause Autism Spectrum Disorder?",
-  "Is a Daily Glass of Wine Healthy?",
-  "Do Cell Phones Cause Brain Cancer?",
-  "What is the universe made of?",
-  "How can I lower my blood pressure?",
-  "What can I do for heartburn relief?",
-  "Is Microwaved Food Unsafe?",
-  "Why do we dream?",
-];
 const PROEM_BOT = {
   name: "proem",
   initials: "P",
@@ -66,9 +56,11 @@ function Message({
   );
 }
 
-type ChatProps = Pick<MessageProps, "user">;
+type ChatProps = Pick<MessageProps, "user"> & {
+  initialInput?: string;
+};
 
-export default function Chat({ user }: ChatProps) {
+export default function Chat({ user, initialInput }: ChatProps) {
   const {
     messages,
     input,
@@ -79,7 +71,19 @@ export default function Chat({ user }: ChatProps) {
   } = useChat({
     id: "quickfix_for_local_persistenst",
     api: "/api/bot/answer-engine",
+    // initialMessages: initialInput && [
+    //   { id: "something", role: "user", content: initialInput },
+    // ],
+    // initialInput,
   });
+
+  useEffect(() => {
+    if (!initialInput) return;
+
+    // TODO! Add append
+    // append({ role: "user", content: initialInput });
+  }, [initialInput]);
+
   const chatWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -97,24 +101,7 @@ export default function Chat({ user }: ChatProps) {
       className="relative flex flex-col min-h-full px-4 pt-6 pb-12 font-sans"
       ref={chatWrapperRef}
     >
-      {isEmptyScreen ? (
-        <div className="flex flex-col mt-auto mb-5">
-          <div className="flex flex-wrap gap-[6px] ">
-            {STARTERS.map((starter) => (
-              <Button
-                key={starter}
-                variant="ae_starter"
-                size="sm"
-                onClick={() => {
-                  append({ role: "user", content: starter });
-                }}
-              >
-                {starter}
-              </Button>
-            ))}
-          </div>
-        </div>
-      ) : (
+      {!isEmptyScreen && (
         <div className="w-full pb-20 space-y-5">
           {messages.map((m) => (
             <Message
