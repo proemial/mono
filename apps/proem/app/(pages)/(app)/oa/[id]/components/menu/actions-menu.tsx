@@ -8,7 +8,7 @@ type Props = {
   className: string;
 };
 
-export function ActionsMenu({ id, url, className }: Props) {
+export function ActionsMenu({ url, className }: Props) {
   return (
     <div
       className={`${className} w-full flex justify-between items-center shadow`}

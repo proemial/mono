@@ -1,4 +1,4 @@
-import { Message as AiMessage, CreateMessage } from "ai";
+import { Message as AiMessage } from "ai";
 import { Message, Question } from "./message";
 import { Tracker } from "@/app//components/analytics/tracker";
 import { UseChatHelpers } from "ai/react";
