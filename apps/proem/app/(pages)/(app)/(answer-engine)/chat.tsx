@@ -1,6 +1,14 @@
 "use client";
+
 import SearchInput from "@/app/(pages)/(app)/(answer-engine)/search-input";
+import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
+import WithHeader from "@/app/(pages)/(app)/header";
 import { applyLinks } from "@/app/(pages)/(app)/oa/[id]/components/panels/bot/apply-links";
+import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
+import { Tracker } from "@/app/components/analytics/tracker";
+import { ProemLogo } from "@/app/components/icons/logo";
+import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
+import { Button } from "@/app/components/proem-ui/link-button";
 import {
   Avatar,
   AvatarFallback,
@@ -10,19 +18,12 @@ import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
 import {
   Dispatch,
-  memo,
   SetStateAction,
+  memo,
   useEffect,
   useRef,
   useState,
 } from "react";
-import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
-import WithHeader from "@/app/(pages)/(app)/header";
-import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
-import { Button } from "@/app/components/proem-ui/link-button";
-import { ProemLogo } from "@/app/components/icons/logo";
-import { Tracker } from "@/app/components/analytics/tracker";
-import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 
 const PROEM_BOT = {
   name: "proem",
@@ -78,8 +79,8 @@ export default function Chat({ user, message }: MessageProps) {
     id: "quickfix_for_local_persistenst",
     api: "/api/bot/answer-engine",
   });
-
   const chatWrapperRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (messages?.length > 0 && chatWrapperRef.current) {
       chatWrapperRef.current.scrollIntoView(false);
@@ -214,7 +215,7 @@ const Starters = memo(function Starters({ append }: { append: any }) {
 
   return (
     <div className="flex flex-col h-full mb-3" suppressHydrationWarning>
-      <div className="h-full flex flex-col text-center items-center justify-center px-8 font-sans">
+      <div className="flex flex-col items-center justify-center h-full px-8 font-sans text-center">
         <Text />
       </div>
       <div className="flex flex-wrap gap-[6px] ">
@@ -222,10 +223,10 @@ const Starters = memo(function Starters({ append }: { append: any }) {
           <Button
             key={starter.index}
             variant="starter"
-            className="mb-1 w-full cursor-pointer"
+            className="w-full mb-1 cursor-pointer"
             onClick={() => {
               trackAndInvoke(() =>
-                append({ role: "user", content: starter.text }),
+                append({ role: "user", content: starter.text })
               );
             }}
           >
@@ -241,7 +242,7 @@ function Text() {
   return (
     <>
       <ProemLogo />
-      <div className="text-3xl py-4">proem</div>
+      <div className="py-4 text-3xl">proem</div>
       <div className="text-md text-white/80">
         <div>answers to your questions</div>
         <div>supported by scientific research</div>
