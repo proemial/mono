@@ -35,10 +35,7 @@ export default async function RootLayout({ children }: Props) {
         <body
           className={`flex relative flex-col justify-center ${light} h-dvh`}
         >
-          <PageHeader />
-          <div className="w-full h-full max-w-screen-md mx-auto py-14">
-            {children}
-          </div>
+          {children}
 
           <LoginDrawer />
           <MainMenu />

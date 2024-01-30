@@ -1,4 +1,4 @@
-import Chat from "@/app/(pages)/answer-engine/chat";
+import Chat from "@/app/(pages)/(answer-engine)/chat";
 
 export default function SearchPage() {
   return <Chat />;
