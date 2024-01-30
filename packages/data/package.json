@@ -5,7 +5,7 @@
   "types": "./index.ts",
   "license": "MIT",
   "scripts": {
-    "schema:push": "drizzle-kit push:pg"
+    "neon:schema:push": "drizzle-kit push:pg --config ./neon/drizzle.config.ts"
   },
   "devDependencies": {
     "@proemial/typescript-config": "workspace:*",

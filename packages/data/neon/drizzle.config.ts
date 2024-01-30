@@ -4,8 +4,8 @@ import dotenv from "dotenv";
 dotenv.config({ path: "../../apps/proem/.env.local" });
 
 export default {
-  schema: "./schema/*",
-  out: "./drizzle",
+  schema: "./neon/schema/*",
+  out: "./neon/drizzle",
   driver: "pg",
   dbCredentials: {
     connectionString: `${process.env.DATABASE_URL!}?sslmode=require`,
