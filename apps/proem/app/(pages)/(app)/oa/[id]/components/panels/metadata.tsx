@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import avatar from "@/app/images/avatar.svg";
 import Image from "next/image";
-import Markdown from "@/app/(pages)/oa/[id]/components/markdown";
+import Markdown from "@/app/(pages)/(app)/oa/[id]/components/markdown";
 import { Panel } from "@/app/components/panel";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 

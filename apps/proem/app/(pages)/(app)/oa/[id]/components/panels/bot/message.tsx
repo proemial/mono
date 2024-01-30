@@ -1,6 +1,6 @@
 "use client";
 
-import { applyExplainLinks } from "@/app/(pages)/oa/[id]/components/panels/bot/apply-links";
+import { applyExplainLinks } from "@/app/(pages)/(app)/oa/[id]/components/panels/bot/apply-links";
 import { useDrawerState } from "@/app/components/login/state";
 import { useAuth } from "@clerk/nextjs";
 

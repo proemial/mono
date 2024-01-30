@@ -1,8 +1,10 @@
 import { ReactNode } from "react";
-import WithHeader from "@/app/components/with-header";
+import WithHeader from "@/app/(pages)/(app)/header";
+
+const pageName = "feed";
 
 export const metadata = {
-  title: "proem - science answers",
+  title: `proem - ${pageName}`,
 };
 
 type Props = {
@@ -10,5 +12,5 @@ type Props = {
 };
 
 export default async function RootLayout({ children }: Props) {
-  return <WithHeader title="science answers">{children}</WithHeader>;
+  return <WithHeader title={pageName}>{children}</WithHeader>;
 }

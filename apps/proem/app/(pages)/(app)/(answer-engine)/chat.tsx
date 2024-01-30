@@ -1,7 +1,7 @@
 "use client";
 
-import SearchInput from "@/app/(pages)/(answer-engine)/search-input";
-import { applyLinks } from "@/app/(pages)/oa/[id]/components/panels/bot/apply-links";
+import SearchInput from "@/app/(pages)/(app)/(answer-engine)/search-input";
+import { applyLinks } from "@/app/(pages)/(app)/oa/[id]/components/panels/bot/apply-links";
 import {
   Avatar,
   AvatarFallback,

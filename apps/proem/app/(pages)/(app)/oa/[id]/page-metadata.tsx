@@ -1,4 +1,4 @@
-import { fetchPaper } from "@/app/(pages)/oa/[id]/fetch-paper";
+import { fetchPaper } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
 import { Redis } from "@proemial/redis/redis";
 import { headers } from "next/headers";
 
@@ -24,8 +24,8 @@ export async function getDescription(id: string, title?: string) {
 }
 
 export function formatMetadata(id: string, description?: string) {
-  const requestHeaders = headers()
-  const host = requestHeaders.get('host')
+  const requestHeaders = headers();
+  const host = requestHeaders.get("host");
 
   const title = `${description}`;
   return {

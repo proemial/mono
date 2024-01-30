@@ -1,7 +1,7 @@
 export default function PrivacyPage() {
   return (
-    <div className="flex flex-col items-center justify-between min-h-screen pt-24 p-6 sm:p-24">
-      <div className="relative -mt-[5.75rem] overflow-hidden sm:pt-[5.75rem]">
+    <div className="flex flex-col items-center justify-between min-h-screen p-24">
+      <div className="relative flex flex-col place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="relative mx-auto sm:max-w-[37.5rem] pt-20 text-center pb-24">
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">

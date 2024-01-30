@@ -1,6 +1,6 @@
-import { getProfileFromUser } from "@/app/(pages)/profile/getProfileFromUser";
+import { getProfileFromUser } from "@/app/(pages)/(app)/profile/getProfileFromUser";
 import { currentUser } from "@clerk/nextjs";
-import Chat from "@/app/(pages)/(answer-engine)/chat";
+import Chat from "@/app/(pages)/(app)/(answer-engine)/chat";
 
 export const revalidate = 1;
 

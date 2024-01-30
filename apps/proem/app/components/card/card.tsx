@@ -1,5 +1,5 @@
-import Summary from "@/app/(pages)/oa/[id]/components/summary";
-import { fetchPaper } from "@/app/(pages)/oa/[id]/fetch-paper";
+import Summary from "@/app/(pages)/(app)/oa/[id]/components/summary";
+import { fetchPaper } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
 import { Spinner } from "@/app/components/spinner";
 import dayjs from "dayjs";
 import Link from "next/link";
@@ -9,7 +9,7 @@ export async function PaperCard({ id }: { id: string }) {
   const paper = await fetchPaper(id);
 
   if (!paper) {
-    return undefined
+    return undefined;
   }
 
   // const organisation =

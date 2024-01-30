@@ -1,4 +1,4 @@
-import { fetchLatestPaperIds } from "@/app/(pages)/oa/[id]/fetch-paper";
+import { fetchLatestPaperIds } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
 import { PaperCard } from "@/app/components/card/card";
 import {
   CenteredSpinner,

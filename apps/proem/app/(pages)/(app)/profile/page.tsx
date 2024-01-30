@@ -1,5 +1,5 @@
-import { getProfileFromUser } from "@/app/(pages)/profile/getProfileFromUser";
-import { ProfileButtons } from "@/app/(pages)/profile/profile-buttons";
+import { getProfileFromUser } from "@/app/(pages)/(app)/profile/getProfileFromUser";
+import { ProfileButtons } from "@/app/(pages)/(app)/profile/profile-buttons";
 import { MegaPhone } from "@/app/components/icons/objects/megaphone";
 import {
   Avatar,
