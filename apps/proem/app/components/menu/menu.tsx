@@ -10,7 +10,7 @@ export function MainMenu() {
   return (
     <div className="bg-[#1A1A1A] fixed bottom-0 z-50 w-full">
       <div className="flex justify-between w-full max-w-screen-md px-4 mx-auto">
-        <MenuItem text="ASK" href="">
+        <MenuItem text="ASK" href="/?reload=true">
           <SearchIcon />
         </MenuItem>
 
