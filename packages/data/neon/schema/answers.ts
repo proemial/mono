@@ -1,11 +1,10 @@
-import { papers } from "@/neon/schema/papers";
-import { relations } from "drizzle-orm";
-import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
+import { pgTable, serial, text } from "drizzle-orm/pg-core";
 
 export const answers = pgTable("answers", {
   id: serial("id").primaryKey(),
   question: text("question").notNull(),
   slug: text("slug").notNull(),
+  // updatedAT | createdA
   // paperIds: integer("paperIds").array(),
 });
 

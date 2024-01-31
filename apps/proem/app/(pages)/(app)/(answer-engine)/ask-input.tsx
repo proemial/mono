@@ -1,6 +1,6 @@
 "use client";
 
-import SearchInput from "@/app/(pages)/answer/search-input";
+import SearchInput from "@/app/(pages)/(app)/(answer-engine)/search-input";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 

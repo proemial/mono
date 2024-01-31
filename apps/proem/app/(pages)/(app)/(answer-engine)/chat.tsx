@@ -79,6 +79,7 @@ export default function Chat({ user, message }: MessageProps) {
     id: "quickfix_for_local_persistenst",
     api: "/api/bot/answer-engine",
   });
+
   const chatWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
