@@ -11,15 +11,16 @@ type Props = {
 };
 
 export function MenuItem(props: Props) {
-  const { text, linkProps, children, style } = useMenuProps(props);
+  const { text, linkProps, children, style, active } = useMenuProps(props);
 
   return (
-    <Link
-      {...linkProps}
-      className="p-2 cursor-pointer flex items-center"
-      style={style}
-    >
-      {children} {text}
+    <Link {...linkProps} className="w-full px-1 pt-2 pb-3 flex" style={style}>
+      <div
+        className="w-full px-6 py-2 gap-1 flex items-center rounded-full cursor-pointer justify-center text-xs"
+        style={{ backgroundColor: active ? "#3C3C3C" : "inherit" }}
+      >
+        {children} {text}
+      </div>
     </Link>
   );
 }
@@ -32,8 +33,9 @@ export function useMenuProps(props: Props) {
 
   return {
     ...props,
+    active,
     text: active && props.text,
-    style: { fill: color, stroke: color },
+    style: { fill: color, stroke: color, color },
     linkProps,
   };
 }

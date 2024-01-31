@@ -9,7 +9,7 @@ import { MenuItem } from "@/app/components/menu/menu-item";
 export function MainMenu() {
   return (
     <div className="bg-[#1A1A1A] fixed bottom-0 z-50 w-full">
-      <div className="flex justify-between w-full max-w-screen-md px-3 py-2 mx-auto">
+      <div className="flex justify-between w-full max-w-screen-md px-4 mx-auto">
         <MenuItem text="ASK" href="/?reload=true">
           <SearchIcon />
         </MenuItem>
