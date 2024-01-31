@@ -1,4 +1,3 @@
-import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useDrawerState } from "@/app/components/login/state";
 import { useAuth } from "@clerk/nextjs";
@@ -8,13 +7,6 @@ type Props = {
   href: string;
   authRequired?: boolean;
 };
-
-export function useIsActive(props: Props) {
-  const pathname = usePathname();
-  const isHome = pathname === "/" && props.href === "/?reload=true";
-
-  return isHome || pathname.includes(props.href);
-}
 
 export function useLinkProps(props: Props): Parameters<typeof Link>[0] {
   const { close, open } = useDrawerState();

@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import Link from "next/link";
-import { useIsActive, useLinkProps } from "@/app/components/menu/menu-helpers";
+import { useIsActive } from "@/app/components/menu/helpers/is-active";
+import { useLinkProps } from "@/app/components/menu/helpers/link-props";
 
 type Props = {
   text: string;
@@ -13,7 +14,11 @@ export function MenuItem(props: Props) {
   const { text, linkProps, children, style } = useMenuProps(props);
 
   return (
-    <Link {...linkProps} className="p-2 cursor-pointer flex" style={style}>
+    <Link
+      {...linkProps}
+      className="p-2 cursor-pointer flex items-center"
+      style={style}
+    >
       {children} {text}
     </Link>
   );
