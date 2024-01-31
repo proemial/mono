@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { FeedIcon } from "@/app/components/icons/menu/feed-icon";
+import { ReadIcon } from "@/app/components/icons/menu/read-icon";
 import { SearchIcon } from "@/app/components/icons/menu/search-icon";
 import { UserIcon } from "@/app/components/icons/menu/user-icon";
 import { MenuItem } from "@/app/components/menu/menu-item";
@@ -15,6 +16,10 @@ export function MainMenu() {
 
         <MenuItem text="FEED" href="/feed">
           <FeedIcon />
+        </MenuItem>
+
+        <MenuItem text="READ" href="/oa">
+          <ReadIcon />
         </MenuItem>
 
         <MenuItem text="YOU" href="/profile" authRequired>
