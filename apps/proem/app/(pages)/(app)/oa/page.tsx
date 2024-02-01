@@ -1,7 +1,11 @@
 import { Search } from "lucide-react";
 import { Button } from "@/app/components/shadcn-ui/button";
+import { LinkButton } from "@/app/components/proem-ui/link-button";
+import { fetchLatestPaperIds } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
 
-export default async function FrontPage() {
+export const revalidate = 1;
+
+export default async function ReadPage() {
   return (
     <div className="h-full max-w-screen-sm flex flex-col px-2">
       <div className="h-full flex flex-col text-center items-center justify-center p-8 font-sans">
@@ -28,17 +32,24 @@ function Text() {
   );
 }
 
-function Actions() {
+async function Actions() {
+  const latestIds = await fetchLatestPaperIds();
+  const randomId = latestIds
+    ? latestIds[Math.floor(Math.random() * latestIds.length)]
+    : "";
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center">
         <Search style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
         SUGGESTED ACTIONS
       </div>
-      <Button className="mb-2 text-lg font-medium">Open your feed</Button>
-      <Button className="mb-2 text-lg font-medium">
+      <LinkButton href="/feed" className="mb-2">
+        Open your feed
+      </LinkButton>
+      <LinkButton href={`/oa/${randomId}`} className="mb-2">
         Open a random recent paper
-      </Button>
+      </LinkButton>
     </div>
   );
 }
@@ -50,12 +61,16 @@ function Questions() {
         <Search style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
         SUGGESTED QUESTIONS
       </div>
-      <Button variant="ae_starter" size="sm" className="mb-2">
-        foo
-      </Button>
-      <Button variant="ae_starter" size="sm" className="mb-2">
-        bar
-      </Button>
+      <StarterButton>foo</StarterButton>
+      <StarterButton>bar</StarterButton>
     </div>
+  );
+}
+
+function StarterButton({ children }: { children: string }) {
+  return (
+    <Button variant="ae_starter" size="sm" className="mb-2">
+      {children}
+    </Button>
   );
 }
