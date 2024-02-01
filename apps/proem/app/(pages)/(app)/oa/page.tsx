@@ -1,7 +1,7 @@
 import { Search } from "lucide-react";
-import { Button } from "@/app/components/shadcn-ui/button";
 import { LinkButton } from "@/app/components/proem-ui/link-button";
 import { fetchLatestPaperIds } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
+import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 
 export const revalidate = 1;
 
@@ -55,22 +55,26 @@ async function Actions() {
 }
 
 function Questions() {
+  const starters = STARTERS.map((text, index) => ({ index, text }))
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 3);
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center font-sourceCodePro">
         <Search style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
         SUGGESTED QUESTIONS
       </div>
-      <StarterButton>foo</StarterButton>
-      <StarterButton>bar</StarterButton>
+      {starters.map((starter) => (
+        <LinkButton
+          key={starter.index}
+          href={`/?q=${encodeURIComponent(starter.text)}`}
+          variant="starter"
+          className="mb-2"
+        >
+          {starter.text}
+        </LinkButton>
+      ))}
     </div>
-  );
-}
-
-function StarterButton({ children }: { children: string }) {
-  return (
-    <Button variant="ae_starter" size="sm" className="mb-2">
-      {children}
-    </Button>
   );
 }

@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-md text-base transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background",
+  "inline-flex rounded-md text-base transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background",
   {
     variants: {
       variant: {
@@ -19,8 +19,10 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "underline-offset-4 hover:underline text-primary",
         danger: "bg-[#F93B25]/20 text-[#F93B25] font-semibold font-sans",
-        ae_starter: "bg-[#2F2F2F] border border-[#3C3C3C] text-[14px] font-sans font-normal text-white",
-        send_button: "bg-[#2F2F2F] cursor-pointer scale-100 active:scale-[0.95] transition-all duration-100"
+        ae_starter:
+          "bg-[#2F2F2F] border border-[#3C3C3C] text-[14px] font-sans font-normal text-white justify-begin items-begin",
+        send_button:
+          "bg-[#2F2F2F] cursor-pointer scale-100 active:scale-[0.95] transition-all duration-100",
       },
       size: {
         default: "h-10 py-2 px-4",
@@ -32,12 +34,12 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-  VariantProps<typeof buttonVariants> {
+    VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }
 
@@ -51,7 +53,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       />
     );
-  }
+  },
 );
 
 Button.displayName = "Button";
