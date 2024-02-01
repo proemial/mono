@@ -52,9 +52,7 @@ function Message({
   );
 }
 
-type ChatProps = Pick<MessageProps, "user">;
-
-export default function Chat({ user }: ChatProps) {
+export default function Chat({ user, message }: MessageProps) {
   const {
     messages,
     input,
@@ -62,6 +60,7 @@ export default function Chat({ user }: ChatProps) {
     handleSubmit,
     append,
     isLoading,
+    setMessages,
   } = useChat({
     id: "quickfix_for_local_persistenst",
     api: "/api/bot/answer-engine",
@@ -73,6 +72,13 @@ export default function Chat({ user }: ChatProps) {
       chatWrapperRef.current.scrollIntoView(false);
     }
   }, [messages]);
+
+  useEffect(() => {
+    if (message) {
+      setMessages([]);
+      append({ role: "user", content: message });
+    }
+  }, [message]);
 
   const isEmptyScreen = messages.length === 0;
   const showLoadingState = isLoading && messages.length <= 1;

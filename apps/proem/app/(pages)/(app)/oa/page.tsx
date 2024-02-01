@@ -8,7 +8,7 @@ export const revalidate = 1;
 export default async function ReadPage() {
   return (
     <div className="h-full max-w-screen-sm flex flex-col px-2">
-      <div className="h-full flex flex-col text-center items-center justify-center p-8 font-sans">
+      <div className="h-full flex flex-col text-center items-center justify-center px-8 font-sans">
         <Text />
       </div>
       <div className="flex flex-col gap-2 py-2 text-xs font-light">

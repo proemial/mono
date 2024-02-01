@@ -4,16 +4,11 @@ import Chat from "@/app/(pages)/(app)/(answer-engine)/chat";
 
 export const revalidate = 1;
 
-export default async function FrontPage() {
-  // const latestIds = await fetchLatestPaperIds()
+type Props = {
+  searchParams: { q: string };
+};
 
-  // return (
-  //   <div className="flex flex-col max-w-screen-sm min-h-full mx-auto justify-begin">
-  //     <Suspense fallback={<CenteredSpinner />}>
-  //       <PageContent latestIds={latestIds} />
-  //     </Suspense>
-  //   </div>
-  // );
+export default async function FrontPage({ searchParams }: Props) {
   const user = await currentUser();
   const { fullName, initials } = getProfileFromUser(user);
 
@@ -24,6 +19,7 @@ export default async function FrontPage() {
           ? { name: fullName!, initials: initials!, avatar: user?.imageUrl }
           : undefined
       }
+      message={searchParams.q}
     />
   );
 }
