@@ -14,6 +14,7 @@ import { useEffect, useRef } from "react";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import WithHeader from "@/app/(pages)/(app)/header";
 import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
+import { SquareIcon } from "lucide-react";
 
 const PROEM_BOT = {
   name: "proem",
@@ -63,6 +64,7 @@ export default function Chat({ user, message }: MessageProps) {
     append,
     isLoading,
     setMessages,
+    stop,
   } = useChat({
     id: "quickfix_for_local_persistenst",
     api: "/api/bot/answer-engine",
@@ -87,15 +89,17 @@ export default function Chat({ user, message }: MessageProps) {
   const isEmptyScreen = messages.length === 0;
   const showLoadingState = isLoading && messages.length <= 1;
 
-  const clearButton = (
-    <ClearButton
-      visible={!isLoading && messages.length > 0}
-      onClick={() => setMessages([])}
+  const actionButton = (
+    <ActionButton
+      isLoading={isLoading}
+      messages={messages}
+      setMessages={setMessages}
+      stop={stop}
     />
   );
 
   return (
-    <WithHeader title="science answers" action={clearButton}>
+    <WithHeader title="science answers" action={actionButton}>
       {/*// TODO: Remove font-sans to use the global font*/}
       <div
         className="relative flex flex-col min-h-full px-4 pt-6 pb-12 font-sans"
@@ -151,21 +155,39 @@ export default function Chat({ user, message }: MessageProps) {
   );
 }
 
-function ClearButton({
-  visible,
-  onClick,
+function ActionButton({
+  isLoading,
+  messages,
+  setMessages,
+  stop,
 }: {
-  visible: boolean;
-  onClick: () => void;
+  isLoading: boolean;
+  messages: any[];
+  setMessages: any;
+  stop: any;
 }) {
+  const visible = !isLoading && messages.length > 0;
   return (
-    <div
-      onClick={onClick}
-      className={`transition-all ease-in delay-300 duration-500 ${
-        visible ? "opacity-100" : "opacity-0 hidden"
-      }\`}`}
-    >
-      <ClearIcon />
-    </div>
+    <>
+      <div
+        onClick={() => stop()}
+        className={`${
+          // TODO: Fix fade in/out
+          isLoading ? "opacity-100" : "opacity-0 hidden"
+        } transition-all ease-in delay-300 duration-500`}
+      >
+        <SquareIcon size={22} />
+      </div>
+
+      <div
+        onClick={() => setMessages([])}
+        className={`${
+          // TODO: Fix fade in/out
+          visible ? "opacity-100" : "opacity-0 hidden"
+        } transition-all ease-in delay-300 duration-500`}
+      >
+        <ClearIcon />
+      </div>
+    </>
   );
 }
