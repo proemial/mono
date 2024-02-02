@@ -7,7 +7,6 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
-import { Button } from "@/app/components/shadcn-ui/button";
 import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
@@ -15,6 +14,7 @@ import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import WithHeader from "@/app/(pages)/(app)/header";
 import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
 import { SquareIcon } from "lucide-react";
+import { Button } from "@/app/components/proem-ui/link-button";
 
 const PROEM_BOT = {
   name: "proem",
@@ -111,8 +111,8 @@ export default function Chat({ user, message }: MessageProps) {
               {STARTERS.map((starter) => (
                 <Button
                   key={starter}
-                  variant="ae_starter"
-                  size="sm"
+                  variant="starter"
+                  className="mb-1"
                   onClick={() => {
                     append({ role: "user", content: starter });
                   }}
