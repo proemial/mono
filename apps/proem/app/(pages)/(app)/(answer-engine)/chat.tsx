@@ -135,6 +135,7 @@ export default function Chat({ user, message }: MessageProps) {
               handleSubmit={handleSubmit}
               input={input}
               handleInputChange={handleInputChange}
+              disabled={isLoading}
             />
           </div>
         </div>
