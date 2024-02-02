@@ -1,5 +1,4 @@
 "use client";
-
 import SearchInput from "@/app/(pages)/(app)/(answer-engine)/search-input";
 import { applyLinks } from "@/app/(pages)/(app)/oa/[id]/components/panels/bot/apply-links";
 import {
@@ -9,7 +8,7 @@ import {
 } from "@/app/components/shadcn-ui/Avatar";
 import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import WithHeader from "@/app/(pages)/(app)/header";
 import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
@@ -106,20 +105,9 @@ export default function Chat({ user, message }: MessageProps) {
         ref={chatWrapperRef}
       >
         {isEmptyScreen ? (
-          <div className="flex flex-col mt-auto mb-5">
+          <div className="flex flex-col mt-auto mb-5" suppressHydrationWarning>
             <div className="flex flex-wrap gap-[6px] ">
-              {STARTERS.map((starter) => (
-                <Button
-                  key={starter}
-                  variant="starter"
-                  className="mb-1"
-                  onClick={() => {
-                    append({ role: "user", content: starter });
-                  }}
-                >
-                  {starter}
-                </Button>
-              ))}
+              <Starters append={append} />
             </div>
           </div>
         ) : (
@@ -188,6 +176,37 @@ function ActionButton({
       >
         <ClearIcon />
       </div>
+    </>
+  );
+}
+
+function Starters({ append }: { append: any }) {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) return null;
+
+  const starters = STARTERS.map((text, index) => ({ index, text }))
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 3);
+
+  return (
+    <>
+      {starters.map((starter) => (
+        <Button
+          key={starter.index}
+          variant="starter"
+          className="mb-1"
+          onClick={() => {
+            append({ role: "user", content: starter.text });
+          }}
+        >
+          {starter.text}
+        </Button>
+      ))}
     </>
   );
 }
