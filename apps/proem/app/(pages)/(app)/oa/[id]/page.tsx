@@ -52,9 +52,7 @@ export default async function ReaderPage({ params }: Props) {
 
       <Tabs defaultValue="QA" className="w-full">
         <TabsList className="text-[14px] sticky z-10 justify-start w-full bg-background top-14 h-[unset] pt-3 pb-3 px-4">
-          <TabsTrigger value="QA">QA</TabsTrigger>
-          <TabsTrigger value="publicquestions">Public Q&A</TabsTrigger>
-          <TabsTrigger value="authors">Authors</TabsTrigger>
+          <TabsTrigger value="QA">Your answers</TabsTrigger>
           <TabsTrigger value="metadata">Metadata</TabsTrigger>
         </TabsList>
         <TabsContent value="QA">
