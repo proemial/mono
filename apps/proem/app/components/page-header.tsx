@@ -1,12 +1,17 @@
 "use client";
 import { Proem } from "@/app/components/icons/brand/proem";
 import Link from "next/link";
+import { ReactNode } from "react";
 
 type PageHeaderProps = {
   title?: string;
+  action?: ReactNode;
 };
 
-export function PageHeader({ title = "Proem" }: PageHeaderProps) {
+export function PageHeader({
+  title = "Proem",
+  action = <></>,
+}: PageHeaderProps) {
   return (
     <>
       <div className="fixed w-full top-0 z-50 bg-[#1A1A1A]">
@@ -17,6 +22,7 @@ export function PageHeader({ title = "Proem" }: PageHeaderProps) {
               <span className="text-[16px] font-sans font-normal">{title}</span>
             </div>
           </Link>
+          {action}
         </div>
       </div>
       <hr className="mx-6 h-[1px] border-t-0 bg-white/10" />

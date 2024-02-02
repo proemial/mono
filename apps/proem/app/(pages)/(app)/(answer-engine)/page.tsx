@@ -4,6 +4,10 @@ import Chat from "@/app/(pages)/(app)/(answer-engine)/chat";
 
 export const revalidate = 1;
 
+export const metadata = {
+  title: "proem - science answers",
+};
+
 type Props = {
   searchParams: { q: string };
 };

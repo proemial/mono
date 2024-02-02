@@ -12,6 +12,8 @@ import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
+import WithHeader from "@/app/(pages)/(app)/header";
+import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
 
 const PROEM_BOT = {
   name: "proem",
@@ -76,64 +78,94 @@ export default function Chat({ user, message }: MessageProps) {
   useEffect(() => {
     if (message) {
       setMessages([]);
-      append({ role: "user", content: message });
+      if (message.length > 0) {
+        append({ role: "user", content: message });
+      }
     }
   }, [message]);
 
   const isEmptyScreen = messages.length === 0;
   const showLoadingState = isLoading && messages.length <= 1;
 
+  const clearButton = (
+    <ClearButton
+      visible={!isLoading && messages.length > 0}
+      onClick={() => setMessages([])}
+    />
+  );
+
   return (
-    // TODO: Remove font-sans to use the global font
-    <div
-      className="relative flex flex-col min-h-full px-4 pt-6 pb-12 font-sans"
-      ref={chatWrapperRef}
-    >
-      {isEmptyScreen ? (
-        <div className="flex flex-col mt-auto mb-5">
-          <div className="flex flex-wrap gap-[6px] ">
-            {STARTERS.map((starter) => (
-              <Button
-                key={starter}
-                variant="ae_starter"
-                size="sm"
-                onClick={() => {
-                  append({ role: "user", content: starter });
-                }}
-              >
-                {starter}
-              </Button>
+    <WithHeader title="science answers" action={clearButton}>
+      {/*// TODO: Remove font-sans to use the global font*/}
+      <div
+        className="relative flex flex-col min-h-full px-4 pt-6 pb-12 font-sans"
+        ref={chatWrapperRef}
+      >
+        {isEmptyScreen ? (
+          <div className="flex flex-col mt-auto mb-5">
+            <div className="flex flex-wrap gap-[6px] ">
+              {STARTERS.map((starter) => (
+                <Button
+                  key={starter}
+                  variant="ae_starter"
+                  size="sm"
+                  onClick={() => {
+                    append({ role: "user", content: starter });
+                  }}
+                >
+                  {starter}
+                </Button>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="w-full pb-20 space-y-5">
+            {messages.map((m) => (
+              <Message
+                key={m.id}
+                message={m.content}
+                user={m.role === "assistant" ? PROEM_BOT : user}
+              />
             ))}
+
+            {showLoadingState ? (
+              <Message
+                message="Searching for relevant scientific papers..."
+                user={PROEM_BOT}
+              />
+            ) : null}
+          </div>
+        )}
+
+        <div className="fixed left-0 w-full bg-black bottom-14">
+          <div className="w-full max-w-screen-md px-4 py-3 mx-auto">
+            <SearchInput
+              handleSubmit={handleSubmit}
+              input={input}
+              handleInputChange={handleInputChange}
+            />
           </div>
         </div>
-      ) : (
-        <div className="w-full pb-20 space-y-5">
-          {messages.map((m) => (
-            <Message
-              key={m.id}
-              message={m.content}
-              user={m.role === "assistant" ? PROEM_BOT : user}
-            />
-          ))}
-
-          {showLoadingState ? (
-            <Message
-              message="Searching for relevant scientific papers..."
-              user={PROEM_BOT}
-            />
-          ) : null}
-        </div>
-      )}
-
-      <div className="fixed left-0 w-full bg-black bottom-14">
-        <div className="w-full max-w-screen-md px-4 py-3 mx-auto">
-          <SearchInput
-            handleSubmit={handleSubmit}
-            input={input}
-            handleInputChange={handleInputChange}
-          />
-        </div>
       </div>
+    </WithHeader>
+  );
+}
+
+function ClearButton({
+  visible,
+  onClick,
+}: {
+  visible: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <div
+      onClick={onClick}
+      className={`transition-all ease-in delay-300 duration-500 ${
+        visible ? "opacity-100" : "opacity-0 hidden"
+      }\`}`}
+    >
+      <ClearIcon />
     </div>
   );
 }
