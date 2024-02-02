@@ -14,6 +14,7 @@ import WithHeader from "@/app/(pages)/(app)/header";
 import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
 import { SquareIcon } from "lucide-react";
 import { Button } from "@/app/components/proem-ui/link-button";
+import { ProemLogo } from "@/app/components/icons/logo";
 
 const PROEM_BOT = {
   name: "proem",
@@ -101,32 +102,17 @@ export default function Chat({ user, message }: MessageProps) {
     <WithHeader title="science answers" action={actionButton}>
       {/*// TODO: Remove font-sans to use the global font*/}
       <div
-        className="relative flex flex-col min-h-full px-4 pt-6 pb-12 font-sans"
+        className="relative flex flex-col h-full px-4 pt-6 pb-12 font-sans"
         ref={chatWrapperRef}
       >
         {isEmptyScreen ? (
-          <div className="flex flex-col mt-auto mb-5" suppressHydrationWarning>
-            <div className="flex flex-wrap gap-[6px] ">
-              <Starters append={append} />
-            </div>
-          </div>
+          <Starters append={append} />
         ) : (
-          <div className="w-full pb-20 space-y-5">
-            {messages.map((m) => (
-              <Message
-                key={m.id}
-                message={m.content}
-                user={m.role === "assistant" ? PROEM_BOT : user}
-              />
-            ))}
-
-            {showLoadingState ? (
-              <Message
-                message="Searching for relevant scientific papers..."
-                user={PROEM_BOT}
-              />
-            ) : null}
-          </div>
+          <Messages
+            messages={messages}
+            showLoadingState={showLoadingState}
+            user={user}
+          />
         )}
 
         <div className="fixed left-0 w-full bg-black bottom-14">
@@ -144,17 +130,14 @@ export default function Chat({ user, message }: MessageProps) {
   );
 }
 
-function ActionButton({
-  isLoading,
-  messages,
-  setMessages,
-  stop,
-}: {
+type ActionButtonProps = {
   isLoading: boolean;
   messages: any[];
   setMessages: any;
   stop: any;
-}) {
+};
+function ActionButton(props: ActionButtonProps) {
+  const { isLoading, messages, setMessages, stop } = props;
   const visible = !isLoading && messages.length > 0;
   return (
     <>
@@ -195,19 +178,63 @@ function Starters({ append }: { append: any }) {
     .slice(0, 3);
 
   return (
+    <div className="flex flex-col h-full mb-5" suppressHydrationWarning>
+      <div className="h-full flex flex-col text-center items-center justify-center px-8 font-sans">
+        <Text />
+      </div>
+      <div className="flex flex-wrap gap-[6px] ">
+        {starters.map((starter) => (
+          <Button
+            key={starter.index}
+            variant="starter"
+            className="mb-1"
+            onClick={() => {
+              append({ role: "user", content: starter.text });
+            }}
+          >
+            {starter.text}
+          </Button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Text() {
+  return (
     <>
-      {starters.map((starter) => (
-        <Button
-          key={starter.index}
-          variant="starter"
-          className="mb-1"
-          onClick={() => {
-            append({ role: "user", content: starter.text });
-          }}
-        >
-          {starter.text}
-        </Button>
-      ))}
+      <ProemLogo />
+      <div className="text-3xl py-4">proem</div>
+      <div className="text-md text-white/80">
+        answers to your questions supported by scientific research
+      </div>
     </>
+  );
+}
+
+type MessagesProps = {
+  messages: any[];
+  showLoadingState: boolean;
+  user: any;
+};
+
+function Messages({ messages, showLoadingState, user }: MessagesProps) {
+  return (
+    <div className="w-full pb-20 space-y-5">
+      {messages.map((m) => (
+        <Message
+          key={m.id}
+          message={m.content}
+          user={m.role === "assistant" ? PROEM_BOT : user}
+        />
+      ))}
+
+      {showLoadingState ? (
+        <Message
+          message="Searching for relevant scientific papers..."
+          user={PROEM_BOT}
+        />
+      ) : null}
+    </div>
   );
 }
