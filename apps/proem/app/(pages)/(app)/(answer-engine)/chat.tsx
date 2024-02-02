@@ -11,7 +11,12 @@ import { Button } from "@/app/components/shadcn-ui/button";
 import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
+import {
+  STARTERS,
+  STARTERS2,
+  STARTERS3,
+} from "@/app/(pages)/(app)/(answer-engine)/starters";
+import { InfinityScroll } from "@/app/components/infinity-scroll";
 
 const PROEM_BOT = {
   name: "proem",
@@ -92,18 +97,21 @@ export default function Chat({ user, message }: MessageProps) {
       {isEmptyScreen ? (
         <div className="flex flex-col mt-auto mb-5">
           <div className="flex flex-wrap gap-[6px] ">
-            {STARTERS.map((starter) => (
-              <Button
-                key={starter}
-                variant="ae_starter"
-                size="sm"
-                onClick={() => {
-                  append({ role: "user", content: starter });
-                }}
-              >
-                {starter}
-              </Button>
-            ))}
+            <InfinityScroll>
+              {STARTERS.map((starter, j) => (
+                <StarterButton key={j} starter={starter} append={append} />
+              ))}
+            </InfinityScroll>
+            <InfinityScroll>
+              {STARTERS2.map((starter, j) => (
+                <StarterButton key={j} starter={starter} append={append} />
+              ))}
+            </InfinityScroll>
+            <InfinityScroll>
+              {STARTERS3.map((starter, j) => (
+                <StarterButton key={j} starter={starter} append={append} />
+              ))}
+            </InfinityScroll>
           </div>
         </div>
       ) : (
@@ -135,5 +143,19 @@ export default function Chat({ user, message }: MessageProps) {
         </div>
       </div>
     </div>
+  );
+}
+
+function StarterButton({ starter, append }: { starter: string; append: any }) {
+  return (
+    <Button
+      variant="ae_starter"
+      size="sm"
+      onClick={() => {
+        append({ role: "user", content: starter });
+      }}
+    >
+      {starter}
+    </Button>
   );
 }
