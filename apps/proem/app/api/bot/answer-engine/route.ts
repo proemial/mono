@@ -23,7 +23,7 @@ export const runtime = "edge";
 const model = new ChatOpenAI({
   // TODO! Figure out different temperature settings?
   temperature: 0.8,
-  modelName: "gpt-3.5-turbo-1106",
+  modelName: "gpt-3.5-turbo-0125",
   cache: true,
   verbose: true,
 });
