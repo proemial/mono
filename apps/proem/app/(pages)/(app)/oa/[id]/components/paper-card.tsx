@@ -31,6 +31,15 @@ export function PaperCard({ children, paper }: Props) {
         {children}
       </div>
 
+      <div className="py-1 text-xs">
+        <div className="text-white/50 leading-4">
+          {paper.data.primary_location?.source?.host_organization_name}
+        </div>
+        <div className="leading-4">
+          {paper.data.primary_location?.source?.display_name}
+        </div>
+      </div>
+
       <Concepts data={paper.data as OpenAlexWorkMetadata} />
     </div>
   );

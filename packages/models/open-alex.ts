@@ -153,6 +153,7 @@ export type OpenAlexLocation = {
   pdf_url: string;
   source: {
     id: string;
+    display_name: string;
     host_organization: string;
     host_organization_name: string;
     type: string;
