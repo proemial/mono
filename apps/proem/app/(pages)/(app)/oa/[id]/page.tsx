@@ -38,13 +38,7 @@ export default async function ReaderPage({ params }: Props) {
 
   return (
     <div className="relative w-full pb-32">
-      <PaperCard
-        id={params.id}
-        date={paper.data.publication_date}
-        organisation={
-          paper.data.primary_location?.source?.host_organization_name
-        }
-      >
+      <PaperCard id={params.id} paper={paper}>
         <Suspense fallback={<Spinner />}>
           <Summary paper={paper} />
         </Suspense>

@@ -2,15 +2,18 @@
 import dayjs from "dayjs";
 import { ReactNode } from "react";
 import { ReadIcon } from "@/app/components/icons/menu/read-icon";
+import {
+  OpenAlexPaper,
+  OpenAlexWorkMetadata,
+} from "@proemial/models/open-alex";
 
 type Props = {
   id: string;
-  date: string;
-  organisation: string;
+  paper: OpenAlexPaper;
   children: string | ReactNode;
 };
 
-export function PaperCard({ date, children }: Props) {
+export function PaperCard({ children, paper }: Props) {
   return (
     <div className="flex px-6 pb-6 bg-[#1A1A1A] flex-col before:absolute before:-inset-0 relative before:top-[-100%] before:bg-[#1A1A1A] before:-z-10 border-b shadow border-[#4E4E4E] w-full">
       <div className="mb-2 text-[12px] text-white/50 font-sourceCodePro font-normal uppercase tracking-wide flex justify-between">
@@ -21,16 +24,40 @@ export function PaperCard({ date, children }: Props) {
           <ReadIcon />
           JOURNAL ARTICLE
         </div>
-        <div>{dayjs(date).format("M.D.YYYY")}</div>
+        <div>{dayjs(paper.data.publication_date).format("M.D.YYYY")}</div>
       </div>
 
       <div className={`text-[24px] font-sans font-normal leading-[32px]`}>
         {children}
       </div>
 
-      {/*<div className="text-[12px] mb-2 font-sans opacity-50 font-normal tracking-wide">*/}
-      {/*  #data-science #ai #3dmodels*/}
-      {/*</div>*/}
+      <Concepts data={paper.data as OpenAlexWorkMetadata} />
+    </div>
+  );
+}
+
+function Concepts({ data }: { data: OpenAlexWorkMetadata }) {
+  const sorted = (data || []).concepts.sort((a, b) => a.level - b.level);
+  const filtered = sorted ? [sorted.at(0), sorted.at(-2), sorted.at(-1)] : [];
+
+  return (
+    <div className="flex gap-1 text-xs text-white/50 mt-2">
+      {filtered && (
+        <div
+          key={filtered[0]?.id}
+          className="border border-white/50 rounded-md px-1 whitespace-nowrap"
+        >
+          {filtered[0]?.display_name}
+        </div>
+      )}
+      {filtered?.slice(1).map((c) => (
+        <div
+          key={c?.id}
+          className="border border-white/50 rounded-md px-1 truncate"
+        >
+          {c?.display_name}
+        </div>
+      ))}
     </div>
   );
 }
