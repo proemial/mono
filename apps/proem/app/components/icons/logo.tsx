@@ -27,6 +27,7 @@ export function ProemLogo() {
       viewBox="0 0 64 97"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      stroke="#7DFA86"
     >
       <path
         d="M6.10352e-05 0.666694C6.10352e-05 0.298489 0.29855 0 0.666756 0H32.004V32.0039H0.666755C0.29855 32.0039 6.10352e-05 31.7054 6.10352e-05 31.3372V0.666694Z"
