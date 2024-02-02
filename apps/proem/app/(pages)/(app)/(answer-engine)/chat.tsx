@@ -187,7 +187,7 @@ function Starters({ append }: { append: any }) {
           <Button
             key={starter.index}
             variant="starter"
-            className="mb-1"
+            className="mb-1 w-full"
             onClick={() => {
               append({ role: "user", content: starter.text });
             }}
