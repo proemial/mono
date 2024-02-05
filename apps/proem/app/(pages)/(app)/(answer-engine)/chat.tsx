@@ -8,7 +8,7 @@ import {
 } from "@/app/components/shadcn-ui/Avatar";
 import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import WithHeader from "@/app/(pages)/(app)/header";
 import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
@@ -146,7 +146,7 @@ function ActionButton(props: ActionButtonProps) {
         className={`${
           // TODO: Fix fade in/out
           isLoading ? "opacity-100" : "opacity-0 hidden"
-        } transition-all ease-in delay-300 duration-500`}
+        } transition-all ease-in delay-300 duration-500 cursor-pointer`}
       >
         <SquareIcon size={22} />
       </div>
@@ -156,7 +156,7 @@ function ActionButton(props: ActionButtonProps) {
         className={`${
           // TODO: Fix fade in/out
           visible ? "opacity-100" : "opacity-0 hidden"
-        } transition-all ease-in delay-300 duration-500`}
+        } transition-all ease-in delay-300 duration-500 cursor-pointer`}
       >
         <ClearIcon />
       </div>
@@ -164,7 +164,7 @@ function ActionButton(props: ActionButtonProps) {
   );
 }
 
-function Starters({ append }: { append: any }) {
+const Starters = memo(function Starters({ append }: { append: any }) {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -187,7 +187,7 @@ function Starters({ append }: { append: any }) {
           <Button
             key={starter.index}
             variant="starter"
-            className="mb-1 w-full"
+            className="mb-1 w-full cursor-pointer"
             onClick={() => {
               append({ role: "user", content: starter.text });
             }}
@@ -198,7 +198,7 @@ function Starters({ append }: { append: any }) {
       </div>
     </div>
   );
-}
+});
 
 function Text() {
   return (
