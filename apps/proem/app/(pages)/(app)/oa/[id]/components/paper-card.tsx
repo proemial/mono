@@ -24,7 +24,7 @@ export function PaperCard({ children, paper }: Props) {
           <ReadIcon />
           JOURNAL ARTICLE
         </div>
-        <div>{dayjs(paper.data.publication_date).format("M.D.YYYY")}</div>
+        <div>{dayjs(paper.data.publication_date).format("YYYY.MM.DD")}</div>
       </div>
 
       <div className={`text-[24px] font-sans font-normal leading-[32px]`}>
