@@ -3,10 +3,11 @@ import { NextRequest } from "next/server";
 
 import { convertToOASearchString } from "@/app/api/bot/answer-engine/convert-query-parameters";
 import { fetchPapers } from "@/app/api/paper-search/search";
+import { organizations } from "@/app/prompts/openai-keys";
 import {
   AIMessage,
+  BaseMessageChunk,
   HumanMessage,
-  SystemMessage,
 } from "@langchain/core/messages";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
 import {
@@ -15,9 +16,7 @@ import {
 } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { ChatOpenAI } from "langchain/chat_models/openai";
-import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
-import { organizations } from "@/app/prompts/openai-keys";
+import { getBuildSearchParamsChain } from "./chains/build-search-params-chain";
 
 export const runtime = "edge";
 
@@ -30,67 +29,23 @@ const model = new ChatOpenAI(
     verbose: true,
   },
   // Not really sure if this works, so ASK has also been set as the default organisation in the OpenAI admin panel
-  { organization: organizations.ask },
+  { organization: organizations.ask }
 );
 
-const constructSearchParametersSchema = z.object({
-  keyConcept: z.string()
-    .describe(`A single common noun that is VERY likely to occur in the title of
-    a research paper that contains the answer to the user's question. The
-    argument MUST be a single word.`),
-  relatedConcepts: z.string().array()
-    .describe(`The most closely related scientific concepts as well as two or
-    three synonyms for the key concept. Preferrably two-grams or longer.`),
-});
+const bytesOutputParser = new BytesOutputParser();
 
-type ChatHistory = { role: string; content: string }[];
+type ChatHistoryItem = { role: string; content: string };
 
 type AnswerEngineChainInput = {
   question: string;
-  chatHistory: ChatHistory;
+  chatHistory: (HumanMessage | AIMessage)[];
 };
-/*
- * This handler initializes and calls a simple chain with a prompt,
- * chat model, and output parser. See the docs for more information:
- *
- * https://js.langchain.com/docs/guides/expression_language/cookbook#prompttemplate--llm--outputparser
- */
+
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const messages: ChatHistory = body.messages ?? [];
-  const chatHistory = messages.slice(0, -1);
+  const messages: ChatHistoryItem[] = body.messages ?? [];
+  const chatHistory = messages.slice(0, -1).map(toLangChainChatHistory);
   const currentMessageContent = messages[messages.length - 1]!.content;
-
-  /**
-   * See a full list of supported models at:
-   * https://js.langchain.com/docs/modules/model_io/models/
-   */
-
-  const bytesOutputParser = new BytesOutputParser();
-
-  const searchQueryPrompt = ChatPromptTemplate.fromMessages([
-    [
-      "system",
-      `Construct a set of search parameters that can be used retrieve one or
-      more scientific research papers related to the user's question.`,
-    ],
-    ["human", `{question}`],
-  ]);
-
-  const fetchPapersChain = RunnableSequence.from([
-    searchQueryPrompt,
-    model.bind({
-      functions: [
-        {
-          name: "constructSearchParameters",
-          description: `A function to construct a set of search parameters to
-          retrieve one or more scientific research papers related to the user's
-          question.`,
-          parameters: zodToJsonSchema(constructSearchParametersSchema),
-        },
-      ],
-    }),
-  ]);
 
   const chatPrompt = ChatPromptTemplate.fromMessages<AnswerEngineChainInput>([
     [
@@ -138,89 +93,61 @@ LINKS INSIDE THE ANSWER.
 WITH HYPERLINKS ON TWO KEY PHRASES. THIS IS ESSENTIAL. KEEP YOUR ANSWERS SHORT
 AND SIMPLE!`,
     ],
-    // TODO! Hacky with hack-hack
-    // ! fix langchain pipe
     new MessagesPlaceholder("chatHistory"),
-    new MessagesPlaceholder("papers"),
     ["human", `{question}`],
   ]);
 
-  const conversationalAnswerEngineChain =
-    RunnableSequence.from<AnswerEngineChainInput>([
-      {
-        question: (input) => input.question,
-        chatHistory: (input) =>
-          input.chatHistory.map((message) => {
-            switch (message.role) {
-              case "user":
-                return new HumanMessage({ content: message.content });
-              case "assistant":
-              default:
-                return new AIMessage({ content: message.content });
-            }
-          }),
-        papers: async (input) => {
-          // TODO! type!
-          const searchQuery = parseFunctionCall(
-            // invoking searchQuery chain to prevent streaming in the result
-            // @ts-expect-error TODO!!!
-            await fetchPapersChain.invoke(input),
-          );
+  const conversationalAnswerEngineChain = RunnableSequence.from<
+    AnswerEngineChainInput,
+    BaseMessageChunk
+  >([
+    {
+      // TODO: To save time, how do we pass through the object with both
+      // `question` and `chatHistory`?
+      question: (input) => input.question,
+      chatHistory: (input) => input.chatHistory,
+      searchParams: getBuildSearchParamsChain(model),
+    },
+    {
+      question: (input) => input.question,
+      chatHistory: (input) => input.chatHistory,
+      papers: async (input) => {
+        if (!input.searchParams) {
+          return "[]";
+        }
 
-          if (!searchQuery) {
-            // Here we use a system message to not make the model believe it gave
-            // an empty answer, when going through the chat history.
-            return new SystemMessage({ content: "" });
-          }
+        const { keyConcept, relatedConcepts } = input.searchParams;
+        const oaSearchQuery = convertToOASearchString(
+          keyConcept,
+          relatedConcepts
+        );
 
-          const query = convertToOASearchString(
-            searchQuery.keyConcept,
-            searchQuery.relatedConcepts,
-          );
+        // TODO: Fix 0 paper results breaking the pipeline
+        const papers = await fetchPapers(oaSearchQuery);
+        // TODO: This should be better encapsulated
+        const papersWithRelativeLinks = papers?.map((paper) => ({
+          ...paper,
+          link: paper.link.replace("https://proem.ai", ""),
+        }));
 
-          // TODO: Fix case where 0 results from OA causes the pipeline to fail.
-
-          const papers = await fetchPapers(query);
-          // TODO! This is quite hacky to do here
-          const papersWithRelativeLinks = papers?.map((paper) => ({
-            ...paper,
-            link: paper.link.replace("https://proem.ai", ""),
-          }));
-
-          return new AIMessage({
-            content: JSON.stringify(papersWithRelativeLinks),
-          });
-        },
+        return JSON.stringify(papersWithRelativeLinks);
       },
-      chatPrompt,
-      model,
-      bytesOutputParser,
-    ]);
+    },
+    chatPrompt,
+    model,
+  ]);
 
-  const stream = await conversationalAnswerEngineChain.stream({
-    chatHistory,
-    question: currentMessageContent,
-  });
+  const stream = await conversationalAnswerEngineChain
+    .pipe(bytesOutputParser)
+    .stream({
+      question: currentMessageContent,
+      chatHistory,
+    });
 
   return new StreamingTextResponse(stream);
 }
 
-type ParseFunctionCallType = {
-  lc_kwargs: {
-    additional_kwargs: {
-      function_call: {
-        // name: string;
-        arguments: string;
-      };
-      tool_calls: undefined;
-    };
-  };
-};
-
-/**
- * hacky way to handle optional JsonOutputFunctionsParser
- */
-function parseFunctionCall<T extends ParseFunctionCallType>(response: T) {
-  const args = response?.lc_kwargs?.additional_kwargs?.function_call?.arguments;
-  return args && JSON.parse(args);
-}
+const toLangChainChatHistory = (item: ChatHistoryItem) =>
+  item.role === "user"
+    ? new HumanMessage(item.content)
+    : new AIMessage(item.content);
