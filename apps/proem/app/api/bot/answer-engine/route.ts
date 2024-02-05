@@ -1,4 +1,4 @@
-import { Message, StreamingTextResponse } from "ai";
+import { StreamingTextResponse } from "ai";
 import { NextRequest } from "next/server";
 
 import { convertToOASearchString } from "@/app/api/bot/answer-engine/convert-query-parameters";
@@ -17,16 +17,21 @@ import { RunnableSequence } from "@langchain/core/runnables";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
+import { organizations } from "@/app/prompts/openai-keys";
 
 export const runtime = "edge";
 
-const model = new ChatOpenAI({
-  // TODO! Figure out different temperature settings?
-  temperature: 0.8,
-  modelName: "gpt-3.5-turbo-1106",
-  cache: true,
-  verbose: true,
-});
+const model = new ChatOpenAI(
+  {
+    // TODO! Figure out different temperature settings?
+    temperature: 0.8,
+    modelName: "gpt-3.5-turbo-1106",
+    cache: true,
+    verbose: true,
+  },
+  // Not really sure if this works, so ASK has also been set as the default organisation in the OpenAI admin panel
+  { organization: organizations.ask },
+);
 
 const constructSearchParametersSchema = z.object({
   keyConcept: z.string()
@@ -159,7 +164,7 @@ AND SIMPLE!`,
           const searchQuery = parseFunctionCall(
             // invoking searchQuery chain to prevent streaming in the result
             // @ts-expect-error TODO!!!
-            await fetchPapersChain.invoke(input)
+            await fetchPapersChain.invoke(input),
           );
 
           if (!searchQuery) {
@@ -170,7 +175,7 @@ AND SIMPLE!`,
 
           const query = convertToOASearchString(
             searchQuery.keyConcept,
-            searchQuery.relatedConcepts
+            searchQuery.relatedConcepts,
           );
 
           // TODO: Fix case where 0 results from OA causes the pipeline to fail.

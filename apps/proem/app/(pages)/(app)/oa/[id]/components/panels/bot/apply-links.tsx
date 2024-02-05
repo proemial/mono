@@ -42,23 +42,43 @@ export function applyExplainLinks(
   ));
 }
 
-export const linkCheckReqex = /<a\s+(?:[^>]*?\s+)?href="([^"]*)">(.*?)<\/a>/g;
+export const aTaglinkCheckReqex =
+  /<a\s+(?:[^>]*?\s+)?href="([^"]*)">(.*?)<\/a>/g;
+export const markdownlinkCheckReqex = /\[([^\]]+)\]\(([^)]+)\)/g;
 
 export function applyLinks(
   message: string,
   onClick: (concept: string) => void
 ) {
-  const arr = message.replace(linkCheckReqex, "~~$&~~").split("~~");
+  const arr = message
+    .replace(aTaglinkCheckReqex, "~~$&~~")
+    .replace(markdownlinkCheckReqex, "~~$&~~")
+    .split("~~");
 
   // TODO?: Add better streaming support with partial rendering of styled a tags while it's streamed in
   return arr.map((messagePart, i) => {
-    const [_fullTag, href, innerContent] =
-      linkCheckReqex.exec(messagePart) ?? [];
-    const hrefWithoutQueryParameters = href?.split("?")[0];
-    const content =
-      hrefWithoutQueryParameters && innerContent
-        ? asLink(innerContent, () => onClick(hrefWithoutQueryParameters))
-        : messagePart;
+    const [_fullATag, aTagHref, aTagContent] =
+      aTaglinkCheckReqex.exec(messagePart) ?? [];
+
+    const [_fullMarkdownLink, markdownContent, markdownHref] =
+      markdownlinkCheckReqex.exec(messagePart) ?? [];
+
+    const link: { href: string; content: string } | null =
+      aTagHref && aTagContent
+        ? {
+            href: aTagHref.split("?")[0] as string,
+            content: aTagContent,
+          }
+        : markdownHref && markdownContent
+          ? {
+              href: markdownHref.split("?")[0] as string,
+              content: markdownContent,
+            }
+          : null;
+
+    const content = link
+      ? asLink(link.content, () => onClick(link.href))
+      : messagePart;
 
     return <span key={i}>{content}</span>;
   });

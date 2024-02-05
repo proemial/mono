@@ -1,15 +1,10 @@
 import { NextRequest } from "next/server";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { Configuration, OpenAIApi } from "openai-edge";
-import {
-  context,
-  question,
-  model,
-  apiKey,
-  organization,
-} from "@/app/prompts/chat";
+import { context, question, model } from "@/app/prompts/chat";
+import { apiKey, organizations } from "@/app/prompts/openai-keys";
 
-const config = new Configuration({ apiKey, organization });
+const config = new Configuration({ apiKey, organization: organizations.read });
 const openai = new OpenAIApi(config);
 
 export const runtime = "edge";
