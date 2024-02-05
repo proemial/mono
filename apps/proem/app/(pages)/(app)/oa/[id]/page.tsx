@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { PaperCard } from "./components/paper-card";
 import Summary from "./components/summary";
 import { fetchPaper } from "./fetch-paper";
-import { Metadata } from "./page-metadata";
 
 import {
   Tabs,
@@ -13,6 +12,7 @@ import {
   TabsTrigger,
 } from "@/app/components/shadcn-ui/tab";
 import { notFound } from "next/navigation";
+import { Metadata } from "@/app/(pages)/(app)/oa/[id]/components/panels/metadata";
 
 type Props = {
   params: { id: string };

@@ -1,49 +1,25 @@
-import dayjs from "dayjs";
-import avatar from "@/app/images/avatar.svg";
-import Image from "next/image";
-import Markdown from "@/app/(pages)/(app)/oa/[id]/components/markdown";
-import { Panel } from "@/app/components/panel";
-import { OpenAlexPaper } from "@proemial/models/open-alex";
+import {
+  OpenAlexPaper,
+  OpenAlexWorkMetadata,
+} from "@proemial/models/open-alex";
+import { LinkButton } from "@/app/(pages)/(app)/oa/[id]/components/menu/link-button";
+import { Authors } from "@/app/(pages)/(app)/oa/[id]/components/panels/metadata/authors";
+import { PublicationDate } from "@/app/(pages)/(app)/oa/[id]/components/panels/metadata/publication-date";
+import { Concepts } from "@/app/(pages)/(app)/oa/[id]/components/panels/metadata/concepts";
+import { RelatedPapers } from "@/app/(pages)/(app)/oa/[id]/components/panels/metadata/related-papers";
+import { PaperSource } from "@/app/(pages)/(app)/oa/[id]/components/panels/metadata/paper-source";
+import { Title } from "@/app/(pages)/(app)/oa/[id]/components/panels/metadata/title";
 
-type Props = {
-  paper: OpenAlexPaper;
-  closed?: boolean;
-};
-
-export function MetadataPanel({ paper, closed }: Props) {
+export function Metadata({ paper }: { paper: OpenAlexPaper }) {
   return (
-    <Panel title="metadata" closed={closed}>
-      <div>
-        <div>
-          <div className="text-white">
-            {paper.data.primary_location?.source?.host_organization_name}
-            {" - "}
-            {dayjs(paper.data.publication_date).format("MMM DD, YYYY")}
-          </div>
-        </div>
-        <Markdown>{paper.data.title}</Markdown>
-        {paper.data.abstract && (
-          <div className=" font-light">
-            <Markdown>{paper.data.abstract}</Markdown>
-          </div>
-        )}
-      </div>
-      <div className="text-white mt-2">Authors</div>
-      <div className="flex py-2 gap-10 flex-nowrap overflow-scroll no-scrollbar">
-        {paper.data.authorships.map((author, index) => (
-          <Author key={index} name={author.author.display_name} />
-        ))}
-      </div>
-    </Panel>
-  );
-}
-
-function Author({ name }: { name: string }) {
-  const names = name.split(" ");
-  return (
-    <div className="whitespace-nowrap flex gap-1">
-      <Image src={avatar} alt="" />
-      {names.at(-1)}
+    <div className="flex flex-col gap-3 font-sans text-xs leading-4">
+      <Title>{paper.data.title}</Title>
+      <Authors authorships={paper.data.authorships} />
+      <PublicationDate>{paper.data.publication_date}</PublicationDate>
+      <Concepts concepts={(paper.data as OpenAlexWorkMetadata).concepts} />
+      <RelatedPapers papers={paper.data.related_works} />
+      <PaperSource>{paper.data.primary_location?.landing_page_url}</PaperSource>
+      <LinkButton url={paper.data.primary_location?.landing_page_url} />
     </div>
   );
 }
