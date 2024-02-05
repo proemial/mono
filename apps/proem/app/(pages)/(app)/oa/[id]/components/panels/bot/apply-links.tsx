@@ -78,7 +78,7 @@ export function applyLinks(
 
     const content = link
       ? asLink(link.content, () => onClick(link.href))
-      : messagePart.trim();
+      : messagePart;
 
     return <span key={i}>{content}</span>;
   });
