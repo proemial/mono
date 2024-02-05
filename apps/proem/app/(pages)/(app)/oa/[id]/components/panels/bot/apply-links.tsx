@@ -50,7 +50,10 @@ export function applyLinks(
   message: string,
   onClick: (concept: string) => void
 ) {
-  const arr = message.replace(aTaglinkCheckReqex, "~~$&~~").split("~~");
+  const arr = message
+    .replace(aTaglinkCheckReqex, "~~$&~~")
+    .replace(markdownlinkCheckReqex, "~~$&~~")
+    .split("~~");
 
   // TODO?: Add better streaming support with partial rendering of styled a tags while it's streamed in
   return arr.map((messagePart, i) => {
@@ -75,7 +78,7 @@ export function applyLinks(
 
     const content = link
       ? asLink(link.content, () => onClick(link.href))
-      : messagePart;
+      : messagePart.trim();
 
     return <span key={i}>{content}</span>;
   });
