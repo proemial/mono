@@ -9,7 +9,7 @@ const ANSWER_WITH_A_TAG_LINK =
 const ANSWER_WITH_MARDOWN_LINK =
   "Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. [Dreaming and the brain: from phenomenology to neurophysiology](https://proem.ai/oa/W2081767153?title=Dreaming%20and%20the%20brain:%20from%20phenomenology%20to%20neurophysiology) The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, [The brain as a dream state generator: an activation-synthesis hypothesis of the dream process](https://proem.ai/oa/W1750887975?title=The%20brain%20as%20a%20dream%20state%20generator:%20an%20activation-synthesis%20hypothesis%20of%20the%20dream%20process)";
 
-test("applyLinks", () => {
+test("applyLinks can handle markdown + a tag links", () => {
   expect(applyLinks(ANSWER_WITH_A_TAG_LINK, () => {})).toMatchSnapshot();
   expect(applyLinks(ANSWER_WITH_MARDOWN_LINK, () => {})).toMatchSnapshot();
 });
