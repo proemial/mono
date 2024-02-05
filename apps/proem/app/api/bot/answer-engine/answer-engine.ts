@@ -1,10 +1,16 @@
-import { StreamingTextResponse } from "ai";
+import {
+  StreamingTextResponse,
+  createStreamDataTransformer,
+  experimental_StreamData,
+} from "ai";
 
+import { AnswerEngineChatMessageHistory } from "@/app/api/bot/answer-engine/answer-engine-memory";
 import { convertToOASearchString } from "@/app/api/bot/answer-engine/convert-query-parameters";
 import { parseFunctionCall } from "@/app/api/bot/answer-engine/parse-function-call";
 import { fetchPapers } from "@/app/api/paper-search/search";
 import {
   AIMessage,
+  FunctionMessage,
   HumanMessage,
   SystemMessage,
 } from "@langchain/core/messages";
@@ -13,7 +19,10 @@ import {
   ChatPromptTemplate,
   MessagesPlaceholder,
 } from "@langchain/core/prompts";
-import { RunnableSequence } from "@langchain/core/runnables";
+import {
+  RunnableSequence,
+  RunnableWithMessageHistory,
+} from "@langchain/core/runnables";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
@@ -117,6 +126,28 @@ const chatPrompt = ChatPromptTemplate.fromMessages<AnswerEngineChainInput>([
   ["human", `{question}`],
 ]);
 
+// const messageHistory = new AnswerEngineChatMessageHistory();
+
+const chatChain = chatPrompt.pipe(model);
+const chatChainWithHistory = new RunnableWithMessageHistory({
+  runnable: chatChain,
+  // getMessageHistory: (sessionId) => messageHistory,
+  getMessageHistory: (sessionId) =>
+    new AnswerEngineChatMessageHistory(sessionId),
+  inputMessagesKey: "question",
+  historyMessagesKey: "chatHistory",
+});
+
+type ChatHistory = { role: string; content: string }[];
+
+type AnswerEngineChainInput = {
+  sessionId: string;
+  question: string;
+  chatHistory: ChatHistory;
+};
+
+export type AnswerEngineParams = AnswerEngineChainInput;
+
 const conversationalAnswerEngineChain =
   RunnableSequence.from<AnswerEngineChainInput>([
     {
@@ -132,6 +163,7 @@ const conversationalAnswerEngineChain =
           }
         }),
       papers: async (input) => {
+        return [];
         // TODO! type!
         const searchQuery = parseFunctionCall(
           // invoking searchQuery chain to prevent streaming in the result
@@ -159,33 +191,54 @@ const conversationalAnswerEngineChain =
           link: paper.link.replace("https://proem.ai", ""),
         }));
 
-        return new AIMessage({
-          content: JSON.stringify(papersWithRelativeLinks),
-        });
+        return [
+          new AIMessage({ content: "" }), // Add function_call parameter how?
+          new FunctionMessage({
+            name: "name_of_function",
+            content: "result_of_function", // content: JSON.stringify(papersWithRelativeLinks),
+          }),
+        ];
       },
     },
-    chatPrompt,
-    model,
-    bytesOutputParser,
+    chatChainWithHistory,
+    bytesOutputParser, // TODO: Can this parse papers through?
   ]);
-
-type ChatHistory = { role: string; content: string }[];
-
-type AnswerEngineChainInput = {
-  question: string;
-  chatHistory: ChatHistory;
-};
-
-export type AnswerEngineParams = AnswerEngineChainInput;
 
 export async function askAnswerEngine({
   question,
   chatHistory,
+  sessionId,
 }: AnswerEngineParams) {
-  const stream = await conversationalAnswerEngineChain.stream({
-    chatHistory,
-    question,
+  const data = new experimental_StreamData();
+
+  data.append({
+    sessionId,
   });
 
-  return new StreamingTextResponse(stream);
+  const stream = await conversationalAnswerEngineChain.stream(
+    {
+      sessionId,
+      chatHistory,
+      question,
+    },
+    {
+      configurable: { sessionId },
+      callbacks: [
+        {
+          handleChainEnd(_outputs, _runid, parentRunId) {
+            // check that main chain (without parent) is finished:
+            if (parentRunId == null) {
+              data.close();
+            }
+          },
+        },
+      ],
+    }
+  );
+
+  return new StreamingTextResponse(
+    stream.pipeThrough(createStreamDataTransformer(true)),
+    {},
+    data
+  );
 }
