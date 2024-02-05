@@ -1,12 +1,13 @@
 import OpenAI from "openai";
-import { Env } from "@proemial/utils/env";
-
-const apiKey = Env.get("OPENAI_API_KEY");
+import { apiKey, organizations } from "@/app/prompts/openai-keys";
 
 const model = "gpt-3.5-turbo";
 
 export async function summarise(title: string, abstract: string) {
-  const openai = new OpenAI({ apiKey });
+  const openai = new OpenAI({
+    apiKey,
+    organization: organizations.summarization,
+  });
 
   const completion = await openai.chat.completions.create({
     model,
