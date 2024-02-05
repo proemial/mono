@@ -17,7 +17,7 @@ const asLink = (content: string, onClickHandle: LinkOnClick) => {
  */
 export function applyExplainLinks(
   msg: string,
-  onClick: (concept: string) => void
+  onClick: (concept: string) => void,
 ): React.ReactNode {
   const re = /\(\(.*?\)\)/gi;
 
@@ -48,7 +48,7 @@ export const markdownlinkCheckReqex = /\[([^\]]+)\]\(([^)]+)\)/g;
 
 export function applyLinks(
   message: string,
-  onClick: (concept: string) => void
+  onClick: (concept: string) => void,
 ) {
   const arr = message
     .replace(aTaglinkCheckReqex, "~~$&~~")
@@ -80,6 +80,10 @@ export function applyLinks(
       ? asLink(link.content, () => onClick(link.href))
       : messagePart;
 
-    return <span key={i}>{content}</span>;
+    return (
+      <span key={i} className="break-words">
+        {content}
+      </span>
+    );
   });
 }
