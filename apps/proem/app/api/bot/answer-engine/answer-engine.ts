@@ -3,6 +3,7 @@ import {
   createStreamDataTransformer,
   experimental_StreamData,
 } from "ai";
+import { Run } from "@langchain/core/tracers/base";
 
 import { AnswerEngineChatMessageHistory } from "@/app/api/bot/answer-engine/answer-engine-memory";
 import { convertToOASearchString } from "@/app/api/bot/answer-engine/convert-query-parameters";
@@ -23,57 +24,18 @@ import {
   RunnableSequence,
   RunnableWithMessageHistory,
 } from "@langchain/core/runnables";
-import { ChatOpenAI } from "langchain/chat_models/openai";
-import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
-import { organizations } from "@/app/prompts/openai-keys";
+import { model } from "@/app/api/bot/answer-engine/model";
+import { fetchPapersChain } from "@/app/api/bot/answer-engine/fetch-papers-chain";
+import { fetchPaper } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
+import { config } from "process";
+import { neonDb } from "../../../../../../packages/data";
+import {
+  NewAnswer,
+  answers,
+  insertAnswerSchema,
+} from "../../../../../../packages/data/neon/schema/answers";
 
 const bytesOutputParser = new BytesOutputParser();
-
-const model = new ChatOpenAI(
-  {
-    // TODO! Figure out different temperature settings?
-    temperature: 0.8,
-    modelName: "gpt-3.5-turbo-1106",
-    cache: true,
-    verbose: true,
-  },
-  // Not really sure if this works, so ASK has also been set as the default organisation in the OpenAI admin panel
-  { organization: organizations.ask }
-);
-
-const constructSearchParametersSchema = z.object({
-  keyConcept: z.string()
-    .describe(`A single common noun that is VERY likely to occur in the title of
-    a research paper that contains the answer to the user's question. The
-    argument MUST be a single word.`),
-  relatedConcepts: z.string().array()
-    .describe(`The most closely related scientific concepts as well as two or
-    three synonyms for the key concept. Preferrably two-grams or longer.`),
-});
-
-const searchQueryPrompt = ChatPromptTemplate.fromMessages([
-  [
-    "system",
-    "Construct a set of search parameters that can be used retrieve one or more scientific research papers related to the user's question.",
-  ],
-  ["human", `{question}`],
-]);
-
-const fetchPapersChain = RunnableSequence.from([
-  searchQueryPrompt,
-  model.bind({
-    functions: [
-      {
-        name: "constructSearchParameters",
-        description: `A function to construct a set of search parameters to
-          retrieve one or more scientific research papers related to the user's
-          question.`,
-        parameters: zodToJsonSchema(constructSearchParametersSchema),
-      },
-    ],
-  }),
-]);
 
 const chatPrompt = ChatPromptTemplate.fromMessages<AnswerEngineChainInput>([
   [
@@ -124,21 +86,26 @@ const chatPrompt = ChatPromptTemplate.fromMessages<AnswerEngineChainInput>([
   // TODO! Hacky with hack-hack
   // ! fix langchain pipe
   new MessagesPlaceholder("chatHistory"),
-  new MessagesPlaceholder("papers"),
   ["human", `{question}`],
 ]);
 
-// const messageHistory = new AnswerEngineChatMessageHistory();
-
 const chatChain = chatPrompt.pipe(model);
-const chatChainWithHistory = new RunnableWithMessageHistory({
-  runnable: chatChain,
-  // getMessageHistory: (sessionId) => messageHistory,
-  getMessageHistory: (sessionId) =>
-    new AnswerEngineChatMessageHistory(sessionId),
-  inputMessagesKey: "question",
-  historyMessagesKey: "chatHistory",
-});
+// const chatChainWithHistory = new RunnableWithMessageHistory({
+//   runnable: chatChain,
+//   getMessageHistory: (sessionId) =>
+//     new AnswerEngineChatMessageHistory(sessionId),
+//   inputMessagesKey: "question",
+//   historyMessagesKey: "chatHistory",
+// });
+
+// const fetchPapersChainWithHistory = new RunnableWithMessageHistory({
+//   runnable: fetchPapersChain,
+//   getMessageHistory: (sessionId) =>
+//     new AnswerEngineChatMessageHistory(sessionId),
+//   inputMessagesKey: "papers",
+//   outputMessagesKey: "papers",
+//   historyMessagesKey: "fakeHistory?",
+// });
 
 type ChatHistory = { role: string; content: string }[];
 
@@ -154,6 +121,7 @@ const conversationalAnswerEngineChain =
   RunnableSequence.from<AnswerEngineChainInput>([
     {
       question: (input) => input.question,
+      // TODO! remove
       chatHistory: (input) =>
         input.chatHistory.map((message) => {
           switch (message.role) {
@@ -164,46 +132,35 @@ const conversationalAnswerEngineChain =
               return new AIMessage({ content: message.content });
           }
         }),
-      papers: async (input) => {
-        return [];
-        // TODO! type!
-        const searchQuery = parseFunctionCall(
-          // invoking searchQuery chain to prevent streaming in the result
-          // @ts-expect-error TODO!!!
-          await fetchPapersChain.invoke(input)
+      papersRequest: async (input, { config: { configurable } }) => {
+        // TODO! We should only fetch papers on the first run
+        console.log(configurable);
+        const request = await fetchPapersChain.invoke(
+          {
+            question: input.question,
+          },
+          {
+            configurable: { sessionId: configurable.sessionId },
+          }
         );
 
-        if (!searchQuery) {
-          // Here we use a system message to not make the model believe it gave
-          // an empty answer, when going through the chat history.
-          return new SystemMessage({ content: "" });
-        }
-
-        const query = convertToOASearchString(
-          searchQuery.keyConcept,
-          searchQuery.relatedConcepts
-        );
-
-        // TODO: Fix case where 0 results from OA causes the pipeline to fail.
-
-        const papers = await fetchPapers(query);
-        // TODO! This is quite hacky to do here
-        const papersWithRelativeLinks = papers?.map((paper) => ({
-          ...paper,
-          link: paper.link.replace("https://proem.ai", ""),
-        }));
-
-        return [
-          new AIMessage({ content: "" }), // Add function_call parameter how?
-          new FunctionMessage({
-            name: "name_of_function",
-            content: "result_of_function", // content: JSON.stringify(papersWithRelativeLinks),
-          }),
-        ];
+        console.log(request);
+        return request;
+        // return JSON.stringify(papers);
       },
+      // test: (input, config) => {
+      //   console.log(input);
+      //   console.log(config);
+      //   return fetchPapersChain.invoke({ question: input.question });
+      // },
     },
-    chatChainWithHistory,
-    bytesOutputParser, // TODO: Can this parse papers through?
+    {
+      papers: (input) => JSON.stringify(input.papersRequest.papers),
+      question: (input) => input.question,
+      chatHistory: (input) => input.chatHistory,
+    },
+    chatChain,
+    bytesOutputParser,
   ]);
 
 export async function askAnswerEngine({
@@ -211,32 +168,183 @@ export async function askAnswerEngine({
   chatHistory,
   sessionId,
 }: AnswerEngineParams) {
+  // TODO! Check for cached item?
+  // const cached = await kv.get(key);
+  // if (cached) {
+  //   return new Response(cached);
+  // optional: emulate streaming https://sdk.vercel.ai/docs/concepts/caching
+
   const data = new experimental_StreamData();
+  const memory = new AnswerEngineChatMessageHistory(sessionId);
+  // const answerToSave = {
+  //   question,
+  //   sessionId,
+  //   answer,
+  //   papers,
+  //   parent?
+  // }
 
   data.append({
     sessionId,
   });
 
-  const stream = await conversationalAnswerEngineChain.stream(
-    {
-      sessionId,
-      chatHistory,
-      question,
-    },
-    {
-      configurable: { sessionId },
-      callbacks: [
-        {
-          handleChainEnd(_outputs, _runid, parentRunId) {
-            // check that main chain (without parent) is finished:
-            if (parentRunId == null) {
-              data.close();
-            }
+  const stream = await conversationalAnswerEngineChain
+    .withListeners({
+      onStart: (run: Run) => {
+        console.log(run);
+      },
+      onEnd: async (run: Run) => {
+        const newAnswer = run.child_runs.reduce(
+          (acc, cur) => {
+            const answer = acc.answer || cur.inputs.content;
+            const paperRequests = acc.paperRequests || cur.inputs.papersRequest;
+            return {
+              ...acc,
+              paperRequests,
+              answer,
+            };
           },
+          {
+            answer: null,
+            paperRequests: null,
+          }
+        );
+
+        console.log(newAnswer);
+        const answerToSave: NewAnswer = {
+          answer: newAnswer.answer!,
+          keyConcept: newAnswer.paperRequests!.query.keyConcept,
+          relatedConcepts: newAnswer.paperRequests!.query.relatedConcepts,
+          papers: {
+            papers: newAnswer.paperRequests!.papers,
+          },
+          slug: sessionId,
+          question,
+          // ownerId,
+        };
+        console.log({ answerToSave });
+        // const parsedAnswer = insertAnswerSchema.parse(answerToSave);
+        // console.log(parsedAnswer);
+
+        // TODO! could batch +   .onConflictDoNothing();
+        const returned = await neonDb.insert(answers).values(answerToSave);
+
+        console.log(returned);
+
+        const { extra, events, outputs, inputs, child_runs } = run;
+
+        console.log(extra);
+        console.log(events);
+        console.log(outputs);
+        console.log(inputs);
+        console.log(child_runs.length);
+        console.log(child_runs[0]);
+        console.log(child_runs[1]);
+        console.log(child_runs[2]);
+        console.log(child_runs[3]);
+        console.log(child_runs[0]?.child_runs);
+        console.log(child_runs[1]?.child_runs);
+        console.log(child_runs[2]?.child_runs);
+        console.log(child_runs[3]?.child_runs);
+        for (const child of child_runs) {
+          // const paperOutput
+          console.log(child?.serialized);
+          console.log(child?.child_runs);
+          console.log(child?.inputs);
+          const aiContent = child.inputs.content;
+          console.log(aiContent);
+          const question = child.inputs.question;
+          console.log(question);
+
+          const paperRequests = child?.inputs?.papersRequest;
+          console.log(paperRequests);
+          /*
+           papersRequest: {
+      query: {
+        keyConcept: 'sleep',
+        relatedConcepts: [ 'sleep patterns', 'sleep deprivation', 'circadian rhythm', 'REM sleep', 'sleep disorders' ]
+      },
+      papers: Array(30) [
+        {
+          link: '/oa/W2118370586',
+          abstract:
+            'Actigraphy is increasingly used in sleep research and the clinical care of patients with sleep and circadian rhythm abnormalities. The following practice parameters update the previous practice parameters published in 2003 for the use of actigraphy in the study of sleep and circadian rhythms. Based upon a systematic grading of evidence, members of the Standards of Practice Committee, including those with expertise in the use of actigraphy, developed these practice parameters as a guide to the appropriate use of actigraphy, both as a diagnostic tool in the evaluation of sleep disorders and as an outcome measure of treatment efficacy in clinical settings with appropriate patient populations. Actigraphy provides an acceptably accurate estimate of sleep patterns in normal, healthy adult populations and inpatients suspected of certain sleep disorders. More specifically, actigraphy is indicated to assist in the evaluation of patients with advanced sleep phase syndrome (ASPS), delayed sleep phase syndrome (DSPS), and shift work disorder. Additionally, there is some evidence to support the use of actigraphy in the evaluation of patients suspected of jet lag disorder and non-24hr sleep/wake syndrome (including that associated with blindness). When polysomnography is not available, actigraphy is indicated to estimate total sleep time in patients with obstructive sleep apnea. In patients with insomnia and hypersomnia, there is evidence to support the use of actigraphy in the characterization of circadian rhythms and sleep patterns/disturbances. In assessing response to therapy, actigraphy has proven useful as an outcome measure in patients with circadian rhythm disorders and insomnia. In older adults (including older nursing home residents), in whom traditional sleep monitoring can be difficult, actigraphy is indicated for characterizing sleep and circadian patterns and to document treatment responses. Similarly, in normal infants and children, as well as special pediatric populations, actigraphy has proven useful for delineating sleep patterns and documenting treatment responses. Recent research utilizing actigraphy in the assessment and management of sleep disorders has allowed the development of evidence-based recommendations for the use of actigraphy in the clinical setting. Additional research is warranted to further refine and broaden its clinical value.',
+          title:
+            'Practice Parameters for the Use of Actigraphy in the Assessment of Sleep and Sleep Disorders: An Update for 2007'
         },
-      ],
-    }
-  );
+
+          */
+        }
+        console.log(run);
+
+        console.log(
+          run.child_runs.find((run) => run.name === "RunnableSequence")
+            ?.serialized
+        );
+      },
+    })
+    .stream(
+      {
+        sessionId,
+        chatHistory,
+        question,
+      },
+      {
+        configurable: { sessionId },
+        callbacks: [
+          {
+            // handleChainError(){}
+            // handleChainStart() {}
+            // handleChatModelStart(
+            //   llm,
+            //   messages,
+            //   runId,
+            //   parentRunId,
+            //   extraParams,
+            //   tags,
+            //   metadata,
+            //   name
+            // ) {
+            //   console.log(llm);
+            //   console.log(messages);
+            //   console.log(runId);
+            //   console.log(parentRunId);
+            //   console.log(extraParams);
+            //   console.log(tags);
+            //   console.log(metadata);
+            //   console.log(name);
+            // },
+            handleChainEnd(_outputs, _runid, parentRunId, tags, kwargs) {
+              const test = _outputs?.test;
+
+              if (test) {
+                console.log(test.query);
+              }
+              console.log(test);
+              console.log(_outputs);
+              console.log(_runid);
+              console.log(parentRunId);
+              console.log(tags);
+              console.log(kwargs);
+
+              if (tags?.includes("map:key:papers")) {
+                console.log(_outputs);
+              }
+
+              if (parentRunId == null) {
+                // TODO! Add correct function with query and papers
+                // memory.addMessage(
+                //   new FunctionMessage({ name: "test", content: "done" })
+                // );
+                // check that main chain (without parent) is finished:
+                console.log(_outputs);
+                data.close();
+              }
+            },
+          },
+        ],
+      }
+    );
 
   return new StreamingTextResponse(
     stream.pipeThrough(createStreamDataTransformer(true)),
