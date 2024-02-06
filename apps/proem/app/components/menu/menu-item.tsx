@@ -9,13 +9,15 @@ type Props = {
   href: string;
   children: ReactNode;
   authRequired?: boolean;
+  track?: string;
 };
 
 export function MenuItem(props: Props) {
-  const { text, linkProps, children, style, active } = useMenuProps(props);
+  const { text, linkProps, children, style, active, track } =
+    useMenuProps(props);
 
   const handleClick = () => {
-    Tracker.track(`click:menu-${props.text.toLowerCase()}`);
+    track && Tracker.track(track);
   };
 
   return (

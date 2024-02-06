@@ -1,4 +1,14 @@
 export const analyticsKeys = {
+  ui: {
+    menu: {
+      click: {
+        ask: "click:menu-ask",
+        feed: "click:menu-feed",
+        read: "click:menu-read",
+        you: "click:menu-profile",
+      },
+    },
+  },
   read: {
     click: {
       feed: "click:read-feed",
