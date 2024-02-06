@@ -3,14 +3,15 @@ import { useEffect, useState } from "react";
 import { Env } from "@proemial/utils/env";
 import * as Sentry from "@sentry/nextjs";
 import process from "process";
+import { analyticsTrace } from "@/app/components/analytics/utils";
 
 export function SentryClient() {
   const [initialized, setInitialized] = useState(false);
-  console.log("[SentryClient]");
+  analyticsTrace("[SentryClient]");
 
   useEffect(() => {
     if (!initialized && Env.isProd) {
-      console.log("[SentryClient] init");
+      analyticsTrace("[SentryClient] init");
       Sentry.init({
         dsn: Env.validate(
           "NEXT_PUBLIC_SENTRY_DSN",

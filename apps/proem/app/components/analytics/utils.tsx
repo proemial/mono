@@ -14,12 +14,12 @@ export function useAnalyticsDisabled() {
   // Deleting the cookie must be done manually
   if ((isEmployee || explicitDisabled) && !disabledByCookie) {
     setCookie("analyticsDisabled", "true");
-    console.log("analytics cookie updated");
+    analyticsTrace("analytics cookie updated");
   }
 
   const isDisabled = !!(isEmployee || explicitDisabled || disabledByCookie);
 
-  console.log(
+  analyticsTrace(
     `AnalyticsDisabled: ${isDisabled} (${isEmployee}, ${explicitDisabled}, ${disabledByCookie})`,
   );
 
@@ -36,4 +36,10 @@ export function usePathNames() {
   };
 
   return { pathname, viewName: getViewName(pathname) };
+}
+
+export function analyticsTrace(...data: any[]) {
+  const enabled = getCookie("analyticsTrace");
+
+  if (enabled) console.log(...data);
 }
