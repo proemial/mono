@@ -2,7 +2,7 @@ import { Search } from "lucide-react";
 import { LinkButton } from "@/app/components/proem-ui/link-button";
 import { fetchLatestPaperIds } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
-import { TextInput } from "@/app/components/proem-ui/text-input";
+import { AskInput } from "@/app/(pages)/(app)/oa/ask-input";
 
 export const revalidate = 1;
 
@@ -48,10 +48,10 @@ async function Actions() {
         <Search style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
         SUGGESTED ACTIONS
       </div>
-      <LinkButton href="/feed" className="mb-2">
+      <LinkButton href="/feed" className="mb-2" track="read-feed">
         Open your feed
       </LinkButton>
-      <LinkButton href={`/oa/${randomId}`} className="mb-2">
+      <LinkButton href={`/oa/${randomId}`} className="mb-2" track="read-feed">
         Open a random recent paper
       </LinkButton>
     </div>
@@ -75,14 +75,13 @@ function Questions() {
           href={`/?q=${encodeURIComponent(starter.text)}`}
           variant="starter"
           className="mb-2"
+          track="read-starter"
         >
           {starter.text}
         </LinkButton>
       ))}
       <div className="relative w-full">
-        <form className="flex flex-row items-center" action="/" method="get">
-          <TextInput />
-        </form>
+        <AskInput />
       </div>
     </div>
   );

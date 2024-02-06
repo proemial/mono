@@ -1,12 +1,15 @@
+"use client";
 import Link from "next/link";
 import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "@/app/components/shadcn-ui/utils";
 import { Send } from "@/app/components/icons/functional/send";
+import { Tracker } from "@/app/components/analytics/tracker";
 
 type LinkProps = VariantProps<typeof variants> & {
   children: string;
   className?: string;
   href: string;
+  track?: string;
 };
 
 const variants = cva("rounded-sm font-sans", {
@@ -27,12 +30,13 @@ const variants = cva("rounded-sm font-sans", {
 });
 
 export function LinkButton(props: LinkProps) {
-  const { children, href, variant, size, className } = props;
+  const { children, href, variant, size, className, track } = props;
 
   return (
     <Link
       href={href}
       className={`${cn(variants({ variant, size, className }))}`}
+      onClick={() => track && Tracker.track(`click:${track}`)}
     >
       <div className="w-full truncate mr-2">{children}</div>
       {variant === "starter" && <Send />}
