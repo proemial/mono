@@ -50,7 +50,7 @@ function Concepts({ data }: { data: OpenAlexWorkMetadata }) {
   const filtered = sorted ? [sorted.at(0), sorted.at(-2), sorted.at(-1)] : [];
 
   return (
-    <div className="flex gap-1 text-xs text-white/50 mt-2">
+    <div className="flex gap-1 text-xs text-white/50 mt-2 font-sans">
       {filtered && (
         <div
           key={filtered[0]?.id}
