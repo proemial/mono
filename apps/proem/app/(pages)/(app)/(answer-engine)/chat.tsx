@@ -8,7 +8,7 @@ import {
 } from "@/app/components/shadcn-ui/Avatar";
 import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
-import { memo, useEffect, useRef, useState } from "react";
+import { Dispatch, memo, useEffect, useRef, useState } from "react";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import WithHeader from "@/app/(pages)/(app)/header";
 import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
@@ -66,6 +66,7 @@ export default function Chat({ user, message }: MessageProps) {
     isLoading,
     setMessages,
     stop,
+    setInput,
   } = useChat({
     id: "quickfix_for_local_persistenst",
     api: "/api/bot/answer-engine",
@@ -96,6 +97,7 @@ export default function Chat({ user, message }: MessageProps) {
       messages={messages}
       setMessages={setMessages}
       stop={stop}
+      setInput={setInput}
     />
   );
 
@@ -136,9 +138,10 @@ type ActionButtonProps = {
   messages: any[];
   setMessages: any;
   stop: any;
+  setInput: Dispatch<React.SetStateAction<string>>;
 };
 function ActionButton(props: ActionButtonProps) {
-  const { isLoading, messages, setMessages, stop } = props;
+  const { isLoading, messages, setMessages, stop, setInput } = props;
   const visible = !isLoading && messages.length > 0;
   const trackAndInvoke = (item: string, callback: () => void) => {
     Tracker.track(`click:ask-${item}`);
@@ -158,7 +161,12 @@ function ActionButton(props: ActionButtonProps) {
       </div>
 
       <div
-        onClick={() => trackAndInvoke("clear", () => setMessages([]))}
+        onClick={() =>
+          trackAndInvoke("clear", () => {
+            setMessages([]);
+            setInput("");
+          })
+        }
         className={`${
           // TODO: Fix fade in/out
           visible ? "opacity-100" : "opacity-0 hidden"
