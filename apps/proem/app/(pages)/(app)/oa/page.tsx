@@ -2,9 +2,7 @@ import { Search } from "lucide-react";
 import { LinkButton } from "@/app/components/proem-ui/link-button";
 import { fetchLatestPaperIds } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
-import { Input } from "@/app/components/shadcn-ui/input";
-import { Button } from "@/app/components/shadcn-ui/button";
-import { Send } from "@/app/components/icons/functional/send";
+import { TextInput } from "@/app/components/proem-ui/text-input";
 
 export const revalidate = 1;
 
@@ -78,28 +76,11 @@ function Questions() {
           {starter.text}
         </LinkButton>
       ))}
-      <AskInput />
+      <div className="relative w-full">
+        <form className="flex flex-row items-center" action="/" method="get">
+          <TextInput />
+        </form>
+      </div>
     </div>
-  );
-}
-
-function AskInput() {
-  return (
-    <form className="flex flex-row items-center" action="/" method="get">
-      <Input
-        type="text"
-        name="q"
-        placeholder="Ask anything"
-        className="relative break-words stretch"
-      />
-      <Button
-        variant="send_button"
-        size="sm"
-        type="submit"
-        className="absolute justify-center bg-transparent right-4"
-      >
-        <Send />
-      </Button>
-    </form>
   );
 }

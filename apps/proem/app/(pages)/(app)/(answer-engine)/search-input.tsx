@@ -1,9 +1,7 @@
 "use client";
-import { Send } from "@/app/components/icons/functional/send";
-import { Button } from "@/app/components/shadcn-ui/button";
-import { Input } from "@/app/components/shadcn-ui/input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { TextInput } from "@/app/components/proem-ui/text-input";
 
 type SearchInputProps = {
   handleSubmit?: (e: any) => void;
@@ -35,10 +33,7 @@ export default function SearchInput({
               }
         }
       >
-        <Input
-          type="text"
-          placeholder="Ask anything"
-          className="relative break-words stretch"
+        <TextInput
           value={input ? input : searchValue}
           onChange={
             handleInputChange
@@ -47,15 +42,6 @@ export default function SearchInput({
           }
           disabled={disabled}
         />
-        <Button
-          variant="send_button"
-          size="sm"
-          type="submit"
-          className="absolute justify-center bg-transparent right-2"
-          disabled={disabled}
-        >
-          <Send />
-        </Button>
       </form>
     </div>
   );
