@@ -2,6 +2,7 @@ import React, { ReactNode } from "react";
 import Link from "next/link";
 import { useIsActive } from "@/app/components/menu/helpers/is-active";
 import { useLinkProps } from "@/app/components/menu/helpers/link-props";
+import { Tracker } from "@/app/components/analytics/tracker";
 
 type Props = {
   text: string;
@@ -13,11 +14,16 @@ type Props = {
 export function MenuItem(props: Props) {
   const { text, linkProps, children, style, active } = useMenuProps(props);
 
+  const handleClick = () => {
+    Tracker.track(`click:menu-${props.text.toLowerCase()}`);
+  };
+
   return (
     <Link {...linkProps} className="w-full px-1 pt-2 pb-3 flex" style={style}>
       <div
         className="w-full px-6 py-2 gap-1 flex items-center rounded-full cursor-pointer justify-center text-xs"
         style={{ backgroundColor: active ? "#3C3C3C" : "inherit" }}
+        onClick={handleClick}
       >
         {children} {text}
       </div>
