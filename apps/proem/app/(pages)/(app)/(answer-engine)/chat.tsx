@@ -183,6 +183,11 @@ const Starters = memo(function Starters({ append }: { append: any }) {
     .sort(() => 0.5 - Math.random())
     .slice(0, 3);
 
+  const trackAndInvoke = (callback: () => void) => {
+    Tracker.track(`click:ask-starter`);
+    callback();
+  };
+
   return (
     <div className="flex flex-col h-full mb-5" suppressHydrationWarning>
       <div className="h-full flex flex-col text-center items-center justify-center px-8 font-sans">
@@ -195,7 +200,9 @@ const Starters = memo(function Starters({ append }: { append: any }) {
             variant="starter"
             className="mb-1 w-full cursor-pointer"
             onClick={() => {
-              append({ role: "user", content: starter.text });
+              trackAndInvoke(() =>
+                append({ role: "user", content: starter.text }),
+              );
             }}
           >
             {starter.text}
