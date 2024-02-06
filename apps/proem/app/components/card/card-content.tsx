@@ -11,10 +11,6 @@ export async function CardContent({ id }: { id: string }) {
     return undefined;
   }
 
-  // const organisation =
-  //   paper.data.primary_location?.source?.host_organization_name;
-  const date = paper.data.publication_date;
-
   return (
     <div className="bg-[#2F2F2F] mb-3 rounded-sm border border-[#3C3C3C] scale-100 active:scale-[0.99] transition-all duration-100">
       <div className="flex flex-col justify-between h-full p-4 text-lg font-medium items-left">
@@ -23,7 +19,7 @@ export async function CardContent({ id }: { id: string }) {
             RESEARCH PAPER{" "}
             <span className="text-white/50">
               {" "}
-              — {dayjs(date).format("M.D.YYYY")}
+              — {dayjs(paper.data.publication_date).format("M.D.YYYY")}
             </span>
           </div>
 
