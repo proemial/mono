@@ -8,6 +8,7 @@ import {
 } from "@/app/components/shadcn-ui/Avatar";
 import { SignedIn, currentUser } from "@clerk/nextjs";
 import Link from "next/link";
+import { Privacy } from "@/app/(pages)/(app)/profile/privacy";
 
 export default async function ProfilePage() {
   const user = await currentUser();
@@ -98,18 +99,7 @@ export default async function ProfilePage() {
         </div>
       </SignedIn>
 
-      <div className="inset-x-0 px-4 bottom-5">
-        <p className="font-sans text-xs font-normal leading-snug text-left text-gray-500">
-          Proemial reserves all rights. Read our{" "}
-          <Link href="" className="underline">
-            Privacy Policy.
-          </Link>
-        </p>
-        <p className="font-sans text-xs font-normal leading-snug text-left text-gray-500">
-          Proemial ApS. DK-8000 Aarhus C. CVR no.: 44250543. Email:
-          hi@proemial.ai.
-        </p>
-      </div>
+      <Privacy />
     </>
   );
 }
