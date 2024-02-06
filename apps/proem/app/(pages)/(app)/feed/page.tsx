@@ -6,6 +6,7 @@ import {
   NothingHereYet,
 } from "@/app/components/spinner";
 import { Suspense } from "react";
+import { CardContent } from "@/app/components/card/card-content";
 
 export const revalidate = 1;
 
@@ -27,7 +28,9 @@ async function PageContent({ latestIds }: { latestIds: string[] }) {
       {latestIds.length === 0 && <NothingHereYet />}
       {latestIds.map((id, index) => (
         <Suspense key={index} fallback={<EmptySpinner />}>
-          <PaperCard id={id} />
+          <PaperCard id={id}>
+            <CardContent id={id} />
+          </PaperCard>
         </Suspense>
       ))}
     </div>
