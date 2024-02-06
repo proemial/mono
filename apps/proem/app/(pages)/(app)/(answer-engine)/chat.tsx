@@ -15,6 +15,7 @@ import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
 import { SquareIcon } from "lucide-react";
 import { Button } from "@/app/components/proem-ui/link-button";
 import { ProemLogo } from "@/app/components/icons/logo";
+import { Tracker } from "@/app/components/analytics/tracker";
 
 const PROEM_BOT = {
   name: "proem",
@@ -139,10 +140,15 @@ type ActionButtonProps = {
 function ActionButton(props: ActionButtonProps) {
   const { isLoading, messages, setMessages, stop } = props;
   const visible = !isLoading && messages.length > 0;
+  const trackAndInvoke = (item: string, callback: () => void) => {
+    Tracker.track(`click:ask-${item}`);
+    callback();
+  };
+
   return (
     <>
       <div
-        onClick={() => stop()}
+        onClick={() => trackAndInvoke("stop", () => stop())}
         className={`${
           // TODO: Fix fade in/out
           isLoading ? "opacity-100" : "opacity-0 hidden"
@@ -152,7 +158,7 @@ function ActionButton(props: ActionButtonProps) {
       </div>
 
       <div
-        onClick={() => setMessages([])}
+        onClick={() => trackAndInvoke("clear", () => setMessages([]))}
         className={`${
           // TODO: Fix fade in/out
           visible ? "opacity-100" : "opacity-0 hidden"
