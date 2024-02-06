@@ -1,14 +1,14 @@
 "use client";
 import Link from "next/link";
 import { Tracker } from "@/app/components/analytics/tracker";
+import { ReactNode } from "react";
 
-export async function PaperCard({
-  id,
-  children,
-}: {
+type Props = {
   id: string;
-  children: React.ReactNode;
-}) {
+  children: ReactNode;
+};
+
+export async function PaperCard({ id, children }: Props) {
   const handleClick = () => {
     Tracker.track(`click:feed-card`, { id });
   };
