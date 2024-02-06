@@ -1,7 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { TextInput } from "@/app/components/proem-ui/text-input";
+import { Tracker } from "@/app/components/analytics/tracker";
 
 type SearchInputProps = {
   handleSubmit?: (e: any) => void;
@@ -20,18 +21,22 @@ export default function SearchInput({
   const [searchValue, setSearchValue] = useState("");
   const router = useRouter();
 
+  const trackAndInvoke = (event: FormEvent<HTMLFormElement>) => {
+    Tracker.track(`submit:ask-question`, { text: input ? input : searchValue });
+
+    !!handleSubmit
+      ? handleSubmit(event)
+      : () => {
+          event.preventDefault();
+          router.push(`/search?q=${searchValue}`);
+        };
+  };
+
   return (
     <div className="relative w-full">
       <form
         className="flex flex-row items-center"
-        onSubmit={
-          handleSubmit
-            ? handleSubmit
-            : (event) => {
-                event.preventDefault();
-                router.push(`/search?q=${searchValue}`);
-              }
-        }
+        onSubmit={(event) => trackAndInvoke(event)}
       >
         <TextInput
           value={input ? input : searchValue}
