@@ -60,7 +60,7 @@ function Concepts({ data }: { data: OpenAlexWorkMetadata }) {
         </div>
       )}
       {filtered.length > 1 &&
-        sorted?.slice(1).map((c) => (
+        filtered?.slice(1).map((c) => (
           <div
             key={c?.id}
             className="border border-white/50 rounded-md px-1 truncate"
