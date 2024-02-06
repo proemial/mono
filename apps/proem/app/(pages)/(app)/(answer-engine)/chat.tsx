@@ -206,7 +206,8 @@ function Text() {
       <ProemLogo />
       <div className="text-3xl py-4">proem</div>
       <div className="text-md text-white/80">
-        answers to your questions supported by scientific research
+        <div>answers to your questions</div>
+        <div>supported by scientific research</div>
       </div>
     </>
   );
