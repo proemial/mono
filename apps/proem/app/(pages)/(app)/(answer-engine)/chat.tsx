@@ -119,7 +119,7 @@ export default function Chat({ user, message }: MessageProps) {
         )}
 
         <div className="fixed left-0 w-full bg-black bottom-14">
-          <div className="w-full max-w-screen-md px-4 py-3 mx-auto">
+          <div className="w-full max-w-screen-md px-4 pt-2 pb-3 mx-auto">
             <SearchInput
               handleSubmit={handleSubmit}
               input={input}
@@ -197,7 +197,7 @@ const Starters = memo(function Starters({ append }: { append: any }) {
   };
 
   return (
-    <div className="flex flex-col h-full mb-5" suppressHydrationWarning>
+    <div className="flex flex-col h-full mb-3" suppressHydrationWarning>
       <div className="h-full flex flex-col text-center items-center justify-center px-8 font-sans">
         <Text />
       </div>
