@@ -8,6 +8,11 @@ export const analyticsKeys = {
         you: "click:menu-profile",
       },
     },
+    header: {
+      click: {
+        logo: "click:header-logo",
+      },
+    },
   },
   read: {
     click: {

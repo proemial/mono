@@ -3,6 +3,7 @@ import { Proem } from "@/app/components/icons/brand/proem";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { Tracker } from "@/app/components/analytics/tracker";
+import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 
 type PageHeaderProps = {
   title?: string;
@@ -14,7 +15,7 @@ export function PageHeader({
   action = <></>,
 }: PageHeaderProps) {
   const handleClick = () => {
-    Tracker.track(`click:header-logo`);
+    Tracker.track(analyticsKeys.ui.header.click.logo);
   };
 
   return (
