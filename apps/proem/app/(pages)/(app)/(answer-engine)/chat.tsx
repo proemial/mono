@@ -105,7 +105,9 @@ export default function Chat({ user, message }: MessageProps) {
     <WithHeader title="science answers" action={actionButton}>
       {/*// TODO: Remove font-sans to use the global font*/}
       <div
-        className="relative flex flex-col h-full px-4 pt-6 pb-12 font-sans"
+        className={`flex flex-col px-4 pt-6 pb-12 font-sans ${
+          isEmptyScreen && "h-full"
+        }`}
         ref={chatWrapperRef}
       >
         {isEmptyScreen ? (
