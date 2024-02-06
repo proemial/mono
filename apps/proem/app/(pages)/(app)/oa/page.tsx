@@ -24,10 +24,13 @@ function Text() {
   return (
     <>
       <div className="text-xl pb-4">No Paper Selected</div>
-      <div className="text-md text-white/50">
-        To find an interesting paper, start by asking a question, or go to the
-        feed and click a summary of a recent paper from a domain you are
-        interested in. You can also just click one of the suggestions below.
+      <div className="text-md text-white/80">
+        <div>To find an interesting paper, start by</div>
+        <div>asking a question, or go to the feed</div>
+        <div>and click a summary of a recent paper</div>
+        <div>from a domain you are interested in.</div>
+        <div>You can also just click one of the</div>
+        <div>suggestions below.</div>
       </div>
     </>
   );
