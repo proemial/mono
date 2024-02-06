@@ -15,7 +15,7 @@ export function TextInput({ value, disabled, onChange }: Props) {
         type="text"
         name="q"
         placeholder="Ask anything"
-        className="relative break-words stretch"
+        className="relative break-words stretch pr-12"
         value={value}
         onChange={onChange}
         disabled={disabled}
