@@ -26,6 +26,7 @@ import {
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
+import { organizations } from "@/app/prompts/openai-keys";
 
 const bytesOutputParser = new BytesOutputParser();
 
@@ -36,7 +37,8 @@ const model = new ChatOpenAI(
     modelName: "gpt-3.5-turbo-1106",
     cache: true,
     verbose: true,
-  }, // Not really sure if this works, so ASK has also been set as the default organisation in the OpenAI admin panel
+  },
+  // Not really sure if this works, so ASK has also been set as the default organisation in the OpenAI admin panel
   { organization: organizations.ask }
 );
 
