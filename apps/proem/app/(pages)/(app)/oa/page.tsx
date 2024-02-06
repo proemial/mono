@@ -3,6 +3,7 @@ import { LinkButton } from "@/app/components/proem-ui/link-button";
 import { fetchLatestPaperIds } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import { AskInput } from "@/app/(pages)/(app)/oa/ask-input";
+import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 
 export const revalidate = 1;
 
@@ -48,10 +49,18 @@ async function Actions() {
         <Search style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
         SUGGESTED ACTIONS
       </div>
-      <LinkButton href="/feed" className="mb-2" track="read-feed">
+      <LinkButton
+        href="/feed"
+        className="mb-2"
+        track={analyticsKeys.read.click.feed}
+      >
         Open your feed
       </LinkButton>
-      <LinkButton href={`/oa/${randomId}`} className="mb-2" track="read-feed">
+      <LinkButton
+        href={`/oa/${randomId}`}
+        className="mb-2"
+        track={analyticsKeys.read.click.random}
+      >
         Open a random recent paper
       </LinkButton>
     </div>
@@ -75,7 +84,7 @@ function Questions() {
           href={`/?q=${encodeURIComponent(starter.text)}`}
           variant="starter"
           className="mb-2"
-          track="read-starter"
+          track={analyticsKeys.read.click.starter}
         >
           {starter.text}
         </LinkButton>

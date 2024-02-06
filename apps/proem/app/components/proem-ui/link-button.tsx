@@ -36,7 +36,7 @@ export function LinkButton(props: LinkProps) {
     <Link
       href={href}
       className={`${cn(variants({ variant, size, className }))}`}
-      onClick={() => track && Tracker.track(`click:${track}`)}
+      onClick={() => track && Tracker.track(track)}
     >
       <div className="w-full truncate mr-2">{children}</div>
       {variant === "starter" && <Send />}

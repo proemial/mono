@@ -1,6 +1,7 @@
 "use client";
 import { Tracker } from "@/app/components/analytics/tracker";
 import { TextInput } from "@/app/components/proem-ui/text-input";
+import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 
 export function AskInput() {
   return (
@@ -9,7 +10,7 @@ export function AskInput() {
       action="/"
       method="get"
       onSubmit={() => {
-        Tracker.track("submit:read-ask");
+        Tracker.track(analyticsKeys.read.submit.ask);
       }}
     >
       <TextInput />
