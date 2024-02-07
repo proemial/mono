@@ -14,7 +14,7 @@ export async function QuestionsPanel(props: Props) {
     ? paper?.generated?.starters
     : await generate(paper);
 
-  return <InsightsBot {...props} suggestions={starters} />;
+  return <InsightsBot {...props} starters={starters} />;
 }
 
 async function generate(paper: OpenAlexPaper) {

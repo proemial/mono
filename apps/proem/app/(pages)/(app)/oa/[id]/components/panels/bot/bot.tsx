@@ -9,10 +9,10 @@ import { BotMessages } from "./messages";
 
 type Props = {
   paper: OpenAlexPaper;
-  suggestions: string[];
+  starters: string[];
 };
 
-export function InsightsBot({ paper, suggestions }: Props) {
+export function InsightsBot({ paper, starters }: Props) {
   const { title, abstract } = paper.data;
 
   const { messages, input, handleInputChange, handleSubmit, append } = useChat({
@@ -29,16 +29,16 @@ export function InsightsBot({ paper, suggestions }: Props) {
 
   return (
     <div className="flex flex-col h-full">
-      {!suggestions && (
+      {!starters && (
         <div className="mb-4">
           <Spinner />
         </div>
       )}
 
-      {suggestions && (
+      {starters && (
         <BotMessages
           messages={messages}
-          suggestions={suggestions}
+          starters={starters}
           append={append}
           chatWrapperRef={chatWrapperRef}
         />
@@ -53,7 +53,6 @@ export function InsightsBot({ paper, suggestions }: Props) {
           />
         </div>
       </div>
-
     </div>
   );
 }

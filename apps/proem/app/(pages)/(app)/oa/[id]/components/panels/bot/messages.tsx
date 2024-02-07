@@ -7,13 +7,13 @@ import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 
 type Props = Pick<UseChatHelpers, "append"> & {
   messages: AiMessage[];
-  suggestions: string[];
+  starters: string[];
   chatWrapperRef: MutableRefObject<HTMLInputElement | null>;
 };
 
 export function BotMessages({
   messages,
-  suggestions,
+  starters,
   append,
   chatWrapperRef,
 }: Props) {
@@ -37,11 +37,12 @@ export function BotMessages({
     >
       {messages.length === 0 &&
         // TODO! Filter out empty strings as a hack for now until the data consistensy is fixed
-        suggestions?.filter(Boolean).map((question) => (
+        starters?.filter(Boolean).map((question) => (
           <Question
             key={question}
             onClick={() => handleSuggestionClick(question)}
             className="cursor-pointer max-w-full sm:max-w-lg scale-100 active:scale-[0.99] transition-all duration-100"
+            starter
           >
             {question}
           </Question>
