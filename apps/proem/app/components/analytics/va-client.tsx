@@ -18,7 +18,7 @@ export function VaClient() {
 
   useEffect(() => {
     if (!disabled) {
-      analyticsTrace("[VaClient] trackPage:", `view:${viewName}`, pathname);
+      analyticsTrace("[VaClient] trackPage:", `${viewName}:view`, pathname);
       va.track(`view:${viewName}`, {
         path: pathname,
       });

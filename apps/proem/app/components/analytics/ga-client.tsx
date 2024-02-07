@@ -20,7 +20,7 @@ export function GaClient() {
 
   useEffect(() => {
     if (initialized) {
-      analyticsTrace("[GaClient] trackPage:", `view:${viewName}`, pathname);
+      analyticsTrace("[GaClient] trackPage:", `${viewName}:view`, pathname);
       ReactGA.send({ hitType: "pageview", page: pathname, title: pathname });
       ReactGA.event(`view:${viewName}`, {
         path: pathname,

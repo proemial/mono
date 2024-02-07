@@ -30,8 +30,9 @@ export function usePathNames() {
   const pathname = usePathname();
 
   const getViewName = (path: string) => {
-    if (path === "/") return "home";
-    if (path.startsWith("/oa")) return "reader";
+    if (path === "/") return "ask";
+    if (path.startsWith("/oa")) return "read";
+    if (path === "/profile") return "you";
     return path.slice(1);
   };
 
