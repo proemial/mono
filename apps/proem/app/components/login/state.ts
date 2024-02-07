@@ -15,3 +15,13 @@ export const useDrawerState = create<DrawerState>((set) => ({
   open: () => set(() => ({ isOpen: true })),
   close: () => set(() => ({ isOpen: false })),
 }));
+
+export type PaperState = {
+  latest?: string;
+  setLatest: (latest: string) => void;
+};
+
+export const usePaperState = create<PaperState>((set) => ({
+  latest: undefined,
+  setLatest: (latest) => set(() => ({ latest })),
+}));

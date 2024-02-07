@@ -4,20 +4,23 @@ import { fetchLatestPaperIds } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import { AskInput } from "@/app/(pages)/(app)/oa/ask-input";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
+import { Redirect } from "@/app/(pages)/(app)/oa/redirect";
 
 export const revalidate = 1;
 
 export default async function ReadPage() {
   return (
-    <div className="h-full max-w-screen-sm flex flex-col px-2">
-      <div className="h-full flex flex-col text-center items-center justify-center px-8 font-sans">
-        <Text />
+    <Redirect>
+      <div className="h-full max-w-screen-sm flex flex-col px-2">
+        <div className="h-full flex flex-col text-center items-center justify-center px-8 font-sans">
+          <Text />
+        </div>
+        <div className="flex flex-col gap-2 py-2 text-xs font-light">
+          <Actions />
+          <Questions />
+        </div>
       </div>
-      <div className="flex flex-col gap-2 py-2 text-xs font-light">
-        <Actions />
-        <Questions />
-      </div>
-    </div>
+    </Redirect>
   );
 }
 
