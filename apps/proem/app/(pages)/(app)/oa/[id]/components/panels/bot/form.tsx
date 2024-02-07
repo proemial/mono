@@ -29,7 +29,7 @@ export function BotForm({ value, onSubmit, onChange }: Props) {
           readOnly={!userId}
           onFocus={() => !userId && open()}
           type="text"
-          placeholder="Ask anything"
+          placeholder="Ask your own question about this paper"
           className="flex w-full h-[42px] text-[16px] font-sans font-normal rounded bg-[#1A1A1A] border border-[#4E4E4E] text-white placeholder-[#7DFA86] px-3 py-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 relative break-words stretch"
           value={value}
           onChange={onChange}
