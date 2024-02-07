@@ -38,6 +38,8 @@ export const analyticsKeys = {
       share: "read:share:click",
       starter: "read:starter:click",
       explainer: "read:explainer:click",
+      answers: "read:tab-answers:click",
+      metadata: "read:tab-metadata:click",
     },
     submit: {
       ask: "read:ask_input:submit",
@@ -51,4 +53,14 @@ export const analyticsKeys = {
       logout: "profile:logout:click",
     },
   },
+  viewName: (path: string) => {
+    return getViewName(path) + ":view";
+  },
 };
+
+function getViewName(path: string) {
+  if (path === "/") return "ask";
+  if (path.startsWith("/oa")) return "read";
+  if (path === "/profile") return "you";
+  return path.slice(1);
+}

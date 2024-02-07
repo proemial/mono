@@ -2,6 +2,7 @@
 import { useUser } from "@clerk/nextjs";
 import { getCookie, setCookie } from "cookies-next";
 import { usePathname } from "next/navigation";
+import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 
 export function useAnalyticsDisabled() {
   const { user } = useUser();
@@ -28,15 +29,9 @@ export function useAnalyticsDisabled() {
 
 export function usePathNames() {
   const pathname = usePathname();
+  const trackingKey = analyticsKeys.viewName(pathname);
 
-  const getViewName = (path: string) => {
-    if (path === "/") return "ask";
-    if (path.startsWith("/oa")) return "read";
-    if (path === "/profile") return "you";
-    return path.slice(1);
-  };
-
-  return { pathname, viewName: getViewName(pathname) };
+  return { pathname, trackingKey };
 }
 
 export function analyticsTrace(...data: any[]) {

@@ -14,12 +14,12 @@ export function VaClient() {
   analyticsTrace("[VaClient]");
 
   const disabled = useAnalyticsDisabled();
-  const { pathname, viewName } = usePathNames();
+  const { pathname, trackingKey } = usePathNames();
 
   useEffect(() => {
     if (!disabled) {
-      analyticsTrace("[VaClient] trackPage:", `${viewName}:view`, pathname);
-      va.track(`view:${viewName}`, {
+      analyticsTrace("[VaClient] trackPage:", trackingKey, pathname);
+      va.track(trackingKey, {
         path: pathname,
       });
     }

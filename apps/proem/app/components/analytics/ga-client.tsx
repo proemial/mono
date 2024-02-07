@@ -16,13 +16,13 @@ export function GaClient() {
 
   const disabled = useAnalyticsDisabled();
   const initialized = useInit(disabled);
-  const { pathname, viewName } = usePathNames();
+  const { pathname, trackingKey } = usePathNames();
 
   useEffect(() => {
     if (initialized) {
-      analyticsTrace("[GaClient] trackPage:", `${viewName}:view`, pathname);
+      analyticsTrace("[GaClient] trackPage:", trackingKey, pathname);
       ReactGA.send({ hitType: "pageview", page: pathname, title: pathname });
-      ReactGA.event(`view:${viewName}`, {
+      ReactGA.event(trackingKey, {
         path: pathname,
       });
     }
