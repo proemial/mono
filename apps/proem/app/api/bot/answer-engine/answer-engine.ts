@@ -5,7 +5,6 @@ import {
   experimental_StreamData,
 } from "ai";
 
-import { AnswerEngineChatMessageHistory } from "@/app/api/bot/answer-engine/answer-engine-memory";
 import { fetchPapersChain } from "@/app/api/bot/answer-engine/fetch-papers-chain";
 import { model } from "@/app/api/bot/answer-engine/model";
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
@@ -15,11 +14,8 @@ import {
   MessagesPlaceholder,
 } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
-import { neonDb } from "../../../../../../packages/data";
-import {
-  NewAnswer,
-  answers,
-} from "../../../../../../packages/data/neon/schema/answers";
+import { neonDb } from "@proemial/data";
+import { NewAnswer, answers } from "@proemial/data/neon/schema/answers";
 
 const bytesOutputParser = new BytesOutputParser();
 
@@ -76,22 +72,6 @@ const chatPrompt = ChatPromptTemplate.fromMessages<AnswerEngineChainInput>([
 ]);
 
 const chatChain = chatPrompt.pipe(model);
-// const chatChainWithHistory = new RunnableWithMessageHistory({
-//   runnable: chatChain,
-//   getMessageHistory: (sessionId) =>
-//     new AnswerEngineChatMessageHistory(sessionId),
-//   inputMessagesKey: "question",
-//   historyMessagesKey: "chatHistory",
-// });
-
-// const fetchPapersChainWithHistory = new RunnableWithMessageHistory({
-//   runnable: fetchPapersChain,
-//   getMessageHistory: (sessionId) =>
-//     new AnswerEngineChatMessageHistory(sessionId),
-//   inputMessagesKey: "papers",
-//   outputMessagesKey: "papers",
-//   historyMessagesKey: "fakeHistory?",
-// });
 
 type ChatHistory = { role: string; content: string }[];
 
@@ -134,11 +114,6 @@ const conversationalAnswerEngineChain =
         return request;
         // return JSON.stringify(papers);
       },
-      // test: (input, config) => {
-      //   console.log(input);
-      //   console.log(config);
-      //   return fetchPapersChain.invoke({ question: input.question });
-      // },
     },
     {
       papers: (input) => JSON.stringify(input.papersRequest.papers),
