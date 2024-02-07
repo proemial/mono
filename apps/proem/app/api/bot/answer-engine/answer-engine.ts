@@ -94,17 +94,22 @@ const conversationalAnswerEngineChain =
               return new AIMessage({ content: message.content });
           }
         }),
-      papers: async (input) => {
+      papersRequest: async (input) => {
         if (input.papers) {
-          return JSON.stringify(input.papers);
+          return { papers: input.papers };
         }
 
         const request = await fetchPapersChain.invoke({
           question: input.question,
         });
 
-        return JSON.stringify(request.papers);
+        return request;
       },
+    },
+    {
+      question: (input) => input.question,
+      chatHistory: (input) => input.chatHistory,
+      papers: (input) => JSON.stringify(input.papersRequest.papers),
     },
     chatChain,
     bytesOutputParser,
@@ -131,11 +136,7 @@ export async function askAnswerEngine({
     .from(answers)
     .where(eq(answers.slug, slug));
 
-  console.log(existingAnswers);
-
   const existingPapers = existingAnswers[0]?.papers?.papers;
-
-  console.log(existingPapers);
 
   data.append({
     slug,
