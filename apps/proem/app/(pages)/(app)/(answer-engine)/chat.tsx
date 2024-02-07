@@ -67,9 +67,7 @@ function Message({
 type ChatProps = Pick<MessageProps, "user" | "message">;
 
 export default function Chat({ user, message }: ChatProps) {
-  // const [sessionId, setSessionId] = useState("dummy");
-  // const Router = useRouter();
-
+  const [sessionSlug, setSessionSlug] = useState<null | string>(null);
   const {
     messages,
     input,
@@ -81,22 +79,23 @@ export default function Chat({ user, message }: ChatProps) {
     stop,
     setInput,
     data,
-    metadata,
   } = useChat({
-    id: "hardcoded_for_client",
+    id: "hardcoded",
     api: "/api/bot/answer-engine",
+    body: { slug: sessionSlug },
   });
 
-  // const sessionIdFromServer = data?.find(({ sessionId }) => sessionId)
-  //   ?.sessionId;
+  const sessionSlugFromServer = (data as { slug?: string }[])?.find(
+    ({ slug }) => slug
+  )?.slug;
 
-  // useEffect(() => {
-  //   if (sessionIdFromServer) {
-  //     setSessionId(sessionIdFromServer);
-  //     // TODO! Make some condition around new router replace after initial message is recieved
-  //     Router.replace(`/answer/${sessionIdFromServer}`);
-  //   }
-  // }, [sessionIdFromServer]);
+  useEffect(() => {
+    if (sessionSlugFromServer) {
+      setSessionSlug(sessionSlugFromServer);
+      // TODO! Make some condition around new router replace after initial message is recieved
+      // Router.replace(`/answer/${sessionIdFromServer}`);
+    }
+  }, [sessionSlugFromServer]);
 
   const chatWrapperRef = useRef<HTMLDivElement>(null);
 
