@@ -2,6 +2,7 @@
 import { Button } from "@/app/components/shadcn-ui/button";
 import { SignOutButton } from "@clerk/nextjs";
 import { Tracker } from "@/app/components/analytics/tracker";
+import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 
 export function ProfileButtons() {
   // TODO: callback from clerk is quirky.
@@ -9,7 +10,7 @@ export function ProfileButtons() {
   //  Tracking after kinda works, but sometimes throws a console error
   const handleCallback = () => {
     window.location.replace("/");
-    Tracker.track(`click:profile-logout`);
+    Tracker.track(analyticsKeys.profile.click.logout);
   };
 
   return (

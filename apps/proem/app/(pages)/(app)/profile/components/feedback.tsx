@@ -2,6 +2,7 @@
 import { MegaPhone } from "@/app/components/icons/objects/megaphone";
 import Link from "next/link";
 import { Tracker } from "@/app/components/analytics/tracker";
+import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 
 export function Feedback() {
   return (
@@ -10,7 +11,7 @@ export function Feedback() {
       href="https://tally.so/r/wAv8Ve"
       target="_blank"
       rel="noopener noreferrer"
-      onClick={() => Tracker.track(`click:profile-feedback`)}
+      onClick={() => Tracker.track(analyticsKeys.profile.click.feedback)}
     >
       <div className="flex items-center justify-center gap-3 leading-none">
         <MegaPhone />

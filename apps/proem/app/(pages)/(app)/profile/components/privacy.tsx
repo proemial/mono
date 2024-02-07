@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Tracker } from "@/app/components/analytics/tracker";
+import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 
 export function Privacy() {
   return (
@@ -10,7 +11,7 @@ export function Privacy() {
         <Link
           href="/privacy"
           className="underline"
-          onClick={() => Tracker.track(`click:profile-privacy`)}
+          onClick={() => Tracker.track(analyticsKeys.profile.click.privacy)}
         >
           Privacy Policy.
         </Link>

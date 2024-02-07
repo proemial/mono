@@ -31,5 +31,11 @@ export const analyticsKeys = {
       ask: "read:ask_input:submit",
     },
   },
-  profile: {},
+  profile: {
+    click: {
+      feedback: "profile:feedback:click",
+      privacy: "profile:privacy:click",
+      logout: "profile:logout:click",
+    },
+  },
 };
