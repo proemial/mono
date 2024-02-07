@@ -16,6 +16,7 @@ import {
 import { RunnableSequence } from "@langchain/core/runnables";
 import { neonDb } from "@proemial/data";
 import { NewAnswer, answers } from "@proemial/data/neon/schema/answers";
+import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
 
 const bytesOutputParser = new BytesOutputParser();
 
@@ -76,12 +77,9 @@ const chatChain = chatPrompt.pipe(model);
 type ChatHistory = { role: string; content: string }[];
 
 type AnswerEngineChainInput = {
-  sessionId: string;
   question: string;
   chatHistory: ChatHistory;
 };
-
-export type AnswerEngineParams = AnswerEngineChainInput;
 
 const conversationalAnswerEngineChain =
   RunnableSequence.from<AnswerEngineChainInput>([
@@ -98,19 +96,12 @@ const conversationalAnswerEngineChain =
               return new AIMessage({ content: message.content });
           }
         }),
-      papersRequest: async (input, { config: { configurable } }) => {
+      papersRequest: async (input) => {
         // TODO! We should only fetch papers on the first run
-        console.log(configurable);
-        const request = await fetchPapersChain.invoke(
-          {
-            question: input.question,
-          },
-          {
-            configurable: { sessionId: configurable.sessionId },
-          }
-        );
+        const request = await fetchPapersChain.invoke({
+          question: input.question,
+        });
 
-        console.log(request);
         return request;
         // return JSON.stringify(papers);
       },
@@ -129,15 +120,20 @@ type PapersRequest = {
   papers: { link: string; abstract: string; title: string }[];
 };
 
+export type AnswerEngineParams = AnswerEngineChainInput & {
+  existingSlug?: string;
+};
+
 export async function askAnswerEngine({
+  existingSlug,
   question,
   chatHistory,
-  sessionId,
 }: AnswerEngineParams) {
   const data = new experimental_StreamData();
+  const slug = existingSlug ?? prettySlug(question);
 
   data.append({
-    sessionId,
+    slug,
   });
 
   const stream = await conversationalAnswerEngineChain
@@ -178,7 +174,7 @@ export async function askAnswerEngine({
           papers: {
             papers: valuesFromCurrentChain.papersRequest!.papers,
           },
-          slug: sessionId,
+          slug,
           question,
           // TODO! add ownerId
           // ownerId,
@@ -189,17 +185,14 @@ export async function askAnswerEngine({
     })
     .stream(
       {
-        sessionId,
         chatHistory,
         question,
       },
       {
-        configurable: { sessionId },
         callbacks: [
           {
-            handleChainEnd(_outputs, _runid, parentRunId, tags, kwargs) {
+            handleChainEnd(_outputs, _runid, parentRunId) {
               if (parentRunId == null) {
-                console.log(_outputs);
                 data.close();
               }
             },

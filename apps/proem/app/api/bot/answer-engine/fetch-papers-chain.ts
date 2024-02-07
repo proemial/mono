@@ -44,7 +44,7 @@ export const fetchPapersChain = RunnableSequence.from([
   jsonOutputFunctionsParser,
   {
     query: (input) => input,
-    papers: async (input, configuration) => {
+    papers: async (input) => {
       const query = convertToOASearchString(
         input.keyConcept,
         input.relatedConcepts
