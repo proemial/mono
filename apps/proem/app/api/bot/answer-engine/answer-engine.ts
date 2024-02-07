@@ -1,12 +1,6 @@
-import { Run } from "@langchain/core/tracers/base";
-import {
-  StreamingTextResponse,
-  createStreamDataTransformer,
-  experimental_StreamData,
-} from "ai";
-
 import { fetchPapersChain } from "@/app/api/bot/answer-engine/fetch-papers-chain";
 import { model } from "@/app/api/bot/answer-engine/model";
+import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
 import {
@@ -14,9 +8,15 @@ import {
   MessagesPlaceholder,
 } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
+import { Run } from "@langchain/core/tracers/base";
 import { neonDb } from "@proemial/data";
 import { NewAnswer, answers } from "@proemial/data/neon/schema/answers";
-import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
+import {
+  StreamingTextResponse,
+  createStreamDataTransformer,
+  experimental_StreamData,
+} from "ai";
+import { eq } from "drizzle-orm";
 
 const bytesOutputParser = new BytesOutputParser();
 
@@ -66,8 +66,6 @@ const chatPrompt = ChatPromptTemplate.fromMessages<AnswerEngineChainInput>([
     WITH HYPERLINKS ON TWO KEY PHRASES. THIS IS ESSENTIAL. KEEP YOUR ANSWERS SHORT
     AND SIMPLE!`,
   ],
-  // TODO! Hacky with hack-hack
-  // ! fix langchain pipe
   new MessagesPlaceholder("chatHistory"),
   ["human", `{question}`],
 ]);
@@ -79,13 +77,13 @@ type ChatHistory = { role: string; content: string }[];
 type AnswerEngineChainInput = {
   question: string;
   chatHistory: ChatHistory;
+  papers?: PapersRequest["papers"];
 };
 
 const conversationalAnswerEngineChain =
   RunnableSequence.from<AnswerEngineChainInput>([
     {
       question: (input) => input.question,
-      // TODO! remove
       chatHistory: (input) =>
         input.chatHistory.map((message) => {
           switch (message.role) {
@@ -96,20 +94,17 @@ const conversationalAnswerEngineChain =
               return new AIMessage({ content: message.content });
           }
         }),
-      papersRequest: async (input) => {
-        // TODO! We should only fetch papers on the first run
+      papers: async (input) => {
+        if (input.papers) {
+          return JSON.stringify(input.papers);
+        }
+
         const request = await fetchPapersChain.invoke({
           question: input.question,
         });
 
-        return request;
-        // return JSON.stringify(papers);
+        return JSON.stringify(request.papers);
       },
-    },
-    {
-      papers: (input) => JSON.stringify(input.papersRequest.papers),
-      question: (input) => input.question,
-      chatHistory: (input) => input.chatHistory,
     },
     chatChain,
     bytesOutputParser,
@@ -131,6 +126,16 @@ export async function askAnswerEngine({
 }: AnswerEngineParams) {
   const data = new experimental_StreamData();
   const slug = existingSlug ?? prettySlug(question);
+  const existingAnswers = await neonDb
+    .select()
+    .from(answers)
+    .where(eq(answers.slug, slug));
+
+  console.log(existingAnswers);
+
+  const existingPapers = existingAnswers[0]?.papers?.papers;
+
+  console.log(existingPapers);
 
   data.append({
     slug,
@@ -187,6 +192,7 @@ export async function askAnswerEngine({
       {
         chatHistory,
         question,
+        papers: existingPapers,
       },
       {
         callbacks: [

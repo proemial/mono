@@ -1,9 +1,6 @@
 import { NextRequest } from "next/server";
 
-import {
-  AnswerEngineParams,
-  askAnswerEngine,
-} from "@/app/api/bot/answer-engine/answer-engine";
+import { askAnswerEngine } from "@/app/api/bot/answer-engine/answer-engine";
 
 export async function POST(req: NextRequest) {
   const { messages = [], slug } = await req.json();
