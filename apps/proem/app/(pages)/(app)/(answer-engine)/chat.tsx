@@ -19,7 +19,6 @@ import {
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import WithHeader from "@/app/(pages)/(app)/header";
 import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
-import { SquareIcon } from "lucide-react";
 import { Button } from "@/app/components/proem-ui/link-button";
 import { ProemLogo } from "@/app/components/icons/logo";
 import { Tracker } from "@/app/components/analytics/tracker";
@@ -128,7 +127,7 @@ export default function Chat({ user, message }: MessageProps) {
           />
         )}
 
-        <div className="fixed left-0 w-full bg-black bottom-14">
+        <div className="fixed left-0 w-full bg-black bottom-14 shadow-top">
           <div className="w-full max-w-screen-md px-4 pt-2 pb-3 mx-auto">
             <SearchInput
               handleSubmit={handleSubmit}

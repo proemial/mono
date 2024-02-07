@@ -10,7 +10,7 @@ import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 export function MainMenu() {
   return (
     <div className="bg-[#1A1A1A] fixed bottom-0 z-50 w-full">
-      <div className="flex justify-between w-full max-w-screen-md px-4 mx-auto">
+      <div className="flex justify-between w-full max-w-screen-md px-4 mx-auto shado">
         <MenuItem text="ASK" href="/" track={analyticsKeys.ui.menu.click.ask}>
           <SearchIcon />
         </MenuItem>

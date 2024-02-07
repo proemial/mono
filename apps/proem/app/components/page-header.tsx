@@ -20,8 +20,8 @@ export function PageHeader({
 
   return (
     <>
-      <div className="fixed w-full top-0 z-50 bg-black">
-        <div className="flex flex-row items-center justify-between max-w-screen-md px-6 py-3 mx-auto">
+      <div className="fixed w-full top-0 z-50 bg-black shadow-bottom">
+        <div className="flex flex-row items-center justify-between max-w-screen-md px-6 pt-3 pb-2 mx-auto">
           <Link href="/" onClick={handleClick}>
             <div className="flex flex-row gap-3">
               <Proem />

@@ -32,6 +32,8 @@ module.exports = {
       },
       boxShadow: {
         DEFAULT: "0 4px 8px hsl(var(--background))",
+        top: "0 -4px 8px -4px hsl(var(--background))",
+        bottom: "0 8px 8px -4px hsl(var(--background))",
       },
       colors: {
         border: "hsl(var(--border))",
@@ -114,7 +116,7 @@ module.exports = {
             textShadow: value,
           }),
         },
-        { values: theme("textShadow") }
+        { values: theme("textShadow") },
       );
     }),
     require("tailwindcss-animate"),
