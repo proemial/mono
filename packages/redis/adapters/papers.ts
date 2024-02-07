@@ -18,6 +18,10 @@ export const OpenAlexPapers = {
   },
 
   pushAll: async (papers: WithData | Array<WithData>) => {
+    if (Array.isArray(papers) && papers.length < 1) {
+      return;
+    }
+
     try {
       if (!Array.isArray(papers)) {
         const id = getIdFromOpenAlexPaper(papers);
@@ -39,11 +43,11 @@ export const OpenAlexPapers = {
 
   upsert: async (
     id: string,
-    appendFn: (existingPaper: OpenAlexPaper) => OpenAlexPaper,
+    appendFn: (existingPaper: OpenAlexPaper) => OpenAlexPaper
   ) => {
     try {
       const redisPaper = (await UpStash.papers.get(
-        `oa:${id}`,
+        `oa:${id}`
       )) as OpenAlexPaper;
 
       const updatedPaper = appendFn(redisPaper || {});

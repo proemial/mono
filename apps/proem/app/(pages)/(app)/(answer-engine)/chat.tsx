@@ -116,14 +116,18 @@ export default function Chat({ user, message }: ChatProps) {
 
   const isEmptyScreen = messages.length === 0;
   const showLoadingState = isLoading && messages.length <= 1;
+  const clear = () => {
+    setMessages([]);
+    setInput("");
+    setSessionSlug(null);
+  };
 
   const actionButton = (
     <ActionButton
       isLoading={isLoading}
       messages={messages}
-      setMessages={setMessages}
       stop={stop}
-      setInput={setInput}
+      clear={clear}
     />
   );
 
@@ -164,21 +168,15 @@ export default function Chat({ user, message }: ChatProps) {
 type ActionButtonProps = {
   isLoading: boolean;
   messages: any[];
-  setMessages: any;
   stop: any;
-  setInput: Dispatch<SetStateAction<string>>;
+  clear: () => void;
 };
 function ActionButton(props: ActionButtonProps) {
-  const { isLoading, messages, setMessages, stop, setInput } = props;
+  const { isLoading, messages, clear, stop } = props;
   const visible = !isLoading && messages.length > 0;
   const trackAndInvoke = (key: string, callback: () => void) => {
     Tracker.track(key);
     callback();
-  };
-
-  const clear = () => {
-    setMessages([]);
-    setInput("");
   };
 
   return (
