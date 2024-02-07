@@ -7,7 +7,7 @@ export const answers = pgTable("answers", {
   question: text("question").notNull(),
   answer: text("answer").notNull(),
   ownerId: text("ownerId"),
-  keyConcept: text("keyConcept").notNull(),
+  keyConcept: text("keyConcept"),
   relatedConcepts: text("relatedConcepts").array(),
   // TODO! This is all papers & we need to save the papers used for the answer separately
   papers:

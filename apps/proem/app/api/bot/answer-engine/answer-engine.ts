@@ -136,6 +136,7 @@ export async function askAnswerEngine({
     .from(answers)
     .where(eq(answers.slug, slug));
 
+  const isFollowUpQuestion = existingAnswers.length > 0;
   const existingPapers = existingAnswers[0]?.papers?.papers;
 
   data.append({
@@ -145,48 +146,31 @@ export async function askAnswerEngine({
   const stream = await conversationalAnswerEngineChain
     .withListeners({
       onEnd: async (run: Run) => {
-        const valuesFromCurrentChain = (
-          run.child_runs as any as {
-            inputs: {
-              content: string;
-              papersRequest: PapersRequest;
+        const chainRun = run.child_runs as any as {
+          inputs: {
+            content: string;
+            papersRequest: PapersRequest;
+          };
+        }[];
+
+        const answer = chainRun.find((run) => run.inputs.content)?.inputs
+          .content!;
+        const paperRequests = chainRun.find((run) => run.inputs.papersRequest)
+          ?.inputs.papersRequest!;
+
+        const papers = isFollowUpQuestion
+          ? {}
+          : {
+              relatedConcepts: paperRequests?.query.relatedConcepts,
+              keyConcept: paperRequests?.query.keyConcept,
+              papers: {
+                papers: paperRequests?.papers,
+              },
             };
-          }[]
-        ).reduce(
-          (acc, cur) => {
-            const answer = acc.answer || cur.inputs.content;
-            const papersRequest = acc.papersRequest || cur.inputs.papersRequest;
 
-            return {
-              ...acc,
-              papersRequest,
-              answer,
-            };
-          },
-          {
-            answer: null,
-            papersRequest: null,
-          } as {
-            answer: string | null;
-            papersRequest: PapersRequest | null;
-          }
-        );
-
-        const newAnswer: NewAnswer = {
-          answer: valuesFromCurrentChain.answer!,
-          keyConcept: valuesFromCurrentChain.papersRequest!.query.keyConcept,
-          relatedConcepts:
-            valuesFromCurrentChain.papersRequest!.query.relatedConcepts,
-          papers: {
-            papers: valuesFromCurrentChain.papersRequest!.papers,
-          },
-          slug,
-          question,
-          // TODO! add ownerId
-          // ownerId,
-        };
-
-        await neonDb.insert(answers).values(newAnswer);
+        await neonDb
+          .insert(answers)
+          .values({ slug, question, answer, ...papers });
       },
     })
     .stream(
