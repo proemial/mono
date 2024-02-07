@@ -4,6 +4,8 @@ import { useAuth } from "@clerk/nextjs";
 import { FormEvent } from "react";
 import { Button } from "@/app/components/shadcn-ui/button";
 import { Send } from "@/app/components/icons/functional/send";
+import { Tracker } from "@/app/components/analytics/tracker";
+import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 
 type Props = {
   value: string;
@@ -15,9 +17,14 @@ export function BotForm({ value, onSubmit, onChange }: Props) {
   const { userId } = useAuth();
   const { open } = useDrawerState();
 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    Tracker.track(analyticsKeys.read.submit.question);
+    onSubmit(e);
+  };
+
   return (
     <div className="relative w-full">
-      <form onSubmit={onSubmit} className="flex flex-row items-center">
+      <form onSubmit={handleSubmit} className="flex flex-row items-center">
         <input
           readOnly={!userId}
           onFocus={() => !userId && open()}

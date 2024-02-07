@@ -41,6 +41,7 @@ export const analyticsKeys = {
     },
     submit: {
       ask: "read:ask_input:submit",
+      question: "read:input:submit",
     },
   },
   profile: {
