@@ -18,14 +18,26 @@ export const analyticsKeys = {
     click: {
       stop: "ask:stop:click",
       clear: "ask:clear:click",
+      starter: "ask:starter:click",
+    },
+    submit: {
+      ask: "ask:input:submit",
     },
   },
-  feed: {},
+  feed: {
+    click: {
+      card: "feed:card:click",
+    },
+  },
   read: {
     click: {
       feed: "read:feed:click",
       random: "read:random:click",
-      starter: "read:ask_starter:click",
+      askStarter: "read:ask_starter:click",
+      fullPaper: "read:full-paper:click",
+      share: "read:share:click",
+      starter: "read:starter:click",
+      explainer: "read:explainer:click",
     },
     submit: {
       ask: "read:ask_input:submit",

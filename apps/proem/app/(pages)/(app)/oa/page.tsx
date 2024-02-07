@@ -84,7 +84,7 @@ function Questions() {
           href={`/?q=${encodeURIComponent(starter.text)}`}
           variant="starter"
           className="mb-2"
-          track={analyticsKeys.read.click.starter}
+          track={analyticsKeys.read.click.askStarter}
         >
           {starter.text}
         </LinkButton>

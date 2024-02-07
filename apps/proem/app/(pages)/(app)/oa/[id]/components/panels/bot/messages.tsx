@@ -3,6 +3,7 @@ import { Message, Question } from "./message";
 import { Tracker } from "@/app//components/analytics/tracker";
 import { UseChatHelpers } from "ai/react";
 import { MutableRefObject } from "react";
+import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 
 type Props = Pick<UseChatHelpers, "append"> & {
   messages: AiMessage[];
@@ -20,12 +21,12 @@ export function BotMessages({
     append({ role: "user", content: question });
 
   const explainConcept = (msg: string) => {
-    Tracker.track("click:question-explainer", { msg });
+    Tracker.track(analyticsKeys.read.click.explainer, { msg });
     appendQuestion(`What is ${msg}?`);
   };
 
   const handleSuggestionClick = (question: string) => {
-    Tracker.track("click:question-suggestion", { question });
+    Tracker.track(analyticsKeys.read.click.starter, { question });
     appendQuestion(question);
   };
 

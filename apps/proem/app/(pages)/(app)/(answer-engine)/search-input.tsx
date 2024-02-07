@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { TextInput } from "@/app/components/proem-ui/text-input";
 import { Tracker } from "@/app/components/analytics/tracker";
+import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 
 type SearchInputProps = {
   handleSubmit?: (e: any) => void;
@@ -22,7 +23,9 @@ export default function SearchInput({
   const router = useRouter();
 
   const trackAndInvoke = (event: FormEvent<HTMLFormElement>) => {
-    Tracker.track(`submit:ask-question`, { text: input ? input : searchValue });
+    Tracker.track(analyticsKeys.ask.submit.ask, {
+      text: input ? input : searchValue,
+    });
 
     !!handleSubmit
       ? handleSubmit(event)

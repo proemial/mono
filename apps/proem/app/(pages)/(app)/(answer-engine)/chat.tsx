@@ -8,7 +8,14 @@ import {
 } from "@/app/components/shadcn-ui/Avatar";
 import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
-import { Dispatch, memo, useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  memo,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import WithHeader from "@/app/(pages)/(app)/header";
 import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
@@ -16,6 +23,7 @@ import { SquareIcon } from "lucide-react";
 import { Button } from "@/app/components/proem-ui/link-button";
 import { ProemLogo } from "@/app/components/icons/logo";
 import { Tracker } from "@/app/components/analytics/tracker";
+import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 
 const PROEM_BOT = {
   name: "proem",
@@ -140,34 +148,41 @@ type ActionButtonProps = {
   messages: any[];
   setMessages: any;
   stop: any;
-  setInput: Dispatch<React.SetStateAction<string>>;
+  setInput: Dispatch<SetStateAction<string>>;
 };
 function ActionButton(props: ActionButtonProps) {
   const { isLoading, messages, setMessages, stop, setInput } = props;
   const visible = !isLoading && messages.length > 0;
-  const trackAndInvoke = (item: string, callback: () => void) => {
-    Tracker.track(`click:ask-${item}`);
+  const trackAndInvoke = (key: string, callback: () => void) => {
+    Tracker.track(key);
     callback();
+  };
+
+  const clear = () => {
+    setMessages([]);
+    setInput("");
   };
 
   return (
     <>
       <div
-        onClick={() => trackAndInvoke("stop", () => stop())}
+        onClick={() =>
+          trackAndInvoke(analyticsKeys.ask.click.stop, () => {
+            stop();
+            clear();
+          })
+        }
         className={`${
           // TODO: Fix fade in/out
           isLoading ? "opacity-100" : "opacity-0 hidden"
         } transition-all ease-in delay-300 duration-500 cursor-pointer`}
       >
-        <SquareIcon size={22} />
+        <ClearIcon />
       </div>
 
       <div
         onClick={() =>
-          trackAndInvoke("clear", () => {
-            setMessages([]);
-            setInput("");
-          })
+          trackAndInvoke(analyticsKeys.ask.click.clear, () => clear())
         }
         className={`${
           // TODO: Fix fade in/out
@@ -194,7 +209,7 @@ const Starters = memo(function Starters({ append }: { append: any }) {
     .slice(0, 3);
 
   const trackAndInvoke = (callback: () => void) => {
-    Tracker.track(`click:ask-starter`);
+    Tracker.track(analyticsKeys.ask.click.starter);
     callback();
   };
 
