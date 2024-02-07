@@ -4,6 +4,7 @@ import { Tracker } from "@/app//components/analytics/tracker";
 import { UseChatHelpers } from "ai/react";
 import { MutableRefObject } from "react";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
+import { limit } from "@proemial/utils/array";
 
 type Props = Pick<UseChatHelpers, "append"> & {
   messages: AiMessage[];
@@ -37,7 +38,7 @@ export function BotMessages({
     >
       {messages.length === 0 &&
         // TODO! Filter out empty strings as a hack for now until the data consistensy is fixed
-        starters?.filter(Boolean).map((question) => (
+        limit(starters?.filter(Boolean), 3).map((question) => (
           <Question
             key={question}
             onClick={() => handleSuggestionClick(question)}
