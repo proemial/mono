@@ -12,9 +12,9 @@ export const answers = pgTable("answers", {
   // TODO! This is all papers & we need to save the papers used for the answer separately
   papers:
     // TODO! infer from centralised paper schema?
-    jsonb("papers").$type<
-      { link: string; abstract: string; title: string }[]
-    >(),
+    jsonb("papers").$type<{
+      papers: { link: string; abstract: string; title: string }[];
+    }>(),
 });
 
 export type Answer = typeof answers.$inferSelect;

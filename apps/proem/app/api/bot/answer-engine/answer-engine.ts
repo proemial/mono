@@ -1,38 +1,24 @@
+import { Run } from "@langchain/core/tracers/base";
 import {
   StreamingTextResponse,
   createStreamDataTransformer,
   experimental_StreamData,
 } from "ai";
-import { Run } from "@langchain/core/tracers/base";
 
 import { AnswerEngineChatMessageHistory } from "@/app/api/bot/answer-engine/answer-engine-memory";
-import { convertToOASearchString } from "@/app/api/bot/answer-engine/convert-query-parameters";
-import { parseFunctionCall } from "@/app/api/bot/answer-engine/parse-function-call";
-import { fetchPapers } from "@/app/api/paper-search/search";
-import {
-  AIMessage,
-  FunctionMessage,
-  HumanMessage,
-  SystemMessage,
-} from "@langchain/core/messages";
+import { fetchPapersChain } from "@/app/api/bot/answer-engine/fetch-papers-chain";
+import { model } from "@/app/api/bot/answer-engine/model";
+import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
 import {
   ChatPromptTemplate,
   MessagesPlaceholder,
 } from "@langchain/core/prompts";
-import {
-  RunnableSequence,
-  RunnableWithMessageHistory,
-} from "@langchain/core/runnables";
-import { model } from "@/app/api/bot/answer-engine/model";
-import { fetchPapersChain } from "@/app/api/bot/answer-engine/fetch-papers-chain";
-import { fetchPaper } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
-import { config } from "process";
+import { RunnableSequence } from "@langchain/core/runnables";
 import { neonDb } from "../../../../../../packages/data";
 import {
   NewAnswer,
   answers,
-  insertAnswerSchema,
 } from "../../../../../../packages/data/neon/schema/answers";
 
 const bytesOutputParser = new BytesOutputParser();
@@ -163,26 +149,17 @@ const conversationalAnswerEngineChain =
     bytesOutputParser,
   ]);
 
+type PapersRequest = {
+  query: { keyConcept: string; relatedConcepts: string[] };
+  papers: { link: string; abstract: string; title: string }[];
+};
+
 export async function askAnswerEngine({
   question,
   chatHistory,
   sessionId,
 }: AnswerEngineParams) {
-  // TODO! Check for cached item?
-  // const cached = await kv.get(key);
-  // if (cached) {
-  //   return new Response(cached);
-  // optional: emulate streaming https://sdk.vercel.ai/docs/concepts/caching
-
   const data = new experimental_StreamData();
-  const memory = new AnswerEngineChatMessageHistory(sessionId);
-  // const answerToSave = {
-  //   question,
-  //   sessionId,
-  //   answer,
-  //   papers,
-  //   parent?
-  // }
 
   data.append({
     sessionId,
@@ -190,97 +167,49 @@ export async function askAnswerEngine({
 
   const stream = await conversationalAnswerEngineChain
     .withListeners({
-      onStart: (run: Run) => {
-        console.log(run);
-      },
       onEnd: async (run: Run) => {
-        const newAnswer = run.child_runs.reduce(
+        const valuesFromCurrentChain = (
+          run.child_runs as any as {
+            inputs: {
+              content: string;
+              papersRequest: PapersRequest;
+            };
+          }[]
+        ).reduce(
           (acc, cur) => {
             const answer = acc.answer || cur.inputs.content;
-            const paperRequests = acc.paperRequests || cur.inputs.papersRequest;
+            const papersRequest = acc.papersRequest || cur.inputs.papersRequest;
+
             return {
               ...acc,
-              paperRequests,
+              papersRequest,
               answer,
             };
           },
           {
             answer: null,
-            paperRequests: null,
+            papersRequest: null,
+          } as {
+            answer: string | null;
+            papersRequest: PapersRequest | null;
           }
         );
 
-        console.log(newAnswer);
-        const answerToSave: NewAnswer = {
-          answer: newAnswer.answer!,
-          keyConcept: newAnswer.paperRequests!.query.keyConcept,
-          relatedConcepts: newAnswer.paperRequests!.query.relatedConcepts,
+        const newAnswer: NewAnswer = {
+          answer: valuesFromCurrentChain.answer!,
+          keyConcept: valuesFromCurrentChain.papersRequest!.query.keyConcept,
+          relatedConcepts:
+            valuesFromCurrentChain.papersRequest!.query.relatedConcepts,
           papers: {
-            papers: newAnswer.paperRequests!.papers,
+            papers: valuesFromCurrentChain.papersRequest!.papers,
           },
           slug: sessionId,
           question,
+          // TODO! add ownerId
           // ownerId,
         };
-        console.log({ answerToSave });
-        // const parsedAnswer = insertAnswerSchema.parse(answerToSave);
-        // console.log(parsedAnswer);
 
-        // TODO! could batch +   .onConflictDoNothing();
-        const returned = await neonDb.insert(answers).values(answerToSave);
-
-        console.log(returned);
-
-        const { extra, events, outputs, inputs, child_runs } = run;
-
-        console.log(extra);
-        console.log(events);
-        console.log(outputs);
-        console.log(inputs);
-        console.log(child_runs.length);
-        console.log(child_runs[0]);
-        console.log(child_runs[1]);
-        console.log(child_runs[2]);
-        console.log(child_runs[3]);
-        console.log(child_runs[0]?.child_runs);
-        console.log(child_runs[1]?.child_runs);
-        console.log(child_runs[2]?.child_runs);
-        console.log(child_runs[3]?.child_runs);
-        for (const child of child_runs) {
-          // const paperOutput
-          console.log(child?.serialized);
-          console.log(child?.child_runs);
-          console.log(child?.inputs);
-          const aiContent = child.inputs.content;
-          console.log(aiContent);
-          const question = child.inputs.question;
-          console.log(question);
-
-          const paperRequests = child?.inputs?.papersRequest;
-          console.log(paperRequests);
-          /*
-           papersRequest: {
-      query: {
-        keyConcept: 'sleep',
-        relatedConcepts: [ 'sleep patterns', 'sleep deprivation', 'circadian rhythm', 'REM sleep', 'sleep disorders' ]
-      },
-      papers: Array(30) [
-        {
-          link: '/oa/W2118370586',
-          abstract:
-            'Actigraphy is increasingly used in sleep research and the clinical care of patients with sleep and circadian rhythm abnormalities. The following practice parameters update the previous practice parameters published in 2003 for the use of actigraphy in the study of sleep and circadian rhythms. Based upon a systematic grading of evidence, members of the Standards of Practice Committee, including those with expertise in the use of actigraphy, developed these practice parameters as a guide to the appropriate use of actigraphy, both as a diagnostic tool in the evaluation of sleep disorders and as an outcome measure of treatment efficacy in clinical settings with appropriate patient populations. Actigraphy provides an acceptably accurate estimate of sleep patterns in normal, healthy adult populations and inpatients suspected of certain sleep disorders. More specifically, actigraphy is indicated to assist in the evaluation of patients with advanced sleep phase syndrome (ASPS), delayed sleep phase syndrome (DSPS), and shift work disorder. Additionally, there is some evidence to support the use of actigraphy in the evaluation of patients suspected of jet lag disorder and non-24hr sleep/wake syndrome (including that associated with blindness). When polysomnography is not available, actigraphy is indicated to estimate total sleep time in patients with obstructive sleep apnea. In patients with insomnia and hypersomnia, there is evidence to support the use of actigraphy in the characterization of circadian rhythms and sleep patterns/disturbances. In assessing response to therapy, actigraphy has proven useful as an outcome measure in patients with circadian rhythm disorders and insomnia. In older adults (including older nursing home residents), in whom traditional sleep monitoring can be difficult, actigraphy is indicated for characterizing sleep and circadian patterns and to document treatment responses. Similarly, in normal infants and children, as well as special pediatric populations, actigraphy has proven useful for delineating sleep patterns and documenting treatment responses. Recent research utilizing actigraphy in the assessment and management of sleep disorders has allowed the development of evidence-based recommendations for the use of actigraphy in the clinical setting. Additional research is warranted to further refine and broaden its clinical value.',
-          title:
-            'Practice Parameters for the Use of Actigraphy in the Assessment of Sleep and Sleep Disorders: An Update for 2007'
-        },
-
-          */
-        }
-        console.log(run);
-
-        console.log(
-          run.child_runs.find((run) => run.name === "RunnableSequence")
-            ?.serialized
-        );
+        await neonDb.insert(answers).values(newAnswer);
       },
     })
     .stream(
@@ -293,50 +222,8 @@ export async function askAnswerEngine({
         configurable: { sessionId },
         callbacks: [
           {
-            // handleChainError(){}
-            // handleChainStart() {}
-            // handleChatModelStart(
-            //   llm,
-            //   messages,
-            //   runId,
-            //   parentRunId,
-            //   extraParams,
-            //   tags,
-            //   metadata,
-            //   name
-            // ) {
-            //   console.log(llm);
-            //   console.log(messages);
-            //   console.log(runId);
-            //   console.log(parentRunId);
-            //   console.log(extraParams);
-            //   console.log(tags);
-            //   console.log(metadata);
-            //   console.log(name);
-            // },
             handleChainEnd(_outputs, _runid, parentRunId, tags, kwargs) {
-              const test = _outputs?.test;
-
-              if (test) {
-                console.log(test.query);
-              }
-              console.log(test);
-              console.log(_outputs);
-              console.log(_runid);
-              console.log(parentRunId);
-              console.log(tags);
-              console.log(kwargs);
-
-              if (tags?.includes("map:key:papers")) {
-                console.log(_outputs);
-              }
-
               if (parentRunId == null) {
-                // TODO! Add correct function with query and papers
-                // memory.addMessage(
-                //   new FunctionMessage({ name: "test", content: "done" })
-                // );
-                // check that main chain (without parent) is finished:
                 console.log(_outputs);
                 data.close();
               }
