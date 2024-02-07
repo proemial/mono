@@ -56,6 +56,8 @@ function Concepts({ data }: { data: OpenAlexWorkMetadata }) {
   const sorted = (data || []).concepts.sort((a, b) => a.level - b.level);
   const filtered = sorted ? [sorted.at(0), sorted.at(-2), sorted.at(-1)] : [];
 
+  if (sorted.length === 0) return null;
+
   return (
     <div className="flex gap-2 text-xs text-white/50 mt-2 font-sans">
       {filtered && (
