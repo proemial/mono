@@ -19,7 +19,3 @@ export const answers = pgTable("answers", {
 
 export type Answer = typeof answers.$inferSelect;
 export type NewAnswer = typeof answers.$inferInsert;
-
-// export const answersRelations = relations(answers, ({ many }) => ({
-//   paper: many(papers),
-// }));
