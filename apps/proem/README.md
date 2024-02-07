@@ -17,7 +17,7 @@ Every time you change branch the updated env vars can be fetched with: `pnpm run
 | [branch_name]   | [branch_name] (preview) | [branch_name] (preview) |
 
 Because Vercel only have custom branches for the preview enviroment and the Neon integrations relies on that, we're currently running the exact same environment variables for both preview environment on Vercel & local development.
-Note: Right after installing the integration the `DATABASE_URL` & `PGHOST` env vars is only set to "Development"."Preview" has been added manually.
+Note: Right after installing the integration the `DATABASE_URL` env vars is only set to "Development"."Preview" has been added manually.
 
 ## Answer Engine AI streaming
 
