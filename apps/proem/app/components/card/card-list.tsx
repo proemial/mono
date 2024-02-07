@@ -9,7 +9,7 @@ export function CardList({ ids }: { ids: string[] }) {
   }
 
   return (
-    <div className="flex flex-col max-w-screen-sm pt-4 pb-20 mx-auto justify-begin">
+    <div className="max-w-screen-sm pb-20 mx-auto flex flex-col justify-begin">
       {ids.map((id, index) => (
         <Suspense key={index} fallback={<CenteredSpinner />}>
           <PaperCard id={id}>
