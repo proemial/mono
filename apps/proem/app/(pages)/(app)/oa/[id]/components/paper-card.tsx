@@ -23,7 +23,7 @@ export function PaperCard({ children, paper, id }: Props) {
   }, [id]);
 
   return (
-    <div className="flex px-6 pb-6 bg-[#1A1A1A] flex-col before:absolute before:-inset-0 relative before:top-[-100%] before:bg-[#1A1A1A] before:-z-10 border-b shadow border-[#4E4E4E] w-full">
+    <div className="flex px-6 pb-6 pt-2 bg-[#1A1A1A] flex-col before:absolute before:-inset-0 relative before:top-[-100%] before:bg-[#1A1A1A] before:-z-10 border-b shadow border-[#4E4E4E] w-full">
       <div className="mb-2 text-[12px] text-white/50 font-sourceCodePro font-normal uppercase tracking-wide flex justify-between">
         <div
           className="flex gap-2"
