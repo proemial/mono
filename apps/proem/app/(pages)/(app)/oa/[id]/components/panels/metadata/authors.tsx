@@ -1,4 +1,6 @@
 import { OpenAlexPaper } from "@proemial/models/open-alex";
+import { AuthorsIcon } from "@/app/(pages)/(app)/oa/[id]/components/icons/authors-icon";
+import { IconWrapper } from "@/app/(pages)/(app)/oa/[id]/components/icons/wrapper";
 
 type AuthorsProps = {
   authorships: OpenAlexPaper["data"]["authorships"];
@@ -9,7 +11,10 @@ export function Authors({ authorships }: AuthorsProps) {
     <>
       {authorships.length > 0 && (
         <div>
-          <div>Authors</div>
+          <IconWrapper>
+            <AuthorsIcon />
+            Authors
+          </IconWrapper>
           <div className="text-white/50 flex flex-wrap">
             {/* TODO: Show a max of 3 with expansion */}
             {authorships.map((authorship) => (
