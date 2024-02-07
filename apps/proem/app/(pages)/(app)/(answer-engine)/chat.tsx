@@ -66,16 +66,9 @@ function Message({
 
 type ChatProps = Pick<MessageProps, "user" | "message">;
 
-function prettyId(id: string) {
-  return `${encodeURI(id.replaceAll(" ", "-")).substring(0, 12)}-${crypto
-    .randomUUID()
-    .replaceAll("-", "")
-    .substring(0, 22)}`;
-}
-
 export default function Chat({ user, message }: ChatProps) {
-  const [sessionId, setSessionId] = useState("dummy");
-  const Router = useRouter();
+  // const [sessionId, setSessionId] = useState("dummy");
+  // const Router = useRouter();
 
   const {
     messages,
@@ -90,20 +83,20 @@ export default function Chat({ user, message }: ChatProps) {
     data,
     metadata,
   } = useChat({
-    id: sessionId,
+    id: "hardcoded_for_client",
     api: "/api/bot/answer-engine",
   });
 
-  const sessionIdFromServer = data?.find(({ sessionId }) => sessionId)
-    ?.sessionId;
+  // const sessionIdFromServer = data?.find(({ sessionId }) => sessionId)
+  //   ?.sessionId;
 
-  useEffect(() => {
-    if (sessionIdFromServer) {
-      setSessionId(sessionIdFromServer);
-      // TODO! Make some condition around new router replace after initial message is recieved
-      Router.replace(`/answer/${sessionIdFromServer}`);
-    }
-  }, [sessionIdFromServer]);
+  // useEffect(() => {
+  //   if (sessionIdFromServer) {
+  //     setSessionId(sessionIdFromServer);
+  //     // TODO! Make some condition around new router replace after initial message is recieved
+  //     Router.replace(`/answer/${sessionIdFromServer}`);
+  //   }
+  // }, [sessionIdFromServer]);
 
   const chatWrapperRef = useRef<HTMLDivElement>(null);
 
