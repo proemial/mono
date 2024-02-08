@@ -41,12 +41,7 @@ type QuestionProps = {
   starter?: boolean;
 };
 
-export function Question({
-  children,
-  onClick,
-  className,
-  starter,
-}: QuestionProps) {
+export function Question({ children, onClick, starter }: QuestionProps) {
   const { userId } = useAuth();
   const { open } = useDrawerState();
 
@@ -59,18 +54,16 @@ export function Question({
   };
 
   return (
-    <div className="flex flex-col gap-3 mb-2 p-2 border rounded-sm border-[#4E4E4E] bg-[#2F2F2F] leading-5 text-[16px] font-sans font-light text-left">
-      <div
-        className={`${className} ${style} flex flex-row items-center justify-between`}
-        onClick={handleClick}
-      >
-        {children}
-        {starter && (
-          <div className="mr-1 ml-2">
-            <Send />
-          </div>
-        )}
-      </div>
+    <div
+      className="flex justify-between gap-3 mb-2 p-2 border rounded-sm border-[#4E4E4E] bg-[#2F2F2F] leading-5 text-[16px] font-sans font-light text-left"
+      onClick={handleClick}
+    >
+      {children}
+      {starter && (
+        <div className="mr-1 ml-2 flex items-center">
+          <Send />
+        </div>
+      )}
     </div>
   );
 }

@@ -49,14 +49,14 @@ export default async function ReaderPage({ params }: Props) {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="QA">
-          <div className="flex flex-col h-full gap-6 px-6 text-base">
+          <div className="flex flex-col h-full gap-6 px-4 text-base">
             <Suspense fallback={<Spinner />}>
               <QuestionsPanel paper={paper} />
             </Suspense>
           </div>
         </TabsContent>
         <TabsContent value="metadata">
-          <div className="flex flex-col mb-2 px-4 mb-2">
+          <div className="flex flex-col mb-2 px-4">
             <Metadata paper={paper} />
           </div>
         </TabsContent>
