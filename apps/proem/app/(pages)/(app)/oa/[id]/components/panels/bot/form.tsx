@@ -38,7 +38,7 @@ export function BotForm({ value, onSubmit, onChange }: Props) {
           variant="send_button"
           size="sm"
           type="submit"
-          className="absolute justify-center bg-transparent right-2"
+          className="absolute justify-center items-center bg-transparent right-2"
         >
           <Send />
         </Button>
