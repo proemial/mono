@@ -1,18 +1,17 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
-import { TextInput } from "@/app/components/proem-ui/text-input";
-import { Tracker } from "@/app/components/analytics/tracker";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
+import { Tracker } from "@/app/components/analytics/tracker";
+import { TextInput } from "@/app/components/proem-ui/text-input";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 type SearchInputProps = {
-  handleSubmit?: (e: any) => void;
+  handleSubmit?: (e: FormEvent<HTMLFormElement>) => void;
   input?: string;
-  handleInputChange?: (e: any) => void;
+  handleInputChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
 };
 
-// TODO: Remove logic from the component
 export default function SearchInput({
   handleSubmit,
   input,
