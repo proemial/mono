@@ -3,6 +3,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ReactNode } from "react";
 import "./globals.css";
 import { Source_Code_Pro } from "next/font/google";
+import { Metadata } from "next";
 
 // If loading a variable font, you don't need to specify the font weight
 const sourceCodePro = Source_Code_Pro({
@@ -13,10 +14,21 @@ const sourceCodePro = Source_Code_Pro({
 
 const lightModeEnabled = false;
 
-export const metadata = {
-  title: "proem",
-};
+const title = "proem";
+const description =
+  "answers to your questions supported by scientific research";
 
+export const metadata: Metadata = {
+  title,
+  description,
+  openGraph: {
+    type: "website",
+    url: "https://proem.ai",
+    title,
+    description,
+    siteName: title,
+  },
+};
 type Props = {
   children: ReactNode;
 };
