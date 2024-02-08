@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1707313469219,
+      "tag": "0000_striped_lightspeed",
+      "breakpoints": true
+    }
+  ]
+}
