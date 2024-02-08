@@ -53,7 +53,7 @@ export const fetchLatestPaperIds = async (
 ): Promise<string[]> => {
   const today = dayjs().format("YYYY-MM-DD");
   const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
-  const select = ["id", "publication_date", "concepts"].join(",");
+  const select = ["id", "publication_date"].join(",");
   const filter = [
     "type:article",
     "has_abstract:true",
