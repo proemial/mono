@@ -12,7 +12,7 @@ export function ProemLogo({ size = "lg", includeName }: Props) {
   const { height, width } = sizes[size];
 
   return (
-    <div className="flex flex-col items-center gap-6 pb-6">
+    <div className="flex flex-col items-center gap-6">
       <svg
         width={width}
         height={height}

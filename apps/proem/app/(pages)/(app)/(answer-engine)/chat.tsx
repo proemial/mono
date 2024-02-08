@@ -251,7 +251,7 @@ function Text() {
   return (
     <>
       <ProemLogo includeName />
-      <div className="text-md text-white/80">
+      <div className="text-md text-white/80 pt-6">
         <div>answers to your questions</div>
         <div>supported by scientific research</div>
       </div>
