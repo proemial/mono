@@ -7,7 +7,7 @@ import { Concepts } from "@/app/components/card/concepts";
 import { OpenAlexWorkMetadata } from "@proemial/models/open-alex";
 import { ReadIcon } from "@/app/components/icons/menu/read-icon";
 
-export async function CardContent({ id }: { id: string }) {
+export async function PaperCard({ id }: { id: string }) {
   const paper = await fetchPaper(id);
 
   if (!paper) {
