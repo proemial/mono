@@ -60,7 +60,7 @@ export const fetchLatestPaperIds = async (
     `from_created_date:${twoWeeksAgo}`,
     `publication_date:>${twoWeeksAgo}`, // We do not want old papers that were added recently
     `publication_date:<${today}`, // We do not want papers published in the future
-    concept ? `concepts.id:${concept}` : undefined,
+    concept ? `primary_topic.field.id:${concept}` : undefined,
   ]
     .filter((f) => !!f)
     .join(",");
