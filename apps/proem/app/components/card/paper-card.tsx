@@ -55,12 +55,10 @@ export async function PaperCard({
             </Suspense>
           </div>
         </div>
-        {!(paper.data as OpenAlexWorkMetadata).topics && (
-          <Concepts
-            data={paper.data as OpenAlexWorkMetadata}
-            mainConcept={mainConcept}
-          />
-        )}
+        <Concepts
+          data={paper.data as OpenAlexWorkMetadata}
+          mainConcept={mainConcept}
+        />
         <Topics
           data={paper.data as OpenAlexWorkMetadata}
           mainTopic={mainConcept}
