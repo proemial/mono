@@ -10,11 +10,11 @@ import {
 import { RunnableSequence } from "@langchain/core/runnables";
 import { Run } from "@langchain/core/tracers/base";
 import { neonDb } from "@proemial/data";
-import { NewAnswer, answers } from "@proemial/data/neon/schema/answers";
+import { answers } from "@proemial/data/neon/schema/answers";
 import {
-  StreamingTextResponse,
   createStreamDataTransformer,
   experimental_StreamData,
+  StreamingTextResponse,
 } from "ai";
 import { eq } from "drizzle-orm";
 
@@ -41,7 +41,7 @@ const chatPrompt = ChatPromptTemplate.fromMessages<AnswerEngineChainInput>([
     with key phrases of the answer text as hyperlinks pointing to the papers, like
     this example:
 
-    """Yes/No. Smoking causes/does not cause cancer. Studies show that cigarette
+    """[Yes|No]. Smoking [causes|does not cause] cancer. Studies show that cigarette
     smokers are <a href="https://proem.ai/oa/W4213460776?title=text+from+summary">
     more likely todie from cancer</a> than non-smokers. Furthermore, studies have
     found  that passive smokers
@@ -99,11 +99,9 @@ const conversationalAnswerEngineChain =
           return { papers: input.papers };
         }
 
-        const request = await fetchPapersChain.invoke({
+        return await fetchPapersChain.invoke({
           question: input.question,
         });
-
-        return request;
       },
     },
     {
@@ -190,12 +188,12 @@ export async function askAnswerEngine({
             },
           },
         ],
-      }
+      },
     );
 
   return new StreamingTextResponse(
     stream.pipeThrough(createStreamDataTransformer(true)),
     {},
-    data
+    data,
   );
 }
