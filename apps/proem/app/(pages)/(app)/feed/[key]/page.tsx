@@ -15,12 +15,12 @@ export default async function FrontPage({ params }: Props) {
     (c) => c.display_name === decodeURI(params.key),
   )?.id;
 
-  const latestIds = await fetchLatestPaperIds(`${conceptId}`);
+  const latestIds = await fetchLatestPaperIds(conceptId);
 
   return (
     <div>
       <Suspense fallback={<CenteredSpinner />}>
-        <CardList ids={latestIds} mainConcept={`${conceptId}`} />
+        <CardList ids={latestIds} mainConcept={params.key} />
       </Suspense>
     </div>
   );

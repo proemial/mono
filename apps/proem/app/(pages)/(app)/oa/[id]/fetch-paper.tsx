@@ -49,7 +49,7 @@ export const fetchPaper = cache(
 );
 
 export const fetchLatestPaperIds = async (
-  concept?: string,
+  concept?: number,
 ): Promise<string[]> => {
   const today = dayjs().format("YYYY-MM-DD");
   const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
