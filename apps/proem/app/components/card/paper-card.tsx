@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import { Concepts } from "@/app/components/card/concepts";
 import { OpenAlexWorkMetadata } from "@proemial/models/open-alex";
 import { ReadIcon } from "@/app/components/icons/menu/read-icon";
+import { Topics } from "@/app/components/card/topics";
 
 export async function PaperCard({
   id,
@@ -54,9 +55,15 @@ export async function PaperCard({
             </Suspense>
           </div>
         </div>
-        <Concepts
+        {!(paper.data as OpenAlexWorkMetadata).topics && (
+          <Concepts
+            data={paper.data as OpenAlexWorkMetadata}
+            mainConcept={mainConcept}
+          />
+        )}
+        <Topics
           data={paper.data as OpenAlexWorkMetadata}
-          mainConcept={mainConcept}
+          mainTopic={mainConcept}
         />
       </div>
     </div>
