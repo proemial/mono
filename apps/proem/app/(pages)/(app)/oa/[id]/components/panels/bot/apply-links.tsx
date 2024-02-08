@@ -1,14 +1,11 @@
+import Link from "next/link";
 import React from "react";
 
-type LinkOnClick = () => void;
-const asLink = (content: string, onClickHandle: LinkOnClick) => {
+const asLink = (content: string, href: string) => {
   return (
-    <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
-      onClick={() => onClickHandle()}
-    >
+    <Link href={href} className="font-sans font-normal text-green-500">
       {content}
-    </span>
+    </Link>
   );
 };
 
@@ -17,16 +14,16 @@ const asLink = (content: string, onClickHandle: LinkOnClick) => {
  */
 export function applyExplainLinks(
   msg: string,
-  onClick: (concept: string) => void,
+  onClick: (concept: string) => void
 ): React.ReactNode {
   const re = /\(\(.*?\)\)/gi;
 
-  const asLink = (input: string) => {
+  const asPush = (input: string) => {
     const sanitized = input.replace("((", "").replace("))", "");
 
     return (
       <span
-        className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+        className="font-sans font-normal text-green-500 cursor-pointer"
         onClick={() => onClick(sanitized)}
       >
         {sanitized}
@@ -37,7 +34,7 @@ export function applyExplainLinks(
   const arr = msg.replace(re, "~~$&~~").split("~~");
   return arr.map((s, i) => (
     <span key={i}>
-      {s.match(re) ? <span>{s.match(re) ? asLink(s) : s}</span> : s}
+      {s.match(re) ? <span>{s.match(re) ? asPush(s) : s}</span> : s}
     </span>
   ));
 }
@@ -46,10 +43,7 @@ export const aTaglinkCheckReqex =
   /<a\s+(?:[^>]*?\s+)?href="([^"]*)">(.*?)<\/a>/g;
 export const markdownlinkCheckReqex = /\[([^\]]+)\]\(([^)]+)\)/g;
 
-export function applyLinks(
-  message: string,
-  onClick: (concept: string) => void,
-) {
+export function applyLinks(message: string) {
   const arr = message
     .replace(aTaglinkCheckReqex, "~~$&~~")
     .replace(markdownlinkCheckReqex, "~~$&~~")
@@ -76,9 +70,7 @@ export function applyLinks(
             }
           : null;
 
-    const content = link
-      ? asLink(link.content, () => onClick(link.href))
-      : messagePart;
+    const content = link ? asLink(link.content, link.href) : messagePart;
 
     return (
       <span key={i} className="break-words">
