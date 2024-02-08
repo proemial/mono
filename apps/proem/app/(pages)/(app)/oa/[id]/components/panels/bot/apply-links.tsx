@@ -4,7 +4,7 @@ type LinkOnClick = () => void;
 const asLink = (content: string, onClickHandle: LinkOnClick) => {
   return (
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={() => onClickHandle()}
     >
       {content}
@@ -26,7 +26,7 @@ export function applyExplainLinks(
 
     return (
       <span
-        className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+        className="font-normal font-sans text-green-500 cursor-pointer"
         onClick={() => onClick(sanitized)}
       >
         {sanitized}

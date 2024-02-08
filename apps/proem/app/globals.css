@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-primary-50: 249 255 249;
+  --color-primary-100: 242 255 243;
+  --color-primary-200: 223 254 225;
+  --color-primary-300: 203 253 207;
+  --color-primary-400: 164 252 170;
+  --color-primary-500: 125 250 134;
+  --color-primary-600: 113 225 121;
+  --color-primary-700: 75 150 80;
+  --color-primary-800: 56 113 60;
+  --color-primary-900: 38 75 40;
+}
+
 html {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }

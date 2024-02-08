@@ -3,11 +3,11 @@
 exports[`applyLinks  1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -22,29 +22,29 @@ exports[`applyLinks  1`] = `
 exports[`applyLinks  2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -52,11 +52,11 @@ exports[`applyLinks  2`] = `
 exports[`applyLinks 1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -71,29 +71,29 @@ exports[`applyLinks 1`] = `
 exports[`applyLinks 2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -101,11 +101,11 @@ exports[`applyLinks 2`] = `
 exports[`applyLinks can 1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -120,29 +120,29 @@ exports[`applyLinks can 1`] = `
 exports[`applyLinks can 2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -150,11 +150,11 @@ exports[`applyLinks can 2`] = `
 exports[`applyLinks can han 1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -169,29 +169,29 @@ exports[`applyLinks can han 1`] = `
 exports[`applyLinks can han 2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -199,11 +199,11 @@ exports[`applyLinks can han 2`] = `
 exports[`applyLinks can handle  1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -218,29 +218,29 @@ exports[`applyLinks can handle  1`] = `
 exports[`applyLinks can handle  2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -248,11 +248,11 @@ exports[`applyLinks can handle  2`] = `
 exports[`applyLinks can handle m 1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -267,29 +267,29 @@ exports[`applyLinks can handle m 1`] = `
 exports[`applyLinks can handle m 2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -297,11 +297,11 @@ exports[`applyLinks can handle m 2`] = `
 exports[`applyLinks can handle markd 1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -316,29 +316,29 @@ exports[`applyLinks can handle markd 1`] = `
 exports[`applyLinks can handle markd 2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -346,11 +346,11 @@ exports[`applyLinks can handle markd 2`] = `
 exports[`applyLinks can handle markdow 1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -365,29 +365,29 @@ exports[`applyLinks can handle markdow 1`] = `
 exports[`applyLinks can handle markdow 2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -395,11 +395,11 @@ exports[`applyLinks can handle markdow 2`] = `
 exports[`applyLinks can handle markdown  1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -414,29 +414,29 @@ exports[`applyLinks can handle markdown  1`] = `
 exports[`applyLinks can handle markdown  2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -444,11 +444,11 @@ exports[`applyLinks can handle markdown  2`] = `
 exports[`applyLinks can handle markdown +  1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -463,29 +463,29 @@ exports[`applyLinks can handle markdown +  1`] = `
 exports[`applyLinks can handle markdown +  2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -493,11 +493,11 @@ exports[`applyLinks can handle markdown +  2`] = `
 exports[`applyLinks can handle markdown + a  1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -512,29 +512,29 @@ exports[`applyLinks can handle markdown + a  1`] = `
 exports[`applyLinks can handle markdown + a  2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -542,11 +542,11 @@ exports[`applyLinks can handle markdown + a  2`] = `
 exports[`applyLinks can handle markdown + a 1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -561,29 +561,29 @@ exports[`applyLinks can handle markdown + a 1`] = `
 exports[`applyLinks can handle markdown + a 2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -591,11 +591,11 @@ exports[`applyLinks can handle markdown + a 2`] = `
 exports[`applyLinks can handle markdown + a ta 1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -610,29 +610,29 @@ exports[`applyLinks can handle markdown + a ta 1`] = `
 exports[`applyLinks can handle markdown + a ta 2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -640,11 +640,11 @@ exports[`applyLinks can handle markdown + a ta 2`] = `
 exports[`applyLinks can handle markdown + a tag  1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -659,29 +659,29 @@ exports[`applyLinks can handle markdown + a tag  1`] = `
 exports[`applyLinks can handle markdown + a tag  2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -689,11 +689,11 @@ exports[`applyLinks can handle markdown + a tag  2`] = `
 exports[`applyLinks can handle markdown + a tag l 1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -708,29 +708,29 @@ exports[`applyLinks can handle markdown + a tag l 1`] = `
 exports[`applyLinks can handle markdown + a tag l 2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -738,11 +738,11 @@ exports[`applyLinks can handle markdown + a tag l 2`] = `
 exports[`applyLinks can handle markdown + a tag lin 1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -757,29 +757,29 @@ exports[`applyLinks can handle markdown + a tag lin 1`] = `
 exports[`applyLinks can handle markdown + a tag lin 2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -787,11 +787,11 @@ exports[`applyLinks can handle markdown + a tag lin 2`] = `
 exports[`applyLinks can handle markdown + a tag links 1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -806,29 +806,29 @@ exports[`applyLinks can handle markdown + a tag links 1`] = `
 exports[`applyLinks can handle markdown + a tag links 2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;
@@ -836,11 +836,11 @@ exports[`applyLinks can handle markdown + a tag links 2`] = `
 exports[`applyLinks can handle markdown 1`] = `
 [
   <span>
-    No. Vaccines are 
+    No. Vaccines are
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -855,29 +855,29 @@ exports[`applyLinks can handle markdown 1`] = `
 exports[`applyLinks can handle markdown 2`] = `
 [
   <span>
-    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming. 
+    Dreams are a remarkable experiment in psychology and neuroscience, revealing that the human brain can generate entire conscious experiences by itself, disconnected from the environment. Content analysis and developmental studies promote understanding of dream phenomenology. Brain lesion studies, functional imaging, and neurophysiology have advanced knowledge of the neural basis of dreaming.
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
     </span>
   </span>,
   <span>
-     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process, 
+     The brain as a dream state generator: an activation-synthesis hypothesis of the dream process,
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-[#7DFA86] cursor-pointer"
+      className="font-normal font-sans text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
     </span>
   </span>,
   <span>
-    
+
   </span>,
 ]
 `;

@@ -15,7 +15,7 @@ type LinkProps = VariantProps<typeof variants> & {
 const variants = cva("rounded-sm font-sans", {
   variants: {
     variant: {
-      default: "bg-[#7DFA86] text-black text-center",
+      default: "bg-green-500 text-black text-center",
       starter:
         "bg-[#2F2F2F] text-white flex justify-between items-center border border-[#4E4E4E]",
     },
