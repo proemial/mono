@@ -3,7 +3,13 @@ import { CenteredSpinner, NothingHere } from "@/app/components/spinner";
 import { ClickablePaperCard } from "@/app/components/card/clickable-card";
 import { PaperCard } from "@/app/components/card/paper-card";
 
-export function CardList({ ids }: { ids: string[] }) {
+export function CardList({
+  ids,
+  mainConcept,
+}: {
+  ids: string[];
+  mainConcept?: string;
+}) {
   if (ids.length === 0) {
     return <NothingHere>No papers found</NothingHere>;
   }
@@ -13,7 +19,7 @@ export function CardList({ ids }: { ids: string[] }) {
       {ids.map((paper, index) => (
         <Suspense key={index} fallback={<CenteredSpinner />}>
           <ClickablePaperCard id={paper}>
-            <PaperCard id={paper} />
+            <PaperCard id={paper} mainConcept={mainConcept} />
           </ClickablePaperCard>
         </Suspense>
       ))}

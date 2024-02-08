@@ -7,7 +7,13 @@ import { Concepts } from "@/app/components/card/concepts";
 import { OpenAlexWorkMetadata } from "@proemial/models/open-alex";
 import { ReadIcon } from "@/app/components/icons/menu/read-icon";
 
-export async function PaperCard({ id }: { id: string }) {
+export async function PaperCard({
+  id,
+  mainConcept,
+}: {
+  id: string;
+  mainConcept?: string;
+}) {
   const paper = await fetchPaper(id);
 
   if (!paper) {
@@ -48,7 +54,10 @@ export async function PaperCard({ id }: { id: string }) {
             </Suspense>
           </div>
         </div>
-        <Concepts data={paper.data as OpenAlexWorkMetadata} />
+        <Concepts
+          data={paper.data as OpenAlexWorkMetadata}
+          mainConcept={mainConcept}
+        />
       </div>
     </div>
   );
