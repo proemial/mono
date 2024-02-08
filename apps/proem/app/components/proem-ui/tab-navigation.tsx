@@ -23,7 +23,7 @@ export function TabNavigation({ items, rootPath }: Props) {
 
   return (
     <>
-      <div className="w-full px-4 flex gap-1 text-[14px] overflow-x-scroll no-scrollbar">
+      <div className="max-w-screen-sm px-4 flex gap-1 text-[14px] overflow-x-scroll no-scrollbar">
         {items.map((item) => (
           <Tab key={item} active={active === item} onClick={handleChildClick}>
             {item}
@@ -44,7 +44,7 @@ export function Tab({ children, active, onClick }: TabProps) {
   const style = active ? "bg-[#7DFA86] text-black" : "text-white/50";
   return (
     <div
-      className={`px-2 py-1 rounded-[2px] whitespace-nowrap font-sans font-light ${style}`}
+      className={`px-2 py-1 rounded-[2px] whitespace-nowrap font-sans font-light ${style} cursor-pointer`}
       onClick={() => onClick && onClick(children)}
     >
       {children}

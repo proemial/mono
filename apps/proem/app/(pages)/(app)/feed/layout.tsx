@@ -16,10 +16,12 @@ type Props = {
 export default async function RootLayout({ children }: Props) {
   return (
     <WithHeader title={pageName}>
-      <TabNavigation
-        items={["all", ...OaConcepts.map((concept) => concept.display_name)]}
-        rootPath="/feed"
-      />
+      <div className="mb-4 flex justify-center">
+        <TabNavigation
+          items={["all", ...OaConcepts.map((concept) => concept.display_name)]}
+          rootPath="/feed"
+        />
+      </div>
       {children}
     </WithHeader>
   );
