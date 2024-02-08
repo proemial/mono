@@ -29,14 +29,15 @@ export default function PrivacyPage() {
               a data subject - can assert.
             </p>
 
-            <h2>About Science Proem users</h2>
+            <h2>About Proem users</h2>
             <p>
-              This notice also applies to the users of Proem and Science Proems.
-              Each section below has been elaborated with information relevant
-              to the specific use of Proem and Science Proems. Proem and Science
-              Proems are developed by Proemial ApS, which is part of Proemial
-              ApSYou do not need to be a Proemial customer to be a user of Proem
-              and Science Proems.
+              This notice also applies to the users of Proem and Science Answers
+              by Proem. Each section below has been elaborated with information
+              relevant to the specific use of Proem and Science Answers by
+              Proem. Proem and Science Answers by Proem are developed by
+              Proemial ApS, which is part of Proemial ApSYou do not need to be a
+              Proemial customer to be a user of Proem and Science Answers by
+              Proem.
             </p>
 
             <h2>More about the application and use of cookies</h2>
@@ -50,7 +51,7 @@ export default function PrivacyPage() {
             <p>
               If you have any questions or complaints about our processing of
               personal data or this policy, please contact our DPO at
-              dpo@proemial.app.
+              dpo@proemial.ai.
             </p>
 
             <h2>Data controller</h2>
@@ -226,7 +227,7 @@ export default function PrivacyPage() {
               </li>
               <li>Personal: Citizenship, marital status and employment</li>
               <li>
-                Purpose of using Proemial Bank, historical information about the
+                Purpose of using Proemial, historical information about the
                 customer relationship with Proemial, purchase/registration for
                 products/services offered in cooperation with Proemial partners
               </li>
@@ -301,18 +302,6 @@ export default function PrivacyPage() {
                 Public registers (e.g. population registers, tax registers,
                 business registers and other law enforcement agencies&apos;
                 registers)
-              </li>
-              <li>
-                Economic sanction lists (e.g. within national and international
-                organizations such as the EU and UN)
-              </li>
-              <li>
-                Registers of credit rating agencies and other commercial
-                providers of information on e.g. beneficial owners
-              </li>
-              <li>
-                Money transfer services, merchants, banks and others in relation
-                to payments
               </li>
             </ul>
 
@@ -463,7 +452,7 @@ export default function PrivacyPage() {
               processing policy from time to time.
             </p>
             <p>
-              The current information is updated with effect from (january
+              The current information is updated with effect from (January
               2024).
             </p>
 
