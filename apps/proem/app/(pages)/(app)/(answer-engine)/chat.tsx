@@ -6,7 +6,6 @@ import WithHeader from "@/app/(pages)/(app)/header";
 import { applyLinks } from "@/app/(pages)/(app)/oa/[id]/components/panels/bot/apply-links";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { Tracker } from "@/app/components/analytics/tracker";
-import { ProemLogo } from "@/app/components/icons/logo";
 import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
 import { Button } from "@/app/components/proem-ui/link-button";
 import {
@@ -17,6 +16,7 @@ import {
 import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
 import { memo, useEffect, useRef, useState } from "react";
+import { ProemLogo } from "@/app/components/logo";
 
 const PROEM_BOT = {
   name: "proem",
@@ -79,7 +79,7 @@ export default function Chat({ user, message }: ChatProps) {
   });
 
   const sessionSlugFromServer = (data as { slug?: string }[])?.find(
-    ({ slug }) => slug
+    ({ slug }) => slug,
   )?.slug;
 
   useEffect(() => {
@@ -235,7 +235,7 @@ const Starters = memo(function Starters({ append }: { append: any }) {
             className="w-full mb-1 cursor-pointer"
             onClick={() => {
               trackAndInvoke(() =>
-                append({ role: "user", content: starter.text })
+                append({ role: "user", content: starter.text }),
               );
             }}
           >
@@ -250,8 +250,7 @@ const Starters = memo(function Starters({ append }: { append: any }) {
 function Text() {
   return (
     <>
-      <ProemLogo />
-      <div className="py-4 text-3xl">proem</div>
+      <ProemLogo includeName />
       <div className="text-md text-white/80">
         <div>answers to your questions</div>
         <div>supported by scientific research</div>

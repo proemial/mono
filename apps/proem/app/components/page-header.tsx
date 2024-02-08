@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ReactNode } from "react";
 import { Tracker } from "@/app/components/analytics/tracker";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
+import { ProemLogo } from "@/app/components/logo";
 
 type PageHeaderProps = {
   title?: string;
@@ -24,7 +25,7 @@ export function PageHeader({
         <div className="flex flex-row items-center justify-between max-w-screen-md px-6 pt-3 pb-2 mx-auto">
           <Link href="/" onClick={handleClick}>
             <div className="flex flex-row gap-3">
-              <Proem />
+              <ProemLogo size="sm" />
               <span className="text-[16px] font-sans font-normal">{title}</span>
             </div>
           </Link>
