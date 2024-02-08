@@ -7,6 +7,7 @@ import { applyLinks } from "@/app/(pages)/(app)/oa/[id]/components/panels/bot/ap
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { Tracker } from "@/app/components/analytics/tracker";
 import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
+import { ProemLogo } from "@/app/components/logo";
 import { Button } from "@/app/components/proem-ui/link-button";
 import {
   Avatar,
@@ -14,9 +15,7 @@ import {
   AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
 import { useChat } from "ai/react";
-import { useRouter } from "next/navigation";
 import { memo, useEffect, useRef, useState } from "react";
-import { ProemLogo } from "@/app/components/logo";
 
 const PROEM_BOT = {
   name: "proem",
@@ -37,9 +36,7 @@ function Message({
   message,
   user = { name: "you", initials: "U", avatar: "" },
 }: MessageProps) {
-  const router = useRouter();
-  const onClickHandle = router.push;
-  const content = applyLinks(message, onClickHandle);
+  const content = applyLinks(message);
   return (
     <div className="w-full">
       <div className="flex gap-3">
@@ -53,6 +50,7 @@ function Message({
       </div>
 
       <div className="flex-1 prose ml-9 prose-invert">{content}</div>
+      <div className="bg-green-700"></div>
     </div>
   );
 }
@@ -79,7 +77,7 @@ export default function Chat({ user, message }: ChatProps) {
   });
 
   const sessionSlugFromServer = (data as { slug?: string }[])?.find(
-    ({ slug }) => slug,
+    ({ slug }) => slug
   )?.slug;
 
   useEffect(() => {
@@ -235,7 +233,7 @@ const Starters = memo(function Starters({ append }: { append: any }) {
             className="w-full mb-1 cursor-pointer"
             onClick={() => {
               trackAndInvoke(() =>
-                append({ role: "user", content: starter.text }),
+                append({ role: "user", content: starter.text })
               );
             }}
           >
@@ -251,7 +249,7 @@ function Text() {
   return (
     <>
       <ProemLogo includeName />
-      <div className="text-md text-white/80 pt-6">
+      <div className="pt-6 text-md text-white/80">
         <div>answers to your questions</div>
         <div>supported by scientific research</div>
       </div>
