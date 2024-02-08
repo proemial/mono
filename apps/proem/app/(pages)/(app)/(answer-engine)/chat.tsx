@@ -17,6 +17,8 @@ import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
 import { memo, useEffect, useRef, useState } from "react";
 import { ProemLogo } from "@/app/components/logo";
+import clsx from "clsx";
+import { LoadingState } from "@/app/(pages)/(app)/(answer-engine)/loading-state";
 
 const PROEM_BOT = {
   name: "proem",
@@ -25,7 +27,7 @@ const PROEM_BOT = {
 };
 
 type MessageProps = {
-  message: string;
+  message: React.ReactNode;
   user?: {
     name: string;
     initials: string;
@@ -39,7 +41,9 @@ function Message({
 }: MessageProps) {
   const router = useRouter();
   const onClickHandle = router.push;
-  const content = applyLinks(message, onClickHandle);
+  const content =
+    typeof message === "string" ? applyLinks(message, onClickHandle) : message;
+
   return (
     <div className="w-full">
       <div className="flex gap-3">
@@ -52,7 +56,9 @@ function Message({
         <div>{user.name}</div>
       </div>
 
-      <div className="flex-1 prose ml-9 prose-invert">{content}</div>
+      <div className="flex-1 prose ml-9 prose-invert">
+        {message} <LoadingState />
+      </div>
     </div>
   );
 }
@@ -79,7 +85,7 @@ export default function Chat({ user, message }: ChatProps) {
   });
 
   const sessionSlugFromServer = (data as { slug?: string }[])?.find(
-    ({ slug }) => slug,
+    ({ slug }) => slug
   )?.slug;
 
   useEffect(() => {
@@ -235,7 +241,7 @@ const Starters = memo(function Starters({ append }: { append: any }) {
             className="w-full mb-1 cursor-pointer"
             onClick={() => {
               trackAndInvoke(() =>
-                append({ role: "user", content: starter.text }),
+                append({ role: "user", content: starter.text })
               );
             }}
           >
@@ -251,11 +257,59 @@ function Text() {
   return (
     <>
       <ProemLogo includeName />
-      <div className="text-md text-white/80 pt-6">
+      <div className="pt-6 text-md text-white/80">
         <div>answers to your questions</div>
         <div>supported by scientific research</div>
       </div>
     </>
+  );
+}
+
+function Throbber() {
+  // .loader, .loader:before, .loader:after {
+  //   border-radius: 50%;
+  //   width: 2.5em;
+  //   height: 2.5em;
+  //   animation-fill-mode: both;
+  //   animation: bblFadInOut 1.8s infinite ease-in-out;
+  // }
+  // .loader {
+  //   color: #FFF;
+  //   font-size: 7px;
+  //   position: relative;
+  //   text-indent: -9999em;
+  //   transform: translateZ(0);
+  //   animation-delay: -0.16s;
+  // }
+  // .loader:before,
+  // .loader:after {
+  //   content: '';
+  //   position: absolute;
+  //   top: 0;
+  // }
+  // .loader:before {
+  //   left: -3.5em;
+  //   animation-delay: -0.32s;
+  // }
+  // .loader:after {
+  //   left: 3.5em;
+  // }
+
+  // @keyframes bblFadInOut {
+  //   0%, 80%, 100% { box-shadow: 0 2.5em 0 -1.3em }
+  //   40% { box-shadow: 0 2.5em 0 0 }
+  // }
+
+  const keyframeAnimation = `animate-[wiggle_1s_ease-in-out_infinite]`;
+  return (
+    <div
+      className={clsx(
+        "before:absolute before:top-0 before:-left-4 before:w-3 before:h-3 before:bg-white before:rounded-full",
+        "rounded-full bg-white w-3 h-3 relative",
+        keyframeAnimation,
+        "after:absolute after:top-0 after:left-4 after:w-3 after:h-3 after:bg-white after:rounded-full"
+      )}
+    />
   );
 }
 
@@ -282,6 +336,9 @@ function Messages({ messages, showLoadingState, user }: MessagesProps) {
           user={PROEM_BOT}
         />
       ) : null}
+
+      <Message message={<Throbber />} user={PROEM_BOT} />
+      <Message message={<Throbber />} user={PROEM_BOT} />
     </div>
   );
 }
