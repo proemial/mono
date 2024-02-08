@@ -15,15 +15,17 @@ const sourceCodePro = Source_Code_Pro({
 const lightModeEnabled = false;
 
 const title = "proem";
+const url = "https://proem.ai";
 const description =
   "answers to your questions supported by scientific research";
 
 export const metadata: Metadata = {
   title,
   description,
+  metadataBase: new URL(url),
   openGraph: {
     type: "website",
-    url: "https://proem.ai",
+    url,
     title,
     description,
     siteName: title,

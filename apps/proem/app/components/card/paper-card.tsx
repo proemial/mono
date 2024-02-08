@@ -21,7 +21,7 @@ export async function PaperCard({
   }
 
   return (
-    <div className="bg-[#1A1A1A] border border-t-0 border-[#4E4E4E] scale-100 active:scale-[0.99] transition-all duration-100">
+    <div className="bg-[#1A1A1A] border border-t-0 border-x-0 border-[#4E4E4E] scale-100 active:scale-[0.99] transition-all duration-100">
       <div className="h-full px-4 pb-4 pt-2 flex flex-col justify-between text-lg font-medium items-left">
         <div className="w-full flex">
           <div className="w-full mb-2 flex justify-between text-[12px] text-white/50 font-sourceCodePro font-normal uppercase tracking-wide">
