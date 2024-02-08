@@ -16,14 +16,7 @@ import {
 } from "@/app/components/shadcn-ui/Avatar";
 import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
-import {
-  Dispatch,
-  SetStateAction,
-  memo,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { memo, useEffect, useRef, useState } from "react";
 
 const PROEM_BOT = {
   name: "proem",

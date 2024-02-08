@@ -131,6 +131,7 @@ export async function askAnswerEngine({
 }: AnswerEngineParams) {
   const data = new experimental_StreamData();
   const slug = existingSlug ?? prettySlug(question);
+  // TODO! doesn't have to fetch on new request
   const existingAnswers = await neonDb
     .select()
     .from(answers)

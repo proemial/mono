@@ -50,7 +50,6 @@ export const fetchPapersChain = RunnableSequence.from([
         input.relatedConcepts
       );
 
-      // TODO: Fix case where 0 results from OA causes the pipeline to fail.
       const papers = await fetchPapers(query);
       // TODO! This is quite hacky to do here
       const papersWithRelativeLinks =
