@@ -9,8 +9,10 @@ export default async function FrontPage() {
   const latestIds = await fetchLatestPaperIds();
 
   return (
-    <Suspense fallback={<CenteredSpinner />}>
-      <CardList ids={latestIds} />
-    </Suspense>
+    <div>
+      <Suspense fallback={<CenteredSpinner />}>
+        <CardList ids={latestIds} />
+      </Suspense>
+    </div>
   );
 }

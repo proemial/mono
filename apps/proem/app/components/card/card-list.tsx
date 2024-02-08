@@ -1,20 +1,26 @@
 import { Suspense } from "react";
 import { CenteredSpinner, NothingHere } from "@/app/components/spinner";
-import { PaperCard } from "@/app/components/card/card";
-import { CardContent } from "@/app/components/card/card-content";
+import { ClickablePaperCard } from "@/app/components/card/clickable-card";
+import { PaperCard } from "@/app/components/card/paper-card";
 
-export function CardList({ ids }: { ids: string[] }) {
+export function CardList({
+  ids,
+  mainConcept,
+}: {
+  ids: string[];
+  mainConcept?: string;
+}) {
   if (ids.length === 0) {
     return <NothingHere>No papers found</NothingHere>;
   }
 
   return (
     <div className="max-w-screen-sm pb-20 mx-auto flex flex-col justify-begin">
-      {ids.map((id, index) => (
+      {ids.map((paper, index) => (
         <Suspense key={index} fallback={<CenteredSpinner />}>
-          <PaperCard id={id}>
-            <CardContent id={id} />
-          </PaperCard>
+          <ClickablePaperCard id={paper}>
+            <PaperCard id={paper} mainConcept={mainConcept} />
+          </ClickablePaperCard>
         </Suspense>
       ))}
     </div>

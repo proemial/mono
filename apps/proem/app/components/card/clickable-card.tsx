@@ -9,7 +9,7 @@ type Props = {
   children: ReactNode;
 };
 
-export async function PaperCard({ id, children }: Props) {
+export async function ClickablePaperCard({ id, children }: Props) {
   const handleClick = () => {
     Tracker.track(analyticsKeys.feed.click.card, { id });
   };

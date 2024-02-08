@@ -15,12 +15,14 @@ import dayjs from "dayjs";
 
 export const fetchPaper = cache(
   async (id: string): Promise<OpenAlexPaper | undefined> => {
-    console.log("fetchPaper");
     const paper = await Redis.papers.get(id);
 
+    const oaApiKey = Env.get("OPENALEX_API_KEY");
+
     if (!(paper?.data as OpenAlexWorkMetadata)?.doi) {
+      console.log("fetchPaper");
       const oaPaper = await fetch(
-        `${baseOaUrl}/${id}?select=${openAlexFields.all}`,
+        `${baseOaUrl}/${id}?mailto=lab@paperflow.ai&select=${openAlexFields.all}&api_key=${oaApiKey}`,
       );
       if (!oaPaper.ok) {
         console.error(
@@ -46,24 +48,30 @@ export const fetchPaper = cache(
   },
 );
 
-export const fetchLatestPaperIds = async (): Promise<string[]> => {
+export const fetchLatestPaperIds = async (
+  concept?: string,
+): Promise<string[]> => {
   const today = dayjs().format("YYYY-MM-DD");
   const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
-  const select = ["id", "publication_date", "concepts"].join(",");
+  const select = ["id", "publication_date"].join(",");
   const filter = [
     "type:article",
     "has_abstract:true",
     `from_created_date:${twoWeeksAgo}`,
     `publication_date:>${twoWeeksAgo}`, // We do not want old papers that were added recently
     `publication_date:<${today}`, // We do not want papers published in the future
-  ].join(",");
+    concept ? `concepts.id:${concept}` : undefined,
+  ]
+    .filter((f) => !!f)
+    .join(",");
   const sort = "from_created_date:desc";
   const oaApiKey = Env.get("OPENALEX_API_KEY");
+  const url = `${baseOaUrl}?select=${select}&filter=${filter}&sort=${sort}&api_key=${oaApiKey}`;
+
+  console.log("fetchLatestPaperIds", url);
   // This will include 25 paper IDs (one pagination page), which seems appropriate
   // for a feed.
-  const oaPapers = await fetchJson<OpenAlexWorksSearchResult>(
-    `${baseOaUrl}?select=${select}&filter=${filter}&sort=${sort}&api_key=${oaApiKey}`,
-  );
+  const oaPapers = await fetchJson<OpenAlexWorksSearchResult>(url);
   return (
     oaPapers?.results
       .sort(sortByPublicationDateDesc)
