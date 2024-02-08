@@ -21,7 +21,8 @@
   },
   "pnpm": {
     "overrides": {
-      "@langchain/core": "0.1.12"
+      "@langchain/core": "0.1.12",
+      "drizzle-orm": "^0.29.3"
     }
   }
 }
