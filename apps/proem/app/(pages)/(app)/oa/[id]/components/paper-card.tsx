@@ -15,7 +15,7 @@ type Props = {
   children: string | ReactNode;
 };
 
-export function PaperCard({ children, paper, id }: Props) {
+export function ReaderPaper({ children, paper, id }: Props) {
   const { setLatest } = usePaperState();
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export function PaperCard({ children, paper, id }: Props) {
       </div>
 
       <div className="py-1 text-xs">
-        <div className="text-white/50 leading-4">
+        <div className="leading-4 text-white/50">
           {paper.data.primary_location?.source?.host_organization_name}
         </div>
         <div className="leading-4">

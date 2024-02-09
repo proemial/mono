@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { CenteredSpinner, NothingHere } from "@/app/components/spinner";
 import { ClickablePaperCard } from "@/app/components/card/clickable-card";
-import { PaperCard } from "@/app/components/card/paper-card";
+import { FeedPaper } from "@/app/components/card/feed-paper";
 
 export function CardList({
   ids,
@@ -15,11 +15,11 @@ export function CardList({
   }
 
   return (
-    <div className="max-w-screen-sm pb-20 mx-auto flex flex-col justify-begin">
+    <div className="flex flex-col max-w-screen-sm pb-20 mx-auto justify-begin">
       {ids.map((paper, index) => (
         <Suspense key={index} fallback={<CenteredSpinner />}>
           <ClickablePaperCard id={paper}>
-            <PaperCard id={paper} mainConcept={mainConcept} />
+            <FeedPaper id={paper} mainConcept={mainConcept} />
           </ClickablePaperCard>
         </Suspense>
       ))}
