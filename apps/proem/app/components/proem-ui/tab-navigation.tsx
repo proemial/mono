@@ -52,7 +52,7 @@ export function Tab({ children, active, onClick }: TabProps) {
       className={`px-2 py-1 rounded-[2px] whitespace-nowrap font-sans font-light ${style} cursor-pointer`}
       onClick={() => onClick && onClick(children)}
     >
-      {children}
+      {children.toLowerCase()}
     </div>
   );
 }
