@@ -1,7 +1,7 @@
 import { QuestionsPanel } from "@/app/(pages)/(app)/oa/[id]/components/panels/questions";
 import { Spinner } from "@/app/components/spinner";
 import { Suspense } from "react";
-import { PaperCard } from "./components/paper-card";
+import { ReaderPaper } from "./components/reader-paper";
 import Summary from "./components/summary";
 import { fetchPaper } from "./fetch-paper";
 import {
@@ -29,11 +29,11 @@ export default async function ReaderPage({ params }: Props) {
 
   return (
     <div className="relative w-full pb-32">
-      <PaperCard id={params.id} paper={paper}>
+      <ReaderPaper id={params.id} paper={paper}>
         <Suspense fallback={<Spinner />}>
           <Summary paper={paper} />
         </Suspense>
-      </PaperCard>
+      </ReaderPaper>
 
       <Tabs defaultValue="QA" className="w-full">
         <TabsList className="text-[14px] sticky z-10 justify-start w-full bg-background top-14 h-[unset] pt-3 pb-3 px-4">
@@ -56,7 +56,7 @@ export default async function ReaderPage({ params }: Props) {
           </div>
         </TabsContent>
         <TabsContent value="metadata">
-          <div className="flex flex-col mb-2 px-4">
+          <div className="flex flex-col px-4 mb-2">
             <Metadata paper={paper} />
           </div>
         </TabsContent>

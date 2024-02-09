@@ -19,6 +19,8 @@ export const analyticsKeys = {
       stop: "ask:stop:click",
       clear: "ask:clear:click",
       starter: "ask:starter:click",
+      answerCard: "ask:answer-card:click",
+      answerLink: "ask:answer-link:click",
     },
     submit: {
       ask: "ask:input:submit",
