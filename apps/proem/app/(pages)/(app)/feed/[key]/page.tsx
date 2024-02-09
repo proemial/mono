@@ -12,7 +12,7 @@ type Props = {
 
 export default async function FrontPage({ params }: Props) {
   const conceptId = OaConcepts.find(
-    (c) => c.display_name === decodeURI(params.key),
+    (c) => c.display_name === decodeURI(params.key).replaceAll("%2C", ","),
   )?.id;
 
   const latestIds = await fetchLatestPaperIds(conceptId);
@@ -20,7 +20,7 @@ export default async function FrontPage({ params }: Props) {
   return (
     <div>
       <Suspense fallback={<CenteredSpinner />}>
-        <CardList ids={latestIds} mainConcept={conceptId} />
+        <CardList ids={latestIds} mainConcept={params.key} />
       </Suspense>
     </div>
   );

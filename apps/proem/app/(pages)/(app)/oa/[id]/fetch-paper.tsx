@@ -19,7 +19,10 @@ export const fetchPaper = cache(
 
     const oaApiKey = Env.get("OPENALEX_API_KEY");
 
-    if (!(paper?.data as OpenAlexWorkMetadata)?.doi) {
+    if (
+      !(paper?.data as OpenAlexWorkMetadata)?.doi ||
+      !(paper?.data as OpenAlexWorkMetadata)?.topics
+    ) {
       console.log("fetchPaper");
       const oaPaper = await fetch(
         `${baseOaUrl}/${id}?mailto=lab@paperflow.ai&select=${openAlexFields.all}&api_key=${oaApiKey}`,
@@ -49,7 +52,7 @@ export const fetchPaper = cache(
 );
 
 export const fetchLatestPaperIds = async (
-  concept?: string,
+  concept?: number,
 ): Promise<string[]> => {
   const today = dayjs().format("YYYY-MM-DD");
   const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
@@ -60,7 +63,8 @@ export const fetchLatestPaperIds = async (
     `from_created_date:${twoWeeksAgo}`,
     `publication_date:>${twoWeeksAgo}`, // We do not want old papers that were added recently
     `publication_date:<${today}`, // We do not want papers published in the future
-    concept ? `concepts.id:${concept}` : undefined,
+    "open_access.is_oa:true",
+    concept ? `primary_topic.field.id:${concept}` : undefined,
   ]
     .filter((f) => !!f)
     .join(",");

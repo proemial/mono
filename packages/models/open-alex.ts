@@ -37,7 +37,7 @@ export function getIdFromOpenAlexPaper(paper: WithData) {
 
 // Fields to request from OpenAlex (the ones from OpenAlexWorkMetadata)
 export const openAlexFields = {
-  all: "id,doi,title,display_name,publication_date,updated_date,ids,language,primary_location,best_oa_location,locations,open_access,authorships,corresponding_author_ids,corresponding_institution_ids,has_fulltext,fulltext_origin,cited_by_count,cited_by_percentile_year,keywords,concepts,referenced_works,related_works,ngrams_url,cited_by_api_url,counts_by_year,abstract_inverted_index",
+  all: "id,doi,title,display_name,publication_date,updated_date,ids,language,primary_location,best_oa_location,locations,open_access,authorships,corresponding_author_ids,corresponding_institution_ids,has_fulltext,fulltext_origin,cited_by_count,cited_by_percentile_year,keywords,concepts,referenced_works,related_works,ngrams_url,cited_by_api_url,counts_by_year,abstract_inverted_index,topics",
   search:
     "relevance_score,id,ids,publication_date,title,language,has_fulltext,open_access,primary_location,authorships,related_works,abstract_inverted_index",
 };
@@ -87,6 +87,7 @@ export type OpenAlexWorkMetadata = OpenAlexWorkCoreMetadata & {
   ngrams_url: string;
   cited_by_api_url: string;
   counts_by_year: OpenAlexCitationCount[];
+  topics?: OpenAlexTopic[];
 };
 
 export type PaperId =
@@ -100,6 +101,20 @@ export type PaperId =
   | "hdl"
   | "purl"
   | "uri";
+
+export type OpenAlexTopic = {
+  id: string;
+  display_name: string;
+  score: number;
+  subfield: OpenAlexTopicItem;
+  field: OpenAlexTopicItem;
+  domain: OpenAlexTopicItem;
+};
+
+type OpenAlexTopicItem = {
+  id: number;
+  display_name: string;
+};
 
 export type OpenAlexCitationCount = {
   year: number;
