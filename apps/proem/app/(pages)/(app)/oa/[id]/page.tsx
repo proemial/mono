@@ -1,7 +1,7 @@
 import { QuestionsPanel } from "@/app/(pages)/(app)/oa/[id]/components/panels/questions";
 import { Spinner } from "@/app/components/spinner";
 import { Suspense } from "react";
-import { ReaderPaper } from "./components/paper-card";
+import { ReaderPaper } from "./components/reader-paper";
 import Summary from "./components/summary";
 import { fetchPaper } from "./fetch-paper";
 import {

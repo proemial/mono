@@ -15,9 +15,7 @@ export async function FeedPaper({
   asTags,
 }: {
   id: string;
-  mainConcept?: string;
   asTags?: boolean;
-  children?: ReactNode;
 }) {
   const paper = await fetchPaper(id);
 

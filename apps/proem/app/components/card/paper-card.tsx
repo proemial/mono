@@ -1,15 +1,8 @@
 "use client";
-import Summary from "@/app/(pages)/(app)/oa/[id]/components/summary";
-import { fetchPaper } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
-import { Spinner } from "@/app/components/spinner";
-import dayjs from "dayjs";
-import { ReactNode, Suspense } from "react";
-import { Concepts } from "@/app/components/card/concepts";
-import {
-  OpenAlexPaper,
-  OpenAlexWorkMetadata,
-} from "@proemial/models/open-alex";
 import { ReadIcon } from "@/app/components/icons/menu/read-icon";
+import { cn } from "@/app/components/shadcn-ui/utils";
+import dayjs from "dayjs";
+import { ReactNode } from "react";
 
 export function PaperCardTop({ date }: { date: string }) {
   return (
@@ -32,10 +25,23 @@ export function PaperCardTop({ date }: { date: string }) {
   );
 }
 
-export function PaperCardTitle({ children }: { children: ReactNode }) {
+export function PaperCardTitle({
+  children,
+  size = "default",
+}: {
+  children: ReactNode;
+  /**
+   * size defaults to "default"
+   */
+  size?: "default" | "lg";
+}) {
   return (
-    // <div className="text-[18px] font-sans font-normal leading-6"></div>
-    <div className={`text-[24px] font-sans font-normal leading-[32px`}>
+    <div
+      className={cn(`font-sans font-normal`, {
+        "text-[18px] text-base leading-6": size === "default",
+        "text-[24px] leading-[32px]": size === "lg",
+      })}
+    >
       {children}
     </div>
   );
