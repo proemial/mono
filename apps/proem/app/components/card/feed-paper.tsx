@@ -12,11 +12,11 @@ import { ReactNode, Suspense } from "react";
 
 export async function FeedPaper({
   id,
-  mainConcept,
-  children,
+  asTags,
 }: {
   id: string;
   mainConcept?: string;
+  asTags?: boolean;
   children?: ReactNode;
 }) {
   const paper = await fetchPaper(id);
@@ -37,10 +37,7 @@ export async function FeedPaper({
         </Suspense>
       </PaperCardTitle>
 
-      <Concepts
-        data={paper.data as OpenAlexWorkMetadata}
-        mainConcept={mainConcept}
-      />
+      <Concepts data={paper.data as OpenAlexWorkMetadata} asTags={asTags} />
     </PaperCard>
     //   </div>
     // </div>

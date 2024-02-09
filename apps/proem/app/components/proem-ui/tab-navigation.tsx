@@ -1,7 +1,8 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-// import { getCookie, setCookie } from "cookies-next";
+import { getCookie, setCookie, deleteCookie } from "cookies-next";
+import { useEffect, useState } from "react";
 
 type Props = {
   items: string[];
@@ -11,20 +12,39 @@ type Props = {
 function useActiveTab(defaultTab: string) {
   const pathname = usePathname();
 
-  // TODO: Fix remember latest and scroll to it
-  // latestFeedConcept
-  // const latestFeedConcept = getCookie("latestFeedConcept");
-  const activeTab = pathname?.split("/")[2] ?? defaultTab;
-  return decodeURI(activeTab);
+  const conceptFromPath = pathname?.split("/")[2];
+  const conceptFromCookie = getCookie("latestFeedConcept") as string;
+  const activeTab = conceptFromPath ?? conceptFromCookie ?? defaultTab;
+
+  const active = decodeURI(activeTab);
+  const fromPath = conceptFromPath ? decodeURI(conceptFromPath) : undefined;
+
+  if (conceptFromPath) {
+    if (conceptFromPath !== "all") {
+      setCookie("latestFeedConcept", conceptFromPath);
+    } else {
+      deleteCookie("latestFeedConcept");
+    }
+  }
+
+  return { active, fromPath };
 }
 
 export function TabNavigation({ items, rootPath }: Props) {
   const router = useRouter();
-  const active = useActiveTab(items[0] as string);
+  const { active, fromPath } = useActiveTab(items[0] as string);
+
+  useEffect(() => {
+    if (fromPath !== active) {
+      router.replace(`${rootPath}/${active}`);
+    }
+  }, [active, fromPath]);
 
   const handleChildClick = (item: string) => {
     router.replace(`${rootPath}/${item}`);
   };
+
+  // TODO: Scroll to active tab on mount
 
   return (
     <>
@@ -46,6 +66,16 @@ type TabProps = {
 };
 
 export function Tab({ children, active, onClick }: TabProps) {
+  //     Opt out of SSR     //
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) return null;
+  ////////////////////////////
+
   const style = active ? "bg-[#7DFA86] text-black" : "text-white/50";
   return (
     <div
