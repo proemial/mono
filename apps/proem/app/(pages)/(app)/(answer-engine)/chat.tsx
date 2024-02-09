@@ -6,9 +6,14 @@ import WithHeader from "@/app/(pages)/(app)/header";
 import { applyLinks } from "@/app/(pages)/(app)/oa/[id]/components/panels/bot/apply-links";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { Tracker } from "@/app/components/analytics/tracker";
+import {
+  PaperCard,
+  PaperCardTitle,
+  PaperCardTop,
+} from "@/app/components/card/paper-card";
 import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
 import { ProemLogo } from "@/app/components/logo";
-import { Button } from "@/app/components/proem-ui/link-button";
+import { Button, LinkButton } from "@/app/components/proem-ui/link-button";
 import {
   Avatar,
   AvatarFallback,
@@ -36,7 +41,7 @@ function Message({
   message,
   user = { name: "you", initials: "U", avatar: "" },
 }: MessageProps) {
-  const { content } = applyLinks(message);
+  const { content, links } = applyLinks(message);
 
   return (
     <div className="w-full">
@@ -50,8 +55,33 @@ function Message({
         <div>{user.name}</div>
       </div>
 
-      <div className="flex-1 prose ml-9 prose-invert">{content}</div>
-      <div className="bg-green-700"></div>
+      <div className="flex-1 prose ml-9 prose-invert">
+        {content}
+
+        {links.length > 0 && (
+          <div className="pt-3 mt-3 space-y-3 border-t border-[#3C3C3C]">
+            {links.map((link) => (
+              <PaperCard
+                key={link.href}
+                className="pb-3 pt-1 border-0 rounded-lg bg-[#3C3C3C]"
+              >
+                {/* TODO: add date */}
+                <PaperCardTop />
+
+                <PaperCardTitle>{link.title}</PaperCardTitle>
+
+                <LinkButton
+                  href={link.href}
+                  className="py-1 mt-2 no-underline"
+                  track={analyticsKeys.ask.click.answerCard}
+                >
+                  Learn more...
+                </LinkButton>
+              </PaperCard>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

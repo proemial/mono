@@ -10,7 +10,7 @@ export function PaperCardTop({
   date,
   size = "default",
 }: {
-  date: string;
+  date?: string;
   /**
    * size defaults to "default"
    */
@@ -30,7 +30,7 @@ export function PaperCardTop({
           <ReadIcon />
           JOURNAL ARTICLE
         </div>
-        <div>{dayjs(date).format("YYYY.MM.DD")}</div>
+        {date && <div>{dayjs(date).format("YYYY.MM.DD")}</div>}
       </div>
     </div>
   );
@@ -79,7 +79,7 @@ export function PaperCard({
         className
       )}
     >
-      <div className="flex flex-col justify-between h-full px-4 pt-2 pb-4 text-lg font-medium items-left">
+      <div className="flex flex-col justify-between h-full px-4 py-2 text-lg font-medium items-left">
         {children}
       </div>
     </div>

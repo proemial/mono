@@ -43,7 +43,16 @@ export const aTaglinkCheckReqex =
   /<a\s+(?:[^>]*?\s+)?href="([^"]*)">(.*?)<\/a>/g;
 export const markdownlinkCheckReqex = /\[([^\]]+)\]\(([^)]+)\)/g;
 
-type Link = { href: string; content: string };
+function convertHrefToLink(fullHref: string) {
+  const [href, title] = fullHref.split("?") as [string, string];
+
+  return {
+    href,
+    title: decodeURIComponent(title.replace("title=", "").replaceAll("+", " ")),
+  };
+}
+
+type Link = { href: string; content: string; title: string };
 export function applyLinks(message: string) {
   const arr = message
     .replace(aTaglinkCheckReqex, "~~$&~~")
@@ -62,12 +71,12 @@ export function applyLinks(message: string) {
       const link =
         aTagHref && aTagContent
           ? {
-              href: aTagHref.split("?")[0] as string,
+              ...convertHrefToLink(aTagHref),
               content: aTagContent,
             }
           : markdownHref && markdownContent
             ? {
-                href: markdownHref.split("?")[0] as string,
+                ...convertHrefToLink(markdownHref),
                 content: markdownContent,
               }
             : null;
