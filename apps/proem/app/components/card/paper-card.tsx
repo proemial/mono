@@ -37,7 +37,7 @@ export function PaperCardTitle({
 }) {
   return (
     <div
-      className={cn(`font-sans font-normal`, {
+      className={cn(`font-normal`, {
         "text-[18px] text-base leading-6": size === "default",
         "text-[24px] leading-[32px]": size === "lg",
       })}
@@ -47,31 +47,26 @@ export function PaperCardTitle({
   );
 }
 
-export function PaperCardSources({
-  organisationName,
-  displayName,
-}: {
-  organisationName?: string;
-  displayName?: string;
-}) {
-  return (
-    <div className="py-1 text-xs">
-      <div className="leading-4 text-white/50">{organisationName}</div>
-      <div className="leading-4">{displayName}</div>
-    </div>
-  );
-}
-
-export function LinkTransition({ children }: { children: ReactNode }) {
+export function ClickFeedback({ children }: { children: ReactNode }) {
   return (
     <div className="scale-100 active:scale-[0.99] transition-all duration-100">
       {children}
     </div>
   );
 }
-export function PaperCard({ children }: { children: ReactNode }) {
+export function PaperCard({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
   return (
-    <div className="bg-[#1A1A1A] border border-t-0 border-x-0 border-[#4E4E4E] ">
+    <div
+      className={cn(
+        "bg-[#1A1A1A] border border-t-0 border-x-0 border-[#4E4E4E]"
+      )}
+    >
       <div className="flex flex-col justify-between h-full px-4 pt-2 pb-4 text-lg font-medium items-left">
         {children}
       </div>
