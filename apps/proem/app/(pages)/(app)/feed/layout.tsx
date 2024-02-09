@@ -18,7 +18,10 @@ export default async function RootLayout({ children }: Props) {
     <WithHeader title={pageName}>
       <div className="mb-4 flex justify-center">
         <TabNavigation
-          items={["all", ...OaConcepts.map((concept) => concept.display_name)]}
+          items={[
+            "all",
+            ...OaConcepts.map((concept) => concept.display_name.toLowerCase()),
+          ]}
           rootPath="/feed"
         />
       </div>
