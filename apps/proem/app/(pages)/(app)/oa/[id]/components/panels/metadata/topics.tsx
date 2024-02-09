@@ -21,12 +21,11 @@ export function Topics({ concepts }: { concepts?: OpenAlexTopic[] }) {
     </>
   );
 }
-
 function Topic({ topic, index }: { topic: OpenAlexTopic; index: number }) {
   return (
     <div key={topic.id} className="mb-2">
       {topic.domain.display_name} &gt;{" "}
-      <span className={index === 0 ? "font-bold text-white" : ""}>
+      <span className={index === 0 ? "font-bold" : ""}>
         {topic.field.display_name}
       </span>{" "}
       &gt; {topic.subfield.display_name}
