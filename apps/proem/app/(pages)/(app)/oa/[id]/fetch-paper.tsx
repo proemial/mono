@@ -19,7 +19,10 @@ export const fetchPaper = cache(
 
     const oaApiKey = Env.get("OPENALEX_API_KEY");
 
-    if (!(paper?.data as OpenAlexWorkMetadata)?.doi) {
+    if (
+      !(paper?.data as OpenAlexWorkMetadata)?.doi ||
+      !(paper?.data as OpenAlexWorkMetadata)?.topics
+    ) {
       console.log("fetchPaper");
       const oaPaper = await fetch(
         `${baseOaUrl}/${id}?mailto=lab@paperflow.ai&select=${openAlexFields.all}&api_key=${oaApiKey}`,

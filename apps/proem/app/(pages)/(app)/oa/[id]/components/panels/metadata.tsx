@@ -8,14 +8,17 @@ import { PublicationDate } from "@/app/(pages)/(app)/oa/[id]/components/panels/m
 import { Concepts } from "@/app/(pages)/(app)/oa/[id]/components/panels/metadata/concepts";
 import { PaperSource } from "@/app/(pages)/(app)/oa/[id]/components/panels/metadata/paper-source";
 import { Title } from "@/app/(pages)/(app)/oa/[id]/components/panels/metadata/title";
+import { Topics } from "@/app/(pages)/(app)/oa/[id]/components/panels/metadata/topics";
 
 export function Metadata({ paper }: { paper: OpenAlexPaper }) {
+  console.log("topics", (paper.data as OpenAlexWorkMetadata).topics);
   return (
     <div className="flex flex-col gap-3 font-sans text-xs leading-4">
       <Title>{paper.data.title}</Title>
       <Authors authorships={paper.data.authorships} />
       <PublicationDate>{paper.data.publication_date}</PublicationDate>
       <Concepts concepts={(paper.data as OpenAlexWorkMetadata).concepts} />
+      <Topics concepts={(paper.data as OpenAlexWorkMetadata).topics} />
       <PaperSource>{paper.data.primary_location?.landing_page_url}</PaperSource>
       <LinkButton url={paper.data.primary_location?.landing_page_url} />
     </div>
