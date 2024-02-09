@@ -8,7 +8,7 @@ import {
 } from "@/app/components/card/paper-card";
 import { Spinner } from "@/app/components/spinner";
 import { OpenAlexWorkMetadata } from "@proemial/models/open-alex";
-import { ReactNode, Suspense } from "react";
+import { Suspense } from "react";
 
 export async function FeedPaper({
   id,

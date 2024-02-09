@@ -11,31 +11,29 @@ export function Concepts({ data, asTags }: Props) {
     .sort((a, b) => a.level - b.level)
     .reverse();
   if (sorted.length === 0) return null;
+  if (asTags) {
+    return (
+      <div className="text-xs truncate text-white/50">
+        {limit(sorted, 3)
+          .map(
+            (c) =>
+              `#${c.display_name
+                .toLowerCase()
+                .replaceAll(" ", "-")
+                .replaceAll(",", "-")}`
+          )
+          .join(" ")}
+      </div>
+    );
+  }
 
   return (
-    <>
-      {asTags && (
-        <div className=" text-xs text-white/50 truncate">
-          {limit(sorted, 3)
-            .map(
-              (c) =>
-                `#${c.display_name
-                  .toLowerCase()
-                  .replaceAll(" ", "-")
-                  .replaceAll(",", "-")}`,
-            )
-            .join(" ")}
+    <div className="flex gap-2 font-sans text-xs truncate text-white/50">
+      {limit(sorted, 3).map((c) => (
+        <div key={c?.id} className="px-2 border rounded-md border-white/50">
+          {c?.display_name}
         </div>
-      )}
-      {!asTags && (
-        <div className="flex gap-2 text-white/50 text-xs mt-2 font-sans truncate">
-          {limit(sorted, 3).map((c) => (
-            <div key={c?.id} className="border border-white/50 rounded-md px-2">
-              {c?.display_name}
-            </div>
-          ))}
-        </div>
-      )}
-    </>
+      ))}
+    </div>
   );
 }

@@ -4,7 +4,18 @@ import { cn } from "@/app/components/shadcn-ui/utils";
 import dayjs from "dayjs";
 import { ReactNode } from "react";
 
-export function PaperCardTop({ date }: { date: string }) {
+type PaperCardSize = "default" | "lg";
+
+export function PaperCardTop({
+  date,
+  size = "default",
+}: {
+  date: string;
+  /**
+   * size defaults to "default"
+   */
+  size?: PaperCardSize;
+}) {
   return (
     <div className="flex w-full">
       <div className="w-full flex justify-between text-[12px] text-white/50 font-sourceCodePro font-normal uppercase tracking-wide">
@@ -33,7 +44,7 @@ export function PaperCardTitle({
   /**
    * size defaults to "default"
    */
-  size?: "default" | "lg";
+  size?: PaperCardSize;
 }) {
   return (
     <div
@@ -64,7 +75,8 @@ export function PaperCard({
   return (
     <div
       className={cn(
-        "bg-[#1A1A1A] border border-t-0 border-x-0 border-[#4E4E4E]"
+        "bg-[#1A1A1A] border border-t-0 border-x-0 border-[#4E4E4E]",
+        className
       )}
     >
       <div className="flex flex-col justify-between h-full px-4 pt-2 pb-4 text-lg font-medium items-left">

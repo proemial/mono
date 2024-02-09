@@ -2,7 +2,6 @@
 import { Concepts } from "@/app/components/card/concepts";
 import {
   PaperCard,
-  PaperCardSources,
   PaperCardTitle,
   PaperCardTop,
 } from "@/app/components/card/paper-card";
@@ -28,16 +27,13 @@ export function ReaderPaper({ children, paper, id }: Props) {
 
   return (
     // <div className="flex px-6 pb-6 pt-2 bg-[#1A1A1A] flex-col before:absolute before:-inset-0 relative before:top-[-100%] before:bg-[#1A1A1A] before:-z-10 border-b shadow border-[#4E4E4E] w-full">
-    <PaperCard>
-      <PaperCardTop date={paper.data.publication_date} />
+    <PaperCard className="py-1">
+      <PaperCardTop size="lg" date={paper.data.publication_date} />
       <PaperCardTitle size={"lg"}>{children}</PaperCardTitle>
 
-      <PaperCardSources
-        organisationName={
-          paper.data.primary_location?.source?.host_organization_name
-        }
-        displayName={paper.data.primary_location?.source?.display_name}
-      />
+      <div className="mt-1 mb-2 text-xs text-white/50">
+        {paper.data.primary_location?.source?.host_organization_name}
+      </div>
 
       <Concepts data={paper.data as OpenAlexWorkMetadata} />
     </PaperCard>
