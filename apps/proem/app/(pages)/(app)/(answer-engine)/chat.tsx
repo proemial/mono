@@ -36,7 +36,8 @@ function Message({
   message,
   user = { name: "you", initials: "U", avatar: "" },
 }: MessageProps) {
-  const content = applyLinks(message);
+  const { content } = applyLinks(message);
+
   return (
     <div className="w-full">
       <div className="flex gap-3">

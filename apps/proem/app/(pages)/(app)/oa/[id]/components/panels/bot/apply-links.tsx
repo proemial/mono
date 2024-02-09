@@ -43,6 +43,7 @@ export const aTaglinkCheckReqex =
   /<a\s+(?:[^>]*?\s+)?href="([^"]*)">(.*?)<\/a>/g;
 export const markdownlinkCheckReqex = /\[([^\]]+)\]\(([^)]+)\)/g;
 
+type Link = { href: string; content: string };
 export function applyLinks(message: string) {
   const arr = message
     .replace(aTaglinkCheckReqex, "~~$&~~")
@@ -50,32 +51,40 @@ export function applyLinks(message: string) {
     .split("~~");
 
   // TODO?: Add better streaming support with partial rendering of styled a tags while it's streamed in
-  return arr.map((messagePart, i) => {
-    const [_fullATag, aTagHref, aTagContent] =
-      aTaglinkCheckReqex.exec(messagePart) ?? [];
+  return arr.reduce(
+    (acc, messagePart, i) => {
+      const [_fullATag, aTagHref, aTagContent] =
+        aTaglinkCheckReqex.exec(messagePart) ?? [];
 
-    const [_fullMarkdownLink, markdownContent, markdownHref] =
-      markdownlinkCheckReqex.exec(messagePart) ?? [];
+      const [_fullMarkdownLink, markdownContent, markdownHref] =
+        markdownlinkCheckReqex.exec(messagePart) ?? [];
 
-    const link: { href: string; content: string } | null =
-      aTagHref && aTagContent
-        ? {
-            href: aTagHref.split("?")[0] as string,
-            content: aTagContent,
-          }
-        : markdownHref && markdownContent
+      const link =
+        aTagHref && aTagContent
           ? {
-              href: markdownHref.split("?")[0] as string,
-              content: markdownContent,
+              href: aTagHref.split("?")[0] as string,
+              content: aTagContent,
             }
-          : null;
+          : markdownHref && markdownContent
+            ? {
+                href: markdownHref.split("?")[0] as string,
+                content: markdownContent,
+              }
+            : null;
 
-    const content = link ? asLink(link.content, link.href) : messagePart;
+      const content = link ? asLink(link.content, link.href) : messagePart;
 
-    return (
-      <span key={i} className="break-words">
-        {content}
-      </span>
-    );
-  });
+      if (link) {
+        acc.links.push(link);
+      }
+
+      acc.content.push(
+        <span key={i} className="break-words">
+          {content}
+        </span>
+      );
+      return acc;
+    },
+    { content: [], links: [] } as { content: React.ReactNode[]; links: Link[] }
+  );
 }
