@@ -36,7 +36,7 @@ function Author({ authorship }: AuthorProps) {
   const name = `${display_name.charAt(0)}. ${display_name.split(" ").pop()}`;
 
   return (
-    <div className="mr-1 border border-white/50 px-1 rounded-md text-nowrap">
+    <div className="mr-1 mb-1 border border-white/50 px-1 rounded-md text-nowrap">
       {name}
     </div>
   );
