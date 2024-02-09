@@ -9,10 +9,10 @@ import { ReadIcon } from "@/app/components/icons/menu/read-icon";
 
 export async function PaperCard({
   id,
-  mainConcept,
+  asTags,
 }: {
   id: string;
-  mainConcept?: string;
+  asTags?: boolean;
 }) {
   const paper = await fetchPaper(id);
 
@@ -54,10 +54,7 @@ export async function PaperCard({
             </Suspense>
           </div>
         </div>
-        <Concepts
-          data={paper.data as OpenAlexWorkMetadata}
-          mainConcept={mainConcept}
-        />
+        <Concepts data={paper.data as OpenAlexWorkMetadata} asTags={asTags} />
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ export default async function FrontPage({ params }: Props) {
   return (
     <div>
       <Suspense fallback={<CenteredSpinner />}>
-        <CardList ids={latestIds} mainConcept={params.key} />
+        <CardList ids={latestIds} asTags={true} />
       </Suspense>
     </div>
   );

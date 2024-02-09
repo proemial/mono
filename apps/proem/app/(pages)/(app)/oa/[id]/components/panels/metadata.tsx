@@ -11,7 +11,6 @@ import { Title } from "@/app/(pages)/(app)/oa/[id]/components/panels/metadata/ti
 import { Topics } from "@/app/(pages)/(app)/oa/[id]/components/panels/metadata/topics";
 
 export function Metadata({ paper }: { paper: OpenAlexPaper }) {
-  console.log("topics", (paper.data as OpenAlexWorkMetadata).topics);
   return (
     <div className="flex flex-col gap-3 font-sans text-xs leading-4">
       <Title>{paper.data.title}</Title>
