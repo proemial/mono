@@ -87,6 +87,7 @@ export type OpenAlexWorkMetadata = OpenAlexWorkCoreMetadata & {
   ngrams_url: string;
   cited_by_api_url: string;
   counts_by_year: OpenAlexCitationCount[];
+  topics?: OpenAlexTopic[];
 };
 
 export type PaperId =
@@ -100,6 +101,20 @@ export type PaperId =
   | "hdl"
   | "purl"
   | "uri";
+
+export type OpenAlexTopic = {
+  id: string;
+  display_name: string;
+  score: number;
+  subfield: OpenAlexTopicItem;
+  field: OpenAlexTopicItem;
+  domain: OpenAlexTopicItem;
+};
+
+type OpenAlexTopicItem = {
+  id: number;
+  display_name: string;
+};
 
 export type OpenAlexCitationCount = {
   year: number;
