@@ -2,7 +2,7 @@ import { fetchLatestPaperIds } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
 import { CardList } from "@/app/components/card/card-list";
 import { CenteredSpinner } from "@/app/components/spinner";
 import { Suspense } from "react";
-import { OaConcepts } from "@proemial/models/open-alex-concepts";
+import { OaTopics } from "@proemial/models/open-alex-topics";
 
 export const revalidate = 1;
 
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export default async function FrontPage({ params }: Props) {
-  const conceptId = OaConcepts.find(
+  const conceptId = OaTopics.find(
     (c) =>
       c.display_name.toLowerCase() ===
       decodeURI(params.key).replaceAll("%2C", ","),

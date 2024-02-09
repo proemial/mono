@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import WithHeader from "@/app/(pages)/(app)/header";
 import { TabNavigation } from "@/app/components/proem-ui/tab-navigation";
-import { OaConcepts } from "@proemial/models/open-alex-concepts";
+import { OaTopics } from "@proemial/models/open-alex-topics";
 
 const pageName = "feed";
 
@@ -20,7 +20,7 @@ export default async function RootLayout({ children }: Props) {
         <TabNavigation
           items={[
             "all",
-            ...OaConcepts.map((concept) => concept.display_name.toLowerCase()),
+            ...OaTopics.map((concept) => concept.display_name.toLowerCase()),
           ]}
           rootPath="/feed"
         />
