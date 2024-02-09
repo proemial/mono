@@ -72,7 +72,7 @@ function Message({
 
                 <LinkButton
                   href={link.href}
-                  className="py-1 mt-2 no-underline"
+                  className="py-[1px] mt-2 no-underline"
                   track={analyticsKeys.ask.click.answerCard}
                 >
                   Learn more...
@@ -108,7 +108,7 @@ export default function Chat({ user, message }: ChatProps) {
   });
 
   const sessionSlugFromServer = (data as { slug?: string }[])?.find(
-    ({ slug }) => slug
+    ({ slug }) => slug,
   )?.slug;
 
   useEffect(() => {
@@ -264,7 +264,7 @@ const Starters = memo(function Starters({ append }: { append: any }) {
             className="w-full mb-1 cursor-pointer"
             onClick={() => {
               trackAndInvoke(() =>
-                append({ role: "user", content: starter.text })
+                append({ role: "user", content: starter.text }),
               );
             }}
           >

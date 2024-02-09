@@ -48,8 +48,8 @@ export function PaperCardTitle({
 }) {
   return (
     <div
-      className={cn(`font-normal font-sans`, {
-        "text-[18px] text-base leading-6": size === "default",
+      className={cn(`font-light font-sans text-white`, {
+        "text-[16px] leading-5": size === "default",
         "text-[24px] leading-[32px]": size === "lg",
       })}
     >
@@ -76,7 +76,7 @@ export function PaperCard({
     <div
       className={cn(
         "bg-[#1A1A1A] border border-t-0 border-x-0 border-[#4E4E4E]",
-        className
+        className,
       )}
     >
       <div className="flex flex-col justify-between h-full px-4 py-2 text-lg font-medium items-left">
