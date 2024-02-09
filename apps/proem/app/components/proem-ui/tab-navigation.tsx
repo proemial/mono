@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
+// import { getCookie, setCookie } from "cookies-next";
 
 type Props = {
   items: string[];
@@ -9,6 +10,10 @@ type Props = {
 
 function useActiveTab(defaultTab: string) {
   const pathname = usePathname();
+
+  // TODO: Fix remember latest and scroll to it
+  // latestFeedConcept
+  // const latestFeedConcept = getCookie("latestFeedConcept");
   const activeTab = pathname?.split("/")[2] ?? defaultTab;
   return decodeURI(activeTab);
 }
