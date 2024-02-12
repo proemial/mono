@@ -12,6 +12,8 @@ import { fromInvertedIndex } from "@proemial/utils/string";
 import { fetchJson } from "@proemial/utils/fetch";
 import { Env } from "@proemial/utils/env";
 import dayjs from "dayjs";
+import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
+import { Features } from "@/app/components/feature-flags/features";
 
 export const fetchPaper = cache(
   async (id: string): Promise<OpenAlexPaper | undefined> => {
@@ -57,6 +59,8 @@ export const fetchLatestPaperIds = async (
   const today = dayjs().format("YYYY-MM-DD");
   const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
   const select = ["id", "publication_date"].join(",");
+  const preprintsOnly = getFeatureFlag(Features.fetchPreprintsOnly);
+
   const filter = [
     "type:article",
     "has_abstract:true",
@@ -64,6 +68,7 @@ export const fetchLatestPaperIds = async (
     `publication_date:>${twoWeeksAgo}`, // We do not want old papers that were added recently
     `publication_date:<${today}`, // We do not want papers published in the future
     "open_access.is_oa:true",
+    !!preprintsOnly ? `primary_location.version:submittedVersion` : undefined,
     concept ? `primary_topic.field.id:${concept}` : undefined,
   ]
     .filter((f) => !!f)
