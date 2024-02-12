@@ -48,7 +48,7 @@ export function PaperCardTitle({
 }) {
   return (
     <div
-      className={cn(`font-light text-white`, {
+      className={cn(`font-normal text-white`, {
         "text-[16px] leading-5": size === "default",
         "text-[24px] leading-[32px]": size === "lg",
       })}
