@@ -9,3 +9,9 @@ export const Features = {
 
 export type FeatureKey = keyof typeof Features;
 export type FeatureValue = (typeof Features)[FeatureKey];
+
+export function keyByValue(flag: FeatureValue) {
+  return Object.entries(Features)
+    .find((f) => f[1] === flag)
+    ?.at(0) as FeatureKey;
+}

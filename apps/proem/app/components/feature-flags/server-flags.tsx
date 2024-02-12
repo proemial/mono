@@ -2,8 +2,8 @@ import { Env } from "@proemial/utils/env";
 import { PostHog } from "posthog-node";
 import { currentUser } from "@clerk/nextjs";
 import {
+  keyByValue,
   FeatureKey,
-  Features,
   FeatureValue,
 } from "@/app/components/feature-flags/features";
 
@@ -25,22 +25,16 @@ export async function getFeatureFlags(flags: FeatureValue[]) {
   const distinctID = await getDistinctID();
 
   if (!distinctID) {
-    return Object.fromEntries(flags.map((f) => [getKey(f), false])) as {
+    return Object.fromEntries(flags.map((f) => [keyByValue(f), false])) as {
       [key in FeatureKey]: boolean;
     };
   }
 
   const all = await posthog.getAllFlags(distinctID);
 
-  return Object.fromEntries(flags.map((f) => [getKey(f), !!all[f]])) as {
+  return Object.fromEntries(flags.map((f) => [keyByValue(f), !!all[f]])) as {
     [key in FeatureKey]: boolean;
   };
-}
-
-function getKey(flag: FeatureValue) {
-  return Object.entries(Features)
-    .find((f) => f[1] === flag)
-    ?.at(0);
 }
 
 async function getDistinctID() {
