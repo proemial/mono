@@ -21,20 +21,14 @@ export async function FeedPaper({ id }: { id: string }) {
 
   const data = paper.data as OpenAlexWorkMetadata;
 
-  //  TODO: use enum keys instead of values
-  const {
-    CARD_FOOTER_HIDE_MAIN_TOPIC,
-    CARD_FOOTER_SHOW_SUBFIELD,
-    CARD_FOOTER_SHOW_CONCEPTS,
-    CARD_FOOTER_SHOW_JOURNAL,
-    CARD_FOOTER_SHOW_ORG,
-  } = await getFeatureFlags([
+  const flags = await getFeatureFlags([
     Features.hideMainTopicInCards,
     Features.showSubfieldInCards,
     Features.showConceptsInCards,
     Features.showJournalInCards,
     Features.showOrgInCards,
   ]);
+  console.log("flags", flags);
 
   return (
     <PaperCard>
@@ -47,27 +41,27 @@ export async function FeedPaper({ id }: { id: string }) {
       </PaperCardTitle>
 
       <div className="font-sourceCodePro">
-        {!CARD_FOOTER_HIDE_MAIN_TOPIC && (
+        {!flags.hideMainTopicInCards && (
           <div className="text-xs text-white/50">
             {data.topics?.length && data.topics.at(0)?.display_name}
           </div>
         )}
-        {CARD_FOOTER_SHOW_SUBFIELD && (
+        {flags.showSubfieldInCards && (
           <div className="text-xs text-white/50">
             {data.topics?.length && data.topics.at(0)?.subfield?.display_name}
           </div>
         )}
-        {CARD_FOOTER_SHOW_ORG && (
+        {flags.showOrgInCards && (
           <div className="text-xs text-white/50">
             {data?.primary_location?.source?.host_organization_name}
           </div>
         )}
-        {CARD_FOOTER_SHOW_JOURNAL && (
+        {flags.showJournalInCards && (
           <div className="text-xs text-white/50">
             {data?.primary_location?.source?.display_name}
           </div>
         )}
-        {CARD_FOOTER_SHOW_CONCEPTS && (
+        {flags.showConceptsInCards && (
           <Concepts data={paper.data as OpenAlexWorkMetadata} />
         )}
       </div>
