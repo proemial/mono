@@ -45,7 +45,5 @@ function getKey(flag: FeatureValue) {
 async function getDistinctID() {
   const user = await currentUser();
 
-  return user?.emailAddresses?.length
-    ? user?.emailAddresses[0]?.emailAddress
-    : user?.id;
+  return user?.emailAddresses?.[0]?.emailAddress ?? user?.id;
 }
