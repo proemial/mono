@@ -8,6 +8,9 @@ import {
 import { Spinner } from "@/app/components/spinner";
 import { OpenAlexWorkMetadata } from "@proemial/models/open-alex";
 import { Suspense } from "react";
+import { getFeatureFlags } from "@/app/components/feature-flags/server-flags";
+import { Features } from "@/app/components/feature-flags/features";
+import { CardFooter } from "@/app/components/card/footer";
 
 export async function FeedPaper({ id }: { id: string }) {
   const paper = await fetchPaper(id);
@@ -17,6 +20,14 @@ export async function FeedPaper({ id }: { id: string }) {
   }
 
   const data = paper.data as OpenAlexWorkMetadata;
+
+  const flags = await getFeatureFlags([
+    Features.showMainTopicInCards,
+    Features.showSubfieldInCards,
+    Features.hideConceptsInCards,
+    Features.showJournalInCards,
+    Features.showOrgInCards,
+  ]);
 
   return (
     <PaperCard>
@@ -28,8 +39,8 @@ export async function FeedPaper({ id }: { id: string }) {
         </Suspense>
       </PaperCardTitle>
 
-      <div className="text-xs text-white/50 font-sourceCodePro">
-        {data.topics?.length && data.topics.at(0)?.display_name}
+      <div className="font-sourceCodePro">
+        <CardFooter data={data} flags={flags} />
       </div>
     </PaperCard>
   );
