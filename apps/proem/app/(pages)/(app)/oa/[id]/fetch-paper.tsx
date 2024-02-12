@@ -59,7 +59,8 @@ export const fetchLatestPaperIds = async (
   const today = dayjs().format("YYYY-MM-DD");
   const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
   const select = ["id", "publication_date"].join(",");
-  const preprintsOnly = getFeatureFlag(Features.fetchPreprintsOnly);
+  const preprintsOnly = await getFeatureFlag(Features.fetchPreprintsOnly);
+  console.log("fetchLatestPaperIds", preprintsOnly);
 
   const filter = [
     "type:article",
