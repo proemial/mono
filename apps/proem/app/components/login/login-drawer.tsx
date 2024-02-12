@@ -61,8 +61,9 @@ export function LoginDrawer() {
                       pathname,
                   });
                 }}
+                className="items-center space-x-2"
               >
-                <Logo variant={icon} className="mr-2" />
+                <Logo variant={icon} />
                 <span className="font-sans text-xs font-semibold">
                   Continue using {name}
                 </span>
