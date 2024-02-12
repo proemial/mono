@@ -118,12 +118,14 @@ type PapersRequest = {
 
 export type AnswerEngineParams = AnswerEngineChainInput & {
   existingSlug?: string;
+  userId?: string;
 };
 
 export async function askAnswerEngine({
   existingSlug,
   question,
   chatHistory,
+  userId,
 }: AnswerEngineParams) {
   const data = new experimental_StreamData();
   const isFollowUpQuestion = Boolean(existingSlug);
@@ -163,7 +165,13 @@ export async function askAnswerEngine({
               },
             };
 
-        await answers.create({ slug, question, answer, ...papers });
+        await answers.create({
+          slug,
+          question,
+          answer,
+          ownerId: userId,
+          ...papers,
+        });
       },
     })
     .stream(

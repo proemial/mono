@@ -90,7 +90,9 @@ function Message({
   );
 }
 
-type ChatProps = Pick<MessageProps, "user" | "message">;
+type ChatProps = Pick<MessageProps, "user" | "message"> & {
+  user?: { id?: string };
+};
 
 export default function Chat({ user, message }: ChatProps) {
   const [sessionSlug, setSessionSlug] = useState<null | string>(null);
@@ -108,7 +110,7 @@ export default function Chat({ user, message }: ChatProps) {
   } = useChat({
     id: "hardcoded",
     api: "/api/bot/answer-engine",
-    body: { slug: sessionSlug },
+    body: { slug: sessionSlug, userId: user?.id },
   });
 
   const sessionSlugFromServer = (data as { slug?: string }[])?.find(
