@@ -20,7 +20,7 @@ import {
   AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
 import { cn } from "@/app/components/shadcn-ui/utils";
-import { useChat } from "ai/react";
+import { Message, useChat } from "ai/react";
 import { ShareIcon } from "lucide-react";
 import { memo, useEffect, useRef, useState } from "react";
 
@@ -90,11 +90,12 @@ function Message({
   );
 }
 
-type ChatProps = Pick<MessageProps, "user" | "message"> & {
+type ChatProps = Partial<Pick<MessageProps, "user" | "message">> & {
   user?: { id?: string };
+  initialMessages?: Message[];
 };
 
-export default function Chat({ user, message }: ChatProps) {
+export default function Chat({ user, message, initialMessages }: ChatProps) {
   const [sessionSlug, setSessionSlug] = useState<null | string>(null);
   const {
     messages,
@@ -110,6 +111,7 @@ export default function Chat({ user, message }: ChatProps) {
   } = useChat({
     id: "hardcoded",
     api: "/api/bot/answer-engine",
+    initialMessages,
     body: { slug: sessionSlug, userId: user?.id },
   });
 
