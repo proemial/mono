@@ -1,3 +1,4 @@
+import { answers } from "@/app/api/bot/answer-engine/answer";
 import { fetchPapersChain } from "@/app/api/bot/answer-engine/fetch-papers-chain";
 import { model } from "@/app/api/bot/answer-engine/model";
 import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
@@ -9,14 +10,11 @@ import {
 } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { Run } from "@langchain/core/tracers/base";
-import { neonDb } from "@proemial/data";
-import { answers } from "@proemial/data/neon/schema/answers";
 import {
+  StreamingTextResponse,
   createStreamDataTransformer,
   experimental_StreamData,
-  StreamingTextResponse,
 } from "ai";
-import { eq } from "drizzle-orm";
 
 const bytesOutputParser = new BytesOutputParser();
 
@@ -128,14 +126,12 @@ export async function askAnswerEngine({
   chatHistory,
 }: AnswerEngineParams) {
   const data = new experimental_StreamData();
+  const isFollowUpQuestion = Boolean(existingSlug);
   const slug = existingSlug ?? prettySlug(question);
-  // TODO! doesn't have to fetch on new request
-  const existingAnswers = await neonDb
-    .select()
-    .from(answers)
-    .where(eq(answers.slug, slug));
+  const existingAnswers = isFollowUpQuestion
+    ? await answers.getBySlug(slug)
+    : [];
 
-  const isFollowUpQuestion = existingAnswers.length > 0;
   const existingPapers = existingAnswers[0]?.papers?.papers;
 
   data.append({
@@ -167,9 +163,7 @@ export async function askAnswerEngine({
               },
             };
 
-        await neonDb
-          .insert(answers)
-          .values({ slug, question, answer, ...papers });
+        await answers.create({ slug, question, answer, ...papers });
       },
     })
     .stream(
@@ -188,12 +182,12 @@ export async function askAnswerEngine({
             },
           },
         ],
-      },
+      }
     );
 
   return new StreamingTextResponse(
     stream.pipeThrough(createStreamDataTransformer(true)),
     {},
-    data,
+    data
   );
 }

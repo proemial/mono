@@ -1,6 +1,6 @@
 import { jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
-export const answers = pgTable("answers", {
+export const answersTable = pgTable("answers", {
   id: serial("id").notNull().primaryKey(),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   slug: text("slug").notNull(),
@@ -18,5 +18,5 @@ export const answers = pgTable("answers", {
     }>(),
 });
 
-export type Answer = typeof answers.$inferSelect;
-export type NewAnswer = typeof answers.$inferInsert;
+export type Answer = typeof answersTable.$inferSelect;
+export type NewAnswer = typeof answersTable.$inferInsert;
