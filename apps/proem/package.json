@@ -44,7 +44,9 @@
     "sharp": "^0.32.6",
     "zod": "^3.22.4",
     "zod-to-json-schema": "^3.22.3",
-    "zustand": "^4"
+    "zustand": "^4",
+    "posthog-js": "^1",
+    "posthog-node": "^3"
   },
   "devDependencies": {
     "@proemial/typescript-config": "workspace:*",

@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import "./globals.css";
 import { Source_Code_Pro } from "next/font/google";
 import { Metadata } from "next";
+import { PostHogClient } from "@/app/components/analytics/posthog-client";
 
 // If loading a variable font, you don't need to specify the font weight
 const sourceCodePro = Source_Code_Pro({
@@ -40,15 +41,17 @@ export default async function RootLayout({ children }: Props) {
 
   return (
     <ClerkProvider>
-      <html lang="en" className={sourceCodePro.className}>
-        <body
-          className={`flex relative flex-col justify-center ${light} h-dvh`}
-        >
-          {children}
+      <PostHogClient>
+        <html lang="en" className={sourceCodePro.className}>
+          <body
+            className={`flex relative flex-col justify-center ${light} h-dvh`}
+          >
+            {children}
 
-          <AnalyticsClient />
-        </body>
-      </html>
+            <AnalyticsClient />
+          </body>
+        </html>
+      </PostHogClient>
     </ClerkProvider>
   );
 }
