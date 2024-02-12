@@ -1,7 +1,7 @@
 import posthog from "posthog-js";
-import { Features } from "@/app/components/feature-flags/features";
+import { FeatureValue } from "@/app/components/feature-flags/features";
 
-export function useFeatureFlag(flag: Features) {
+export function useFeatureFlag(flag: FeatureValue) {
   return posthog.isFeatureEnabled(flag);
 }
 

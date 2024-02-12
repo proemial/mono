@@ -6,3 +6,6 @@ export const Features = {
   showOrgInCards: "CARD_FOOTER_SHOW_ORG",
   fetchPreprintsOnly: "FEED_FETCH_APPROXIMATED_PREPRINTS_ONLY",
 } as const;
+
+export type FeatureKey = keyof typeof Features;
+export type FeatureValue = (typeof Features)[FeatureKey];

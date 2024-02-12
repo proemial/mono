@@ -1,14 +1,15 @@
 import { Env } from "@proemial/utils/env";
 import { PostHog } from "posthog-node";
 import { currentUser } from "@clerk/nextjs";
-import { Features } from "@/app/components/feature-flags/features";
+import {
+  FeatureKey,
+  Features,
+  FeatureValue,
+} from "@/app/components/feature-flags/features";
 
 const posthog = new PostHog(Env.get("NEXT_PUBLIC_POSTHOG_KEY"), {
   host: Env.get("NEXT_PUBLIC_POSTHOG_HOST"),
 });
-
-type FeatureKey = keyof typeof Features;
-type FeatureValue = (typeof Features)[FeatureKey];
 
 export async function getFeatureFlag(flag: FeatureValue) {
   const distinctID = await getDistinctID();
