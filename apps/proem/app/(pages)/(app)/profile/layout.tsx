@@ -11,6 +11,6 @@ type Props = {
   children: ReactNode;
 };
 
-export default async function RootLayout({ children }: Props) {
+export default async function ProfileLayout({ children }: Props) {
   return <WithHeader title={pageName}>{children}</WithHeader>;
 }

@@ -19,7 +19,9 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
+import { cn } from "@/app/components/shadcn-ui/utils";
 import { useChat } from "ai/react";
+import { ShareIcon } from "lucide-react";
 import { memo, useEffect, useRef, useState } from "react";
 
 const PROEM_BOT = {
@@ -52,10 +54,12 @@ function Message({
             {user.initials}
           </AvatarFallback>
         </Avatar>
-        <div>{user.name}</div>
+        <div className="font-bold">{user.name}</div>
+
+        {/* <ShareIcon className="ml-auto" /> */}
       </div>
 
-      <div className="flex-1 prose ml-9 prose-invert">
+      <div className="mt-2 ml-9">
         {content}
 
         {links.length > 0 && (
@@ -156,7 +160,9 @@ export default function Chat({ user, message }: ChatProps) {
   return (
     <WithHeader title="science answers" action={actionButton}>
       <div
-        className={`flex flex-col px-4 pt-6 pb-12 ${isEmptyScreen && "h-full"}`}
+        className={cn("flex flex-col px-4 pt-6 pb-12", {
+          "h-full": isEmptyScreen,
+        })}
         ref={chatWrapperRef}
       >
         {isEmptyScreen ? (

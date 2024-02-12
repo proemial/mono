@@ -5,7 +5,6 @@ import "./globals.css";
 import { Source_Code_Pro } from "next/font/google";
 import { Metadata } from "next";
 
-// If loading a variable font, you don't need to specify the font weight
 const sourceCodePro = Source_Code_Pro({
   subsets: ["latin"],
   variable: "--font-source-code-pro",
