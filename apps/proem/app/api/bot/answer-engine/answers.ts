@@ -4,11 +4,20 @@ import {
   answersTable,
   Answer,
   NewAnswer,
-} from "@proemial/data/neon/schema/answers";
+} from "@proemial/data/neon/schema/answersTable";
+import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
 
 export const answers = {
   create(answer: NewAnswer) {
-    return neonDb.insert(answersTable).values(answer);
+    const shareId = prettySlug(answer.answer);
+    return neonDb.insert(answersTable).values({ ...answer, shareId });
+  },
+
+  getByShareId(shareId: NonNullable<Answer["shareId"]>) {
+    return neonDb
+      .select()
+      .from(answersTable)
+      .where(eq(answersTable.shareId, shareId));
   },
 
   getBySlug(slug: Answer["slug"]) {

@@ -4,6 +4,7 @@ export const answersTable = pgTable("answers", {
   id: serial("id").notNull().primaryKey(),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   slug: text("slug").notNull(),
+  shareId: text("shareId"),
   question: text("question").notNull(),
   answer: text("answer").notNull(),
   ownerId: text("ownerId"),
