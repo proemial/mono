@@ -12,7 +12,7 @@ import { Publication } from "@/app/(pages)/(app)/oa/[id]/components/panels/metad
 
 export function Metadata({ paper }: { paper: OpenAlexPaper }) {
   return (
-    <div className="flex flex-col gap-3 font-sans text-xs leading-4">
+    <div className="flex flex-col gap-3 text-xs leading-4">
       <Title>{paper.data.title}</Title>
       <Authors authorships={paper.data.authorships} />
       <Publication paper={paper} />

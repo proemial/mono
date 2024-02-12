@@ -12,7 +12,7 @@ type LinkProps = VariantProps<typeof variants> & {
   track?: string;
 };
 
-const variants = cva("rounded-sm font-sans", {
+const variants = cva("rounded-sm", {
   variants: {
     variant: {
       default: "bg-green-500 text-black text-center",
@@ -38,7 +38,7 @@ export function LinkButton(props: LinkProps) {
       className={`${cn(variants({ variant, size, className }))}`}
       onClick={() => track && Tracker.track(track)}
     >
-      <div className="w-full truncate mr-2">{children}</div>
+      <div className="w-full mr-2 truncate">{children}</div>
       {variant === "starter" && <Send />}
     </Link>
   );
@@ -57,7 +57,7 @@ export function Button(props: ButtonProps) {
       onClick={onClick}
       className={`${cn(variants({ variant, size, className }))}`}
     >
-      <div className="w-full truncate mr-2">{children}</div>
+      <div className="w-full mr-2 truncate">{children}</div>
       {variant === "starter" && <Send />}
     </div>
   );

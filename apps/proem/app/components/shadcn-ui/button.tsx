@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-green-500 text-black font-semibold font-sans scale-100 active:scale-[0.98] transition-all duration-100",
+          "bg-green-500 text-black font-semibold scale-100 active:scale-[0.98] transition-all duration-100",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
@@ -18,9 +18,9 @@ const buttonVariants = cva(
         secondary: "bg-gradient-to-r from-secondary to-secondary-gradient ",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "underline-offset-4 hover:underline text-primary",
-        danger: "bg-[#F93B25]/20 text-[#F93B25] font-semibold font-sans",
+        danger: "bg-[#F93B25]/20 text-[#F93B25] font-semibold",
         ae_starter:
-          "bg-[#2F2F2F] border border-[#3C3C3C] text-[14px] font-sans font-normal text-white justify-begin items-begin",
+          "bg-[#2F2F2F] border border-[#3C3C3C] text-[14px] font-normal text-white justify-begin items-begin",
         send_button:
           "bg-[#2F2F2F] cursor-pointer scale-100 active:scale-[0.95] transition-all duration-100",
       },

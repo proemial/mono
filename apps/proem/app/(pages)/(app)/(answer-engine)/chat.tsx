@@ -108,7 +108,7 @@ export default function Chat({ user, message }: ChatProps) {
   });
 
   const sessionSlugFromServer = (data as { slug?: string }[])?.find(
-    ({ slug }) => slug,
+    ({ slug }) => slug
   )?.slug;
 
   useEffect(() => {
@@ -155,11 +155,8 @@ export default function Chat({ user, message }: ChatProps) {
 
   return (
     <WithHeader title="science answers" action={actionButton}>
-      {/*// TODO: Remove font-sans to use the global font*/}
       <div
-        className={`flex flex-col px-4 pt-6 pb-12 font-sans ${
-          isEmptyScreen && "h-full"
-        }`}
+        className={`flex flex-col px-4 pt-6 pb-12 ${isEmptyScreen && "h-full"}`}
         ref={chatWrapperRef}
       >
         {isEmptyScreen ? (
@@ -253,7 +250,7 @@ const Starters = memo(function Starters({ append }: { append: any }) {
 
   return (
     <div className="flex flex-col h-full mb-3" suppressHydrationWarning>
-      <div className="flex flex-col items-center justify-center h-full px-8 font-sans text-center">
+      <div className="flex flex-col items-center justify-center h-full px-8 text-center">
         <Text />
       </div>
       <div className="flex flex-wrap gap-[6px] ">
@@ -264,7 +261,7 @@ const Starters = memo(function Starters({ append }: { append: any }) {
             className="w-full mb-1 cursor-pointer"
             onClick={() => {
               trackAndInvoke(() =>
-                append({ role: "user", content: starter.text }),
+                append({ role: "user", content: starter.text })
               );
             }}
           >

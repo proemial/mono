@@ -40,7 +40,7 @@ export default async function RootLayout({ children }: Props) {
 
   return (
     <ClerkProvider>
-      <html lang="en" className={sourceCodePro.className}>
+      <html lang="en" className={sourceCodePro.variable}>
         <body
           className={`flex relative flex-col justify-center ${light} h-dvh`}
         >

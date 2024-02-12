@@ -16,7 +16,7 @@ export function ProfileButtons() {
   return (
     <SignOutButton signOutCallback={handleCallback}>
       <Button variant="danger">
-        <span className="font-sans text-xs font-semibold">Log out</span>
+        <span className="text-xs font-semibold">Log out</span>
       </Button>
     </SignOutButton>
   );

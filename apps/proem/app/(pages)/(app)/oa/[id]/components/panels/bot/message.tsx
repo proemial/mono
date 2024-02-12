@@ -27,7 +27,7 @@ const style = "inline-block";
 export function Answer({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className={`${style} bg-[#464545] max-w-md leading-snug mb-2 py-2 px-4 text-[16px] font-sans font-normal rounded-sm self-start`}
+      className={`${style} bg-[#464545] max-w-md leading-snug mb-2 py-2 px-4 text-[16px] font-normal rounded-sm self-start`}
     >
       {children}
     </div>
@@ -55,12 +55,12 @@ export function Question({ children, onClick, starter }: QuestionProps) {
 
   return (
     <div
-      className="flex justify-between gap-3 mb-2 p-2 border rounded-sm border-[#4E4E4E] bg-[#2F2F2F] leading-5 text-[16px] font-sans font-light text-left"
+      className="flex justify-between gap-3 mb-2 p-2 border rounded-sm border-[#4E4E4E] bg-[#2F2F2F] leading-5 text-[16px] font-light text-left"
       onClick={handleClick}
     >
       {children}
       {starter && (
-        <div className="mr-1 ml-2 flex items-center">
+        <div className="flex items-center ml-2 mr-1">
           <Send />
         </div>
       )}

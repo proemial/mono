@@ -3,7 +3,7 @@ import React from "react";
 
 const asLink = (content: string, href: string) => {
   return (
-    <Link href={href} className="font-sans font-normal text-green-500">
+    <Link href={href} className="font-normal text-green-500">
       {content}
     </Link>
   );
@@ -23,7 +23,7 @@ export function applyExplainLinks(
 
     return (
       <span
-        className="font-sans font-normal text-green-500 cursor-pointer"
+        className="font-normal text-green-500 cursor-pointer"
         onClick={() => onClick(sanitized)}
       >
         {sanitized}

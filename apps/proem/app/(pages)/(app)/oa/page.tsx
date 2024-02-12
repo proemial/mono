@@ -11,8 +11,8 @@ export const revalidate = 1;
 export default async function ReadPage() {
   return (
     <Redirect>
-      <div className="h-full max-w-screen-sm flex flex-col px-2">
-        <div className="h-full flex flex-col text-center items-center justify-center px-8 font-sans">
+      <div className="flex flex-col h-full max-w-screen-sm px-2">
+        <div className="flex flex-col items-center justify-center h-full px-8 text-center">
           <Text />
         </div>
         <div className="flex flex-col gap-2 py-2 text-xs font-light">
@@ -27,7 +27,7 @@ export default async function ReadPage() {
 function Text() {
   return (
     <>
-      <div className="text-xl pb-4">No Paper Selected</div>
+      <div className="pb-4 text-xl">No Paper Selected</div>
       <div className="text-md text-white/80">
         <div>To find an interesting paper, start by</div>
         <div>asking a question, or go to the feed</div>

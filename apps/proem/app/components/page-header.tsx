@@ -21,12 +21,12 @@ export function PageHeader({
 
   return (
     <>
-      <div className="fixed w-full top-0 z-50 bg-black shadow-bottom">
+      <div className="fixed top-0 z-50 w-full bg-black shadow-bottom">
         <div className="flex flex-row items-center justify-between max-w-screen-md px-6 pt-3 pb-2 mx-auto">
           <Link href="/" onClick={handleClick}>
             <div className="flex flex-row gap-3">
               <ProemLogo size="sm" />
-              <span className="text-[16px] font-sans font-normal">{title}</span>
+              <span className="text-[16px] font-normal">{title}</span>
             </div>
           </Link>
           {action}

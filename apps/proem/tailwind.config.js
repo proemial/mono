@@ -101,7 +101,6 @@ module.exports = {
         "3xl": ["32px", { lineHeight: "40px", fontWeight: "500" }],
       },
       fontFamily: {
-        sans: ['"Helvetica"', "system-ui"],
         sourceCodePro: [" var(--font-source-code-pro)"],
       },
       keyframes: {
