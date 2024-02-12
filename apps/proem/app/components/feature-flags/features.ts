@@ -1,5 +1,5 @@
 export enum Features {
-  hideTopicsInCards = "CARD_FOOTER_HIDE_TOPICS",
+  hideMainTopicInCards = "CARD_FOOTER_HIDE_MAIN_TOPIC",
   showSubfieldInCards = "CARD_FOOTER_SHOW_SUBFIELD",
   showConceptsInCards = "CARD_FOOTER_SHOW_CONCEPTS",
   showJournalInCards = "CARD_FOOTER_SHOW_JOURNAL",

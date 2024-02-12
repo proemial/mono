@@ -22,7 +22,7 @@ export async function FeedPaper({ id }: { id: string }) {
   const data = paper.data as OpenAlexWorkMetadata;
 
   const flags = await getFeatureFlags([
-    Features.hideTopicsInCards,
+    Features.hideMainTopicInCards,
     Features.showSubfieldInCards,
     Features.showConceptsInCards,
     Features.showJournalInCards,
@@ -40,7 +40,7 @@ export async function FeedPaper({ id }: { id: string }) {
       </PaperCardTitle>
 
       <div className="font-sourceCodePro">
-        {!flags.hideTopicsInCards && (
+        {!flags.hideMainTopicInCards && (
           <div className="text-xs text-white/50">
             {data.topics?.length && data.topics.at(0)?.display_name}
           </div>
