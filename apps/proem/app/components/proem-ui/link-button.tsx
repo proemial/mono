@@ -20,7 +20,7 @@ const variants = cva("rounded-sm", {
         "bg-[#2F2F2F] text-white flex justify-between items-center border border-[#4E4E4E]",
     },
     size: {
-      default: "text-[16px] font-light py-2 px-4",
+      default: "text-[16px] font-normal py-2 px-4",
     },
   },
   defaultVariants: {

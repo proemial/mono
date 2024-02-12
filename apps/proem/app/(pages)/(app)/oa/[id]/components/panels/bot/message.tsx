@@ -55,7 +55,7 @@ export function Question({ children, onClick, starter }: QuestionProps) {
 
   return (
     <div
-      className="flex justify-between gap-3 mb-2 p-2 border rounded-sm border-[#4E4E4E] bg-[#2F2F2F] leading-5 text-[16px] font-light text-left"
+      className="flex justify-between gap-3 mb-2 p-2 border rounded-sm border-[#4E4E4E] bg-[#2F2F2F] leading-5 text-[16px] font-normal"
       onClick={handleClick}
     >
       {children}

@@ -15,7 +15,7 @@ export default async function ReadPage() {
         <div className="flex flex-col items-center justify-center h-full px-8 text-center">
           <Text />
         </div>
-        <div className="flex flex-col gap-2 py-2 text-xs font-light">
+        <div className="flex flex-col gap-2 py-2 text-xs font-normal">
           <Actions />
           <Questions />
         </div>
@@ -48,7 +48,7 @@ async function Actions() {
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center">
+      <div className="flex items-center font-sourceCodePro">
         <Search style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
         SUGGESTED ACTIONS
       </div>

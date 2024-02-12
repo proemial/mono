@@ -253,7 +253,7 @@ const Starters = memo(function Starters({ append }: { append: any }) {
       <div className="flex flex-col items-center justify-center h-full px-8 text-center">
         <Text />
       </div>
-      <div className="flex flex-wrap gap-[6px] ">
+      <div className="flex flex-wrap gap-[6px]">
         {starters.map((starter) => (
           <Button
             key={starter.index}
