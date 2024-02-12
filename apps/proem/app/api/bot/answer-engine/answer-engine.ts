@@ -1,4 +1,4 @@
-import { answers } from "@/app/api/bot/answer-engine/answer";
+import { answers } from "@/app/api/bot/answer-engine/answers";
 import { fetchPapersChain } from "@/app/api/bot/answer-engine/fetch-papers-chain";
 import { model } from "@/app/api/bot/answer-engine/model";
 import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
