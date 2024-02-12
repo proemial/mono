@@ -6,7 +6,6 @@ import { Source_Code_Pro } from "next/font/google";
 import { Metadata } from "next";
 import { PostHogClient } from "@/app/components/analytics/posthog-client";
 
-// If loading a variable font, you don't need to specify the font weight
 const sourceCodePro = Source_Code_Pro({
   subsets: ["latin"],
   variable: "--font-source-code-pro",
@@ -41,17 +40,17 @@ export default async function RootLayout({ children }: Props) {
 
   return (
     <ClerkProvider>
-      <PostHogClient>
-        <html lang="en" className={sourceCodePro.className}>
-          <body
-            className={`flex relative flex-col justify-center ${light} h-dvh`}
-          >
-            {children}
+        <PostHogClient>
+          <html lang="en" className={sourceCodePro.variable}>
+            <body
+              className={`flex relative flex-col justify-center ${light} h-dvh`}
+            >
+              {children}
 
-            <AnalyticsClient />
-          </body>
-        </html>
-      </PostHogClient>
+              <AnalyticsClient />
+            </body>
+          </html>
+        </PostHogClient>
     </ClerkProvider>
   );
 }

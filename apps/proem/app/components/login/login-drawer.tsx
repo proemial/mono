@@ -43,7 +43,7 @@ export function LoginDrawer() {
         <div className="flex flex-col gap-2">
           <div className="flex flex-col justify-center my-2">
             <Proem />
-            <div className="mt-3 font-sans text-xl font-semibold text-left">
+            <div className="mt-3 text-xl font-semibold text-left">
               Get started with Proem
             </div>
           </div>
@@ -61,16 +61,17 @@ export function LoginDrawer() {
                       pathname,
                   });
                 }}
+                className="items-center space-x-2"
               >
-                <Logo variant={icon} className="mr-2" />
-                <span className="font-sans text-xs font-semibold">
+                <Logo variant={icon} />
+                <span className="text-xs font-semibold">
                   Continue using {name}
                 </span>
               </Button>
             );
           })}
 
-          <div className="text-xs font-normal leading-tight text-left text-gray-600">
+          <div className="text-xs font-normal leading-tight text-left text-gray-600 font-sourceCodePro">
             By using Proem, you consent to our{" "}
             <Link
               href="/privacy"

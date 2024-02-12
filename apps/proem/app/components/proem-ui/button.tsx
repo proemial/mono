@@ -9,9 +9,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-green-500 text-black text-xs font-medium font-normal font-sans scale-100 active:scale-[0.98] transition-all duration-100",
+          "bg-green-500 text-black text-xs font-medium font-normal scale-100 active:scale-[0.98] transition-all duration-100",
         secondary:
-          "border border-white text-white text-xs font-medium font-normal font-sans scale-100 active:scale-[0.98] transition-all duration-100",
+          "border border-white text-white text-xs font-medium font-normal scale-100 active:scale-[0.98] transition-all duration-100",
         danger: "bg-red-600",
       },
       defaultVariants: {

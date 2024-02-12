@@ -33,11 +33,11 @@ export function ReaderPaper({ children, paper, id }: Props) {
       <PaperCardTop size="lg" date={paper.data.publication_date} />
       <PaperCardTitle size={"lg"}>{children}</PaperCardTitle>
 
-      <div className="mt-1 mb-2 text-xs text-white/50">
+      <div className="mt-1 mb-2 text-xs text-white/50 font-sourceCodePro">
         {paperSource(paper.data.primary_location)}
       </div>
 
-      <div className="text-xs text-white/80 leading-4">
+      <div className="text-xs leading-4 text-white/80 font-sourceCodePro">
         {data.topics?.length && data.topics.at(0)?.display_name}
       </div>
     </PaperCard>

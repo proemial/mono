@@ -40,11 +40,11 @@ export default async function ProfilePage() {
             <div className="relative flex items-center justify-between w-full pb-8 pl-8 pr-8">
               <div className="flex flex-col">
                 <div className="flex items-center gap-1 mb-1.5">
-                  <h4 className="font-sans text-xl font-medium leading-none text-white">
+                  <h4 className="text-xl font-medium leading-none text-white">
                     {fullName}
                   </h4>
                 </div>
-                <h4 className="mt-1 font-sans text-sm font-normal leading-none text-white">
+                <h4 className="mt-1 text-sm font-normal leading-none text-white">
                   Registered member
                 </h4>
               </div>

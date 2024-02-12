@@ -39,29 +39,31 @@ export async function FeedPaper({ id }: { id: string }) {
         </Suspense>
       </PaperCardTitle>
 
-      {!flags.hideTopicsInCards && (
-        <div className="text-xs text-white/50">
-          {data.topics?.length && data.topics.at(0)?.display_name}
-        </div>
-      )}
-      {flags.showSubfieldInCards && (
-        <div className="text-xs text-white/50">
-          {data.topics?.length && data.topics.at(0)?.subfield?.display_name}
-        </div>
-      )}
-      {flags.showOrgInCards && (
-        <div className="text-xs text-white/50">
-          {data?.primary_location?.source?.host_organization_name}
-        </div>
-      )}
-      {flags.showJournalInCards && (
-        <div className="text-xs text-white/50">
-          {data?.primary_location?.source?.display_name}
-        </div>
-      )}
-      {flags.showConceptsInCards && (
-        <Concepts data={paper.data as OpenAlexWorkMetadata} />
-      )}
+      <div className="font-sourceCodePro">
+        {!flags.hideTopicsInCards && (
+          <div className="text-xs text-white/50">
+            {data.topics?.length && data.topics.at(0)?.display_name}
+          </div>
+        )}
+        {flags.showSubfieldInCards && (
+          <div className="text-xs text-white/50">
+            {data.topics?.length && data.topics.at(0)?.subfield?.display_name}
+          </div>
+        )}
+        {flags.showOrgInCards && (
+          <div className="text-xs text-white/50">
+            {data?.primary_location?.source?.host_organization_name}
+          </div>
+        )}
+        {flags.showJournalInCards && (
+          <div className="text-xs text-white/50">
+            {data?.primary_location?.source?.display_name}
+          </div>
+        )}
+        {flags.showConceptsInCards && (
+          <Concepts data={paper.data as OpenAlexWorkMetadata} />
+        )}
+      </div>
     </PaperCard>
   );
 }

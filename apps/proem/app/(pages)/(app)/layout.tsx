@@ -7,7 +7,7 @@ type Props = {
   children: ReactNode;
 };
 
-export default async function RootLayout({ children }: Props) {
+export default async function AppLayout({ children }: Props) {
   return (
     <>
       {children}

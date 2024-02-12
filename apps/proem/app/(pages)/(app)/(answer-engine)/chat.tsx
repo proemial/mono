@@ -19,7 +19,9 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
+import { cn } from "@/app/components/shadcn-ui/utils";
 import { useChat } from "ai/react";
+import { ShareIcon } from "lucide-react";
 import { memo, useEffect, useRef, useState } from "react";
 
 const PROEM_BOT = {
@@ -52,10 +54,12 @@ function Message({
             {user.initials}
           </AvatarFallback>
         </Avatar>
-        <div>{user.name}</div>
+        <div className="font-bold">{user.name}</div>
+
+        {/* <ShareIcon className="ml-auto" /> */}
       </div>
 
-      <div className="flex-1 prose ml-9 prose-invert">
+      <div className="mt-2 ml-9">
         {content}
 
         {links.length > 0 && (
@@ -108,7 +112,7 @@ export default function Chat({ user, message }: ChatProps) {
   });
 
   const sessionSlugFromServer = (data as { slug?: string }[])?.find(
-    ({ slug }) => slug,
+    ({ slug }) => slug
   )?.slug;
 
   useEffect(() => {
@@ -155,11 +159,10 @@ export default function Chat({ user, message }: ChatProps) {
 
   return (
     <WithHeader title="science answers" action={actionButton}>
-      {/*// TODO: Remove font-sans to use the global font*/}
       <div
-        className={`flex flex-col px-4 pt-6 pb-12 font-sans ${
-          isEmptyScreen && "h-full"
-        }`}
+        className={cn("flex flex-col px-4 pt-6 pb-12", {
+          "h-full": isEmptyScreen,
+        })}
         ref={chatWrapperRef}
       >
         {isEmptyScreen ? (
@@ -253,10 +256,10 @@ const Starters = memo(function Starters({ append }: { append: any }) {
 
   return (
     <div className="flex flex-col h-full mb-3" suppressHydrationWarning>
-      <div className="flex flex-col items-center justify-center h-full px-8 font-sans text-center">
+      <div className="flex flex-col items-center justify-center h-full px-8 text-center">
         <Text />
       </div>
-      <div className="flex flex-wrap gap-[6px] ">
+      <div className="flex flex-wrap gap-[6px]">
         {starters.map((starter) => (
           <Button
             key={starter.index}
@@ -264,7 +267,7 @@ const Starters = memo(function Starters({ append }: { append: any }) {
             className="w-full mb-1 cursor-pointer"
             onClick={() => {
               trackAndInvoke(() =>
-                append({ role: "user", content: starter.text }),
+                append({ role: "user", content: starter.text })
               );
             }}
           >

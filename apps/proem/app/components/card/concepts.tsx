@@ -28,7 +28,7 @@ export function Concepts({ data, asTags }: Props) {
   }
 
   return (
-    <div className="flex gap-2 font-sans text-xs truncate text-white/50">
+    <div className="flex gap-2 text-xs truncate text-white/50">
       {limit(sorted, 3).map((c) => (
         <div key={c?.id} className="px-2 border rounded-md border-white/50">
           {c?.display_name}

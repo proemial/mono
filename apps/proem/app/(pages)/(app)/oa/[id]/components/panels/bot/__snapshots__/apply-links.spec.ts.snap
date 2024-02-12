@@ -7,7 +7,7 @@ exports[`applyLinks  1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -26,7 +26,7 @@ exports[`applyLinks  2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -37,7 +37,7 @@ exports[`applyLinks  2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -56,7 +56,7 @@ exports[`applyLinks 1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -75,7 +75,7 @@ exports[`applyLinks 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -86,7 +86,7 @@ exports[`applyLinks 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -105,7 +105,7 @@ exports[`applyLinks can 1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -124,7 +124,7 @@ exports[`applyLinks can 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -135,7 +135,7 @@ exports[`applyLinks can 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -154,7 +154,7 @@ exports[`applyLinks can han 1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -173,7 +173,7 @@ exports[`applyLinks can han 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -184,7 +184,7 @@ exports[`applyLinks can han 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -203,7 +203,7 @@ exports[`applyLinks can handle  1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -222,7 +222,7 @@ exports[`applyLinks can handle  2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -233,7 +233,7 @@ exports[`applyLinks can handle  2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -252,7 +252,7 @@ exports[`applyLinks can handle m 1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -271,7 +271,7 @@ exports[`applyLinks can handle m 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -282,7 +282,7 @@ exports[`applyLinks can handle m 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -301,7 +301,7 @@ exports[`applyLinks can handle markd 1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -320,7 +320,7 @@ exports[`applyLinks can handle markd 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -331,7 +331,7 @@ exports[`applyLinks can handle markd 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -350,7 +350,7 @@ exports[`applyLinks can handle markdow 1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -369,7 +369,7 @@ exports[`applyLinks can handle markdow 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -380,7 +380,7 @@ exports[`applyLinks can handle markdow 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -399,7 +399,7 @@ exports[`applyLinks can handle markdown  1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -418,7 +418,7 @@ exports[`applyLinks can handle markdown  2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -429,7 +429,7 @@ exports[`applyLinks can handle markdown  2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -448,7 +448,7 @@ exports[`applyLinks can handle markdown +  1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -467,7 +467,7 @@ exports[`applyLinks can handle markdown +  2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -478,7 +478,7 @@ exports[`applyLinks can handle markdown +  2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -497,7 +497,7 @@ exports[`applyLinks can handle markdown + a  1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -516,7 +516,7 @@ exports[`applyLinks can handle markdown + a  2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -527,7 +527,7 @@ exports[`applyLinks can handle markdown + a  2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -546,7 +546,7 @@ exports[`applyLinks can handle markdown + a 1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -565,7 +565,7 @@ exports[`applyLinks can handle markdown + a 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -576,7 +576,7 @@ exports[`applyLinks can handle markdown + a 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -595,7 +595,7 @@ exports[`applyLinks can handle markdown + a ta 1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -614,7 +614,7 @@ exports[`applyLinks can handle markdown + a ta 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -625,7 +625,7 @@ exports[`applyLinks can handle markdown + a ta 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -644,7 +644,7 @@ exports[`applyLinks can handle markdown + a tag  1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -663,7 +663,7 @@ exports[`applyLinks can handle markdown + a tag  2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -674,7 +674,7 @@ exports[`applyLinks can handle markdown + a tag  2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -693,7 +693,7 @@ exports[`applyLinks can handle markdown + a tag l 1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -712,7 +712,7 @@ exports[`applyLinks can handle markdown + a tag l 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -723,7 +723,7 @@ exports[`applyLinks can handle markdown + a tag l 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -742,7 +742,7 @@ exports[`applyLinks can handle markdown + a tag lin 1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -761,7 +761,7 @@ exports[`applyLinks can handle markdown + a tag lin 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -772,7 +772,7 @@ exports[`applyLinks can handle markdown + a tag lin 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -791,7 +791,7 @@ exports[`applyLinks can handle markdown + a tag links 1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -810,7 +810,7 @@ exports[`applyLinks can handle markdown + a tag links 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -821,7 +821,7 @@ exports[`applyLinks can handle markdown + a tag links 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process
@@ -840,7 +840,7 @@ exports[`applyLinks can handle markdown 1`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       not associated with the development of autism or autism spectrum disorder
@@ -859,7 +859,7 @@ exports[`applyLinks can handle markdown 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       Dreaming and the brain: from phenomenology to neurophysiology
@@ -870,7 +870,7 @@ exports[`applyLinks can handle markdown 2`] = `
   </span>,
   <span>
     <span
-      className="font-normal font-sans text-green-500 cursor-pointer"
+      className="font-normal text-green-500 cursor-pointer"
       onClick={[Function]}
     >
       The brain as a dream state generator: an activation-synthesis hypothesis of the dream process

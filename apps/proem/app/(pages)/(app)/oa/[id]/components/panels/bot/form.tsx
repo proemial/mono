@@ -30,7 +30,7 @@ export function BotForm({ value, onSubmit, onChange }: Props) {
           onFocus={() => !userId && open()}
           type="text"
           placeholder="Ask your own question about this paper"
-          className="flex w-full h-[42px] text-[16px] font-sans font-normal rounded bg-[#1A1A1A] border border-[#4E4E4E] text-white placeholder-green-500 px-3 py-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 relative break-words stretch"
+          className="flex w-full h-[42px] text-[16px] font-normal rounded bg-[#1A1A1A] border border-[#4E4E4E] text-white placeholder-green-500 px-3 py-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 relative break-words stretch"
           value={value}
           onChange={onChange}
         />
@@ -38,7 +38,7 @@ export function BotForm({ value, onSubmit, onChange }: Props) {
           variant="send_button"
           size="sm"
           type="submit"
-          className="absolute justify-center items-center bg-transparent right-2"
+          className="absolute items-center justify-center bg-transparent right-2"
         >
           <Send />
         </Button>
