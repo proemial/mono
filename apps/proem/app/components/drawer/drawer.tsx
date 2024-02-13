@@ -95,19 +95,13 @@ function Drawer({
         className,
       })}
     >
-      <div className="w-full h-full">
-        <div
-          className={`backdrop h-full flex flex-col drawer ${position} items-center`}
-          role="dialog"
-        >
-          <div className="flex-1 w-full" onClick={onClose} />
-          <div className="w-full sm:mb-4 p-4 bg-[#2F2F2F] border border-[#3C3C3C] rounded-t-lg sm:rounded-lg max-w-fit">
-            <div className="flex flex-col items-center w-full">
-              <div className="flex max-w-[420px]">
-                {children}
-              </div>
-            </div>
-          </div>
+      <div
+        className={`backdrop h-full justify-end flex flex-col drawer ${position} items-center`}
+        role="dialog"
+        onClick={onClose}
+      >
+        <div className="w-full p-4 bg-[#333333] rounded-t-[32px] max-w-md">
+          {children}
         </div>
       </div>
     </div>,
