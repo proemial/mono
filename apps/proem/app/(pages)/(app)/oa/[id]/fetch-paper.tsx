@@ -59,7 +59,9 @@ export const fetchLatestPaperIds = async (
   const today = dayjs().format("YYYY-MM-DD");
   const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
   const select = ["id", "publication_date"].join(",");
-  const preprintsOnly = await getFeatureFlag(Features.fetchPreprintsOnly);
+  const preprintsAll = await getFeatureFlag(
+    Features.fetchWithoutPreprintsFilter,
+  );
   console.log("fetchLatestPaperIds", preprintsOnly);
 
   const filter = [
@@ -69,7 +71,7 @@ export const fetchLatestPaperIds = async (
     `publication_date:>${twoWeeksAgo}`, // We do not want old papers that were added recently
     `publication_date:<${today}`, // We do not want papers published in the future
     "open_access.is_oa:true",
-    !!preprintsOnly ? `primary_location.version:submittedVersion` : undefined,
+    !!preprintsAll ? undefined : `primary_location.version:submittedVersion`,
     concept ? `primary_topic.field.id:${concept}` : undefined,
   ]
     .filter((f) => !!f)
