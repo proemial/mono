@@ -56,7 +56,7 @@ function Message({
         </Avatar>
         <div className="font-bold">{user.name}</div>
 
-        {/* <ShareIcon className="ml-auto" /> */}
+        <ShareIcon className="ml-auto" />
       </div>
 
       <div className="mt-2 ml-9">
@@ -114,6 +114,7 @@ export default function Chat({ user, message, initialMessages }: ChatProps) {
     initialMessages,
     body: { slug: sessionSlug, userId: user?.id },
   });
+  const disabledQuestions = Boolean(initialMessages);
 
   const sessionSlugFromServer = (data as { slug?: string }[])?.find(
     ({ slug }) => slug
@@ -185,7 +186,7 @@ export default function Chat({ user, message, initialMessages }: ChatProps) {
               handleSubmit={handleSubmit}
               input={input}
               handleInputChange={handleInputChange}
-              disabled={isLoading}
+              disabled={isLoading || disabledQuestions}
             />
           </div>
         </div>
