@@ -1,11 +1,10 @@
+import {
+  FeatureValue,
+  Features,
+} from "@/app/components/feature-flags/features";
+import { currentUser } from "@clerk/nextjs";
 import { Env } from "@proemial/utils/env";
 import { PostHog } from "posthog-node";
-import { currentUser } from "@clerk/nextjs";
-import {
-  keyByValue,
-  FeatureKey,
-  FeatureValue,
-} from "@/app/components/feature-flags/features";
 
 const posthog = new PostHog(Env.get("NEXT_PUBLIC_POSTHOG_KEY"), {
   host: Env.get("NEXT_PUBLIC_POSTHOG_HOST"),
@@ -21,19 +20,18 @@ export async function getFeatureFlag(flag: FeatureValue) {
   return posthog.isFeatureEnabled(flag, distinctID);
 }
 
-export async function getFeatureFlags(flags: FeatureValue[]) {
+export async function getFeatureFlags<T extends keyof Features>(flags: T[]) {
   const distinctID = await getDistinctID();
-
   if (!distinctID) {
-    return Object.fromEntries(flags.map((f) => [keyByValue(f), false])) as {
-      [key in FeatureKey]: boolean;
+    return Object.fromEntries(flags.map((flag) => [flag, false])) as {
+      [key in T]: boolean;
     };
   }
 
   const all = await posthog.getAllFlags(distinctID);
 
-  return Object.fromEntries(flags.map((f) => [keyByValue(f), !!all[f]])) as {
-    [key in FeatureKey]: boolean;
+  return Object.fromEntries(flags.map((f) => [f, !!all[f]])) as {
+    [key in T]: boolean;
   };
 }
 
