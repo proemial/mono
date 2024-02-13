@@ -41,7 +41,7 @@ const chatPrompt = ChatPromptTemplate.fromMessages<AnswerEngineChainInput>([
     with key phrases of the answer text as hyperlinks pointing to the papers, like
     this example:
 
-    """Yes/No. Smoking causes/does not cause cancer. Studies show that cigarette
+    """Studies show that cigarette
     smokers are <a href="https://proem.ai/oa/W4213460776?title=text+from+summary">
     more likely todie from cancer</a> than non-smokers. Furthermore, studies have
     found  that passive smokers
