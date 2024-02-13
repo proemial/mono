@@ -20,6 +20,7 @@ import {
   AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
 import { cn } from "@/app/components/shadcn-ui/utils";
+import { useShareDrawerState } from "@/app/components/share/state";
 import { Message, useChat } from "ai/react";
 import { ShareIcon } from "lucide-react";
 import { memo, useEffect, useRef, useState } from "react";
@@ -37,11 +38,13 @@ type MessageProps = {
     initials: string;
     avatar?: string;
   };
+  onShareHandle?: ((content: React.ReactNode) => void) | null;
 };
 
-function Message({
+export function Message({
   message,
   user = { name: "you", initials: "U", avatar: "" },
+  onShareHandle,
 }: MessageProps) {
   const { content, links } = applyLinks(message);
 
@@ -56,7 +59,12 @@ function Message({
         </Avatar>
         <div className="font-bold">{user.name}</div>
 
-        <ShareIcon className="ml-auto" />
+        {onShareHandle && (
+          <ShareIcon
+            onClick={() => onShareHandle(content)}
+            className="ml-auto"
+          />
+        )}
       </div>
 
       <div className="mt-2 ml-9">
@@ -303,6 +311,13 @@ type MessagesProps = {
 };
 
 function Messages({ messages, showLoadingState, user }: MessagesProps) {
+  const { open } = useShareDrawerState();
+  const shareMessage = (content: React.ReactNode) =>
+    open({
+      link: "http://proem.ai",
+      title: "custom title",
+      content,
+    });
   return (
     <div className="w-full pb-20 space-y-5">
       {messages.map((m) => (
@@ -310,6 +325,7 @@ function Messages({ messages, showLoadingState, user }: MessagesProps) {
           key={m.id}
           message={m.content}
           user={m.role === "assistant" ? PROEM_BOT : user}
+          onShareHandle={m.role === "assistant" ? shareMessage : null}
         />
       ))}
 
