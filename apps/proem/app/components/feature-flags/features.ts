@@ -5,7 +5,7 @@ export const Features = {
   showJournalInCards: "CARD_FOOTER_SHOW_JOURNAL",
   showOrgInCards: "CARD_FOOTER_SHOW_ORG",
   fetchPreprintsOnly: "FEED_FETCH_APPROXIMATED_PREPRINTS_ONLY",
-  fetchWithoutPreprintsFilter: "FEED_FETCH_WITHOUT_PREPRINTS_filter",
+  fetchWithoutPreprintsFilter: "FEED_FETCH_WITHOUT_PREPRINTS_FILTER",
 } as const;
 
 export type FeatureKey = keyof typeof Features;
