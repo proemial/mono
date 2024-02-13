@@ -62,7 +62,6 @@ export const fetchLatestPaperIds = async (
   const preprintsAll = await getFeatureFlag(
     Features.fetchWithoutPreprintsFilter,
   );
-  console.log("fetchLatestPaperIds", preprintsOnly);
 
   const filter = [
     "type:article",
