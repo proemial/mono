@@ -40,8 +40,8 @@ export function LoginDrawer() {
   return (
     <SignedOut>
       <Drawer isOpen={isOpen} onClose={close} removeWhenClosed={false}>
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-col justify-center my-2">
+        <div className="flex flex-col gap-3 p-4 ">
+          <div className="flex flex-col justify-center">
             <Proem />
             <div className="mt-3 text-xl font-semibold text-left">
               Get started with Proem
@@ -71,21 +71,13 @@ export function LoginDrawer() {
             );
           })}
 
-          <div className="text-xs font-normal leading-tight text-left text-gray-600 font-sourceCodePro">
+          <div className="text-xs font-normal leading-tight text-left text-gray-500 font-sourceCodePro">
             By using Proem, you consent to our{" "}
-            <Link
-              href="/privacy"
-              onClick={close}
-              className="text-gray-600 underline"
-            >
+            <Link href="/privacy" onClick={close} className="underline ">
               Privacy Policy
             </Link>{" "}
             and{" "}
-            <Link
-              href="/terms"
-              onClick={close}
-              className="text-gray-600 underline"
-            >
+            <Link href="/terms" onClick={close} className="underline">
               Terms of Service
             </Link>
             .
