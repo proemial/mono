@@ -10,6 +10,7 @@ import {
   LucideIcon,
   TwitterIcon,
 } from "lucide-react";
+import { useEffect } from "react";
 
 type ShareIcon = {
   icon: LucideIcon;
@@ -57,6 +58,9 @@ const shareProviders: ShareProviders = [
 export function ShareDrawer() {
   const { itemToBeShared, close } = useShareDrawerState();
   const isOpen = Boolean(itemToBeShared);
+  useEffect(() => {
+    // TODO! Create share URL based on the Answer?
+  }, []);
 
   return (
     <Drawer isOpen={isOpen} onClose={close} removeWhenClosed={false}>
