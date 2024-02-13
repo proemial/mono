@@ -11,7 +11,7 @@ export const revalidate = 1;
 export default async function ReadPage() {
   return (
     <Redirect>
-      <div className="flex flex-col h-full max-w-screen-sm px-2">
+      <div className="flex flex-col h-full px-4 pt-6 pb-1">
         <div className="flex flex-col items-center justify-center h-full px-8 text-center">
           <Text />
         </div>
