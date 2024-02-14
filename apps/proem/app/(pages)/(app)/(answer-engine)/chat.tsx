@@ -33,12 +33,13 @@ const PROEM_BOT = {
 };
 
 type MessageProps = {
-  message: string;
+  message: Message["content"];
   user?: {
-    name: string;
+    name?: string;
     initials: string;
     avatar?: string;
   };
+  isLoading?: boolean;
   onShareHandle?:
     | ((params: { renderedContent: React.ReactNode; message: string }) => void)
     | null;
@@ -48,6 +49,7 @@ export function Message({
   message,
   user = { name: "you", initials: "U", avatar: "" },
   onShareHandle,
+  isLoading,
 }: MessageProps) {
   const { content, links } = applyLinks(message);
 
@@ -62,7 +64,7 @@ export function Message({
         </Avatar>
         <div className="font-bold">{user.name}</div>
 
-        {onShareHandle && (
+        {onShareHandle && !isLoading && (
           <ShareIcon
             onClick={() => onShareHandle({ renderedContent: content, message })}
             className="ml-auto"
@@ -108,7 +110,7 @@ type ChatProps = Partial<Pick<MessageProps, "user" | "message">> & {
 
 export default function Chat({ user, message, initialMessages }: ChatProps) {
   const [sessionSlug, setSessionSlug] = useState<null | string>(null);
-  const { open } = useShareDrawerState();
+  const { openShareDrawer } = useShareDrawerState();
   const {
     messages,
     input,
@@ -172,8 +174,13 @@ export default function Chat({ user, message, initialMessages }: ChatProps) {
     const shareId = (
       data as { answers?: { shareId: string; answer: string } }[]
     )?.find(({ answers }) => answers?.answer === message)?.answers?.shareId;
+    console.log({
+      link: `/share/${shareId}`,
+      title: "Proem Science Answers",
+      content: renderedContent,
+    });
 
-    open({
+    openShareDrawer({
       link: `/share/${shareId}`,
       title: "Proem Science Answers",
       content: renderedContent,
@@ -205,6 +212,7 @@ export default function Chat({ user, message, initialMessages }: ChatProps) {
             showLoadingState={showLoadingState}
             user={user}
             onShareHandle={shareMessage}
+            isLoading={isLoading}
           />
         )}
 
@@ -324,17 +332,20 @@ function Text() {
   );
 }
 
-type MessagesProps = Required<Pick<MessageProps, "onShareHandle">> & {
-  messages: any[];
-  showLoadingState: boolean;
-  user: any;
-};
+type MessagesProps = Required<
+  Pick<MessageProps, "onShareHandle" | "isLoading">
+> &
+  Pick<MessageProps, "user"> & {
+    messages: Message[];
+    showLoadingState: boolean;
+  };
 
 function Messages({
   messages,
   showLoadingState,
   user,
   onShareHandle,
+  isLoading,
 }: MessagesProps) {
   return (
     <div className="w-full pb-20 space-y-5">
@@ -344,6 +355,7 @@ function Messages({
           message={m.content}
           user={m.role === "assistant" ? PROEM_BOT : user}
           onShareHandle={m.role === "assistant" ? onShareHandle : null}
+          isLoading={isLoading}
         />
       ))}
 
