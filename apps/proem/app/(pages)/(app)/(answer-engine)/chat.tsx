@@ -4,6 +4,7 @@ import SearchInput from "@/app/(pages)/(app)/(answer-engine)/search-input";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import WithHeader from "@/app/(pages)/(app)/header";
 import { applyLinks } from "@/app/(pages)/(app)/oa/[id]/components/panels/bot/apply-links";
+import { answers } from "@/app/api/bot/answer-engine/answers";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { Tracker } from "@/app/components/analytics/tracker";
 import {
@@ -38,7 +39,9 @@ type MessageProps = {
     initials: string;
     avatar?: string;
   };
-  onShareHandle?: ((content: React.ReactNode) => void) | null;
+  onShareHandle?:
+    | ((params: { renderedContent: React.ReactNode; message: string }) => void)
+    | null;
 };
 
 export function Message({
@@ -61,7 +64,7 @@ export function Message({
 
         {onShareHandle && (
           <ShareIcon
-            onClick={() => onShareHandle(content)}
+            onClick={() => onShareHandle({ renderedContent: content, message })}
             className="ml-auto"
           />
         )}
@@ -105,6 +108,7 @@ type ChatProps = Partial<Pick<MessageProps, "user" | "message">> & {
 
 export default function Chat({ user, message, initialMessages }: ChatProps) {
   const [sessionSlug, setSessionSlug] = useState<null | string>(null);
+  const { open } = useShareDrawerState();
   const {
     messages,
     input,
@@ -161,6 +165,21 @@ export default function Chat({ user, message, initialMessages }: ChatProps) {
     setSessionSlug(null);
   };
 
+  const shareMessage: MessageProps["onShareHandle"] = ({
+    renderedContent,
+    message,
+  }) => {
+    const shareId = (
+      data as { answers?: { shareId: string; answer: string } }[]
+    )?.find(({ answers }) => answers?.answer === message)?.answers?.shareId;
+
+    open({
+      link: `/share/${shareId}`,
+      title: "Proem Science Answers",
+      content: renderedContent,
+    });
+  };
+
   const actionButton = (
     <ActionButton
       isLoading={isLoading}
@@ -185,6 +204,7 @@ export default function Chat({ user, message, initialMessages }: ChatProps) {
             messages={messages}
             showLoadingState={showLoadingState}
             user={user}
+            onShareHandle={shareMessage}
           />
         )}
 
@@ -304,20 +324,18 @@ function Text() {
   );
 }
 
-type MessagesProps = {
+type MessagesProps = Required<Pick<MessageProps, "onShareHandle">> & {
   messages: any[];
   showLoadingState: boolean;
   user: any;
 };
 
-function Messages({ messages, showLoadingState, user }: MessagesProps) {
-  const { open } = useShareDrawerState();
-  const shareMessage = (content: React.ReactNode) =>
-    open({
-      link: "http://proem.ai",
-      title: "custom title",
-      content,
-    });
+function Messages({
+  messages,
+  showLoadingState,
+  user,
+  onShareHandle,
+}: MessagesProps) {
   return (
     <div className="w-full pb-20 space-y-5">
       {messages.map((m) => (
@@ -325,7 +343,7 @@ function Messages({ messages, showLoadingState, user }: MessagesProps) {
           key={m.id}
           message={m.content}
           user={m.role === "assistant" ? PROEM_BOT : user}
-          onShareHandle={m.role === "assistant" ? shareMessage : null}
+          onShareHandle={m.role === "assistant" ? onShareHandle : null}
         />
       ))}
 

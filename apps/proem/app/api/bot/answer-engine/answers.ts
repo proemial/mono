@@ -8,9 +8,13 @@ import {
 import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
 
 export const answers = {
-  create(answer: NewAnswer) {
+  async create(answer: NewAnswer) {
     const shareId = prettySlug(answer.answer);
-    return neonDb.insert(answersTable).values({ ...answer, shareId });
+    const [insertedAnswer] = await neonDb
+      .insert(answersTable)
+      .values({ ...answer, shareId })
+      .returning();
+    return insertedAnswer;
   },
 
   getByShareId(shareId: NonNullable<Answer["shareId"]>) {

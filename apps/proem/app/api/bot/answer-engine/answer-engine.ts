@@ -165,13 +165,26 @@ export async function askAnswerEngine({
               },
             };
 
-        await answers.create({
+        const insertedAnswer = await answers.create({
           slug,
           question,
           answer,
           ownerId: userId,
           ...papers,
         });
+
+        console.log(insertedAnswer);
+        if (!insertedAnswer) {
+          return;
+        }
+
+        data.append({
+          answers: {
+            shareId: insertedAnswer.shareId,
+            answer: insertedAnswer.answer,
+          },
+        });
+        data.close();
       },
     })
     .stream(
@@ -179,18 +192,17 @@ export async function askAnswerEngine({
         chatHistory,
         question,
         papers: existingPapers,
-      },
-      {
-        callbacks: [
-          {
-            handleChainEnd(_outputs, _runid, parentRunId) {
-              if (parentRunId == null) {
-                data.close();
-              }
-            },
-          },
-        ],
       }
+      // {
+      //   callbacks: [
+      //     {
+      //       handleChainEnd(_outputs, _runid, parentRunId) {
+      //         if (parentRunId == null) {
+      //         }
+      //       },
+      //     },
+      //   ],
+      // }
     );
 
   return new StreamingTextResponse(
