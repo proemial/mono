@@ -22,27 +22,24 @@ export function AnswerSharingCard({
     >
       <div {...twcl("flex")}>
         <img
-          {...twcl("w-16 h-16 rounded-full")}
+          {...twcl("w-8 h-8 rounded-full")}
           src="https://proem.ai/android-chrome-512x512.png"
         />
-        <div
-          {...twcl(
-            "flex flex-col text-3xl justify-center leading-none w-full ml-3"
-          )}
-        >
-          <div
-            {...twcl("font-bold leading-none font-black")}
-            style={{ fontWeight: 900 }}
-          >
-            Proem Science Answers
-          </div>
+        <div {...twcl("flex flex-col justify-center leading-none w-full ml-2")}>
+          <div {...twcl("font-bold leading-none")}>Proem Science Answers</div>
           <div {...twcl("font-normal leading-none text-white/50")}>
             Based on 250M research papers
           </div>
         </div>
       </div>
 
-      <p {...twcl("flex text-4xl font-normal leading-relaxed")}>{content}</p>
+      <p
+        {...twcl(
+          "flex-inline flex-col text-sm font-normal leading-relaxed mt-2"
+        )}
+      >
+        {content}
+      </p>
     </div>
   );
 }
