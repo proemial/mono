@@ -19,7 +19,6 @@ export function AnswerSharingCard({
       {...twcl(
         "flex flex-col p-9 bg-[#333333] w-full h-full text-white font-sans"
       )}
-      style={{ fontFamily: "helvetica" }}
     >
       <div {...twcl("flex")}>
         <img
