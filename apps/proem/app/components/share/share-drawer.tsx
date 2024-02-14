@@ -10,7 +10,6 @@ import {
   LucideIcon,
   TwitterIcon,
 } from "lucide-react";
-import { useEffect } from "react";
 
 type ShareIcon = {
   icon: LucideIcon;
@@ -39,7 +38,7 @@ const shareProviders: ShareProviders = [
     name: "X",
     icon: TwitterIcon,
     createShareLink: (url: string, title: string) =>
-      `http://twitter.com/share?text=${title}&url=${url}`,
+      `https://twitter.com/intent/tweet?text=${title}&url=${encodeURI(url)}`,
   },
   {
     name: "LinkedIn",
@@ -56,34 +55,36 @@ const shareProviders: ShareProviders = [
 ] as const;
 
 export function ShareDrawer() {
-  const { itemToBeShared, close } = useShareDrawerState();
+  const { itemToBeShared, closeShareDrawer } = useShareDrawerState();
   const isOpen = Boolean(itemToBeShared);
-  useEffect(() => {
-    // TODO! Create share URL based on the Answer?
-  }, []);
 
   return (
-    <Drawer isOpen={isOpen} onClose={close} removeWhenClosed={false}>
-      <div className="w-full space-y-4">
-        <AnswerSharingCard content={itemToBeShared?.content} />
+    <Drawer isOpen={isOpen} onClose={closeShareDrawer} removeWhenClosed={false}>
+      {itemToBeShared && (
+        <div className="w-full space-y-4">
+          <AnswerSharingCard content={itemToBeShared?.content} />
 
-        <div className="flex gap-4">
-          {shareProviders.map((provider) => {
-            if ("onClick" in provider) {
-              return <ShareIcon Icon={provider.icon} text={provider.name} />;
-            }
+          <div className="flex gap-4">
+            {shareProviders.map((provider) => {
+              if ("onClick" in provider) {
+                return <ShareIcon Icon={provider.icon} text={provider.name} />;
+              }
 
-            return (
-              <a
-                href={provider.createShareLink(itemToBeShared?.link!, "proem")}
-                target="_blank"
-              >
-                <ShareIcon Icon={provider.icon} text={provider.name} />
-              </a>
-            );
-          })}
+              return (
+                <a
+                  href={provider.createShareLink(
+                    `https://proem.ai${itemToBeShared.link}`,
+                    itemToBeShared.title
+                  )}
+                  target="_blank"
+                >
+                  <ShareIcon Icon={provider.icon} text={provider.name} />
+                </a>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
     </Drawer>
   );
 }

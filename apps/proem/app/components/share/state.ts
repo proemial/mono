@@ -4,12 +4,12 @@ type ShareItem = { content: React.ReactNode; link: string; title: string };
 
 export type ShareDrawerState = {
   itemToBeShared: ShareItem | null;
-  open: (link: ShareItem) => void;
-  close: () => void;
+  openShareDrawer: (link: ShareItem) => void;
+  closeShareDrawer: () => void;
 };
 
 export const useShareDrawerState = create<ShareDrawerState>((set) => ({
   itemToBeShared: null,
-  open: (link) => set(() => ({ itemToBeShared: link })),
-  close: () => set(() => ({ itemToBeShared: null })),
+  openShareDrawer: (link) => set(() => ({ itemToBeShared: link })),
+  closeShareDrawer: () => set(() => ({ itemToBeShared: null })),
 }));

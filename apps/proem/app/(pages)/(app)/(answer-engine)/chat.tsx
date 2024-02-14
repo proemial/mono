@@ -174,11 +174,6 @@ export default function Chat({ user, message, initialMessages }: ChatProps) {
     const shareId = (
       data as { answers?: { shareId: string; answer: string } }[]
     )?.find(({ answers }) => answers?.answer === message)?.answers?.shareId;
-    console.log({
-      link: `/share/${shareId}`,
-      title: "Proem Science Answers",
-      content: renderedContent,
-    });
 
     openShareDrawer({
       link: `/share/${shareId}`,
