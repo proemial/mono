@@ -17,7 +17,14 @@ export async function GET(request: Request) {
       throw new Error("No shareId provided in the query string.");
     }
 
-    const fontData = await fetch(
+    const helveticaBold = await fetch(
+      new URL(
+        "../../../../../../assets/fonts/helvetica/Helvetica-Bold.ttf",
+        import.meta.url
+      )
+    ).then((res) => res.arrayBuffer());
+
+    const helvetica = await fetch(
       new URL(
         "../../../../../../assets/fonts/helvetica/Helvetica.ttf",
         import.meta.url
@@ -49,7 +56,13 @@ export async function GET(request: Request) {
         fonts: [
           {
             name: "helvetica",
-            data: fontData,
+            data: helvetica,
+            weight: 400,
+          },
+          {
+            name: "helvetica",
+            data: helveticaBold,
+            weight: 700,
           },
         ],
       }
