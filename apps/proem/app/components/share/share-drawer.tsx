@@ -1,5 +1,5 @@
 "use client";
-import { AnswerSharingCard } from "@/app/(pages)/(app)/(answer-engine)/og/answer-sharing-card";
+import { AnswerSharingCard } from "@/app/(pages)/(app)/share/[shareId]/og/answer-sharing-card";
 import Drawer from "@/app/components/drawer/drawer";
 import { ShareIcon } from "@/app/components/share/share-icon";
 import { useShareDrawerState } from "@/app/components/share/state";

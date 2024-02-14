@@ -8,11 +8,11 @@ export const metadata = {
 };
 
 type Props = {
-  params: { share_id: string };
+  params: { shareId: string };
 };
 
-export default async function SharePage({ params: { share_id } }: Props) {
-  const [sharedAnswer] = await answers.getByShareId(share_id);
+export default async function SharePage({ params: { shareId } }: Props) {
+  const [sharedAnswer] = await answers.getByShareId(shareId);
 
   if (!sharedAnswer) {
     redirect("/");
