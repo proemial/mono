@@ -10,6 +10,7 @@ import {
   LucideIcon,
   TwitterIcon,
 } from "lucide-react";
+import { AspectRatio } from "@proemial/shadcn-ui";
 
 type ShareIcon = {
   icon: LucideIcon;
@@ -62,7 +63,9 @@ export function ShareDrawer() {
     <Drawer isOpen={isOpen} onClose={closeShareDrawer} removeWhenClosed={false}>
       {itemToBeShared && (
         <div className="w-full space-y-4">
-          <AnswerSharingCard content={itemToBeShared?.content} />
+          <AspectRatio ratio={1200 / 630}>
+            <AnswerSharingCard content={itemToBeShared?.content} />
+          </AspectRatio>
 
           <div className="flex gap-4">
             {shareProviders.map((provider) => {
