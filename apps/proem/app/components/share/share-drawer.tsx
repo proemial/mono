@@ -1,5 +1,4 @@
 "use client";
-import { AnswerSharingCard } from "@/app/(pages)/(app)/share/[shareId]/og/answer-sharing-card";
 import Drawer from "@/app/components/drawer/drawer";
 import { ShareIcon } from "@/app/components/share/share-icon";
 import { useShareDrawerState } from "@/app/components/share/state";
@@ -10,7 +9,7 @@ import {
   LucideIcon,
   TwitterIcon,
 } from "lucide-react";
-import { AspectRatio } from "@proemial/shadcn-ui";
+import Image from "next/image";
 
 type ShareIcon = {
   icon: LucideIcon;
@@ -63,9 +62,12 @@ export function ShareDrawer() {
     <Drawer isOpen={isOpen} onClose={closeShareDrawer} removeWhenClosed={false}>
       {itemToBeShared && (
         <div className="w-full space-y-4">
-          <AspectRatio ratio={1200 / 630}>
-            <AnswerSharingCard content={itemToBeShared?.content} />
-          </AspectRatio>
+          <Image
+            width={600}
+            height={315}
+            src={`${itemToBeShared.link}/og`}
+            alt="Image"
+          />
 
           <div className="flex gap-4">
             {shareProviders.map((provider) => {
@@ -75,6 +77,7 @@ export function ShareDrawer() {
 
               return (
                 <a
+                  key={provider.name}
                   href={provider.createShareLink(
                     `https://proem.ai${itemToBeShared.link}`,
                     itemToBeShared.title
