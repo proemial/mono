@@ -31,7 +31,11 @@ const shareProviders: ShareProviders = [
     name: "Copy link",
     icon: Link2Icon,
     onClick: (url: string) => {
-      alert(url);
+      const baseUrl = process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : "http://localhost";
+
+      navigator.clipboard.writeText(`${baseUrl}${url}`);
     },
   },
   {
@@ -72,14 +76,18 @@ export function ShareDrawer() {
           <div className="flex gap-4">
             {shareProviders.map((provider) => {
               if ("onClick" in provider) {
-                return <ShareIcon Icon={provider.icon} text={provider.name} />;
+                return (
+                  <div onClick={() => provider.onClick(itemToBeShared.link)}>
+                    <ShareIcon Icon={provider.icon} text={provider.name} />
+                  </div>
+                );
               }
 
               return (
                 <a
                   key={provider.name}
                   href={provider.createShareLink(
-                    `https://proem.ai${itemToBeShared.link}`,
+                    itemToBeShared.link,
                     itemToBeShared.title
                   )}
                   target="_blank"
