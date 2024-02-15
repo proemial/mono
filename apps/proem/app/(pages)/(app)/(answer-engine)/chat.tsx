@@ -4,7 +4,6 @@ import SearchInput from "@/app/(pages)/(app)/(answer-engine)/search-input";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import WithHeader from "@/app/(pages)/(app)/header";
 import { applyLinks } from "@/app/(pages)/(app)/oa/[id]/components/panels/bot/apply-links";
-import { answers } from "@/app/api/bot/answer-engine/answers";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { Tracker } from "@/app/components/analytics/tracker";
 import {
@@ -106,9 +105,15 @@ export function Message({
 type ChatProps = Partial<Pick<MessageProps, "user" | "message">> & {
   user?: { id?: string };
   initialMessages?: Message[];
+  existingShareId?: string | null;
 };
 
-export default function Chat({ user, message, initialMessages }: ChatProps) {
+export default function Chat({
+  user,
+  message,
+  initialMessages,
+  existingShareId,
+}: ChatProps) {
   const [sessionSlug, setSessionSlug] = useState<null | string>(null);
   const { openShareDrawer } = useShareDrawerState();
   const {
@@ -171,9 +176,12 @@ export default function Chat({ user, message, initialMessages }: ChatProps) {
     renderedContent,
     message,
   }) => {
-    const shareId = (
-      data as { answers?: { shareId: string; answer: string } }[]
-    )?.find(({ answers }) => answers?.answer === message)?.answers?.shareId;
+    // If we're comming from a shared page we reuse the existing shareId
+    const shareId =
+      existingShareId ||
+      (data as { answers?: { shareId: string; answer: string } }[])?.find(
+        ({ answers }) => answers?.answer === message
+      )?.answers?.shareId;
 
     openShareDrawer({
       link: `/share/${shareId}`,

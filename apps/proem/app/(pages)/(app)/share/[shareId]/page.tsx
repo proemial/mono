@@ -20,6 +20,7 @@ export default async function SharePage({ params: { shareId } }: Props) {
 
   return (
     <Chat
+      existingShareId={sharedAnswer.shareId}
       initialMessages={[
         { id: "id", role: "assistant", content: sharedAnswer.answer },
       ]}
