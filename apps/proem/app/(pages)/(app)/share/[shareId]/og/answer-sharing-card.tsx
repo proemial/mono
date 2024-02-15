@@ -20,7 +20,7 @@ export function AnswerSharingCard({
         "flex flex-col px-8 pt-8 bg-[#333333] w-full h-full text-white font-sans"
       )}
     >
-      <div {...twcl("flex align-center")}>
+      <div {...twcl("flex")}>
         <img
           {...twcl("w-17 h-17 rounded-full")}
           src="https://proem.ai/android-chrome-512x512.png"
@@ -33,13 +33,13 @@ export function AnswerSharingCard({
         </div>
       </div>
 
-      <p
+      <span
         {...twcl(
           "flex-inline flex-col text-[40px] leading-1.6 flex-1 line-clamp-3 mt-4 mb-0"
         )}
       >
         {content}
-      </p>
+      </span>
     </div>
   );
 }

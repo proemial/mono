@@ -33,26 +33,10 @@ export async function GET(request: Request) {
 
     const { content } = applyLinks(sharedAnswer.answer);
     return new ImageResponse(
-      (
-        <AnswerSharingCard
-          content={
-            // <span>
-            //   Suncream does not inherently cause cancer. However, certain
-            //   ingredients in suncreams, like oxybenzone, can have toxic effects
-            //   on aquatic life and ecosystems. Additionally, interactions between
-            //   UV filters in commercial suncreams can lead to reduced UV
-            //   protection, potentially increasing the risk of skin damage. It is
-            //   important to choose suncreams with safe and effective ingredients.
-            // </span>
-            content
-          }
-          classNameAttr="tw"
-        />
-      ),
+      <AnswerSharingCard content={sharedAnswer.answer} classNameAttr="tw" />,
       {
         width: 1200,
         height: 630,
-        // TODO! Add multiple weights?
         fonts: [
           {
             name: "helvetica",
