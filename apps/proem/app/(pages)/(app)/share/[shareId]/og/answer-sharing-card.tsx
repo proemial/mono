@@ -33,13 +33,9 @@ export function AnswerSharingCard({
         </div>
       </div>
 
-      <span
-        {...twcl(
-          "flex-inline flex-col text-[40px] leading-1.6 flex-1 line-clamp-3 mt-4 mb-0"
-        )}
-      >
+      <div {...twcl("flex flex-wrap text-[40px] leading-1.6 flex-1 mt-4 mb-0")}>
         {content}
-      </span>
+      </div>
     </div>
   );
 }
