@@ -2,9 +2,13 @@ import { Redis } from "@proemial/redis/redis";
 import Markdown from "./markdown";
 import { summarise } from "@/app/prompts/summariser";
 import { fetchPaper } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
+import { OpenAlexPaper } from "@proemial/models/open-alex";
 
-export default async function Summary({ id }: { id: string }) {
-  const paper = await fetchPaper(id);
+export default async function Summary(options: {
+  id?: string;
+  paper?: OpenAlexPaper;
+}) {
+  const paper = options.paper || (await fetchPaper(options.id));
 
   const paperTitle = paper?.data?.title;
   const abstract = paper?.data?.abstract;

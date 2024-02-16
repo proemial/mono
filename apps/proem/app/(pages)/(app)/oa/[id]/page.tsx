@@ -21,6 +21,7 @@ type Props = {
 };
 
 export default async function ReaderPage({ params }: Props) {
+  console.log("[ReaderPage] Get", params);
   const paper = await fetchPaper(params.id);
 
   if (!paper) {
