@@ -1,0 +1,5 @@
+### [DEV] Fetch OpenAlex papers for feed
+https://api.openalex.org/works?select=id,publication_date&filter=type:article,has_abstract:true,from_created_date:2024-01-30,publication_date:>2024-01-30,publication_date:<2024-02-13,open_access.is_oa:true,primary_location.version:submittedVersion,primary_topic.field.id:17&sort=from_created_date:desc&api_key=AuEVGBBSG9SBwo6LV8hhxh
+
+### [DEV] Fetch full OpenAlex papers for feed
+https://api.openalex.org/works?select=id,doi,title,display_name,publication_date,updated_date,ids,language,primary_location,best_oa_location,locations,open_access,authorships,corresponding_author_ids,corresponding_institution_ids,has_fulltext,fulltext_origin,cited_by_count,cited_by_percentile_year,keywords,concepts,referenced_works,related_works,ngrams_url,cited_by_api_url,counts_by_year,abstract_inverted_index,topics&filter=type:article,has_abstract:true,from_created_date:2024-01-30,publication_date:>2024-01-30,publication_date:<2024-02-13,open_access.is_oa:true,primary_location.version:submittedVersion,primary_topic.field.id:17&sort=from_created_date:desc&api_key=AuEVGBBSG9SBwo6LV8hhxh

@@ -22,7 +22,6 @@ export default async function Summary({ paper }: { paper: OpenAlexPaper }) {
       };
     });
 
-    console.log("response", title);
     return <Markdown>{title as string}</Markdown>;
   }
 
