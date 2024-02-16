@@ -1,8 +1,8 @@
 import { LucideIcon } from "lucide-react";
 
-type ShareIconProps = {
+export type ShareIconProps = {
   text: string;
-  Icon: LucideIcon;
+  Icon: LucideIcon | (() => JSX.Element);
 };
 export function ShareIcon({ text, Icon }: ShareIconProps) {
   return (
