@@ -2,10 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
-import { useEffect } from "react";
-import dynamic from "next/dynamic";
-
-const Tab = dynamic(() => import("./tab"));
+import { useEffect, useRef } from "react";
 
 type Props = {
   items: string[];
@@ -36,6 +33,7 @@ function useActiveTab(defaultTab: string) {
 export function TabNavigation({ items, rootPath }: Props) {
   const router = useRouter();
   const { active, fromPath } = useActiveTab(items[0] as string);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (fromPath !== active) {
@@ -43,18 +41,35 @@ export function TabNavigation({ items, rootPath }: Props) {
     }
   }, [active, fromPath]);
 
+  useEffect(() => {
+    if (active && ref?.current) {
+      ref.current.scrollIntoView(false);
+    }
+  }, []);
+
   const handleChildClick = (item: string) => {
     router.replace(`${rootPath}/${item}`);
   };
 
-  // TODO: Scroll to active tab on mount
+  const tabStyle = (item: string) =>
+    `px-2 py-1 rounded-[2px] whitespace-nowrap cursor-pointer ${
+      isActive(item) ? "bg-[#7DFA86] text-black" : "text-white/50"
+    }`;
+
+  const isActive = (item: string) => active === item;
+
   return (
     <>
-      <div className="max-w-screen-sm px-4 flex gap-1 text-[14px] overflow-x-scroll no-scrollbar">
+      <div className="max-w-screen-sm px-4 flex gap-1 text-[14px] overflow-x-scroll no-scrollbar scroll-px-5">
         {items.map((item) => (
-          <Tab key={item} active={active === item} onClick={handleChildClick}>
+          <div
+            key={item}
+            className={tabStyle(item)}
+            onClick={() => handleChildClick(item)}
+            ref={isActive(item) ? ref : undefined}
+          >
             {item}
-          </Tab>
+          </div>
         ))}
       </div>
     </>
