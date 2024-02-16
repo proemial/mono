@@ -25,7 +25,7 @@ const shareProviders: ShareProviders = [
     name: "Copy link",
     icon: Link2Icon,
     onClick: (url: string) => {
-      navigator.clipboard.writeText(`${window.location.origin}${url}`);
+      navigator.clipboard.writeText(url);
     },
   },
   {
@@ -76,7 +76,9 @@ const shareProviders: ShareProviders = [
       </svg>
     ),
     createShareLink: (url: string, title: string) =>
-      `https://www.linkedin.com/shareArticle?url=${url}&title=${title}`,
+      `https://www.linkedin.com/shareArticle?url=${encodeURI(
+        url
+      )}&title=${title}`,
   },
   {
     name: "Facebook",
@@ -107,13 +109,16 @@ const shareProviders: ShareProviders = [
       </svg>
     ),
     createShareLink: (url: string, title: string) =>
-      `http://www.facebook.com/sharer.php?u=${url}&p[title]=${title}`,
+      `http://www.facebook.com/sharer.php?u=${encodeURI(
+        url
+      )}&p[title]=${title}`,
   },
 ] as const;
 
 export function ShareDrawer() {
   const { itemToBeShared, closeShareDrawer } = useShareDrawerState();
   const isOpen = Boolean(itemToBeShared);
+  const fullUrl = `${window.location.origin}${itemToBeShared?.link}`;
 
   return (
     <Drawer isOpen={isOpen} onClose={closeShareDrawer} removeWhenClosed={false}>
@@ -130,14 +135,14 @@ export function ShareDrawer() {
             {shareProviders.map((provider) => (
               <div onClick={() => closeShareDrawer()}>
                 {"onClick" in provider ? (
-                  <div onClick={() => provider.onClick(itemToBeShared.link)}>
+                  <div onClick={() => provider.onClick(fullUrl)}>
                     <ShareIcon Icon={provider.icon} text={provider.name} />
                   </div>
                 ) : (
                   <a
                     key={provider.name}
                     href={provider.createShareLink(
-                      itemToBeShared.link,
+                      fullUrl,
                       itemToBeShared.title
                     )}
                     target="_blank"
