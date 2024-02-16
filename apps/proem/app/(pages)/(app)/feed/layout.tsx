@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import WithHeader from "@/app/(pages)/(app)/header";
-import { TabNavigation } from "@/app/components/proem-ui/tab-navigation/tabs";
+import { TabNavigation } from "@/app/components/proem-ui/tab-navigation/tab-navigation";
 import { OaTopics } from "@proemial/models/open-alex-topics";
 
 const pageName = "feed";
