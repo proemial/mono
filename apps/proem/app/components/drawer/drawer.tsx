@@ -8,8 +8,8 @@ import { MutableRefObject, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
 function createPortalRoot() {
-  const drawerRoot = document.createElement("div");
-  drawerRoot.setAttribute("id", "drawer-root");
+  const drawerRoot = globalThis.document?.createElement("div");
+  drawerRoot?.setAttribute("id", "drawer-root");
 
   return drawerRoot;
 }
@@ -32,10 +32,10 @@ function Drawer({
   removeWhenClosed = true,
 }: Props) {
   const bodyRef = useRef(
-    document.querySelector("body")
+    globalThis.document?.querySelector("body")
   ) as MutableRefObject<HTMLBodyElement>;
   const portalRootRef = useRef(
-    document.getElementById("drawer-root") || createPortalRoot()
+    globalThis.document?.getElementById("drawer-root") || createPortalRoot()
   );
 
   // Append portal root on mount
@@ -98,9 +98,12 @@ function Drawer({
       <div
         className={`backdrop h-full justify-end flex flex-col drawer ${position} items-center`}
         role="dialog"
-        onClick={onClose}
       >
-        <div className="w-full p-4 bg-[#333333] rounded-t-[32px] max-w-md">
+        <div
+          className="absolute top-0 left-0 w-full h-full"
+          onClick={onClose}
+        />
+        <div className="w-full p-4 bg-[#333333] rounded-t-[32px] max-w-md z-10">
           {children}
         </div>
       </div>
