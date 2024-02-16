@@ -14,7 +14,6 @@ import { notFound } from "next/navigation";
 import { Metadata } from "@/app/(pages)/(app)/oa/[id]/components/panels/metadata";
 import { Trackable } from "@/app/components/trackable";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
-import { Related } from "@/app/(pages)/(app)/oa/[id]/components/panels/related";
 
 type Props = {
   params: { id: string };
@@ -27,9 +26,6 @@ export default async function ReaderPage({ params }: Props) {
   if (!paper) {
     notFound();
   }
-
-  const related = paper.data.related_works;
-
   return (
     <div className="relative w-full pb-32">
       <ReaderPaper id={params.id} paper={paper}>
@@ -50,14 +46,6 @@ export default async function ReaderPage({ params }: Props) {
               Metadata
             </Trackable>
           </TabsTrigger>
-          <TabsTrigger
-            value="related"
-            disabled={!related || related.length === 0}
-          >
-            <Trackable track={analyticsKeys.read.click.related}>
-              Related
-            </Trackable>
-          </TabsTrigger>
         </TabsList>
         <TabsContent value="QA">
           <div className="flex flex-col h-full gap-6 px-4 text-base">
@@ -69,11 +57,6 @@ export default async function ReaderPage({ params }: Props) {
         <TabsContent value="metadata">
           <div className="flex flex-col px-4 mb-2">
             <Metadata paper={paper} />
-          </div>
-        </TabsContent>
-        <TabsContent value="related">
-          <div className="flex flex-col mb-2 px-4 mb-2">
-            <Related paper={paper} />
           </div>
         </TabsContent>
       </Tabs>
