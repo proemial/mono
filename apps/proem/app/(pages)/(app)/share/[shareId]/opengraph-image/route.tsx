@@ -1,6 +1,7 @@
 import { applyLinksAsSpans } from "@/app/(pages)/(app)/oa/[id]/components/panels/bot/apply-links";
-import { AnswerSharingCard } from "@/app/(pages)/(app)/share/[shareId]/og/answer-sharing-card";
+import { AnswerSharingCard } from "@/app/(pages)/(app)/share/[shareId]/opengraph-image/answer-sharing-card";
 import { answers } from "@/app/api/bot/answer-engine/answers";
+import { cn } from "@/app/components/shadcn-ui/utils";
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
@@ -23,24 +24,22 @@ export async function GET(request: Request) {
     const helveticaBold = await fetch(
       new URL(
         "../../../../../../assets/fonts/helvetica/Helvetica-Bold.ttf",
-        import.meta.url
-      )
+        import.meta.url,
+      ),
     ).then((res) => res.arrayBuffer());
 
     const helvetica = await fetch(
       new URL(
         "../../../../../../assets/fonts/helvetica/Helvetica.ttf",
-        import.meta.url
-      )
+        import.meta.url,
+      ),
     ).then((res) => res.arrayBuffer());
 
     const { content } = applyLinksAsSpans(sharedAnswer.answer);
-    const contentAsString = content
-      .map((span) => pickContentFromElement(span))
-      .join("");
+    const contentSplittedInSpans = content.map(splitEachWordToSpan);
 
     return new ImageResponse(
-      <AnswerSharingCard content={contentAsString} classNameAttr="tw" />,
+      <AnswerSharingCard content={contentSplittedInSpans} classNameAttr="tw" />,
       {
         width: 1200,
         height: 630,
@@ -56,7 +55,7 @@ export async function GET(request: Request) {
             weight: 700,
           },
         ],
-      }
+      },
     );
   } catch (e: any) {
     console.log(`${e.message}`);
@@ -66,9 +65,12 @@ export async function GET(request: Request) {
   }
 }
 
-function pickContentFromElement(element: JSX.Element) {
+function splitEachWordToSpan(element: JSX.Element) {
   if (element.props.children.props) {
-    return pickContentFromElement(element.props.children);
+    return splitEachWordToSpan(element.props.children);
   }
-  return element.props.children;
+
+  return element.props.children.split(" ").map((word: string) => {
+    return <span tw={cn("mr-2", element.props.tw)}>{word}</span>;
+  });
 }
