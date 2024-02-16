@@ -8,13 +8,15 @@ export const runtime = "edge";
 export async function GET(request: Request) {
   try {
     const shareId = request.url.split("/").at(-2);
+    console.log(request.url);
+    console.log(shareId);
     if (!shareId) {
-      throw new Error("No shareId provided in the query string.");
+      throw new Error("No shareId provided in the url");
     }
 
     const [sharedAnswer] = await answers.getByShareId(shareId);
     if (!sharedAnswer) {
-      throw new Error("No shareId provided in the query string.");
+      throw new Error("no shared answer found for the given shareId");
     }
 
     const helveticaBold = await fetch(
