@@ -127,28 +127,26 @@ export function ShareDrawer() {
           />
 
           <div className="flex gap-4">
-            {shareProviders.map((provider) => {
-              if ("onClick" in provider) {
-                return (
+            {shareProviders.map((provider) => (
+              <div onClick={() => closeShareDrawer()}>
+                {"onClick" in provider ? (
                   <div onClick={() => provider.onClick(itemToBeShared.link)}>
                     <ShareIcon Icon={provider.icon} text={provider.name} />
                   </div>
-                );
-              }
-
-              return (
-                <a
-                  key={provider.name}
-                  href={provider.createShareLink(
-                    itemToBeShared.link,
-                    itemToBeShared.title
-                  )}
-                  target="_blank"
-                >
-                  <ShareIcon Icon={provider.icon} text={provider.name} />
-                </a>
-              );
-            })}
+                ) : (
+                  <a
+                    key={provider.name}
+                    href={provider.createShareLink(
+                      itemToBeShared.link,
+                      itemToBeShared.title
+                    )}
+                    target="_blank"
+                  >
+                    <ShareIcon Icon={provider.icon} text={provider.name} />
+                  </a>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       )}
