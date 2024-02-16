@@ -31,11 +31,7 @@ const shareProviders: ShareProviders = [
     name: "Copy link",
     icon: Link2Icon,
     onClick: (url: string) => {
-      const baseUrl = process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : "http://localhost";
-
-      navigator.clipboard.writeText(`${baseUrl}${url}`);
+      navigator.clipboard.writeText(`${window.location.origin}${url}`);
     },
   },
   {
