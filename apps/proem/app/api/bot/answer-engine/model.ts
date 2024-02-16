@@ -1,4 +1,4 @@
-import { ChatOpenAI } from "langchain/chat_models/openai";
+import { ChatOpenAI } from "@langchain/openai";
 import { organizations } from "@/app/prompts/openai-keys";
 
 export const model = new ChatOpenAI(
