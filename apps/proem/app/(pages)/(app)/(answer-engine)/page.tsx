@@ -20,7 +20,12 @@ export default async function FrontPage({ searchParams }: Props) {
     <Chat
       user={
         user
-          ? { name: fullName!, initials: initials!, avatar: user?.imageUrl }
+          ? {
+              name: fullName!,
+              initials: initials!,
+              avatar: user?.imageUrl,
+              id: user?.id,
+            }
           : undefined
       }
       message={searchParams.q}

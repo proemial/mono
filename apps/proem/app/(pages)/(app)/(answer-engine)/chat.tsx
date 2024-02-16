@@ -20,7 +20,8 @@ import {
   AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
 import { cn } from "@/app/components/shadcn-ui/utils";
-import { useChat } from "ai/react";
+import { useShareDrawerState } from "@/app/components/share/state";
+import { Message, useChat } from "ai/react";
 import { ShareIcon } from "lucide-react";
 import { memo, useEffect, useRef, useState } from "react";
 
@@ -31,17 +32,23 @@ const PROEM_BOT = {
 };
 
 type MessageProps = {
-  message: string;
+  message: Message["content"];
   user?: {
-    name: string;
+    name?: string;
     initials: string;
     avatar?: string;
   };
+  isLoading?: boolean;
+  onShareHandle?:
+    | ((params: { renderedContent: React.ReactNode; message: string }) => void)
+    | null;
 };
 
-function Message({
+export function Message({
   message,
   user = { name: "you", initials: "U", avatar: "" },
+  onShareHandle,
+  isLoading,
 }: MessageProps) {
   const { content, links } = applyLinks(message);
 
@@ -56,7 +63,15 @@ function Message({
         </Avatar>
         <div className="font-bold">{user.name}</div>
 
-        {/* <ShareIcon className="ml-auto" /> */}
+        {onShareHandle && !isLoading && (
+          <ShareIcon
+            onClick={() => {
+              onShareHandle({ renderedContent: content, message });
+              Tracker.track(analyticsKeys.ask.click.share);
+            }}
+            className="ml-auto"
+          />
+        )}
       </div>
 
       <div className="mt-2 ml-9">
@@ -90,10 +105,20 @@ function Message({
   );
 }
 
-type ChatProps = Pick<MessageProps, "user" | "message">;
+type ChatProps = Partial<Pick<MessageProps, "user" | "message">> & {
+  user?: { id?: string };
+  initialMessages?: Message[];
+  existingShareId?: string | null;
+};
 
-export default function Chat({ user, message }: ChatProps) {
+export default function Chat({
+  user,
+  message,
+  initialMessages,
+  existingShareId,
+}: ChatProps) {
   const [sessionSlug, setSessionSlug] = useState<null | string>(null);
+  const { openShareDrawer } = useShareDrawerState();
   const {
     messages,
     input,
@@ -108,8 +133,10 @@ export default function Chat({ user, message }: ChatProps) {
   } = useChat({
     id: "hardcoded",
     api: "/api/bot/answer-engine",
-    body: { slug: sessionSlug },
+    initialMessages,
+    body: { slug: sessionSlug, userId: user?.id },
   });
+  const disabledQuestions = Boolean(initialMessages);
 
   const sessionSlugFromServer = (data as { slug?: string }[])?.find(
     ({ slug }) => slug
@@ -148,6 +175,24 @@ export default function Chat({ user, message }: ChatProps) {
     setSessionSlug(null);
   };
 
+  const shareMessage: MessageProps["onShareHandle"] = ({
+    renderedContent,
+    message,
+  }) => {
+    // If we're comming from a shared page we reuse the existing shareId
+    const shareId =
+      existingShareId ||
+      (data as { answers?: { shareId: string; answer: string } }[])?.find(
+        ({ answers }) => answers?.answer === message
+      )?.answers?.shareId;
+
+    openShareDrawer({
+      link: `/share/${shareId}`,
+      title: "Proem Science Answers",
+      content: renderedContent,
+    });
+  };
+
   const actionButton = (
     <ActionButton
       isLoading={isLoading}
@@ -172,6 +217,8 @@ export default function Chat({ user, message }: ChatProps) {
             messages={messages}
             showLoadingState={showLoadingState}
             user={user}
+            onShareHandle={shareMessage}
+            isLoading={isLoading}
           />
         )}
 
@@ -181,7 +228,7 @@ export default function Chat({ user, message }: ChatProps) {
               handleSubmit={handleSubmit}
               input={input}
               handleInputChange={handleInputChange}
-              disabled={isLoading}
+              disabled={isLoading || disabledQuestions}
             />
           </div>
         </div>
@@ -291,13 +338,21 @@ function Text() {
   );
 }
 
-type MessagesProps = {
-  messages: any[];
-  showLoadingState: boolean;
-  user: any;
-};
+type MessagesProps = Required<
+  Pick<MessageProps, "onShareHandle" | "isLoading">
+> &
+  Pick<MessageProps, "user"> & {
+    messages: Message[];
+    showLoadingState: boolean;
+  };
 
-function Messages({ messages, showLoadingState, user }: MessagesProps) {
+function Messages({
+  messages,
+  showLoadingState,
+  user,
+  onShareHandle,
+  isLoading,
+}: MessagesProps) {
   return (
     <div className="w-full pb-20 space-y-5">
       {messages.map((m) => (
@@ -305,6 +360,8 @@ function Messages({ messages, showLoadingState, user }: MessagesProps) {
           key={m.id}
           message={m.content}
           user={m.role === "assistant" ? PROEM_BOT : user}
+          onShareHandle={m.role === "assistant" ? onShareHandle : null}
+          isLoading={isLoading}
         />
       ))}
 

@@ -1,17 +1,6 @@
 import Link from "next/link";
 import React from "react";
 
-const asLink = (content: string, href: string) => {
-  return (
-    <Link href={href} className="font-normal text-green-500">
-      {content}
-    </Link>
-  );
-};
-
-/***
- * @deprecated reuse to applyLinks
- */
 export function applyExplainLinks(
   msg: string,
   onClick: (concept: string) => void
@@ -53,47 +42,65 @@ function convertHrefToLink(fullHref: string) {
 }
 
 type Link = { href: string; content: string; title: string };
-export function applyLinks(message: string) {
-  const arr = message
-    .replace(aTaglinkCheckReqex, "~~$&~~")
-    .replace(markdownlinkCheckReqex, "~~$&~~")
-    .split("~~");
 
-  // TODO?: Add better streaming support with partial rendering of styled a tags while it's streamed in
-  return arr.reduce(
-    (acc, messagePart, i) => {
-      const [_fullATag, aTagHref, aTagContent] =
-        aTaglinkCheckReqex.exec(messagePart) ?? [];
+export function applyElement(asElement: (link: Link) => React.ReactNode) {
+  return function withAppliedElement(message: string) {
+    const arr = message
+      .replace(aTaglinkCheckReqex, "~~$&~~")
+      .replace(markdownlinkCheckReqex, "~~$&~~")
+      .split("~~");
 
-      const [_fullMarkdownLink, markdownContent, markdownHref] =
-        markdownlinkCheckReqex.exec(messagePart) ?? [];
+    // TODO?: Add better streaming support with partial rendering of styled a tags while it's streamed in
+    const test = arr.reduce(
+      (acc, messagePart, i) => {
+        const [_fullATag, aTagHref, aTagContent] =
+          aTaglinkCheckReqex.exec(messagePart) ?? [];
 
-      const link =
-        aTagHref && aTagContent
-          ? {
-              ...convertHrefToLink(aTagHref),
-              content: aTagContent,
-            }
-          : markdownHref && markdownContent
+        const [_fullMarkdownLink, markdownContent, markdownHref] =
+          markdownlinkCheckReqex.exec(messagePart) ?? [];
+
+        const link =
+          aTagHref && aTagContent
             ? {
-                ...convertHrefToLink(markdownHref),
-                content: markdownContent,
+                ...convertHrefToLink(aTagHref),
+                content: aTagContent,
               }
-            : null;
+            : markdownHref && markdownContent
+              ? {
+                  ...convertHrefToLink(markdownHref),
+                  content: markdownContent,
+                }
+              : null;
 
-      const content = link ? asLink(link.content, link.href) : messagePart;
+        if (link) {
+          acc.links.push(link);
+        }
 
-      if (link) {
-        acc.links.push(link);
+        const content = link ? asElement(link) : messagePart;
+
+        acc.content.push(
+          <span key={i} className="break-words">
+            {content}
+          </span>
+        );
+        return acc;
+      },
+      { content: [], links: [] } as {
+        content: JSX.Element[];
+        links: Link[];
       }
-
-      acc.content.push(
-        <span key={i} className="break-words">
-          {content}
-        </span>
-      );
-      return acc;
-    },
-    { content: [], links: [] } as { content: React.ReactNode[]; links: Link[] }
-  );
+    );
+    return test;
+  };
 }
+
+export const applyLinks = applyElement((link) => {
+  return (
+    <Link href={link.href} className="font-normal text-green-500">
+      {link.content}
+    </Link>
+  );
+});
+export const applyLinksAsSpans = applyElement((link) => {
+  return <span tw="text-green-500 break-all">{link.content}</span>;
+});

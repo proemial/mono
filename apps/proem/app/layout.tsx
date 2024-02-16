@@ -23,6 +23,10 @@ export const metadata: Metadata = {
   title,
   description,
   metadataBase: new URL(url),
+  robots: {
+    index: false,
+    follow: false,
+  },
   openGraph: {
     type: "website",
     url,
@@ -40,17 +44,17 @@ export default async function RootLayout({ children }: Props) {
 
   return (
     <ClerkProvider>
-        <PostHogClient>
-          <html lang="en" className={sourceCodePro.variable}>
-            <body
-              className={`flex relative flex-col justify-center ${light} h-dvh`}
-            >
-              {children}
+      <PostHogClient>
+        <html lang="en" className={sourceCodePro.variable}>
+          <body
+            className={`flex relative flex-col justify-center ${light} h-dvh`}
+          >
+            {children}
 
-              <AnalyticsClient />
-            </body>
-          </html>
-        </PostHogClient>
+            <AnalyticsClient />
+          </body>
+        </html>
+      </PostHogClient>
     </ClerkProvider>
   );
 }

@@ -21,6 +21,7 @@ export const analyticsKeys = {
       starter: "ask:starter:click",
       answerCard: "ask:answer-card:click",
       answerLink: "ask:answer-link:click",
+      share: "ask:share:click",
     },
     submit: {
       ask: "ask:input:submit",

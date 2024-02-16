@@ -13,6 +13,7 @@
     "@langchain/openai": "^0.0.11",
     "@proemial/data": "workspace:*",
     "@proemial/models": "workspace:*",
+    "@proemial/shadcn-ui": "workspace:*",
     "@proemial/redis": "workspace:*",
     "@proemial/utils": "workspace:*",
     "@radix-ui/react-avatar": "^1",
