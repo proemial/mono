@@ -29,14 +29,14 @@ export default async function SharePageOpenGraphImage({
 
     const helveticaBold = await fetch(
       new URL(
-        "../../../../../../assets/fonts/helvetica/Helvetica-Bold.ttf",
+        "../../../../../assets/fonts/helvetica/Helvetica-Bold.ttf",
         import.meta.url,
       ),
     ).then((res) => res.arrayBuffer());
 
     const helvetica = await fetch(
       new URL(
-        "../../../../../../assets/fonts/helvetica/Helvetica.ttf",
+        "../../../../../assets/fonts/helvetica/Helvetica.ttf",
         import.meta.url,
       ),
     ).then((res) => res.arrayBuffer());
