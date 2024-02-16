@@ -8,7 +8,7 @@ export default async function Summary(options: {
   id?: string;
   paper?: OpenAlexPaper;
 }) {
-  const paper = options.paper || (await fetchPaper(options.id));
+  const paper = options.paper ?? (await fetchPaper(options.id));
 
   const paperTitle = paper?.data?.title;
   const abstract = paper?.data?.abstract;

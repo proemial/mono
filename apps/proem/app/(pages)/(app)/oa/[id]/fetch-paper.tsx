@@ -16,7 +16,6 @@ import { Features } from "@/app/components/feature-flags/features";
 
 export const fetchPaper = cache(
   async (id: string): Promise<OpenAlexPaper | undefined> => {
-    console.log("[fetchPaper] Get", id);
     const paper = await Redis.papers.get(id);
 
     const oaApiKey = Env.get("OPENALEX_API_KEY");
