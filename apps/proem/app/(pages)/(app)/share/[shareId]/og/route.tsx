@@ -9,8 +9,6 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const shareId = searchParams.get("shareId");
-    console.log(request.url);
-    console.log({ shareId });
     if (!shareId) {
       throw new Error("No shareId provided in the url");
     }
