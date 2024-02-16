@@ -7,8 +7,10 @@ export const runtime = "edge";
 
 export async function GET(request: Request) {
   try {
+    console.log({ request: request.url });
     const { searchParams } = new URL(request.url);
     const shareId = searchParams.get("shareId");
+    console.log({ shareId });
     if (!shareId) {
       throw new Error("No shareId provided in the url");
     }

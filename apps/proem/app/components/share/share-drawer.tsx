@@ -119,7 +119,7 @@ const shareProviders: ShareProviders = [
 export function ShareDrawer() {
   const { itemToBeShared, closeShareDrawer } = useShareDrawerState();
   const isOpen = Boolean(itemToBeShared);
-  const fullUrl = `${globalThis?.location.origin}${itemToBeShared?.link}`;
+  const fullUrl = `${globalThis?.location?.origin}${itemToBeShared?.link}`;
 
   return (
     <Drawer isOpen={isOpen} onClose={closeShareDrawer} removeWhenClosed={false}>
