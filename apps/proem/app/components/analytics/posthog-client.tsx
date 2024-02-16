@@ -10,7 +10,7 @@ import process from "process";
 // https://posthog.com/tutorials/cookieless-tracking
 export function PostHogClient({ children }: { children: ReactNode }) {
   analyticsTrace("[PosthogClient]");
-  const initialized = useInit();
+  useInit();
 
   return <PostHogProvider client={posthog}>{children}</PostHogProvider>;
 }
@@ -23,7 +23,6 @@ function useInit() {
   useEffect(() => {
     const persistence = user ? undefined : "memory";
     const distinctID = user?.primaryEmailAddress?.emailAddress || user?.id;
-    console.log("distinctID", distinctID);
 
     const token = Env.validate(
       "NEXT_PUBLIC_POSTHOG_KEY",
@@ -35,13 +34,14 @@ function useInit() {
     );
 
     analyticsTrace("[PosthogClient] initializing", persistence, distinctID);
-    const result = posthog.init(token, {
+    posthog.init(token, {
       api_host,
       persistence,
       bootstrap: {
         distinctID,
       },
     });
+    setInitialized(true);
   }, [setInitialized, user]);
 
   return initialized;
