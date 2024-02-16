@@ -65,7 +65,10 @@ export function Message({
 
         {onShareHandle && !isLoading && (
           <ShareIcon
-            onClick={() => onShareHandle({ renderedContent: content, message })}
+            onClick={() => {
+              onShareHandle({ renderedContent: content, message });
+              Tracker.track(analyticsKeys.ask.click.share);
+            }}
             className="ml-auto"
           />
         )}
