@@ -1,16 +1,22 @@
 import { applyLinksAsSpans } from "@/app/(pages)/(app)/oa/[id]/components/panels/bot/apply-links";
-import { AnswerSharingCard } from "@/app/(pages)/(app)/share/[shareId]/opengraph-image/answer-sharing-card";
+import { AnswerSharingCard } from "@/app/(pages)/(app)/share/[shareId]/og/answer-sharing-card";
+import { splitEachWordToSpan } from "@/app/(pages)/(app)/share/[shareId]/og/route";
 import { answers } from "@/app/api/bot/answer-engine/answers";
-import { cn } from "@/app/components/shadcn-ui/utils";
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export async function GET(request: Request) {
+export const alt = "My images alt text";
+export const size = { width: 1200, height: 630 };
+export const contentType = "image/png";
+type Props = {
+  params: { shareId: string };
+};
+
+export default async function SharePageOpenGraphImage({
+  params: { shareId },
+}: Props) {
   try {
-    console.log({ request: request.url });
-    const { searchParams } = new URL(request.url);
-    const shareId = searchParams.get("shareId");
     console.log({ shareId });
     if (!shareId) {
       throw new Error("No shareId provided in the url");
@@ -63,14 +69,4 @@ export async function GET(request: Request) {
       status: 500,
     });
   }
-}
-
-function splitEachWordToSpan(element: JSX.Element) {
-  if (element.props.children.props) {
-    return splitEachWordToSpan(element.props.children);
-  }
-
-  return element.props.children.split(" ").map((word: string) => {
-    return <span tw={cn("mr-2", element.props.tw)}>{word}</span>;
-  });
 }

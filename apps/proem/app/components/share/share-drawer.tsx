@@ -129,7 +129,7 @@ export function ShareDrawer() {
           <Image
             width={600}
             height={315}
-            src={`${itemToBeShared.link}/opengraph-image`}
+            src={`${itemToBeShared.link}/og`}
             alt="Image"
           />
 
