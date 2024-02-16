@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import { LinkButton } from "@/app/components/proem-ui/link-button";
-import { fetchLatestPaperIds } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
+import { fetchLatestPapers } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import { AskInput } from "@/app/(pages)/(app)/oa/ask-input";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
@@ -41,10 +41,9 @@ function Text() {
 }
 
 async function Actions() {
-  const latestIds = await fetchLatestPaperIds();
-  const randomId = latestIds
-    ? latestIds[Math.floor(Math.random() * latestIds.length)]
-    : "";
+  const latestPapers = await fetchLatestPapers();
+  const randomId =
+    latestPapers[Math.floor(Math.random() * latestPapers.length)]?.id ?? "";
 
   return (
     <div className="flex flex-col">

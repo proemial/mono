@@ -3,7 +3,7 @@ import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
 import {
   baseOaUrl,
-  WithAbstract,
+  OpenAlexPaperWithAbstract,
   openAlexFields,
   OpenAlexWorksSearchResult,
 } from "@proemial/models/open-alex";
@@ -15,7 +15,7 @@ const baseUrl = `${baseOaUrl}?select=${openAlexFields.search}&${filter}`;
 export async function fetchPapers(q: string, count = 30, tokens = 350) {
   const papers = await fetchWithAbstract(q, count, tokens);
 
-  await Redis.papers.pushAll(papers.map((data) => ({ data })));
+  await Redis.papers.pushAll(papers.map((data) => ({ data, id: data.id })));
 
   return papers.map((o) => ({
     link: o.id.replace("openalex.org", "proem.ai/oa"),
@@ -38,6 +38,6 @@ async function fetchWithAbstract(q: string, count: number, tokens: number) {
     return {
       ...rest,
       abstract: fromInvertedIndex(abstract_inverted_index, tokens),
-    } as WithAbstract;
+    } as OpenAlexPaperWithAbstract;
   });
 }

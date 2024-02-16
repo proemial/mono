@@ -2,9 +2,6 @@ import { UpStash } from "./upstash-client";
 import {
   getIdFromOpenAlexPaper,
   OpenAlexPaper,
-  OpenAlexWorkCoreMetadata,
-  WithAbstract,
-  WithData,
 } from "@proemial/models/open-alex";
 
 export const OpenAlexPapers = {
@@ -17,24 +14,21 @@ export const OpenAlexPapers = {
     }
   },
 
-  pushAll: async (papers: WithData | Array<WithData>) => {
+  pushAll: async (papers: OpenAlexPaper | Array<OpenAlexPaper>) => {
     if (Array.isArray(papers) && papers.length < 1) {
       return;
     }
+    const papersArray = Array.isArray(papers) ? papers : [papers];
 
     try {
-      if (!Array.isArray(papers)) {
-        const id = getIdFromOpenAlexPaper(papers);
-        await UpStash.papers.set(`oa:${id}`, { id, paper: papers });
-      } else {
-        const pipeline = UpStash.papers.pipeline();
-        papers.forEach((paper) => {
-          const id = getIdFromOpenAlexPaper(paper);
-          pipeline.set(`oa:${id}`, { ...paper, id });
-        });
+      console.log("[pushAll] pushing", papersArray.length, "papers");
+      const pipeline = UpStash.papers.pipeline();
+      papersArray.forEach((paper) => {
+        const id = getIdFromOpenAlexPaper(paper);
+        pipeline.set(`oa:${id}`, { ...paper, id });
+      });
 
-        await pipeline.exec();
-      }
+      await pipeline.exec();
     } catch (error) {
       console.error(error);
       throw error;
@@ -43,18 +37,48 @@ export const OpenAlexPapers = {
 
   upsert: async (
     id: string,
-    appendFn: (existingPaper: OpenAlexPaper) => OpenAlexPaper
+    appendFn: (existingPaper: OpenAlexPaper) => OpenAlexPaper,
   ) => {
     try {
       const redisPaper = (await UpStash.papers.get(
-        `oa:${id}`
+        `oa:${id}`,
       )) as OpenAlexPaper;
 
       const updatedPaper = appendFn(redisPaper || {});
 
+      console.log("[upsert] pushing paper", id);
       await UpStash.papers.set(`oa:${id}`, updatedPaper);
 
       return updatedPaper;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+
+  upsertAll: async (papers: OpenAlexPaper | Array<OpenAlexPaper>) => {
+    if (Array.isArray(papers) && papers.length < 1) {
+      return;
+    }
+
+    const papersArray = Array.isArray(papers) ? papers : [papers];
+
+    try {
+      const pipeline = UpStash.papers.pipeline();
+      papersArray.forEach((paper) => {
+        const id = getIdFromOpenAlexPaper(paper);
+        pipeline.get(`oa:${id}`);
+      });
+      const dbPapers = await pipeline.exec<OpenAlexPaper[]>();
+
+      const dbPaperIds = dbPapers.map((paper) => paper?.id);
+      const missingPapers = papersArray.filter(
+        (paper) => !dbPaperIds.includes(paper?.id),
+      );
+
+      if (missingPapers.length > 0) {
+        await OpenAlexPapers.pushAll(missingPapers);
+      }
     } catch (error) {
       console.error(error);
       throw error;
