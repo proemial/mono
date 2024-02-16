@@ -18,20 +18,17 @@ export const OpenAlexPapers = {
     if (Array.isArray(papers) && papers.length < 1) {
       return;
     }
+    const papersArray = Array.isArray(papers) ? papers : [papers];
 
     try {
-      if (!Array.isArray(papers)) {
-        const id = getIdFromOpenAlexPaper(papers);
-        await UpStash.papers.set(`oa:${id}`, { id, paper: papers });
-      } else {
-        const pipeline = UpStash.papers.pipeline();
-        papers.forEach((paper) => {
-          const id = getIdFromOpenAlexPaper(paper);
-          pipeline.set(`oa:${id}`, { ...paper, id });
-        });
+      console.log("[pushAll] pushing", papersArray.length, "papers");
+      const pipeline = UpStash.papers.pipeline();
+      papersArray.forEach((paper) => {
+        const id = getIdFromOpenAlexPaper(paper);
+        pipeline.set(`oa:${id}`, { ...paper, id });
+      });
 
-        await pipeline.exec();
-      }
+      await pipeline.exec();
     } catch (error) {
       console.error(error);
       throw error;
@@ -49,6 +46,7 @@ export const OpenAlexPapers = {
 
       const updatedPaper = appendFn(redisPaper || {});
 
+      console.log("[upsert] pushing paper", id);
       await UpStash.papers.set(`oa:${id}`, updatedPaper);
 
       return updatedPaper;

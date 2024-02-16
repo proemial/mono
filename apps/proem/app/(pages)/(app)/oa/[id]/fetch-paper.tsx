@@ -24,7 +24,7 @@ export const fetchPaper = cache(
       !(paper?.data as OpenAlexWorkMetadata)?.doi ||
       !(paper?.data as OpenAlexWorkMetadata)?.topics
     ) {
-      console.log("fetchPaper");
+      console.log("[fetchPaper] Fetch", id);
       const oaPaper = await fetch(
         `${baseOaUrl}/${id}?mailto=lab@paperflow.ai&select=${openAlexFields.all}&api_key=${oaApiKey}`,
       );
@@ -40,6 +40,7 @@ export const fetchPaper = cache(
         abstract: fromInvertedIndex(oaPaperJson.abstract_inverted_index, 350),
       };
 
+      console.log("[fetchPaper] Upsert", id);
       return await Redis.papers.upsert(id, (existingPaper) => {
         return {
           ...existingPaper,

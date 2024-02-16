@@ -33,7 +33,7 @@ export async function FeedPaper({ paper }: { paper?: OpenAlexPaper }) {
 
       <PaperCardTitle>
         <Suspense fallback={<Spinner />}>
-          <Summary paper={paper} />
+          <Summary id={paper.id} />
         </Suspense>
       </PaperCardTitle>
 
