@@ -8,7 +8,8 @@ export default async function Summary(options: {
   id?: string;
   paper?: OpenAlexPaper;
 }) {
-  const paper = options.paper ?? (await fetchPaper(options.id));
+  if (!options.id && !options.paper) throw new Error("No id or paper provided");
+  const paper = options.paper ?? (await fetchPaper(options.id as string));
 
   const paperTitle = paper?.data?.title;
   const abstract = paper?.data?.abstract;
