@@ -2,12 +2,14 @@ import { model } from "@/app/api/bot/answer-engine/model";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { JsonOutputFunctionsParser } from "langchain/output_parsers";
+import { formatDocumentsAsString } from "langchain/util/document";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { fetchPapers } from "../../paper-search/search";
 import { convertToOASearchString } from "./convert-query-parameters";
+import { PaperRetriever } from "./paper-retriever";
 
 const jsonOutputFunctionsParser = new JsonOutputFunctionsParser();
+const paperRetriever = new PaperRetriever()
 
 const constructSearchParametersSchema = z.object({
   keyConcept: z.string()
@@ -42,30 +44,8 @@ export const fetchPapersChain = RunnableSequence.from([
     function_call: { name: constructSearchParameter.name },
   }),
   jsonOutputFunctionsParser,
+  (input) => convertToOASearchString(input.keyConcept, input.relatedConcepts),
   {
-    query: (input) => input,
-    papers: async (input) => {
-      const query = convertToOASearchString(
-        input.keyConcept,
-        input.relatedConcepts
-      );
-
-      const papers = await fetchPapers(query);
-      // TODO! This is quite hacky to do here
-      const papersWithRelativeLinks =
-        papers?.map((paper) => ({
-          ...paper,
-          link: paper.link.replace("https://proem.ai", ""),
-        })) ?? [];
-
-      return papersWithRelativeLinks;
-      // return [
-      //   new AIMessage({ content: "" }), // Add function_call parameter how?
-      //   new FunctionMessage({
-      //     name: constructSearchParameter.name,
-      //     content: JSON.stringify(papersWithRelativeLinks),
-      //   }),
-      // ];
-    },
+    papers: paperRetriever.pipe(formatDocumentsAsString),
   },
 ]);
