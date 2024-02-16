@@ -43,6 +43,7 @@ export const analyticsKeys = {
       explainer: "read:explainer:click",
       answers: "read:tab-answers:click",
       metadata: "read:tab-metadata:click",
+      related: "read:tab-related:click",
     },
     submit: {
       ask: "read:ask_input:submit",
