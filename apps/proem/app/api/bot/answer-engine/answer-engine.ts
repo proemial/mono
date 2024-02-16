@@ -173,7 +173,6 @@ export async function askAnswerEngine({
           ...papers,
         });
 
-        console.log(insertedAnswer);
         if (!insertedAnswer) {
           return;
         }
@@ -187,23 +186,11 @@ export async function askAnswerEngine({
         data.close();
       },
     })
-    .stream(
-      {
-        chatHistory,
-        question,
-        papers: existingPapers,
-      }
-      // {
-      //   callbacks: [
-      //     {
-      //       handleChainEnd(_outputs, _runid, parentRunId) {
-      //         if (parentRunId == null) {
-      //         }
-      //       },
-      //     },
-      //   ],
-      // }
-    );
+    .stream({
+      chatHistory,
+      question,
+      papers: existingPapers,
+    });
 
   return new StreamingTextResponse(
     stream.pipeThrough(createStreamDataTransformer(true)),

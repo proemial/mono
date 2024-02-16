@@ -6,7 +6,6 @@ import { ImageResponse } from "next/og";
 export const runtime = "edge";
 
 export async function GET(request: Request) {
-  console.log('"worksdf');
   try {
     const shareId = request.url.split("/").at(-2);
     if (!shareId) {

@@ -44,7 +44,7 @@ function convertHrefToLink(fullHref: string) {
 type Link = { href: string; content: string; title: string };
 
 export function applyElement(asElement: (link: Link) => React.ReactNode) {
-  return function applyElement(message: string) {
+  return function withAppliedElement(message: string) {
     const arr = message
       .replace(aTaglinkCheckReqex, "~~$&~~")
       .replace(markdownlinkCheckReqex, "~~$&~~")
@@ -90,7 +90,6 @@ export function applyElement(asElement: (link: Link) => React.ReactNode) {
         links: Link[];
       }
     );
-    console.log(test.content);
     return test;
   };
 }
