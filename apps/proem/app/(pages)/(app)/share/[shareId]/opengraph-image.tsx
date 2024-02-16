@@ -1,6 +1,7 @@
 import { createSharePageOpenGraphImage } from "@/app/(pages)/(app)/share/[shareId]/og/create-share-page-open-graph-image";
 
 export const runtime = "edge";
+export const alt = "proem - science answers";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -12,7 +13,6 @@ export default async function SharePageOpenGraphImage({
   params: { shareId },
 }: Props) {
   try {
-    console.log({ shareId });
     if (!shareId) {
       throw new Error("No shareId provided in the url");
     }
