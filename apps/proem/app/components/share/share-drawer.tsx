@@ -76,7 +76,7 @@ const shareProviders: ShareProviders = [
       </svg>
     ),
     createShareLink: (url: string, title: string) =>
-      `https://www.linkedin.com/shareArticle?url=${encodeURI(
+      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURI(
         url
       )}&title=${title}`,
   },
@@ -118,7 +118,7 @@ const shareProviders: ShareProviders = [
 export function ShareDrawer() {
   const { itemToBeShared, closeShareDrawer } = useShareDrawerState();
   const isOpen = Boolean(itemToBeShared);
-  const fullUrl = `${window.location.origin}${itemToBeShared?.link}`;
+  const fullUrl = `${globalThis?.location.origin}${itemToBeShared?.link}`;
 
   return (
     <Drawer isOpen={isOpen} onClose={closeShareDrawer} removeWhenClosed={false}>
