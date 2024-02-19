@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+
 const { withSentryConfig } = require("@sentry/nextjs");
 
 const nextConfig = {
@@ -18,22 +19,16 @@ const nextConfig = {
       },
     ];
   },
+  sentry: {
+    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration
+    hideSourceMaps: true,
+  },
 };
 
-const isProd = process.env.NODE_ENV !== "development";
-module.exports = isProd
-  ? withSentryConfig(
-      {
-        ...nextConfig,
-        sentry: {
-          // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration
-          hideSourceMaps: true,
-        },
-      },
-      {
-        org: "proemial",
-        project: "proem",
-        authToken: process.env.SENTRY_AUTH_TOKEN,
-      },
-    )
-  : nextConfig;
+const sentryWebpackPluginOptions = {
+  org: "proemial",
+  project: "proem",
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+};
+
+module.exports = withSentryConfig(nextConfig, sentryWebpackPluginOptions);
