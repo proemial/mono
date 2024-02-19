@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { Env } from "@proemial/utils/env";
 import * as Sentry from "@sentry/nextjs";
@@ -17,7 +18,10 @@ export function SentryClient() {
           "NEXT_PUBLIC_SENTRY_DSN",
           process.env.NEXT_PUBLIC_SENTRY_DSN,
         ),
-        integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
+        integrations: [
+          Sentry.browserTracingIntegration(),
+          Sentry.replayIntegration(),
+        ],
         // Performance Monitoring
         tracesSampleRate: 1.0, // Capture 100% of the transactions, reduce in production!
         // Session Replay
