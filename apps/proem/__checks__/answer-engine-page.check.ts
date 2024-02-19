@@ -1,6 +1,6 @@
 import { ApiCheck, AssertionBuilder } from 'checkly/constructs'
 
-new ApiCheck('proem-answer-engine-page', {
+new ApiCheck('answer-engine-page-api', {
   name: 'Proem Answer Engine Page',
   alertChannels: [],
   degradedResponseTime: 10000,
