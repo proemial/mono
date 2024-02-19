@@ -1,10 +1,14 @@
-import { VaClient } from "@/app/components/analytics/va-client";
 import { GaClient } from "@/app/components/analytics/ga-client";
+import { VaClient } from "@/app/components/analytics/va-client";
 
-export function AnalyticsClient() {
+export type AnalyticsClientProps = {
+  isBot?: boolean
+}
+
+export function AnalyticsClient({ isBot }: AnalyticsClientProps) {
   return (
     <>
-      <VaClient />
+      <VaClient isBot={isBot} />
       <GaClient />
     </>
   );

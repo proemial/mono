@@ -8,9 +8,10 @@ import {
   useAnalyticsDisabled,
   usePathNames,
 } from "@/app/components/analytics/utils";
+import { AnalyticsClientProps } from "@/app/components/analytics/analytics";
 
 // https://vercel.com/docs/concepts/analytics/custom-events
-export function VaClient() {
+export function VaClient({ isBot }: AnalyticsClientProps) {
   analyticsTrace("[VaClient]");
 
   const disabled = useAnalyticsDisabled();
