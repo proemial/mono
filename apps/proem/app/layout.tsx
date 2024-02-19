@@ -5,6 +5,8 @@ import "./globals.css";
 import { Source_Code_Pro } from "next/font/google";
 import { Metadata } from "next";
 import { PostHogClient } from "@/app/components/analytics/posthog-client";
+import { cookies, headers } from 'next/headers'
+
 
 const sourceCodePro = Source_Code_Pro({
   subsets: ["latin"],
@@ -41,6 +43,11 @@ type Props = {
 
 export default async function RootLayout({ children }: Props) {
   const light = lightModeEnabled ? "dark:dark" : "dark";
+  const headersList = headers()
+  const cookieStore = cookies()
+  console.log({headersList})
+  console.log({cookieStore})
+  // const referer = headersList.get('referer')
 
   return (
     <ClerkProvider>
