@@ -4,6 +4,7 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "checkly": "turbo checkly",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "vercel-pull-env": "vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/proem --yes && vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/search --yes",
     "test": "vitest",
