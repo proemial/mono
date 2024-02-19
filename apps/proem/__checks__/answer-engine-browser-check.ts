@@ -12,7 +12,7 @@ new BrowserCheck('answer-engine-browser-check', {
   muted: false,
   shouldFail: false,
   runParallel: true,
-  locations: ['us-east-1'],
+  locations: ['eu-central-1'],
   tags: [],
   sslCheckDomain: '',
   frequency: Frequency.EVERY_10M,
