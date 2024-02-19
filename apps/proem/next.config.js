@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
+const { withSentryConfig } = require("@sentry/nextjs");
+
+const nextConfig = {
   transpilePackages: ["@repo/utils"],
   async redirects() {
     return [
@@ -17,3 +19,21 @@ module.exports = {
     ];
   },
 };
+
+const isProd = process.env.NODE_ENV === "production";
+module.exports = isProd
+  ? withSentryConfig(
+      {
+        ...nextConfig,
+        sentry: {
+          // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration
+          hideSourceMaps: true,
+        },
+      },
+      {
+        org: "proemial",
+        project: "proem",
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+      },
+    )
+  : nextConfig;

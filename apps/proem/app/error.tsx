@@ -1,8 +1,6 @@
 "use client"; // Error components must be Client Components
 
-import { useEffect } from "react";
-import { buttonVariants } from "@/app/components/proem-ui/button";
-import { Button } from "@/app/components/proem-ui/button";
+import GlobalError from "@/app/global-error";
 
 export default function Error({
   error,
@@ -11,25 +9,7 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    // Log the error to an error reporting service
-    console.error(error);
-  }, [error]);
-
-  return (
-    <div className="bg-[#2F2F2F] rounded-sm border border-[#3C3C3C] flex flex-col py-4 px-4 items-left m-auto">
-      <h2 className="text-[24px] font-normal leading-[32px]">
-        Something went wrong
-      </h2>
-      <Button
-        className={buttonVariants({ variant: "primary", size: "default" })}
-        onClick={
-          // Attempt to recover by trying to re-render the segment
-          () => reset()
-        }
-      >
-        Try again
-      </Button>
-    </div>
-  );
+  // Wrapping GlobalError as I somehow cannot get the default sentry setup to work
+  // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#react-render-errors-in-app-router
+  return <GlobalError error={error} reset={reset} />;
 }
