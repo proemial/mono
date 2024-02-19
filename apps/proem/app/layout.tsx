@@ -1,11 +1,11 @@
 import { AnalyticsClient } from "@/app/components/analytics/analytics";
-import { PostHogClient } from "@/app/components/analytics/posthog-client";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Metadata } from "next";
-import { Source_Code_Pro } from "next/font/google";
-import { headers } from 'next/headers';
 import { ReactNode } from "react";
 import "./globals.css";
+import { Source_Code_Pro } from "next/font/google";
+import { Metadata } from "next";
+import { PostHogClient } from "@/app/components/analytics/posthog-client";
+import { cookies, headers } from 'next/headers'
 
 
 const sourceCodePro = Source_Code_Pro({
@@ -44,7 +44,15 @@ type Props = {
 export default async function RootLayout({ children }: Props) {
   const light = lightModeEnabled ? "dark:dark" : "dark";
   const headersList = headers()
-  console.log(headersList.entries())
+  const cookieStore = cookies()
+  for (const pair of headersList.entries()) {
+
+    console.log(pair)
+  }
+  console.log(cookieStore.getAll())
+
+
+
 
   return (
     <ClerkProvider>
