@@ -3,7 +3,7 @@ import { PostHogClient } from "@/app/components/analytics/posthog-client";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Metadata } from "next";
 import { Source_Code_Pro } from "next/font/google";
-import { cookies } from 'next/headers';
+import { headers } from 'next/headers';
 import { ReactNode } from "react";
 import "./globals.css";
 
@@ -43,10 +43,8 @@ type Props = {
 
 export default async function RootLayout({ children }: Props) {
   const light = lightModeEnabled ? "dark:dark" : "dark";
-  const cookieStore = cookies()
-  console.log({cookieStore})
-  console.log(cookieStore.getAll())
-  // const referer = headersList.get('referer')
+  const headersList = headers()
+  console.log(headersList.entries())
 
   return (
     <ClerkProvider>
