@@ -20,7 +20,7 @@
     "@radix-ui/react-slot": "^1",
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toast": "^1",
-    "@sentry/nextjs": "^7",
+    "@sentry/nextjs": "^7.101.1",
     "@vercel/analytics": "^1",
     "@vercel/speed-insights": "^1",
     "ai": "^2",
