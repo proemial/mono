@@ -92,5 +92,6 @@ export const answerEngineChain = RunnableSequence.from<ChainInput, ChainOutput>(
     model,
     bytesOutputParser,
   ],
-  "AnswerEngineChain",
-);
+).withConfig({
+  runName: "Ask",
+});

@@ -7,7 +7,7 @@ import { convertToOASearchString } from "./convert-query-parameters";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { fetchPapers } from "@/app/api/paper-search/search";
 
-const constructSearchParametersSchema = z.object({
+const generateSearchParamsSchema = z.object({
   keyConcept: z.string()
     .describe(`A single common noun that is VERY likely to occur in the title of
     a research paper that contains the answer to the user's question. The
@@ -17,23 +17,23 @@ const constructSearchParametersSchema = z.object({
     three synonyms for the key concept. Preferrably two-grams or longer.`),
 });
 
-const constructSearchParameters = {
-  name: "constructSearchParameters",
-  description: `A function to construct a set of search parameters to
+const generateSearchParams = {
+  name: "generateSearchParams",
+  description: `A function to generate a set of search parameters to
       retrieve one or more scientific research papers related to the user's
       question.`,
-  parameters: zodToJsonSchema(constructSearchParametersSchema),
+  parameters: zodToJsonSchema(generateSearchParamsSchema),
 };
 
-type SearchParametersOutput = z.infer<typeof constructSearchParametersSchema>;
+type GeneratedSearchParams = z.infer<typeof generateSearchParamsSchema>;
 
 const jsonOutputFunctionsParser =
-  new JsonOutputFunctionsParser<SearchParametersOutput>();
+  new JsonOutputFunctionsParser<GeneratedSearchParams>();
 
-const searchQueryPrompt = ChatPromptTemplate.fromMessages<ChainInput>([
+const generateSearchParamsPrompt = ChatPromptTemplate.fromMessages<ChainInput>([
   [
     "system",
-    "Construct a set of search parameters that can be used retrieve one or more scientific research papers related to the user's question.",
+    "Generate a set of search parameters that can be used retrieve one or more scientific research papers related to the user's question.",
   ],
   ["human", `{question}`],
 ]);
@@ -50,39 +50,37 @@ export type PapersRequest = {
 type ChainInput = { question: string };
 type ChainOutput = PapersRequest; // Note: This structure is required for saving answers
 
-const constructSearchParamsChain = RunnableSequence.from<
+const generateSearchParamsChain = RunnableSequence.from<
   ChainInput,
-  SearchParametersOutput
->(
-  [
-    searchQueryPrompt,
-    model.bind({
-      functions: [constructSearchParameters],
-      function_call: { name: constructSearchParameters.name },
-    }),
-    (input) => input, // This is silly, but it makes the output parser below not stream the response
-    jsonOutputFunctionsParser,
-  ],
-  "ConstructSearchParamsChain",
-);
+  GeneratedSearchParams
+>([
+  generateSearchParamsPrompt,
+  model.bind({
+    functions: [generateSearchParams],
+    function_call: { name: generateSearchParams.name },
+  }),
+  (input) => input, // This is silly, but it makes the output parser below not stream the response
+  jsonOutputFunctionsParser,
+]).withConfig({
+  runName: "GenerateSearchParams",
+});
 
-export const fetchPapersChain = RunnableSequence.from<ChainInput, ChainOutput>(
-  [
-    constructSearchParamsChain,
-    {
-      query: (input: SearchParametersOutput) => input,
-      papers: async (input: SearchParametersOutput) => {
-        const query = convertToOASearchString(
-          input.keyConcept,
-          input.relatedConcepts,
-        );
-        const papers = await fetchPapers(query);
-        return papers?.map(toRelativeLink) ?? [];
-      },
+export const fetchPapersChain = RunnableSequence.from<ChainInput, ChainOutput>([
+  generateSearchParamsChain,
+  {
+    query: (input: GeneratedSearchParams) => input,
+    papers: async (input: GeneratedSearchParams) => {
+      const query = convertToOASearchString(
+        input.keyConcept,
+        input.relatedConcepts,
+      );
+      const papers = await fetchPapers(query);
+      return papers?.map(toRelativeLink) ?? [];
     },
-  ],
-  "FetchPapersChain",
-);
+  },
+]).withConfig({
+  runName: "FetchPapers",
+});
 
 type FetchPaperResult = {
   title: string;
