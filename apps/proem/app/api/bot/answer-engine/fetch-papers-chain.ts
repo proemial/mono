@@ -1,4 +1,3 @@
-import { model } from "@/app/api/bot/answer-engine/model";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { JsonOutputFunctionsParser } from "langchain/output_parsers";
@@ -7,6 +6,7 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 import { fetchPapers } from "../../paper-search/search";
 import { convertToOASearchString } from "./convert-query-parameters";
 import { PapersRequest } from "./answer-engine";
+import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 
 const constructSearchParametersSchema = z.object({
   keyConcept: z.string()
@@ -38,6 +38,8 @@ const searchQueryPrompt = ChatPromptTemplate.fromMessages<ChainInput>([
   ],
   ["human", `{question}`],
 ]);
+
+const model = buildOpenAIChatModel('gpt-3.5-turbo-1106', 'ask', { verbose: true })
 
 type ChainInput = { question: string };
 type ChainOutput = PapersRequest; // Note: This structure is required for saving answers

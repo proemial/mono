@@ -1,5 +1,5 @@
 import { fetchPapersChain } from "@/app/api/bot/answer-engine/fetch-papers-chain";
-import { model } from "@/app/api/bot/answer-engine/model";
+import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
 import {
@@ -59,6 +59,8 @@ const prompt = ChatPromptTemplate.fromMessages<ChainInput>([
   new MessagesPlaceholder("chatHistory"),
   ["human", `{question}`],
 ]);
+
+const model = buildOpenAIChatModel('gpt-3.5-turbo-1106', 'ask', { verbose: true })
 
 type ChainInput = {
   question: string;
