@@ -8,51 +8,51 @@ import { BotForm } from "./form";
 import { BotMessages } from "./messages";
 
 type Props = {
-  paper: OpenAlexPaper;
-  starters: string[];
+	paper: OpenAlexPaper;
+	starters: string[];
 };
 
 export function InsightsBot({ paper, starters }: Props) {
-  const { title, abstract } = paper.data;
+	const { title, abstract } = paper.data;
 
-  const { messages, input, handleInputChange, handleSubmit, append } = useChat({
-    body: { title, abstract, model: "gpt-3.5-turbo" },
-    api: "/api/bot/chat",
-  });
+	const { messages, input, handleInputChange, handleSubmit, append } = useChat({
+		body: { title, abstract, model: "gpt-3.5-turbo" },
+		api: "/api/bot/chat",
+	});
 
-  const chatWrapperRef = React.useRef<HTMLInputElement>(null);
-  React.useEffect(() => {
-    if (messages?.length > 0 && chatWrapperRef.current) {
-      chatWrapperRef.current.scrollIntoView(false);
-    }
-  }, [messages]);
+	const chatWrapperRef = React.useRef<HTMLInputElement>(null);
+	React.useEffect(() => {
+		if (messages?.length > 0 && chatWrapperRef.current) {
+			chatWrapperRef.current.scrollIntoView(false);
+		}
+	}, [messages]);
 
-  return (
-    <div className="flex flex-col h-full">
-      {!starters && (
-        <div className="mb-4">
-          <Spinner />
-        </div>
-      )}
+	return (
+		<div className="flex flex-col h-full">
+			{!starters && (
+				<div className="mb-4">
+					<Spinner />
+				</div>
+			)}
 
-      {starters && (
-        <BotMessages
-          messages={messages}
-          starters={starters}
-          append={append}
-          chatWrapperRef={chatWrapperRef}
-        />
-      )}
+			{starters && (
+				<BotMessages
+					messages={messages}
+					starters={starters}
+					append={append}
+					chatWrapperRef={chatWrapperRef}
+				/>
+			)}
 
-      <div className="fixed left-0 w-full bg-black bottom-14 shadow-top">
-        <div className="w-full max-w-screen-md px-4 py-3 mx-auto">
-          <BotForm
-            value={input}
-            onChange={handleInputChange}
-            onSubmit={handleSubmit}
-          />
-        </div>
-      </div>
-    </div>
-  );
+			<div className="fixed left-0 w-full bg-black bottom-14 shadow-top">
+				<div className="w-full max-w-screen-md px-4 py-3 mx-auto">
+					<BotForm
+						value={input}
+						onChange={handleInputChange}
+						onSubmit={handleSubmit}
+					/>
+				</div>
+			</div>
+		</div>
+	);
 }

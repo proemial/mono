@@ -1,64 +1,64 @@
 "use client";
-import Link from "next/link";
-import { cva, VariantProps } from "class-variance-authority";
-import { cn } from "@/app/components/shadcn-ui/utils";
-import { Send } from "@/app/components/icons/functional/send";
 import { Tracker } from "@/app/components/analytics/tracker";
+import { Send } from "@/app/components/icons/functional/send";
+import { cn } from "@/app/components/shadcn-ui/utils";
+import { VariantProps, cva } from "class-variance-authority";
+import Link from "next/link";
 
 type LinkProps = VariantProps<typeof variants> & {
-  children: string;
-  className?: string;
-  href: string;
-  track?: string;
+	children: string;
+	className?: string;
+	href: string;
+	track?: string;
 };
 
 const variants = cva("rounded-sm", {
-  variants: {
-    variant: {
-      default: "bg-green-500 text-black text-center",
-      starter:
-        "bg-[#2F2F2F] text-white flex justify-between items-center border border-[#4E4E4E]",
-    },
-    size: {
-      default: "text-[16px] font-normal py-2 px-4",
-    },
-  },
-  defaultVariants: {
-    variant: "default",
-    size: "default",
-  },
+	variants: {
+		variant: {
+			default: "bg-green-500 text-black text-center",
+			starter:
+				"bg-[#2F2F2F] text-white flex justify-between items-center border border-[#4E4E4E]",
+		},
+		size: {
+			default: "text-[16px] font-normal py-2 px-4",
+		},
+	},
+	defaultVariants: {
+		variant: "default",
+		size: "default",
+	},
 });
 
 export function LinkButton(props: LinkProps) {
-  const { children, href, variant, size, className, track } = props;
+	const { children, href, variant, size, className, track } = props;
 
-  return (
-    <Link
-      href={href}
-      className={`${cn(variants({ variant, size, className }))}`}
-      onClick={() => track && Tracker.track(track)}
-    >
-      <div className="w-full mr-2 truncate">{children}</div>
-      {variant === "starter" && <Send />}
-    </Link>
-  );
+	return (
+		<Link
+			href={href}
+			className={`${cn(variants({ variant, size, className }))}`}
+			onClick={() => track && Tracker.track(track)}
+		>
+			<div className="w-full mr-2 truncate">{children}</div>
+			{variant === "starter" && <Send />}
+		</Link>
+	);
 }
 
 type ButtonProps = VariantProps<typeof variants> & {
-  children: string;
-  className?: string;
-  onClick: () => void;
+	children: string;
+	className?: string;
+	onClick: () => void;
 };
 export function Button(props: ButtonProps) {
-  const { children, onClick, variant, size, className } = props;
+	const { children, onClick, variant, size, className } = props;
 
-  return (
-    <div
-      onClick={onClick}
-      className={`${cn(variants({ variant, size, className }))}`}
-    >
-      <div className="w-full mr-2 truncate">{children}</div>
-      {variant === "starter" && <Send />}
-    </div>
-  );
+	return (
+		<div
+			onClick={onClick}
+			className={`${cn(variants({ variant, size, className }))}`}
+		>
+			<div className="w-full mr-2 truncate">{children}</div>
+			{variant === "starter" && <Send />}
+		</div>
+	);
 }

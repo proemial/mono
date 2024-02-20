@@ -6,50 +6,50 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 
 type SearchInputProps = {
-  handleSubmit?: (e: FormEvent<HTMLFormElement>) => void;
-  input?: string;
-  handleInputChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-  disabled?: boolean;
+	handleSubmit?: (e: FormEvent<HTMLFormElement>) => void;
+	input?: string;
+	handleInputChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+	disabled?: boolean;
 };
 
 export default function SearchInput({
-  handleSubmit,
-  input,
-  handleInputChange,
-  disabled,
+	handleSubmit,
+	input,
+	handleInputChange,
+	disabled,
 }: SearchInputProps) {
-  const [searchValue, setSearchValue] = useState("");
-  const router = useRouter();
+	const [searchValue, setSearchValue] = useState("");
+	const router = useRouter();
 
-  const trackAndInvoke = (event: FormEvent<HTMLFormElement>) => {
-    Tracker.track(analyticsKeys.ask.submit.ask, {
-      text: input ? input : searchValue,
-    });
+	const trackAndInvoke = (event: FormEvent<HTMLFormElement>) => {
+		Tracker.track(analyticsKeys.ask.submit.ask, {
+			text: input ? input : searchValue,
+		});
 
-    !!handleSubmit
-      ? handleSubmit(event)
-      : () => {
-          event.preventDefault();
-          router.push(`/search?q=${searchValue}`);
-        };
-  };
+		!!handleSubmit
+			? handleSubmit(event)
+			: () => {
+					event.preventDefault();
+					router.push(`/search?q=${searchValue}`);
+			  };
+	};
 
-  return (
-    <div className="relative w-full">
-      <form
-        className="flex flex-row items-center"
-        onSubmit={(event) => trackAndInvoke(event)}
-      >
-        <TextInput
-          value={input ? input : searchValue}
-          onChange={
-            handleInputChange
-              ? handleInputChange
-              : (e) => setSearchValue(e.target.value)
-          }
-          disabled={disabled}
-        />
-      </form>
-    </div>
-  );
+	return (
+		<div className="relative w-full">
+			<form
+				className="flex flex-row items-center"
+				onSubmit={(event) => trackAndInvoke(event)}
+			>
+				<TextInput
+					value={input ? input : searchValue}
+					onChange={
+						handleInputChange
+							? handleInputChange
+							: (e) => setSearchValue(e.target.value)
+					}
+					disabled={disabled}
+				/>
+			</form>
+		</div>
+	);
 }

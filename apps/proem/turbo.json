@@ -1,9 +1,9 @@
 {
-  "extends": ["//"],
-  "pipeline": {
-    "build": {
-      "dependsOn": ["@proemial/data#schema:push"],
-      "env": ["DATABASE_URL"]
-    }
-  }
+	"extends": ["//"],
+	"pipeline": {
+		"build": {
+			"dependsOn": ["@proemial/data#schema:push"],
+			"env": ["DATABASE_URL"]
+		}
+	}
 }

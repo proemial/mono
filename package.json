@@ -1,30 +1,30 @@
 {
-  "name": "@proemial/mono",
-  "private": true,
-  "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "checkly": "turbo checkly",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "vercel-pull-env": "vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/proem --yes && vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/search --yes",
-    "test": "vitest",
-    "coverage": "vitest run --coverage"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.5.3",
-    "@vitest/coverage-v8": "^1.2.1",
-    "prettier": "^3.1.0",
-    "turbo": "latest",
-    "vitest": "^1.2.1"
-  },
-  "packageManager": "pnpm@8.9.0",
-  "engines": {
-    "node": ">=18"
-  },
-  "pnpm": {
-    "overrides": {
-      "@langchain/core": "0.1.29",
-      "drizzle-orm": "^0.29.3"
-    }
-  }
+	"name": "@proemial/mono",
+	"private": true,
+	"scripts": {
+		"build": "turbo build",
+		"dev": "turbo dev",
+		"checkly": "turbo checkly",
+		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
+		"vercel-pull-env": "vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/proem --yes && vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/search --yes",
+		"test": "vitest",
+		"coverage": "vitest run --coverage"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.5.3",
+		"@vitest/coverage-v8": "^1.2.1",
+		"prettier": "^3.1.0",
+		"turbo": "latest",
+		"vitest": "^1.2.1"
+	},
+	"packageManager": "pnpm@8.9.0",
+	"engines": {
+		"node": ">=18"
+	},
+	"pnpm": {
+		"overrides": {
+			"@langchain/core": "0.1.29",
+			"drizzle-orm": "^0.29.3"
+		}
+	}
 }

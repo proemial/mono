@@ -1,5 +1,5 @@
-import type { Config } from "drizzle-kit";
 import dotenv from "dotenv";
+import type { Config } from "drizzle-kit";
 // TODO! currently tightly coupled with apps/proem
 dotenv.config({ path: "../../apps/proem/.env.local" });
 

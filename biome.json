@@ -5,13 +5,7 @@
 	},
 	"formatter": {
 		"enabled": true,
-		"ignore": [
-			"node_modules/*",
-			"*.config.*",
-			"*.json",
-			"tsconfig.json",
-			".turbo"
-		]
+		"ignore": ["node_modules/*", "*.config.*", "tsconfig.json", ".turbo"]
 	},
 	"linter": {
 		"enabled": true,

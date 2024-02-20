@@ -2,17 +2,17 @@ import { TitleIcon } from "@/app/(pages)/(app)/oa/[id]/components/icons/title-ic
 import { IconWrapper } from "@/app/(pages)/(app)/oa/[id]/components/icons/wrapper";
 
 export function Title({ children }: { children?: string }) {
-  return (
-    <>
-      {children && (
-        <div>
-          <IconWrapper>
-            <TitleIcon />
-            Title
-          </IconWrapper>
-          <div className="text-white/50">{children}</div>
-        </div>
-      )}
-    </>
-  );
+	return (
+		<>
+			{children && (
+				<div>
+					<IconWrapper>
+						<TitleIcon />
+						Title
+					</IconWrapper>
+					<div className="text-white/50">{children}</div>
+				</div>
+			)}
+		</>
+	);
 }

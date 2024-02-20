@@ -1,3 +1,7 @@
 {
-	"recommendations": ["biomejs.biome", "heybourn.headwind", "bradlc.vscode-tailwindcss"]
+	"recommendations": [
+		"biomejs.biome",
+		"heybourn.headwind",
+		"bradlc.vscode-tailwindcss"
+	]
 }

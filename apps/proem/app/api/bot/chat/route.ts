@@ -1,8 +1,8 @@
-import { NextRequest } from "next/server";
-import { OpenAIStream, StreamingTextResponse } from "ai";
-import { Configuration, OpenAIApi } from "openai-edge";
-import { context, question, model } from "@/app/prompts/chat";
+import { context, model, question } from "@/app/prompts/chat";
 import { apiKey, organizations } from "@/app/prompts/openai-keys";
+import { OpenAIStream, StreamingTextResponse } from "ai";
+import { NextRequest } from "next/server";
+import { Configuration, OpenAIApi } from "openai-edge";
 
 const config = new Configuration({ apiKey, organization: organizations.read });
 const openai = new OpenAIApi(config);
@@ -10,27 +10,27 @@ const openai = new OpenAIApi(config);
 export const runtime = "edge";
 
 export async function POST(req: NextRequest) {
-  const { messages, title, abstract } = await req.json();
+	const { messages, title, abstract } = await req.json();
 
-  const moddedMessages = [context(title, abstract), ...messages];
-  const prompt = await question(model);
+	const moddedMessages = [context(title, abstract), ...messages];
+	const prompt = await question(model);
 
-  const lastMessage = moddedMessages.at(-1);
-  if (lastMessage.role === "user") {
-    // TODO: Why does is start with `!!`?
-    if (!lastMessage.content.startsWith("!!"))
-      lastMessage.content = `${prompt} ${lastMessage.content}`;
-    else lastMessage.content = lastMessage.content.substring(2); // Remove the `!!`
-  }
+	const lastMessage = moddedMessages.at(-1);
+	if (lastMessage.role === "user") {
+		// TODO: Why does is start with `!!`?
+		if (!lastMessage.content.startsWith("!!"))
+			lastMessage.content = `${prompt} ${lastMessage.content}`;
+		else lastMessage.content = lastMessage.content.substring(2); // Remove the `!!`
+	}
 
-  // Ask OpenAI for a streaming completion given the prompt
-  const response = await openai.createChatCompletion({
-    model,
-    stream: true,
-    messages: moddedMessages,
-  });
-  // Convert the response into a friendly text-stream
-  const stream = OpenAIStream(response);
-  // Respond with the stream
-  return new StreamingTextResponse(stream);
+	// Ask OpenAI for a streaming completion given the prompt
+	const response = await openai.createChatCompletion({
+		model,
+		stream: true,
+		messages: moddedMessages,
+	});
+	// Convert the response into a friendly text-stream
+	const stream = OpenAIStream(response);
+	// Respond with the stream
+	return new StreamingTextResponse(stream);
 }
