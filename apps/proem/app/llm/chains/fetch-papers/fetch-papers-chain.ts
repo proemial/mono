@@ -43,7 +43,7 @@ const model = buildOpenAIChatModel("gpt-3.5-turbo-1106", "ask", {
 });
 
 export type PapersRequest = {
-  query: { keyConcept: string; relatedConcepts: string[] };
+  searchParams: { keyConcept: string; relatedConcepts: string[] };
   papers: { link: string; abstract: string; title: string }[];
 };
 
@@ -68,13 +68,13 @@ const generateSearchParamsChain = RunnableSequence.from<
 export const fetchPapersChain = RunnableSequence.from<ChainInput, ChainOutput>([
   generateSearchParamsChain,
   {
-    query: (input: GeneratedSearchParams) => input,
+    searchParams: (input: GeneratedSearchParams) => input,
     papers: async (input: GeneratedSearchParams) => {
-      const query = convertToOASearchString(
+      const searchString = convertToOASearchString(
         input.keyConcept,
         input.relatedConcepts,
       );
-      const papers = await fetchPapers(query);
+      const papers = await fetchPapers(searchString);
       return papers?.map(toRelativeLink) ?? [];
     },
   },

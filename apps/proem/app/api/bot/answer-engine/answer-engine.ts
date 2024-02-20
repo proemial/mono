@@ -77,16 +77,16 @@ const saveAnswer =
     }[];
 
     const answer = chainRun.find((run) => run.inputs.content)?.inputs.content!;
-    const paperRequests = chainRun.find((run) => run.inputs.papersRequest)
+    const paperRequest = chainRun.find((run) => run.inputs.papersRequest)
       ?.inputs.papersRequest!;
 
     const papers = isFollowUpQuestion
       ? {}
       : {
-          relatedConcepts: paperRequests?.query.relatedConcepts,
-          keyConcept: paperRequests?.query.keyConcept,
+          relatedConcepts: paperRequest?.searchParams.relatedConcepts,
+          keyConcept: paperRequest?.searchParams.keyConcept,
           papers: {
-            papers: paperRequests?.papers,
+            papers: paperRequest?.papers,
           },
         };
 
