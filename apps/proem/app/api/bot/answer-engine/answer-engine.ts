@@ -99,6 +99,7 @@ const saveAnswer =
     });
 
     if (!insertedAnswer) {
+      data.close();
       return;
     }
 
