@@ -13,7 +13,7 @@ new ApiCheck("frontpage-ping", {
 	shouldFail: false,
 	runParallel: true,
 	locations: ["eu-central-1"],
-	frequency: Frequency.EVERY_5M,
+	frequency: Frequency.EVERY_10M,
 	maxResponseTime: 20000,
 	degradedResponseTime: 5000,
 	request: {
