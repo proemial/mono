@@ -12,8 +12,10 @@ new ApiCheck("frontpage-ping", {
 	muted: false,
 	shouldFail: false,
 	runParallel: true,
+	runtimeId: "2023.09",
 	locations: ["eu-central-1"],
-	frequency: Frequency.EVERY_10M,
+	frequency: Frequency.EVERY_1H,
+	environmentVariables: [],
 	maxResponseTime: 20000,
 	degradedResponseTime: 5000,
 	request: {
@@ -21,6 +23,11 @@ new ApiCheck("frontpage-ping", {
 		method: "GET",
 		followRedirects: true,
 		skipSSL: false,
+		assertions: [],
+		body: ``,
+		bodyType: "NONE",
+		headers: [],
+		queryParameters: [],
 	},
 	retryStrategy: RetryStrategyBuilder.linearStrategy({
 		baseBackoffSeconds: 60,
