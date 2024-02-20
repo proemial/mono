@@ -4,11 +4,11 @@ import { VaClient } from "@/app/components/analytics/va-client";
 import { headers } from "next/headers";
 
 export function Analytics() {
-  const userAgent = headers().get("user-agent");
-  return (
-    <AnalyticsIsEnabledByUser>
-      <VaClient />
-      <GaClient />
-    </AnalyticsIsEnabledByUser>
-  );
+	const userAgent = headers().get("user-agent");
+	return (
+		<AnalyticsIsEnabledByUser userAgent={userAgent}>
+			<VaClient />
+			<GaClient />
+		</AnalyticsIsEnabledByUser>
+	);
 }
