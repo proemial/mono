@@ -7,14 +7,10 @@ import {
   createStreamDataTransformer,
   experimental_StreamData,
 } from "ai";
-import { answerEngineChain } from "./answer-engine-chain";
+import { PapersRequest } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
+import { answerEngineChain } from "@/app/llm/chains/answer-engine-chain";
 
 type ChatHistoryMessage = { role: string; content: string };
-
-export type PapersRequest = {
-  query: { keyConcept: string; relatedConcepts: string[] };
-  papers: { link: string; abstract: string; title: string }[];
-};
 
 type AnswerEngineParams = {
   question: string;

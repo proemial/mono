@@ -3,10 +3,9 @@ import { RunnableSequence } from "@langchain/core/runnables";
 import { JsonOutputFunctionsParser } from "langchain/output_parsers";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { fetchPapers } from "../../paper-search/search";
 import { convertToOASearchString } from "./convert-query-parameters";
-import { PapersRequest } from "./answer-engine";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
+import { fetchPapers } from "@/app/api/paper-search/search";
 
 const constructSearchParametersSchema = z.object({
   keyConcept: z.string()
@@ -39,12 +38,18 @@ const searchQueryPrompt = ChatPromptTemplate.fromMessages<ChainInput>([
   ["human", `{question}`],
 ]);
 
-const model = buildOpenAIChatModel('gpt-3.5-turbo-1106', 'ask', { verbose: true })
+const model = buildOpenAIChatModel("gpt-3.5-turbo-1106", "ask", {
+  verbose: true,
+});
+
+export type PapersRequest = {
+  query: { keyConcept: string; relatedConcepts: string[] };
+  papers: { link: string; abstract: string; title: string }[];
+};
 
 type ChainInput = { question: string };
 type ChainOutput = PapersRequest; // Note: This structure is required for saving answers
 
-// TODO: Extract (create "chains" folder)
 const constructSearchParamsChain = RunnableSequence.from<
   ChainInput,
   SearchParametersOutput

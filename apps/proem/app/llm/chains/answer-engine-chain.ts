@@ -1,4 +1,4 @@
-import { fetchPapersChain } from "@/app/api/bot/answer-engine/fetch-papers-chain";
+import { fetchPapersChain } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
@@ -60,7 +60,9 @@ const prompt = ChatPromptTemplate.fromMessages<ChainInput>([
   ["human", `{question}`],
 ]);
 
-const model = buildOpenAIChatModel('gpt-3.5-turbo-1106', 'ask', { verbose: true })
+const model = buildOpenAIChatModel("gpt-3.5-turbo-1106", "ask", {
+  verbose: true,
+});
 
 type ChainInput = {
   question: string;

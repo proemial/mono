@@ -8,7 +8,7 @@ import {
   AnswerEngineChatMessageHistory,
   messageMemory,
 } from "./answer-engine-memory";
-import { neonDb } from "../../../../../../packages/data";
+import { neonDb } from "@proemial/data";
 import { eq } from "drizzle-orm";
 import { FakeListChatModel } from "@langchain/core/utils/testing";
 import { answerEngineMemory } from "../../../../../../packages/data/neon/schema/answer-engine-memory";
