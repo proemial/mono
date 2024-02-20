@@ -4,7 +4,10 @@ import { getCookie, setCookie } from "cookies-next";
 import { usePathname } from "next/navigation";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 
+const INTERNAL_COOIKE_NAME = "isInternalUser";
+
 type UserAgent = string;
+
 export type useAnalyticsDisabledProps = {
   userAgent: UserAgent | null
 }
@@ -14,20 +17,20 @@ export function useAnalyticsDisabled({ userAgent }: useAnalyticsDisabledProps) {
   const isBot = userAgent && isChecklyBot(userAgent);
 
   const email = user?.primaryEmailAddress?.emailAddress ?? "";
-  const isEmployee = email.endsWith("@proemial.ai");
-  const disabledByCookie = getCookie("analyticsDisabled");
+  const isInternal = email.endsWith("@proemial.ai");
+  const disabledByCookie = getCookie(INTERNAL_COOIKE_NAME);
 
 
   // Deleting the cookie must be done manually
-  if ((isEmployee) && !disabledByCookie) {
-    setCookie("analyticsDisabled", "true");
+  if ((isInternal) && !disabledByCookie) {
+    setCookie(INTERNAL_COOIKE_NAME, "true");
     analyticsTrace("analytics cookie updated");
   }
 
-  const isDisabled = Boolean(isEmployee || disabledByCookie || isBot);
+  const isDisabled = Boolean(isInternal || disabledByCookie || isBot);
 
   analyticsTrace(
-    `AnalyticsDisabled: ${isDisabled} (${isEmployee}, ${disabledByCookie})`,
+    `AnalyticsDisabled: ${isDisabled} (${isInternal}, ${disabledByCookie})`,
   );
 
   return isDisabled;
