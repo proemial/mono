@@ -53,6 +53,7 @@ const constructSearchParamsChain = RunnableSequence.from<
       functions: [constructSearchParameters],
       function_call: { name: constructSearchParameters.name },
     }),
+    (input) => input, // This is silly, but it makes the output parser below not stream the response
     jsonOutputFunctionsParser,
   ],
   "ConstructSearchParamsChain",
