@@ -6,8 +6,7 @@ import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { fetchPapers } from "../../paper-search/search";
 import { convertToOASearchString } from "./convert-query-parameters";
-
-const jsonOutputFunctionsParser = new JsonOutputFunctionsParser();
+import { PapersRequest } from "./answer-engine";
 
 const constructSearchParametersSchema = z.object({
   keyConcept: z.string()
@@ -19,7 +18,7 @@ const constructSearchParametersSchema = z.object({
     three synonyms for the key concept. Preferrably two-grams or longer.`),
 });
 
-const constructSearchParameter = {
+const constructSearchParameters = {
   name: "constructSearchParameters",
   description: `A function to construct a set of search parameters to
       retrieve one or more scientific research papers related to the user's
@@ -27,7 +26,12 @@ const constructSearchParameter = {
   parameters: zodToJsonSchema(constructSearchParametersSchema),
 };
 
-const searchQueryPrompt = ChatPromptTemplate.fromMessages([
+type SearchParametersOutput = z.infer<typeof constructSearchParametersSchema>;
+
+const jsonOutputFunctionsParser =
+  new JsonOutputFunctionsParser<SearchParametersOutput>();
+
+const searchQueryPrompt = ChatPromptTemplate.fromMessages<ChainInput>([
   [
     "system",
     "Construct a set of search parameters that can be used retrieve one or more scientific research papers related to the user's question.",
@@ -35,37 +39,51 @@ const searchQueryPrompt = ChatPromptTemplate.fromMessages([
   ["human", `{question}`],
 ]);
 
-export const fetchPapersChain = RunnableSequence.from([
-  searchQueryPrompt,
-  model.bind({
-    functions: [constructSearchParameter],
-    function_call: { name: constructSearchParameter.name },
-  }),
-  jsonOutputFunctionsParser,
-  {
-    query: (input) => input,
-    papers: async (input) => {
-      const query = convertToOASearchString(
-        input.keyConcept,
-        input.relatedConcepts
-      );
+type ChainInput = { question: string };
+type ChainOutput = PapersRequest; // Note: This structure is required for saving answers
 
-      const papers = await fetchPapers(query);
-      // TODO! This is quite hacky to do here
-      const papersWithRelativeLinks =
-        papers?.map((paper) => ({
-          ...paper,
-          link: paper.link.replace("https://proem.ai", ""),
-        })) ?? [];
+// TODO: Extract (create "chains" folder)
+const constructSearchParamsChain = RunnableSequence.from<
+  ChainInput,
+  SearchParametersOutput
+>(
+  [
+    searchQueryPrompt,
+    model.bind({
+      functions: [constructSearchParameters],
+      function_call: { name: constructSearchParameters.name },
+    }),
+    jsonOutputFunctionsParser,
+  ],
+  "ConstructSearchParamsChain",
+);
 
-      return papersWithRelativeLinks;
-      // return [
-      //   new AIMessage({ content: "" }), // Add function_call parameter how?
-      //   new FunctionMessage({
-      //     name: constructSearchParameter.name,
-      //     content: JSON.stringify(papersWithRelativeLinks),
-      //   }),
-      // ];
+export const fetchPapersChain = RunnableSequence.from<ChainInput, ChainOutput>(
+  [
+    constructSearchParamsChain,
+    {
+      query: (input: SearchParametersOutput) => input,
+      papers: async (input: SearchParametersOutput) => {
+        const query = convertToOASearchString(
+          input.keyConcept,
+          input.relatedConcepts,
+        );
+        const papers = await fetchPapers(query);
+        return papers?.map(toRelativeLink) ?? [];
+      },
     },
-  },
-]);
+  ],
+  "FetchPapersChain",
+);
+
+type FetchPaperResult = {
+  title: string;
+  link: string;
+  abstract?: string;
+};
+
+const toRelativeLink = (paper: FetchPaperResult) => ({
+  title: paper.title,
+  link: paper.link.replace("https://proem.ai", ""),
+  abstract: paper.abstract ?? "",
+});
