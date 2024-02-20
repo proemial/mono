@@ -1,21 +1,19 @@
 "use client";
-import { useUser } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
-import ReactGA from "react-ga4";
-import { Env } from "@proemial/utils/env";
-import process from "process";
 import {
   analyticsTrace,
-  useAnalyticsDisabled,
-  usePathNames,
+  usePathNames
 } from "@/app/components/analytics/utils";
+import { useUser } from "@clerk/nextjs";
+import { Env } from "@proemial/utils/env";
+import process from "process";
+import { useEffect, useState } from "react";
+import ReactGA from "react-ga4";
 
 // https://www.npmjs.com/package/react-ga4
 export function GaClient() {
   analyticsTrace("[GaClient]");
 
-  const disabled = useAnalyticsDisabled();
-  const initialized = useInit(disabled);
+  const initialized = useInit();
   const { pathname, trackingKey } = usePathNames();
 
   useEffect(() => {
@@ -31,14 +29,14 @@ export function GaClient() {
   return <></>;
 }
 
-function useInit(disabled: boolean) {
+function useInit() {
   const { user } = useUser();
   const [initialized, setInitialized] = useState(false);
 
   analyticsTrace("[GaClient] useInit");
 
   useEffect(() => {
-    if (user && !disabled) {
+    if (user) {
       analyticsTrace("[GaClient] initializing");
       // const email = user?.primaryEmailAddress?.emailAddress as string;
       ReactGA.initialize(
@@ -52,7 +50,7 @@ function useInit(disabled: boolean) {
 
       setInitialized(true);
     }
-  }, [setInitialized, user, disabled]);
+  }, [setInitialized, user]);
 
   return initialized;
 }

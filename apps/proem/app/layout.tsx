@@ -1,4 +1,4 @@
-import { AnalyticsClient } from "@/app/components/analytics/analytics";
+import { Analytics } from "@/app/components/analytics/analytics";
 import { PostHogClient } from "@/app/components/analytics/posthog-client";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Metadata } from "next";
@@ -42,11 +42,6 @@ type Props = {
 
 export default async function RootLayout({ children }: Props) {
   const light = lightModeEnabled ? "dark:dark" : "dark";
-
-
-
-
-
   return (
     <ClerkProvider>
       <PostHogClient>
@@ -55,8 +50,7 @@ export default async function RootLayout({ children }: Props) {
             className={`flex relative flex-col justify-center ${light} h-dvh`}
           >
             {children}
-
-            <AnalyticsClient />
+            <Analytics />
           </body>
         </html>
       </PostHogClient>

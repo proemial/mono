@@ -12,7 +12,7 @@ new BrowserCheck('answer-engine-visual-regression', {
   muted: false,
   shouldFail: false,
   runParallel: true,
-  locations: ['eu-north-1', 'eu-central-1'],
+  locations: ['eu-central-1'],
   tags: [],
   sslCheckDomain: '',
   frequency: Frequency.EVERY_10M,
