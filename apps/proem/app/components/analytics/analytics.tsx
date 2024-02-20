@@ -1,15 +1,12 @@
+import { AnalyticsIsEnabledByUser } from "@/app/components/analytics/disabled-analytics";
 import { GaClient } from "@/app/components/analytics/ga-client";
 import { VaClient } from "@/app/components/analytics/va-client";
 
-export type AnalyticsClientProps = {
-  isBot?: boolean
-}
-
-export function AnalyticsClient({ isBot }: AnalyticsClientProps) {
+export function Analytics() {
   return (
-    <>
-      <VaClient isBot={isBot} />
+    <AnalyticsIsEnabledByUser>
+      <VaClient />
       <GaClient />
-    </>
+    </AnalyticsIsEnabledByUser>
   );
 }
