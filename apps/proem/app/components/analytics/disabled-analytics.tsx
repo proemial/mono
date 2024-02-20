@@ -1,13 +1,13 @@
 "use client"
 
-import { useAnalyticsDisabled } from "@/app/components/analytics/utils";
+import { useAnalyticsDisabled, useAnalyticsDisabledProps } from "@/app/components/analytics/utils";
 
-type AnalyticsIsDisabledByUserProps = {
+type AnalyticsIsDisabledByUserProps = useAnalyticsDisabledProps & {
 	children: React.ReactNode;
 };
 
-export function AnalyticsIsEnabledByUser({ children }: AnalyticsIsDisabledByUserProps) {
-  const analyticsIsDisabled = useAnalyticsDisabled();
+export function AnalyticsIsEnabledByUser({ children, userAgent }: AnalyticsIsDisabledByUserProps) {
+  const analyticsIsDisabled = useAnalyticsDisabled({ userAgent });
 
 
 	if (analyticsIsDisabled) {

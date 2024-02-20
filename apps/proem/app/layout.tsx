@@ -42,7 +42,6 @@ type Props = {
 
 export default async function RootLayout({ children }: Props) {
   const light = lightModeEnabled ? "dark:dark" : "dark";
-
   return (
     <ClerkProvider>
       <PostHogClient>

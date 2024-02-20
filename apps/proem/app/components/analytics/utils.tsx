@@ -4,24 +4,30 @@ import { getCookie, setCookie } from "cookies-next";
 import { usePathname } from "next/navigation";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 
-export function useAnalyticsDisabled() {
-  const { user } = useUser();
+type UserAgent = string;
+export type useAnalyticsDisabledProps = {
+  userAgent: UserAgent | null
+}
 
-  const email = user?.primaryEmailAddress?.emailAddress || "";
+export function useAnalyticsDisabled({ userAgent }: useAnalyticsDisabledProps) {
+  const { user } = useUser();
+  const isBot = userAgent && isChecklyBot(userAgent);
+
+  const email = user?.primaryEmailAddress?.emailAddress ?? "";
   const isEmployee = email.endsWith("@proemial.ai");
-  const explicitDisabled = user?.publicMetadata?.analyticsDisabled;
   const disabledByCookie = getCookie("analyticsDisabled");
 
+
   // Deleting the cookie must be done manually
-  if ((isEmployee || explicitDisabled) && !disabledByCookie) {
+  if ((isEmployee) && !disabledByCookie) {
     setCookie("analyticsDisabled", "true");
     analyticsTrace("analytics cookie updated");
   }
 
-  const isDisabled = !!(isEmployee || explicitDisabled || disabledByCookie);
+  const isDisabled = Boolean(isEmployee || disabledByCookie || isBot);
 
   analyticsTrace(
-    `AnalyticsDisabled: ${isDisabled} (${isEmployee}, ${explicitDisabled}, ${disabledByCookie})`,
+    `AnalyticsDisabled: ${isDisabled} (${isEmployee}, ${disabledByCookie})`,
   );
 
   return isDisabled;
@@ -38,4 +44,8 @@ export function analyticsTrace(...data: any[]) {
   const enabled = getCookie("analyticsTrace");
 
   if (enabled) console.log(...data);
+}
+
+function isChecklyBot(userAgent: UserAgent) {
+  return userAgent.includes("Checkly");
 }

@@ -1,5 +1,4 @@
 "use client";
-import { AnalyticsClientProps } from "@/app/components/analytics/analytics";
 import {
   analyticsTrace,
   usePathNames
@@ -10,7 +9,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { useEffect } from "react";
 
 // https://vercel.com/docs/concepts/analytics/custom-events
-export function VaClient({ isBot }: AnalyticsClientProps) {
+export function VaClient() {
   analyticsTrace("[VaClient]");
 
   const { pathname, trackingKey } = usePathNames();
