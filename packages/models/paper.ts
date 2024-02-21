@@ -1,29 +1,29 @@
 export type Paper = {
-  id?: string;
-  source?: {
-    id: string;
-    providers: string[];
-    url: string;
-    pdf: string;
-  };
+	id?: string;
+	source?: {
+		id: string;
+		providers: string[];
+		url: string;
+		pdf: string;
+	};
 
-  version?: {
-    date: string;
-    name: string;
-  };
+	version?: {
+		date: string;
+		name: string;
+	};
 
-  title?: string;
-  abstract?: string;
+	title?: string;
+	abstract?: string;
 
-  authors?: WithName[];
+	authors?: WithName[];
 
-  categories?: WithName[];
+	categories?: WithName[];
 
-  proems?: {
-    title: string;
-    abstract: string;
-    tags: string[];
-  };
+	proems?: {
+		title: string;
+		abstract: string;
+		tags: string[];
+	};
 };
 
 type WithName = { name: string };

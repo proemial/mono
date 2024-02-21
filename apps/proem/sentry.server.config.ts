@@ -1,5 +1,5 @@
-import * as Sentry from "@sentry/nextjs";
 import { Env } from "@proemial/utils/env";
+import * as Sentry from "@sentry/nextjs";
 
 Sentry.init({
   dsn: Env.validate(

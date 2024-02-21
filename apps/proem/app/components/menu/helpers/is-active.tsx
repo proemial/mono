@@ -1,7 +1,7 @@
 import { usePathname } from "next/navigation";
 
 export function useIsActive({ href }: { href: string }) {
-  const pathname = usePathname();
+	const pathname = usePathname();
 
-  return pathname === href || (href !== "/" && pathname.includes(href));
+	return pathname === href || (href !== "/" && pathname.includes(href));
 }

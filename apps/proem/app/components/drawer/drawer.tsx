@@ -8,108 +8,108 @@ import { MutableRefObject, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
 function createPortalRoot() {
-  const drawerRoot = globalThis.document?.createElement("div");
-  drawerRoot?.setAttribute("id", "drawer-root");
+	const drawerRoot = globalThis.document?.createElement("div");
+	drawerRoot?.setAttribute("id", "drawer-root");
 
-  return drawerRoot;
+	return drawerRoot;
 }
 
 type Props = {
-  isOpen: boolean;
-  children: any;
-  className?: string;
-  onClose: () => void;
-  position?: "left" | "right" | "top" | "bottom";
-  removeWhenClosed?: boolean;
+	isOpen: boolean;
+	children: any;
+	className?: string;
+	onClose: () => void;
+	position?: "left" | "right" | "top" | "bottom";
+	removeWhenClosed?: boolean;
 };
 
 function Drawer({
-  isOpen,
-  children,
-  className,
-  onClose,
-  position = "right",
-  removeWhenClosed = true,
+	isOpen,
+	children,
+	className,
+	onClose,
+	position = "right",
+	removeWhenClosed = true,
 }: Props) {
-  const bodyRef = useRef(
-    globalThis.document?.querySelector("body")
-  ) as MutableRefObject<HTMLBodyElement>;
-  const portalRootRef = useRef(
-    globalThis.document?.getElementById("drawer-root") || createPortalRoot()
-  );
+	const bodyRef = useRef(
+		globalThis.document?.querySelector("body"),
+	) as MutableRefObject<HTMLBodyElement>;
+	const portalRootRef = useRef(
+		globalThis.document?.getElementById("drawer-root") || createPortalRoot(),
+	);
 
-  // Append portal root on mount
-  useEffect(() => {
-    bodyRef.current.appendChild(portalRootRef.current);
-    const portal = portalRootRef.current;
-    const bodyEl = bodyRef.current;
+	// Append portal root on mount
+	useEffect(() => {
+		bodyRef.current.appendChild(portalRootRef.current);
+		const portal = portalRootRef.current;
+		const bodyEl = bodyRef.current;
 
-    return () => {
-      // Clean up the portal when drawer component unmounts
-      portal.remove();
-      // Ensure scroll overflow is removed
-      bodyEl.style.overflow = "";
-    };
-  }, []);
+		return () => {
+			// Clean up the portal when drawer component unmounts
+			portal.remove();
+			// Ensure scroll overflow is removed
+			bodyEl.style.overflow = "";
+		};
+	}, []);
 
-  useEffect(() => {
-    const updatePageScroll = () => {
-      if (isOpen) {
-        bodyRef.current.style.overflow = "hidden";
-      } else {
-        bodyRef.current.style.overflow = "";
-      }
-    };
+	useEffect(() => {
+		const updatePageScroll = () => {
+			if (isOpen) {
+				bodyRef.current.style.overflow = "hidden";
+			} else {
+				bodyRef.current.style.overflow = "";
+			}
+		};
 
-    updatePageScroll();
-  }, [isOpen]);
+		updatePageScroll();
+	}, [isOpen]);
 
-  useEffect(() => {
-    const onKeyPress = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    };
+	useEffect(() => {
+		const onKeyPress = (e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				onClose();
+			}
+		};
 
-    if (isOpen) {
-      window.addEventListener("keyup", onKeyPress);
-    }
+		if (isOpen) {
+			window.addEventListener("keyup", onKeyPress);
+		}
 
-    return () => {
-      window.removeEventListener("keyup", onKeyPress);
-    };
-  }, [isOpen, onClose]);
+		return () => {
+			window.removeEventListener("keyup", onKeyPress);
+		};
+	}, [isOpen, onClose]);
 
-  const isTransitioning = useMountTransition(isOpen, 300);
+	const isTransitioning = useMountTransition(isOpen, 300);
 
-  if (!isTransitioning && removeWhenClosed && !isOpen) {
-    return null;
-  }
+	if (!isTransitioning && removeWhenClosed && !isOpen) {
+		return null;
+	}
 
-  return createPortal(
-    <div
-      aria-hidden={isOpen ? "false" : "true"}
-      className={cn("drawer-container h-full w-full", {
-        open: isOpen,
-        in: isTransitioning,
-        className,
-      })}
-    >
-      <div
-        className={`backdrop h-full justify-end flex flex-col drawer ${position} items-center`}
-        role="dialog"
-      >
-        <div
-          className="absolute top-0 left-0 w-full h-full"
-          onClick={onClose}
-        />
-        <div className="w-full p-4 bg-[#333333] rounded-t-[32px] max-w-md z-10">
-          {children}
-        </div>
-      </div>
-    </div>,
-    portalRootRef.current
-  );
+	return createPortal(
+		<div
+			aria-hidden={isOpen ? "false" : "true"}
+			className={cn("drawer-container h-full w-full", {
+				open: isOpen,
+				in: isTransitioning,
+				className,
+			})}
+		>
+			<div
+				className={`backdrop h-full justify-end flex flex-col drawer ${position} items-center`}
+				role="dialog"
+			>
+				<div
+					className="absolute top-0 left-0 w-full h-full"
+					onClick={onClose}
+				/>
+				<div className="w-full p-4 bg-[#333333] rounded-t-[32px] max-w-md z-10">
+					{children}
+				</div>
+			</div>
+		</div>,
+		portalRootRef.current,
+	);
 }
 
 export default Drawer;

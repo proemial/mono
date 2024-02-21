@@ -1,16 +1,16 @@
-import { ReactNode } from "react";
 import WithHeader from "@/app/(pages)/(app)/header";
+import { ReactNode } from "react";
 
 const pageName = "profile";
 
 export const metadata = {
-  title: `proem - ${pageName}`,
+	title: `proem - ${pageName}`,
 };
 
 type Props = {
-  children: ReactNode;
+	children: ReactNode;
 };
 
 export default async function ProfileLayout({ children }: Props) {
-  return <WithHeader title={pageName}>{children}</WithHeader>;
+	return <WithHeader title={pageName}>{children}</WithHeader>;
 }

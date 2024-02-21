@@ -1,8 +1,8 @@
 {
-  "extends": ["//"],
-  "pipeline": {
-    "schema:push": {
-      "env": ["DATABASE_URL"]
-    }
-  }
+	"extends": ["//"],
+	"pipeline": {
+		"schema:push": {
+			"env": ["DATABASE_URL"]
+		}
+	}
 }

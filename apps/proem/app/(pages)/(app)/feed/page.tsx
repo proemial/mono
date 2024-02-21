@@ -6,13 +6,13 @@ import { Suspense } from "react";
 export const revalidate = 1;
 
 export default async function FrontPage() {
-  const papers = await fetchLatestPapers();
+	const papers = await fetchLatestPapers();
 
-  return (
-    <div>
-      <Suspense fallback={<CenteredSpinner />}>
-        <CardList papers={papers} />
-      </Suspense>
-    </div>
-  );
+	return (
+		<div>
+			<Suspense fallback={<CenteredSpinner />}>
+				<CardList papers={papers} />
+			</Suspense>
+		</div>
+	);
 }

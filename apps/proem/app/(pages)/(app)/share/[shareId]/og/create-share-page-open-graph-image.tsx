@@ -5,57 +5,57 @@ import { cn } from "@/app/components/shadcn-ui/utils";
 import { ImageResponse } from "next/og";
 
 export async function createSharePageOpenGraphImage(
-  shareId: string,
-  size: { width: number; height: number },
+	shareId: string,
+	size: { width: number; height: number },
 ) {
-  const [sharedAnswer] = await answers.getByShareId(shareId);
-  if (!sharedAnswer) {
-    throw new Error("no shared answer found for the given shareId");
-  }
+	const [sharedAnswer] = await answers.getByShareId(shareId);
+	if (!sharedAnswer) {
+		throw new Error("no shared answer found for the given shareId");
+	}
 
-  const helveticaBold = await fetch(
-    new URL(
-      "../../../../../../assets/fonts/helvetica/Helvetica-Bold.ttf",
-      import.meta.url,
-    ),
-  ).then((res) => res.arrayBuffer());
+	const helveticaBold = await fetch(
+		new URL(
+			"../../../../../../assets/fonts/helvetica/Helvetica-Bold.ttf",
+			import.meta.url,
+		),
+	).then((res) => res.arrayBuffer());
 
-  const helvetica = await fetch(
-    new URL(
-      "../../../../../../assets/fonts/helvetica/Helvetica.ttf",
-      import.meta.url,
-    ),
-  ).then((res) => res.arrayBuffer());
+	const helvetica = await fetch(
+		new URL(
+			"../../../../../../assets/fonts/helvetica/Helvetica.ttf",
+			import.meta.url,
+		),
+	).then((res) => res.arrayBuffer());
 
-  const { content } = applyLinksAsSpans(sharedAnswer.answer);
-  const contentSplittedInSpans = content.map(splitEachWordToSpan);
+	const { content } = applyLinksAsSpans(sharedAnswer.answer);
+	const contentSplittedInSpans = content.map(splitEachWordToSpan);
 
-  return new ImageResponse(
-    <AnswerSharingCard content={contentSplittedInSpans} classNameAttr="tw" />,
-    {
-      ...size,
-      fonts: [
-        {
-          name: "helvetica",
-          data: helvetica,
-          weight: 400,
-        },
-        {
-          name: "helvetica",
-          data: helveticaBold,
-          weight: 700,
-        },
-      ],
-    },
-  );
+	return new ImageResponse(
+		<AnswerSharingCard content={contentSplittedInSpans} classNameAttr="tw" />,
+		{
+			...size,
+			fonts: [
+				{
+					name: "helvetica",
+					data: helvetica,
+					weight: 400,
+				},
+				{
+					name: "helvetica",
+					data: helveticaBold,
+					weight: 700,
+				},
+			],
+		},
+	);
 }
 
 function splitEachWordToSpan(element: JSX.Element) {
-  if (element.props.children.props) {
-    return splitEachWordToSpan(element.props.children);
-  }
+	if (element.props.children.props) {
+		return splitEachWordToSpan(element.props.children);
+	}
 
-  return element.props.children.split(" ").map((word: string) => {
-    return <span tw={cn("mr-2", element.props.tw)}>{word}</span>;
-  });
+	return element.props.children.split(" ").map((word: string) => {
+		return <span tw={cn("mr-2", element.props.tw)}>{word}</span>;
+	});
 }

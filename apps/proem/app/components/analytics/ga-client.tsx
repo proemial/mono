@@ -1,8 +1,5 @@
 "use client";
-import {
-  analyticsTrace,
-  usePathNames
-} from "@/app/components/analytics/utils";
+import { analyticsTrace, usePathNames } from "@/app/components/analytics/utils";
 import { useUser } from "@clerk/nextjs";
 import { Env } from "@proemial/utils/env";
 import process from "process";
@@ -11,46 +8,46 @@ import ReactGA from "react-ga4";
 
 // https://www.npmjs.com/package/react-ga4
 export function GaClient() {
-  analyticsTrace("[GaClient]");
+	analyticsTrace("[GaClient]");
 
-  const initialized = useInit();
-  const { pathname, trackingKey } = usePathNames();
+	const initialized = useInit();
+	const { pathname, trackingKey } = usePathNames();
 
-  useEffect(() => {
-    if (initialized) {
-      analyticsTrace("[GaClient] trackPage:", trackingKey, pathname);
-      ReactGA.send({ hitType: "pageview", page: pathname, title: pathname });
-      ReactGA.event(trackingKey, {
-        path: pathname,
-      });
-    }
-  }, [initialized, pathname]);
+	useEffect(() => {
+		if (initialized) {
+			analyticsTrace("[GaClient] trackPage:", trackingKey, pathname);
+			ReactGA.send({ hitType: "pageview", page: pathname, title: pathname });
+			ReactGA.event(trackingKey, {
+				path: pathname,
+			});
+		}
+	}, [initialized, pathname]);
 
-  return <></>;
+	return <></>;
 }
 
 function useInit() {
-  const { user } = useUser();
-  const [initialized, setInitialized] = useState(false);
+	const { user } = useUser();
+	const [initialized, setInitialized] = useState(false);
 
-  analyticsTrace("[GaClient] useInit");
+	analyticsTrace("[GaClient] useInit");
 
-  useEffect(() => {
-    if (user) {
-      analyticsTrace("[GaClient] initializing");
-      // const email = user?.primaryEmailAddress?.emailAddress as string;
-      ReactGA.initialize(
-        Env.validate("NEXT_PUBLIC_GA_ID", process.env.NEXT_PUBLIC_GA_ID),
-        {
-          gaOptions: {
-            userId: user.id,
-          },
-        },
-      );
+	useEffect(() => {
+		if (user) {
+			analyticsTrace("[GaClient] initializing");
+			// const email = user?.primaryEmailAddress?.emailAddress as string;
+			ReactGA.initialize(
+				Env.validate("NEXT_PUBLIC_GA_ID", process.env.NEXT_PUBLIC_GA_ID),
+				{
+					gaOptions: {
+						userId: user.id,
+					},
+				},
+			);
 
-      setInitialized(true);
-    }
-  }, [setInitialized, user]);
+			setInitialized(true);
+		}
+	}, [setInitialized, user]);
 
-  return initialized;
+	return initialized;
 }

@@ -6,11 +6,10 @@ import { Source_Code_Pro } from "next/font/google";
 import { ReactNode } from "react";
 import "./globals.css";
 
-
 const sourceCodePro = Source_Code_Pro({
-  subsets: ["latin"],
-  variable: "--font-source-code-pro",
-  display: "swap",
+	subsets: ["latin"],
+	variable: "--font-source-code-pro",
+	display: "swap",
 });
 
 const lightModeEnabled = false;
@@ -18,42 +17,42 @@ const lightModeEnabled = false;
 const title = "proem";
 const url = "https://proem.ai";
 const description =
-  "answers to your questions supported by scientific research";
+	"answers to your questions supported by scientific research";
 
 export const metadata: Metadata = {
-  title,
-  description,
-  metadataBase: new URL(url),
-  robots: {
-    index: false,
-    follow: false,
-  },
-  openGraph: {
-    type: "website",
-    url,
-    title,
-    description,
-    siteName: title,
-  },
+	title,
+	description,
+	metadataBase: new URL(url),
+	robots: {
+		index: false,
+		follow: false,
+	},
+	openGraph: {
+		type: "website",
+		url,
+		title,
+		description,
+		siteName: title,
+	},
 };
 type Props = {
-  children: ReactNode;
+	children: ReactNode;
 };
 
 export default async function RootLayout({ children }: Props) {
-  const light = lightModeEnabled ? "dark:dark" : "dark";
-  return (
-    <ClerkProvider>
-      <PostHogClient>
-        <html lang="en" className={sourceCodePro.variable}>
-          <body
-            className={`flex relative flex-col justify-center ${light} h-dvh`}
-          >
-            {children}
-            <Analytics />
-          </body>
-        </html>
-      </PostHogClient>
-    </ClerkProvider>
-  );
+	const light = lightModeEnabled ? "dark:dark" : "dark";
+	return (
+		<ClerkProvider>
+			<PostHogClient>
+				<html lang="en" className={sourceCodePro.variable}>
+					<body
+						className={`flex relative flex-col justify-center ${light} h-dvh`}
+					>
+						{children}
+						<Analytics />
+					</body>
+				</html>
+			</PostHogClient>
+		</ClerkProvider>
+	);
 }

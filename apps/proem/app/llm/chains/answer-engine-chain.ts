@@ -2,16 +2,16 @@ import { fetchPapersChain } from "@/app/llm/chains/fetch-papers/fetch-papers-cha
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
 import {
-  ChatPromptTemplate,
-  MessagesPlaceholder,
+	ChatPromptTemplate,
+	MessagesPlaceholder,
 } from "@langchain/core/prompts";
 import { RunnableMap, RunnableSequence } from "@langchain/core/runnables";
 import { LangChainChatHistoryMessage } from "../utils";
 
 const prompt = ChatPromptTemplate.fromMessages<ChainInput>([
-  [
-    "system",
-    `
+	[
+		"system",
+		`
     You will provide conclusive answers to user questions, based on the following
     research articles: {papers},
     IMPORTANT: YOUR ANSWER MUST BE A SINGLE SHORT PARAGRAPH OF 40 WORDS OR LESS KEY
@@ -53,26 +53,26 @@ const prompt = ChatPromptTemplate.fromMessages<ChainInput>([
     - IMPORTANT: YOUR ANSWER MUST BE A SINGLE SHORT PARAGRAPH OF 40 WORDS OR LESS
     WITH HYPERLINKS ON TWO KEY PHRASES. THIS IS ESSENTIAL. KEEP YOUR ANSWERS SHORT
     AND SIMPLE!`,
-  ],
-  new MessagesPlaceholder("chatHistory"),
-  ["human", `{question}`],
+	],
+	new MessagesPlaceholder("chatHistory"),
+	["human", `{question}`],
 ]);
 
 const bytesOutputParser = new BytesOutputParser();
 
 const model = buildOpenAIChatModel("gpt-3.5-turbo-1106", "ask", {
-  verbose: true,
+	verbose: true,
 });
 
 type ChainInput = {
-  question: string;
-  chatHistory: LangChainChatHistoryMessage[]
-  papers: { link: string; abstract: string; title: string }[] | undefined;
+	question: string;
+	chatHistory: LangChainChatHistoryMessage[];
+	papers: { link: string; abstract: string; title: string }[] | undefined;
 };
-type ChainOutput = Uint8Array
+type ChainOutput = Uint8Array;
 
-export const answerEngineChain = (isFollowUpQuestion: boolean) => RunnableSequence.from<ChainInput, ChainOutput>(
-	[
+export const answerEngineChain = (isFollowUpQuestion: boolean) =>
+	RunnableSequence.from<ChainInput, ChainOutput>([
 		RunnableMap.from<ChainInput>({
 			question: (input) => input.question,
 			chatHistory: (input) => input.chatHistory,
@@ -85,19 +85,25 @@ export const answerEngineChain = (isFollowUpQuestion: boolean) => RunnableSequen
 		}).withConfig({
 			runName: "FetchPapers",
 		}),
-    RunnableMap.from<any, { question: string, chatHistory: LangChainChatHistoryMessage[], papers: string}>({
+		RunnableMap.from<
+			any,
+			{
+				question: string;
+				chatHistory: LangChainChatHistoryMessage[];
+				papers: string;
+			}
+		>({
 			question: (input) => input.question,
 			chatHistory: (input) => input.chatHistory,
 			papers: (input) => JSON.stringify(input.papersRequest.papers),
 		}).withConfig({
-      runName: 'StringifyPapers'
-    }),
+			runName: "StringifyPapers",
+		}),
 		prompt,
 		model.withConfig({
-      runName: 'AskForFinalAnswer'
-    }),
-    bytesOutputParser
-	],
-).withConfig({
-	runName: isFollowUpQuestion ? 'Ask (follow-up)' : 'Ask',
-});
+			runName: "AskForFinalAnswer",
+		}),
+		bytesOutputParser,
+	]).withConfig({
+		runName: isFollowUpQuestion ? "Ask (follow-up)" : "Ask",
+	});
