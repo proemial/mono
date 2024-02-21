@@ -1,4 +1,4 @@
-import { convertToOASearchString } from "./convert-query-parameters";
+import { convertToOASearchString } from "@/app/llm/chains/fetch-papers/convert-query-parameters";
 
 it("can convert title and abstracts to OA friendly query format", () => {
 	expect(

@@ -1,24 +1,24 @@
 {
-  "extends": "@proemial/typescript-config/nextjs.json",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"]
-    },
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "types": ["vitest/globals"]
-  },
-  "include": [
-    "next-env.d.ts",
-    "next.config.js",
-    "**/*.ts",
-    "**/*.tsx",
-    "../../packages/data/**/*.ts",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": ["node_modules"]
+	"extends": "@proemial/typescript-config/nextjs.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./*"]
+		},
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
+		"types": ["vitest/globals"]
+	},
+	"include": [
+		"next-env.d.ts",
+		"next.config.js",
+		"**/*.ts",
+		"**/*.tsx",
+		"../../packages/data/**/*.ts",
+		".next/types/**/*.ts"
+	],
+	"exclude": ["node_modules"]
 }

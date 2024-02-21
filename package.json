@@ -7,14 +7,15 @@
 		"checkly": "turbo checkly",
 		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
 		"vercel-pull-env": "vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/proem --yes && vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/search --yes",
-		"test": "vitest",
-		"coverage": "vitest run --coverage"
+		"test": "turbo run test",
+		"test:watch": "turbo run test:watch"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.5.3",
 		"@vitest/coverage-v8": "^1.2.1",
 		"prettier": "^3.1.0",
 		"turbo": "latest",
+		"vite-tsconfig-paths": "^4.3.1",
 		"vitest": "^1.2.1"
 	},
 	"packageManager": "pnpm@8.9.0",
