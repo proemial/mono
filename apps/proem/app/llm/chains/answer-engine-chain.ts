@@ -57,7 +57,7 @@ const prompt = ChatPromptTemplate.fromMessages<ChainInput>([
     AND SIMPLE!`,
 	],
 	new MessagesPlaceholder("chatHistory"),
-	["human", `{question}`],
+	["human", "{question}"],
 ]);
 
 const model = buildOpenAIChatModel("gpt-3.5-turbo-1106", "ask", {

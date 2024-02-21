@@ -36,7 +36,7 @@ const generateSearchParamsPrompt = ChatPromptTemplate.fromMessages<ChainInput>([
 		"system",
 		"Generate a set of search parameters that can be used retrieve one or more scientific research papers related to the user's question.",
 	],
-	["human", `{question}`],
+	["human", "{question}"],
 ]);
 
 const model = buildOpenAIChatModel("gpt-3.5-turbo-1106", "ask", {
