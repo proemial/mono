@@ -1,5 +1,5 @@
+import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
 import { ChatOpenAI } from "@langchain/openai";
-import { Env } from "@proemial/utils/env";
 
 // Source: https://platform.openai.com/docs/models/overview
 type OpenAIModel =
@@ -13,13 +13,6 @@ type OpenAIModelOptions = {
 	temperature?: number;
 	verbose?: boolean;
 	cache?: boolean;
-};
-
-const openAIApiKey = Env.get("OPENAI_API_KEY");
-const openaiOrganizations = {
-	ask: "org-aMpPztUAkETkCQYK6QhW25A4",
-	read: "org-igYkjAypLUMGZ32zgikAg46E",
-	summarization: "org-H6CcBBVdWURJ01YnJ0t9wZaH",
 };
 
 export const buildOpenAIChatModel = (

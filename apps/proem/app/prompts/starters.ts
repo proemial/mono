@@ -1,12 +1,12 @@
-import { apiKey, organizations } from "@/app/prompts/openai-keys";
+import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
 import OpenAI from "openai";
 
 const model = "gpt-3.5-turbo";
 
 export async function generateStarters(title: string, abstract: string) {
 	const openai = new OpenAI({
-		apiKey,
-		organization: organizations.summarization,
+		apiKey: openAIApiKey,
+		organization: openaiOrganizations.summarization,
 	});
 
 	const completion = await openai.chat.completions.create({

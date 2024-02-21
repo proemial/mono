@@ -1,10 +1,13 @@
 import { context, model, question } from "@/app/prompts/chat";
-import { apiKey, organizations } from "@/app/prompts/openai-keys";
+import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { NextRequest } from "next/server";
 import { Configuration, OpenAIApi } from "openai-edge";
 
-const config = new Configuration({ apiKey, organization: organizations.read });
+const config = new Configuration({
+	apiKey: openAIApiKey,
+	organization: openaiOrganizations.read,
+});
 const openai = new OpenAIApi(config);
 
 export const runtime = "edge";
