@@ -1,7 +1,7 @@
 import { fetchPapers } from "@/app/api/paper-search/search";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { RunnableSequence } from "@langchain/core/runnables";
+import { RunnableMap, RunnableSequence } from "@langchain/core/runnables";
 import { JsonOutputFunctionsParser } from "langchain/output_parsers";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
@@ -36,7 +36,7 @@ const generateSearchParamsPrompt = ChatPromptTemplate.fromMessages<ChainInput>([
 		"system",
 		"Generate a set of search parameters that can be used retrieve one or more scientific research papers related to the user's question.",
 	],
-	["human", "{question}"],
+	["human", `{question}`],
 ]);
 
 const model = buildOpenAIChatModel("gpt-3.5-turbo-1106", "ask", {
@@ -56,10 +56,14 @@ const generateSearchParamsChain = RunnableSequence.from<
 	GeneratedSearchParams
 >([
 	generateSearchParamsPrompt,
-	model.bind({
-		functions: [generateSearchParams],
-		function_call: { name: generateSearchParams.name },
-	}),
+	model
+		.bind({
+			functions: [generateSearchParams],
+			function_call: { name: generateSearchParams.name },
+		})
+		.withConfig({
+			runName: "AskForSearchParams",
+		}),
 	(input) => input, // This is silly, but it makes the output parser below not stream the response
 	jsonOutputFunctionsParser,
 ]).withConfig({
@@ -68,7 +72,7 @@ const generateSearchParamsChain = RunnableSequence.from<
 
 export const fetchPapersChain = RunnableSequence.from<ChainInput, ChainOutput>([
 	generateSearchParamsChain,
-	{
+	RunnableMap.from<GeneratedSearchParams, ChainOutput>({
 		searchParams: (input: GeneratedSearchParams) => input,
 		papers: async (input: GeneratedSearchParams) => {
 			const searchString = convertToOASearchString(
@@ -78,10 +82,10 @@ export const fetchPapersChain = RunnableSequence.from<ChainInput, ChainOutput>([
 			const papers = await fetchPapers(searchString);
 			return papers?.map(toRelativeLink) ?? [];
 		},
-	},
-]).withConfig({
-	runName: "FetchPapers",
-});
+	}).withConfig({
+		runName: "QueryOpenAlex",
+	}),
+]);
 
 type FetchPaperResult = {
 	title: string;
