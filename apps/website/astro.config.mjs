@@ -7,7 +7,6 @@ export default defineConfig({
 	output: "server",
 	integrations: [tailwind()],
 	adapter: vercel({
-		edgeMiddleware: true,
 		webAnalytics: {
 			enabled: true,
 		},

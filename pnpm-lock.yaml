@@ -266,9 +266,6 @@ importers:
       '@vercel/analytics':
         specifier: ^1
         version: 1.1.1
-      '@vercel/edge':
-        specifier: ^1.1.1
-        version: 1.1.1
       astro:
         specifier: ^4.0.4
         version: 4.0.4(sass@1.69.5)(typescript@5.3.3)
@@ -3674,10 +3671,6 @@ packages:
     resolution: {integrity: sha512-+NqgNmSabg3IFfxYhrWCfB/H+RCUOCR5ExRudNG2+pcRehq628DJB5e1u1xqwpLtn4pAYii4D98w7kofORAGQA==}
     dependencies:
       server-only: 0.0.1
-    dev: false
-
-  /@vercel/edge@1.1.1:
-    resolution: {integrity: sha512-NtKiIbn9Cq6HWGy+qRudz28mz5nxfOJWls5Pnckjw1yCfSX8rhXdvY/il3Sy3Zd5n/sKCM2h7VSCCpJF/oaDrQ==}
     dev: false
 
   /@vercel/nft@0.24.4:

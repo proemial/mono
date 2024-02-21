@@ -13,7 +13,6 @@
     "@astrojs/tailwind": "^5.1.0",
     "@astrojs/vercel": "^6",
     "@vercel/analytics": "^1",
-    "@vercel/edge": "^1.1.1",
     "astro": "^4.0.4",
     "tailwindcss": "^3.4.1"
   },
