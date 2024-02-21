@@ -1,6 +1,5 @@
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
-import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { Run } from "@langchain/core/tracers/base";
 import {
   StreamingTextResponse,
@@ -9,8 +8,9 @@ import {
 } from "ai";
 import { PapersRequest } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
 import { answerEngineChain } from "@/app/llm/chains/answer-engine-chain";
+import { toLangChainChatHistory } from "@/app/llm/utils";
 
-type ChatHistoryMessage = { role: string; content: string };
+export type ChatHistoryMessage = { role: string; content: string };
 
 type AnswerEngineParams = {
   question: string;
@@ -38,7 +38,7 @@ export async function askAnswerEngine({
     slug,
   });
 
-  const stream = await answerEngineChain
+  const stream = await answerEngineChain(isFollowUpQuestion)
     .withListeners({
       onEnd: saveAnswer(question, isFollowUpQuestion, slug, userId, data),
     })
@@ -54,11 +54,6 @@ export async function askAnswerEngine({
     data,
   );
 }
-
-const toLangChainChatHistory = (message: ChatHistoryMessage) =>
-  message.role === "user"
-    ? new HumanMessage(message.content)
-    : new AIMessage(message.content);
 
 const saveAnswer =
   (

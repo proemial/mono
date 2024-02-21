@@ -1,14 +1,12 @@
 import { fetchPapersChain } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
-import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
 import {
   ChatPromptTemplate,
   MessagesPlaceholder,
 } from "@langchain/core/prompts";
-import { RunnableSequence } from "@langchain/core/runnables";
-
-const bytesOutputParser = new BytesOutputParser();
+import { RunnableMap, RunnableSequence } from "@langchain/core/runnables";
+import { LangChainChatHistoryMessage } from "../utils";
 
 const prompt = ChatPromptTemplate.fromMessages<ChainInput>([
   [
@@ -60,38 +58,46 @@ const prompt = ChatPromptTemplate.fromMessages<ChainInput>([
   ["human", `{question}`],
 ]);
 
+const bytesOutputParser = new BytesOutputParser();
+
 const model = buildOpenAIChatModel("gpt-3.5-turbo-1106", "ask", {
   verbose: true,
 });
 
 type ChainInput = {
   question: string;
-  chatHistory: (HumanMessage | AIMessage)[];
+  chatHistory: LangChainChatHistoryMessage[]
   papers: { link: string; abstract: string; title: string }[] | undefined;
 };
-type ChainOutput = Uint8Array;
+type ChainOutput = Uint8Array
 
-export const answerEngineChain = RunnableSequence.from<ChainInput, ChainOutput>(
-  [
-    {
-      question: (input) => input.question,
-      chatHistory: (input) => input.chatHistory,
-      papersRequest: async (input) => {
-        if (input.papers) {
-          return { papers: input.papers };
-        }
-        return fetchPapersChain;
-      },
-    },
-    {
-      question: (input) => input.question,
-      chatHistory: (input) => input.chatHistory,
-      papers: (input) => JSON.stringify(input.papersRequest.papers),
-    },
-    prompt,
-    model,
-    bytesOutputParser,
-  ],
+export const answerEngineChain = (isFollowUpQuestion: boolean) => RunnableSequence.from<ChainInput, ChainOutput>(
+	[
+		RunnableMap.from<ChainInput>({
+			question: (input) => input.question,
+			chatHistory: (input) => input.chatHistory,
+			papersRequest: async (input) => {
+				if (input.papers) {
+					return { papers: input.papers };
+				}
+				return fetchPapersChain;
+			},
+		}).withConfig({
+			runName: "MaybeFetchPapers",
+		}),
+    RunnableMap.from<any, { question: string, chatHistory: LangChainChatHistoryMessage[], papers: string}>({
+			question: (input) => input.question,
+			chatHistory: (input) => input.chatHistory,
+			papers: (input) => JSON.stringify(input.papersRequest.papers),
+		}).withConfig({
+      runName: 'StringifyPapers'
+    }),
+		prompt,
+		model.withConfig({
+      runName: 'AskForFinalAnswer'
+    }),
+    bytesOutputParser
+	],
 ).withConfig({
-  runName: "Ask",
+	runName: isFollowUpQuestion ? 'Ask (follow-up)' : 'Ask',
 });
