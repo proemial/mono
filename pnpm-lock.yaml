@@ -99,6 +99,9 @@ importers:
       langchain:
         specifier: ^0.1.19
         version: 0.1.19
+      langsmith:
+        specifier: ^0.1.3
+        version: 0.1.3
       lucide-react:
         specifier: ^0.294.0
         version: 0.294.0(react@18.2.0)
@@ -2167,7 +2170,7 @@ packages:
       '@langchain/core': 0.1.29
       '@langchain/openai': 0.0.14
       flat: 5.0.2
-      langsmith: 0.1.1
+      langsmith: 0.1.3
       uuid: 9.0.1
       zod: 3.22.4
     transitivePeerDependencies:
@@ -2182,7 +2185,7 @@ packages:
       camelcase: 6.3.0
       decamelize: 1.2.0
       js-tiktoken: 1.0.8
-      langsmith: 0.1.1
+      langsmith: 0.1.3
       ml-distance: 4.0.1
       p-queue: 6.6.2
       p-retry: 4.6.2
@@ -7687,7 +7690,7 @@ packages:
       js-yaml: 4.1.0
       jsonpointer: 5.0.1
       langchainhub: 0.0.8
-      langsmith: 0.1.1
+      langsmith: 0.1.3
       ml-distance: 4.0.1
       openapi-types: 12.1.3
       p-retry: 4.6.2
@@ -7762,8 +7765,8 @@ packages:
     resolution: {integrity: sha512-Woyb8YDHgqqTOZvWIbm2CaFDGfZ4NTSyXV687AG4vXEfoNo7cGQp7nhl7wL3ehenKWmNEmcxCLgOZzW8jE6lOQ==}
     dev: false
 
-  /langsmith@0.1.1:
-    resolution: {integrity: sha512-SY1J7Y/hfcRby4ik5b2djvsTTlbJ76Mtl4Q2EDPznSKn+qMPMY2JVb3CroOHpA6qhXK/dGNbRLUz3Kq+mLmMsw==}
+  /langsmith@0.1.3:
+    resolution: {integrity: sha512-kQMS3QySeU0Qt9A71d9trUXbeKn33HfxpRc7hRjSB967zcdTAngh66NcqYqBflD3nOL4FK6LKmvfb3vbNDEoPg==}
     hasBin: true
     dependencies:
       '@types/uuid': 9.0.7
