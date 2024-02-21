@@ -1,11 +1,10 @@
-import { fetchPapers } from "@/app/api/paper-search/search";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { RunnableMap, RunnableSequence } from "@langchain/core/runnables";
+import { RunnableSequence } from "@langchain/core/runnables";
 import { JsonOutputFunctionsParser } from "langchain/output_parsers";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { convertToOASearchString } from "./convert-query-parameters";
+import { FetchPapersTool } from "../../tools/fetch-papers-tool";
 
 const generateSearchParamsSchema = z.object({
 	keyConcept: z.string().describe(`A single common noun that is VERY likely to occur in the title of
@@ -31,6 +30,8 @@ type GeneratedSearchParams = z.infer<typeof generateSearchParamsSchema>;
 const jsonOutputFunctionsParser =
 	new JsonOutputFunctionsParser<GeneratedSearchParams>();
 
+const fetchPapersTool = new FetchPapersTool();
+
 const generateSearchParamsPrompt = ChatPromptTemplate.fromMessages<ChainInput>([
 	[
 		"system",
@@ -43,27 +44,18 @@ const model = buildOpenAIChatModel("gpt-3.5-turbo-1106", "ask", {
 	verbose: true,
 });
 
-export type PapersRequest = {
-	searchParams: { keyConcept: string; relatedConcepts: string[] };
-	papers: { link: string; abstract: string; title: string }[];
-};
-
 type ChainInput = { question: string };
-type ChainOutput = PapersRequest; // Note: This structure is required for saving answers
+type ChainOutput = string;
 
 const generateSearchParamsChain = RunnableSequence.from<
 	ChainInput,
 	GeneratedSearchParams
 >([
 	generateSearchParamsPrompt,
-	model
-		.bind({
-			functions: [generateSearchParams],
-			function_call: { name: generateSearchParams.name },
-		})
-		.withConfig({
-			runName: "AskForSearchParams",
-		}),
+	model.bind({
+		functions: [generateSearchParams],
+		function_call: { name: generateSearchParams.name },
+	}),
 	(input) => input, // This is silly, but it makes the output parser below not stream the response
 	jsonOutputFunctionsParser,
 ]).withConfig({
@@ -72,29 +64,5 @@ const generateSearchParamsChain = RunnableSequence.from<
 
 export const fetchPapersChain = RunnableSequence.from<ChainInput, ChainOutput>([
 	generateSearchParamsChain,
-	RunnableMap.from<GeneratedSearchParams, ChainOutput>({
-		searchParams: (input: GeneratedSearchParams) => input,
-		papers: async (input: GeneratedSearchParams) => {
-			const searchString = convertToOASearchString(
-				input.keyConcept,
-				input.relatedConcepts,
-			);
-			const papers = await fetchPapers(searchString);
-			return papers?.map(toRelativeLink) ?? [];
-		},
-	}).withConfig({
-		runName: "QueryOpenAlex",
-	}),
+	fetchPapersTool,
 ]);
-
-type FetchPaperResult = {
-	title: string;
-	link: string;
-	abstract?: string;
-};
-
-const toRelativeLink = (paper: FetchPaperResult) => ({
-	title: paper.title,
-	link: paper.link.replace("https://proem.ai", ""),
-	abstract: paper.abstract ?? "",
-});
