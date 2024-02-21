@@ -80,7 +80,7 @@ export const fetchPapersChain = RunnableSequence.from<ChainInput, ChainOutput>([
       return papers?.map(toRelativeLink) ?? [];
     },
   }).withConfig({
-    runName: 'FetchPapers'
+    runName: 'QueryOpenAlex'
   }),
 ])
 

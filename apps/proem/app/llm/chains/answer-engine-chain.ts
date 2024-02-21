@@ -83,7 +83,7 @@ export const answerEngineChain = (isFollowUpQuestion: boolean) => RunnableSequen
 				return fetchPapersChain;
 			},
 		}).withConfig({
-			runName: "MaybeFetchPapers",
+			runName: "FetchPapers",
 		}),
     RunnableMap.from<any, { question: string, chatHistory: LangChainChatHistoryMessage[], papers: string}>({
 			question: (input) => input.question,
