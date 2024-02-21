@@ -17,11 +17,6 @@ const nextConfig = {
 				destination: "https://chat.openai.com/g/g-SxYGBAT0I-science-proems",
 				permanent: false,
 			},
-			{
-				source: "/survey",
-				destination: "https://tally.so/r/mB7Q7e",
-				permanent: false,
-			},
 		];
 	},
 	sentry: {
