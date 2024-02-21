@@ -1,4 +1,7 @@
-import { fetchPapersChain } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
+import {
+	PapersRequest,
+	fetchPapersChain,
+} from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
 import {
@@ -55,7 +58,7 @@ const prompt = ChatPromptTemplate.fromMessages<ChainInput>([
     AND SIMPLE!`,
 	],
 	new MessagesPlaceholder("chatHistory"),
-	["human", `{question}`],
+	["human", "{question}"],
 ]);
 
 const bytesOutputParser = new BytesOutputParser();
@@ -70,6 +73,16 @@ type ChainInput = {
 	papers: { link: string; abstract: string; title: string }[] | undefined;
 };
 type ChainOutput = Uint8Array;
+type PreBytesOutput = {
+	question: string;
+	chatHistory: LangChainChatHistoryMessage[];
+	papers: string;
+};
+type FetchPapersOutput = {
+	question: string;
+	chatHistory: LangChainChatHistoryMessage[];
+	papersRequest: { papers: PapersRequest };
+};
 
 export const answerEngineChain = (isFollowUpQuestion: boolean) =>
 	RunnableSequence.from<ChainInput, ChainOutput>([
@@ -85,14 +98,7 @@ export const answerEngineChain = (isFollowUpQuestion: boolean) =>
 		}).withConfig({
 			runName: "FetchPapers",
 		}),
-		RunnableMap.from<
-			any,
-			{
-				question: string;
-				chatHistory: LangChainChatHistoryMessage[];
-				papers: string;
-			}
-		>({
+		RunnableMap.from<FetchPapersOutput, PreBytesOutput>({
 			question: (input) => input.question,
 			chatHistory: (input) => input.chatHistory,
 			papers: (input) => JSON.stringify(input.papersRequest.papers),
