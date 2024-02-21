@@ -1,7 +1,6 @@
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
 import { answerEngineChain } from "@/app/llm/chains/answer-engine-chain";
-import { PapersRequest } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
 import { findRun } from "@/app/llm/helpers/find-run";
 import { toLangChainChatHistory } from "@/app/llm/utils";
 import { Run } from "@langchain/core/tracers/base";
@@ -66,17 +65,24 @@ const saveAnswer =
 	) =>
 	async (run: Run) => {
 		const hasAnswer = (run: Run) => run.name === "BytesOutputParser";
-		const hasPapersRequest = (run: Run) => !!run.inputs.papersRequest;
 		const answer = findRun(run, hasAnswer)?.inputs.content;
-		const papersRequest = findRun(run, hasPapersRequest)?.inputs.papersRequest;
+
+		const hasPapersResponse = (run: Run) => run.name === "FetchPapersTool";
+		const papersResponse = findRun(run, hasPapersResponse)?.outputs
+			?.output as string;
+
+		const hasSearchParamsResponse = (run: Run) =>
+			run.name === "GenerateSearchParams";
+		const searchParamsResponse = findRun(run, hasSearchParamsResponse)
+			?.outputs as { keyConcept: string; relatedConcepts: string[] };
 
 		const papers = isFollowUpQuestion
 			? {}
 			: {
-					relatedConcepts: papersRequest?.searchParams.relatedConcepts,
-					keyConcept: papersRequest?.searchParams.keyConcept,
+					relatedConcepts: searchParamsResponse.relatedConcepts,
+					keyConcept: searchParamsResponse.keyConcept,
 					papers: {
-						papers: papersRequest?.papers,
+						papers: JSON.parse(papersResponse),
 					},
 			  };
 
