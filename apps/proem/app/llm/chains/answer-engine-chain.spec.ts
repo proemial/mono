@@ -2,7 +2,11 @@ import { runOnDataset } from "langchain/smith";
 import { answerEngineChain } from "./answer-engine-chain";
 import { CharCountEvaluator } from "../evaluators/string-evaluators";
 import { summariseRunResults } from "../helpers/summarise-result";
-import { LinkCountEvaluator } from "../evaluators/link-evaluators";
+import {
+	LinkCountEvaluator,
+	ValidLinkEvaluator,
+	ValidTitleEvaluator,
+} from "../evaluators/link-evaluators";
 
 describe("answerEngineChain", () => {
 	// Works, but vitest breaks
@@ -10,7 +14,12 @@ describe("answerEngineChain", () => {
 		const runResults = await runOnDataset(
 			answerEngineChain,
 			"ASK - Reference dataset",
-			[new CharCountEvaluator(200, 400), new LinkCountEvaluator(2, 2)],
+			[
+				new CharCountEvaluator(200, 400),
+				new LinkCountEvaluator(2, 2),
+				new ValidLinkEvaluator(2, 2),
+				new ValidTitleEvaluator(20, 50),
+			],
 		);
 
 		const { scores, avg } = summariseRunResults(runResults);
