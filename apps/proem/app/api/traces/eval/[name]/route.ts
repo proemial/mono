@@ -9,6 +9,8 @@ import {
   ValidTitleEvaluator,
 } from "@/app/llm/evaluators/link-evaluators";
 
+export const revalidate = 1;
+
 // http://127.0.0.1/api/eval/ASK-OnePaperDataSet
 // http://127.0.0.1/api/eval/ASK-RefDataSet
 export async function GET(
