@@ -44,7 +44,7 @@ type MessageProps = {
 		| null;
 };
 
-export function Message({
+export function ChatMessage({
 	message,
 	user = { name: "you", initials: "U", avatar: "" },
 	onShareHandle,
@@ -213,7 +213,7 @@ export default function Chat({
 				{isEmptyScreen ? (
 					<Starters append={append} />
 				) : (
-					<Messages
+					<ChatMessages
 						messages={messages}
 						showLoadingState={showLoadingState}
 						user={user}
@@ -346,7 +346,7 @@ type MessagesProps = Required<
 		showLoadingState: boolean;
 	};
 
-function Messages({
+function ChatMessages({
 	messages,
 	showLoadingState,
 	user,
@@ -356,7 +356,7 @@ function Messages({
 	return (
 		<div className="w-full pb-20 space-y-5">
 			{messages.map((m) => (
-				<Message
+				<ChatMessage
 					key={m.id}
 					message={m.content}
 					user={m.role === "assistant" ? PROEM_BOT : user}
@@ -366,7 +366,7 @@ function Messages({
 			))}
 
 			{showLoadingState ? (
-				<Message
+				<ChatMessage
 					message="Searching for relevant scientific papers..."
 					user={PROEM_BOT}
 				/>
