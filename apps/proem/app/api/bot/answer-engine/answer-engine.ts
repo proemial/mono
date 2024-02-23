@@ -48,6 +48,9 @@ export async function askAnswerEngine({
 		.withConfig({
 			runName: isFollowUpQuestion ? "Ask (follow-up)" : "Ask",
 			tags,
+			metadata: {
+				userId,
+			},
 		})
 		.withListeners({
 			onEnd: saveAnswer(question, isFollowUpQuestion, slug, userId, data),
