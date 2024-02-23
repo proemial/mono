@@ -60,7 +60,7 @@ const prompt = ChatPromptTemplate.fromMessages<ChainInput>([
 
 const bytesOutputParser = new BytesOutputParser();
 
-const model = buildOpenAIChatModel("gpt-3.5-turbo-1106", "ask", {
+const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask", {
 	verbose: true,
 });
 
@@ -76,7 +76,7 @@ type ChainPreBytesOutput = {
 	papers: string | RunnableSequence<ChainInput, string>;
 };
 
-export const answerEngineChain = (isFollowUpQuestion: boolean) =>
+export const answerEngineChain = () =>
 	RunnableSequence.from<ChainInput, ChainOutput>([
 		RunnableMap.from<ChainInput, ChainPreBytesOutput>({
 			question: (input) => input.question,
@@ -93,6 +93,4 @@ export const answerEngineChain = (isFollowUpQuestion: boolean) =>
 		prompt,
 		model,
 		bytesOutputParser,
-	]).withConfig({
-		runName: isFollowUpQuestion ? "Ask (follow-up)" : "Ask",
-	});
+	]);

@@ -38,7 +38,10 @@ export async function askAnswerEngine({
 		slug,
 	});
 
-	const stream = await answerEngineChain(isFollowUpQuestion)
+	const stream = await answerEngineChain()
+		.withConfig({
+			runName: isFollowUpQuestion ? "Ask (follow-up)" : "Ask",
+		})
 		.withListeners({
 			onEnd: saveAnswer(question, isFollowUpQuestion, slug, userId, data),
 		})
