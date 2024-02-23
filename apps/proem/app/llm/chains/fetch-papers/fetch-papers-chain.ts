@@ -40,7 +40,7 @@ const generateSearchParamsPrompt = ChatPromptTemplate.fromMessages<ChainInput>([
 	["human", "{question}"],
 ]);
 
-const model = buildOpenAIChatModel("gpt-3.5-turbo-1106", "ask", {
+const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask", {
 	verbose: true,
 });
 
