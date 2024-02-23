@@ -1,5 +1,6 @@
 "use client";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
+import { isInternalUser } from "@/app/components/analytics/is-internal-user";
 import { useUser } from "@clerk/nextjs";
 import { getCookie, setCookie } from "cookies-next";
 import { usePathname } from "next/navigation";
@@ -50,13 +51,4 @@ export function analyticsTrace(...data: any[]) {
 
 function isChecklyBot(userAgent: UserAgent) {
 	return userAgent.includes("Checkly");
-}
-
-export function isInternalUser(email: string) {
-	const [name, domain] = email.split("@");
-	if (domain?.endsWith("proemial.ai") && name) {
-		return { isInternal: true as const, name };
-	}
-
-	return { isInternal: false as const, name: null };
 }

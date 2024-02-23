@@ -14,17 +14,18 @@ type Props = {
 
 export default async function FrontPage({ searchParams }: Props) {
 	const user = await currentUser();
-	const { fullName, initials } = getProfileFromUser(user);
+	const userProfile = getProfileFromUser(user);
 
 	return (
 		<Chat
 			user={
-				user
+				user && userProfile
 					? {
-							name: fullName!,
-							initials: initials!,
-							avatar: user?.imageUrl,
-							id: user?.id,
+							name: userProfile.fullName,
+							initials: userProfile.initials,
+							email: userProfile.email,
+							avatar: user.imageUrl,
+							id: user.id,
 					  }
 					: undefined
 			}

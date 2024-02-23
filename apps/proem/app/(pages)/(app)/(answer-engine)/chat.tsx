@@ -34,9 +34,9 @@ const PROEM_BOT = {
 type MessageProps = {
 	message: Message["content"];
 	user?: {
-		name?: string;
+		name: string;
 		initials: string;
-		avatar?: string;
+		avatar: string;
 	};
 	isLoading?: boolean;
 	onShareHandle?:
@@ -106,7 +106,7 @@ export function ChatMessage({
 }
 
 type ChatProps = Partial<Pick<MessageProps, "user" | "message">> & {
-	user?: { id?: string };
+	user?: { id: string; email: string };
 	initialMessages?: Message[];
 	existingShareId?: string | null;
 };
@@ -134,7 +134,7 @@ export default function Chat({
 		id: "hardcoded",
 		api: "/api/bot/answer-engine",
 		initialMessages,
-		body: { slug: sessionSlug, userId: user?.id },
+		body: { slug: sessionSlug, userId: user?.id, userEmail: user?.email },
 	});
 	const disabledQuestions = Boolean(initialMessages);
 
@@ -239,8 +239,8 @@ export default function Chat({
 
 type ActionButtonProps = {
 	isLoading: boolean;
-	messages: any[];
-	stop: any;
+	messages: Message[];
+	stop: () => void;
 	clear: () => void;
 };
 function ActionButton(props: ActionButtonProps) {

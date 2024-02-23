@@ -18,6 +18,7 @@ type AnswerEngineParams = {
 	chatHistory: ChatHistoryMessage[];
 	existingSlug?: string;
 	userId?: string;
+	tags?: string[];
 };
 
 const bytesOutputParser = new BytesOutputParser();
@@ -27,6 +28,7 @@ export async function askAnswerEngine({
 	question,
 	chatHistory,
 	userId,
+	tags,
 }: AnswerEngineParams) {
 	const data = new experimental_StreamData();
 	const isFollowUpQuestion = Boolean(existingSlug);
@@ -45,6 +47,7 @@ export async function askAnswerEngine({
 		.pipe(bytesOutputParser)
 		.withConfig({
 			runName: isFollowUpQuestion ? "Ask (follow-up)" : "Ask",
+			tags,
 		})
 		.withListeners({
 			onEnd: saveAnswer(question, isFollowUpQuestion, slug, userId, data),
