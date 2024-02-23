@@ -3,6 +3,7 @@ import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
 import { answerEngineChain } from "@/app/llm/chains/answer-engine-chain";
 import { findRun } from "@/app/llm/helpers/find-run";
 import { toLangChainChatHistory } from "@/app/llm/utils";
+import { BytesOutputParser } from "@langchain/core/output_parsers";
 import { Run } from "@langchain/core/tracers/base";
 import {
 	StreamingTextResponse,
@@ -18,6 +19,8 @@ type AnswerEngineParams = {
 	existingSlug?: string;
 	userId?: string;
 };
+
+const bytesOutputParser = new BytesOutputParser();
 
 export async function askAnswerEngine({
 	existingSlug,
@@ -38,7 +41,8 @@ export async function askAnswerEngine({
 		slug,
 	});
 
-	const stream = await answerEngineChain()
+	const stream = await answerEngineChain
+		.pipe(bytesOutputParser)
 		.withConfig({
 			runName: isFollowUpQuestion ? "Ask (follow-up)" : "Ask",
 		})
@@ -67,8 +71,13 @@ const saveAnswer =
 		data: experimental_StreamData,
 	) =>
 	async (run: Run) => {
-		const hasAnswer = (run: Run) => run.name === "BytesOutputParser";
-		const answer = findRun(run, hasAnswer)?.inputs.content;
+		const hasAnswer = (run: Run) => run.name === "AnswerEngine";
+		const answer = findRun(run, hasAnswer)?.outputs?.output;
+
+		if (!answer) {
+			data.close();
+			throw new Error("Save failure: No answer was found");
+		}
 
 		const hasPapersResponse = (run: Run) => run.name === "FetchPapersTool";
 		const papersResponse = findRun(run, hasPapersResponse)?.outputs

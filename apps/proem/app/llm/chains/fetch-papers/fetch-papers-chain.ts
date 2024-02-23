@@ -45,7 +45,6 @@ const model = buildOpenAIChatModel("gpt-3.5-turbo-1106", "ask", {
 });
 
 type ChainInput = { question: string };
-type ChainOutput = string;
 
 const generateSearchParamsChain = RunnableSequence.from<
 	ChainInput,
@@ -62,7 +61,7 @@ const generateSearchParamsChain = RunnableSequence.from<
 	runName: "GenerateSearchParams",
 });
 
-export const fetchPapersChain = RunnableSequence.from<ChainInput, ChainOutput>([
+export const fetchPapersChain = RunnableSequence.from<ChainInput, string>([
 	generateSearchParamsChain,
 	fetchPapersTool,
 ]);

@@ -1,12 +1,13 @@
 import { fetchPapersChain } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
-import { BytesOutputParser } from "@langchain/core/output_parsers";
 import {
 	ChatPromptTemplate,
 	MessagesPlaceholder,
 } from "@langchain/core/prompts";
 import { RunnableMap, RunnableSequence } from "@langchain/core/runnables";
 import { LangChainChatHistoryMessage } from "../utils";
+import { BaseMessageChunk } from "@langchain/core/messages";
+import { StringOutputParser } from "@langchain/core/output_parsers";
 
 const prompt = ChatPromptTemplate.fromMessages<ChainInput>([
 	[
@@ -58,39 +59,39 @@ const prompt = ChatPromptTemplate.fromMessages<ChainInput>([
 	["human", "{question}"],
 ]);
 
-const bytesOutputParser = new BytesOutputParser();
-
-const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask", {
+const model = buildOpenAIChatModel("gpt-3.5-turbo-1106", "ask", {
 	verbose: true,
 });
+
+const stringOutputParser = new StringOutputParser();
 
 type ChainInput = {
 	question: string;
 	chatHistory: LangChainChatHistoryMessage[];
 	papers: { link: string; abstract: string; title: string }[] | undefined;
 };
-type ChainOutput = Uint8Array;
 type ChainPreBytesOutput = {
 	question: string;
 	chatHistory: LangChainChatHistoryMessage[];
 	papers: string | RunnableSequence<ChainInput, string>;
 };
 
-export const answerEngineChain = () =>
-	RunnableSequence.from<ChainInput, ChainOutput>([
-		RunnableMap.from<ChainInput, ChainPreBytesOutput>({
-			question: (input) => input.question,
-			chatHistory: (input) => input.chatHistory,
-			papers: (input) => {
-				if (input.papers) {
-					return JSON.stringify(input.papers);
-				}
-				return fetchPapersChain;
-			},
-		}).withConfig({
-			runName: "FetchPapers",
-		}),
-		prompt,
-		model,
-		bytesOutputParser,
-	]);
+export const answerEngineChain = RunnableSequence.from<ChainInput, string>([
+	RunnableMap.from<ChainInput, ChainPreBytesOutput>({
+		question: (input) => input.question,
+		chatHistory: (input) => input.chatHistory,
+		papers: (input) => {
+			if (input.papers) {
+				return JSON.stringify(input.papers);
+			}
+			return fetchPapersChain;
+		},
+	}).withConfig({
+		runName: "FetchPapers",
+	}),
+	prompt,
+	model,
+	stringOutputParser,
+]).withConfig({
+	runName: "AnswerEngine",
+});
