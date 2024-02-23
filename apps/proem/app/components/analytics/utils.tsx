@@ -17,7 +17,7 @@ export function useAnalyticsDisabled({ userAgent }: useAnalyticsDisabledProps) {
 	const isBot = userAgent && isChecklyBot(userAgent);
 
 	const email = user?.primaryEmailAddress?.emailAddress ?? "";
-	const isInternal = email.endsWith("@proemial.ai");
+	const { isInternal } = isInternalUser(email);
 	const disabledByCookie = getCookie(INTERNAL_COOIKE_NAME);
 
 	// Deleting the cookie must be done manually
@@ -50,4 +50,13 @@ export function analyticsTrace(...data: any[]) {
 
 function isChecklyBot(userAgent: UserAgent) {
 	return userAgent.includes("Checkly");
+}
+
+export function isInternalUser(email: string) {
+	const [name, domain] = email.split("@");
+	if (domain?.endsWith("proemial.ai") && name) {
+		return { isInternal: true as const, name };
+	}
+
+	return { isInternal: false as const, name: null };
 }
