@@ -12,6 +12,7 @@
 	},
 	"dependencies": {
 		"@clerk/nextjs": "^4.29.3",
+		"@langchain/community": "^0.0.32",
 		"@langchain/core": "0.1.29",
 		"@langchain/openai": "^0.0.14",
 		"@proemial/data": "workspace:*",

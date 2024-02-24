@@ -36,6 +36,9 @@ importers:
       '@clerk/nextjs':
         specifier: ^4.29.3
         version: 4.29.3(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)
+      '@langchain/community':
+        specifier: ^0.0.32
+        version: 0.0.32
       '@langchain/core':
         specifier: 0.1.29
         version: 0.1.29
@@ -1912,8 +1915,8 @@ packages:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  /@langchain/community@0.0.29:
-    resolution: {integrity: sha512-7KCr6JjmWfX26eNGYoDcsSx2PqFcrCt7g3Zy3YwFrjaCIob9ivsx59IXiOd4TgvKJmTiP3RjMTz55cDj7Es63g==}
+  /@langchain/community@0.0.32:
+    resolution: {integrity: sha512-jN4BxGKAmLbA87hqXH5Mx1IRMMVOgcn1TY1MLOVyBcBa12EvHFx8suogtXgA2ekfc8U8nIryVb1ftSupwUBv/A==}
     engines: {node: '>=18'}
     peerDependencies:
       '@aws-crypto/sha256-js': ^5.0.0
@@ -1982,7 +1985,7 @@ packages:
       llmonitor: ^0.5.9
       lodash: ^4.17.21
       lunary: ^0.6.11
-      mongodb: ^5.2.0
+      mongodb: '>=5.2.0'
       mysql2: ^3.3.3
       neo4j-driver: '*'
       node-llama-cpp: '*'
@@ -7688,7 +7691,7 @@ packages:
         optional: true
     dependencies:
       '@anthropic-ai/sdk': 0.9.1
-      '@langchain/community': 0.0.29
+      '@langchain/community': 0.0.32
       '@langchain/core': 0.1.29
       '@langchain/openai': 0.0.14
       binary-extensions: 2.2.0
