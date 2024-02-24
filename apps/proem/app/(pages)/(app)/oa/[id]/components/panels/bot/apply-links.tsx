@@ -37,7 +37,7 @@ function convertHrefToLink(fullHref: string) {
 
 	return {
 		href,
-		title: decodeURIComponent(title.replace("title=", "").replaceAll("+", " ")),
+		title: decodeURIComponent(title?.replace("title=", "")?.replaceAll("+", " ")),
 	};
 }
 
