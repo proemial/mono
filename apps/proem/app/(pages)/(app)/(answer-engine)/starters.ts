@@ -1,10 +1,10 @@
 export const STARTERS = [
-	"Do Vaccines Cause Autism Spectrum Disorder?",
-	"Is a Daily Glass of Wine Healthy?",
-	"Do Cell Phones Cause Brain Cancer?",
+	"Do vaccines cause autism spectrum disorder?",
+	"Is a daily glass of wine healthy?",
+	"Do cell phones cause brain cancer?",
 	"What is the universe made of?",
 	"How can I lower my blood pressure?",
 	"What can I do for heartburn relief?",
-	"Is Microwaved Food Unsafe?",
+	"Is microwaved food unsafe?",
 	"Why do we dream?",
 ];
