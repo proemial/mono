@@ -7,6 +7,7 @@ import {
 	LinkCountEvaluator,
 	ValidLinkEvaluator,
 	ValidTitleEvaluator,
+	LinksEvaluator,
 } from "@/app/llm/evaluators/link-evaluators";
 
 export const revalidate = 1;
@@ -20,7 +21,8 @@ export async function GET(
 	console.log("params", params);
 	const results = await runOnDataset(answerEngineChain, params.name, [
 		new CharCountEvaluator(200, 400),
-		new LinkCountEvaluator(2, 2),
+		new LinksEvaluator(1, 2),
+		new LinkCountEvaluator(1, 2),
 		new ValidLinkEvaluator(),
 		new ValidTitleEvaluator(20, 50),
 	]);

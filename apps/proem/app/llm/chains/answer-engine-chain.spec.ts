@@ -6,6 +6,7 @@ import {
 	LinkCountEvaluator,
 	ValidLinkEvaluator,
 	ValidTitleEvaluator,
+	LinksEvaluator,
 } from "../evaluators/link-evaluators";
 
 describe("answerEngineChain", () => {
@@ -16,7 +17,8 @@ describe("answerEngineChain", () => {
 			"ASK - Reference dataset",
 			[
 				new CharCountEvaluator(200, 400),
-				new LinkCountEvaluator(2, 2),
+				new LinksEvaluator(1, 2),
+				new LinkCountEvaluator(1, 2),
 				new ValidLinkEvaluator(),
 				new ValidTitleEvaluator(20, 50),
 			],

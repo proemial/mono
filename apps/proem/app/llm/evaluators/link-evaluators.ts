@@ -8,6 +8,43 @@ import {
 } from "../helpers/evaluator-helpers";
 import { findRunPaperLinks } from "@/app/llm/helpers/find-run";
 
+export class LinksEvaluator implements RunEvaluator {
+	constructor(
+		private min: number,
+		private max: number,
+	) {}
+
+	async evaluateRun(run: Run): Promise<EvaluationResult> {
+		const output = runOutputAsString(run) ?? "";
+		const links = findRunPaperLinks(run);
+
+		const result = LinksEvaluator.evaluate(this.min, this.max, output, links);
+
+		return { key: "links", ...result };
+	}
+
+	static evaluate(
+		min: number,
+		max: number,
+		text: string,
+		paperLinks: string[],
+	) {
+		const answerLinks = extractLinks(text);
+		const matches = answerLinks.filter(
+			(url) => paperLinks.includes(url.path) && url.host === "proem.ai",
+		);
+
+		const value = matches.length;
+		const score = calculateDiffScore(min, max, matches.length);
+		const comment = `expected: ${min}-${max}, actual: ${JSON.stringify({
+			answerLinks,
+			paperLinks,
+		})}`;
+
+		return { value, score, comment };
+	}
+}
+
 export class LinkCountEvaluator implements RunEvaluator {
 	constructor(
 		private min: number,
@@ -18,7 +55,7 @@ export class LinkCountEvaluator implements RunEvaluator {
 		const output = runOutputAsString(run);
 		const result = LinkCountEvaluator.evaluate(this.min, this.max, output);
 
-		return { key: "link_count", ...result };
+		return { key: "links_count", ...result };
 	}
 
 	static evaluate(min: number, max: number, text?: string) {
@@ -74,7 +111,7 @@ export class ValidTitleEvaluator implements RunEvaluator {
 
 		const result = ValidTitleEvaluator.evaluate(this.min, this.max, output);
 
-		return { key: "link_titles", ...result };
+		return { key: "links_titles", ...result };
 	}
 
 	static evaluate(min: number, max: number, text: string) {
