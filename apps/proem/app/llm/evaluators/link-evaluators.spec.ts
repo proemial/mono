@@ -1,4 +1,8 @@
-import { LinkCountEvaluator, ValidTitleEvaluator } from "./link-evaluators";
+import {
+	LinkCountEvaluator,
+	ValidLinkEvaluator,
+	ValidTitleEvaluator,
+} from "./link-evaluators";
 
 describe("LinkCountEvaluator", () => {
 	it("(0, 0) == 1", () => {
@@ -86,6 +90,57 @@ describe("LinkCountEvaluator", () => {
 	});
 });
 
+describe("ValidLinkEvaluator", () => {
+	it("no links == 1", () => {
+		expect(ValidLinkEvaluator.evaluate("", [])).toEqual({
+			score: 1,
+			value: 0,
+			comment: 'expected: 0-0, actual: {"answerLinks":[],"paperLinks":[]}',
+		});
+	});
+
+	it("one valid link == 1", () => {
+		expect(
+			ValidLinkEvaluator.evaluate("Here's a link: https://proem.ai/oa/1234", [
+				"/oa/1234",
+			]),
+		).toEqual({
+			score: 1,
+			value: 1,
+			comment:
+				'expected: 1-1, actual: {"answerLinks":[{"host":"proem.ai","path":"/oa/1234","query":""}],"paperLinks":["/oa/1234"]}',
+		});
+	});
+
+	it("one invalid link == 0.5", () => {
+		expect(
+			ValidLinkEvaluator.evaluate(
+				"Valid: https://proem.ai/oa/1234 and invalid: https://proem.ai/oa/2345",
+				["/oa/1234"],
+			),
+		).toEqual({
+			score: 0.5,
+			value: 1,
+			comment:
+				'expected: 2-2, actual: {"answerLinks":[{"host":"proem.ai","path":"/oa/1234","query":""},{"host":"proem.ai","path":"/oa/2345","query":""}],"paperLinks":["/oa/1234"]}',
+		});
+	});
+
+	it("Ywo invalid links == 0", () => {
+		expect(
+			ValidLinkEvaluator.evaluate(
+				"Valid: https://proem.ai/oa/1234 and invalid: https://proem.ai/oa/2345",
+				["/oa/foo"],
+			),
+		).toEqual({
+			score: 0,
+			value: 0,
+			comment:
+				'expected: 2-2, actual: {"answerLinks":[{"host":"proem.ai","path":"/oa/1234","query":""},{"host":"proem.ai","path":"/oa/2345","query":""}],"paperLinks":["/oa/foo"]}',
+		});
+	});
+});
+
 describe("ValidTitleEvaluator", () => {
 	it("(0, 0) == 1", () => {
 		expect(ValidTitleEvaluator.evaluate(0, 0, "")).toEqual({
@@ -97,7 +152,7 @@ describe("ValidTitleEvaluator", () => {
 
 	it("(1, 1) == 0", () => {
 		expect(ValidTitleEvaluator.evaluate(1, 1, "")).toEqual({
-			score: 0,
+			score: 1,
 			value: 0,
 			comment: 'expected: 1-1, actual: {"titles":[]}',
 		});

@@ -18,7 +18,7 @@ export class LinkCountEvaluator implements RunEvaluator {
 		const output = runOutputAsString(run);
 		const result = LinkCountEvaluator.evaluate(this.min, this.max, output);
 
-		return { key: "links", ...result };
+		return { key: "link_count", ...result };
 	}
 
 	static evaluate(min: number, max: number, text?: string) {
@@ -33,42 +33,31 @@ export class LinkCountEvaluator implements RunEvaluator {
 }
 
 export class ValidLinkEvaluator implements RunEvaluator {
-	constructor(
-		private min: number,
-		private max: number,
-	) {}
-
 	async evaluateRun(run: Run): Promise<EvaluationResult> {
 		const output = runOutputAsString(run) ?? "";
 		const links = findRunPaperLinks(run);
 
-		const result = ValidLinkEvaluator.evaluate(
-			this.min,
-			this.max,
-			output,
-			links,
-		);
+		const result = ValidLinkEvaluator.evaluate(output, links);
 
-		return { key: "valid_links", ...result };
+		return { key: "links_valid", ...result };
 	}
 
-	static evaluate(
-		min: number,
-		max: number,
-		text: string,
-		paperLinks: string[],
-	) {
+	static evaluate(text: string, paperLinks: string[]) {
 		const answerLinks = extractLinks(text);
+		const linkCount = answerLinks.length;
+
 		const matches = answerLinks.filter(
 			(url) => paperLinks.includes(url.path) && url.host === "proem.ai",
 		);
 
 		const value = matches.length;
-		const score = calculateDiffScore(min, max, matches.length);
-		const comment = `expected: ${min}-${max}, actual: ${JSON.stringify({
-			answerLinks,
-			paperLinks,
-		})}`;
+		const score = calculateDiffScore(linkCount, linkCount, matches.length);
+		const comment = `expected: ${linkCount}-${linkCount}, actual: ${JSON.stringify(
+			{
+				answerLinks,
+				paperLinks,
+			},
+		)}`;
 
 		return { value, score, comment };
 	}
@@ -85,7 +74,7 @@ export class ValidTitleEvaluator implements RunEvaluator {
 
 		const result = ValidTitleEvaluator.evaluate(this.min, this.max, output);
 
-		return { key: "valid_titles", ...result };
+		return { key: "link_titles", ...result };
 	}
 
 	static evaluate(min: number, max: number, text: string) {

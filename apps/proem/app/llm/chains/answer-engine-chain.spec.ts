@@ -17,7 +17,7 @@ describe("answerEngineChain", () => {
 			[
 				new CharCountEvaluator(200, 400),
 				new LinkCountEvaluator(2, 2),
-				new ValidLinkEvaluator(2, 2),
+				new ValidLinkEvaluator(),
 				new ValidTitleEvaluator(20, 50),
 			],
 		);
