@@ -42,6 +42,9 @@ importers:
       '@langchain/core':
         specifier: 0.1.29
         version: 0.1.29
+      '@langchain/groq':
+        specifier: ^0.0.1
+        version: 0.0.1
       '@langchain/openai':
         specifier: ^0.0.14
         version: 0.0.14
@@ -2198,6 +2201,17 @@ packages:
       uuid: 9.0.1
       zod: 3.22.4
       zod-to-json-schema: 3.22.3(zod@3.22.4)
+    dev: false
+
+  /@langchain/groq@0.0.1:
+    resolution: {integrity: sha512-eZ26j6QQWaTdPc0P5131NEEbm/rj4eCdGw7JgkMY9Oh0DZm+ziSKGfXKQAbd1XtgXHDyBO9nviEF0D9EVkuERQ==}
+    engines: {node: '>=18'}
+    dependencies:
+      '@langchain/core': 0.1.29
+      '@langchain/openai': 0.0.14
+      groq-sdk: 0.3.0
+    transitivePeerDependencies:
+      - encoding
     dev: false
 
   /@langchain/openai@0.0.14:
@@ -6641,6 +6655,22 @@ packages:
       kind-of: 6.0.3
       section-matter: 1.0.0
       strip-bom-string: 1.0.0
+    dev: false
+
+  /groq-sdk@0.3.0:
+    resolution: {integrity: sha512-Cdgjh4YoSBE2X4S9sxPGXaAy1dlN4bRtAaDZ3cnq+XsxhhN9WSBeHF64l7LWwuD5ntmw7YC5Vf4Ff1oHCg1LOg==}
+    dependencies:
+      '@types/node': 18.19.3
+      '@types/node-fetch': 2.6.9
+      abort-controller: 3.0.0
+      agentkeepalive: 4.5.0
+      digest-fetch: 1.3.0
+      form-data-encoder: 1.7.2
+      formdata-node: 4.4.1
+      node-fetch: 2.7.0
+      web-streams-polyfill: 3.2.1
+    transitivePeerDependencies:
+      - encoding
     dev: false
 
   /hanji@0.0.5:
