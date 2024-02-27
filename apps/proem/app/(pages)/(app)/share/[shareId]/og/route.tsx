@@ -5,11 +5,15 @@ export const runtime = "edge";
 export async function GET(request: Request) {
 	const { searchParams } = new URL(request.url);
 	const shareId = searchParams.get("shareId");
+
 	if (!shareId) {
 		throw new Error("No shareId provided in the url");
 	}
 
-	return await createSharePageOpenGraphImage(shareId, {
+	// URLSearchParams unescape parameters and we`ll need to escape it again
+	const encodedShareId = encodeURIComponent(shareId);
+
+	return await createSharePageOpenGraphImage(encodedShareId, {
 		width: 1200,
 		height: 630,
 	});
