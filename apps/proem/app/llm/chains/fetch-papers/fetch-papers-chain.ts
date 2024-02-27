@@ -32,7 +32,7 @@ const jsonOutputFunctionsParser =
 
 const fetchPapersTool = new FetchPapersTool();
 
-const generateSearchParamsPrompt = ChatPromptTemplate.fromMessages<ChainInput>([
+const generateSearchParamsPrompt = ChatPromptTemplate.fromMessages<Input>([
 	[
 		"system",
 		"Generate a set of search parameters that can be used retrieve one or more scientific research papers related to the user's question.",
@@ -41,15 +41,15 @@ const generateSearchParamsPrompt = ChatPromptTemplate.fromMessages<ChainInput>([
 ]);
 
 const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask", {
-	verbose: true,
+	verbose: process.env.NODE_ENV === "development" ? true : false,
+	cache: process.env.NODE_ENV === "development" ? false : true,
 });
 
-type ChainInput = { question: string };
+type Input = { question: string };
 
-const generateSearchParamsChain = RunnableSequence.from<
-	ChainInput,
-	GeneratedSearchParams
->([
+type Output = GeneratedSearchParams;
+
+const generateSearchParamsChain = RunnableSequence.from<Input, Output>([
 	generateSearchParamsPrompt,
 	model.bind({
 		functions: [generateSearchParams],
@@ -61,7 +61,7 @@ const generateSearchParamsChain = RunnableSequence.from<
 	runName: "GenerateSearchParams",
 });
 
-export const fetchPapersChain = RunnableSequence.from<ChainInput, string>([
+export const fetchPapersChain = RunnableSequence.from<Input, string>([
 	generateSearchParamsChain,
 	fetchPapersTool,
 ]);
