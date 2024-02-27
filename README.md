@@ -4,7 +4,7 @@ This monorepo is based on turborepo.
 
 ## Getting started
 
-This guide describes how to stup and use a GitHub Codespace. 
+This guide describes how to setup and use a GitHub Codespace. 
 
 Developers are assumed to be capable of up their own local development environment, including the installation of `turborepo`, `node`, `pnpm` and the `vercel cli`.
 
