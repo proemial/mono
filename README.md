@@ -9,7 +9,7 @@ This guide describes how to setup and use a GitHub Codespace.
 Developers are assumed to be capable of up their own local development environment, including the installation of `turborepo`, `node`, `pnpm` and the `vercel cli`.
 
 ### Initial setup up of a GitHub Codespace
-> All commands should be executed from the root.
+> All commands should be executed from the root directory, in a terminal, inside the codespaces development environment.
 
 1. Create a codespace using the shortcut in the upper right corner of GitHub. This should eventually bring up an online development environment.
 ![Alt text](<screenshots/CleanShot 2024-02-27 at 15.13.23@2x.png>)
