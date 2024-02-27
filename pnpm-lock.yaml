@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@langchain/core': 0.1.29
+  '@langchain/core': 0.1.36
   drizzle-orm: ^0.29.3
 
 importers:
@@ -37,16 +37,16 @@ importers:
         specifier: ^4.29.3
         version: 4.29.3(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)
       '@langchain/community':
-        specifier: ^0.0.32
-        version: 0.0.32
+        specifier: 0.0.33
+        version: 0.0.33
       '@langchain/core':
-        specifier: 0.1.29
-        version: 0.1.29
+        specifier: 0.1.36
+        version: 0.1.36
       '@langchain/groq':
-        specifier: ^0.0.1
+        specifier: 0.0.1
         version: 0.0.1
       '@langchain/openai':
-        specifier: ^0.0.14
+        specifier: 0.0.14
         version: 0.0.14
       '@proemial/data':
         specifier: workspace:*
@@ -106,11 +106,11 @@ importers:
         specifier: ^0.16.8
         version: 0.16.9
       langchain:
-        specifier: ^0.1.19
-        version: 0.1.19
+        specifier: 0.1.23
+        version: 0.1.23
       langsmith:
-        specifier: ^0.1.3
-        version: 0.1.3
+        specifier: 0.1.7
+        version: 0.1.7
       lucide-react:
         specifier: ^0.294.0
         version: 0.294.0(react@18.2.0)
@@ -1918,8 +1918,8 @@ packages:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  /@langchain/community@0.0.32:
-    resolution: {integrity: sha512-jN4BxGKAmLbA87hqXH5Mx1IRMMVOgcn1TY1MLOVyBcBa12EvHFx8suogtXgA2ekfc8U8nIryVb1ftSupwUBv/A==}
+  /@langchain/community@0.0.33:
+    resolution: {integrity: sha512-m7KfOB2t/6ZQkx29FcqHeOe+jxQZDJdRqpMsCAxRebCaIUiAwNJgRqqukQOcDsG574jhEyEMYuYDfImfXSY7aw==}
     engines: {node: '>=18'}
     peerDependencies:
       '@aws-crypto/sha256-js': ^5.0.0
@@ -2176,25 +2176,25 @@ packages:
       ws:
         optional: true
     dependencies:
-      '@langchain/core': 0.1.29
+      '@langchain/core': 0.1.36
       '@langchain/openai': 0.0.14
       flat: 5.0.2
-      langsmith: 0.1.3
+      langsmith: 0.1.7
       uuid: 9.0.1
       zod: 3.22.4
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@langchain/core@0.1.29:
-    resolution: {integrity: sha512-MVrrb2J1Y08Yy6JnRDy/C/yxZj2PvO6wNkMs8657Q345SHs8iCbRX7Dy7rC69isUrpMjR7PvADFxV9rGvdoMBg==}
+  /@langchain/core@0.1.36:
+    resolution: {integrity: sha512-uZP1Y5gGysSHKT7D5IT+fNJCuWU76msiYuQuQvMQJZyu+MAHAJQrBuokdwxjyMSE1cumGhn4tBnpcFoq5JAm1w==}
     engines: {node: '>=18'}
     dependencies:
       ansi-styles: 5.2.0
       camelcase: 6.3.0
       decamelize: 1.2.0
       js-tiktoken: 1.0.8
-      langsmith: 0.1.3
+      langsmith: 0.1.7
       ml-distance: 4.0.1
       p-queue: 6.6.2
       p-retry: 4.6.2
@@ -2207,7 +2207,7 @@ packages:
     resolution: {integrity: sha512-eZ26j6QQWaTdPc0P5131NEEbm/rj4eCdGw7JgkMY9Oh0DZm+ziSKGfXKQAbd1XtgXHDyBO9nviEF0D9EVkuERQ==}
     engines: {node: '>=18'}
     dependencies:
-      '@langchain/core': 0.1.29
+      '@langchain/core': 0.1.36
       '@langchain/openai': 0.0.14
       groq-sdk: 0.3.0
     transitivePeerDependencies:
@@ -2218,7 +2218,7 @@ packages:
     resolution: {integrity: sha512-co6nRylPrLGY/C3JYxhHt6cxLq07P086O7K3QaZH7SFFErIN9wSzJonpvhZR07DEUq6eK6wKgh2ORxA/NcjSRQ==}
     engines: {node: '>=18'}
     dependencies:
-      '@langchain/core': 0.1.29
+      '@langchain/core': 0.1.36
       js-tiktoken: 1.0.8
       openai: 4.28.0
       zod: 3.22.4
@@ -7558,8 +7558,8 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /langchain@0.1.19:
-    resolution: {integrity: sha512-LYriiBsbdQmVdfREBUga4jSy5/OKGMSxadzW74q7qzQsWOgNFymfHbyb4cmRpwtJmz+WR2TPGLHdPLeIxuJ3eg==}
+  /langchain@0.1.23:
+    resolution: {integrity: sha512-IzvF0c+mi+6kqrC0akWOQnJ0ynwkuh4qhg5bpgr56mlQItaJimO87ujktgxrOb1xMVU7fF9Y52SNc2Kjg7ihJw==}
     engines: {node: '>=18'}
     peerDependencies:
       '@aws-sdk/client-s3': ^3.310.0
@@ -7571,7 +7571,7 @@ packages:
       '@gomomento/sdk-core': ^1.51.1
       '@gomomento/sdk-web': ^1.51.1
       '@google-ai/generativelanguage': ^0.2.1
-      '@google-cloud/storage': ^6.10.1
+      '@google-cloud/storage': ^6.10.1 || ^7.7.0
       '@notionhq/client': ^2.2.10
       '@pinecone-database/pinecone': '*'
       '@supabase/supabase-js': ^2.10.0
@@ -7595,7 +7595,7 @@ packages:
       ioredis: ^5.3.2
       jsdom: '*'
       mammoth: ^1.6.0
-      mongodb: ^5.2.0
+      mongodb: '>=5.2.0'
       node-llama-cpp: '*'
       notion-to-md: ^3.1.0
       officeparser: ^4.0.4
@@ -7608,8 +7608,7 @@ packages:
       sonix-speech-recognition: ^2.1.1
       srt-parser-2: ^1.2.3
       typeorm: ^0.3.12
-      vectordb: ^0.1.4
-      weaviate-ts-client: ^1.4.0
+      weaviate-ts-client: '*'
       web-auth-library: ^1.0.3
       ws: ^8.14.2
       youtube-transcript: ^1.0.6
@@ -7707,8 +7706,6 @@ packages:
         optional: true
       typeorm:
         optional: true
-      vectordb:
-        optional: true
       weaviate-ts-client:
         optional: true
       web-auth-library:
@@ -7721,8 +7718,8 @@ packages:
         optional: true
     dependencies:
       '@anthropic-ai/sdk': 0.9.1
-      '@langchain/community': 0.0.32
-      '@langchain/core': 0.1.29
+      '@langchain/community': 0.0.33
+      '@langchain/core': 0.1.36
       '@langchain/openai': 0.0.14
       binary-extensions: 2.2.0
       expr-eval: 2.0.2
@@ -7730,7 +7727,7 @@ packages:
       js-yaml: 4.1.0
       jsonpointer: 5.0.1
       langchainhub: 0.0.8
-      langsmith: 0.1.3
+      langsmith: 0.1.7
       ml-distance: 4.0.1
       openapi-types: 12.1.3
       p-retry: 4.6.2
@@ -7798,6 +7795,7 @@ packages:
       - replicate
       - typesense
       - usearch
+      - vectordb
       - voy-search
     dev: false
 
@@ -7805,8 +7803,8 @@ packages:
     resolution: {integrity: sha512-Woyb8YDHgqqTOZvWIbm2CaFDGfZ4NTSyXV687AG4vXEfoNo7cGQp7nhl7wL3ehenKWmNEmcxCLgOZzW8jE6lOQ==}
     dev: false
 
-  /langsmith@0.1.3:
-    resolution: {integrity: sha512-kQMS3QySeU0Qt9A71d9trUXbeKn33HfxpRc7hRjSB967zcdTAngh66NcqYqBflD3nOL4FK6LKmvfb3vbNDEoPg==}
+  /langsmith@0.1.7:
+    resolution: {integrity: sha512-yPhpsppcqV1LBDO3Eh3PdiAS5/1Z5pAvgECXQbx77aJjEYqZ4+sm4WBuSHSAdj8on0SG6xXkA+lDsQU8nM+k/w==}
     hasBin: true
     dependencies:
       '@types/uuid': 9.0.7
