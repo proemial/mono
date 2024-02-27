@@ -6,6 +6,7 @@ export function prettySlug(str: string) {
 	const trimmedInput = str
 		.trim()
 		.toLowerCase()
+		.replaceAll(`"`, "")
 		// Remove all commas and periods for a cleaner slug
 		.replaceAll(",", "")
 		.replaceAll(".", "")
