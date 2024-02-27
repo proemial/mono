@@ -15,6 +15,8 @@ Developers are assumed to have the neccesary skills to set up their own local de
 ![Alt text](<screenshots/CleanShot 2024-02-27 at 15.13.23@2x.png>)
 ![Alt text](<screenshots/CleanShot 2024-02-27 at 15.14.24@2x.png>)
 
+1. Install the suggested plugins when prompted
+
 1. Install prerequisites
     - `npm install turbo --global`
     - `npm i -g vercel`
