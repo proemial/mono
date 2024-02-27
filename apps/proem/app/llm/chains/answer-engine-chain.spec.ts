@@ -15,13 +15,15 @@ describe("answerEngineChain", () => {
 		const runResults = await runOnDataset(
 			answerEngineChain,
 			"ASK - Reference dataset",
-			[
-				new CharCountEvaluator(200, 400),
-				new LinksEvaluator(1, 2),
-				new LinkCountEvaluator(1, 2),
-				new ValidLinkEvaluator(),
-				new ValidTitleEvaluator(20, 50),
-			],
+			{
+				evaluators: [
+					new CharCountEvaluator(200, 400),
+					new LinksEvaluator(1, 2),
+					new LinkCountEvaluator(1, 2),
+					new ValidLinkEvaluator(),
+					new ValidTitleEvaluator(20, 50),
+				],
+			},
 		);
 
 		const { scores, avg } = summariseRunResults(runResults);

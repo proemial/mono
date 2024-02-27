@@ -19,13 +19,15 @@ export async function GET(
 	{ params }: { params: { name: string } },
 ) {
 	console.log("params", params);
-	const results = await runOnDataset(answerEngineChain, params.name, [
-		new CharCountEvaluator(200, 400),
-		new LinksEvaluator(1, 2),
-		new LinkCountEvaluator(1, 2),
-		new ValidLinkEvaluator(),
-		new ValidTitleEvaluator(20, 50),
-	]);
+	const results = await runOnDataset(answerEngineChain, params.name, {
+		evaluators: [
+			new CharCountEvaluator(200, 400),
+			new LinksEvaluator(1, 2),
+			new LinkCountEvaluator(1, 2),
+			new ValidLinkEvaluator(),
+			new ValidTitleEvaluator(20, 50),
+		],
+	});
 	const { scores, avg } = summariseRunResults(results);
 
 	return Response.json({ avg, scores, results });
