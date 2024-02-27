@@ -19,13 +19,13 @@ export async function FeedPaper({ paper }: { paper?: OpenAlexPaper }) {
 		return;
 	}
 
-	const flags = await getFeatureFlags([
+	const flags = await getFeatureFlags(
 		Features.showMainTopicInCards,
 		Features.showSubfieldInCards,
 		Features.hideConceptsInCards,
 		Features.showJournalInCards,
 		Features.showOrgInCards,
-	]);
+	);
 
 	return (
 		<PaperCard>

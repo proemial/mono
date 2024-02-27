@@ -6,6 +6,7 @@ import {
 import { currentUser } from "@clerk/nextjs";
 import { Env } from "@proemial/utils/env";
 import { PostHog } from "posthog-node";
+import { cache } from "react";
 
 const posthog = new PostHog(Env.get("NEXT_PUBLIC_POSTHOG_KEY"), {
 	host: Env.get("NEXT_PUBLIC_POSTHOG_HOST"),
@@ -21,7 +22,7 @@ export async function getFeatureFlag(flag: FeatureValue) {
 	return posthog.isFeatureEnabled(flag, distinctID);
 }
 
-export async function getFeatureFlags(flags: FeatureValue[]) {
+async function getFeatureFlagsRequest(...flags: FeatureValue[]) {
 	const distinctID = await getDistinctID();
 
 	if (!distinctID) {
@@ -42,3 +43,5 @@ async function getDistinctID() {
 
 	return user?.emailAddresses?.[0]?.emailAddress ?? user?.id;
 }
+
+export const getFeatureFlags = cache(getFeatureFlagsRequest);
