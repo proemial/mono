@@ -2,81 +2,56 @@
 
 This monorepo is based on turborepo.
 
-## Requirements
+## Getting started
 
-The latest LTS releases of:
+This guide describes setting up a GitHub Codespace. 
 
-- node & pnpm
+Developers are assumed to have the neccesary skills to set up their own local development environment. This includes installation of `turborepo`, `node`, `pnpm` and the `vercel cli`.
+
+### Setting up the development environment
+> All commands should be executed from the root.
+
+1. Create a codespace using the shortcut in the upper right corner of GitHub. This should eventually bring up an online development environment.
+![Alt text](<screenshots/CleanShot 2024-02-27 at 15.13.23@2x.png>)
+![Alt text](<screenshots/CleanShot 2024-02-27 at 15.14.24@2x.png>)
+
+1. Install prerequisites
+    - `npm install turbo --global`
+    - `npm i -g vercel`
+
+1. ~~Link to vercel~~
+    - ~~cd into `/apps/proem` and run `vercel link`~~
+    - ~~Click the login url and copy the code~~
+    - ~~Paste it into your terminal and press enter~~
+    - ~~Complete the wizard, setting the scope to `Proemial` and accepting to link to an existing app~~
+
+1. Link to vercel:
+      - install cli: `pnpm i -g vercel`
+    - login with your user: `vercel login`
+    - link the repository: `vercel link --repo`
+
+1. Pull enviroment variables by running `pnpm run vercel-pull-env`
+
+1. Install dependencies by running `pnpm i`
+
+1. Start a development server using `turbo dev` and open the suggessted url
+
+## Working with the code
+
+### Daily routine
+TODO: 
+- start and stop codespace plus development server
+- pull changes
+- Pull env and install dependencies
+- branching
+
+## Code structure
 
 ### Apps and Packages
 
 - `apps/proem`: The main app
 - `apps/search`: The search api, used by ChatGPT
 - `apps/website`: The website for proemial.ai
-- `packages/data`: Helpers for accessing various api's
-- `packages/models`: Shared models
-- `packages/utils`: Pure TS utilities
-- `packages/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `packages/*`: Code and configuration shared between apps
 
-### Getting started
-
-1. To interact with the (Vercel)[https://vercel.com/docs/cli] run the following commands from the repository root:
-   1.1. install cli: `pnpm i -g vercel`
-   1.2. login with your user: `vercel login`
-   1.3. link the repository: `vercel link --repo`
-
-2. Install dependencies: `pnpm i`
-3. To develop all apps and packages, run the following command from the repository root: `pnpm dev` or filter to application like `pnpm dev --filter proem`
-
-### Build
-
-To build all apps and packages, run the following command from the repository root:
-
-```
-pnpm build
-```
-
-### Unit Test
-
-To run all unit tests in `./apps` and `./packages`, run the following command from the repository root:
-
-```
-pnpm test
-```
-
-Alternatively, the VSCode extension `Vitest` works as well.
-
-Coverage can can be observed with:
-
-```
-pnpm coverage
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+## TODO: The router structure
