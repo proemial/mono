@@ -7,7 +7,7 @@ type Props = {
 	flags: { [key in FeatureKey]: boolean };
 };
 
-export default function CardFooter({ data, flags }: Props) {
+export function CardFooter({ data, flags }: Props) {
 	return (
 		<>
 			{flags.showMainTopicInCards && (
@@ -34,3 +34,5 @@ export default function CardFooter({ data, flags }: Props) {
 		</>
 	);
 }
+
+export default CardFooter;
