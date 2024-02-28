@@ -1,6 +1,7 @@
 import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
 import { ChatOpenAI } from "@langchain/openai";
 import { ModelOptions } from "./model-options";
+import { Env } from "@proemial/utils/env";
 
 // Source: https://platform.openai.com/docs/models/overview
 type OpenAIModel =
@@ -18,12 +19,29 @@ export const buildOpenAIChatModel = (
 	new ChatOpenAI({
 		openAIApiKey,
 		modelName: modelName,
-		temperature: options?.temperature ?? 0.8, // TODO: Set default to `0` once we have evaluations
+		temperature: options?.temperature ?? 0.8, // TODO: Set default to `0` once we have a baseline
 		cache: options?.cache ?? true,
 		verbose: options?.verbose ?? false,
 		configuration: {
 			organization: openaiOrganizations[organization],
 		},
+		onFailedAttempt: (error) => {
+			console.error(error);
+		},
+	});
+
+export const buildOpenAIModelForEvaluation = (
+	modelName: OpenAIModel,
+	temperature?: number,
+) =>
+	new ChatOpenAI({
+		openAIApiKey: Env.get("OPENAI_API_KEY_TEST"),
+		modelName,
+		temperature: temperature ?? 0.8, // TODO: Set default to `0` once we have a baseline
+		cache: false,
+		verbose: true,
+		maxRetries: 0,
+		maxConcurrency: 1, // We get throttled by OpenAI if we set concurrency higher than 1
 		onFailedAttempt: (error) => {
 			console.error(error);
 		},
