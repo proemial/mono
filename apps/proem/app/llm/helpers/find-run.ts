@@ -3,7 +3,7 @@ import { Run } from "@langchain/core/tracers/base";
 export function findRunPaperLinks(run: Run): string[] {
 	type WithLink = { link: string };
 
-	const papersString = findRunWithPapers(run)?.outputs?.papers as
+	const papersString = findRunWithPapersInput(run)?.inputs.papers as
 		| string
 		| undefined;
 
@@ -12,8 +12,8 @@ export function findRunPaperLinks(run: Run): string[] {
 	return papers.map((paper) => paper.link);
 }
 
-export function findRunWithPapers(run: Run): Run | undefined {
-	return findRun(run, (run) => run.outputs?.papers);
+export function findRunWithPapersInput(run: Run): Run | undefined {
+	return findRun(run, (run) => run.inputs.papers);
 }
 export function findRun(
 	within: Run,
