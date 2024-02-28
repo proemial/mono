@@ -59,9 +59,7 @@ export const fetchLatestPapers = async (
 	const today = dayjs().format("YYYY-MM-DD");
 	const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
 	const select = openAlexFields.all;
-	const preprintsAll = await getFeatureFlag(
-		Features.fetchWithoutPreprintsFilter,
-	);
+	const preprintsAll = await getFeatureFlag("fetchWithoutPreprintsFilter");
 
 	const filter = [
 		"type:article",

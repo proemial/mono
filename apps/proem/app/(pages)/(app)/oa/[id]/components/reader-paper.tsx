@@ -6,7 +6,6 @@ import {
 	PaperCardTop,
 } from "@/app/components/card/paper-card";
 import { useFeatureFlags } from "@/app/components/feature-flags/client-flags";
-import { Features } from "@/app/components/feature-flags/features";
 import { usePaperState } from "@/app/components/login/state";
 import {
 	OpenAlexLocation,

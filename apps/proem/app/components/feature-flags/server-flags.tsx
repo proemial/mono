@@ -1,7 +1,4 @@
-import {
-	FeatureKey,
-	FeatureValue,
-} from "@/app/components/feature-flags/features";
+import { FeatureKey, Features } from "@/app/components/feature-flags/features";
 import { mapFeatureFlagsToRequestedKeys } from "@/app/components/feature-flags/map-feauture-flags-to-requested-keys";
 import { posthog } from "@/app/components/feature-flags/post-hog-client";
 import { currentUser } from "@clerk/nextjs";
@@ -16,14 +13,14 @@ const getAllFlagsCached = cache(
 
 const currentUserCached = cache(currentUser);
 
-export async function getFeatureFlag(flag: FeatureValue) {
+export async function getFeatureFlag(flag: FeatureKey) {
 	const distinctID = await getDistinctID();
 
 	if (!distinctID) {
 		return false;
 	}
 
-	return posthog.isFeatureEnabled(flag, distinctID);
+	return posthog.isFeatureEnabled(Features[flag], distinctID);
 }
 
 export async function getFeatureFlags<T extends FeatureKey>(
