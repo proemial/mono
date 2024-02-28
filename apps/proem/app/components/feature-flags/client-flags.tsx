@@ -1,13 +1,10 @@
-import {
-	FeatureKey,
-	FeatureValue,
-} from "@/app/components/feature-flags/features";
+import { FeatureKey, Features } from "@/app/components/feature-flags/features";
 import { mapFeatureFlagsToRequestedKeys } from "@/app/components/feature-flags/map-feauture-flags-to-requested-keys";
 import posthog from "posthog-js";
 import { useActiveFeatureFlags } from "posthog-js/react";
 
-export function useFeatureFlag(flag: FeatureValue) {
-	return posthog.isFeatureEnabled(flag);
+export function useFeatureFlag(flag: FeatureKey) {
+	return posthog.isFeatureEnabled(Features[flag]);
 }
 
 /**
