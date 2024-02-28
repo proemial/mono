@@ -33,7 +33,7 @@ Developers are assumed to be capable of up their own local development environme
 
 1. When committing, first add changes to staged using '+' then choose 'commit & push'
 
-1. In case of conflicts open terminal and run: `GitHub Codespaces plugin`
+1. In case of conflicts open terminal and run: `git fetch & git rebase & git push` then choose 'commit & push'
 
 1. Shut down the codespace using the bottom blue button
 
