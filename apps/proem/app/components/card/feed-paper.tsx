@@ -5,7 +5,6 @@ import {
 	PaperCardTitle,
 	PaperCardTop,
 } from "@/app/components/card/paper-card";
-import { Features } from "@/app/components/feature-flags/features";
 import { getFeatureFlags } from "@/app/components/feature-flags/server-flags";
 import { Spinner } from "@/app/components/spinner";
 import {
@@ -19,13 +18,13 @@ export async function FeedPaper({ paper }: { paper?: OpenAlexPaper }) {
 		return;
 	}
 
-	const flags = await getFeatureFlags(
-		Features.showMainTopicInCards,
-		Features.showSubfieldInCards,
-		Features.hideConceptsInCards,
-		Features.showJournalInCards,
-		Features.showOrgInCards,
-	);
+	const flags = await getFeatureFlags([
+		"showMainTopicInCards",
+		"showSubfieldInCards",
+		"hideConceptsInCards",
+		"showJournalInCards",
+		"showOrgInCards",
+	]);
 
 	return (
 		<PaperCard>

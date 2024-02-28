@@ -11,8 +11,12 @@ export const Features = {
 export type FeatureKey = keyof typeof Features;
 export type FeatureValue = (typeof Features)[FeatureKey];
 
-export function keyByValue(flag: FeatureValue) {
+type FeaturesValueMap = {
+	[K in keyof typeof Features as (typeof Features)[K]]: K;
+};
+
+export function keyByValue<T extends keyof FeaturesValueMap>(flag: T) {
 	return Object.entries(Features)
 		.find((f) => f[1] === flag)
-		?.at(0) as FeatureKey;
+		?.at(0) as FeaturesValueMap[T];
 }

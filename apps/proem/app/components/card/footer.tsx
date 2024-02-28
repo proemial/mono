@@ -4,7 +4,7 @@ import { OpenAlexWorkMetadata } from "@proemial/models/open-alex";
 
 type Props = {
 	data: OpenAlexWorkMetadata;
-	flags: { [key in FeatureKey]: boolean };
+	flags: { [key in FeatureKey]?: boolean };
 };
 
 export function CardFooter({ data, flags }: Props) {

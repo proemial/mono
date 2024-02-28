@@ -1,16 +1,20 @@
 import {
 	FeatureKey,
 	FeatureValue,
-	keyByValue,
+	Features,
 } from "@/app/components/feature-flags/features";
+import { posthog } from "@/app/components/feature-flags/post-hog-client";
 import { currentUser } from "@clerk/nextjs";
-import { Env } from "@proemial/utils/env";
-import { PostHog } from "posthog-node";
 import { cache } from "react";
 
-const posthog = new PostHog(Env.get("NEXT_PUBLIC_POSTHOG_KEY"), {
-	host: Env.get("NEXT_PUBLIC_POSTHOG_HOST"),
-});
+const getAllFlagsCached = cache(
+	async (...parameters: Parameters<typeof posthog.getAllFlags>) => {
+		const allFlags = await posthog.getAllFlags(...parameters);
+		return allFlags;
+	},
+);
+
+const currentUserCached = cache(currentUser);
 
 export async function getFeatureFlag(flag: FeatureValue) {
 	const distinctID = await getDistinctID();
@@ -22,26 +26,19 @@ export async function getFeatureFlag(flag: FeatureValue) {
 	return posthog.isFeatureEnabled(flag, distinctID);
 }
 
-async function getFeatureFlagsRequest(...flags: FeatureValue[]) {
+export async function getFeatureFlags<T extends FeatureKey>(
+	flags: T[],
+): Promise<Record<T, boolean>> {
 	const distinctID = await getDistinctID();
+	const allFlags = distinctID ? await getAllFlagsCached(distinctID) : {};
 
-	if (!distinctID) {
-		return Object.fromEntries(flags.map((f) => [keyByValue(f), false])) as {
-			[key in FeatureKey]: boolean;
-		};
-	}
-
-	const all = await posthog.getAllFlags(distinctID);
-
-	return Object.fromEntries(flags.map((f) => [keyByValue(f), !!all[f]])) as {
-		[key in FeatureKey]: boolean;
-	};
+	return Object.fromEntries(
+		flags.map((f) => [f, Boolean(allFlags[Features[f]])]),
+	) as Record<T, boolean>;
 }
 
 async function getDistinctID() {
-	const user = await currentUser();
+	const user = await currentUserCached();
 
 	return user?.emailAddresses?.[0]?.emailAddress ?? user?.id;
 }
-
-export const getFeatureFlags = cache(getFeatureFlagsRequest);
