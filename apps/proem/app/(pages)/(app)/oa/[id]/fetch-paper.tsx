@@ -68,7 +68,7 @@ export const fetchLatestPapers = async (
 		`publication_date:>${twoWeeksAgo}`, // We do not want old papers that were added recently
 		`publication_date:<${today}`, // We do not want papers published in the future
 		"open_access.is_oa:true",
-		!!preprintsAll ? undefined : `primary_location.version:submittedVersion`,
+		preprintsAll ? undefined : "primary_location.version:submittedVersion",
 		concept ? `primary_topic.field.id:${concept}` : undefined,
 	]
 		.filter((f) => !!f)
@@ -88,7 +88,7 @@ export const fetchLatestPapers = async (
 	// Overwriting all papers always is not optimal
 	await Redis.papers.upsertAll(papers);
 
-	return papers.sort(sortByPublicationDateDesc);
+	return [...papers].sort(sortByPublicationDateDesc);
 };
 
 const sortByPublicationDateDesc = (a: OpenAlexPaper, b: OpenAlexPaper) =>

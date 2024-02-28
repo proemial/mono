@@ -70,7 +70,8 @@ async function Actions() {
 }
 
 function Questions() {
-	const starters = STARTERS.map((text, index) => ({ index, text }))
+	const starters = [...STARTERS]
+		.map((text, index) => ({ index, text }))
 		.sort(() => 0.5 - Math.random())
 		.slice(0, 3);
 

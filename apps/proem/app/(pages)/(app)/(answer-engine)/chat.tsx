@@ -292,7 +292,8 @@ const Starters = memo(function Starters({ append }: { append: any }) {
 
 	if (!isClient) return null;
 
-	const starters = STARTERS.map((text, index) => ({ index, text }))
+	const starters = [...STARTERS]
+		.map((text, index) => ({ index, text }))
 		.sort(() => 0.5 - Math.random())
 		.slice(0, 3);
 
