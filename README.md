@@ -31,6 +31,10 @@ Developers are assumed to be capable of up their own local development environme
 
 1. Start a development server using `turbo dev` and open the port `4242` url mapping
 
+1. When committing, first add changes to staged using '+' then choose 'commit & push'
+
+1. In case of conflicts open terminal and run: `GitHub Codespaces plugin`
+
 1. Shut down the codespace using the bottom blue button
 
 > To reopen the codespace, got to https://github.com/codespaces and start it. There is an hourly fee for running it, so remember to shut it down whenever your done. (shuts down automatically after 30 minutes)
