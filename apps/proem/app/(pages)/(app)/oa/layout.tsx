@@ -1,7 +1,7 @@
 import WithHeader from "@/app/(pages)/(app)/header";
 import { ReactNode } from "react";
 
-const pageName = "reader";
+const pageName = "read";
 
 type Props = {
 	children: ReactNode;

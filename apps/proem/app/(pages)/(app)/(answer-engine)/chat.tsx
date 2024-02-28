@@ -203,7 +203,7 @@ export default function Chat({
 	);
 
 	return (
-		<WithHeader title="science answers" action={actionButton}>
+		<WithHeader title="ask" action={actionButton}>
 			<div
 				className={cn("flex flex-col px-4 pt-6 pb-12", {
 					"h-full": isEmptyScreen,
