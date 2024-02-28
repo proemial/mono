@@ -16,11 +16,13 @@ export function PostHogClient({ children }: { children: ReactNode }) {
 }
 
 function useInit() {
-	const { user } = useUser();
+	const { user, isLoaded } = useUser();
 	const [initialized, setInitialized] = useState(false);
 
 	analyticsTrace("[PosthogClient] useInit");
 	useEffect(() => {
+		// wait for clerk to load to bootstrap with
+		if (!isLoaded) return;
 		const persistence = user ? undefined : "memory";
 		const distinctID = user?.primaryEmailAddress?.emailAddress || user?.id;
 
@@ -42,7 +44,7 @@ function useInit() {
 			},
 		});
 		setInitialized(true);
-	}, [setInitialized, user]);
+	}, [user, isLoaded]);
 
 	return initialized;
 }

@@ -1,8 +1,8 @@
 import {
 	FeatureKey,
 	FeatureValue,
-	Features,
 } from "@/app/components/feature-flags/features";
+import { mapFeatureFlagsToRequestedKeys } from "@/app/components/feature-flags/map-feauture-flags-to-requested-keys";
 import { posthog } from "@/app/components/feature-flags/post-hog-client";
 import { currentUser } from "@clerk/nextjs";
 import { cache } from "react";
@@ -39,13 +39,4 @@ async function getDistinctID() {
 	const user = await currentUserCached();
 
 	return user?.emailAddresses?.[0]?.emailAddress ?? user?.id;
-}
-
-function mapFeatureFlagsToRequestedKeys<T extends FeatureKey>(
-	flags: T[],
-	allFlags: Awaited<ReturnType<typeof posthog.getAllFlags>>,
-) {
-	return Object.fromEntries(
-		flags.map((f) => [f, Boolean(allFlags[Features[f]])]),
-	) as Record<T, boolean>;
 }

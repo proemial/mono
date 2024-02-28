@@ -31,11 +31,11 @@ export function ReaderPaper({ children, paper, id }: Props) {
 	const data = paper.data as OpenAlexWorkMetadata;
 
 	const flags = useFeatureFlags([
-		Features.showMainTopicInCards,
-		Features.showSubfieldInCards,
-		Features.hideConceptsInCards,
-		Features.showJournalInCards,
-		Features.showOrgInCards,
+		"showMainTopicInCards",
+		"showSubfieldInCards",
+		"hideConceptsInCards",
+		"showJournalInCards",
+		"showOrgInCards",
 	]);
 
 	return (
