@@ -32,13 +32,20 @@ export async function getFeatureFlags<T extends FeatureKey>(
 	const distinctID = await getDistinctID();
 	const allFlags = distinctID ? await getAllFlagsCached(distinctID) : {};
 
-	return Object.fromEntries(
-		flags.map((f) => [f, Boolean(allFlags[Features[f]])]),
-	) as Record<T, boolean>;
+	return mapFeatureFlagsToRequestedKeys(flags, allFlags);
 }
 
 async function getDistinctID() {
 	const user = await currentUserCached();
 
 	return user?.emailAddresses?.[0]?.emailAddress ?? user?.id;
+}
+
+function mapFeatureFlagsToRequestedKeys<T extends FeatureKey>(
+	flags: T[],
+	allFlags: Awaited<ReturnType<typeof posthog.getAllFlags>>,
+) {
+	return Object.fromEntries(
+		flags.map((f) => [f, Boolean(allFlags[Features[f]])]),
+	) as Record<T, boolean>;
 }
