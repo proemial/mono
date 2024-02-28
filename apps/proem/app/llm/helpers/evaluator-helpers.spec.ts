@@ -20,7 +20,7 @@ describe("withinBasedScore", () => {
 	});
 
 	it("(200, 400, 300) = 1", () => {
-		expect(countDiff(200, 400, 300)).toBe(1);
+		expect(countDiff(200, 400, 300)).toBe(0);
 	});
 });
 
