@@ -19,8 +19,7 @@ Developers are assumed to be capable of up their own local development environme
 ![alt text](<screenshots/CleanShot 2024-02-27 at 16.21.43@2x.png>)
 
 1. Install prerequisite cli's
-    - `npm install turbo --global`
-    - `npm i -g vercel`
+    - `npm i -g turbo vercel`
 
 1. Link to vercel:
     - login with your GitHub user: `vercel login`
