@@ -1,0 +1,32 @@
+import { getSelectRelevantPapersChain } from "@/app/llm/chains/fetch-papers/select-relevant-papers-chain";
+import { CharCountEvaluator } from "@/app/llm/evaluators/string-evaluators";
+import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
+import { buildOpenAIModelForEvaluation } from "@/app/llm/models/openai-model";
+import { runOnDataset } from "langchain/smith";
+import { NextRequest } from "next/server";
+
+export const revalidate = 1;
+
+export async function GET(
+	_req: NextRequest,
+	{ params }: { params: { name: string } },
+) {
+	const model = buildOpenAIModelForEvaluation("gpt-3.5-turbo-0125");
+	const results = await runOnDataset(
+		getSelectRelevantPapersChain(model),
+		params.name,
+		{
+			evaluationConfig: {
+				customEvaluators: [new CharCountEvaluator(200, 400)],
+			},
+			projectMetadata: {
+				model: model.modelName,
+				temperature: model.temperature,
+				prompt_changes: "none",
+			},
+		},
+	);
+	const { scores, avg } = summariseRunResults(results);
+
+	return Response.json({ avg, scores, results });
+}
