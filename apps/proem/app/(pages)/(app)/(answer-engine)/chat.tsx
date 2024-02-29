@@ -3,7 +3,7 @@
 import SearchInput from "@/app/(pages)/(app)/(answer-engine)/search-input";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import WithHeader from "@/app/(pages)/(app)/header";
-import { applyLinks } from "@/app/(pages)/(app)/oa/[id]/components/panels/bot/apply-links";
+import { applyLinks } from "@/app/components/chat/apply-links";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { Tracker } from "@/app/components/analytics/tracker";
 import {
