@@ -31,11 +31,11 @@ const prompt = ChatPromptTemplate.fromMessages<Input>([
 
     """Studies show that cigarette
     smokers are <a href="https://proem.ai/oa/W4213460776?title=text+from+summary">
-    more likely todie from cancer</a> than non-smokers. Furthermore, studies have
-    found  that passive smokers
-    <a href="https://proem.ai/oa/W2004456560?title=text+from+summary">hae a higher
-    risk of cardiovascular disease</a> than people never exposed to a smoking
-    environment."""
+    more likely to die from cancer</a> than non-smokers. Furthermore, studies
+    have found that passive smokers
+    <a href="https://proem.ai/oa/W2004456560?title=text+from+summary">have a
+    higher risk of cardiovascular disease</a> than people never exposed to a
+    smoking environment."""
 
     - The links should be pointing to the returned proem links, with the generated
     "summaries" appended as a query string to the link
