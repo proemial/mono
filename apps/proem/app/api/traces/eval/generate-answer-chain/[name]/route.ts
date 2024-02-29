@@ -37,7 +37,7 @@ export async function GET(
 			projectMetadata: {
 				model: model.modelName,
 				temperature: model.temperature,
-				prompt_changes: "none",
+				latest_prompt_changes: "ask for markdown links",
 			},
 		},
 	);
