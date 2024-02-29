@@ -3,8 +3,10 @@ import { Run } from "@langchain/core/tracers/base";
 import {
 	calculateDiffScore,
 	extractLinks,
+	extractATag,
 	runOutputAsString,
 	urlRegExp,
+	extractFirstRelativeLink,
 } from "../helpers/evaluator-helpers";
 import { findRunPaperLinks } from "@/app/llm/helpers/find-run";
 
@@ -29,10 +31,11 @@ export class LinksEvaluator implements RunEvaluator {
 		text: string,
 		paperLinks: string[],
 	) {
-		const answerLinks = extractLinks(text);
-		const matches = answerLinks.filter(
-			(url) => paperLinks.includes(url.path) && url.host === "proem.ai",
-		);
+		const answerLinks = extractATag(text);
+		const matches = answerLinks.filter((link) => {
+			const relativeLink = extractFirstRelativeLink(link);
+			return relativeLink ? paperLinks.includes(relativeLink) : false;
+		});
 
 		const value = matches.length;
 		const score = calculateDiffScore(min, max, matches.length);

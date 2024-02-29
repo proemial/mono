@@ -1,5 +1,6 @@
 import {
 	LinkCountEvaluator,
+	LinksEvaluator,
 	ValidLinkEvaluator,
 	ValidTitleEvaluator,
 } from "./link-evaluators";
@@ -152,7 +153,7 @@ describe("ValidTitleEvaluator", () => {
 
 	it("(1, 1) == 0", () => {
 		expect(ValidTitleEvaluator.evaluate(1, 1, "")).toEqual({
-			score: 1,
+			score: 0,
 			value: 0,
 			comment: 'expected: 1-1, actual: {"titles":[]}',
 		});
@@ -166,5 +167,42 @@ describe("ValidTitleEvaluator", () => {
 			value: 3,
 			comment: 'expected: 1-3, actual: {"titles":["baz"]}',
 		});
+	});
+});
+
+describe("LinksEvaluator", () => {
+	it("(1, 2) one-link == 1", () => {
+		const paperLinks = ["/oa/W2030447619"];
+		const answer =
+			'more information in the papers: <a href="/oa/W2030447619">Grapes, Wines, Resveratrol, and Heart Health</a> and';
+		const result = LinksEvaluator.evaluate(1, 2, answer, paperLinks);
+
+		expect(result.score).toBe(1);
+	});
+
+	it("(2, 2) two-links == 1", () => {
+		const paperLinks = ["/oa/W2030447619", "/oa/W2101940624"];
+		const answer =
+			'Learn more <a href="/oa/W2030447619?title=Grapes%2C+Wines%2C+Resveratrol%2C+and+Heart+Health">here</a> and <a href="/oa/W2101940624?title=Wine+and+Your+Heart">here</a>.';
+		const result = LinksEvaluator.evaluate(2, 2, answer, paperLinks);
+
+		expect(result.score).toBe(1);
+	});
+
+	it("(1, 2) no-links == 0", () => {
+		const paperLinks = ["/oa/W2030447619", "/oa/W2101940624"];
+		const answer = "no links :(";
+		const result = LinksEvaluator.evaluate(1, 2, answer, paperLinks);
+
+		expect(result.score).toBe(0);
+	});
+
+	it("(2, 2) one-link == 0.5", () => {
+		const paperLinks = ["/oa/W2030447619", "/oa/W2101940624"];
+		const answer =
+			'more information in the papers: <a href="/oa/W2030447619">Grapes, Wines, Resveratrol, and Heart Health</a> and';
+		const result = LinksEvaluator.evaluate(2, 2, answer, paperLinks);
+
+		expect(result.score).toBe(0.5);
 	});
 });
