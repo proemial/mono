@@ -6,6 +6,7 @@ import {
 } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { LangChainChatHistoryMessage } from "../utils";
+import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 
 const prompt = ChatPromptTemplate.fromMessages<Input>([
 	[
@@ -72,8 +73,9 @@ type Input = {
 
 type Output = string;
 
-export const generateAnswerChain = RunnableSequence.from<Input, Output>([
-	prompt,
-	model,
-	stringOutputParser,
-]);
+export const getGenerateAnswerChain = (modelOverride: BaseChatModel = model) =>
+	RunnableSequence.from<Input, Output>([
+		prompt,
+		modelOverride,
+		stringOutputParser,
+	]);

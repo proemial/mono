@@ -1,7 +1,7 @@
 import { fetchPapersChain } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
 import { RunnableMap, RunnableSequence } from "@langchain/core/runnables";
 import { LangChainChatHistoryMessage } from "../utils";
-import { generateAnswerChain } from "./generate-answer-chain";
+import { getGenerateAnswerChain } from "./generate-answer-chain";
 
 type Input = {
 	question: string;
@@ -30,7 +30,7 @@ export const answerEngineChain = RunnableSequence.from<Input, Output>([
 	}).withConfig({
 		runName: "FetchPapers",
 	}),
-	generateAnswerChain,
+	getGenerateAnswerChain(),
 ]).withConfig({
 	runName: "AnswerEngine",
 });
