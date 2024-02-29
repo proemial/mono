@@ -230,6 +230,7 @@ export default function Chat({
 							onChange={handleInputChange}
 							disabled={isLoading || disabledQuestions}
 							placeholder="Ask anything"
+							trackingKey={analyticsKeys.ask.submit.ask}
 						/>
 					</div>
 				</div>

@@ -9,14 +9,16 @@ type Props = {
 	placeholder: string;
 	onSubmit: (e: FormEvent<HTMLFormElement>) => void;
 	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	trackingKey: string;
 	disabled?: boolean;
 };
 
 export default function ChatInput(props: Props) {
-	const { input, disabled, placeholder, onSubmit, onChange } = props;
+	const { input, placeholder, onSubmit, onChange, trackingKey, disabled } =
+		props;
 
 	const trackAndInvoke = (event: FormEvent<HTMLFormElement>) => {
-		Tracker.track(analyticsKeys.ask.submit.ask, {
+		Tracker.track(trackingKey, {
 			text: input,
 		});
 
