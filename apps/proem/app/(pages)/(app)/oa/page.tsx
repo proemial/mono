@@ -1,8 +1,8 @@
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import { fetchLatestPapers } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
-import { AskInput } from "@/app/(pages)/(app)/oa/ask-input";
 import { Redirect } from "@/app/(pages)/(app)/oa/redirect";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
+import { AskInput } from "@/app/(pages)/(app)/oa/ask-input";
 import { LinkButton } from "@/app/components/proem-ui/link-button";
 import { Search } from "lucide-react";
 
@@ -11,11 +11,13 @@ export const revalidate = 1;
 export default async function ReadPage() {
 	return (
 		<Redirect>
-			<div className="flex flex-col h-full px-4 pt-6 pb-1">
-				<div className="flex flex-col items-center justify-center h-full px-8 text-center">
+			{/* justify-content: space-between;
+    height: 100%; */}
+			<div className="relative flex flex-col justify-between w-full h-full px-4 pt-6">
+				<div className="flex flex-col items-center justify-center px-8 text-center">
 					<Text />
 				</div>
-				<div className="flex flex-col gap-2 py-2 text-xs font-normal">
+				<div className="flex flex-col gap-2 py-2 pb-16 text-xs font-normal">
 					<Actions />
 					<Questions />
 				</div>
@@ -92,8 +94,10 @@ function Questions() {
 					{starter.text}
 				</LinkButton>
 			))}
-			<div className="relative w-full">
-				<AskInput />
+			<div className="fixed left-0 w-full bg-black bottom-14 shadow-top">
+				<div className="w-full max-w-screen-md px-4 py-3 mx-auto">
+					<AskInput />
+				</div>
 			</div>
 		</div>
 	);

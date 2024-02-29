@@ -1,19 +1,18 @@
 "use client";
-
 import { Spinner } from "@/app/components/spinner";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { useChat } from "ai/react";
 import React from "react";
-import { BotMessages } from "./messages";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
-import ChatInput from "@/app/components/chat/chat-input";
+import { ChatInput } from "@/app/components/chat/chat-input";
+import { ChatMessages } from "@/app/components/chat/chat-messages";
 
 type Props = {
 	paper: OpenAlexPaper;
 	starters: string[];
 };
 
-export function InsightsBot({ paper, starters }: Props) {
+export function PaperChat({ paper, starters }: Props) {
 	const { title, abstract } = paper.data;
 
 	const { messages, input, handleInputChange, handleSubmit, append } = useChat({
@@ -21,7 +20,7 @@ export function InsightsBot({ paper, starters }: Props) {
 		api: "/api/bot/chat",
 	});
 
-	const chatWrapperRef = React.useRef<HTMLInputElement>(null);
+	const chatWrapperRef = React.useRef<HTMLDivElement>(null);
 	React.useEffect(() => {
 		if (messages?.length > 0 && chatWrapperRef.current) {
 			chatWrapperRef.current.scrollIntoView(false);
@@ -29,7 +28,7 @@ export function InsightsBot({ paper, starters }: Props) {
 	}, [messages]);
 
 	return (
-		<div className="flex flex-col h-full">
+		<div className="flex flex-col scroll-mb-96" ref={chatWrapperRef}>
 			{!starters && (
 				<div className="mb-4">
 					<Spinner />
@@ -37,12 +36,15 @@ export function InsightsBot({ paper, starters }: Props) {
 			)}
 
 			{starters && (
-				<BotMessages
-					messages={messages}
-					starters={starters}
-					append={append}
-					chatWrapperRef={chatWrapperRef}
-				/>
+				<>
+					<div>
+						<ChatMessages
+							messages={messages}
+							starters={starters}
+							append={append}
+						/>
+					</div>
+				</>
 			)}
 
 			<div className="fixed left-0 w-full bg-black bottom-14 shadow-top">

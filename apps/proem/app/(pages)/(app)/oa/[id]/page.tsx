@@ -48,7 +48,7 @@ export default async function ReaderPage({ params }: Props) {
 					</TabsTrigger>
 				</TabsList>
 				<TabsContent value="QA">
-					<div className="flex flex-col h-full gap-6 px-4 text-base">
+					<div className="flex flex-col h-full gap-6 px-4">
 						<Suspense fallback={<Spinner />}>
 							<QuestionsPanel paper={paper} />
 						</Suspense>

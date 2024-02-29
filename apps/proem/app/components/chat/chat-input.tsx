@@ -6,16 +6,16 @@ import { ChangeEvent, FormEvent } from "react";
 import { useDrawerState } from "../login/state";
 
 type Props = {
-	value: string;
 	placeholder: string;
-	onSubmit: (e: FormEvent<HTMLFormElement>) => void;
-	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	trackingKey: string;
+	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+	value?: string;
 	disabled?: boolean;
 	authRequired?: boolean;
 };
 
-export default function ChatInput(props: Props) {
+export function ChatInput(props: Props) {
 	const {
 		value,
 		placeholder,
@@ -26,6 +26,7 @@ export default function ChatInput(props: Props) {
 		authRequired,
 	} = props;
 
+	// TODO: Fix return url
 	const { userId } = useAuth();
 	const { open } = useDrawerState();
 

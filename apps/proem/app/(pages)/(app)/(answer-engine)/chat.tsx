@@ -1,6 +1,6 @@
 "use client";
 
-import ChatInput from "@/app/components/chat/chat-input";
+import { ChatInput } from "@/app/components/chat/chat-input";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import WithHeader from "@/app/(pages)/(app)/header";
 import { applyLinks } from "@/app/components/chat/apply-links";

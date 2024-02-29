@@ -5,7 +5,6 @@ import { ReactNode, useEffect } from "react";
 
 export function Redirect({ children }: { children: ReactNode }) {
 	const { latest } = usePaperState();
-	console.log("latest", latest);
 
 	useEffect(() => {
 		if (latest) {

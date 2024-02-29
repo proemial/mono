@@ -1,19 +1,23 @@
 "use client";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
-import { Tracker } from "@/app/components/analytics/tracker";
-import { TextInput } from "@/app/components/proem-ui/text-input";
+import { ChatInput } from "@/app/components/chat/chat-input";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 export function AskInput() {
+	const [value, setValue] = useState("");
+	const router = useRouter();
+
 	return (
-		<form
-			className="flex flex-row items-center"
-			action="/"
-			method="get"
-			onSubmit={() => {
-				Tracker.track(analyticsKeys.read.submit.ask);
+		<ChatInput
+			value={value}
+			placeholder="Ask anything"
+			trackingKey={analyticsKeys.ask.submit.ask}
+			onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
+			onSubmit={(e) => {
+				e.preventDefault();
+				router.push(`/?q=${value}`);
 			}}
-		>
-			<TextInput />
-		</form>
+		/>
 	);
 }

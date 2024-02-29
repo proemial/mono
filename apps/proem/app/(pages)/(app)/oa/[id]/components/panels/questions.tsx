@@ -1,7 +1,7 @@
 import { generateStarters } from "@/app/prompts/starters";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
-import { InsightsBot } from "./bot/bot";
+import { PaperChat } from "./chat/paper-chat";
 
 type Props = {
 	paper: OpenAlexPaper;
@@ -14,7 +14,7 @@ export async function QuestionsPanel(props: Props) {
 		? paper?.generated?.starters
 		: await generate(paper);
 
-	return <InsightsBot {...props} starters={starters} />;
+	return <PaperChat {...props} starters={starters} />;
 }
 
 async function generate(paper: OpenAlexPaper) {

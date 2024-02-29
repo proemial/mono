@@ -4,8 +4,8 @@ import { Input } from "@/app/components/shadcn-ui/input";
 import { ChangeEvent } from "react";
 
 type Props = {
-	value: string;
 	placeholder: string;
+	value?: string;
 	disabled?: boolean;
 	readonly?: boolean;
 	onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
