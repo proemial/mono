@@ -2,7 +2,9 @@ import {
 	calculateDiffScore,
 	countDiff,
 	extractLinks,
-	extractATag,
+	extractATags,
+	extractFirstRelativeLink,
+	extractMarkdownLinks,
 } from "./evaluator-helpers";
 
 describe("withinBasedScore", () => {
@@ -130,25 +132,25 @@ describe("extractLinks", () => {
 	});
 });
 
-describe("extractATag", () => {
+describe("extractATags", () => {
 	it("extracts a tag", () => {
 		const text =
 			'more information in the papers: <a href="/oa/W2030447619">Grapes, Wines, Resveratrol, and Heart Health</a> and';
-		const expected =
-			'<a href="/oa/W2030447619">Grapes, Wines, Resveratrol, and Heart Health</a>';
-		const aTags = extractATag(text);
-		expect(aTags[0]).toEqual(expected);
-		expect(aTags.length).toBe(1);
+		const expected = [
+			'<a href="/oa/W2030447619">Grapes, Wines, Resveratrol, and Heart Health</a>',
+		];
+		const aTags = extractATags(text);
+		expect(aTags).toEqual(expected);
 	});
 
 	it("extracts a tag w/ query param", () => {
 		const text =
 			'more information in the papers: <a href="/oa/W2030447619?title=foo+bar+baz">Grapes, Wines, Resveratrol, and Heart Health</a> and';
-		const expected =
-			'<a href="/oa/W2030447619?title=foo+bar+baz">Grapes, Wines, Resveratrol, and Heart Health</a>';
-		const aTags = extractATag(text);
-		expect(aTags[0]).toEqual(expected);
-		expect(aTags).toHaveLength(1);
+		const expected = [
+			'<a href="/oa/W2030447619?title=foo+bar+baz">Grapes, Wines, Resveratrol, and Heart Health</a>',
+		];
+		const aTags = extractATags(text);
+		expect(aTags).toEqual(expected);
 	});
 
 	it("extracts multiple a tags", () => {
@@ -158,9 +160,8 @@ describe("extractATag", () => {
 			'<a href="/oa/W2030447619">1st title</a>',
 			'<a href="/oa/W2030447619">2nd title</a>',
 		];
-		const aTags = extractATag(text);
+		const aTags = extractATags(text);
 		expect(aTags).toEqual(expected);
-		expect(aTags).toHaveLength(2);
 	});
 
 	it("extracts multiple a tags w/ query params", () => {
@@ -170,14 +171,63 @@ describe("extractATag", () => {
 			'<a href="/oa/W2030447619?title=foo+bar">1st title</a>',
 			'<a href="/oa/W2030447619?title=baz">2nd title</a>',
 		];
-		const aTags = extractATag(text);
+		const aTags = extractATags(text);
 		expect(aTags).toEqual(expected);
-		expect(aTags).toHaveLength(2);
 	});
 
 	it("extracts no a tags", () => {
 		const text = "No links :(";
-		const aTags = extractATag(text);
-		expect(aTags).toHaveLength(0);
+		const aTags = extractATags(text);
+		expect(aTags).toEqual([]);
+	});
+});
+
+describe("extractFirstRelativeLink", () => {
+	it("should extract a link", () => {
+		const text =
+			'<a href="/oa/W2030447619?title=foo+bar+baz">Grapes, Wines, Resveratrol, and Heart Health</a>';
+		const expected = "/oa/W2030447619";
+		const link = extractFirstRelativeLink(text);
+		expect(link).toEqual(expected);
+	});
+
+	it("should extract the first link", () => {
+		const text =
+			"/oa/W2030447618?title=foo+bar+baz /oa/W2030447619?title=foo+bar+baz";
+		const expected = "/oa/W2030447618";
+		const link = extractFirstRelativeLink(text);
+		expect(link).toEqual(expected);
+	});
+
+	it("should return undefined", () => {
+		const text = "foo";
+		const link = extractFirstRelativeLink(text);
+		expect(link).toEqual(undefined);
+	});
+});
+
+describe("extractMarkdownLink", () => {
+	it("should extract a link", () => {
+		const text = "some context [link text](/oa/W2030447619) around the link";
+		const expected = ["[link text](/oa/W2030447619)"];
+		const markdownLinks = extractMarkdownLinks(text);
+		expect(markdownLinks).toEqual(expected);
+	});
+
+	it("should extract multiple links", () => {
+		const text =
+			"some context [link text](/oa/W2030447619) around the link, and here's another link: [link text](/oa/W2030447618).";
+		const expected = [
+			"[link text](/oa/W2030447619)",
+			"[link text](/oa/W2030447618)",
+		];
+		const markdownLinks = extractMarkdownLinks(text);
+		expect(markdownLinks).toEqual(expected);
+	});
+
+	it("should extract no links", () => {
+		const text = "blah blah blah, no links here, just a bunch of words.";
+		const markdownLinks = extractMarkdownLinks(text);
+		expect(markdownLinks).toEqual([]);
 	});
 });

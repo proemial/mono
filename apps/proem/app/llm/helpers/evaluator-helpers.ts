@@ -50,13 +50,16 @@ export function extractLinks(text: string) {
 const relativeLink = /\/oa\/W[0-9]+/;
 const relativeATagLinksWithOptionalQueryParam =
 	/<a\s+href="\/oa\/W[0-9]+(\?title=[^&"]*)?">.*?<\/a>/g;
-const relativeMarkdownLinks = /\[.*?\]\(\/oa\/W[0-9]+\)/g;
 const relativeMarkdownLinksWithOptionalQueryParam =
 	/\[.*?\]\(\/oa\/W[0-9]+(\?title=[^)\]]*)?\)/g;
 
-export function extractATag(text: string) {
-	// TODO: Change to relative markdown link when we change the prompt
+export function extractATags(text: string) {
 	const matches = text.match(relativeATagLinksWithOptionalQueryParam);
+	return matches ?? [];
+}
+
+export function extractMarkdownLinks(text: string) {
+	const matches = text.match(relativeMarkdownLinksWithOptionalQueryParam);
 	return matches ?? [];
 }
 
