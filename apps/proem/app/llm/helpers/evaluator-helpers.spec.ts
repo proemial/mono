@@ -5,6 +5,7 @@ import {
 	extractATags,
 	extractFirstRelativeLink,
 	extractMarkdownLinks,
+	extractMarkdownLinkTitle,
 } from "./evaluator-helpers";
 
 describe("withinBasedScore", () => {
@@ -229,5 +230,21 @@ describe("extractMarkdownLink", () => {
 		const text = "blah blah blah, no links here, just a bunch of words.";
 		const markdownLinks = extractMarkdownLinks(text);
 		expect(markdownLinks).toEqual([]);
+	});
+});
+
+describe("extractMarkdownLinkTitle", () => {
+	it("should extract a title", () => {
+		const text =
+			"some context [some text](/oa/W2030447619?title=foo+bar) around the link";
+		const expected = "foo bar";
+		const titles = extractMarkdownLinkTitle(text);
+		expect(titles).toEqual(expected);
+	});
+
+	it("should extract no titles", () => {
+		const text = "no links :(";
+		const titles = extractMarkdownLinkTitle(text);
+		expect(titles).toEqual(undefined);
 	});
 });

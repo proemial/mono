@@ -52,6 +52,7 @@ const relativeATagLinksWithOptionalQueryParam =
 	/<a\s+href="\/oa\/W[0-9]+(\?title=[^&"]*)?">.*?<\/a>/g;
 const relativeMarkdownLinksWithOptionalQueryParam =
 	/\[.*?\]\(\/oa\/W[0-9]+(\?title=[^)\]]*)?\)/g;
+const titleQueryParam = /(?<=title=)[^&\)]+/;
 
 export function extractATags(text: string) {
 	const matches = text.match(relativeATagLinksWithOptionalQueryParam);
@@ -62,6 +63,9 @@ export function extractMarkdownLinks(text: string) {
 	const matches = text.match(relativeMarkdownLinksWithOptionalQueryParam);
 	return matches ?? [];
 }
+
+export const extractMarkdownLinkTitle = (text: string) =>
+	text.match(titleQueryParam)?.map((match) => match.replaceAll("+", " "))[0];
 
 export const extractFirstRelativeLink = (text: string) =>
 	text.match(relativeLink)?.[0];
