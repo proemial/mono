@@ -142,7 +142,7 @@ describe("ValidLinkEvaluator", () => {
 	});
 });
 
-describe("ValidTitleEvaluator", () => {
+describe.only("ValidTitleEvaluator", () => {
 	it("(0, 0) == 1", () => {
 		expect(ValidTitleEvaluator.evaluate(0, 0, "")).toEqual({
 			score: 1,
@@ -159,13 +159,13 @@ describe("ValidTitleEvaluator", () => {
 		});
 	});
 
-	it("(1, 3, url) == 1", () => {
-		expect(
-			ValidTitleEvaluator.evaluate(1, 3, "http://foo.bar?title=baz"),
-		).toEqual({
+	it("(1, 30, title) == 1", () => {
+		const text =
+			"some text [Cell phones and brain tumors](/oa/W2110716479?title=cell+phones+and+brain+tumors) more text";
+		expect(ValidTitleEvaluator.evaluate(1, 30, text)).toEqual({
 			score: 1,
-			value: 3,
-			comment: 'expected: 1-3, actual: {"titles":["baz"]}',
+			value: 28,
+			comment: 'expected: 1-30, actual: {"titles":["cell phones and brain tumors"]}',
 		});
 	});
 });

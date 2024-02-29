@@ -7,6 +7,7 @@ import {
 	urlRegExp,
 	extractFirstRelativeLink,
 	extractMarkdownLinks,
+	extractMarkdownLinkTitle,
 } from "../helpers/evaluator-helpers";
 import { findRunPaperLinks } from "@/app/llm/helpers/find-run";
 
@@ -48,6 +49,9 @@ export class LinksEvaluator implements RunEvaluator {
 	}
 }
 
+/**
+ * @deprecated: Not updated to Markdown links, use `LinksEvaluator` instead.
+ */
 export class LinkCountEvaluator implements RunEvaluator {
 	constructor(
 		private min: number,
@@ -72,6 +76,9 @@ export class LinkCountEvaluator implements RunEvaluator {
 	}
 }
 
+/**
+ * @deprecated: Not updated to Markdown links, use `LinksEvaluator` instead.
+ */
 export class ValidLinkEvaluator implements RunEvaluator {
 	async evaluateRun(run: Run): Promise<EvaluationResult> {
 		const output = runOutputAsString(run) ?? "";
@@ -118,8 +125,10 @@ export class ValidTitleEvaluator implements RunEvaluator {
 	}
 
 	static evaluate(min: number, max: number, text: string) {
-		const titles = extractLinks(text).map((url) => url.query);
-		const values = titles.map((title) => title.length);
+		const links = extractMarkdownLinks(text);
+		const titles = links.map(extractMarkdownLinkTitle);
+		// biome-ignore lint/style/noNonNullAssertion: undefined is filtered out
+		const values = titles.filter((title) => !!title).map((title) => title!.length);
 		const scores = values.map((length) => calculateDiffScore(min, max, length));
 
 		const value =
