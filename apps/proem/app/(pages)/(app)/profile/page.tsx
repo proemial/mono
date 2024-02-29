@@ -1,7 +1,7 @@
 import { Feedback } from "@/app/(pages)/(app)/profile/components/feedback";
 import { Privacy } from "@/app/(pages)/(app)/profile/components/privacy";
 import { ProfileButtons } from "@/app/(pages)/(app)/profile/components/profile-buttons";
-import { getProfileFromUser } from "@/app/(pages)/(app)/profile/getProfileFromUser";
+import { getProfileFromUser } from "@/app/(pages)/(app)/profile/profile-from-user";
 import {
 	Avatar,
 	AvatarFallback,

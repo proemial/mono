@@ -1,5 +1,4 @@
 "use client";
-import { CardFooter } from "@/app/components/card/footer";
 import {
 	PaperCard,
 	PaperCardTitle,
@@ -13,7 +12,12 @@ import {
 	OpenAlexPaper,
 	OpenAlexWorkMetadata,
 } from "@proemial/models/open-alex";
+import dynamic from "next/dynamic";
 import { ReactNode, useEffect } from "react";
+
+const CardFooter = dynamic(() => import("@/app/components/card/footer"), {
+	ssr: false,
+});
 
 type Props = {
 	id: string;
@@ -26,7 +30,7 @@ export function ReaderPaper({ children, paper, id }: Props) {
 
 	useEffect(() => {
 		setLatest(id);
-	}, [id, setLatest]);
+	}, [id]);
 
 	const data = paper.data as OpenAlexWorkMetadata;
 

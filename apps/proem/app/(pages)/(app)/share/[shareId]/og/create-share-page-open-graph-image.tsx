@@ -1,4 +1,4 @@
-import { applyLinksAsSpans } from "@/app/(pages)/(app)/oa/[id]/components/panels/bot/apply-links";
+import { applyLinksAsSpans } from "@/app/components/bot/apply-links";
 import { AnswerSharingCard } from "@/app/(pages)/(app)/share/[shareId]/og/answer-sharing-card";
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import { cn } from "@/app/components/shadcn-ui/utils";

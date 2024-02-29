@@ -34,3 +34,5 @@ export function CardFooter({ data, flags }: Props) {
 		</>
 	);
 }
+
+export default CardFooter;

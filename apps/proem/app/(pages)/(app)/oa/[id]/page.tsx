@@ -35,7 +35,7 @@ export default async function ReaderPage({ params }: Props) {
 			</ReaderPaper>
 
 			<Tabs defaultValue="QA" className="w-full">
-				<TabsList className="text-[14px] sticky z-10 justify-start w-full bg-background top-14 h-[unset] pt-3 pb-3 px-4">
+				<TabsList className="text-[14px] sticky z-10 justify-start w-full bg-background top-10 h-[unset] pt-3 pb-3 px-4">
 					<TabsTrigger value="QA">
 						<Trackable track={analyticsKeys.read.click.answers}>
 							Your answers
@@ -48,7 +48,7 @@ export default async function ReaderPage({ params }: Props) {
 					</TabsTrigger>
 				</TabsList>
 				<TabsContent value="QA">
-					<div className="flex flex-col h-full gap-6 px-4 text-base">
+					<div className="flex flex-col h-full gap-6 px-4">
 						<Suspense fallback={<Spinner />}>
 							<QuestionsPanel paper={paper} />
 						</Suspense>

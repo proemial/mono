@@ -5,12 +5,12 @@ import { Send } from "@/app/components/icons/functional/send";
 import { useDrawerState } from "@/app/components/login/state";
 import { Button } from "@/app/components/shadcn-ui/button";
 import { useAuth } from "@clerk/nextjs";
-import { FormEvent } from "react";
+import { ChangeEvent, FormEvent } from "react";
 
 type Props = {
 	value: string;
 	onSubmit: (e: FormEvent<HTMLFormElement>) => void;
-	onChange: (e: any) => void;
+	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 export function BotForm({ value, onSubmit, onChange }: Props) {
