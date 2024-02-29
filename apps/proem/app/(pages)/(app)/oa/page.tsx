@@ -94,11 +94,7 @@ function Questions() {
 					{starter.text}
 				</LinkButton>
 			))}
-			<div className="fixed left-0 w-full bg-black bottom-14 shadow-top">
-				<div className="w-full max-w-screen-md px-4 py-3 mx-auto">
-					<AskInput />
-				</div>
-			</div>
+			<AskInput />
 		</div>
 	);
 }
