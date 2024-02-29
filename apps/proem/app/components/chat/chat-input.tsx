@@ -10,6 +10,7 @@ type Props = {
 	input?: string;
 	handleInputChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 	disabled?: boolean;
+	placeholder?: string;
 };
 
 export default function ChatInput({
@@ -17,6 +18,7 @@ export default function ChatInput({
 	input,
 	handleInputChange,
 	disabled,
+	placeholder,
 }: Props) {
 	const [searchValue, setSearchValue] = useState("");
 	const router = useRouter();
@@ -48,6 +50,7 @@ export default function ChatInput({
 							: (e) => setSearchValue(e.target.value)
 					}
 					disabled={disabled}
+					placeholder={placeholder}
 				/>
 			</form>
 		</div>

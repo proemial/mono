@@ -7,15 +7,16 @@ type Props = {
 	value?: string;
 	disabled?: boolean;
 	onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+	placeholder?: string;
 };
 
-export function TextInput({ value, disabled, onChange }: Props) {
+export function TextInput({ value, disabled, onChange, placeholder }: Props) {
 	return (
 		<>
 			<Input
 				type="text"
 				name="q"
-				placeholder="Ask anything"
+				placeholder={placeholder}
 				className="relative pr-12 break-words stretch"
 				value={value}
 				onChange={onChange}

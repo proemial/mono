@@ -229,6 +229,7 @@ export default function Chat({
 							input={input}
 							handleInputChange={handleInputChange}
 							disabled={isLoading || disabledQuestions}
+							placeholder="Ask anything"
 						/>
 					</div>
 				</div>
