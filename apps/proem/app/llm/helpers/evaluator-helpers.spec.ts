@@ -2,6 +2,7 @@ import {
 	calculateDiffScore,
 	countDiff,
 	extractLinks,
+	extractATag,
 } from "./evaluator-helpers";
 
 describe("withinBasedScore", () => {
@@ -126,5 +127,57 @@ describe("extractLinks", () => {
 				query: "foo bar baz",
 			},
 		]);
+	});
+});
+
+describe("extractATag", () => {
+	it("extracts a tag", () => {
+		const text =
+			'more information in the papers: <a href="/oa/W2030447619">Grapes, Wines, Resveratrol, and Heart Health</a> and';
+		const expected =
+			'<a href="/oa/W2030447619">Grapes, Wines, Resveratrol, and Heart Health</a>';
+		const aTags = extractATag(text);
+		expect(aTags[0]).toEqual(expected);
+		expect(aTags.length).toBe(1);
+	});
+
+	it("extracts a tag w/ query param", () => {
+		const text =
+			'more information in the papers: <a href="/oa/W2030447619?title=foo+bar+baz">Grapes, Wines, Resveratrol, and Heart Health</a> and';
+		const expected =
+			'<a href="/oa/W2030447619?title=foo+bar+baz">Grapes, Wines, Resveratrol, and Heart Health</a>';
+		const aTags = extractATag(text);
+		expect(aTags[0]).toEqual(expected);
+		expect(aTags).toHaveLength(1);
+	});
+
+	it("extracts multiple a tags", () => {
+		const text =
+			'Two links: <a href="/oa/W2030447619">1st title</a> and <a href="/oa/W2030447619">2nd title</a>.';
+		const expected = [
+			'<a href="/oa/W2030447619">1st title</a>',
+			'<a href="/oa/W2030447619">2nd title</a>',
+		];
+		const aTags = extractATag(text);
+		expect(aTags).toEqual(expected);
+		expect(aTags).toHaveLength(2);
+	});
+
+	it("extracts multiple a tags w/ query params", () => {
+		const text =
+			'Two links: <a href="/oa/W2030447619?title=foo+bar">1st title</a> and <a href="/oa/W2030447619?title=baz">2nd title</a>.';
+		const expected = [
+			'<a href="/oa/W2030447619?title=foo+bar">1st title</a>',
+			'<a href="/oa/W2030447619?title=baz">2nd title</a>',
+		];
+		const aTags = extractATag(text);
+		expect(aTags).toEqual(expected);
+		expect(aTags).toHaveLength(2);
+	});
+
+	it("extracts no a tags", () => {
+		const text = "No links :(";
+		const aTags = extractATag(text);
+		expect(aTags).toHaveLength(0);
 	});
 });

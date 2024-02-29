@@ -35,10 +35,8 @@ export function countDiff(min: number, max: number, value?: number): number {
 export const urlRegExp = /https?:\/\/[^\s$.?#].[^\s]*[a-zA-Z0-9]/g;
 
 export function extractLinks(text: string) {
-	console.log("text", text);
 	return (
 		text.match(urlRegExp)?.map((match) => {
-			console.log("match", match);
 			const url = new URL(match);
 
 			const { host, pathname: path, searchParams } = url;
@@ -48,3 +46,19 @@ export function extractLinks(text: string) {
 		}) ?? []
 	);
 }
+
+const relativeLink = /\/oa\/W[0-9]+/;
+const relativeATagLinksWithOptionalQueryParam =
+	/<a\s+href="\/oa\/W[0-9]+(\?title=[^&"]*)?">.*?<\/a>/g;
+const relativeMarkdownLinks = /\[.*?\]\(\/oa\/W[0-9]+\)/g;
+const relativeMarkdownLinksWithOptionalQueryParam =
+	/\[.*?\]\(\/oa\/W[0-9]+(\?title=[^)\]]*)?\)/g;
+
+export function extractATag(text: string) {
+	// TODO: Change to relative markdown link when we change the prompt
+	const matches = text.match(relativeATagLinksWithOptionalQueryParam);
+	return matches ?? [];
+}
+
+export const extractFirstRelativeLink = (text: string) =>
+	text.match(relativeLink)?.[0];
