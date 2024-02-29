@@ -225,9 +225,9 @@ export default function Chat({
 				<div className="fixed left-0 w-full bg-black bottom-14 shadow-top">
 					<div className="w-full max-w-screen-md px-4 pt-2 pb-3 mx-auto">
 						<ChatInput
-							handleSubmit={handleSubmit}
+							onSubmit={handleSubmit}
 							input={input}
-							handleInputChange={handleInputChange}
+							onChange={handleInputChange}
 							disabled={isLoading || disabledQuestions}
 							placeholder="Ask anything"
 						/>

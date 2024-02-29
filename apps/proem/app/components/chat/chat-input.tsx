@@ -2,38 +2,25 @@
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { Tracker } from "@/app/components/analytics/tracker";
 import { TextInput } from "@/app/components/proem-ui/text-input";
-import { useRouter } from "next/navigation";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent } from "react";
 
 type Props = {
-	handleSubmit?: (e: FormEvent<HTMLFormElement>) => void;
-	input?: string;
-	handleInputChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+	input: string;
+	placeholder: string;
+	onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	disabled?: boolean;
-	placeholder?: string;
 };
 
-export default function ChatInput({
-	handleSubmit,
-	input,
-	handleInputChange,
-	disabled,
-	placeholder,
-}: Props) {
-	const [searchValue, setSearchValue] = useState("");
-	const router = useRouter();
+export default function ChatInput(props: Props) {
+	const { input, disabled, placeholder, onSubmit, onChange } = props;
 
 	const trackAndInvoke = (event: FormEvent<HTMLFormElement>) => {
 		Tracker.track(analyticsKeys.ask.submit.ask, {
-			text: input ? input : searchValue,
+			text: input,
 		});
 
-		handleSubmit
-			? handleSubmit(event)
-			: () => {
-					event.preventDefault();
-					router.push(`/search?q=${searchValue}`);
-			  };
+		onSubmit(event);
 	};
 
 	return (
@@ -43,12 +30,8 @@ export default function ChatInput({
 				onSubmit={(event) => trackAndInvoke(event)}
 			>
 				<TextInput
-					value={input ? input : searchValue}
-					onChange={
-						handleInputChange
-							? handleInputChange
-							: (e) => setSearchValue(e.target.value)
-					}
+					value={input}
+					onChange={onChange}
 					disabled={disabled}
 					placeholder={placeholder}
 				/>
