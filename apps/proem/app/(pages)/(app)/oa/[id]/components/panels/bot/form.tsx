@@ -1,5 +1,4 @@
 "use client";
-import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { Tracker } from "@/app/components/analytics/tracker";
 import { Send } from "@/app/components/icons/functional/send";
 import { useDrawerState } from "@/app/components/login/state";
@@ -9,16 +8,21 @@ import { ChangeEvent, FormEvent } from "react";
 
 type Props = {
 	value: string;
+	placeholder: string;
 	onSubmit: (e: FormEvent<HTMLFormElement>) => void;
 	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	trackingKey: string;
+	disabled?: boolean;
 };
 
-export function BotForm({ value, onSubmit, onChange }: Props) {
+export function BotForm(props: Props) {
+	const { value, placeholder, onSubmit, onChange, trackingKey } = props;
+
 	const { userId } = useAuth();
 	const { open } = useDrawerState();
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-		Tracker.track(analyticsKeys.read.submit.question);
+		Tracker.track(trackingKey);
 		onSubmit(e);
 	};
 
@@ -29,7 +33,7 @@ export function BotForm({ value, onSubmit, onChange }: Props) {
 					readOnly={!userId}
 					onFocus={() => !userId && open()}
 					type="text"
-					placeholder="Ask your own question about this paper"
+					placeholder={placeholder}
 					className="flex w-full h-[42px] text-[16px] font-normal rounded bg-[#1A1A1A] border border-[#4E4E4E] text-white placeholder-green-500 px-3 py-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 relative break-words stretch"
 					value={value}
 					onChange={onChange}

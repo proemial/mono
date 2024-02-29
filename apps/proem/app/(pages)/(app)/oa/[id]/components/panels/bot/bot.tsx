@@ -6,6 +6,7 @@ import { useChat } from "ai/react";
 import React from "react";
 import { BotForm } from "./form";
 import { BotMessages } from "./messages";
+import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 
 type Props = {
 	paper: OpenAlexPaper;
@@ -48,8 +49,10 @@ export function InsightsBot({ paper, starters }: Props) {
 				<div className="w-full max-w-screen-md px-4 py-3 mx-auto">
 					<BotForm
 						value={input}
+						placeholder="Ask your own question about this paper"
 						onChange={handleInputChange}
 						onSubmit={handleSubmit}
+						trackingKey={analyticsKeys.read.submit.question}
 					/>
 				</div>
 			</div>
