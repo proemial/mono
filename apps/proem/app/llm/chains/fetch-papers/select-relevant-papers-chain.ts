@@ -1,3 +1,4 @@
+import { Paper } from "@/app/api/paper-search/search";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { StringOutputParser } from "@langchain/core/output_parsers";
@@ -27,15 +28,15 @@ const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask", {
 
 export const getSelectRelevantPapersChain = (modelOverride: BaseChatModel) =>
 	RunnableSequence.from<{
-		papers: object;
+		papers: string;
 		question: string;
 	}>([
 		(input) => {
-			const papers = JSON.parse(input.papers).map((paper) => ({
+			const papers = (JSON.parse(input.papers) as Paper[]).map((paper: {link: string}) => ({
 				...paper,
 				id: paper.link,
 			}));
-			console.log(papers);
+			console.log(papers)
 			return {
 				question: input.question,
 				papers: input.papers,

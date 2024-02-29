@@ -12,6 +12,8 @@ import { fromInvertedIndex } from "@proemial/utils/string";
 const filter = "filter=type:article,cited_by_count:>10,cited_by_count:<1000";
 const baseUrl = `${baseOaUrl}?select=${openAlexFields.search}&${filter}`;
 
+export type Paper = Awaited<ReturnType<typeof fetchPapers>>[number]
+
 export async function fetchPapers(q: string, count = 30, tokens = 350) {
 	const papers = await fetchWithAbstract(q, count, tokens);
 
