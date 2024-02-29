@@ -3,8 +3,6 @@ import { runOnDataset } from "langchain/smith";
 import { CharCountEvaluator } from "@/app/llm/evaluators/string-evaluators";
 import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
 import {
-	LinkCountEvaluator,
-	ValidLinkEvaluator,
 	ValidTitleEvaluator,
 	LinksEvaluator,
 } from "@/app/llm/evaluators/link-evaluators";
@@ -29,15 +27,13 @@ export async function GET(
 				customEvaluators: [
 					new CharCountEvaluator(200, 400),
 					new LinksEvaluator(1, 2),
-					// new LinkCountEvaluator(1, 2),
-					// new ValidLinkEvaluator(),
 					new ValidTitleEvaluator(20, 50),
 				],
 			},
 			projectMetadata: {
 				model: model.modelName,
 				temperature: model.temperature,
-				latest_prompt_changes: "ask for markdown links",
+				latest_prompt_changes: "reworked prompt",
 			},
 		},
 	);
