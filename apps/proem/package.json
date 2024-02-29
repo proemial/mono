@@ -15,6 +15,7 @@
 		"@langchain/community": "0.0.33",
 		"@langchain/core": "0.1.36",
 		"@langchain/groq": "0.0.1",
+		"@langchain/mistralai": "0.0.9",
 		"@langchain/openai": "0.0.14",
 		"@proemial/data": "workspace:*",
 		"@proemial/models": "workspace:*",
