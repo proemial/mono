@@ -4,13 +4,17 @@ import { Input } from "@/app/components/shadcn-ui/input";
 import { ChangeEvent } from "react";
 
 type Props = {
-	value?: string;
+	value: string;
+	placeholder: string;
 	disabled?: boolean;
+	readonly?: boolean;
 	onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-	placeholder?: string;
+	onFocus?: () => void;
 };
 
-export function TextInput({ value, disabled, onChange, placeholder }: Props) {
+export function TextInput(props: Props) {
+	const { value, placeholder, disabled, readonly, onChange, onFocus } = props;
+
 	return (
 		<>
 			<Input
@@ -20,7 +24,9 @@ export function TextInput({ value, disabled, onChange, placeholder }: Props) {
 				className="relative pr-12 break-words stretch"
 				value={value}
 				onChange={onChange}
+				onFocus={onFocus}
 				disabled={disabled}
+				readOnly={readonly}
 			/>
 			<Button
 				variant="send_button"

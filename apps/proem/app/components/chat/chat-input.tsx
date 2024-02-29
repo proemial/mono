@@ -1,7 +1,9 @@
 "use client";
 import { Tracker } from "@/app/components/analytics/tracker";
 import { TextInput } from "@/app/components/proem-ui/text-input";
+import { useAuth } from "@clerk/nextjs";
 import { ChangeEvent, FormEvent } from "react";
+import { useDrawerState } from "../login/state";
 
 type Props = {
 	value: string;
@@ -10,11 +12,22 @@ type Props = {
 	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	trackingKey: string;
 	disabled?: boolean;
+	authRequired?: boolean;
 };
 
 export default function ChatInput(props: Props) {
-	const { value, placeholder, onSubmit, onChange, trackingKey, disabled } =
-		props;
+	const {
+		value,
+		placeholder,
+		onSubmit,
+		onChange,
+		trackingKey,
+		disabled,
+		authRequired,
+	} = props;
+
+	const { userId } = useAuth();
+	const { open } = useDrawerState();
 
 	const trackAndInvoke = (event: FormEvent<HTMLFormElement>) => {
 		Tracker.track(trackingKey, {
@@ -32,9 +45,11 @@ export default function ChatInput(props: Props) {
 			>
 				<TextInput
 					value={value}
+					placeholder={placeholder}
 					onChange={onChange}
 					disabled={disabled}
-					placeholder={placeholder}
+					readonly={authRequired && !userId}
+					onFocus={() => authRequired && !userId && open()}
 				/>
 			</form>
 		</div>
