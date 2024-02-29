@@ -26,7 +26,7 @@ export default function SearchInput({
 			text: input ? input : searchValue,
 		});
 
-		!!handleSubmit
+		handleSubmit
 			? handleSubmit(event)
 			: () => {
 					event.preventDefault();
