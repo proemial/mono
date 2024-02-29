@@ -78,7 +78,7 @@ function Questions() {
 		.slice(0, 3);
 
 	return (
-		<div className="flex flex-col">
+		<div className="flex flex-col mb-16">
 			<div className="flex items-center font-sourceCodePro">
 				<Search style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
 				SUGGESTED QUESTIONS
