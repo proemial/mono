@@ -5,19 +5,19 @@ import { TextInput } from "@/app/components/proem-ui/text-input";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 
-type SearchInputProps = {
+type Props = {
 	handleSubmit?: (e: FormEvent<HTMLFormElement>) => void;
 	input?: string;
 	handleInputChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 	disabled?: boolean;
 };
 
-export default function SearchInput({
+export default function ChatInput({
 	handleSubmit,
 	input,
 	handleInputChange,
 	disabled,
-}: SearchInputProps) {
+}: Props) {
 	const [searchValue, setSearchValue] = useState("");
 	const router = useRouter();
 

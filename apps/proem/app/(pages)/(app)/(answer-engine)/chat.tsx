@@ -1,6 +1,6 @@
 "use client";
 
-import SearchInput from "@/app/(pages)/(app)/(answer-engine)/search-input";
+import ChatInput from "@/app/components/chat/chat-input";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import WithHeader from "@/app/(pages)/(app)/header";
 import { applyLinks } from "@/app/components/chat/apply-links";
@@ -224,7 +224,7 @@ export default function Chat({
 
 				<div className="fixed left-0 w-full bg-black bottom-14 shadow-top">
 					<div className="w-full max-w-screen-md px-4 pt-2 pb-3 mx-auto">
-						<SearchInput
+						<ChatInput
 							handleSubmit={handleSubmit}
 							input={input}
 							handleInputChange={handleInputChange}
