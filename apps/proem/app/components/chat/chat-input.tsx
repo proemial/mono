@@ -1,11 +1,10 @@
 "use client";
-import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { Tracker } from "@/app/components/analytics/tracker";
 import { TextInput } from "@/app/components/proem-ui/text-input";
 import { ChangeEvent, FormEvent } from "react";
 
 type Props = {
-	input: string;
+	value: string;
 	placeholder: string;
 	onSubmit: (e: FormEvent<HTMLFormElement>) => void;
 	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -14,12 +13,12 @@ type Props = {
 };
 
 export default function ChatInput(props: Props) {
-	const { input, placeholder, onSubmit, onChange, trackingKey, disabled } =
+	const { value, placeholder, onSubmit, onChange, trackingKey, disabled } =
 		props;
 
 	const trackAndInvoke = (event: FormEvent<HTMLFormElement>) => {
 		Tracker.track(trackingKey, {
-			text: input,
+			text: value,
 		});
 
 		onSubmit(event);
@@ -32,7 +31,7 @@ export default function ChatInput(props: Props) {
 				onSubmit={(event) => trackAndInvoke(event)}
 			>
 				<TextInput
-					value={input}
+					value={value}
 					onChange={onChange}
 					disabled={disabled}
 					placeholder={placeholder}
