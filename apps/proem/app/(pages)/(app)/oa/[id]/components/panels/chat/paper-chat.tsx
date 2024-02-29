@@ -15,7 +15,14 @@ type Props = {
 export function PaperChat({ paper, starters }: Props) {
 	const { title, abstract } = paper.data;
 
-	const { messages, input, handleInputChange, handleSubmit, append } = useChat({
+	const {
+		messages,
+		input,
+		handleInputChange,
+		handleSubmit,
+		append,
+		isLoading,
+	} = useChat({
 		body: { title, abstract, model: "gpt-3.5-turbo" },
 		api: "/api/bot/chat",
 	});
@@ -26,6 +33,9 @@ export function PaperChat({ paper, starters }: Props) {
 			chatWrapperRef.current.scrollIntoView(false);
 		}
 	}, [messages]);
+
+	const initialPlaceholder =
+		messages.length === 0 || (isLoading && messages.length < 3);
 
 	return (
 		<div className="flex flex-col scroll-mb-96" ref={chatWrapperRef}>
@@ -51,7 +61,12 @@ export function PaperChat({ paper, starters }: Props) {
 				<div className="w-full max-w-screen-md px-4 py-3 mx-auto">
 					<ChatInput
 						value={input}
-						placeholder="Ask your own question about this paper"
+						placeholder={
+							initialPlaceholder
+								? "Ask your own question about this paper"
+								: "Ask a follow-up question"
+						}
+						disabled={isLoading}
 						onChange={handleInputChange}
 						onSubmit={handleSubmit}
 						trackingKey={analyticsKeys.read.submit.question}

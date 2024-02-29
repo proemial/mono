@@ -169,6 +169,9 @@ export default function Chat({
 
 	const isEmptyScreen = messages.length === 0;
 	const showLoadingState = isLoading && messages.length <= 1;
+	const initialPlaceholder =
+		isEmptyScreen || (isLoading && messages.length < 3);
+
 	const clear = () => {
 		setMessages([]);
 		setInput("");
@@ -226,7 +229,9 @@ export default function Chat({
 					<div className="w-full max-w-screen-md px-4 pt-2 pb-3 mx-auto">
 						<ChatInput
 							value={input}
-							placeholder="Ask anything"
+							placeholder={
+								initialPlaceholder ? "Ask anything" : "Ask a follow-up question"
+							}
 							onChange={handleInputChange}
 							onSubmit={handleSubmit}
 							disabled={isLoading || disabledQuestions}
