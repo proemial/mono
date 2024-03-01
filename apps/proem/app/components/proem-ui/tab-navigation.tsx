@@ -60,7 +60,7 @@ export function TabNavigation({ items, rootPath }: Props) {
 
 	return (
 		<>
-			<div className="max-w-screen-sm px-4 flex gap-1 text-[14px] overflow-x-scroll no-scrollbar scroll-px-5">
+			<div className="max-w-screen-sm px-4 flex gap-1 text-[14px] overflow-x-scroll no-scrollbar scroll-px-5 select-none">
 				{items.map((item) => (
 					<div
 						key={item}

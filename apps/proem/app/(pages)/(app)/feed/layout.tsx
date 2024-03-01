@@ -16,7 +16,7 @@ type Props = {
 export default async function RootLayout({ children }: Props) {
 	return (
 		<WithHeader title={pageName}>
-			<div className="mb-4 flex justify-center">
+			<div className="mb-4 flex justify-center touch-pan-y">
 				<TabNavigation
 					items={[
 						"all",
