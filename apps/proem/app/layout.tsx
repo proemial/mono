@@ -1,7 +1,7 @@
 import { Analytics } from "@/app/components/analytics/analytics";
 import { PostHogClient } from "@/app/components/analytics/posthog-client";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import { Source_Code_Pro } from "next/font/google";
 import { ReactNode } from "react";
 import "./globals.css";
@@ -35,6 +35,13 @@ export const metadata: Metadata = {
 		siteName: title,
 	},
 };
+
+export const viewport: Viewport = {
+	width: "device-width",
+	initialScale: 1,
+	maximumScale: 1,
+};
+
 type Props = {
 	children: ReactNode;
 };
