@@ -1,4 +1,4 @@
-import Chat from "@/app/(pages)/(app)/(answer-engine)/chat";
+import Chat from "@/app/(pages)/(app)/(answer-engine)/chat/ask-chat";
 import { getProfileFromUser } from "@/app/(pages)/(app)/profile/profile-from-user";
 import { currentUser } from "@clerk/nextjs";
 

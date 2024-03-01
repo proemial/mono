@@ -1,4 +1,4 @@
-import Chat from "@/app/(pages)/(app)/(answer-engine)/chat";
+import Chat from "@/app/(pages)/(app)/(answer-engine)/chat/ask-chat";
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import { redirect } from "next/navigation";
 
