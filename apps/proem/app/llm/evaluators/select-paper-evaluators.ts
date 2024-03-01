@@ -1,14 +1,14 @@
-import { runOutputAsString } from "@/app/llm/helpers/evaluator-helpers";
+import {
+	calculateDiffScore,
+	runOutputAsString,
+} from "@/app/llm/helpers/evaluator-helpers";
 import { Run } from "@langchain/core/tracers/base";
 import { EvaluationResult, RunEvaluator } from "langsmith/evaluation";
 
 export class PaperIdEvaluator implements RunEvaluator {
 	async evaluateRun(run: Run): Promise<EvaluationResult> {
-		console.log(run);
 		const papers = mapPapersToIds(run.inputs.papers);
-		console.log(papers);
 		const output = runOutputAsString(run);
-		console.log(output);
 		const result = PaperIdEvaluator.evaluate(papers, output);
 
 		return { key: "paper-hallucinated-id", ...result };
@@ -16,11 +16,17 @@ export class PaperIdEvaluator implements RunEvaluator {
 
 	static evaluate<T extends { id: string }>(papers: T[], output: string) {
 		const paperIds = output.split(",").map((str) => str.trim()) ?? output;
-		const hasHallucinatedId = paperIds.some((id) => {
-			return !papers.find((paper) => paper.id === id);
-		});
+		const { hallucinatedIds } = validatePaperIds(papers, paperIds);
+		const hallucinatedIdsCount = hallucinatedIds.length;
 
-		return { hasHallucinatedId };
+		return {
+			value: hallucinatedIdsCount,
+			score: 1 - hallucinatedIdsCount / paperIds.length,
+			comment:
+				hallucinatedIdsCount > 0
+					? `Expected no hallucinated ids, but found ${hallucinatedIdsCount} in the output`
+					: "No hallucinated ids found in the output",
+		};
 	}
 }
 
@@ -29,4 +35,22 @@ export function mapPapersToIds<T extends { link: string }>(papers: string) {
 		...paper,
 		id: paper.link,
 	}));
+}
+
+function validatePaperIds(papers: { id: string }[], paperIds: string[]) {
+	return paperIds.reduce<{
+		validIds: string[];
+		hallucinatedIds: string[];
+	}>(
+		(acc, cur) => {
+			if (papers.find((paper) => paper.id === cur)) {
+				acc.validIds.push(cur);
+			} else {
+				acc.hallucinatedIds.push(cur);
+			}
+
+			return acc;
+		},
+		{ validIds: [], hallucinatedIds: [] },
+	);
 }

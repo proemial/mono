@@ -1,5 +1,5 @@
 import { getSelectRelevantPapersChain } from "@/app/llm/chains/fetch-papers/select-relevant-papers-chain";
-import { CharCountEvaluator } from "@/app/llm/evaluators/string-evaluators";
+import { PaperIdEvaluator } from "@/app/llm/evaluators/select-paper-evaluators";
 import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
 import { buildOpenAIModelForEvaluation } from "@/app/llm/models/openai-model";
 import { runOnDataset } from "langchain/smith";
@@ -17,7 +17,7 @@ export async function GET(
 		params.name,
 		{
 			evaluationConfig: {
-				customEvaluators: [new CharCountEvaluator(200, 400)],
+				customEvaluators: [new PaperIdEvaluator()],
 			},
 			projectMetadata: {
 				model: model.modelName,

@@ -241,30 +241,33 @@ const MOCKED_PAPERS = [
 describe("PaperIdEvaluator", () => {
 	describe("should validate outputted id's matches the papers provided", async () => {
 		it("with a single valid id", async () => {
-			const { hasHallucinatedId } = PaperIdEvaluator.evaluate(
+			const { score, value } = PaperIdEvaluator.evaluate(
 				MOCKED_PAPERS,
 				`${MOCKED_PAPERS[0]?.id}`,
 			);
 
-			expect(hasHallucinatedId).toEqual(false);
+			expect(score).toEqual(1);
+			expect(value).toEqual(0);
 		});
 
 		it("with multiple valid ids", async () => {
-			const { hasHallucinatedId } = PaperIdEvaluator.evaluate(
+			const { score, value } = PaperIdEvaluator.evaluate(
 				MOCKED_PAPERS,
 				`${MOCKED_PAPERS[0]?.id}, ${MOCKED_PAPERS[4]?.id}, ${MOCKED_PAPERS[2]?.id}`,
 			);
 
-			expect(hasHallucinatedId).toEqual(false);
+			expect(score).toEqual(1);
+			expect(value).toEqual(0);
 		});
 
 		it("with multiple ids with hallucinated items", async () => {
-			const { hasHallucinatedId } = PaperIdEvaluator.evaluate(
+			const { score, value } = PaperIdEvaluator.evaluate(
 				MOCKED_PAPERS,
 				`${MOCKED_PAPERS[0]?.id}, ${MOCKED_PAPERS[2]?.id}, ${MOCKED_PAPERS[10]?.id}, /oa/unknown_id`,
 			);
 
-			expect(hasHallucinatedId).toEqual(true);
+			expect(score).toEqual(0.75);
+			expect(value).toEqual(1);
 		});
 	});
 });
