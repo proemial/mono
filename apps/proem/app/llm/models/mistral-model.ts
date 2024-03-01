@@ -18,19 +18,17 @@ type MistralModel =
 	| "mistral-large-2402"
 	| "mistral-embed";
 
-const apiKey = Env.get("MISTRAL_API_KEY");
-
-export const buildMistralModel = (
-	modelName: MistralModel,
-	options?: ModelOptions,
-) =>
-	new ChatMistralAI({
-		apiKey,
-		modelName,
-		temperature: options?.temperature ?? 0.0,
-		cache: options?.cache ?? true,
-		verbose: options?.verbose ?? false,
-		onFailedAttempt: (error) => {
-			console.error(error);
-		},
-	});
+// export const buildMistralModel = (
+// 	modelName: MistralModel,
+// 	options?: ModelOptions,
+// ) =>
+// 	new ChatMistralAI({
+// 		apiKey: Env.get("MISTRAL_API_KEY"),
+// 		modelName,
+// 		temperature: options?.temperature ?? 0.0,
+// 		cache: options?.cache ?? true,
+// 		verbose: options?.verbose ?? false,
+// 		onFailedAttempt: (error) => {
+// 			console.error(error);
+// 		},
+// 	});
