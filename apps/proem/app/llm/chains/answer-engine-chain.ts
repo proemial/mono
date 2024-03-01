@@ -25,6 +25,7 @@ export const answerEngineChain = RunnableSequence.from<Input, Output>([
 			if (input.papers) {
 				return JSON.stringify(input.papers);
 			}
+			// TODO: Handle thrown errors.
 			return fetchPapersChain as unknown as string;
 		},
 	}).withConfig({

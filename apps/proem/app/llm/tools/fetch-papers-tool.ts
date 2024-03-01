@@ -57,6 +57,9 @@ export class FetchPapersTool extends StructuredTool {
 			input.relatedConcepts,
 		);
 		const papers = await fetchPapers(searchString);
+		if (papers.length === 0) {
+			throw new Error("No papers found for the given search parameters.");
+		}
 		const papersWithRelativeLinks = papers?.map(this._toRelativeLink) ?? [];
 		return JSON.stringify(papersWithRelativeLinks); // TODO: Improve paper formatting
 	}
