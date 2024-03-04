@@ -1,6 +1,6 @@
 import { ClickablePaperCard } from "@/app/components/card/clickable-card";
 import { FeedPaper } from "@/app/components/card/feed-paper";
-import { CenteredSpinner, NothingHere } from "@/app/components/spinner";
+import { CenteredSpinner, NothingHere } from "@/app/components/loading/spinner";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Suspense } from "react";
 

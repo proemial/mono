@@ -7,7 +7,7 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@/app/components/shadcn-ui/tab";
-import { Spinner } from "@/app/components/spinner";
+import { Spinner } from "@/app/components/loading/spinner";
 import { Trackable } from "@/app/components/trackable";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";

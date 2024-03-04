@@ -1,5 +1,5 @@
 "use client";
-import { Spinner } from "@/app/components/spinner";
+import { Spinner } from "@/app/components/loading/spinner";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { useChat } from "ai/react";
 import React from "react";

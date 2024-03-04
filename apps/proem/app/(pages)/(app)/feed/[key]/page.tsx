@@ -1,6 +1,6 @@
 import { fetchLatestPapers } from "@/app/(pages)/(app)/oa/[id]/fetch-paper";
 import { CardList } from "@/app/components/card/card-list";
-import { CenteredSpinner } from "@/app/components/spinner";
+import { CenteredSpinner } from "@/app/components/loading/spinner";
 import { OaTopics } from "@proemial/models/open-alex-topics";
 import { Suspense } from "react";
 

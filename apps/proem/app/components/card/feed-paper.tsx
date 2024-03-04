@@ -6,7 +6,7 @@ import {
 	PaperCardTop,
 } from "@/app/components/card/paper-card";
 import { getFeatureFlags } from "@/app/components/feature-flags/server-flags";
-import { Spinner } from "@/app/components/spinner";
+import { Spinner } from "@/app/components/loading/spinner";
 import {
 	OpenAlexPaper,
 	OpenAlexWorkMetadata,
