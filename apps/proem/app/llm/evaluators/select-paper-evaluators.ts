@@ -14,7 +14,14 @@ export class PaperIdEvaluator implements RunEvaluator {
 		return { key: "paper-hallucinated-id", ...result };
 	}
 
-	static evaluate<T extends { id: string }>(papers: T[], output: string) {
+	static evaluate<T extends { id: string }>(
+		papers: T[],
+		output: string | undefined,
+	) {
+		if (!output) {
+			return { value: 0, score: 0, comment: "No answer was found" };
+		}
+
 		const paperIds = output.split(",").map((str) => str.trim()) ?? output;
 		const { hallucinatedIds } = validatePaperIds(papers, paperIds);
 		const hallucinatedIdsCount = hallucinatedIds.length;

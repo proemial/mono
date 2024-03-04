@@ -18,7 +18,7 @@ export class LinksEvaluator implements RunEvaluator {
 	) {}
 
 	async evaluateRun(run: Run): Promise<EvaluationResult> {
-		const output = runOutputAsString(run) ?? "";
+		const output = runOutputAsString(run);
 		const links = findRunPaperLinks(run);
 
 		const result = LinksEvaluator.evaluate(this.min, this.max, output, links);
@@ -29,9 +29,13 @@ export class LinksEvaluator implements RunEvaluator {
 	static evaluate(
 		min: number,
 		max: number,
-		text: string,
+		text: string | undefined,
 		paperLinks: string[],
 	) {
+		if (!text) {
+			return { value: 0, score: 0, comment: "No answer was found" };
+		}
+
 		const answerLinks = extractMarkdownLinks(text);
 		const matches = answerLinks.filter((link) => {
 			const relativeLink = extractFirstRelativeLink(link);
@@ -66,9 +70,11 @@ export class LinkCountEvaluator implements RunEvaluator {
 	}
 
 	static evaluate(min: number, max: number, text?: string) {
-		const sanitised = text ?? "";
+		if (!text) {
+			return { value: 0, score: 0, comment: "No answer was found" };
+		}
 
-		const value = sanitised.match(urlRegExp)?.length ?? 0;
+		const value = text.match(urlRegExp)?.length ?? 0;
 		const score = calculateDiffScore(min, max, value);
 		const comment = `expected: ${min}-${max}, actual: ${value}`;
 
@@ -81,7 +87,7 @@ export class LinkCountEvaluator implements RunEvaluator {
  */
 export class ValidLinkEvaluator implements RunEvaluator {
 	async evaluateRun(run: Run): Promise<EvaluationResult> {
-		const output = runOutputAsString(run) ?? "";
+		const output = runOutputAsString(run);
 		const links = findRunPaperLinks(run);
 
 		const result = ValidLinkEvaluator.evaluate(output, links);
@@ -89,7 +95,11 @@ export class ValidLinkEvaluator implements RunEvaluator {
 		return { key: "links_valid", ...result };
 	}
 
-	static evaluate(text: string, paperLinks: string[]) {
+	static evaluate(text: string | undefined, paperLinks: string[]) {
+		if (!text) {
+			return { value: 0, score: 0, comment: "No answer was found" };
+		}
+
 		const answerLinks = extractLinks(text);
 		const linkCount = answerLinks.length;
 
@@ -117,18 +127,24 @@ export class ValidTitleEvaluator implements RunEvaluator {
 	) {}
 
 	async evaluateRun(run: Run): Promise<EvaluationResult> {
-		const output = runOutputAsString(run) ?? "";
+		const output = runOutputAsString(run);
 
 		const result = ValidTitleEvaluator.evaluate(this.min, this.max, output);
 
 		return { key: "links_titles", ...result };
 	}
 
-	static evaluate(min: number, max: number, text: string) {
+	static evaluate(min: number, max: number, text: string | undefined) {
+		if (!text) {
+			return { value: 0, score: 0, comment: "No answer was found" };
+		}
+
 		const links = extractMarkdownLinks(text);
 		const titles = links.map(extractMarkdownLinkTitle);
-		// biome-ignore lint/style/noNonNullAssertion: undefined is filtered out
-		const values = titles.filter((title) => !!title).map((title) => title!.length);
+		const values = titles
+			.filter((title) => !!title)
+			// biome-ignore lint/style/noNonNullAssertion: undefined is filtered out
+			.map((title) => title!.length);
 		const scores = values.map((length) => calculateDiffScore(min, max, length));
 
 		const value =
