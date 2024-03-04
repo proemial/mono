@@ -16,9 +16,10 @@ import {
 } from "@/app/components/shadcn-ui/Avatar";
 import { Message } from "ai/react";
 import { ShareIcon } from "lucide-react";
+import { SinglarThrobber, Throbber } from "../loading/throbber";
 
 export type ChatMessageProps = {
-	message: Message["content"];
+	message?: Message["content"];
 	user?: {
 		name: string;
 		initials: string;
@@ -36,7 +37,7 @@ export function ChatMessage({
 	onShareHandle,
 	isLoading,
 }: ChatMessageProps) {
-	const { content, links } = applyLinks(message);
+	const { content, links } = applyLinks(message ?? "");
 
 	return (
 		<div className="w-full">
@@ -61,7 +62,10 @@ export function ChatMessage({
 			</div>
 
 			<div className="mt-2 ml-9">
-				{content}
+				<div>
+					{message ? content : <Throbber />}
+					{isLoading && user.name === "proem" && <SinglarThrobber />}
+				</div>
 
 				{links.length > 0 && (
 					<div className="pt-3 mt-3 space-y-3 border-t border-[#3C3C3C]">

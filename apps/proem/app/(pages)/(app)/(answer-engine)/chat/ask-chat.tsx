@@ -64,7 +64,7 @@ export default function Chat({
 	}, [chat.messages]);
 
 	const isEmptyScreen = chat.messages.length === 0;
-	const showLoadingState = chat.isLoading && chat.messages.length <= 1;
+	const showLoadingState = chat.isLoading && chat.messages.length % 2 === 1;
 	const initialPlaceholder =
 		isEmptyScreen || (chat.isLoading && chat.messages.length < 3);
 

@@ -28,12 +28,7 @@ export function ChatMessages(props: Props) {
 				/>
 			))}
 
-			{showLoadingState ? (
-				<ChatMessage
-					message="Searching for relevant scientific papers..."
-					user={PROEM_BOT}
-				/>
-			) : null}
+			{showLoadingState && <ChatMessage user={PROEM_BOT} />}
 		</div>
 	);
 }
