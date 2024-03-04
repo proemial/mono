@@ -6,6 +6,7 @@ import { Message as AiMessage } from "ai";
 import { UseChatHelpers } from "ai/react";
 import { useEffect, useRef } from "react";
 import { ChatMessage, ChatStarter } from "./chat-message";
+import { limit } from "@proemial/utils/array";
 
 type Props = Pick<UseChatHelpers, "append"> & {
 	messages: AiMessage[];
@@ -32,7 +33,8 @@ export function ChatMessages({ messages, starters, append }: Props) {
 	return (
 		<>
 			{messages.length === 0 &&
-				starters?.map((question) => (
+				// TODO! Filter out empty strings as a hack for now until the data consistensy is fixed
+				limit(starters?.filter(Boolean), 3).map((question) => (
 					<ChatStarter
 						key={question}
 						onClick={() => handleStarterClick(question)}
