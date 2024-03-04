@@ -7,6 +7,7 @@ import { ChatMessageProps } from "@/app/components/chat/chat-message-ask";
 import { ChatMessages } from "@/app/components/chat/chat-messages-ask";
 import { cn } from "@/app/components/shadcn-ui/utils";
 import { useShareDrawerState } from "@/app/components/share/state";
+import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { Message, useChat } from "ai/react";
 import { useEffect, useRef, useState } from "react";
 import { ClearButton } from "./clear-button";
@@ -32,6 +33,14 @@ export default function Chat({
 		initialMessages,
 		body: { slug: sessionSlug, userId: user?.id, userEmail: user?.email },
 	});
+
+	useRunOnFirstRender(() => {
+		if (message) {
+			chat.setMessages([]);
+			chat.append({ role: "user", content: message });
+		}
+	});
+
 	const disabledQuestions = Boolean(initialMessages);
 
 	const sessionSlugFromServer = (chat.data as { slug?: string }[])?.find(
@@ -53,15 +62,6 @@ export default function Chat({
 			chatWrapperRef.current.scrollIntoView(false);
 		}
 	}, [chat.messages]);
-
-	useEffect(() => {
-		if (message) {
-			chat.setMessages([]);
-			if (message.length > 0) {
-				chat.append({ role: "user", content: message });
-			}
-		}
-	}, [message, chat.setMessages, chat.append]);
 
 	const isEmptyScreen = chat.messages.length === 0;
 	const showLoadingState = chat.isLoading && chat.messages.length <= 1;
