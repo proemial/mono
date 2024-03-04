@@ -1,7 +1,7 @@
 "use client";
 import Drawer from "@/app/components/drawer/drawer";
 import { Proem } from "@/app/components/icons/brand/proem";
-import { Logo } from "@/app/components/icons/logo";
+import { SoMeLogo } from "@/app/components/icons/some-logo";
 import { useDrawerState } from "@/app/components/login/state";
 import { Button } from "@/app/components/shadcn-ui/button";
 import { SignedOut, useSignIn } from "@clerk/nextjs";
@@ -63,7 +63,7 @@ export function LoginDrawer() {
 								}}
 								className="items-center space-x-2"
 							>
-								<Logo variant={icon} />
+								<SoMeLogo variant={icon} />
 								<span className="text-xs font-semibold">
 									Continue using {name}
 								</span>
