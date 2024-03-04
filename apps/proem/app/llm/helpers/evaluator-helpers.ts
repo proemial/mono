@@ -1,7 +1,11 @@
 import { Run } from "@langchain/core/tracers/base";
 
-export function runOutputAsString(run: Run): string | undefined {
+export function runOutput<T = string>(run: Run): T | undefined {
 	return run.outputs?.output;
+}
+
+export function runOutputAsString(run: Run) {
+	return runOutput<string>(run);
 }
 
 export function calculateDiffScore(min: number, max: number, value?: number) {
