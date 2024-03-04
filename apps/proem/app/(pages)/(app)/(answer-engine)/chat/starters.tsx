@@ -1,7 +1,7 @@
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { Tracker } from "@/app/components/analytics/tracker";
-import { ProemLogo } from "@/app/components/logo";
+import { ProemLogo } from "@/app/components/icons/brand/logo";
 import { Button } from "@/app/components/proem-ui/link-button";
 import { memo, useEffect, useState } from "react";
 
