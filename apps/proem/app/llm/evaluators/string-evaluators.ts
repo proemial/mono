@@ -1,9 +1,6 @@
-import { EvaluationResult, RunEvaluator } from "langsmith/evaluation";
 import { Run } from "@langchain/core/tracers/base";
-import {
-	calculateDiffScore,
-	runOutputAsString,
-} from "../helpers/evaluator-helpers";
+import { EvaluationResult, RunEvaluator } from "langsmith/evaluation";
+import { calculateDiffScore, pickOutput } from "../helpers/evaluator-helpers";
 
 export class CharCountEvaluator implements RunEvaluator {
 	constructor(
@@ -12,7 +9,7 @@ export class CharCountEvaluator implements RunEvaluator {
 	) {}
 
 	async evaluateRun(run: Run): Promise<EvaluationResult> {
-		const output = runOutputAsString(run);
+		const output = pickOutput(run);
 		const result = CharCountEvaluator.evaluate(this.min, this.max, output);
 
 		return { key: "chars", ...result };

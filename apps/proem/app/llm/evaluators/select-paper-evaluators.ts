@@ -1,28 +1,24 @@
-import {
-	calculateDiffScore,
-	runOutputAsString,
-} from "@/app/llm/helpers/evaluator-helpers";
+import { getOutputFromRun } from "@/app/llm/helpers/evaluator-helpers";
 import { Run } from "@langchain/core/tracers/base";
 import { EvaluationResult, RunEvaluator } from "langsmith/evaluation";
+
+type Output = string[];
 
 export class PaperIdEvaluator implements RunEvaluator {
 	async evaluateRun(run: Run): Promise<EvaluationResult> {
 		const papers = mapPapersToIds(run.inputs.papers);
-		const output = runOutputAsString(run);
+		const output = getOutputFromRun<Output>(run);
 		const result = PaperIdEvaluator.evaluate(papers, output);
 
 		return { key: "paper-hallucinated-id", ...result };
 	}
 
-	static evaluate<T extends { id: string }>(
-		papers: T[],
-		output: string | undefined,
-	) {
+	static evaluate<T extends { id: string }>(papers: T[], output?: Output) {
 		if (!output) {
 			return { value: 0, score: 0, comment: "No answer was found" };
 		}
 
-		const paperIds = output.split(",").map((str) => str.trim()) ?? output;
+		const paperIds = output;
 		const { hallucinatedIds } = validatePaperIds(papers, paperIds);
 		const hallucinatedIdsCount = hallucinatedIds.length;
 
@@ -40,7 +36,7 @@ export class PaperIdEvaluator implements RunEvaluator {
 export function mapPapersToIds<T extends { link: string }>(papers: string) {
 	return (JSON.parse(papers) as T[]).map((paper) => ({
 		...paper,
-		id: paper.link,
+		id: paper.link.replace("/oa/", ""),
 	}));
 }
 
