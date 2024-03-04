@@ -50,7 +50,7 @@ export function ChatMessage({
 				</Avatar>
 				<div className="font-bold">{user.name}</div>
 
-				{onShareHandle && !isLoading && (
+				{onShareHandle && message && !isLoading && (
 					<ShareIcon
 						onClick={() => {
 							onShareHandle({ renderedContent: content, message });
