@@ -96,7 +96,7 @@ export default function Chat({
 		<ClearButton
 			isLoading={chat.isLoading}
 			messages={chat.messages}
-			stop={stop}
+			stop={chat.stop}
 			clear={clear}
 		/>
 	);
