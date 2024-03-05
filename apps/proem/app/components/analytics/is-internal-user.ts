@@ -1,3 +1,5 @@
+export const INTERNAL_COOKIE_NAME = "internalUser";
+
 export function isInternalUser(email?: string) {
 	const [name, domain] = email?.split("@") ?? [];
 	if (domain?.endsWith("proemial.ai") && name) {

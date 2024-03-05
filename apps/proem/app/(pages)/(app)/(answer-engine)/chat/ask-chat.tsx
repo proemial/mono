@@ -31,7 +31,7 @@ export default function Chat({
 		id: "hardcoded",
 		api: "/api/bot/answer-engine",
 		initialMessages,
-		body: { slug: sessionSlug, userId: user?.id, userEmail: user?.email },
+		body: { slug: sessionSlug, userId: user?.id },
 	});
 
 	useRunOnFirstRender(() => {

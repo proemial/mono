@@ -1,11 +1,12 @@
 "use client";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
-import { isInternalUser } from "@/app/components/analytics/is-internal-user";
+import {
+	INTERNAL_COOKIE_NAME,
+	isInternalUser,
+} from "@/app/components/analytics/is-internal-user";
 import { useUser } from "@clerk/nextjs";
 import { getCookie, setCookie } from "cookies-next";
 import { usePathname } from "next/navigation";
-
-const INTERNAL_COOIKE_NAME = "isInternalUser";
 
 type UserAgent = string;
 
@@ -18,12 +19,13 @@ export function useAnalyticsDisabled({ userAgent }: useAnalyticsDisabledProps) {
 	const isBot = userAgent && isChecklyBot(userAgent);
 
 	const email = user?.primaryEmailAddress?.emailAddress ?? "";
+	const userId = user?.id;
 	const { isInternal } = isInternalUser(email);
-	const disabledByCookie = getCookie(INTERNAL_COOIKE_NAME);
+	const disabledByCookie = getCookie(INTERNAL_COOKIE_NAME);
 
 	// Deleting the cookie must be done manually
 	if (isInternal && !disabledByCookie) {
-		setCookie(INTERNAL_COOIKE_NAME, "true");
+		setCookie(INTERNAL_COOKIE_NAME, { email, userId });
 		analyticsTrace("analytics cookie updated");
 	}
 
