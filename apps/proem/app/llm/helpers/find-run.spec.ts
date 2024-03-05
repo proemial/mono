@@ -1,5 +1,5 @@
+import { Run } from "langsmith";
 import { findRun } from "./find-run";
-import { Run } from "@langchain/core/tracers/base";
 
 describe("findRun", () => {
 	it("Returns undefined when unmatched", () => {

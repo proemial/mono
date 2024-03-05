@@ -4,12 +4,12 @@ import { answerEngineChain } from "@/app/llm/chains/answer-engine-chain";
 import { findRun } from "@/app/llm/helpers/find-run";
 import { toLangChainChatHistory } from "@/app/llm/utils";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
-import { Run } from "@langchain/core/tracers/base";
 import {
 	StreamingTextResponse,
 	createStreamDataTransformer,
 	experimental_StreamData,
 } from "ai";
+import { Run } from "langsmith";
 
 export type ChatHistoryMessage = { role: string; content: string };
 
