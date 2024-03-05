@@ -1,48 +1,44 @@
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
+import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import {
 	ChatPromptTemplate,
 	MessagesPlaceholder,
 } from "@langchain/core/prompts";
-import { RunnableSequence } from "@langchain/core/runnables";
 import { LangChainChatHistoryMessage } from "../utils";
-import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 
 const prompt = ChatPromptTemplate.fromMessages<Input>([
 	[
 		"system",
 		`
     You are a helpful assistant that provides conclusive answers to user
-    questions, based on the following research articles: {papers}. Each research
-    article has an associated link. If you have no research articles, decline to
+    questions, based on the following research papers: <papers>{papers}</papers>. Each research
+    paper has an associated link. If you have no research paper, decline to
     answer the user's question in a friendly manner stating you have
     insufficient research available on the topic.
 
 		You must follow these steps when constructing your answer:
 
-		1. Select the two research articles most relevant to the user's
-		question.
-
-		2. Summarize each of the selected research articles into 20 words or
+		1. Summarize each of the selected research articles into 20 words or
 		less, with the most significant finding as an engaging tweet capturing
 		the minds of other researchers. Use layman's terminology, without
 		mentioning abstract entities like "you", "researchers", "authors",
 		"propose", or "study", but rather stating the finding as a statement of
 		fact, without reservations or caveats.
-		
+
 		Example of a summary:
-		
+
 		"""
 		More tooth loss is associated with greater cognitive decline and
 		dementia in elderly people.
 		"""
 
-		3. Based on these two summaries, construct two Markdown links pointing to
+		2. Based on these two summaries, construct two Markdown links pointing to
 		each the associated research articles. The title of a link must be a key
 		phrase from the summary and consist of 3-6 words. This title must also be
 		appended to the link destination as a \`title\` query parameter.
 
-		4. Finally, based on these two summaries and the two links, construct
+		3. Finally, based on these two summaries and the two links, construct
 		your answer spanning no more than 40 words. Your answer must include the links
 		intertwined with the text of the answer.
 
@@ -79,11 +75,8 @@ type Input = {
 	papers: string;
 };
 
-type Output = string;
-
 export const getGenerateAnswerChain = (modelOverride: BaseChatModel = model) =>
-	RunnableSequence.from<Input, Output>([
-		prompt,
-		modelOverride,
-		stringOutputParser,
-	]);
+	prompt
+		.pipe(modelOverride)
+		.pipe(stringOutputParser)
+		.withConfig({ runName: "GenerateAnswer" });

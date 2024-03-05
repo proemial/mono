@@ -11,7 +11,7 @@ import {
 
 type SelectRelevantPapersPromptInput = {
 	question: string;
-	papers: string;
+	papersWithIds: string;
 };
 
 const selectRelevantPapersPrompt =
@@ -19,11 +19,11 @@ const selectRelevantPapersPrompt =
 		// TODO! ask llm to select ID's with a reason why and a score
 		[
 			"system",
-			"You are a scientist who is trying to find the 5 best scientific research papers that are related to the user's question. Only answer with papers given the user's question. ONLY respond with the id's of the most relevant papers in a comma separated list.",
+			"You are a scientist who is trying to find the 2 best scientific research papers that are related to the user's question. Only answer with papers given the user's question. ONLY respond with the id's of the most relevant papers in a comma separated list.",
 		],
 		[
 			"human",
-			"Which of these papers is most relevant to my question. <papers>{papers}</papers>. My question is <question>{question}</question>.",
+			"Which of these papers is most relevant to my question. <papers>{papersWithIds}</papers>. My question is <question>{question}</question>.",
 		],
 	]);
 
@@ -33,7 +33,7 @@ const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask", {
 	temperature: 0,
 });
 
-type SelectRelevantPapersChainInput = SelectRelevantPapersPromptInput;
+type SelectRelevantPapersChainInput = { question: string; papers: string };
 type SelectRelevantPapersChainOutput = SelectRelevantPapersPromptInput & {
 	selectedPaperIds: string[];
 	selectedPapers: Paper[];
@@ -45,7 +45,7 @@ export const getSelectRelevantPapersChain = (modelOverride: BaseChatModel) =>
 		SelectRelevantPapersChainOutput
 	>([
 		RunnablePassthrough.assign({
-			papers: (input) => JSON.stringify(mapPapersToIds(input.papers)),
+			papersWithIds: (input) => JSON.stringify(mapPapersToIds(input.papers)),
 		}),
 		RunnablePassthrough.assign({
 			selectedPaperIds: selectRelevantPapersPrompt
@@ -54,31 +54,30 @@ export const getSelectRelevantPapersChain = (modelOverride: BaseChatModel) =>
 				.pipe((selectedPaperIdsAsString) => {
 					const selectedPaperIds =
 						selectedPaperIdsAsString.split(",").map((str) => str.trim()) ?? [];
+					if (selectedPaperIds.length < 1) {
+						throw new Error("No papers were selected");
+					}
 
 					return selectedPaperIds;
 				}),
 		}),
-		RunnablePassthrough.assign({
-			selectedPapers: (input) => {
-				if (input.selectedPaperIds.length < 1) {
-					throw new Error("No papers were selected");
-				}
-				const papers = JSON.parse(input.papers);
+		(input) => {
+			const papers = JSON.parse(input.papers);
 
-				// const evaluation = PaperIdEvaluator.evaluate(
-				// 	papers,
-				// 	input.selectedPaperIds,
-				// );
+			// const evaluation = PaperIdEvaluator.evaluate(
+			// 	papers,
+			// 	input.selectedPaperIds,
+			// );
 
-				const selectedPapers = papers.filter(({ id }: { id: string }) =>
+			const selectedPapers = papers.filter(
+				({ link }: { link: `/oa/${string}` }) =>
 					input.selectedPaperIds.some(
-						(selectedPaperId: string) => selectedPaperId === id,
+						(selectedPaperId: string) => `/oa/${selectedPaperId}` === link,
 					),
-				);
+			);
 
-				return selectedPapers;
-			},
-		}),
-	]);
+			return selectedPapers;
+		},
+	]).withConfig({ runName: "SelectRelevantPapers" });
 
 export const selectRelevantPapersChain = getSelectRelevantPapersChain(model);

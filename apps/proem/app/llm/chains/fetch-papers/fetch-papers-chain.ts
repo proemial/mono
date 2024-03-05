@@ -1,5 +1,6 @@
 import { selectRelevantPapersChain } from "@/app/llm/chains/fetch-papers/select-relevant-papers-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
+import { FetchPapersTool } from "@/app/llm/tools/fetch-papers-tool";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import {
 	RunnablePassthrough,
@@ -8,7 +9,6 @@ import {
 import { JsonOutputFunctionsParser } from "langchain/output_parsers";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { FetchPapersTool } from "../../tools/fetch-papers-tool";
 
 const generateSearchParamsSchema = z.object({
 	keyConcept: z.string().describe(`A single common noun that is VERY likely to occur in the title of
@@ -61,23 +61,14 @@ const generateSearchParamsChain = RunnableSequence.from<Input, Output>([
 	}),
 	(input) => input, // This is silly, but it makes the output parser below not stream the response
 	jsonOutputFunctionsParser,
-]).withConfig({
-	runName: "GenerateSearchParams",
-});
+]).withConfig({ runName: "GenerateSearchParams" });
 
 export const fetchPapersChain = RunnableSequence.from<Input, string>([
 	RunnablePassthrough.assign({
-		searchParams: (input) => generateSearchParamsChain.invoke(input),
+		papers: generateSearchParamsChain
+			.pipe(fetchPapersTool)
+			.withConfig({ runName: "FetchPapers" }),
 	}),
-	RunnablePassthrough.assign({
-		papers: async (input) => {
-			const fetchedPapers = await fetchPapersTool.invoke(input.searchParams);
-			const { selectedPapers } = await selectRelevantPapersChain.invoke({
-				question: input.question,
-				papers: fetchedPapers,
-			});
-
-			return selectedPapers;
-		},
-	}),
+	selectRelevantPapersChain,
+	(selectedPapers) => JSON.stringify(selectedPapers),
 ]);
