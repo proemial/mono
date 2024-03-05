@@ -71,10 +71,10 @@ export function StarterButton(props: ButtonProps) {
 			onClick={onClick}
 			className={`${cn(variants({ variant, size, className }))}`}
 		>
-			<div ref={container} className="w-full mr-2 overflow-hidden">
+			<div ref={container} className="flex w-full mr-2 overflow-hidden">
 				<div
 					ref={child}
-					className="inline-block overflow-hidden text-nowrap"
+					className="inline-block overflow-hidden"
 					style={{ animationDelay: "1s" }}
 				>
 					{!isMarquee && <p className="inline-block">{children}</p>}
