@@ -5,7 +5,7 @@
 		"build": "turbo build",
 		"dev": "turbo dev",
 		"checkly": "turbo checkly",
-		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
+		"format": "biome format --write .",
 		"vercel-pull-env": "vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/proem --yes && vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/search --yes",
 		"test": "turbo run test",
 		"test:watch": "turbo run test:watch"
@@ -13,7 +13,6 @@
 	"devDependencies": {
 		"@biomejs/biome": "1.5.3",
 		"@vitest/coverage-v8": "^1.2.1",
-		"prettier": "^3.1.0",
 		"turbo": "^1.12.4",
 		"vite-tsconfig-paths": "^4.3.1",
 		"vitest": "^1.2.1"
