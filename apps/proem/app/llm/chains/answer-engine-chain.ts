@@ -2,6 +2,7 @@ import { fetchPapersChain } from "@/app/llm/chains/fetch-papers/fetch-papers-cha
 import { RunnableMap, RunnableSequence } from "@langchain/core/runnables";
 import { LangChainChatHistoryMessage } from "../utils";
 import { getGenerateAnswerChain } from "./generate-answer-chain";
+import { getIdentifyIntentChain } from "./identify-intent-chain";
 
 type Input = {
 	question: string;
@@ -15,6 +16,7 @@ type FetchPapersOutput = {
 	question: string;
 	chatHistory: LangChainChatHistoryMessage[];
 	papers: string;
+	intent: string;
 };
 
 export const answerEngineChain = RunnableSequence.from<Input, Output>([
@@ -28,6 +30,7 @@ export const answerEngineChain = RunnableSequence.from<Input, Output>([
 			// TODO: Handle thrown errors.
 			return fetchPapersChain as unknown as string;
 		},
+		intent: getIdentifyIntentChain(),
 	}).withConfig({
 		runName: "FetchPapers",
 	}),
