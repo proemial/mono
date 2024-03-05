@@ -2,7 +2,7 @@ import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { Tracker } from "@/app/components/analytics/tracker";
 import { ProemLogo } from "@/app/components/icons/brand/logo";
-import { Button } from "@/app/components/proem-ui/link-button";
+import { StarterButton } from "@/app/components/proem-ui/link-button";
 import { memo, useEffect, useState } from "react";
 
 export const Starters = memo(function Starters({ append }: { append: any }) {
@@ -31,7 +31,7 @@ export const Starters = memo(function Starters({ append }: { append: any }) {
 			</div>
 			<div className="flex flex-wrap gap-[6px]">
 				{starters.map((starter) => (
-					<Button
+					<StarterButton
 						key={starter.index}
 						variant="starter"
 						className="w-full mb-1 cursor-pointer"
@@ -42,7 +42,7 @@ export const Starters = memo(function Starters({ append }: { append: any }) {
 						}}
 					>
 						{starter.text}
-					</Button>
+					</StarterButton>
 				))}
 			</div>
 		</div>

@@ -4,6 +4,7 @@ import { Send } from "@/app/components/icons/functional/send";
 import { cn } from "@/app/components/shadcn-ui/utils";
 import { VariantProps, cva } from "class-variance-authority";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
 type LinkProps = VariantProps<typeof variants> & {
 	children: string;
@@ -49,16 +50,43 @@ type ButtonProps = VariantProps<typeof variants> & {
 	className?: string;
 	onClick: () => void;
 };
-export function Button(props: ButtonProps) {
+export function StarterButton(props: ButtonProps) {
 	const { children, onClick, variant, size, className } = props;
+
+	const container = useRef<HTMLDivElement>(null);
+	const child = useRef<HTMLDivElement>(null);
+	const [isMarquee, setIsMarquee] = useState(false);
+
+	useEffect(() => {
+		if (container.current && child.current) {
+			if (container.current.clientWidth < child.current.clientWidth) {
+				setIsMarquee(true);
+				child.current.classList.add("animate-marquee");
+			}
+		}
+	}, [container.current, child.current]);
 
 	return (
 		<div
 			onClick={onClick}
 			className={`${cn(variants({ variant, size, className }))}`}
 		>
-			<div className="w-full mr-2 truncate">{children}</div>
-			{variant === "starter" && <Send />}
+			<div ref={container} className="w-full mr-2 overflow-hidden">
+				<div
+					ref={child}
+					className="inline-block overflow-hidden text-nowrap"
+					style={{ animationDelay: "1s" }}
+				>
+					{!isMarquee && <p className="inline-block">{children}</p>}
+					{isMarquee && (
+						<>
+							<p className="inline-block pr-4">{children}</p>
+							<p className="inline-block pr-4">{children}</p>
+						</>
+					)}
+				</div>
+			</div>
+			<Send />
 		</div>
 	);
 }
