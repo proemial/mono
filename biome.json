@@ -17,6 +17,7 @@
 			"a11y": {
 				"useKeyWithClickEvents": "off"
 			}
-		}
+		},
+		"ignore": [".next", ".vercel", ".turbo"]
 	}
 }
