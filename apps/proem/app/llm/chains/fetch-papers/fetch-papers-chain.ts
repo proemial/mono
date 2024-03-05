@@ -1,6 +1,10 @@
+import { selectRelevantPapersChain } from "@/app/llm/chains/fetch-papers/select-relevant-papers-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { RunnableSequence } from "@langchain/core/runnables";
+import {
+	RunnablePassthrough,
+	RunnableSequence,
+} from "@langchain/core/runnables";
 import { JsonOutputFunctionsParser } from "langchain/output_parsers";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
@@ -62,6 +66,18 @@ const generateSearchParamsChain = RunnableSequence.from<Input, Output>([
 });
 
 export const fetchPapersChain = RunnableSequence.from<Input, string>([
-	generateSearchParamsChain,
-	fetchPapersTool,
+	RunnablePassthrough.assign({
+		searchParams: (input) => generateSearchParamsChain.invoke(input),
+	}),
+	RunnablePassthrough.assign({
+		papers: async (input) => {
+			const fetchedPapers = await fetchPapersTool.invoke(input.searchParams);
+			const { selectedPapers } = await selectRelevantPapersChain.invoke({
+				question: input.question,
+				papers: fetchedPapers,
+			});
+
+			return selectedPapers;
+		},
+	}),
 ]);
