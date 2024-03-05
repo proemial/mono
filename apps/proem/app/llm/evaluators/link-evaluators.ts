@@ -1,5 +1,4 @@
 import { EvaluationResult, RunEvaluator } from "langsmith/evaluation";
-import { Run } from "@langchain/core/tracers/base";
 import {
 	calculateDiffScore,
 	extractLinks,
@@ -10,6 +9,7 @@ import {
 	extractMarkdownLinkTitle,
 } from "../helpers/evaluator-helpers";
 import { findRunPaperLinks } from "@/app/llm/helpers/find-run";
+import { Run } from "langsmith";
 
 export class LinksEvaluator implements RunEvaluator {
 	constructor(
@@ -32,7 +32,7 @@ export class LinksEvaluator implements RunEvaluator {
 		text: string | undefined,
 		paperLinks: string[],
 	) {
-		if (typeof text === 'undefined') {
+		if (typeof text === "undefined") {
 			return { value: 0, score: 0, comment: "No answer was found" };
 		}
 
@@ -70,7 +70,7 @@ export class LinkCountEvaluator implements RunEvaluator {
 	}
 
 	static evaluate(min: number, max: number, text?: string) {
-		if (typeof text === 'undefined') {
+		if (typeof text === "undefined") {
 			return { value: 0, score: 0, comment: "No answer was found" };
 		}
 
@@ -96,7 +96,7 @@ export class ValidLinkEvaluator implements RunEvaluator {
 	}
 
 	static evaluate(text: string | undefined, paperLinks: string[]) {
-		if (typeof text === 'undefined') {
+		if (typeof text === "undefined") {
 			return { value: 0, score: 0, comment: "No answer was found" };
 		}
 
@@ -135,7 +135,7 @@ export class ValidTitleEvaluator implements RunEvaluator {
 	}
 
 	static evaluate(min: number, max: number, text: string | undefined) {
-		if (typeof text === 'undefined') {
+		if (typeof text === "undefined") {
 			return { value: 0, score: 0, comment: "No answer was found" };
 		}
 

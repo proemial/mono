@@ -1,4 +1,4 @@
-import { Run } from "@langchain/core/tracers/base";
+import { Run } from "langsmith";
 
 export function getOutputFromRun<T = string>(run: Run): T | undefined {
 	return run.outputs?.output;

@@ -1,5 +1,5 @@
 import { getOutputFromRun } from "@/app/llm/helpers/evaluator-helpers";
-import { Run } from "@langchain/core/tracers/base";
+import { Run } from "langsmith";
 import { EvaluationResult, RunEvaluator } from "langsmith/evaluation";
 
 type Output = string[];

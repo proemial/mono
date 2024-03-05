@@ -2,7 +2,7 @@ import {
 	calculateDiffScore,
 	runOutputAsString,
 } from "@/app/llm/helpers/evaluator-helpers";
-import { Run } from "@langchain/core/tracers/base";
+import { Run } from "langsmith";
 import { EvaluationResult, RunEvaluator } from "langsmith/evaluation";
 
 export class CharCountEvaluator implements RunEvaluator {
