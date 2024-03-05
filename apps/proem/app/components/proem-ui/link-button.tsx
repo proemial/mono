@@ -5,6 +5,8 @@ import { cn } from "@/app/components/shadcn-ui/utils";
 import { VariantProps, cva } from "class-variance-authority";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { Features } from "../feature-flags/features";
+import { useFeatureFlags } from "../feature-flags/client-flags";
 
 type LinkProps = VariantProps<typeof variants> & {
 	children: string;
@@ -57,24 +59,32 @@ export function StarterButton(props: ButtonProps) {
 	const child = useRef<HTMLDivElement>(null);
 	const [isMarquee, setIsMarquee] = useState(false);
 
+	const flags = useFeatureFlags(["animateAskStarters"]);
+
 	useEffect(() => {
-		if (container.current && child.current) {
+		if (flags.animateAskStarters && container.current && child.current) {
 			if (container.current.clientWidth < child.current.clientWidth) {
 				setIsMarquee(true);
 				child.current.classList.add("animate-marquee");
 			}
 		}
-	}, [container.current, child.current]);
+	}, [container.current, child.current, flags]);
+
+	const containerStyles = flags.animateAskStarters ? "" : "flex";
+	const childStyles = flags.animateAskStarters ? "text-nowrap" : "";
 
 	return (
 		<div
 			onClick={onClick}
 			className={`${cn(variants({ variant, size, className }))}`}
 		>
-			<div ref={container} className="flex w-full mr-2 overflow-hidden">
+			<div
+				ref={container}
+				className={`w-full mr-2 overflow-hidden ${containerStyles}`}
+			>
 				<div
 					ref={child}
-					className="inline-block overflow-hidden"
+					className={`inline-block overflow-hidden ${childStyles}`}
 					style={{ animationDelay: "1s" }}
 				>
 					{!isMarquee && <p className="inline-block">{children}</p>}
