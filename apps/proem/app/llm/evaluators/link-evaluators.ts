@@ -32,7 +32,7 @@ export class LinksEvaluator implements RunEvaluator {
 		text: string | undefined,
 		paperLinks: string[],
 	) {
-		if (!text) {
+		if (typeof text === 'undefined') {
 			return { value: 0, score: 0, comment: "No answer was found" };
 		}
 
@@ -70,7 +70,7 @@ export class LinkCountEvaluator implements RunEvaluator {
 	}
 
 	static evaluate(min: number, max: number, text?: string) {
-		if (!text) {
+		if (typeof text === 'undefined') {
 			return { value: 0, score: 0, comment: "No answer was found" };
 		}
 
@@ -96,7 +96,7 @@ export class ValidLinkEvaluator implements RunEvaluator {
 	}
 
 	static evaluate(text: string | undefined, paperLinks: string[]) {
-		if (!text) {
+		if (typeof text === 'undefined') {
 			return { value: 0, score: 0, comment: "No answer was found" };
 		}
 
@@ -135,7 +135,7 @@ export class ValidTitleEvaluator implements RunEvaluator {
 	}
 
 	static evaluate(min: number, max: number, text: string | undefined) {
-		if (!text) {
+		if (typeof text === 'undefined') {
 			return { value: 0, score: 0, comment: "No answer was found" };
 		}
 
