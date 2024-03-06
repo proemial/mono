@@ -1,3 +1,4 @@
+import { Runnable } from "@langchain/core/runnables";
 import { z } from "zod";
 
 type ExtractData<T> = Extract<AnswerEngineEvents, { type: T }>["data"];
@@ -16,6 +17,10 @@ export function findByEventType<T extends AnswerEngineEvents["type"]>(
 	return events?.find((event) => event.type === type)?.data as
 		| ExtractData<T>
 		| undefined;
+}
+
+export function withEventTag<T extends Runnable>(func: T, tag: string) {
+	return func.withConfig({ tags: [tag] });
 }
 
 export const ANSWER_SLUG_GENERATED = z.literal("answer-slug-generated");
