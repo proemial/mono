@@ -1,5 +1,7 @@
 import { fetchPapersChain } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
 import {
+	RunnableBranch,
+	RunnableLambda,
 	RunnablePassthrough,
 	RunnableSequence,
 } from "@langchain/core/runnables";
@@ -14,10 +16,7 @@ type Input = {
 };
 type Output = string;
 
-export const answerEngineChain = RunnableSequence.from<Input, Output>([
-	RunnablePassthrough.assign({
-		intent: getIdentifyIntentChain(),
-	}),
+const answerChain = RunnableSequence.from<Input & { intent: string }, Output>([
 	RunnablePassthrough.assign({
 		papers: (input) => {
 			if (input.papers) {
@@ -27,6 +26,25 @@ export const answerEngineChain = RunnableSequence.from<Input, Output>([
 		},
 	}),
 	getGenerateAnswerChain(),
+]);
+
+const abortChain = RunnableLambda.from<Input, Output>(
+	() => "We're sorry, but we can't answer that question.",
+);
+
+const isSupportedIntent = (input: Input & { intent: string }) =>
+	input.intent !== "0";
+
+const answerIfSupportedIntent = RunnableBranch.from<
+	Input & { intent: string },
+	Output
+>([[isSupportedIntent, answerChain], abortChain]);
+
+export const answerEngineChain = RunnableSequence.from<Input, Output>([
+	RunnablePassthrough.assign({
+		intent: getIdentifyIntentChain(),
+	}),
+	answerIfSupportedIntent,
 ]).withConfig({
 	runName: "AnswerEngine",
 });
