@@ -3,13 +3,21 @@ import { findRun } from "@/app/llm/helpers/find-run";
 import { experimental_StreamData } from "ai";
 import { Run } from "langsmith";
 
-export function saveAnswer(
-	question: string,
-	isFollowUpQuestion: boolean,
-	slug: string,
-	userId: string | undefined,
-	data: experimental_StreamData,
-) {
+type SaveAnswerParams = {
+	question: string;
+	isFollowUpQuestion: boolean;
+	slug: string;
+	userId?: string;
+	data: experimental_StreamData;
+};
+
+export function saveAnswer({
+	question,
+	isFollowUpQuestion,
+	slug,
+	userId,
+	data,
+}: SaveAnswerParams) {
 	return async (run: Run) => {
 		const answer = findRun(run, (run) => run.name === "AnswerEngine")?.outputs
 			?.output;

@@ -53,7 +53,7 @@ export async function askAnswerEngine({
 			},
 		})
 		.withListeners({
-			onEnd: saveAnswer(question, isFollowUpQuestion, slug, userId, data),
+			onEnd: saveAnswer({ question, isFollowUpQuestion, slug, userId, data }),
 		})
 		.stream({
 			question,
