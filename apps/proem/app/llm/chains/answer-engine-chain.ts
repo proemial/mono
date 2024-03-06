@@ -1,6 +1,5 @@
 import { fetchPapersChain } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
 import {
-	RunnableMap,
 	RunnablePassthrough,
 	RunnableSequence,
 } from "@langchain/core/runnables";
@@ -15,31 +14,17 @@ type Input = {
 };
 type Output = string;
 
-type FetchPapersInput = Input & {
-	intent: string;
-};
-type FetchPapersOutput = {
-	question: string;
-	chatHistory: LangChainChatHistoryMessage[];
-	papers: string;
-};
-
 export const answerEngineChain = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
 		intent: getIdentifyIntentChain(),
 	}),
-	RunnableMap.from<FetchPapersInput, FetchPapersOutput>({
-		question: (input) => input.question,
-		chatHistory: (input) => input.chatHistory,
+	RunnablePassthrough.assign({
 		papers: (input) => {
 			if (input.papers) {
 				return JSON.stringify(input.papers);
 			}
-			// TODO: Handle thrown errors.
-			return fetchPapersChain as unknown as string;
+			return fetchPapersChain;
 		},
-	}).withConfig({
-		runName: "FetchPapers",
 	}),
 	getGenerateAnswerChain(),
 ]).withConfig({
