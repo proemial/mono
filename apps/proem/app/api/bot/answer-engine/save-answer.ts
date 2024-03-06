@@ -1,7 +1,7 @@
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import { findRun } from "@/app/llm/helpers/find-run";
-import { Run } from "@langchain/core/tracers/base";
 import { experimental_StreamData } from "ai";
+import { Run } from "langsmith";
 
 export function saveAnswer(
 	question: string,
@@ -11,8 +11,8 @@ export function saveAnswer(
 	data: experimental_StreamData,
 ) {
 	return async (run: Run) => {
-		const answer = findRun(run, (run: Run) => run.name === "AnswerEngine")
-			?.outputs?.output;
+		const answer = findRun(run, (run) => run.name === "AnswerEngine")?.outputs
+			?.output;
 
 		if (!answer) {
 			data.close();
@@ -26,7 +26,7 @@ export function saveAnswer(
 
 		const searchParamsResponse = findRun(
 			run,
-			(run: Run) => run.name === "GenerateSearchParams",
+			(run) => run.name === "GenerateSearchParams",
 		)?.outputs as { keyConcept: string; relatedConcepts: string[] };
 
 		const papers = isFollowUpQuestion
