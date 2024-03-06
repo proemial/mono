@@ -13,9 +13,7 @@ const prompt = ChatPromptTemplate.fromMessages<Input>([
 		`
     You are a helpful assistant that provides conclusive answers to user
     questions, based on the following research papers: <papers>{papers}</papers>. Each research
-    paper has an associated link. If you have no research paper, decline to
-    answer the user's question in a friendly manner stating you have
-    insufficient research available on the topic.
+    paper has an associated link.
 
 		You must follow these steps when constructing your answer:
 
