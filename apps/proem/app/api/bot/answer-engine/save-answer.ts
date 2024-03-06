@@ -1,4 +1,5 @@
 import { answers } from "@/app/api/bot/answer-engine/answers";
+import { createSaveAnswerEvent } from "@/app/api/bot/answer-engine/events";
 import { findRun } from "@/app/llm/helpers/find-run";
 import { experimental_StreamData } from "ai";
 import { Run } from "langsmith";
@@ -60,12 +61,12 @@ export function saveAnswer({
 			return;
 		}
 
-		data.append({
-			answers: {
+		data.append(
+			createSaveAnswerEvent({
 				shareId: insertedAnswer.shareId,
 				answer: insertedAnswer.answer,
-			},
-		});
+			}),
+		);
 		data.close();
 	};
 }

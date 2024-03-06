@@ -1,4 +1,5 @@
 import { answers } from "@/app/api/bot/answer-engine/answers";
+import { createAnswerSlugEvent } from "@/app/api/bot/answer-engine/events";
 import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
 import { saveAnswer } from "@/app/api/bot/answer-engine/save-answer";
 import { answerEngineChain } from "@/app/llm/chains/answer-engine-chain";
@@ -9,7 +10,6 @@ import {
 	createStreamDataTransformer,
 	experimental_StreamData,
 } from "ai";
-import { Run } from "langsmith";
 
 export type ChatHistoryMessage = { role: string; content: string };
 
@@ -39,9 +39,7 @@ export async function askAnswerEngine({
 
 	const existingPapers = existingAnswers[0]?.papers?.papers;
 
-	data.append({
-		slug,
-	});
+	data.append(createAnswerSlugEvent({ slug }));
 
 	const stream = await answerEngineChain
 		.pipe(bytesOutputParser)
