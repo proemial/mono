@@ -1,6 +1,5 @@
 import { LoginDrawer } from "@/app/components/login/login-drawer";
 import { MainMenu } from "@/app/components/menu/menu";
-import { Toaster } from "@/app/components/shadcn-ui/toaster";
 import { ShareDrawer } from "@/app/components/share/share-drawer";
 import { ReactNode } from "react";
 
@@ -16,7 +15,6 @@ export default async function AppLayout({ children }: Props) {
 			<LoginDrawer />
 			<ShareDrawer />
 			<MainMenu />
-			<Toaster />
 		</>
 	);
 }
