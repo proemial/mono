@@ -2,7 +2,11 @@ import { answers } from "@/app/api/bot/answer-engine/answers";
 import { createAnswerSlugEvent } from "@/app/api/bot/answer-engine/events";
 import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
 import { saveAnswer } from "@/app/api/bot/answer-engine/save-answer";
-import { answerEngineChain } from "@/app/llm/chains/answer-engine-chain";
+import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
+import {
+	answerEngineChain,
+	answerEngineExperimental,
+} from "@/app/llm/chains/answer-engine-chain";
 import { toLangChainChatHistory } from "@/app/llm/utils";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
 import {
@@ -41,7 +45,10 @@ export async function askAnswerEngine({
 
 	data.append(createAnswerSlugEvent({ slug }));
 
-	const stream = await answerEngineChain
+	const validateIntent = await getFeatureFlag("validateAskIntent");
+	const chain = validateIntent ? answerEngineExperimental : answerEngineChain;
+
+	const stream = await chain
 		.pipe(bytesOutputParser)
 		.withConfig({
 			runName: isFollowUpQuestion ? "Ask (follow-up)" : "Ask",
