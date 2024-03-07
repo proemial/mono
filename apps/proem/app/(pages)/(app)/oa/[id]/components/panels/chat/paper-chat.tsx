@@ -57,13 +57,13 @@ export function PaperChat({ paper, starters }: Props) {
 				</>
 			)}
 
-			<div className="fixed left-0 w-full bg-black bottom-14 shadow-top">
+			{/* <div className="fixed left-0 w-full bg-black bottom-14 shadow-top">
 				<div className="w-full max-w-screen-md px-4 py-3 mx-auto">
 					<ChatInput
 						value={input}
 						placeholder={
 							initialPlaceholder
-								? "Ask your own question about this paper"
+								? "Ask a question about this paper"
 								: "Ask a follow-up question"
 						}
 						disabled={isLoading}
@@ -73,7 +73,7 @@ export function PaperChat({ paper, starters }: Props) {
 						authRequired
 					/>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 }

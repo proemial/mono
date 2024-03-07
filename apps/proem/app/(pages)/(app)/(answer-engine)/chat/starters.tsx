@@ -25,27 +25,22 @@ export const Starters = memo(function Starters({ append }: { append: any }) {
 	};
 
 	return (
-		<div className="flex flex-col h-full mb-3" suppressHydrationWarning>
-			<div className="flex flex-col items-center justify-center h-full px-8 text-center">
-				<Text />
-			</div>
-			<div className="flex flex-wrap gap-[6px]">
-				{starters.map((starter) => (
-					<StarterButton
-						key={starter.index}
-						variant="starter"
-						className="w-full mb-1 cursor-pointer"
-						onClick={() => {
-							trackAndInvoke(() =>
-								append({ role: "user", content: starter.text }),
-							);
-						}}
-					>
-						{starter.text}
-					</StarterButton>
-				))}
-			</div>
-		</div>
+		<>
+			{starters.map((starter) => (
+				<StarterButton
+					key={starter.index}
+					variant="starter"
+					className="w-full cursor-pointer"
+					onClick={() => {
+						trackAndInvoke(() =>
+							append({ role: "user", content: starter.text }),
+						);
+					}}
+				>
+					{starter.text}
+				</StarterButton>
+			))}
+		</>
 	);
 });
 

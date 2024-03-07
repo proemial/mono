@@ -26,6 +26,7 @@ export type ChatMessageProps = {
 		avatar: string;
 	};
 	isLoading?: boolean;
+	showThrobber?: boolean;
 	onShareHandle?:
 		| ((params: { renderedContent: React.ReactNode; message: string }) => void)
 		| null;
@@ -36,11 +37,12 @@ export function ChatMessage({
 	user = { name: "you", initials: "U", avatar: "" },
 	onShareHandle,
 	isLoading,
+	showThrobber,
 }: ChatMessageProps) {
 	const { content, links } = applyLinks(message ?? "");
 
 	return (
-		<div className="w-full">
+		<div className="w-full mx-[-4px] my-2">
 			<div className="flex gap-3">
 				<Avatar className="w-6 h-6">
 					<AvatarImage src={user.avatar} />
@@ -64,7 +66,7 @@ export function ChatMessage({
 			<div className="mt-2 ml-9">
 				<div>
 					{message ? content : <Throbber />}
-					{isLoading && user.name === "proem" && <SinglarThrobber />}
+					{showThrobber && <SinglarThrobber />}
 				</div>
 
 				{links.length > 0 && (

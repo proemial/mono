@@ -17,18 +17,21 @@ export function ChatMessages(props: Props) {
 	const { messages, user, onShareHandle, isLoading, showLoadingState } = props;
 
 	return (
-		<div className="w-full pb-20 space-y-5">
-			{messages.map((m) => (
+		<>
+			{messages.map((m, i) => (
 				<ChatMessage
-					key={m.id}
+					key={i}
 					message={m.content}
 					user={m.role === "assistant" ? PROEM_BOT : user}
 					onShareHandle={m.role === "assistant" ? onShareHandle : null}
 					isLoading={isLoading}
+					showThrobber={
+						m.role === "assistant" && isLoading && i === messages.length - 1
+					}
 				/>
 			))}
 
 			{showLoadingState && <ChatMessage user={PROEM_BOT} />}
-		</div>
+		</>
 	);
 }

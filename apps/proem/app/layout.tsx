@@ -40,6 +40,7 @@ export const viewport: Viewport = {
 	width: "device-width",
 	initialScale: 1,
 	maximumScale: 1,
+	userScalable: false,
 };
 
 type Props = {
@@ -52,9 +53,7 @@ export default async function RootLayout({ children }: Props) {
 		<ClerkProvider>
 			<PostHogClient>
 				<html lang="en" className={sourceCodePro.variable}>
-					<body
-						className={`flex relative flex-col justify-center ${light} h-dvh`}
-					>
+					<body className={`${light} h-dvh w-dvw`}>
 						{children}
 						<Analytics />
 					</body>

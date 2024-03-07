@@ -8,15 +8,22 @@ import {
 	AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
 import { SignedIn, currentUser } from "@clerk/nextjs";
+import { PageLayout } from "../page-layout";
+
+const pageName = "profile";
+
+export const metadata = {
+	title: `proem - ${pageName}`,
+};
 
 export default async function ProfilePage() {
 	const user = await currentUser();
 	const userProfile = getProfileFromUser(user);
 
 	return (
-		<>
+		<PageLayout title={pageName}>
 			<SignedIn>
-				<div className="w-full p-4 space-y-4">
+				<div className="w-full py-4 space-y-4">
 					<div className="relative flex flex-col overflow-hidden bg-[#1A1A1A] rounded-sm border border-[#3C3C3C]">
 						<div className="absolute inset-0 w-full h-full">
 							<div className="w-full h-full bg-pattern-amie animate-backgroundScroll" />
@@ -65,6 +72,6 @@ export default async function ProfilePage() {
 			</SignedIn>
 
 			<Privacy />
-		</>
+		</PageLayout>
 	);
 }

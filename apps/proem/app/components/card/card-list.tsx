@@ -10,7 +10,7 @@ export function CardList({ papers }: { papers?: OpenAlexPaper[] }) {
 	}
 
 	return (
-		<div className="flex flex-col max-w-screen-sm pb-20 mx-auto justify-begin">
+		<div className="flex flex-col justify-begin">
 			{papers?.map((paper, index) => (
 				<Suspense key={index} fallback={<CenteredSpinner />}>
 					<ClickablePaperCard id={paper.id}>

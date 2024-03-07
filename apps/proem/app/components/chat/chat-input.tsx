@@ -4,27 +4,17 @@ import { TextInput } from "@/app/components/proem-ui/text-input";
 import { useAuth } from "@clerk/nextjs";
 import { ChangeEvent, FormEvent } from "react";
 import { useDrawerState } from "../login/state";
+import { UseChatHelpers } from "ai/react";
 
 type Props = {
 	placeholder: string;
 	trackingKey: string;
-	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-	onSubmit: (e: FormEvent<HTMLFormElement>) => void;
-	value?: string;
-	disabled?: boolean;
 	authRequired?: boolean;
 };
 
 export function ChatInput(props: Props) {
-	const {
-		value,
-		placeholder,
-		onSubmit,
-		onChange,
-		trackingKey,
-		disabled,
-		authRequired,
-	} = props;
+	const { chat, placeholder, trackingKey, authRequired } = props;
+	const { input, isLoading, handleInputChange, handleSubmit } = chat;
 
 	// TODO: Fix return url
 	const { userId } = useAuth();
@@ -32,10 +22,10 @@ export function ChatInput(props: Props) {
 
 	const trackAndInvoke = (event: FormEvent<HTMLFormElement>) => {
 		Tracker.track(trackingKey, {
-			text: value,
+			text: input,
 		});
 
-		onSubmit(event);
+		handleSubmit(event);
 	};
 
 	return (
@@ -45,10 +35,10 @@ export function ChatInput(props: Props) {
 				onSubmit={(event) => trackAndInvoke(event)}
 			>
 				<TextInput
-					value={value}
+					value={input}
 					placeholder={placeholder}
-					onChange={onChange}
-					disabled={disabled}
+					onChange={handleInputChange}
+					disabled={isLoading}
 					readonly={authRequired && !userId}
 					onFocus={() => authRequired && !userId && open()}
 				/>

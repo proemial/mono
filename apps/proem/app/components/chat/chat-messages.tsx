@@ -4,16 +4,16 @@ import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { useUser } from "@clerk/nextjs";
 import { Message as AiMessage } from "ai";
 import { UseChatHelpers } from "ai/react";
-import { useEffect, useRef } from "react";
 import { ChatMessage, ChatStarter } from "./chat-message";
 import { limit } from "@proemial/utils/array";
 
-type Props = Pick<UseChatHelpers, "append"> & {
-	messages: AiMessage[];
-	starters: string[];
+type MessagesProps = {
+	chat: UseChatHelpers;
 };
 
-export function ChatMessages({ messages, starters, append }: Props) {
+export function ChatMessages({ chat }: MessagesProps) {
+	const { messages, append } = chat;
+
 	const { user } = useUser();
 	const userProfile = getProfileFromUser(user);
 
@@ -25,24 +25,15 @@ export function ChatMessages({ messages, starters, append }: Props) {
 		appendQuestion(`What is ${msg}?`);
 	};
 
-	const handleStarterClick = (question: string) => {
-		Tracker.track(analyticsKeys.read.click.starter, { question });
-		appendQuestion(question);
-	};
+	// const chatWrapperRef = React.useRef<HTMLDivElement>(null);
+	// React.useEffect(() => {
+	// 	if (chat.messages?.length > 0 && chatWrapperRef.current) {
+	// 		chatWrapperRef.current.scrollIntoView(false);
+	// 	}
+	// }, [chat.messages]);
 
 	return (
 		<>
-			{messages.length === 0 &&
-				// TODO! Filter out empty strings as a hack for now until the data consistensy is fixed
-				limit(starters?.filter(Boolean), 3).map((question) => (
-					<ChatStarter
-						key={question}
-						onClick={() => handleStarterClick(question)}
-					>
-						{question}
-					</ChatStarter>
-				))}
-
 			<div className="flex flex-col justify-end gap-4">
 				{messages?.map((message, i) => (
 					<ChatMessage
@@ -53,6 +44,34 @@ export function ChatMessages({ messages, starters, append }: Props) {
 					/>
 				))}
 			</div>
+		</>
+	);
+}
+
+type StartersProps = {
+	chat: UseChatHelpers;
+	starters: string[];
+};
+
+export function StarterMessages({ starters, chat }: StartersProps) {
+	const appendQuestion = (question: string) =>
+		chat.append({ role: "user", content: question });
+
+	const handleStarterClick = (question: string) => {
+		Tracker.track(analyticsKeys.read.click.starter, { question });
+		appendQuestion(question);
+	};
+
+	return (
+		<>
+			{limit(starters?.filter(Boolean), 3).map((question) => (
+				<ChatStarter
+					key={question}
+					onClick={() => handleStarterClick(question)}
+				>
+					{question}
+				</ChatStarter>
+			))}
 		</>
 	);
 }

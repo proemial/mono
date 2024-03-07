@@ -5,23 +5,29 @@ import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { AskInput } from "@/app/(pages)/(app)/oa/ask-input";
 import { LinkButton } from "@/app/components/proem-ui/link-button";
 import { Search } from "lucide-react";
+import { PageLayout } from "../page-layout";
 
 export const revalidate = 1;
 
 export default async function ReadPage() {
 	return (
 		<Redirect>
-			{/* justify-content: space-between;
+			<PageLayout title="read">
+				{/* justify-content: space-between;
     height: 100%; */}
-			<div className="relative flex flex-col justify-between w-full h-full px-4 pt-6">
-				<div className="flex flex-col items-center justify-center px-8 text-center">
-					<Text />
+				<div className="relative flex flex-col justify-between w-full h-full px-4 pt-6">
+					<div className="flex flex-col items-center justify-center text-center">
+						<Text />
+					</div>
+					<div className="flex flex-col gap-2 py-2 pb-16 text-xs font-normal">
+						<Actions />
+					</div>
 				</div>
-				<div className="flex flex-col gap-2 py-2 pb-16 text-xs font-normal">
-					<Actions />
+				<div className="flex flex-col px-2 pt-1 pb-2">
 					<Questions />
+					<AskInput />
 				</div>
-			</div>
+			</PageLayout>
 		</Redirect>
 	);
 }
@@ -78,7 +84,7 @@ function Questions() {
 		.slice(0, 3);
 
 	return (
-		<div className="flex flex-col mb-16">
+		<div>
 			<div className="flex items-center font-sourceCodePro">
 				<Search style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
 				SUGGESTED QUESTIONS
@@ -88,13 +94,12 @@ function Questions() {
 					key={starter.index}
 					href={`/?q=${encodeURIComponent(starter.text)}`}
 					variant="starter"
-					className="mb-2"
+					className="my-2"
 					track={analyticsKeys.read.click.askStarter}
 				>
 					{starter.text}
 				</LinkButton>
 			))}
-			<AskInput />
 		</div>
 	);
 }

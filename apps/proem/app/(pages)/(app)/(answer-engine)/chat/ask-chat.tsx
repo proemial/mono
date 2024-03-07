@@ -1,17 +1,16 @@
 "use client";
-
-import WithHeader from "@/app/(pages)/(app)/header";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { ChatInput } from "@/app/components/chat/chat-input";
 import { ChatMessageProps } from "@/app/components/chat/chat-message-ask";
 import { ChatMessages } from "@/app/components/chat/chat-messages-ask";
-import { cn } from "@/app/components/shadcn-ui/utils";
 import { useShareDrawerState } from "@/app/components/share/state";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { Message, useChat } from "ai/react";
 import { useEffect, useRef, useState } from "react";
 import { ClearButton } from "./clear-button";
 import { Starters } from "./starters";
+import { PageLayout } from "../../page-layout";
+import { ProemLogo } from "@/app/components/icons/brand/logo";
 
 type ChatProps = Partial<Pick<ChatMessageProps, "user" | "message">> & {
 	user?: { id: string; email: string };
@@ -59,6 +58,8 @@ export default function Chat({
 
 	useEffect(() => {
 		if (chat.messages?.length > 0 && chatWrapperRef.current) {
+			console.log("scrolling to bottom", chat.messages?.length);
+
 			chatWrapperRef.current.scrollIntoView(false);
 		}
 	}, [chat.messages]);
@@ -102,16 +103,10 @@ export default function Chat({
 	);
 
 	return (
-		<WithHeader title="ask" action={actionButton}>
-			<div
-				className={cn("flex flex-col px-4 pt-6 pb-12", {
-					"h-full": isEmptyScreen,
-				})}
-				ref={chatWrapperRef}
-			>
-				{isEmptyScreen ? (
-					<Starters append={chat.append} />
-				) : (
+		<PageLayout title="ask" action={actionButton}>
+			<>
+				{isEmptyScreen && <Text />}
+				<div ref={chatWrapperRef}>
 					<ChatMessages
 						messages={chat.messages}
 						showLoadingState={showLoadingState}
@@ -119,23 +114,34 @@ export default function Chat({
 						onShareHandle={shareMessage}
 						isLoading={chat.isLoading}
 					/>
-				)}
-
-				<div className="fixed left-0 w-full bg-black bottom-14 shadow-top">
-					<div className="w-full max-w-screen-md px-4 pt-2 pb-3 mx-auto">
-						<ChatInput
-							value={chat.input}
-							placeholder={
-								initialPlaceholder ? "Ask anything" : "Ask a follow-up question"
-							}
-							onChange={chat.handleInputChange}
-							onSubmit={chat.handleSubmit}
-							disabled={chat.isLoading || disabledQuestions}
-							trackingKey={analyticsKeys.ask.submit.ask}
-						/>
-					</div>
 				</div>
+			</>
+
+			<div className="flex flex-col gap-2 px-2 pt-1 pb-2">
+				{isEmptyScreen && <Starters append={chat.append} />}
+				<ChatInput
+					value={chat.input}
+					placeholder={
+						initialPlaceholder ? "Ask anything" : "Ask a follow-up question"
+					}
+					onChange={chat.handleInputChange}
+					onSubmit={chat.handleSubmit}
+					disabled={chat.isLoading || disabledQuestions}
+					trackingKey={analyticsKeys.ask.submit.ask}
+				/>
 			</div>
-		</WithHeader>
+		</PageLayout>
+	);
+}
+
+function Text() {
+	return (
+		<div className="mt-auto mb-auto">
+			<ProemLogo includeName />
+			<div className="pt-6 text-center text-md text-white/80">
+				<div>answers to your questions</div>
+				<div>supported by scientific research</div>
+			</div>
+		</div>
 	);
 }

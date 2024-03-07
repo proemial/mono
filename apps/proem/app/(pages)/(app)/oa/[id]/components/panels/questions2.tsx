@@ -1,19 +1,17 @@
 import { generateStarters } from "@/app/prompts/starters";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
-import { PaperChat } from "./chat/paper-chat";
+import { PaperChat2 } from "./chat/paper-chat2";
+import { ReactNode } from "react";
 
-type Props = {
-	paper: OpenAlexPaper;
-};
+export async function QuestionsPanel2({ paper }: { paper?: OpenAlexPaper }) {
+	if (!paper) return [null, null, null];
 
-export async function QuestionsPanel(props: Props) {
-	const { paper } = props;
-	const starters = paper?.generated?.starters
-		? paper?.generated?.starters
+	const starters = paper.generated?.starters
+		? paper.generated?.starters
 		: await generate(paper);
 
-	return <PaperChat {...props} starters={starters} />;
+	return PaperChat2({ paper, starters }) as [ReactNode, ReactNode, ReactNode];
 }
 
 async function generate(paper: OpenAlexPaper) {
