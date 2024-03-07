@@ -82,6 +82,15 @@ export const answerEngineChain = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
 		intent: getIdentifyIntentChain(),
 	}),
+	answerChain,
+]).withConfig({
+	runName: "AnswerEngine",
+});
+
+export const answerEngineExperimental = RunnableSequence.from<Input, Output>([
+	RunnablePassthrough.assign({
+		intent: getIdentifyIntentChain(),
+	}),
 	answerIfSupportedIntent,
 ]).withConfig({
 	runName: "AnswerEngine",

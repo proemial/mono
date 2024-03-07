@@ -1,6 +1,9 @@
 import { NextRequest } from "next/server";
 import { runOnDataset } from "langchain/smith";
-import { answerEngineChain } from "@/app/llm/chains/answer-engine-chain";
+import {
+	answerEngineChain,
+	answerEngineExperimental,
+} from "@/app/llm/chains/answer-engine-chain";
 import { CharCountEvaluator } from "@/app/llm/evaluators/string-evaluators";
 import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
 import {
@@ -9,6 +12,7 @@ import {
 	ValidTitleEvaluator,
 	LinksEvaluator,
 } from "@/app/llm/evaluators/link-evaluators";
+import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
 
 export const revalidate = 1;
 
@@ -19,7 +23,11 @@ export async function GET(
 	{ params }: { params: { name: string } },
 ) {
 	console.log("params", params);
-	const results = await runOnDataset(answerEngineChain, params.name, {
+
+	const validateIntent = await getFeatureFlag("validateAskIntent");
+	const chain = validateIntent ? answerEngineExperimental : answerEngineChain;
+
+	const results = await runOnDataset(chain, params.name, {
 		evaluationConfig: {
 			customEvaluators: [
 				new CharCountEvaluator(200, 400),
