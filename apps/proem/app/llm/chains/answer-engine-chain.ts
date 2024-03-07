@@ -1,4 +1,4 @@
-import { fetchPapersChain } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
+import { fetchIfNoExistingPapers } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
 import {
 	RunnableBranch,
 	RunnableLambda,
@@ -19,12 +19,7 @@ type Output = string;
 
 const answerChain = RunnableSequence.from<Input & { intent: Intent }, Output>([
 	RunnablePassthrough.assign({
-		papers: (input) => {
-			if (input.papers) {
-				return JSON.stringify(input.papers);
-			}
-			return fetchPapersChain;
-		},
+		papers: fetchIfNoExistingPapers,
 	}),
 	getGenerateAnswerChain(),
 ]);

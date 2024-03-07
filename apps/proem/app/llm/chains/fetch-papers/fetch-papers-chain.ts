@@ -3,6 +3,7 @@ import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { FetchPapersTool } from "@/app/llm/tools/fetch-papers-tool";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import {
+	RunnableBranch,
 	RunnablePassthrough,
 	RunnableSequence,
 } from "@langchain/core/runnables";
@@ -31,11 +32,6 @@ const generateSearchParams = {
 
 type GeneratedSearchParams = z.infer<typeof generateSearchParamsSchema>;
 
-const jsonOutputFunctionsParser =
-	new JsonOutputFunctionsParser<GeneratedSearchParams>();
-
-const fetchPapersTool = new FetchPapersTool();
-
 const generateSearchParamsPrompt = ChatPromptTemplate.fromMessages<Input>([
 	[
 		"system",
@@ -49,7 +45,10 @@ const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask", {
 	cache: process.env.NODE_ENV === "development" ? false : true,
 });
 
-type Input = { question: string };
+type Input = {
+	question: string;
+	papers: { link: string; abstract: string; title: string }[] | undefined;
+};
 
 type Output = GeneratedSearchParams;
 
@@ -60,15 +59,22 @@ const generateSearchParamsChain = RunnableSequence.from<Input, Output>([
 		function_call: { name: generateSearchParams.name },
 	}),
 	(input) => input, // This is silly, but it makes the output parser below not stream the response
-	jsonOutputFunctionsParser,
+	new JsonOutputFunctionsParser<GeneratedSearchParams>(),
 ]).withConfig({ runName: "GenerateSearchParams" });
 
-export const fetchPapersChain = RunnableSequence.from<Input, string>([
+const fetchPapersChain = RunnableSequence.from<Input, string>([
 	RunnablePassthrough.assign({
 		papers: generateSearchParamsChain
-			.pipe(fetchPapersTool)
+			.pipe(new FetchPapersTool())
 			.withConfig({ runName: "FetchPapers" }),
 	}),
 	selectRelevantPapersChain,
 	(selectedPapers) => JSON.stringify(selectedPapers),
+]);
+
+const hasExistingPapers = (input: Input) => input.papers !== undefined;
+
+export const fetchIfNoExistingPapers = RunnableBranch.from<Input, string>([
+	[hasExistingPapers, (input) => JSON.stringify(input.papers)],
+	fetchPapersChain,
 ]);
