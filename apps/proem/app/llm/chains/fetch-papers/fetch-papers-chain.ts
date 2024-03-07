@@ -72,9 +72,9 @@ const fetchPapersChain = RunnableSequence.from<Input, string>([
 	(selectedPapers) => JSON.stringify(selectedPapers),
 ]);
 
-const hasExistingPapers = (input: Input) => input.papers !== undefined;
+const hasCachedPapers = (input: Input) => input.papers !== undefined;
 
-export const fetchIfNoExistingPapers = RunnableBranch.from<Input, string>([
-	[hasExistingPapers, (input) => JSON.stringify(input.papers)],
+export const fetchIfNoCachedPapers = RunnableBranch.from<Input, string>([
+	[hasCachedPapers, (input) => JSON.stringify(input.papers)],
 	fetchPapersChain,
 ]);
