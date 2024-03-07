@@ -23,11 +23,6 @@ export function saveAnswer({
 		const answer = findRun(run, (run) => run.name === "AnswerEngine")?.outputs
 			?.output;
 
-		if (!answer) {
-			data.close();
-			throw new Error("Save failure: No answer was found");
-		}
-
 		const selectedPapers = findRun(
 			run,
 			(run) => run.name === "SelectRelevantPapers",
@@ -37,6 +32,11 @@ export function saveAnswer({
 			run,
 			(run) => run.name === "GenerateSearchParams",
 		)?.outputs as { keyConcept: string; relatedConcepts: string[] };
+
+		if (!answer || !selectedPapers || !searchParamsResponse) {
+			data.close();
+			throw new Error("Save failure: No answer or papers found.");
+		}
 
 		const papers = isFollowUpQuestion
 			? {}
