@@ -33,7 +33,7 @@ export function saveAnswer({
 			(run) => run.name === "GenerateSearchParams",
 		)?.outputs as { keyConcept: string; relatedConcepts: string[] };
 
-		if (!answer || !selectedPapers || !searchParamsResponse) {
+		if (!answer || !selectedPapers?.length || !searchParamsResponse) {
 			data.close();
 			throw new Error("Save failure: No answer or papers found.");
 		}

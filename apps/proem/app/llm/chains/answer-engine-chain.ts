@@ -17,11 +17,29 @@ type Input = {
 };
 type Output = string;
 
+const hasPapersAvailable = (input: { papers: string }) => {
+	const papers = JSON.parse(input.papers);
+	return papers.length > 0;
+};
+
+const answerIfPapersAvailable = RunnableBranch.from<
+	{
+		question: string;
+		chatHistory: LangChainChatHistoryMessage[];
+		papers: string;
+	},
+	Output
+>([
+	[hasPapersAvailable, getGenerateAnswerChain()],
+	() => `I'm sorry, I could't find any relevant research papers to support an
+	answer. Please try again with a different question.`,
+]);
+
 const answerChain = RunnableSequence.from<Input & { intent: Intent }, Output>([
 	RunnablePassthrough.assign({
 		papers: fetchIfNoCachedPapers,
 	}),
-	getGenerateAnswerChain(),
+	answerIfPapersAvailable,
 ]);
 
 const abortChain = RunnableLambda.from<Input & { intent: Intent }, Output>(

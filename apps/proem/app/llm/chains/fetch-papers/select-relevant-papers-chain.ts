@@ -54,10 +54,6 @@ export const getSelectRelevantPapersChain = (modelOverride: BaseChatModel) =>
 				.pipe((selectedPaperIdsAsString) => {
 					const selectedPaperIds =
 						selectedPaperIdsAsString.split(",").map((str) => str.trim()) ?? [];
-					if (selectedPaperIds.length < 1) {
-						throw new Error("No papers were selected");
-					}
-
 					return selectedPaperIds;
 				}),
 		}),

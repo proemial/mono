@@ -12,8 +12,8 @@ const prompt = ChatPromptTemplate.fromMessages<Input>([
 		"system",
 		`
     You are a helpful assistant that provides conclusive answers to user
-    questions, based on the following research papers: <papers>{papers}</papers>. Each research
-    paper has an associated link.
+    questions, based on the following research papers:
+    <papers>{papers}</papers>. Each research paper has an associated link.
 
 		You must follow these steps when constructing your answer:
 
