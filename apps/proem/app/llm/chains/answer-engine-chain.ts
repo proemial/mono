@@ -64,7 +64,7 @@ const abortChain = RunnableLambda.from<Input & { intent: Intent }, Output>(
 	},
 );
 
-const isSupportedIntent = (input: Input & { intent: Intent }) => {
+const isSupportedIntent = (input: { intent: Intent }) => {
 	const supportedIntents: Intent[] = [
 		"ANSWER_EVERYDAY_QUESTION",
 		"ANSWER_FOLLOWUP_QUESTION",
@@ -76,7 +76,17 @@ const isSupportedIntent = (input: Input & { intent: Intent }) => {
 const answerIfSupportedIntent = RunnableBranch.from<
 	Input & { intent: Intent },
 	Output
->([[isSupportedIntent, answerChain], abortChain]);
+>([
+	[isSupportedIntent, answerChain],
+	RunnableLambda.from((input) =>
+		abortChain.withConfig({
+			metadata: {
+				supported_intent: isSupportedIntent({ intent: input.intent }),
+				intent: input.intent,
+			},
+		}),
+	),
+]);
 
 export const answerEngineChain = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
