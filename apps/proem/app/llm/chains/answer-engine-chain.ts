@@ -42,51 +42,20 @@ const answerChain = RunnableSequence.from<Input & { intent: Intent }, Output>([
 	answerIfPapersAvailable,
 ]);
 
-const abortChain = RunnableLambda.from<Input & { intent: Intent }, Output>(
-	(input) => {
-		// Static responses for unsupported user intents
-		const prefix = "It looks like you're looking for";
-		const postfix = "I can't help with that yet, but come back again soon!";
-		switch (input.intent) {
-			case "FIND_PAPER":
-				return `${prefix} a specific research paper. ${postfix}`;
-			case "FIND_LATEST_PAPERS":
-				return `${prefix} the latest research papers within a specific domain. ${postfix}`;
-			case "FIND_INFLUENTIAL_PAPERS":
-				return `${prefix} specific popular or influential research papers. ${postfix}`;
-			case "FIND_PAPERS_BY_AUTHOR":
-				return `${prefix} research papers by a specific author. ${postfix}`;
-			case "FIND_PAPERS_CITING_A_GIVEN_PAPER":
-				return `${prefix} research papers citing a specific paper. ${postfix}`;
-			default:
-				return "I didn't quite understand that. Please try again with a different question.";
-		}
-	},
+const declineChain = RunnableLambda.from<Input & { intent: Intent }, Output>(
+	// Static response for when user intent is `UNKNOWN`
+	(input) =>
+		"I didn't quite understand that question. Please try again with a different question.",
 );
 
-const isSupportedIntent = (input: { intent: Intent }) => {
-	const supportedIntents: Intent[] = [
-		"ANSWER_EVERYDAY_QUESTION",
-		"ANSWER_FOLLOWUP_QUESTION",
-		"EXPLAIN_CONCEPT",
-	];
-	return supportedIntents.includes(input.intent);
+const isUnknownIntent = (input: { intent: Intent }) => {
+	return input.intent === "UNKNOWN";
 };
 
-const answerIfSupportedIntent = RunnableBranch.from<
+const declineIfUnknownIntent = RunnableBranch.from<
 	Input & { intent: Intent },
 	Output
->([
-	[isSupportedIntent, answerChain],
-	RunnableLambda.from((input) =>
-		abortChain.withConfig({
-			metadata: {
-				supported_intent: isSupportedIntent({ intent: input.intent }),
-				intent: input.intent,
-			},
-		}),
-	),
-]);
+>([[isUnknownIntent, declineChain], answerChain]);
 
 export const answerEngineChain = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
@@ -101,7 +70,7 @@ export const answerEngineExperimental = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
 		intent: getIdentifyIntentChain(),
 	}),
-	answerIfSupportedIntent,
+	declineIfUnknownIntent,
 ]).withConfig({
 	runName: "AnswerEngine",
 });
