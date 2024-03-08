@@ -8,7 +8,7 @@ import { NextRequest } from "next/server";
 export const revalidate = 1;
 
 // Examples:
-//   - http://localhost:4242/api/traces/eval/identify-intent-chain/identify-intent-1q
+//   - http://localhost:4242/api/traces/eval/identify-intent-chain/identify-intent-231q
 export async function GET(
 	req: NextRequest,
 	{ params }: { params: { name: string } },
