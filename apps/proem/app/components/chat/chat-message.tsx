@@ -13,24 +13,25 @@ import { applyExplainLinks } from "./apply-links";
 type Role = "function" | "data" | "system" | "user" | "assistant" | "tool";
 
 type Props = {
-	message: { role: Role; content: string };
+	message?: { role: Role; content: string };
 	user?: {
 		fullName: string;
 		initials: string;
 		avatar: string;
 	};
-	onExplainerClick: (msg: string) => void;
+	showThrobber?: boolean;
+	onExplainerClick?: (msg: string) => void;
 };
 
 export function ChatMessage(props: Props) {
-	const { message, user, onExplainerClick } = props;
+	const { message, user, onExplainerClick, showThrobber } = props;
 
-	const isUser = message.role === "user";
+	const isUser = message?.role === "user";
 
 	const text = isUser
 		? message.content
 		: applyExplainLinks(
-				message.content as string,
+				message?.content as string,
 				onExplainerClick ?? (() => {}),
 		  );
 
@@ -43,7 +44,7 @@ export function ChatMessage(props: Props) {
 		  };
 
 	return (
-		<div className="w-full">
+		<div className="w-full mb-2">
 			<div className="flex gap-3">
 				<Avatar className="w-6 h-6">
 					<AvatarImage src={speaker?.avatar} />
@@ -79,7 +80,7 @@ export function ChatStarter({ children, onClick }: StarterProps) {
 
 	return (
 		<div
-			className="flex justify-between gap-3 mb-2 p-2 border rounded-sm border-[#4E4E4E] bg-[#2F2F2F] leading-5 text-[16px] font-normal"
+			className="flex justify-between gap-3 mb-2 p-2 border rounded-sm border-[#4E4E4E] bg-[#2F2F2F] leading-5 text-[16px] font-normal cursor-pointer"
 			onClick={handleClick}
 		>
 			{children}

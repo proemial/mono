@@ -1,6 +1,6 @@
 "use client";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
-import { ChatInput } from "@/app/components/chat/chat-input";
+import { ChatInputOld } from "@/app/components/chat/chat-input";
 import { ChatMessageProps } from "@/app/components/chat/chat-message-ask";
 import { ChatMessages } from "@/app/components/chat/chat-messages-ask";
 import { useShareDrawerState } from "@/app/components/share/state";
@@ -58,8 +58,6 @@ export default function Chat({
 
 	useEffect(() => {
 		if (chat.messages?.length > 0 && chatWrapperRef.current) {
-			console.log("scrolling to bottom", chat.messages?.length);
-
 			chatWrapperRef.current.scrollIntoView(false);
 		}
 	}, [chat.messages]);
@@ -119,14 +117,11 @@ export default function Chat({
 
 			<div className="flex flex-col gap-2 px-2 pt-1 pb-2">
 				{isEmptyScreen && <Starters append={chat.append} />}
-				<ChatInput
-					value={chat.input}
+				<ChatInputOld
+					chat={chat}
 					placeholder={
 						initialPlaceholder ? "Ask anything" : "Ask a follow-up question"
 					}
-					onChange={chat.handleInputChange}
-					onSubmit={chat.handleSubmit}
-					disabled={chat.isLoading || disabledQuestions}
 					trackingKey={analyticsKeys.ask.submit.ask}
 				/>
 			</div>

@@ -9,7 +9,7 @@ import {
 import { Spinner } from "@/app/components/loading/spinner";
 import { Trackable } from "@/app/components/trackable";
 import { notFound } from "next/navigation";
-import { ReactNode, Suspense } from "react";
+import { Suspense } from "react";
 import { ReaderPaper } from "./components/reader-paper";
 import Summary from "./components/summary";
 import { fetchPaper } from "./fetch-paper";
@@ -18,6 +18,11 @@ import { Search } from "lucide-react";
 import { generateStarters } from "@/app/prompts/starters";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
+import { ChatInput } from "@/app/components/chat/chat-input";
+import {
+	ChatMessages,
+	StarterMessages,
+} from "@/app/components/chat/chat-messages";
 
 type Props = {
 	params: { id: string };
@@ -31,16 +36,11 @@ export default async function ReaderPage({ params }: Props) {
 		notFound();
 	}
 
+	const { title, abstract } = paper.data;
+
 	const starters = paper?.generated?.starters
 		? paper?.generated?.starters
 		: await generate(paper);
-
-	const [starterMsgs, messages, input] = [null, null, null];
-	// const [starterMsgs, messages, input] = PaperChat2({ paper, starters }) as [
-	// 	ReactNode,
-	// 	ReactNode,
-	// 	ReactNode,
-	// ];
 
 	return (
 		<PageLayout title="read">
@@ -65,8 +65,12 @@ export default async function ReaderPage({ params }: Props) {
 						</TabsTrigger>
 					</TabsList>
 					<TabsContent value="QA">
-						<div className="flex flex-col h-full gap-6 px-4">
-							<Suspense fallback={<Spinner />}>{messages}</Suspense>
+						<div className="px-4">
+							<ChatMessages
+								target="paper"
+								title={title}
+								abstract={abstract as string}
+							/>
 						</div>
 					</TabsContent>
 					<TabsContent value="metadata">
@@ -76,16 +80,21 @@ export default async function ReaderPage({ params }: Props) {
 					</TabsContent>
 				</Tabs>
 			</div>
-			<div>
-				<div className="flex items-center font-sourceCodePro">
-					<Search
-						style={{ height: "12px", strokeWidth: "3" }}
-						className="w-4"
-					/>
-					SUGGESTED QUESTIONS
-				</div>
-				<div>{starterMsgs}</div>
-				<div>{input}</div>
+			<div className="flex flex-col px-2 pt-1 pb-2">
+				<StarterMessages
+					starters={starters}
+					target="paper"
+					trackingKey={analyticsKeys.read.click.starter}
+				/>
+				<ChatInput
+					target="paper"
+					placeholders={[
+						"Ask a question about this paper",
+						"Ask a follow-up question",
+					]}
+					trackingKey={analyticsKeys.read.submit.question}
+					authRequired
+				/>
 			</div>
 		</PageLayout>
 	);
