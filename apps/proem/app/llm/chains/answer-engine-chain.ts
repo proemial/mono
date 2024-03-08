@@ -43,20 +43,45 @@ const answerChain = RunnableSequence.from<Input & { intent: Intent }, Output>([
 ]).withConfig({ runName: "Answer" });
 
 const declineChain = RunnableLambda.from<Input & { intent: Intent }, Output>(
-	// Static response for when user intent is `UNKNOWN`
-	(input) =>
-		"I didn't quite understand that question. Please try again with a different question.",
+	(input) => {
+		// Static responses for unsupported user intents
+		const prefix = "It looks like you're looking for";
+		const postfix = "I can't help with that yet, but come back again soon!";
+		switch (input.intent) {
+			case "FIND_PAPER":
+				return `${prefix} a specific research paper. ${postfix}`;
+			case "FIND_LATEST_PAPERS":
+				return `${prefix} the latest research papers within a specific domain. ${postfix}`;
+			case "FIND_INFLUENTIAL_PAPERS":
+				return `${prefix} specific popular or influential research papers. ${postfix}`;
+			case "FIND_PAPERS_BY_AUTHOR":
+				return `${prefix} research papers by a specific author. ${postfix}`;
+			case "FIND_PAPERS_CITING_A_GIVEN_PAPER":
+				return `${prefix} research papers citing a specific paper. ${postfix}`;
+			default:
+				// Includes `UNKNOWN` intent
+				return "I didn't quite understand that. Please try again with a different question.";
+		}
+	},
 ).withConfig({ runName: "Decline" });
 
-const isUnknownIntent = (input: { intent: Intent }) => {
-	return input.intent === "UNKNOWN";
+const isUnsupportedIntent = (input: { intent: Intent }) => {
+	const unsupportedIntents: Intent[] = [
+		"FIND_PAPER",
+		"FIND_LATEST_PAPERS",
+		"FIND_INFLUENTIAL_PAPERS",
+		"FIND_PAPERS_BY_AUTHOR",
+		"FIND_PAPERS_CITING_A_GIVEN_PAPER",
+		"UNKNOWN",
+	];
+	return unsupportedIntents.includes(input.intent);
 };
 
-const declineIfUnknownIntent = RunnableBranch.from<
+const declineIfUnsupportedIntent = RunnableBranch.from<
 	Input & { intent: Intent },
 	Output
->([[isUnknownIntent, declineChain], answerChain]).withConfig({
-	runName: "DeclineIfUnknownIntent",
+>([[isUnsupportedIntent, declineChain], answerChain]).withConfig({
+	runName: "DeclineIfUnsupportedIntent",
 });
 
 export const answerEngineChain = RunnableSequence.from<Input, Output>([
@@ -72,7 +97,7 @@ export const answerEngineExperimental = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
 		intent: getIdentifyIntentChain(),
 	}),
-	declineIfUnknownIntent,
+	declineIfUnsupportedIntent,
 ]).withConfig({
 	runName: "AnswerEngine",
 });
