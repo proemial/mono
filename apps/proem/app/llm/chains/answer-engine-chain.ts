@@ -59,7 +59,6 @@ const declineChain = RunnableLambda.from<Input & { intent: Intent }, Output>(
 			case "FIND_PAPERS_CITING_A_GIVEN_PAPER":
 				return `${prefix} research papers citing a specific paper. ${postfix}`;
 			default:
-				// Includes `UNKNOWN` intent
 				return "I didn't quite understand that. Please try again with a different question.";
 		}
 	},
@@ -72,7 +71,6 @@ const isUnsupportedIntent = (input: { intent: Intent }) => {
 		"FIND_INFLUENTIAL_PAPERS",
 		"FIND_PAPERS_BY_AUTHOR",
 		"FIND_PAPERS_CITING_A_GIVEN_PAPER",
-		"UNKNOWN",
 	];
 	return unsupportedIntents.includes(input.intent);
 };
