@@ -1,23 +1,30 @@
 "use client";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
-import { ChatInput } from "@/app/components/chat/chat-input";
+import { ChatInputOld } from "@/app/components/chat/chat-input";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 export function AskInput() {
-	const [value, setValue] = useState("");
+	const [input, setInput] = useState("");
 	const router = useRouter();
 
+	const chat = {
+		input,
+		handleSubmit: (e: React.FormEvent<HTMLFormElement>) => {
+			e.preventDefault();
+			router.push(`/?q=${input}`);
+		},
+		handleInputChange: (
+			e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>,
+		) => setInput(e.target.value),
+		isLoading: false,
+	};
+
 	return (
-		<ChatInput
-			value={value}
+		<ChatInputOld
+			chat={chat}
 			placeholder="Ask anything"
 			trackingKey={analyticsKeys.ask.submit.ask}
-			onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
-			onSubmit={(e) => {
-				e.preventDefault();
-				router.push(`/?q=${value}`);
-			}}
 		/>
 	);
 }

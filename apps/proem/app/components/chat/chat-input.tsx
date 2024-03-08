@@ -62,7 +62,12 @@ export function ChatInput(props: Props) {
 }
 
 type ChatInputOldProps = {
-	chat: UseChatHelpers;
+	chat: Required<
+		Pick<
+			UseChatHelpers,
+			"input" | "isLoading" | "handleInputChange" | "handleSubmit"
+		>
+	>;
 	placeholder: string;
 	trackingKey: string;
 	authRequired?: boolean;
