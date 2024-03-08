@@ -40,13 +40,13 @@ const answerChain = RunnableSequence.from<Input & { intent: Intent }, Output>([
 		papers: fetchIfNoCachedPapers,
 	}),
 	answerIfPapersAvailable,
-]);
+]).withConfig({ runName: "Answer" });
 
 const declineChain = RunnableLambda.from<Input & { intent: Intent }, Output>(
 	// Static response for when user intent is `UNKNOWN`
 	(input) =>
 		"I didn't quite understand that question. Please try again with a different question.",
-);
+).withConfig({ runName: "Decline" });
 
 const isUnknownIntent = (input: { intent: Intent }) => {
 	return input.intent === "UNKNOWN";
@@ -55,7 +55,9 @@ const isUnknownIntent = (input: { intent: Intent }) => {
 const declineIfUnknownIntent = RunnableBranch.from<
 	Input & { intent: Intent },
 	Output
->([[isUnknownIntent, declineChain], answerChain]);
+>([[isUnknownIntent, declineChain], answerChain]).withConfig({
+	runName: "DeclineIfUnknownIntent",
+});
 
 export const answerEngineChain = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
