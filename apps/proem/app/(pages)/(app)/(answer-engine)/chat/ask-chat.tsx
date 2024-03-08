@@ -11,6 +11,7 @@ import { ClearButton } from "./clear-button";
 import { Starters } from "./starters";
 import { PageLayout } from "../../page-layout";
 import { ProemLogo } from "@/app/components/icons/brand/logo";
+import useIsKeyboardOpen from "@/app/components/mobile/keyboard";
 
 type ChatProps = Partial<Pick<ChatMessageProps, "user" | "message">> & {
 	user?: { id: string; email: string };
@@ -61,6 +62,9 @@ export default function Chat({
 			chatWrapperRef.current.scrollIntoView(false);
 		}
 	}, [chat.messages]);
+
+	const keyboardOpen = useIsKeyboardOpen();
+	console.log("keyboardOpen", keyboardOpen);
 
 	const isEmptyScreen = chat.messages.length === 0;
 	const showLoadingState = chat.isLoading && chat.messages.length % 2 === 1;
@@ -116,7 +120,7 @@ export default function Chat({
 			</>
 
 			<div className="flex flex-col gap-2 px-2 pt-1 pb-2">
-				{isEmptyScreen && <Starters append={chat.append} />}
+				{(isEmptyScreen || keyboardOpen) && <Starters append={chat.append} />}
 				<ChatInputOld
 					chat={chat}
 					placeholder={

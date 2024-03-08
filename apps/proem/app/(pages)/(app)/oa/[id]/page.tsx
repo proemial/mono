@@ -52,7 +52,7 @@ export default async function ReaderPage({ params }: Props) {
 				</ReaderPaper>
 
 				<Tabs defaultValue="QA" className="w-full">
-					<TabsList className="text-[14px] sticky z-10 justify-start w-full bg-background top-10 h-[unset] pt-3 pb-3 px-4">
+					<TabsList className="text-[14px] sticky justify-start w-full bg-background top-10 h-[unset] pt-3 pb-3 px-4">
 						<TabsTrigger value="QA">
 							<Trackable track={analyticsKeys.read.click.answers}>
 								Q & A
