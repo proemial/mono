@@ -61,7 +61,7 @@ const generateSearchParamsChain = RunnableSequence.from<
 	runName: "GenerateSearchParams",
 });
 
-const queryOpenAlex = RunnableLambda.from(
+const queryOpenAlex = RunnableLambda.from<GeneratedSearchParams, string>(
 	async (input: GeneratedSearchParams) => {
 		const searchString = convertToOASearchString([
 			...input.relatedConcepts,
