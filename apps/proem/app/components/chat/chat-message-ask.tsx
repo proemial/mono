@@ -65,7 +65,11 @@ export function ChatMessage({
 
 			<div className="mt-2 ml-9">
 				<div>
-					{message ? content : <Throbber />}
+					{message ? (
+						content
+					) : (
+						<Throbber text="Searching scientific papers..." />
+					)}
 					{showThrobber && <SinglarThrobber />}
 				</div>
 
