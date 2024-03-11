@@ -3,49 +3,23 @@ import { z } from "zod";
 
 type ExtractData<T> = Extract<AnswerEngineEvents, { type: T }>["data"];
 
-export function createEvent<T extends AnswerEngineEvents["type"]>(type: T) {
-	return (data: Extract<AnswerEngineEvents, { type: T }>["data"]) => ({
-		type,
-		data,
-	});
-}
-
-export function findByEventType<T extends AnswerEngineEvents["type"]>(
-	events: AnswerEngineEvents[] | undefined,
-	type: T,
-) {
-	return events?.find((event) => event.type === type)?.data as
-		| ExtractData<T>
-		| undefined;
-}
-
-export function withEventTag<
-	TEventType extends AnswerEngineEvents["type"],
-	TFunc extends Runnable<any, ExtractData<TEventType>, any>,
->(func: TFunc, tag: TEventType) {
-	return func.withConfig({ tags: [tag] });
-}
-
-export const ANSWER_SLUG_GENERATED = z.literal("answer-slug-generated");
 export const answerSlugGeneratedEvent = z.object({
-	type: ANSWER_SLUG_GENERATED,
+	type: z.literal("answer-slug-generated"),
 	data: z.object({
 		slug: z.string(),
 	}),
 });
 
-export const ANSWER_SAVED = z.literal("answer-saved");
 export const answerSavedEvent = z.object({
-	type: ANSWER_SAVED,
+	type: z.literal("answer-saved"),
 	data: z.object({
 		shareId: z.string().nullable(),
 		answer: z.string(),
 	}),
 });
 
-export const SEARCH_PARAMS_GENERATED = z.literal("search-params-generated");
 export const searchParamsGeneratedEvent = z.object({
-	type: SEARCH_PARAMS_GENERATED,
+	type: z.literal("search-params-generated"),
 	data: z.object({
 		keyConcept: z.string(),
 		relatedConcepts: z.array(z.string()),
@@ -59,9 +33,6 @@ const answerEngineEvents = z.discriminatedUnion("type", [
 ]);
 
 export type AnswerEngineEvents = z.infer<typeof answerEngineEvents>;
-
-export const createAnswerSlugEvent = createEvent(ANSWER_SLUG_GENERATED.value);
-export const createSaveAnswerEvent = createEvent(ANSWER_SAVED.value);
 
 // TODO: could be infered better
 function validateAnswerEngineEvent<
@@ -92,4 +63,20 @@ export function handleAnswerEngineEvents(
 	if (validEvent) {
 		onSuccessCallback(validEvent);
 	}
+}
+
+export function findByEventType<T extends AnswerEngineEvents["type"]>(
+	events: AnswerEngineEvents[] | undefined,
+	type: T,
+) {
+	return events?.find((event) => event.type === type)?.data as
+		| ExtractData<T>
+		| undefined;
+}
+
+export function withEventTag<
+	TEventType extends AnswerEngineEvents["type"],
+	TFunc extends Runnable<any, ExtractData<TEventType>, any>,
+>(func: TFunc, tag: TEventType) {
+	return func.withConfig({ tags: [tag] });
 }

@@ -1,6 +1,6 @@
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import {
-	createAnswerSlugEvent,
+	AnswerEngineEvents,
 	handleAnswerEngineEvents,
 } from "@/app/api/bot/answer-engine/events";
 import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
@@ -26,6 +26,10 @@ type AnswerEngineParams = {
 
 const bytesOutputParser = new BytesOutputParser();
 
+export interface AnswerEngineStreamData extends experimental_StreamData {
+	append(event: AnswerEngineEvents): void;
+}
+
 export async function askAnswerEngine({
 	existingSlug,
 	question,
@@ -33,7 +37,7 @@ export async function askAnswerEngine({
 	userId,
 	tags,
 }: AnswerEngineParams) {
-	const data = new experimental_StreamData();
+	const data = new experimental_StreamData() as AnswerEngineStreamData;
 	const isFollowUpQuestion = Boolean(existingSlug);
 	const slug = existingSlug ?? prettySlug(question);
 	const existingAnswers = isFollowUpQuestion
@@ -42,7 +46,10 @@ export async function askAnswerEngine({
 
 	const existingPapers = existingAnswers[0]?.papers?.papers;
 
-	data.append(createAnswerSlugEvent({ slug }));
+	data.append({
+		type: "answer-slug-generated",
+		data: { slug },
+	});
 
 	const stream = await answerEngineChain
 		.pipe(bytesOutputParser)

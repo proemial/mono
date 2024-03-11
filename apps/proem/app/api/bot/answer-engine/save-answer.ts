@@ -1,7 +1,6 @@
+import { AnswerEngineStreamData } from "@/app/api/bot/answer-engine/answer-engine";
 import { answers } from "@/app/api/bot/answer-engine/answers";
-import { createSaveAnswerEvent } from "@/app/api/bot/answer-engine/events";
 import { findRun } from "@/app/llm/helpers/find-run";
-import { experimental_StreamData } from "ai";
 import { Run } from "langsmith";
 
 type SaveAnswerParams = {
@@ -9,7 +8,7 @@ type SaveAnswerParams = {
 	isFollowUpQuestion: boolean;
 	slug: string;
 	userId?: string;
-	data: experimental_StreamData;
+	data: AnswerEngineStreamData;
 };
 
 export function saveAnswer({
@@ -61,12 +60,13 @@ export function saveAnswer({
 			return;
 		}
 
-		data.append(
-			createSaveAnswerEvent({
+		data.append({
+			type: "answer-saved",
+			data: {
 				shareId: insertedAnswer.shareId,
 				answer: insertedAnswer.answer,
-			}),
-		);
+			},
+		});
 		data.close();
 	};
 }
