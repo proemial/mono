@@ -52,10 +52,10 @@ export class FetchPapersTool extends StructuredTool {
 		input: z.infer<typeof this.schema>,
 		_runManager?: CallbackManagerForToolRun,
 	): Promise<string> {
-		const searchString = this._convertToOASearchString(
+		const searchString = this._convertToOASearchString([
+			...input.relatedConcepts,
 			input.keyConcept,
-			input.relatedConcepts,
-		);
+		]);
 		const papers = await fetchPapers(searchString);
 		const papersWithRelativeLinks = papers?.map(this._toRelativeLink) ?? [];
 		return JSON.stringify(papersWithRelativeLinks); // TODO: Improve paper formatting
@@ -69,10 +69,9 @@ export class FetchPapersTool extends StructuredTool {
 		};
 	}
 
-	private _convertToOASearchString(title: string, abstract: string[]) {
-		const query = `title.search:("${title}"),abstract.search:(${abstract
-			.map((abstract) => `"${abstract}"`)
-			.join(" OR ")})`;
+	private _convertToOASearchString(concepts: string[]) {
+		const searchStrings = concepts.map((concept) => `"${concept}"`).join("OR");
+		const query = `title.search:(${searchStrings}),abstract.search:(${searchStrings})`;
 		return encodeURIComponent(query);
 	}
 }
