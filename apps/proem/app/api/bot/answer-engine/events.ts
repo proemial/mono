@@ -52,5 +52,44 @@ export const searchParamsGeneratedEvent = z.object({
 	}),
 });
 
+const answerEngineEvents = z.discriminatedUnion("type", [
+	answerSlugGeneratedEvent,
+	answerSavedEvent,
+	searchParamsGeneratedEvent,
+]);
+
+export type AnswerEngineEvents = z.infer<typeof answerEngineEvents>;
+
 export const createAnswerSlugEvent = createEvent(ANSWER_SLUG_GENERATED.value);
 export const createSaveAnswerEvent = createEvent(ANSWER_SAVED.value);
+
+// TODO: could be infered better
+function validateAnswerEngineEvent<
+	TEvent extends z.infer<typeof answerEngineEvents>,
+>(event: TEvent | unknown) {
+	const parsedEvent = answerEngineEvents.safeParse(event);
+	if (parsedEvent.success) {
+		return parsedEvent.data;
+	}
+}
+
+type ValidateTagsParames = {
+	tags: string[] | undefined;
+	data: unknown;
+};
+
+function validateTags({ tags, data }: ValidateTagsParames) {
+	return tags
+		?.map((type) => validateAnswerEngineEvent({ type, data }))
+		.find(Boolean);
+}
+
+export function handleAnswerEngineEvents(
+	{ tags, data }: ValidateTagsParames,
+	onSuccessCallback: (event: z.infer<typeof answerEngineEvents>) => void,
+) {
+	const validEvent = validateTags({ tags, data });
+	if (validEvent) {
+		onSuccessCallback(validEvent);
+	}
+}

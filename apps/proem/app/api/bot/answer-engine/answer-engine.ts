@@ -1,5 +1,8 @@
 import { answers } from "@/app/api/bot/answer-engine/answers";
-import { createAnswerSlugEvent } from "@/app/api/bot/answer-engine/events";
+import {
+	createAnswerSlugEvent,
+	handleAnswerEngineEvents,
+} from "@/app/api/bot/answer-engine/events";
 import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
 import { saveAnswer } from "@/app/api/bot/answer-engine/save-answer";
 import { answerEngineChain } from "@/app/llm/chains/answer-engine-chain";
@@ -53,11 +56,24 @@ export async function askAnswerEngine({
 		.withListeners({
 			onEnd: saveAnswer({ question, isFollowUpQuestion, slug, userId, data }),
 		})
-		.stream({
-			question,
-			chatHistory: chatHistory.map(toLangChainChatHistory),
-			papers: existingPapers,
-		});
+		.stream(
+			{
+				question,
+				chatHistory: chatHistory.map(toLangChainChatHistory),
+				papers: existingPapers,
+			},
+			{
+				callbacks: [
+					{
+						handleChainEnd(token, _runId, _parentRunId, tags) {
+							handleAnswerEngineEvents({ tags, data: token }, (event) => {
+								data.append(event);
+							});
+						},
+					},
+				],
+			},
+		);
 
 	return new StreamingTextResponse(
 		stream.pipeThrough(createStreamDataTransformer(true)),
