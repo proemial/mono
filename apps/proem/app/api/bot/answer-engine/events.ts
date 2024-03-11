@@ -19,7 +19,10 @@ export function findByEventType<T extends AnswerEngineEvents["type"]>(
 		| undefined;
 }
 
-export function withEventTag<T extends Runnable>(func: T, tag: string) {
+export function withEventTag<
+	TEventType extends AnswerEngineEvents["type"],
+	TFunc extends Runnable<any, ExtractData<TEventType>, any>,
+>(func: TFunc, tag: TEventType) {
 	return func.withConfig({ tags: [tag] });
 }
 
@@ -30,7 +33,6 @@ export const answerSlugGeneratedEvent = z.object({
 		slug: z.string(),
 	}),
 });
-type AnswerSlugGeneratedEvent = z.infer<typeof answerSlugGeneratedEvent>;
 
 export const ANSWER_SAVED = z.literal("answer-saved");
 export const answerSavedEvent = z.object({
@@ -40,9 +42,15 @@ export const answerSavedEvent = z.object({
 		answer: z.string(),
 	}),
 });
-type AnswerSavedEvent = z.infer<typeof answerSavedEvent>;
 
-export type AnswerEngineEvents = AnswerSlugGeneratedEvent | AnswerSavedEvent;
+export const SEARCH_PARAMS_GENERATED = z.literal("search-params-generated");
+export const searchParamsGeneratedEvent = z.object({
+	type: SEARCH_PARAMS_GENERATED,
+	data: z.object({
+		keyConcept: z.string(),
+		relatedConcepts: z.array(z.string()),
+	}),
+});
 
 export const createAnswerSlugEvent = createEvent(ANSWER_SLUG_GENERATED.value);
 export const createSaveAnswerEvent = createEvent(ANSWER_SAVED.value);
