@@ -1,4 +1,4 @@
-import { fetchIfNoCachedPapers } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
+import { fetchPapersChain } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
 import {
 	RunnableBranch,
 	RunnableLambda,
@@ -37,7 +37,7 @@ const answerIfPapersAvailable = RunnableBranch.from<
 
 const answerChain = RunnableSequence.from<Input & { intent: Intent }, Output>([
 	RunnablePassthrough.assign({
-		papers: fetchIfNoCachedPapers,
+		papers: fetchPapersChain,
 	}),
 	answerIfPapersAvailable,
 ]).withConfig({ runName: "Answer" });
@@ -91,7 +91,11 @@ export const answerEngineChain = RunnableSequence.from<Input, Output>([
 	runName: "AnswerEngine",
 });
 
-export const answerEngineExperimental = RunnableSequence.from<Input, Output>([
+// We need to improve intent detection before we can branch on it
+export const answerEngineChainWithIntentBranching = RunnableSequence.from<
+	Input,
+	Output
+>([
 	RunnablePassthrough.assign({
 		intent: getIdentifyIntentChain(),
 	}),

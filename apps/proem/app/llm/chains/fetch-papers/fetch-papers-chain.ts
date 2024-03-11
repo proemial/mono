@@ -3,7 +3,6 @@ import { selectRelevantPapersChain } from "@/app/llm/chains/fetch-papers/select-
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import {
-	RunnableBranch,
 	RunnableLambda,
 	RunnablePassthrough,
 	RunnableSequence,
@@ -73,7 +72,7 @@ const queryOpenAlex = RunnableLambda.from<GeneratedSearchParams, string>(
 	},
 ).withConfig({ runName: "QueryOpenAlex" });
 
-const fetchPapersChain = RunnableSequence.from<Input, Output>([
+export const fetchPapersChain = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
 		papers: generateSearchParamsChain
 			.pipe(queryOpenAlex)
@@ -83,19 +82,12 @@ const fetchPapersChain = RunnableSequence.from<Input, Output>([
 	(selectedPapers) => JSON.stringify(selectedPapers),
 ]);
 
-const hasCachedPapers = (input: Input) => input.papers !== undefined;
-
 type Input = {
 	question: string;
 	papers: { link: string; abstract: string; title: string }[] | undefined;
 };
 
 type Output = string;
-
-export const fetchIfNoCachedPapers = RunnableBranch.from<Input, Output>([
-	[hasCachedPapers, (input) => JSON.stringify(input.papers)],
-	fetchPapersChain,
-]);
 
 const toRelativeLink = (paper: Paper) => {
 	return {
