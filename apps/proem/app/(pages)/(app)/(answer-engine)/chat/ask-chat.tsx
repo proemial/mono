@@ -6,12 +6,11 @@ import { ChatMessages } from "@/app/components/chat/chat-messages-ask";
 import { useShareDrawerState } from "@/app/components/share/state";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { Message, useChat } from "ai/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { ClearButton } from "./clear-button";
 import { Starters } from "./starters";
 import { PageLayout } from "../../page-layout";
 import { ProemLogo } from "@/app/components/icons/brand/logo";
-import useIsKeyboardOpen from "@/app/components/mobile/keyboard";
 
 type ChatProps = Partial<Pick<ChatMessageProps, "user" | "message">> & {
 	user?: { id: string; email: string };
@@ -26,6 +25,8 @@ export default function Chat({
 	existingShareId,
 }: ChatProps) {
 	const [sessionSlug, setSessionSlug] = useState<null | string>(null);
+	const [inputFocus, setInputFocus] = useState<boolean>();
+
 	const { openShareDrawer } = useShareDrawerState();
 	const chat = useChat({
 		id: "hardcoded",
@@ -41,8 +42,6 @@ export default function Chat({
 		}
 	});
 
-	const disabledQuestions = Boolean(initialMessages);
-
 	const sessionSlugFromServer = (chat.data as { slug?: string }[])?.find(
 		({ slug }) => slug,
 	)?.slug;
@@ -55,16 +54,14 @@ export default function Chat({
 		}
 	}, [sessionSlugFromServer]);
 
-	const chatWrapperRef = useRef<HTMLDivElement>(null);
+	// const messagesDiv = useRef<HTMLDivElement>(null);
+	// useEffect(() => {
+	// 	if (messagesDiv.current) {
+	// 		console.log("scrolling to bottom", chat.messages?.length);
 
-	useEffect(() => {
-		if (chat.messages?.length > 0 && chatWrapperRef.current) {
-			chatWrapperRef.current.scrollIntoView(false);
-		}
-	}, [chat.messages]);
-
-	const keyboardOpen = useIsKeyboardOpen();
-	console.log("keyboardOpen", keyboardOpen);
+	// 		messagesDiv.current.scrollIntoView(false);
+	// 	}
+	// }, [chat.messages.length]);
 
 	const isEmptyScreen = chat.messages.length === 0;
 	const showLoadingState = chat.isLoading && chat.messages.length % 2 === 1;
@@ -108,25 +105,28 @@ export default function Chat({
 		<PageLayout title="ask" action={actionButton}>
 			<>
 				{isEmptyScreen && <Text />}
-				<div ref={chatWrapperRef}>
-					<ChatMessages
-						messages={chat.messages}
-						showLoadingState={showLoadingState}
-						user={user}
-						onShareHandle={shareMessage}
-						isLoading={chat.isLoading}
-					/>
-				</div>
+				{/* <div className="messages" ref={messagesDiv}> */}
+				<ChatMessages
+					messages={chat.messages}
+					showLoadingState={showLoadingState}
+					user={user}
+					onShareHandle={shareMessage}
+					isLoading={chat.isLoading}
+				/>
+				{/* </div> */}
 			</>
 
 			<div className="flex flex-col gap-2 px-2 pt-1 pb-2">
-				{(isEmptyScreen || keyboardOpen) && <Starters append={chat.append} />}
+				{(isEmptyScreen || inputFocus) && <Starters append={chat.append} />}
 				<ChatInputOld
 					chat={chat}
 					placeholder={
 						initialPlaceholder ? "Ask anything" : "Ask a follow-up question"
 					}
 					trackingKey={analyticsKeys.ask.submit.ask}
+					onFocusChange={(isFocused) => {
+						setInputFocus(isFocused);
+					}}
 				/>
 			</div>
 		</PageLayout>

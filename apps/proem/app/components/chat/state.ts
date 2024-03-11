@@ -5,9 +5,19 @@ export type ChatTarget = "ask" | "paper";
 export function useChatState(target: ChatTarget) {
 	const ask = useAskChatState();
 	const paper = usePaperChatState();
+	const focus = useInputFocusState();
 
-	return target === "ask" ? ask : paper;
+	return target === "ask" ? { ...ask, ...focus } : { ...paper, ...focus };
 }
+
+type InputFocusState = {
+	focus: boolean;
+	setFocus: (focus: boolean) => void;
+};
+export const useInputFocusState = create<InputFocusState>((set) => ({
+	focus: false,
+	setFocus: (focus) => set({ focus }),
+}));
 
 type AskChatState = {
 	questions: string[];
@@ -15,7 +25,6 @@ type AskChatState = {
 	appendQuestion: (question: string) => void;
 	setLoading: (loading: boolean) => void;
 };
-
 const useAskChatState = create<AskChatState>((set) => ({
 	questions: [],
 	loading: false,
@@ -30,7 +39,6 @@ type PaperChatState = {
 	appendQuestion: (question: string) => void;
 	setLoading: (loading: boolean) => void;
 };
-
 const usePaperChatState = create<PaperChatState>((set) => ({
 	questions: [],
 	loading: false,

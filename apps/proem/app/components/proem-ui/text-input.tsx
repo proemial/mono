@@ -10,10 +10,28 @@ type Props = {
 	readonly?: boolean;
 	onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 	onFocus?: () => void;
+	onFocusChange?: (focus: boolean) => void;
 };
 
 export function TextInput(props: Props) {
-	const { value, placeholder, disabled, readonly, onChange, onFocus } = props;
+	const {
+		value,
+		placeholder,
+		disabled,
+		readonly,
+		onChange,
+		onFocus,
+		onFocusChange,
+	} = props;
+
+	const handleFocusChange = (focus: boolean) => {
+		if (focus && onFocus) {
+			onFocus();
+		}
+		if (onFocusChange) {
+			onFocusChange(focus);
+		}
+	};
 
 	return (
 		<>
@@ -24,7 +42,10 @@ export function TextInput(props: Props) {
 				className="relative pr-12 break-words stretch"
 				value={value}
 				onChange={onChange}
-				onFocus={onFocus}
+				onFocus={() => {
+					handleFocusChange(true);
+				}}
+				onBlur={() => handleFocusChange(false)}
 				disabled={disabled}
 				readOnly={readonly}
 			/>

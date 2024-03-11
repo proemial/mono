@@ -5,8 +5,7 @@ import { useAuth } from "@clerk/nextjs";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useDrawerState } from "../login/state";
 import { UseChatHelpers } from "ai/react";
-import { ChatTarget, useChatState } from "./state";
-import { s } from "vitest/dist/reporters-rzC174PQ.js";
+import { ChatTarget, useChatState, useInputFocusState } from "./state";
 
 type Props = {
 	target: ChatTarget;
@@ -19,7 +18,7 @@ export function ChatInput(props: Props) {
 	const { target, placeholders, trackingKey, authRequired } = props;
 
 	const [input, setInput] = useState("");
-	const { questions, loading, appendQuestion } = useChatState(target);
+	const { questions, loading, appendQuestion, setFocus } = useChatState(target);
 
 	// TODO: Fix return url
 	const { userId } = useAuth();
@@ -31,6 +30,10 @@ export function ChatInput(props: Props) {
 		});
 
 		appendQuestion(input);
+	};
+
+	const handleFocusChange = (isFocused: boolean) => {
+		setFocus(isFocused);
 	};
 
 	const placeholder =
@@ -55,6 +58,7 @@ export function ChatInput(props: Props) {
 					disabled={loading}
 					readonly={authRequired && !userId}
 					onFocus={() => authRequired && !userId && open()}
+					onFocusChange={handleFocusChange}
 				/>
 			</form>
 		</div>
@@ -70,12 +74,14 @@ type ChatInputOldProps = {
 	>;
 	placeholder: string;
 	trackingKey: string;
+	onFocusChange?: (isFocused: boolean) => void;
 	authRequired?: boolean;
 };
 
 export function ChatInputOld(props: ChatInputOldProps) {
 	const { chat, placeholder, trackingKey, authRequired } = props;
 	const { input, isLoading, handleInputChange, handleSubmit } = chat;
+	const { setFocus } = useInputFocusState();
 
 	// TODO: Fix return url
 	const { userId } = useAuth();
@@ -87,6 +93,13 @@ export function ChatInputOld(props: ChatInputOldProps) {
 		});
 
 		handleSubmit(event);
+		props.onFocusChange?.(false);
+		// setFocus(false);
+	};
+
+	const handleFocusChange = (isFocused: boolean) => {
+		setFocus(isFocused);
+		props.onFocusChange?.(isFocused);
 	};
 
 	return (
@@ -102,6 +115,7 @@ export function ChatInputOld(props: ChatInputOldProps) {
 					disabled={isLoading}
 					readonly={authRequired && !userId}
 					onFocus={() => authRequired && !userId && open()}
+					onFocusChange={handleFocusChange}
 				/>
 			</form>
 		</div>
