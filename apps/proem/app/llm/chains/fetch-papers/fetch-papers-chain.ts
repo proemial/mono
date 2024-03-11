@@ -1,9 +1,10 @@
+import { Paper, fetchPapers } from "@/app/api/paper-search/search";
 import { selectRelevantPapersChain } from "@/app/llm/chains/fetch-papers/select-relevant-papers-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
-import { FetchPapersTool } from "@/app/llm/tools/fetch-papers-tool";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import {
 	RunnableBranch,
+	RunnableLambda,
 	RunnablePassthrough,
 	RunnableSequence,
 } from "@langchain/core/runnables";
@@ -45,14 +46,10 @@ const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask", {
 	cache: process.env.NODE_ENV === "development" ? false : true,
 });
 
-type Input = {
-	question: string;
-	papers: { link: string; abstract: string; title: string }[] | undefined;
-};
-
-type Output = GeneratedSearchParams;
-
-const generateSearchParamsChain = RunnableSequence.from<Input, Output>([
+const generateSearchParamsChain = RunnableSequence.from<
+	Input,
+	GeneratedSearchParams
+>([
 	generateSearchParamsPrompt,
 	model.bind({
 		functions: [generateSearchParams],
@@ -60,12 +57,26 @@ const generateSearchParamsChain = RunnableSequence.from<Input, Output>([
 	}),
 	(input) => input, // This is silly, but it makes the output parser below not stream the response
 	new JsonOutputFunctionsParser<GeneratedSearchParams>(),
-]).withConfig({ runName: "GenerateSearchParams" });
+]).withConfig({
+	runName: "GenerateSearchParams",
+});
 
-const fetchPapersChain = RunnableSequence.from<Input, string>([
+const queryOpenAlex = RunnableLambda.from(
+	async (input: GeneratedSearchParams) => {
+		const searchString = convertToOASearchString([
+			...input.relatedConcepts,
+			input.keyConcept,
+		]);
+		const papers = await fetchPapers(searchString);
+		const papersWithRelativeLinks = papers?.map(toRelativeLink) ?? [];
+		return JSON.stringify(papersWithRelativeLinks);
+	},
+).withConfig({ runName: "QueryOpenAlex" });
+
+const fetchPapersChain = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
 		papers: generateSearchParamsChain
-			.pipe(new FetchPapersTool())
+			.pipe(queryOpenAlex)
 			.withConfig({ runName: "FetchPapers" }),
 	}),
 	selectRelevantPapersChain,
@@ -74,7 +85,28 @@ const fetchPapersChain = RunnableSequence.from<Input, string>([
 
 const hasCachedPapers = (input: Input) => input.papers !== undefined;
 
-export const fetchIfNoCachedPapers = RunnableBranch.from<Input, string>([
+type Input = {
+	question: string;
+	papers: { link: string; abstract: string; title: string }[] | undefined;
+};
+
+type Output = string;
+
+export const fetchIfNoCachedPapers = RunnableBranch.from<Input, Output>([
 	[hasCachedPapers, (input) => JSON.stringify(input.papers)],
 	fetchPapersChain,
 ]);
+
+const toRelativeLink = (paper: Paper) => {
+	return {
+		title: paper.title,
+		link: paper.link.replace("https://proem.ai", ""),
+		abstract: paper.abstract ?? "",
+	};
+};
+
+const convertToOASearchString = (concepts: string[]) => {
+	const searchStrings = concepts.map((concept) => `"${concept}"`).join("OR");
+	const query = `title.search:(${searchStrings}),abstract.search:(${searchStrings})`;
+	return encodeURIComponent(query);
+};
