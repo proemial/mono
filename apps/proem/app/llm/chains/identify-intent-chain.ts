@@ -1,14 +1,18 @@
-import { ChatPromptTemplate } from "@langchain/core/prompts";
+import {
+	ChatPromptTemplate,
+	MessagesPlaceholder,
+} from "@langchain/core/prompts";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { buildOpenAIChatModel } from "../models/openai-model";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
+import { LangChainChatHistoryMessage } from "../utils";
 
 const prompt = ChatPromptTemplate.fromMessages<Input>([
 	[
 		"system",
 		`
-		Given a user question, identify the action from the list below that best
-		describes the user's expectation based on their question:
+		Given a user question and possibly a chat history, identify the action from the list below
+		that best describes the user's expectation, based on their question:
 
 		---
 		Action: \`ANSWER_EVERYDAY_QUESTION\`
@@ -59,16 +63,16 @@ const prompt = ChatPromptTemplate.fromMessages<Input>([
 
 		Rules:
 		- Respond ONLY with the action of the matching item from the list above.
-		- If you are unsure which action best matches the user's request, respond
-			with \`UNKNOWN\`.
+		- If you are unsure which action best matches the user's request, respond with \`UNKNOWN\`.
 	`,
 	],
 	["human", "User question: {question}"],
+	new MessagesPlaceholder("chatHistory"),
 ]);
 
 const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask");
 
-type Input = { question: string };
+type Input = { question: string; chatHistory: LangChainChatHistoryMessage[] };
 
 export const getIdentifyIntentChain = (modelOverride: BaseChatModel = model) =>
 	prompt.pipe(modelOverride).pipe(new StringOutputParser()).withConfig({
