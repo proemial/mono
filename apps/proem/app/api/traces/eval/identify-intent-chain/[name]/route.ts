@@ -1,5 +1,6 @@
 import { getIdentifyIntentChain } from "@/app/llm/chains/identify-intent-chain";
-import { IntentEvaluator } from "@/app/llm/evaluators/intent-evaluator";
+import { ExpectedIntentEvaluator } from "@/app/llm/evaluators/intent/expected-intent-evaluator";
+import { SupportedIntentEvaluator } from "@/app/llm/evaluators/intent/supported-intent-evaluator";
 import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
 import { buildOpenAIModelForEvaluation } from "@/app/llm/models/openai-model";
 import { runOnDataset } from "langchain/smith";
@@ -20,7 +21,10 @@ export async function GET(
 		params.name,
 		{
 			evaluationConfig: {
-				customEvaluators: [new IntentEvaluator()],
+				customEvaluators: [
+					new ExpectedIntentEvaluator(),
+					new SupportedIntentEvaluator(),
+				],
 			},
 			projectMetadata: {
 				model: model.modelName,
