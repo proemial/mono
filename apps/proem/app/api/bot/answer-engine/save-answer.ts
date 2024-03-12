@@ -7,52 +7,52 @@ type SaveAnswerParams = {
 	isFollowUpQuestion: boolean;
 	slug: string;
 	userId?: string;
+	run: Run;
 	onEnd: (insertedAnswer?: Awaited<ReturnType<typeof answers.create>>) => void;
 };
 
-export function saveAnswer({
+export async function saveAnswer({
 	question,
 	isFollowUpQuestion,
 	slug,
 	userId,
 	onEnd,
+	run,
 }: SaveAnswerParams) {
-	return async (run: Run) => {
-		const answer = findRun(run, (run) => run.name === "AnswerEngine")?.outputs
-			?.output;
+	const answer = findRun(run, (run) => run.name === "AnswerEngine")?.outputs
+		?.output;
 
-		const selectedPapers = findRun(
-			run,
-			(run) => run.name === "SelectRelevantPapers",
-		)?.outputs?.output;
+	const selectedPapers = findRun(
+		run,
+		(run) => run.name === "SelectRelevantPapers",
+	)?.outputs?.output;
 
-		const searchParamsResponse = findRun(
-			run,
-			(run) => run.name === "GenerateSearchParams",
-		)?.outputs as { keyConcept: string; relatedConcepts: string[] };
+	const searchParamsResponse = findRun(
+		run,
+		(run) => run.name === "GenerateSearchParams",
+	)?.outputs as { keyConcept: string; relatedConcepts: string[] };
 
-		if (!answer || !selectedPapers?.length || !searchParamsResponse) {
-			return onEnd();
-		}
+	if (!answer || !selectedPapers?.length || !searchParamsResponse) {
+		return onEnd();
+	}
 
-		const papers = isFollowUpQuestion
-			? {}
-			: {
-					relatedConcepts: searchParamsResponse.relatedConcepts,
-					keyConcept: searchParamsResponse.keyConcept,
-					papers: {
-						papers: selectedPapers,
-					},
-			  };
+	const papers = isFollowUpQuestion
+		? {}
+		: {
+				relatedConcepts: searchParamsResponse.relatedConcepts,
+				keyConcept: searchParamsResponse.keyConcept,
+				papers: {
+					papers: selectedPapers,
+				},
+		  };
 
-		const insertedAnswer = await answers.create({
-			slug,
-			question,
-			answer,
-			ownerId: userId,
-			...papers,
-		});
+	const insertedAnswer = await answers.create({
+		slug,
+		question,
+		answer,
+		ownerId: userId,
+		...papers,
+	});
 
-		onEnd(insertedAnswer);
-	};
+	onEnd(insertedAnswer);
 }

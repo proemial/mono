@@ -67,6 +67,7 @@ export async function askAnswerEngine({
 					isFollowUpQuestion,
 					slug,
 					userId,
+					run,
 					onEnd: (insertedAnswer) => {
 						if (insertedAnswer) {
 							data.append({
@@ -80,7 +81,7 @@ export async function askAnswerEngine({
 
 						data.close();
 					},
-				})(run);
+				});
 			},
 		})
 		.stream(
