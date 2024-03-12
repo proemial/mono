@@ -1,12 +1,13 @@
 "use client";
 import { Tracker } from "@/app/components/analytics/tracker";
 import { Send } from "@/app/components/icons/functional/send";
+import { Button } from "@/app/components/shadcn-ui/button";
 import { cn } from "@/app/components/shadcn-ui/utils";
 import { VariantProps, cva } from "class-variance-authority";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { Features } from "../feature-flags/features";
 import { useFeatureFlags } from "../feature-flags/client-flags";
+import { Features } from "../feature-flags/features";
 
 type LinkProps = VariantProps<typeof variants> & {
 	children: string;
@@ -74,9 +75,12 @@ export function StarterButton(props: ButtonProps) {
 	const childStyles = flags.animateAskStarters ? "text-nowrap" : "";
 
 	return (
-		<div
+		<Button
 			onClick={onClick}
-			className={`${cn(variants({ variant, size, className }))}`}
+			className={cn(
+				variants({ variant, size, className }),
+				"text-left h-[unset]",
+			)}
 		>
 			<div
 				ref={container}
@@ -97,6 +101,6 @@ export function StarterButton(props: ButtonProps) {
 				</div>
 			</div>
 			<Send />
-		</div>
+		</Button>
 	);
 }
