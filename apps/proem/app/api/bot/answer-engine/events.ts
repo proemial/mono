@@ -26,10 +26,20 @@ export const searchParamsGeneratedEvent = z.object({
 	}),
 });
 
+export const followUpQuestionsGeneratedEvent = z.object({
+	type: z.literal("follow-up-questions-generated"),
+	data: z.array(
+		z.object({
+			question: z.string(),
+		}),
+	),
+});
+
 const answerEngineEvents = z.discriminatedUnion("type", [
 	answerSlugGeneratedEvent,
 	answerSavedEvent,
 	searchParamsGeneratedEvent,
+	followUpQuestionsGeneratedEvent,
 ]);
 
 export type AnswerEngineEvents = z.infer<typeof answerEngineEvents>;

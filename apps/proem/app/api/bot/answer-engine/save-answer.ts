@@ -31,7 +31,6 @@ export async function saveAnswer({
 	)?.outputs as { keyConcept: string; relatedConcepts: string[] };
 
 	if (answer && selectedPapers?.length && searchParamsResponse) {
-		console.log("working");
 		const papers = isFollowUpQuestion
 			? {}
 			: {

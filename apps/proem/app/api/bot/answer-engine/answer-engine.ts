@@ -6,6 +6,8 @@ import {
 import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
 import { saveAnswer } from "@/app/api/bot/answer-engine/save-answer";
 import { answerEngineChain } from "@/app/llm/chains/answer-engine-chain";
+import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
+import { findRun } from "@/app/llm/helpers/find-run";
 import { toLangChainChatHistory } from "@/app/llm/utils";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
 import {
@@ -62,7 +64,10 @@ export async function askAnswerEngine({
 		})
 		.withListeners({
 			onEnd: async (run) => {
-				saveAnswer({
+				const answer = findRun(run, (run) => run.name === "AnswerEngine")
+					?.outputs?.output;
+
+				const saveAnswerPromise = saveAnswer({
 					question,
 					isFollowUpQuestion,
 					slug,
@@ -78,7 +83,25 @@ export async function askAnswerEngine({
 							},
 						});
 					}
+				});
 
+				const followUpsQuestionPromise = followUpQuestionChain
+					.invoke({
+						question,
+						answer,
+					})
+					.then((followUpsQuestions) => {
+						data.append({
+							type: "follow-up-questions-generated",
+							data: followUpsQuestions
+								.split("?")
+								.filter(Boolean)
+								.map((question) => ({ question: `${question.trim()}?` })),
+						});
+					});
+
+				// Waiting for all sideeffects relying on data to finish before closing the data stream
+				Promise.all([saveAnswerPromise, followUpsQuestionPromise]).then(() => {
 					data.close();
 				});
 			},
