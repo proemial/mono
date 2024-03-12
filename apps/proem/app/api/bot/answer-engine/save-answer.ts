@@ -1,4 +1,3 @@
-import { AnswerEngineStreamData } from "@/app/api/bot/answer-engine/answer-engine";
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import { findRun } from "@/app/llm/helpers/find-run";
 import { Run } from "langsmith";
@@ -8,7 +7,7 @@ type SaveAnswerParams = {
 	isFollowUpQuestion: boolean;
 	slug: string;
 	userId?: string;
-	data: AnswerEngineStreamData;
+	onEnd: (insertedAnswer?: Awaited<ReturnType<typeof answers.create>>) => void;
 };
 
 export function saveAnswer({
@@ -16,7 +15,7 @@ export function saveAnswer({
 	isFollowUpQuestion,
 	slug,
 	userId,
-	data,
+	onEnd,
 }: SaveAnswerParams) {
 	return async (run: Run) => {
 		const answer = findRun(run, (run) => run.name === "AnswerEngine")?.outputs
@@ -33,8 +32,7 @@ export function saveAnswer({
 		)?.outputs as { keyConcept: string; relatedConcepts: string[] };
 
 		if (!answer || !selectedPapers?.length || !searchParamsResponse) {
-			data.close();
-			throw new Error("Save failure: No answer or papers found.");
+			return onEnd();
 		}
 
 		const papers = isFollowUpQuestion
@@ -55,18 +53,6 @@ export function saveAnswer({
 			...papers,
 		});
 
-		if (!insertedAnswer) {
-			data.close();
-			return;
-		}
-
-		data.append({
-			type: "answer-saved",
-			data: {
-				shareId: insertedAnswer.shareId,
-				answer: insertedAnswer.answer,
-			},
-		});
-		data.close();
+		onEnd(insertedAnswer);
 	};
 }

@@ -61,7 +61,27 @@ export async function askAnswerEngine({
 			},
 		})
 		.withListeners({
-			onEnd: saveAnswer({ question, isFollowUpQuestion, slug, userId, data }),
+			onEnd: async (run) => {
+				saveAnswer({
+					question,
+					isFollowUpQuestion,
+					slug,
+					userId,
+					onEnd: (insertedAnswer) => {
+						if (insertedAnswer) {
+							data.append({
+								type: "answer-saved",
+								data: {
+									shareId: insertedAnswer.shareId,
+									answer: insertedAnswer.answer,
+								},
+							});
+						}
+
+						data.close();
+					},
+				})(run);
+			},
 		})
 		.stream(
 			{
