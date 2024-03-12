@@ -68,19 +68,18 @@ export async function askAnswerEngine({
 					slug,
 					userId,
 					run,
-					onEnd: (insertedAnswer) => {
-						if (insertedAnswer) {
-							data.append({
-								type: "answer-saved",
-								data: {
-									shareId: insertedAnswer.shareId,
-									answer: insertedAnswer.answer,
-								},
-							});
-						}
+				}).then((insertedAnswer) => {
+					if (insertedAnswer) {
+						data.append({
+							type: "answer-saved",
+							data: {
+								shareId: insertedAnswer.shareId,
+								answer: insertedAnswer.answer,
+							},
+						});
+					}
 
-						data.close();
-					},
+					data.close();
 				});
 			},
 		})

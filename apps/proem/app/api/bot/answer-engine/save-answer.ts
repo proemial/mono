@@ -8,7 +8,6 @@ type SaveAnswerParams = {
 	slug: string;
 	userId?: string;
 	run: Run;
-	onEnd: (insertedAnswer?: Awaited<ReturnType<typeof answers.create>>) => void;
 };
 
 export async function saveAnswer({
@@ -16,7 +15,6 @@ export async function saveAnswer({
 	isFollowUpQuestion,
 	slug,
 	userId,
-	onEnd,
 	run,
 }: SaveAnswerParams) {
 	const answer = findRun(run, (run) => run.name === "AnswerEngine")?.outputs
@@ -32,27 +30,24 @@ export async function saveAnswer({
 		(run) => run.name === "GenerateSearchParams",
 	)?.outputs as { keyConcept: string; relatedConcepts: string[] };
 
-	if (!answer || !selectedPapers?.length || !searchParamsResponse) {
-		return onEnd();
+	if (answer && selectedPapers?.length && searchParamsResponse) {
+		console.log("working");
+		const papers = isFollowUpQuestion
+			? {}
+			: {
+					relatedConcepts: searchParamsResponse.relatedConcepts,
+					keyConcept: searchParamsResponse.keyConcept,
+					papers: {
+						papers: selectedPapers,
+					},
+			  };
+
+		return answers.create({
+			slug,
+			question,
+			answer,
+			ownerId: userId,
+			...papers,
+		});
 	}
-
-	const papers = isFollowUpQuestion
-		? {}
-		: {
-				relatedConcepts: searchParamsResponse.relatedConcepts,
-				keyConcept: searchParamsResponse.keyConcept,
-				papers: {
-					papers: selectedPapers,
-				},
-		  };
-
-	const insertedAnswer = await answers.create({
-		slug,
-		question,
-		answer,
-		ownerId: userId,
-		...papers,
-	});
-
-	onEnd(insertedAnswer);
 }
