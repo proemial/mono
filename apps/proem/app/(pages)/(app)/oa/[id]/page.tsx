@@ -65,13 +65,11 @@ export default async function ReaderPage({ params }: Props) {
 						</TabsTrigger>
 					</TabsList>
 					<TabsContent value="QA">
-						<div className="px-4">
-							<ChatMessages
-								target="paper"
-								title={title}
-								abstract={abstract as string}
-							/>
-						</div>
+						<ChatMessages
+							target="paper"
+							title={title}
+							abstract={abstract as string}
+						/>
 					</TabsContent>
 					<TabsContent value="metadata">
 						<div className="flex flex-col px-4 mb-2">

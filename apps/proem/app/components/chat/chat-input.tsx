@@ -25,11 +25,14 @@ export function ChatInput(props: Props) {
 	const { open } = useDrawerState();
 
 	const trackAndInvoke = (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+
 		Tracker.track(trackingKey, {
 			text: input,
 		});
 
 		appendQuestion(input);
+		setInput("");
 	};
 
 	const handleFocusChange = (isFocused: boolean) => {
@@ -38,8 +41,8 @@ export function ChatInput(props: Props) {
 
 	const placeholder =
 		Array.isArray(placeholders) &&
-		placeholders.length > 1 &&
-		questions.length > 0
+			placeholders.length > 1 &&
+			questions.length > 0
 			? placeholders[1]
 			: placeholders[0];
 

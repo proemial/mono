@@ -40,7 +40,10 @@ export function ChatMessages({ target, title, abstract }: MessagesProps) {
 	}, [isLoading, setLoading]);
 
 	useEffect(() => {
+		console.log("questions", questions?.length);
+
 		if (questions?.length > 0) {
+			console.log("appending question", questions?.at(-1));
 			appendQuestion(questions.at(-1) as string);
 		}
 	}, [questions]);
@@ -49,7 +52,7 @@ export function ChatMessages({ target, title, abstract }: MessagesProps) {
 	useEffect(() => {
 		if (messages?.length > 0 && chatWrapperRef.current) {
 			console.log("scrolling to bottom", messages?.length);
-			chatWrapperRef.current.scrollIntoView(false);
+			chatWrapperRef.current.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
 		}
 	}, [messages]);
 
@@ -62,7 +65,7 @@ export function ChatMessages({ target, title, abstract }: MessagesProps) {
 	};
 
 	return (
-		<div ref={chatWrapperRef}>
+		<div ref={chatWrapperRef} className="px-4 pb-32">
 			{messages?.map((message, i) => (
 				<ChatMessage
 					key={i}
