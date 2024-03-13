@@ -1,20 +1,21 @@
 "use client";
 import {
 	AnswerEngineEvents,
+	findAllByEventType,
 	findByEventType,
 } from "@/app/api/bot/answer-engine/events";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { ChatInputOld } from "@/app/components/chat/chat-input";
 import { ChatMessageProps } from "@/app/components/chat/chat-message-ask";
 import { ChatMessages } from "@/app/components/chat/chat-messages-ask";
+import { ProemLogo } from "@/app/components/icons/brand/logo";
 import { useShareDrawerState } from "@/app/components/share/state";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { Message, useChat } from "ai/react";
 import { useEffect, useRef, useState } from "react";
+import { PageLayout } from "../../page-layout";
 import { ClearButton } from "./clear-button";
 import { Starters } from "./starters";
-import { PageLayout } from "../../page-layout";
-import { ProemLogo } from "@/app/components/icons/brand/logo";
 
 type ChatProps = Partial<Pick<ChatMessageProps, "user" | "message">> & {
 	user?: { id: string; email: string };
@@ -73,6 +74,9 @@ export default function Chat({
 		setSessionSlug(null);
 	};
 
+	const answerSavedEvents = findAllByEventType(chat.data, "answer-saved");
+	const runIds = answerSavedEvents.map((event) => event.runId);
+
 	const shareMessage: ChatMessageProps["onShareHandle"] = ({
 		renderedContent,
 		message,
@@ -103,6 +107,7 @@ export default function Chat({
 				showLoadingState={showLoadingState}
 				user={user}
 				onShareHandle={shareMessage}
+				runIds={runIds}
 				isLoading={chat.isLoading}
 			>
 				<Text />

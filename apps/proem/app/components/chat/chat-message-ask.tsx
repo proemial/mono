@@ -17,6 +17,10 @@ import {
 import { Message } from "ai/react";
 import { ShareIcon } from "lucide-react";
 import { SinglarThrobber, Throbber } from "../loading/throbber";
+import {
+	FeedbackButtons,
+	FeedbackButtonsProps,
+} from "./feedback/feedback-buttons";
 
 export type ChatMessageProps = {
 	message?: Message["content"];
@@ -30,12 +34,14 @@ export type ChatMessageProps = {
 	onShareHandle?:
 		| ((params: { renderedContent: React.ReactNode; message: string }) => void)
 		| null;
+	runId?: FeedbackButtonsProps["runId"];
 };
 
 export function ChatMessage({
 	message,
 	user = { name: "you", initials: "U", avatar: "" },
 	onShareHandle,
+	runId,
 	isLoading,
 	showThrobber,
 }: ChatMessageProps) {
@@ -43,24 +49,29 @@ export function ChatMessage({
 
 	return (
 		<div className="w-full mx-[-4px] my-2">
-			<div className="flex gap-3">
-				<Avatar className="w-6 h-6">
-					<AvatarImage src={user.avatar} />
-					<AvatarFallback className="bg-gray-600">
-						{user.initials}
-					</AvatarFallback>
-				</Avatar>
-				<div className="font-bold">{user.name}</div>
+			<div className="flex justify-between gap-4">
+				<div className="flex gap-3">
+					<Avatar className="w-6 h-6">
+						<AvatarImage src={user.avatar} />
+						<AvatarFallback className="bg-gray-600">
+							{user.initials}
+						</AvatarFallback>
+					</Avatar>
+					<div className="font-bold">{user.name}</div>
+				</div>
 
-				{onShareHandle && message && !isLoading && (
-					<ShareIcon
-						onClick={() => {
-							onShareHandle({ renderedContent: content, message });
-							Tracker.track(analyticsKeys.ask.click.share);
-						}}
-						className="ml-auto"
-					/>
-				)}
+				<div className="flex items-end gap-3">
+					<FeedbackButtons runId={runId} />
+					{onShareHandle && message && !isLoading && (
+						<ShareIcon
+							onClick={() => {
+								onShareHandle({ renderedContent: content, message });
+								Tracker.track(analyticsKeys.ask.click.share);
+							}}
+							className="ml-auto"
+						/>
+					)}
+				</div>
 			</div>
 
 			<div className="mt-2 ml-9">
