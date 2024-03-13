@@ -51,7 +51,6 @@ export function ChatMessages({ target, title, abstract }: MessagesProps) {
 	const chatWrapperRef = useRef<HTMLDivElement>(null);
 	useEffect(() => {
 		if (messages?.length > 0 && chatWrapperRef.current) {
-			console.log("scrolling to bottom", messages?.length);
 			chatWrapperRef.current.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
 		}
 	}, [messages]);

@@ -65,8 +65,6 @@ export default function Chat({
 	const messagesDiv = useRef<HTMLDivElement>(null);
 	useEffect(() => {
 		if (messagesDiv.current) {
-			console.log("scrolling to bottom", chat.messages?.length);
-
 			messagesDiv.current.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
 		}
 	}, [chat.messages]);
