@@ -25,7 +25,6 @@ export default function Chat({
 	existingShareId,
 }: ChatProps) {
 	const [sessionSlug, setSessionSlug] = useState<null | string>(null);
-	const [inputFocus, setInputFocus] = useState<boolean>();
 
 	const { openShareDrawer } = useShareDrawerState();
 	const chat = useChat({
@@ -117,16 +116,13 @@ export default function Chat({
 			</>
 
 			<div className="flex flex-col gap-2 px-2 pt-1 pb-2">
-				{(isEmptyScreen || inputFocus) && <Starters append={chat.append} />}
+				{isEmptyScreen && <Starters append={chat.append} />}
 				<ChatInputOld
 					chat={chat}
 					placeholder={
 						initialPlaceholder ? "Ask anything" : "Ask a follow-up question"
 					}
 					trackingKey={analyticsKeys.ask.submit.ask}
-					onFocusChange={(isFocused) => {
-						setInputFocus(isFocused);
-					}}
 				/>
 			</div>
 		</PageLayout>
