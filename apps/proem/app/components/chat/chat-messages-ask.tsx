@@ -1,5 +1,6 @@
 import { Message } from "ai";
 import { ChatMessage, ChatMessageProps } from "./chat-message-ask";
+import { ReactNode } from "react";
 
 const PROEM_BOT = {
 	name: "proem",
@@ -11,10 +12,11 @@ type Props = Required<Pick<ChatMessageProps, "onShareHandle" | "isLoading">> &
 	Pick<ChatMessageProps, "user"> & {
 		messages: Message[];
 		showLoadingState: boolean;
+		children?: ReactNode;
 	};
 
 export function ChatMessages(props: Props) {
-	const { messages, user, onShareHandle, isLoading, showLoadingState } = props;
+	const { messages, user, onShareHandle, isLoading, showLoadingState, children } = props;
 
 	return (
 		<>
@@ -30,8 +32,9 @@ export function ChatMessages(props: Props) {
 					}
 				/>
 			))}
-
 			{showLoadingState && <ChatMessage user={PROEM_BOT} />}
+
+			{messages.length === 0 && children}
 		</>
 	);
 }

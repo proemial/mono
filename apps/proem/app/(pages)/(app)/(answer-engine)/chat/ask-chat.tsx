@@ -64,7 +64,7 @@ export default function Chat({
 
 	const messagesDiv = useRef<HTMLDivElement>(null);
 	useEffect(() => {
-		if (messagesDiv.current) {
+		if (messagesDiv.current && chat.messages) {
 			messagesDiv.current.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
 		}
 	}, [chat.messages]);
@@ -105,18 +105,17 @@ export default function Chat({
 
 	return (
 		<PageLayout title="ask" action={actionButton}>
-			<>
-				{isEmptyScreen && <Text />}
-				<div className="pb-32 messages" ref={messagesDiv}>
-					<ChatMessages
-						messages={chat.messages}
-						showLoadingState={showLoadingState}
-						user={user}
-						onShareHandle={shareMessage}
-						isLoading={chat.isLoading}
-					/>
-				</div>
-			</>
+			<div className="pb-32 messages" ref={messagesDiv}>
+				<ChatMessages
+					messages={chat.messages}
+					showLoadingState={showLoadingState}
+					user={user}
+					onShareHandle={shareMessage}
+					isLoading={chat.isLoading}
+				>
+					<Text />
+				</ChatMessages>
+			</div>
 
 			<div className="flex flex-col gap-2 px-2 pt-1 pb-2">
 				{isEmptyScreen && <Starters append={chat.append} />}

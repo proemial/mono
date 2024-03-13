@@ -7,7 +7,7 @@ import { useChat } from "ai/react";
 import { ChatMessage, ChatStarter } from "./chat-message";
 import { limit } from "@proemial/utils/array";
 import { ChatTarget, useChatState } from "./state";
-import { useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import { Search } from "lucide-react";
 
 const PROEM_BOT = {
@@ -20,9 +20,10 @@ type MessagesProps = {
 	target: ChatTarget;
 	title: string;
 	abstract: string;
+	children?: ReactNode;
 };
 
-export function ChatMessages({ target, title, abstract }: MessagesProps) {
+export function ChatMessages({ target, title, abstract, children }: MessagesProps) {
 	const { messages, append, isLoading } = useChat({
 		body: { title, abstract, model: "gpt-3.5-turbo" },
 		api: "/api/bot/chat",
@@ -73,6 +74,7 @@ export function ChatMessages({ target, title, abstract }: MessagesProps) {
 					onExplainerClick={handleExplainerClick}
 				/>
 			))}
+			{messages?.length === 0 && children}
 		</div>
 	);
 }

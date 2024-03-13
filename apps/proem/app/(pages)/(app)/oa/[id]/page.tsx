@@ -69,7 +69,13 @@ export default async function ReaderPage({ params }: Props) {
 							target="paper"
 							title={title}
 							abstract={abstract as string}
-						/>
+						>
+							<StarterMessages
+								starters={starters}
+								target="paper"
+								trackingKey={analyticsKeys.read.click.starter}
+							/>
+						</ChatMessages>
 					</TabsContent>
 					<TabsContent value="metadata">
 						<div className="flex flex-col px-4 mb-2">
@@ -79,11 +85,6 @@ export default async function ReaderPage({ params }: Props) {
 				</Tabs>
 			</div>
 			<div className="flex flex-col px-2 pt-1 pb-2">
-				<StarterMessages
-					starters={starters}
-					target="paper"
-					trackingKey={analyticsKeys.read.click.starter}
-				/>
 				<ChatInput
 					target="paper"
 					placeholders={[
