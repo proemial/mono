@@ -6,7 +6,7 @@ import { ChatMessages } from "@/app/components/chat/chat-messages-ask";
 import { useShareDrawerState } from "@/app/components/share/state";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { Message, useChat } from "ai/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ClearButton } from "./clear-button";
 import { Starters } from "./starters";
 import { PageLayout } from "../../page-layout";
@@ -54,14 +54,14 @@ export default function Chat({
 		}
 	}, [sessionSlugFromServer]);
 
-	// const messagesDiv = useRef<HTMLDivElement>(null);
-	// useEffect(() => {
-	// 	if (messagesDiv.current) {
-	// 		console.log("scrolling to bottom", chat.messages?.length);
+	const messagesDiv = useRef<HTMLDivElement>(null);
+	useEffect(() => {
+		if (messagesDiv.current) {
+			console.log("scrolling to bottom", chat.messages?.length);
 
-	// 		messagesDiv.current.scrollIntoView(false);
-	// 	}
-	// }, [chat.messages.length]);
+			messagesDiv.current.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+		}
+	}, [chat.messages]);
 
 	const isEmptyScreen = chat.messages.length === 0;
 	const showLoadingState = chat.isLoading && chat.messages.length % 2 === 1;
@@ -105,15 +105,15 @@ export default function Chat({
 		<PageLayout title="ask" action={actionButton}>
 			<>
 				{isEmptyScreen && <Text />}
-				{/* <div className="messages" ref={messagesDiv}> */}
-				<ChatMessages
-					messages={chat.messages}
-					showLoadingState={showLoadingState}
-					user={user}
-					onShareHandle={shareMessage}
-					isLoading={chat.isLoading}
-				/>
-				{/* </div> */}
+				<div className="pb-32 messages" ref={messagesDiv}>
+					<ChatMessages
+						messages={chat.messages}
+						showLoadingState={showLoadingState}
+						user={user}
+						onShareHandle={shareMessage}
+						isLoading={chat.isLoading}
+					/>
+				</div>
 			</>
 
 			<div className="flex flex-col gap-2 px-2 pt-1 pb-2">
