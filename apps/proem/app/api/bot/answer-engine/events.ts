@@ -15,6 +15,7 @@ export const answerSavedEvent = z.object({
 	data: z.object({
 		shareId: z.string().nullable(),
 		answer: z.string(),
+		runId: z.string(),
 	}),
 });
 

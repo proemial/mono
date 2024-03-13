@@ -80,6 +80,7 @@ export async function askAnswerEngine({
 							data: {
 								shareId: insertedAnswer.shareId,
 								answer: insertedAnswer.answer,
+								runId: run.id,
 							},
 						});
 					}
