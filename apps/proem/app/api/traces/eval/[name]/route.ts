@@ -19,6 +19,7 @@ export async function GET(
 	{ params }: { params: { name: string } },
 ) {
 	console.log("params", params);
+
 	const results = await runOnDataset(answerEngineChain, params.name, {
 		evaluationConfig: {
 			customEvaluators: [

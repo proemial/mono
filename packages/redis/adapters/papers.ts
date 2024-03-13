@@ -3,6 +3,7 @@ import {
 	getIdFromOpenAlexPaper,
 } from "@proemial/models/open-alex";
 import { UpStash } from "./upstash-client";
+import { Time } from "@proemial/utils/time";
 
 export const OpenAlexPapers = {
 	get: async (id: string) => {
@@ -20,18 +21,21 @@ export const OpenAlexPapers = {
 		}
 		const papersArray = Array.isArray(papers) ? papers : [papers];
 
+		const begin = Time.now();
 		try {
 			console.log("[pushAll] pushing", papersArray.length, "papers");
 			const pipeline = UpStash.papers.pipeline();
-			papersArray.forEach((paper) => {
+			for (const paper of papersArray) {
 				const id = getIdFromOpenAlexPaper(paper);
 				pipeline.set(`oa:${id}`, { ...paper, id });
-			});
+			}
 
 			await pipeline.exec();
 		} catch (error) {
 			console.error(error);
 			throw error;
+		} finally {
+			Time.log(begin, `[pushAll] ${papersArray.length} papers`);
 		}
 	},
 

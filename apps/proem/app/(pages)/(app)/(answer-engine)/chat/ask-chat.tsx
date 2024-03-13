@@ -1,4 +1,8 @@
 "use client";
+import {
+	AnswerEngineEvents,
+	findByEventType,
+} from "@/app/api/bot/answer-engine/events";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { ChatInputOld } from "@/app/components/chat/chat-input";
 import { ChatMessageProps } from "@/app/components/chat/chat-message-ask";
@@ -32,7 +36,9 @@ export default function Chat({
 		api: "/api/bot/answer-engine",
 		initialMessages,
 		body: { slug: sessionSlug, userId: user?.id },
-	});
+	}) as Omit<ReturnType<typeof useChat>, "data"> & {
+		data: AnswerEngineEvents[];
+	};
 
 	useRunOnFirstRender(() => {
 		if (message) {
@@ -44,14 +50,17 @@ export default function Chat({
 	const sessionSlugFromServer = (chat.data as { slug?: string }[])?.find(
 		({ slug }) => slug,
 	)?.slug;
+	const disabledQuestions = Boolean(initialMessages);
+
+	const answerSlug = findByEventType(chat.data, "answer-slug-generated")?.slug;
 
 	useEffect(() => {
-		if (sessionSlugFromServer) {
-			setSessionSlug(sessionSlugFromServer);
+		if (answerSlug) {
+			setSessionSlug(answerSlug);
 			// TODO! Make some condition around new router replace after initial message is recieved
 			// Router.replace(`/answer/${sessionIdFromServer}`);
 		}
-	}, [sessionSlugFromServer]);
+	}, [answerSlug]);
 
 	const messagesDiv = useRef<HTMLDivElement>(null);
 	useEffect(() => {
@@ -79,11 +88,7 @@ export default function Chat({
 	}) => {
 		// If we're comming from a shared page we reuse the existing shareId
 		const shareId =
-			existingShareId ||
-			(chat.data as { answers?: { shareId: string; answer: string } }[])?.find(
-				({ answers }) => answers?.answer === message,
-			)?.answers?.shareId;
-
+			existingShareId || findByEventType(chat.data, "answer-saved")?.shareId;
 		openShareDrawer({
 			link: `/share/${shareId}`,
 			title: "Proem Science Answers",
