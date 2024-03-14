@@ -1,3 +1,4 @@
+import { PapersAsString } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { StringOutputParser } from "@langchain/core/output_parsers";
@@ -70,7 +71,7 @@ const stringOutputParser = new StringOutputParser();
 type Input = {
 	question: string;
 	chatHistory: LangChainChatHistoryMessage[];
-	papers: string;
+	papers: PapersAsString;
 };
 
 export const getGenerateAnswerChain = (modelOverride: BaseChatModel = model) =>

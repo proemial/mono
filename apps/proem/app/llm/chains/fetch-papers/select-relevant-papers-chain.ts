@@ -1,4 +1,5 @@
 import { Paper } from "@/app/api/paper-search/search";
+import { PapersAsString } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
 import { mapPapersToIds } from "@/app/llm/evaluators/select-paper-evaluators";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
@@ -33,7 +34,10 @@ const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask", {
 	temperature: 0,
 });
 
-type SelectRelevantPapersChainInput = { question: string; papers: string };
+type SelectRelevantPapersChainInput = {
+	question: string;
+	papers: PapersAsString;
+};
 type SelectRelevantPapersChainOutput = SelectRelevantPapersPromptInput & {
 	selectedPaperIds: string[];
 	selectedPapers: Paper[];

@@ -60,22 +60,39 @@ const generateSearchParamsChain = RunnableSequence.from<
 	runName: "GenerateSearchParams",
 });
 
-const queryOpenAlex = RunnableLambda.from<GeneratedSearchParams, string>(
-	async (input: GeneratedSearchParams) => {
-		const searchString = convertToOASearchString([
-			...input.relatedConcepts,
-			input.keyConcept,
-		]);
-		const papers = await fetchPapers(searchString);
-		const papersWithRelativeLinks = papers?.map(toRelativeLink) ?? [];
-		return JSON.stringify(papersWithRelativeLinks);
-	},
-).withConfig({ runName: "QueryOpenAlex" });
+type OpenAlexQueryParams = {
+	searchQuery: string;
+};
 
-export const fetchPapersChain = RunnableSequence.from<Input, Output>([
+const generateOpenAlexSearchChain = RunnableLambda.from<
+	GeneratedSearchParams,
+	OpenAlexQueryParams // & { link: string }
+>(({ relatedConcepts, keyConcept }) => {
+	const searchQuery = convertToOASearchString([...relatedConcepts, keyConcept]);
+
+	return {
+		searchQuery,
+		//TODO! OpenAlex search is currently down, so add link when it's back up
+		// link: "https://openalex.org/",
+	};
+}).withConfig({ runName: "GenerateOpenAlexSearch" });
+
+export type PapersAsString = string;
+
+const queryOpenAlexChain = RunnableLambda.from<
+	OpenAlexQueryParams,
+	PapersAsString
+>(async ({ searchQuery }) => {
+	const papers = await fetchPapers(searchQuery);
+	const papersWithRelativeLinks = papers?.map(toRelativeLink) ?? [];
+	return JSON.stringify(papersWithRelativeLinks);
+}).withConfig({ runName: "QueryOpenAlex" });
+
+export const fetchPapersChain = RunnableSequence.from<Input, PapersAsString>([
 	RunnablePassthrough.assign({
 		papers: generateSearchParamsChain
-			.pipe(queryOpenAlex)
+			.pipe(generateOpenAlexSearchChain)
+			.pipe(queryOpenAlexChain)
 			.withConfig({ runName: "FetchPapers" }),
 	}),
 	selectRelevantPapersChain,
