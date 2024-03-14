@@ -4,11 +4,9 @@ import { Tracker } from "@/app//components/analytics/tracker";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { useUser } from "@clerk/nextjs";
 import { useChat } from "ai/react";
-import { ChatMessage, ChatStarter } from "./chat-message";
-import { limit } from "@proemial/utils/array";
-import { ChatTarget, useChatState } from "./state";
 import { ReactNode, useEffect, useRef } from "react";
-import { Search } from "lucide-react";
+import { ChatMessage } from "./chat-message";
+import { ChatTarget, useChatState } from "./state";
 
 const PROEM_BOT = {
 	fullName: "proem",
@@ -16,14 +14,14 @@ const PROEM_BOT = {
 	avatar: "/android-chrome-512x512.png",
 };
 
-type MessagesProps = {
+type Props = {
 	target: ChatTarget;
 	title: string;
 	abstract: string;
 	children?: ReactNode;
 };
 
-export function ChatMessages({ target, title, abstract, children }: MessagesProps) {
+export function ChatMessages({ target, title, abstract, children }: Props) {
 	const { messages, append, isLoading } = useChat({
 		body: { title, abstract, model: "gpt-3.5-turbo" },
 		api: "/api/bot/chat",
@@ -32,7 +30,7 @@ export function ChatMessages({ target, title, abstract, children }: MessagesProp
 	const { user } = useUser();
 	const userProfile = getProfileFromUser(user);
 
-	const { questions, loading, setLoading } = useChatState(target);
+	const { questions, setLoading } = useChatState(target);
 
 	useEffect(() => {
 		if (setLoading) {
@@ -76,45 +74,5 @@ export function ChatMessages({ target, title, abstract, children }: MessagesProp
 			))}
 			{messages?.length === 0 && children}
 		</div>
-	);
-}
-
-type StartersProps = {
-	target: ChatTarget;
-	starters: string[];
-	trackingKey: string;
-};
-
-export function StarterMessages({
-	target,
-	starters,
-	trackingKey,
-}: StartersProps) {
-	const { questions, appendQuestion } = useChatState(target);
-
-	if (questions?.length > 0) {
-		return null;
-	}
-
-	const trackAndInvoke = (text: string) => {
-		Tracker.track(trackingKey, {
-			text,
-		});
-
-		appendQuestion(text);
-	};
-
-	return (
-		<>
-			<div className="flex items-center font-sourceCodePro">
-				<Search style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
-				SUGGESTED QUESTIONS
-			</div>
-			{limit(starters?.filter(Boolean), 3).map((question) => (
-				<ChatStarter key={question} onClick={() => trackAndInvoke(question)}>
-					{question}
-				</ChatStarter>
-			))}
-		</>
 	);
 }

@@ -1,28 +1,27 @@
 import { Metadata } from "@/app/(pages)/(app)/oa/[id]/components/panels/metadata";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
+import { ChatInput } from "@/app/components/chat/chat-input";
+import {
+	ChatMessages
+} from "@/app/components/chat/chat-messages";
+import { StarterMessages } from "@/app/components/chat/chat-starters";
+import { Spinner } from "@/app/components/loading/spinner";
 import {
 	Tabs,
 	TabsContent,
 	TabsList,
 	TabsTrigger,
 } from "@/app/components/shadcn-ui/tab";
-import { Spinner } from "@/app/components/loading/spinner";
 import { Trackable } from "@/app/components/trackable";
-import { notFound } from "next/navigation";
-import { Suspense } from "react";
-import { ReaderPaper } from "./components/reader-paper";
-import Summary from "./components/summary";
-import { fetchPaper } from "./fetch-paper";
-import { PageLayout } from "../../page-layout";
-import { Search } from "lucide-react";
 import { generateStarters } from "@/app/prompts/starters";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
-import { ChatInput } from "@/app/components/chat/chat-input";
-import {
-	ChatMessages,
-	StarterMessages,
-} from "@/app/components/chat/chat-messages";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { PageLayout } from "../../page-layout";
+import { ReaderPaper } from "./components/reader-paper";
+import Summary from "./components/summary";
+import { fetchPaper } from "./fetch-paper";
 
 type Props = {
 	params: { id: string };
@@ -52,7 +51,7 @@ export default async function ReaderPage({ params }: Props) {
 				</ReaderPaper>
 
 				<Tabs defaultValue="QA" className="w-full">
-					<TabsList className="text-[14px] sticky justify-start w-full bg-background top-10 h-[unset] pt-3 pb-3 px-4">
+					<TabsList className="text-[14px] sticky justify-start w-full bg-background top-0 h-[unset] pt-3 pb-3 px-4 z-50">
 						<TabsTrigger value="QA">
 							<Trackable track={analyticsKeys.read.click.answers}>
 								Q & A
@@ -87,12 +86,6 @@ export default async function ReaderPage({ params }: Props) {
 			<div className="flex flex-col px-2 pt-1 pb-2">
 				<ChatInput
 					target="paper"
-					placeholders={[
-						"Ask a question about this paper",
-						"Ask a follow-up question",
-					]}
-					trackingKey={analyticsKeys.read.submit.question}
-					authRequired
 				/>
 			</div>
 		</PageLayout>
