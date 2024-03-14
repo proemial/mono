@@ -28,7 +28,7 @@ export default async function SharePage({ params: { shareId } }: Props) {
 		<PageLayout title={target}>
 			<div>
 				<ChatMessages
-					existingShareId={sharedAnswer.shareId}
+					existingShareId={sharedAnswer.shareId ?? undefined}
 					initialMessages={[
 						{ id: "id", role: "assistant", content: sharedAnswer.answer },
 					]} />

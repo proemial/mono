@@ -6,8 +6,8 @@ import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
 import { Message } from "ai";
 
 export function ClearButton() {
-	const { loading, questions } = useChatState("ask");
-	const visible = questions.length > 0;
+	const { loading, question } = useChatState("ask");
+	const visible = question;
 
 	console.log("ClearButton", loading);
 
