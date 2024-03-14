@@ -31,17 +31,17 @@ export function ChatMessage(props: Props) {
 	const text = isUser
 		? message.content
 		: applyExplainLinks(
-				message?.content as string,
-				onExplainerClick ?? (() => {}),
-		  );
+			message?.content as string,
+			onExplainerClick ?? (() => { }),
+		);
 
 	const speaker = isUser
 		? user
 		: {
-				fullName: "proem",
-				initials: "P",
-				avatar: "/android-chrome-512x512.png",
-		  };
+			fullName: "proem",
+			initials: "P",
+			avatar: "/android-chrome-512x512.png",
+		};
 
 	return (
 		<div className="w-full mb-2">
@@ -62,16 +62,16 @@ export function ChatMessage(props: Props) {
 
 type StarterProps = {
 	children: string;
+	requiresAuth?: boolean;
 	onClick?: () => void;
-	className?: string;
 };
 
-export function ChatStarter({ children, onClick }: StarterProps) {
+export function ChatStarter({ children, requiresAuth, onClick }: StarterProps) {
 	const { userId } = useAuth();
 	const { open } = useDrawerState();
 
 	const handleClick = () => {
-		if (!userId) {
+		if (requiresAuth && !userId) {
 			open();
 			return;
 		}

@@ -8,11 +8,13 @@ import { ChatTarget, useChatState } from "./state";
 
 type Props = {
     target: ChatTarget;
+    requiresAuth?: boolean;
     trackingKey: string;
 };
 
 export function StarterMessages({
     target,
+    requiresAuth,
     trackingKey,
 }: Props) {
     const { suggestions, addQuestion } = useChatState(target);
@@ -39,6 +41,7 @@ export function StarterMessages({
                 <ChatStarter
                     key={suggestion}
                     onClick={() => trackAndInvoke(suggestion)}
+                    requiresAuth={requiresAuth}
                 >
                     {suggestion}
                 </ChatStarter>
