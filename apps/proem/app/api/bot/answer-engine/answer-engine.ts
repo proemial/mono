@@ -2,6 +2,7 @@ import { answers } from "@/app/api/bot/answer-engine/answers";
 import {
 	AnswerEngineEvents,
 	handleAnswerEngineEvents,
+	stepStartedEvents,
 } from "@/app/api/bot/answer-engine/events";
 import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
 import { saveAnswer } from "@/app/api/bot/answer-engine/save-answer";
@@ -25,9 +26,6 @@ type AnswerEngineParams = {
 	userId?: string;
 	tags?: string[];
 };
-
-// Chain names it's safe to publish to the client
-const chainNamesClientShouldListenFor = ["FetchPapers", "GenerateAnswer"];
 
 const bytesOutputParser = new BytesOutputParser();
 
@@ -129,7 +127,7 @@ export async function askAnswerEngine({
 							_runType,
 							name,
 						) {
-							if (name && chainNamesClientShouldListenFor.includes(name)) {
+							if (name && stepStartedEvents.includes(name)) {
 								data.append({ type: "step-started", data: { name } });
 							}
 						},

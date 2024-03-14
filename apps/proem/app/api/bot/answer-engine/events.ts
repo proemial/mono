@@ -3,6 +3,8 @@ import { z } from "zod";
 
 type ExtractData<T> = Extract<AnswerEngineEvents, { type: T }>["data"];
 
+// Chain names it's safe to publish to the client
+export const stepStartedEvents = ["FetchPapers", "GenerateAnswer"];
 export const stepStartedEvent = z.object({
 	type: z.literal("step-started"),
 	data: z.object({
