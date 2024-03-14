@@ -1,7 +1,7 @@
 "use client";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import { getProfileFromUser } from "@/app/(pages)/(app)/profile/profile-from-user";
-import { AnswerEngineEvents, findAllByEventType, findByEventType } from "@/app/api/bot/answer-engine/events";
+import { AnswerEngineEvents, findAllByEventType, findByEventType, findLatestByEventType } from "@/app/api/bot/answer-engine/events";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { useUser } from "@clerk/nextjs";
 import { Message, useChat } from "ai/react";
@@ -19,7 +19,7 @@ type Props = {
 };
 
 export function ChatMessages({ message, children, initialMessages, existingShareId }: Props) {
-	const { question, setSuggestions, clearQuestion } = useChatState("ask");
+	const { question, clearQuestion, suggestions, setSuggestions } = useChatState("ask");
 	const { userProfile, shareMessage, messages, isLoading, append, setMessages, data } = useShareableChat(initialMessages, existingShareId);
 
 	const messagesDiv = useScroll(messages);
@@ -49,8 +49,7 @@ export function ChatMessages({ message, children, initialMessages, existingShare
 	const appendQuestion = (question: string) =>
 		append({ role: "user", content: question });
 
-	console.log(data);
-
+	useFollowups(data);
 
 	return (
 		<>
@@ -76,6 +75,21 @@ export function ChatMessages({ message, children, initialMessages, existingShare
 			{messages.length === 0 && children}
 		</>
 	);
+}
+
+function useFollowups(data: AnswerEngineEvents[]) {
+	const [currentIndex, setCurrentIndex] = useState(-1);
+	const { setSuggestions } = useChatState("ask");
+
+	const { index, followups } = findLatestByEventType(data, "follow-up-questions-generated");
+
+	useEffect(() => {
+		if (followups?.length && index !== currentIndex) {
+			setCurrentIndex(index);
+			setSuggestions(followups?.at(0)?.map((f) => f.question) || []);
+		}
+	}, [currentIndex, followups, index, currentIndex, setSuggestions]);
+
 }
 
 function useGetRunId(data: AnswerEngineEvents[]) {
