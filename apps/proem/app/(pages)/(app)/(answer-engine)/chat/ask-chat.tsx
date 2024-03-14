@@ -1,21 +1,20 @@
 "use client";
-
-import WithHeader from "@/app/(pages)/(app)/header";
 import {
 	AnswerEngineEvents,
 	findByEventType,
 } from "@/app/api/bot/answer-engine/events";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
-import { ChatInput } from "@/app/components/chat/chat-input";
+import { ChatInputOld } from "@/app/components/chat/chat-input";
 import { ChatMessageProps } from "@/app/components/chat/chat-message-ask";
 import { ChatMessages } from "@/app/components/chat/chat-messages-ask";
-import { cn } from "@/app/components/shadcn-ui/utils";
 import { useShareDrawerState } from "@/app/components/share/state";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { Message, useChat } from "ai/react";
 import { useEffect, useRef, useState } from "react";
 import { ClearButton } from "./clear-button";
 import { Starters } from "./starters";
+import { PageLayout } from "../../page-layout";
+import { ProemLogo } from "@/app/components/icons/brand/logo";
 
 type ChatProps = Partial<Pick<ChatMessageProps, "user" | "message">> & {
 	user?: { id: string; email: string };
@@ -30,6 +29,7 @@ export default function Chat({
 	existingShareId,
 }: ChatProps) {
 	const [sessionSlug, setSessionSlug] = useState<null | string>(null);
+
 	const { openShareDrawer } = useShareDrawerState();
 	const chat = useChat({
 		id: "hardcoded",
@@ -47,6 +47,9 @@ export default function Chat({
 		}
 	});
 
+	const sessionSlugFromServer = (chat.data as { slug?: string }[])?.find(
+		({ slug }) => slug,
+	)?.slug;
 	const disabledQuestions = Boolean(initialMessages);
 
 	const answerSlug = findByEventType(chat.data, "answer-slug-generated")?.slug;
@@ -58,14 +61,6 @@ export default function Chat({
 			// Router.replace(`/answer/${sessionIdFromServer}`);
 		}
 	}, [answerSlug]);
-
-	const chatWrapperRef = useRef<HTMLDivElement>(null);
-
-	useEffect(() => {
-		if (chat.messages?.length > 0 && chatWrapperRef.current) {
-			chatWrapperRef.current.scrollIntoView(false);
-		}
-	}, [chat.messages]);
 
 	const isEmptyScreen = chat.messages.length === 0;
 	const showLoadingState = chat.isLoading && chat.messages.length % 2 === 1;
@@ -102,40 +97,39 @@ export default function Chat({
 	);
 
 	return (
-		<WithHeader title="ask" action={actionButton}>
-			<div
-				className={cn("flex flex-col px-4 pt-6 pb-12", {
-					"h-full": isEmptyScreen,
-				})}
-				ref={chatWrapperRef}
+		<PageLayout title="ask" action={actionButton}>
+			<ChatMessages
+				messages={chat.messages}
+				showLoadingState={showLoadingState}
+				user={user}
+				onShareHandle={shareMessage}
+				isLoading={chat.isLoading}
 			>
-				{isEmptyScreen ? (
-					<Starters append={chat.append} />
-				) : (
-					<ChatMessages
-						messages={chat.messages}
-						showLoadingState={showLoadingState}
-						user={user}
-						onShareHandle={shareMessage}
-						isLoading={chat.isLoading}
-					/>
-				)}
+				<Text />
+			</ChatMessages>
 
-				<div className="fixed left-0 w-full bg-black bottom-14 shadow-top">
-					<div className="w-full max-w-screen-md px-4 pt-2 pb-3 mx-auto">
-						<ChatInput
-							value={chat.input}
-							placeholder={
-								initialPlaceholder ? "Ask anything" : "Ask a follow-up question"
-							}
-							onChange={chat.handleInputChange}
-							onSubmit={chat.handleSubmit}
-							disabled={chat.isLoading || disabledQuestions}
-							trackingKey={analyticsKeys.ask.submit.ask}
-						/>
-					</div>
-				</div>
+			<div className="flex flex-col gap-2 px-2 pt-1 pb-2">
+				{isEmptyScreen && <Starters append={chat.append} />}
+				<ChatInputOld
+					chat={chat}
+					placeholder={
+						initialPlaceholder ? "Ask anything" : "Ask a follow-up question"
+					}
+					trackingKey={analyticsKeys.ask.submit.ask}
+				/>
 			</div>
-		</WithHeader>
+		</PageLayout>
+	);
+}
+
+function Text() {
+	return (
+		<div className="mt-auto mb-auto">
+			<ProemLogo includeName />
+			<div className="pt-6 text-center text-md text-white/80">
+				<div>answers to your questions</div>
+				<div>supported by scientific research</div>
+			</div>
+		</div>
 	);
 }

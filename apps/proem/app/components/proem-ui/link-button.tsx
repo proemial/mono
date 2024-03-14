@@ -51,7 +51,7 @@ export function LinkButton(props: LinkProps) {
 type ButtonProps = VariantProps<typeof variants> & {
 	children: string;
 	className?: string;
-	onClick: () => void;
+	onClick?: () => void;
 };
 export function StarterButton(props: ButtonProps) {
 	const { children, onClick, variant, size, className } = props;

@@ -32,8 +32,8 @@ module.exports = {
 			},
 			boxShadow: {
 				DEFAULT: "0 4px 8px hsl(var(--background))",
-				top: "0 -4px 8px -4px hsl(var(--background))",
-				bottom: "0 8px 8px -4px hsl(var(--background))",
+				top: "0 -12px 12px 0 rgba(0, 0, 0, .5)",
+				bottom: "0 12px 12px 0 rgba(0, 0, 0, .5)",
 			},
 			colors: {
 				border: "hsl(var(--border))",

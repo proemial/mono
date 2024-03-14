@@ -1,5 +1,6 @@
 import { Message } from "ai";
 import { ChatMessage, ChatMessageProps } from "./chat-message-ask";
+import { ReactNode, useEffect, useRef } from "react";
 
 const PROEM_BOT = {
 	name: "proem",
@@ -11,24 +12,40 @@ type Props = Required<Pick<ChatMessageProps, "onShareHandle" | "isLoading">> &
 	Pick<ChatMessageProps, "user"> & {
 		messages: Message[];
 		showLoadingState: boolean;
+		children?: ReactNode;
 	};
 
 export function ChatMessages(props: Props) {
-	const { messages, user, onShareHandle, isLoading, showLoadingState } = props;
+	const { messages, user, onShareHandle, isLoading, showLoadingState, children } = props;
+
+	const messagesDiv = useRef<HTMLDivElement>(null);
+	useEffect(() => {
+		if (messagesDiv.current && messages) {
+			messagesDiv.current.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+		}
+	}, [messages]);
 
 	return (
-		<div className="w-full pb-20 space-y-5">
-			{messages.map((m) => (
-				<ChatMessage
-					key={m.id}
-					message={m.content}
-					user={m.role === "assistant" ? PROEM_BOT : user}
-					onShareHandle={m.role === "assistant" ? onShareHandle : null}
-					isLoading={isLoading}
-				/>
-			))}
+		<>
+			{messages?.length > 0 &&
+				<div ref={messagesDiv} className="pb-32">
+					{messages.map((m, i) => (
+						<ChatMessage
+							key={i}
+							message={m.content}
+							user={m.role === "assistant" ? PROEM_BOT : user}
+							onShareHandle={m.role === "assistant" ? onShareHandle : null}
+							isLoading={isLoading}
+							showThrobber={
+								m.role === "assistant" && isLoading && i === messages.length - 1
+							}
+						/>
+					))}
+					{showLoadingState && <ChatMessage user={PROEM_BOT} />}
 
-			{showLoadingState && <ChatMessage user={PROEM_BOT} />}
-		</div>
+				</div>
+			}
+			{messages.length === 0 && children}
+		</>
 	);
 }

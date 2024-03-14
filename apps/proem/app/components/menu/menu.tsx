@@ -9,37 +9,39 @@ import React from "react";
 
 export function MainMenu() {
 	return (
-		<div className="bg-[#1A1A1A] fixed bottom-0 z-50 w-full">
-			<div className="flex justify-between w-full max-w-screen-md px-4 mx-auto font-sourceCodePro">
-				<MenuItem text="ASK" href="/" track={analyticsKeys.ui.menu.click.ask}>
-					<SearchIcon />
-				</MenuItem>
+		<div className="fixed bottom-0 z-50 w-full">
+			<MainMenuUnfixed />
+		</div>
+	);
+}
 
-				<MenuItem
-					text="FEED"
-					href="/feed"
-					track={analyticsKeys.ui.menu.click.feed}
-				>
-					<FeedIcon />
-				</MenuItem>
+export function MainMenuUnfixed() {
+	return (
+		<div className="flex bg-[#1A1A1A] justify-between px-4 mx-auto font-sourceCodePro">
+			<MenuItem text="ASK" href="/" track={analyticsKeys.ui.menu.click.ask}>
+				<SearchIcon />
+			</MenuItem>
 
-				<MenuItem
-					text="READ"
-					href="/oa"
-					track={analyticsKeys.ui.menu.click.read}
-				>
-					<ReadIcon />
-				</MenuItem>
+			<MenuItem
+				text="FEED"
+				href="/feed"
+				track={analyticsKeys.ui.menu.click.feed}
+			>
+				<FeedIcon />
+			</MenuItem>
 
-				<MenuItem
-					text="YOU"
-					href="/profile"
-					track={analyticsKeys.ui.menu.click.you}
-					authRequired
-				>
-					<UserIcon />
-				</MenuItem>
-			</div>
+			<MenuItem text="READ" href="/oa" track={analyticsKeys.ui.menu.click.read}>
+				<ReadIcon />
+			</MenuItem>
+
+			<MenuItem
+				text="YOU"
+				href="/profile"
+				track={analyticsKeys.ui.menu.click.you}
+				authRequired
+			>
+				<UserIcon />
+			</MenuItem>
 		</div>
 	);
 }
