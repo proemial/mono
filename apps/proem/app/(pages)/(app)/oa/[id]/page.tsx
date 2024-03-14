@@ -65,12 +65,11 @@ export default async function ReaderPage({ params }: Props) {
 					</TabsList>
 					<TabsContent value="QA">
 						<ChatMessages
-							target="paper"
+							starters={starters}
 							title={title}
 							abstract={abstract as string}
 						>
 							<StarterMessages
-								starters={starters}
 								target="paper"
 								trackingKey={analyticsKeys.read.click.starter}
 							/>

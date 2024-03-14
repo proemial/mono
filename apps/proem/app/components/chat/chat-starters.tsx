@@ -8,18 +8,16 @@ import { ChatTarget, useChatState } from "./state";
 
 type Props = {
     target: ChatTarget;
-    starters: string[];
     trackingKey: string;
 };
 
 export function StarterMessages({
     target,
-    starters,
     trackingKey,
 }: Props) {
-    const { questions, appendQuestion } = useChatState(target);
+    const { suggestions, appendQuestion } = useChatState(target);
 
-    if (questions?.length > 0) {
+    if (suggestions?.length === 0) {
         return null;
     }
 
@@ -37,9 +35,12 @@ export function StarterMessages({
                 <Search style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
                 SUGGESTED QUESTIONS
             </div>
-            {limit(starters?.filter(Boolean), 3).map((question) => (
-                <ChatStarter key={question} onClick={() => trackAndInvoke(question)}>
-                    {question}
+            {suggestions.map((suggestion) => (
+                <ChatStarter
+                    key={suggestion}
+                    onClick={() => trackAndInvoke(suggestion)}
+                >
+                    {suggestion}
                 </ChatStarter>
             ))}
         </>

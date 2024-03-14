@@ -15,13 +15,13 @@ const PROEM_BOT = {
 };
 
 type Props = {
-	target: ChatTarget;
 	title: string;
 	abstract: string;
+	starters: string[];
 	children?: ReactNode;
 };
 
-export function ChatMessages({ target, title, abstract, children }: Props) {
+export function ChatMessages({ title, abstract, starters, children }: Props) {
 	const { messages, append, isLoading } = useChat({
 		body: { title, abstract, model: "gpt-3.5-turbo" },
 		api: "/api/bot/chat",
@@ -30,7 +30,11 @@ export function ChatMessages({ target, title, abstract, children }: Props) {
 	const { user } = useUser();
 	const userProfile = getProfileFromUser(user);
 
-	const { questions, setLoading } = useChatState(target);
+	const { questions, setLoading, setSuggestions } = useChatState("paper");
+
+	useEffect(() => {
+		setSuggestions(starters);
+	}, [starters, setSuggestions]);
 
 	useEffect(() => {
 		if (setLoading) {
@@ -39,10 +43,7 @@ export function ChatMessages({ target, title, abstract, children }: Props) {
 	}, [isLoading, setLoading]);
 
 	useEffect(() => {
-		console.log("questions", questions?.length);
-
 		if (questions?.length > 0) {
-			console.log("appending question", questions?.at(-1));
 			appendQuestion(questions.at(-1) as string);
 		}
 	}, [questions]);
