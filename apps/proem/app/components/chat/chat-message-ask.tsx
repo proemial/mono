@@ -21,20 +21,20 @@ import { SinglarThrobber, Throbber } from "../loading/throbber";
 export type ChatMessageProps = {
 	message?: Message["content"];
 	user?: {
-		name: string;
+		fullName: string;
 		initials: string;
 		avatar: string;
 	};
 	isLoading?: boolean;
 	showThrobber?: boolean;
 	onShareHandle?:
-		| ((params: { renderedContent: React.ReactNode; message: string }) => void)
-		| null;
+	| ((params: { renderedContent: React.ReactNode; message: string }) => void)
+	| null;
 };
 
 export function ChatMessage({
 	message,
-	user = { name: "you", initials: "U", avatar: "" },
+	user = { fullName: "you", initials: "U", avatar: "" },
 	onShareHandle,
 	isLoading,
 	showThrobber,
@@ -50,7 +50,7 @@ export function ChatMessage({
 						{user.initials}
 					</AvatarFallback>
 				</Avatar>
-				<div className="font-bold">{user.name}</div>
+				<div className="font-bold">{user.fullName}</div>
 
 				{onShareHandle && message && !isLoading && (
 					<ShareIcon

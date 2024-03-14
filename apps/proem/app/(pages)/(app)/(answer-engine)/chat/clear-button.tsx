@@ -1,7 +1,29 @@
+"use client";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { Tracker } from "@/app/components/analytics/tracker";
+import { useChatState } from "@/app/components/chat/state";
 import { ClearIcon } from "@/app/components/icons/menu/clear-icon";
 import { Message } from "ai";
+
+export function ClearButton() {
+	const { loading, questions } = useChatState("ask");
+	const visible = questions.length > 0;
+
+	console.log("ClearButton", loading);
+
+	return (
+		<>
+			<div
+				className={`${
+					// TODO: Fix fade in/out
+					visible ? "opacity-100" : "opacity-0 hidden"
+					} transition-all ease-in delay-300 duration-500 cursor-pointer`}
+			>
+				<ClearIcon />
+			</div>
+		</>
+	);
+}
 
 type Props = {
 	isLoading: boolean;
@@ -10,7 +32,7 @@ type Props = {
 	clear: () => void;
 };
 
-export function ClearButton(props: Props) {
+export function ClearButtonOld(props: Props) {
 	const { isLoading, messages, clear, stop } = props;
 	const visible = !isLoading && messages.length > 0;
 	const trackAndInvoke = (key: string, callback: () => void) => {
@@ -30,7 +52,7 @@ export function ClearButton(props: Props) {
 				className={`${
 					// TODO: Fix fade in/out
 					isLoading ? "opacity-100" : "opacity-0 hidden"
-				} transition-all ease-in delay-300 duration-500 cursor-pointer`}
+					} transition-all ease-in delay-300 duration-500 cursor-pointer`}
 			>
 				<ClearIcon />
 			</div>
@@ -42,7 +64,7 @@ export function ClearButton(props: Props) {
 				className={`${
 					// TODO: Fix fade in/out
 					visible ? "opacity-100" : "opacity-0 hidden"
-				} transition-all ease-in delay-300 duration-500 cursor-pointer`}
+					} transition-all ease-in delay-300 duration-500 cursor-pointer`}
 			>
 				<ClearIcon />
 			</div>

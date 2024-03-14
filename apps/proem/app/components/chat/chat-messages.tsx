@@ -6,13 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { useChat } from "ai/react";
 import { ReactNode, useEffect, useRef } from "react";
 import { ChatMessage } from "./chat-message";
-import { ChatTarget, useChatState } from "./state";
-
-const PROEM_BOT = {
-	fullName: "proem",
-	initials: "P",
-	avatar: "/android-chrome-512x512.png",
-};
+import { useChatState } from "./state";
 
 type Props = {
 	title: string;
