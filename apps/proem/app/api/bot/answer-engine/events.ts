@@ -99,6 +99,25 @@ export function findByEventType<T extends AnswerEngineEvents["type"]>(
 		| undefined;
 }
 
+export function findLatestByEventType<T extends AnswerEngineEvents["type"]>(
+	events: AnswerEngineEvents[] | undefined,
+	type: T,
+): { index: number; followups: ExtractData<T>[] } {
+	if (!events) return { index: 0, followups: [] };
+
+	// @ts-ignore
+	const index = events.findLastIndex(
+		(event: AnswerEngineEvents) => event.type === "answer-slug-generated",
+	);
+	const followups =
+		[...events]
+			.slice(index)
+			.filter((event) => event.type === type)
+			.map((event) => event.data as ExtractData<T>) ?? [];
+
+	return { index, followups };
+}
+
 export function findAllByEventType<T extends AnswerEngineEvents["type"]>(
 	events: AnswerEngineEvents[] | undefined,
 	type: T,
