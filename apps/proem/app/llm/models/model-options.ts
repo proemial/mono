@@ -3,3 +3,7 @@ export type ModelOptions = {
 	verbose?: boolean;
 	cache?: boolean;
 };
+
+export type LocalModelOptions = {
+	baseUrl?: string;
+};
