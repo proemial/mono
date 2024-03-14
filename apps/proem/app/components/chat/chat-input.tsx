@@ -4,8 +4,7 @@ import { TextInput } from "@/app/components/proem-ui/text-input";
 import { useAuth } from "@clerk/nextjs";
 import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
 import { useDrawerState } from "../login/state";
-import { UseChatHelpers } from "ai/react";
-import { ChatTarget, useChatState, useInputFocusState } from "./state";
+import { ChatTarget, useChatState } from "./state";
 import { analyticsKeys } from "../analytics/analytics-keys";
 
 type Props = {
