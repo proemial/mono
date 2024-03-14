@@ -1,4 +1,7 @@
-import { fetchPapersChain } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
+import {
+	PapersAsString,
+	fetchPapersChain,
+} from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
 import {
 	RunnableBranch,
 	RunnableLambda,
@@ -17,7 +20,7 @@ type Input = {
 };
 type Output = string;
 
-const hasPapersAvailable = (input: { papers: string }) => {
+const hasPapersAvailable = (input: { papers: PapersAsString }) => {
 	const papers = JSON.parse(input.papers);
 	return papers.length > 0;
 };
@@ -26,7 +29,7 @@ const answerIfPapersAvailable = RunnableBranch.from<
 	{
 		question: string;
 		chatHistory: LangChainChatHistoryMessage[];
-		papers: string;
+		papers: PapersAsString;
 	},
 	Output
 >([
