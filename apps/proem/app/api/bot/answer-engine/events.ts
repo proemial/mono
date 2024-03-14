@@ -3,6 +3,13 @@ import { z } from "zod";
 
 type ExtractData<T> = Extract<AnswerEngineEvents, { type: T }>["data"];
 
+export const stepStartedEvent = z.object({
+	type: z.literal("step-started"),
+	data: z.object({
+		name: z.string(),
+	}),
+});
+
 export const answerSlugGeneratedEvent = z.object({
 	type: z.literal("answer-slug-generated"),
 	data: z.object({
@@ -37,6 +44,7 @@ export const followUpQuestionsGeneratedEvent = z.object({
 });
 
 const answerEngineEvents = z.discriminatedUnion("type", [
+	stepStartedEvent,
 	answerSlugGeneratedEvent,
 	answerSavedEvent,
 	searchParamsGeneratedEvent,
@@ -76,6 +84,10 @@ export function handleAnswerEngineEvents(
 	}
 }
 
+/**
+ * Only returns the first event of the given event type.
+ * For multiple events see {@link findAllByEventType}.
+ */
 export function findByEventType<T extends AnswerEngineEvents["type"]>(
 	events: AnswerEngineEvents[] | undefined,
 	type: T,

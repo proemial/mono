@@ -26,6 +26,9 @@ type AnswerEngineParams = {
 	tags?: string[];
 };
 
+// Chain names it's safe to publish to the client
+const chainNamesClientShouldListenFor = ["FetchPapers", "GenerateAnswer"];
+
 const bytesOutputParser = new BytesOutputParser();
 
 export interface AnswerEngineStreamData extends experimental_StreamData {
@@ -116,6 +119,20 @@ export async function askAnswerEngine({
 			{
 				callbacks: [
 					{
+						handleChainStart(
+							_chain,
+							_inputs,
+							_runId,
+							_parentRunId,
+							_tags,
+							_metadata,
+							_runType,
+							name,
+						) {
+							if (name && chainNamesClientShouldListenFor.includes(name)) {
+								data.append({ type: "step-started", data: { name } });
+							}
+						},
 						handleChainEnd(token, _runId, _parentRunId, tags) {
 							handleAnswerEngineEvents({ tags, data: token }, (event) => {
 								data.append(event);
