@@ -2,6 +2,7 @@ import { answers } from "@/app/api/bot/answer-engine/answers";
 import {
 	AnswerEngineEvents,
 	handleAnswerEngineEvents,
+	stepStartedEvents,
 } from "@/app/api/bot/answer-engine/events";
 import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
 import { saveAnswer } from "@/app/api/bot/answer-engine/save-answer";
@@ -116,6 +117,20 @@ export async function askAnswerEngine({
 			{
 				callbacks: [
 					{
+						handleChainStart(
+							_chain,
+							_inputs,
+							_runId,
+							_parentRunId,
+							_tags,
+							_metadata,
+							_runType,
+							name,
+						) {
+							if (name && stepStartedEvents.includes(name)) {
+								data.append({ type: "step-started", data: { name } });
+							}
+						},
 						handleChainEnd(token, _runId, _parentRunId, tags) {
 							handleAnswerEngineEvents({ tags, data: token }, (event) => {
 								data.append(event);

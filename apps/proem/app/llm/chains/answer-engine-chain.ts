@@ -35,7 +35,7 @@ const answerIfPapersAvailable = RunnableBranch.from<
 	answer. Please try again with a different question.`,
 ]);
 
-const answerChain = RunnableSequence.from<Input & { intent: Intent }, Output>([
+const answerChain = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
 		papers: fetchPapersChain,
 	}),
