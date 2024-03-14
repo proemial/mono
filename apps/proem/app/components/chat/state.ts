@@ -19,38 +19,29 @@ export const useInputFocusState = create<InputFocusState>((set) => ({
 	setFocus: (focus) => set({ focus }),
 }));
 
-type AskChatState = {
-	questions: string[];
+type ChatState = {
+	question?: string;
 	suggestions: string[];
 	loading: boolean;
-	appendQuestion: (question: string) => void;
+	addQuestion: (question: string) => void;
+	clearQuestion: () => void;
 	setSuggestions: (suggestions: string[]) => void;
 	setLoading: (loading: boolean) => void;
 };
-export const useAskChatState = create<AskChatState>((set) => ({
-	questions: [],
+export const useAskChatState = create<ChatState>((set) => ({
 	suggestions: [],
 	loading: false,
-	appendQuestion: (question) =>
-		set((state) => ({ questions: [...state.questions, question] })),
+	addQuestion: (question) => set({ question }),
+	clearQuestion: () => set({ question: undefined }),
 	setSuggestions: (suggestions) => set({ suggestions }),
 	setLoading: (loading) => set({ loading }),
 }));
 
-type PaperChatState = {
-	questions: string[];
-	suggestions: string[];
-	loading: boolean;
-	appendQuestion: (question: string) => void;
-	setSuggestions: (suggestions: string[]) => void;
-	setLoading: (loading: boolean) => void;
-};
-export const usePaperChatState = create<PaperChatState>((set) => ({
-	questions: [],
+export const usePaperChatState = create<ChatState>((set) => ({
 	suggestions: [],
 	loading: false,
-	appendQuestion: (question) =>
-		set((state) => ({ questions: [...state.questions, question] })),
+	addQuestion: (question) => set({ question }),
+	clearQuestion: () => set({ question: undefined }),
 	setSuggestions: (suggestions) => set({ suggestions }),
 	setLoading: (loading) => set({ loading }),
 }));

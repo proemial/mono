@@ -17,7 +17,7 @@ export function ChatInput({ target, children }: Props) {
 	const [input, setInput] = useState("");
 	const { placeholders, trackingKey, readonly, onFocus } =
 		useInputState(target);
-	const { questions, loading, appendQuestion, setFocus } = useChatState(target);
+	const { question, loading, addQuestion, setFocus } = useChatState(target);
 
 	const trackAndInvoke = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -26,7 +26,7 @@ export function ChatInput({ target, children }: Props) {
 			text: input,
 		});
 
-		appendQuestion(input);
+		addQuestion(input);
 		setInput("");
 	};
 
@@ -37,7 +37,7 @@ export function ChatInput({ target, children }: Props) {
 	const placeholder =
 		Array.isArray(placeholders) &&
 			placeholders.length > 1 &&
-			questions.length > 0
+			!question
 			? placeholders[1]
 			: placeholders[0];
 
@@ -82,61 +82,4 @@ function useInputState(target: ChatTarget) {
 	const onFocus = isRead && !userId && open;
 
 	return { placeholders, trackingKey, readonly, onFocus };
-}
-
-type ChatInputOldProps = {
-	chat: Required<
-		Pick<
-			UseChatHelpers,
-			"input" | "isLoading" | "handleInputChange" | "handleSubmit"
-		>
-	>;
-	placeholder: string;
-	trackingKey: string;
-	onFocusChange?: (isFocused: boolean) => void;
-	authRequired?: boolean;
-};
-
-export function ChatInputOld(props: ChatInputOldProps) {
-	const { chat, placeholder, trackingKey, authRequired } = props;
-	const { input, isLoading, handleInputChange, handleSubmit } = chat;
-	const { setFocus } = useInputFocusState();
-
-	// TODO: Fix return url
-	const { userId } = useAuth();
-	const { open } = useDrawerState();
-
-	const trackAndInvoke = (event: FormEvent<HTMLFormElement>) => {
-		Tracker.track(trackingKey, {
-			text: input,
-		});
-
-		handleSubmit(event);
-		props.onFocusChange?.(false);
-		// setFocus(false);
-	};
-
-	const handleFocusChange = (isFocused: boolean) => {
-		setFocus(isFocused);
-		props.onFocusChange?.(isFocused);
-	};
-
-	return (
-		<div className="relative w-full">
-			<form
-				className="flex flex-row items-center"
-				onSubmit={(event) => trackAndInvoke(event)}
-			>
-				<TextInput
-					value={input}
-					placeholder={placeholder}
-					onChange={handleInputChange}
-					disabled={isLoading}
-					readonly={authRequired && !userId}
-					onFocus={() => authRequired && !userId && open()}
-					onFocusChange={handleFocusChange}
-				/>
-			</form>
-		</div>
-	);
 }

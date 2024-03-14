@@ -15,7 +15,7 @@ export function StarterMessages({
     target,
     trackingKey,
 }: Props) {
-    const { suggestions, appendQuestion } = useChatState(target);
+    const { suggestions, addQuestion } = useChatState(target);
 
     if (suggestions?.length === 0) {
         return null;
@@ -26,7 +26,7 @@ export function StarterMessages({
             text,
         });
 
-        appendQuestion(text);
+        addQuestion(text);
     };
 
     return (

@@ -19,7 +19,7 @@ type Props = {
 };
 
 export function ChatMessages({ message, children, initialMessages, existingShareId }: Props) {
-	const { questions, setSuggestions } = useChatState("ask");
+	const { question, setSuggestions, clearQuestion } = useChatState("ask");
 	const { userProfile, shareMessage, messages, isLoading, append, setMessages, data } = useShareableChat(initialMessages, existingShareId);
 
 	const messagesDiv = useScroll(messages);
@@ -39,14 +39,18 @@ export function ChatMessages({ message, children, initialMessages, existingShare
 	});
 
 	useEffect(() => {
-		if (questions?.length > 0) {
-			appendQuestion(questions.at(-1) as string);
+		if (question) {
+			appendQuestion(question);
+			clearQuestion();
 			setSuggestions([]);
 		}
-	}, [questions, setSuggestions]);
+	}, [question, setSuggestions, clearQuestion]);
 
 	const appendQuestion = (question: string) =>
 		append({ role: "user", content: question });
+
+	console.log(data);
+
 
 	return (
 		<>

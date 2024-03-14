@@ -3,7 +3,7 @@ import { getProfileFromUser } from "@/app/(pages)/(app)/profile/profile-from-use
 import { Tracker } from "@/app//components/analytics/tracker";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { useUser } from "@clerk/nextjs";
-import { useChat } from "ai/react";
+import { Message, useChat } from "ai/react";
 import { ReactNode, useEffect, useRef } from "react";
 import { ChatMessage } from "./chat-message";
 import { useChatState } from "./state";
@@ -24,7 +24,9 @@ export function ChatMessages({ title, abstract, starters, children }: Props) {
 	const { user } = useUser();
 	const userProfile = getProfileFromUser(user);
 
-	const { questions, setLoading, setSuggestions } = useChatState("paper");
+	const { question, setLoading, setSuggestions, clearQuestion } = useChatState("paper");
+
+	const chatWrapperRef = useScroll(messages);
 
 	useEffect(() => {
 		setSuggestions(starters);
@@ -37,17 +39,11 @@ export function ChatMessages({ title, abstract, starters, children }: Props) {
 	}, [isLoading, setLoading]);
 
 	useEffect(() => {
-		if (questions?.length > 0) {
-			appendQuestion(questions.at(-1) as string);
+		if (question) {
+			appendQuestion(question);
+			clearQuestion();
 		}
-	}, [questions]);
-
-	const chatWrapperRef = useRef<HTMLDivElement>(null);
-	useEffect(() => {
-		if (messages?.length > 0 && chatWrapperRef.current) {
-			chatWrapperRef.current.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
-		}
-	}, [messages]);
+	}, [question, clearQuestion]);
 
 	const appendQuestion = (question: string) =>
 		append({ role: "user", content: question });
@@ -70,4 +66,15 @@ export function ChatMessages({ title, abstract, starters, children }: Props) {
 			{messages?.length === 0 && children}
 		</div>
 	);
+}
+
+function useScroll(messages: Message[]) {
+	const messagesDiv = useRef<HTMLDivElement>(null);
+	useEffect(() => {
+		if (messagesDiv.current && messages) {
+			messagesDiv.current.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+		}
+	}, [messages]);
+
+	return messagesDiv;
 }
