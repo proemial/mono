@@ -47,9 +47,6 @@ export function ChatMessage({
 }: ChatMessageProps) {
 	const { content, links } = applyLinks(message ?? "");
 
-	console.log(runId, "runId");
-
-
 	return (
 		<div className="w-full mx-[-4px] my-2">
 			<div className="flex justify-between gap-4">
