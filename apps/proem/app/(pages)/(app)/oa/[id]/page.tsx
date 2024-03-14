@@ -14,15 +14,14 @@ import { ReaderPaper } from "./components/reader-paper";
 import Summary from "./components/summary";
 import { fetchPaper } from "./fetch-paper";
 import { PageLayout } from "../../page-layout";
-import { Search } from "lucide-react";
 import { generateStarters } from "@/app/prompts/starters";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
 import { ChatInput } from "@/app/components/chat/chat-input";
 import {
-	ChatMessages,
-	StarterMessages,
+	ChatMessages
 } from "@/app/components/chat/chat-messages";
+import { StarterMessages } from "@/app/components/chat/chat-starters";
 
 type Props = {
 	params: { id: string };
@@ -71,9 +70,7 @@ export default async function ReaderPage({ params }: Props) {
 							abstract={abstract as string}
 						>
 							<StarterMessages
-								starters={starters}
 								target="paper"
-								trackingKey={analyticsKeys.read.click.starter}
 							/>
 						</ChatMessages>
 					</TabsContent>
@@ -87,12 +84,6 @@ export default async function ReaderPage({ params }: Props) {
 			<div className="flex flex-col px-2 pt-1 pb-2">
 				<ChatInput
 					target="paper"
-					placeholders={[
-						"Ask a question about this paper",
-						"Ask a follow-up question",
-					]}
-					trackingKey={analyticsKeys.read.submit.question}
-					authRequired
 				/>
 			</div>
 		</PageLayout>

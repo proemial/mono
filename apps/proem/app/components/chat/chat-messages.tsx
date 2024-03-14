@@ -4,17 +4,9 @@ import { Tracker } from "@/app//components/analytics/tracker";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { useUser } from "@clerk/nextjs";
 import { useChat } from "ai/react";
-import { ChatMessage, ChatStarter } from "./chat-message";
-import { limit } from "@proemial/utils/array";
-import { ChatTarget, useChatState } from "./state";
 import { ReactNode, useEffect, useRef } from "react";
-import { Search } from "lucide-react";
-
-const PROEM_BOT = {
-	fullName: "proem",
-	initials: "P",
-	avatar: "/android-chrome-512x512.png",
-};
+import { ChatMessage } from "./chat-message";
+import { ChatTarget, useChatState } from "./state";
 
 type MessagesProps = {
 	target: ChatTarget;
@@ -76,45 +68,5 @@ export function ChatMessages({ target, title, abstract, children }: MessagesProp
 			))}
 			{messages?.length === 0 && children}
 		</div>
-	);
-}
-
-type StartersProps = {
-	target: ChatTarget;
-	starters: string[];
-	trackingKey: string;
-};
-
-export function StarterMessages({
-	target,
-	starters,
-	trackingKey,
-}: StartersProps) {
-	const { questions, appendQuestion } = useChatState(target);
-
-	if (questions?.length > 0) {
-		return null;
-	}
-
-	const trackAndInvoke = (text: string) => {
-		Tracker.track(trackingKey, {
-			text,
-		});
-
-		appendQuestion(text);
-	};
-
-	return (
-		<>
-			<div className="flex items-center font-sourceCodePro">
-				<Search style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
-				SUGGESTED QUESTIONS
-			</div>
-			{limit(starters?.filter(Boolean), 3).map((question) => (
-				<ChatStarter key={question} onClick={() => trackAndInvoke(question)}>
-					{question}
-				</ChatStarter>
-			))}
-		</>
 	);
 }

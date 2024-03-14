@@ -1,57 +1,63 @@
-import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
+"use client";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { Tracker } from "@/app/components/analytics/tracker";
-import { ProemLogo } from "@/app/components/icons/brand/logo";
+import {
+	ChatTarget,
+	useAskChatState,
+	useChatState,
+	usePaperChatState,
+} from "@/app/components/chat/state";
 import { StarterButton } from "@/app/components/proem-ui/link-button";
-import { memo, useEffect, useState } from "react";
 
-export const Starters = memo(function Starters({ append }: { append: any }) {
-	const [isClient, setIsClient] = useState(false);
+export function Starters({ target }: { target: ChatTarget }) {
+	const { trackingKey, suggestions, appendQuestion } = useStartersState(target);
 
-	useEffect(() => {
-		setIsClient(true);
-	}, []);
+	// console.log("suggestions", suggestions);
 
-	if (!isClient) return null;
-
-	const starters = [...STARTERS]
-		.map((text, index) => ({ index, text }))
-		.sort(() => 0.5 - Math.random())
-		.slice(0, 3);
+	// const starters = [...STARTERS]
+	// 	.map((text, index) => ({ index, text }))
+	// 	.sort(() => 0.5 - Math.random())
+	// 	.slice(0, 3);
 
 	const trackAndInvoke = (callback: () => void) => {
-		Tracker.track(analyticsKeys.ask.click.starter);
+		Tracker.track(trackingKey);
 		callback();
 	};
 
 	return (
 		<>
-			{starters.map((starter) => (
+			{suggestions.map((suggestion) => (
 				<StarterButton
-					key={starter.index}
+					key={suggestion}
 					variant="starter"
-					className="w-full cursor-pointer"
+					className="w-full mb-2 cursor-pointer"
 					onClick={() => {
-						trackAndInvoke(() =>
-							append({ role: "user", content: starter.text }),
-						);
+						trackAndInvoke(() => appendQuestion(suggestion));
 					}}
 				>
-					{starter.text}
+					{suggestion}
 				</StarterButton>
 			))}
 		</>
 	);
-});
+}
 
-function Text() {
-	return (
-		<>
-			<ProemLogo includeName />
-			<div className="pt-6 text-md text-white/80">
-				<div>answers to your questions</div>
-				<div>supported by scientific research</div>
-			</div>
-		</>
-	);
+function useStartersState(target: ChatTarget) {
+	const isRead = target === "paper";
+
+	const trackingKey = isRead
+		? analyticsKeys.read.click.starter
+		: analyticsKeys.ask.click.starter;
+
+	const { suggestions, appendQuestion } = useChatState(target);
+	// const { suggestions, appendQuestion } = isRead
+	// 	? usePaperChatState((state) => ({
+	// 		suggestions: state.suggestions,
+	// 		appendQuestion: state.appendQuestion,
+	// 	}))
+	// 	: useAskChatState((state) => ({
+	// 		suggestions: state.suggestions,
+	// 		appendQuestion: state.appendQuestion,
+	// 	}));
+	return { trackingKey, suggestions, appendQuestion };
 }

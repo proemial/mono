@@ -8,15 +8,13 @@ const PROEM_BOT = {
 	avatar: "/android-chrome-512x512.png",
 };
 
-type Props = Required<Pick<ChatMessageProps, "onShareHandle" | "isLoading">> &
-	Pick<ChatMessageProps, "user"> & {
-		messages: Message[];
-		showLoadingState: boolean;
-		children?: ReactNode;
-	};
+type Props = {
+	message?: string;
+	children?: ReactNode;
+};
 
 export function ChatMessages(props: Props) {
-	const { messages, user, onShareHandle, isLoading, showLoadingState, children } = props;
+	const { message, children } = props;
 
 	const messagesDiv = useRef<HTMLDivElement>(null);
 	useEffect(() => {
