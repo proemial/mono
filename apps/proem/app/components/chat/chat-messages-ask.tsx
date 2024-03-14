@@ -24,7 +24,7 @@ export function ChatMessages({ message, children, initialMessages, existingShare
 
 	const messagesDiv = useScroll(messages);
 	const showLoadingState = useLoadingState(isLoading, messages);
-	const getAnswerRunId = useGetShareId(data);
+	const getAnswerRunId = useGetRunId(data);
 
 	useRunOnFirstRender(() => {
 		if (message) {
@@ -74,7 +74,7 @@ export function ChatMessages({ message, children, initialMessages, existingShare
 	);
 }
 
-function useGetShareId(data: AnswerEngineEvents[]) {
+function useGetRunId(data: AnswerEngineEvents[]) {
 	const answerSavedEvents = findAllByEventType(data, "answer-saved");
 	const runIds = answerSavedEvents.map((event) => event.runId); //match the run ID to the answer
 	return (role: Message["role"], index: number) =>
