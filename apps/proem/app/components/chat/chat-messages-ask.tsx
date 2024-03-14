@@ -1,16 +1,15 @@
 "use client";
-import { ChatMessage, ChatMessageProps } from "./chat-message-ask";
-import { ReactNode, use, useEffect, useRef, useState } from "react";
-import { useChatState } from "./state";
-import { Message, UseChatHelpers, useChat } from "ai/react";
-import { useUser } from "@clerk/nextjs";
+import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import { getProfileFromUser } from "@/app/(pages)/(app)/profile/profile-from-user";
 import { AnswerEngineEvents, findAllByEventType, findByEventType } from "@/app/api/bot/answer-engine/events";
-import { PROEM_BOT } from "./bot-user";
-import { useShareDrawerState } from "../share/state";
-import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
-import { FeedbackButtonsProps } from "./feedback/feedback-buttons";
+import { useUser } from "@clerk/nextjs";
+import { Message, useChat } from "ai/react";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { useShareDrawerState } from "../share/state";
+import { PROEM_BOT } from "./bot-user";
+import { ChatMessage, ChatMessageProps } from "./chat-message-ask";
+import { useChatState } from "./state";
 
 type Props = {
 	message?: string;
@@ -20,11 +19,12 @@ type Props = {
 };
 
 export function ChatMessages({ message, children, initialMessages, existingShareId }: Props) {
-	const { questions, setSuggestions, setLoading } = useChatState("ask");
+	const { questions, setSuggestions } = useChatState("ask");
 	const { userProfile, shareMessage, messages, isLoading, append, setMessages, data } = useShareableChat(initialMessages, existingShareId);
 
 	const messagesDiv = useScroll(messages);
 	const showLoadingState = useLoadingState(isLoading, messages);
+	const getAnswerRunId = useGetShareId(data);
 
 	useRunOnFirstRender(() => {
 		if (message) {
@@ -47,13 +47,6 @@ export function ChatMessages({ message, children, initialMessages, existingShare
 
 	const appendQuestion = (question: string) =>
 		append({ role: "user", content: question });
-
-	// There is a run ID for each answer, so we need to
-
-	const answerSavedEvents = findAllByEventType(data, "answer-saved");
-	const runIds = answerSavedEvents.map((event) => event.runId); //match the run ID to the answer
-	const getAnswerRunId = (role: Message["role"], index: number) =>
-		role === "assistant" ? runIds[Math.floor(index / 2)] : undefined;
 
 	return (
 		<>
@@ -79,6 +72,13 @@ export function ChatMessages({ message, children, initialMessages, existingShare
 			{messages.length === 0 && children}
 		</>
 	);
+}
+
+function useGetShareId(data: AnswerEngineEvents[]) {
+	const answerSavedEvents = findAllByEventType(data, "answer-saved");
+	const runIds = answerSavedEvents.map((event) => event.runId); //match the run ID to the answer
+	return (role: Message["role"], index: number) =>
+		role === "assistant" ? runIds[Math.floor(index / 2)] : undefined;
 }
 
 function useScroll(messages: Message[]) {
