@@ -85,6 +85,17 @@ export function findByEventType<T extends AnswerEngineEvents["type"]>(
 		| undefined;
 }
 
+export function findAllByEventType<T extends AnswerEngineEvents["type"]>(
+	events: AnswerEngineEvents[] | undefined,
+	type: T,
+) {
+	return (
+		events
+			?.filter((event) => event.type === type)
+			.map((event) => event.data as ExtractData<T>) ?? []
+	);
+}
+
 export function withEventTag<
 	TEventType extends AnswerEngineEvents["type"],
 	TFunc extends Runnable<any, ExtractData<TEventType>, any>,

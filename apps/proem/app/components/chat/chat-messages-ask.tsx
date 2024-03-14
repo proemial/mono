@@ -5,11 +5,12 @@ import { useChatState } from "./state";
 import { Message, UseChatHelpers, useChat } from "ai/react";
 import { useUser } from "@clerk/nextjs";
 import { getProfileFromUser } from "@/app/(pages)/(app)/profile/profile-from-user";
-import { AnswerEngineEvents, findByEventType } from "@/app/api/bot/answer-engine/events";
+import { AnswerEngineEvents, findAllByEventType, findByEventType } from "@/app/api/bot/answer-engine/events";
 import { PROEM_BOT } from "./bot-user";
 import { useShareDrawerState } from "../share/state";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
+import { FeedbackButtonsProps } from "./feedback/feedback-buttons";
 
 type Props = {
 	message?: string;
@@ -20,7 +21,7 @@ type Props = {
 
 export function ChatMessages({ message, children, initialMessages, existingShareId }: Props) {
 	const { questions, setSuggestions, setLoading } = useChatState("ask");
-	const { userProfile, shareMessage, messages, isLoading, append, setMessages } = useShareableChat(initialMessages, existingShareId);
+	const { userProfile, shareMessage, messages, isLoading, append, setMessages, data } = useShareableChat(initialMessages, existingShareId);
 
 	const messagesDiv = useScroll(messages);
 	const showLoadingState = useLoadingState(isLoading, messages);
@@ -47,6 +48,13 @@ export function ChatMessages({ message, children, initialMessages, existingShare
 	const appendQuestion = (question: string) =>
 		append({ role: "user", content: question });
 
+	// There is a run ID for each answer, so we need to
+
+	const answerSavedEvents = findAllByEventType(data, "answer-saved");
+	const runIds = answerSavedEvents.map((event) => event.runId); //match the run ID to the answer
+	const getAnswerRunId = (role: Message["role"], index: number) =>
+		role === "assistant" ? runIds[Math.floor(index / 2)] : undefined;
+
 	return (
 		<>
 			{messages?.length > 0 &&
@@ -57,6 +65,7 @@ export function ChatMessages({ message, children, initialMessages, existingShare
 							message={m.content}
 							user={m.role === "assistant" ? PROEM_BOT : userProfile}
 							onShareHandle={shareMessage}
+							runId={getAnswerRunId(m.role, i)}
 							isLoading={isLoading}
 							showThrobber={
 								m.role === "assistant" && isLoading && i === messages.length - 1
