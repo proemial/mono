@@ -53,7 +53,7 @@ export default async function RootLayout({ children }: Props) {
 		<ClerkProvider>
 			<PostHogClient>
 				<html lang="en" className={sourceCodePro.variable}>
-					<body className={`${light} h-dvh w-dvw`}>
+					<body className={`${light} h-dvh w-dvw flex flex-col justify-center items-center`}>
 						{children}
 						<Analytics />
 					</body>

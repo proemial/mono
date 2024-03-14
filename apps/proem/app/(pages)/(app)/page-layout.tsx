@@ -13,7 +13,7 @@ export function PageLayout({ title, children, action }: Props) {
 	const [first, second] = Array.isArray(children) ? children : [children, null];
 
 	return (
-		<div className="flex flex-col w-full min-h-full">
+		<div className="flex flex-col w-full min-h-full max-w-[600px]">
 			<div className="sticky top-0 z-50 w-full pb-2 bg-black flex-0 shadow-bottom">
 				<PageHeaderUnfixed title={title} action={action} />
 			</div>
