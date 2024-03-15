@@ -2,6 +2,7 @@ import { AnthropicInput, ChatAnthropic } from "@langchain/anthropic";
 import { Ollama, OllamaInput } from "@langchain/community/llms/ollama";
 import { BaseLanguageModelParams } from "@langchain/core/language_models/base";
 import { BaseLangChainParams } from "@langchain/core/language_models/base";
+import { AsyncCallerParams } from "@langchain/core/utils/async_caller";
 import { ChatGroq, ChatGroqInput } from "@langchain/groq";
 import { ChatMistralAI, ChatMistralAIInput } from "@langchain/mistralai";
 import { ChatOpenAI, ClientOptions, OpenAIBaseInput } from "@langchain/openai";
@@ -51,7 +52,7 @@ const API_KEY_MISTRALAI = Env.get("MISTRAL_API_KEY");
 const API_KEY_GROQ = Env.get("GROQ_API_KEY");
 const API_KEY_ANTHROPIC = Env.get("ANTHROPIC_API_KEY");
 
-type CommonModelOptions = {
+type CommonModelOptions = AsyncCallerParams & {
 	verbose: BaseLangChainParams["verbose"];
 	cache: BaseLanguageModelParams["cache"];
 };
@@ -59,6 +60,11 @@ type CommonModelOptions = {
 const COMMON_MODEL_DEFAULTS: CommonModelOptions = {
 	verbose: process.env.NODE_ENV === "development" ? true : false,
 	cache: process.env.NODE_ENV === "development" ? false : true,
+	maxConcurrency: process.env.NODE_ENV === "development" ? 1 : undefined,
+	maxRetries: process.env.NODE_ENV === "development" ? 0 : undefined,
+	onFailedAttempt: (error) => {
+		console.error(error);
+	},
 };
 
 type OpenAIModelOptions = CommonModelOptions & {
@@ -128,7 +134,7 @@ const MODEL_DEFAULTS: ModelOptions = {
 	},
 };
 
-type CommonModelParams = {
+type CommonModelParams = AsyncCallerParams & {
 	modelName:
 		| MistralAIModelName
 		| OllamaModelName
@@ -138,7 +144,7 @@ type CommonModelParams = {
 	temperature?: number;
 };
 
-type OpenAIModelParams = {
+type OpenAIModelParams = AsyncCallerParams & {
 	modelName: OpenAIModelName;
 	organization: keyof typeof OPENAI_ORGANIZATIONS;
 	temperature?: CommonModelParams["temperature"];
