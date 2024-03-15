@@ -1,3 +1,4 @@
+import { AnthropicInput, ChatAnthropic } from "@langchain/anthropic";
 import { Ollama, OllamaInput } from "@langchain/community/llms/ollama";
 import { BaseLanguageModelParams } from "@langchain/core/language_models/base";
 import { BaseLangChainParams } from "@langchain/core/language_models/base";
@@ -6,7 +7,17 @@ import { ChatMistralAI, ChatMistralAIInput } from "@langchain/mistralai";
 import { ChatOpenAI, ClientOptions, OpenAIBaseInput } from "@langchain/openai";
 import { Env } from "@proemial/utils/env";
 
-type ModelProvider = "openai" | "mistralai" | "ollama" | "groq" | "lmstudio";
+/**
+ * Add new providers, models, default configs and params here.
+ */
+
+type ModelProvider =
+	| "openai"
+	| "mistralai"
+	| "ollama"
+	| "groq"
+	| "lmstudio"
+	| "anthropic";
 
 type OpenAIModelName =
 	| "gpt-3.5-turbo-0125"
@@ -21,6 +32,13 @@ type MistralAIModelName =
 type OllamaModelName = "llama2" | "mistral"; // Models can be downloaded using `ollama pull <model>`
 type GroqModelName = "llama2-70b-4096" | "mixtral-8x7b-32768" | "gemma-7b-it";
 type LMStudioModelName = "loaded-model"; // Load a model in LM Studio and start the server
+type AnthropicModelName =
+	| "claude-3-opus-20240229"
+	| "claude-3-sonnet-20240229"
+	| "claude-3-haiku-20240307"
+	| "claude-2.1"
+	| "claude-2.0"
+	| "claude-instant-1.2";
 
 const OPENAI_ORGANIZATIONS = {
 	ask: "org-aMpPztUAkETkCQYK6QhW25A4",
@@ -31,6 +49,7 @@ const OPENAI_ORGANIZATIONS = {
 const API_KEY_OPENAI = Env.get("OPENAI_API_KEY");
 const API_KEY_MISTRALAI = Env.get("MISTRAL_API_KEY");
 const API_KEY_GROQ = Env.get("GROQ_API_KEY");
+const API_KEY_ANTHROPIC = Env.get("ANTHROPIC_API_KEY");
 
 type CommonModelOptions = {
 	verbose: BaseLangChainParams["verbose"];
@@ -65,6 +84,10 @@ type LMStudioModelOptions = CommonModelOptions & {
 	};
 };
 
+type AnthropicModelOptions = CommonModelOptions & {
+	anthropicApiKey: AnthropicInput["anthropicApiKey"];
+};
+
 type ModelOptions = Record<
 	ModelProvider,
 	| OpenAIModelOptions
@@ -72,6 +95,7 @@ type ModelOptions = Record<
 	| OllamaModelOptions
 	| GroqModelOptions
 	| LMStudioModelOptions
+	| AnthropicModelOptions
 >;
 
 const MODEL_DEFAULTS: ModelOptions = {
@@ -98,6 +122,10 @@ const MODEL_DEFAULTS: ModelOptions = {
 			baseURL: "http://localhost:1234/v1",
 		},
 	},
+	anthropic: {
+		...COMMON_MODEL_DEFAULTS,
+		anthropicApiKey: API_KEY_ANTHROPIC,
+	},
 };
 
 type CommonModelParams = {
@@ -105,7 +133,8 @@ type CommonModelParams = {
 		| MistralAIModelName
 		| OllamaModelName
 		| GroqModelName
-		| LMStudioModelName;
+		| LMStudioModelName
+		| AnthropicModelName;
 	temperature?: number;
 };
 
@@ -139,5 +168,12 @@ export const createModel = (params: ModelParams) => {
 			return new ChatGroq({ ...MODEL_DEFAULTS.groq, ...params });
 		case "loaded-model":
 			return new ChatOpenAI({ ...MODEL_DEFAULTS.lmstudio, ...params });
+		case "claude-3-opus-20240229":
+		case "claude-3-sonnet-20240229":
+		case "claude-3-haiku-20240307":
+		case "claude-2.1":
+		case "claude-2.0":
+		case "claude-instant-1.2":
+			return new ChatAnthropic({ ...MODEL_DEFAULTS.anthropic, ...params });
 	}
 };
