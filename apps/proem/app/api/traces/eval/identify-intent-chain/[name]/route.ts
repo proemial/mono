@@ -1,4 +1,4 @@
-import { getIdentifyIntentChain } from "@/app/llm/chains/identify-intent-chain";
+import { identifyIntentChainWithModel } from "@/app/llm/chains/identify-intent-chain";
 import { ExpectedIntentEvaluator } from "@/app/llm/evaluators/intent/expected-intent-evaluator";
 import { SupportedIntentEvaluator } from "@/app/llm/evaluators/intent/supported-intent-evaluator";
 import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
@@ -17,7 +17,7 @@ export async function GET(
 	console.log("params", params);
 	const model = buildOpenAIModelForEvaluation("gpt-3.5-turbo-0125");
 	const results = await runOnDataset(
-		getIdentifyIntentChain(model),
+		identifyIntentChainWithModel(model),
 		params.name,
 		{
 			evaluationConfig: {

@@ -1,10 +1,10 @@
+import { BaseChatModel } from "@langchain/core/language_models/chat_models";
+import { StringOutputParser } from "@langchain/core/output_parsers";
 import {
 	ChatPromptTemplate,
 	MessagesPlaceholder,
 } from "@langchain/core/prompts";
-import { StringOutputParser } from "@langchain/core/output_parsers";
-import { buildOpenAIChatModel } from "../models/openai-model";
-import { BaseChatModel } from "@langchain/core/language_models/chat_models";
+import { createModel } from "../models/model-factory";
 import { LangChainChatHistoryMessage } from "../utils";
 
 const prompt = ChatPromptTemplate.fromMessages<Input>([
@@ -70,11 +70,21 @@ const prompt = ChatPromptTemplate.fromMessages<Input>([
 	new MessagesPlaceholder("chatHistory"),
 ]);
 
-const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask");
+const model = createModel({
+	modelName: "gpt-3.5-turbo-0125",
+	organization: "ask",
+});
 
 type Input = { question: string; chatHistory: LangChainChatHistoryMessage[] };
 
-export const getIdentifyIntentChain = (modelOverride: BaseChatModel = model) =>
-	prompt.pipe(modelOverride).pipe(new StringOutputParser()).withConfig({
+export const identifyIntentChain = prompt
+	.pipe(model)
+	.pipe(new StringOutputParser())
+	.withConfig({
+		runName: "IdentifyIntent",
+	});
+
+export const identifyIntentChainWithModel = (model: BaseChatModel) =>
+	prompt.pipe(model).pipe(new StringOutputParser()).withConfig({
 		runName: "IdentifyIntent",
 	});

@@ -10,7 +10,7 @@ import {
 } from "@langchain/core/runnables";
 import { LangChainChatHistoryMessage } from "../utils";
 import { getGenerateAnswerChain } from "./generate-answer-chain";
-import { getIdentifyIntentChain } from "./identify-intent-chain";
+import { identifyIntentChain } from "./identify-intent-chain";
 import { Intent } from "./intent";
 
 type Input = {
@@ -87,7 +87,7 @@ const declineIfUnsupportedIntent = RunnableBranch.from<
 
 export const answerEngineChain = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
-		intent: getIdentifyIntentChain(),
+		intent: identifyIntentChain,
 	}),
 	answerChain,
 ]).withConfig({
@@ -100,7 +100,7 @@ export const answerEngineChainWithIntentBranching = RunnableSequence.from<
 	Output
 >([
 	RunnablePassthrough.assign({
-		intent: getIdentifyIntentChain(),
+		intent: identifyIntentChain,
 	}),
 	declineIfUnsupportedIntent,
 ]).withConfig({
