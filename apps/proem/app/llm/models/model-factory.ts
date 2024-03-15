@@ -159,21 +159,23 @@ export const createModel = (params: ModelParams) => {
 		// case "open-mixtral-8x7b":
 		// case "mistral-embed":
 		// 	return new ChatMistralAI({ ...MODEL_DEFAULTS.mistralai, ...params });
-		case "llama2":
-		case "mistral":
-			return new Ollama({ ...MODEL_DEFAULTS.ollama, ...params });
+		// case "llama2":
+		// case "mistral":
+		// 	return new Ollama({ ...MODEL_DEFAULTS.ollama, ...params });
 		case "llama2-70b-4096":
 		case "mixtral-8x7b-32768":
 		case "gemma-7b-it":
 			return new ChatGroq({ ...MODEL_DEFAULTS.groq, ...params });
 		case "loaded-model":
 			return new ChatOpenAI({ ...MODEL_DEFAULTS.lmstudio, ...params });
-		case "claude-3-opus-20240229":
-		case "claude-3-sonnet-20240229":
-		case "claude-3-haiku-20240307":
-		case "claude-2.1":
-		case "claude-2.0":
-		case "claude-instant-1.2":
-			return new ChatAnthropic({ ...MODEL_DEFAULTS.anthropic, ...params });
+		// case "claude-3-opus-20240229":
+		// case "claude-3-sonnet-20240229":
+		// case "claude-3-haiku-20240307":
+		// case "claude-2.1":
+		// case "claude-2.0":
+		// case "claude-instant-1.2":
+		// 	return new ChatAnthropic({ ...MODEL_DEFAULTS.anthropic, ...params });
+		default:
+			throw new Error("Model is not supported.");
 	}
 };
