@@ -146,7 +146,7 @@ type CommonModelParams = AsyncCallerParams & {
 
 type OpenAIModelParams = AsyncCallerParams & {
 	modelName: OpenAIModelName;
-	organization: keyof typeof OPENAI_ORGANIZATIONS;
+	organization: keyof typeof OPENAI_ORGANIZATIONS | undefined; // Use `undefined` for tests
 	temperature?: CommonModelParams["temperature"];
 };
 

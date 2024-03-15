@@ -2,7 +2,7 @@ import { identifyIntentChainWithModel } from "@/app/llm/chains/identify-intent-c
 import { ExpectedIntentEvaluator } from "@/app/llm/evaluators/intent/expected-intent-evaluator";
 import { SupportedIntentEvaluator } from "@/app/llm/evaluators/intent/supported-intent-evaluator";
 import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
-import { buildOpenAIModelForEvaluation } from "@/app/llm/models/openai-model";
+import { createModel } from "@/app/llm/models/model-factory";
 import { runOnDataset } from "langchain/smith";
 import { NextRequest } from "next/server";
 
@@ -15,7 +15,10 @@ export async function GET(
 	{ params }: { params: { name: string } },
 ) {
 	console.log("params", params);
-	const model = buildOpenAIModelForEvaluation("gpt-3.5-turbo-0125");
+	const model = createModel({
+		modelName: "gpt-3.5-turbo-0125",
+		organization: undefined,
+	});
 	const results = await runOnDataset(
 		identifyIntentChainWithModel(model),
 		params.name,
