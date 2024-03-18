@@ -93,7 +93,7 @@ const queryOpenAlexChain = RunnableLambda.from<
 	};
 }).withConfig({ runName: "QueryOpenAlex" });
 
-const filterOnlyAbstractsWithKeywords = RunnableLambda.from<
+const filterOnlyAbstractsWithKeyConcept = RunnableLambda.from<
 	GeneratedSearchParams & { papers: Paper[] },
 	PapersAsString
 >((input) => {
@@ -103,15 +103,15 @@ const filterOnlyAbstractsWithKeywords = RunnableLambda.from<
 	return JSON.stringify(filteredPapers);
 });
 
-const containsWords = (keywords: string[], abstract: string) =>
-	keywords.every((keyword) => abstract.includes(keyword));
+const containsWords = (words: string[], text: string) =>
+	words.every((word) => text.includes(word));
 
 export const fetchPapersChain = RunnableSequence.from<Input, PapersAsString>([
 	RunnablePassthrough.assign({
 		papers: generateSearchParamsChain
 			.pipe(generateOpenAlexSearchChain)
 			.pipe(queryOpenAlexChain)
-			.pipe(filterOnlyAbstractsWithKeywords)
+			.pipe(filterOnlyAbstractsWithKeyConcept)
 			.withConfig({ runName: "FetchPapers" }),
 	}),
 	selectRelevantPapersChain,
