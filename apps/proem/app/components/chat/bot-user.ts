@@ -1,5 +1,6 @@
 export const PROEM_BOT = {
 	fullName: "proem",
 	initials: "P",
-	avatar: "/android-chrome-512x512.png",
+	// TODO!: decouple from favicons ect.
+	avatar: "/android-chrome-192x192.png",
 };
