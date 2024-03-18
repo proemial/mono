@@ -18,6 +18,6 @@
 				"useKeyWithClickEvents": "off"
 			}
 		},
-		"ignore": [".next", ".vercel", ".turbo"]
+		"ignore": [".next", ".vercel", ".turbo", "node_modules"]
 	}
 }
