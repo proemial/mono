@@ -31,28 +31,20 @@ export function ChatMessage(props: Props) {
 	const text = isUser
 		? message.content
 		: applyExplainLinks(
-			message?.content as string,
-			onExplainerClick ?? (() => { }),
-		);
-
-	const speaker = isUser
-		? user
-		: {
-			fullName: "proem",
-			initials: "P",
-			avatar: "/android-chrome-512x512.png",
-		};
+				message?.content as string,
+				onExplainerClick ?? (() => {}),
+		  );
 
 	return (
 		<div className="w-full mb-2">
 			<div className="flex gap-3">
 				<Avatar className="w-6 h-6">
-					<AvatarImage src={speaker?.avatar} />
+					<AvatarImage src={user?.avatar} />
 					<AvatarFallback className="bg-gray-600">
 						{user?.initials}
 					</AvatarFallback>
 				</Avatar>
-				<div className="font-bold">{speaker?.fullName}</div>
+				<div className="font-bold">{user?.fullName}</div>
 			</div>
 
 			<div className="mt-2 ml-9">{text}</div>
