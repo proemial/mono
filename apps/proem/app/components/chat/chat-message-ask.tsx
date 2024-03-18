@@ -22,7 +22,7 @@ import {
 	FeedbackButtonsProps,
 } from "./feedback/feedback-buttons";
 
-export type ChatMessageProps = FeedbackButtonsProps & {
+export type ChatMessageProps = Partial<FeedbackButtonsProps> & {
 	message?: Message["content"];
 	user?: {
 		fullName: string;

@@ -1,7 +1,12 @@
 "use client";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import { getProfileFromUser } from "@/app/(pages)/(app)/profile/profile-from-user";
-import { AnswerEngineEvents, findAllByEventType, findByEventType, findLatestByEventType } from "@/app/api/bot/answer-engine/events";
+import {
+	AnswerEngineEvents,
+	findAllByEventType,
+	findByEventType,
+	findLatestByEventType,
+} from "@/app/api/bot/answer-engine/events";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { useUser } from "@clerk/nextjs";
 import { Message, useChat } from "ai/react";
@@ -18,9 +23,23 @@ type Props = {
 	existingShareId?: string;
 };
 
-export function ChatMessages({ message, children, initialMessages, existingShareId }: Props) {
-	const { question, clearQuestion, suggestions, setSuggestions } = useChatState("ask");
-	const { userProfile, shareMessage, messages, isLoading, append, setMessages, data } = useShareableChat(initialMessages, existingShareId);
+export function ChatMessages({
+	message,
+	children,
+	initialMessages,
+	existingShareId,
+}: Props) {
+	const { question, clearQuestion, suggestions, setSuggestions } =
+		useChatState("ask");
+	const {
+		userProfile,
+		shareMessage,
+		messages,
+		isLoading,
+		append,
+		setMessages,
+		data,
+	} = useShareableChat(initialMessages, existingShareId);
 
 	const messagesDiv = useScroll(messages);
 	const showLoadingState = useLoadingState(isLoading, messages);
@@ -85,7 +104,10 @@ function useFollowups(data: AnswerEngineEvents[]) {
 	const [currentIndex, setCurrentIndex] = useState(-1);
 	const { setSuggestions } = useChatState("ask");
 
-	const { index, followups } = findLatestByEventType(data, "follow-up-questions-generated");
+	const { index, followups } = findLatestByEventType(
+		data,
+		"follow-up-questions-generated",
+	);
 
 	useEffect(() => {
 		if (followups?.length && index !== currentIndex) {
@@ -93,7 +115,6 @@ function useFollowups(data: AnswerEngineEvents[]) {
 			setSuggestions(followups?.at(0)?.map((f) => f.question) || []);
 		}
 	}, [currentIndex, followups, index, currentIndex, setSuggestions]);
-
 }
 
 function useGetRunId(data: AnswerEngineEvents[]) {
@@ -107,7 +128,11 @@ function useScroll(messages: Message[]) {
 	const messagesDiv = useRef<HTMLDivElement>(null);
 	useEffect(() => {
 		if (messagesDiv.current && messages) {
-			messagesDiv.current.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+			messagesDiv.current.scrollIntoView({
+				behavior: "smooth",
+				block: "end",
+				inline: "nearest",
+			});
 		}
 	}, [messages]);
 
@@ -124,7 +149,10 @@ function useLoadingState(isLoading: boolean, messages: Message[]) {
 	return isLoading && messages.length % 2 === 1;
 }
 
-function useShareableChat(initialMessages?: Message[], existingShareId?: string) {
+function useShareableChat(
+	initialMessages?: Message[],
+	existingShareId?: string,
+) {
 	const [sessionSlug, setSessionSlug] = useState<null | string>(null);
 
 	const { user } = useUser();
@@ -142,8 +170,7 @@ function useShareableChat(initialMessages?: Message[], existingShareId?: string)
 	const shareMessage: ChatMessageProps["onShareHandle"] = () => {
 		// If we're comming from a shared page we reuse the existing shareId
 		const shareId =
-			existingShareId ||
-			findLastByEventType(chat.data, "answer-saved")?.shareId;
+			existingShareId || findByEventType(chat.data, "answer-saved")?.shareId;
 		openShareDrawer({
 			link: `/share/${shareId}`,
 			title: "Proem Science Answers",
