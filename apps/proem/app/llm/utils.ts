@@ -1,10 +1,11 @@
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
-import { ChatHistoryMessage } from "../api/bot/answer-engine/answer-engine";
 
 export type LangChainChatHistoryMessage = HumanMessage | AIMessage;
 
-export const toLangChainChatHistory = (
-	message: ChatHistoryMessage,
+export const toLangChainChatHistory = <
+	T extends { role: string; content: string },
+>(
+	message: T,
 ): LangChainChatHistoryMessage =>
 	message.role === "user"
 		? new HumanMessage(message.content)

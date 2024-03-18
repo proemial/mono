@@ -1,26 +1,43 @@
-import { askAnswerEngine } from "@/app/api/bot/answer-engine/answer-engine";
+import {
+	AIMessage,
+	askAnswerEngine,
+} from "@/app/api/bot/answer-engine/answer-engine";
 import {
 	INTERNAL_COOKIE_NAME,
 	isInternalUser,
 } from "@/app/components/analytics/is-internal-user";
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
+import { z } from "zod";
+
+const answerEngineRouteParams = z.object({
+	slug: z.string().optional().nullable(),
+	userId: z.string().optional(),
+	messages: z.array(AIMessage),
+});
 
 export async function POST(req: NextRequest) {
-	const { messages = [], slug, userId: userIdFromHeader } = await req.json();
+	const body = await req.json();
+	const {
+		slug,
+		userId: userIdFromHeader,
+		messages,
+	} = answerEngineRouteParams.parse(body);
 
 	const { name, userId } = nameAndIdFromCookie(userIdFromHeader);
 
 	const chatHistory = messages.slice(0, -1);
-	const question = messages[messages.length - 1]?.content;
-	const tags = name ? [name] : undefined;
+	const newestQuestion = messages.at(-1);
+	if (!newestQuestion) {
+		throw new Error("No question found");
+	}
 
 	const stream = askAnswerEngine({
-		question,
 		chatHistory,
-		existingSlug: slug,
 		userId,
-		tags,
+		question: newestQuestion.content,
+		existingSlug: slug || undefined,
+		tags: name ? [name] : undefined,
 	});
 
 	return stream;

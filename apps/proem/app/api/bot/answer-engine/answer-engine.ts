@@ -16,8 +16,15 @@ import {
 	createStreamDataTransformer,
 	experimental_StreamData,
 } from "ai";
+import { z } from "zod";
 
-export type ChatHistoryMessage = { role: string; content: string };
+export const AIMessage = z.object({
+	id: z.string(),
+	content: z.string(),
+	role: z.enum(["system", "user", "assistant", "function", "data", "tool"]),
+});
+
+export type ChatHistoryMessage = z.infer<typeof AIMessage>;
 
 type AnswerEngineParams = {
 	question: string;
