@@ -1,19 +1,17 @@
 "use client";
+import { Send } from "@/app/components/icons/functional/send";
 import {
 	Avatar,
 	AvatarFallback,
 	AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
-
-import { Send } from "@/app/components/icons/functional/send";
 import { useAuth } from "@clerk/nextjs";
+import { Message } from "ai";
 import { useDrawerState } from "../login/state";
 import { applyExplainLinks } from "./apply-links";
 
-type Role = "function" | "data" | "system" | "user" | "assistant" | "tool";
-
 type Props = {
-	message?: { role: Role; content: string };
+	message?: Pick<Message, "role" | "content">;
 	user?: {
 		fullName: string;
 		initials: string;

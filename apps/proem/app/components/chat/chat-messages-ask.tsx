@@ -43,7 +43,7 @@ export function ChatMessages({
 
 	const messagesDiv = useScroll(messages);
 	const showLoadingState = useLoadingState(isLoading, messages);
-	const getAnswerRunId = useGetRunId(data);
+	const getAnswerRunId = getRunId(data);
 
 	useRunOnFirstRender(() => {
 		if (message) {
@@ -117,9 +117,10 @@ function useFollowups(data: AnswerEngineEvents[]) {
 	}, [currentIndex, followups, index, currentIndex, setSuggestions]);
 }
 
-function useGetRunId(data: AnswerEngineEvents[]) {
+function getRunId(data: AnswerEngineEvents[]) {
 	const answerSavedEvents = findAllByEventType(data, "answer-saved");
 	const runIds = answerSavedEvents.map((event) => event.runId); //match the run ID to the answer
+	// This only works if the amount of assistant messages is the same as the amount of runIds pushed from the server?
 	return (role: Message["role"], index: number) =>
 		role === "assistant" ? runIds[Math.floor(index / 2)] : undefined;
 }
