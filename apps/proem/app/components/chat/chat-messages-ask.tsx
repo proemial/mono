@@ -55,23 +55,24 @@ export function ChatMessages({ message, children, initialMessages, existingShare
 		<>
 			{messages?.length > 0 && (
 				<div ref={messagesDiv} className="pb-32">
-					{messages.map((m, i) => {
+					{messages.map((message, i) => {
+						const isMessageFromAI = message.role === "assistant";
+
 						return (
 							<ChatMessage
-								key={m.id}
-								message={m.content}
-								user={m.role === "assistant" ? PROEM_BOT : userProfile}
-								onShareHandle={shareMessage}
-								runId={getAnswerRunId(m.role, i)}
+								key={message.id}
+								message={message.content}
+								user={isMessageFromAI ? PROEM_BOT : userProfile}
+								onShareHandle={isMessageFromAI ? shareMessage : undefined}
+								runId={getAnswerRunId(message.role, i)}
 								isLoading={isLoading}
 								showThrobber={
-									m.role === "assistant" &&
-									isLoading &&
-									i === messages.length - 1
+									isMessageFromAI && isLoading && i === messages.length - 1
 								}
 							/>
 						);
 					})}
+
 					{showLoadingState && <ChatMessage user={PROEM_BOT} />}
 				</div>
 			)}

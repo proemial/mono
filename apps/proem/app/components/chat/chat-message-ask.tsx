@@ -22,7 +22,7 @@ import {
 	FeedbackButtonsProps,
 } from "./feedback/feedback-buttons";
 
-export type ChatMessageProps = {
+export type ChatMessageProps = FeedbackButtonsProps & {
 	message?: Message["content"];
 	user?: {
 		fullName: string;
@@ -32,7 +32,6 @@ export type ChatMessageProps = {
 	isLoading?: boolean;
 	showThrobber?: boolean;
 	onShareHandle?: (() => void) | null;
-	runId?: FeedbackButtonsProps["runId"];
 };
 
 export function ChatMessage({
@@ -63,7 +62,7 @@ export function ChatMessage({
 					{onShareHandle && message && !isLoading && (
 						<ShareIcon
 							onClick={() => {
-								onShareHandle({ message });
+								onShareHandle();
 								Tracker.track(analyticsKeys.ask.click.share);
 							}}
 							className="ml-auto"
