@@ -135,7 +135,7 @@ export function ShareDrawer() {
 
 					<div className="flex gap-4">
 						{shareProviders.map((provider) => (
-							<div onClick={() => closeShareDrawer()}>
+							<div key={provider.name} onClick={() => closeShareDrawer()}>
 								{"onClick" in provider ? (
 									<div onClick={() => provider.onClick(fullUrl)}>
 										<ShareIcon Icon={provider.icon} text={provider.name} />

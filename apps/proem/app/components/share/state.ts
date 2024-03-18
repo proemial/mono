@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type ShareItem = { content: React.ReactNode; link: string; title: string };
+type ShareItem = { link: string; title: string };
 
 export type ShareDrawerState = {
 	itemToBeShared: ShareItem | null;

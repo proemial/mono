@@ -135,13 +135,14 @@ function useShareableChat(initialMessages?: Message[], existingShareId?: string)
 	};
 
 	const { openShareDrawer } = useShareDrawerState();
-	const shareMessage: ChatMessageProps["onShareHandle"] = ({ renderedContent }) => {
+	const shareMessage: ChatMessageProps["onShareHandle"] = () => {
 		// If we're comming from a shared page we reuse the existing shareId
-		const shareId = existingShareId || findByEventType(chat.data, "answer-saved")?.shareId;
+		const shareId =
+			existingShareId ||
+			findLastByEventType(chat.data, "answer-saved")?.shareId;
 		openShareDrawer({
 			link: `/share/${shareId}`,
 			title: "Proem Science Answers",
-			content: renderedContent,
 		});
 	};
 

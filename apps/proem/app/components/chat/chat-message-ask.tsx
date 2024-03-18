@@ -31,9 +31,7 @@ export type ChatMessageProps = {
 	};
 	isLoading?: boolean;
 	showThrobber?: boolean;
-	onShareHandle?:
-	| ((params: { renderedContent: React.ReactNode; message: string }) => void)
-	| null;
+	onShareHandle?: (() => void) | null;
 	runId?: FeedbackButtonsProps["runId"];
 };
 
@@ -65,7 +63,7 @@ export function ChatMessage({
 					{onShareHandle && message && !isLoading && (
 						<ShareIcon
 							onClick={() => {
-								onShareHandle({ renderedContent: content, message });
+								onShareHandle({ message });
 								Tracker.track(analyticsKeys.ask.click.share);
 							}}
 							className="ml-auto"
