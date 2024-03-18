@@ -66,11 +66,14 @@ type OpenAlexQueryParams = {
 
 const generateOpenAlexSearchChain = RunnableLambda.from<
 	GeneratedSearchParams,
-	OpenAlexQueryParams // & { link: string }
->(({ relatedConcepts, keyConcept }) => {
-	const searchQuery = convertToOASearchString([...relatedConcepts, keyConcept]);
-
+	OpenAlexQueryParams & GeneratedSearchParams // & { link: string }
+>((input) => {
+	const searchQuery = convertToOASearchString([
+		...input.relatedConcepts,
+		input.keyConcept,
+	]);
 	return {
+		...input,
 		searchQuery,
 		//TODO! OpenAlex search is currently down, so add link when it's back up
 		// link: "https://openalex.org/",
@@ -80,19 +83,35 @@ const generateOpenAlexSearchChain = RunnableLambda.from<
 export type PapersAsString = string;
 
 const queryOpenAlexChain = RunnableLambda.from<
-	OpenAlexQueryParams,
-	PapersAsString
->(async ({ searchQuery }) => {
-	const papers = await fetchPapers(searchQuery);
-	const papersWithRelativeLinks = papers?.map(toRelativeLink) ?? [];
-	return JSON.stringify(papersWithRelativeLinks);
+	OpenAlexQueryParams & GeneratedSearchParams,
+	GeneratedSearchParams & { papers: Paper[] }
+>(async (input) => {
+	const papers = await fetchPapers(input.searchQuery);
+	return {
+		...input,
+		papers: papers?.map(toRelativeLink) ?? [],
+	};
 }).withConfig({ runName: "QueryOpenAlex" });
+
+const filterOnlyAbstractsWithKeywords = RunnableLambda.from<
+	GeneratedSearchParams & { papers: Paper[] },
+	PapersAsString
+>((input) => {
+	const filteredPapers = input.papers.filter((paper) =>
+		containsWords([input.keyConcept], paper.abstract ?? ""),
+	);
+	return JSON.stringify(filteredPapers);
+});
+
+const containsWords = (keywords: string[], abstract: string) =>
+	keywords.every((keyword) => abstract.includes(keyword));
 
 export const fetchPapersChain = RunnableSequence.from<Input, PapersAsString>([
 	RunnablePassthrough.assign({
 		papers: generateSearchParamsChain
 			.pipe(generateOpenAlexSearchChain)
 			.pipe(queryOpenAlexChain)
+			.pipe(filterOnlyAbstractsWithKeywords)
 			.withConfig({ runName: "FetchPapers" }),
 	}),
 	selectRelevantPapersChain,
