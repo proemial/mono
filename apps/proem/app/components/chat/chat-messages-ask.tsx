@@ -53,25 +53,28 @@ export function ChatMessages({ message, children, initialMessages, existingShare
 
 	return (
 		<>
-			{messages?.length > 0 &&
+			{messages?.length > 0 && (
 				<div ref={messagesDiv} className="pb-32">
-					{messages.map((m, i) => (
-						<ChatMessage
-							key={i}
-							message={m.content}
-							user={m.role === "assistant" ? PROEM_BOT : userProfile}
-							onShareHandle={shareMessage}
-							runId={getAnswerRunId(m.role, i)}
-							isLoading={isLoading}
-							showThrobber={
-								m.role === "assistant" && isLoading && i === messages.length - 1
-							}
-						/>
-					))}
+					{messages.map((m, i) => {
+						return (
+							<ChatMessage
+								key={m.id}
+								message={m.content}
+								user={m.role === "assistant" ? PROEM_BOT : userProfile}
+								onShareHandle={shareMessage}
+								runId={getAnswerRunId(m.role, i)}
+								isLoading={isLoading}
+								showThrobber={
+									m.role === "assistant" &&
+									isLoading &&
+									i === messages.length - 1
+								}
+							/>
+						);
+					})}
 					{showLoadingState && <ChatMessage user={PROEM_BOT} />}
-
 				</div>
-			}
+			)}
 			{messages.length === 0 && children}
 		</>
 	);
