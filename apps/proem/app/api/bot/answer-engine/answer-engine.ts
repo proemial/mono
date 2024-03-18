@@ -27,11 +27,12 @@ export const AIMessage = z.object({
 export type ChatHistoryMessage = z.infer<typeof AIMessage>;
 
 type AnswerEngineParams = {
-	question: string;
 	chatHistory: ChatHistoryMessage[];
 	existingSlug?: string;
-	userId?: string;
+	question: string;
 	tags?: string[];
+	transactionId: string;
+	userId?: string;
 };
 
 const bytesOutputParser = new BytesOutputParser();
@@ -41,11 +42,12 @@ export interface AnswerEngineStreamData extends experimental_StreamData {
 }
 
 export async function askAnswerEngine({
+	chatHistory,
 	existingSlug,
 	question,
-	chatHistory,
-	userId,
 	tags,
+	transactionId,
+	userId,
 }: AnswerEngineParams) {
 	const data = new experimental_StreamData() as AnswerEngineStreamData;
 	const isFollowUpQuestion = Boolean(existingSlug);
@@ -58,6 +60,7 @@ export async function askAnswerEngine({
 
 	data.append({
 		type: "answer-slug-generated",
+		transactionId,
 		data: { slug },
 	});
 
@@ -85,6 +88,7 @@ export async function askAnswerEngine({
 					if (insertedAnswer) {
 						data.append({
 							type: "answer-saved",
+							transactionId,
 							data: {
 								shareId: insertedAnswer.shareId,
 								answer: insertedAnswer.answer,
@@ -102,6 +106,7 @@ export async function askAnswerEngine({
 					.then((followUpsQuestions) => {
 						data.append({
 							type: "follow-up-questions-generated",
+							transactionId,
 							data: followUpsQuestions
 								.split("?")
 								.filter(Boolean)
@@ -135,7 +140,11 @@ export async function askAnswerEngine({
 							name,
 						) {
 							if (name && stepStartedEvents.includes(name)) {
-								data.append({ type: "step-started", data: { name } });
+								data.append({
+									type: "step-started",
+									transactionId,
+									data: { name },
+								});
 							}
 						},
 						handleChainEnd(token, _runId, _parentRunId, tags) {

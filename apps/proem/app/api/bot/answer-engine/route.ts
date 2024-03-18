@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
 	const stream = askAnswerEngine({
 		chatHistory,
 		userId,
+		transactionId: newestQuestion.id,
 		question: newestQuestion.content,
 		existingSlug: slug || undefined,
 		tags: name ? [name] : undefined,

@@ -7,6 +7,7 @@ type ExtractData<T> = Extract<AnswerEngineEvents, { type: T }>["data"];
 export const stepStartedEvents = ["FetchPapers", "GenerateAnswer"];
 export const stepStartedEvent = z.object({
 	type: z.literal("step-started"),
+	transactionId: z.string(),
 	data: z.object({
 		name: z.string(),
 	}),
@@ -14,6 +15,7 @@ export const stepStartedEvent = z.object({
 
 export const answerSlugGeneratedEvent = z.object({
 	type: z.literal("answer-slug-generated"),
+	transactionId: z.string(),
 	data: z.object({
 		slug: z.string(),
 	}),
@@ -21,6 +23,7 @@ export const answerSlugGeneratedEvent = z.object({
 
 export const answerSavedEvent = z.object({
 	type: z.literal("answer-saved"),
+	transactionId: z.string(),
 	data: z.object({
 		shareId: z.string().nullable(),
 		answer: z.string(),
@@ -30,6 +33,7 @@ export const answerSavedEvent = z.object({
 
 export const searchParamsGeneratedEvent = z.object({
 	type: z.literal("search-params-generated"),
+	transactionId: z.string(),
 	data: z.object({
 		keyConcept: z.string(),
 		relatedConcepts: z.array(z.string()),
@@ -38,6 +42,7 @@ export const searchParamsGeneratedEvent = z.object({
 
 export const followUpQuestionsGeneratedEvent = z.object({
 	type: z.literal("follow-up-questions-generated"),
+	transactionId: z.string(),
 	data: z.array(
 		z.object({
 			question: z.string(),
