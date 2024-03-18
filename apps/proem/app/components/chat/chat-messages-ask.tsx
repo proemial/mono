@@ -159,6 +159,7 @@ function useShareableChat(
 	const { user } = useUser();
 
 	const chat = useChat({
+		sendExtraMessageFields: true,
 		id: "hardcoded",
 		api: "/api/bot/answer-engine",
 		initialMessages,
