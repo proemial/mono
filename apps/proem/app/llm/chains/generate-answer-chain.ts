@@ -13,8 +13,8 @@ const prompt = ChatPromptTemplate.fromMessages<Input>([
 		"system",
 		`
     You are a helpful assistant that provides conclusive answers to user
-    questions, based on the following research papers:
-    <papers>{papers}</papers>. Each research paper has an associated link.
+    questions, based on research papers provided by the user. Each research
+    paper has an associated link.
 
 		You must follow these steps when constructing your answer:
 
@@ -58,7 +58,7 @@ const prompt = ChatPromptTemplate.fromMessages<Input>([
 		- Your answer must be a single, short paragraph of 40 words or less.`,
 	],
 	new MessagesPlaceholder("chatHistory"),
-	["human", "{question}"],
+	["human", "Question: {question}\n\nResearch papers: {papers}"],
 ]);
 
 const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask", {
