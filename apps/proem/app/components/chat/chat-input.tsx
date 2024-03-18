@@ -3,9 +3,9 @@ import { Tracker } from "@/app/components/analytics/tracker";
 import { TextInput } from "@/app/components/proem-ui/text-input";
 import { useAuth } from "@clerk/nextjs";
 import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
+import { analyticsKeys } from "../analytics/analytics-keys";
 import { useDrawerState } from "../login/state";
 import { ChatTarget, useChatState } from "./state";
-import { analyticsKeys } from "../analytics/analytics-keys";
 
 type Props = {
 	target: ChatTarget;
@@ -34,9 +34,7 @@ export function ChatInput({ target, children }: Props) {
 	};
 
 	const placeholder =
-		Array.isArray(placeholders) &&
-			placeholders.length > 1 &&
-			!question
+		Array.isArray(placeholders) && placeholders.length > 1 && !question
 			? placeholders[1]
 			: placeholders[0];
 
@@ -66,9 +64,10 @@ export function ChatInput({ target, children }: Props) {
 function useInputState(target: ChatTarget) {
 	const isRead = target === "paper";
 
-	const placeholders = isRead
-		? ["Ask a question about this paper", "Ask a follow-up question"]
-		: ["Ask anything", "Ask a follow-up question"];
+	const placeholders: [emptyPlaceholder: string, followUpPLaceholder: string] =
+		isRead
+			? ["Ask a question about this paper", "Ask a follow-up question"]
+			: ["Ask anything", "Ask a follow-up question"];
 
 	const trackingKey = isRead
 		? analyticsKeys.read.submit.question
