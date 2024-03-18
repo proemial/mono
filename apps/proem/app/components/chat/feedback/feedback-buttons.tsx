@@ -1,9 +1,10 @@
 "use client";
 
+import { dislike, like } from "@/app/components/chat/feedback/actions";
+import { useFeatureFlags } from "@/app/components/feature-flags/client-flags";
+import { cn } from "@/app/components/shadcn-ui/utils";
 import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
 import { useState } from "react";
-import { useFeatureFlags } from "../../feature-flags/client-flags";
-import { dislike, like } from "./actions";
 
 type Feedback = "like" | "dislike";
 
@@ -15,10 +16,9 @@ export const FeedbackButtons = ({ runId }: FeedbackButtonsProps) => {
 	const [feedbackState, setFeedbackState] = useState<Feedback>();
 	const flags = useFeatureFlags(["showAnswerFeedbackButtons"]);
 
-	const colors = {
-		like: feedbackState === "like" ? "text-green-400" : "",
-		dislike: feedbackState === "dislike" ? "text-red-300" : "",
-	};
+	if (!flags.showAnswerFeedbackButtons || !runId) {
+		return null;
+	}
 
 	const handleFeedback = (feedback: Feedback) => () => {
 		if (feedback === "like" && feedbackState !== "like") {
@@ -30,20 +30,23 @@ export const FeedbackButtons = ({ runId }: FeedbackButtonsProps) => {
 		}
 	};
 
-	if (!flags.showAnswerFeedbackButtons || !runId) {
-		return undefined;
-	}
-
 	return (
 		<div className="flex gap-1">
 			<ThumbsUpIcon
 				size="18"
-				className={`duration-200 cursor-pointer hover:text-green-500 ${colors.like}`}
+				className={cn("duration-200", {
+					"text-green-400": feedbackState === "like",
+					"hover:text-green-500 cursor-pointer": feedbackState !== "like",
+				})}
 				onClick={handleFeedback("like")}
 			/>
+
 			<ThumbsDownIcon
 				size="18"
-				className={`duration-200 cursor-pointer hover:text-red-400 ${colors.dislike}`}
+				className={cn("duration-200", {
+					"text-red-300": feedbackState === "dislike",
+					"hover:text-red-400 cursor-pointer": feedbackState !== "dislike",
+				})}
 				onClick={handleFeedback("dislike")}
 			/>
 		</div>
