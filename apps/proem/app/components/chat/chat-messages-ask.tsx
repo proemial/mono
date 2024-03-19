@@ -77,20 +77,25 @@ export function ChatMessages({
 					{messages.map((message, i) => {
 						const isMessageFromAI = message.role === "assistant";
 						const isLastMessage = i === messages.length - 1;
+						// Prevent settings prior messages in a conversation to a loading state while we wait for the AI to respond
+						const isLastMessageAndLoading = isLastMessage ? isLoading : false;
 						const transactionId = isMessageFromAI
 							? // We`r looking up the prior message so it can't be undefined
 							  messages.at(i - 1)!.id
 							: message.id;
+						const onShareHandle =
+							isMessageFromAI && !isLastMessageAndLoading
+								? () => shareMessage(transactionId)
+								: undefined;
 
 						return (
 							<ChatMessage
 								key={message.id}
-								transactionId={transactionId}
 								message={message.content}
 								user={isMessageFromAI ? PROEM_BOT : userProfile}
-								onShareHandle={isMessageFromAI ? shareMessage : undefined}
+								onShareHandle={onShareHandle}
 								runId={getAnswerRunId(message.role, i)}
-								isLoading={isLastMessage ? isLoading : false}
+								isLoading={isLastMessageAndLoading}
 								showThrobber={isMessageFromAI && isLoading && isLastMessage}
 							/>
 						);
@@ -173,13 +178,15 @@ function useShareableChat(
 	};
 
 	const { openShareDrawer } = useShareDrawerState();
-	const shareMessage: ChatMessageProps["onShareHandle"] = (TransactionId) => {
+
+	// Each transactionId corrolates to the messageId of the question in an question/answer pair
+	const shareMessage = (transactionId: string) => {
 		// TODO! How can we have stored multiple existingSharedIds in the DB?
 		// TODO! This doesn't work on shared pages with multiple answers
 		const shareId =
 			// If we're comming from a shared page we reuse the existing shareId
 			existingShareId ||
-			findByEventType(chat.data, "answer-saved", TransactionId)?.shareId;
+			findByEventType(chat.data, "answer-saved", transactionId)?.shareId;
 
 		openShareDrawer({
 			link: `/share/${shareId}`,
@@ -187,6 +194,7 @@ function useShareableChat(
 		});
 	};
 
+	// TODO! This ONLY works because we don't update the answerSlug after the first message is recieved. Event if multiple answer-slug-generated request is send.
 	const answerSlug = findByEventType(chat.data, "answer-slug-generated")?.slug;
 	useEffect(() => {
 		if (answerSlug) {

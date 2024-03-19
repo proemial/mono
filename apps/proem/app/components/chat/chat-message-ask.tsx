@@ -22,14 +22,9 @@ import {
 	type FeedbackButtonsProps,
 } from "./feedback/feedback-buttons";
 
-type TransactionId = string;
-type OnShareHandle = (transactionId: TransactionId) => void;
-
 // TODO! Type as either a user message or a bot message
 export type ChatMessageProps = Partial<FeedbackButtonsProps> & {
 	message?: Message["content"];
-	/** Each transactionId corrolates to the messageId of the question in an question/answer pair */
-	transactionId?: TransactionId;
 	user?: {
 		fullName: string;
 		initials: string;
@@ -37,16 +32,14 @@ export type ChatMessageProps = Partial<FeedbackButtonsProps> & {
 	};
 	isLoading?: boolean;
 	showThrobber?: boolean;
-	onShareHandle?: OnShareHandle | null;
+	onShareHandle?: (() => void) | null;
 };
 
 export function ChatMessage({
 	message,
-	transactionId,
 	user = { fullName: "you", initials: "U", avatar: "" },
 	onShareHandle,
 	runId,
-	isLoading,
 	showThrobber,
 }: ChatMessageProps) {
 	const { content, links } = applyLinks(message ?? "");
@@ -66,10 +59,11 @@ export function ChatMessage({
 
 				<div className="flex items-end gap-3">
 					<FeedbackButtons runId={runId} />
-					{onShareHandle && transactionId && !isLoading && (
+
+					{onShareHandle && (
 						<ShareIcon
 							onClick={() => {
-								onShareHandle(transactionId);
+								onShareHandle();
 								Tracker.track(analyticsKeys.ask.click.share);
 							}}
 							className="ml-auto"
