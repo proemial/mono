@@ -181,12 +181,11 @@ function useShareableChat(
 
 	// Each transactionId corrolates to the messageId of the question in an question/answer pair
 	const shareMessage = (transactionId: string) => {
-		// TODO! How can we have stored multiple existingSharedIds in the DB?
-		// TODO! This doesn't work on shared pages with multiple answers
+		// If no shareId is found in the event stream & we have an existingShareId we assume we're on the shared page and fallback to that
 		const shareId =
+			findByEventType(chat.data, "answer-saved", transactionId)?.shareId ||
 			// If we're comming from a shared page we reuse the existing shareId
-			existingShareId ||
-			findByEventType(chat.data, "answer-saved", transactionId)?.shareId;
+			existingShareId;
 
 		openShareDrawer({
 			link: `/share/${shareId}`,
