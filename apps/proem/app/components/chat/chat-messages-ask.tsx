@@ -2,18 +2,18 @@
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
 import { getProfileFromUser } from "@/app/(pages)/(app)/profile/profile-from-user";
 import {
-	AnswerEngineEvents,
+	type AnswerEngineEvents,
 	findAllByEventType,
 	findByEventType,
 	findLatestByEventType,
 } from "@/app/api/bot/answer-engine/events";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { useUser } from "@clerk/nextjs";
-import { Message, useChat } from "ai/react";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { type Message, useChat } from "ai/react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { useShareDrawerState } from "../share/state";
 import { PROEM_BOT } from "./bot-user";
-import { ChatMessage, ChatMessageProps } from "./chat-message-ask";
+import { ChatMessage, type ChatMessageProps } from "./chat-message-ask";
 import { useChatState } from "./state";
 
 type Props = {
@@ -76,18 +76,22 @@ export function ChatMessages({
 				<div ref={messagesDiv} className="pb-32">
 					{messages.map((message, i) => {
 						const isMessageFromAI = message.role === "assistant";
+						const isLastMessage = i === messages.length - 1;
+						const transactionId = isMessageFromAI
+							? // We`r looking up the prior message so it can't be undefined
+							  messages.at(i - 1)!.id
+							: message.id;
 
 						return (
 							<ChatMessage
 								key={message.id}
+								transactionId={transactionId}
 								message={message.content}
 								user={isMessageFromAI ? PROEM_BOT : userProfile}
 								onShareHandle={isMessageFromAI ? shareMessage : undefined}
 								runId={getAnswerRunId(message.role, i)}
-								isLoading={isLoading}
-								showThrobber={
-									isMessageFromAI && isLoading && i === messages.length - 1
-								}
+								isLoading={isLastMessage ? isLoading : false}
+								showThrobber={isMessageFromAI && isLoading && isLastMessage}
 							/>
 						);
 					})}
@@ -169,10 +173,14 @@ function useShareableChat(
 	};
 
 	const { openShareDrawer } = useShareDrawerState();
-	const shareMessage: ChatMessageProps["onShareHandle"] = () => {
-		// If we're comming from a shared page we reuse the existing shareId
+	const shareMessage: ChatMessageProps["onShareHandle"] = (TransactionId) => {
+		// TODO! How can we have stored multiple existingSharedIds in the DB?
+		// TODO! This doesn't work on shared pages with multiple answers
 		const shareId =
-			existingShareId || findByEventType(chat.data, "answer-saved")?.shareId;
+			// If we're comming from a shared page we reuse the existing shareId
+			existingShareId ||
+			findByEventType(chat.data, "answer-saved", TransactionId)?.shareId;
+
 		openShareDrawer({
 			link: `/share/${shareId}`,
 			title: "Proem Science Answers",

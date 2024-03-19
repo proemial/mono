@@ -14,16 +14,22 @@ import {
 	AvatarFallback,
 	AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
-import { Message } from "ai/react";
+import type { Message } from "ai/react";
 import { ShareIcon } from "lucide-react";
 import { SinglarThrobber, Throbber } from "../loading/throbber";
 import {
 	FeedbackButtons,
-	FeedbackButtonsProps,
+	type FeedbackButtonsProps,
 } from "./feedback/feedback-buttons";
 
+type TransactionId = string;
+type OnShareHandle = (transactionId: TransactionId) => void;
+
+// TODO! Type as either a user message or a bot message
 export type ChatMessageProps = Partial<FeedbackButtonsProps> & {
 	message?: Message["content"];
+	/** Each transactionId corrolates to the messageId of the question in an question/answer pair */
+	transactionId?: TransactionId;
 	user?: {
 		fullName: string;
 		initials: string;
@@ -31,11 +37,12 @@ export type ChatMessageProps = Partial<FeedbackButtonsProps> & {
 	};
 	isLoading?: boolean;
 	showThrobber?: boolean;
-	onShareHandle?: (() => void) | null;
+	onShareHandle?: OnShareHandle | null;
 };
 
 export function ChatMessage({
 	message,
+	transactionId,
 	user = { fullName: "you", initials: "U", avatar: "" },
 	onShareHandle,
 	runId,
@@ -59,10 +66,10 @@ export function ChatMessage({
 
 				<div className="flex items-end gap-3">
 					<FeedbackButtons runId={runId} />
-					{onShareHandle && message && !isLoading && (
+					{onShareHandle && transactionId && !isLoading && (
 						<ShareIcon
 							onClick={() => {
-								onShareHandle();
+								onShareHandle(transactionId);
 								Tracker.track(analyticsKeys.ask.click.share);
 							}}
 							className="ml-auto"

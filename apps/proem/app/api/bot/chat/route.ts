@@ -1,7 +1,7 @@
 import { context, model, question } from "@/app/prompts/chat";
 import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
 import { OpenAIStream, StreamingTextResponse } from "ai";
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { Configuration, OpenAIApi } from "openai-edge";
 
 const config = new Configuration({

@@ -97,12 +97,20 @@ export function handleAnswerEngineEvents(
 export function findByEventType<T extends AnswerEngineEvents["type"]>(
 	events: AnswerEngineEvents[] | undefined,
 	type: T,
+	transactionId?: string,
 ) {
-	return events?.find((event) => event.type === type)?.data as
-		| ExtractData<T>
-		| undefined;
+	return events?.find((event) => {
+		if (transactionId) {
+			return event.type === type && event.transactionId === transactionId;
+		}
+		return event.type === type;
+	})?.data as ExtractData<T> | undefined;
 }
 
+/**
+ * Finds the latest event of the given event type and returns its index and all follow-up events.
+ * Consider use {@link findByEventType} if you only need a single event & know the transactionId.
+ */
 export function findLatestByEventType<T extends AnswerEngineEvents["type"]>(
 	events: AnswerEngineEvents[] | undefined,
 	type: T,
@@ -111,6 +119,10 @@ export function findLatestByEventType<T extends AnswerEngineEvents["type"]>(
 
 	// @ts-ignore
 	const index = events.findLastIndex(
+		// This is a little hacky as it's based on the assumtion the "answer-slug-generated" event is always
+		// the first event of a new answer. This is true for now, but shouldn't be as it's not generated on each
+		// request but only on the first question. It's just using the existing slug on follow-ups and we shouldn't emmit
+		// a generated event for that.
 		(event: AnswerEngineEvents) => event.type === "answer-slug-generated",
 	);
 	const followups =
