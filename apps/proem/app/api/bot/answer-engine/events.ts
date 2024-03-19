@@ -1,4 +1,4 @@
-import { Runnable } from "@langchain/core/runnables";
+import type { Runnable } from "@langchain/core/runnables";
 import { z } from "zod";
 
 type ExtractData<T> = Extract<AnswerEngineEvents, { type: T }>["data"];
@@ -26,7 +26,6 @@ export const answerSavedEvent = z.object({
 	transactionId: z.string(),
 	data: z.object({
 		shareId: z.string().nullable(),
-		answer: z.string(),
 		runId: z.string(),
 	}),
 });

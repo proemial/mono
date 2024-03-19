@@ -1,6 +1,6 @@
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import {
-	AnswerEngineEvents,
+	type AnswerEngineEvents,
 	handleAnswerEngineEvents,
 	stepStartedEvents,
 } from "@/app/api/bot/answer-engine/events";
@@ -91,7 +91,6 @@ export async function askAnswerEngine({
 							transactionId,
 							data: {
 								shareId: insertedAnswer.shareId,
-								answer: insertedAnswer.answer,
 								runId: run.id,
 							},
 						});
