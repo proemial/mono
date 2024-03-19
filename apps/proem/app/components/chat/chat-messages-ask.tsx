@@ -13,7 +13,7 @@ import { type Message, useChat } from "ai/react";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { useShareDrawerState } from "../share/state";
 import { PROEM_BOT } from "./bot-user";
-import { ChatMessage, type ChatMessageProps } from "./chat-message-ask";
+import { ChatMessage } from "./chat-message-ask";
 import { useChatState } from "./state";
 
 type Props = {
@@ -29,8 +29,7 @@ export function ChatMessages({
 	initialMessages,
 	existingShareId,
 }: Props) {
-	const { question, clearQuestion, suggestions, setSuggestions } =
-		useChatState("ask");
+	const { question, clearQuestion, setSuggestions } = useChatState("ask");
 	const {
 		userProfile,
 		shareMessage,
