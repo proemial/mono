@@ -38,4 +38,11 @@ export const generateKeywordsChain = (modelOverride: BaseChatModel = model) =>
 		runName: "GenerateKeywords",
 	});
 
-const toArray = (str: string) => str.replaceAll("\n", "").split(",");
+const toArray = (str: string) =>
+	str
+		// Filter out newlines and quotes, trim, and remove duplicates
+		.replaceAll("\n", "")
+		.replaceAll('"', "")
+		.split(",")
+		.map((s) => s.trim())
+		.filter((value, index, self) => self.indexOf(value) === index);
