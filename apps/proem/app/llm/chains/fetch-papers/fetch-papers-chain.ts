@@ -85,13 +85,10 @@ export type PapersAsString = string;
 
 const queryOpenAlexChain = RunnableLambda.from<
 	OpenAlexQueryParams & GeneratedSearchParams,
-	GeneratedSearchParams & { papers: Paper[] }
+	PapersAsString
 >(async (input) => {
 	const papers = await fetchPapers(input.searchQuery);
-	return {
-		...input,
-		papers: papers?.map(toRelativeLink) ?? [],
-	};
+	return JSON.stringify(papers?.map(toRelativeLink) ?? []);
 }).withConfig({ runName: "QueryOpenAlex" });
 
 const filterOnlyAbstractsWithKeyConcept = RunnableLambda.from<
@@ -113,7 +110,7 @@ export const fetchPapersChain = RunnableSequence.from<Input, PapersAsString>([
 		papers: generateSearchParamsChain
 			.pipe(generateOpenAlexSearchChain)
 			.pipe(queryOpenAlexChain)
-			.pipe(filterOnlyAbstractsWithKeyConcept)
+			// .pipe(filterOnlyAbstractsWithKeyConcept)
 			.withConfig({ runName: "FetchPapers" }),
 	}),
 	selectRelevantPapersChain,
