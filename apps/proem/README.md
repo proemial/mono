@@ -24,13 +24,21 @@ Note: Right after installing the integration the `DATABASE_URL` env vars is only
 ```mermaid
 sequenceDiagram
     Client->> Server: Ask Question
-    Server->> AI: Send prompt with Question
-    Note left of AI: AI understands if<br/>it need to fetch<br/>papers to answer<br/>the question.
-    AI-->>Server: Function: Ask for paper search
-    Server-->> Client: Potentially push data
-    Server-->>OpenAlex: Fetch papers based on AI generated query
-    OpenAlex-->>Server: Return papers from Open Alex's search
-    Server-->>AI: Function: return fetched papers
-    AI->>Server: Stream response
-    Server->>Client: Stream response
+    Server-->> Client: Push generated answer slug. 
+		Server->> LLM: Find intent from Question
+		Server->> LLM: Generate Search Params from Question
+		LLM->> Server: Returns related & key concepts
+    Server->>OpenAlex: Fetch papers based on AI generated query
+		OpenAlex->>Server: Return 30 papers from Open Alex's search
+		Server-->> Server: Filter papers based on Abstract
+    Server->> LLM: Select relevant papers based on the users question
+		LLM->> Server: Returns 2 most relevant papers
+		Server->> Client: (if no papers) return an error early
+		Server->> LLM: Generate answer by question, 2 papers & chat history  
+    LLM->>Server: Stream answer
+    Server->>Client: Stream answer
+		Server-->> Client: Push shareId & runId
+		Server->> LLM: Generate follow-up questions
+    LLM->> Server: Return 2 follow-up questions
+		Server-->> Client: Push follow-up questions    
 ```
