@@ -20,10 +20,11 @@ export const envVariables = z.object({
 	NEXT_PUBLIC_POSTHOG_HOST: z.string(),
 	NEXT_PUBLIC_POSTHOG_KEY: z.string(),
 	NEXT_PUBLIC_SENTRY_DSN: z.string(),
-	OPENAI_API_KEY_TEST: z.string(),
+	/** TODO: This is only used for evaluation but the code is build and running in production  */
+	OPENAI_API_KEY_TEST: z.string().optional(),
 	OPENAI_API_KEY: z.string(),
 	OPENALEX_API_KEY: z.string(),
-	SENTRY_ORG: z.string(), // not used
+	SENTRY_ORG: z.string(),
 });
 
 envVariables.parse(process.env);
