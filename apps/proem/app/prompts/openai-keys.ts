@@ -1,6 +1,4 @@
-import { Env } from "@proemial/utils/env";
-
-export const openAIApiKey = Env.get("OPENAI_API_KEY");
+export const openAIApiKey = process.env.OPENAI_API_KEY;
 
 export const openaiOrganizations = {
 	ask: "org-aMpPztUAkETkCQYK6QhW25A4",

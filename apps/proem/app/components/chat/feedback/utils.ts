@@ -1,4 +1,3 @@
-import { Env } from "@proemial/utils/env";
 import { z } from "zod";
 
 type FeedbackKey = "score"; // This is the display key in LangSmith
@@ -11,7 +10,6 @@ export const parseRunId = (runIdParam: string | undefined): string =>
 	z.string().uuid().parse(runIdParam);
 
 export const uploadFeedback = async (score: number, runId: string) => {
-	const langchainApiKey = Env.get("LANGCHAIN_API_KEY");
 	const response = await fetch("https://api.smith.langchain.com/feedback", {
 		method: "POST",
 		body: JSON.stringify({
@@ -24,7 +22,7 @@ export const uploadFeedback = async (score: number, runId: string) => {
 		}),
 		headers: {
 			"Content-Type": "application/json",
-			"x-api-key": langchainApiKey,
+			"x-api-key": process.env.LANGCHAIN_API_KEY,
 		},
 	});
 	if (!response.ok) {

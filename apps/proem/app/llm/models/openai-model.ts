@@ -1,7 +1,6 @@
 import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
 import { ChatOpenAI } from "@langchain/openai";
 import { ModelOptions } from "./model-options";
-import { Env } from "@proemial/utils/env";
 
 // Source: https://platform.openai.com/docs/models/overview
 type OpenAIModel =
@@ -35,7 +34,7 @@ export const buildOpenAIModelForEvaluation = (
 	temperature?: number,
 ) =>
 	new ChatOpenAI({
-		openAIApiKey: Env.get("OPENAI_API_KEY_TEST"),
+		openAIApiKey: process.env.OPENAI_API_KEY_TEST,
 		modelName,
 		temperature: temperature ?? 0.8, // TODO: Set default to `0` once we have a baseline
 		cache: false,

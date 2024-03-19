@@ -1,7 +1,6 @@
 "use client";
 import { analyticsTrace } from "@/app/components/analytics/utils";
 import { useUser } from "@clerk/nextjs";
-import { Env } from "@proemial/utils/env";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import process from "process";
@@ -26,14 +25,8 @@ function useInit() {
 		const persistence = user ? undefined : "memory";
 		const distinctID = user?.primaryEmailAddress?.emailAddress || user?.id;
 
-		const token = Env.validate(
-			"NEXT_PUBLIC_POSTHOG_KEY",
-			process.env.NEXT_PUBLIC_POSTHOG_KEY,
-		);
-		const api_host = Env.validate(
-			"NEXT_PUBLIC_POSTHOG_HOST",
-			process.env.NEXT_PUBLIC_POSTHOG_HOST,
-		);
+		const token = process.env.NEXT_PUBLIC_POSTHOG_KEY;
+		const api_host = process.env.NEXT_PUBLIC_POSTHOG_HOST;
 
 		analyticsTrace("[PosthogClient] initializing", persistence, distinctID);
 		posthog.init(token, {

@@ -1,4 +1,3 @@
-import { Features } from "@/app/components/feature-flags/features";
 import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
 import {
 	OpenAlexPaper,
@@ -8,7 +7,6 @@ import {
 	openAlexFields,
 } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
-import { Env } from "@proemial/utils/env";
 import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
 import dayjs from "dayjs";
@@ -18,15 +16,13 @@ export const fetchPaper = cache(
 	async (id: string): Promise<OpenAlexPaper | undefined> => {
 		const paper = await Redis.papers.get(id);
 
-		const oaApiKey = Env.get("OPENALEX_API_KEY");
-
 		if (
 			!(paper?.data as OpenAlexWorkMetadata)?.doi ||
 			!(paper?.data as OpenAlexWorkMetadata)?.topics
 		) {
 			console.log("[fetchPaper] Fetch", id);
 			const oaPaper = await fetch(
-				`${baseOaUrl}/${id}?mailto=lab@paperflow.ai&select=${openAlexFields.all}&api_key=${oaApiKey}`,
+				`${baseOaUrl}/${id}?mailto=lab@paperflow.ai&select=${openAlexFields.all}&api_key=${process.env.OPENALEX_API_KEY}`,
 			);
 			if (!oaPaper.ok) {
 				console.error(
@@ -74,8 +70,7 @@ export const fetchLatestPapers = async (
 		.filter((f) => !!f)
 		.join(",");
 	const sort = "from_created_date:desc";
-	const oaApiKey = Env.get("OPENALEX_API_KEY");
-	const url = `${baseOaUrl}?select=${select}&filter=${filter}&sort=${sort}&api_key=${oaApiKey}`;
+	const url = `${baseOaUrl}?select=${select}&filter=${filter}&sort=${sort}&api_key=${process.env.OPENALEX_API_KEY}`;
 
 	// This will include 25 papers (one pagination page), which seems appropriate
 	// for a feed.

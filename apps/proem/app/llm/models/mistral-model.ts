@@ -1,5 +1,4 @@
 import { ChatMistralAI } from "@langchain/mistralai";
-import { Env } from "@proemial/utils/env";
 import { ModelOptions } from "./model-options";
 
 type MistralModel =

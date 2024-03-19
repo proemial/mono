@@ -1,5 +1,4 @@
 import { fetchPapers } from "@/app/api/v2/search/search";
-import { Env } from "@proemial/utils/env";
 import { Time } from "@proemial/utils/time";
 import { track } from "@vercel/analytics/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -39,8 +38,8 @@ export async function GET(req: NextRequest) {
 		!(
 			apiKey &&
 			[
-				`Basic ${Env.get("GPT_API_KEY")}`,
-				`Bearer ${Env.get("GPT_API_KEY")}`,
+				`Basic ${process.env.GPT_API_KEY}`,
+				`Bearer ${process.env.GPT_API_KEY}`,
 			].includes(apiKey)
 		)
 	) {

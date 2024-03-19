@@ -1,7 +1,6 @@
 "use client";
 import { analyticsTrace, usePathNames } from "@/app/components/analytics/utils";
 import { useUser } from "@clerk/nextjs";
-import { Env } from "@proemial/utils/env";
 import process from "process";
 import { useEffect, useState } from "react";
 import ReactGA from "react-ga4";
@@ -36,14 +35,11 @@ function useInit() {
 		if (user) {
 			analyticsTrace("[GaClient] initializing");
 			// const email = user?.primaryEmailAddress?.emailAddress as string;
-			ReactGA.initialize(
-				Env.validate("NEXT_PUBLIC_GA_ID", process.env.NEXT_PUBLIC_GA_ID),
-				{
-					gaOptions: {
-						userId: user.id,
-					},
+			ReactGA.initialize(process.env.NEXT_PUBLIC_GA_ID, {
+				gaOptions: {
+					userId: user.id,
 				},
-			);
+			});
 
 			setInitialized(true);
 		}

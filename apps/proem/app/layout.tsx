@@ -1,10 +1,11 @@
 import { Analytics } from "@/app/components/analytics/analytics";
 import { PostHogClient } from "@/app/components/analytics/posthog-client";
+import "@/app/globals.css";
+import "@/env";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Metadata, Viewport } from "next";
 import { Source_Code_Pro } from "next/font/google";
 import { ReactNode } from "react";
-import "./globals.css";
 
 const sourceCodePro = Source_Code_Pro({
 	subsets: ["latin"],
@@ -53,7 +54,9 @@ export default async function RootLayout({ children }: Props) {
 		<ClerkProvider>
 			<PostHogClient>
 				<html lang="en" className={sourceCodePro.variable}>
-					<body className={`${light} h-dvh w-dvw flex flex-col justify-center items-center`}>
+					<body
+						className={`${light} h-dvh w-dvw flex flex-col justify-center items-center`}
+					>
 						{children}
 						<Analytics />
 					</body>

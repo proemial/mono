@@ -6,7 +6,6 @@ import { AsyncCallerParams } from "@langchain/core/utils/async_caller";
 import { ChatGroq, ChatGroqInput } from "@langchain/groq";
 import { ChatMistralAI, ChatMistralAIInput } from "@langchain/mistralai";
 import { ChatOpenAI, ClientOptions, OpenAIBaseInput } from "@langchain/openai";
-import { Env } from "@proemial/utils/env";
 
 /**
  * Add new providers, models, default configs and params here.
@@ -47,10 +46,10 @@ const OPENAI_ORGANIZATIONS = {
 	summarization: "org-H6CcBBVdWURJ01YnJ0t9wZaH",
 };
 
-const API_KEY_OPENAI = Env.get("OPENAI_API_KEY");
-const API_KEY_MISTRALAI = Env.get("MISTRAL_API_KEY");
-const API_KEY_GROQ = Env.get("GROQ_API_KEY");
-const API_KEY_ANTHROPIC = Env.get("ANTHROPIC_API_KEY");
+const API_KEY_OPENAI = process.env.OPENAI_API_KEY;
+const API_KEY_MISTRALAI = process.env.MISTRAL_API_KEY;
+const API_KEY_GROQ = process.env.GROQ_API_KEY;
+const API_KEY_ANTHROPIC = process.env.ANTHROPIC_API_KEY;
 
 type CommonModelOptions = AsyncCallerParams & {
 	verbose: BaseLangChainParams["verbose"];

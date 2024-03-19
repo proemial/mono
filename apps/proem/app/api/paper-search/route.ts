@@ -1,4 +1,3 @@
-import { Env } from "@proemial/utils/env";
 import { Time } from "@proemial/utils/time";
 import { track } from "@vercel/analytics/server";
 import { NextRequest } from "next/server";
@@ -14,8 +13,8 @@ export async function GET(req: NextRequest) {
 		!(
 			apiKey &&
 			[
-				`Basic ${Env.get("GPT_API_KEY")}`,
-				`Bearer ${Env.get("GPT_API_KEY")}`,
+				`Basic ${process.env.GPT_API_KEY}`,
+				`Bearer ${process.env.GPT_API_KEY}`,
 			].includes(apiKey)
 		)
 	) {
