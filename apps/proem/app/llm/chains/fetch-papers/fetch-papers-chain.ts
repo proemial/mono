@@ -1,4 +1,4 @@
-import { Paper, fetchPapers } from "@/app/api/paper-search/search";
+import { type Paper, fetchPapers } from "@/app/api/paper-search/search";
 import { selectRelevantPapersChain } from "@/app/llm/chains/fetch-papers/select-relevant-papers-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
@@ -10,6 +10,7 @@ import {
 import { JsonOutputFunctionsParser } from "langchain/output_parsers";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
+import { generateKeywordsChain } from "./generate-keywords-chain";
 
 const generateSearchParamsSchema = z.object({
 	keyConcept: z.string().describe(`A single common noun that is VERY likely to occur in the title of
@@ -108,6 +109,7 @@ const containsWords = (words: string[], text: string) =>
 
 export const fetchPapersChain = RunnableSequence.from<Input, PapersAsString>([
 	RunnablePassthrough.assign({
+		keywords: generateKeywordsChain(),
 		papers: generateSearchParamsChain
 			.pipe(generateOpenAlexSearchChain)
 			.pipe(queryOpenAlexChain)
