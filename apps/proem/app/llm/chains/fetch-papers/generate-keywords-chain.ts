@@ -13,14 +13,14 @@ const systemPrompt = `
 Based on a given user question, for each of the key concepts and verbs in the
 question respond with three closely related scientific concepts as well as three
 synonyms. Both the scientific concepts and synonyms should preferably be
-two-grams or longer.
+two-grams or longer. If you cannot complete the task, respond with an empty
+string (\`\`).
 
 Example:
 User question: \`Does smoking cause lung cancer?\`
 Your response: \`smoking,tobacco use,nicotine exposure,cause,induce,trigger,lead
 to,lung cancer,lung malignancy,lung neoplasm\`
 
-If you cannot complete the task, respond with an empty string (\`\`).
 `;
 
 const prompt = ChatPromptTemplate.fromMessages<Input>([
