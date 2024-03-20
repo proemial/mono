@@ -9,6 +9,7 @@ export const Features = {
 	animateAskStarters: "ASK_STARTERS_ANIMATE_TEXT",
 	validateAskIntent: "ASK_PROMPT_VALIDATE_INTENT",
 	showAnswerFeedbackButtons: "ASK_ANSWER_FEEDBACK",
+	useKeywordsForOaQuery: "ASK_OA_QUERY_USING_KEYWORDS",
 } as const;
 
 export type FeatureKey = keyof typeof Features;

@@ -23,6 +23,7 @@ export async function saveAnswer({
 	const fetchedPapers = findRun(run, (run) => run.name === "FetchPapers")
 		?.outputs?.output;
 
+	// TODO: Store `keywords` instead of `keyConcept` and `relatedConcepts`
 	const searchParamsResponse = findRun(
 		run,
 		(run) => run.name === "GenerateSearchParams",
