@@ -1,6 +1,6 @@
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import { findRun } from "@/app/llm/helpers/find-run";
-import { Run } from "langsmith";
+import type { Run } from "langsmith";
 
 type SaveAnswerParams = {
 	question: string;
@@ -20,24 +20,22 @@ export async function saveAnswer({
 	const answer = findRun(run, (run) => run.name === "AnswerEngine")?.outputs
 		?.output;
 
-	const selectedPapers = findRun(
-		run,
-		(run) => run.name === "SelectRelevantPapers",
-	)?.outputs?.output;
+	const fetchedPapers = findRun(run, (run) => run.name === "FetchPapers")
+		?.outputs?.output;
 
 	const searchParamsResponse = findRun(
 		run,
 		(run) => run.name === "GenerateSearchParams",
 	)?.outputs as { keyConcept: string; relatedConcepts: string[] };
 
-	if (answer && selectedPapers?.length && searchParamsResponse) {
+	if (answer && fetchedPapers?.length && searchParamsResponse) {
 		const papers = isFollowUpQuestion
 			? {}
 			: {
 					relatedConcepts: searchParamsResponse.relatedConcepts,
 					keyConcept: searchParamsResponse.keyConcept,
 					papers: {
-						papers: selectedPapers,
+						papers: fetchedPapers,
 					},
 			  };
 

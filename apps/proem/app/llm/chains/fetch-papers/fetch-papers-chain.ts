@@ -1,5 +1,4 @@
 import { type Paper, fetchPapers } from "@/app/api/paper-search/search";
-import { selectRelevantPapersChain } from "@/app/llm/chains/fetch-papers/select-relevant-papers-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import {
@@ -85,10 +84,10 @@ export type PapersAsString = string;
 
 const queryOpenAlexChain = RunnableLambda.from<
 	OpenAlexQueryParams & GeneratedSearchParams,
-	PapersAsString
+	Paper[]
 >(async (input) => {
 	const papers = await fetchPapers(input.searchQuery);
-	return JSON.stringify(papers?.map(toRelativeLink) ?? []);
+	return papers?.map(toRelativeLink) ?? [];
 }).withConfig({ runName: "QueryOpenAlex" });
 
 const filterOnlyAbstractsWithKeyConcept = RunnableLambda.from<
@@ -113,8 +112,7 @@ export const fetchPapersChain = RunnableSequence.from<Input, PapersAsString>([
 			// .pipe(filterOnlyAbstractsWithKeyConcept)
 			.withConfig({ runName: "FetchPapers" }),
 	}),
-	selectRelevantPapersChain,
-	(selectedPapers) => JSON.stringify(selectedPapers),
+	(input) => JSON.stringify(input.papers),
 ]);
 
 type Input = {

@@ -1,12 +1,12 @@
-import { PapersAsString } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
+import type { PapersAsString } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
-import { BaseChatModel } from "@langchain/core/language_models/chat_models";
+import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import {
 	ChatPromptTemplate,
 	MessagesPlaceholder,
 } from "@langchain/core/prompts";
-import { LangChainChatHistoryMessage } from "../utils";
+import type { LangChainChatHistoryMessage } from "../utils";
 
 const prompt = ChatPromptTemplate.fromMessages<Input>([
 	[
@@ -18,12 +18,12 @@ const prompt = ChatPromptTemplate.fromMessages<Input>([
 
 		You must follow these steps when constructing your answer:
 
-		1. Summarize each of the selected research articles into 20 words or
-		less, with the most significant finding as an engaging tweet capturing
-		the minds of other researchers. Use layman's terminology, without
-		mentioning abstract entities like "you", "researchers", "authors",
-		"propose", or "study", but rather stating the finding as a statement of
-		fact, without reservations or caveats.
+		1. Summarize the two research articles most relevant to the user's
+		question into 20 words or less, with the most significant finding as an
+		engaging tweet capturing the minds of other researchers. Use layman's
+		terminology, without mentioning abstract entities like "you",
+		"researchers", "authors", "propose", or "study", but rather stating the
+		finding as a statement of fact, without reservations or caveats.
 
 		Example of a summary:
 
@@ -33,7 +33,7 @@ const prompt = ChatPromptTemplate.fromMessages<Input>([
 		"""
 
 		2. Based on these two summaries, construct two Markdown links pointing to
-		each the associated research articles. The title of a link must be a key
+		each of the associated research articles. The title of a link must be a key
 		phrase from the summary and consist of 3-6 words. This title must also be
 		appended to the link destination as a \`title\` query parameter.
 
