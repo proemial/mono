@@ -33,15 +33,15 @@ export const generateKeywordsChain = (modelOverride: BaseChatModel = model) =>
 		prompt,
 		modelOverride,
 		new StringOutputParser(),
-		toArray,
+		toSanitizedArray,
 	]).withConfig({
 		runName: "GenerateKeywords",
 	});
 
-const toArray = (str: string) =>
+const toSanitizedArray = (str: string) =>
 	str
 		// Filter out newlines and quotes, trim, and remove duplicates
-		.replaceAll("\n", "")
+		.replaceAll("\n", " ")
 		.replaceAll('"', "")
 		.split(",")
 		.map((s) => s.trim())
