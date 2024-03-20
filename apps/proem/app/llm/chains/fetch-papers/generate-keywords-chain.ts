@@ -19,6 +19,8 @@ Example:
 User question: \`Does smoking cause lung cancer?\`
 Your response: \`smoking,tobacco use,nicotine exposure,cause,induce,trigger,lead
 to,lung cancer,lung malignancy,lung neoplasm\`
+
+If you cannot complete the task, respond with an empty string (\`\`).
 `;
 
 const prompt = ChatPromptTemplate.fromMessages<Input>([
@@ -40,9 +42,10 @@ export const generateKeywordsChain = (modelOverride: BaseChatModel = model) =>
 
 const toSanitizedArray = (str: string) =>
 	str
-		// Filter out newlines and quotes, trim, and remove duplicates
+		// Filter out newlines, quotes and empty strings, trim, and remove duplicates
 		.replaceAll("\n", " ")
 		.replaceAll('"', "")
 		.split(",")
-		.map((s) => s.trim())
-		.filter((value, index, self) => self.indexOf(value) === index);
+		.map((value) => value.trim())
+		.filter((value, index, self) => self.indexOf(value) === index)
+		.filter((value) => value.length > 0);
