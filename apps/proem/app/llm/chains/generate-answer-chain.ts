@@ -39,7 +39,7 @@ const prompt = ChatPromptTemplate.fromMessages<Input>([
 
 		3. Finally, based on these two summaries and the two links, construct
 		your answer spanning no more than 40 words. Your answer must include the links
-		intertwined with the text of the answer.
+		intertwined with the rest of the text.
 
 		Example of your answer:
 
@@ -52,10 +52,13 @@ const prompt = ChatPromptTemplate.fromMessages<Input>([
 		"""
 
 		Rules:
-		- Your answer must include at least two links as described above. This
-		is absolutely essential.
+		- Your answer must include exactly two links as described above; one for
+		each article. This is absolutely essential. The links should be in-line,
+		highlighting words of the sentences that consitute your answer.
 		- Do not format your whole answer as Markdown, just the links.
-		- Your answer must be a single, short paragraph of 40 words or less.`,
+		- Your answer must be a single, short paragraph of 40 words or less.
+		- Do not begin your answer with a number.
+`,
 	],
 	new MessagesPlaceholder("chatHistory"),
 	["human", "Question: {question}\n\nResearch papers: {papers}"],
