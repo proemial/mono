@@ -16,6 +16,9 @@
 			},
 			"a11y": {
 				"useKeyWithClickEvents": "off"
+			},
+			"style": {
+				"useImportType": "off"
 			}
 		},
 		"ignore": [".next", ".vercel", ".turbo", "node_modules"]
