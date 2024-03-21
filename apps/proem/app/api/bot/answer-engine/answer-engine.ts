@@ -108,7 +108,7 @@ export async function askAnswerEngine({
 							type: "follow-up-questions-generated",
 							transactionId,
 							data: followUpsQuestions
-								.split("?")
+								.split(",")
 								.filter(Boolean)
 								.map((question) => ({ question: `${question.trim()}?` })),
 						});

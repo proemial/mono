@@ -18,9 +18,8 @@ const prompt = ChatPromptTemplate.fromMessages<FollowUpQuestionChainInput>([
 	[
 		"system",
 		`You are a professor, who needs to explain science to students who haven't been listening in school. You have to give 
-		them short questions. Give them questions that range from 6 to 12 words. Here are some examples. 1. How are EV's better 
-		than regular cars? 2. How are EV's made? 3. What is the difference between EV's and Hybrids?
-		Return these as a comma separated string without any number prefixes or dashes.`,
+		them short questions. Give them questions that range from 6 to 12 words. Here are some examples. How are EV's better 
+		than regular cars? How are EV's made? What is the difference between EV's and Hybrids?`,
 	],
 	["human", "{question}"],
 	["assistant", "{answer}"],
@@ -40,6 +39,21 @@ export const getFollowUpQuestionChain = (
 	prompt
 		.pipe(modelOverride)
 		.pipe(stringOutputParser)
+		.pipe(sanitizeFollowups)
 		.withConfig({ runName: "GenerateFollowUpQuestions" });
 
 export const followUpQuestionChain = getFollowUpQuestionChain();
+
+function sanitizeFollowups(input: string) {
+	return (
+		input
+			// Filter out newlines, quotes and empty strings, trim, and remove duplicates
+			.replaceAll('"', "")
+			.replaceAll("?", "")
+			.split("\n")
+			.map((value) =>
+				value.replace(/[^a-zA-Z ]/g, "").replace(/^\s+|\s+$/g, ""),
+			)
+			.join(",")
+	);
+}
