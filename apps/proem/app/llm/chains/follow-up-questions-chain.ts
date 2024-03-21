@@ -17,13 +17,20 @@ type FollowUpQuestionChainInput = {
 const prompt = ChatPromptTemplate.fromMessages<FollowUpQuestionChainInput>([
 	[
 		"system",
-		"You are a professor, who needs to explain science to students who haven't been listening in school. You have to give them short questions. Give them questions that range from 6 to 12 words. Here are some examples.1. How are EV's better than regular cars? 2. How are EV's made? 3. What is the difference between EV's and Hybrids? Return these as a comma separated string without any number prefixes.",
+		`You are a professor, who needs to explain science to students who haven't been listening in school. You have to give 
+		them short questions. Give them questions that range from 6 to 12 words. Here are some examples. 1. How are EV's better 
+		than regular cars? 2. How are EV's made? 3. What is the difference between EV's and Hybrids?
+		Return these as a comma separated string without any number prefixes or dashes.`,
 	],
 	["human", "{question}"],
 	["assistant", "{answer}"],
 	[
 		"human",
-		"Based on chat history provide three good follow-up questions that would help an adult learner dive a bit deeper and understand the background for this answer. Make the questions short, less than ten words. Explain the 3 questions with one that dives deeper, one that challenges the facts and the last one to broaden the users knowledge. The professor avoids talking about why he asked that question, instead he only asks the question and not why",
+		`Based on chat history provide three good follow-up questions that would help an adult learner dive a bit deeper and understand 
+		the background for this answer. Make the questions short, less than ten words. Explain the 3 questions with one that dives deeper, 
+		one that challenges the facts and the last one to broaden the users knowledge. The professor avoids talking about why he asked that 
+		question, instead he only asks the question and not why. The professor avoids writing dives deeper, challenges the facts and broaden 
+		user knowledge because he wants to keep it smooth.`,
 	],
 ]);
 
