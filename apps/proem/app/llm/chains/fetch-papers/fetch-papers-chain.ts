@@ -13,7 +13,7 @@ import {
 
 type Input = {
 	question: string;
-	papers: Paper[];
+	papers: Paper[] | undefined;
 };
 
 type OpenAlexQueryParams = {
