@@ -54,7 +54,7 @@ export function TextInput(props: Props) {
 				size="sm"
 				type="submit"
 				className="absolute justify-center bg-transparent right-2"
-				disabled={disabled}
+				disabled={disabled || readonly}
 			>
 				<Send />
 			</Button>

@@ -1,9 +1,10 @@
 "use client";
 import { Tracker } from "@/app//components/analytics/tracker";
-import { limit } from "@proemial/utils/array";
 import { Search } from "lucide-react";
 import { ChatStarter } from "./chat-message";
 import { ChatTarget, useChatState } from "./state";
+import { useAuth } from "@clerk/nextjs";
+import { useDrawerState } from "../login/state";
 
 
 type Props = {
@@ -18,12 +19,18 @@ export function StarterMessages({
     trackingKey,
 }: Props) {
     const { suggestions, addQuestion } = useChatState(target);
+    const { readonly, onFocus } = useInputState(target);
 
     if (suggestions?.length === 0) {
         return null;
     }
 
     const trackAndInvoke = (text: string) => {
+        if (readonly && onFocus) {
+            onFocus();
+            return;
+        }
+
         Tracker.track(trackingKey, {
             text,
         });
@@ -48,4 +55,17 @@ export function StarterMessages({
             ))}
         </>
     );
+}
+
+
+function useInputState(target: ChatTarget) {
+    const isRead = target === "paper";
+
+    const { userId } = useAuth();
+    const readonly = isRead && !userId;
+
+    const { open } = useDrawerState();
+    const onFocus = isRead && !userId && open;
+
+    return { readonly, onFocus };
 }
