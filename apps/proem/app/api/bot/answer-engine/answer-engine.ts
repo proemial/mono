@@ -6,8 +6,10 @@ import {
 } from "@/app/api/bot/answer-engine/events";
 import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
 import { saveAnswer } from "@/app/api/bot/answer-engine/save-answer";
+import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
 import { answerEngineChain } from "@/app/llm/chains/answer-engine-chain";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
+import { followUpQuestionChainNew } from "@/app/llm/chains/follow-up-questions-chain_v2";
 import { findRun } from "@/app/llm/helpers/find-run";
 import { toLangChainChatHistory } from "@/app/llm/utils";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
@@ -96,8 +98,12 @@ export async function askAnswerEngine({
 						});
 					}
 				});
+				const newFollowups = (await getFeatureFlag("newFollowups")) ?? false;
+				const followUpChain = newFollowups
+					? followUpQuestionChainNew
+					: followUpQuestionChain;
 
-				const followUpsQuestionPromise = followUpQuestionChain
+				const followUpsQuestionPromise = followUpChain
 					.invoke({
 						question,
 						answer,

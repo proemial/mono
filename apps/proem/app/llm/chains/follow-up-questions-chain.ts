@@ -17,19 +17,13 @@ type FollowUpQuestionChainInput = {
 const prompt = ChatPromptTemplate.fromMessages<FollowUpQuestionChainInput>([
 	[
 		"system",
-		`You are a professor, who needs to explain science to students who haven't been listening in school. You have to give 
-		them short questions. Give them questions that range from 6 to 12 words. Here are some examples. How are EV's better 
-		than regular cars? How are EV's made? What is the difference between EV's and Hybrids?`,
+		"You are an middle school teacher. Create great follow up question based on the prior conversation. Keep them REALLY short and precise with a clear language a 5 year old can understand. Return these as a comma separated string without any number prefixes.",
 	],
 	["human", "{question}"],
 	["assistant", "{answer}"],
 	[
 		"human",
-		`Based on chat history provide three good follow-up questions that would help an adult learner dive a bit deeper and understand 
-		the background for this answer. Make the questions short, less than ten words. Explain the 3 questions with one that dives deeper, 
-		one that challenges the facts and the last one to broaden the users knowledge. The professor avoids talking about why he asked that 
-		question, instead he only asks the question and not why. The professor avoids writing dives deeper, challenges the facts and broaden 
-		user knowledge because he wants to keep it smooth.`,
+		"Provide two good follow-up questions that would help a young learner dive a bit deeper and understand the background for this answer. Make the questions short, less than ten words.",
 	],
 ]);
 
@@ -39,21 +33,6 @@ export const getFollowUpQuestionChain = (
 	prompt
 		.pipe(modelOverride)
 		.pipe(stringOutputParser)
-		.pipe(sanitizeFollowups)
 		.withConfig({ runName: "GenerateFollowUpQuestions" });
 
 export const followUpQuestionChain = getFollowUpQuestionChain();
-
-function sanitizeFollowups(input: string) {
-	return (
-		input
-			// Filter out newlines, quotes and empty strings, trim, and remove duplicates
-			.replaceAll('"', "")
-			.replaceAll("?", "")
-			.split("\n")
-			.map((value) =>
-				value.replace(/[^a-zA-Z ]/g, "").replace(/^\s+|\s+$/g, ""),
-			)
-			.join("?")
-	);
-}
