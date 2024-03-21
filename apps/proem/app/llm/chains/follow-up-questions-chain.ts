@@ -17,13 +17,13 @@ type FollowUpQuestionChainInput = {
 const prompt = ChatPromptTemplate.fromMessages<FollowUpQuestionChainInput>([
 	[
 		"system",
-		"You are an middle school teacher. Create great follow up question based on the prior conversation. Keep them REALLY short and precise with a clear language a 5 year old can understand. Return these as a comma separated string without any number prefixes.",
+		"ou are a professor, who needs to explain science to students who haven't been listening in school. You have to give them short questions. Give them questions that range from 6 to 12 words. Here are some examples.1. How are EV's better than regular cars? 2. How are EV's made? 3. What is the difference between EV's and Hybrids? In the first question you write Challenge the facts then the question, in the second you write Deep dive then your question. In the third you write Broaden knowledge then your question. Return these as a comma separated string without any number prefixes.",
 	],
 	["human", "{question}"],
 	["assistant", "{answer}"],
 	[
 		"human",
-		"Provide two good follow-up questions that would help a young learner dive a bit deeper and understand the background for this answer. Make the questions short, less than ten words.",
+		"Based on chat history provide three good follow-up questions that would help an adult learner dive a bit deeper and understand the background for this answer. Make the questions short, less than ten words. Explain the 3 questions with one that dives deeper, one that challenges the facts and the last one to broaden the users knowledge. The professor avoids talking about why he asked that question, instead he only asks the question and not why",
 	],
 ]);
 
