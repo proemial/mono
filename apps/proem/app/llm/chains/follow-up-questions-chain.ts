@@ -54,6 +54,6 @@ function sanitizeFollowups(input: string) {
 			.map((value) =>
 				value.replace(/[^a-zA-Z ]/g, "").replace(/^\s+|\s+$/g, ""),
 			)
-			.join(",")
+			.join("?")
 	);
 }
