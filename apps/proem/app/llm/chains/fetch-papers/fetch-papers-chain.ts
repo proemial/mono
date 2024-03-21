@@ -26,13 +26,9 @@ const generateOpenAlexSearch = RunnableLambda.from<
 	SearchParams,
 	OpenAlexQueryParams // & { link: string }
 >(async (input) => {
-	const useKeywords = (await getFeatureFlag("useKeywordsForOaQuery")) ?? false;
-	console.info(
-		useKeywords
-			? "Using keywords for OA query"
-			: "Using key- and related concepts for OA query",
-	);
-	const concepts = useKeywords
+	const isUsingKeywords =
+		(await getFeatureFlag("useKeywordsForOaQuery")) ?? false;
+	const concepts = isUsingKeywords
 		? input.keywords
 		: [input.keyConcept, ...input.relatedConcepts];
 	const searchQuery = convertToOASearchString(concepts);
