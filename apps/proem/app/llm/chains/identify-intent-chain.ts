@@ -1,81 +1,60 @@
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { StringOutputParser } from "@langchain/core/output_parsers";
-import {
-	ChatPromptTemplate,
-	MessagesPlaceholder,
-} from "@langchain/core/prompts";
+import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { createModel } from "../models/model-factory";
-import { LangChainChatHistoryMessage } from "../utils";
 
 const prompt = ChatPromptTemplate.fromMessages<Input>([
 	[
 		"system",
 		`
-		Given a user question and possibly a chat history, identify the action from the list below
-		that best describes the user's expectation, based on their question:
+		You are a helpful research assistant, that can classify questions as being supported or not.
+
+		- Questions are supported if they are general questions or they seek explainations on general concepts. 
+		- Questions are unsupported if they are about specific research papers, specific topics or authors, recency-based or unlikely to be supported by scientific research.
+
+		Your task is to identify the intent behind the question, and categorize as supported or not.
+
+		Respond with \`SUPPORTED\` if a question is supported.
+		If not, respond with the reason for it not being supported.
+
+		Examples:
 
 		---
-		Action: \`ANSWER_EVERYDAY_QUESTION\`
-		Description: Give an answer to an everyday question.
 
-		Action: \`ANSWER_FOLLOWUP_QUESTION\`
-		Description: Give an answer to a previously-asked question.
+		Question: \`Do electric vehicles pollute more than gasoline cars over their life cycle?\`
+		Response: \`SUPPORTED\`
 
-		Action: \`EXPLAIN_CONCEPT\`
-		Description: Explain a key concept.
+		Question: \`How long does it take to offset the additional production emissions of them?\`
+		Response: \`SUPPORTED\`
 
-		Action: \`FIND_PAPER\`
-		Description: Find a specific research paper.
+		Question: \`What is quantum mechanics?\`
+		Response: \`SUPPORTED\`
 
-		Action: \`FIND_LATEST_PAPERS\`
-		Description: Find the latest research papers within a broad domain.
+		Question: \`Hello\`
+		Response: \`I'm sorry, but this is not a clear question and does not fall into the category of questions I support.\`
 
-		Action: \`FIND_INFLUENTIAL_PAPERS\`
-		Description: Find the most influential research papers on a specific topic.
+		Question: \`fjewjfpwoejgw\`
+		Response: \`The question appears to be random letters and does not seem to be a valid question.\`
 
-		Action: \`FIND_PAPERS_BY_AUTHOR\`
-		Description: Find all research papers by a specific author.
+		Questions: \`Find the most cited research on the relationship between gut microbiota and obesity.\`
+		Answer: \`This question is specific to one or more particular studies conducted, which is not supported.\`
 
-		Action: \`FIND_PAPERS_CITING_A_GIVEN_PAPER\`
-		Description: Find all research papers citing a given research paper.
-
-		Action: \`UNKNOWN\`
-		Description: Unsure or none of the above.
-		---
-
-		Example answer 1:
+		Question: \`How to convince the world that the Earth is flat?\`
+		Answer: \`I do not wish to answer that.\`
 
 		---
-		ANSWER_EVERYDAY_QUESTION
-		---
-
-		Example answer 2:
-
-		---
-		ANSWER_FOLLOWUP_QUESTION
-		---
-
-		Example answer 3:
-
-		---
-		EXPLAIN_CONCEPT
-		---
-
-		Rules:
-		- Respond ONLY with the action of the matching item from the list above.
-		- If you are unsure which action best matches the user's request, respond with \`UNKNOWN\`.
 	`,
 	],
-	["human", "User question: {question}"],
-	new MessagesPlaceholder("chatHistory"),
+	["human", "Question: {question}"],
 ]);
 
 const model = createModel({
 	modelName: "gpt-3.5-turbo-0125",
 	organization: "ask",
+	temperature: 0.7, // We allow some creativity when declining questions
 });
 
-type Input = { question: string; chatHistory: LangChainChatHistoryMessage[] };
+type Input = { question: string };
 
 export const identifyIntentChain = prompt
 	.pipe(model)

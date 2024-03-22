@@ -1,6 +1,6 @@
+import { Example, Run } from "langsmith";
 import { EvaluationResult, RunEvaluator } from "langsmith/evaluation";
 import { runOutputAsString } from "../../helpers/evaluator-helpers";
-import { Example, Run } from "langsmith";
 
 export class ExpectedIntentEvaluator implements RunEvaluator {
 	async evaluateRun(run: Run, example?: Example): Promise<EvaluationResult> {
@@ -17,7 +17,19 @@ export class ExpectedIntentEvaluator implements RunEvaluator {
 		if (expected === undefined) {
 			throw new Error("No expected value to compare against.");
 		}
+		if (expected === "") {
+			// No expected value means unsupported intent and we want the model to provide a reason.
+			const comment = `expected: reason for unsupported, actual: ${output}`;
+			return {
+				value: output,
+				score:
+					output.includes("SUPPORTED") && output.split(" ").length === 1
+						? 0
+						: 1,
+				comment,
+			};
+		}
 		const comment = `expected: ${expected}, actual: ${output}`;
-		return { value: output, score: output === expected ? 1 : 0, comment };
+		return { value: output, score: output.includes(expected) ? 1 : 0, comment }; // Score 1 if the output contains `SUPPORTED`
 	}
 }

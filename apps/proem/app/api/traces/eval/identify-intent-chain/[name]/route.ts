@@ -1,6 +1,5 @@
 import { identifyIntentChainWithModel } from "@/app/llm/chains/identify-intent-chain";
 import { ExpectedIntentEvaluator } from "@/app/llm/evaluators/intent/expected-intent-evaluator";
-import { SupportedIntentEvaluator } from "@/app/llm/evaluators/intent/supported-intent-evaluator";
 import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
 import { createModel } from "@/app/llm/models/model-factory";
 import { runOnDataset } from "langchain/smith";
@@ -17,17 +16,15 @@ export async function GET(
 	console.log("params", params);
 	const model = createModel({
 		modelName: "gpt-3.5-turbo-0125",
-		organization: undefined,
+		organization: undefined, // The account used for evaluations has no organizations
+		temperature: 0.7,
 	});
 	const results = await runOnDataset(
 		identifyIntentChainWithModel(model),
 		params.name,
 		{
 			evaluationConfig: {
-				customEvaluators: [
-					new ExpectedIntentEvaluator(),
-					new SupportedIntentEvaluator(),
-				],
+				customEvaluators: [new ExpectedIntentEvaluator()],
 			},
 			projectMetadata: {
 				model: model.modelName,
