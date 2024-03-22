@@ -61,6 +61,11 @@ const isSupportedIntentAndFeatureEnabledAndInitialQuestion = async (
 	const isGuardrailEnabled =
 		(await getFeatureFlag("useGuardrailsOnInitialQuestion")) ?? false;
 
+	console.log(`INTENT: ${input.intent}`);
+	console.log(`Supported: ${isSupportedIntent}`);
+	console.log(`Initial question: ${isInitialQuestion}`);
+	console.log(`isGuardrailEnabled: ${isGuardrailEnabled}`);
+
 	if (isGuardrailEnabled && isInitialQuestion && !isSupportedIntent) {
 		return false;
 	}
