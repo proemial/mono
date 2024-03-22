@@ -50,7 +50,7 @@ function sanitizeFollowups(input: string) {
 		.replaceAll('"', "")
 		.replaceAll("?", "")
 		.split("\n")
-		.map((value) => value.replace(/[^a-zA-Z ]/g, "").replace(/^\s+|\s+$/g, ""))
+		.map((value) => value.replace(/^[^a-zA-Z]+|\W+$/g, ""))
 		.join("?");
 
 	console.log("[followUpQuestionChainNew] Sanitizing ", input, ">", sanitized);

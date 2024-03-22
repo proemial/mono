@@ -33,9 +33,6 @@ export function ChatInput({ target, children }: Props) {
 		setFocus(isFocused);
 	};
 
-	console.log("question", question);
-
-
 	// I know, this will always be the first element in the array. To be fixed in the next UI iteration.
 	const placeholder =
 		Array.isArray(placeholders) && placeholders.length > 1 && question
