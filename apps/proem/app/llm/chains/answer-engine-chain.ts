@@ -80,7 +80,7 @@ export const answerEngineChain = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
 		intent: identifyIntentChain,
 	}),
-	answerIfSupportedIntent,
+	answerChain,
 ]).withConfig({
 	runName: "AnswerEngine",
 });
