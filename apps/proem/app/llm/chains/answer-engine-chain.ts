@@ -55,15 +55,16 @@ const isSupportedIntentAndFeatureEnabledAndInitialQuestion = async (
 		intent: string;
 	},
 ) => {
+	const isSupportedIntent =
+		input.intent.split(" ").length === 1 && input.intent.includes("SUPPORTED");
 	const isInitialQuestion = input.chatHistory.length === 0;
-	const intentGuardrailOnInitialQuestionEnabled =
+	const isGuardrailEnabled =
 		(await getFeatureFlag("useGuardrailsOnInitialQuestion")) ?? false;
-	return (
-		isInitialQuestion &&
-		intentGuardrailOnInitialQuestionEnabled &&
-		input.intent.split(" ").length === 1 &&
-		input.intent.includes("SUPPORTED")
-	);
+
+	if (isGuardrailEnabled && isInitialQuestion && !isSupportedIntent) {
+		return false;
+	}
+	return true;
 };
 
 const answerIfSupportedIntent = RunnableBranch.from<
@@ -80,7 +81,7 @@ export const answerEngineChain = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
 		intent: identifyIntentChain,
 	}),
-	answerChain,
+	answerIfSupportedIntent,
 ]).withConfig({
 	runName: "AnswerEngine",
 });
