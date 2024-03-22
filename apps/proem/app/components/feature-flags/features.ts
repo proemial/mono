@@ -7,10 +7,10 @@ export const Features = {
 	fetchPreprintsOnly: "FEED_FETCH_APPROXIMATED_PREPRINTS_ONLY",
 	fetchWithoutPreprintsFilter: "FEED_FETCH_WITHOUT_PREPRINTS_FILTER",
 	animateAskStarters: "ASK_STARTERS_ANIMATE_TEXT",
-	validateAskIntent: "ASK_PROMPT_VALIDATE_INTENT",
 	showAnswerFeedbackButtons: "ASK_ANSWER_FEEDBACK",
 	useKeywordsForOaQuery: "ASK_OA_QUERY_USING_KEYWORDS",
 	newFollowups: "ASK_PROMPT_FOLLOWUPS_PROFESSOR",
+	useGuardrailsOnInitialQuestion: "ASK_GUARDRAILS_ON_INITIAL_QUESTION",
 } as const;
 
 export type FeatureKey = keyof typeof Features;

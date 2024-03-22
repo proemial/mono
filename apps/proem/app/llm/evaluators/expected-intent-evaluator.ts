@@ -1,6 +1,6 @@
 import { Example, Run } from "langsmith";
 import { EvaluationResult, RunEvaluator } from "langsmith/evaluation";
-import { runOutputAsString } from "../../helpers/evaluator-helpers";
+import { runOutputAsString } from "../helpers/evaluator-helpers";
 
 export class ExpectedIntentEvaluator implements RunEvaluator {
 	async evaluateRun(run: Run, example?: Example): Promise<EvaluationResult> {

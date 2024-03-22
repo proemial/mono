@@ -1,3 +1,4 @@
+import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
 import {
 	PapersAsString,
 	fetchPapersChain,
@@ -11,7 +12,6 @@ import {
 import { LangChainChatHistoryMessage } from "../utils";
 import { getGenerateAnswerChain } from "./generate-answer-chain";
 import { identifyIntentChain } from "./identify-intent-chain";
-import { Intent } from "./intent";
 
 type Input = {
 	question: string;
@@ -45,64 +45,42 @@ const answerChain = RunnableSequence.from<Input, Output>([
 	answerIfPapersAvailable,
 ]).withConfig({ runName: "Answer" });
 
-const declineChain = RunnableLambda.from<Input & { intent: Intent }, Output>(
-	(input) => {
-		// Static responses for unsupported user intents
-		const prefix = "It looks like you're looking for";
-		const postfix = "I can't help with that yet, but come back again soon!";
-		switch (input.intent) {
-			case "FIND_PAPER":
-				return `${prefix} a specific research paper. ${postfix}`;
-			case "FIND_LATEST_PAPERS":
-				return `${prefix} the latest research papers within a specific domain. ${postfix}`;
-			case "FIND_INFLUENTIAL_PAPERS":
-				return `${prefix} specific popular or influential research papers. ${postfix}`;
-			case "FIND_PAPERS_BY_AUTHOR":
-				return `${prefix} research papers by a specific author. ${postfix}`;
-			case "FIND_PAPERS_CITING_A_GIVEN_PAPER":
-				return `${prefix} research papers citing a specific paper. ${postfix}`;
-			default:
-				return "I didn't quite understand that. Please try again with a different question.";
-		}
-	},
+const declineChain = RunnableLambda.from<Input & { intent: string }, Output>(
+	(input) => input.intent,
 ).withConfig({ runName: "Decline" });
 
-const isUnsupportedIntent = (input: { intent: Intent }) => {
-	const unsupportedIntents: Intent[] = [
-		"FIND_PAPER",
-		"FIND_LATEST_PAPERS",
-		"FIND_INFLUENTIAL_PAPERS",
-		"FIND_PAPERS_BY_AUTHOR",
-		"FIND_PAPERS_CITING_A_GIVEN_PAPER",
-	];
-	return unsupportedIntents.includes(input.intent);
+// The intent is supported if it is a single word and contains "SUPPORTED"
+const isSupportedIntentAndFeatureEnabledAndInitialQuestion = async (
+	input: Input & {
+		intent: string;
+	},
+) => {
+	const isInitialQuestion = input.chatHistory.length === 0;
+	const intentGuardrailOnInitialQuestionEnabled =
+		(await getFeatureFlag("useGuardrailsOnInitialQuestion")) ?? false;
+	return (
+		isInitialQuestion &&
+		intentGuardrailOnInitialQuestionEnabled &&
+		input.intent.split(" ").length === 1 &&
+		input.intent.includes("SUPPORTED")
+	);
 };
 
-const declineIfUnsupportedIntent = RunnableBranch.from<
-	Input & { intent: Intent },
+const answerIfSupportedIntent = RunnableBranch.from<
+	Input & { intent: string },
 	Output
->([[isUnsupportedIntent, declineChain], answerChain]).withConfig({
-	runName: "DeclineIfUnsupportedIntent",
+>([
+	[isSupportedIntentAndFeatureEnabledAndInitialQuestion, answerChain],
+	declineChain,
+]).withConfig({
+	runName: "AnswerIfSupportedIntent",
 });
 
 export const answerEngineChain = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
 		intent: identifyIntentChain,
 	}),
-	answerChain,
-]).withConfig({
-	runName: "AnswerEngine",
-});
-
-// We need to improve intent detection before we can branch on it
-export const answerEngineChainWithIntentBranching = RunnableSequence.from<
-	Input,
-	Output
->([
-	RunnablePassthrough.assign({
-		intent: identifyIntentChain,
-	}),
-	declineIfUnsupportedIntent,
+	answerIfSupportedIntent,
 ]).withConfig({
 	runName: "AnswerEngine",
 });

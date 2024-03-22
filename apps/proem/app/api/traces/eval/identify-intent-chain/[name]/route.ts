@@ -1,5 +1,5 @@
 import { identifyIntentChainWithModel } from "@/app/llm/chains/identify-intent-chain";
-import { ExpectedIntentEvaluator } from "@/app/llm/evaluators/intent/expected-intent-evaluator";
+import { ExpectedIntentEvaluator } from "@/app/llm/evaluators/expected-intent-evaluator";
 import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
 import { createModel } from "@/app/llm/models/model-factory";
 import { runOnDataset } from "langchain/smith";
