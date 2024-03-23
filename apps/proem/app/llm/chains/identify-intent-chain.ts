@@ -1,6 +1,7 @@
-import { BaseChatModel } from "@langchain/core/language_models/chat_models";
+import { BaseLanguageModel } from "@langchain/core/language_models/base";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { ChatOpenAI } from "@langchain/openai";
 import { createModel } from "../models/model-factory";
 
 const prompt = ChatPromptTemplate.fromMessages<Input>([
@@ -48,10 +49,9 @@ const prompt = ChatPromptTemplate.fromMessages<Input>([
 	["human", "Question: {question}"],
 ]);
 
-const model = createModel({
+const model = createModel<ChatOpenAI>({
 	modelName: "gpt-3.5-turbo-0125",
 	organization: "ask",
-	temperature: 0.7, // We allow some creativity when declining questions
 });
 
 type Input = { question: string };
@@ -63,7 +63,7 @@ export const identifyIntentChain = prompt
 		runName: "IdentifyIntent",
 	});
 
-export const identifyIntentChainWithModel = (model: BaseChatModel) =>
+export const identifyIntentChainWithModel = (model: BaseLanguageModel) =>
 	prompt.pipe(model).pipe(new StringOutputParser()).withConfig({
 		runName: "IdentifyIntent",
 	});
