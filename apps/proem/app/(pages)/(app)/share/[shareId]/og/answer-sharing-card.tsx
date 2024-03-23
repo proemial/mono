@@ -26,7 +26,7 @@ export function AnswerSharingCard({
 					src="https://proem.ai/android-chrome-512x512.png"
 				/>
 				<div {...twcl("flex flex-col justify-center text-[32px] w-full ml-2")}>
-					<div {...twcl("font-bold pt-1")}>Proem Science Answers</div>
+					<div {...twcl("font-bold pt-1")}>Science Answers</div>
 					<div {...twcl("text-white/50 pt-1")}>
 						Based on 250M research papers
 					</div>

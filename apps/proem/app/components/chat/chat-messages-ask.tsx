@@ -80,7 +80,7 @@ export function ChatMessages({
 						const isLastMessageAndLoading = isLastMessage ? isLoading : false;
 						const transactionId = isMessageFromAI
 							? // We`r looking up the prior message so it can't be undefined
-							  messages.at(i - 1)!.id
+							messages.at(i - 1)!.id
 							: message.id;
 						const onShareHandle =
 							isMessageFromAI && !isLastMessageAndLoading
@@ -188,7 +188,7 @@ function useShareableChat(
 
 		openShareDrawer({
 			link: `/share/${shareId}`,
-			title: "Proem Science Answers",
+			title: "Science Answers",
 		});
 	};
 
