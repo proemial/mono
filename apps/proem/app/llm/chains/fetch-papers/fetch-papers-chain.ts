@@ -17,16 +17,19 @@ export type PapersAsString = string;
 
 const queryOpenAlex = RunnableLambda.from<OpenAlexQueryParams, Paper[]>(
 	async (input) => {
+		const promises = input.searchQueries.map((query) => fetchPapers(query));
+		const results = await Promise.all(promises);
+
 		const papers = [] as Paper[];
-		for (const query of input.searchQueries) {
-			const result = await fetchPapers(query);
+		for (const result of results) {
 			papers.push(...result);
+			// TODO: Push query, results and time spent to LangSmith
 
 			if (papers?.length > 5) {
 				break;
 			}
 		}
-		return papers?.map(toRelativeLink) ?? [];
+		return papers?.slice(0, 30).map(toRelativeLink) ?? [];
 	},
 ).withConfig({ runName: "QueryOpenAlex" });
 
