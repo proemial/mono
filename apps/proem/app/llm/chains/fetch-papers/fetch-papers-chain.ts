@@ -17,9 +17,10 @@ export type PapersAsString = string;
 
 const queryOpenAlex = RunnableLambda.from<OpenAlexQueryParams, Paper[]>(
 	async (input) => {
-		let papers = undefined;
+		const papers = [] as Paper[];
 		for (const query of input.searchQueries) {
-			papers = await fetchPapers(query);
+			const result = await fetchPapers(query);
+			papers.push(...result);
 
 			if (papers?.length > 5) {
 				break;
