@@ -47,7 +47,5 @@ function sanitizeFollowups(input: string) {
 		.map((value) => value.replace(/^[^a-zA-Z]+|\W+$/g, ""))
 		.join("?");
 
-	console.log("[followUpQuestionChainNew] Sanitizing ", input, ">", sanitized);
-
 	return sanitized;
 }
