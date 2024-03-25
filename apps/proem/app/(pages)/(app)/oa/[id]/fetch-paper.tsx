@@ -1,4 +1,3 @@
-import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
 import {
 	OpenAlexPaper,
 	OpenAlexWorkMetadata,
@@ -55,7 +54,6 @@ export const fetchLatestPapers = async (
 	const today = dayjs().format("YYYY-MM-DD");
 	const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
 	const select = openAlexFields.all;
-	const preprintsAll = await getFeatureFlag("fetchWithoutPreprintsFilter");
 
 	const filter = [
 		"type:article",
@@ -64,7 +62,7 @@ export const fetchLatestPapers = async (
 		`publication_date:>${twoWeeksAgo}`, // We do not want old papers that were added recently
 		`publication_date:<${today}`, // We do not want papers published in the future
 		"open_access.is_oa:true",
-		preprintsAll ? undefined : "primary_location.version:submittedVersion",
+		"primary_location.version:submittedVersion",
 		concept ? `primary_topic.field.id:${concept}` : undefined,
 	]
 		.filter((f) => !!f)

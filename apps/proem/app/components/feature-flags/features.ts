@@ -1,6 +1,4 @@
 export const Features = {
-	fetchPreprintsOnly: "FEED_FETCH_APPROXIMATED_PREPRINTS_ONLY",
-	fetchWithoutPreprintsFilter: "FEED_FETCH_WITHOUT_PREPRINTS_FILTER",
 	animateAskStarters: "ASK_STARTERS_ANIMATE_TEXT",
 	showAnswerFeedbackButtons: "ASK_ANSWER_FEEDBACK",
 	useKeywordsForOaQuery: "ASK_OA_QUERY_USING_KEYWORDS",
