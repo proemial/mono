@@ -1,61 +1,53 @@
-import { type Paper, fetchPapers } from "@/app/api/paper-search/search";
-import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
+import { fetchPapers, type Paper } from "@/app/api/paper-search/search";
 import {
 	RunnableLambda,
 	RunnablePassthrough,
 	RunnableSequence,
 } from "@langchain/core/runnables";
-import { generateKeywordsChain } from "./generate-keywords-chain";
-import {
-	type Output as SearchParams,
-	generateSearchParamsChain,
-} from "./generate-search-params-chain";
+import { searchSynonymsChain } from "./extract-synonyms-chain";
+import { searchParamsChain } from "./generate-search-params-chain";
+import { OpenAlexQueryParams } from "./oa-search-helpers";
 
 type Input = {
 	question: string;
 	papers: Paper[] | undefined;
 };
 
-type OpenAlexQueryParams = {
-	searchQuery: string;
-};
-
 export type PapersAsString = string;
-
-const generateOpenAlexSearch = RunnableLambda.from<
-	SearchParams,
-	OpenAlexQueryParams // & { link: string }
->(async (input) => {
-	const isUsingKeywords =
-		(await getFeatureFlag("useKeywordsForOaQuery")) ?? false;
-	const concepts = isUsingKeywords
-		? input.keywords
-		: [input.keyConcept, ...input.relatedConcepts];
-	const searchQuery = convertToOASearchString(concepts);
-	return {
-		searchQuery,
-		//TODO! OpenAlex search is currently down, so add link when it's back up
-		// link: "https://openalex.org/",
-	};
-}).withConfig({ runName: "GenerateOpenAlexSearch" });
 
 const queryOpenAlex = RunnableLambda.from<OpenAlexQueryParams, Paper[]>(
 	async (input) => {
-		const papers = await fetchPapers(input.searchQuery);
+		let papers = undefined;
+		for (const query of input.searchQueries) {
+			papers = await fetchPapers(query);
+
+			if (papers?.length > 5) {
+				break;
+			}
+		}
 		return papers?.map(toRelativeLink) ?? [];
 	},
 ).withConfig({ runName: "QueryOpenAlex" });
 
 export const fetchPapersChain = RunnableSequence.from<Input, PapersAsString>([
 	RunnablePassthrough.assign({
-		keywords: generateKeywordsChain(),
-		papers: generateSearchParamsChain()
-			.pipe(generateOpenAlexSearch)
+		papers: searchParamsChain
 			.pipe(queryOpenAlex)
 			.withConfig({ runName: "FetchPapers" }),
 	}),
 	(input) => JSON.stringify(input.papers),
 ]);
+
+export const fetchPapersChainNew = RunnableSequence.from<Input, PapersAsString>(
+	[
+		RunnablePassthrough.assign({
+			papers: searchSynonymsChain
+				.pipe(queryOpenAlex)
+				.withConfig({ runName: "FetchPapers" }),
+		}),
+		(input) => JSON.stringify(input.papers),
+	],
+);
 
 const toRelativeLink = (paper: Paper) => {
 	return {
@@ -63,10 +55,4 @@ const toRelativeLink = (paper: Paper) => {
 		link: paper.link.replace("https://proem.ai", ""),
 		abstract: paper.abstract ?? "",
 	};
-};
-
-const convertToOASearchString = (concepts: string[]) => {
-	const searchStrings = concepts.map((concept) => `"${concept}"`).join("OR");
-	const query = `title.search:(${searchStrings}),abstract.search:(${searchStrings})`;
-	return encodeURIComponent(query);
 };

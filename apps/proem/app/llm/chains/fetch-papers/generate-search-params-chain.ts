@@ -1,11 +1,13 @@
 import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { RunnableSequence } from "@langchain/core/runnables";
+import { RunnableLambda, RunnableSequence } from "@langchain/core/runnables";
 import type { ChatOpenAICallOptions } from "@langchain/openai";
 import { JsonOutputFunctionsParser } from "langchain/output_parsers";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { buildOpenAIChatModel } from "../../models/openai-model";
+import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
+import { OpenAlexQueryParams } from "./oa-search-helpers";
 
 type Input = {
 	question: string;
@@ -71,3 +73,28 @@ export const generateSearchParamsChain = (
 	]).withConfig({
 		runName: "GenerateSearchParams",
 	});
+
+export const generateOpenAlexSearch = RunnableLambda.from<
+	Output,
+	OpenAlexQueryParams
+>(async (input) => {
+	const isUsingKeywords =
+		(await getFeatureFlag("useKeywordsForOaQuery")) ?? false;
+	const concepts = isUsingKeywords
+		? input.keywords
+		: [input.keyConcept, ...input.relatedConcepts];
+	const searchQuery = convertToOASearchString(concepts);
+	return {
+		searchQueries: [searchQuery],
+	};
+}).withConfig({ runName: "GenerateOpenAlexSearch" });
+
+const convertToOASearchString = (concepts: string[]) => {
+	const searchStrings = concepts.map((concept) => `"${concept}"`).join("OR");
+	const query = `title.search:(${searchStrings}),abstract.search:(${searchStrings})`;
+	return encodeURIComponent(query);
+};
+
+export const searchParamsChain = generateSearchParamsChain().pipe(
+	generateOpenAlexSearch,
+);
