@@ -11,7 +11,7 @@ import { fromInvertedIndex } from "@proemial/utils/string";
 import { Time } from "@proemial/utils/time";
 
 const filter = "filter=type:article,cited_by_count:>10,cited_by_count:<1000";
-const baseUrl = `${baseOaUrl}?select=${openAlexFields.search}&${filter}`;
+export const askOaBaseUrl = `${baseOaUrl}?select=${openAlexFields.search}&${filter}`;
 
 export type Paper = Awaited<ReturnType<typeof fetchPapers>>[number];
 
@@ -28,7 +28,7 @@ export async function fetchPapers(q: string, count = 30, tokens = 350) {
 }
 
 async function fetchWithAbstract(q: string, count: number, tokens: number) {
-	const query = `${baseUrl},${q}&per-page=${count}`;
+	const query = `${askOaBaseUrl},${q}&per-page=${count}`;
 
 	const begin = Time.now();
 	try {
