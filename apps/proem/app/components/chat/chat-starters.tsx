@@ -44,7 +44,7 @@ export function StarterMessages({
                 <Search style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
                 SUGGESTED QUESTIONS
             </div>
-            {suggestions.map((suggestion) => (
+            {suggestions.slice(0, 3).map((suggestion) => (
                 <ChatStarter
                     key={suggestion}
                     onClick={() => trackAndInvoke(suggestion)}
