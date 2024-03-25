@@ -1,57 +1,16 @@
-import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
-import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { StringOutputParser } from "@langchain/core/output_parsers";
 import { RunnableLambda, RunnableSequence } from "@langchain/core/runnables";
-import type { ChatOpenAICallOptions } from "@langchain/openai";
-import { JsonOutputFunctionsParser } from "langchain/output_parsers";
-import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 import { buildOpenAIChatModel } from "../../models/openai-model";
-import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
+import * as hub from "langchain/hub";
 import { OpenAlexQueryParams } from "./oa-search-helpers";
+import { askOaBaseUrl } from "@/app/api/paper-search/search";
 
 type Input = {
 	question: string;
 };
-export type Output = z.infer<typeof schema>;
+type SynonymGroups = string[][];
 
-const schema = z.object({
-	keyConcept: z.string().describe(`A single common noun that is VERY likely to occur in the title of
-    a research paper that contains the answer to the user's question. The
-    argument MUST be a single word.`),
-	relatedConcepts: z
-		.string()
-		.array()
-		.describe(`The most closely related scientific concepts as well as two or
-    three synonyms for the key concept. Preferrably two-grams or longer.`),
-	keywords: z
-		.string()
-		.array()
-		.describe(`Based on a given user question, for each of the key concepts
-		and verbs in the question provide three closely related scientific
-		concepts as well as three synonyms. Both the scientific concepts and
-		synonyms should preferably be two-grams or longer. If you cannot
-		complete the task, provide an empty array (\`[]\`).
-
-		Example: User question: \`Does smoking cause lung cancer?\` Your
-		response: \`[smoking,tobacco use,nicotine exposure,cause,induce,trigger,lead to,lung cancer,lung malignancy,lung neoplasm]\``),
-});
-
-const generateSearchParamsFn = {
-	name: "generateSearchParams",
-	description: `A function to generate a set of search parameters to
-      retrieve one or more scientific research papers related to the user's
-      question.`,
-	parameters: zodToJsonSchema(schema),
-};
-
-const prompt = ChatPromptTemplate.fromMessages<Input>([
-	[
-		"system",
-		`Generate a set of search parameters that can be used retrieve one or
-		more scientific research papers related to the user's question.`,
-	],
-	["human", "{question}"],
-]);
+const prompt = await hub.pull("proemial/ask-oa-search-params:3c496731");
 
 const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask", {
 	temperature: 0.0,
@@ -59,42 +18,78 @@ const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask", {
 	cache: process.env.NODE_ENV === "development" ? false : true,
 });
 
-export const generateSearchParamsChain = (
-	modelOverride: BaseChatModel<ChatOpenAICallOptions> = model,
-) =>
-	RunnableSequence.from<Input, Output>([
-		prompt,
-		modelOverride.bind({
-			functions: [generateSearchParamsFn],
-			function_call: { name: generateSearchParamsFn.name },
-		}),
-		(input) => input, // This is silly, but it makes the output parser below not stream the response
-		new JsonOutputFunctionsParser<Output>(),
+const runnable = prompt.pipe(model);
+
+const extractSynonymGroupsChain = () =>
+	RunnableSequence.from<Input, SynonymGroups>([
+		runnable,
+		new StringOutputParser(),
+		toSanitizedArray,
 	]).withConfig({
-		runName: "GenerateSearchParams",
+		runName: "ExtractSynonymGroups",
 	});
 
-export const generateOpenAlexSearch = RunnableLambda.from<
-	Output,
-	OpenAlexQueryParams
+const toSanitizedArray = (str: string) => JSON.parse(str);
+
+const generateOpenAlexSearch = RunnableLambda.from<
+	SynonymGroups,
+	OpenAlexQueryParams & { link: string }
 >(async (input) => {
-	const isUsingKeywords =
-		(await getFeatureFlag("useKeywordsForOaQuery")) ?? false;
-	const concepts = isUsingKeywords
-		? input.keywords
-		: [input.keyConcept, ...input.relatedConcepts];
-	const searchQuery = convertToOASearchString(concepts);
+	console.log("singularSynonyms", input, singularSynonyms(input.slice(0, -1)));
+
 	return {
-		searchQueries: [searchQuery],
+		searchQueries: [
+			asUrl(synonymGroups(input), synonymGroups(input)),
+			asUrl(singularSynonyms(input), synonymGroups(input)),
+			asUrl(unigrams(input), synonymGroups(input)),
+			asUrl(synonymGroups(input)),
+			asUrl(singularSynonyms(input.slice(0, -1))),
+		],
+		link: `${askOaBaseUrl},$q`,
 	};
 }).withConfig({ runName: "GenerateOpenAlexSearch" });
 
-const convertToOASearchString = (concepts: string[]) => {
-	const searchStrings = concepts.map((concept) => `"${concept}"`).join("OR");
-	const query = `title.search:(${searchStrings}),abstract.search:(${searchStrings})`;
-	return encodeURIComponent(query);
-};
+function asUrl(title: string, abstract?: string) {
+	return encodeURIComponent(
+		`title.search:(${title})${
+			abstract ? `,abstract.search:(${abstract})` : ""
+		}`,
+	);
+}
 
-export const searchParamsChain = generateSearchParamsChain().pipe(
+// [[a, b], [c, d]] > "(a OR b) AND (c OR d)"
+function synonymGroups(groups: SynonymGroups) {
+	return groups
+		.map(
+			(synonyms) =>
+				`(${synonyms.map((synonym) => `"${synonym}"`).join(" OR ")})`,
+		)
+		.join(" AND ");
+}
+
+// [[a, b], [c, d]] > "a OR b OR c OR d"
+function singularSynonyms(groups: SynonymGroups) {
+	return groups
+		.map((synonyms) => synonyms.map((synonym) => `"${synonym}"`).join(" OR "))
+		.join(" OR ");
+}
+
+// [["a aa", "b bb"], ["c cc", "d dd"]] > "a OR aa OR b OR bb OR c OR cc OR d OR dd"
+function unigrams(groups: SynonymGroups) {
+	return groups
+		.map((synonyms) =>
+			synonyms
+				.map((synonym) =>
+					synonym
+						.split(" ")
+						.map((word) => `"${word}"`)
+						.join(" OR "),
+				)
+				.join(" OR "),
+		)
+		.join(" OR ");
+}
+
+export const searchParamsChain = extractSynonymGroupsChain().pipe(
 	generateOpenAlexSearch,
 );

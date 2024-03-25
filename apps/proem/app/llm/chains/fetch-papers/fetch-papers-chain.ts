@@ -4,7 +4,6 @@ import {
 	RunnablePassthrough,
 	RunnableSequence,
 } from "@langchain/core/runnables";
-import { searchSynonymsChain } from "./extract-synonyms-chain";
 import { searchParamsChain } from "./generate-search-params-chain";
 import { OpenAlexQueryParams } from "./oa-search-helpers";
 
@@ -22,9 +21,11 @@ const queryOpenAlex = RunnableLambda.from<OpenAlexQueryParams, Paper[]>(
 
 		const papers = [] as Paper[];
 		for (const result of results) {
+			// TODO: Somehow enrich LangSmith about paper count pushed from each query
 			papers.push(...result);
-			// TODO: Push query, results and time spent to LangSmith
 
+			// Preferably go with at least 5 from the most narrow queries
+			// TODO: Filter out duplicates
 			if (papers?.length > 5) {
 				break;
 			}
@@ -41,17 +42,6 @@ export const fetchPapersChain = RunnableSequence.from<Input, PapersAsString>([
 	}),
 	(input) => JSON.stringify(input.papers),
 ]);
-
-export const fetchPapersChainNew = RunnableSequence.from<Input, PapersAsString>(
-	[
-		RunnablePassthrough.assign({
-			papers: searchSynonymsChain
-				.pipe(queryOpenAlex)
-				.withConfig({ runName: "FetchPapers" }),
-		}),
-		(input) => JSON.stringify(input.papers),
-	],
-);
 
 const toRelativeLink = (paper: Paper) => {
 	return {

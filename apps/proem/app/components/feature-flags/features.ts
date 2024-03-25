@@ -2,7 +2,6 @@ export const Features = {
 	animateAskStarters: "ASK_STARTERS_ANIMATE_TEXT",
 	showAnswerFeedbackButtons: "ASK_ANSWER_FEEDBACK",
 	useKeywordsForOaQuery: "ASK_OA_QUERY_USING_KEYWORDS",
-	useSynonymGroupsForOaQuery: "ASK_OA_QUERY_USING_SYNONYM_GROUPS",
 	useGuardrailsOnInitialQuestion: "ASK_GUARDRAILS_ON_INITIAL_QUESTION",
 } as const;
 

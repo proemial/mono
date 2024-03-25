@@ -2,7 +2,6 @@ import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
 import {
 	PapersAsString,
 	fetchPapersChain,
-	fetchPapersChainNew,
 } from "@/app/llm/chains/fetch-papers/fetch-papers-chain";
 import {
 	RunnableBranch,
@@ -41,7 +40,7 @@ const answerIfPapersAvailable = RunnableBranch.from<
 
 const answerChain = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
-		papers: queryParamsChain,
+		papers: fetchPapersChain,
 	}),
 	answerIfPapersAvailable,
 ]).withConfig({ runName: "Answer" });
@@ -98,12 +97,3 @@ export const answerEngineChainExperimental = RunnableSequence.from<
 ]).withConfig({
 	runName: "AnswerEngine",
 });
-
-async function queryParamsChain() {
-	const useSynonymGroups =
-		(await getFeatureFlag("useSynonymGroupsForOaQuery")) ?? false;
-
-	console.log(`useSynonymGroups: ${useSynonymGroups}`);
-
-	return useSynonymGroups ? fetchPapersChainNew : fetchPapersChain;
-}
