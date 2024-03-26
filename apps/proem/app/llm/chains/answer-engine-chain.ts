@@ -12,6 +12,7 @@ import {
 import { LangChainChatHistoryMessage } from "../utils";
 import { getGenerateAnswerChain } from "./generate-answer-chain";
 import { identifyIntentChain } from "./identify-intent-chain";
+import { getGenerateAnswerChainGpt4 } from "./generate-answer-chain-gpt-4";
 
 type Input = {
 	question: string;
@@ -25,6 +26,22 @@ const hasPapersAvailable = (input: { papers: PapersAsString }) => {
 	return papers.length > 0;
 };
 
+const isGpt4Enabled = async () => {
+	const gpt4Enabled = (await getFeatureFlag("askGpt4")) ?? false;
+	console.log(`GPT-4 enabled: ${gpt4Enabled}`);
+
+	return gpt4Enabled;
+};
+
+const useGpt4IfPapersAvailable = RunnableBranch.from<
+	{
+		question: string;
+		chatHistory: LangChainChatHistoryMessage[];
+		papers: PapersAsString;
+	},
+	Output
+>([[isGpt4Enabled, getGenerateAnswerChainGpt4()], getGenerateAnswerChain()]);
+
 const answerIfPapersAvailable = RunnableBranch.from<
 	{
 		question: string;
@@ -33,7 +50,7 @@ const answerIfPapersAvailable = RunnableBranch.from<
 	},
 	Output
 >([
-	[hasPapersAvailable, getGenerateAnswerChain()],
+	[hasPapersAvailable, useGpt4IfPapersAvailable],
 	() => `I'm sorry, I could't find any relevant research papers to support an
 	answer. Please try again with a different question.`,
 ]);
