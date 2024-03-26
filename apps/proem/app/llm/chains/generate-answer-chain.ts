@@ -65,7 +65,7 @@ const prompt = ChatPromptTemplate.fromMessages<Input>([
 ]);
 
 const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask", {
-	verbose: process.env.NODE_ENV === "development" ? true : false,
+	verbose: false, //process.env.NODE_ENV === "development" ? true : false,
 	cache: process.env.NODE_ENV === "development" ? false : true,
 });
 
