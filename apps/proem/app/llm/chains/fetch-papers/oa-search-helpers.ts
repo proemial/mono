@@ -1,3 +1,5 @@
 export type OpenAlexQueryParams = {
-	searchQueries: string[];
+	searchQueries: {
+		[key: string]: string;
+	};
 };

@@ -43,12 +43,15 @@ const generateOpenAlexSearch = RunnableLambda.from<
 	OpenAlexQueryParams & { link: string }
 >(async (input) => {
 	return {
-		searchQueries: [
-			asUrl(synonymGroups(input), synonymGroups(input)),
-			asUrl(singularSynonymsNoVerbs(input), synonymGroups(input)),
-			asUrl(singularSynonymsNoVerbs(input), expandedSynonymGroups(input)),
-			asUrl(uniqueUnigrams(input), expandedSynonymGroups(input)),
-		],
+		searchQueries: {
+			"1:sg/sg": asUrl(synonymGroups(input), synonymGroups(input)),
+			"2:ssNv/sg": asUrl(singularSynonymsNoVerbs(input), synonymGroups(input)),
+			"3:ssNv/sgX": asUrl(
+				singularSynonymsNoVerbs(input),
+				expandedSynonymGroups(input),
+			),
+			"4:uni/sgX": asUrl(uniqueUnigrams(input), expandedSynonymGroups(input)),
+		},
 		link: `${askOaBaseUrl},$q`,
 	};
 }).withConfig({ runName: "BuildOASearchString" });

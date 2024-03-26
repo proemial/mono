@@ -23,13 +23,20 @@ function withoutDuplicates(withoutDups: Paper[], withDups: Paper[]) {
 
 const queryOpenAlex = RunnableLambda.from<OpenAlexQueryParams, Paper[]>(
 	async (input) => {
-		const promises = input.searchQueries.map((query) => fetchPapers(query));
+		const promises = Object.keys(input.searchQueries).map((key) =>
+			fetchPapers(input.searchQueries[key] as string, { metadata: key }),
+		);
 		const results = await Promise.all(promises);
 
 		const papers = [] as Paper[];
 		for (const newPapers of results) {
 			const before = papers.length;
-			const deduplicated = withoutDuplicates(papers, newPapers);
+			const deduplicated = withoutDuplicates(papers, newPapers).map(
+				(paper) => ({
+					...paper,
+					metadata: `${paper.metadata} [${newPapers.length}]`,
+				}),
+			);
 			papers.push(...deduplicated);
 			console.log(
 				`${before} + ${newPapers.length} = ${papers.length} after deduplication`,
@@ -41,6 +48,7 @@ const queryOpenAlex = RunnableLambda.from<OpenAlexQueryParams, Paper[]>(
 				break;
 			}
 		}
+
 		return papers?.slice(0, 30).map(toRelativeLink) ?? [];
 	},
 ).withConfig({ runName: "QueryOpenAlex" });
@@ -56,6 +64,7 @@ export const fetchPapersChain = RunnableSequence.from<Input, PapersAsString>([
 
 const toRelativeLink = (paper: Paper) => {
 	return {
+		metadata: paper.metadata,
 		title: paper.title,
 		link: paper.link.replace("https://proem.ai", ""),
 		abstract: paper.abstract ?? "",

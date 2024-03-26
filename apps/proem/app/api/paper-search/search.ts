@@ -13,10 +13,25 @@ import { Time } from "@proemial/utils/time";
 const filter = "filter=type:article,cited_by_count:>10,cited_by_count:<1000";
 export const askOaBaseUrl = `${baseOaUrl}?select=${openAlexFields.search}&${filter}`;
 
-export type Paper = Awaited<ReturnType<typeof fetchPapers>>[number];
+export type Paper = {
+	link: string;
+	title: string;
+	abstract?: string;
+	metadata?: string;
+};
 
-export async function fetchPapers(q: string, count = 30, tokens = 350) {
-	const papers = await fetchWithAbstract(q, count, tokens);
+type FetchConfig = {
+	count?: number;
+	tokens?: number;
+	metadata?: string;
+};
+
+export async function fetchPapers(q: string, config?: FetchConfig) {
+	const papers = await fetchWithAbstract(
+		q,
+		config?.count ?? 30,
+		config?.tokens ?? 350,
+	);
 
 	await Redis.papers.pushAll(papers.map((data) => ({ data, id: data.id })));
 
@@ -24,6 +39,7 @@ export async function fetchPapers(q: string, count = 30, tokens = 350) {
 		link: o.id.replace("openalex.org", "proem.ai/oa"),
 		abstract: o.abstract,
 		title: o.title,
+		metadata: config?.metadata,
 	}));
 }
 
