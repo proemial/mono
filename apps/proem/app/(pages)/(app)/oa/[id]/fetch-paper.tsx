@@ -69,7 +69,7 @@ export const fetchLatestPapers = async (
 		.filter((f) => !!f)
 		.join(",");
 	const sort = "from_created_date:desc";
-	const url = `${oaBaseUrl}?${oaBaseArgs}select=${select}&filter=${filter}&sort=${sort}`;
+	const url = `${oaBaseUrl}?${oaBaseArgs}&select=${select}&filter=${filter}&sort=${sort}`;
 
 	// This will include 25 papers (one pagination page), which seems appropriate
 	// for a feed.
