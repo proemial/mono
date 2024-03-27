@@ -4,6 +4,7 @@ export const Features = {
 	useKeywordsForOaQuery: "ASK_OA_QUERY_USING_KEYWORDS",
 	useGuardrailsOnInitialQuestion: "ASK_GUARDRAILS_ON_INITIAL_QUESTION",
 	askGpt4: "ASK_GPT4",
+	cardShowShortenedTopics: "CARD_SHOW_SHORTENED_TOPICS",
 } as const;
 
 export type FeatureKey = keyof typeof Features;

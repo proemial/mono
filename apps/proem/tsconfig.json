@@ -10,7 +10,8 @@
 				"name": "next"
 			}
 		],
-		"types": ["vitest/globals"]
+		"types": ["vitest/globals"],
+		"resolveJsonModule": true
 	},
 	"include": [
 		"next-env.d.ts",

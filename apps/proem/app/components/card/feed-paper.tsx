@@ -4,11 +4,16 @@ import { PaperCard, PaperCardTitle, PaperCardTop } from "@/app/components/card/p
 import { Spinner } from "@/app/components/loading/spinner";
 import { OpenAlexPaper, OpenAlexWorkMetadata } from "@proemial/models/open-alex";
 import { Suspense } from "react";
+import { getFeatureFlags } from "../feature-flags/server-flags";
 
 export async function FeedPaper({ paper }: { paper?: OpenAlexPaper }) {
 	if (!paper) {
 		return;
 	}
+
+	const flags = await getFeatureFlags([
+		"cardShowShortenedTopics",
+	]);
 
 	return (
 		<PaperCard>
@@ -21,7 +26,7 @@ export async function FeedPaper({ paper }: { paper?: OpenAlexPaper }) {
 			</PaperCardTitle>
 
 			<div className="font-sourceCodePro">
-				<CardFooter data={paper.data as OpenAlexWorkMetadata} />
+				<CardFooter data={paper.data as OpenAlexWorkMetadata} flags={flags} />
 			</div>
 		</PaperCard>
 	);

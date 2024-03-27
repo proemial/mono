@@ -29,6 +29,10 @@ export function ReaderPaper({ children, paper, id }: Props) {
 
 	const data = paper.data as OpenAlexWorkMetadata;
 
+	const flags = useFeatureFlags([
+		"cardShowShortenedTopics",
+	]);
+
 	return (
 		// <div className="flex px-6 pb-6 pt-2 bg-[#1A1A1A] flex-col before:absolute before:-inset-0 relative before:top-[-100%] before:bg-[#1A1A1A] before:-z-10 border-b shadow border-[#4E4E4E] w-full">
 		<PaperCard className="py-1">
@@ -39,7 +43,7 @@ export function ReaderPaper({ children, paper, id }: Props) {
 				{paperSource(paper.data.primary_location)}
 			</div>
 
-			<CardFooter data={data} />
+			<CardFooter data={data} flags={flags} />
 		</PaperCard>
 		// </div>
 	);
