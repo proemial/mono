@@ -26,7 +26,7 @@ export async function saveAnswer({
 	// TODO: Store `keywords` instead of `keyConcept` and `relatedConcepts`
 	const searchParamsResponse = findRun(
 		run,
-		(run) => run.name === "GenerateSearchParams",
+		(run) => run.name === "ExtractSynonymGroups",
 	)?.outputs as { keyConcept: string; relatedConcepts: string[] };
 
 	if (answer && fetchedPapers?.length && searchParamsResponse) {
