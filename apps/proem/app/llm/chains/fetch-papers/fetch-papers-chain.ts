@@ -28,9 +28,9 @@ const queryOpenAlex = RunnableLambda.from<OpenAlexQueryParams, Paper[]>(
 		);
 		const results = await Promise.all(promises);
 
+		const counts = [];
 		const papers = [] as Paper[];
 		for (const newPapers of results) {
-			const before = papers.length;
 			const deduplicated = withoutDuplicates(papers, newPapers).map(
 				(paper) => ({
 					...paper,
@@ -38,18 +38,11 @@ const queryOpenAlex = RunnableLambda.from<OpenAlexQueryParams, Paper[]>(
 				}),
 			);
 			papers.push(...deduplicated);
-			console.log(
-				`${before} + ${newPapers.length} = ${papers.length} after deduplication`,
-			);
-
-			// Preferably go with at least 5 from the most narrow queries
-			// TODO: Filter out duplicates
-			if (papers?.length > 5) {
-				break;
-			}
+			counts.push(deduplicated.length);
 		}
+		console.log(`${counts.join("+")}=${papers.length} papers fetched`);
 
-		return papers?.slice(0, 30).map(toRelativeLink) ?? [];
+		return papers?.map(toRelativeLink) ?? [];
 	},
 ).withConfig({ runName: "QueryOpenAlex" });
 

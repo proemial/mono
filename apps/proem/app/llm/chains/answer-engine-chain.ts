@@ -13,6 +13,8 @@ import { LangChainChatHistoryMessage } from "../utils";
 import { getGenerateAnswerChain } from "./generate-answer-chain";
 import { identifyIntentChain } from "./identify-intent-chain";
 import { getGenerateAnswerChainGpt4 } from "./generate-answer-chain-gpt-4";
+import { vectorisePapers } from "./paper-vectoriser";
+import { Paper } from "@/app/api/paper-search/search";
 
 type Input = {
 	question: string;
@@ -27,10 +29,7 @@ const hasPapersAvailable = (input: { papers: PapersAsString }) => {
 };
 
 const isGpt4Enabled = async () => {
-	const gpt4Enabled = (await getFeatureFlag("askGpt4")) ?? false;
-	console.log(`GPT-4 enabled: ${gpt4Enabled}`);
-
-	return gpt4Enabled;
+	return (await getFeatureFlag("askGpt4")) ?? false;
 };
 
 const useGpt4IfPapersAvailable = RunnableBranch.from<
@@ -55,10 +54,32 @@ const answerIfPapersAvailable = RunnableBranch.from<
 	answer. Please try again with a different question.`,
 ]);
 
+type ReRankInput = { question: string; papers: string };
+const reRankAndLimit = RunnableLambda.from<ReRankInput, ReRankInput>(
+	async (input) => {
+		const reRankingEnabled = await getFeatureFlag("vectorRerankAndFilter");
+
+		if (!reRankingEnabled) {
+			return {
+				...input,
+				papers: JSON.stringify(JSON.parse(input.papers).slice(0, 30)),
+			};
+		}
+
+		const reRanked = await vectorisePapers(
+			input.question,
+			JSON.parse(input.papers) as Paper[],
+		);
+
+		return { ...input, papers: JSON.stringify(reRanked) };
+	},
+).withConfig({ runName: "ReRankPapers" });
+
 const answerChain = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
 		papers: fetchPapersChain,
 	}),
+	reRankAndLimit,
 	answerIfPapersAvailable,
 ]).withConfig({ runName: "Answer" });
 

@@ -5,6 +5,7 @@ import * as hub from "langchain/hub";
 import { OpenAlexQueryParams } from "./oa-search-helpers";
 import { askOaBaseUrl } from "@/app/api/paper-search/search";
 import {
+	SynonymGroups,
 	asUrl,
 	expandedSynonymGroups,
 	singularSynonymsNoVerbs,
@@ -15,7 +16,6 @@ import {
 type Input = {
 	question: string;
 };
-type SynonymGroups = string[][];
 
 const prompt = await hub.pull("proemial/ask-oa-search-params:975dc9f3");
 

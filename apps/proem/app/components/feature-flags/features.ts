@@ -5,6 +5,7 @@ export const Features = {
 	useGuardrailsOnInitialQuestion: "ASK_GUARDRAILS_ON_INITIAL_QUESTION",
 	askGpt4: "ASK_GPT4",
 	cardShowShortenedTopics: "CARD_SHOW_SHORTENED_TOPICS",
+	vectorRerankAndFilter: "VECTOR_RERANK_AND_FILTER",
 } as const;
 
 export type FeatureKey = keyof typeof Features;
