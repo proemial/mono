@@ -27,7 +27,8 @@ export type OpenAlexPaper = {
 	};
 };
 
-export const baseOaUrl = "https://api.openalex.org/works";
+export const oaBaseUrl = "https://api.openalex.org/works";
+export const oaBaseArgs = `mailto=lab@proemial.ai&api_key=${process.env.OPENALEX_API_KEY}`;
 
 export function getIdFromOpenAlexPaper(paper: OpenAlexPaper) {
 	return paper.data.id.split("/").at(-1) as string;

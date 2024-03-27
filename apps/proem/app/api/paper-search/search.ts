@@ -1,7 +1,8 @@
 import {
 	OpenAlexPaperWithAbstract,
 	OpenAlexWorksSearchResult,
-	baseOaUrl,
+	oaBaseUrl,
+	oaBaseArgs,
 	openAlexFields,
 } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
@@ -11,7 +12,7 @@ import { fromInvertedIndex } from "@proemial/utils/string";
 import { Time } from "@proemial/utils/time";
 
 const filter = "filter=type:article,cited_by_count:>10,cited_by_count:<1000";
-export const askOaBaseUrl = `${baseOaUrl}?select=${openAlexFields.search}&${filter}`;
+export const askOaBaseUrl = `${oaBaseUrl}?${oaBaseArgs}&select=${openAlexFields.search}&${filter}`;
 
 export type Paper = {
 	link: string;

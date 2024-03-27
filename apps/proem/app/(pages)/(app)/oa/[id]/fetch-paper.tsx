@@ -2,7 +2,8 @@ import {
 	OpenAlexPaper,
 	OpenAlexWorkMetadata,
 	OpenAlexWorksSearchResult,
-	baseOaUrl,
+	oaBaseUrl,
+	oaBaseArgs,
 	openAlexFields,
 } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
@@ -21,7 +22,7 @@ export const fetchPaper = cache(
 		) {
 			console.log("[fetchPaper] Fetch", id);
 			const oaPaper = await fetch(
-				`${baseOaUrl}/${id}?mailto=lab@paperflow.ai&select=${openAlexFields.all}&api_key=${process.env.OPENALEX_API_KEY}`,
+				`${oaBaseUrl}/${id}?${oaBaseArgs}&select=${openAlexFields.all}`,
 			);
 			if (!oaPaper.ok) {
 				console.error(
@@ -68,7 +69,7 @@ export const fetchLatestPapers = async (
 		.filter((f) => !!f)
 		.join(",");
 	const sort = "from_created_date:desc";
-	const url = `${baseOaUrl}?select=${select}&filter=${filter}&sort=${sort}&api_key=${process.env.OPENALEX_API_KEY}`;
+	const url = `${oaBaseUrl}?${oaBaseArgs}select=${select}&filter=${filter}&sort=${sort}`;
 
 	// This will include 25 papers (one pagination page), which seems appropriate
 	// for a feed.
