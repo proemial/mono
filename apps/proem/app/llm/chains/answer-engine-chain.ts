@@ -57,15 +57,6 @@ const answerIfPapersAvailable = RunnableBranch.from<
 type ReRankInput = { question: string; papers: string };
 const reRankAndLimit = RunnableLambda.from<ReRankInput, ReRankInput>(
 	async (input) => {
-		const reRankingEnabled = await getFeatureFlag("vectorRerankAndFilter");
-
-		if (!reRankingEnabled) {
-			return {
-				...input,
-				papers: JSON.stringify(JSON.parse(input.papers).slice(0, 30)),
-			};
-		}
-
 		const reRanked = await vectorisePapers(
 			input.question,
 			JSON.parse(input.papers) as Paper[],
