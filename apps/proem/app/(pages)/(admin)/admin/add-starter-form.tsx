@@ -1,6 +1,6 @@
 "use client";
 
-import { addAnswerAsStarter } from "@/app/(pages)/(admin)/admin/add-starter-action";
+import { addAnswerAsStarter } from "@/app/(pages)/(admin)/admin/starter-action";
 import { Button } from "@/app/components/shadcn-ui/button";
 import { Input } from "@/app/components/shadcn-ui/input";
 import { useFormState, useFormStatus } from "react-dom";
@@ -24,7 +24,7 @@ export function AddStarterForm() {
 	const [state, formAction] = useFormState(addAnswerAsStarter, initialState);
 
 	return (
-		<form action={formAction} key={state?.resetKey}>
+		<form action={formAction} key={state?.resetKey} className="flex gap-2">
 			<Input placeholder="Input a share url..." name="shareUrl" />
 			<SubmitButton />
 

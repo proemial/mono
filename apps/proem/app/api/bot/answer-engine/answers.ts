@@ -45,4 +45,13 @@ export const answers = {
 			.where(eq(answersTable.shareId, shareId))
 			.returning();
 	},
+
+	removeAsStarter(answerId: Answer["id"]) {
+		console.log(answerId);
+		return neonDb
+			.update(answersTable)
+			.set({ isStarterQuestion: false })
+			.where(eq(answersTable.id, answerId))
+			.returning();
+	},
 };
