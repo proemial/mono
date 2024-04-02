@@ -32,6 +32,17 @@ export const answers = {
 	},
 
 	getStarters() {
-		return neonDb.select().from(answersTable).limit(10);
+		return neonDb
+			.select()
+			.from(answersTable)
+			.where(eq(answersTable.isStarterQuestion, true));
+	},
+
+	addAsStarter(shareId: NonNullable<Answer["shareId"]>) {
+		return neonDb
+			.update(answersTable)
+			.set({ isStarterQuestion: true })
+			.where(eq(answersTable.shareId, shareId))
+			.returning();
 	},
 };

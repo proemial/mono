@@ -1,4 +1,11 @@
-import { jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import {
+	boolean,
+	jsonb,
+	pgTable,
+	serial,
+	text,
+	timestamp,
+} from "drizzle-orm/pg-core";
 
 export const answersTable = pgTable("answers", {
 	id: serial("id").notNull().primaryKey(),
@@ -9,6 +16,7 @@ export const answersTable = pgTable("answers", {
 	answer: text("answer").notNull(),
 	ownerId: text("ownerId"),
 	keyConcept: text("keyConcept"),
+	isStarterQuestion: boolean("isStarterQuestion"),
 	relatedConcepts: text("relatedConcepts").array(),
 	// TODO! This is all papers & we need to save the papers used for the answer separately
 	papers:
