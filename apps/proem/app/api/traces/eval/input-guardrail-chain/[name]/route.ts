@@ -1,5 +1,5 @@
 import { inputGuardrailChainWithModel } from "@/app/llm/chains/input-guardrail-chain";
-import { CorrectGuardrailEvaluator } from "@/app/llm/evaluators/correct-guardrail-evaluator";
+import { SupportedQuestionEvaluator } from "@/app/llm/evaluators/supported-question-evaluator";
 import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
 import { buildOpenAIModelForEvaluation } from "@/app/llm/models/openai-model";
 import { runOnDataset } from "langchain/smith";
@@ -20,7 +20,7 @@ export async function GET(
 		params.name,
 		{
 			evaluationConfig: {
-				customEvaluators: [new CorrectGuardrailEvaluator()],
+				customEvaluators: [new SupportedQuestionEvaluator()],
 			},
 			projectMetadata: {
 				model: model.modelName,
