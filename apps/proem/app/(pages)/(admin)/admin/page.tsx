@@ -10,7 +10,11 @@ import { cookies } from "next/headers";
 import { z } from "zod";
 
 export default async function AdminPage() {
-	const cookie = cookies().get(INTERNAL_COOKIE_NAME)?.value ?? "";
+	const cookie = cookies().get(INTERNAL_COOKIE_NAME)?.value;
+	if (!cookie) {
+		throw new Error("Unauthorized");
+	}
+
 	const { email } = z.object({ email: z.string() }).parse(JSON.parse(cookie));
 	const { isInternal } = isInternalUser(email);
 
