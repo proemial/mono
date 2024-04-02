@@ -12,17 +12,19 @@ type OpenAIModel =
 
 export const buildOpenAIChatModel = (
 	modelName: OpenAIModel,
-	organization: keyof typeof openaiOrganizations,
+	organization: keyof typeof openaiOrganizations | undefined,
 	options?: ModelOptions,
 ) =>
 	new ChatOpenAI({
 		openAIApiKey,
 		modelName: modelName,
-		temperature: options?.temperature ?? 0.8, // TODO: Set default to `0` once we have a baseline
+		temperature: options?.temperature ?? 0.8,
 		cache: options?.cache ?? true,
 		verbose: options?.verbose ?? false,
 		configuration: {
-			organization: openaiOrganizations[organization],
+			organization: organization
+				? openaiOrganizations[organization]
+				: undefined,
 		},
 		onFailedAttempt: (error) => {
 			console.error(error);
@@ -36,7 +38,7 @@ export const buildOpenAIModelForEvaluation = (
 	new ChatOpenAI({
 		openAIApiKey: process.env.OPENAI_API_KEY_TEST,
 		modelName,
-		temperature: temperature ?? 0.8, // TODO: Set default to `0` once we have a baseline
+		temperature: temperature ?? 0.8,
 		cache: false,
 		verbose: true,
 		maxRetries: 0,

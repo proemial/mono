@@ -1,8 +1,7 @@
 import { identifyIntentChainWithModel } from "@/app/llm/chains/identify-intent-chain";
 import { ExpectedIntentEvaluator } from "@/app/llm/evaluators/expected-intent-evaluator";
 import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
-import { createModel } from "@/app/llm/models/model-factory";
-import { ChatOpenAI } from "@langchain/openai";
+import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { runOnDataset } from "langchain/smith";
 import { NextRequest } from "next/server";
 
@@ -15,10 +14,7 @@ export async function GET(
 	{ params }: { params: { name: string } },
 ) {
 	console.log("params", params);
-	const model = createModel<ChatOpenAI>({
-		modelName: "gpt-3.5-turbo-0125",
-		organization: undefined,
-	});
+	const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", undefined);
 	const results = await runOnDataset(
 		identifyIntentChainWithModel(model),
 		params.name,

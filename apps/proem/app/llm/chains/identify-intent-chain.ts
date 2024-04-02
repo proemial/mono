@@ -1,8 +1,7 @@
 import { BaseLanguageModel } from "@langchain/core/language_models/base";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { ChatOpenAI } from "@langchain/openai";
-import { createModel } from "../models/model-factory";
+import { buildOpenAIChatModel } from "../models/openai-model";
 
 const prompt = ChatPromptTemplate.fromMessages<Input>([
 	[
@@ -49,10 +48,7 @@ const prompt = ChatPromptTemplate.fromMessages<Input>([
 	["human", "Question: {question}"],
 ]);
 
-const model = createModel<ChatOpenAI>({
-	modelName: "gpt-3.5-turbo-0125",
-	organization: "ask",
-});
+const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask");
 
 type Input = { question: string };
 
