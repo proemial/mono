@@ -44,16 +44,14 @@ export async function addAnswerAsStarter(
 }
 
 export async function removeAnswerAsStarter(answerId: Answer["id"]) {
-	console.log(answerId);
 	try {
 		const [updatedStarter] = await answers.removeAsStarter(answerId);
-		console.log(updatedStarter);
+
 		if (!updatedStarter) {
 			throw new Error();
 		}
 		revalidatePath("/admin");
 	} catch (e) {
 		console.log(e);
-		// return { message: "Failed to add starter", resetKey: prevState.resetKey };
 	}
 }
