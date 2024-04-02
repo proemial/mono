@@ -1,3 +1,4 @@
+import { Paper } from "@/app/api/paper-search/search";
 import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
 import {
 	PapersAsString,
@@ -11,10 +12,9 @@ import {
 } from "@langchain/core/runnables";
 import { LangChainChatHistoryMessage } from "../utils";
 import { getGenerateAnswerChain } from "./generate-answer-chain";
-import { identifyIntentChain } from "./identify-intent-chain";
 import { getGenerateAnswerChainGpt4 } from "./generate-answer-chain-gpt-4";
+import { inputGuardrailChain } from "./input-guardrail-chain";
 import { vectorisePapers } from "./paper-vectoriser";
-import { Paper } from "@/app/api/paper-search/search";
 
 type Input = {
 	question: string;
@@ -74,55 +74,41 @@ const answerChain = RunnableSequence.from<Input, Output>([
 	answerIfPapersAvailable,
 ]).withConfig({ runName: "Answer" });
 
-const declineChain = RunnableLambda.from<Input & { intent: string }, Output>(
-	(input) => input.intent,
-).withConfig({ runName: "Decline" });
+const declineChain = RunnableLambda.from<
+	{ inputGuardrailReponse: string },
+	Output
+>((input) => input.inputGuardrailReponse).withConfig({ runName: "Decline" });
 
-// The intent is supported if it is a single word and contains "SUPPORTED"
-const isSupportedIntentAndFeatureEnabledAndInitialQuestion = async (
+const isSupportedQuestion = async (
 	input: Input & {
-		intent: string;
+		inputGuardrailReponse: string;
 	},
 ) => {
-	const isSupportedIntent =
-		input.intent.split(" ").length === 1 && input.intent.includes("SUPPORTED");
-	const isInitialQuestion = input.chatHistory.length === 0;
-	const isGuardrailEnabled =
+	const isGuardrailFeatureEnabled =
 		(await getFeatureFlag("useGuardrailsOnInitialQuestion")) ?? false;
+	const isInitialQuestion = input.chatHistory.length === 0;
+	const isSupportedQuestion =
+		input.inputGuardrailReponse.split(" ").length === 1 &&
+		input.inputGuardrailReponse.includes("SUPPORTED");
 
-	console.log(`INTENT: ${input.intent}`);
-	console.log(`Supported: ${isSupportedIntent}`);
-	console.log(`Initial question: ${isInitialQuestion}`);
-	console.log(`isGuardrailEnabled: ${isGuardrailEnabled}`);
-
-	if (isGuardrailEnabled && isInitialQuestion && !isSupportedIntent) {
+	if (isGuardrailFeatureEnabled && isInitialQuestion && !isSupportedQuestion) {
 		return false;
 	}
 	return true;
 };
 
-const answerIfSupportedIntent = RunnableBranch.from<
-	Input & { intent: string },
+const answerIfSupportedQuestion = RunnableBranch.from<
+	Input & { inputGuardrailReponse: string },
 	Output
->([
-	[isSupportedIntentAndFeatureEnabledAndInitialQuestion, answerChain],
-	declineChain,
-]).withConfig({
-	runName: "AnswerIfSupportedIntent",
+>([[isSupportedQuestion, answerChain], declineChain]).withConfig({
+	runName: "AnswerIfSupportedQuestion",
 });
 
-export const answerEngineChain = answerChain.withConfig({
-	runName: "AnswerEngine",
-});
-
-export const answerEngineChainExperimental = RunnableSequence.from<
-	Input,
-	Output
->([
+export const answerEngineChain = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
-		intent: identifyIntentChain,
+		inputGuardrailReponse: inputGuardrailChain,
 	}),
-	answerIfSupportedIntent,
+	answerIfSupportedQuestion,
 ]).withConfig({
 	runName: "AnswerEngine",
 });

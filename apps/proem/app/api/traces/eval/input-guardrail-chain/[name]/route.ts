@@ -1,5 +1,5 @@
-import { identifyIntentChainWithModel } from "@/app/llm/chains/identify-intent-chain";
-import { ExpectedIntentEvaluator } from "@/app/llm/evaluators/expected-intent-evaluator";
+import { inputGuardrailChainWithModel } from "@/app/llm/chains/input-guardrail-chain";
+import { CorrectGuardrailEvaluator } from "@/app/llm/evaluators/correct-guardrail-evaluator";
 import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { runOnDataset } from "langchain/smith";
@@ -8,7 +8,7 @@ import { NextRequest } from "next/server";
 export const revalidate = 1;
 
 // Examples:
-//   - http://localhost:4242/api/traces/eval/identify-intent-chain/identify-intent-231q
+//   - http://localhost:4242/api/traces/eval/input-guardrail-chain/input-guardrail-231q
 export async function GET(
 	req: NextRequest,
 	{ params }: { params: { name: string } },
@@ -16,11 +16,11 @@ export async function GET(
 	console.log("params", params);
 	const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", undefined);
 	const results = await runOnDataset(
-		identifyIntentChainWithModel(model),
+		inputGuardrailChainWithModel(model),
 		params.name,
 		{
 			evaluationConfig: {
-				customEvaluators: [new ExpectedIntentEvaluator()],
+				customEvaluators: [new CorrectGuardrailEvaluator()],
 			},
 			projectMetadata: {
 				model: model.modelName,
