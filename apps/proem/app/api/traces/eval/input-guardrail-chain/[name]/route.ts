@@ -1,20 +1,20 @@
 import { inputGuardrailChainWithModel } from "@/app/llm/chains/input-guardrail-chain";
 import { CorrectGuardrailEvaluator } from "@/app/llm/evaluators/correct-guardrail-evaluator";
 import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
-import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
+import { buildOpenAIModelForEvaluation } from "@/app/llm/models/openai-model";
 import { runOnDataset } from "langchain/smith";
 import { NextRequest } from "next/server";
 
 export const revalidate = 1;
 
 // Examples:
-//   - http://localhost:4242/api/traces/eval/input-guardrail-chain/input-guardrail-231q
+//   - http://localhost:4242/api/traces/eval/input-guardrail-chain/decline-if-unsupported-question
 export async function GET(
 	req: NextRequest,
 	{ params }: { params: { name: string } },
 ) {
 	console.log("params", params);
-	const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", undefined);
+	const model = buildOpenAIModelForEvaluation("gpt-3.5-turbo-0125", undefined);
 	const results = await runOnDataset(
 		inputGuardrailChainWithModel(model),
 		params.name,
