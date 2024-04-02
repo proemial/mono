@@ -1,8 +1,8 @@
 import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
 import { neonDb } from "@proemial/data";
 import {
-	Answer,
-	NewAnswer,
+	type Answer,
+	type NewAnswer,
 	answersTable,
 } from "@proemial/data/neon/schema/answersTable";
 import { eq } from "drizzle-orm";
@@ -29,5 +29,9 @@ export const answers = {
 			.select()
 			.from(answersTable)
 			.where(eq(answersTable.slug, slug));
+	},
+
+	getStarters() {
+		return neonDb.select().from(answersTable).limit(10);
 	},
 };
