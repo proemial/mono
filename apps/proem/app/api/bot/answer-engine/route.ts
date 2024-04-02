@@ -10,6 +10,8 @@ import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 import { z } from "zod";
 
+export const maxDuration = 30;
+
 const answerEngineRouteParams = z.object({
 	slug: z.string().optional().nullable(),
 	userId: z.string().optional(),
