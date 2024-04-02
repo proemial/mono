@@ -1,5 +1,7 @@
 "use server";
 
+import { answers } from "@/app/api/bot/answer-engine/answers";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 const addAnswerAsStarterSchema = z.object({
@@ -16,7 +18,7 @@ export async function addAnswerAsStarter(
 ) {
 	try {
 		const { shareUrl } = addAnswerAsStarterSchema.parse({
-			shareUrl: formData.get("shareId"),
+			shareUrl: formData.get("shareUrl"),
 		});
 
 		const shareId = shareUrl.split("/").at(-1);
@@ -27,8 +29,12 @@ export async function addAnswerAsStarter(
 
 		console.log(shareId);
 
-		// TODO!: add
-		// revalidatePath("/");
+		const [updatedStarter] = await answers.addAsStarter(shareId);
+
+		if (!updatedStarter) {
+			throw new Error();
+		}
+		revalidatePath("/admin");
 		return { message: `Added starter: ${shareId}` };
 	} catch (e) {
 		return { message: "Failed to add starter" };

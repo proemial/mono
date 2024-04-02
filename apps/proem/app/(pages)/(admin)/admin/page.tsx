@@ -36,7 +36,7 @@ export default async function AdminPage() {
 					<AddStarterForm />
 				</div>
 
-				<Table className="">
+				<Table>
 					<TableHeader>
 						<TableRow>
 							<TableHead>ID</TableHead>
@@ -45,10 +45,10 @@ export default async function AdminPage() {
 							<TableHead className="text-right">Action</TableHead>
 						</TableRow>
 					</TableHeader>
-					<TableBody className="">
+					<TableBody>
 						{starterQuestions.map((question) => {
 							return (
-								<TableRow className="">
+								<TableRow key={question.id}>
 									<TableCell className="font-medium">{question.id}</TableCell>
 									<TableCell className="">
 										Q: {question.question}

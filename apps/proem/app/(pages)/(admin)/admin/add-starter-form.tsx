@@ -23,19 +23,11 @@ export function AddStarterForm() {
 	const [state, formAction] = useFormState(addAnswerAsStarter, initialState);
 
 	return (
-		<>
-			<form action={formAction}>
-				<Input
-					placeholder="Input a share url..."
-					name="shareUrl"
-					value={
-						"http://localhost:4242/share/extended-cro-bfe98c0af5704262b4f580"
-					}
-				/>
-				<SubmitButton />
+		<form action={formAction}>
+			<Input placeholder="Input a share url..." name="shareUrl" />
+			<SubmitButton />
 
-				<p>{state?.message}</p>
-			</form>
-		</>
+			<p>{state?.message}</p>
+		</form>
 	);
 }
