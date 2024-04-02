@@ -3,17 +3,17 @@ import { EvaluationResult, RunEvaluator } from "langsmith/evaluation";
 import { runOutputAsString } from "../helpers/evaluator-helpers";
 
 /**
- * This evaluator checks the "correctness" of the input guardrail.
+ * This evaluator checks the input guardrail.
  *
- * The guardrail either return "SUPPORTED" or a reason why the input is not
- * supported.
+ * The guardrail either returns "SUPPORTED" or a reason why the user question is
+ * not supported.
  */
-export class CorrectGuardrailEvaluator implements RunEvaluator {
+export class SupportedQuestionEvaluator implements RunEvaluator {
 	async evaluateRun(run: Run, example?: Example): Promise<EvaluationResult> {
 		const output = runOutputAsString(run);
 		const expected = example?.outputs?.output as string | undefined;
-		const result = CorrectGuardrailEvaluator.evaluate(output, expected);
-		return { key: "correct_guardrail", ...result };
+		const result = SupportedQuestionEvaluator.evaluate(output, expected);
+		return { key: "supported_question", ...result };
 	}
 
 	static evaluate(output: string | undefined, expected: string | undefined) {
@@ -24,7 +24,7 @@ export class CorrectGuardrailEvaluator implements RunEvaluator {
 			throw new Error("No expected value to compare against.");
 		}
 		if (expected === "") {
-			// No expected value means unsupported user input and we want the
+			// No expected value means unsupported user question and we want the
 			// model output to include the reason why it is unsupported.
 			const comment = `expected: a reason for unsupported, actual: ${output}`;
 			return {
