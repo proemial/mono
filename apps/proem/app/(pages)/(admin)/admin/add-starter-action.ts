@@ -11,8 +11,9 @@ const addAnswerAsStarterSchema = z.object({
 });
 
 export async function addAnswerAsStarter(
-	_prevState: {
+	prevState: {
 		message: string;
+		resetKey: string;
 	},
 	formData: FormData,
 ) {
@@ -27,16 +28,15 @@ export async function addAnswerAsStarter(
 			throw new Error();
 		}
 
-		console.log(shareId);
-
 		const [updatedStarter] = await answers.addAsStarter(shareId);
 
 		if (!updatedStarter) {
 			throw new Error();
 		}
 		revalidatePath("/admin");
-		return { message: `Added starter: ${shareId}` };
+		return { message: `Added starter: ${shareId}`, resetKey: shareId };
 	} catch (e) {
-		return { message: "Failed to add starter" };
+		console.log(e);
+		return { message: "Failed to add starter", resetKey: prevState.resetKey };
 	}
 }

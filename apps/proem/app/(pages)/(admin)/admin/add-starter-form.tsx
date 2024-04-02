@@ -7,6 +7,7 @@ import { useFormState, useFormStatus } from "react-dom";
 
 const initialState = {
 	message: "",
+	resetKey: "reset-key",
 };
 
 function SubmitButton() {
@@ -23,7 +24,7 @@ export function AddStarterForm() {
 	const [state, formAction] = useFormState(addAnswerAsStarter, initialState);
 
 	return (
-		<form action={formAction}>
+		<form action={formAction} key={state?.resetKey}>
 			<Input placeholder="Input a share url..." name="shareUrl" />
 			<SubmitButton />
 
