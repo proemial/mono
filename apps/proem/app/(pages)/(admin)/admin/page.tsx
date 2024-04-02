@@ -27,6 +27,7 @@ export default async function AdminPage() {
 	}
 
 	const starterQuestions = await answers.getStarters();
+
 	return (
 		<PageLayout title="admin">
 			<div className="w-full py-3 space-y-4">
