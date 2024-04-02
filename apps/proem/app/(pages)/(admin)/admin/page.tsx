@@ -1,3 +1,4 @@
+import { AddStarterForm } from "@/app/(pages)/(admin)/admin/add-starter-form";
 import { PageLayout } from "@/app/(pages)/(app)/page-layout";
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import {
@@ -5,7 +6,6 @@ import {
 	isInternalUser,
 } from "@/app/components/analytics/is-internal-user";
 import { Button } from "@/app/components/shadcn-ui/button";
-import { Input } from "@/app/components/shadcn-ui/input";
 import {
 	Table,
 	TableBody,
@@ -32,8 +32,7 @@ export default async function AdminPage() {
 			<div className="w-full py-3 space-y-4">
 				<h1>Starter questions ({starterQuestions.length}):</h1>
 				<div className="flex gap-2">
-					<Input placeholder="Input a share url..." />
-					<Button>Add</Button>
+					<AddStarterForm />
 				</div>
 
 				<Table className="">
