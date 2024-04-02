@@ -7,7 +7,7 @@ import { XCircleIcon } from "lucide-react";
 import { useFormState, useFormStatus } from "react-dom";
 
 const initialState = {
-	message: "",
+	error: null,
 	resetKey: "reset-key",
 };
 
@@ -31,12 +31,12 @@ export function AddStarterForm() {
 				<SubmitButton />
 			</form>
 
-			{state.message && (
+			{state.error && (
 				<div className="px-2 py-1 bg-red-500 rounded-md">
 					<div className="flex items-center gap-2">
 						<XCircleIcon className="text-red-300" />
 
-						<h3 className="text-sm font-medium text-red-50">{state.message}</h3>
+						<h3 className="text-sm font-medium text-red-50">{state.error}</h3>
 					</div>
 				</div>
 			)}

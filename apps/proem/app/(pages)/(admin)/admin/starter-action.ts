@@ -8,14 +8,19 @@ import { z } from "zod";
 const addAnswerAsStarterSchema = z.object({
 	shareUrl: z
 		.string({
+			description: "Invalid share URL",
 			invalid_type_error: "Invalid share URL",
+			required_error: "Invalid share URL required",
 		})
-		.regex(/http:\/\/localhost:4242\/share\/([a-zA-Z0-9\\-]+)$/),
+		.regex(
+			/^.+\/share\/.+/,
+			"Does not match the valid share url format: https://proem.ai/share/1234 ",
+		),
 });
 
 export async function addAnswerAsStarter(
 	prevState: {
-		message: string;
+		error: string | null;
 		resetKey: string;
 	},
 	formData: FormData,
@@ -37,9 +42,16 @@ export async function addAnswerAsStarter(
 			throw new Error();
 		}
 		revalidatePath("/admin");
-		return { message: `Added starter: ${shareId}`, resetKey: shareId };
+		return { error: null, resetKey: shareId };
 	} catch (e) {
-		return { message: "Failed to add starter", resetKey: prevState.resetKey };
+		console.log(e);
+		const errorMessage =
+			e instanceof z.ZodError
+				? e.flatten().fieldErrors.shareUrl?.toString() ??
+				  "Failed to validate the URL"
+				: "Failed to add starter";
+
+		return { error: errorMessage, resetKey: prevState.resetKey };
 	}
 }
 
