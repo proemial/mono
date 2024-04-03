@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
 		});
 
 		if (!returnIntermediateSteps) {
-			const logStream = await agentExecutor.streamLog({
+			const logStream = agentExecutor.streamLog({
 				input: currentMessageContent,
 				chat_history: previousMessages,
 			});

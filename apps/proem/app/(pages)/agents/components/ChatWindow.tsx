@@ -19,12 +19,12 @@ export function ChatWindow(props: {
 
     const { endpoint, emptyStateComponent, placeholder, showIntermediateStepsToggle, emoji } = props;
 
-    const [showIntermediateSteps, setShowIntermediateSteps] = useState(false);
+    const [showIntermediateSteps, setShowIntermediateSteps] = useState(true);
     const [intermediateStepsLoading, setIntermediateStepsLoading] = useState(false);
     const intemediateStepsToggle = (
         <div>
             <input type="checkbox" id="show_intermediate_steps" name="show_intermediate_steps" checked={showIntermediateSteps} onChange={(e) => setShowIntermediateSteps(e.target.checked)} />
-            <label htmlFor="show_intermediate_steps"> Show intermediate steps</label>
+            <label htmlFor="show_intermediate_steps"> Show intermediate steps <i>(no streaming)</i></label>
         </div>
     );
 
