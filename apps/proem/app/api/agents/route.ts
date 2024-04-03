@@ -6,11 +6,8 @@ import {
 import { ChatOpenAI } from "@langchain/openai";
 import { StreamingTextResponse, Message as VercelChatMessage } from "ai";
 import { AgentExecutor, createOpenAIFunctionsAgent } from "langchain/agents";
-import { DynamicTool } from "langchain/tools";
 import { NextRequest, NextResponse } from "next/server";
-import papers from "./papers.json";
-
-export const runtime = "edge";
+import { getTools } from "./tools";
 
 const convertVercelMessageToLangChainMessage = (message: VercelChatMessage) => {
 	if (message.role === "user") {
@@ -35,12 +32,12 @@ export async function POST(req: NextRequest) {
 			.slice(0, -1)
 			.map(convertVercelMessageToLangChainMessage);
 		const currentMessageContent = messages[messages.length - 1].content;
+		console.log("currentMessageContent", previousMessages);
 
 		const tools = getTools();
 		const llm = new ChatOpenAI({
-			modelName: "gpt-3.5-turbo-1106",
+			modelName: "gpt-3.5-turbo-1106", // "gpt-4-0125-preview",
 			temperature: 0,
-			// IMPORTANT: Must "streaming: true" on OpenAI to enable final output streaming below.
 			streaming: true,
 		});
 
@@ -106,18 +103,18 @@ function getPrompt() {
 	]);
 }
 
-function getTools() {
-	const searchPapers = new DynamicTool({
-		name: "SearchPapers",
-		description: "Find specific research papers matching a user query",
-		func: async (options) => {
-			console.log("Triggered SearchPapers,", `input: '${options}'`);
-			return JSON.stringify(papers);
-		},
-	});
+// function getTools() {
+// 	const searchPapers = new DynamicTool({
+// 		name: "SearchPapers",
+// 		description: "Find specific research papers matching a user query",
+// 		func: async (options) => {
+// 			console.log("Triggered SearchPapers,", `input: '${options}'`);
+// 			return JSON.stringify(papers);
+// 		},
+// 	});
 
-	return [searchPapers];
-}
+// 	return [searchPapers];
+// }
 
 const template = `
 You will provide conclusive answers to user questions, based on relevant research articles, retrieved using the provided SearchPapers tool.
