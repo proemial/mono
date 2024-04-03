@@ -15,8 +15,12 @@ Answers must be grounded in specific research papers.
 
 `;
 
-// TODO: Fix streaming with intermediate steps
-// It should be possible: https://blog.langchain.dev/langchain-v0-1-0
+// TODO:
+// - Improve prompt
+// - Fix streaming with intermediate steps
+//   It should be possible: https://blog.langchain.dev/langchain-v0-1-0
+// - Add intermediate step, when a tool is triggered
+// - Extract trace id from agent execution, and add it to the tools
 
 export async function POST(req: NextRequest) {
 	try {
@@ -40,8 +44,10 @@ export async function POST(req: NextRequest) {
 			streaming: true,
 		});
 
+		// const prompt = await hub.pull<ChatPromptTemplate>(
+		// 	"proemial/ask_agent:c0575285",
+		// );
 		const prompt = getPrompt();
-
 		const agent = await createOpenAIFunctionsAgent({ llm, tools, prompt });
 
 		const agentExecutor = new AgentExecutor({
