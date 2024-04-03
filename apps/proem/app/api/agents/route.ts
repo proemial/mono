@@ -15,6 +15,9 @@ Answers must be grounded in specific research papers.
 
 `;
 
+// TODO: Fix streaming with intermediate steps
+// It should be possible: https://blog.langchain.dev/langchain-v0-1-0
+
 export async function POST(req: NextRequest) {
 	try {
 		const body = await req.json();
@@ -24,7 +27,6 @@ export async function POST(req: NextRequest) {
 				message.role === "user" || message.role === "assistant",
 		);
 		const returnIntermediateSteps = body.show_intermediate_steps;
-		console.log("returnIntermediateSteps", returnIntermediateSteps);
 
 		const previousMessages = messages
 			.slice(0, -1)
@@ -50,7 +52,7 @@ export async function POST(req: NextRequest) {
 		});
 
 		if (!returnIntermediateSteps) {
-			const logStream = agentExecutor.streamLog({
+			const logStream = await agentExecutor.streamLog({
 				input: currentMessageContent,
 				chat_history: previousMessages,
 			});
