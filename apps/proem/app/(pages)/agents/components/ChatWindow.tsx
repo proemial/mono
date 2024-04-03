@@ -11,13 +11,11 @@ export function ChatWindow(props: {
     endpoint: string,
     emptyStateComponent: ReactElement,
     placeholder?: string,
-    titleText?: string,
-    emoji?: string;
     showIntermediateStepsToggle?: boolean
 }) {
     const messageContainerRef = useRef<HTMLDivElement | null>(null);
 
-    const { endpoint, emptyStateComponent, placeholder, titleText = "An LLM", showIntermediateStepsToggle, emoji } = props;
+    const { endpoint, emptyStateComponent, placeholder, showIntermediateStepsToggle } = props;
 
     const [showIntermediateSteps, setShowIntermediateSteps] = useState(true);
     const [intermediateStepsLoading, setIntermediateStepsLoading] = useState(false);
@@ -102,7 +100,6 @@ export function ChatWindow(props: {
 
     return (
         <div className={`w-full flex flex-col items-center p-4 md:p-8 rounded grow overflow-hidden ${(messages.length > 0 ? "border" : "")}`}>
-            <h2 className={`${messages.length > 0 ? "" : "hidden"} text-2xl`}>{emoji} {titleText}</h2>
             {messages.length === 0 ? emptyStateComponent : ""}
             <div
                 className="flex flex-col-reverse w-full mb-4 overflow-auto transition-[flex-grow] ease-in-out"
@@ -113,7 +110,7 @@ export function ChatWindow(props: {
                         .reverse()
                         .map((m, i) => {
                             const sourceKey = (messages.length - 1 - i).toString();
-                            return (m.role === "system" ? <IntermediateStep key={i} message={m} /> : <ChatMessageBubble key={i} message={m} aiEmoji={emoji} sources={sourcesForMessages[sourceKey]} />)
+                            return (m.role === "system" ? <IntermediateStep key={i} message={m} /> : <ChatMessageBubble key={i} message={m} sources={sourcesForMessages[sourceKey]} />)
                         })
                 ) : (
                     ""

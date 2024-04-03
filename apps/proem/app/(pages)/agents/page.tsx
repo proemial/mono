@@ -5,8 +5,6 @@ export default function AgentsPage() {
         <ChatWindow
             endpoint="api/agents"
             emptyStateComponent={<div />}
-            titleText="Agents"
-            emoji="🦜"
             showIntermediateStepsToggle={true}
         />
     );
