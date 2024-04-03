@@ -14,7 +14,7 @@ export async function GET(
 	{ params }: { params: { name: string } },
 ) {
 	console.log("params", params);
-	const model = buildOpenAIModelForEvaluation("gpt-3.5-turbo-0125", undefined);
+	const model = buildOpenAIModelForEvaluation("gpt-3.5-turbo-0125");
 	const results = await runOnDataset(
 		inputGuardrailChainWithModel(model),
 		params.name,
