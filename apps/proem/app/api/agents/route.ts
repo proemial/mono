@@ -52,6 +52,7 @@ export async function POST(req: NextRequest) {
 			agent,
 			tools,
 			returnIntermediateSteps,
+			maxIterations: 3,
 		});
 
 		if (!returnIntermediateSteps) {
@@ -106,16 +107,7 @@ function getPrompt() {
 }
 
 function getTools() {
-	const foo = new DynamicTool({
-		name: "foo",
-		description: "returns the answer to what foo is",
-		func: async () => {
-			console.log("Triggered foo function");
-			return 'The value of food is "This is a demo for YouTube"';
-		},
-	});
-
-	const life = new DynamicTool({
+	const searchPapers = new DynamicTool({
 		name: "SearchPapers",
 		description: "Find specific research papers matching a user query",
 		func: async (options) => {
@@ -124,7 +116,7 @@ function getTools() {
 		},
 	});
 
-	return [foo, life];
+	return [searchPapers];
 }
 
 const template = `
