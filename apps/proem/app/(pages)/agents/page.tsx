@@ -5,7 +5,6 @@ export default function AgentsPage() {
         <ChatWindow
             endpoint="api/agents"
             emptyStateComponent={<div />}
-            showIntermediateStepsToggle={true}
         />
     );
 }

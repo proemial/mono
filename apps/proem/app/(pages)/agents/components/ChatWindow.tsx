@@ -11,20 +11,12 @@ export function ChatWindow(props: {
     endpoint: string,
     emptyStateComponent: ReactElement,
     placeholder?: string,
-    showIntermediateStepsToggle?: boolean
 }) {
     const messageContainerRef = useRef<HTMLDivElement | null>(null);
 
-    const { endpoint, emptyStateComponent, placeholder, showIntermediateStepsToggle } = props;
+    const { endpoint, emptyStateComponent, placeholder } = props;
 
-    const [showIntermediateSteps, setShowIntermediateSteps] = useState(true);
     const [intermediateStepsLoading, setIntermediateStepsLoading] = useState(false);
-    const intemediateStepsToggle = showIntermediateStepsToggle && (
-        <div>
-            <input type="checkbox" id="show_intermediate_steps" name="show_intermediate_steps" checked={showIntermediateSteps} onChange={(e) => setShowIntermediateSteps(e.target.checked)} />
-            <label htmlFor="show_intermediate_steps"> Show intermediate steps</label>
-        </div>
-    );
 
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     const [sourcesForMessages, setSourcesForMessages] = useState<Record<string, any>>({});
@@ -58,42 +50,37 @@ export function ChatWindow(props: {
         if (chatEndpointIsLoading ?? intermediateStepsLoading) {
             return;
         }
-        if (!showIntermediateSteps) {
-            handleSubmit(e);
-            // Some extra work to show intermediate steps properly
-        } else {
-            setIntermediateStepsLoading(true);
-            setInput("");
-            const messagesWithUserReply = messages.concat({ id: messages.length.toString(), content: input, role: "user" });
-            setMessages(messagesWithUserReply);
-            const response = await fetch(endpoint, {
-                method: "POST",
-                body: JSON.stringify({
-                    messages: messagesWithUserReply,
-                    show_intermediate_steps: true
-                })
+        setIntermediateStepsLoading(true);
+        setInput("");
+        const messagesWithUserReply = messages.concat({ id: messages.length.toString(), content: input, role: "user" });
+        setMessages(messagesWithUserReply);
+        const response = await fetch(endpoint, {
+            method: "POST",
+            body: JSON.stringify({
+                messages: messagesWithUserReply,
+                show_intermediate_steps: true
+            })
+        });
+        const json = await response.json();
+        setIntermediateStepsLoading(false);
+        if (response.status === 200) {
+            // Represent intermediate steps as system messages for display purposes
+            const intermediateStepMessages = (json.intermediate_steps ?? []).map((intermediateStep: AgentStep, i: number) => {
+                return { id: (messagesWithUserReply.length + i).toString(), content: JSON.stringify(intermediateStep), role: "system" };
             });
-            const json = await response.json();
-            setIntermediateStepsLoading(false);
-            if (response.status === 200) {
-                // Represent intermediate steps as system messages for display purposes
-                const intermediateStepMessages = (json.intermediate_steps ?? []).map((intermediateStep: AgentStep, i: number) => {
-                    return { id: (messagesWithUserReply.length + i).toString(), content: JSON.stringify(intermediateStep), role: "system" };
+            const newMessages = messagesWithUserReply;
+            for (const message of intermediateStepMessages) {
+                newMessages.push(message);
+                setMessages([...newMessages]);
+                await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
+            }
+            setMessages([...newMessages, { id: (newMessages.length + intermediateStepMessages.length).toString(), content: json.output, role: "assistant" }]);
+        } else {
+            if (json.error) {
+                console.error(json.error, {
+                    theme: "dark"
                 });
-                const newMessages = messagesWithUserReply;
-                for (const message of intermediateStepMessages) {
-                    newMessages.push(message);
-                    setMessages([...newMessages]);
-                    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
-                }
-                setMessages([...newMessages, { id: (newMessages.length + intermediateStepMessages.length).toString(), content: json.output, role: "assistant" }]);
-            } else {
-                if (json.error) {
-                    console.error(json.error, {
-                        theme: "dark"
-                    });
-                    throw new Error(json.error);
-                }
+                throw new Error(json.error);
             }
         }
     }
@@ -118,9 +105,6 @@ export function ChatWindow(props: {
             </div>
 
             <form onSubmit={sendMessage} className="flex flex-col w-full">
-                <div className="flex">
-                    {intemediateStepsToggle}
-                </div>
                 <div className="flex w-full mt-4">
                     <input
                         className="p-4 mr-8 text-black rounded grow"

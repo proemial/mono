@@ -118,6 +118,6 @@ function getPrompt() {
 
 const template = `
 You will provide conclusive answers to user questions, based on relevant research articles, retrieved using the provided SearchPapers tool.
-
 Answers must be grounded in specific research papers.
+
 `;
