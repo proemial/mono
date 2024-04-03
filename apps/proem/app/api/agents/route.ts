@@ -9,15 +9,11 @@ import { AgentExecutor, createOpenAIFunctionsAgent } from "langchain/agents";
 import { NextRequest, NextResponse } from "next/server";
 import { getTools } from "./tools";
 
-const convertVercelMessageToLangChainMessage = (message: VercelChatMessage) => {
-	if (message.role === "user") {
-		return new HumanMessage(message.content);
-	}
-	if (message.role === "assistant") {
-		return new AIMessage(message.content);
-	}
-	return new ChatMessage(message.content, message.role);
-};
+const template = `
+You will provide conclusive answers to user questions, based on relevant research articles, retrieved using the provided SearchPapers tool.
+Answers must be grounded in specific research papers.
+
+`;
 
 export async function POST(req: NextRequest) {
 	try {
@@ -28,11 +24,12 @@ export async function POST(req: NextRequest) {
 				message.role === "user" || message.role === "assistant",
 		);
 		const returnIntermediateSteps = body.show_intermediate_steps;
+		console.log("returnIntermediateSteps", returnIntermediateSteps);
+
 		const previousMessages = messages
 			.slice(0, -1)
 			.map(convertVercelMessageToLangChainMessage);
 		const currentMessageContent = messages[messages.length - 1].content;
-		console.log("currentMessageContent", previousMessages);
 
 		const tools = getTools();
 		const llm = new ChatOpenAI({
@@ -53,7 +50,7 @@ export async function POST(req: NextRequest) {
 		});
 
 		if (!returnIntermediateSteps) {
-			const logStream = await agentExecutor.streamLog({
+			const logStream = agentExecutor.streamLog({
 				input: currentMessageContent,
 				chat_history: previousMessages,
 			});
@@ -103,21 +100,12 @@ function getPrompt() {
 	]);
 }
 
-// function getTools() {
-// 	const searchPapers = new DynamicTool({
-// 		name: "SearchPapers",
-// 		description: "Find specific research papers matching a user query",
-// 		func: async (options) => {
-// 			console.log("Triggered SearchPapers,", `input: '${options}'`);
-// 			return JSON.stringify(papers);
-// 		},
-// 	});
-
-// 	return [searchPapers];
-// }
-
-const template = `
-You will provide conclusive answers to user questions, based on relevant research articles, retrieved using the provided SearchPapers tool.
-Answers must be grounded in specific research papers.
-
-`;
+const convertVercelMessageToLangChainMessage = (message: VercelChatMessage) => {
+	if (message.role === "user") {
+		return new HumanMessage(message.content);
+	}
+	if (message.role === "assistant") {
+		return new AIMessage(message.content);
+	}
+	return new ChatMessage(message.content, message.role);
+};

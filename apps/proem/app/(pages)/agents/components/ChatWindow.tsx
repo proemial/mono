@@ -21,7 +21,7 @@ export function ChatWindow(props: {
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     const [sourcesForMessages, setSourcesForMessages] = useState<Record<string, any>>({});
 
-    const { messages, input, setInput, handleInputChange, handleSubmit, isLoading: chatEndpointIsLoading, setMessages } =
+    const { messages, input, setInput, handleInputChange, isLoading: chatEndpointIsLoading, setMessages } =
         useChat({
             api: endpoint,
             onResponse(response) {
@@ -39,7 +39,7 @@ export function ChatWindow(props: {
             }
         });
 
-    async function sendMessage(e: FormEvent<HTMLFormElement>) {
+    const sendMessage = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (messageContainerRef.current) {
             messageContainerRef.current.classList.add("grow");
@@ -77,9 +77,6 @@ export function ChatWindow(props: {
             setMessages([...newMessages, { id: (newMessages.length + intermediateStepMessages.length).toString(), content: json.output, role: "assistant" }]);
         } else {
             if (json.error) {
-                console.error(json.error, {
-                    theme: "dark"
-                });
                 throw new Error(json.error);
             }
         }
