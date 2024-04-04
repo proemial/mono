@@ -15,11 +15,18 @@ Answers must be grounded in specific research papers.
 
 `;
 
-// TODO:
-// - Improve prompt
+// Finalise POC
 // - Fix streaming with intermediate steps
-//   It should be possible: https://blog.langchain.dev/langchain-v0-1-0
-// - Add intermediate step, when a tool is triggered
+//    - https://js.langchain.com/docs/modules/agents/how_to/streaming
+// - Add intermediate step (or streamEvents) when a tool is triggered
+
+// Merge
+// - Merge behind separate url
+// - Apply improved prompt
+// - Implement sharing
+
+// Improvements
+// - Rename parent run
 // - Extract trace id from agent execution, and add it to the tools
 
 export async function POST(req: NextRequest) {
