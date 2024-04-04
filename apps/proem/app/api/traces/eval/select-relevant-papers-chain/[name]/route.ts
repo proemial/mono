@@ -24,7 +24,6 @@ export async function GET(
 			projectMetadata: {
 				model: model.modelName,
 				temperature: model.temperature,
-				prompt_changes: "none",
 			},
 		},
 	);

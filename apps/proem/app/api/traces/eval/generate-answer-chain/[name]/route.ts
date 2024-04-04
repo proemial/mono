@@ -32,7 +32,6 @@ export async function GET(
 		projectMetadata: {
 			model: model.modelName,
 			temperature: model.temperature,
-			latest_prompt_changes: "reworked prompt",
 		},
 	});
 	const { scores, avg } = summariseRunResults(results);
