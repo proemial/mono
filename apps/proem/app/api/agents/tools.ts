@@ -1,4 +1,4 @@
-import { DynamicTool } from "langchain/tools";
+import { DynamicTool, WikipediaQueryRun } from "langchain/tools";
 import { answerChain } from "./fetch-papers";
 
 export function getTools() {
@@ -8,7 +8,10 @@ export function getTools() {
 		func: searchTool,
 	});
 
-	return [searchPapers];
+	return [
+		searchPapers,
+		new WikipediaQueryRun({ topKResults: 3, maxDocContentLength: 4000 }),
+	];
 }
 
 async function searchTool(input: string) {
