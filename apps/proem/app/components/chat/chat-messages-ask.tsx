@@ -7,6 +7,7 @@ import {
 	findByEventType,
 	findLatestByEventType,
 } from "@/app/api/bot/answer-engine/events";
+import { useFeatureFlags } from "@/app/components/feature-flags/client-flags";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { useUser } from "@clerk/nextjs";
 import { type Message, useChat } from "ai/react";
@@ -39,6 +40,9 @@ export function ChatMessages({
 		setMessages,
 		data,
 	} = useShareableChat(initialMessages, existingShareId);
+	const isDigestibleAnswersEnabled = useFeatureFlags([
+		"digestibleAnswers",
+	]).digestibleAnswers;
 
 	const messagesDiv = useScroll(messages);
 	const showLoadingState = useLoadingState(isLoading, messages);
@@ -80,7 +84,7 @@ export function ChatMessages({
 						const isLastMessageAndLoading = isLastMessage ? isLoading : false;
 						const transactionId = isMessageFromAI
 							? // We`r looking up the prior message so it can't be undefined
-							messages.at(i - 1)!.id
+							  messages.at(i - 1)!.id
 							: message.id;
 						const onShareHandle =
 							isMessageFromAI && !isLastMessageAndLoading
@@ -96,6 +100,7 @@ export function ChatMessages({
 								runId={getAnswerRunId(message.role, i)}
 								isLoading={isLastMessageAndLoading}
 								showThrobber={isMessageFromAI && isLoading && isLastMessage}
+								showLinkCards={!isDigestibleAnswersEnabled}
 							/>
 						);
 					})}

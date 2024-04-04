@@ -43,9 +43,9 @@ function convertHrefToLink(fullHref: string) {
 	};
 }
 
-type Link = { href: string; content: string; title: string };
+type LinkType = { href: string; content: string; title: string };
 
-export function applyElement(asElement: (link: Link) => React.ReactNode) {
+export function applyElement(asElement: (link: LinkType) => React.ReactNode) {
 	return function withAppliedElement(message: string) {
 		const arr = message
 			.replace(aTaglinkCheckReqex, "~~$&~~")
@@ -89,7 +89,7 @@ export function applyElement(asElement: (link: Link) => React.ReactNode) {
 			},
 			{ content: [], links: [] } as {
 				content: JSX.Element[];
-				links: Link[];
+				links: LinkType[];
 			},
 		);
 		return test;
@@ -100,6 +100,15 @@ export const applyLinks = applyElement((link) => {
 	return (
 		<Link href={link.href} className="font-normal text-green-500">
 			{link.content}
+		</Link>
+	);
+});
+export const applyLinksAsPills = applyElement((link) => {
+	return (
+		<Link href={link.href}>
+			<span className="bg-green-100 text-green-800 text-xs font-medium me-1 px-2 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+				{link.content}
+			</span>
 		</Link>
 	);
 });
