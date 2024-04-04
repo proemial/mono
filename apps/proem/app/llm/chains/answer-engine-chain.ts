@@ -10,9 +10,9 @@ import {
 	RunnablePassthrough,
 	RunnableSequence,
 } from "@langchain/core/runnables";
+import { buildOpenAIChatModel } from "../models/openai-model";
 import { LangChainChatHistoryMessage } from "../utils";
-import { getGenerateAnswerChain } from "./generate-answer-chain";
-import { getGenerateAnswerChainGpt4 } from "./generate-answer-chain-gpt-4";
+import { generateAnswerChain } from "./generate-answer-chain";
 import { inputGuardrailChain } from "./input-guardrail-chain";
 import { vectorisePapers } from "./paper-vectoriser";
 
@@ -39,7 +39,13 @@ const useGpt4IfPapersAvailable = RunnableBranch.from<
 		papers: PapersAsString;
 	},
 	Output
->([[isGpt4Enabled, getGenerateAnswerChainGpt4()], getGenerateAnswerChain()]);
+>([
+	[
+		isGpt4Enabled,
+		generateAnswerChain(buildOpenAIChatModel("gpt-4-0125-preview", "ask")),
+	],
+	generateAnswerChain(),
+]);
 
 const answerIfPapersAvailable = RunnableBranch.from<
 	{
