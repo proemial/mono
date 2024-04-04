@@ -34,7 +34,7 @@ const extractSynonymGroupsChain = () =>
 		runName: "ExtractSynonymGroups",
 	});
 
-const toSanitizedArray = (str: string) => JSON.parse(str);
+const toSanitizedArray = (str: string) => JSON.parse(str.replace("\n", ""));
 
 const generateOpenAlexSearch = RunnableLambda.from<
 	SynonymGroups,
