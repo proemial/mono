@@ -23,7 +23,7 @@ const reRankAndLimit = RunnableLambda.from<ReRankInput, ReRankInput>(
 	},
 ).withConfig({ runName: "ReRankPapers" });
 
-export const answerChain = RunnableSequence.from<Input, ReRankInput>([
+export const openAlexChain = RunnableSequence.from<Input, ReRankInput>([
 	RunnablePassthrough.assign({
 		papers: fetchPapersChain,
 	}),

@@ -1,11 +1,11 @@
 import { DynamicTool, WikipediaQueryRun } from "langchain/tools";
-import { answerChain } from "./fetch-papers";
+import { openAlexChain } from "./fetch-papers";
 
 export function getTools() {
 	const searchPapers = new DynamicTool({
 		name: "SearchPapers",
 		description: "Find specific research papers matching a user query",
-		func: searchTool,
+		func: OpenAlexQuery,
 	});
 
 	return [
@@ -14,10 +14,10 @@ export function getTools() {
 	];
 }
 
-async function searchTool(input: string) {
+async function OpenAlexQuery(input: string) {
 	console.log("Triggered SearchPapers,", `input: '${input}'`);
 
-	const result = await answerChain.invoke({
+	const result = await openAlexChain.invoke({
 		question: input,
 	});
 
