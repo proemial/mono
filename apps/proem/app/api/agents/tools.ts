@@ -1,4 +1,4 @@
-import { DynamicTool, WikipediaQueryRun } from "langchain/tools";
+import { DynamicTool } from "langchain/tools";
 import { openAlexChain } from "./fetch-papers";
 
 export function getTools() {
@@ -8,10 +8,7 @@ export function getTools() {
 		func: OpenAlexQuery,
 	});
 
-	return [
-		searchPapers,
-		new WikipediaQueryRun({ topKResults: 3, maxDocContentLength: 4000 }),
-	];
+	return [searchPapers];
 }
 
 async function OpenAlexQuery(input: string) {

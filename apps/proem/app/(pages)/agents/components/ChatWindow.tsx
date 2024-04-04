@@ -43,9 +43,7 @@ export function ChatWindow(props: {
                 }
             },
             onError: (e) => {
-                console.error(e.message, {
-                    theme: "dark"
-                });
+                console.error(e.message);
             }
         });
 
