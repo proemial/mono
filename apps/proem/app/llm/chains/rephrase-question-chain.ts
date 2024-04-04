@@ -24,6 +24,8 @@ information to make it unambiguous.
 
 If a user is not asking a question, do not rephase the it, but instead reply
 with the given input.
+
+If a user asks to change the subject, ignore the chat history.
 `,
 	],
 	new MessagesPlaceholder("chatHistory"),

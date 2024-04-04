@@ -58,7 +58,8 @@ const answerIfPapersAvailable = RunnableBranch.from<
 >([
 	[hasPapersAvailable, useGpt4IfPapersAvailable],
 	() => `I'm sorry, I could't find any relevant research papers to support an
-	answer. Please try again with a different question.`,
+	answer. Please try again with a different question, or start a new
+	conversation.`,
 ]);
 
 type ReRankInput = { question: string; papers: string };
