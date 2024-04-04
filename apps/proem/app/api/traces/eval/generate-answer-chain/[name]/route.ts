@@ -1,13 +1,13 @@
-import { NextRequest } from "next/server";
-import { runOnDataset } from "langchain/smith";
+import { getGenerateAnswerChain } from "@/app/llm/chains/generate-answer-chain";
+import {
+	LinksEvaluator,
+	ValidTitleEvaluator,
+} from "@/app/llm/evaluators/link-evaluators";
 import { CharCountEvaluator } from "@/app/llm/evaluators/string-evaluators";
 import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
-import {
-	ValidTitleEvaluator,
-	LinksEvaluator,
-} from "@/app/llm/evaluators/link-evaluators";
-import { getGenerateAnswerChain } from "@/app/llm/chains/generate-answer-chain";
-import { buildOpenAIModelForEvaluation } from "@/app/llm/models/openai-model";
+import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
+import { runOnDataset } from "langchain/smith";
+import { NextRequest } from "next/server";
 
 export const revalidate = 1;
 
@@ -18,7 +18,9 @@ export async function GET(
 	{ params }: { params: { name: string } },
 ) {
 	console.log("params", params);
-	const model = buildOpenAIModelForEvaluation("gpt-3.5-turbo-0125");
+	const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "none", {
+		openAIApiKey: process.env.OPENAI_API_KEY_TEST,
+	});
 	const results = await runOnDataset(
 		getGenerateAnswerChain(model),
 		params.name,

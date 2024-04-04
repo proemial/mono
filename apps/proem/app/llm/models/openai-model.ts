@@ -1,6 +1,12 @@
-import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
-import { ChatOpenAI } from "@langchain/openai";
-import { ModelOptions } from "./model-options";
+import { openaiOrganizations } from "@/app/prompts/openai-keys";
+import { BaseChatModelParams } from "@langchain/core/language_models/chat_models";
+import {
+	AzureOpenAIInput,
+	ChatOpenAI,
+	OpenAIChatInput,
+} from "@langchain/openai";
+import { ClientOptions } from "openai/index.mjs";
+import { COMMON_MODEL_DEFAULTS } from "./model-options";
 
 // Source: https://platform.openai.com/docs/models/overview
 type OpenAIModel =
@@ -9,38 +15,22 @@ type OpenAIModel =
 
 export const buildOpenAIChatModel = (
 	modelName: OpenAIModel,
-	organization: keyof typeof openaiOrganizations | undefined,
-	options?: ModelOptions,
+	organization: keyof typeof openaiOrganizations | "none",
+	options?: Partial<OpenAIChatInput> &
+		Partial<AzureOpenAIInput> &
+		BaseChatModelParams & {
+			configuration?: ClientOptions;
+		},
 ) =>
 	new ChatOpenAI({
-		openAIApiKey,
-		modelName: modelName,
-		temperature: options?.temperature ?? 0.8,
-		cache: options?.cache ?? true,
-		verbose: options?.verbose ?? false,
+		...COMMON_MODEL_DEFAULTS,
+		...options,
 		configuration: {
-			organization: organization
-				? openaiOrganizations[organization]
-				: undefined,
+			...options?.configuration,
+			organization:
+				organization === "none"
+					? options?.configuration?.organization
+					: openaiOrganizations[organization],
 		},
-		onFailedAttempt: (error) => {
-			console.error(error);
-		},
-	});
-
-export const buildOpenAIModelForEvaluation = (
-	modelName: OpenAIModel,
-	temperature?: number,
-) =>
-	new ChatOpenAI({
-		openAIApiKey: process.env.OPENAI_API_KEY_TEST,
 		modelName,
-		temperature: temperature ?? 0.8,
-		cache: false,
-		verbose: true,
-		maxRetries: 0,
-		maxConcurrency: 1, // We get throttled by OpenAI if we set concurrency higher than 1
-		onFailedAttempt: (error) => {
-			console.error(error);
-		},
 	});

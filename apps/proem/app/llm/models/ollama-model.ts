@@ -1,17 +1,18 @@
-import { Ollama } from "@langchain/community/llms/ollama";
-import { LocalModelOptions, ModelOptions } from "./model-options";
+import { ChatOllama } from "@langchain/community/chat_models/ollama";
+import { OllamaInput } from "@langchain/community/llms/ollama";
+import { BaseChatModelParams } from "@langchain/core/language_models/chat_models";
+import { COMMON_MODEL_DEFAULTS } from "./model-options";
 
 // Models must be downloaded first. E.g. using `ollama pull llama2`.
-type OllamaModel = "llama2";
+type OllamaModel = "llama2" | "mistral";
 
-export const getOllamaModel = (
+export const buildOllamaChatModel = (
 	modelName: OllamaModel,
-	options?: ModelOptions & LocalModelOptions,
+	options?: OllamaInput & BaseChatModelParams,
 ) =>
-	new Ollama({
-		baseUrl: options?.baseUrl ?? "http://localhost:11434",
+	new ChatOllama({
+		...COMMON_MODEL_DEFAULTS,
+		baseUrl: "http://localhost:11434",
+		...options,
 		model: modelName,
-		verbose: options?.verbose ?? true,
-		cache: options?.cache ?? false,
-		temperature: options?.temperature ?? 0.0,
 	});

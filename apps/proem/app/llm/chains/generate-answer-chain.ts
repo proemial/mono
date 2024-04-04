@@ -64,10 +64,7 @@ const prompt = ChatPromptTemplate.fromMessages<Input>([
 	["human", "Question: {question}\n\nResearch papers: {papers}"],
 ]);
 
-const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask", {
-	verbose: false, //process.env.NODE_ENV === "development" ? true : false,
-	cache: process.env.NODE_ENV === "development" ? false : true,
-});
+const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask");
 
 const stringOutputParser = new StringOutputParser();
 

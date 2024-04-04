@@ -1,7 +1,7 @@
 import { inputGuardrailChainWithModel } from "@/app/llm/chains/input-guardrail-chain";
 import { ExpectedGuardrailOutputEvaluator } from "@/app/llm/evaluators/expected-guardrail-output-evaluator";
 import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
-import { buildOpenAIModelForEvaluation } from "@/app/llm/models/openai-model";
+import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { runOnDataset } from "langchain/smith";
 import { NextRequest } from "next/server";
 
@@ -14,7 +14,9 @@ export async function GET(
 	{ params }: { params: { name: string } },
 ) {
 	console.log("params", params);
-	const model = buildOpenAIModelForEvaluation("gpt-3.5-turbo-0125");
+	const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "none", {
+		openAIApiKey: process.env.OPENAI_API_KEY_TEST,
+	});
 	const results = await runOnDataset(
 		inputGuardrailChainWithModel(model),
 		params.name,

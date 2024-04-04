@@ -1,7 +1,7 @@
 import { getSelectRelevantPapersChain } from "@/app/llm/chains/fetch-papers/select-relevant-papers-chain";
 import { PaperIdEvaluator } from "@/app/llm/evaluators/select-paper-evaluators";
 import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
-import { buildOpenAIModelForEvaluation } from "@/app/llm/models/openai-model";
+import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { runOnDataset } from "langchain/smith";
 import { NextRequest } from "next/server";
 
@@ -11,7 +11,9 @@ export async function GET(
 	_req: NextRequest,
 	{ params }: { params: { name: string } },
 ) {
-	const model = buildOpenAIModelForEvaluation("gpt-3.5-turbo-0125");
+	const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "none", {
+		openAIApiKey: process.env.OPENAI_API_KEY_TEST,
+	});
 	const results = await runOnDataset(
 		getSelectRelevantPapersChain(model),
 		params.name,

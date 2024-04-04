@@ -1,5 +1,5 @@
-import { ChatMistralAI } from "@langchain/mistralai";
-import { ModelOptions } from "./model-options";
+import { ChatMistralAI, ChatMistralAIInput } from "@langchain/mistralai";
+import { COMMON_MODEL_DEFAULTS } from "./model-options";
 
 type MistralModel =
 	| "open-mistral-7b"
@@ -17,17 +17,13 @@ type MistralModel =
 	| "mistral-large-2402"
 	| "mistral-embed";
 
-// export const buildMistralModel = (
-// 	modelName: MistralModel,
-// 	options?: ModelOptions,
-// ) =>
-// 	new ChatMistralAI({
-// 		apiKey: Env.get("MISTRAL_API_KEY"),
-// 		modelName,
-// 		temperature: options?.temperature ?? 0.0,
-// 		cache: options?.cache ?? true,
-// 		verbose: options?.verbose ?? false,
-// 		onFailedAttempt: (error) => {
-// 			console.error(error);
-// 		},
-// 	});
+// The type-casting is far from ideal, but it fixes the TypeScript "cannot be named" error
+export const buildMistralChatModel = <T extends ChatMistralAI<never>>(
+	modelName: MistralModel,
+	options?: ChatMistralAIInput,
+) =>
+	new ChatMistralAI({
+		...COMMON_MODEL_DEFAULTS,
+		...options,
+		modelName,
+	}) as T;
