@@ -5,7 +5,7 @@ import * as hub from "langchain/hub";
 
 const hubPrompt = await hub.pull("proemial/ask-answer-prompt:130ba7cd");
 
-const model = buildOpenAIChatModel("gpt-4-1106-preview", "ask", {
+const model = buildOpenAIChatModel("gpt-4-0125-preview", "ask", {
 	verbose: false, //process.env.NODE_ENV === "development" ? true : false,
 	cache: process.env.NODE_ENV === "development" ? false : true,
 	temperature: 0.8,
