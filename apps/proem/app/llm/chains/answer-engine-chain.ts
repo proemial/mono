@@ -116,7 +116,7 @@ const isSupportedQuestion = async (
 	const isInitialQuestion = input.chatHistory.length === 0;
 	const isSupportedQuestion =
 		input.inputGuardrailReponse.split(" ").length === 1 &&
-		input.inputGuardrailReponse.includes("SUPPORTED");
+		input.inputGuardrailReponse.toUpperCase().includes("SUPPORTED");
 
 	if (isGuardrailFeatureEnabled && isInitialQuestion && !isSupportedQuestion) {
 		return false;
