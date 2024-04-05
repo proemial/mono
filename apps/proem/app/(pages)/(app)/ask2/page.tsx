@@ -1,7 +1,5 @@
-import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { ChatInput } from "@/app/components/chat/chat-input";
 import { ChatMessages } from "@/app/components/chat/chat-messages-ask2";
-import { StarterMessages } from "@/app/components/chat/chat-starters";
 import { ProemLogo } from "@/app/components/icons/brand/logo";
 import { PageLayout } from "../page-layout";
 
@@ -23,11 +21,7 @@ export default async function AskPage({ searchParams }: Props) {
 			</ChatMessages>
 
 			<div className="flex flex-col px-2 pt-1 pb-2">
-				<ChatInput target={target}>
-					<StarterMessages
-						target={target}
-						trackingKey={analyticsKeys.ask.click.starter} />
-				</ChatInput>
+				<ChatInput target={target} />
 			</div>
 		</PageLayout>
 	);

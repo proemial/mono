@@ -6,6 +6,8 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { PROEM_BOT } from "./bot-user";
 import { ChatMessage } from "./chat-message-ask2";
 import { useChatState } from "./state";
+import { useUser } from "@clerk/nextjs";
+import { getProfileFromUser } from "@/app/(pages)/(app)/profile/profile-from-user";
 
 type Props = {
 	message?: string;
@@ -25,15 +27,17 @@ export function ChatMessages({
 		isLoading,
 		append,
 		setMessages,
-		data,
 	} = useChat({
 		sendExtraMessageFields: true,
 		id: "hardcoded",
 		api: "/api/bot/ask2",
 		initialMessages,
 	});
+	const { user } = useUser();
+	const userProfile = getProfileFromUser(user);
 
 	const messagesDiv = useScroll(messages);
+	const showLoadingState = useLoadingState(isLoading, messages);
 
 	useRunOnFirstRender(() => {
 		if (message) {
@@ -72,7 +76,7 @@ export function ChatMessages({
 							<ChatMessage
 								key={message.id}
 								message={message.content}
-								user={isMessageFromAI ? PROEM_BOT : undefined}
+								user={isMessageFromAI ? PROEM_BOT : userProfile}
 								isLoading={isLastMessageAndLoading}
 								showThrobber={isMessageFromAI && isLoading && isLastMessage}
 								showLinkCards={false}
@@ -80,7 +84,7 @@ export function ChatMessages({
 						);
 					})}
 
-					{isLoading && <ChatMessage user={PROEM_BOT} />}
+					{showLoadingState && <ChatMessage user={PROEM_BOT} />}
 				</div>
 			)}
 			{messages.length === 0 && children}
@@ -101,4 +105,14 @@ function useScroll(messages: Message[]) {
 	}, [messages]);
 
 	return messagesDiv;
+}
+
+function useLoadingState(isLoading: boolean, messages: Message[]) {
+	const { setLoading } = useChatState("ask");
+
+	useEffect(() => {
+		setLoading(isLoading);
+	}, [isLoading, setLoading]);
+
+	return isLoading && messages.length % 2 === 1;
 }
