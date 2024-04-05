@@ -75,6 +75,7 @@ export function ChatMessages({
 								user={isMessageFromAI ? PROEM_BOT : undefined}
 								isLoading={isLastMessageAndLoading}
 								showThrobber={isMessageFromAI && isLoading && isLastMessage}
+								showLinkCards={false}
 							/>
 						);
 					})}

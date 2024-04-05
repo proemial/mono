@@ -2,7 +2,16 @@
 
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { Tracker } from "@/app/components/analytics/tracker";
-import { applyLinks } from "@/app/components/chat/apply-links";
+import {
+	PaperCard,
+	PaperCardTitle,
+	PaperCardTop,
+} from "@/app/components/card/paper-card";
+import {
+	applyLinks,
+	applyLinksAsPills,
+} from "@/app/components/chat/apply-links";
+import { LinkButton } from "@/app/components/proem-ui/link-button";
 import {
 	Avatar,
 	AvatarFallback,
@@ -26,6 +35,7 @@ export type ChatMessageProps = Partial<FeedbackButtonsProps> & {
 	};
 	isLoading?: boolean;
 	showThrobber?: boolean;
+	showLinkCards?: boolean;
 	onShareHandle?: (() => void) | null;
 };
 
@@ -35,8 +45,12 @@ export function ChatMessage({
 	onShareHandle,
 	runId,
 	showThrobber,
+	showLinkCards,
 }: ChatMessageProps) {
-	const { content, links } = applyLinks(message ?? "");
+	const showLinksAsPills = !showLinkCards;
+	const { content, links } = showLinksAsPills
+		? applyLinksAsPills(message ?? "")
+		: applyLinks(message ?? "");
 
 	return (
 		<div className="w-full mx-[-4px] my-2">
@@ -75,6 +89,30 @@ export function ChatMessage({
 					)}
 					{showThrobber && <SinglarThrobber />}
 				</div>
+
+				{showLinkCards && links.length > 0 && (
+					<div className="pt-3 mt-3 space-y-3 border-t border-[#3C3C3C]">
+						{links.map((link) => (
+							<PaperCard
+								key={link.href}
+								className="pb-3 pt-1 border-0 rounded-lg bg-[#3C3C3C]"
+							>
+								{/* TODO: add date */}
+								<PaperCardTop />
+
+								<PaperCardTitle>{link.title}</PaperCardTitle>
+
+								<LinkButton
+									href={link.href}
+									className="py-[1px] mt-2 no-underline"
+									track={analyticsKeys.ask.click.answerCard}
+								>
+									Learn more...
+								</LinkButton>
+							</PaperCard>
+						))}
+					</div>
+				)}
 			</div>
 		</div>
 	);
