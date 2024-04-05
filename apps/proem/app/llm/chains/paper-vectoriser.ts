@@ -27,8 +27,13 @@ export async function vectorisePapers(
 		begin = Time.now();
 		try {
 			const result = await vectorStore.similaritySearch(question, count);
+			console.log("result", result);
 
-			return result.map((r) => ({ abstract: r.pageContent, link: r.metadata }));
+			return result.map((r) => ({
+				abstract: r.pageContent,
+				link: r.metadata,
+				title: papers.find((p) => p.link === `${r.metadata}`)?.title,
+			}));
 		} finally {
 			Time.log(begin, `Similarity search performed, returning ${count} papers`);
 		}
