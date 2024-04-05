@@ -133,7 +133,7 @@ const answerIfSupportedQuestion = RunnableBranch.from<
 
 export const answerEngineChain = RunnableSequence.from<Input, Output>([
 	RunnablePassthrough.assign({
-		inputGuardrailReponse: inputGuardrailChain,
+		inputGuardrailReponse: inputGuardrailChain(),
 	}),
 	answerIfSupportedQuestion,
 ]).withConfig({

@@ -1,4 +1,4 @@
-import { BaseLanguageModel } from "@langchain/core/language_models/base";
+import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { buildOpenAIChatModel } from "../models/openai-model";
@@ -48,14 +48,7 @@ const prompt = ChatPromptTemplate.fromMessages<Input>([
 
 const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask");
 
-export const inputGuardrailChain = prompt
-	.pipe(model)
-	.pipe(new StringOutputParser())
-	.withConfig({
-		runName: "InputGuardrail",
-	});
-
-export const inputGuardrailChainWithModel = (model: BaseLanguageModel) =>
-	prompt.pipe(model).pipe(new StringOutputParser()).withConfig({
+export const inputGuardrailChain = (modelOverride: BaseChatModel = model) =>
+	prompt.pipe(modelOverride).pipe(new StringOutputParser()).withConfig({
 		runName: "InputGuardrail",
 	});
