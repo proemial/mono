@@ -1,7 +1,7 @@
-export const askPromptConfig = {
-	modelName: "gpt-3.5-turbo-1106", // "gpt-4-0125-preview",
+export const askPromptConfig = (gpt4: boolean) => ({
+	modelName: gpt4 ? "gpt-4-0125-preview" : "gpt-3.5-turbo-1106",
 	temperature: 0,
-};
+});
 
 export const askPrompt = `
 You are a helpful high school teacher that provides conclusive answers to a
