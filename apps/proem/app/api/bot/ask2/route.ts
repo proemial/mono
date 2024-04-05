@@ -9,6 +9,10 @@ import { AgentExecutor, createOpenAIFunctionsAgent } from "langchain/agents";
 import { NextRequest, NextResponse } from "next/server";
 import { getTools } from "./tools";
 import { askPrompt, askPromptConfig } from "@/app/prompts/ask2";
+import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
+
+// GPT-4 flag
+// - Add the flag to the agent
 
 // Feedback
 // - Fix streaming with intermediate steps
@@ -26,36 +30,10 @@ import { askPrompt, askPromptConfig } from "@/app/prompts/ask2";
 export async function POST(req: NextRequest) {
 	try {
 		const body = await req.json();
+		const { input, chat_history } = parseMessages(body.messages);
 
-		const messages = (body.messages ?? []).filter(
-			(message: VercelChatMessage) =>
-				message.role === "user" || message.role === "assistant",
-		);
-
-		const previousMessages = messages
-			.slice(0, -1)
-			.map(convertVercelMessageToLangChainMessage);
-		const currentMessageContent = messages[messages.length - 1].content;
-
-		const tools = getTools();
-		const llm = new ChatOpenAI({
-			...askPromptConfig,
-			streaming: true,
-		});
-
-		const prompt = getPrompt();
-		const agent = await createOpenAIFunctionsAgent({ llm, tools, prompt });
-
-		const agentExecutor = new AgentExecutor({
-			agent,
-			tools,
-			maxIterations: 3,
-		});
-
-		const logStream = agentExecutor.streamLog({
-			input: currentMessageContent,
-			chat_history: previousMessages,
-		});
+		const executor = await initializeAgent();
+		const logStream = executor.streamLog({ input, chat_history });
 
 		const textEncoder = new TextEncoder();
 		const transformStream = new ReadableStream({
@@ -83,6 +61,24 @@ export async function POST(req: NextRequest) {
 	}
 }
 
+async function initializeAgent() {
+	const tools = getTools();
+	const gpt4 = (await getFeatureFlag("askGpt4")) as boolean;
+	const llm = new ChatOpenAI({
+		...askPromptConfig(gpt4),
+		streaming: true,
+	});
+
+	const prompt = getPrompt();
+	const agent = await createOpenAIFunctionsAgent({ llm, tools, prompt });
+
+	return new AgentExecutor({
+		agent,
+		tools,
+		maxIterations: 3,
+	});
+}
+
 function getPrompt() {
 	return ChatPromptTemplate.fromMessages([
 		["system", askPrompt],
@@ -92,7 +88,23 @@ function getPrompt() {
 	]);
 }
 
-const convertVercelMessageToLangChainMessage = (message: VercelChatMessage) => {
+function parseMessages(chatMessages?: VercelChatMessage[]) {
+	const messages = (chatMessages ?? []).filter(
+		(message: VercelChatMessage) =>
+			message.role === "user" || message.role === "assistant",
+	);
+
+	const chat_history = messages
+		.slice(0, -1)
+		.map(convertVercelMessageToLangChainMessage);
+
+	// @ts-ignore
+	const input = messages[messages.length - 1].content;
+
+	return { input, chat_history };
+}
+
+function convertVercelMessageToLangChainMessage(message: VercelChatMessage) {
 	if (message.role === "user") {
 		return new HumanMessage(message.content);
 	}
@@ -100,4 +112,4 @@ const convertVercelMessageToLangChainMessage = (message: VercelChatMessage) => {
 		return new AIMessage(message.content);
 	}
 	return new ChatMessage(message.content, message.role);
-};
+}
