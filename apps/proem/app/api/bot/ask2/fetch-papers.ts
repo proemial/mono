@@ -5,7 +5,7 @@ import {
 	RunnablePassthrough,
 	RunnableSequence,
 } from "@langchain/core/runnables";
-import { Paper } from "../paper-search/search";
+import { Paper } from "../../paper-search/search";
 
 type Input = {
 	question: string;
