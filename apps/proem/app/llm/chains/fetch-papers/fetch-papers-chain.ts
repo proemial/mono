@@ -6,6 +6,7 @@ import {
 } from "@langchain/core/runnables";
 import { searchParamsChain } from "./search-params-chain";
 import { OpenAlexQueryParams } from "./oa-search-helpers";
+import { Metrics } from "@/app/components/analytics/metrics";
 
 type Input = {
 	question: string;
@@ -27,6 +28,13 @@ const queryOpenAlex = RunnableLambda.from<OpenAlexQueryParams, Paper[]>(
 			fetchPapers(input.searchQueries[key] as string, { metadata: key }),
 		);
 		const results = await Promise.all(promises);
+		// console.log(
+		// 	"results",
+		// 	results.map((r) => ({ count: r.length, key: r[0]?.metadata })),
+		// );
+		for (const r of results) {
+			Metrics.papersFetched(r[0]?.metadata ?? "?", r.length);
+		}
 
 		const counts = [];
 		const papers = [] as Paper[];
