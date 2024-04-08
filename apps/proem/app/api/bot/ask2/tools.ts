@@ -1,10 +1,10 @@
 import { DynamicTool } from "langchain/tools";
 import { openAlexChain } from "./fetch-papers";
+import { searchToolConfig } from "@/app/prompts/ask_agent";
 
 export function getTools() {
 	const searchPapers = new DynamicTool({
-		name: "SearchPapers",
-		description: "Find specific research papers matching a user query",
+		...searchToolConfig,
 		func: OpenAlexQuery,
 	});
 

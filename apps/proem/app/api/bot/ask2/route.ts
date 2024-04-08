@@ -1,20 +1,15 @@
+import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
+import { askAgentPrompt, askPromptConfig } from "@/app/prompts/ask_agent";
 import { AIMessage, ChatMessage, HumanMessage } from "@langchain/core/messages";
 import {
 	ChatPromptTemplate,
 	MessagesPlaceholder,
 } from "@langchain/core/prompts";
 import { ChatOpenAI } from "@langchain/openai";
-import {
-	StreamingTextResponse,
-	experimental_StreamData,
-	Message as VercelChatMessage,
-} from "ai";
+import { StreamingTextResponse, Message as VercelChatMessage } from "ai";
 import { AgentExecutor, createOpenAIFunctionsAgent } from "langchain/agents";
 import { NextRequest, NextResponse } from "next/server";
 import { getTools } from "./tools";
-import { askAgentPrompt, askPromptConfig } from "@/app/prompts/ask_agent";
-import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
-import { AnswerEngineStreamData } from "../answer-engine/answer-engine";
 
 // GPT-4 flag
 // - Add the flag to the agent
@@ -36,19 +31,6 @@ export async function POST(req: NextRequest) {
 	try {
 		const body = await req.json();
 		const { input, chat_history } = parseMessages(body.messages);
-
-		const data = new experimental_StreamData() as AnswerEngineStreamData;
-		// data.append({
-		// 	type: "answer-saved",
-		// 	transactionId,
-		// 	data: {
-		// 		shareId: insertedAnswer.shareId,
-		// 		runId: run.id,
-		// 	},
-		// });
-		// Promise.all([saveAnswerPromise, followUpsQuestionPromise]).then(() => {
-		// 	data.close();
-		// });
 
 		const executor = await initializeAgent();
 		const logStream = executor.streamLog({ input, chat_history });
@@ -94,6 +76,7 @@ async function initializeAgent() {
 		agent,
 		tools,
 		maxIterations: 3,
+		returnIntermediateSteps: true,
 	});
 }
 
@@ -101,7 +84,7 @@ function getPrompt() {
 	return ChatPromptTemplate.fromMessages([
 		["system", askAgentPrompt],
 		new MessagesPlaceholder("chat_history"),
-		["human", "{input}"],
+		["human", "Based on science, {input}"],
 		new MessagesPlaceholder("agent_scratchpad"),
 	]);
 }
