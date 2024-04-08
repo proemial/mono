@@ -1,7 +1,6 @@
 export const Features = {
 	animateAskStarters: "ASK_STARTERS_ANIMATE_TEXT",
 	showAnswerFeedbackButtons: "ASK_ANSWER_FEEDBACK",
-	useGuardrailsOnInitialQuestion: "ASK_GUARDRAILS_ON_INITIAL_QUESTION",
 	askGpt4: "ASK_GPT4",
 	cardShowShortenedTopics: "CARD_SHOW_SHORTENED_TOPICS",
 	vectorRerankAndFilter: "VECTOR_RERANK_AND_FILTER",

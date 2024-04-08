@@ -13,7 +13,6 @@ import {
 import { buildOpenAIChatModel } from "../models/openai-model";
 import { LangChainChatHistoryMessage } from "../utils";
 import { generateAnswerChain } from "./generate-answer-chain";
-import { inputGuardrailChain } from "./input-guardrail-chain";
 import { vectorisePapers } from "./paper-vectoriser";
 import { rephraseQuestionChain } from "./rephrase-question-chain";
 
@@ -89,7 +88,7 @@ const answerChain = RunnableLambda.from(async () => {
 			}),
 			reRankAndLimit,
 			answerIfPapersAvailable,
-		]).withConfig({ runName: "Answer" });
+		]);
 	}
 
 	return RunnableSequence.from<Input, Output>([
@@ -98,44 +97,9 @@ const answerChain = RunnableLambda.from(async () => {
 		}),
 		reRankAndLimit,
 		answerIfPapersAvailable,
-	]).withConfig({ runName: "Answer" });
+	]);
 });
 
-const declineChain = RunnableLambda.from<
-	{ inputGuardrailReponse: string },
-	Output
->((input) => input.inputGuardrailReponse).withConfig({ runName: "Decline" });
-
-const isSupportedQuestion = async (
-	input: Input & {
-		inputGuardrailReponse: string;
-	},
-) => {
-	const isGuardrailFeatureEnabled =
-		(await getFeatureFlag("useGuardrailsOnInitialQuestion")) ?? false;
-	const isInitialQuestion = input.chatHistory.length === 0;
-	const isSupportedQuestion =
-		input.inputGuardrailReponse.split(" ").length === 1 &&
-		input.inputGuardrailReponse.toUpperCase().includes("SUPPORTED");
-
-	if (isGuardrailFeatureEnabled && isInitialQuestion && !isSupportedQuestion) {
-		return false;
-	}
-	return true;
-};
-
-const answerIfSupportedQuestion = RunnableBranch.from<
-	Input & { inputGuardrailReponse: string },
-	Output
->([[isSupportedQuestion, answerChain], declineChain]).withConfig({
-	runName: "AnswerIfSupportedQuestion",
-});
-
-export const answerEngineChain = RunnableSequence.from<Input, Output>([
-	RunnablePassthrough.assign({
-		inputGuardrailReponse: inputGuardrailChain(),
-	}),
-	answerIfSupportedQuestion,
-]).withConfig({
+export const answerEngineChain = answerChain.withConfig({
 	runName: "AnswerEngine",
 });
