@@ -42,13 +42,13 @@ const generateOpenAlexSearch = RunnableLambda.from<
 >(async (input) => {
 	return {
 		searchQueries: {
-			"1:sg/sg": asUrl(synonymGroups(input), synonymGroups(input)),
-			"2:ssNv/sg": asUrl(singularSynonymsNoVerbs(input), synonymGroups(input)),
-			"3:ssNv/sgX": asUrl(
+			"1_sg_sg": asUrl(synonymGroups(input), synonymGroups(input)),
+			"2_ssNv_sg": asUrl(singularSynonymsNoVerbs(input), synonymGroups(input)),
+			"3_ssNv_sgX": asUrl(
 				singularSynonymsNoVerbs(input),
 				expandedSynonymGroups(input),
 			),
-			"4:uni/sgX": asUrl(uniqueUnigrams(input), expandedSynonymGroups(input)),
+			"4_uni_sgX": asUrl(uniqueUnigrams(input), expandedSynonymGroups(input)),
 		},
 		link: `${askOaBaseUrl},$q`,
 	};
