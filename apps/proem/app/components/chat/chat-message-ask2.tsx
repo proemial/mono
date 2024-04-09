@@ -19,7 +19,7 @@ import {
 } from "@/app/components/shadcn-ui/Avatar";
 import type { Message } from "ai/react";
 import { ShareIcon } from "lucide-react";
-import { SinglarThrobber, Throbber } from "../loading/throbber";
+import { SinglarThrobber, Throbber as MessageThrobber } from "../loading/throbber";
 import {
 	FeedbackButtons,
 	type FeedbackButtonsProps,
@@ -34,7 +34,7 @@ export type ChatMessageProps = Partial<FeedbackButtonsProps> & {
 		avatar: string;
 	};
 	isLoading?: boolean;
-	showThrobber?: boolean;
+	throbber?: { message?: string };
 	showLinkCards?: boolean;
 	onShareHandle?: (() => void) | null;
 };
@@ -44,7 +44,7 @@ export function ChatMessage({
 	user = { fullName: "you", initials: "U", avatar: "" },
 	onShareHandle,
 	runId,
-	showThrobber,
+	throbber,
 	showLinkCards,
 }: ChatMessageProps) {
 	const showLinksAsPills = !showLinkCards;
@@ -82,12 +82,8 @@ export function ChatMessage({
 
 			<div className="mt-2 ml-9">
 				<div>
-					{message ? (
-						content
-					) : (
-						<Throbber text="Searching scientific papers..." />
-					)}
-					{showThrobber && <SinglarThrobber />}
+					{message && content}
+					<Throbber throbber={throbber} />
 				</div>
 
 				{showLinkCards && links.length > 0 && (
@@ -115,5 +111,16 @@ export function ChatMessage({
 				)}
 			</div>
 		</div>
+	);
+}
+
+function Throbber({ throbber }: { throbber?: { message?: string } }) {
+	return (
+		<>
+			{throbber?.message?.length !== undefined &&
+				<MessageThrobber text={throbber.message} />
+			}
+			{throbber && throbber.message === undefined && <SinglarThrobber />}
+		</>
 	);
 }

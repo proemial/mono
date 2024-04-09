@@ -69,6 +69,9 @@ export function ChatMessages({
 
 	useFollowups(data);
 
+	const throbberMessage = useThrobberMessage(data);
+	// console.log("throbberMessage", throbberMessage);
+
 	return (
 		<>
 			{messages?.length > 0 && (
@@ -87,6 +90,8 @@ export function ChatMessages({
 								? () => shareMessage(transactionId as string)
 								: undefined;
 
+						const cursorThrobber = isMessageFromAI && isLoading && isLastMessage ? {} : undefined;
+
 						return (
 							<ChatMessage
 								key={message.id}
@@ -95,18 +100,24 @@ export function ChatMessages({
 								onShareHandle={onShareHandle}
 								runId={getAnswerRunId(message.role, i)}
 								isLoading={isLastMessageAndLoading}
-								showThrobber={isMessageFromAI && isLoading && isLastMessage}
+								throbber={cursorThrobber}
 								showLinkCards={false}
 							/>
 						);
 					})}
 
-					{showLoadingState && <ChatMessage user={PROEM_BOT} />}
+					{showLoadingState && <ChatMessage user={PROEM_BOT} throbber={{ message: throbberMessage }} />}
 				</div>
 			)}
 			{messages.length === 0 && children}
 		</>
 	);
+}
+
+function useThrobberMessage(data: AnswerEngineEvents[]) {
+	const isLatestEvent = data?.findLastIndex(d => d.type === "agent-selected-tool") === data?.length - 1;
+
+	return isLatestEvent ? "Fetching papersSearching scientific papers..." : "";
 }
 
 function useFollowups(data: AnswerEngineEvents[]) {
