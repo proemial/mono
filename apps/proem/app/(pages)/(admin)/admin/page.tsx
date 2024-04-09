@@ -7,19 +7,21 @@ import {
 	isInternalUser,
 } from "@/app/components/analytics/is-internal-user";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 
 export default async function AdminPage() {
 	const cookie = cookies().get(INTERNAL_COOKIE_NAME)?.value;
+
 	if (!cookie) {
-		throw new Error("Unauthorized");
+		redirect("/");
 	}
 
 	const { email } = z.object({ email: z.string() }).parse(JSON.parse(cookie));
 	const { isInternal } = isInternalUser(email);
 
 	if (!isInternal) {
-		throw new Error("Unauthorized");
+		redirect("/");
 	}
 
 	const starterQuestions = await answers.getStarters();
