@@ -1,7 +1,7 @@
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { Paper } from "@/app/api/paper-search/search";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { Time } from "@proemial/utils/time";
-import { Paper } from "@/app/api/paper-search/search";
+import { MemoryVectorStore } from "langchain/vectorstores/memory";
 
 export async function vectorisePapers(
 	question: string,
@@ -27,7 +27,6 @@ export async function vectorisePapers(
 		begin = Time.now();
 		try {
 			const result = await vectorStore.similaritySearch(question, count);
-			console.log("result", result);
 
 			return result.map((r) => ({
 				abstract: r.pageContent,

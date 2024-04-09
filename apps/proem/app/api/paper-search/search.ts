@@ -1,8 +1,8 @@
 import {
 	OpenAlexPaperWithAbstract,
 	OpenAlexWorksSearchResult,
-	oaBaseUrl,
 	oaBaseArgs,
+	oaBaseUrl,
 	openAlexFields,
 } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
@@ -50,7 +50,6 @@ async function fetchWithAbstract(q: string, count: number, tokens: number) {
 	const begin = Time.now();
 	try {
 		const response = await fetchJson<OpenAlexWorksSearchResult>(query);
-		console.log(`${response.results.length} papers returned matching ${q}`);
 
 		// TODO: Move to share transform function
 		return response.results.map((paper) => {
