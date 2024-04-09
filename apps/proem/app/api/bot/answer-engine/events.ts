@@ -49,12 +49,21 @@ export const followUpQuestionsGeneratedEvent = z.object({
 	),
 });
 
+export const agentSelectedToolEvent = z.object({
+	type: z.literal("agent-selected-tool"),
+	transactionId: z.string(),
+	data: z.object({
+		tool: z.string(),
+	}),
+});
+
 const answerEngineEvents = z.discriminatedUnion("type", [
 	stepStartedEvent,
 	answerSlugGeneratedEvent,
 	answerSavedEvent,
 	searchParamsGeneratedEvent,
 	followUpQuestionsGeneratedEvent,
+	agentSelectedToolEvent,
 ]);
 
 export type AnswerEngineEvents = z.infer<typeof answerEngineEvents>;
