@@ -1,5 +1,6 @@
 import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
-import { askAgentPrompt, askPromptConfig } from "@/app/prompts/ask_agent";
+import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
+import { askAgentPrompt } from "@/app/prompts/ask_agent";
 import { AIMessage, ChatMessage, HumanMessage } from "@langchain/core/messages";
 import {
 	ChatPromptTemplate,
@@ -64,10 +65,11 @@ export async function POST(req: NextRequest) {
 async function initializeAgent() {
 	const tools = getTools();
 	const gpt4 = (await getFeatureFlag("askGpt4")) as boolean;
-	const llm = new ChatOpenAI({
-		...askPromptConfig(gpt4),
-		streaming: true,
-	});
+	const llm = buildOpenAIChatModel(
+		gpt4 ? "gpt-4-0125-preview" : "gpt-3.5-turbo-0125",
+		"ask",
+		{ temperature: 0.0, streaming: true },
+	);
 
 	const prompt = getPrompt();
 	const agent = await createOpenAIFunctionsAgent({ llm, tools, prompt });

@@ -1,8 +1,3 @@
-export const askPromptConfig = (gpt4: boolean) => ({
-	modelName: gpt4 ? "gpt-4-0125-preview" : "gpt-3.5-turbo-1106",
-	temperature: 0,
-});
-
 export const searchToolConfig = {
 	name: "SearchPapers",
 	description: "Find specific research papers matching a user query",
