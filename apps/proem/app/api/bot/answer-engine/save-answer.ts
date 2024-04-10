@@ -49,3 +49,37 @@ export async function saveAnswer({
 		});
 	}
 }
+
+export async function saveAnswerFromAgent({
+	question,
+	isFollowUpQuestion,
+	slug,
+	userId,
+	run,
+}: SaveAnswerParams) {
+	const answer = run.outputs?.returnValues?.output;
+	const tool = run.inputs?.steps?.find(
+		(step: { action: { tool?: string } }) =>
+			step.action.tool === "SearchPapers",
+	);
+	const fetchedPapers = tool?.observation && JSON.parse(tool?.observation);
+
+	if (answer) {
+		const persistPapers = !isFollowUpQuestion && fetchedPapers?.length;
+		const papers = persistPapers
+			? {
+					papers: {
+						papers: fetchedPapers,
+					},
+			  }
+			: {};
+
+		return answers.create({
+			slug,
+			question,
+			answer,
+			ownerId: userId,
+			...papers,
+		});
+	}
+}

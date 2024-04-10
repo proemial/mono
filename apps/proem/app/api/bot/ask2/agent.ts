@@ -10,7 +10,7 @@ import {
 import { createOpenAIFunctionsAgent } from "langchain/agents";
 import { DynamicTool } from "langchain/tools";
 import { Run } from "langsmith";
-import { saveAnswer } from "../answer-engine/save-answer";
+import { saveAnswerFromAgent } from "../answer-engine/save-answer";
 
 export const buildAgent = async (
 	params: {
@@ -62,7 +62,7 @@ export const buildAgent = async (
 					});
 				} else if (answer) {
 					// Agent provided an answer
-					const saveAnswerPromise = saveAnswer({
+					const saveAnswerPromise = saveAnswerFromAgent({
 						question: userInput,
 						isFollowUpQuestion,
 						slug,
