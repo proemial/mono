@@ -56,6 +56,7 @@ export function ChatInput({ target, children }: Props) {
 					readonly={readonly}
 					onFocus={() => !!onFocus && onFocus()}
 					onFocusChange={handleFocusChange}
+					maxLength={350}
 				/>
 			</form>
 		</div>

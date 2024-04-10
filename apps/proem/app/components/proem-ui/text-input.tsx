@@ -11,6 +11,7 @@ type Props = {
 	onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 	onFocus?: () => void;
 	onFocusChange?: (focus: boolean) => void;
+	maxLength?: number;
 };
 
 export function TextInput(props: Props) {
@@ -22,6 +23,7 @@ export function TextInput(props: Props) {
 		onChange,
 		onFocus,
 		onFocusChange,
+		maxLength
 	} = props;
 
 	const handleFocusChange = (focus: boolean) => {
@@ -48,6 +50,7 @@ export function TextInput(props: Props) {
 				onBlur={() => handleFocusChange(false)}
 				disabled={disabled}
 				readOnly={readonly}
+				maxLength={maxLength}
 			/>
 			<Button
 				variant="send_button"
