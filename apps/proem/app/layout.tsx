@@ -54,6 +54,9 @@ export default async function RootLayout({ children }: Props) {
 		<ClerkProvider>
 			<PostHogClient>
 				<html lang="en" className={sourceCodePro.variable}>
+					<head>
+						<meta name="facebook-domain-verification" content="ua85vc0pbvtj0hyzp6df2ftzgmmglr" />
+					</head>
 					<body
 						className={`${light} h-dvh w-dvw flex flex-col justify-center items-center`}
 					>
