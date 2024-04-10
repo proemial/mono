@@ -126,8 +126,8 @@ function Papers({ papers }: { papers?: { link: string; title: string; published:
 	return (
 		<>
 			{papers &&
-				<div className="flex flex-col justify-center px-2 py-1 mt-4 mb-1 ml-8 border rounded-sm cursor-pointer" onClick={() => setOpen(!open)}>
-					<div className="flex justify-between">
+				<div className="flex flex-col justify-center px-2 py-1 mt-4 mb-1 ml-8 border rounded-sm cursor-pointer">
+					<div className="flex justify-between" onClick={() => setOpen(!open)}>
 						<div>Papers</div>
 						<div>
 							{open && <ChevronUp />}
