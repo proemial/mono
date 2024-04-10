@@ -1,17 +1,41 @@
-import { DynamicTool } from "langchain/tools";
-import { openAlexChain } from "./fetch-papers";
 import { searchToolConfig } from "@/app/prompts/ask_agent";
+import { DynamicTool } from "langchain/tools";
+import { Paper } from "../../paper-search/search";
+import { AnswerEngineStreamData } from "../answer-engine/answer-engine";
+import { openAlexChain } from "./fetch-papers";
 
-export function getTools() {
-	const searchPapers = new DynamicTool({
+export const getTools = (
+	data: AnswerEngineStreamData,
+	transactionId: string,
+) => {
+	const openAlexTool = buildOpenAlexTool(data, transactionId);
+	return [openAlexTool];
+};
+
+const buildOpenAlexTool = (
+	data: AnswerEngineStreamData,
+	transactionId: string,
+) =>
+	new DynamicTool({
 		...searchToolConfig,
-		func: OpenAlexQuery,
+		callbacks: [
+			{
+				handleToolEnd: async (output) => {
+					const papers = JSON.parse(output) as Paper[];
+					data.append({
+						type: "top-5-papers-identified",
+						transactionId,
+						data: {
+							paperLinks: papers.map((paper) => paper.link),
+						},
+					});
+				},
+			},
+		],
+		func: openAlexQuery,
 	});
 
-	return [searchPapers];
-}
-
-async function OpenAlexQuery(input: string) {
+const openAlexQuery = async (input: string) => {
 	console.log("Triggered SearchPapers,", `input: '${input}'`);
 
 	const result = await openAlexChain.invoke({
@@ -19,4 +43,4 @@ async function OpenAlexQuery(input: string) {
 	});
 
 	return result.papers;
-}
+};
