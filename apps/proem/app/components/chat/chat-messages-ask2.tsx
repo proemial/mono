@@ -71,10 +71,6 @@ export function ChatMessages({
 
 	const throbberMessage = useThrobberMessage(data);
 
-	const papers = useFetchedPapers(data);
-	// console.log("papers", papers);
-
-
 	return (
 		<>
 			{messages?.length > 0 && (
@@ -95,6 +91,8 @@ export function ChatMessages({
 
 						const cursorThrobber = isMessageFromAI && isLoading && isLastMessage ? {} : undefined;
 
+						const papers = isMessageFromAI ? findByEventType(data, "papers-fetched", transactionId)?.papers : undefined;
+
 						return (
 							<ChatMessage
 								key={message.id}
@@ -105,6 +103,7 @@ export function ChatMessages({
 								isLoading={isLastMessageAndLoading}
 								throbber={cursorThrobber}
 								showLinkCards={false}
+								papers={papers}
 							/>
 						);
 					})}
@@ -115,12 +114,6 @@ export function ChatMessages({
 			{messages.length === 0 && children}
 		</>
 	);
-}
-
-function useFetchedPapers(data: AnswerEngineEvents[]) {
-	const { hits } = findLatestByEventType(data, "papers-fetched");
-
-	return hits?.length > 0 ? hits[0]?.papers : undefined;
 }
 
 function useThrobberMessage(data: AnswerEngineEvents[]) {

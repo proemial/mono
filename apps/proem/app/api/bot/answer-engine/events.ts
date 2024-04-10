@@ -61,7 +61,9 @@ export const papersFetchedEvent = z.object({
 	type: z.literal("papers-fetched"),
 	transactionId: z.string(),
 	data: z.object({
-		papers: z.array(z.object({ link: z.string(), title: z.string() })),
+		papers: z.array(
+			z.object({ link: z.string(), title: z.string(), published: z.string() }),
+		),
 	}),
 });
 

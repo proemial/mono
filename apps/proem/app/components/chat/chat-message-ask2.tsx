@@ -18,12 +18,14 @@ import {
 	AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
 import type { Message } from "ai/react";
-import { ShareIcon } from "lucide-react";
+import { ChevronDown, ChevronUp, ShareIcon } from "lucide-react";
 import { SinglarThrobber, Throbber as MessageThrobber } from "../loading/throbber";
 import {
 	FeedbackButtons,
 	type FeedbackButtonsProps,
 } from "./feedback/feedback-buttons";
+import { useState } from "react";
+import Link from "next/link";
 
 // TODO! Type as either a user message or a bot message
 export type ChatMessageProps = Partial<FeedbackButtonsProps> & {
@@ -37,6 +39,7 @@ export type ChatMessageProps = Partial<FeedbackButtonsProps> & {
 	throbber?: { message?: string };
 	showLinkCards?: boolean;
 	onShareHandle?: (() => void) | null;
+	papers?: { link: string; title: string; published: string }[];
 };
 
 export function ChatMessage({
@@ -46,6 +49,7 @@ export function ChatMessage({
 	runId,
 	throbber,
 	showLinkCards,
+	papers,
 }: ChatMessageProps) {
 	const showLinksAsPills = !showLinkCards;
 	const { content, links } = showLinksAsPills
@@ -54,6 +58,8 @@ export function ChatMessage({
 
 	return (
 		<div className="w-full mx-[-4px] my-2">
+			<Papers papers={papers} />
+
 			<div className="flex justify-between gap-4">
 				<div className="flex gap-3">
 					<Avatar className="w-6 h-6">
@@ -111,6 +117,37 @@ export function ChatMessage({
 				)}
 			</div>
 		</div>
+	);
+}
+
+function Papers({ papers }: { papers?: { link: string; title: string; published: string }[] }) {
+	const [open, setOpen] = useState(false);
+
+	return (
+		<>
+			{papers &&
+				<div className="flex flex-col justify-center px-2 py-1 mt-4 mb-1 ml-8 border rounded-sm cursor-pointer" onClick={() => setOpen(!open)}>
+					<div className="flex justify-between">
+						<div>Papers</div>
+						<div>
+							{open && <ChevronUp />}
+							{!open && <ChevronDown />}
+						</div>
+					</div>
+					{open && papers &&
+						<ul className="ml-4 list-disc">
+							{papers.map((paper) =>
+								<li key={paper.link}>
+									<Link key={paper.link} href={paper.link} className="font-normal text-green-500">{paper.title}</Link>
+									<span className="text-xs text-slate-400"> ({paper.published})</span>
+								</li>
+
+							)}
+						</ul>
+					}
+				</div>
+			}
+		</>
 	);
 }
 
