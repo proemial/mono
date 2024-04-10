@@ -39,7 +39,7 @@ export type ChatMessageProps = Partial<FeedbackButtonsProps> & {
 	throbber?: { message?: string };
 	showLinkCards?: boolean;
 	onShareHandle?: (() => void) | null;
-	papers?: { link: string; title: string; published: string }[];
+	papers?: { link: string; title: string; published?: string }[];
 };
 
 export function ChatMessage({
@@ -120,7 +120,7 @@ export function ChatMessage({
 	);
 }
 
-function Papers({ papers }: { papers?: { link: string; title: string; published: string }[] }) {
+function Papers({ papers }: { papers?: { link: string; title: string; published?: string }[] }) {
 	const [open, setOpen] = useState(false);
 
 	return (

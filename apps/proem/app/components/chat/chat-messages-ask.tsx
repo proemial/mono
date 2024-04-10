@@ -84,7 +84,7 @@ export function ChatMessages({
 						const isLastMessageAndLoading = isLastMessage ? isLoading : false;
 						const transactionId = isMessageFromAI
 							? // We`r looking up the prior message so it can't be undefined
-							  messages.at(i - 1)!.id
+							messages.at(i - 1)!.id
 							: message.id;
 						const onShareHandle =
 							isMessageFromAI && !isLastMessageAndLoading
@@ -117,17 +117,17 @@ function useFollowups(data: AnswerEngineEvents[]) {
 	const [currentIndex, setCurrentIndex] = useState(-1);
 	const { setSuggestions } = useChatState("ask");
 
-	const { index, followups } = findLatestByEventType(
+	const { index, hits } = findLatestByEventType(
 		data,
 		"follow-up-questions-generated",
 	);
 
 	useEffect(() => {
-		if (followups?.length && index !== currentIndex) {
+		if (hits?.length && index !== currentIndex) {
 			setCurrentIndex(index);
-			setSuggestions(followups?.at(0)?.map((f) => f.question) || []);
+			setSuggestions(hits?.at(0)?.map((f) => f.question) || []);
 		}
-	}, [currentIndex, followups, index, currentIndex, setSuggestions]);
+	}, [currentIndex, hits, index, currentIndex, setSuggestions]);
 }
 
 function getRunId(data: AnswerEngineEvents[]) {
