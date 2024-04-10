@@ -118,10 +118,7 @@ export function ChatMessages({
 }
 
 function useFetchedPapers(data: AnswerEngineEvents[]) {
-	const { hits } = findLatestByEventType(
-		data,
-		"top-5-papers-identified",
-	);
+	const { hits } = findLatestByEventType(data, "papers-fetched");
 
 	return hits?.length > 0 ? hits[0]?.papers : undefined;
 }

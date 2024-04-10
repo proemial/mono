@@ -57,8 +57,8 @@ export const agentSelectedToolEvent = z.object({
 	}),
 });
 
-export const top5PapersIdentifiedEvent = z.object({
-	type: z.literal("top-5-papers-identified"),
+export const papersFetchedEvent = z.object({
+	type: z.literal("papers-fetched"),
 	transactionId: z.string(),
 	data: z.object({
 		papers: z.array(z.object({ link: z.string(), title: z.string() })),
@@ -72,7 +72,7 @@ const answerEngineEvents = z.discriminatedUnion("type", [
 	searchParamsGeneratedEvent,
 	followUpQuestionsGeneratedEvent,
 	agentSelectedToolEvent,
-	top5PapersIdentifiedEvent,
+	papersFetchedEvent,
 ]);
 
 export type AnswerEngineEvents = z.infer<typeof answerEngineEvents>;

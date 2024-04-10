@@ -23,7 +23,7 @@ const buildOpenAlexTool = (
 				handleToolEnd: async (output) => {
 					const papers = JSON.parse(output) as Paper[];
 					data.append({
-						type: "top-5-papers-identified",
+						type: "papers-fetched",
 						transactionId,
 						data: {
 							papers: papers.map((paper) => ({
