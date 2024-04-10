@@ -44,8 +44,11 @@ export async function POST(req: NextRequest) {
 		const { name, userId } = nameAndIdFromCookie(userIdFromHeader);
 		const { input, chatHistory } = parseMessages(messages);
 
-		if (!input) {
+		if (!input?.content.length) {
 			throw new Error("No question found");
+		}
+		if (input.content.length > 350) {
+			throw new Error("Input too long");
 		}
 
 		const stream = answerEngine({
