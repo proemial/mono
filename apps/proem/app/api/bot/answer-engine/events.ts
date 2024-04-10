@@ -61,7 +61,7 @@ export const top5PapersIdentifiedEvent = z.object({
 	type: z.literal("top-5-papers-identified"),
 	transactionId: z.string(),
 	data: z.object({
-		paperLinks: z.array(z.string()),
+		papers: z.array(z.object({ link: z.string(), title: z.string() })),
 	}),
 });
 
@@ -132,8 +132,8 @@ export function findByEventType<T extends AnswerEngineEvents["type"]>(
 export function findLatestByEventType<T extends AnswerEngineEvents["type"]>(
 	events: AnswerEngineEvents[] | undefined,
 	type: T,
-): { index: number; followups: ExtractData<T>[] } {
-	if (!events) return { index: 0, followups: [] };
+): { index: number; hits: ExtractData<T>[] } {
+	if (!events) return { index: 0, hits: [] };
 
 	// @ts-ignore
 	const index = events.findLastIndex(
@@ -143,13 +143,13 @@ export function findLatestByEventType<T extends AnswerEngineEvents["type"]>(
 		// a generated event for that.
 		(event: AnswerEngineEvents) => event.type === "answer-slug-generated",
 	);
-	const followups =
+	const hits =
 		[...events]
 			.slice(index)
 			.filter((event) => event.type === type)
 			.map((event) => event.data as ExtractData<T>) ?? [];
 
-	return { index, followups };
+	return { index, hits };
 }
 
 export function findAllByEventType<T extends AnswerEngineEvents["type"]>(

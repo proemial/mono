@@ -66,5 +66,6 @@ const toRelativeLink = (paper: Paper) => {
 		title: paper.title,
 		link: paper.link.replace("https://proem.ai", ""),
 		abstract: paper.abstract ?? "",
+		publicationDate: paper.publicationDate,
 	};
 };

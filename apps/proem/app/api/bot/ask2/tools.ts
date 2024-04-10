@@ -26,7 +26,11 @@ const buildOpenAlexTool = (
 						type: "top-5-papers-identified",
 						transactionId,
 						data: {
-							paperLinks: papers.map((paper) => paper.link),
+							papers: papers.map((paper) => ({
+								link: paper.link,
+								title: paper.title,
+								published: paper.publicationDate,
+							})),
 						},
 					});
 				},

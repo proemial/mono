@@ -70,7 +70,10 @@ export function ChatMessages({
 	useFollowups(data);
 
 	const throbberMessage = useThrobberMessage(data);
-	// console.log("throbberMessage", throbberMessage);
+
+	const papers = useFetchedPapers(data);
+	// console.log("papers", papers);
+
 
 	return (
 		<>
@@ -114,27 +117,36 @@ export function ChatMessages({
 	);
 }
 
+function useFetchedPapers(data: AnswerEngineEvents[]) {
+	const { hits } = findLatestByEventType(
+		data,
+		"top-5-papers-identified",
+	);
+
+	return hits?.length > 0 ? hits[0]?.papers : undefined;
+}
+
 function useThrobberMessage(data: AnswerEngineEvents[]) {
 	const isLatestEvent = data?.findLastIndex(d => d.type === "agent-selected-tool") === data?.length - 1;
 
-	return isLatestEvent ? "Fetching papersSearching scientific papers..." : "";
+	return isLatestEvent ? "Fetching papersSearching scientific papers..." : "Analysing question...";
 }
 
 function useFollowups(data: AnswerEngineEvents[]) {
 	const [currentIndex, setCurrentIndex] = useState(-1);
 	const { setSuggestions } = useChatState("ask");
 
-	const { index, followups } = findLatestByEventType(
+	const { index, hits } = findLatestByEventType(
 		data,
 		"follow-up-questions-generated",
 	);
 
 	useEffect(() => {
-		if (followups?.length && index !== currentIndex) {
+		if (hits?.length && index !== currentIndex) {
 			setCurrentIndex(index);
-			setSuggestions(followups?.at(0)?.map((f) => f.question) || []);
+			setSuggestions(hits?.at(0)?.map((f) => f.question) || []);
 		}
-	}, [currentIndex, followups, index, currentIndex, setSuggestions]);
+	}, [currentIndex, hits, index, currentIndex, setSuggestions]);
 }
 
 function getRunId(data: AnswerEngineEvents[]) {

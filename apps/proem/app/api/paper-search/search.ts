@@ -19,6 +19,7 @@ export type Paper = {
 	title: string;
 	abstract?: string;
 	metadata?: string;
+	publicationDate?: string;
 };
 
 type FetchConfig = {
@@ -41,6 +42,7 @@ export async function fetchPapers(q: string, config?: FetchConfig) {
 		abstract: o.abstract,
 		title: o.title,
 		metadata: config?.metadata,
+		publicationDate: o.publication_date,
 	}));
 }
 
