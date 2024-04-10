@@ -139,7 +139,7 @@ function Papers({ papers }: { papers?: { link: string; title: string; published:
 							{papers.map((paper) =>
 								<li key={paper.link}>
 									<Link key={paper.link} href={paper.link} className="font-normal text-green-500">{paper.title}</Link>
-									<span className="text-xs text-slate-400"> ({paper.published})</span>
+									<span className=" text-slate-500"> ({paper.published})</span>
 								</li>
 
 							)}
