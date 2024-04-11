@@ -1,3 +1,4 @@
+import { chatInputMaxLength } from "@/app/api/bot/input-limit";
 import { context, model, question } from "@/app/prompts/chat";
 import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
 import { OpenAIStream, StreamingTextResponse } from "ai";
@@ -16,10 +17,14 @@ export async function POST(req: NextRequest) {
 	const { messages, title, abstract } = await req.json();
 
 	const moddedMessages = [context(title, abstract), ...messages];
-	const prompt = await question(model);
+	const prompt = question(model);
 
 	const lastMessage = moddedMessages.at(-1);
 	if (lastMessage.role === "user") {
+		if (lastMessage.content.length > chatInputMaxLength) {
+			throw new Error("Input too long");
+		}
+
 		// TODO: Why does is start with `!!`?
 		if (!lastMessage.content.startsWith("!!"))
 			lastMessage.content = `${prompt} ${lastMessage.content}`;

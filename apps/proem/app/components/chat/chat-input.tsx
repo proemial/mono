@@ -6,6 +6,7 @@ import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
 import { analyticsKeys } from "../analytics/analytics-keys";
 import { useDrawerState } from "../login/state";
 import { ChatTarget, useChatState } from "./state";
+import { chatInputMaxLength } from "@/app/api/bot/input-limit";
 
 type Props = {
 	target: ChatTarget;
@@ -56,7 +57,7 @@ export function ChatInput({ target, children }: Props) {
 					readonly={readonly}
 					onFocus={() => !!onFocus && onFocus()}
 					onFocusChange={handleFocusChange}
-					maxLength={350}
+					maxLength={chatInputMaxLength}
 				/>
 			</form>
 		</div>

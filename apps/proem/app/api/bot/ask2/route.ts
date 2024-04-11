@@ -9,6 +9,7 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { answerEngine } from "./answer-engine";
+import { chatInputMaxLength } from "@/app/api/bot/input-limit";
 
 // GPT-4 flag
 // - Add the flag to the agent
@@ -47,7 +48,7 @@ export async function POST(req: NextRequest) {
 		if (!input?.content.length) {
 			throw new Error("No question found");
 		}
-		if (input.content.length > 350) {
+		if (input.content.length > chatInputMaxLength) {
 			throw new Error("Input too long");
 		}
 

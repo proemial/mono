@@ -11,7 +11,7 @@ export function context(title: string, abstract: string) {
 	};
 }
 
-export async function question(model: SupportedModels) {
+export function question(model: SupportedModels) {
 	return model === "gpt-3.5-turbo"
 		? "In a single sentence, "
 		: 'In a single sentence enclosing "core concepts" with double parenthesis,';
