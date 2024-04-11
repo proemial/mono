@@ -6,8 +6,8 @@ import { PostHogProvider } from "posthog-js/react";
 import { ReactNode, useEffect, useState } from "react";
 
 // https://posthog.com/tutorials/cookieless-tracking
-export function PostHogClient({ children, country }: { children: ReactNode, country?: string }) {
-	console.log("country", country);
+export function PostHogClient({ children, region }: { children: ReactNode, region?: string }) {
+	console.log("region", region);
 
 	analyticsTrace("[PosthogClient]");
 	useInit();

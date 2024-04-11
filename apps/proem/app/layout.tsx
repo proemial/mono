@@ -52,13 +52,11 @@ type Props = {
 export default async function RootLayout({ children }: Props) {
 	const light = lightModeEnabled ? "dark:dark" : "dark";
 
-	const headersList = headers()
-	const country = headersList.get('x-country') ?? undefined;
-	console.log("layout headers", country);
+	const { region } = geoHeaders();
 
 	return (
 		<ClerkProvider>
-			<PostHogClient country={country}>
+			<PostHogClient region={region}>
 				<html lang="en" className={sourceCodePro.variable}>
 					<head>
 						<meta name="facebook-domain-verification" content="ua85vc0pbvtj0hyzp6df2ftzgmmglr" />
@@ -73,4 +71,12 @@ export default async function RootLayout({ children }: Props) {
 			</PostHogClient>
 		</ClerkProvider>
 	);
+}
+
+function geoHeaders() {
+	const headersList = headers()
+	const country = headersList.get('x-country') ?? undefined;
+	const region = headersList.get('x-region') ?? undefined;
+
+	return { country, region }
 }
