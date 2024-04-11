@@ -1,3 +1,3 @@
-export default async function BetaPage() {
-	return <h1>beta </h1>;
+export default async function Frontpage() {
+	return <h1>Frontpage</h1>;
 }
