@@ -6,6 +6,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Metadata, Viewport } from "next";
 import { Source_Code_Pro } from "next/font/google";
 import { ReactNode } from "react";
+import { headers } from 'next/headers'
 
 const sourceCodePro = Source_Code_Pro({
 	subsets: ["latin"],
@@ -50,9 +51,14 @@ type Props = {
 
 export default async function RootLayout({ children }: Props) {
 	const light = lightModeEnabled ? "dark:dark" : "dark";
+
+	const headersList = headers()
+	const country = headersList.get('x-country') ?? undefined;
+	console.log("layout headers", country);
+
 	return (
 		<ClerkProvider>
-			<PostHogClient>
+			<PostHogClient country={country}>
 				<html lang="en" className={sourceCodePro.variable}>
 					<head>
 						<meta name="facebook-domain-verification" content="ua85vc0pbvtj0hyzp6df2ftzgmmglr" />

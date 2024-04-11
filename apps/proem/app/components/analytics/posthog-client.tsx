@@ -3,11 +3,12 @@ import { analyticsTrace } from "@/app/components/analytics/utils";
 import { useUser } from "@clerk/nextjs";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
-import process from "process";
 import { ReactNode, useEffect, useState } from "react";
 
 // https://posthog.com/tutorials/cookieless-tracking
-export function PostHogClient({ children }: { children: ReactNode }) {
+export function PostHogClient({ children, country }: { children: ReactNode, country?: string }) {
+	console.log("country", country);
+
 	analyticsTrace("[PosthogClient]");
 	useInit();
 
