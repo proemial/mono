@@ -11,22 +11,6 @@ import { z } from "zod";
 import { answerEngine } from "./answer-engine";
 import { chatInputMaxLength } from "@/app/api/bot/input-limit";
 
-// GPT-4 flag
-// - Add the flag to the agent
-
-// Feedback
-// - Fix streaming with intermediate steps
-//    - https://js.langchain.com/docs/modules/agents/how_to/streaming
-// - Add intermediate step (or streamEvents) when a tool is triggered
-
-// Integrate
-// - Implement sharing
-// - Invoke genration of followups
-
-// LangSmith housekeeping
-// - Rename parent run
-// - Extract trace id from agent execution, and add it to the tools
-
 const answerEngineRouteParams = z.object({
 	slug: z.string().optional().nullable(),
 	userId: z.string().optional(),
