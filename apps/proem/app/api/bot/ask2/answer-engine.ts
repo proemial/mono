@@ -125,7 +125,7 @@ export const answerEngine = async ({
 	});
 
 	return new StreamingTextResponse(
-		transformStream.pipeThrough(createStreamDataTransformer(true)),
+		transformStream.pipeThrough(createStreamDataTransformer()),
 		undefined,
 		data,
 	);
