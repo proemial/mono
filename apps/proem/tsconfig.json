@@ -16,11 +16,11 @@
 	"include": [
 		"next-env.d.ts",
 		"next.config.js",
+		".next/types/**/*.ts",
 		"**/*.ts",
 		"**/*.tsx",
 		"../../packages/data/**/*.ts",
-		".next/types/**/*.ts",
-		"../../packages/models/clerk-user.ts"
+		"../../packages/models/**/*.ts"
 	],
 	"exclude": ["node_modules"]
 }
