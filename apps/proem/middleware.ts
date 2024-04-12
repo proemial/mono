@@ -1,7 +1,9 @@
 import { authMiddleware } from "@clerk/nextjs";
 import { geolocation } from "@vercel/edge";
 import { NextResponse } from "next/server";
+import { vercelRegions } from "./app/components/analytics/analytics-keys";
 
+// geolocation only works on the edge
 export const runtime = "experimental-edge";
 
 export default authMiddleware({
@@ -11,8 +13,8 @@ export default authMiddleware({
 		const requestHeaders = new Headers(request.headers);
 
 		// @ts-ignore
-		requestHeaders.set("x-region", regions[geo?.region] ?? "somewhere");
-		requestHeaders.set("x-country", geo?.country ?? "somewhere");
+		requestHeaders.set("x-region", vercelRegions[geo?.region] ?? "eu");
+		requestHeaders.set("x-country", geo?.country ?? "");
 
 		return NextResponse.next({
 			request: {
@@ -24,25 +26,4 @@ export default authMiddleware({
 
 export const config = {
 	matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
-};
-
-const regions = {
-	arn1: "eu-north-1", // Stockholm, Sweden
-	bom1: "ap-south-1", // Mumbai, India
-	cdg1: "eu-west-3", // Paris, France
-	cle1: "us-east-2", // Cleveland, USA
-	cpt1: "af-south-1", // Cape Town, South Africa
-	dub1: "eu-west-1", // Dublin, Ireland
-	fra1: "eu-central-1", // Frankfurt, Germany
-	gru1: "sa-east-1", // São Paulo, Brazil
-	hkg1: "ap-east-1", // Hong Kong
-	hnd1: "ap-northeast-1", // Tokyo, Japan
-	iad1: "us-east-1", // Washington, D.C., USA
-	icn1: "ap-northeast-2", // Seoul, South Korea
-	kix1: "ap-northeast-3", // Osaka, Japan
-	lhr1: "eu-west-2", // London, United Kingdom
-	pdx1: "us-west-2", // Portland, USA
-	sfo1: "us-west-1", // San Francisco, USA
-	sin1: "ap-southeast-1", // Singapore
-	syd1: "ap-southeast-2", // Sydney, Australia
 };

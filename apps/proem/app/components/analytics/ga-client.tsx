@@ -1,12 +1,14 @@
 "use client";
-import { analyticsTrace, usePathNames } from "@/app/components/analytics/utils";
+import { TrackingInput, analyticsTrace, usePathNames, useTrackingProfile } from "@/app/components/analytics/tracking-profile";
 import { useUser } from "@clerk/nextjs";
-import process from "process";
 import { useEffect, useState } from "react";
 import ReactGA from "react-ga4";
 
 // https://www.npmjs.com/package/react-ga4
-export function GaClient() {
+export function GaClient({ tracking }: { tracking?: TrackingInput }) {
+	const { trackingProfile } = useTrackingProfile(tracking);
+	if (trackingProfile !== "tracked") return null;
+
 	analyticsTrace("[GaClient]");
 
 	const initialized = useInit();
@@ -20,7 +22,7 @@ export function GaClient() {
 				path: pathname,
 			});
 		}
-	}, [initialized, pathname]);
+	}, [initialized, pathname, trackingKey]);
 
 	return <></>;
 }

@@ -1,15 +1,16 @@
-export type User =
+export type ClerkUser =
 	| {
 			firstName: string | null;
 			lastName: string | null;
 			primaryEmailAddressId: string | null;
 			emailAddresses: { id: string; emailAddress: string }[];
 			imageUrl: string;
+			id?: string;
 	  }
 	| null
 	| undefined;
 
-export function getProfileFromUser(user: User) {
+export function getProfileFromClerkUser(user: ClerkUser) {
 	if (!user) {
 		return undefined;
 	}
@@ -29,5 +30,6 @@ export function getProfileFromUser(user: User) {
 		initials,
 		email,
 		avatar: user.imageUrl,
+		id: user.id,
 	};
 }

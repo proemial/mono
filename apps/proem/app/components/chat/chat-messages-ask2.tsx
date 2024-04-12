@@ -1,6 +1,5 @@
 "use client";
 import { STARTERS } from "@/app/(pages)/(app)/(answer-engine)/starters";
-import { getProfileFromUser } from "@/app/(pages)/(app)/profile/profile-from-user";
 import {
 	type AnswerEngineEvents,
 	findAllByEventType,
@@ -15,6 +14,7 @@ import { useShareDrawerState } from "../share/state";
 import { PROEM_BOT } from "./bot-user";
 import { ChatMessage } from "./chat-message-ask2";
 import { useChatState } from "./state";
+import { getProfileFromClerkUser } from "@proemial/models/clerk-user";
 
 type Props = {
 	message?: string;
@@ -216,7 +216,7 @@ function useShareableChat(
 		}
 	}, [answerSlug]);
 
-	const userProfile = getProfileFromUser(user);
+	const userProfile = getProfileFromClerkUser(user);
 
 	return { userProfile, sessionSlug, shareMessage, ...chat };
 }

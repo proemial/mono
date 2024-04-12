@@ -19,7 +19,8 @@
 		"**/*.ts",
 		"**/*.tsx",
 		"../../packages/data/**/*.ts",
-		".next/types/**/*.ts"
+		".next/types/**/*.ts",
+		"../../packages/models/clerk-user.ts"
 	],
 	"exclude": ["node_modules"]
 }

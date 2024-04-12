@@ -1,7 +1,6 @@
 import { Feedback } from "@/app/(pages)/(app)/profile/components/feedback";
 import { Privacy } from "@/app/(pages)/(app)/profile/components/privacy";
 import { ProfileButtons } from "@/app/(pages)/(app)/profile/components/profile-buttons";
-import { getProfileFromUser } from "@/app/(pages)/(app)/profile/profile-from-user";
 import {
 	Avatar,
 	AvatarFallback,
@@ -9,6 +8,7 @@ import {
 } from "@/app/components/shadcn-ui/Avatar";
 import { SignedIn, currentUser } from "@clerk/nextjs";
 import { PageLayout } from "../page-layout";
+import { getProfileFromClerkUser } from "@proemial/models/clerk-user";
 
 const pageName = "profile";
 
@@ -18,7 +18,7 @@ export const metadata = {
 
 export default async function ProfilePage() {
 	const user = await currentUser();
-	const userProfile = getProfileFromUser(user);
+	const userProfile = getProfileFromClerkUser(user);
 
 	return (
 		<PageLayout title={pageName}>

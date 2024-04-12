@@ -1,12 +1,15 @@
 "use client";
-import { analyticsTrace, usePathNames } from "@/app/components/analytics/utils";
+import { TrackingInput, analyticsTrace, usePathNames, useTrackingProfile } from "@/app/components/analytics/tracking-profile";
 import va from "@vercel/analytics";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { useEffect } from "react";
 
 // https://vercel.com/docs/concepts/analytics/custom-events
-export function VaClient() {
+export function VaClient({ tracking }: { tracking?: TrackingInput }) {
+	const { trackingProfile } = useTrackingProfile(tracking);
+	if (trackingProfile !== "tracked") return null;
+
 	analyticsTrace("[VaClient]");
 
 	const { pathname, trackingKey } = usePathNames();
@@ -16,7 +19,7 @@ export function VaClient() {
 		va.track(trackingKey, {
 			path: pathname,
 		});
-	}, [pathname]);
+	}, [pathname, trackingKey]);
 
 	return (
 		<>

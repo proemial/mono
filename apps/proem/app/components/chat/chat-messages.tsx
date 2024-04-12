@@ -1,5 +1,4 @@
 "use client";
-import { getProfileFromUser } from "@/app/(pages)/(app)/profile/profile-from-user";
 import { Tracker } from "@/app//components/analytics/tracker";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { PROEM_BOT } from "@/app/components/chat/bot-user";
@@ -8,6 +7,7 @@ import { Message, useChat } from "ai/react";
 import { ReactNode, useEffect, useRef } from "react";
 import { ChatMessage } from "./chat-message";
 import { useChatState } from "./state";
+import { getProfileFromClerkUser } from "@proemial/models/clerk-user";
 
 type Props = {
 	title: string;
@@ -23,7 +23,7 @@ export function ChatMessages({ title, abstract, starters, children }: Props) {
 	});
 
 	const { user } = useUser();
-	const userProfile = getProfileFromUser(user);
+	const userProfile = getProfileFromClerkUser(user);
 
 	const { question, setLoading, setSuggestions, clearQuestion } =
 		useChatState("paper");

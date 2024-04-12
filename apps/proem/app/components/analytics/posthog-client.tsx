@@ -1,44 +1,43 @@
 "use client";
-import { analyticsTrace } from "@/app/components/analytics/utils";
-import { useUser } from "@clerk/nextjs";
+import { TrackingInput, analyticsTrace, useTrackingProfile } from "@/app/components/analytics/tracking-profile";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { ReactNode, useEffect, useState } from "react";
 
 // https://posthog.com/tutorials/cookieless-tracking
-export function PostHogClient({ children, region }: { children: ReactNode, region?: string }) {
-	console.log("region", region);
-
+export function PostHogClient({ children, tracking }: { children: ReactNode, tracking?: TrackingInput }) {
 	analyticsTrace("[PosthogClient]");
-	useInit();
+	useInit(tracking);
 
 	return <PostHogProvider client={posthog}>{children}</PostHogProvider>;
 }
 
-function useInit() {
-	const { user, isLoaded } = useUser();
+function useInit(trackingInput?: TrackingInput) {
+	const { trackingProfile, user } = useTrackingProfile(trackingInput);
 	const [initialized, setInitialized] = useState(false);
 
-	analyticsTrace("[PosthogClient] useInit");
 	useEffect(() => {
 		// wait for clerk to load to bootstrap with
-		if (!isLoaded) return;
-		const persistence = user ? undefined : "memory";
-		const distinctID = user?.primaryEmailAddress?.emailAddress || user?.id;
+		if (!trackingProfile) return;
+
+		const persistence = trackingProfile === "tracked" ? "memory" : undefined;
+		const autocapture = user?.isInternal ? false : true;
+		const distinctID = user?.email || user?.id;
 
 		const token = process.env.NEXT_PUBLIC_POSTHOG_KEY;
 		const api_host = process.env.NEXT_PUBLIC_POSTHOG_HOST;
 
-		analyticsTrace("[PosthogClient] initializing", persistence, distinctID);
+		analyticsTrace("[PosthogClient] initializing", `distinctID: ${distinctID}, persistence: ${persistence}, autocapture: ${autocapture}`);
 		posthog.init(token, {
 			api_host,
 			persistence,
+			autocapture,
 			bootstrap: {
 				distinctID,
 			},
 		});
 		setInitialized(true);
-	}, [user, isLoaded]);
+	}, [user, trackingProfile]);
 
 	return initialized;
 }

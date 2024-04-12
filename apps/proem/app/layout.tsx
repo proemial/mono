@@ -1,12 +1,11 @@
-import { Analytics } from "@/app/components/analytics/analytics";
-import { PostHogClient } from "@/app/components/analytics/posthog-client";
+import { Analytics } from "@/app/components/analytics";
 import "@/app/globals.css";
 import "@/env";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Metadata, Viewport } from "next";
 import { Source_Code_Pro } from "next/font/google";
-import { ReactNode } from "react";
 import { headers } from 'next/headers'
+import { ReactNode } from "react";
 
 const sourceCodePro = Source_Code_Pro({
 	subsets: ["latin"],
@@ -51,12 +50,11 @@ type Props = {
 
 export default async function RootLayout({ children }: Props) {
 	const light = lightModeEnabled ? "dark:dark" : "dark";
-
-	const { region } = geoHeaders();
+	const trackingInput = getTrackingInput();
 
 	return (
 		<ClerkProvider>
-			<PostHogClient region={region}>
+			<Analytics.PostHog tracking={trackingInput}>
 				<html lang="en" className={sourceCodePro.variable}>
 					<head>
 						<meta name="facebook-domain-verification" content="ua85vc0pbvtj0hyzp6df2ftzgmmglr" />
@@ -65,18 +63,20 @@ export default async function RootLayout({ children }: Props) {
 						className={`${light} h-dvh w-dvw flex flex-col justify-center items-center`}
 					>
 						{children}
-						<Analytics />
+						<Analytics.Vercel tracking={trackingInput} />
+						<Analytics.Google tracking={trackingInput} />
 					</body>
 				</html>
-			</PostHogClient>
+			</Analytics.PostHog>
 		</ClerkProvider>
 	);
 }
 
-function geoHeaders() {
+function getTrackingInput() {
 	const headersList = headers()
 	const country = headersList.get('x-country') ?? undefined;
 	const region = headersList.get('x-region') ?? undefined;
+	const userAgent = headers().get("user-agent") ?? undefined;
 
-	return { country, region }
+	return { country, region, userAgent }
 }
