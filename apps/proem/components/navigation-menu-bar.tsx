@@ -17,11 +17,11 @@ import { ButtonEdit } from "./button-edit";
 const navigationItems = [
 	{
 		name: "Discover",
-		href: "/discover",
+		href: "/beta/discover",
 	},
 	{
 		name: "Ask",
-		href: "/ask",
+		href: "/beta/ask",
 	},
 ];
 
