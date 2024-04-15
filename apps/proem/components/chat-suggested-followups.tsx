@@ -1,20 +1,18 @@
 "use client";
 
-import { Suggestions } from "@/components/suggestions";
+import { Suggestions, SuggestionsProps } from "@/components/suggestions";
 import { Header4 } from "@proemial/shadcn-ui";
 import { GanttChart } from "lucide-react";
 import { SelectContentSelector } from "./select-content-selector";
 
-export function ChatSuggestedFollowups({ label }: { label: string }) {
+type ChatSuggestedFollowupsProps = Pick<SuggestionsProps, "suggestions">;
+
+export function ChatSuggestedFollowups({
+	suggestions,
+}: ChatSuggestedFollowupsProps) {
 	function onClick() {
 		console.log("Ask follow-up...");
 	}
-
-	const suggestions = [
-		"What is the purpose of the Statistical Interpretation of quantum theory?",
-		"What is the implication of Bell’s theorem on hidden-variable theories that reproduce quantum mechanics exactly?",
-		"How does the Statistical Interpretation propose to view the quantum state description?",
-	];
 
 	return (
 		<div className="flex flex-col gap-5 mb-8">

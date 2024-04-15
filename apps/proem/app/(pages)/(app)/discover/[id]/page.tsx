@@ -1,3 +1,4 @@
+import { generateStarters } from "@/app/prompts/starters";
 import { ButtonScrollToBottom } from "@/components/button-scroll-to-bottom";
 import { ChatActionBarDiscover } from "@/components/chat-action-bar-discover";
 import { ChatArticle } from "@/components/chat-article";
@@ -5,26 +6,30 @@ import { ChatPanel } from "@/components/chat-panel";
 import { ChatPapersDiscover } from "@/components/chat-papers-discover";
 import { ChatQA } from "@/components/chat-qa";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
-import { Suspense } from "react";
+import { fetchPaper } from "@/old/(pages)/(app)/oa/[id]/fetch-paper";
+import { OpenAlexPaper } from "@proemial/models/open-alex";
+import { Redis } from "@proemial/redis/redis";
+import { notFound } from "next/navigation";
 
-const dummySummary = {
-	type: "Summary",
-	model: "GPT-4-TURBO",
-	headline:
-		"Quantum theory may involve hidden variables but proving them logically consistent creates challenges in separated systems",
-	text: "The statistical interpretation of quantum theory focuses on ensemble descriptions and hidden variables. The main purpose is to explain quantum phenomena statistically. Furthermore, a method for calculating wave functions in crystals is proposed. Statistical Interpretation of Quantum Mechanics Calculating Wave Functions in Crystals In quantum theory, statistical interpretations clarify quantum phenomena through ensembles and hidden variables. Additionally, a proposed method calculates wave functions effectively in crystals.",
+type Props = {
+	params: { id: string };
+	searchParams: { title?: string };
 };
 
-export default function Page({
-	searchParams,
-}: {
-	searchParams?: {
-		query?: string;
-	};
-}) {
-	const query = searchParams?.query || "";
+export default async function Page({ params }: Props) {
+	const paper = await fetchPaper(params.id);
 
-	const state = searchParams?.query ? "follow-up-discover" : "empty";
+	if (!paper) {
+		notFound();
+	}
+
+	const { title, abstract } = paper.data;
+
+	const starters = paper?.generated?.starters
+		? paper?.generated?.starters
+		: await generate(paper);
+
+	const state = true ? "follow-up-discover" : "empty";
 
 	const scrollToBottom = () => {
 		console.log("scroll to bottom");
@@ -33,22 +38,50 @@ export default function Page({
 	return (
 		<main className="flex w-full">
 			<div className="flex flex-col w-full gap-6 p-4 pb-0">
-				{query && <ChatPapersDiscover />}
-				{query && (
-					<Suspense key={query}>
-						<ChatArticle article={dummySummary} />
-					</Suspense>
-				)}
-				{query && (
-					<>
-						<ChatActionBarDiscover />
-						<ChatQA />
-						<ChatSuggestedFollowups label="Ask this paper..." />
-					</>
-				)}
+				<ChatPapersDiscover />
+
+				{/* {query && (
+					<Suspense key={query}> */}
+				<ChatArticle
+					headline={title}
+					model="GPT-4 TURBO"
+					type="Summary"
+					text={abstract}
+				/>
+				{/* </Suspense>
+				)} */}
+
+				<ChatActionBarDiscover />
+				<ChatQA />
+				<ChatSuggestedFollowups suggestions={starters} />
+
 				{state !== "empty" && <ButtonScrollToBottom />}
+
 				<ChatPanel state={state} />
 			</div>
 		</main>
 	);
+}
+
+async function generate(paper: OpenAlexPaper) {
+	const paperTitle = paper?.data?.title;
+	const abstract = paper?.data?.abstract;
+
+	if (paperTitle && abstract) {
+		const starters = await generateStarters(paperTitle, abstract);
+
+		await Redis.papers.upsert(paper.id, (existingPaper) => {
+			const generated = existingPaper.generated
+				? { ...existingPaper.generated, starters }
+				: { starters };
+
+			return {
+				...existingPaper,
+				generated,
+			};
+		});
+
+		return starters;
+	}
+	return [];
 }

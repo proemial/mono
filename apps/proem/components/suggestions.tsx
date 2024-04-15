@@ -3,7 +3,9 @@
 import { Button } from "@proemial/shadcn-ui";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export function Suggestions({ suggestions }: { suggestions: string[] }) {
+export type SuggestionsProps = { suggestions?: string[] };
+
+export function Suggestions({ suggestions }: SuggestionsProps) {
 	const searchParams = useSearchParams();
 	const pathname = usePathname();
 	const { replace } = useRouter();
@@ -21,11 +23,11 @@ export function Suggestions({ suggestions }: { suggestions: string[] }) {
 	return (
 		<div className="flex flex-col gap-5 pb-4">
 			<div className="flex flex-col gap-2">
-				{suggestions.map((suggestion, i) => (
+				{suggestions?.map((suggestion) => (
 					<Button
 						variant="suggestion"
 						size="suggestion"
-						key={i}
+						key={suggestion}
 						onClick={() => onClick(suggestion)}
 					>
 						{suggestion}
