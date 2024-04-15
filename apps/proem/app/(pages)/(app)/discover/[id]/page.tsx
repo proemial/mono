@@ -3,12 +3,16 @@ import { ButtonScrollToBottom } from "@/components/button-scroll-to-bottom";
 import { ChatActionBarDiscover } from "@/components/chat-action-bar-discover";
 import { ChatArticle } from "@/components/chat-article";
 import { ChatPanel } from "@/components/chat-panel";
-import { ChatPapersDiscover } from "@/components/chat-papers-discover";
 import { ChatQA } from "@/components/chat-qa";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
+import { CollapsibleSection } from "@/components/collapsible-section";
+import { PaperCardDiscover } from "@/components/paper-card-discover";
+import { PaperCardDiscoverProfile } from "@/components/paper-card-discover-profile";
 import { fetchPaper } from "@/old/(pages)/(app)/oa/[id]/fetch-paper";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
+import { Header4, ScrollArea, ScrollBar } from "@proemial/shadcn-ui";
+import { FileText } from "lucide-react";
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -36,30 +40,49 @@ export default async function Page({ params }: Props) {
 	};
 
 	return (
-		<main className="flex w-full">
-			<div className="flex flex-col w-full gap-6 p-4 pb-0">
-				<ChatPapersDiscover />
+		<div className="space-y-6 ">
+			<CollapsibleSection
+				trigger={
+					<div className="flex items-center gap-4">
+						<FileText className="size-4" />
+						<Header4>Research Paper</Header4>
+					</div>
+				}
+			>
+				<ScrollArea className="w-full pb-4 rounded-md whitespace-nowrap">
+					<div className="flex space-x-3 w-max">
+						<PaperCardDiscover
+							paper={{
+								id: "1",
+								title:
+									"The Role of the Brain in the Evolution of the Human Hand",
+								date: "2021.10.10",
+								publisher: "American Physical Society",
+								type: "www",
+							}}
+						/>
+						<PaperCardDiscoverProfile name="Juliana Mejia" />
+						<PaperCardDiscoverProfile name="Juliana Mejia" />
+					</div>
+					<ScrollBar orientation="horizontal" />
+				</ScrollArea>
+			</CollapsibleSection>
 
-				{/* {query && (
-					<Suspense key={query}> */}
-				<ChatArticle
-					headline={title}
-					model="GPT-4 TURBO"
-					type="Summary"
-					text={abstract}
-				/>
-				{/* </Suspense>
-				)} */}
+			<ChatArticle
+				headline={title}
+				model="GPT-4 TURBO"
+				type="Summary"
+				text={abstract}
+			/>
 
-				<ChatActionBarDiscover />
-				<ChatQA />
-				<ChatSuggestedFollowups suggestions={starters} />
+			<ChatActionBarDiscover />
+			<ChatQA />
+			<ChatSuggestedFollowups suggestions={starters} />
 
-				{state !== "empty" && <ButtonScrollToBottom />}
+			{state !== "empty" && <ButtonScrollToBottom />}
 
-				<ChatPanel state={state} />
-			</div>
-		</main>
+			<ChatPanel state={state} />
+		</div>
 	);
 }
 
