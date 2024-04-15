@@ -2,7 +2,7 @@ import { Header2, Header4, Header5, Paragraph } from "@proemial/shadcn-ui";
 import { AlignLeft } from "lucide-react";
 
 type ChatArticleProps = {
-	type: string;
+	type: "Answer" | "Summary";
 	model: string;
 	headline?: string;
 	text?: string;

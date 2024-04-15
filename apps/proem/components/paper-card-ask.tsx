@@ -1,3 +1,4 @@
+import { Paper } from "@/app/(pages)/(app)/(ask)/answer/[id]/use-papers";
 import {
 	Card,
 	CardBullet,
@@ -10,18 +11,19 @@ import {
 } from "@proemial/shadcn-ui";
 
 interface PaperCardAskProps {
-	paper?: any;
-	cardKey?: React.Key;
-	index?: string;
+	paper: Paper | undefined;
+	index: string;
 }
 
-export function PaperCardAsk({ paper, cardKey, index }: PaperCardAskProps) {
+export function PaperCardAsk({ paper, index }: PaperCardAskProps) {
 	return (
-		<Card key={cardKey} variant="paper">
+		<Card variant="paper">
 			<CardHeader variant="paperAsk">
 				<CardBullet variant="numbered">{index}</CardBullet>
 				{paper && (
-					<CardDescription variant="paperDate">{paper.date}</CardDescription>
+					<CardDescription variant="paperDate">
+						{paper.published}
+					</CardDescription>
 				)}
 			</CardHeader>
 			<CardContent variant="paperAsk">
@@ -32,13 +34,13 @@ export function PaperCardAsk({ paper, cardKey, index }: PaperCardAskProps) {
 					</div>
 				)}
 			</CardContent>
-			{paper && (
+			{/* {paper && (
 				<CardFooter>
 					<CardDescription variant="paperPublisher">
 						{paper.publisher}
 					</CardDescription>
 				</CardFooter>
-			)}
+			)} */}
 		</Card>
 	);
 }

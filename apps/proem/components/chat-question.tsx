@@ -1,6 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@proemial/shadcn-ui";
 
-export function ChatQuestion({ question }: { question: string }) {
+export function ChatQuestion({ question }: { question: string | undefined }) {
+	if (!question) {
+		return undefined;
+	}
+
 	return (
 		<div className="flex flex-col gap-2">
 			<div className="flex items-center gap-2">
