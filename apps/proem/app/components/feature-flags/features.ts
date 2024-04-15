@@ -5,7 +5,6 @@ export const Features = {
 	cardShowShortenedTopics: "CARD_SHOW_SHORTENED_TOPICS",
 	vectorRerankAndFilter: "VECTOR_RERANK_AND_FILTER",
 	rephraseQuestion: "ASK_REPHRASE_QUESTION",
-	digestibleAnswers: "ASK_DIGESTIBLE_ANSWERS",
 } as const;
 
 export type FeatureKey = keyof typeof Features;

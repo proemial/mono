@@ -28,25 +28,6 @@ const hasPapersAvailable = (input: { papers: PapersAsString }) => {
 	return papers.length > 0;
 };
 
-const isGpt4Enabled = async () => {
-	return (await getFeatureFlag("askGpt4")) ?? false;
-};
-
-const useGpt4IfPapersAvailable = RunnableBranch.from<
-	{
-		question: string;
-		chatHistory: LangChainChatHistoryMessage[];
-		papers: PapersAsString;
-	},
-	Output
->([
-	[
-		isGpt4Enabled,
-		generateAnswerChain(buildOpenAIChatModel("gpt-4-0125-preview", "ask")),
-	],
-	generateAnswerChain(),
-]);
-
 const answerIfPapersAvailable = RunnableBranch.from<
 	{
 		question: string;
@@ -55,7 +36,7 @@ const answerIfPapersAvailable = RunnableBranch.from<
 	},
 	Output
 >([
-	[hasPapersAvailable, useGpt4IfPapersAvailable],
+	[hasPapersAvailable, generateAnswerChain()],
 	() => `I'm sorry, I could't find any relevant research papers to support an
 	answer. Please try again with a different question, or start a new
 	conversation.`,
