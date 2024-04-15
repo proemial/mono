@@ -1,10 +1,10 @@
 import { AddStarterForm } from "@/app/(pages)/(admin)/admin/add-starter-form";
 import { DeleteStarterButton } from "@/app/(pages)/(admin)/admin/delete-starter-button";
 import { answers } from "@/app/api/bot/answer-engine/answers";
+import { INTERNAL_COOKIE_NAME, getInternalUser } from "@/app/hooks/use-user";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { INTERNAL_COOKIE_NAME, getInternalUser } from "../../(app)/profile/user";
 
 export default async function AdminPage() {
 	const cookie = cookies().get(INTERNAL_COOKIE_NAME)?.value;

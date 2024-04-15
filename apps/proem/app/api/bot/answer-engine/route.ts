@@ -1,11 +1,8 @@
 import {
-	INTERNAL_COOKIE_NAME,
-	getInternalUser,
-} from "@/app/(pages)/(app)/profile/user";
-import {
 	AIMessage,
 	askAnswerEngine,
 } from "@/app/api/bot/answer-engine/answer-engine";
+import { INTERNAL_COOKIE_NAME, getInternalUser } from "@/app/hooks/use-user";
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 import { z } from "zod";
