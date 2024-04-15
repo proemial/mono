@@ -2,6 +2,7 @@ import { ProfileBookmarks } from "@/components/profile-bookmarks";
 import { ProfileQuestions } from "@/components/profile-questions";
 import { ProfileYou } from "@/components/profile-you";
 import {
+	Button,
 	Sheet,
 	SheetContent,
 	SheetHeader,
@@ -14,7 +15,9 @@ export function Profile() {
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
-				<Menu className="p-1" />
+				<Button variant="ghost" size="sm">
+					<Menu className="p-1" />
+				</Button>
 			</SheetTrigger>
 			{/* TODO! add as drawer */}
 			{/* <SheetContent side="left" className="p-4 overflow-y-auto">

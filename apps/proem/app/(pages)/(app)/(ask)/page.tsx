@@ -84,7 +84,7 @@ export default function AskPage({ searchParams }: AskPageProps) {
 
 	return (
 		<div className="space-y-6">
-			<ChatQuestion question={query} />
+			<ChatQuestion question={"question"} />
 
 			<CollapsibleSection
 				trigger={
@@ -112,9 +112,6 @@ export default function AskPage({ searchParams }: AskPageProps) {
 
 			<ChatAnswerSkeleton />
 
-			{/* {query && (
-				<Suspense key={query} fallback={<ChatAnswerSkeleton />}> */}
-
 			<ChatArticle
 				headline="headline?"
 				type={dummyAnswer.type}
@@ -122,18 +119,11 @@ export default function AskPage({ searchParams }: AskPageProps) {
 				text={dummyAnswer.type}
 			/>
 
-			{/* </Suspense>
-			)} */}
-
-			{query && (
-				<>
-					<ChatActionBarAsk />
-					<ChatSuggestedFollowups suggestions={["Ask follow-up..."]} />
-				</>
-			)}
+			<ChatActionBarAsk />
+			<ChatSuggestedFollowups suggestions={["Ask follow-up..."]} />
 
 			{state !== "empty" && <ButtonScrollToBottom />}
-			<ChatPanel state={state} />
+			{/* <ChatPanel state={state} /> */}
 		</div>
 	);
 }
