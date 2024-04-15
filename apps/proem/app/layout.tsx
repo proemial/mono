@@ -74,9 +74,11 @@ export default function RootLayout({ children }: Readonly<Props>) {
 							enableSystem
 							disableTransitionOnChange
 						>
-							<div className="flex flex-col w-full max-w-screen-md mx-auto">
+							<div className="max-w-screen-md mx-auto">
 								<NavigationMenuBar />
-								{children}
+
+								<main className="w-full p-4">{children}</main>
+
 								<Analytics.Vercel tracking={trackingInput} />
 								<Analytics.Google tracking={trackingInput} />
 							</div>

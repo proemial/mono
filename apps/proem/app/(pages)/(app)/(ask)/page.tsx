@@ -29,24 +29,22 @@ export default function Page({
 	};
 
 	return (
-		<main className="flex w-full">
-			<div className="flex flex-col w-full gap-6 p-4">
-				{query && <ChatQuestion question={query} />}
-				{query && <ChatPapersAsk loading={false} />}
-				{query && (
-					<Suspense key={query} fallback={<ChatAnswerSkeleton />}>
-						{/* <ChatArticle article={dummyAnswer} /> */}
-					</Suspense>
-				)}
-				{query && (
-					<>
-						<ChatActionBarAsk />
-						{/* <ChatSuggestedFollowups label="Ask follow-up..." /> */}
-					</>
-				)}
-				{state !== "empty" && <ButtonScrollToBottom />}
-				<ChatPanel state={state} />
-			</div>
-		</main>
+		<div className="space-y-6">
+			{query && <ChatQuestion question={query} />}
+			{query && <ChatPapersAsk loading={false} />}
+			{query && (
+				<Suspense key={query} fallback={<ChatAnswerSkeleton />}>
+					{/* <ChatArticle article={dummyAnswer} /> */}
+				</Suspense>
+			)}
+			{query && (
+				<>
+					<ChatActionBarAsk />
+					{/* <ChatSuggestedFollowups label="Ask follow-up..." /> */}
+				</>
+			)}
+			{state !== "empty" && <ButtonScrollToBottom />}
+			<ChatPanel state={state} />
+		</div>
 	);
 }
