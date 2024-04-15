@@ -19,32 +19,6 @@ const nextConfig = {
 			},
 		];
 	},
-	async rewrites() {
-		return {
-			beforeFiles: [
-				{
-					source: "/:path*",
-					has: [
-						{
-							type: "host",
-							value: "beta.localhost",
-						},
-					],
-					destination: "/beta/:path*",
-				},
-				{
-					source: "/:path*",
-					has: [
-						{
-							type: "host",
-							value: "beta.proem.ai",
-						},
-					],
-					destination: "/beta/:path*",
-				},
-			],
-		};
-	},
 	sentry: {
 		// https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration
 		hideSourceMaps: true,
