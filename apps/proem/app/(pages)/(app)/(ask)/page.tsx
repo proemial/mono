@@ -35,13 +35,13 @@ export default function Page({
 				{query && <ChatPapersAsk loading={false} />}
 				{query && (
 					<Suspense key={query} fallback={<ChatAnswerSkeleton />}>
-						<ChatArticle article={dummyAnswer} />
+						{/* <ChatArticle article={dummyAnswer} /> */}
 					</Suspense>
 				)}
 				{query && (
 					<>
 						<ChatActionBarAsk />
-						<ChatSuggestedFollowups label="Ask follow-up..." />
+						{/* <ChatSuggestedFollowups label="Ask follow-up..." /> */}
 					</>
 				)}
 				{state !== "empty" && <ButtonScrollToBottom />}
