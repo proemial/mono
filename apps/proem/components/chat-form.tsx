@@ -11,7 +11,7 @@ import {
 	Textarea,
 } from "@proemial/shadcn-ui";
 import { ChevronRight } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -22,22 +22,14 @@ export const QuerySchema = z.object({
 
 export function ChatForm({ placeholder }: { placeholder: string }) {
 	const [isFocused, setIsFocused] = useState(false);
-	const searchParams = useSearchParams();
-	const pathname = usePathname();
-	const { replace } = useRouter();
+	const router = useRouter();
 
 	const form = useForm<z.infer<typeof QuerySchema>>({
 		resolver: zodResolver(QuerySchema),
 	});
 
 	function onSubmit(data: z.infer<typeof QuerySchema>) {
-		const params = new URLSearchParams(searchParams);
-		if (data.query) {
-			params.set("query", data.query);
-		} else {
-			params.delete("query");
-		}
-		replace(`${pathname}?${params.toString()}`);
+		router.push("/answer/something");
 	}
 
 	function onBlur() {
