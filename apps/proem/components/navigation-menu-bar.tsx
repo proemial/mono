@@ -56,18 +56,18 @@ export function NavigationMenuBar() {
 					</NavigationMenuItem>
 				))}
 				<div className="flex-grow" />
-				{/* <NavigationMenuItem className="flex-none px-1" key="create">
-					{pathname === "/ask" && (
+				<NavigationMenuItem className="flex-none px-1" key="create">
+					{pathname === "/" && (
 						<Link href="#" legacyBehavior passHref>
 							<ButtonEdit handleClick={handleClick} />
 						</Link>
 					)}
-					{pathname !== "/ask" && (
+					{pathname !== "/" && (
 						<Link href="#" legacyBehavior passHref>
 							<ButtonCompass handleClick={handleClick} />
 						</Link>
 					)}
-				</NavigationMenuItem> */}
+				</NavigationMenuItem>
 			</NavigationMenuList>
 		</NavigationMenu>
 	);
