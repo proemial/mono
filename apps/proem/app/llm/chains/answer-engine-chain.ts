@@ -55,24 +55,11 @@ const reRankAndLimit = RunnableLambda.from<ReRankInput, ReRankInput>(
 ).withConfig({ runName: "ReRankPapers" });
 
 const answerChain = RunnableLambda.from(async () => {
-	const isRephraseQuestionEnabled =
-		(await getFeatureFlag("rephraseQuestion")) ?? false;
-
-	if (isRephraseQuestionEnabled) {
-		return RunnableSequence.from<Input, Output>([
-			RunnablePassthrough.assign({
-				// Note: This overwrites the original question
-				question: rephraseQuestionChain(),
-			}),
-			RunnablePassthrough.assign({
-				papers: fetchPapersChain,
-			}),
-			reRankAndLimit,
-			answerIfPapersAvailable,
-		]);
-	}
-
 	return RunnableSequence.from<Input, Output>([
+		RunnablePassthrough.assign({
+			// Note: This overwrites the original question
+			question: rephraseQuestionChain(),
+		}),
 		RunnablePassthrough.assign({
 			papers: fetchPapersChain,
 		}),
