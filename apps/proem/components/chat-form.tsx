@@ -29,7 +29,7 @@ export function ChatForm({ placeholder }: { placeholder: string }) {
 	});
 
 	function onSubmit(data: z.infer<typeof QuerySchema>) {
-		router.push("/answer/something");
+		router.push(`/answer/${encodeURIComponent(data.query)}`);
 	}
 
 	function onBlur() {

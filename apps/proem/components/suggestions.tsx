@@ -1,23 +1,15 @@
 "use client";
 
 import { Button } from "@proemial/shadcn-ui";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export type SuggestionsProps = { suggestions?: string[] };
 
 export function Suggestions({ suggestions }: SuggestionsProps) {
-	const searchParams = useSearchParams();
-	const pathname = usePathname();
-	const { replace } = useRouter();
+	const router = useRouter();
 
 	function onClick(suggestion: string) {
-		const params = new URLSearchParams(searchParams);
-		if (suggestion) {
-			params.set("query", suggestion);
-		} else {
-			params.delete("query");
-		}
-		replace(`${pathname}?${params.toString()}`);
+		router.push(`/answer/${encodeURIComponent(suggestion)}`);
 	}
 
 	return (
