@@ -4,6 +4,9 @@ import { getCookie, setCookie } from "cookies-next";
 import { usePathname } from "next/navigation";
 import { INTERNAL_COOKIE_NAME, User, useUser } from "@/app/(pages)/(app)/profile/user";
 
+// TODO
+// Verify feature flags and onboarding
+
 export type TrackingInput = {
 	region?: string;
 	userAgent?: string;

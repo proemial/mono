@@ -1,11 +1,11 @@
 import {
+	INTERNAL_COOKIE_NAME,
+	getInternalUser,
+} from "@/app/(pages)/(app)/profile/user";
+import {
 	AIMessage,
 	askAnswerEngine,
 } from "@/app/api/bot/answer-engine/answer-engine";
-import {
-	INTERNAL_COOKIE_NAME,
-	isInternalUser,
-} from "@/app/components/analytics/is-internal-user";
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 import { z } from "zod";
@@ -59,7 +59,7 @@ function nameAndIdFromCookie(userIdFromHeader?: string) {
 		email?: string;
 		userId?: string;
 	};
-	const { isInternal, name } = isInternalUser(email);
+	const { isInternal, proemialName: name } = getInternalUser(email);
 
 	return {
 		isInternal,

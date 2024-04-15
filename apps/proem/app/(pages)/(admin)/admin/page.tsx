@@ -2,13 +2,10 @@ import { AddStarterForm } from "@/app/(pages)/(admin)/admin/add-starter-form";
 import { DeleteStarterButton } from "@/app/(pages)/(admin)/admin/delete-starter-button";
 import { PageLayout } from "@/app/(pages)/(app)/page-layout";
 import { answers } from "@/app/api/bot/answer-engine/answers";
-import {
-	INTERNAL_COOKIE_NAME,
-	isInternalUser,
-} from "@/app/components/analytics/is-internal-user";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { INTERNAL_COOKIE_NAME, getInternalUser } from "../../(app)/profile/user";
 
 export default async function AdminPage() {
 	const cookie = cookies().get(INTERNAL_COOKIE_NAME)?.value;
@@ -18,7 +15,7 @@ export default async function AdminPage() {
 	}
 
 	const { email } = z.object({ email: z.string() }).parse(JSON.parse(cookie));
-	const { isInternal } = isInternalUser(email);
+	const { isInternal } = getInternalUser(email);
 
 	if (!isInternal) {
 		redirect("/");
