@@ -7,12 +7,12 @@
   "dependencies": {
     "@proemial/models": "workspace:*",
     "@proemial/utils": "workspace:*",
-    "@upstash/redis": "^1",
+    "@upstash/redis": "^1.29.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
     "@proemial/typescript-config": "workspace:*",
-    "@types/node": "^20.11.29",
-    "typescript": "^5"
+    "@types/node": "^20.12.6",
+    "typescript": "^5.4.4"
   }
 }

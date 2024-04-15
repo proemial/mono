@@ -158,7 +158,7 @@ export async function askAnswerEngine({
 		);
 
 	return new StreamingTextResponse(
-		stream.pipeThrough(createStreamDataTransformer(true)),
+		stream.pipeThrough(createStreamDataTransformer()),
 		{},
 		data,
 	);

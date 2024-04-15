@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@proemial/typescript-config": "workspace:*",
-    "typescript": "^5",
-    "@types/node": "^20"
+    "@types/node": "^20.12.6",
+    "typescript": "^5.4.4"
   }
 }

@@ -6,6 +6,6 @@
   "license": "MIT",
   "devDependencies": {
     "@proemial/typescript-config": "workspace:*",
-    "typescript": "^5"
+    "typescript": "^5.4.4"
   }
 }
