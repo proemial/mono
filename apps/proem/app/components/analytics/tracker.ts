@@ -6,7 +6,7 @@ import ReactGA from "react-ga4";
 export const Tracker = {
 	track: (event: string, properties?: Record<string, any>) => {
 		// autocapture is enabled for all users except internal users.
-		if (!posthog.__autocapture) {
+		if (!posthog.autocapture) {
 			analyticsTrace("[AnalyticsClient] track aborted");
 			return;
 		}

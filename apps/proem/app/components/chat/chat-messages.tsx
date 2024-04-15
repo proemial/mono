@@ -2,13 +2,12 @@
 import { Tracker } from "@/app//components/analytics/tracker";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { PROEM_BOT } from "@/app/components/chat/bot-user";
-import { getProfileFromUser } from "@/old/(pages)/(app)/profile/profile-from-user";
 import { useUser } from "@clerk/nextjs";
+import { getProfileFromClerkUser } from "@proemial/models/clerk-user";
 import { Message, useChat } from "ai/react";
 import { ReactNode, useEffect, useRef } from "react";
 import { ChatMessage } from "./chat-message";
 import { useChatState } from "./state";
-import { getProfileFromClerkUser } from "@proemial/models/clerk-user";
 
 type Props = {
 	title: string;
