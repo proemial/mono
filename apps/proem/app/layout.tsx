@@ -1,19 +1,23 @@
 import { Analytics } from "@/app/components/analytics";
+import { cn } from "@/app/components/shadcn-ui/utils";
 import "@/app/globals.css";
+import { NavigationMenuBar } from "@/components/navigation-menu-bar";
 import "@/env";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "@proemial/shadcn-ui";
 import { Metadata, Viewport } from "next";
-import { Source_Code_Pro } from "next/font/google";
-import { headers } from 'next/headers'
+import { Lato as FontSans } from "next/font/google";
+import { headers } from "next/headers";
 import { ReactNode } from "react";
 
-const sourceCodePro = Source_Code_Pro({
-	subsets: ["latin"],
-	variable: "--font-source-code-pro",
-	display: "swap",
-});
-
-const lightModeEnabled = false;
+export const viewport: Viewport = {
+	width: "device-width",
+	initialScale: 1,
+	maximumScale: 1,
+	userScalable: false,
+	// Also supported by less commonly used
+	// interactiveWidget: 'resizes-visual',
+};
 
 const title = "proem";
 const url = "https://proem.ai";
@@ -37,25 +41,21 @@ export const metadata: Metadata = {
 	},
 };
 
-export const viewport: Viewport = {
-	width: "device-width",
-	initialScale: 1,
-	maximumScale: 1,
-	userScalable: false,
-};
+const fontSans = FontSans({
+	weight: ["400", "700"],
+	subsets: ["latin"],
+	variable: "--font-sans",
+});
 
 type Props = {
 	children: ReactNode;
 };
-
-export default async function RootLayout({ children }: Props) {
-	const light = lightModeEnabled ? "dark:dark" : "dark";
+export default function RootLayout({ children }: Readonly<Props>) {
 	const trackingInput = getTrackingInput();
-
 	return (
 		<ClerkProvider>
 			<Analytics.PostHog tracking={trackingInput}>
-				<html lang="en" className={sourceCodePro.variable}>
+				<html lang="en" className="overscroll-none" suppressHydrationWarning>
 					<head>
 						<meta
 							name="facebook-domain-verification"
@@ -63,11 +63,24 @@ export default async function RootLayout({ children }: Props) {
 						/>
 					</head>
 					<body
-						className={`${light} h-dvh w-dvw flex flex-col justify-center items-center`}
+						className={cn(
+							"min-h-screen h-full bg-background font-sans antialiased max-w-full",
+							fontSans.variable,
+						)}
 					>
-						{children}
-						<Analytics.Vercel tracking={trackingInput} />
-						<Analytics.Google tracking={trackingInput} />
+						<ThemeProvider
+							attribute="class"
+							defaultTheme="system"
+							enableSystem
+							disableTransitionOnChange
+						>
+							<div className="flex flex-col w-full max-w-screen-md mx-auto">
+								<NavigationMenuBar />
+								{children}
+								<Analytics.Vercel tracking={trackingInput} />
+								<Analytics.Google tracking={trackingInput} />
+							</div>
+						</ThemeProvider>
 					</body>
 				</html>
 			</Analytics.PostHog>
@@ -76,10 +89,10 @@ export default async function RootLayout({ children }: Props) {
 }
 
 function getTrackingInput() {
-	const headersList = headers()
-	const country = headersList.get('x-country') ?? undefined;
-	const region = headersList.get('x-region') ?? undefined;
+	const headersList = headers();
+	const country = headersList.get("x-country") ?? undefined;
+	const region = headersList.get("x-region") ?? undefined;
 	const userAgent = headers().get("user-agent") ?? undefined;
 
-	return { country, region, userAgent }
+	return { country, region, userAgent };
 }

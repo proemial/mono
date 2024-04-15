@@ -1,8 +1,15 @@
-import Summary from "@/app/(pages)/(app)/oa/[id]/components/summary";
 import { CardFooter } from "@/app/components/card/footer";
-import { PaperCard, PaperCardTitle, PaperCardTop } from "@/app/components/card/paper-card";
+import {
+	PaperCard,
+	PaperCardTitle,
+	PaperCardTop,
+} from "@/app/components/card/paper-card";
 import { Spinner } from "@/app/components/loading/spinner";
-import { OpenAlexPaper, OpenAlexWorkMetadata } from "@proemial/models/open-alex";
+import Summary from "@/app/old/(pages)/(app)/oa/[id]/components/summary";
+import {
+	OpenAlexPaper,
+	OpenAlexWorkMetadata,
+} from "@proemial/models/open-alex";
 import { Suspense } from "react";
 import { getFeatureFlags } from "../feature-flags/server-flags";
 
@@ -11,9 +18,7 @@ export async function FeedPaper({ paper }: { paper?: OpenAlexPaper }) {
 		return;
 	}
 
-	const flags = await getFeatureFlags([
-		"cardShowShortenedTopics",
-	]);
+	const flags = await getFeatureFlags(["cardShowShortenedTopics"]);
 
 	return (
 		<PaperCard>

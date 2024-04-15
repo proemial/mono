@@ -7,14 +7,16 @@ import {
 	findLatestByEventType,
 } from "@/app/api/bot/answer-engine/events";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
+import { STARTERS } from "@/app/old/(pages)/(app)/(answer-engine)/starters";
+import { getProfileFromUser } from "@/app/old/(pages)/(app)/profile/profile-from-user";
 import { useUser } from "@clerk/nextjs";
+import { getProfileFromClerkUser } from "@proemial/models/clerk-user";
 import { type Message, useChat } from "ai/react";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { useShareDrawerState } from "../share/state";
 import { PROEM_BOT } from "./bot-user";
 import { ChatMessage } from "./chat-message-ask2";
 import { useChatState } from "./state";
-import { getProfileFromClerkUser } from "@proemial/models/clerk-user";
 
 type Props = {
 	message?: string;
@@ -82,16 +84,19 @@ export function ChatMessages({
 						const isLastMessageAndLoading = isLastMessage ? isLoading : false;
 						const transactionId = isMessageFromAI
 							? // We`r looking up the prior message so it can't be undefined
-							messages.at(i - 1)?.id
+								messages.at(i - 1)?.id
 							: message.id;
 						const onShareHandle =
 							isMessageFromAI && !isLastMessageAndLoading
 								? () => shareMessage(transactionId as string)
 								: undefined;
 
-						const cursorThrobber = isMessageFromAI && isLoading && isLastMessage ? {} : undefined;
+						const cursorThrobber =
+							isMessageFromAI && isLoading && isLastMessage ? {} : undefined;
 
-						const papers = isMessageFromAI ? findByEventType(data, "papers-fetched", transactionId)?.papers : undefined;
+						const papers = isMessageFromAI
+							? findByEventType(data, "papers-fetched", transactionId)?.papers
+							: undefined;
 
 						return (
 							<ChatMessage
@@ -108,7 +113,12 @@ export function ChatMessages({
 						);
 					})}
 
-					{showLoadingState && <ChatMessage user={PROEM_BOT} throbber={{ message: throbberMessage }} />}
+					{showLoadingState && (
+						<ChatMessage
+							user={PROEM_BOT}
+							throbber={{ message: throbberMessage }}
+						/>
+					)}
 				</div>
 			)}
 			{messages.length === 0 && children}
@@ -117,9 +127,13 @@ export function ChatMessages({
 }
 
 function useThrobberMessage(data: AnswerEngineEvents[]) {
-	const isLatestEvent = data?.findLastIndex(d => d.type === "agent-selected-tool") === data?.length - 1;
+	const isLatestEvent =
+		data?.findLastIndex((d) => d.type === "agent-selected-tool") ===
+		data?.length - 1;
 
-	return isLatestEvent ? "Fetching papersSearching scientific papers..." : "Analysing question...";
+	return isLatestEvent
+		? "Fetching papersSearching scientific papers..."
+		: "Analysing question...";
 }
 
 function useFollowups(data: AnswerEngineEvents[]) {

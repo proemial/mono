@@ -8,6 +8,7 @@ const config = {
 		"./components/**/*.{ts,tsx}",
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
+		"../../packages/shadcn-ui/components/ui/**/*.{ts,tsx}",
 	],
 	prefix: "",
 	theme: {
@@ -26,6 +27,7 @@ const config = {
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",
 				ring: "hsl(var(--ring))",
+				// background: "hsl(var(--background))",
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",
 				primary: {

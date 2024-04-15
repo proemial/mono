@@ -17,11 +17,11 @@ import { ButtonEdit } from "./button-edit";
 const navigationItems = [
 	{
 		name: "Discover",
-		href: "/beta/discover",
+		href: "/discover",
 	},
 	{
 		name: "Ask",
-		href: "/beta/ask",
+		href: "/",
 	},
 ];
 
@@ -56,7 +56,7 @@ export function NavigationMenuBar() {
 					</NavigationMenuItem>
 				))}
 				<div className="flex-grow" />
-				<NavigationMenuItem className="flex-none px-1" key="create">
+				{/* <NavigationMenuItem className="flex-none px-1" key="create">
 					{pathname === "/ask" && (
 						<Link href="#" legacyBehavior passHref>
 							<ButtonEdit handleClick={handleClick} />
@@ -67,7 +67,7 @@ export function NavigationMenuBar() {
 							<ButtonCompass handleClick={handleClick} />
 						</Link>
 					)}
-				</NavigationMenuItem>
+				</NavigationMenuItem> */}
 			</NavigationMenuList>
 		</NavigationMenu>
 	);
@@ -78,23 +78,25 @@ const ListItem = React.forwardRef<
 	React.ComponentPropsWithoutRef<"a">
 >(({ className, title, children, ...props }, ref) => {
 	return (
-		<li>
-			<NavigationMenuLink asChild>
-				<a
-					ref={ref}
-					className={cn(
-						"block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-						className,
-					)}
-					{...props}
-				>
-					<div className="text-sm font-medium leading-none">{title}</div>
-					<p className="text-sm leading-snug line-clamp-2 text-muted-foreground">
-						{children}
-					</p>
-				</a>
-			</NavigationMenuLink>
-		</li>
+		<>
+			<li>
+				<NavigationMenuLink asChild>
+					<a
+						ref={ref}
+						className={cn(
+							"block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+							className,
+						)}
+						{...props}
+					>
+						<div className="text-sm font-medium leading-none">{title}</div>
+						<p className="text-sm leading-snug line-clamp-2 text-muted-foreground">
+							{children}
+						</p>
+					</a>
+				</NavigationMenuLink>
+			</li>
+		</>
 	);
 });
 ListItem.displayName = "ListItem";

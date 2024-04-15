@@ -16,7 +16,8 @@ export function Profile() {
 			<SheetTrigger asChild>
 				<Menu className="p-1" />
 			</SheetTrigger>
-			<SheetContent side="left" className="p-4 overflow-y-auto">
+			{/* TODO! add as drawer */}
+			{/* <SheetContent side="left" className="p-4 overflow-y-auto">
 				<div className="flex flex-col gap-6">
 					<SheetHeader>
 						<SheetTitle className="pt-12 text-2xl font-normal">
@@ -27,7 +28,7 @@ export function Profile() {
 					<ProfileQuestions />
 					<ProfileBookmarks />
 				</div>
-			</SheetContent>
+			</SheetContent> */}
 		</Sheet>
 	);
 }
