@@ -7,8 +7,8 @@ import {
 	findLatestByEventType,
 } from "@/app/api/bot/answer-engine/events";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
-import { STARTERS } from "@/app/old/(pages)/(app)/(answer-engine)/starters";
-import { getProfileFromUser } from "@/app/old/(pages)/(app)/profile/profile-from-user";
+import { STARTERS } from "@/old/(pages)/(app)/(answer-engine)/starters";
+import { getProfileFromUser } from "@/old/(pages)/(app)/profile/profile-from-user";
 import { useUser } from "@clerk/nextjs";
 import { getProfileFromClerkUser } from "@proemial/models/clerk-user";
 import { type Message, useChat } from "ai/react";

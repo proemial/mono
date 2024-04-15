@@ -1,10 +1,14 @@
-import { AddStarterForm } from "@/app/(pages)/(admin)/admin/add-starter-form";
-import { DeleteStarterButton } from "@/app/(pages)/(admin)/admin/delete-starter-button";
 import { answers } from "@/app/api/bot/answer-engine/answers";
+import {
+	INTERNAL_COOKIE_NAME,
+	isInternalUser,
+} from "@/app/components/analytics/is-internal-user";
+import { AddStarterForm } from "@/old/(pages)/(admin)/admin/add-starter-form";
+import { DeleteStarterButton } from "@/old/(pages)/(admin)/admin/delete-starter-button";
+import { PageLayout } from "@/old/(pages)/(app)/page-layout";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { INTERNAL_COOKIE_NAME, getInternalUser } from "../../(app)/profile/user";
 
 export default async function AdminPage() {
 	const cookie = cookies().get(INTERNAL_COOKIE_NAME)?.value;
@@ -14,7 +18,7 @@ export default async function AdminPage() {
 	}
 
 	const { email } = z.object({ email: z.string() }).parse(JSON.parse(cookie));
-	const { isInternal } = getInternalUser(email);
+	const { isInternal } = isInternalUser(email);
 
 	if (!isInternal) {
 		redirect("/");
@@ -23,7 +27,7 @@ export default async function AdminPage() {
 	const starterQuestions = await answers.getStarters();
 
 	return (
-		<div>
+		<PageLayout title="admin">
 			<div className="w-full py-3 space-y-4">
 				<h1>Starter questions ({starterQuestions.length}):</h1>
 				<AddStarterForm />
@@ -68,6 +72,6 @@ export default async function AdminPage() {
 					</table>
 				</div>
 			</div>
-		</div>
+		</PageLayout>
 	);
 }

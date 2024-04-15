@@ -2,7 +2,7 @@
 import { Tracker } from "@/app//components/analytics/tracker";
 import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
 import { PROEM_BOT } from "@/app/components/chat/bot-user";
-import { getProfileFromUser } from "@/app/old/(pages)/(app)/profile/profile-from-user";
+import { getProfileFromUser } from "@/old/(pages)/(app)/profile/profile-from-user";
 import { useUser } from "@clerk/nextjs";
 import { Message, useChat } from "ai/react";
 import { ReactNode, useEffect, useRef } from "react";

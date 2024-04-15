@@ -48,7 +48,7 @@ export async function addAnswerAsStarter(
 		const errorMessage =
 			e instanceof z.ZodError
 				? e.flatten().fieldErrors.shareUrl?.toString() ??
-				  "Failed to validate the URL"
+					"Failed to validate the URL"
 				: "Failed to add starter";
 
 		return { error: errorMessage, resetKey: prevState.resetKey };

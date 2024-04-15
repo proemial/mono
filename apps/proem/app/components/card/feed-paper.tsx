@@ -5,7 +5,7 @@ import {
 	PaperCardTop,
 } from "@/app/components/card/paper-card";
 import { Spinner } from "@/app/components/loading/spinner";
-import Summary from "@/app/old/(pages)/(app)/oa/[id]/components/summary";
+import Summary from "@/old/(pages)/(app)/oa/[id]/components/summary";
 import {
 	OpenAlexPaper,
 	OpenAlexWorkMetadata,
