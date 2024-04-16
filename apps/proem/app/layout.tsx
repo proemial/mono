@@ -8,6 +8,7 @@ import { ThemeProvider } from "@proemial/shadcn-ui";
 import { Metadata, Viewport } from "next";
 import { Lato as FontSans } from "next/font/google";
 import { headers } from "next/headers";
+import Link from "next/link";
 import { ReactNode } from "react";
 
 export const viewport: Viewport = {
@@ -49,8 +50,10 @@ const fontSans = FontSans({
 
 type Props = {
 	children: ReactNode;
+	modal: ReactNode
 };
-export default function RootLayout({ children }: Readonly<Props>) {
+
+export default function RootLayout({ children, modal }: Readonly<Props>) {
 	const trackingInput = getTrackingInput();
 	return (
 		<ClerkProvider>
@@ -76,8 +79,11 @@ export default function RootLayout({ children }: Readonly<Props>) {
 						>
 							<div className="max-w-screen-md mx-auto">
 								<NavigationMenuBar />
+								<Link href="/terms">Terms of Use</Link>
 
 								<main className="w-full p-4">{children}</main>
+								{modal}
+
 
 								<Analytics.Vercel tracking={trackingInput} />
 								<Analytics.Google tracking={trackingInput} />
