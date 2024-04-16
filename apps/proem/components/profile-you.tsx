@@ -1,6 +1,7 @@
 "use client";
 
 import { ProfileColorSchemeToggle } from "@/components/profile-color-scheme-toggle";
+import { useUser } from "@clerk/nextjs";
 import {
 	Avatar,
 	AvatarFallback,
@@ -22,6 +23,7 @@ import {
 	FileText,
 	LockKeyhole,
 	LogOut,
+	LogIn,
 	Mail,
 	MessageSquare,
 	ClipboardCheck
@@ -33,6 +35,7 @@ const feedback = "https://tally.so/r/wAv8Ve";
 
 export function ProfileYou() {
 	const [isOpen, setIsOpen] = React.useState(true);
+	const { user } = useUser();
 
 	return (
 		<Collapsible open={isOpen} onOpenChange={setIsOpen}>
@@ -105,7 +108,13 @@ export function ProfileYou() {
 								<Link href="/privacy">Privacy Policy</Link>
 							</TableCell>
 						</TableRow>
-						{/* <Tableine */}
+						<TableRow className="text-slate-400">
+							<TableCell variant="icon">
+								{user && <LogOut className="mx-auto size-4" />}
+								{!user && <LogIn className="mx-auto size-4" />}
+							</TableCell>
+							<TableCell variant="key">Sign in</TableCell>
+						</TableRow>
 					</TableBody>
 				</Table>
 			</CollapsibleContent>
