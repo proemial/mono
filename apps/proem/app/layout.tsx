@@ -76,7 +76,7 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 							disableTransitionOnChange
 						>
 							<div className="max-w-screen-md mx-auto" vaul-drawer-wrapper="">
-								<main className="w-full p-4">{children}</main>
+								<main className="w-full">{children}</main>
 								{modal}
 
 								<Analytics.Vercel tracking={trackingInput} />
