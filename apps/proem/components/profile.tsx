@@ -1,37 +1,47 @@
-import { ProfileBookmarks } from "@/components/profile-bookmarks";
-import { ProfileQuestions } from "@/components/profile-questions";
+import {
+	Drawer,
+	DrawerClose,
+	DrawerContent,
+	DrawerHeader,
+	DrawerTitle,
+	DrawerTrigger
+} from "@proemial/shadcn-ui";
 import { ProfileYou } from "@/components/profile-you";
 import {
 	Button,
-	Sheet,
-	SheetContent,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger,
 } from "@proemial/shadcn-ui";
 import { Menu } from "lucide-react";
+import { X } from "lucide-react";
+
+// TODO: Move max-w-screen-md to constant
 
 export function Profile() {
 	return (
-		<Sheet>
-			<SheetTrigger asChild>
+		<Drawer>
+			<DrawerTrigger asChild>
 				<Button variant="ghost" size="sm">
 					<Menu className="p-1" />
 				</Button>
-			</SheetTrigger>
-			{/* TODO! add as drawer */}
-			{/* <SheetContent side="left" className="p-4 overflow-y-auto">
+			</DrawerTrigger>
+			<DrawerContent className="w-full h-full max-w-screen-md mx-auto">
 				<div className="flex flex-col gap-6">
-					<SheetHeader>
-						<SheetTitle className="pt-12 text-2xl font-normal">
-							Your Profile
-						</SheetTitle>
-					</SheetHeader>
-					<ProfileYou />
-					<ProfileQuestions />
-					<ProfileBookmarks />
+					<DrawerHeader>
+						<DrawerTitle className="flex justify-between pt-12 text-2xl font-normal">
+							<div>Menu</div>
+							<DrawerClose asChild>
+								<Button variant="ghost" className="p-0">
+									<X className="w-6 h-6" />
+								</Button>
+							</DrawerClose>
+						</DrawerTitle>
+					</DrawerHeader>
+					<div className="px-4">
+						<ProfileYou />
+					</div>
+					{/* <ProfileQuestions />
+					<ProfileBookmarks /> */}
 				</div>
-			</SheetContent> */}
-		</Sheet>
+			</DrawerContent>
+		</Drawer>
 	);
 }
