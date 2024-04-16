@@ -1,6 +1,5 @@
 "use client";
 
-import { AnswerEngineEvents } from "@/app/api/bot/answer-engine/events";
 import { useUser } from "@/app/hooks/use-user";
 import { ButtonScrollToBottom } from "@/components/button-scroll-to-bottom";
 import { ChatActionBarAsk } from "@/components/chat-action-bar-ask";
@@ -9,7 +8,7 @@ import { ChatQuestion } from "@/components/chat-question";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { PaperCardAsk } from "@/components/paper-card-ask";
-import { ChatAnswerSkeleton } from "@/components/skeletons";
+import { ChatAnswerSkeleton, ChatPapersSkeleton } from "@/components/skeletons";
 import { Header4, ScrollArea, ScrollBar } from "@proemial/shadcn-ui";
 import { useChat } from "ai/react";
 import { FileText } from "lucide-react";
@@ -39,11 +38,11 @@ export const Answer = ({ question }: Props) => {
 		body: { slug: sessionSlug, userId: user?.id },
 	});
 
-	const hasExecuted = useRef(false);
+	const hasExecutedOnce = useRef(false);
 
 	useEffect(() => {
-		if (question && !hasExecuted.current) {
-			hasExecuted.current = true;
+		if (question && !hasExecutedOnce.current) {
+			hasExecutedOnce.current = true;
 			append({ role: "user", content: question });
 		}
 	}, [question, append]);
@@ -61,14 +60,15 @@ export const Answer = ({ question }: Props) => {
 	return (
 		<div className="space-y-6">
 			<ChatQuestion question={question} />
-
 			<CollapsibleSection
 				trigger={
 					<div className="flex items-center gap-4">
 						<FileText className="size-4" />
-						<Header4>{`Research papers ${
-							isLoading ? "found" : "interrogated"
-						}`}</Header4>
+						<Header4>
+							{isLoading
+								? "Searching for research papers"
+								: "Research papers interrogated"}
+						</Header4>
 					</div>
 				}
 				extra={papers.length}
@@ -82,15 +82,19 @@ export const Answer = ({ question }: Props) => {
 					<ScrollBar orientation="horizontal" />
 				</ScrollArea>
 			</CollapsibleSection>
-
 			{isLoading && <ChatAnswerSkeleton />}
-
-			<ChatArticle type="Answer" model="GPT-4-TURBO" text={answer} />
-
-			<ChatActionBarAsk />
-			<ChatSuggestedFollowups suggestions={followUps} />
-
-			<ButtonScrollToBottom />
+			<ChatArticle
+				type="Answer"
+				model={answer ? "GPT-4-TURBO" : ""}
+				text={answer}
+			/>
+			{!isLoading && (
+				<>
+					<ChatActionBarAsk />
+					<ChatSuggestedFollowups suggestions={followUps} />
+					<ButtonScrollToBottom />
+				</>
+			)}
 		</div>
 	);
 };
