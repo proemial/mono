@@ -23,6 +23,8 @@ import {
 	LockKeyhole,
 	LogOut,
 	Mail,
+	MessageSquare,
+	ClipboardCheck
 } from "lucide-react";
 import * as React from "react";
 
@@ -68,12 +70,18 @@ export function ProfileYou() {
 								<ProfileColorSchemeToggle />
 							</TableCell>
 						</TableRow>
-						{/* <TableRow>
+						<TableRow>
 							<TableCell variant="icon">
-								<CircleHelp className="mx-auto size-4" />
+								<MessageSquare className="mx-auto size-4" />
 							</TableCell>
-							<TableCell variant="key">Help Center</TableCell>
-						</TableRow> */}
+							<TableCell variant="key">Give feedback</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableCell variant="icon">
+								<ClipboardCheck className="mx-auto size-4" />
+							</TableCell>
+							<TableCell variant="key">Version: {process.env.VERCEL_GIT_COMMIT_SHA ?? "local"}</TableCell>
+						</TableRow>
 						<TableRow>
 							<TableCell variant="icon">
 								<FileText className="mx-auto size-4" />
@@ -86,12 +94,7 @@ export function ProfileYou() {
 							</TableCell>
 							<TableCell variant="key">Privacy Policy</TableCell>
 						</TableRow>
-						<TableRow>
-							<TableCell variant="icon">
-								<LogOut className="mx-auto size-4" />
-							</TableCell>
-							<TableCell variant="key">Sign out</TableCell>
-						</TableRow>
+						{/* <Tableine */}
 					</TableBody>
 				</Table>
 			</CollapsibleContent>
