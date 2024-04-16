@@ -7,7 +7,7 @@ import { GanttChart } from "lucide-react";
 import { SelectContentSelector } from "./select-content-selector";
 
 type ChatSuggestedFollowupsProps = Pick<SuggestionsProps, "suggestions"> & {
-	onClick: ReturnType<typeof useChat>["append"];
+	onClick?: ReturnType<typeof useChat>["append"];
 };
 
 export function ChatSuggestedFollowups({
