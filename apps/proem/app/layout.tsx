@@ -75,7 +75,7 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 							enableSystem
 							disableTransitionOnChange
 						>
-							<div className="max-w-screen-md mx-auto" vaul-drawer-wrapper="">
+							<div className="max-w-screen-md mx-auto">
 								<main className="w-full">{children}</main>
 								{modal}
 
