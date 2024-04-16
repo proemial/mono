@@ -66,7 +66,7 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 					</head>
 					<body
 						className={cn(
-							"min-h-screen h-full bg-background font-sans antialiased max-w-full",
+							"min-h-screen h-full font-sans antialiased max-w-full",
 							fontSans.variable,
 						)}
 					>
@@ -76,15 +76,20 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 							enableSystem
 							disableTransitionOnChange
 						>
-							<div className={`${screenMaxWidth} mx-auto min-h-screen flex flex-col`}>
-								<main className="w-full flex flex-col flex-grow">
-									{children}
-								</main>
-								{modal}
-
-								<Analytics.Vercel tracking={trackingInput} />
-								<Analytics.Google tracking={trackingInput} />
+							<div vaul-drawer-wrapper="">
+								<div className="bg-background">
+									<div
+										className={`${screenMaxWidth} mx-auto min-h-screen flex flex-col`}
+									>
+										<main className="w-full flex flex-col flex-grow">
+											{children}
+										</main>
+										{modal}
+									</div>
+								</div>
 							</div>
+							<Analytics.Vercel tracking={trackingInput} />
+							<Analytics.Google tracking={trackingInput} />
 						</ThemeProvider>
 					</body>
 				</html>
