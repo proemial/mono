@@ -1,5 +1,9 @@
 "use client";
 
+import {
+	AnswerEngineEvents,
+	findByEventType,
+} from "@/app/api/bot/answer-engine/events";
 import { useUser } from "@/app/hooks/use-user";
 import { ButtonScrollToBottom } from "@/components/button-scroll-to-bottom";
 import { ChatActionBarAsk } from "@/components/chat-action-bar-ask";
@@ -8,7 +12,7 @@ import { ChatQuestion } from "@/components/chat-question";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { PaperCardAsk } from "@/components/paper-card-ask";
-import { ChatAnswerSkeleton, ChatPapersSkeleton } from "@/components/skeletons";
+import { ChatAnswerSkeleton } from "@/components/skeletons";
 import { Header4, ScrollArea, ScrollBar } from "@proemial/shadcn-ui";
 import { useChat } from "ai/react";
 import { FileText } from "lucide-react";
@@ -21,7 +25,7 @@ type Props = {
 };
 
 export const Answer = ({ question }: Props) => {
-	const [sessionSlug, setSessionSlug] = useState<null | string>(null); // TODO: Integrate
+	const [sessionSlug, setSessionSlug] = useState<string | undefined>(undefined);
 	const { user } = useUser();
 	const {
 		messages,
@@ -39,7 +43,6 @@ export const Answer = ({ question }: Props) => {
 	});
 
 	const hasExecutedOnce = useRef(false);
-
 	useEffect(() => {
 		if (question && !hasExecutedOnce.current) {
 			hasExecutedOnce.current = true;
@@ -50,6 +53,16 @@ export const Answer = ({ question }: Props) => {
 	const answer = messages
 		.filter((m) => m.role === "assistant")
 		.slice(-1)[0]?.content;
+
+	const answerSlug = findByEventType(
+		data as AnswerEngineEvents[],
+		"answer-slug-generated",
+	)?.slug;
+	useEffect(() => {
+		if (answerSlug) {
+			setSessionSlug(answerSlug);
+		}
+	});
 
 	const papers = usePapers({
 		data,
