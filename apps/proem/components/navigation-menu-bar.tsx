@@ -40,6 +40,7 @@ export function NavigationMenuBar() {
 				<NavigationMenuItem className="flex">
 					{navigationItems.map((navigationItem, index) => (
 						<Link
+							key={navigationItem.name}
 							href={navigationItem.href}
 							className={cn(
 								"flex h-7 items-center justify-center rounded-full px-4 text-center text-sm",
