@@ -70,7 +70,7 @@ export default function RootLayout({ children }: Readonly<Props>) {
 					>
 						<ThemeProvider
 							attribute="class"
-							defaultTheme="system"
+							defaultTheme="dark"
 							enableSystem
 							disableTransitionOnChange
 						>
