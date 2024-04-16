@@ -59,7 +59,8 @@ export const Answer = ({ question }: Props) => {
 		"answer-slug-generated",
 	)?.slug;
 	useEffect(() => {
-		if (answerSlug) {
+		// Keep slug from first answer
+		if (answerSlug && !sessionSlug) {
 			setSessionSlug(answerSlug);
 		}
 	});
@@ -104,7 +105,7 @@ export const Answer = ({ question }: Props) => {
 			{!isLoading && (
 				<>
 					<ChatActionBarAsk />
-					<ChatSuggestedFollowups suggestions={followUps} />
+					<ChatSuggestedFollowups suggestions={followUps} onClick={append} />
 					<ButtonScrollToBottom />
 				</>
 			)}

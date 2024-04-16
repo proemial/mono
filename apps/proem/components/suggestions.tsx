@@ -1,15 +1,23 @@
 "use client";
 
 import { Button } from "@proemial/shadcn-ui";
+import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
 
-export type SuggestionsProps = { suggestions?: string[] };
+export type SuggestionsProps = {
+	suggestions?: string[];
+	onClick?: ReturnType<typeof useChat>["append"];
+};
 
-export function Suggestions({ suggestions }: SuggestionsProps) {
+export function Suggestions({ suggestions, onClick }: SuggestionsProps) {
 	const router = useRouter();
 
-	function onClick(suggestion: string) {
-		router.push(`/answer/${encodeURIComponent(suggestion)}`);
+	function handleClick(suggestion: string) {
+		if (onClick) {
+			onClick({ role: "user", content: suggestion });
+		} else {
+			router.push(`/answer/${encodeURIComponent(suggestion)}`);
+		}
 	}
 
 	return (
@@ -20,7 +28,7 @@ export function Suggestions({ suggestions }: SuggestionsProps) {
 						variant="suggestion"
 						size="suggestion"
 						key={suggestion}
-						onClick={() => onClick(suggestion)}
+						onClick={() => handleClick(suggestion)}
 					>
 						{suggestion}
 					</Button>

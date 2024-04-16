@@ -2,18 +2,18 @@
 
 import { Suggestions, SuggestionsProps } from "@/components/suggestions";
 import { Header4 } from "@proemial/shadcn-ui";
+import { useChat } from "ai/react";
 import { GanttChart } from "lucide-react";
 import { SelectContentSelector } from "./select-content-selector";
 
-type ChatSuggestedFollowupsProps = Pick<SuggestionsProps, "suggestions">;
+type ChatSuggestedFollowupsProps = Pick<SuggestionsProps, "suggestions"> & {
+	onClick: ReturnType<typeof useChat>["append"];
+};
 
 export function ChatSuggestedFollowups({
 	suggestions,
+	onClick,
 }: ChatSuggestedFollowupsProps) {
-	function onClick() {
-		console.log("Ask follow-up...");
-	}
-
 	return (
 		<div className="flex flex-col gap-5 mb-8">
 			<div className="flex items-center place-content-between">
@@ -32,7 +32,7 @@ export function ChatSuggestedFollowups({
 				</div>
 			</div>
 			<div>
-				<Suggestions suggestions={suggestions} />
+				<Suggestions suggestions={suggestions} onClick={onClick} />
 			</div>
 		</div>
 	);
