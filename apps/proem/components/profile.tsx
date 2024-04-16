@@ -1,3 +1,5 @@
+import { screenMaxWidth } from "@/app/constants";
+import { ProfileYou } from "@/components/profile-you";
 import {
 	Button,
 	Drawer,
@@ -7,9 +9,7 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 } from "@proemial/shadcn-ui";
-import { ProfileYou } from "@/components/profile-you";
 import { Menu05, XClose } from "@untitled-ui/icons-react";
-import { screenMaxWidth } from "@/app/constants";
 
 export function Profile() {
 	return (
@@ -19,7 +19,9 @@ export function Profile() {
 					<Menu05 className="p-1" />
 				</Button>
 			</DrawerTrigger>
-			<DrawerContent className={`${screenMaxWidth} w-full h-full mx-auto rounded-none`}>
+			<DrawerContent
+				className={`${screenMaxWidth} w-full  h-[calc(100%-32px)] mx-auto rounded-none`}
+			>
 				<div className="flex flex-col gap-6">
 					<DrawerHeader className="pt-0">
 						<DrawerTitle className="flex justify-end text-2xl font-normal">
