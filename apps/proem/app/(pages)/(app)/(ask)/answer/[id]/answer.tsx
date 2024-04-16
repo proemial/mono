@@ -6,7 +6,6 @@ import {
 	findLatestByEventType,
 } from "@/app/api/bot/answer-engine/events";
 import { useUser } from "@/app/hooks/use-user";
-import { ButtonScrollToBottom } from "@/components/button-scroll-to-bottom";
 import { ChatForm } from "@/components/chat-form";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
 import { Message, useChat } from "ai/react";
@@ -15,10 +14,18 @@ import { QaPair } from "./qa-pair";
 import { useEffectOnce } from "./use-effect-once";
 
 type Props = {
-	initialQuestion: string;
+	initialQuestion?: string;
+	initialMessages?: Message[];
+	existingShareId?: string;
+	existingData?: AnswerEngineEvents[];
 };
 
-export const Answer = ({ initialQuestion }: Props) => {
+export const Answer = ({
+	initialQuestion,
+	initialMessages,
+	existingShareId,
+	existingData,
+}: Props) => {
 	const [sessionSlug, setSessionSlug] = useState<string | undefined>(undefined);
 	const { user } = useUser();
 	const {
@@ -33,16 +40,26 @@ export const Answer = ({ initialQuestion }: Props) => {
 		sendExtraMessageFields: true,
 		id: "hardcoded",
 		api: "/api/bot/ask2",
+		initialMessages,
 		body: { slug: sessionSlug, userId: user?.id },
 	}) as Omit<ReturnType<typeof useChat>, "data"> & {
 		data: AnswerEngineEvents[];
 	};
+	const answerEngineData = existingData
+		? [...existingData, ...(data ? data : [])]
+		: data;
 
 	useEffectOnce(() => {
-		append({ role: "user", content: initialQuestion });
+		if (initialQuestion) {
+			append({ role: "user", content: initialQuestion });
+		}
 	}, [initialQuestion, append]);
 
-	const answerSlug = findByEventType(data, "answer-slug-generated")?.slug;
+	const answerSlug = findByEventType(
+		answerEngineData,
+		"answer-slug-generated",
+	)?.slug;
+
 	useEffect(() => {
 		// Keep slug from first answer
 		if (answerSlug && !sessionSlug) {
@@ -50,7 +67,7 @@ export const Answer = ({ initialQuestion }: Props) => {
 		}
 	});
 
-	const followUps = getFollowUps(data);
+	const followUps = getFollowUps(answerEngineData);
 
 	return (
 		<div className="flex flex-col gap-10">
@@ -61,7 +78,7 @@ export const Answer = ({ initialQuestion }: Props) => {
 						key={message.id}
 						question={message}
 						answer={getCorrespondingAnswerMessage(index, messages)}
-						data={data}
+						data={answerEngineData}
 						loading={
 							isLoading && !getCorrespondingAnswerMessage(index, messages)
 						}

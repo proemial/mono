@@ -1,49 +1,38 @@
 "use client";
 
+import { SHARED_ANSWER_TRANSACTION_ID } from "@/app/(pages)/(app)/share/constants";
 import {
 	AnswerEngineEvents,
-	PapersFetched,
-	findLatestByEventType,
+	findByEventType,
 } from "@/app/api/bot/answer-engine/events";
 import { ChatActionBarAsk } from "@/components/chat-action-bar-ask";
 import { ChatArticle } from "@/components/chat-article";
-import { ChatQuestion } from "@/components/chat-question";
+import { ChatQuestion, ChatQuestionProps } from "@/components/chat-question";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { PaperCardAsk } from "@/components/paper-card-ask";
 import { ChatAnswerSkeleton, ChatPapersSkeleton } from "@/components/skeletons";
-import { Header4, ScrollArea, ScrollBar } from "@proemial/shadcn-ui";
-import { Message, useChat } from "ai/react";
+import { Header4 } from "@proemial/shadcn-ui";
+import { Message } from "ai/react";
 import { FileText } from "lucide-react";
-import { useEffect, useState } from "react";
 
-type Props = {
+type QaPairProps = {
 	question: Message;
 	answer: Message | undefined;
 	data: AnswerEngineEvents[];
 	loading: boolean;
 };
 
-export const QaPair = ({ question, answer, data, loading }: Props) => {
-	const [papers, setPapers] = useState<PapersFetched | undefined>(undefined);
-
-	useEffect(() => {
-		if (data) {
-			const transactionId = question.id;
-			const transactionData = data?.filter(
-				(d) => d.transactionId === transactionId,
-			);
-			const papers = findLatestByEventType(
-				transactionData,
-				"papers-fetched",
-			)?.hits?.at(0)?.papers;
-			setPapers(papers);
-		}
-	}, [data, question.id]);
+export const QaPair = ({ question, answer, data, loading }: QaPairProps) => {
+	const { papers } = findByEventType(data, "papers-fetched", question.id) ?? {};
+	const isQuestionByCurrentUser = question.id !== SHARED_ANSWER_TRANSACTION_ID;
 
 	return (
 		<div className="space-y-6">
-			<ChatQuestion question={question.content} />
+			<ChatQuestion
+				question={question.content}
+				isQuestionByCurrentUser={isQuestionByCurrentUser}
+			/>
 			{!papers && loading && (
 				<ChatPapersSkeleton statusText="Searching research papers" />
 			)}
@@ -55,10 +44,10 @@ export const QaPair = ({ question, answer, data, loading }: Props) => {
 							<Header4>Research papers interrogated</Header4>
 						</div>
 					}
-					extra={papers.length}
+					extra={papers?.length}
 				>
 					<HorisontalScrollArea>
-						{papers.map((paper, index) => (
+						{papers?.map((paper, index) => (
 							<PaperCardAsk
 								key={index}
 								date={paper?.published}
