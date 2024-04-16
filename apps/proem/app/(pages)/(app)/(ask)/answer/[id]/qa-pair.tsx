@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 type Props = {
 	question: Message;
 	answer: Message | undefined;
-	data: ReturnType<typeof useChat>["data"];
+	data: AnswerEngineEvents[];
 	loading: boolean;
 };
 
@@ -31,8 +31,8 @@ export const QaPair = ({ question, answer, data, loading }: Props) => {
 		if (data) {
 			const transactionId = question.id;
 			const transactionData = data?.filter(
-				(d) => (d as AnswerEngineEvents).transactionId === transactionId,
-			) as AnswerEngineEvents[];
+				(d) => d.transactionId === transactionId,
+			);
 			const papers = findLatestByEventType(
 				transactionData,
 				"papers-fetched",

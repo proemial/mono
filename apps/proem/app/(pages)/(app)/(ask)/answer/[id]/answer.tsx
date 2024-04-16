@@ -33,7 +33,9 @@ export const Answer = ({ initialQuestion }: Props) => {
 		id: "hardcoded",
 		api: "/api/bot/ask2",
 		body: { slug: sessionSlug, userId: user?.id },
-	});
+	}) as Omit<ReturnType<typeof useChat>, "data"> & {
+		data: AnswerEngineEvents[];
+	};
 
 	useEffectOnce(() => {
 		if (initialQuestion) {
@@ -41,10 +43,7 @@ export const Answer = ({ initialQuestion }: Props) => {
 		}
 	}, [initialQuestion, append]);
 
-	const answerSlug = findByEventType(
-		data as AnswerEngineEvents[],
-		"answer-slug-generated",
-	)?.slug;
+	const answerSlug = findByEventType(data, "answer-slug-generated")?.slug;
 	useEffect(() => {
 		// Keep slug from first answer
 		if (answerSlug && !sessionSlug) {
@@ -87,10 +86,7 @@ const getCorrespondingAnswerMessage = (
 	return messages[answerMessageIndex];
 };
 
-const getFollowUps = (data: ReturnType<typeof useChat>["data"]) =>
-	findLatestByEventType(
-		data as AnswerEngineEvents[],
-		"follow-up-questions-generated",
-	)
+const getFollowUps = (data: AnswerEngineEvents[]) =>
+	findLatestByEventType(data, "follow-up-questions-generated")
 		.hits.at(0)
 		?.map((hit) => hit.question) ?? [];
