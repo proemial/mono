@@ -31,7 +31,7 @@ export function ProfileYou() {
 
 	return (
 		<Collapsible open={isOpen} onOpenChange={setIsOpen}>
-			<CollapsibleTrigger className="w-full">
+			{/* <CollapsibleTrigger className="w-full">
 				<div className="flex items-center place-content-between">
 					<div className="flex items-center gap-4">
 						<Avatar className="size-6">
@@ -48,17 +48,17 @@ export function ProfileYou() {
 						)}
 					</div>
 				</div>
-			</CollapsibleTrigger>
+			</CollapsibleTrigger> */}
 			<CollapsibleContent>
 				<Table className="text-base">
 					<TableBody>
-						<TableRow>
+						{/* <TableRow>
 							<TableCell variant="icon">
 								<Mail className="mx-auto size-4" />
 							</TableCell>
 							<TableCell variant="key">Email</TableCell>
 							<TableCell variant="value">johnconner@proemial.ai</TableCell>
-						</TableRow>
+						</TableRow> */}
 						<TableRow>
 							<TableCell variant="icon">
 								<Droplet className="mx-auto size-4" />
@@ -68,12 +68,12 @@ export function ProfileYou() {
 								<ProfileColorSchemeToggle />
 							</TableCell>
 						</TableRow>
-						<TableRow>
+						{/* <TableRow>
 							<TableCell variant="icon">
 								<CircleHelp className="mx-auto size-4" />
 							</TableCell>
 							<TableCell variant="key">Help Center</TableCell>
-						</TableRow>
+						</TableRow> */}
 						<TableRow>
 							<TableCell variant="icon">
 								<FileText className="mx-auto size-4" />
