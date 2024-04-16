@@ -1,3 +1,5 @@
+import { User01 } from "@untitled-ui/icons-react";
+
 export type ChatQuestionProps = {
 	question?: string;
 	isQuestionByCurrentUser: boolean;
@@ -14,7 +16,7 @@ export function ChatQuestion({
 	return (
 		<div className="space-y-2">
 			<div className="flex items-center gap-2">
-				<div className="rounded-full size-6 bg-primary" />
+				<User01 />
 
 				<p>{isQuestionByCurrentUser ? "You" : "User"}</p>
 			</div>
