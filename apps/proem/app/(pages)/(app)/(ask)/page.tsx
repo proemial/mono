@@ -11,18 +11,20 @@ export default function AskPage() {
 	];
 
 	return (
-		<div className="space-y-2">
-			<Suggestions suggestions={starters} />
-			<div className="space-y-1">
-				<SelectContentSelector
-					selector={[
-						{ value: "popular", label: "Popular" },
-						{ value: "trending", label: "Trending", disabled: true },
-						{ value: "curious", label: "Curious", disabled: true },
-					]}
-				/>
-				<ChatForm placeholder="Ask a question" />
+		<div className="flex flex-col flex-grow gap-4 justify-end">
+			<div className="flex flex-col gap-2">
+				<div className="flex justify-end">
+					<SelectContentSelector
+						selector={[
+							{ value: "popular", label: "Popular" },
+							{ value: "trending", label: "Trending", disabled: true },
+							{ value: "curious", label: "Curious", disabled: true },
+						]}
+					/>
+				</div>
+				<Suggestions suggestions={starters} />
 			</div>
+			<ChatForm placeholder="Ask a question" />
 		</div>
 	);
 }

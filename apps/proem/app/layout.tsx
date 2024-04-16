@@ -75,8 +75,10 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 							enableSystem
 							disableTransitionOnChange
 						>
-							<div className="max-w-screen-md mx-auto">
-								<main className="w-full">{children}</main>
+							<div className="max-w-screen-md mx-auto min-h-screen flex flex-col">
+								<main className="w-full flex flex-col flex-grow">
+									{children}
+								</main>
 								{modal}
 
 								<Analytics.Vercel tracking={trackingInput} />

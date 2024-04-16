@@ -23,7 +23,7 @@ export function SelectContentSelector({ selector }: Props) {
 
 	return (
 		<Select onValueChange={onValueChange}>
-			<SelectTrigger className="border-0 w-28 focus:ring-0 focus:ring-offset-0 float-end">
+			<SelectTrigger className="border-0 w-28 focus:ring-0 focus:ring-offset-0">
 				<SelectValue placeholder={selector[0]?.label ?? ""} />
 			</SelectTrigger>
 			<SelectContent>

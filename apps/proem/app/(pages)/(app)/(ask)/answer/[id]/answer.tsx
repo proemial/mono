@@ -85,7 +85,7 @@ export const Answer = ({
 					/>
 				))}
 			{!isLoading && (
-				<div className="space-y-2">
+				<div className="space-y-4">
 					<ChatSuggestedFollowups suggestions={followUps} onClick={append} />
 					<ChatForm placeholder="Ask a follow-up question…" onClick={append} />
 				</div>

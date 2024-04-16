@@ -7,7 +7,7 @@ import {
 } from "@/app/api/bot/answer-engine/events";
 import { ChatActionBarAsk } from "@/components/chat-action-bar-ask";
 import { ChatArticle } from "@/components/chat-article";
-import { ChatQuestion, ChatQuestionProps } from "@/components/chat-question";
+import { ChatQuestion } from "@/components/chat-question";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { PaperCardAsk } from "@/components/paper-card-ask";
