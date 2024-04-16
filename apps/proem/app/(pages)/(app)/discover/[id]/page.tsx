@@ -20,18 +20,14 @@ type Props = {
 	searchParams: { title?: string };
 };
 
-export default async function Page({ params }: Props) {
+export default async function ReaderPage({ params }: Props) {
 	const paper = await fetchPaper(params.id);
 
 	if (!paper) {
 		notFound();
 	}
 
-	const { title, abstract } = paper.data;
-
-	const starters = paper?.generated?.starters
-		? paper?.generated?.starters
-		: await generate(paper);
+	const starters = paper.generated?.starters ?? (await generate(paper));
 
 	const state = true ? "follow-up-discover" : "empty";
 
@@ -40,7 +36,7 @@ export default async function Page({ params }: Props) {
 	};
 
 	return (
-		<div className="space-y-6 ">
+		<div className="space-y-6">
 			<CollapsibleSection
 				trigger={
 					<div className="flex items-center gap-4">
@@ -49,39 +45,39 @@ export default async function Page({ params }: Props) {
 					</div>
 				}
 			>
-				<ScrollArea className="w-full pb-4 rounded-md whitespace-nowrap">
-					<div className="flex space-x-3 w-max">
-						<PaperCardDiscover
-							paper={{
-								id: "1",
-								title:
-									"The Role of the Brain in the Evolution of the Human Hand",
-								date: "2021.10.10",
-								publisher: "American Physical Society",
-								type: "www",
-							}}
-						/>
-						<PaperCardDiscoverProfile name="Juliana Mejia" />
-						<PaperCardDiscoverProfile name="Juliana Mejia" />
-					</div>
-					<ScrollBar orientation="horizontal" />
-				</ScrollArea>
+				<div className="-mx-3">
+					<ScrollArea className="w-full">
+						<div className="flex space-x-3 w-max py-4 px-3">
+							<PaperCardDiscover
+								title={paper.data.title}
+								date={paper.data.publication_date}
+								publisher={"American Physical Society"}
+							/>
+							{paper.data.authorships.map((author) => (
+								<PaperCardDiscoverProfile name={author.author.display_name} />
+							))}
+						</div>
+						<ScrollBar orientation="horizontal" />
+					</ScrollArea>
+				</div>
 			</CollapsibleSection>
 
 			<ChatArticle
-				headline={title}
+				headline={paper.generated?.title}
 				model="GPT-4 TURBO"
 				type="Summary"
-				text={abstract}
+				text={paper.data.abstract}
 			/>
 
 			<ChatActionBarDiscover />
+
 			<ChatQA />
+
 			<ChatSuggestedFollowups suggestions={starters} />
 
-			{state !== "empty" && <ButtonScrollToBottom />}
+			{/* {state !== "empty" && <ButtonScrollToBottom />} */}
 
-			<ChatPanel state={state} />
+			{/* <ChatPanel state={state} /> */}
 		</div>
 	);
 }

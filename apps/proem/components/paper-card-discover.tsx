@@ -1,31 +1,8 @@
-import {
-	Card,
-	CardBullet,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@proemial/shadcn-ui";
+import { PaperCard, PaperCardProps } from "@/components/paper-card";
 import { Globe } from "lucide-react";
 
-export function PaperCardDiscover({ paper }: { paper: any }) {
-	return (
-		<Card variant="paper">
-			<CardHeader variant="paperDiscover">
-				<CardBullet>
-					<Globe className="size-4" />
-				</CardBullet>
-				<CardDescription variant="paperDate">{paper.date}</CardDescription>
-			</CardHeader>
-			<CardContent variant="paper">
-				<CardTitle variant="paper">{paper.title}</CardTitle>
-			</CardContent>
-			<CardFooter>
-				<CardDescription variant="paperPublisher">
-					{paper.publisher}
-				</CardDescription>
-			</CardFooter>
-		</Card>
-	);
+type PaperCardDiscoverProps = PaperCardProps;
+
+export function PaperCardDiscover(props: PaperCardDiscoverProps) {
+	return <PaperCard {...props} bullet={<Globe className="size-4" />} />;
 }

@@ -5,25 +5,21 @@ import { VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/utils";
 
-const cardVariants = cva(
-	"rounded-lg border dark:border-0 bg-card text-card-foreground",
-	{
-		variants: {
-			variant: {
-				default: "",
-				paper: "w-40 h-48",
-			},
+const cardVariants = cva("rounded-2xl bg-card text-card-foreground shadow", {
+	variants: {
+		variant: {
+			default: "",
+			paper: "w-40 h-48",
 		},
 	},
-);
+});
 
 const cardHeaderVariants = cva(
-	"flex flex-row place-content-between p-2 items-center ",
+	"flex flex-row place-content-between p-2.5 items-center ",
 	{
 		variants: {
 			variant: {
 				default: "",
-				paperDiscover: "px-[10px]",
 				paperAsk: "",
 			},
 		},
