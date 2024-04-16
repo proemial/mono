@@ -1,14 +1,12 @@
 import { Analytics } from "@/app/components/analytics";
 import { cn } from "@/app/components/shadcn-ui/utils";
 import "@/app/globals.css";
-import { NavigationMenuBar } from "@/components/navigation-menu-bar";
 import "@/env";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@proemial/shadcn-ui";
 import { Metadata, Viewport } from "next";
 import { Lato as FontSans } from "next/font/google";
 import { headers } from "next/headers";
-import Link from "next/link";
 import { ReactNode } from "react";
 
 export const viewport: Viewport = {
@@ -78,12 +76,8 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 							disableTransitionOnChange
 						>
 							<div className="max-w-screen-md mx-auto">
-								<NavigationMenuBar />
-								<Link href="/terms">Terms of Use</Link>
-
 								<main className="w-full p-4">{children}</main>
 								{modal}
-
 
 								<Analytics.Vercel tracking={trackingInput} />
 								<Analytics.Google tracking={trackingInput} />
