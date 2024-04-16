@@ -282,6 +282,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.24
         version: 18.2.24
+      '@types/react-gtm-module':
+        specifier: ^2.0.3
+        version: 2.0.3
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.19(postcss@8.4.38)
@@ -4429,6 +4432,10 @@ packages:
     resolution: {integrity: sha512-cN6upcKd8zkGy4HU9F1+/s98Hrp6D4MOcippK4PoE8OZRngohHZpbJn1GsaDLz87MqvHNoT13nHvNqM9ocRHZg==}
     dependencies:
       '@types/react': 18.2.75
+
+  /@types/react-gtm-module@2.0.3:
+    resolution: {integrity: sha512-fL2zKdDFN5LckSsVBXEhhm9M4tFTM9oHJfGcfZJzktQkzpOTGtDM8oXIP9d9UBDxO4xLNZhS22dlgRVv6wgK9w==}
+    dev: true
 
   /@types/react@18.2.75:
     resolution: {integrity: sha512-+DNnF7yc5y0bHkBTiLKqXFe+L4B3nvOphiMY3tuA5X10esmjqk7smyBZzbGTy2vsiy/Bnzj8yFIBL8xhRacoOg==}
