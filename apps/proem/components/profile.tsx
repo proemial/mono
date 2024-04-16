@@ -23,7 +23,7 @@ export function Profile() {
 					<Menu className="p-1" />
 				</Button>
 			</DrawerTrigger>
-			<DrawerContent className="w-full h-full max-w-screen-md mx-auto">
+			<DrawerContent className="w-full h-full max-w-screen-md mx-auto rounded-none">
 				<div className="flex flex-col gap-6">
 					<DrawerHeader className="pt-0">
 						<DrawerTitle className="flex justify-end text-2xl font-normal">
