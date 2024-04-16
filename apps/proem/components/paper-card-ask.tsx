@@ -1,4 +1,4 @@
-import { Paper } from "@/app/(pages)/(app)/(ask)/answer/[id]/use-papers";
+import { PapersFetched } from "@/app/api/bot/answer-engine/events";
 import {
 	Card,
 	CardBullet,
@@ -11,7 +11,7 @@ import {
 } from "@proemial/shadcn-ui";
 
 interface PaperCardAskProps {
-	paper: Paper | undefined;
+	paper: PapersFetched[number] | undefined;
 	index: string;
 }
 

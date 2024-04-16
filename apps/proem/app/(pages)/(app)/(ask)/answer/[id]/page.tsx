@@ -7,6 +7,6 @@ type Props = {
 };
 
 export default function AnswerPage({ params: { id } }: Props) {
-	const question = decodeURIComponent(id);
-	return <Answer question={question} />;
+	const initialQuestion = decodeURIComponent(id);
+	return <Answer initialQuestion={initialQuestion} />;
 }

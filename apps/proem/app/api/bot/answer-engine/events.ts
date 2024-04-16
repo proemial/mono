@@ -71,6 +71,10 @@ export const papersFetchedEvent = z.object({
 	}),
 });
 
+export type PapersFetched = z.infer<
+	typeof papersFetchedEvent
+>["data"]["papers"];
+
 const answerEngineEvents = z.discriminatedUnion("type", [
 	stepStartedEvent,
 	answerSlugGeneratedEvent,

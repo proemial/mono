@@ -3,28 +3,21 @@
 import {
 	AnswerEngineEvents,
 	findByEventType,
+	findLatestByEventType,
 } from "@/app/api/bot/answer-engine/events";
 import { useUser } from "@/app/hooks/use-user";
 import { ButtonScrollToBottom } from "@/components/button-scroll-to-bottom";
-import { ChatActionBarAsk } from "@/components/chat-action-bar-ask";
-import { ChatArticle } from "@/components/chat-article";
-import { ChatQuestion } from "@/components/chat-question";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
-import { CollapsibleSection } from "@/components/collapsible-section";
-import { PaperCardAsk } from "@/components/paper-card-ask";
-import { ChatAnswerSkeleton } from "@/components/skeletons";
-import { Header4, ScrollArea, ScrollBar } from "@proemial/shadcn-ui";
-import { useChat } from "ai/react";
-import { FileText } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { useFollowUps } from "./use-follow-ups";
-import { usePapers } from "./use-papers";
+import { Message, useChat } from "ai/react";
+import { useEffect, useState } from "react";
+import { QaPair } from "./qa-pair";
+import { useEffectOnce } from "./use-effect-once";
 
 type Props = {
-	question: string;
+	initialQuestion: string;
 };
 
-export const Answer = ({ question }: Props) => {
+export const Answer = ({ initialQuestion }: Props) => {
 	const [sessionSlug, setSessionSlug] = useState<string | undefined>(undefined);
 	const { user } = useUser();
 	const {
@@ -42,17 +35,11 @@ export const Answer = ({ question }: Props) => {
 		body: { slug: sessionSlug, userId: user?.id },
 	});
 
-	const hasExecutedOnce = useRef(false);
-	useEffect(() => {
-		if (question && !hasExecutedOnce.current) {
-			hasExecutedOnce.current = true;
-			append({ role: "user", content: question });
+	useEffectOnce(() => {
+		if (initialQuestion) {
+			append({ role: "user", content: initialQuestion });
 		}
-	}, [question, append]);
-
-	const answer = messages
-		.filter((m) => m.role === "assistant")
-		.slice(-1)[0]?.content;
+	}, [initialQuestion, append]);
 
 	const answerSlug = findByEventType(
 		data as AnswerEngineEvents[],
@@ -65,46 +52,25 @@ export const Answer = ({ question }: Props) => {
 		}
 	});
 
-	const papers = usePapers({
-		data,
-		fallback: Array(5).fill(undefined),
-	});
-	const followUps = useFollowUps(data);
+	const followUps = getFollowUps(data);
 
 	return (
-		<div className="space-y-6">
-			<ChatQuestion question={question} />
-			<CollapsibleSection
-				trigger={
-					<div className="flex items-center gap-4">
-						<FileText className="size-4" />
-						<Header4>
-							{isLoading
-								? "Searching for research papers"
-								: "Research papers interrogated"}
-						</Header4>
-					</div>
-				}
-				extra={papers.length}
-			>
-				<ScrollArea className="w-full pb-4 rounded-md whitespace-nowrap">
-					<div className="flex space-x-3 w-max">
-						{papers.map((paper, index) => (
-							<PaperCardAsk key={index} paper={paper} index={`${index + 1}`} />
-						))}
-					</div>
-					<ScrollBar orientation="horizontal" />
-				</ScrollArea>
-			</CollapsibleSection>
-			{isLoading && <ChatAnswerSkeleton />}
-			<ChatArticle
-				type="Answer"
-				model={answer ? "GPT-4-TURBO" : ""}
-				text={answer}
-			/>
+		<div className="flex flex-col gap-10">
+			{messages
+				.filter((message) => message.role === "user")
+				.map((message, index) => (
+					<QaPair
+						key={message.id}
+						question={message}
+						answer={getCorrespondingAnswerMessage(index, messages)}
+						data={data}
+						loading={
+							isLoading && !getCorrespondingAnswerMessage(index, messages)
+						}
+					/>
+				))}
 			{!isLoading && (
 				<>
-					<ChatActionBarAsk />
 					<ChatSuggestedFollowups suggestions={followUps} onClick={append} />
 					<ButtonScrollToBottom />
 				</>
@@ -112,3 +78,19 @@ export const Answer = ({ question }: Props) => {
 		</div>
 	);
 };
+
+const getCorrespondingAnswerMessage = (
+	questionMessageIndex: number,
+	messages: Message[],
+) => {
+	const answerMessageIndex = questionMessageIndex * 2 + 1;
+	return messages[answerMessageIndex];
+};
+
+const getFollowUps = (data: ReturnType<typeof useChat>["data"]) =>
+	findLatestByEventType(
+		data as AnswerEngineEvents[],
+		"follow-up-questions-generated",
+	)
+		.hits.at(0)
+		?.map((hit) => hit.question) ?? [];
