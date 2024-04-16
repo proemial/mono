@@ -7,6 +7,7 @@ import {
 } from "@/app/api/bot/answer-engine/events";
 import { useUser } from "@/app/hooks/use-user";
 import { ButtonScrollToBottom } from "@/components/button-scroll-to-bottom";
+import { ChatForm } from "@/components/chat-form";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
 import { Message, useChat } from "ai/react";
 import { useEffect, useState } from "react";
@@ -38,9 +39,7 @@ export const Answer = ({ initialQuestion }: Props) => {
 	};
 
 	useEffectOnce(() => {
-		if (initialQuestion) {
-			append({ role: "user", content: initialQuestion });
-		}
+		append({ role: "user", content: initialQuestion });
 	}, [initialQuestion, append]);
 
 	const answerSlug = findByEventType(data, "answer-slug-generated")?.slug;
@@ -69,10 +68,10 @@ export const Answer = ({ initialQuestion }: Props) => {
 					/>
 				))}
 			{!isLoading && (
-				<>
+				<div className="space-y-2">
 					<ChatSuggestedFollowups suggestions={followUps} onClick={append} />
-					<ButtonScrollToBottom />
-				</>
+					<ChatForm placeholder="Ask a follow-up question…" onClick={append} />
+				</div>
 			)}
 		</div>
 	);

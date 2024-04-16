@@ -21,7 +21,7 @@ export function Suggestions({ suggestions, onClick }: SuggestionsProps) {
 	}
 
 	return (
-		<div className="flex flex-col gap-5 pb-4">
+		<div className="flex flex-col gap-5">
 			<div className="flex flex-col gap-2">
 				{suggestions?.map((suggestion) => (
 					<Button
@@ -34,9 +34,9 @@ export function Suggestions({ suggestions, onClick }: SuggestionsProps) {
 					</Button>
 				))}
 			</div>
-			<div className="flex justify-center">
+			{/* <div className="flex justify-center">
 				<Button size="pill">More</Button>
-			</div>
+			</div> */}
 		</div>
 	);
 }

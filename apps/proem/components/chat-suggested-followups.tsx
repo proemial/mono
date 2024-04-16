@@ -15,7 +15,7 @@ export function ChatSuggestedFollowups({
 	onClick,
 }: ChatSuggestedFollowupsProps) {
 	return (
-		<div className="flex flex-col gap-5 mb-8">
+		<div className="flex flex-col gap-5">
 			<div className="flex items-center place-content-between">
 				<div className="flex items-center gap-4">
 					<GanttChart className="size-4" />

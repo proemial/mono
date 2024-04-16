@@ -10,6 +10,7 @@ import {
 	FormMessage,
 	Textarea,
 } from "@proemial/shadcn-ui";
+import { useChat } from "ai/react";
 import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -20,7 +21,12 @@ export const QuerySchema = z.object({
 	query: z.string(),
 });
 
-export function ChatForm({ placeholder }: { placeholder: string }) {
+type Props = {
+	placeholder: string;
+	onClick?: ReturnType<typeof useChat>["append"];
+};
+
+export function ChatForm({ placeholder, onClick }: Props) {
 	const [isFocused, setIsFocused] = useState(false);
 	const router = useRouter();
 
@@ -29,7 +35,11 @@ export function ChatForm({ placeholder }: { placeholder: string }) {
 	});
 
 	function onSubmit(data: z.infer<typeof QuerySchema>) {
-		router.push(`/answer/${encodeURIComponent(data.query)}`);
+		if (onClick) {
+			onClick({ role: "user", content: data.query });
+		} else {
+			router.push(`/answer/${encodeURIComponent(data.query)}`);
+		}
 	}
 
 	function onBlur() {

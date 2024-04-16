@@ -7,7 +7,7 @@ export default function PagesLayout({ children }: { children: ReactNode }) {
 	return (
 		<>
 			<NavigationMenuBar />
-			<main className="w-full p-4">{children}</main>
+			<main className="w-full">{children}</main>
 		</>
 	);
 }
