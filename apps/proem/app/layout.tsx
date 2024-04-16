@@ -1,7 +1,6 @@
 import { Analytics } from "@/app/components/analytics";
 import { cn } from "@/app/components/shadcn-ui/utils";
 import "@/app/globals.css";
-import { NavigationMenuBar } from "@/components/navigation-menu-bar";
 import "@/env";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@proemial/shadcn-ui";
@@ -49,8 +48,10 @@ const fontSans = FontSans({
 
 type Props = {
 	children: ReactNode;
+	modal: ReactNode
 };
-export default function RootLayout({ children }: Readonly<Props>) {
+
+export default function RootLayout({ children, modal }: Readonly<Props>) {
 	const trackingInput = getTrackingInput();
 	return (
 		<ClerkProvider>
@@ -75,9 +76,8 @@ export default function RootLayout({ children }: Readonly<Props>) {
 							disableTransitionOnChange
 						>
 							<div className="max-w-screen-md mx-auto">
-								<NavigationMenuBar />
-
 								<main className="w-full p-4">{children}</main>
+								{modal}
 
 								<Analytics.Vercel tracking={trackingInput} />
 								<Analytics.Google tracking={trackingInput} />

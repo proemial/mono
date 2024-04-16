@@ -26,6 +26,7 @@ import {
 	MessageSquare,
 	ClipboardCheck
 } from "lucide-react";
+import Link from "next/link";
 import * as React from "react";
 
 const feedback = "https://tally.so/r/wAv8Ve";
@@ -92,13 +93,17 @@ export function ProfileYou() {
 							<TableCell variant="icon">
 								<FileText className="mx-auto size-4" />
 							</TableCell>
-							<TableCell variant="key">Terms of Use</TableCell>
+							<TableCell variant="key">
+								<Link href="/terms">Terms of Use</Link>
+							</TableCell>
 						</TableRow>
 						<TableRow>
 							<TableCell variant="icon">
 								<LockKeyhole className="mx-auto size-4" />
 							</TableCell>
-							<TableCell variant="key">Privacy Policy</TableCell>
+							<TableCell variant="key">
+								<Link href="/privacy">Privacy Policy</Link>
+							</TableCell>
 						</TableRow>
 						{/* <Tableine */}
 					</TableBody>
