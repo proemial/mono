@@ -29,7 +29,6 @@ import {
 import * as React from "react";
 
 const feedback = "https://tally.so/r/wAv8Ve";
-const version = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ?? "local";
 
 export function ProfileYou() {
 	const [isOpen, setIsOpen] = React.useState(true);
@@ -78,14 +77,16 @@ export function ProfileYou() {
 								<MessageSquare className="mx-auto size-4" />
 							</TableCell>
 							<TableCell variant="key">
-								<a href={feedback} target="_blank" rel="noreferrer">Give feedback</a>
+								<Feedback />
 							</TableCell>
 						</TableRow>
 						<TableRow>
 							<TableCell variant="icon">
 								<ClipboardCheck className="mx-auto size-4" />
 							</TableCell>
-							<TableCell variant="key">Version: {version.substring(0, 7)}</TableCell>
+							<TableCell variant="key" className="flex items-center gap-4">
+								<Version />
+							</TableCell>
 						</TableRow>
 						<TableRow>
 							<TableCell variant="icon">
@@ -104,5 +105,20 @@ export function ProfileYou() {
 				</Table>
 			</CollapsibleContent>
 		</Collapsible>
+	);
+}
+
+function Feedback() {
+	return <a href={feedback} target="_blank" rel="noreferrer">Give feedback</a>
+}
+
+function Version() {
+	const version = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ?? "local";
+	return <>Version: {version.substring(0, 7)} <Beta /></>;
+}
+
+function Beta() {
+	return (
+		<span className="px-2 py-1.5 text-xs font-bold rounded-md text-secondary-foreground bg-secondary">BETA</span>
 	);
 }
