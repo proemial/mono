@@ -467,7 +467,7 @@ export default function Privacy() {
     )
 }
 
-function List({ children }: { children: React.ReactNode[] }) {
+function List({ children }: { children: React.ReactNode }) {
     return <ul className="list-disc mx-8 my-4">
         {children}
     </ul>
