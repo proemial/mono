@@ -28,8 +28,13 @@ import {
 } from "lucide-react";
 import * as React from "react";
 
+const feedback = "https://tally.so/r/wAv8Ve";
+
 export function ProfileYou() {
 	const [isOpen, setIsOpen] = React.useState(true);
+
+	console.log("version", process.env.VERCEL_GIT_COMMIT_SHA, process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA);
+
 
 	return (
 		<Collapsible open={isOpen} onOpenChange={setIsOpen}>
@@ -74,7 +79,13 @@ export function ProfileYou() {
 							<TableCell variant="icon">
 								<MessageSquare className="mx-auto size-4" />
 							</TableCell>
-							<TableCell variant="key">Give feedback</TableCell>
+							<TableCell variant="key">
+								<a href={feedback} target="_blank" rel="noreferrer">Give feedback</a>
+							</TableCell>
+							{/* <TableCell className="flex">
+								<MessageSquare className="mx-auto size-4" />
+								<Button variant="ghost" className="h-8 p-0 m-0">Give feedback</Button>
+							</TableCell> */}
 						</TableRow>
 						<TableRow>
 							<TableCell variant="icon">
