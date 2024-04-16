@@ -45,11 +45,17 @@ export default async function ReaderPage({ params }: Props) {
 				}
 			>
 				<HorisontalScrollArea>
-					<PaperCardDiscover
-						title={paper.data.title}
-						date={paper.data.publication_date}
-						publisher={"American Physical Society"}
-					/>
+					<a
+						href={paper.data.primary_location.landing_page_url}
+						target="_blank"
+						rel="noreferrer"
+					>
+						<PaperCardDiscover
+							title={paper.data.title}
+							date={paper.data.publication_date}
+							publisher={paper.data.primary_location.source.display_name}
+						/>
+					</a>
 					{paper.data.authorships.map((author) => (
 						<PaperCardDiscoverProfile name={author.author.display_name} />
 					))}
