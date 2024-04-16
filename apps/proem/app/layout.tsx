@@ -48,7 +48,7 @@ const fontSans = FontSans({
 
 type Props = {
 	children: ReactNode;
-	modal: ReactNode
+	modal: ReactNode;
 };
 
 export default function RootLayout({ children, modal }: Readonly<Props>) {
@@ -75,7 +75,7 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 							enableSystem
 							disableTransitionOnChange
 						>
-							<div className="max-w-screen-md mx-auto">
+							<div className="max-w-screen-md mx-auto" vaul-drawer-wrapper="">
 								<main className="w-full p-4">{children}</main>
 								{modal}
 
