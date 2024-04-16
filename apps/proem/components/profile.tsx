@@ -25,9 +25,8 @@ export function Profile() {
 			</DrawerTrigger>
 			<DrawerContent className="w-full h-full max-w-screen-md mx-auto">
 				<div className="flex flex-col gap-6">
-					<DrawerHeader>
-						<DrawerTitle className="flex justify-between pt-12 text-2xl font-normal">
-							<div>Menu</div>
+					<DrawerHeader className="pt-0">
+						<DrawerTitle className="flex justify-end text-2xl font-normal">
 							<DrawerClose asChild>
 								<Button variant="ghost" className="p-0">
 									<X className="w-6 h-6" />

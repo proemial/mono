@@ -17,8 +17,8 @@ export default function TermsModal() {
         <Drawer open>
             <DrawerContent className="w-full h-full max-w-screen-md mx-auto">
                 <div className="flex flex-col max-h-full gap-6">
-                    <DrawerHeader className="grow-0">
-                        <DrawerTitle className="flex justify-between pt-12 text-2xl font-normal">
+                    <DrawerHeader className="pt-0 grow-0">
+                        <DrawerTitle className="flex justify-between text-2xl font-normal">
                             <div>Privacy policy</div>
                             <Button variant="ghost" className="p-0" onClick={() => router.back()}>
                                 <X className="w-6 h-6" />
