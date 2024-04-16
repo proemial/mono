@@ -8,6 +8,9 @@ export interface ChatPanelProps {
 	state: "empty" | "inprogress" | "follow-up-ask" | "follow-up-discover";
 }
 
+/**
+ * @deprecated: Kept for styling reference - throw away if you want :3
+ */
 export function ChatPanel({ state }: ChatPanelProps) {
 	const suggestions = [
 		"Does organic farming produce more greenhouse gasses?",
