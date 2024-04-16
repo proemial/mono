@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@proemial/shadcn-ui";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown } from "@untitled-ui/icons-react";
 
 export function ButtonScrollToBottom() {
 	return (

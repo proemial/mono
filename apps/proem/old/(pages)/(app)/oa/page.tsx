@@ -4,7 +4,7 @@ import { STARTERS } from "@/old/(pages)/(app)/(answer-engine)/starters";
 import { fetchLatestPapers } from "@/old/(pages)/(app)/oa/[id]/fetch-paper";
 import { AskInput } from "@/old/(pages)/(app)/oa/ask-input";
 import { Redirect } from "@/old/(pages)/(app)/oa/redirect";
-import { Search } from "lucide-react";
+import { SearchMd } from "@untitled-ui/icons-react";
 import { PageLayout } from "../page-layout";
 
 export const revalidate = 1;
@@ -56,7 +56,7 @@ async function Actions() {
 	return (
 		<div className="flex flex-col">
 			<div className="flex items-center font-sourceCodePro">
-				<Search style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
+				<SearchMd style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
 				SUGGESTED ACTIONS
 			</div>
 			<LinkButton
@@ -86,7 +86,7 @@ function Questions() {
 	return (
 		<div>
 			<div className="flex items-center font-sourceCodePro">
-				<Search style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
+				<SearchMd style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
 				SUGGESTED QUESTIONS
 			</div>
 			{starters.map((starter) => (

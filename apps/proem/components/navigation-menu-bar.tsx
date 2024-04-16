@@ -8,7 +8,7 @@ import {
 	NavigationMenuList,
 	cn,
 } from "@proemial/shadcn-ui";
-import { Compass, SquarePen } from "lucide-react";
+import { Compass03, Edit05 } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -58,12 +58,12 @@ export function NavigationMenuBar() {
 				<NavigationMenuItem className="flex-none px-1">
 					{pathname === "/" && (
 						<Button onClick={handleClick} variant="ghost">
-							<SquarePen className="size-4" />
+							<Edit05 className="size-4" />
 						</Button>
 					)}
 					{pathname !== "/" && (
 						<Button onClick={handleClick} variant="ghost">
-							<Compass className="size-4" />
+							<Compass03 className="size-4" />
 						</Button>
 					)}
 				</NavigationMenuItem>

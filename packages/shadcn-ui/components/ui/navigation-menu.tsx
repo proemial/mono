@@ -2,7 +2,7 @@
 
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
 import { cva } from "class-variance-authority";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown } from "@untitled-ui/icons-react";
 import * as React from "react";
 import { cn } from "../../lib/utils";
 

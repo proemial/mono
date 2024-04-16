@@ -14,7 +14,7 @@ import { PaperCardAsk } from "@/components/paper-card-ask";
 import { ChatAnswerSkeleton, ChatPapersSkeleton } from "@/components/skeletons";
 import { Header4 } from "@proemial/shadcn-ui";
 import { Message } from "ai/react";
-import { FileText } from "lucide-react";
+import { File02 } from "@untitled-ui/icons-react";
 
 type QaPairProps = {
 	question: Message;
@@ -40,7 +40,7 @@ export const QaPair = ({ question, answer, data, loading }: QaPairProps) => {
 				<CollapsibleSection
 					trigger={
 						<div className="flex items-center gap-4">
-							<FileText className="size-4" />
+							<File02 className="size-4" />
 							<Header4>Research papers interrogated</Header4>
 						</div>
 					}

@@ -7,7 +7,7 @@ import {
     DrawerTitle,
 } from "@proemial/shadcn-ui";
 import Terms from "../../terms/terms";
-import { X } from "lucide-react";
+import { XClose } from "@untitled-ui/icons-react";
 import { useRouter } from "next/navigation";
 
 export default function TermsModal() {
@@ -21,7 +21,7 @@ export default function TermsModal() {
                         <DrawerTitle className="flex justify-between text-2xl font-normal">
                             <div>Proemial Terms of Service</div>
                             <Button variant="ghost" className="p-0" onClick={() => router.back()}>
-                                <X className="w-6 h-6" />
+                                <XClose className="w-6 h-6" />
                             </Button>
                         </DrawerTitle>
                     </DrawerHeader>

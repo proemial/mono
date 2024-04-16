@@ -15,19 +15,7 @@ import {
 	TableCell,
 	TableRow,
 } from "@proemial/shadcn-ui";
-import {
-	ChevronDown,
-	ChevronUp,
-	CircleHelp,
-	Droplet,
-	FileText,
-	LockKeyhole,
-	LogOut,
-	LogIn,
-	Mail,
-	MessageSquare,
-	ClipboardCheck
-} from "lucide-react";
+import { ClipboardCheck, Drop, File02, Lock01, LogIn01, LogOut01, MessageSquare02 } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import * as React from "react";
 
@@ -69,7 +57,7 @@ export function ProfileYou() {
 						</TableRow> */}
 						<TableRow>
 							<TableCell variant="icon">
-								<Droplet className="mx-auto size-4" />
+								<Drop className="mx-auto size-4" />
 							</TableCell>
 							<TableCell variant="key">Color Scheme</TableCell>
 							<TableCell variant="value">
@@ -78,7 +66,7 @@ export function ProfileYou() {
 						</TableRow>
 						<TableRow>
 							<TableCell variant="icon">
-								<MessageSquare className="mx-auto size-4" />
+								<MessageSquare02 className="mx-auto size-4" />
 							</TableCell>
 							<TableCell variant="key">
 								<Feedback />
@@ -94,7 +82,7 @@ export function ProfileYou() {
 						</TableRow>
 						<TableRow>
 							<TableCell variant="icon">
-								<FileText className="mx-auto size-4" />
+								<File02 className="mx-auto size-4" />
 							</TableCell>
 							<TableCell variant="key">
 								<Link href="/terms">Terms of Use</Link>
@@ -102,7 +90,7 @@ export function ProfileYou() {
 						</TableRow>
 						<TableRow>
 							<TableCell variant="icon">
-								<LockKeyhole className="mx-auto size-4" />
+								<Lock01 className="mx-auto size-4" />
 							</TableCell>
 							<TableCell variant="key">
 								<Link href="/privacy">Privacy Policy</Link>
@@ -110,8 +98,8 @@ export function ProfileYou() {
 						</TableRow>
 						<TableRow className="text-slate-400">
 							<TableCell variant="icon">
-								{user && <LogOut className="mx-auto size-4" />}
-								{!user && <LogIn className="mx-auto size-4" />}
+								{user && <LogOut01 className="mx-auto size-4" />}
+								{!user && <LogIn01 className="mx-auto size-4" />}
 							</TableCell>
 							<TableCell variant="key">Sign in</TableCell>
 						</TableRow>

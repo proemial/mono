@@ -2,8 +2,8 @@
 
 import { QAEntry } from "@/components/qa-message";
 import { Header4 } from "@proemial/shadcn-ui";
-import { GanttChart } from "lucide-react";
 import { SelectContentSelector } from "./select-content-selector";
+import { GanttChart } from "./icons/GanttChart";
 
 export function ChatQA() {
 	const messages = [
@@ -65,7 +65,7 @@ export function ChatQA() {
 		<div className="flex flex-col gap-5">
 			<div className="flex items-center place-content-between">
 				<div className="flex items-center gap-4">
-					<GanttChart className="size-4" />
+					<GanttChart />
 					<Header4>Q&A</Header4>
 				</div>
 				<div>

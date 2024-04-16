@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@proemial/shadcn-ui";
-import { Share } from "lucide-react";
+import { Upload01 } from "@untitled-ui/icons-react";
 
 export function ButtonShare() {
 	const handleClick = () => {
@@ -10,7 +10,7 @@ export function ButtonShare() {
 
 	return (
 		<Button size="actionBar" variant="ghost" onClick={() => handleClick()}>
-			<Share />
+			<Upload01 />
 		</Button>
 	);
 }

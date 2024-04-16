@@ -8,7 +8,6 @@ import {
 	CardTitle,
 	Icons,
 } from "@proemial/shadcn-ui";
-import { Globe } from "lucide-react";
 
 export type PaperCardProps = {
 	date?: string;

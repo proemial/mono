@@ -495,15 +495,15 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.0.2
         version: 1.0.2(@types/react@18.2.78)(react@18.2.0)
+      '@untitled-ui/icons-react':
+        specifier: ^0.1.2
+        version: 0.1.2(@types/react@18.2.78)(react@18.2.0)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
       clsx:
         specifier: ^2.1.0
         version: 2.1.0
-      lucide-react:
-        specifier: ^0.368.0
-        version: 0.368.0(react@18.2.0)
       next-themes:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@18.2.0)(react@18.2.0)

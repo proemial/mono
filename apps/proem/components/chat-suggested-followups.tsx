@@ -3,8 +3,8 @@
 import { Suggestions, SuggestionsProps } from "@/components/suggestions";
 import { Header4 } from "@proemial/shadcn-ui";
 import { useChat } from "ai/react";
-import { GanttChart } from "lucide-react";
 import { SelectContentSelector } from "./select-content-selector";
+import { GanttChart } from "./icons/GanttChart";
 
 type ChatSuggestedFollowupsProps = Pick<SuggestionsProps, "suggestions"> & {
 	onClick?: ReturnType<typeof useChat>["append"];
@@ -18,7 +18,7 @@ export function ChatSuggestedFollowups({
 		<div className="flex flex-col gap-5">
 			<div className="flex items-center place-content-between">
 				<div className="flex items-center gap-4">
-					<GanttChart className="size-4" />
+					<GanttChart />
 					<Header4>Suggested follow-ups</Header4>
 				</div>
 				<div>

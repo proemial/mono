@@ -11,7 +11,7 @@ import { fetchPaper } from "@/old/(pages)/(app)/oa/[id]/fetch-paper";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
 import { Header4 } from "@proemial/shadcn-ui";
-import { FileText } from "lucide-react";
+import { File02 } from "@untitled-ui/icons-react";
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -39,7 +39,7 @@ export default async function ReaderPage({ params }: Props) {
 			<CollapsibleSection
 				trigger={
 					<div className="flex items-center gap-4">
-						<FileText className="size-4" />
+						<File02 className="size-4" />
 						<Header4>Research Paper</Header4>
 					</div>
 				}

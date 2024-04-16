@@ -11,7 +11,7 @@ import {
 	Textarea,
 } from "@proemial/shadcn-ui";
 import { useChat } from "ai/react";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight } from "@untitled-ui/icons-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -53,18 +53,16 @@ export function ChatForm({ placeholder, onClick }: Props) {
 				onFocus={() => setIsFocused(true)}
 				onBlur={onBlur}
 				onSubmit={form.handleSubmit(onSubmit)}
-				className={`${
-					isFocused ? "bg-primary p-0 md:p-4" : "p-4"
-				} w-full flex gap-2 items-center`}
+				className={`${isFocused ? "bg-primary p-0 md:p-4" : "p-4"
+					} w-full flex gap-2 items-center`}
 			>
 				<FormField
 					control={form.control}
 					name="query"
 					render={({ field }) => (
 						<FormItem
-							className={`${
-								isFocused ? "rounded-none md:rounded-3xl" : "rounded-3xl"
-							} w-full overflow-hidden`}
+							className={`${isFocused ? "rounded-none md:rounded-3xl" : "rounded-3xl"
+								} w-full overflow-hidden`}
 						>
 							<FormControl>
 								<Textarea
@@ -78,9 +76,8 @@ export function ChatForm({ placeholder, onClick }: Props) {
 					)}
 				/>
 				<Button
-					className={`${
-						isFocused ? "visible" : "hidden"
-					} rounded-full text-foreground bg-background p-2 size-6`}
+					className={`${isFocused ? "visible" : "hidden"
+						} rounded-full text-foreground bg-background p-2 size-6`}
 					size="icon"
 					type="submit"
 				>

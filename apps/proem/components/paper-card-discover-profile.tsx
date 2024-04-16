@@ -7,14 +7,14 @@ import {
 	CardFooter,
 	CardHeader,
 } from "@proemial/shadcn-ui";
-import { Users } from "lucide-react";
+import { Users01 } from "@untitled-ui/icons-react";
 
 export function PaperCardDiscoverProfile({ name }: { name: string }) {
 	return (
 		<Card variant="paper">
 			<CardHeader>
 				<CardBullet>
-					<Users className="size-4" />
+					<Users01 className="size-4" />
 				</CardBullet>
 				<CardDescription variant="paperDate">CO-AUTHOR</CardDescription>
 			</CardHeader>

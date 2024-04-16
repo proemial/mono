@@ -6,7 +6,7 @@ import {
     DrawerHeader,
     DrawerTitle,
 } from "@proemial/shadcn-ui";
-import { X } from "lucide-react";
+import { XClose } from "@untitled-ui/icons-react";
 import { useRouter } from "next/navigation";
 import Privacy from "@/app/privacy/privacy";
 
@@ -21,7 +21,7 @@ export default function TermsModal() {
                         <DrawerTitle className="flex justify-between text-2xl font-normal">
                             <div>Privacy policy</div>
                             <Button variant="ghost" className="p-0" onClick={() => router.back()}>
-                                <X className="w-6 h-6" />
+                                <XClose className="w-6 h-6" />
                             </Button>
                         </DrawerTitle>
                     </DrawerHeader>

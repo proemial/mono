@@ -6,7 +6,7 @@ import {
 	CollapsibleContent,
 	CollapsibleTrigger,
 } from "@proemial/shadcn-ui";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp } from "@untitled-ui/icons-react";
 import * as React from "react";
 import { useState } from "react";
 
