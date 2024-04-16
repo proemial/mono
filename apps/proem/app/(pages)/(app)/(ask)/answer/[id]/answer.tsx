@@ -52,8 +52,11 @@ export const Answer = ({ question }: Props) => {
 		.filter((m) => m.role === "assistant")
 		.slice(-1)[0]?.content;
 
-	const papers = usePapers(data as AnswerEngineEvents[]);
-	const followUps = useFollowUps(data as AnswerEngineEvents[]);
+	const papers = usePapers({
+		data,
+		fallback: Array(5).fill(undefined),
+	});
+	const followUps = useFollowUps(data);
 
 	return (
 		<div className="space-y-6">
@@ -73,11 +76,7 @@ export const Answer = ({ question }: Props) => {
 				<ScrollArea className="w-full pb-4 rounded-md whitespace-nowrap">
 					<div className="flex space-x-3 w-max">
 						{papers.map((paper, index) => (
-							<PaperCardAsk
-								key={paper.link}
-								paper={paper}
-								index={`${index + 1}`}
-							/>
+							<PaperCardAsk key={index} paper={paper} index={`${index + 1}`} />
 						))}
 					</div>
 					<ScrollBar orientation="horizontal" />

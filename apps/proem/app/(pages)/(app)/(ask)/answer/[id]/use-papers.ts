@@ -2,6 +2,7 @@ import {
 	AnswerEngineEvents,
 	findLatestByEventType,
 } from "@/app/api/bot/answer-engine/events";
+import { useChat } from "ai/react";
 import { useEffect, useState } from "react";
 
 export type Paper = {
@@ -10,11 +11,19 @@ export type Paper = {
 	published: string;
 };
 
-export const usePapers = (data: AnswerEngineEvents[]) => {
-	const [currentIndex, setCurrentIndex] = useState(-1);
-	const [papers, setPapers] = useState<Paper[]>([]);
+type Props = {
+	data: ReturnType<typeof useChat>["data"];
+	fallback?: Paper[];
+};
 
-	const { index, hits } = findLatestByEventType(data, "papers-fetched");
+export const usePapers = ({ data, fallback = [] }: Props) => {
+	const [currentIndex, setCurrentIndex] = useState(-1);
+	const [papers, setPapers] = useState<Paper[]>(fallback);
+
+	const { index, hits } = findLatestByEventType(
+		data as AnswerEngineEvents[],
+		"papers-fetched",
+	);
 
 	useEffect(() => {
 		if (hits?.length && index !== currentIndex) {

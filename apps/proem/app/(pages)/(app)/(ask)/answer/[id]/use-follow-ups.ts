@@ -2,14 +2,15 @@ import {
 	AnswerEngineEvents,
 	findLatestByEventType,
 } from "@/app/api/bot/answer-engine/events";
+import { useChat } from "ai/react";
 import { useEffect, useState } from "react";
 
-export const useFollowUps = (data: AnswerEngineEvents[]) => {
+export const useFollowUps = (data: ReturnType<typeof useChat>["data"]) => {
 	const [currentIndex, setCurrentIndex] = useState(-1);
 	const [followUps, setFollowUps] = useState<string[]>([]);
 
 	const { index, hits } = findLatestByEventType(
-		data,
+		data as AnswerEngineEvents[],
 		"follow-up-questions-generated",
 	);
 
