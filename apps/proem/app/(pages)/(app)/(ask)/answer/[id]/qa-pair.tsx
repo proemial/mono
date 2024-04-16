@@ -9,6 +9,7 @@ import { ChatActionBarAsk } from "@/components/chat-action-bar-ask";
 import { ChatArticle } from "@/components/chat-article";
 import { ChatQuestion } from "@/components/chat-question";
 import { CollapsibleSection } from "@/components/collapsible-section";
+import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { PaperCardAsk } from "@/components/paper-card-ask";
 import { ChatAnswerSkeleton, ChatPapersSkeleton } from "@/components/skeletons";
 import { Header4, ScrollArea, ScrollBar } from "@proemial/shadcn-ui";
@@ -56,18 +57,17 @@ export const QaPair = ({ question, answer, data, loading }: Props) => {
 					}
 					extra={papers.length}
 				>
-					<ScrollArea className="w-full pb-4 rounded-md whitespace-nowrap">
-						<div className="flex space-x-3 w-max">
-							{papers.map((paper, index) => (
-								<PaperCardAsk
-									key={index}
-									paper={paper}
-									index={`${index + 1}`}
-								/>
-							))}
-						</div>
-						<ScrollBar orientation="horizontal" />
-					</ScrollArea>
+					<HorisontalScrollArea>
+						{papers.map((paper, index) => (
+							<PaperCardAsk
+								key={index}
+								date={paper?.published}
+								title={paper?.title}
+								loading={!paper}
+								index={`${index + 1}`}
+							/>
+						))}
+					</HorisontalScrollArea>
 				</CollapsibleSection>
 			)}
 			{loading && papers && <ChatAnswerSkeleton />}

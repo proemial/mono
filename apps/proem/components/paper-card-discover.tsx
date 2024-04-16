@@ -1,8 +1,18 @@
 import { PaperCard, PaperCardProps } from "@/components/paper-card";
+import { CardBullet } from "@proemial/shadcn-ui";
 import { Globe } from "lucide-react";
 
-type PaperCardDiscoverProps = Omit<PaperCardProps, "bullet">;
+type PaperCardDiscoverProps = Omit<PaperCardProps, "header">;
 
 export function PaperCardDiscover(props: PaperCardDiscoverProps) {
-	return <PaperCard {...props} bullet={<Globe className="size-4" />} />;
+	return (
+		<PaperCard
+			{...props}
+			header={
+				<CardBullet>
+					<Globe className="size-4" />
+				</CardBullet>
+			}
+		/>
+	);
 }

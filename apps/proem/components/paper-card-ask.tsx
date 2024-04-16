@@ -1,46 +1,15 @@
-import { PapersFetched } from "@/app/api/bot/answer-engine/events";
-import {
-	Card,
-	CardBullet,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-	Icons,
-} from "@proemial/shadcn-ui";
+import { PaperCard, PaperCardProps } from "@/components/paper-card";
+import { CardBullet } from "@proemial/shadcn-ui";
 
-interface PaperCardAskProps {
-	paper: PapersFetched[number] | undefined;
+type PaperCardAskProps = Omit<PaperCardProps, "header"> & {
 	index: string;
-}
+};
 
-export function PaperCardAsk({ paper, index }: PaperCardAskProps) {
+export function PaperCardAsk({ index, ...rest }: PaperCardAskProps) {
 	return (
-		<Card variant="paper">
-			<CardHeader variant="paperAsk">
-				<CardBullet variant="numbered">{index}</CardBullet>
-				{paper && (
-					<CardDescription variant="paperDate">
-						{paper.published}
-					</CardDescription>
-				)}
-			</CardHeader>
-			<CardContent variant="paperAsk">
-				{paper && <CardTitle variant="paper">{paper.title}</CardTitle>}
-				{!paper && (
-					<div className="flex items-center justify-center mx-auto size-24">
-						<Icons.loader />
-					</div>
-				)}
-			</CardContent>
-			{/* {paper && (
-				<CardFooter>
-					<CardDescription variant="paperPublisher">
-						{paper.publisher}
-					</CardDescription>
-				</CardFooter>
-			)} */}
-		</Card>
+		<PaperCard
+			{...rest}
+			header={<CardBullet variant="numbered">{index}</CardBullet>}
+		/>
 	);
 }

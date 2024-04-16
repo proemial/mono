@@ -1,17 +1,16 @@
 import { generateStarters } from "@/app/prompts/starters";
-import { ButtonScrollToBottom } from "@/components/button-scroll-to-bottom";
 import { ChatActionBarDiscover } from "@/components/chat-action-bar-discover";
 import { ChatArticle } from "@/components/chat-article";
-import { ChatPanel } from "@/components/chat-panel";
 import { ChatQA } from "@/components/chat-qa";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
 import { CollapsibleSection } from "@/components/collapsible-section";
+import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { PaperCardDiscover } from "@/components/paper-card-discover";
 import { PaperCardDiscoverProfile } from "@/components/paper-card-discover-profile";
 import { fetchPaper } from "@/old/(pages)/(app)/oa/[id]/fetch-paper";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
-import { Header4, ScrollArea, ScrollBar } from "@proemial/shadcn-ui";
+import { Header4 } from "@proemial/shadcn-ui";
 import { FileText } from "lucide-react";
 import { notFound } from "next/navigation";
 
@@ -45,21 +44,16 @@ export default async function ReaderPage({ params }: Props) {
 					</div>
 				}
 			>
-				<div className="-mx-3">
-					<ScrollArea className="w-full">
-						<div className="flex space-x-3 w-max py-4 px-3">
-							<PaperCardDiscover
-								title={paper.data.title}
-								date={paper.data.publication_date}
-								publisher={"American Physical Society"}
-							/>
-							{paper.data.authorships.map((author) => (
-								<PaperCardDiscoverProfile name={author.author.display_name} />
-							))}
-						</div>
-						<ScrollBar orientation="horizontal" />
-					</ScrollArea>
-				</div>
+				<HorisontalScrollArea>
+					<PaperCardDiscover
+						title={paper.data.title}
+						date={paper.data.publication_date}
+						publisher={"American Physical Society"}
+					/>
+					{paper.data.authorships.map((author) => (
+						<PaperCardDiscoverProfile name={author.author.display_name} />
+					))}
+				</HorisontalScrollArea>
 			</CollapsibleSection>
 
 			<ChatArticle
@@ -74,10 +68,6 @@ export default async function ReaderPage({ params }: Props) {
 			<ChatQA />
 
 			<ChatSuggestedFollowups suggestions={starters} />
-
-			{/* {state !== "empty" && <ButtonScrollToBottom />} */}
-
-			{/* <ChatPanel state={state} /> */}
 		</div>
 	);
 }

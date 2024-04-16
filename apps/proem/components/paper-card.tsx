@@ -6,35 +6,53 @@ import {
 	CardFooter,
 	CardHeader,
 	CardTitle,
+	Icons,
 } from "@proemial/shadcn-ui";
 import { Globe } from "lucide-react";
 
 export type PaperCardProps = {
-	date: string;
+	date?: string;
+	header: React.ReactNode;
+	loading?: boolean;
+	publisher?: string;
 	title: string;
-	publisher: string;
-	bullet: React.ReactNode;
 };
 
-export function PaperCard({ date, title, publisher }: PaperCardProps) {
+export function PaperCard({
+	date,
+	title,
+	publisher,
+	header,
+	loading,
+}: PaperCardProps) {
 	return (
 		<Card variant="paper">
 			<CardHeader>
-				<CardBullet>
-					<Globe className="size-4" />
-				</CardBullet>
+				{header}
 				<CardDescription variant="paperDate">
-					{date.replaceAll("-", ".")}
+					{date?.replaceAll("-", ".")}
 				</CardDescription>
 			</CardHeader>
-			<CardContent variant="paper">
-				<CardTitle variant="paper" className="line-clamp-4">
-					{title}
-				</CardTitle>
+
+			<CardContent>
+				{loading ? (
+					<div className="flex items-center justify-center mx-auto size-24">
+						<Icons.loader />
+					</div>
+				) : (
+					<CardTitle variant="paper" className="line-clamp-4">
+						{title}
+					</CardTitle>
+				)}
 			</CardContent>
-			<CardFooter className="pb-0">
-				<CardDescription variant="paperPublisher">{publisher}</CardDescription>
-			</CardFooter>
+
+			{publisher && (
+				<CardFooter>
+					<CardDescription variant="paperPublisher">
+						{publisher}
+					</CardDescription>
+				</CardFooter>
+			)}
 		</Card>
 	);
 }

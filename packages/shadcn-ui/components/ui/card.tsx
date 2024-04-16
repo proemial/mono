@@ -5,22 +5,24 @@ import { VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/utils";
 
-const cardVariants = cva("rounded-2xl bg-card text-card-foreground shadow", {
-	variants: {
-		variant: {
-			default: "",
-			paper: "w-40 h-48",
-		},
-	},
-});
-
-const cardHeaderVariants = cva(
-	"flex flex-row place-content-between p-2.5 items-center ",
+const cardVariants = cva(
+	"rounded-2xl bg-card text-card-foreground shadow p-2.5",
 	{
 		variants: {
 			variant: {
 				default: "",
-				paperAsk: "",
+				paper: "w-40 h-48",
+			},
+		},
+	},
+);
+
+const cardHeaderVariants = cva(
+	"flex flex-row place-content-between items-center",
+	{
+		variants: {
+			variant: {
+				default: "",
 			},
 		},
 		defaultVariants: {
@@ -49,7 +51,8 @@ const cardDescriptionVariants = cva("text-2xs text-foreground uppercase", {
 		variant: {
 			default: "",
 			paperDate: "",
-			paperPublisher: "uppercase text-wrap text-center whitespace-normal",
+			paperPublisher:
+				"uppercase text-wrap text-center whitespace-normal mx-auto",
 			paperCoAuthor:
 				"text-2xs mx-auto text-foreground uppercase text-wrap text-center whitespace-normal",
 		},
@@ -59,17 +62,15 @@ const cardDescriptionVariants = cva("text-2xs text-foreground uppercase", {
 	},
 });
 
-const cardContentVariants = cva("", {
+const cardContentVariants = cva("pt-6 pb-3.5", {
 	variants: {
 		variant: {
 			default: "",
-			paper: "p-4",
-			paperAsk: "p-4 flex place-items-center",
 		},
 	},
 });
 
-const cardFooterVariants = cva("flex items-center p-6 pt-0", {
+const cardFooterVariants = cva("flex items-center", {
 	variants: {
 		variant: {
 			default: "",
