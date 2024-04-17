@@ -39,7 +39,7 @@ export const Answer = ({
 		stop,
 	} = useChat({
 		sendExtraMessageFields: true,
-		id: "hardcoded",
+		id: initialQuestion,
 		api: "/api/bot/ask2",
 		initialMessages,
 		body: { slug: sessionSlug, userId: user?.id },
@@ -92,7 +92,12 @@ export const Answer = ({
 					<ChatSuggestedFollowups suggestions={followUps} onClick={append} />
 				)}
 			</div>
-			<ChatInput placeholder="Ask a follow-up question…" onSend={append} isLoading={isLoading} stop={stop} />
+			<ChatInput
+				placeholder="Ask a follow-up question…"
+				onSend={append}
+				isLoading={isLoading}
+				stop={stop}
+			/>
 		</div>
 	);
 };
