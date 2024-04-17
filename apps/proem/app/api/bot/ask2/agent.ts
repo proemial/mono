@@ -27,7 +27,7 @@ export const buildAgent = async (
 	const prompt = ChatPromptTemplate.fromMessages([
 		["system", askAgentPrompt],
 		new MessagesPlaceholder("chatHistory"),
-		["human", "Based on science, {input}"],
+		["human", "{input}"],
 		new MessagesPlaceholder("agent_scratchpad"),
 	]);
 	const isGpt4FeatureEnabled = (await getFeatureFlag("askGpt4")) ?? false;
