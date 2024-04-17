@@ -53,7 +53,7 @@ export default async function ReaderPage({ params }: Props) {
 						<PaperCardDiscover
 							title={paper.data.title}
 							date={paper.data.publication_date}
-							publisher={paper.data.primary_location.source.display_name}
+							publisher={paper.data.primary_location.source?.display_name ?? ""}
 						/>
 					</a>
 					{paper.data.authorships.map((author) => (
