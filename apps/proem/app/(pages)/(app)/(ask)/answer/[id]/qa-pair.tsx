@@ -13,8 +13,9 @@ import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { PaperCardAsk } from "@/components/paper-card-ask";
 import { ChatAnswerSkeleton, ChatPapersSkeleton } from "@/components/skeletons";
 import { Header4 } from "@proemial/shadcn-ui";
-import { Message } from "ai/react";
 import { File02 } from "@untitled-ui/icons-react";
+import { Message } from "ai/react";
+import { useThrobberStatus } from "./use-throbber-status";
 
 type QaPairProps = {
 	question: Message;
@@ -26,6 +27,7 @@ type QaPairProps = {
 export const QaPair = ({ question, answer, data, loading }: QaPairProps) => {
 	const { papers } = findByEventType(data, "papers-fetched", question.id) ?? {};
 	const isQuestionByCurrentUser = question.id !== SHARED_ANSWER_TRANSACTION_ID;
+	const throbberStatus = useThrobberStatus();
 
 	return (
 		<div className="space-y-6">
@@ -33,9 +35,7 @@ export const QaPair = ({ question, answer, data, loading }: QaPairProps) => {
 				question={question.content}
 				isQuestionByCurrentUser={isQuestionByCurrentUser}
 			/>
-			{!papers && loading && (
-				<ChatPapersSkeleton statusText="Searching research papers" />
-			)}
+			{!papers && loading && <ChatPapersSkeleton statusText={throbberStatus} />}
 			{papers && (
 				<CollapsibleSection
 					trigger={
