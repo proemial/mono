@@ -19,6 +19,10 @@ h3 {
   font-size: large;
 }
 
+.max-w-screen-md {
+  max-width: 550px;
+}
+
 @layer base {
   :root {
     --background: 0 0% 96%;
