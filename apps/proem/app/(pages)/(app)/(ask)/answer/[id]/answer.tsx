@@ -72,28 +72,27 @@ export const Answer = ({
 
 	return (
 		<div className="flex flex-col gap-10 flex-grow justify-between">
-			<div className="flex flex-col gap-10">
-				{messages
-					.filter((message) => message.role === "user")
-					.map((message, index) => (
-						<QaPair
-							key={message.id}
-							question={message}
-							answer={getCorrespondingAnswerMessage(index, messages)}
-							data={answerEngineData}
-							loading={
-								isLoading && !getCorrespondingAnswerMessage(index, messages)
-							}
-						/>
-					))}
-			</div>
-			<div>
+			<div className="flex flex-col flex-grow gap-10">
+				<div className="flex flex-col flex-grow gap-10">
+					{messages
+						.filter((message) => message.role === "user")
+						.map((message, index) => (
+							<QaPair
+								key={message.id}
+								question={message}
+								answer={getCorrespondingAnswerMessage(index, messages)}
+								data={answerEngineData}
+								loading={
+									isLoading && !getCorrespondingAnswerMessage(index, messages)
+								}
+							/>
+						))}
+				</div>
 				{!isLoading && (
 					<ChatSuggestedFollowups suggestions={followUps} onClick={append} />
 				)}
-
-				<ChatInput placeholder="Ask a follow-up question…" onSend={append} isLoading={isLoading} stop={stop} />
 			</div>
+			<ChatInput placeholder="Ask a follow-up question…" onSend={append} isLoading={isLoading} stop={stop} />
 		</div>
 	);
 };
