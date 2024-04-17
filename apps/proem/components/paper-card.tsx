@@ -8,6 +8,7 @@ import {
 	CardTitle,
 	Icons,
 } from "@proemial/shadcn-ui";
+import Link from "next/link";
 
 export type PaperCardProps = {
 	date?: string;
@@ -53,5 +54,48 @@ export function PaperCard({
 				</CardFooter>
 			)}
 		</Card>
+	);
+}
+
+// Created just to test navigation between Ask and Read - delete once Read works!
+export function PaperCardWithLink({
+	date,
+	title,
+	publisher,
+	header,
+	loading,
+	link,
+}: PaperCardProps & { link: string }) {
+	return (
+		<Link href={link}>
+			<Card variant="paper">
+				<CardHeader>
+					{header}
+					<CardDescription variant="paperDate">
+						{date?.replaceAll("-", ".")}
+					</CardDescription>
+				</CardHeader>
+
+				<CardContent>
+					{loading ? (
+						<div className="flex items-center justify-center mx-auto size-24">
+							<Icons.loader />
+						</div>
+					) : (
+						<CardTitle variant="paper" className="line-clamp-4">
+							{title}
+						</CardTitle>
+					)}
+				</CardContent>
+
+				{publisher && (
+					<CardFooter>
+						<CardDescription variant="paperPublisher">
+							{publisher}
+						</CardDescription>
+					</CardFooter>
+				)}
+			</Card>
+		</Link>
 	);
 }

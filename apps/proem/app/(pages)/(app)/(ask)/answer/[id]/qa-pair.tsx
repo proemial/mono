@@ -78,6 +78,7 @@ export const QaPair = ({
 									title={paper?.title}
 									loading={!paper}
 									index={`${index + 1}`}
+									link={`/discover/${paper.link.replace("/oa/", "")}`}
 								/>
 							))}
 						</HorisontalScrollArea>
