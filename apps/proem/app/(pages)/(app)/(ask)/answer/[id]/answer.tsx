@@ -71,27 +71,25 @@ export const Answer = ({
 	const followUps = getFollowUps(answerEngineData);
 
 	return (
-		<div className="flex flex-col gap-10 flex-grow justify-between">
-			<div className="flex flex-col flex-grow gap-10">
-				<div className="flex flex-col flex-grow gap-10">
-					{messages
-						.filter((message) => message.role === "user")
-						.map((message, index) => (
-							<QaPair
-								key={message.id}
-								question={message}
-								answer={getCorrespondingAnswerMessage(index, messages)}
-								data={answerEngineData}
-								followUps={
-									<ChatSuggestedFollowups
-										suggestions={followUps}
-										onClick={append}
-									/>
-								}
-								isLatest={index === Math.ceil(messages.length / 2) - 1}
-							/>
-						))}
-				</div>
+		<div className="flex flex-col gap-4 flex-grow justify-between">
+			<div className="flex flex-col gap-10">
+				{messages
+					.filter((message) => message.role === "user")
+					.map((message, index) => (
+						<QaPair
+							key={message.id}
+							question={message}
+							answer={getCorrespondingAnswerMessage(index, messages)}
+							data={answerEngineData}
+							followUps={
+								<ChatSuggestedFollowups
+									suggestions={followUps}
+									onClick={append}
+								/>
+							}
+							isLatest={index === Math.ceil(messages.length / 2) - 1}
+						/>
+					))}
 			</div>
 			<ChatInput
 				placeholder="Ask a follow-up question…"

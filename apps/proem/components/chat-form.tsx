@@ -41,31 +41,34 @@ export function ChatForm({ placeholder, onSend }: ChatFormProps) {
 		} else {
 			router.push(`/answer/${encodeURIComponent(question)}`);
 		}
-	}
+	};
 
 	const handleSubmit = (data: z.infer<typeof QuerySchema>) => {
 		askQuestion(data.question);
-	}
+	};
 
 	const handleBlur = () => {
 		// Necessary delay to fire the form when the button is clicked and goes invisible
 		setTimeout(() => setIsFocused(false), 100);
-	}
+	};
 
 	const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
 		if (e.code === "Enter") {
 			setIsFocused(false);
 			askQuestion(form.getValues("question"));
 		}
-	}
+	};
 
 	const handleChange = (textarea: HTMLTextAreaElement) => {
 		const initialHeight = 40;
 
 		// reset the height to get the correct scrollHeight
 		textarea.style.height = "inherit";
-		textarea.style.height = textarea.scrollHeight > 56 ? `${textarea.scrollHeight}px` : `${initialHeight}px`;
-	}
+		textarea.style.height =
+			textarea.scrollHeight > 56
+				? `${textarea.scrollHeight}px`
+				: `${initialHeight}px`;
+	};
 
 	return (
 		<Form {...form}>
@@ -73,16 +76,22 @@ export function ChatForm({ placeholder, onSend }: ChatFormProps) {
 				onFocus={() => setIsFocused(true)}
 				onBlur={handleBlur}
 				onSubmit={form.handleSubmit(handleSubmit)}
-				className={`${keyboardUp ? "bg-primary p-0 mb-[-24px] ml-[-24px] w-[calc(100%+48px)]" : "w-full py-4"
-					} flex gap-2 items-center`}
+				className={`${
+					keyboardUp
+						? "bg-primary p-0 mb-[-24px] ml-[-24px] w-[calc(100%+48px)]"
+						: "w-full"
+				} flex gap-2 items-center`}
 			>
 				<FormField
 					control={form.control}
 					name="question"
 					render={({ field }) => (
 						<FormItem
-							className={`${keyboardUp ? "rounded-none" : "rounded-3xl border border-background"
-								} w-full overflow-hidden`}
+							className={`${
+								keyboardUp
+									? "rounded-none"
+									: "rounded-3xl border border-background"
+							} w-full overflow-hidden`}
 						>
 							<FormControl>
 								<Textarea
@@ -101,8 +110,9 @@ export function ChatForm({ placeholder, onSend }: ChatFormProps) {
 					)}
 				/>
 				<Button
-					className={`${isFocused ? "visible" : "hidden"
-						} rounded-full text-foreground bg-background p-2 size-6 mr-4`}
+					className={`${
+						isFocused ? "visible" : "hidden"
+					} rounded-full text-foreground bg-background p-2 size-6 mr-4`}
 					size="icon"
 					type="submit"
 				>
