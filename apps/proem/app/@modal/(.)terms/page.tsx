@@ -15,7 +15,7 @@ export default function TermsModal() {
 
     return (
         <Drawer open>
-            <DrawerContent className="w-full h-full max-w-screen-md mx-auto">
+            <DrawerContent className="w-full h-full max-w-screen-md mx-auto rounded-none">
                 <div className="flex flex-col">
                     <DrawerHeader className="pt-0">
                         <DrawerTitle className="flex justify-between text-2xl font-normal">
