@@ -1,5 +1,4 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Button,
@@ -21,30 +20,18 @@ export const QuerySchema = z.object({
 	query: z.string(),
 });
 
-type Props = {
+export type ChatFormProps = {
 	placeholder: string;
-	isLoading?: ReturnType<typeof useChat>["isLoading"];
-	stop?: ReturnType<typeof useChat>["stop"];
 	onSend?: ReturnType<typeof useChat>["append"];
 };
 
-export function ChatForm({ placeholder, onSend, isLoading, stop }: Props) {
+export function ChatForm({ placeholder, onSend }: ChatFormProps) {
 	const [isFocused, setIsFocused] = useState(false);
 	const router = useRouter();
 
 	const form = useForm<z.infer<typeof QuerySchema>>({
 		resolver: zodResolver(QuerySchema),
 	});
-
-	if (isLoading) {
-		return (
-			<div className="sticky bottom-6 w-full flex justify-center">
-				<Button className="w-12 h-12 rounded-full" onClick={() => !!stop && stop()}>
-					<Stop className="w-6 h-6" />
-				</Button>
-			</div >
-		);
-	}
 
 	function onSubmit(data: z.infer<typeof QuerySchema>) {
 		if (onSend) {
@@ -60,44 +47,42 @@ export function ChatForm({ placeholder, onSend, isLoading, stop }: Props) {
 	}
 
 	return (
-		<div className="sticky bottom-0">
-			<Form {...form}>
-				<form
-					onFocus={() => setIsFocused(true)}
-					onBlur={onBlur}
-					onSubmit={form.handleSubmit(onSubmit)}
-					className={`${isFocused ? "bg-primary p-0 md:p-4" : "p-4"
-						} w-full flex gap-2 items-center`}
+		<Form {...form}>
+			<form
+				onFocus={() => setIsFocused(true)}
+				onBlur={onBlur}
+				onSubmit={form.handleSubmit(onSubmit)}
+				className={`${isFocused ? "bg-primary p-0 md:p-4" : "p-4"
+					} w-full flex gap-2 items-center`}
+			>
+				<FormField
+					control={form.control}
+					name="query"
+					render={({ field }) => (
+						<FormItem
+							className={`${isFocused ? "rounded-none md:rounded-3xl" : "rounded-3xl"
+								} w-full overflow-hidden`}
+						>
+							<FormControl>
+								<Textarea
+									placeholder={placeholder}
+									className="w-full h-10 pl-4 pt-[10px]"
+									{...field}
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<Button
+					className={`${isFocused ? "visible" : "hidden"
+						} rounded-full text-foreground bg-background p-2 size-6`}
+					size="icon"
+					type="submit"
 				>
-					<FormField
-						control={form.control}
-						name="query"
-						render={({ field }) => (
-							<FormItem
-								className={`${isFocused ? "rounded-none md:rounded-3xl" : "rounded-3xl"
-									} w-full overflow-hidden`}
-							>
-								<FormControl>
-									<Textarea
-										placeholder={placeholder}
-										className="w-full h-10 pl-4 pt-[10px]"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<Button
-						className={`${isFocused ? "visible" : "hidden"
-							} rounded-full text-foreground bg-background p-2 size-6`}
-						size="icon"
-						type="submit"
-					>
-						<ChevronRight />
-					</Button>
-				</form>
-			</Form>
-		</div>
+					<ChevronRight />
+				</Button>
+			</form>
+		</Form>
 	);
 }

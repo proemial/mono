@@ -1,7 +1,7 @@
 "use client";
 
 import { screenMaxWidth } from "@/app/constants";
-import { ChatForm } from "@/components/chat-form";
+import { ChatInput } from "@/components/chat-input";
 import { SelectContentSelector } from "@/components/select-content-selector";
 import { Suggestions } from "@/components/suggestions";
 
@@ -38,10 +38,10 @@ export function ChatPanel({ state }: ChatPanelProps) {
 					<Suggestions suggestions={suggestions} />
 				</>
 			)}
-			{state === "empty" && <ChatForm placeholder="Ask a question" />}
-			{state === "follow-up-ask" && <ChatForm placeholder="Ask follow-up..." />}
+			{state === "empty" && <ChatInput placeholder="Ask a question" />}
+			{state === "follow-up-ask" && <ChatInput placeholder="Ask follow-up..." />}
 			{state === "follow-up-discover" && (
-				<ChatForm placeholder="Ask this paper..." />
+				<ChatInput placeholder="Ask this paper..." />
 			)}
 		</div>
 	);

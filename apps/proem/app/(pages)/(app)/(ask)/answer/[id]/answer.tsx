@@ -6,7 +6,7 @@ import {
 	findLatestByEventType,
 } from "@/app/api/bot/answer-engine/events";
 import { useUser } from "@/app/hooks/use-user";
-import { ChatForm } from "@/components/chat-form";
+import { ChatInput } from "@/components/chat-input";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
 import { Message, useChat } from "ai/react";
 import { useEffect, useState } from "react";
@@ -71,26 +71,29 @@ export const Answer = ({
 	const followUps = getFollowUps(answerEngineData);
 
 	return (
-		<div className="flex flex-col gap-10">
-			{messages
-				.filter((message) => message.role === "user")
-				.map((message, index) => (
-					<QaPair
-						key={message.id}
-						question={message}
-						answer={getCorrespondingAnswerMessage(index, messages)}
-						data={answerEngineData}
-						loading={
-							isLoading && !getCorrespondingAnswerMessage(index, messages)
-						}
-					/>
-				))}
+		<div className="flex flex-col gap-10 flex-grow justify-between">
+			<div className="flex flex-col gap-10">
+				{messages
+					.filter((message) => message.role === "user")
+					.map((message, index) => (
+						<QaPair
+							key={message.id}
+							question={message}
+							answer={getCorrespondingAnswerMessage(index, messages)}
+							data={answerEngineData}
+							loading={
+								isLoading && !getCorrespondingAnswerMessage(index, messages)
+							}
+						/>
+					))}
+			</div>
+			<div>
+				{!isLoading && (
+					<ChatSuggestedFollowups suggestions={followUps} onClick={append} />
+				)}
 
-			{!isLoading && (
-				<ChatSuggestedFollowups suggestions={followUps} onClick={append} />
-			)}
-
-			<ChatForm placeholder="Ask a follow-up question…" onSend={append} isLoading={isLoading} stop={stop} />
+				<ChatInput placeholder="Ask a follow-up question…" onSend={append} isLoading={isLoading} stop={stop} />
+			</div>
 		</div>
 	);
 };

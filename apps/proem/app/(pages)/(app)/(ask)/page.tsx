@@ -1,4 +1,4 @@
-import { ChatForm } from "@/components/chat-form";
+import { ChatInput } from "@/components/chat-input";
 import { SelectContentSelector } from "@/components/select-content-selector";
 import { Suggestions } from "@/components/suggestions";
 
@@ -24,7 +24,7 @@ export default function AskPage() {
 				</div>
 				<Suggestions suggestions={starters} />
 			</div>
-			<ChatForm placeholder="Ask a question" />
+			<ChatInput placeholder="Ask a question" />
 		</div>
 	);
 }
