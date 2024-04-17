@@ -36,6 +36,7 @@ export const Answer = ({
 		data,
 		append,
 		isLoading,
+		stop,
 	} = useChat({
 		sendExtraMessageFields: true,
 		id: "hardcoded",
@@ -84,12 +85,12 @@ export const Answer = ({
 						}
 					/>
 				))}
+
 			{!isLoading && (
-				<div className="space-y-4">
-					<ChatSuggestedFollowups suggestions={followUps} onClick={append} />
-					<ChatForm placeholder="Ask a follow-up question…" onClick={append} />
-				</div>
+				<ChatSuggestedFollowups suggestions={followUps} onClick={append} />
 			)}
+
+			<ChatForm placeholder="Ask a follow-up question…" onSend={append} isLoading={isLoading} stop={stop} />
 		</div>
 	);
 };

@@ -11,7 +11,7 @@ import {
 	Textarea,
 } from "@proemial/shadcn-ui";
 import { useChat } from "ai/react";
-import { ChevronRight } from "@untitled-ui/icons-react";
+import { ChevronRight, Stop } from "@untitled-ui/icons-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -23,10 +23,12 @@ export const QuerySchema = z.object({
 
 type Props = {
 	placeholder: string;
-	onClick?: ReturnType<typeof useChat>["append"];
+	isLoading?: ReturnType<typeof useChat>["isLoading"];
+	stop?: ReturnType<typeof useChat>["stop"];
+	onSend?: ReturnType<typeof useChat>["append"];
 };
 
-export function ChatForm({ placeholder, onClick }: Props) {
+export function ChatForm({ placeholder, onSend, isLoading, stop }: Props) {
 	const [isFocused, setIsFocused] = useState(false);
 	const router = useRouter();
 
@@ -34,9 +36,19 @@ export function ChatForm({ placeholder, onClick }: Props) {
 		resolver: zodResolver(QuerySchema),
 	});
 
+	if (isLoading) {
+		return (
+			<div className="sticky bottom-6 w-full flex justify-center">
+				<Button className="w-12 h-12 rounded-full" onClick={() => !!stop && stop()}>
+					<Stop className="w-6 h-6" />
+				</Button>
+			</div >
+		);
+	}
+
 	function onSubmit(data: z.infer<typeof QuerySchema>) {
-		if (onClick) {
-			onClick({ role: "user", content: data.query });
+		if (onSend) {
+			onSend({ role: "user", content: data.query });
 		} else {
 			router.push(`/answer/${encodeURIComponent(data.query)}`);
 		}
@@ -48,42 +60,44 @@ export function ChatForm({ placeholder, onClick }: Props) {
 	}
 
 	return (
-		<Form {...form}>
-			<form
-				onFocus={() => setIsFocused(true)}
-				onBlur={onBlur}
-				onSubmit={form.handleSubmit(onSubmit)}
-				className={`${isFocused ? "bg-primary p-0 md:p-4" : "p-4"
-					} w-full flex gap-2 items-center`}
-			>
-				<FormField
-					control={form.control}
-					name="query"
-					render={({ field }) => (
-						<FormItem
-							className={`${isFocused ? "rounded-none md:rounded-3xl" : "rounded-3xl"
-								} w-full overflow-hidden`}
-						>
-							<FormControl>
-								<Textarea
-									placeholder={placeholder}
-									className="w-full h-10 pl-4 pt-[10px]"
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<Button
-					className={`${isFocused ? "visible" : "hidden"
-						} rounded-full text-foreground bg-background p-2 size-6`}
-					size="icon"
-					type="submit"
+		<div className="sticky bottom-0">
+			<Form {...form}>
+				<form
+					onFocus={() => setIsFocused(true)}
+					onBlur={onBlur}
+					onSubmit={form.handleSubmit(onSubmit)}
+					className={`${isFocused ? "bg-primary p-0 md:p-4" : "p-4"
+						} w-full flex gap-2 items-center`}
 				>
-					<ChevronRight />
-				</Button>
-			</form>
-		</Form>
+					<FormField
+						control={form.control}
+						name="query"
+						render={({ field }) => (
+							<FormItem
+								className={`${isFocused ? "rounded-none md:rounded-3xl" : "rounded-3xl"
+									} w-full overflow-hidden`}
+							>
+								<FormControl>
+									<Textarea
+										placeholder={placeholder}
+										className="w-full h-10 pl-4 pt-[10px]"
+										{...field}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<Button
+						className={`${isFocused ? "visible" : "hidden"
+							} rounded-full text-foreground bg-background p-2 size-6`}
+						size="icon"
+						type="submit"
+					>
+						<ChevronRight />
+					</Button>
+				</form>
+			</Form>
+		</div>
 	);
 }
