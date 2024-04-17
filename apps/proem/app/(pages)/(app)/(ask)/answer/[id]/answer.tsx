@@ -82,15 +82,16 @@ export const Answer = ({
 								question={message}
 								answer={getCorrespondingAnswerMessage(index, messages)}
 								data={answerEngineData}
-								loading={
-									isLoading && !getCorrespondingAnswerMessage(index, messages)
+								followUps={
+									<ChatSuggestedFollowups
+										suggestions={followUps}
+										onClick={append}
+									/>
 								}
+								isLatest={index === Math.ceil(messages.length / 2) - 1}
 							/>
 						))}
 				</div>
-				{!isLoading && (
-					<ChatSuggestedFollowups suggestions={followUps} onClick={append} />
-				)}
 			</div>
 			<ChatInput
 				placeholder="Ask a follow-up question…"
