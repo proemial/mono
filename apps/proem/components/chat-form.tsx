@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useVisualViewport } from "@/utils/useVisualViewport";
 
 export const QuerySchema = z.object({
 	query: z.string(),
@@ -26,6 +27,7 @@ export type ChatFormProps = {
 };
 
 export function ChatForm({ placeholder, onSend }: ChatFormProps) {
+	const { keyboardUp } = useVisualViewport();
 	const [isFocused, setIsFocused] = useState(false);
 	const router = useRouter();
 
@@ -52,7 +54,7 @@ export function ChatForm({ placeholder, onSend }: ChatFormProps) {
 				onFocus={() => setIsFocused(true)}
 				onBlur={onBlur}
 				onSubmit={form.handleSubmit(onSubmit)}
-				className={`${isFocused ? "bg-primary p-0 md:p-4" : "p-4"
+				className={`${keyboardUp ? "bg-primary p-0 mb-[-28px]" : "py-4"
 					} w-full flex gap-2 items-center`}
 			>
 				<FormField
@@ -76,7 +78,7 @@ export function ChatForm({ placeholder, onSend }: ChatFormProps) {
 				/>
 				<Button
 					className={`${isFocused ? "visible" : "hidden"
-						} rounded-full text-foreground bg-background p-2 size-6`}
+						} rounded-full text-foreground bg-background p-2 size-6 mr-4`}
 					size="icon"
 					type="submit"
 				>
