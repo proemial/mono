@@ -1,4 +1,5 @@
 import { PageHeader } from "@/app/components/page-header";
+import { screenMaxWidth } from "@/app/constants";
 import { ReactNode } from "react";
 
 type Props = {
@@ -11,7 +12,7 @@ export default function WithHeader({ title, children, action }: Props) {
 	return (
 		<>
 			<PageHeader title={title} action={action} />
-			<div className="w-full h-full max-w-screen-md mx-auto py-14">
+			<div className={`${screenMaxWidth} w-full h-full mx-auto py-14`}>
 				{children}
 			</div>
 		</>

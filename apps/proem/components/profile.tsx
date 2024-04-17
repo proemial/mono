@@ -9,8 +9,7 @@ import {
 } from "@proemial/shadcn-ui";
 import { ProfileYou } from "@/components/profile-you";
 import { Menu05, XClose } from "@untitled-ui/icons-react";
-
-// TODO: Move max-w-screen-md to constant
+import { screenMaxWidth } from "@/app/constants";
 
 export function Profile() {
 	return (
@@ -20,7 +19,7 @@ export function Profile() {
 					<Menu05 className="p-1" />
 				</Button>
 			</DrawerTrigger>
-			<DrawerContent className="w-full h-full max-w-screen-md mx-auto rounded-none">
+			<DrawerContent className={`${screenMaxWidth} w-full h-full mx-auto rounded-none`}>
 				<div className="flex flex-col gap-6">
 					<DrawerHeader className="pt-0">
 						<DrawerTitle className="flex justify-end text-2xl font-normal">

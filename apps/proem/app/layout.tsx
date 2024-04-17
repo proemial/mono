@@ -8,6 +8,7 @@ import { Metadata, Viewport } from "next";
 import { Lato as FontSans } from "next/font/google";
 import { headers } from "next/headers";
 import { ReactNode } from "react";
+import { screenMaxWidth } from "./constants";
 
 export const viewport: Viewport = {
 	width: "device-width",
@@ -75,7 +76,7 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 							enableSystem
 							disableTransitionOnChange
 						>
-							<div className="max-w-screen-md mx-auto min-h-screen flex flex-col">
+							<div className={`${screenMaxWidth} mx-auto min-h-screen flex flex-col`}>
 								<main className="w-full flex flex-col flex-grow">
 									{children}
 								</main>

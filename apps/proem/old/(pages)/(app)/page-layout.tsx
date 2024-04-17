@@ -2,6 +2,7 @@ import { MainMenuUnfixed } from "@/app/components/menu/menu";
 import { PageHeaderUnfixed } from "@/app/components/page-header";
 import { ReactNode } from "react";
 import { HideOnInput } from "./page-layout-focus";
+import { screenMaxWidth } from "@/app/constants";
 
 type Props = {
 	title: string;
@@ -13,7 +14,7 @@ export function PageLayout({ title, children, action }: Props) {
 	const [first, second] = Array.isArray(children) ? children : [children, null];
 
 	return (
-		<div className="flex flex-col w-full max-w-screen-md min-h-full">
+		<div className={`${screenMaxWidth} flex flex-col w-full min-h-full`}>
 			<div className="sticky top-0 z-50 w-full pb-2 bg-black flex-0 shadow-bottom">
 				<PageHeaderUnfixed title={title} action={action} />
 			</div>
