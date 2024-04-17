@@ -1,6 +1,7 @@
 type Props = {
 	size?: "sm" | "lg";
 	includeName?: boolean;
+	className?: string; // Can be used to change the color of the logo (e.g. "text-blue-500")
 };
 
 const sizes = {
@@ -8,26 +9,21 @@ const sizes = {
 	lg: { height: 96, width: 64 },
 };
 
-export function ProemLogo({ size = "lg", includeName }: Props) {
+export function ProemLogo({ size = "lg", includeName, className = "" }: Props) {
 	const { height, width } = sizes[size];
 
 	return (
-		<div className="flex flex-col items-center gap-6">
+		<div
+			className={`flex flex-col items-center gap-6 fill-current ${className}`}
+		>
 			<svg
 				width={width}
 				height={height}
-				viewBox="0 0 64 96"
-				fill="none"
+				viewBox="0 0 26 39"
 				xmlns="http://www.w3.org/2000/svg"
 			>
-				<path
-					d="M0 2.1729V29.8542C0 31.0145 0.994929 32.009 2.15568 32.009H29.8479C31.0086 32.009 32.0035 33.0036 32.0035 34.1639V61.8452C32.0035 63.0055 32.9985 64 34.1592 64H61.8443C63.0051 64 64 63.0055 64 61.8452V2.1729C64 1.01261 63.0051 0.0180738 61.8443 0.0180738H2.15568C0.829108 -0.147682 0 0.846854 0 2.1729Z"
-					fill="#7DFA86"
-				/>
-				<path
-					d="M29.8277 96.0035H2.15422C0.994257 96.0035 0 95.0086 0 93.8478V66.1557C0 64.9949 0.994257 64 2.15422 64H29.8277C30.9877 64 31.9819 64.9949 31.9819 66.1557V93.8478C32.1476 95.0086 31.1534 96.0035 29.8277 96.0035Z"
-					fill="#7DFA86"
-				/>
+				<path d="M0 0.869162V11.9417C0 12.4058 0.397972 12.8036 0.862272 12.8036H11.9391C12.4034 12.8036 12.8014 13.2014 12.8014 13.6655V24.7381C12.8014 25.2022 13.1994 25.6 13.6637 25.6H24.7377C25.202 25.6 25.6 25.2022 25.6 24.7381V0.869162C25.6 0.405044 25.202 0.00722954 24.7377 0.00722954H0.862272C0.331643 -0.059073 0 0.338742 0 0.869162Z" />
+				<path d="M11.9311 38.4014H0.861689C0.397703 38.4014 0 38.0034 0 37.5391V26.4622C0 25.9979 0.397703 25.6 0.861689 25.6H11.9311C12.3951 25.6 12.7928 25.9979 12.7928 26.4622V37.5391C12.8591 38.0034 12.4614 38.4014 11.9311 38.4014Z" />
 			</svg>
 
 			{includeName && <ProemLogoText />}
