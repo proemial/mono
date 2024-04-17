@@ -15,8 +15,8 @@ export default function AskPage() {
 					<div className="flex justify-end">
 						<SelectContentSelector
 							selector={[
-								{ value: "popular", label: "Popular" },
-								{ value: "trending", label: "Trending", disabled: true },
+								{ value: "trending", label: "Trending" },
+								{ value: "popular", label: "Popular", disabled: true },
 								{ value: "curious", label: "Curious", disabled: true },
 							]}
 						/>
