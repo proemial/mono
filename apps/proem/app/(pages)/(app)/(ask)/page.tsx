@@ -1,14 +1,11 @@
 import { ChatInput } from "@/components/chat-input";
 import { SelectContentSelector } from "@/components/select-content-selector";
 import { Suggestions } from "@/components/suggestions";
+import { getThreeRandomStarters } from "./starters";
 
 export default function AskPage() {
 	// TODO: Fetch top nice starters from DB
-	const starters = [
-		"Does organic farming produce more greenhouse gasses?",
-		"How can I lower my blood pressure?",
-		"Have low-fat diets increased obesity?",
-	];
+	const starters = getThreeRandomStarters();
 
 	return (
 		<div className="flex flex-col gap-10 flex-grow justify-between">
