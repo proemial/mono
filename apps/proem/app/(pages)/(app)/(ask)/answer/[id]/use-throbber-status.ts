@@ -12,15 +12,13 @@ export const useThrobberStatus = () => {
 	const [message, setMessage] = useState<string>(MESSAGES[0]);
 
 	useEffect(() => {
-		if (message === MESSAGES[0]) {
-			(async () => {
-				const generator = generateStatusMessage();
-				for await (const statusMessage of generator) {
-					setMessage(statusMessage);
-				}
-			})();
-		}
-	}, [message]);
+		(async () => {
+			const generator = generateStatusMessage();
+			for await (const statusMessage of generator) {
+				setMessage(statusMessage);
+			}
+		})();
+	}, []);
 
 	return message;
 };

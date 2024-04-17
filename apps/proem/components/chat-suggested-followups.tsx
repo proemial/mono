@@ -3,8 +3,8 @@
 import { Suggestions, SuggestionsProps } from "@/components/suggestions";
 import { Header4 } from "@proemial/shadcn-ui";
 import { useChat } from "ai/react";
-import { SelectContentSelector } from "./select-content-selector";
 import { GanttChart } from "./icons/GanttChart";
+import { SelectContentSelector } from "./select-content-selector";
 
 type ChatSuggestedFollowupsProps = Pick<SuggestionsProps, "suggestions"> & {
 	onClick?: ReturnType<typeof useChat>["append"];
@@ -25,8 +25,8 @@ export function ChatSuggestedFollowups({
 					<SelectContentSelector
 						selector={[
 							{ value: "popular", label: "Popular" },
-							{ value: "trending", label: "Trending" },
-							{ value: "curious", label: "Curious" },
+							{ value: "trending", label: "Trending", disabled: true },
+							{ value: "curious", label: "Curious", disabled: true },
 						]}
 					/>
 				</div>
