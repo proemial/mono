@@ -1,4 +1,5 @@
 "use client";
+import { useVisualViewport } from "@/utils/useVisualViewport";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Button,
@@ -9,16 +10,15 @@ import {
 	FormMessage,
 	Textarea,
 } from "@proemial/shadcn-ui";
+import { ChevronRight } from "@untitled-ui/icons-react";
 import { useChat } from "ai/react";
-import { ChevronRight, Stop } from "@untitled-ui/icons-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { KeyboardEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useVisualViewport } from "@/utils/useVisualViewport";
 
 export const QuerySchema = z.object({
-	query: z.string(),
+	question: z.string(),
 });
 
 export type ChatFormProps = {
@@ -35,41 +35,65 @@ export function ChatForm({ placeholder, onSend }: ChatFormProps) {
 		resolver: zodResolver(QuerySchema),
 	});
 
-	function onSubmit(data: z.infer<typeof QuerySchema>) {
+	const askQuestion = (question: string) => {
 		if (onSend) {
-			onSend({ role: "user", content: data.query });
+			onSend({ role: "user", content: question });
 		} else {
-			router.push(`/answer/${encodeURIComponent(data.query)}`);
+			router.push(`/answer/${encodeURIComponent(question)}`);
 		}
 	}
 
-	function onBlur() {
+	const handleSubmit = (data: z.infer<typeof QuerySchema>) => {
+		askQuestion(data.question);
+	}
+
+	const handleBlur = () => {
 		// Necessary delay to fire the form when the button is clicked and goes invisible
 		setTimeout(() => setIsFocused(false), 100);
+	}
+
+	const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+		if (e.code === "Enter") {
+			setIsFocused(false);
+			askQuestion(form.getValues("question"));
+		}
+	}
+
+	const handleChange = (textarea: HTMLTextAreaElement) => {
+		const initialHeight = 40;
+
+		// reset the height to get the correct scrollHeight
+		textarea.style.height = "inherit";
+		textarea.style.height = textarea.scrollHeight > 56 ? `${textarea.scrollHeight}px` : `${initialHeight}px`;
 	}
 
 	return (
 		<Form {...form}>
 			<form
 				onFocus={() => setIsFocused(true)}
-				onBlur={onBlur}
-				onSubmit={form.handleSubmit(onSubmit)}
-				className={`${keyboardUp ? "bg-primary p-0 mb-[-28px]" : "py-4"
-					} w-full flex gap-2 items-center`}
+				onBlur={handleBlur}
+				onSubmit={form.handleSubmit(handleSubmit)}
+				className={`${keyboardUp ? "bg-primary p-0 mb-[-24px] ml-[-24px] w-[calc(100%+48px)]" : "w-full py-4"
+					} flex gap-2 items-center`}
 			>
 				<FormField
 					control={form.control}
-					name="query"
+					name="question"
 					render={({ field }) => (
 						<FormItem
-							className={`${isFocused ? "rounded-none md:rounded-3xl" : "rounded-3xl"
+							className={`${keyboardUp ? "rounded-none" : "rounded-3xl border border-background"
 								} w-full overflow-hidden`}
 						>
 							<FormControl>
 								<Textarea
-									placeholder={placeholder}
-									className="w-full h-10 pl-4 pt-[10px]"
 									{...field}
+									placeholder={placeholder}
+									className="w-full h-10 pl-4"
+									onKeyDown={handleKeyDown}
+									onChange={(e) => {
+										handleChange(e.target as HTMLTextAreaElement);
+										field.onChange(e);
+									}}
 								/>
 							</FormControl>
 							<FormMessage />
