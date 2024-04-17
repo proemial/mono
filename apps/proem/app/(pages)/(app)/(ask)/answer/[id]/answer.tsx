@@ -51,7 +51,7 @@ export const Answer = ({
 		: data;
 
 	useEffectOnce(() => {
-		if (initialQuestion) {
+		if (initialQuestion && messages.length === 0) {
 			append({ role: "user", content: initialQuestion });
 		}
 	}, [initialQuestion, append]);
