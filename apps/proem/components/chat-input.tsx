@@ -7,10 +7,7 @@ import dynamic from "next/dynamic";
 import { z } from "zod";
 import { ChatFormProps } from "./chat-form";
 
-const ChatForm = dynamic(
-	() => import("./chat-form"),
-	{ ssr: false }
-)
+const ChatForm = dynamic(() => import("./chat-form"));
 
 export const QuerySchema = z.object({
 	query: z.string(),
