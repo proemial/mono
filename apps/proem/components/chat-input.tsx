@@ -3,15 +3,14 @@ import { screenMaxWidth } from "@/app/constants";
 import { Button } from "@proemial/shadcn-ui";
 import { Stop } from "@untitled-ui/icons-react";
 import { useChat } from "ai/react";
+import dynamic from "next/dynamic";
 import { z } from "zod";
 import { ChatFormProps } from "./chat-form";
-import dynamic from "next/dynamic";
 
 const ChatForm = dynamic(
 	() => import("./chat-form"),
 	{ ssr: false }
 )
-
 
 export const QuerySchema = z.object({
 	query: z.string(),

@@ -1,5 +1,5 @@
 "use client";
-import { useDeviceType, useVisualViewport } from "@/utils/useVisualViewport";
+import { useVisualViewport } from "@/utils/useVisualViewport";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Button,

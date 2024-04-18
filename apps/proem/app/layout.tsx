@@ -39,6 +39,20 @@ export const metadata: Metadata = {
 		description,
 		siteName: title,
 	},
+	icons: [
+		{
+			rel: 'icon',
+			type: 'image/x-icon',
+			url: '/favicon.ico',
+			media: '(prefers-color-scheme: light)',
+		},
+		{
+			rel: 'icon',
+			type: 'image/x-icon',
+			url: '/favicon-darkmode.ico',
+			media: '(prefers-color-scheme: dark)',
+		},
+	],
 };
 
 const fontSans = FontSans({
