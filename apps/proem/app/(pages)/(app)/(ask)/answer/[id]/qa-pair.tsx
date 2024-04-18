@@ -86,13 +86,15 @@ export const QaPair = ({
 				)}
 				{/* {isLoadingAnswer && papers && <ChatAnswerSkeleton /> // Relevant once we generate micro titles} */}
 				{answer && (
-					<ChatArticle
-						type="Answer"
-						model="GPT-4-TURBO"
-						text={answer.content}
-					/>
+					<div className="space-y-2">
+						<ChatArticle
+							type="Answer"
+							model="GPT-4-TURBO"
+							text={answer.content}
+						/>
+						{!isLoadingAnswer && <ChatActionBarAsk />}
+					</div>
 				)}
-				{!isLoadingAnswer && <ChatActionBarAsk />}
 			</div>
 			{isLatest && !isLoadingAnswer && followUps}
 		</div>
