@@ -13,15 +13,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const navItems = {
-	discover: {
-		name: "Discover",
-		href: "/discover",
-	},
-	ask: {
-		name: "Ask",
-	},
-};
+// const navItems = {
+// 	discover: {
+// 		name: "Discover",
+// 		href: "/discover",
+// 	},
+// 	ask: {
+// 		name: "Ask",
+// 	},
+// };
 
 export function NavigationMenuBar() {
 	const pathname = usePathname();
@@ -40,8 +40,8 @@ export function NavigationMenuBar() {
 					<Profile />
 				</NavigationMenuItem>
 
-				<NavigationMenuItem className="flex">
-					{/* Discover link is disabled until feature is implemented */}
+				{/* Discover link is disabled until feature is implemented */}
+				{/* <NavigationMenuItem className="flex">
 					<Link
 						href={navItems.discover.href}
 						aria-disabled
@@ -64,7 +64,7 @@ export function NavigationMenuBar() {
 					>
 						{navItems.ask.name}
 					</Link>
-				</NavigationMenuItem>
+				</NavigationMenuItem> */}
 
 				<NavigationMenuItem className="flex-none px-1">
 					<Link href="/">
