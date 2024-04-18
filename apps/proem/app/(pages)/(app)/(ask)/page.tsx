@@ -32,7 +32,9 @@ export default function AskPage() {
 					<Suggestions suggestions={starters} />
 				</div>
 			</div>
-			<ChatInput placeholder="Ask a question" />
+			<div>
+				<ChatInput placeholder="Ask a question" />
+			</div>
 		</div>
 	);
 }
