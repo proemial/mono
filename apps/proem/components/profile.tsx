@@ -20,7 +20,7 @@ export function Profile() {
 				</Button>
 			</DrawerTrigger>
 			<DrawerContent
-				className={`${screenMaxWidth} w-full h-[calc(100%-2rem)] mx-auto`}
+				className={`${screenMaxWidth} w-full h-full rounded-none mx-auto`}
 			>
 				<div className="flex flex-col gap-6">
 					<DrawerHeader className="pt-0">
