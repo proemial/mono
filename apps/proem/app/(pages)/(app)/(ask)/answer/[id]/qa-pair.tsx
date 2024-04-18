@@ -10,10 +10,10 @@ import { ChatArticle } from "@/components/chat-article";
 import { ChatQuestion } from "@/components/chat-question";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
+import { Paper } from "@/components/icons/Paper";
 import { PaperCardAsk } from "@/components/paper-card-ask";
 import { ChatPapersSkeleton } from "@/components/skeletons";
 import { Header4 } from "@proemial/shadcn-ui";
-import { File02 } from "@untitled-ui/icons-react";
 import { Message } from "ai/react";
 import { ReactNode, useEffect, useRef } from "react";
 import { useThrobberStatus } from "./use-throbber-status";
@@ -48,8 +48,9 @@ export const QaPair = ({
 	return (
 		<div
 			ref={pairRef}
-			className={`flex flex-col justify-between gap-4 ${isLatest && "min-h-[calc(100dvh-148px)]"
-				}`}
+			className={`flex flex-col justify-between gap-4 ${
+				isLatest && "min-h-[calc(100dvh-148px)]"
+			}`}
 		>
 			<div className="space-y-6">
 				<ChatQuestion
@@ -63,7 +64,7 @@ export const QaPair = ({
 					<CollapsibleSection
 						trigger={
 							<div className="flex items-center gap-4">
-								<File02 className="size-4" />
+								<Paper />
 								<Header4>Research papers evaluated</Header4>
 							</div>
 						}

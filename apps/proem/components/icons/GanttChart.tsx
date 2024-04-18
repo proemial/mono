@@ -10,19 +10,19 @@ export function GanttChart() {
 		>
 			<path
 				d="M1 1H12"
-				stroke="#2B2B2B"
+				stroke="currentColor"
 				strokeWidth="1.5"
 				strokeLinecap="round"
 			/>
 			<path
 				d="M9 6L17 6"
-				stroke="#2B2B2B"
+				stroke="currentColor"
 				strokeWidth="1.5"
 				strokeLinecap="round"
 			/>
 			<path
 				d="M1 11H8.53846"
-				stroke="#2B2B2B"
+				stroke="currentColor"
 				strokeWidth="1.5"
 				strokeLinecap="round"
 			/>
