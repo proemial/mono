@@ -35,7 +35,7 @@ export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 
 	// const { keyboardUp } = useVisualViewport();
 	// Use simulated keyboardUp, to test in desktop browsers.
-	const keyboardUp = isFocused && isMobile;
+	const keyboardUp = false; //isFocused && isMobile;
 
 	const form = useForm<z.infer<typeof QuerySchema>>({
 		resolver: zodResolver(QuerySchema),
@@ -146,17 +146,17 @@ const formStyles = {
 		variants: {
 			variant: {
 				default: "rounded-3xl border border-background",
-				focusKeyboardDown: "rounded-l-3xl border border-background",
+				focusKeyboardDown: "rounded-3xl border border-background",
 				focusKeyboardUp: "rounded-none",
 			},
 		},
 	}),
 	input: cva("w-full h-10 pl-4"),
-	button: cva("rounded-full text-foreground bg-background p-2 size-6 mr-4", {
+	button: cva("rounded-full text-foreground bg-muted p-2 size-6 mr-4", {
 		variants: {
 			variant: {
 				default: "hidden",
-				focusKeyboardDown: "visible",
+				focusKeyboardDown: "hidden",
 				focusKeyboardUp: "visible",
 			},
 		},
