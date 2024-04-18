@@ -22,7 +22,7 @@ type FormProps = ChatFormProps &
 export function ChatInput({ placeholder, onSend, isLoading, stop }: FormProps) {
 	return (
 		<div
-			className={`${screenMaxWidth} sticky bottom-8 flex justify-center h-20`}
+			className={`${screenMaxWidth} sticky bottom-6 flex justify-center h-20`}
 		>
 			{isLoading && <StopButton stop={stop} />}
 			{!isLoading && <ChatForm placeholder={placeholder} onSend={onSend} />}
@@ -33,7 +33,7 @@ export function ChatInput({ placeholder, onSend, isLoading, stop }: FormProps) {
 function StopButton({ stop }: ButtonProps) {
 	return (
 		<Button className="w-12 h-12 rounded-full" onClick={() => !!stop && stop()}>
-			<Stop className="w-6 h-6" />
+			<Stop className="w-6 h-6 animate-pulse" />
 		</Button>
 	);
 }
