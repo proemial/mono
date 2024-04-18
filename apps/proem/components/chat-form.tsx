@@ -48,6 +48,11 @@ export function ChatForm({ placeholder, onSend }: ChatFormProps) {
 		askQuestion(data.question);
 	};
 
+	const handleFocus = () => {
+		setIsFocused(true);
+		window?.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+	};
+
 	const handleBlur = () => {
 		// Necessary delay to fire the form when the button is clicked and goes invisible
 		setTimeout(() => setIsFocused(false), 100);
@@ -74,7 +79,7 @@ export function ChatForm({ placeholder, onSend }: ChatFormProps) {
 	return (
 		<Form {...form}>
 			<form
-				onFocus={() => setIsFocused(true)}
+				onFocus={handleFocus}
 				onBlur={handleBlur}
 				onSubmit={form.handleSubmit(handleSubmit)}
 				className={style("form", isFocused, keyboardUp)}
