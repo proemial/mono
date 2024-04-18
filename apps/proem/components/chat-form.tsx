@@ -50,7 +50,10 @@ export function ChatForm({ placeholder, onSend }: ChatFormProps) {
 
 	const handleFocus = () => {
 		setIsFocused(true);
-		window?.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+		setTimeout(() =>
+			window?.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }),
+			100
+		);
 	};
 
 	const handleBlur = () => {
