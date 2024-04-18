@@ -11,7 +11,7 @@ import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Header4 } from "@proemial/shadcn-ui";
 import { File02 } from "@untitled-ui/icons-react";
 
-type PaperReaderProps = {
+export type PaperReaderProps = {
 	paper: OpenAlexPaper;
 	starters: PaperChatProps["suggestions"];
 };
