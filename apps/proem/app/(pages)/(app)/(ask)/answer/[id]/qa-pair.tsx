@@ -48,9 +48,8 @@ export const QaPair = ({
 	return (
 		<div
 			ref={pairRef}
-			className={`flex flex-col justify-between gap-4 ${
-				isLatest && "min-h-[calc(100vh-160px)]"
-			}`}
+			className={`flex flex-col justify-between gap-4 ${isLatest && "min-h-[calc(100dvh-148px)]"
+				}`}
 		>
 			<div className="space-y-6">
 				<ChatQuestion
