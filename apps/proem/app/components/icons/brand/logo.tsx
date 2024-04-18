@@ -1,6 +1,7 @@
 const sizes = {
 	xs: { height: 18, width: 12 },
 	sm: { height: 24, width: 16 },
+	md: { height: 38, width: 26 },
 	lg: { height: 96, width: 64 },
 };
 
