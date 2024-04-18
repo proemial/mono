@@ -1,5 +1,5 @@
 const sizes = {
-	xs: { height: 12, width: 8 },
+	xs: { height: 18, width: 12 },
 	sm: { height: 24, width: 16 },
 	lg: { height: 96, width: 64 },
 };

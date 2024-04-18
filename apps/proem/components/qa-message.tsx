@@ -28,7 +28,7 @@ export function QAEntry({ message }: { message: any }) {
 			<MessageFooter>
 				<MessageAuthor>
 					{message.author.avatar ? (
-						<div className="size-6 bg-primary rounded-full flex justify-center items-center">
+						<div className="size-6 flex justify-center items-center">
 							<ProemLogo size="xs" />
 						</div>
 					) : (
