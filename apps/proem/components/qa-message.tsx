@@ -1,25 +1,24 @@
 import { ProemLogo } from "@/app/components/icons/brand/logo";
 import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage,
-	Button,
 	Message,
-	MessageAction,
 	MessageAuthor,
 	MessageBubble,
 	MessageContent,
 	MessageFooter,
-	MessageReplies,
 } from "@proemial/shadcn-ui";
 import { User01 } from "@untitled-ui/icons-react";
-import { ButtonHeart } from "./button-heart";
 
-export function QAEntry({ message }: { message: any }) {
+type QAMessageProps = {
+	role: string;
+	content: string;
+};
+
+export function QAMessage({ content, role }: QAMessageProps) {
+	const messageType = role === "user" ? "question" : "answer";
 	return (
-		<Message variant={message.type}>
+		<Message variant={messageType}>
 			<MessageContent>
-				<MessageBubble>{message.text}</MessageBubble>
+				<MessageBubble>{content}</MessageBubble>
 				{/* <MessageAction>
 					<ButtonHeart small />
 					<span className="leading-tight">{message.likes}</span>
@@ -27,14 +26,19 @@ export function QAEntry({ message }: { message: any }) {
 			</MessageContent>
 			<MessageFooter>
 				<MessageAuthor>
-					{message.author.avatar ? (
-						<div className="size-6 flex justify-center items-center">
-							<ProemLogo size="xs" />
-						</div>
+					{messageType === "question" ? (
+						<>
+							<User01 className=" size-6" />
+							<p>You</p>
+						</>
 					) : (
-						<User01 className=" size-6" />
+						<>
+							<div className="size-6 flex justify-center items-center">
+								<ProemLogo size="xs" />
+							</div>
+							<p>Proem</p>
+						</>
 					)}
-					<p>{message.author.name}</p>
 				</MessageAuthor>
 				{/* <MessageReplies>
 					{message.replies ? <div>{message.replies} REPLIES</div> : <></>}

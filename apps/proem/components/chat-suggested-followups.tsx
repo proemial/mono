@@ -6,7 +6,10 @@ import { useChat } from "ai/react";
 import { GanttChart } from "./icons/GanttChart";
 import { SelectContentSelector } from "./select-content-selector";
 
-type ChatSuggestedFollowupsProps = Pick<SuggestionsProps, "suggestions"> & {
+export type ChatSuggestedFollowupsProps = Pick<
+	SuggestionsProps,
+	"suggestions"
+> & {
 	onClick?: ReturnType<typeof useChat>["append"];
 };
 

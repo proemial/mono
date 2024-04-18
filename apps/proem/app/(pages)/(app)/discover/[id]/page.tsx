@@ -1,7 +1,6 @@
+import { PaperChat } from "@/app/(pages)/(app)/discover/paper-chat";
 import { generateStarters } from "@/app/prompts/starters";
 import { ChatArticle } from "@/components/chat-article";
-import { ChatQA } from "@/components/chat-qa";
-import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { PaperCardDiscover } from "@/components/paper-card-discover";
@@ -70,9 +69,11 @@ export default async function ReaderPage({ params }: Props) {
 
 			{/* <ChatActionBarDiscover /> */}
 
-			<ChatQA />
-
-			<ChatSuggestedFollowups suggestions={starters} />
+			<PaperChat
+				suggestions={starters}
+				title={paper.data.title}
+				abstract={paper.data.abstract}
+			/>
 		</div>
 	);
 }
