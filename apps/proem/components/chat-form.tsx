@@ -1,5 +1,5 @@
 "use client";
-import { useVisualViewport } from "@/utils/useVisualViewport";
+import { useDeviceType, useVisualViewport } from "@/utils/useVisualViewport";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Button,
@@ -12,6 +12,7 @@ import {
 } from "@proemial/shadcn-ui";
 import { ChevronRight } from "@untitled-ui/icons-react";
 import { useChat } from "ai/react";
+import { cva } from "class-variance-authority";
 import { useRouter } from "next/navigation";
 import { KeyboardEvent, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -76,28 +77,20 @@ export function ChatForm({ placeholder, onSend }: ChatFormProps) {
 				onFocus={() => setIsFocused(true)}
 				onBlur={handleBlur}
 				onSubmit={form.handleSubmit(handleSubmit)}
-				className={`${
-					keyboardUp
-						? "bg-primary p-0 mb-[-24px] ml-[-24px] w-[calc(100%+48px)]"
-						: "w-full"
-				} flex gap-2 items-center`}
+				className={style("form", isFocused, keyboardUp)}
 			>
 				<FormField
 					control={form.control}
 					name="question"
 					render={({ field }) => (
 						<FormItem
-							className={`${
-								keyboardUp
-									? "rounded-none"
-									: "rounded-3xl border border-background"
-							} w-full overflow-hidden`}
+							className={style("wrapper", isFocused, keyboardUp)}
 						>
 							<FormControl>
 								<Textarea
 									{...field}
 									placeholder={placeholder}
-									className="w-full h-10 pl-4"
+									className={style("input", isFocused, keyboardUp)}
 									onKeyDown={handleKeyDown}
 									onChange={(e) => {
 										handleChange(e.target as HTMLTextAreaElement);
@@ -110,9 +103,7 @@ export function ChatForm({ placeholder, onSend }: ChatFormProps) {
 					)}
 				/>
 				<Button
-					className={`${
-						isFocused ? "visible" : "hidden"
-					} rounded-full text-foreground bg-background p-2 size-6 mr-4`}
+					className={style("button", isFocused, keyboardUp)}
 					size="icon"
 					type="submit"
 				>
@@ -122,3 +113,56 @@ export function ChatForm({ placeholder, onSend }: ChatFormProps) {
 		</Form>
 	);
 }
+
+function style(item: "form" | "wrapper" | "input" | "button", isFocused: boolean, keyboardUp: boolean) {
+	const styles = {
+		form: cva(
+			"flex gap-2 items-center",
+			{
+				variants: {
+					variant: {
+						default: "w-full",
+						focusKeyboardDown: "w-full",
+						focusKeyboardUp: "bg-primary p-0 mb-[-24px] ml-[-24px] w-[calc(100%+48px)]",
+					},
+				},
+			},
+		),
+		wrapper: cva(
+			"w-full overflow-hidden",
+			{
+				variants: {
+					variant: {
+						default: "rounded-3xl border border-background",
+						focusKeyboardDown: "rounded-l-3xl border border-background",
+						focusKeyboardUp: "rounded-none",
+					},
+				},
+			},
+		),
+		input: cva(
+			"w-full h-10 pl-4",
+		),
+		button: cva(
+			"rounded-full text-foreground bg-background p-2 size-6 mr-4",
+			{
+				variants: {
+					variant: {
+						default: "hidden",
+						focusKeyboardDown: "visible",
+						focusKeyboardUp: "visible",
+					},
+				},
+			},
+		),
+	};
+
+	return styles[item]({
+		variant: keyboardUp
+			? "focusKeyboardUp"
+			: isFocused
+				? "focusKeyboardDown"
+				: "default"
+	});
+}
+

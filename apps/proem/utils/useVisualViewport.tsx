@@ -21,7 +21,7 @@ function getViewports() {
 
 function getViewportState() {
     const { viewport, visualViewport } = getViewports();
-    const keyboardUp = visualViewport.height && visualViewport.height < viewport.height;
+    const keyboardUp = !!(visualViewport.height && visualViewport.height < viewport.height);
 
     return { viewport, visualViewport, keyboardUp };
 }
