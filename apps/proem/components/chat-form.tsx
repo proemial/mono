@@ -27,7 +27,7 @@ export type ChatFormProps = {
 	onSend?: ReturnType<typeof useChat>["append"];
 };
 
-export function ChatForm({ placeholder, onSend }: ChatFormProps) {
+export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 	const { keyboardUp } = useVisualViewport();
 	const [isFocused, setIsFocused] = useState(false);
 	const router = useRouter();

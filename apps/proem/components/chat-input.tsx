@@ -4,7 +4,14 @@ import { Button } from "@proemial/shadcn-ui";
 import { Stop } from "@untitled-ui/icons-react";
 import { useChat } from "ai/react";
 import { z } from "zod";
-import { ChatForm, ChatFormProps } from "./chat-form";
+import { ChatFormProps } from "./chat-form";
+import dynamic from "next/dynamic";
+
+const ChatForm = dynamic(
+	() => import("./chat-form"),
+	{ ssr: false }
+)
+
 
 export const QuerySchema = z.object({
 	query: z.string(),
