@@ -70,8 +70,9 @@ export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 		setTimeout(() => setIsFocused(false), 100);
 	};
 
-	const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-		if (e.code === "Enter") {
+	const handleFormInput = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+		const target = e.target as HTMLTextAreaElement;
+		if (e.code === "Enter" || target.value.includes("\n")) {
 			e.preventDefault();
 			setIsFocused(false);
 			askQuestion(form.getValues("question"));
@@ -108,7 +109,8 @@ export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 									{...field}
 									placeholder={placeholder}
 									className={style("input", isFocused, keyboardUp)}
-									onKeyDown={handleKeyDown}
+									onKeyDown={handleFormInput}
+									onInput={handleFormInput}
 									onChange={(e) => {
 										handleChange(e.target as HTMLTextAreaElement);
 										field.onChange(e);
