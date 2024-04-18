@@ -1,3 +1,4 @@
+import { ProemLogo } from "@/app/components/icons/brand/logo";
 import {
 	Avatar,
 	AvatarFallback,
@@ -11,33 +12,36 @@ import {
 	MessageFooter,
 	MessageReplies,
 } from "@proemial/shadcn-ui";
+import { User01 } from "@untitled-ui/icons-react";
 import { ButtonHeart } from "./button-heart";
 
-// component that takes in a QAMessage and renders it
 export function QAEntry({ message }: { message: any }) {
 	return (
 		<Message variant={message.type}>
 			<MessageContent>
 				<MessageBubble>{message.text}</MessageBubble>
-				<MessageAction>
+				{/* <MessageAction>
 					<ButtonHeart small />
 					<span className="leading-tight">{message.likes}</span>
-				</MessageAction>
+				</MessageAction> */}
 			</MessageContent>
 			<MessageFooter>
 				<MessageAuthor>
-					<Avatar className="size-6">
-						<AvatarImage src={message.author.avatar} />
-						<AvatarFallback>CN</AvatarFallback>
-					</Avatar>
+					{message.author.avatar ? (
+						<div className="size-6 bg-primary rounded-full flex justify-center items-center">
+							<ProemLogo size="xs" />
+						</div>
+					) : (
+						<User01 className=" size-6" />
+					)}
 					<p>{message.author.name}</p>
 				</MessageAuthor>
-				<MessageReplies>
+				{/* <MessageReplies>
 					{message.replies ? <div>{message.replies} REPLIES</div> : <></>}
 					<Button variant="ghost" size="none">
 						REPLY
 					</Button>
-				</MessageReplies>
+				</MessageReplies> */}
 			</MessageFooter>
 		</Message>
 	);

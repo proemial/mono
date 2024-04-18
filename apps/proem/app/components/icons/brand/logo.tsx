@@ -1,12 +1,13 @@
-type Props = {
-	size?: "sm" | "lg";
-	includeName?: boolean;
-	className?: string; // Can be used to change the color of the logo (e.g. "text-blue-500")
-};
-
 const sizes = {
+	xs: { height: 12, width: 8 },
 	sm: { height: 24, width: 16 },
 	lg: { height: 96, width: 64 },
+};
+
+type Props = {
+	size?: keyof typeof sizes;
+	includeName?: boolean;
+	className?: string; // Can be used to change the color of the logo (e.g. "text-blue-500")
 };
 
 export function ProemLogo({ size = "lg", includeName, className = "" }: Props) {

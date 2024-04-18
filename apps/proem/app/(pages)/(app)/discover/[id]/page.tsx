@@ -1,5 +1,4 @@
 import { generateStarters } from "@/app/prompts/starters";
-import { ChatActionBarDiscover } from "@/components/chat-action-bar-discover";
 import { ChatArticle } from "@/components/chat-article";
 import { ChatQA } from "@/components/chat-qa";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
@@ -69,7 +68,7 @@ export default async function ReaderPage({ params }: Props) {
 				text={paper.data.abstract}
 			/>
 
-			<ChatActionBarDiscover />
+			{/* <ChatActionBarDiscover /> */}
 
 			<ChatQA />
 
