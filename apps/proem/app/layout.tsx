@@ -66,7 +66,7 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 					</head>
 					<body
 						className={cn(
-							"min-h-screen h-full font-sans antialiased max-w-full",
+							"min-h-[100dvh] h-full font-sans antialiased max-w-full",
 							fontSans.variable,
 						)}
 					>
@@ -79,7 +79,7 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 							<div vaul-drawer-wrapper="">
 								<div className="bg-background">
 									<div
-										className={`${screenMaxWidth} mx-auto min-h-screen flex flex-col`}
+										className={`${screenMaxWidth} mx-auto min-h-[100dvh] flex flex-col`}
 									>
 										<main className="w-full flex flex-col flex-grow">
 											{children}
