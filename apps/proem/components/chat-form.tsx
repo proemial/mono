@@ -114,50 +114,50 @@ export function ChatForm({ placeholder, onSend }: ChatFormProps) {
 	);
 }
 
-function style(item: "form" | "wrapper" | "input" | "button", isFocused: boolean, keyboardUp: boolean) {
-	const styles = {
-		form: cva(
-			"flex gap-2 items-center",
-			{
-				variants: {
-					variant: {
-						default: "w-full",
-						focusKeyboardDown: "w-full",
-						focusKeyboardUp: "bg-primary p-0 mb-[-24px] ml-[-24px] w-[calc(100%+48px)]",
-					},
+const formStyles = {
+	form: cva(
+		"flex gap-2 items-center",
+		{
+			variants: {
+				variant: {
+					default: "w-full",
+					focusKeyboardDown: "w-full",
+					focusKeyboardUp: "bg-primary p-0 mb-[-24px] ml-[-24px] w-[calc(100%+48px)]",
 				},
 			},
-		),
-		wrapper: cva(
-			"w-full overflow-hidden",
-			{
-				variants: {
-					variant: {
-						default: "rounded-3xl border border-background",
-						focusKeyboardDown: "rounded-l-3xl border border-background",
-						focusKeyboardUp: "rounded-none",
-					},
+		},
+	),
+	wrapper: cva(
+		"w-full overflow-hidden",
+		{
+			variants: {
+				variant: {
+					default: "rounded-3xl border border-background",
+					focusKeyboardDown: "rounded-l-3xl border border-background",
+					focusKeyboardUp: "rounded-none",
 				},
 			},
-		),
-		input: cva(
-			"w-full h-10 pl-4",
-		),
-		button: cva(
-			"rounded-full text-foreground bg-background p-2 size-6 mr-4",
-			{
-				variants: {
-					variant: {
-						default: "hidden",
-						focusKeyboardDown: "visible",
-						focusKeyboardUp: "visible",
-					},
+		},
+	),
+	input: cva(
+		"w-full h-10 pl-4",
+	),
+	button: cva(
+		"rounded-full text-foreground bg-background p-2 size-6 mr-4",
+		{
+			variants: {
+				variant: {
+					default: "hidden",
+					focusKeyboardDown: "visible",
+					focusKeyboardUp: "visible",
 				},
 			},
-		),
-	};
+		},
+	),
+};
 
-	return styles[item]({
+function style(item: keyof typeof formStyles, isFocused: boolean, keyboardUp: boolean) {
+	return formStyles[item]({
 		variant: keyboardUp
 			? "focusKeyboardUp"
 			: isFocused
