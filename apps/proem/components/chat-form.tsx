@@ -1,5 +1,5 @@
 "use client";
-import { useVisualViewport } from "@/utils/useVisualViewport";
+import { useDeviceType, useVisualViewport } from "@/utils/useVisualViewport";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Button,
@@ -28,9 +28,14 @@ export type ChatFormProps = {
 };
 
 export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
-	const { keyboardUp } = useVisualViewport();
-	const [isFocused, setIsFocused] = useState(false);
 	const router = useRouter();
+
+	const [isFocused, setIsFocused] = useState(false);
+	const { isMobile } = useDeviceType();
+
+	// const { keyboardUp } = useVisualViewport();
+	// Use simulated keyboardUp, to test in desktop browsers.
+	const keyboardUp = isFocused && isMobile;
 
 	const form = useForm<z.infer<typeof QuerySchema>>({
 		resolver: zodResolver(QuerySchema),
@@ -67,8 +72,10 @@ export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 
 	const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
 		if (e.code === "Enter") {
+			e.preventDefault();
 			setIsFocused(false);
 			askQuestion(form.getValues("question"));
+			return false;
 		}
 	};
 
