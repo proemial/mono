@@ -17,18 +17,18 @@ type ButtonProps = {
 	stop?: ReturnType<typeof useChat>["stop"];
 };
 
-type FormProps = ChatFormProps &
-	ButtonProps & {
-		isLoading?: ReturnType<typeof useChat>["isLoading"];
-	};
+type FormProps = ChatFormProps & ButtonProps & {
+	isLoading?: ReturnType<typeof useChat>["isLoading"];
+	onFocusChange?: (isFocused: boolean) => void;
+};
 
-export function ChatInput({ placeholder, onSend, isLoading, stop }: FormProps) {
+export function ChatInput({ placeholder, onSend, isLoading, stop, onFocusChange }: FormProps) {
 	return (
 		<div
 			className={`${screenMaxWidth} sticky bottom-0 mb-[-16px] flex justify-center items-center`}
 		>
 			{isLoading && <StopButton stop={stop} />}
-			{!isLoading && <ChatForm placeholder={placeholder} onSend={onSend} />}
+			{!isLoading && <ChatForm placeholder={placeholder} onSend={onSend} onFocusChange={onFocusChange} />}
 		</div>
 	);
 }

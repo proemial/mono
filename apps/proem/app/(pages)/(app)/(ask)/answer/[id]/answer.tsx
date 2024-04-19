@@ -68,34 +68,54 @@ export const Answer = ({
 		}
 	});
 
+	const [isFocused, setIsFocused] = useState(false);
+	const handleFocusChange = (isFocused: boolean) => {
+		console.log("isFocused", isFocused);
+		setIsFocused(isFocused);
+	};
+
 	const followUps = getFollowUps(answerEngineData);
 
 	return (
 		<div className="flex flex-col gap-4 flex-grow justify-between">
-			<div className="flex flex-col gap-10">
-				{messages
-					.filter((message) => message.role === "user")
-					.map((message, index) => (
-						<QaPair
-							key={message.id}
-							question={message}
-							answer={getCorrespondingAnswerMessage(index, messages)}
-							data={answerEngineData}
-							followUps={
-								<ChatSuggestedFollowups
-									suggestions={followUps}
-									onClick={append}
-								/>
-							}
-							isLatest={index === Math.ceil(messages.length / 2) - 1}
-						/>
-					))}
-			</div>
+			{!isFocused &&
+				<div className="flex flex-col gap-10">
+					{messages
+						.filter((message) => message.role === "user")
+						.map((message, index) => (
+							<QaPair
+								key={message.id}
+								question={message}
+								answer={getCorrespondingAnswerMessage(index, messages)}
+								data={answerEngineData}
+								followUps={
+									<ChatSuggestedFollowups
+										suggestions={followUps}
+										onClick={append}
+									/>
+								}
+								isLatest={index === Math.ceil(messages.length / 2) - 1}
+							/>
+						))}
+
+				</div>
+			}
+
+			{isFocused &&
+				<div className="flex-grow flex flex-col justify-end">
+					<ChatSuggestedFollowups
+						suggestions={followUps}
+						onClick={append}
+					/>
+				</div>
+			}
+
 			<ChatInput
 				placeholder="Ask a follow-up question…"
 				onSend={append}
 				isLoading={isLoading}
 				stop={stop}
+				onFocusChange={handleFocusChange}
 			/>
 		</div>
 	);

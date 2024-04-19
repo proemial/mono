@@ -25,9 +25,10 @@ export const QuerySchema = z.object({
 export type ChatFormProps = {
 	placeholder: string;
 	onSend?: ReturnType<typeof useChat>["append"];
+	onFocusChange?: (isFocused: boolean) => void;
 };
 
-export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
+export default function ChatForm({ placeholder, onSend, onFocusChange }: ChatFormProps) {
 	const router = useRouter();
 
 	const [isFocused, setIsFocused] = useState(false);
@@ -44,6 +45,10 @@ export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 			setIsFocused(false);
 		}
 	}, [keyboardUp, isFocused]);
+
+	useEffect(() => {
+		!!onFocusChange && onFocusChange(isFocused);
+	}, [isFocused, onFocusChange]);
 
 	const askQuestion = (question: string) => {
 		if (onSend) {
