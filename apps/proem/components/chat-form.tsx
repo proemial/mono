@@ -1,5 +1,5 @@
 "use client";
-import { useDeviceType, useVisualViewport } from "@/utils/useVisualViewport";
+import { useDeviceType } from "@/utils/useVisualViewport";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Button,
@@ -35,7 +35,7 @@ export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 
 	// const { keyboardUp } = useVisualViewport();
 	// Use simulated keyboardUp, to test in desktop browsers.
-	const keyboardUp = false; //isFocused && isMobile;
+	const keyboardUp = isFocused && isMobile;
 
 	const form = useForm<z.infer<typeof QuerySchema>>({
 		resolver: zodResolver(QuerySchema),
@@ -99,66 +99,68 @@ export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 				onSubmit={form.handleSubmit(handleSubmit)}
 				className={style("form", isFocused, keyboardUp)}
 			>
-				<FormField
-					control={form.control}
-					name="question"
-					render={({ field }) => (
-						<FormItem className={style("wrapper", isFocused, keyboardUp)}>
-							<FormControl>
-								<Textarea
-									{...field}
-									placeholder={placeholder}
-									className={style("input", isFocused, keyboardUp)}
-									onKeyDown={handleFormInput}
-									onInput={handleFormInput}
-									onChange={(e) => {
-										handleChange(e.target as HTMLTextAreaElement);
-										field.onChange(e);
-									}}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<Button
-					className={style("button", isFocused, keyboardUp)}
-					size="icon"
-					type="submit"
-				>
-					<ChevronRight />
-				</Button>
+				<div className={style("wrapper", isFocused, keyboardUp)}>
+					<FormField
+						control={form.control}
+						name="question"
+						render={({ field }) => (
+							<FormItem className={style("inputWrapper", isFocused, keyboardUp)}>
+								<FormControl>
+									<Textarea
+										{...field}
+										placeholder={placeholder}
+										className={style("input", isFocused, keyboardUp)}
+										onKeyDown={handleFormInput}
+										onInput={handleFormInput}
+										onChange={(e) => {
+											handleChange(e.target as HTMLTextAreaElement);
+											field.onChange(e);
+										}}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<Button
+						className={style("button", isFocused, keyboardUp)}
+						size="icon"
+						type="submit"
+					>
+						<ChevronRight />
+					</Button>
+				</div>
 			</form>
 		</Form>
 	);
 }
 
 const formStyles = {
-	form: cva("flex gap-2 items-center", {
+	form: cva("w-full"),
+	wrapper: cva("w-full mb-6 flex items-center bg-primary border border-background", {
 		variants: {
 			variant: {
-				default: "w-full",
-				focusKeyboardDown: "w-full",
-				focusKeyboardUp:
-					"bg-primary p-0 mb-[-24px] ml-[-24px] w-[calc(100%+48px)]",
+				default: "rounded-3xl",
+				focusKeyboardDown: "rounded-l-3xl",
+				focusKeyboardUp: "w-screen fixed bottom-0 left-0 rounded-none mb-0",
 			},
 		},
 	}),
-	wrapper: cva("w-full overflow-hidden", {
+	inputWrapper: cva("w-full"),
+	input: cva("w-full h-10 pl-4 resize-none", {
 		variants: {
 			variant: {
-				default: "rounded-3xl border border-background",
-				focusKeyboardDown: "rounded-3xl border border-background",
+				default: "rounded-3xl",
+				focusKeyboardDown: "rounded-l-3xl",
 				focusKeyboardUp: "rounded-none",
 			},
 		},
 	}),
-	input: cva("w-full h-10 pl-4"),
-	button: cva("rounded-full text-foreground bg-muted p-2 size-6 mr-4", {
+	button: cva("rounded-full text-foreground bg-card p-2 size-6 mr-4", {
 		variants: {
 			variant: {
 				default: "hidden",
-				focusKeyboardDown: "hidden",
+				focusKeyboardDown: "visible",
 				focusKeyboardUp: "visible",
 			},
 		},
