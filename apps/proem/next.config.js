@@ -23,6 +23,14 @@ const nextConfig = {
 		// https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration
 		hideSourceMaps: true,
 	},
+	images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com',
+      },
+    ],
+  },
 };
 
 const sentryWebpackPluginOptions = {
