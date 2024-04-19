@@ -78,7 +78,7 @@ export const Answer = ({
 
 	return (
 		<div className="flex flex-col gap-4 flex-grow justify-between">
-			{!isFocused &&
+			{(!isFocused || isLoading) &&
 				<div className="flex flex-col gap-10">
 					{messages
 						.filter((message) => message.role === "user")
@@ -101,7 +101,7 @@ export const Answer = ({
 				</div>
 			}
 
-			{isFocused &&
+			{isFocused && !isLoading &&
 				<div className="flex-grow flex flex-col justify-end">
 					<ChatSuggestedFollowups
 						suggestions={followUps}

@@ -59,7 +59,7 @@ export default function ChatForm({ placeholder, onSend, onFocusChange }: ChatFor
 	};
 
 	const handleSubmit = (data: z.infer<typeof QuerySchema>) => {
-		askQuestion(data.question);
+		setTimeout(() => askQuestion(data.question));
 	};
 
 	const handleFocus = () => {
@@ -76,6 +76,7 @@ export default function ChatForm({ placeholder, onSend, onFocusChange }: ChatFor
 		if (e.code === "Enter" || target.value.includes("\n")) {
 			e.preventDefault();
 			setIsFocused(false);
+			!!onFocusChange && onFocusChange(false);
 			askQuestion(form.getValues("question"));
 			form.setValue("question", "");
 			return false;
