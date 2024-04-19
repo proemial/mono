@@ -26,9 +26,10 @@ const AUTH_PROVIDERS = [
 		icon: "google",
 	},
 	{
+		// TODO: Set up and use Clerk's `oauth_x` strategy, instead of styling Twitter as X
 		oAuthStrategy: "oauth_twitter",
-		name: "Twitter",
-		icon: "twitter",
+		name: "X",
+		icon: "x",
 	},
 	{
 		oAuthStrategy: "oauth_github",
@@ -93,7 +94,7 @@ export function SignInDrawer() {
 											className="items-center space-x-2"
 										>
 											<SoMeLogo variant={icon} />
-											<span className="text-xs font-semibold">
+											<span className="text-xs font-semibold tracking-wider">
 												Sign in with {name}
 											</span>
 										</Button>
