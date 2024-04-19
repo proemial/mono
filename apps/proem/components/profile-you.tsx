@@ -1,7 +1,7 @@
 "use client";
 
 import { ProfileColorSchemeToggle } from "@/components/profile-color-scheme-toggle";
-import { useUser } from "@clerk/nextjs";
+import { useClerk, useUser } from "@clerk/nextjs";
 import {
 	Avatar,
 	AvatarFallback,
@@ -15,15 +15,24 @@ import {
 	TableCell,
 	TableRow,
 } from "@proemial/shadcn-ui";
-import { ClipboardCheck, Drop, File02, Lock01, LogIn01, LogOut01, MessageSquare02 } from "@untitled-ui/icons-react";
+import {
+	ClipboardCheck,
+	Drop,
+	File02,
+	Lock01,
+	LogOut01,
+	MessageSquare02,
+} from "@untitled-ui/icons-react";
 import Link from "next/link";
 import * as React from "react";
+import { SignInDrawer } from "./sign-in-drawer";
 
 const feedback = "https://tally.so/r/wAv8Ve";
 
 export function ProfileYou() {
 	const [isOpen, setIsOpen] = React.useState(true);
 	const { user } = useUser();
+	const { signOut } = useClerk();
 
 	return (
 		<Collapsible open={isOpen} onOpenChange={setIsOpen}>
@@ -96,13 +105,22 @@ export function ProfileYou() {
 								<Link href="/privacy">Privacy Policy</Link>
 							</TableCell>
 						</TableRow>
-						<TableRow className="text-slate-400">
-							<TableCell variant="icon">
-								{user && <LogOut01 className="mx-auto size-4" />}
-								{!user && <LogIn01 className="mx-auto size-4" />}
-							</TableCell>
-							<TableCell variant="key">Sign in</TableCell>
-						</TableRow>
+						{user ? (
+							<TableRow>
+								<TableCell variant="icon">
+									{user && <LogOut01 className="mx-auto size-4" />}
+								</TableCell>
+								<TableCell
+									variant="key"
+									onClick={() => signOut()}
+									className="cursor-pointer"
+								>
+									Sign out
+								</TableCell>
+							</TableRow>
+						) : (
+							<SignInDrawer />
+						)}
 					</TableBody>
 				</Table>
 			</CollapsibleContent>
@@ -111,16 +129,26 @@ export function ProfileYou() {
 }
 
 function Feedback() {
-	return <a href={feedback} target="_blank" rel="noreferrer">Give feedback</a>
+	return (
+		<a href={feedback} target="_blank" rel="noreferrer">
+			Give feedback
+		</a>
+	);
 }
 
 function Version() {
 	const version = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ?? "local";
-	return <>Version: {version.substring(0, 7)} <Beta /></>;
+	return (
+		<>
+			Version: {version.substring(0, 7)} <Beta />
+		</>
+	);
 }
 
 function Beta() {
 	return (
-		<span className="px-2 py-1.5 text-xs font-bold rounded-md text-secondary-foreground bg-secondary">BETA</span>
+		<span className="px-2 py-1.5 text-xs font-bold rounded-md text-secondary-foreground bg-secondary">
+			BETA
+		</span>
 	);
 }

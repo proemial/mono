@@ -27,7 +27,7 @@ export function FullPageDrawer({ children, title }: FullPageDrawerProps) {
 			>
 				<div className="flex flex-col max-h-full gap-6">
 					<DrawerHeader className="pt-0 grow-0">
-						<DrawerTitle className="flex justify-between flex-row-reverse text-2xl font-normal">
+						<DrawerTitle className="flex justify-between flex-row-reverse text-2xl font-normal items-center">
 							<Button variant="ghost" className="p-0" onClick={closeHandle}>
 								<XClose className="w-6 h-6" />
 							</Button>
