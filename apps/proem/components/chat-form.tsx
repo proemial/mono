@@ -143,7 +143,7 @@ export default function ChatForm({ placeholder, onSend, onFocusChange }: ChatFor
 
 const formStyles = {
 	form: cva("w-full"),
-	background: cva("w-full flex items-center bg-primary border border-background", {
+	background: cva("w-full flex items-center bg-primary border border-background mt-3", {
 		variants: {
 			variant: {
 				default: "mb-12 rounded-3xl",
