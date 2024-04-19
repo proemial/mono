@@ -84,12 +84,15 @@ export default function ChatForm({ placeholder, onSend, onFocusChange }: ChatFor
 	};
 
 	const handleChange = (textarea: HTMLTextAreaElement) => {
-		const initialHeight = 40;
+		const initialHeight = 48;
+
+		console.log("height", textarea.style.height, textarea.scrollHeight);
+
 
 		// reset the height to get the correct scrollHeight
 		textarea.style.height = "inherit";
 		textarea.style.height =
-			textarea.scrollHeight > 56
+			textarea.scrollHeight > 72
 				? `${textarea.scrollHeight}px`
 				: `${initialHeight}px`;
 	};
