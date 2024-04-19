@@ -1,4 +1,5 @@
 import { AnswerEngineStreamData } from "@/app/api/bot/answer-engine/answer-engine";
+import { answers } from "@/app/api/bot/answer-engine/answers";
 import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
@@ -79,6 +80,7 @@ export const buildAgent = async (
 								},
 							});
 						}
+						return insertedAnswer;
 					});
 
 					const followUpsQuestionPromise = followUpQuestionChain
@@ -86,21 +88,28 @@ export const buildAgent = async (
 							question: userInput,
 							answer,
 						})
-						.then((followUpsQuestions) => {
-							// TODO! Save follow-up questions to the database
+						.then((response) => {
+							const followUpQuestions = response
+								.split("?")
+								.filter(Boolean)
+								.map((question) => ({ question: `${question.trim()}?` }));
+
 							data.append({
 								type: "follow-up-questions-generated",
 								transactionId,
-								data: followUpsQuestions
-									.split("?")
-									.filter(Boolean)
-									.map((question) => ({ question: `${question.trim()}?` })),
+								data: followUpQuestions,
 							});
+
+							return followUpQuestions;
 						});
 
-					// Waiting for all sideeffects relying on data to finish before closing the data stream
 					Promise.all([saveAnswerPromise, followUpsQuestionPromise]).then(
-						() => {
+						async ([insertedAnswer, followUpQuestions]) => {
+							if (insertedAnswer && followUpQuestions) {
+								await answers.update(insertedAnswer.id, { followUpQuestions });
+							}
+
+							// Waiting for all sideeffects relying on data to finish before closing the data stream
 							data.close();
 						},
 					);

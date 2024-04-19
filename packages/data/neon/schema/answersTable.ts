@@ -18,6 +18,11 @@ export const answersTable = pgTable("answers", {
 	keyConcept: text("keyConcept"),
 	isStarterQuestion: boolean("isStarterQuestion"),
 	relatedConcepts: text("relatedConcepts").array(),
+	followUpQuestions: jsonb("followUpQuestions")
+		.$type<{
+			question: string;
+		}>()
+		.array(),
 	// TODO! This is all papers & we need to save the papers used for the answer separately
 	papers:
 		// TODO! infer from centralised paper schema?

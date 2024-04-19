@@ -46,6 +46,14 @@ export const answers = {
 			.returning();
 	},
 
+	update(answerId: Answer["id"], updatedAnswer: Partial<Answer>) {
+		return neonDb
+			.update(answersTable)
+			.set(updatedAnswer)
+			.where(eq(answersTable.id, answerId))
+			.returning();
+	},
+
 	removeAsStarter(answerId: Answer["id"]) {
 		console.log(answerId);
 		return neonDb
