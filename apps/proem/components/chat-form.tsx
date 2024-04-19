@@ -72,6 +72,7 @@ export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 			e.preventDefault();
 			setIsFocused(false);
 			askQuestion(form.getValues("question"));
+			form.setValue("question", "");
 			return false;
 		}
 	};
@@ -100,7 +101,9 @@ export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 						control={form.control}
 						name="question"
 						render={({ field }) => (
-							<FormItem className={style("inputWrapper", isFocused, simulateKeyboardUp)}>
+							<FormItem
+								className={style("inputWrapper", isFocused, simulateKeyboardUp)}
+							>
 								<FormControl>
 									<Textarea
 										{...field}
@@ -154,15 +157,18 @@ const formStyles = {
 		},
 	}),
 
-	button: cva("rounded-full text-foreground border border-[1px] bg-card p-2 size-6 mr-4", {
-		variants: {
-			variant: {
-				default: "hidden",
-				focusKeyboardDown: "visible",
-				focusKeyboardUp: "visible",
+	button: cva(
+		"rounded-full text-foreground border border-[1px] bg-card p-2 size-6 mr-4",
+		{
+			variants: {
+				variant: {
+					default: "hidden",
+					focusKeyboardDown: "visible",
+					focusKeyboardUp: "visible",
+				},
 			},
 		},
-	}),
+	),
 };
 
 function style(
