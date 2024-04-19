@@ -13,7 +13,7 @@ import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { Paper } from "@/components/icons/Paper";
 import { PaperCardAsk } from "@/components/paper-card-ask";
 import { ChatPapersSkeleton } from "@/components/skeletons";
-import { Header4, Paragraph } from "@proemial/shadcn-ui";
+import { Header4 } from "@proemial/shadcn-ui";
 import { Message } from "ai/react";
 import { ReactNode, useEffect, useRef } from "react";
 import { useThrobberStatus } from "./use-throbber-status";
@@ -89,9 +89,8 @@ export const QaPair = ({
 						<ChatArticle
 							type="Answer"
 							model="GPT-4-TURBO"
-						>
-							<Paragraph>{answer.content}</Paragraph>
-						</ChatArticle>
+							text={answer.content}
+						/>
 						{!isLoadingAnswer && <ChatActionBarAsk />}
 					</div>
 				)}

@@ -10,8 +10,6 @@ import { PaperCardDiscoverProfile } from "@/components/paper-card-discover-profi
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Header4 } from "@proemial/shadcn-ui";
 import { File02 } from "@untitled-ui/icons-react";
-import { Suspense } from "react";
-import Summary from "./summary";
 
 export type PaperReaderProps = {
 	paper: OpenAlexPaper;
@@ -48,12 +46,10 @@ export function PaperReader({ paper, starters }: PaperReaderProps) {
 			</CollapsibleSection>
 
 			<ChatArticle
+				headline={paper.generated?.title ?? paper.data.title}
 				model="GPT-4 TURBO"
-				type="Summary">
-				<Suspense fallback={<div>Loading...</div>}>
-					<Summary paper={paper} />
-				</Suspense>
-			</ChatArticle>
+				type="Summary"
+			/>
 
 			{/* <ChatActionBarDiscover /> */}
 

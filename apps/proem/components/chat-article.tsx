@@ -1,14 +1,15 @@
-import { Header4, Header5 } from "@proemial/shadcn-ui";
+import { Header2, Header4, Header5, Paragraph } from "@proemial/shadcn-ui";
 import { AlignLeft } from "./icons/AlignLeft";
 
 
 type ChatArticleProps = {
 	type: "Answer" | "Summary";
 	model: string;
-	children: React.ReactNode;
+	headline?: string;
+	text?: string;
 };
 
-export function ChatArticle({ type, model, children }: ChatArticleProps) {
+export function ChatArticle({ headline, type, model, text }: ChatArticleProps) {
 	return (
 		<div className="flex flex-col gap-3">
 			<div className="flex items-center place-content-between">
@@ -21,7 +22,8 @@ export function ChatArticle({ type, model, children }: ChatArticleProps) {
 				</div>
 			</div>
 
-			{children}
+			{headline ? <Header2>{headline}</Header2> : null}
+			<Paragraph>{text}</Paragraph>
 		</div>
 	);
 }
