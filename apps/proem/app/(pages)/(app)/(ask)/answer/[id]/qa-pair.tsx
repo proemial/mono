@@ -48,8 +48,9 @@ export const QaPair = ({
 	return (
 		<div
 			ref={pairRef}
-			className={`flex flex-col justify-between gap-4 ${isLatest && "min-h-[calc(100dvh-172px)]"
-				}`}
+			className={`flex flex-col justify-between gap-4 ${
+				isLatest && "min-h-[calc(100dvh-172px)]"
+			}`}
 		>
 			<div className="space-y-6">
 				<ChatQuestion
@@ -59,12 +60,18 @@ export const QaPair = ({
 				{!papers && isLoadingAnswer && !answer && (
 					<ChatPapersSkeleton statusText={throbberStatus} />
 				)}
-				{papers && (
+				{papers && papers.length === 0 && (
+					<div className="flex items-center gap-4">
+						<Paper />
+						<Header4>No research papers found</Header4>
+					</div>
+				)}
+				{papers && papers.length > 0 && (
 					<CollapsibleSection
 						trigger={
 							<div className="flex items-center gap-4">
 								<Paper />
-								<Header4>Research papers evaluated</Header4>
+								<Header4>Research papers interrogated</Header4>
 							</div>
 						}
 						extra={papers?.length}
