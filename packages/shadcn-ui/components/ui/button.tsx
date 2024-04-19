@@ -25,7 +25,7 @@ const buttonVariants = cva(
 				icon: "h-10 w-10 rounded-full",
 				pill: "h-6 px-4 py-2 rounded-full",
 				pillLg: "h-10 p-2 pl-[18px] pb-[10px] rounded-full",
-				suggestion: "h-fit px-4 py-2",
+				suggestion: "min-h-12 rounded-3xl h-fit px-6 py-2 flex items-center",
 				actionBar: "size-5 p-0",
 				none: "",
 			},
@@ -39,7 +39,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
 	extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-		VariantProps<typeof buttonVariants> {
+	VariantProps<typeof buttonVariants> {
 	asChild?: boolean;
 }
 

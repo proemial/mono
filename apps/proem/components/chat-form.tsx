@@ -144,7 +144,7 @@ const formStyles = {
 	background: cva("w-full flex items-center bg-primary border border-background", {
 		variants: {
 			variant: {
-				default: "mb-6 rounded-3xl",
+				default: "mb-12 rounded-3xl",
 				focusKeyboardDown: "mb-6 rounded-3xl",
 				focusKeyboardUp: "w-screen rounded-none mb-0 ml-[-16px]",
 			},
@@ -152,7 +152,7 @@ const formStyles = {
 	}),
 
 	inputWrapper: cva("w-full"), // annoying shadcn/ui div
-	input: cva("w-full h-10 pl-4 resize-none", {
+	input: cva("w-full h-12 pl-6 resize-none flex items-center text-lg", {
 		variants: {
 			variant: {
 				default: "rounded-3xl",

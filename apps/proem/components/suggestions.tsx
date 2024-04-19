@@ -22,7 +22,7 @@ export function Suggestions({ suggestions, onClick }: SuggestionsProps) {
 
 	return (
 		<div className="flex flex-col gap-5">
-			<div className="flex flex-col gap-2">
+			<div className="flex flex-col gap-4">
 				{suggestions?.map((suggestion) => (
 					<Button
 						variant="suggestion"
