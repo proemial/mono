@@ -18,29 +18,41 @@ export default async function SharePage({ params: { shareId } }: Props) {
 	if (!sharedAnswer) {
 		redirect("/");
 	}
+	const existingData = [];
 	const existingPapers = sharedAnswer.papers;
+	const existingShareId = sharedAnswer.shareId;
+	const existingFollowUpQuestions = sharedAnswer.followUpQuestions;
+
+	if (existingPapers) {
+		existingData.push({
+			type: "papers-fetched" as const,
+			transactionId: SHARED_ANSWER_TRANSACTION_ID,
+			data: existingPapers,
+		});
+	}
+
+	if (existingShareId) {
+		existingData.push({
+			type: "answer-saved" as const,
+			transactionId: SHARED_ANSWER_TRANSACTION_ID,
+			data: {
+				shareId: existingShareId,
+				runId: existingShareId,
+			},
+		});
+	}
+
+	if (existingFollowUpQuestions) {
+		existingData.push({
+			type: "follow-up-questions-generated" as const,
+			transactionId: SHARED_ANSWER_TRANSACTION_ID,
+			data: existingFollowUpQuestions as { question: string }[],
+		});
+	}
 
 	return (
 		<Answer
-			{...(existingPapers
-				? {
-						existingData: [
-							{
-								type: "papers-fetched",
-								transactionId: "initial_message_question",
-								data: existingPapers,
-							},
-							{
-								type: "follow-up-questions-generated",
-								transactionId: "initial_message_question",
-								data: [
-									{ question: "hardcoded 1" },
-									{ question: "hardcoded 2" },
-								],
-							},
-						],
-					}
-				: {})}
+			existingData={existingData}
 			initialMessages={[
 				{
 					id: SHARED_ANSWER_TRANSACTION_ID,
