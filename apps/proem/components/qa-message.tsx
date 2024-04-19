@@ -1,4 +1,5 @@
 import { ProemLogo } from "@/app/components/icons/brand/logo";
+import { UserAvatar } from "@/app/components/user-avatar";
 import {
 	Message,
 	MessageAuthor,
@@ -6,7 +7,6 @@ import {
 	MessageContent,
 	MessageFooter,
 } from "@proemial/shadcn-ui";
-import { User01 } from "@untitled-ui/icons-react";
 
 type QAMessageProps = {
 	role: string;
@@ -16,7 +16,7 @@ type QAMessageProps = {
 export function QAMessage({ content, role }: QAMessageProps) {
 	const messageType = role === "user" ? "question" : "answer";
 	return (
-		<Message variant={messageType}>
+		<Message variant={messageType} className="space-y-1.5">
 			<MessageContent>
 				<MessageBubble>{content}</MessageBubble>
 				{/* <MessageAction>
@@ -28,7 +28,7 @@ export function QAMessage({ content, role }: QAMessageProps) {
 				<MessageAuthor>
 					{messageType === "question" ? (
 						<>
-							<User01 className=" size-6" />
+							<UserAvatar />
 							<p>You</p>
 						</>
 					) : (
