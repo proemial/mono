@@ -1,8 +1,8 @@
 "use client";
 
+import { User } from "@/components/icons/User";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
-import { User } from "./icons/user/user";
 
 export function UserAvatar() {
 	const { isSignedIn, user, isLoaded } = useUser();
