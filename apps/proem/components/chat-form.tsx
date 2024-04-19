@@ -55,14 +55,6 @@ export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 
 	const handleFocus = () => {
 		setIsFocused(true);
-		setTimeout(
-			() =>
-				globalThis.scrollTo({
-					top: globalThis.document.body.scrollHeight,
-					behavior: "smooth",
-				}),
-			100,
-		);
 	};
 
 	const handleBlur = () => {
