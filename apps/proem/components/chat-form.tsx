@@ -1,5 +1,5 @@
 "use client";
-import { useDeviceType } from "@/utils/useVisualViewport";
+import { useDeviceType, useVisualViewport } from "@/utils/useVisualViewport";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Button,
@@ -14,7 +14,7 @@ import { ChevronRight } from "@untitled-ui/icons-react";
 import { useChat } from "ai/react";
 import { cva } from "class-variance-authority";
 import { useRouter } from "next/navigation";
-import { KeyboardEvent, useState } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -32,14 +32,18 @@ export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 
 	const [isFocused, setIsFocused] = useState(false);
 	const { isMobile } = useDeviceType();
-
-	// const { keyboardUp } = useVisualViewport();
-	// Use simulated keyboardUp, to test in desktop browsers.
-	const keyboardUp = isFocused && isMobile;
+	const simulateKeyboardUp = isFocused && isMobile;
 
 	const form = useForm<z.infer<typeof QuerySchema>>({
 		resolver: zodResolver(QuerySchema),
 	});
+
+	const { keyboardUp } = useVisualViewport();
+	useEffect(() => {
+		if (!keyboardUp && !isFocused) {
+			setIsFocused(false);
+		}
+	}, [keyboardUp, isFocused]);
 
 	const askQuestion = (question: string) => {
 		if (onSend) {
@@ -89,19 +93,19 @@ export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 				onFocus={handleFocus}
 				onBlur={handleBlur}
 				onSubmit={form.handleSubmit(handleSubmit)}
-				className={style("form", isFocused, keyboardUp)}
+				className={style("form", isFocused, simulateKeyboardUp)}
 			>
-				<div className={style("wrapper", isFocused, keyboardUp)}>
+				<div className={style("wrapper", isFocused, simulateKeyboardUp)}>
 					<FormField
 						control={form.control}
 						name="question"
 						render={({ field }) => (
-							<FormItem className={style("inputWrapper", isFocused, keyboardUp)}>
+							<FormItem className={style("inputWrapper", isFocused, simulateKeyboardUp)}>
 								<FormControl>
 									<Textarea
 										{...field}
 										placeholder={placeholder}
-										className={style("input", isFocused, keyboardUp)}
+										className={style("input", isFocused, simulateKeyboardUp)}
 										onKeyDown={handleFormInput}
 										onInput={handleFormInput}
 										onChange={(e) => {
@@ -115,7 +119,7 @@ export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 						)}
 					/>
 					<Button
-						className={style("button", isFocused, keyboardUp)}
+						className={style("button", isFocused, simulateKeyboardUp)}
 						size="icon"
 						type="submit"
 					>
@@ -150,7 +154,7 @@ const formStyles = {
 		},
 	}),
 
-	button: cva("rounded-full text-foreground bg-card p-2 size-6 mr-4", {
+	button: cva("rounded-full text-foreground border border-[1px] bg-card p-2 size-6 mr-4", {
 		variants: {
 			variant: {
 				default: "hidden",
