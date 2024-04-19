@@ -164,7 +164,7 @@ const formStyles = {
 	}),
 
 	button: cva(
-		"rounded-full text-foreground border border-[1px] bg-card p-2 size-6 mr-4",
+		"rounded-full text-foreground border border-[1px] bg-card p-2 size-8 mr-4",
 		{
 			variants: {
 				variant: {
