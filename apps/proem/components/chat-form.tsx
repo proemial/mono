@@ -137,12 +137,12 @@ export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 
 const formStyles = {
 	form: cva("w-full"),
-	wrapper: cva("w-full mb-6 flex items-center bg-primary border border-background", {
+	wrapper: cva("w-full flex items-center bg-primary border border-background", {
 		variants: {
 			variant: {
-				default: "rounded-3xl",
-				focusKeyboardDown: "rounded-l-3xl",
-				focusKeyboardUp: "w-screen fixed bottom-0 left-0 rounded-none mb-0",
+				default: "mb-6 rounded-3xl",
+				focusKeyboardDown: "mb-6 rounded-3xl",
+				focusKeyboardUp: "w-screen rounded-none mb-0 ml-[-16px]",
 			},
 		},
 	}),
@@ -161,7 +161,7 @@ const formStyles = {
 			variant: {
 				default: "hidden",
 				focusKeyboardDown: "visible",
-				focusKeyboardUp: "visible",
+				focusKeyboardUp: "visible mr-8",
 			},
 		},
 	}),
