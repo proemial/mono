@@ -95,7 +95,7 @@ export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 				onSubmit={form.handleSubmit(handleSubmit)}
 				className={style("form", isFocused, simulateKeyboardUp)}
 			>
-				<div className={style("wrapper", isFocused, simulateKeyboardUp)}>
+				<div className={style("background", isFocused, simulateKeyboardUp)}>
 					<FormField
 						control={form.control}
 						name="question"
@@ -133,7 +133,7 @@ export default function ChatForm({ placeholder, onSend }: ChatFormProps) {
 
 const formStyles = {
 	form: cva("w-full"),
-	wrapper: cva("w-full flex items-center bg-primary border border-background", {
+	background: cva("w-full flex items-center bg-primary border border-background", {
 		variants: {
 			variant: {
 				default: "mb-6 rounded-3xl",
