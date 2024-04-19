@@ -69,38 +69,42 @@ export function SignInDrawer() {
 									<XClose className="w-6 h-6" />
 								</Button>
 							</DrawerClose>
-							<div>Get started with Proem</div>
 						</DrawerTitle>
 					</DrawerHeader>
-					<div className="p-4 flex flex-col flex-grow justify-end gap-8">
-						<div className="flex flex-col gap-6">
-							{AUTH_PROVIDERS.map(({ name, icon, oAuthStrategy }) => {
-								return (
-									<Button
-										key={name}
-										onClick={() => {
-											signIn.authenticateWithRedirect({
-												strategy: oAuthStrategy,
-												redirectUrl: "/sso-callback",
-												redirectUrlComplete:
-													searchParams.get(LOGIN_REDIRECT_URL_PARAM_NAME) ||
-													pathname,
-											});
-										}}
-										className="items-center space-x-2"
-									>
-										<SoMeLogo variant={icon} />
-										<span className="text-xs font-semibold">
-											Sign in with {name}
-										</span>
-									</Button>
-								);
-							})}
+					<div className="p-4 flex flex-col flex-grow justify-between gap-8">
+						<div className="flex flex-grow justify-center text-[24px]">
+							Get started with Proem
 						</div>
-						<div className="text-gray-400 text-sm">
-							By using Proem, you consent to our{" "}
-							<Link href="/privacy">Privacy Policy</Link> and{" "}
-							<Link href="/terms">Terms of Service</Link>.
+						<div className="flex flex-col gap-8">
+							<div className="flex flex-col gap-5">
+								{AUTH_PROVIDERS.map(({ name, icon, oAuthStrategy }) => {
+									return (
+										<Button
+											key={name}
+											onClick={() => {
+												signIn.authenticateWithRedirect({
+													strategy: oAuthStrategy,
+													redirectUrl: "/sso-callback",
+													redirectUrlComplete:
+														searchParams.get(LOGIN_REDIRECT_URL_PARAM_NAME) ||
+														pathname,
+												});
+											}}
+											className="items-center space-x-2"
+										>
+											<SoMeLogo variant={icon} />
+											<span className="text-xs font-semibold">
+												Sign in with {name}
+											</span>
+										</Button>
+									);
+								})}
+							</div>
+							<div className="text-gray-400 text-sm">
+								By using Proem, you consent to our{" "}
+								<Link href="/privacy">Privacy Policy</Link> and{" "}
+								<Link href="/terms">Terms of Service</Link>.
+							</div>
 						</div>
 					</div>
 				</div>
