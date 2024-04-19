@@ -6,6 +6,7 @@ import {
 	DrawerContent,
 	DrawerHeader,
 	DrawerTitle,
+	DrawerTrigger,
 	cn,
 } from "@proemial/shadcn-ui";
 import { XClose } from "@untitled-ui/icons-react";
@@ -14,14 +15,22 @@ import { useRouter } from "next/navigation";
 type FullPageDrawerProps = {
 	title?: string;
 	children: React.ReactNode;
+	trigger?: React.ReactNode;
+	onClose?: () => void;
 };
 
-export function FullPageDrawer({ children, title }: FullPageDrawerProps) {
+export function FullPageDrawer({
+	children,
+	title,
+	trigger,
+	onClose,
+}: FullPageDrawerProps) {
 	const router = useRouter();
 	const closeHandle = () => router.back();
 
 	return (
-		<Drawer open onClose={closeHandle}>
+		<Drawer open onClose={onClose}>
+			{trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
 			<DrawerContent
 				className={cn(screenMaxWidth, "w-full h-full mx-auto rounded-none")}
 			>
@@ -39,5 +48,25 @@ export function FullPageDrawer({ children, title }: FullPageDrawerProps) {
 				</div>
 			</DrawerContent>
 		</Drawer>
+	);
+}
+type FullPageDrawerWithRouterNavigationProps = Pick<
+	FullPageDrawerProps,
+	"title"
+> & {
+	children: React.ReactNode;
+};
+
+export function FullPageDrawerWithRouterNavigation({
+	children,
+	title,
+}: FullPageDrawerWithRouterNavigationProps) {
+	const router = useRouter();
+	const closeHandle = () => router.back();
+
+	return (
+		<FullPageDrawer title={title} onClose={closeHandle}>
+			{children}
+		</FullPageDrawer>
 	);
 }
