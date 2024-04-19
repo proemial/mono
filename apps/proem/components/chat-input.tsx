@@ -35,8 +35,8 @@ export function ChatInput({ placeholder, onSend, isLoading, stop }: FormProps) {
 
 function StopButton({ stop }: ButtonProps) {
 	return (
-		<Button className="mb-6 w-12 h-12 rounded-full" onClick={() => !!stop && stop()}>
-			<Stop className="w-6 h-6 animate-pulse" />
+		<Button className="mb-6 w-10 h-10 p-3 rounded-full" onClick={() => !!stop && stop()}>
+			<Stop className="animate-pulse" />
 		</Button>
 	);
 }

@@ -146,7 +146,8 @@ const formStyles = {
 			},
 		},
 	}),
-	inputWrapper: cva("w-full"),
+
+	inputWrapper: cva("w-full"), // annoying shadcn/ui div
 	input: cva("w-full h-10 pl-4 resize-none", {
 		variants: {
 			variant: {
@@ -156,12 +157,13 @@ const formStyles = {
 			},
 		},
 	}),
+
 	button: cva("rounded-full text-foreground bg-card p-2 size-6 mr-4", {
 		variants: {
 			variant: {
 				default: "hidden",
 				focusKeyboardDown: "visible",
-				focusKeyboardUp: "visible mr-8",
+				focusKeyboardUp: "visible",
 			},
 		},
 	}),
