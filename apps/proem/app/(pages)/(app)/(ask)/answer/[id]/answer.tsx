@@ -70,7 +70,6 @@ export const Answer = ({
 
 	const [isFocused, setIsFocused] = useState(false);
 	const handleFocusChange = (isFocused: boolean) => {
-		console.log("isFocused", isFocused);
 		setIsFocused(isFocused);
 	};
 
