@@ -4,7 +4,7 @@ import {
 	PaperReader,
 	PaperReaderProps,
 } from "@/app/(pages)/(app)/discover/[id]/paper-reader";
-import { FullPageDrawerWithRouterNavigation } from "@/components/full-page-drawer";
+import { PageDrawer } from "@/components/full-page-drawer";
 import { useEffect, useState } from "react";
 
 type ReaderModalProps = {
@@ -26,8 +26,8 @@ export default function ReaderModal({
 	}, [paperId]);
 
 	return (
-		<FullPageDrawerWithRouterNavigation>
+		<PageDrawer>
 			{readerData ? <PaperReader {...readerData} /> : <p>loading...</p>}
-		</FullPageDrawerWithRouterNavigation>
+		</PageDrawer>
 	);
 }

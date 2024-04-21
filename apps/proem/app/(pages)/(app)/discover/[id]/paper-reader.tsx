@@ -39,8 +39,12 @@ export function PaperReader({ paper, starters }: PaperReaderProps) {
 							publisher={paper.data.primary_location.source?.display_name ?? ""}
 						/>
 					</a>
+
 					{paper.data.authorships.map((author) => (
-						<PaperCardDiscoverProfile name={author.author.display_name} />
+						<PaperCardDiscoverProfile
+							key={author.author.id}
+							name={author.author.display_name}
+						/>
 					))}
 				</HorisontalScrollArea>
 			</CollapsibleSection>

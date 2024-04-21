@@ -35,7 +35,8 @@ export const QaPair = ({
 }: QaPairProps) => {
 	const isQuestionByCurrentUser = question.id !== SHARED_ANSWER_TRANSACTION_ID;
 	const { papers } = findByEventType(data, "papers-fetched", question.id) ?? {};
-	const isLoadingAnswer = !findByEventType(data, "answer-saved", question.id);
+	const savedAnswer = findByEventType(data, "answer-saved", question.id);
+	const isLoadingAnswer = !savedAnswer;
 	const throbberStatus = useThrobberStatus();
 	const pairRef = useRef<HTMLDivElement>(null);
 
@@ -98,7 +99,9 @@ export const QaPair = ({
 							model="GPT-4-TURBO"
 							text={answer.content}
 						/>
-						{!isLoadingAnswer && <ChatActionBarAsk />}
+						{savedAnswer?.shareId && (
+							<ChatActionBarAsk shareId={savedAnswer.shareId} />
+						)}
 					</div>
 				)}
 			</div>

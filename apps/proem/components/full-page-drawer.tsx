@@ -1,8 +1,8 @@
 "use client";
 import { screenMaxWidth } from "@/app/constants";
 import {
-	Button,
 	Drawer,
+	DrawerClose,
 	DrawerContent,
 	DrawerHeader,
 	DrawerTitle,
@@ -14,37 +14,38 @@ import { useRouter } from "next/navigation";
 
 type FullPageDrawerProps = {
 	title?: string;
-	children: React.ReactNode;
+	children?: React.ReactNode;
+	render?: (DrawerCloseComponent: typeof DrawerClose) => React.ReactNode;
 	trigger?: React.ReactNode;
 	onClose?: () => void;
 };
 
-export function FullPageDrawer({
+export function FullSizeDrawer({
 	children,
 	title,
 	trigger,
 	onClose,
+	render,
 }: FullPageDrawerProps) {
-	const router = useRouter();
-	const closeHandle = () => router.back();
-
 	return (
-		<Drawer open onClose={onClose}>
-			{trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
+		<Drawer {...(onClose ? { open: true } : {})} onClose={onClose}>
+			{trigger && <DrawerTrigger>{trigger}</DrawerTrigger>}
 			<DrawerContent
 				className={cn(screenMaxWidth, "w-full h-full mx-auto rounded-none")}
 			>
-				<div className="flex flex-col max-h-full gap-6">
+				<div className="flex flex-col h-full gap-6">
 					<DrawerHeader className="pt-0 grow-0">
 						<DrawerTitle className="flex justify-between flex-row-reverse text-2xl font-normal items-center">
-							<Button variant="ghost" className="p-0" onClick={closeHandle}>
+							<DrawerClose onClick={onClose}>
 								<XClose className="w-6 h-6" />
-							</Button>
+							</DrawerClose>
 
 							<div>{title}</div>
 						</DrawerTitle>
 					</DrawerHeader>
-					<div className="grow px-8 overflow-auto">{children}</div>
+					<div className="grow px-8 overflow-auto ">
+						{render ? render(DrawerClose) : children}
+					</div>
 				</div>
 			</DrawerContent>
 		</Drawer>
@@ -57,7 +58,10 @@ type FullPageDrawerWithRouterNavigationProps = Pick<
 	children: React.ReactNode;
 };
 
-export function FullPageDrawerWithRouterNavigation({
+/**
+ * PageDrawer is a full-size drawer that can be used to embed new routes in a drawer.
+ */
+export function PageDrawer({
 	children,
 	title,
 }: FullPageDrawerWithRouterNavigationProps) {
@@ -65,8 +69,8 @@ export function FullPageDrawerWithRouterNavigation({
 	const closeHandle = () => router.back();
 
 	return (
-		<FullPageDrawer title={title} onClose={closeHandle}>
+		<FullSizeDrawer title={title} onClose={closeHandle}>
 			{children}
-		</FullPageDrawer>
+		</FullSizeDrawer>
 	);
 }

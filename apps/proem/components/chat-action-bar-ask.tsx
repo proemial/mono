@@ -1,9 +1,11 @@
-import { ButtonShare } from "@/components/button-share";
+import { ShareDrawer, ShareDrawerProps } from "@/components/share-drawer";
 
-export function ChatActionBarAsk() {
+type ChatActionBarAskProps = Pick<ShareDrawerProps, "shareId">;
+
+export function ChatActionBarAsk({ shareId }: ChatActionBarAskProps) {
 	return (
 		<div className="flex justify-end">
-			<ButtonShare />
+			<ShareDrawer shareId={shareId} />
 		</div>
 	);
 }
