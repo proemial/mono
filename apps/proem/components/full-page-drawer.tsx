@@ -29,7 +29,7 @@ export function FullSizeDrawer({
 }: FullPageDrawerProps) {
 	return (
 		<Drawer {...(onClose ? { open: true } : {})} onClose={onClose}>
-			{trigger && <DrawerTrigger>{trigger}</DrawerTrigger>}
+			{trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
 			<DrawerContent
 				className={cn(screenMaxWidth, "w-full h-full mx-auto rounded-none")}
 			>

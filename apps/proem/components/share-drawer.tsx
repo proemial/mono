@@ -2,6 +2,7 @@
 import { ShareIcon, ShareIconProps } from "@/app/components/share/share-icon";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
 import { Answer } from "@proemial/data/neon/schema/answersTable";
+import { Button } from "@proemial/shadcn-ui";
 import { Upload01 } from "@untitled-ui/icons-react";
 // TODO: Replace with untitled-ui or custom icon
 import { Link2Icon } from "lucide-react";
@@ -130,9 +131,13 @@ export function ShareDrawer({ shareId }: ShareDrawerProps) {
 
 	return (
 		<FullSizeDrawer
-			trigger={<Upload01 />}
+			trigger={
+				<Button variant="ghost">
+					<Upload01 />
+				</Button>
+			}
 			render={(DrawerClose) => (
-				<div className="w-full content-end h-full flex-col py-8">
+				<div className="w-full justify-end h-full flex flex-col py-8">
 					<Image
 						width={600}
 						height={315}
