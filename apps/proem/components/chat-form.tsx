@@ -28,7 +28,11 @@ export type ChatFormProps = {
 	onFocusChange?: (isFocused: boolean) => void;
 };
 
-export default function ChatForm({ placeholder, onSend, onFocusChange }: ChatFormProps) {
+export function ChatForm({
+	placeholder,
+	onSend,
+	onFocusChange,
+}: ChatFormProps) {
 	const router = useRouter();
 
 	const [isFocused, setIsFocused] = useState(false);
@@ -143,15 +147,18 @@ export default function ChatForm({ placeholder, onSend, onFocusChange }: ChatFor
 
 const formStyles = {
 	form: cva("w-full"),
-	background: cva("w-full flex items-center bg-primary border border-background mt-3", {
-		variants: {
-			variant: {
-				default: "mb-12 rounded-3xl",
-				focusKeyboardDown: "mb-6 rounded-3xl",
-				focusKeyboardUp: "w-screen rounded-none mb-0 ml-[-16px]",
+	background: cva(
+		"w-full flex items-center bg-primary border border-background mt-3",
+		{
+			variants: {
+				variant: {
+					default: "mb-12 rounded-3xl",
+					focusKeyboardDown: "mb-6 rounded-3xl",
+					focusKeyboardUp: "w-screen rounded-none mb-0 ml-[-16px]",
+				},
 			},
 		},
-	}),
+	),
 
 	inputWrapper: cva("w-full"), // annoying shadcn/ui div
 	input: cva("w-full h-12 pl-6 resize-none flex items-center text-lg", {
