@@ -30,7 +30,7 @@ const queryOpenAlex = RunnableLambda.from<OpenAlexQueryParams, Paper[]>(
 
 		const begin = Metrics.now();
 		const results = await Promise.all(promises);
-		Metrics.elapsedSince(begin, "ask.fetch.all");
+		Metrics.elapsedSince(begin, "ask.papers.fetchall");
 
 		Object.keys(input.searchQueries).forEach((key, i) => {
 			Metrics.paperQueryExecuted(key, results[i]?.length ?? 0);
@@ -61,7 +61,14 @@ export const fetchPapersChain = RunnableSequence.from<Input, PapersAsString>([
 			.withConfig({ runName: "FetchPapers" }),
 	}),
 	(input) => JSON.stringify(input.papers),
-]);
+]).withListeners({
+	onEnd: (output) => {
+		const elapsed = output?.end_time && output?.end_time - output.start_time;
+		if (elapsed) {
+			Metrics.elapsed(elapsed, "ask.papers");
+		}
+	},
+});
 
 const toRelativeLink = (paper: Paper) => {
 	return {

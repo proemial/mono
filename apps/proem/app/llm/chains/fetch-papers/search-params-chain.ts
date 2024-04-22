@@ -40,7 +40,7 @@ const extractSynonymGroupsChain = () =>
 				const elapsed =
 					output?.end_time && output?.end_time - output.start_time;
 				if (elapsed) {
-					Metrics.elapsed(elapsed, "ask.synonyms");
+					Metrics.elapsed(elapsed, "ask.papers.synonyms");
 				}
 			},
 		});
