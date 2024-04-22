@@ -29,8 +29,6 @@ export async function generateStarters(title: string, abstract: string) {
 		],
 	});
 
-	console.log("Starters generated", completion.choices[0]?.message.content);
-
 	return asArray(completion.choices[0]?.message.content as string);
 }
 
