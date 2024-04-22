@@ -1,3 +1,4 @@
+import { Metrics } from "@/app/components/analytics/metrics";
 import {
 	OpenAlexPaperWithAbstract,
 	OpenAlexWorksSearchResult,
@@ -65,5 +66,6 @@ async function fetchWithAbstract(q: string, count: number, tokens: number) {
 		});
 	} finally {
 		Time.log(begin, `[fetchWithAbstract] ${query}`);
+		Metrics.elapsedSince(begin, "ask.papers.fetch");
 	}
 }
