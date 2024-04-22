@@ -1,5 +1,5 @@
 import { fetchPaper } from "@/app/(pages)/(app)/discover/[id]/fetch-paper";
-import { generate } from "@/app/(pages)/(app)/discover/[id]/generate-starters";
+import { generate } from "@/app/(pages)/(app)/discover/[id]/llm-generate";
 import { PaperReader } from "@/app/(pages)/(app)/discover/[id]/paper-reader";
 import { notFound } from "next/navigation";
 
@@ -14,8 +14,7 @@ export default async function ReaderPage({ params }: Props) {
 	if (!paper) {
 		notFound();
 	}
+	const updatedPaper = await generate(paper);
 
-	const starters = paper.generated?.starters ?? (await generate(paper));
-
-	return <PaperReader paper={paper} starters={starters} />;
+	return <PaperReader paper={updatedPaper} />;
 }

@@ -1,4 +1,4 @@
-import { generate } from "@/app/(pages)/(app)/discover/[id]/generate-starters";
+import { generate } from "@/app/(pages)/(app)/discover/[id]/llm-generate";
 import { fetchPaper } from "@/old/(pages)/(app)/oa/[id]/fetch-paper";
 
 export async function GET(request: Request) {
@@ -17,8 +17,7 @@ export async function GET(request: Request) {
 			status: 400,
 		});
 	}
+	const updatedPaper = await generate(paper);
 
-	const starters = paper.generated?.starters ?? (await generate(paper));
-
-	return Response.json({ paper, starters });
+	return Response.json(updatedPaper);
 }

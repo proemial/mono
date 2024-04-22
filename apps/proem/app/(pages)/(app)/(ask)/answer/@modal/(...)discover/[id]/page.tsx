@@ -5,6 +5,7 @@ import {
 	PaperReaderProps,
 } from "@/app/(pages)/(app)/discover/[id]/paper-reader";
 import { PageDrawer } from "@/components/full-page-drawer";
+import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { useEffect, useState } from "react";
 
 type ReaderModalProps = {
@@ -14,7 +15,7 @@ export default function ReaderModal({
 	params: { id: paperId },
 }: ReaderModalProps) {
 	// TODO!: ugly client side data fetching until we have a better solution
-	const [readerData, setReaderData] = useState<PaperReaderProps | null>(null);
+	const [readerData, setReaderData] = useState<OpenAlexPaper>();
 
 	useEffect(() => {
 		const fetchCurrentPaper = async () => {
@@ -27,7 +28,7 @@ export default function ReaderModal({
 
 	return (
 		<PageDrawer>
-			{readerData ? <PaperReader {...readerData} /> : <p>loading...</p>}
+			{readerData ? <PaperReader paper={readerData} /> : <p>loading...</p>}
 		</PageDrawer>
 	);
 }

@@ -12,11 +12,10 @@ import { Header4 } from "@proemial/shadcn-ui";
 import { File02 } from "@untitled-ui/icons-react";
 
 export type PaperReaderProps = {
-	paper: OpenAlexPaper;
-	starters: PaperChatProps["suggestions"];
+	paper?: OpenAlexPaper;
 };
 
-export function PaperReader({ paper, starters }: PaperReaderProps) {
+export function PaperReader({ paper }: PaperReaderProps) {
 	return (
 		<div className="space-y-6">
 			<CollapsibleSection
@@ -29,18 +28,18 @@ export function PaperReader({ paper, starters }: PaperReaderProps) {
 			>
 				<HorisontalScrollArea>
 					<a
-						href={paper.data.primary_location.landing_page_url}
+						href={paper?.data.primary_location.landing_page_url}
 						target="_blank"
 						rel="noreferrer"
 					>
 						<PaperCardDiscover
-							title={paper.data.title}
-							date={paper.data.publication_date}
-							publisher={paper.data.primary_location.source?.display_name ?? ""}
+							title={paper?.data.title ?? ""}
+							date={paper?.data.publication_date}
+							publisher={paper?.data.primary_location.source?.display_name ?? ""}
 						/>
 					</a>
 
-					{paper.data.authorships.map((author) => (
+					{paper?.data.authorships.map((author) => (
 						<PaperCardDiscoverProfile
 							key={author.author.id}
 							name={author.author.display_name}
@@ -50,7 +49,7 @@ export function PaperReader({ paper, starters }: PaperReaderProps) {
 			</CollapsibleSection>
 
 			<ChatArticle
-				headline={paper.generated?.title ?? paper.data.title}
+				headline={paper?.generated?.title ?? paper?.data.title}
 				model="GPT-4 TURBO"
 				type="Summary"
 			/>
@@ -58,9 +57,9 @@ export function PaperReader({ paper, starters }: PaperReaderProps) {
 			{/* <ChatActionBarDiscover /> */}
 
 			<PaperChat
-				suggestions={starters}
-				title={paper.data.title}
-				abstract={paper.data.abstract}
+				suggestions={paper?.generated?.starters}
+				title={paper?.data.title ?? ""}
+				abstract={paper?.data.abstract}
 			/>
 		</div>
 	);
