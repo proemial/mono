@@ -34,8 +34,13 @@ export async function generateStarters(title: string, abstract: string) {
 
 // {text: "1. xxx\n2. xxx\n 3. xxx"} > ["xxx", "xxx", "xxx"]
 function asArray(text: string) {
+	console.log("READ starters string: ", text);
+
 	if (!text[0]?.match(/^\d/)) {
 		return [text];
 	}
-	return text.split("\n").map((str) => str.substring(3));
+	const array = text.split("\n").map((str) => str.substring(3));
+	console.log("READ starters array: ", array);
+
+	return array;
 }
