@@ -1,9 +1,9 @@
 import { AnswerEngineStreamData } from "@/app/api/bot/answer-engine/answer-engine";
 import { LangChainChatHistoryMessage } from "@/app/llm/utils";
 import {
+	StreamData,
 	StreamingTextResponse,
 	createStreamDataTransformer,
-	experimental_StreamData,
 } from "ai";
 import { AgentExecutor } from "langchain/agents";
 import { answers } from "../answer-engine/answers";
@@ -32,7 +32,7 @@ export const answerEngine = async ({
 	transactionId,
 	userId,
 }: AnswerEngineParams) => {
-	const data = new experimental_StreamData() as AnswerEngineStreamData;
+	const data = new StreamData() as AnswerEngineStreamData;
 	const isFollowUpQuestion = Boolean(existingSlug);
 	const slug = existingSlug ?? prettySlug(userInput);
 	const existingAnswers = isFollowUpQuestion

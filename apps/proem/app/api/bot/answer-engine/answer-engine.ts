@@ -12,9 +12,9 @@ import { findRun } from "@/app/llm/helpers/find-run";
 import { toLangChainChatHistory } from "@/app/llm/utils";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
 import {
+	StreamData,
 	StreamingTextResponse,
 	createStreamDataTransformer,
-	experimental_StreamData,
 } from "ai";
 import { z } from "zod";
 
@@ -37,7 +37,7 @@ type AnswerEngineParams = {
 
 const bytesOutputParser = new BytesOutputParser();
 
-export interface AnswerEngineStreamData extends experimental_StreamData {
+export interface AnswerEngineStreamData extends StreamData {
 	append(event: AnswerEngineEvents): void;
 }
 
@@ -49,7 +49,7 @@ export async function askAnswerEngine({
 	transactionId,
 	userId,
 }: AnswerEngineParams) {
-	const data = new experimental_StreamData() as AnswerEngineStreamData;
+	const data = new StreamData() as AnswerEngineStreamData;
 	const isFollowUpQuestion = Boolean(existingSlug);
 	const slug = existingSlug ?? prettySlug(question);
 	const existingAnswers = isFollowUpQuestion
