@@ -135,7 +135,7 @@ importers:
         version: 0.1.16
       '@langchain/community':
         specifier: 0.0.50
-        version: 0.0.50
+        version: 0.0.50(@upstash/redis@1.29.0)
       '@langchain/core':
         specifier: 0.1.58
         version: 0.1.58
@@ -181,6 +181,12 @@ importers:
       '@untitled-ui/icons-react':
         specifier: ^0.1.2
         version: 0.1.2(@types/react@18.2.78)(react@18.2.0)
+      '@upstash/ratelimit':
+        specifier: 1.1.2
+        version: 1.1.2
+      '@upstash/redis':
+        specifier: ^1.29.0
+        version: 1.29.0
       '@vercel/analytics':
         specifier: ^1.2.2
         version: 1.2.2(next@14.2.1)(react@18.2.0)
@@ -213,7 +219,7 @@ importers:
         version: 0.16.10
       langchain:
         specifier: 0.1.34
-        version: 0.1.34
+        version: 0.1.34(@upstash/redis@1.29.0)
       langsmith:
         specifier: 0.1.18
         version: 0.1.18
@@ -2119,7 +2125,7 @@ packages:
       - encoding
     dev: false
 
-  /@langchain/community@0.0.50:
+  /@langchain/community@0.0.50(@upstash/redis@1.29.0):
     resolution: {integrity: sha512-ZxS0qmvEKlRYPtIPnzSa+un82mqi+DpxEsME6aLJSxEmQpk4vwoArcL/KzHEtM8vsi3ZKB15f7BNS6Qp00rizg==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -2400,6 +2406,7 @@ packages:
     dependencies:
       '@langchain/core': 0.1.58
       '@langchain/openai': 0.0.28
+      '@upstash/redis': 1.29.0
       expr-eval: 2.0.2
       flat: 5.0.2
       langsmith: 0.1.18
@@ -4386,6 +4393,19 @@ packages:
     dependencies:
       '@types/react': 18.2.78
       react: 18.2.0
+    dev: false
+
+  /@upstash/core-analytics@0.0.8:
+    resolution: {integrity: sha512-MCJoF+Y8fkzq4NRLG7kEHjtGyMsZ2DICBdmEdwoK9umoSrfkzgBlYdZiHTIaewyt9PGaMZCHOasz0LAuMpxwxQ==}
+    engines: {node: '>=16.0.0'}
+    dependencies:
+      '@upstash/redis': 1.29.0
+    dev: false
+
+  /@upstash/ratelimit@1.1.2:
+    resolution: {integrity: sha512-u9aGWwJ9rojcoZoD3EyBJ0F/fLOtD4dlugCYcRTFXNPPDnMAQ8Y8CoXb02hucT24q62xb3ikyS4NdZyj4aqESQ==}
+    dependencies:
+      '@upstash/core-analytics': 0.0.8
     dev: false
 
   /@upstash/redis@1.29.0:
@@ -8910,7 +8930,7 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /langchain@0.1.34:
+  /langchain@0.1.34(@upstash/redis@1.29.0):
     resolution: {integrity: sha512-4TVH2mzhITrLPOeyfGucfqo1+360DJMl4+ItG56ApxVY1krO4hV0EkqcRLAxW06W6sIue8mIU70WbyhBYH68Ug==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -9070,7 +9090,7 @@ packages:
         optional: true
     dependencies:
       '@anthropic-ai/sdk': 0.9.1
-      '@langchain/community': 0.0.50
+      '@langchain/community': 0.0.50(@upstash/redis@1.29.0)
       '@langchain/core': 0.1.58
       '@langchain/openai': 0.0.28
       binary-extensions: 2.3.0
