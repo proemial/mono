@@ -1,5 +1,5 @@
 import { searchToolConfig } from "@/app/prompts/ask_agent";
-import { DynamicTool } from "langchain/tools";
+import { DynamicTool } from "@langchain/core/tools";
 import { Paper } from "../../paper-search/search";
 import { AnswerEngineStreamData } from "../answer-engine/answer-engine";
 import { openAlexChain } from "./fetch-papers";

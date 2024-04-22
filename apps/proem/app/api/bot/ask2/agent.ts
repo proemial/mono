@@ -8,8 +8,8 @@ import {
 	ChatPromptTemplate,
 	MessagesPlaceholder,
 } from "@langchain/core/prompts";
+import { DynamicTool } from "@langchain/core/tools";
 import { createOpenAIFunctionsAgent } from "langchain/agents";
-import { DynamicTool } from "langchain/tools";
 import { Run } from "langsmith";
 import { saveAnswerFromAgent } from "../answer-engine/save-answer";
 
