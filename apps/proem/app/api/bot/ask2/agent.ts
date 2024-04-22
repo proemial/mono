@@ -1,6 +1,5 @@
 import { AnswerEngineStreamData } from "@/app/api/bot/answer-engine/answer-engine";
 import { answers } from "@/app/api/bot/answer-engine/answers";
-import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { askAgentPrompt } from "@/app/prompts/ask_agent";
@@ -31,12 +30,10 @@ export const buildAgent = async (
 		["human", "{input}"],
 		new MessagesPlaceholder("agent_scratchpad"),
 	]);
-	const isGpt4FeatureEnabled = (await getFeatureFlag("askGpt4")) ?? false;
-	const llm = buildOpenAIChatModel(
-		isGpt4FeatureEnabled ? "gpt-4-0125-preview" : "gpt-3.5-turbo-0125",
-		"ask",
-		{ temperature: 0.0, streaming: true },
-	);
+	const llm = buildOpenAIChatModel("gpt-4-0125-preview", "ask", {
+		temperature: 0.0,
+		streaming: true,
+	});
 	const { isFollowUpQuestion, slug, userInput, tags, transactionId, userId } =
 		params;
 
