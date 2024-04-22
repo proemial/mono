@@ -1,7 +1,7 @@
 import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
 import OpenAI from "openai";
 
-const model = "gpt-3.5-turbo";
+const model = "gpt-4-0125-preview";
 
 export async function generateStarters(title: string, abstract: string) {
 	const openai = new OpenAI({

@@ -18,7 +18,7 @@ export async function vectorisePapers(
 				papers.map((paper) => paper?.abstract as string),
 				papers.map((paper) => paper.link),
 				// TODO: Evaluate faster embeddings model
-				new OpenAIEmbeddings(),
+				new OpenAIEmbeddings({ modelName: "text-embedding-3-small" }),
 			);
 		} finally {
 			Time.log(begin, `vectorStore initialized om ${papers.length} papers`);
