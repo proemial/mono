@@ -11,13 +11,13 @@ export const Metrics = {
 	},
 	now: () => Time.now(),
 	elapsedSince: (begin: number, key: string) => {
-		console.log(`Metrics.elapsedSince(${begin}, ${key})`);
+		console.log(`Metrics.elapsedSince[${key}]: ${Time.elapsed(begin)}`);
 		Sentry.metrics.gauge(`proem.${key}.elapsed`, Time.elapsed(begin), {
 			unit: "millisecond",
 		});
 	},
 	elapsed: (millis: number, key: string) => {
-		console.log(`Metrics.elapsed(${millis}, ${key})`);
+		console.log(`Metrics.elapsed[${key}]: ${millis}`);
 		Sentry.metrics.gauge(`proem.${key}.elapsed`, millis, {
 			unit: "millisecond",
 		});
