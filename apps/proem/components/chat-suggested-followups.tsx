@@ -22,7 +22,7 @@ export function ChatSuggestedFollowups({
 			<div className="flex items-center place-content-between">
 				<div className="flex items-center gap-4">
 					<GanttChart />
-					<Header4>Suggested follow-ups</Header4>
+					<Header4>Suggested questions</Header4>
 				</div>
 				<div>
 					<SelectContentSelector
