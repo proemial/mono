@@ -4,7 +4,7 @@ import { BaseChatModelParams } from "@langchain/core/language_models/chat_models
 import { COMMON_MODEL_DEFAULTS } from "./model-options";
 
 // Models must be downloaded first. E.g. using `ollama pull llama2`.
-type OllamaModel = "llama2" | "mistral";
+type OllamaModel = "llama3" | "llama2" | "mistral";
 
 export const buildOllamaChatModel = (
 	modelName: OllamaModel,
