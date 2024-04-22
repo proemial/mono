@@ -23,7 +23,7 @@ export async function vectorisePapers(
 			);
 		} finally {
 			Time.log(begin, `vectorStore initialized om ${papers.length} papers`);
-			Metrics.elapsed(begin, "ask.rerank.vectorize");
+			Metrics.elapsedSince(begin, "ask.rerank.vectorize");
 		}
 
 		begin = Time.now();
@@ -41,10 +41,10 @@ export async function vectorisePapers(
 			});
 		} finally {
 			Time.log(begin, `Similarity search performed, returning ${count} papers`);
-			Metrics.elapsed(begin, "ask.rerank.search");
+			Metrics.elapsedSince(begin, "ask.rerank.search");
 		}
 	} finally {
 		Time.log(start, "Elapsed");
-		Metrics.elapsed(start, "ask.rerank");
+		Metrics.elapsedSince(start, "ask.rerank");
 	}
 }

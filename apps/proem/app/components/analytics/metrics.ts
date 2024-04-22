@@ -10,8 +10,13 @@ export const Metrics = {
 		});
 	},
 	now: () => Time.now(),
-	elapsed: (begin: number, key: string) => {
+	elapsedSince: (begin: number, key: string) => {
 		Sentry.metrics.gauge(`proem.${key}.elapsed`, Time.elapsed(begin), {
+			unit: "millisecond",
+		});
+	},
+	elapsed: (millis: number, key: string) => {
+		Sentry.metrics.gauge(`proem.${key}.elapsed`, millis, {
 			unit: "millisecond",
 		});
 	},
