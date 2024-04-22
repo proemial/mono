@@ -1,7 +1,7 @@
 import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
 import OpenAI from "openai";
 
-const model = "gpt-4-0125-preview";
+const model = "gpt-3.5-turbo-0125";
 
 export async function generateStarters(title: string, abstract: string) {
 	const openai = new OpenAI({
@@ -28,6 +28,9 @@ export async function generateStarters(title: string, abstract: string) {
 			},
 		],
 	});
+
+	console.log("Starters generated", completion.choices[0]?.message.content);
+
 	return asArray(completion.choices[0]?.message.content as string);
 }
 
