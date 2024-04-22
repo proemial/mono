@@ -7,7 +7,6 @@ import {
 import { searchParamsChain } from "./search-params-chain";
 import { OpenAlexQueryParams } from "./oa-search-helpers";
 import { Metrics } from "@/app/components/analytics/metrics";
-import { Time } from "@proemial/utils/time";
 
 type Input = {
 	question: string;
@@ -25,15 +24,12 @@ function withoutDuplicates(withoutDups: Paper[], withDups: Paper[]) {
 
 const queryOpenAlex = RunnableLambda.from<OpenAlexQueryParams, Paper[]>(
 	async (input) => {
-		const a = Time.now();
 		const promises = Object.keys(input.searchQueries).map((key) =>
 			fetchPapers(input.searchQueries[key] as string, { metadata: key }),
 		);
-		console.log(`Metrics.elapsed[CREATE PROMISES]: ${Time.elapsed(a)} ms`);
 
 		const begin = Metrics.now();
 		const results = await Promise.all(promises);
-		console.log(`Metrics.elapsed[INVOKE PROMISES]: ${Time.elapsed(begin)} ms`);
 		Metrics.elapsedSince(begin, "ask.papers.fetchall");
 
 		Object.keys(input.searchQueries).forEach((key, i) => {
