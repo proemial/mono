@@ -1,7 +1,6 @@
 import { ButtonBookmark } from "@/components/button-bookmark";
 import { ButtonHeart } from "@/components/button-heart";
 import { ButtonReplies } from "@/components/button-replies";
-import { ButtonShare } from "@/components/button-share";
 import {
 	ChatActionBar,
 	ChatActionBarColumn,
@@ -21,7 +20,7 @@ export function ChatActionBarDiscover() {
 				</div>
 			</ChatActionBarColumn>
 			<ChatActionBarColumn>
-				<ButtonShare />
+				{/* <ButtonShare /> */}
 				<ButtonBookmark />
 			</ChatActionBarColumn>
 		</ChatActionBar>
