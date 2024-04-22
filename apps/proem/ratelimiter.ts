@@ -9,11 +9,12 @@ export const buildRatelimiter = (
 	const config = getEnvConfig();
 	if (config) {
 		const redis = new Redis({ url: config.endpoint, token: config.password });
-		console.log("Rate limiter configured successfully");
-		return new Ratelimit({
+		const ratelimit = new Ratelimit({
 			redis,
 			limiter: Ratelimit.slidingWindow(noOfRequests, windowDuration),
 		});
+		console.log("Rate limiter configured successfully");
+		return ratelimit;
 	}
 };
 
