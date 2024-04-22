@@ -48,7 +48,7 @@ export function PaperCard({
 
 			{publisher && (
 				<CardFooter>
-					<CardDescription variant="paperPublisher">
+					<CardDescription variant="paperPublisher" className="line-clamp-2">
 						{publisher}
 					</CardDescription>
 				</CardFooter>
