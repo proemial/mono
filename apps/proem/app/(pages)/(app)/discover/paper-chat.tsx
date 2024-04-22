@@ -23,15 +23,18 @@ export function PaperChat({ suggestions, title, abstract }: PaperChatProps) {
 		api: "/api/bot/chat",
 	});
 
+	const hasQA = messages.length > 0;
+
 	return (
 		<>
-			<div className="flex flex-col gap-5">
-				<div className="flex items-center place-content-between">
-					<div className="flex items-center gap-4">
-						<GanttChart />
-						<Header4>Q&A</Header4>
-					</div>
-					{/* <SelectContentSelector
+			{hasQA ? (
+				<div className="flex flex-col gap-5">
+					<div className="flex items-center place-content-between">
+						<div className="flex items-center gap-4">
+							<GanttChart />
+							<Header4>Q&A</Header4>
+						</div>
+						{/* <SelectContentSelector
 					selector={[
 						{ value: "latest", label: "Latest" },
 						{ value: "popular", label: "Popular" },
@@ -39,21 +42,20 @@ export function PaperChat({ suggestions, title, abstract }: PaperChatProps) {
 						{ value: "unanswered", label: "Unanswered" },
 					]}
 				/> */}
+					</div>
+					<div className="flex flex-col gap-6 place-items-end">
+						{messages.map((message) => (
+							<QAMessage
+								key={message.id}
+								content={message.content}
+								role={message.role}
+							/>
+						))}
+					</div>
 				</div>
-				<div className="flex flex-col gap-6 place-items-end">
-					{messages.map((message) => (
-						<QAMessage
-							key={message.id}
-							content={message.content}
-							role={message.role}
-						/>
-					))}
-				</div>
-			</div>
-
-			{!messages?.length &&
+			) : (
 				<ChatSuggestedFollowups suggestions={suggestions} onClick={append} />
-			}
+			)}
 
 			<ChatInput placeholder="Ask a question" onSend={append} />
 		</>
