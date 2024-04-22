@@ -14,6 +14,7 @@ export default async function ReaderPage({ params }: Props) {
 	if (!paper) {
 		notFound();
 	}
+
 	const updatedPaper = await generate(paper);
 
 	return <PaperReader paper={updatedPaper} />;

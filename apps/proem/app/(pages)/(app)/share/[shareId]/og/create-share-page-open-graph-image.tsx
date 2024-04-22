@@ -26,7 +26,10 @@ export async function createSharePageOpenGraphImage(
 	).then((res) => res.arrayBuffer());
 
 	return new ImageResponse(
-		<AnswerSharingCard content={sharedAnswer.answer ?? ""} classNameAttr="tw" />,
+		<AnswerSharingCard
+			content={sharedAnswer.answer ?? ""}
+			classNameAttr="tw"
+		/>,
 		{
 			...size,
 			fonts: [
