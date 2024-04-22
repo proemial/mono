@@ -10,9 +10,8 @@ const maxLength = 270;
 const truncate = (str: string) =>
 	str.length <= maxLength
 		? str
-		: `${
-				str.substring(0, maxLength) + str?.substring(maxLength).split(" ")[0]
-			}`;
+		: `${str.substring(0, maxLength) + str?.substring(maxLength).split(" ")[0]
+		}`;
 
 export function AnswerSharingCard({
 	content,
@@ -41,7 +40,7 @@ export function AnswerSharingCard({
 				</div>
 				<img
 					{...twcl("w-[74px] h-[46px]")}
-					src={`http://${process.env.NEXT_PUBLIC_VERCEL_URL}/open-graph/corner.png`}
+					src={`${process.env.NEXT_PUBLIC_VERCEL_URL}/open-graph/corner.png`}
 					alt=""
 				/>
 			</div>
@@ -49,7 +48,7 @@ export function AnswerSharingCard({
 			<div {...twcl("flex items-center")}>
 				<img
 					{...twcl("w-14 h-20 mr-8 mt-2")}
-					src={`http://${process.env.NEXT_PUBLIC_VERCEL_URL}/open-graph/logo.svg`}
+					src={`${process.env.NEXT_PUBLIC_VERCEL_URL}/open-graph/logo.svg`}
 					alt=""
 				/>
 				<div
