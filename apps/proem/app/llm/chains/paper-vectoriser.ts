@@ -1,4 +1,5 @@
 import { Paper } from "@/app/api/paper-search/search";
+import { Metrics } from "@/app/components/analytics/metrics";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { Time } from "@proemial/utils/time";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
@@ -22,6 +23,7 @@ export async function vectorisePapers(
 			);
 		} finally {
 			Time.log(begin, `vectorStore initialized om ${papers.length} papers`);
+			Metrics.elapsed(begin, "ask.rerank.vectorize");
 		}
 
 		begin = Time.now();
@@ -39,8 +41,10 @@ export async function vectorisePapers(
 			});
 		} finally {
 			Time.log(begin, `Similarity search performed, returning ${count} papers`);
+			Metrics.elapsed(begin, "ask.rerank.search");
 		}
 	} finally {
 		Time.log(start, "Elapsed");
+		Metrics.elapsed(start, "ask.rerank");
 	}
 }
