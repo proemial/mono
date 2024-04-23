@@ -27,10 +27,13 @@ const queryOpenAlex = RunnableLambda.from<OpenAlexQueryParams, Paper[]>(
 		const promises = Object.keys(input.searchQueries).map((key) =>
 			fetchPapers(input.searchQueries[key] as string, { metadata: key }),
 		);
+
+		const begin = Metrics.now();
 		const results = await Promise.all(promises);
+		Metrics.elapsedSince(begin, "ask.papers.fetchall");
 
 		Object.keys(input.searchQueries).forEach((key, i) => {
-			Metrics.papersFetched(key, results[i]?.length ?? 0);
+			Metrics.paperQueryExecuted(key, results[i]?.length ?? 0);
 		});
 
 		const counts = [];

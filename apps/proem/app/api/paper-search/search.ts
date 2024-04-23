@@ -1,3 +1,4 @@
+import { Metrics } from "@/app/components/analytics/metrics";
 import {
 	OpenAlexPaperWithAbstract,
 	OpenAlexWorksSearchResult,
@@ -5,7 +6,6 @@ import {
 	oaBaseUrl,
 	openAlexFields,
 } from "@proemial/models/open-alex";
-import { Redis } from "@proemial/redis/redis";
 // ,publication_date:>2023-10-16,publication_date:<2023-11-16
 import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
@@ -35,8 +35,6 @@ export async function fetchPapers(q: string, config?: FetchConfig) {
 		config?.tokens ?? 350,
 	);
 
-	await Redis.papers.pushAll(papers.map((data) => ({ data, id: data.id })));
-
 	return papers.map((o) => ({
 		link: o.id.replace("openalex.org", "proem.ai/oa"),
 		abstract: o.abstract,
@@ -65,5 +63,6 @@ async function fetchWithAbstract(q: string, count: number, tokens: number) {
 		});
 	} finally {
 		Time.log(begin, `[fetchWithAbstract] ${query}`);
+		Metrics.elapsedSince(begin, "ask.papers.fetch");
 	}
 }

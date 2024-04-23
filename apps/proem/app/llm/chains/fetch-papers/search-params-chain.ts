@@ -12,6 +12,7 @@ import {
 	synonymGroups,
 	uniqueUnigrams,
 } from "./search-params-helpers";
+import { Metrics } from "@/app/components/analytics/metrics";
 
 type Input = {
 	question: string;
@@ -30,9 +31,19 @@ const extractSynonymGroupsChain = () =>
 		runnable,
 		new StringOutputParser(),
 		toSanitizedArray,
-	]).withConfig({
-		runName: "ExtractSynonymGroups",
-	});
+	])
+		.withConfig({
+			runName: "ExtractSynonymGroups",
+		})
+		.withListeners({
+			onEnd: (output) => {
+				const elapsed =
+					output?.end_time && output?.end_time - output.start_time;
+				if (elapsed) {
+					Metrics.elapsed(elapsed, "ask.papers.synonyms");
+				}
+			},
+		});
 
 const toSanitizedArray = (str: string) => JSON.parse(str.replace("\n", ""));
 

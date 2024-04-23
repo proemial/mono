@@ -1,7 +1,7 @@
 import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
 import OpenAI from "openai";
 
-const model = "gpt-3.5-turbo";
+const model = "gpt-3.5-turbo-0125";
 
 export async function generateStarters(title: string, abstract: string) {
 	const openai = new OpenAI({
@@ -28,13 +28,19 @@ export async function generateStarters(title: string, abstract: string) {
 			},
 		],
 	});
+
 	return asArray(completion.choices[0]?.message.content as string);
 }
 
 // {text: "1. xxx\n2. xxx\n 3. xxx"} > ["xxx", "xxx", "xxx"]
 function asArray(text: string) {
+	console.log("READ starters string: ", text);
+
 	if (!text[0]?.match(/^\d/)) {
 		return [text];
 	}
-	return text.split("\n").map((str) => str.substring(3));
+	const array = text.split("\n").map((str) => str.substring(3));
+	console.log("READ starters array: ", array);
+
+	return array;
 }

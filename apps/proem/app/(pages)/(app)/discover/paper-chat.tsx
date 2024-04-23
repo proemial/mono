@@ -47,7 +47,7 @@ export function PaperChat({ suggestions, title, abstract }: PaperChatProps) {
 						{messages.map((message) => (
 							<QAMessage
 								key={message.id}
-								content={message.content}
+								content={message.content.replaceAll("((", "").replaceAll("))", "")}
 								role={message.role}
 							/>
 						))}

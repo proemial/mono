@@ -2,7 +2,7 @@ import { answers } from "@/app/api/bot/answer-engine/answers";
 import { MOCKED_ANSWER_ENGINE_RUN } from "@/app/api/bot/answer-engine/mocked-answer-engine-run";
 import { saveAnswer } from "@/app/api/bot/answer-engine/save-answer";
 import { NewAnswer } from "@proemial/data/neon/schema/answersTable";
-import { experimental_StreamData } from "ai";
+import { StreamData } from "ai";
 
 const MOCKED_SHARE_ID = "123456";
 
@@ -28,7 +28,7 @@ describe("saveAnswer", () => {
 		const data = {
 			close: vi.fn(),
 			append: vi.fn(),
-		} as unknown as experimental_StreamData;
+		} as unknown as StreamData;
 
 		await saveAnswer(
 			question,
