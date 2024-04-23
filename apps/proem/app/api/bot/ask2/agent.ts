@@ -80,7 +80,7 @@ export const buildAgent = async (
 						return insertedAnswer;
 					});
 
-					const followUpsQuestionPromise = followUpQuestionChain
+					const followUpsQuestionPromise = followUpQuestionChain()
 						.invoke({
 							question: userInput,
 							answer,

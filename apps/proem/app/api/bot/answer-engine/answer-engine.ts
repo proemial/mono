@@ -97,7 +97,7 @@ export async function askAnswerEngine({
 					}
 				});
 
-				const followUpsQuestionPromise = followUpQuestionChain
+				const followUpsQuestionPromise = followUpQuestionChain()
 					.invoke({
 						question,
 						answer,
