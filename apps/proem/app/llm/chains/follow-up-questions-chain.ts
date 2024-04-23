@@ -16,7 +16,7 @@ The second question should challenge the facts presented in the answer.
 The third question should broaden the user's knowledge on the topic.
 
 Rules:
-- Each of the three follow-up questions must not exceed 10 words.
+- Each of the three follow-up questions must not exceed ten words.
 - Respond only with the three follow-up questions.
 
 Example:
@@ -24,7 +24,7 @@ Example:
 ---
 Human: How does life work?
 Assistan: Life works through complex processes, including the biological aging modeled by Gompertz and the developmental plasticity that allows organisms to adapt to their environment, influenced by genetics and early life events.
-Response: What are the key components of Gompertz's aging model? Are there any alternative theories to Gompertz's model of aging? How do genetics and early life events interact in shaping an organism's development?
+Response: What are the key components of the model? Are there any alternative theories to it? How do genetics interact in shaping an organism's development?
 ---
 `;
 
