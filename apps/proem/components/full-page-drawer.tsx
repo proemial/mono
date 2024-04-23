@@ -33,7 +33,7 @@ export function FullSizeDrawer({
 			<DrawerContent
 				className={cn(screenMaxWidth, "w-full h-full mx-auto rounded-none")}
 			>
-				<div className="flex flex-col h-full gap-6">
+				<div className="flex flex-col h-full gap-1">
 					<DrawerHeader className="pt-0 grow-0">
 						<DrawerTitle className="flex justify-between flex-row-reverse text-2xl font-normal items-center">
 							<DrawerClose onClick={onClose}>
@@ -43,7 +43,7 @@ export function FullSizeDrawer({
 							<div>{title}</div>
 						</DrawerTitle>
 					</DrawerHeader>
-					<div className="grow px-8 overflow-auto ">
+					<div className="grow px-4 overflow-auto">
 						{render ? render(DrawerClose) : children}
 					</div>
 				</div>
