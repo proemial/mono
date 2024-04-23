@@ -61,14 +61,7 @@ export const fetchPapersChain = RunnableSequence.from<Input, PapersAsString>([
 			.withConfig({ runName: "FetchPapers" }),
 	}),
 	(input) => JSON.stringify(input.papers),
-]).withListeners({
-	onEnd: (output) => {
-		const elapsed = output?.end_time && output?.end_time - output.start_time;
-		if (elapsed) {
-			Metrics.elapsed(elapsed, "ask.papers");
-		}
-	},
-});
+]);
 
 const toRelativeLink = (paper: Paper) => {
 	return {
