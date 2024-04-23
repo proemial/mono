@@ -25,6 +25,10 @@ export function PaperChat({ suggestions, title, abstract }: PaperChatProps) {
 
 	const hasQA = messages.length > 0;
 
+	const handleExplainerClick = (msg: string) => {
+		append({ role: "user", content: `What is ${msg}?` });
+	};
+
 	return (
 		<>
 			{hasQA ? (
@@ -47,8 +51,9 @@ export function PaperChat({ suggestions, title, abstract }: PaperChatProps) {
 						{messages.map((message) => (
 							<QAMessage
 								key={message.id}
-								content={message.content.replaceAll("((", "").replaceAll("))", "")}
+								content={message.content}
 								role={message.role}
+								onExplainerClick={handleExplainerClick}
 							/>
 						))}
 					</div>

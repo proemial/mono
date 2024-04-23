@@ -1,3 +1,4 @@
+import { applyExplainLinks } from "@/app/components/chat/apply-links";
 import { ProemLogo } from "@/app/components/icons/brand/logo";
 import { UserAvatar } from "@/app/components/user-avatar";
 import {
@@ -11,14 +12,19 @@ import {
 type QAMessageProps = {
 	role: string;
 	content: string;
+	onExplainerClick: (msg: string) => void;
 };
 
-export function QAMessage({ content, role }: QAMessageProps) {
+export function QAMessage({ content, role, onExplainerClick }: QAMessageProps) {
 	const messageType = role === "user" ? "question" : "answer";
 	return (
 		<Message variant={messageType} className="space-y-1.5">
 			<MessageContent>
-				<MessageBubble>{content}</MessageBubble>
+				<MessageBubble>
+					{messageType === "answer"
+						? applyExplainLinks(content, onExplainerClick)
+						: content}
+				</MessageBubble>
 				{/* <MessageAction>
 					<ButtonHeart small />
 					<span className="leading-tight">{message.likes}</span>

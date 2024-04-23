@@ -12,7 +12,7 @@ export function applyExplainLinks(
 
 		return (
 			<span
-				className="font-normal text-green-500 cursor-pointer"
+				className="font-normal bg-neutral-100 dark:bg-neutral-700 cursor-pointer"
 				onClick={() => onClick(sanitized)}
 			>
 				{sanitized}
@@ -66,13 +66,13 @@ export function applyElement(asElement: (link: LinkType) => React.ReactNode) {
 						? {
 								...convertHrefToLink(aTagHref),
 								content: aTagContent,
-						  }
+							}
 						: markdownHref && markdownContent
-						  ? {
+							? {
 									...convertHrefToLink(markdownHref),
 									content: markdownContent,
-							  }
-						  : null;
+								}
+							: null;
 
 				if (link) {
 					acc.links.push(link);
