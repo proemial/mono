@@ -20,6 +20,10 @@ export function useUser() {
 	const clerkProfile = getProfileFromClerkUser(clerkUser);
 	const internalUser = getInternalUser(clerkProfile?.email);
 
+	if (!clerkProfile?.id && !internalUser.isInternal) {
+		return { user: undefined, isLoaded };
+	}
+
 	const user = {
 		...clerkProfile,
 		isInternal: internalUser.isInternal,
