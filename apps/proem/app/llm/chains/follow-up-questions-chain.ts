@@ -3,33 +3,45 @@ import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 
-const stringOutputParser = new StringOutputParser();
-
-const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask");
-
 type FollowUpQuestionChainInput = {
 	question: string;
 	answer: string;
 };
+
+const systemPrompt = `
+Based on a given question and an answer to that question, provide three good follow-up questions that would enable an adult learner dive deeper into a topic and understand the background for the given answer.
+
+The first question should dive deeper into the topic.
+The second question should challenge the facts presented in the answer.
+The third question should broaden the user's knowledge on the topic.
+
+Rules:
+- Each of the three follow-up questions must not exceed 10 words.
+- Respond only with the three follow-up questions.
+
+Example:
+
+---
+Question: How does life work?
+Answer: Life works through complex processes, including the biological aging modeled by Gompertz and the developmental plasticity that allows organisms to adapt to their environment, influenced by genetics and early life events.
+Follow-up questions: What are the key components of Gompertz's aging model? Are there any alternative theories to Gompertz's model of aging? How do genetics and early life events interact in shaping an organism's development?
+---
+`;
+
 const prompt = ChatPromptTemplate.fromMessages<FollowUpQuestionChainInput>([
-	[
-		"system",
-		"You are a professor, who needs to explain science to students who haven't been listening in school. You have to give them short questions. Here are some examples. There is one that is critical to the question, please mind that because that is an important question. What societal changes might accompany widespread EV adoption? What are the environmental concerns about battery production and their disposal? Can EVs overcome limitations like battery technology and charging time?",
-	],
+	["system", systemPrompt],
 	["human", "{question}"],
 	["assistant", "{answer}"],
-	[
-		"human",
-		"Based on chat history provide three good follow-up questions that would help an adult learner dive a bit deeper and understand the background for this answer. Make the questions short, 10 words or less. Explain the 3 questions with one that dives deeper, one that challenges the facts and the last one to broaden the users knowledge. The professor avoids talking about why he asked that question, instead he only asks the question and not why. The professor avoids writing dives deeper, challenges the facts and broaden user knowledge because he wants to keep it smooth.",
-	],
 ]);
+
+const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "ask");
 
 export const getFollowUpQuestionChain = (
 	modelOverride: BaseChatModel = model,
 ) =>
 	prompt
 		.pipe(modelOverride)
-		.pipe(stringOutputParser)
+		.pipe(new StringOutputParser())
 		.pipe(sanitizeFollowups)
 		.withConfig({ runName: "GenerateFollowUpQuestions" });
 
