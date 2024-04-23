@@ -6,7 +6,6 @@ import {
 	oaBaseUrl,
 	openAlexFields,
 } from "@proemial/models/open-alex";
-import { Redis } from "@proemial/redis/redis";
 // ,publication_date:>2023-10-16,publication_date:<2023-11-16
 import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
@@ -35,8 +34,6 @@ export async function fetchPapers(q: string, config?: FetchConfig) {
 		config?.count ?? 30,
 		config?.tokens ?? 350,
 	);
-
-	await Redis.papers.pushAll(papers.map((data) => ({ data, id: data.id })));
 
 	return papers.map((o) => ({
 		link: o.id.replace("openalex.org", "proem.ai/oa"),
