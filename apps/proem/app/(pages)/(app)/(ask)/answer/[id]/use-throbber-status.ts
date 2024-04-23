@@ -28,7 +28,7 @@ async function* generateStatusMessage() {
 		yield message;
 		if (message !== MESSAGES[MESSAGES.length - 1]) {
 			await new Promise((resolve) =>
-				setTimeout(resolve, randomIntervalMs(3000, 5000)),
+				setTimeout(resolve, randomIntervalMs(2000, 3000)),
 			);
 		}
 	}
