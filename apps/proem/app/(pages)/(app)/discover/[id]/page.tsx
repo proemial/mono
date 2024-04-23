@@ -1,21 +1,26 @@
 import { fetchPaper } from "@/app/(pages)/(app)/discover/[id]/fetch-paper";
 import { generate } from "@/app/(pages)/(app)/discover/[id]/llm-generate";
 import { PaperReader } from "@/app/(pages)/(app)/discover/[id]/paper-reader";
+import { PaperReaderSkeleton } from "@/app/(pages)/(app)/discover/[id]/paper-reader-skeleton";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 type Props = {
 	params: { id: string };
-	searchParams: { title?: string };
 };
 
 export default async function ReaderPage({ params }: Props) {
-	const paper = await fetchPaper(params.id);
+	const paperPromise = fetchPaper(params.id).then((paper) => {
+		if (!paper) {
+			notFound();
+		}
 
-	if (!paper) {
-		notFound();
-	}
+		return generate(paper);
+	});
 
-	const updatedPaper = await generate(paper);
-
-	return <PaperReader paper={updatedPaper} />;
+	return (
+		<Suspense fallback={<PaperReaderSkeleton />}>
+			<PaperReader paperPromise={paperPromise} />
+		</Suspense>
+	);
 }

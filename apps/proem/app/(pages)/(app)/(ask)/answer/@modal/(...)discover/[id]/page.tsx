@@ -1,34 +1,15 @@
-"use client";
-
-import {
-	PaperReader,
-	PaperReaderProps,
-} from "@/app/(pages)/(app)/discover/[id]/paper-reader";
+import ReaderPage from "@/app/(pages)/(app)/discover/[id]/page";
 import { PageDrawer } from "@/components/full-page-drawer";
-import { OpenAlexPaper } from "@proemial/models/open-alex";
-import { useEffect, useState } from "react";
 
 type ReaderModalProps = {
 	params: { id: string };
 };
-export default function ReaderModal({
+export default async function ReaderModal({
 	params: { id: paperId },
 }: ReaderModalProps) {
-	// TODO!: ugly client side data fetching until we have a better solution
-	const [readerData, setReaderData] = useState<OpenAlexPaper>();
-
-	useEffect(() => {
-		const fetchCurrentPaper = async () => {
-			const response = await fetch(`/discover/${paperId}/get`);
-			const body = await response.json();
-			setReaderData(body);
-		};
-		fetchCurrentPaper();
-	}, [paperId]);
-
 	return (
 		<PageDrawer>
-			{readerData ? <PaperReader paper={readerData} /> : <p>loading...</p>}
+			<ReaderPage params={{ id: paperId }} />
 		</PageDrawer>
 	);
 }

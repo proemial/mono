@@ -10,12 +10,15 @@ import { PaperCardDiscoverProfile } from "@/components/paper-card-discover-profi
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Header4 } from "@proemial/shadcn-ui";
 import { File02 } from "@untitled-ui/icons-react";
+import { use } from "react";
 
 export type PaperReaderProps = {
-	paper?: OpenAlexPaper;
+	paperPromise: Promise<OpenAlexPaper>;
 };
 
-export function PaperReader({ paper }: PaperReaderProps) {
+export function PaperReader({ paperPromise }: PaperReaderProps) {
+	const paper = use(paperPromise);
+
 	return (
 		<div className="space-y-6">
 			<CollapsibleSection
@@ -35,7 +38,9 @@ export function PaperReader({ paper }: PaperReaderProps) {
 						<PaperCardDiscover
 							title={paper?.data.title ?? ""}
 							date={paper?.data.publication_date}
-							publisher={paper?.data.primary_location.source?.display_name ?? ""}
+							publisher={
+								paper?.data.primary_location.source?.display_name ?? ""
+							}
 						/>
 					</a>
 
