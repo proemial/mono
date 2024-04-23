@@ -8,7 +8,7 @@ export default function PagesLayout({
 	return (
 		<>
 			<NavigationMenuBar />
-			<main className="w-full p-4 flex flex-col flex-grow">{children}</main>
+			<main className="w-full p-4 pb-0 flex flex-col flex-grow">{children}</main>
 		</>
 	);
 }
