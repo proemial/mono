@@ -36,7 +36,7 @@ export async function fetchPapers(q: string, config?: FetchConfig) {
 		config?.tokens ?? 350,
 	);
 
-	// await Redis.papers.pushAll(papers.map((data) => ({ data, id: data.id })));
+	await Redis.papers.pushAll(papers.map((data) => ({ data, id: data.id })));
 
 	return papers.map((o) => ({
 		link: o.id.replace("openalex.org", "proem.ai/oa"),

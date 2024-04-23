@@ -8,7 +8,7 @@ import { Time } from "@proemial/utils/time";
 export const OpenAlexPapers = {
 	get: async (id: string) => {
 		try {
-			return (await UpStash.papers.get(`oa:${id}`)) as OpenAlexPaper;
+			return (await UpStash.papers().get(`oa:${id}`)) as OpenAlexPaper;
 		} catch (error) {
 			console.error(error);
 			throw error;
@@ -24,7 +24,7 @@ export const OpenAlexPapers = {
 		const begin = Time.now();
 		try {
 			console.log("[pushAll] pushing", papersArray.length, "papers");
-			const pipeline = UpStash.papers.pipeline();
+			const pipeline = UpStash.papers().pipeline();
 			for (const paper of papersArray) {
 				const id = getIdFromOpenAlexPaper(paper);
 				pipeline.set(`oa:${id}`, { ...paper, id });
@@ -44,14 +44,14 @@ export const OpenAlexPapers = {
 		appendFn: (existingPaper: OpenAlexPaper) => OpenAlexPaper,
 	) => {
 		try {
-			const redisPaper = (await UpStash.papers.get(
+			const redisPaper = (await UpStash.papers().get(
 				`oa:${id}`,
 			)) as OpenAlexPaper;
 
 			const updatedPaper = appendFn(redisPaper || {});
 
 			console.log("[upsert] pushing paper", id);
-			await UpStash.papers.set(`oa:${id}`, updatedPaper);
+			await UpStash.papers().set(`oa:${id}`, updatedPaper);
 
 			return updatedPaper;
 		} catch (error) {
@@ -68,7 +68,7 @@ export const OpenAlexPapers = {
 		const papersArray = Array.isArray(papers) ? papers : [papers];
 
 		try {
-			const pipeline = UpStash.papers.pipeline();
+			const pipeline = UpStash.papers().pipeline();
 			papersArray.forEach((paper) => {
 				const id = getIdFromOpenAlexPaper(paper);
 				pipeline.get(`oa:${id}`);
