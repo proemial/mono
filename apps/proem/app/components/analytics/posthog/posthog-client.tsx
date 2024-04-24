@@ -1,9 +1,8 @@
 "use client";
-import { TrackingInput, analyticsTrace, useTrackingProfile } from "@/app/components/analytics/tracking/tracking-profile";
+import { TrackingInput, analyticsTrace, usePathNames, useTrackingProfile } from "@/app/components/analytics/tracking/tracking-profile";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { ReactNode, useEffect, useState } from "react";
-import { a } from "vitest/dist/suite-ynYMzeLu.js";
 
 // https://posthog.com/tutorials/cookieless-tracking
 export function PostHogClient({ children, tracking }: { children: ReactNode, tracking?: TrackingInput }) {
@@ -17,6 +16,7 @@ function useInit(trackingInput?: TrackingInput) {
 	const { trackingProfile, user } = useTrackingProfile(trackingInput);
 	const [initialized, setInitialized] = useState(false);
 	const [identified, setIdentified] = useState(false);
+	const { pathname, trackingKey } = usePathNames();
 
 	useEffect(() => {
 		// wait for clerk to load
@@ -55,6 +55,15 @@ function useInit(trackingInput?: TrackingInput) {
 			setIdentified(true);
 		};
 	}, [user?.isInternal, user?.email, user?.id]);
+
+	useEffect(() => {
+		if (initialized) {
+			analyticsTrace("[PosthogClient] trackPage:", trackingKey, pathname);
+			posthog.capture(trackingKey, {
+				path: pathname,
+			});
+		}
+	}, [initialized, pathname, trackingKey]);
 
 	return initialized && identified;
 }
