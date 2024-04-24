@@ -58,7 +58,7 @@ export const QaPair = ({
 					isQuestionByCurrentUser={isQuestionByCurrentUser}
 				/>
 				{!papers && isLoadingAnswer && !answer && (
-					<div className="flex items-center gap-4">
+					<div className="flex items-center gap-4 min-h-9">
 						<Paper />
 						<Header4>{throbberStatus}</Header4>
 						<div className="flex flex-grow justify-end">
