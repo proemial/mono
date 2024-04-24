@@ -1,5 +1,4 @@
 import {
-	Button,
 	Card,
 	CardBullet,
 	CardContent,
@@ -22,10 +21,10 @@ export function PaperCardDiscoverProfile({ name }: { name: string }) {
 				<div className="size-[72px] rounded-full mx-auto bg-primary" />
 			</CardContent>
 			<CardFooter>
-				<CardDescription variant="paperCoAuthor">
-					<Button variant="default" size="pill">
+				<CardDescription variant="paperCoAuthor" className="truncate">
+					<div className="truncate bg-primary px-4 py-2 rounded-full text-2xs">
 						{name}
-					</Button>
+					</div>
 				</CardDescription>
 			</CardFooter>
 		</Card>
