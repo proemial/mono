@@ -8,6 +8,8 @@ import { useEffect } from "react";
 // https://vercel.com/docs/concepts/analytics/custom-events
 export function VaClient({ tracking }: { tracking?: TrackingInput }) {
 	const { trackingProfile } = useTrackingProfile(tracking);
+
+	// Only enabled for registered users or non-eu citizens
 	if (trackingProfile !== "tracked") return null;
 
 	analyticsTrace("[VaClient]");

@@ -4,8 +4,7 @@ import { INTERNAL_COOKIE_NAME, User, useUser } from "@/app/hooks/use-user";
 import { getCookie, setCookie } from "cookies-next";
 import { usePathname } from "next/navigation";
 
-// TODO
-// Verify feature flags and onboarding
+const traceEnabled = false;
 
 export type TrackingInput = {
 	region?: string;
@@ -34,7 +33,7 @@ export function getTrackingProfile(
 
 	const props = `registered: ${registered}, region: ${region}, bot: ${isBot}, internal: ${internal}`;
 	const trace = (profile: string) =>
-		analyticsTrace(`[tracking][${profile}] ${props}`);
+		traceEnabled && analyticsTrace(`[tracking][${profile}] ${props}`);
 
 	if (isBot) {
 		trace("disabled");
@@ -47,7 +46,7 @@ export function getTrackingProfile(
 		return "disabled";
 	}
 
-	if (!user || trackingInput?.region?.startsWith("eu")) {
+	if (!user && trackingInput?.region?.startsWith("eu")) {
 		trace("anonymous");
 		return "anonymous";
 	}

@@ -3,6 +3,7 @@ import { TrackingInput, analyticsTrace, useTrackingProfile } from "@/app/compone
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { ReactNode, useEffect, useState } from "react";
+import { a } from "vitest/dist/suite-ynYMzeLu.js";
 
 // https://posthog.com/tutorials/cookieless-tracking
 export function PostHogClient({ children, tracking }: { children: ReactNode, tracking?: TrackingInput }) {
@@ -21,17 +22,22 @@ function useInit(trackingInput?: TrackingInput) {
 		// wait for clerk to load
 		if (!trackingProfile) return;
 
+		// memory: do not persist in cookies/local storage for anonymous eu citizens
 		const persistence = trackingProfile !== "tracked" ? "memory" : undefined;
-		const autocapture = user?.isInternal ? false : true;
+
+		// false: do not capture events for internal users
+		const disableTracking = user?.isInternal;
 
 		const token = process.env.NEXT_PUBLIC_POSTHOG_KEY;
 		const api_host = process.env.NEXT_PUBLIC_POSTHOG_HOST;
 
-		analyticsTrace("[PosthogClient] initializing", `persistence: ${persistence}, autocapture: ${autocapture}`);
+		analyticsTrace("[PosthogClient] initializing", `persistence: ${persistence}, disableTracking: ${disableTracking}`);
 		posthog.init(token, {
 			api_host,
 			persistence,
-			autocapture,
+			autocapture: !disableTracking,
+			capture_pageview: !disableTracking,
+			capture_pageleave: !disableTracking,
 			loaded: (posthog) => {
 				if (process.env.NODE_ENV === 'development') posthog.debug()
 			},
@@ -40,14 +46,15 @@ function useInit(trackingInput?: TrackingInput) {
 	}, [user, trackingProfile]);
 
 	useEffect(() => {
+		// we may need to stop overwriting the default distinctID, if we want to keep trafic after initial login
 		const distinctID = user?.email || user?.id;
 
-		if (distinctID) {
+		if (!user?.isInternal && distinctID) {
 			analyticsTrace("[PosthogClient] identifying", `distinctID: ${distinctID}`);
 			posthog.identify(distinctID);
 			setIdentified(true);
 		};
-	}, [user?.email, user?.id]);
+	}, [user?.isInternal, user?.email, user?.id]);
 
 	return initialized && identified;
 }
