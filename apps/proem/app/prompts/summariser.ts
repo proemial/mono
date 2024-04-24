@@ -24,7 +24,7 @@ export async function summarise(title: string, abstract: string) {
 			{
 				role: "user",
 				content:
-					'Write a captivating summary in 20 words or less of the most significant finding for an engaging tweet that will capture the minds of other researchers, using layman\'s terminology, and without mentioning abstract entities like "you", "researchers", "authors", "propose", or "study" but rather stating the finding as a statement of fact. Make sure to use 20 words or less.',
+					'Write a captivating summary in 20 words or less of the most significant finding for an engaging headline that will capture the minds of other researchers, using layman\'s terminology, and without mentioning abstract entities like "you", "researchers", "authors", "propose", or "study" but rather stating the finding as a statement of fact. Make sure to use 20 words or less.',
 			},
 		],
 	});

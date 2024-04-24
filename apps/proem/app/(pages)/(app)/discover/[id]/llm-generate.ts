@@ -10,10 +10,10 @@ export async function generate(paper: OpenAlexPaper) {
 	if (paperTitle && abstract) {
 		const starters = !paper.generated?.starters
 			? await generateStarters(paperTitle, abstract)
-			: paper.generated?.starters;
+			: paper.generated.starters;
 		const title = !paper.generated?.title
 			? ((await summarise(paperTitle, abstract)) as string)
-			: paper.generated?.title;
+			: paper.generated.title;
 
 		const updatedPaper = await Redis.papers.upsert(
 			paper.id,
