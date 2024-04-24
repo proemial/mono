@@ -1,6 +1,6 @@
+import { toTitleCaseIfAllCaps } from "@/utils/string-utils";
 import {
 	Card,
-	CardBullet,
 	CardContent,
 	CardDescription,
 	CardFooter,
@@ -83,7 +83,7 @@ export function PaperCardWithLink({
 						</div>
 					) : (
 						<CardTitle variant="paper" className="line-clamp-4">
-							{title}
+							{toTitleCaseIfAllCaps(title)}
 						</CardTitle>
 					)}
 				</CardContent>

@@ -7,6 +7,7 @@ import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { PaperCardDiscover } from "@/components/paper-card-discover";
 import { PaperCardDiscoverProfile } from "@/components/paper-card-discover-profile";
+import { toTitleCaseIfAllCaps } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Header4 } from "@proemial/shadcn-ui";
 import { File02 } from "@untitled-ui/icons-react";
@@ -31,20 +32,18 @@ export function PaperReader({ paperPromise }: PaperReaderProps) {
 			>
 				<HorisontalScrollArea>
 					<a
-						href={paper?.data.primary_location.landing_page_url}
+						href={paper.data.primary_location.landing_page_url}
 						target="_blank"
 						rel="noreferrer"
 					>
 						<PaperCardDiscover
-							title={paper?.data.title ?? ""}
-							date={paper?.data.publication_date}
-							publisher={
-								paper?.data.primary_location.source?.display_name ?? ""
-							}
+							title={toTitleCaseIfAllCaps(paper.data.title)}
+							date={paper.data.publication_date}
+							publisher={paper.data.primary_location.source.display_name}
 						/>
 					</a>
 
-					{paper?.data.authorships.map((author) => (
+					{paper.data.authorships.map((author) => (
 						<PaperCardDiscoverProfile
 							key={author.author.id}
 							name={author.author.display_name}
@@ -54,7 +53,7 @@ export function PaperReader({ paperPromise }: PaperReaderProps) {
 			</CollapsibleSection>
 
 			<ChatArticle
-				headline={paper?.generated?.title ?? paper?.data.title}
+				headline={paper.generated?.title ?? paper.data.title}
 				model="GPT-4 TURBO"
 				type="Summary"
 			/>
@@ -62,9 +61,9 @@ export function PaperReader({ paperPromise }: PaperReaderProps) {
 			{/* <ChatActionBarDiscover /> */}
 
 			<PaperChat
-				suggestions={paper?.generated?.starters}
-				title={paper?.data.title ?? ""}
-				abstract={paper?.data.abstract}
+				suggestions={paper.generated?.starters}
+				title={paper.data.title}
+				abstract={paper.data.abstract}
 			/>
 		</div>
 	);
