@@ -6,15 +6,17 @@ export const revalidate = 1;
 export async function GET(req: NextRequest) {
 	const client = new Client();
 	const runs = client.listRuns({
-		projectName: "proem",
+		projectName: "proem-staging",
 		executionOrder: 1,
 		startTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
-		filter: 'eq(name,"Ask")',
+		filter: 'eq(name,"AgentExecutor")',
 	});
 
 	const questions = {} as { [key: string]: number };
 	for await (const run of runs) {
-		const question = run?.inputs?.question;
+		// console.log(dayjs(run.start_time).format("YYYY.MM.DD"));
+
+		const question = run?.inputs?.input;
 
 		if (!questions[question]) {
 			questions[question] = 0;
