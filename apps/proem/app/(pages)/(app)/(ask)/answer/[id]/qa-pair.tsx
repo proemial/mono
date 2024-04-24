@@ -12,8 +12,7 @@ import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { Paper } from "@/components/icons/Paper";
 import { PaperCardAsk } from "@/components/paper-card-ask";
-import { ChatPapersSkeleton } from "@/components/skeletons";
-import { Header4 } from "@proemial/shadcn-ui";
+import { Header4, Icons } from "@proemial/shadcn-ui";
 import { Message } from "ai/react";
 import { ReactNode, useEffect, useRef } from "react";
 import { useThrobberStatus } from "./use-throbber-status";
@@ -59,7 +58,13 @@ export const QaPair = ({
 					isQuestionByCurrentUser={isQuestionByCurrentUser}
 				/>
 				{!papers && isLoadingAnswer && !answer && (
-					<ChatPapersSkeleton statusText={throbberStatus} />
+					<div className="flex items-center gap-4">
+						<Paper />
+						<Header4>{throbberStatus}</Header4>
+						<div className="flex flex-grow justify-end">
+							<Icons.throbber />
+						</div>
+					</div>
 				)}
 				{papers && papers.length === 0 && (
 					<div className="flex items-center gap-4">
