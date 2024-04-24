@@ -15,7 +15,7 @@ export function PaperCardDiscoverProfile({ name }: { name: string }) {
 				<CardBullet>
 					<Users01 className="size-4" />
 				</CardBullet>
-				<CardDescription variant="paperDate">CO-AUTHOR</CardDescription>
+				<CardDescription variant="paperDate">AUTHOR</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<div className="size-[72px] rounded-full mx-auto bg-primary" />
