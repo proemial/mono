@@ -1,4 +1,4 @@
-import { Metrics } from "@/app/components/analytics/metrics";
+import { Metrics } from "@/app/components/analytics/sentry/metrics";
 import {
 	OpenAlexPaperWithAbstract,
 	OpenAlexWorksSearchResult,

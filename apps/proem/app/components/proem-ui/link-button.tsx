@@ -1,5 +1,5 @@
 "use client";
-import { Tracker } from "@/app/components/analytics/tracker";
+import { Tracker } from "@/app/components/analytics/tracking/tracker";
 import { Send } from "@/app/components/icons/functional/send";
 import { Button } from "@/app/components/shadcn-ui/button";
 import { cn } from "@/app/components/shadcn-ui/utils";

@@ -1,5 +1,5 @@
 "use client";
-import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
+import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
 import { INTERNAL_COOKIE_NAME, User, useUser } from "@/app/hooks/use-user";
 import { getCookie, setCookie } from "cookies-next";
 import { usePathname } from "next/navigation";

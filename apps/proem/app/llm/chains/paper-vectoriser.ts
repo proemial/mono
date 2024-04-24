@@ -1,5 +1,5 @@
 import { Paper } from "@/app/api/paper-search/search";
-import { Metrics } from "@/app/components/analytics/metrics";
+import { Metrics } from "@/app/components/analytics/sentry/metrics";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { Time } from "@proemial/utils/time";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";

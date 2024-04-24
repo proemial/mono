@@ -1,7 +1,7 @@
 import { authMiddleware } from "@clerk/nextjs";
 import { geolocation } from "@vercel/edge";
 import { NextResponse } from "next/server";
-import { vercelRegions } from "./app/components/analytics/analytics-keys";
+import { vercelRegions } from "./app/components/analytics/tracking/tracking-keys";
 import { buildRatelimiter } from "./ratelimiter";
 
 // geolocation only works on the edge

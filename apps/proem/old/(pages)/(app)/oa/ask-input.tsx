@@ -1,6 +1,6 @@
 "use client";
-import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
-import { Tracker } from "@/app/components/analytics/tracker";
+import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
+import { Tracker } from "@/app/components/analytics/tracking/tracker";
 import { useInputFocusState } from "@/app/components/chat/state";
 import { useDrawerState } from "@/app/components/login/state";
 import { TextInput } from "@/app/components/proem-ui/text-input";

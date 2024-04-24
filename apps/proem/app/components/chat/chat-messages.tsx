@@ -1,6 +1,6 @@
 "use client";
-import { Tracker } from "@/app//components/analytics/tracker";
-import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
+import { Tracker } from "@/app/components/analytics/tracking/tracker";
+import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
 import { PROEM_BOT } from "@/app/components/chat/bot-user";
 import { useUser } from "@clerk/nextjs";
 import { getProfileFromClerkUser } from "@proemial/models/clerk-user";

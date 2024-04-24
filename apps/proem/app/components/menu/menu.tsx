@@ -1,5 +1,5 @@
 "use client";
-import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
+import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
 import { FeedIcon } from "@/app/components/icons/menu/feed-icon";
 import { ReadIcon } from "@/app/components/icons/menu/read-icon";
 import { SearchIcon } from "@/app/components/icons/menu/search-icon";

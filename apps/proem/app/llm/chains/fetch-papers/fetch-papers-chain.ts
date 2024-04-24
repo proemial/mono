@@ -6,7 +6,7 @@ import {
 } from "@langchain/core/runnables";
 import { searchParamsChain } from "./search-params-chain";
 import { OpenAlexQueryParams } from "./oa-search-helpers";
-import { Metrics } from "@/app/components/analytics/metrics";
+import { Metrics } from "@/app/components/analytics/sentry/metrics";
 
 type Input = {
 	question: string;

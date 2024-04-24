@@ -1,4 +1,4 @@
-import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
+import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
 import { ChatInput } from "@/app/components/chat/chat-input";
 import { ChatMessages } from "@/app/components/chat/chat-messages";
 import { StarterMessages } from "@/app/components/chat/chat-starters";

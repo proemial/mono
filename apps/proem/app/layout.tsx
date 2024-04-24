@@ -103,8 +103,7 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 									</div>
 								</div>
 							</div>
-							<Analytics.Vercel tracking={trackingInput} />
-							<Analytics.Google tracking={trackingInput} />
+							<Analytics.Clients tracking={trackingInput} />
 						</ThemeProvider>
 					</body>
 				</html>

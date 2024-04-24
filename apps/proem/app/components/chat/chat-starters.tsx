@@ -1,5 +1,5 @@
 "use client";
-import { Tracker } from "@/app//components/analytics/tracker";
+import { Tracker } from "@/app/components/analytics/tracking/tracker";
 import { SearchMd } from "@untitled-ui/icons-react";
 import { ChatStarter } from "./chat-message";
 import { ChatTarget, useChatState } from "./state";

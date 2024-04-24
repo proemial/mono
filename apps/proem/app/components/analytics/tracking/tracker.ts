@@ -1,4 +1,4 @@
-import { analyticsTrace } from "@/app/components/analytics/tracking-profile";
+import { analyticsTrace } from "@/app/components/analytics/tracking/tracking-profile";
 import va from "@vercel/analytics";
 import posthog from "posthog-js";
 import ReactGA from "react-ga4";

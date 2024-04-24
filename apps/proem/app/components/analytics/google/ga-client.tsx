@@ -1,17 +1,12 @@
 "use client";
-import { TrackingInput, analyticsTrace, usePathNames, useTrackingProfile } from "@/app/components/analytics/tracking-profile";
+import { TrackingInput, analyticsTrace, usePathNames } from "@/app/components/analytics/tracking/tracking-profile";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import ReactGA from "react-ga4";
-import TagManager from 'react-gtm-module'
+import TagManager from 'react-gtm-module';
 
 // https://www.npmjs.com/package/react-ga4
 export function GaClient({ tracking }: { tracking?: TrackingInput }) {
-	const { trackingProfile } = useTrackingProfile(tracking);
-
-	// Only enabled for registered users or non-eu citizens
-	if (trackingProfile !== "tracked") return null;
-
 	analyticsTrace("[GaClient]");
 
 	const initialized = useInit();

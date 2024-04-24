@@ -1,5 +1,5 @@
 "use client";
-import { TrackingInput, analyticsTrace, useTrackingProfile } from "@/app/components/analytics/tracking-profile";
+import { TrackingInput, analyticsTrace, useTrackingProfile } from "@/app/components/analytics/tracking/tracking-profile";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { ReactNode, useEffect, useState } from "react";

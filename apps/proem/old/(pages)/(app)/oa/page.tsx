@@ -1,4 +1,4 @@
-import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
+import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
 import { LinkButton } from "@/app/components/proem-ui/link-button";
 import { STARTERS } from "@/old/(pages)/(app)/(answer-engine)/starters";
 import { fetchLatestPapers } from "@/old/(pages)/(app)/oa/[id]/fetch-paper";
