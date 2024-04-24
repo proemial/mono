@@ -43,7 +43,7 @@ export function FullSizeDrawer({
 							<div>{title}</div>
 						</DrawerTitle>
 					</DrawerHeader>
-					<div className="p-4 pb-0">
+					<div className="p-4 overflow-auto">
 						{render ? render(DrawerClose) : children}
 					</div>
 				</div>
