@@ -77,7 +77,10 @@ export function ChatForm({
 
 	const handleFormInput = (e: KeyboardEvent<HTMLTextAreaElement>) => {
 		const target = e.target as HTMLTextAreaElement;
-		if ((e.code === "Enter" || target.value.includes("\n")) && target.value?.replaceAll("\n", "")?.length) {
+		if (
+			(e.code === "Enter" || target.value.includes("\n")) &&
+			target.value?.replaceAll("\n", "")?.length
+		) {
 			setIsFocused(false);
 			!!onFocusChange && onFocusChange(false);
 			askQuestion(form.getValues("question"));
@@ -118,10 +121,18 @@ export function ChatForm({
 									<Textarea
 										{...field}
 										placeholder={placeholder}
-										className={`${style("input", isFocused, simulateKeyboardUp)} ${form.getFieldState("question").invalid ? "border border-red-300" : ""}`}
+										className={`dark:placeholder:text-[#e5e5e5] placeholder:text-[#2b2b2b] placeholder:opacity-40 ${style(
+											"input",
+											isFocused,
+											simulateKeyboardUp,
+										)} ${
+											form.getFieldState("question").invalid
+												? "border border-red-300"
+												: ""
+										}`}
 										onKeyDown={(e) => {
 											const target = e.target as HTMLTextAreaElement;
-											if ((e.code === "Enter" || target.value.includes("\n"))) {
+											if (e.code === "Enter" || target.value.includes("\n")) {
 												e.preventDefault();
 											}
 											return handleFormInput(e);
@@ -137,7 +148,13 @@ export function ChatForm({
 						)}
 					/>
 					<Button
-						disabled={!!(form.formState.isSubmitting || form.getFieldState("question").error || !form.getValues("question")?.length)}
+						disabled={
+							!!(
+								form.formState.isSubmitting ||
+								form.getFieldState("question").error ||
+								!form.getValues("question")?.length
+							)
+						}
 						className={style("button", isFocused, simulateKeyboardUp)}
 						size="icon"
 						type="submit"
