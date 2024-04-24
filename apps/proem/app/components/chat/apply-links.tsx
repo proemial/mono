@@ -12,7 +12,7 @@ export function applyExplainLinks(
 
 		return (
 			<span
-				className="font-normal bg-neutral-100 dark:bg-neutral-700 cursor-pointer"
+				className="font-normal bg-neutral-200 dark:bg-neutral-600 cursor-pointer"
 				onClick={() => onClick(sanitized)}
 			>
 				{sanitized}
