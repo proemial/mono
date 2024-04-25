@@ -1,11 +1,20 @@
 "use client";
-import { TrackingInput, analyticsTrace, usePathNames, useTrackingProfile } from "@/app/components/analytics/tracking/tracking-profile";
+import {
+	TrackingInput,
+	analyticsTrace,
+	usePathNames,
+	useTrackingProfile,
+} from "@/app/components/analytics/tracking/tracking-profile";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { ReactNode, useEffect, useState } from "react";
+import { Tracker } from "../tracking/tracker";
 
 // https://posthog.com/tutorials/cookieless-tracking
-export function PostHogClient({ children, tracking }: { children: ReactNode, tracking?: TrackingInput }) {
+export function PostHogClient({
+	children,
+	tracking,
+}: { children: ReactNode; tracking?: TrackingInput }) {
 	analyticsTrace("[PosthogClient]");
 	useInit(tracking);
 
@@ -31,7 +40,10 @@ function useInit(trackingInput?: TrackingInput) {
 		const token = process.env.NEXT_PUBLIC_POSTHOG_KEY;
 		const api_host = process.env.NEXT_PUBLIC_POSTHOG_HOST;
 
-		analyticsTrace("[PosthogClient] initializing", `persistence: ${persistence}, disableTracking: ${disableTracking}`);
+		analyticsTrace(
+			"[PosthogClient] initializing",
+			`persistence: ${persistence}, disableTracking: ${disableTracking}`,
+		);
 		posthog.init(token, {
 			api_host,
 			persistence,
@@ -39,7 +51,7 @@ function useInit(trackingInput?: TrackingInput) {
 			capture_pageview: !disableTracking,
 			capture_pageleave: !disableTracking,
 			loaded: (posthog) => {
-				if (process.env.NODE_ENV === 'development') posthog.debug()
+				if (process.env.NODE_ENV === "development") posthog.debug();
 			},
 		});
 		setInitialized(true);
@@ -50,18 +62,18 @@ function useInit(trackingInput?: TrackingInput) {
 		const distinctID = user?.email || user?.id;
 
 		if (!user?.isInternal && distinctID) {
-			analyticsTrace("[PosthogClient] identifying", `distinctID: ${distinctID}`);
+			analyticsTrace(
+				"[PosthogClient] identifying",
+				`distinctID: ${distinctID}`,
+			);
 			posthog.identify(distinctID);
 			setIdentified(true);
-		};
+		}
 	}, [user?.isInternal, user?.email, user?.id]);
 
 	useEffect(() => {
 		if (initialized) {
-			analyticsTrace("[PosthogClient] trackPage:", trackingKey, pathname);
-			posthog.capture(`proem:${trackingKey}`, {
-				path: pathname,
-			});
+			Tracker.trackPage.posthog(trackingKey, pathname);
 		}
 	}, [initialized, pathname, trackingKey]);
 

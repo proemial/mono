@@ -1,12 +1,17 @@
 "use client";
-import { TrackingInput, analyticsTrace, usePathNames } from "@/app/components/analytics/tracking/tracking-profile";
+import {
+	TrackingInput,
+	analyticsTrace,
+	usePathNames,
+} from "@/app/components/analytics/tracking/tracking-profile";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import ReactGA from "react-ga4";
-import TagManager from 'react-gtm-module';
+import TagManager from "react-gtm-module";
+import { Tracker } from "../tracking/tracker";
 
 // https://www.npmjs.com/package/react-ga4
-export function GaClient({ tracking }: { tracking?: TrackingInput }) {
+export function GaClient() {
 	analyticsTrace("[GaClient]");
 
 	const initialized = useInit();
@@ -14,11 +19,7 @@ export function GaClient({ tracking }: { tracking?: TrackingInput }) {
 
 	useEffect(() => {
 		if (initialized) {
-			analyticsTrace("[GaClient] trackPage:", trackingKey, pathname);
-			ReactGA.send({ hitType: "pageview", page: pathname, title: pathname });
-			ReactGA.event(`proem:${trackingKey}`, {
-				path: pathname,
-			});
+			Tracker.trackPage.google(trackingKey, pathname);
 		}
 	}, [initialized, pathname, trackingKey]);
 
@@ -43,11 +44,11 @@ function useInit() {
 
 			analyticsTrace("[GaClient] GTM initializing");
 			TagManager.initialize({
-				gtmId: 'GTM-TCS63KTV',
+				gtmId: "GTM-TCS63KTV",
 				dataLayer: {
 					userId: user.id,
-				}
-			})
+				},
+			});
 			setInitialized(true);
 		}
 	}, [user]);
