@@ -35,6 +35,7 @@ export function ChatSuggestedFollowups({
 					suggestions={suggestions}
 					trackingPrefix={trackingPrefix}
 					onClick={onClick}
+					starters={trackingPrefix === "read"}
 				/>
 			</div>
 		</div>

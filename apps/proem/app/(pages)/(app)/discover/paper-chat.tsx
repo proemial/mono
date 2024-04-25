@@ -1,4 +1,8 @@
 "use client";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/app/components/analytics/tracking/tracking-keys";
 import { ChatInput } from "@/components/chat-input";
 import {
 	ChatSuggestedFollowups,
@@ -28,6 +32,7 @@ export function PaperChat({ suggestions, title, abstract }: PaperChatProps) {
 
 	const handleExplainerClick = (msg: string) => {
 		append({ role: "user", content: `What is ${msg}?` });
+		trackHandler(analyticsKeys.read.click.explainer)();
 	};
 
 	return (

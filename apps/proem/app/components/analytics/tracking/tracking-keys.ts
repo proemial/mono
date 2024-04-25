@@ -36,15 +36,15 @@ export const analyticsKeys = {
 	},
 	chat: {
 		click: {
-			stop: "stop:click",
-			clear: "clear:click",
-			share: "share:click",
-			input: "input:click",
-			submit: "submit:click",
-			starter: "starter:click",
-			followup: "followup:click",
-			suggestion: "suggestion:click",
-			suggestionsCategory: "suggestions:category:click",
+			stop: "chat:stop:click",
+			clear: "chat:clear:click",
+			share: "chat:share:click",
+			input: "chat:input:click",
+			submit: "chat:submit:click",
+			starter: "chat:starter:click",
+			followup: "chat:followup:click",
+			suggestion: "chat:suggestion:click",
+			suggestionsCategory: "chat:suggestions:category:click",
 		},
 		submit: {
 			input: "input:submit",
@@ -73,6 +73,7 @@ export const analyticsKeys = {
 			collapse: "read:metadata:collapse:click",
 			fullPaper: "read:full-paper:click",
 			model: "read:model:click",
+			explainer: "read:chat:explainer:click",
 
 			// TODO: cleanup
 			feed: "read:feed:click",
@@ -80,11 +81,11 @@ export const analyticsKeys = {
 			askStarter: "read:ask_starter:click",
 			share: "read:share:click",
 			starter: "read:starter:click",
-			explainer: "read:explainer:click",
 			answers: "read:tab-answers:click",
 			metadata: "read:tab-metadata:click",
 		},
 		submit: {
+			// TODO: cleanup
 			ask: "read:ask_input:submit",
 			question: "read:input:submit",
 		},

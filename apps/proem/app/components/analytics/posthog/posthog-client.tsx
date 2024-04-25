@@ -50,9 +50,9 @@ function useInit(trackingInput?: TrackingInput) {
 			autocapture: !disableTracking,
 			capture_pageview: !disableTracking,
 			capture_pageleave: !disableTracking,
-			loaded: (posthog) => {
-				if (process.env.NODE_ENV === "development") posthog.debug();
-			},
+			// loaded: (posthog) => {
+			// 	if (process.env.NODE_ENV === "development") posthog.debug();
+			// },
 		});
 		setInitialized(true);
 	}, [user, trackingProfile]);
