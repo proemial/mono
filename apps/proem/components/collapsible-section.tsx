@@ -1,5 +1,6 @@
 "use client";
 
+import { trackHandler } from "@/app/components/analytics/tracking/tracking-keys";
 import {
 	Button,
 	Collapsible,
@@ -14,12 +15,14 @@ type CollapsibleSection = {
 	trigger: React.ReactNode;
 	children: React.ReactNode;
 	extra?: React.ReactNode;
+	trackingKey?: string;
 };
 
 export function CollapsibleSection({
 	children,
 	trigger,
 	extra,
+	trackingKey,
 }: CollapsibleSection) {
 	const [isOpen, setIsOpen] = useState(true);
 
@@ -29,7 +32,10 @@ export function CollapsibleSection({
 			onOpenChange={setIsOpen}
 			className="w-full space-y-2"
 		>
-			<CollapsibleTrigger asChild>
+			<CollapsibleTrigger
+				asChild
+				onClick={() => trackingKey && trackHandler(trackingKey)()}
+			>
 				<div className="flex items-center justify-between space-x-4 cursor-pointer">
 					{trigger}
 

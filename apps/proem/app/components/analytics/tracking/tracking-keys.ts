@@ -41,17 +41,16 @@ export const analyticsKeys = {
 			share: "ask:share:click",
 			collapse: "ask:papers:collapse:click",
 			paper: "ask:paper:click",
-			avatar: "ask:avatar:click",
+			avatar: "ask:avatar:click", //
 			model: "ask:model:click",
 			input: "ask:input:click",
 			submit: "ask:submit:click",
-
-			// TODO: cleanup
 			starter: "ask:starter:click",
 			followup: "ask:followup:click",
 			suggestion: "ask:suggestion:click",
 			suggestionsCategory: "ask:suggestions:category:click",
 
+			// TODO: cleanup
 			answerCard: "ask:answer-card:click",
 			answerLink: "ask:answer-link:click",
 		},
@@ -60,12 +59,16 @@ export const analyticsKeys = {
 		},
 	},
 	feed: {
+		// TODO: cleanup
 		click: {
 			card: "feed:card:click",
 		},
 	},
 	read: {
 		click: {
+			collapse: "read:metadata:collapse:click",
+
+			// TODO: cleanup
 			feed: "read:feed:click",
 			random: "read:random:click",
 			askStarter: "read:ask_starter:click",
@@ -82,6 +85,7 @@ export const analyticsKeys = {
 		},
 	},
 	profile: {
+		// TODO: cleanup
 		click: {
 			feedback: "profile:feedback:click",
 			privacy: "profile:privacy:click",

@@ -5,6 +5,7 @@ import {
 	AnswerEngineEvents,
 	findByEventType,
 } from "@/app/api/bot/answer-engine/events";
+import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
 import { ChatActionBarAsk } from "@/components/chat-action-bar-ask";
 import { ChatArticle } from "@/components/chat-article";
 import { ChatQuestion } from "@/components/chat-question";
@@ -74,6 +75,7 @@ export const QaPair = ({
 				)}
 				{papers && papers.length > 0 && (
 					<CollapsibleSection
+						trackingKey={analyticsKeys.ask.click.collapse}
 						trigger={
 							<div className="flex items-center gap-4">
 								<Paper />
