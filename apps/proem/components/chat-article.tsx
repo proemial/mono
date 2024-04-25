@@ -7,7 +7,7 @@ type ChatArticleProps = {
 	type: "Answer" | "Summary";
 	headline?: string;
 	text?: string;
-	trackingKey?: string;
+	trackingKey: string;
 };
 
 export function ChatArticle({
@@ -25,7 +25,7 @@ export function ChatArticle({
 				</div>
 				<div className="flex justify-end flex-grow -mr-2">
 					<Trackable trackingKey={trackingKey}>
-						<ModelSelector className="w-full" />
+						<ModelSelector className="w-full" trackingKey={trackingKey} />
 					</Trackable>
 				</div>
 			</div>

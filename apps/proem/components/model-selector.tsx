@@ -2,9 +2,10 @@ import { SelectContentSelector } from "./select-content-selector";
 
 type Props = {
 	className?: string;
+	trackingKey: string;
 };
 
-export const ModelSelector = ({ className }: Props) => (
+export const ModelSelector = ({ className, trackingKey }: Props) => (
 	<SelectContentSelector
 		className={className}
 		selector={[
@@ -15,5 +16,6 @@ export const ModelSelector = ({ className }: Props) => (
 			{ value: "curious", label: "Mixtral 8x22B", disabled: true },
 			{ value: "curious", label: "Llama 3", disabled: true },
 		]}
+		trackingKey={trackingKey}
 	/>
 );
