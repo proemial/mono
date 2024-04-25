@@ -14,7 +14,7 @@ const buttonVariants = cva(
 				default:
 					"bg-primary text-primary-foreground uppercase text-2xs hover:bg-primary/90",
 				suggestion:
-					"text-left justify-start items-start text-foreground bg-card text-base/leading-5 text-wrap whitespace-normal rounded-2xl border-0 md:w-fit",
+					"text-left justify-start items-start text-foreground bg-card text-base leading-snug text-wrap whitespace-normal rounded-xl border-0 md:w-fit",
 				chat: "text-left justify-start text-foreground bg-primary",
 				ghost: "hover:bg-inherit hover:text-inherit",
 			},
@@ -25,7 +25,7 @@ const buttonVariants = cva(
 				icon: "h-10 w-10 rounded-full",
 				pill: "h-6 px-4 py-2 rounded-full",
 				pillLg: "h-10 p-2 pl-[18px] pb-[10px] rounded-full",
-				suggestion: "min-h-12 rounded-3xl h-fit px-6 py-2 flex items-center",
+				suggestion: "rounded-2xl h-fit px-3.5 py-2 flex items-center",
 				actionBar: "size-5 p-0",
 				none: "",
 			},
@@ -39,7 +39,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
 	extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-	VariantProps<typeof buttonVariants> {
+		VariantProps<typeof buttonVariants> {
 	asChild?: boolean;
 }
 

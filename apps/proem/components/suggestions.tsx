@@ -1,6 +1,9 @@
 "use client";
 
-import { analyticsKeys, trackHandler } from "@/app/components/analytics/tracking/tracking-keys";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/app/components/analytics/tracking/tracking-keys";
 import { Button } from "@proemial/shadcn-ui";
 import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
@@ -11,7 +14,11 @@ export type SuggestionsProps = {
 	starters?: boolean;
 };
 
-export function Suggestions({ suggestions, onClick, starters }: SuggestionsProps) {
+export function Suggestions({
+	suggestions,
+	onClick,
+	starters,
+}: SuggestionsProps) {
 	const router = useRouter();
 
 	const handleTracking = () => {
@@ -21,7 +28,7 @@ export function Suggestions({ suggestions, onClick, starters }: SuggestionsProps
 		} else {
 			trackHandler(analyticsKeys.ask.click.followup)();
 		}
-	}
+	};
 
 	function handleClick(suggestion: string) {
 		handleTracking();
@@ -34,7 +41,7 @@ export function Suggestions({ suggestions, onClick, starters }: SuggestionsProps
 
 	return (
 		<div className="flex flex-col gap-5">
-			<div className="flex flex-col gap-4">
+			<div className="space-y-2.5">
 				{suggestions?.map((suggestion) => (
 					<Button
 						variant="suggestion"

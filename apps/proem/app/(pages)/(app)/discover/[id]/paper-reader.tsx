@@ -30,7 +30,7 @@ export function PaperReader({
 				trackingKey={analyticsKeys.read.click.collapse}
 				trigger={
 					<div className="flex items-center gap-4">
-						<File02 className="size-4" />
+						<File02 className="size-5" />
 						<Header4>Research Paper</Header4>
 					</div>
 				}

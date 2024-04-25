@@ -49,7 +49,7 @@ export const QaPair = ({
 	return (
 		<div
 			ref={pairRef}
-			className={`flex flex-col justify-between gap-4 ${
+			className={`flex flex-col justify-between gap-6 ${
 				isLatest && "min-h-[calc(100dvh-172px)]"
 			}`}
 		>
@@ -59,16 +59,16 @@ export const QaPair = ({
 					isQuestionByCurrentUser={isQuestionByCurrentUser}
 				/>
 				{!papers && isLoadingAnswer && !answer && (
-					<div className="flex items-center gap-4 min-h-9">
+					<div className="flex items-center gap-3.5 min-h-9">
 						<Paper />
 						<Header4>{throbberStatus}</Header4>
-						<div className="flex flex-grow justify-end">
+						<div className="flex justify-end flex-grow">
 							<Icons.throbber />
 						</div>
 					</div>
 				)}
 				{papers && papers.length === 0 && (
-					<div className="flex items-center gap-4">
+					<div className="flex items-center gap-3.5">
 						<Paper />
 						<Header4>No research papers found</Header4>
 					</div>
@@ -77,7 +77,7 @@ export const QaPair = ({
 					<CollapsibleSection
 						trackingKey={analyticsKeys.ask.click.collapse}
 						trigger={
-							<div className="flex items-center gap-4">
+							<div className="flex items-center gap-3.5">
 								<Paper />
 								<Header4>Research papers interrogated</Header4>
 							</div>
@@ -100,7 +100,7 @@ export const QaPair = ({
 				)}
 				{/* {isLoadingAnswer && papers && <ChatAnswerSkeleton /> // Relevant once we generate micro titles} */}
 				{answer && (
-					<div className="space-y-4">
+					<div className="pt-3 ">
 						<ChatArticle
 							type="Answer"
 							text={answer.content}

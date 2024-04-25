@@ -22,9 +22,5 @@ export function UserAvatar({ trackingKey }: { trackingKey?: string }) {
 		);
 	}
 
-	return (
-		<div className="w-6 h-6">
-			<User />
-		</div>
-	);
+	return <User />;
 }
