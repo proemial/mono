@@ -1,3 +1,7 @@
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/app/components/analytics/tracking/tracking-keys";
 import { toTitleCaseIfAllCaps } from "@/utils/string-utils";
 import {
 	Card,
@@ -67,7 +71,7 @@ export function PaperCardWithLink({
 	link,
 }: PaperCardProps & { link: string }) {
 	return (
-		<Link href={link}>
+		<Link href={link} onClick={trackHandler(analyticsKeys.ask.click.paper)}>
 			<Card variant="paper">
 				<CardHeader>
 					{header}
