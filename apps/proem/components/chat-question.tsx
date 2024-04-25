@@ -1,3 +1,4 @@
+import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
 import { UserAvatar } from "@/app/components/user-avatar";
 import { User } from "@/components/icons/User";
 
@@ -20,7 +21,7 @@ export function ChatQuestion({
 				{/* TODO: has to be user and not you on share pagecv */}
 				{isQuestionByCurrentUser ? (
 					<>
-						<UserAvatar />
+						<UserAvatar trackingKey={analyticsKeys.ask.click.avatar} />
 						<p>You</p>
 					</>
 				) : (

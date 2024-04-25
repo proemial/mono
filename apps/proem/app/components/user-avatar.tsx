@@ -3,8 +3,9 @@
 import { User } from "@/components/icons/User";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
+import { trackHandler } from "./analytics/tracking/tracking-keys";
 
-export function UserAvatar() {
+export function UserAvatar({ trackingKey }: { trackingKey?: string }) {
 	const { isSignedIn, user, isLoaded } = useUser();
 	const showUserAvatar = isSignedIn && isLoaded && user.hasImage;
 
@@ -16,6 +17,7 @@ export function UserAvatar() {
 				width="24"
 				height="24"
 				className="rounded-full"
+				onClick={() => trackingKey && trackHandler(trackingKey)()}
 			/>
 		);
 	}
