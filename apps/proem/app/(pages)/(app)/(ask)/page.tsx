@@ -1,6 +1,6 @@
 import { ProemLogo } from "@/app/components/icons/brand/logo";
 import { ChatInput } from "@/components/chat-input";
-import { SelectContentSelector } from "@/components/select-content-selector";
+import { FakeMoodSelector } from "@/components/fake-mood-selector";
 import { Suggestions } from "@/components/suggestions";
 import { getThreeRandomStarters } from "./starters";
 
@@ -19,14 +19,8 @@ export default function AskPage() {
 			</div>
 			<div className="flex flex-col gap-10">
 				<div className="flex flex-col gap-2">
-					<div className="flex justify-end">
-						<SelectContentSelector
-							selector={[
-								{ value: "trending", label: "Trending" },
-								{ value: "popular", label: "Popular", disabled: true },
-								{ value: "curious", label: "Curious", disabled: true },
-							]}
-						/>
+					<div className="flex justify-end -mr-2">
+						<FakeMoodSelector />
 					</div>
 					<Suggestions suggestions={starters} starters />
 				</div>
