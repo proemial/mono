@@ -1,7 +1,4 @@
-import {
-	PaperChat,
-	PaperChatProps,
-} from "@/app/(pages)/(app)/discover/paper-chat";
+import { PaperChat } from "@/app/(pages)/(app)/discover/paper-chat";
 import { ChatArticle } from "@/components/chat-article";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
@@ -14,11 +11,16 @@ import { File02 } from "@untitled-ui/icons-react";
 import { use } from "react";
 
 export type PaperReaderProps = {
-	paperPromise: Promise<OpenAlexPaper>;
+	fetchedPaperPromise: Promise<Omit<OpenAlexPaper, "generated">>;
+	generatedPaperPromise: Promise<OpenAlexPaper>;
 };
 
-export function PaperReader({ paperPromise }: PaperReaderProps) {
-	const paper = use(paperPromise);
+export function PaperReader({
+	fetchedPaperPromise,
+	generatedPaperPromise,
+}: PaperReaderProps) {
+	const fetchedPaper = use(fetchedPaperPromise);
+	const generatedPaper = use(generatedPaperPromise);
 
 	return (
 		<div className="space-y-6">
@@ -32,18 +34,18 @@ export function PaperReader({ paperPromise }: PaperReaderProps) {
 			>
 				<HorisontalScrollArea>
 					<a
-						href={paper.data.primary_location.landing_page_url}
+						href={fetchedPaper.data.primary_location.landing_page_url}
 						target="_blank"
 						rel="noreferrer"
 					>
 						<PaperCardDiscover
-							title={toTitleCaseIfAllCaps(paper.data.title)}
-							date={paper.data.publication_date}
-							publisher={paper.data.primary_location.source.display_name}
+							title={toTitleCaseIfAllCaps(fetchedPaper.data.title)}
+							date={fetchedPaper.data.publication_date}
+							publisher={fetchedPaper.data.primary_location.source.display_name}
 						/>
 					</a>
 
-					{paper.data.authorships.map((author) => (
+					{fetchedPaper.data.authorships.map((author) => (
 						<PaperCardDiscoverProfile
 							key={author.author.id}
 							name={author.author.display_name}
@@ -53,7 +55,7 @@ export function PaperReader({ paperPromise }: PaperReaderProps) {
 			</CollapsibleSection>
 
 			<ChatArticle
-				headline={paper.generated?.title ?? paper.data.title}
+				headline={generatedPaper.generated?.title ?? fetchedPaper.data.title}
 				model="GPT-4 TURBO"
 				type="Summary"
 			/>
@@ -61,9 +63,9 @@ export function PaperReader({ paperPromise }: PaperReaderProps) {
 			{/* <ChatActionBarDiscover /> */}
 
 			<PaperChat
-				suggestions={paper.generated?.starters}
-				title={paper.data.title}
-				abstract={paper.data.abstract}
+				suggestions={generatedPaper.generated?.starters}
+				title={fetchedPaper.data.title}
+				abstract={fetchedPaper.data.abstract}
 			/>
 		</div>
 	);

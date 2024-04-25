@@ -10,17 +10,24 @@ type Props = {
 };
 
 export default async function ReaderPage({ params }: Props) {
-	const paperPromise = fetchPaper(params.id).then((paper) => {
+	const fetchedPaperPromise = fetchPaper(params.id).then((paper) => {
 		if (!paper) {
 			notFound();
 		}
 
+		return paper;
+	});
+
+	const generatedPaperPromise = fetchedPaperPromise.then((paper) => {
 		return generate(paper);
 	});
 
 	return (
 		<Suspense fallback={<PaperReaderSkeleton />}>
-			<PaperReader paperPromise={paperPromise} />
+			<PaperReader
+				fetchedPaperPromise={fetchedPaperPromise}
+				generatedPaperPromise={generatedPaperPromise}
+			/>
 		</Suspense>
 	);
 }
