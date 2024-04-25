@@ -1,5 +1,6 @@
 "use client";
 
+import { analyticsKeys, trackHandler } from "@/app/components/analytics/tracking/tracking-keys";
 import { Profile } from "@/components/profile";
 import {
 	Button,
@@ -64,7 +65,7 @@ export function NavigationMenuBar() {
 				</NavigationMenuItem> */}
 
 				<NavigationMenuItem className="flex-none px-1">
-					<Link href="/">
+					<Link href="/" onClick={trackHandler(analyticsKeys.ask.click.clear)}>
 						<Button variant="ghost">
 							<Edit05 className="size-4" />
 						</Button>

@@ -1,5 +1,6 @@
 "use client";
 
+import { analyticsKeys, trackHandler } from "@/app/components/analytics/tracking/tracking-keys";
 import { SoMeLogo } from "@/app/components/icons/some-logo";
 import { LOGIN_REDIRECT_URL_PARAM_NAME } from "@/app/components/login/login-drawer";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
@@ -44,7 +45,7 @@ export function SignInDrawer() {
 					<TableCell variant="icon">
 						<LogIn01 className="mx-auto size-4" />
 					</TableCell>
-					<TableCell variant="key" className="cursor-pointer">
+					<TableCell variant="key" className="cursor-pointer" onClick={trackHandler(analyticsKeys.ui.menu.click.signin)}>
 						Sign in
 					</TableCell>
 				</TableRow>

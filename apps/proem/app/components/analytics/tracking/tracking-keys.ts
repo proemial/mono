@@ -1,7 +1,26 @@
+import { Tracker } from "./tracker";
+
+export function trackHandler(key: string, properties?: Record<string, string>) {
+	return () => {
+		Tracker.track(key, properties);
+	};
+}
+
 export const analyticsKeys = {
 	ui: {
 		menu: {
 			click: {
+				open: "menu:open:click",
+				close: "menu:close:click",
+				theme: "menu:theme:click",
+				feedback: "menu:feedback:click",
+				version: "menu:version:click",
+				terms: "menu:terms:click",
+				privacy: "menu:privacy:click",
+				signin: "menu:signin:click",
+				signout: "menu:signout:click",
+
+				// TODO: cleanup
 				ask: "menu:ask:click",
 				feed: "menu:feed:click",
 				read: "menu:read:click",
@@ -10,6 +29,7 @@ export const analyticsKeys = {
 		},
 		header: {
 			click: {
+				// TODO: cleanup
 				logo: "header:logo:click",
 			},
 		},
@@ -18,10 +38,22 @@ export const analyticsKeys = {
 		click: {
 			stop: "ask:stop:click",
 			clear: "ask:clear:click",
+			share: "ask:share:click",
+			collapse: "ask:papers:collapse:click",
+			paper: "ask:paper:click",
+			avatar: "ask:avatar:click",
+			model: "ask:model:click",
+			input: "ask:input:click",
+			submt: "ask:submit:click",
+
+			// TODO: cleanup
 			starter: "ask:starter:click",
+			followup: "ask:followup:click",
+			suggestion: "ask:suggestion:click",
+			suggestionsCategory: "ask:suggestions:category:click",
+
 			answerCard: "ask:answer-card:click",
 			answerLink: "ask:answer-link:click",
-			share: "ask:share:click",
 		},
 		submit: {
 			ask: "ask:input:submit",

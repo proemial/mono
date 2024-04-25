@@ -11,11 +11,12 @@ export const Tracker = {
 			analyticsTrace("[AnalyticsClient] track aborted");
 			return;
 		}
+		const eventPrefixed = `proem:${event}`;
 
-		va.track(event, properties);
-		ReactGA.event(event, properties);
-		posthog.capture(event, properties);
+		va.track(eventPrefixed, properties);
+		ReactGA.event(eventPrefixed, properties);
+		posthog.capture(eventPrefixed, properties);
 
-		analyticsTrace("[AnalyticsClient] track", event, properties);
+		analyticsTrace("[AnalyticsClient] track", eventPrefixed, properties);
 	},
 };

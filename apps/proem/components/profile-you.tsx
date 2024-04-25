@@ -26,6 +26,7 @@ import {
 import Link from "next/link";
 import * as React from "react";
 import { SignInDrawer } from "./sign-in-drawer";
+import { analyticsKeys, trackHandler } from "@/app/components/analytics/tracking/tracking-keys";
 
 const feedback = "https://tally.so/r/wAv8Ve";
 
@@ -94,7 +95,7 @@ export function ProfileYou() {
 								<File02 className="mx-auto size-4" />
 							</TableCell>
 							<TableCell variant="key">
-								<Link href="/terms">Terms of Use</Link>
+								<Link href="/terms" onClick={trackHandler(analyticsKeys.ui.menu.click.terms)}>Terms of Use</Link>
 							</TableCell>
 						</TableRow>
 						<TableRow>
@@ -102,7 +103,7 @@ export function ProfileYou() {
 								<Lock01 className="mx-auto size-4" />
 							</TableCell>
 							<TableCell variant="key">
-								<Link href="/privacy">Privacy Policy</Link>
+								<Link href="/privacy" onClick={trackHandler(analyticsKeys.ui.menu.click.privacy)}>Privacy Policy</Link>
 							</TableCell>
 						</TableRow>
 						{user ? (
@@ -112,7 +113,10 @@ export function ProfileYou() {
 								</TableCell>
 								<TableCell
 									variant="key"
-									onClick={() => signOut()}
+									onClick={() => {
+										trackHandler(analyticsKeys.ui.menu.click.signout)();
+										signOut();
+									}}
 									className="cursor-pointer"
 								>
 									Sign out
@@ -130,7 +134,8 @@ export function ProfileYou() {
 
 function Feedback() {
 	return (
-		<a href={feedback} target="_blank" rel="noreferrer">
+		<a href={feedback} target="_blank" rel="noreferrer"
+			onClick={trackHandler(analyticsKeys.ui.menu.click.feedback)}>
 			Give feedback
 		</a>
 	);
@@ -139,15 +144,18 @@ function Feedback() {
 function Version() {
 	const version = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ?? "local";
 	return (
-		<>
+		// Check if anyone is actually clicking this
+		<div onClick={trackHandler(analyticsKeys.ui.menu.click.version)}>
 			Version: {version.substring(0, 7)} <Beta />
-		</>
+		</div>
 	);
 }
 
 function Beta() {
 	return (
-		<span className="px-2 py-1.5 text-xs font-bold rounded-md text-secondary-foreground bg-secondary">
+		<span
+			className="px-2 py-1.5 text-xs font-bold rounded-md text-secondary-foreground bg-secondary"
+			onClick={trackHandler(analyticsKeys.ui.menu.click.version, { value: "button" })}>
 			BETA
 		</span>
 	);

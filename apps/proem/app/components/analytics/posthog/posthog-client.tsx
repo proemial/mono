@@ -59,7 +59,7 @@ function useInit(trackingInput?: TrackingInput) {
 	useEffect(() => {
 		if (initialized) {
 			analyticsTrace("[PosthogClient] trackPage:", trackingKey, pathname);
-			posthog.capture(trackingKey, {
+			posthog.capture(`proem:${trackingKey}`, {
 				path: pathname,
 			});
 		}

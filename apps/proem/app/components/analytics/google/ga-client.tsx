@@ -16,7 +16,7 @@ export function GaClient({ tracking }: { tracking?: TrackingInput }) {
 		if (initialized) {
 			analyticsTrace("[GaClient] trackPage:", trackingKey, pathname);
 			ReactGA.send({ hitType: "pageview", page: pathname, title: pathname });
-			ReactGA.event(trackingKey, {
+			ReactGA.event(`proem:${trackingKey}`, {
 				path: pathname,
 			});
 		}

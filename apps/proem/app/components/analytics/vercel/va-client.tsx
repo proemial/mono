@@ -16,7 +16,7 @@ export function VaClient({ tracking }: { tracking?: TrackingInput }) {
 	useEffect(() => {
 		if (initialized) {
 			analyticsTrace("[VaClient] trackPage:", trackingKey, pathname);
-			va.track(trackingKey, {
+			va.track(`proem:${trackingKey}`, {
 				path: pathname,
 			});
 		}
