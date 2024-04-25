@@ -105,6 +105,7 @@ export const QaPair = ({
 							type="Answer"
 							model="GPT-4-TURBO"
 							text={answer.content}
+							trackingKey={analyticsKeys.ask.click.model}
 						/>
 						{savedAnswer?.shareId && (
 							<ChatActionBarAsk shareId={savedAnswer.shareId} />

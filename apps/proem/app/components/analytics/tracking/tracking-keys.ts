@@ -41,7 +41,7 @@ export const analyticsKeys = {
 			share: "ask:share:click",
 			collapse: "ask:papers:collapse:click",
 			paper: "ask:paper:click",
-			avatar: "ask:avatar:click", //
+			avatar: "ask:avatar:click",
 			model: "ask:model:click",
 			input: "ask:input:click",
 			submit: "ask:submit:click",
@@ -67,12 +67,13 @@ export const analyticsKeys = {
 	read: {
 		click: {
 			collapse: "read:metadata:collapse:click",
+			fullPaper: "read:full-paper:click",
+			model: "read:model:click",
 
 			// TODO: cleanup
 			feed: "read:feed:click",
 			random: "read:random:click",
 			askStarter: "read:ask_starter:click",
-			fullPaper: "read:full-paper:click",
 			share: "read:share:click",
 			starter: "read:starter:click",
 			explainer: "read:explainer:click",

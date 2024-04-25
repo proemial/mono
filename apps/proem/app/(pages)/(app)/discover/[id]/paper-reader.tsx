@@ -1,4 +1,6 @@
 import { PaperChat } from "@/app/(pages)/(app)/discover/paper-chat";
+import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
+import { Trackable } from "@/components/trackable";
 import { ChatArticle } from "@/components/chat-article";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
@@ -25,6 +27,7 @@ export function PaperReader({
 	return (
 		<div className="space-y-6">
 			<CollapsibleSection
+				trackingKey={analyticsKeys.read.click.collapse}
 				trigger={
 					<div className="flex items-center gap-4">
 						<File02 className="size-4" />
@@ -33,17 +36,21 @@ export function PaperReader({
 				}
 			>
 				<HorisontalScrollArea>
-					<a
-						href={fetchedPaper.data.primary_location.landing_page_url}
-						target="_blank"
-						rel="noreferrer"
-					>
-						<PaperCardDiscover
-							title={toTitleCaseIfAllCaps(fetchedPaper.data.title)}
-							date={fetchedPaper.data.publication_date}
-							publisher={fetchedPaper.data.primary_location.source.display_name}
-						/>
-					</a>
+					<Trackable trackingKey={analyticsKeys.read.click.fullPaper}>
+						<a
+							href={fetchedPaper.data.primary_location.landing_page_url}
+							target="_blank"
+							rel="noreferrer"
+						>
+							<PaperCardDiscover
+								title={toTitleCaseIfAllCaps(fetchedPaper.data.title)}
+								date={fetchedPaper.data.publication_date}
+								publisher={
+									fetchedPaper.data.primary_location.source.display_name
+								}
+							/>
+						</a>
+					</Trackable>
 
 					{fetchedPaper.data.authorships.map((author) => (
 						<PaperCardDiscoverProfile
@@ -58,6 +65,7 @@ export function PaperReader({
 				headline={generatedPaper.generated?.title ?? fetchedPaper.data.title}
 				model="GPT-4 TURBO"
 				type="Summary"
+				trackingKey={analyticsKeys.read.click.model}
 			/>
 
 			{/* <ChatActionBarDiscover /> */}
