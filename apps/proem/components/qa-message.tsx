@@ -10,18 +10,28 @@ import {
 } from "@proemial/shadcn-ui";
 
 type QAMessageProps = {
-	role: string;
-	content: string;
+	role: "user" | "assistant";
+	content: string | undefined;
 	onExplainerClick: (msg: string) => void;
 };
 
-export function QAMessage({ content, role, onExplainerClick }: QAMessageProps) {
-	const messageType = role === "user" ? "question" : "answer";
+export function QAMessage({
+	role,
+	content = "",
+	onExplainerClick,
+}: QAMessageProps) {
+	if (!content) {
+		return undefined;
+	}
+
 	return (
-		<Message variant={messageType} className="space-y-1.5">
+		<Message
+			variant={role === "user" ? "question" : "answer"}
+			className="space-y-1.5"
+		>
 			<MessageContent>
 				<MessageBubble>
-					{messageType === "answer"
+					{role === "assistant"
 						? applyExplainLinks(content, onExplainerClick)
 						: content}
 				</MessageBubble>
@@ -32,7 +42,7 @@ export function QAMessage({ content, role, onExplainerClick }: QAMessageProps) {
 			</MessageContent>
 			<MessageFooter>
 				<MessageAuthor>
-					{messageType === "question" ? (
+					{role === "user" ? (
 						<>
 							<UserAvatar />
 							<p>You</p>

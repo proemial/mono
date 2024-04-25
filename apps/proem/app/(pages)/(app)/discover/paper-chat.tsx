@@ -5,6 +5,7 @@ import {
 	ChatSuggestedFollowupsProps,
 } from "@/components/chat-suggested-followups";
 import { QAMessage } from "@/components/qa-message";
+import { QAMessageContainer } from "@/components/qa-message-container";
 import { Header4 } from "@proemial/shadcn-ui";
 import { useChat } from "ai/react";
 import { GanttChart } from "lucide-react";
@@ -47,15 +48,28 @@ export function PaperChat({ suggestions, title, abstract }: PaperChatProps) {
 					]}
 				/> */}
 					</div>
-					<div className="flex flex-col gap-6 place-items-end">
-						{messages.map((message) => (
-							<QAMessage
-								key={message.id}
-								content={message.content}
-								role={message.role}
-								onExplainerClick={handleExplainerClick}
-							/>
-						))}
+					<div className="flex flex-col gap-6">
+						{messages
+							.filter((_, index) => index % 2 === 0)
+							.map((message, index) => (
+								<QAMessageContainer
+									key={message.id}
+									grow={[index * 2, index * 2 + 1].includes(
+										messages.length - 1,
+									)}
+								>
+									<QAMessage
+										content={messages[index * 2]?.content}
+										role="user"
+										onExplainerClick={handleExplainerClick}
+									/>
+									<QAMessage
+										content={messages[index * 2 + 1]?.content}
+										role="assistant"
+										onExplainerClick={handleExplainerClick}
+									/>
+								</QAMessageContainer>
+							))}
 					</div>
 				</div>
 			) : (

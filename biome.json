@@ -15,7 +15,8 @@
 				"noArrayIndexKey": "off"
 			},
 			"a11y": {
-				"useKeyWithClickEvents": "off"
+				"useKeyWithClickEvents": "off",
+				"useValidAriaRole": "off"
 			},
 			"style": {
 				"useImportType": "off"
