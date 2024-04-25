@@ -1,11 +1,11 @@
 import { PaperChat } from "@/app/(pages)/(app)/discover/paper-chat";
 import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
-import { Trackable } from "@/components/trackable";
 import { ChatArticle } from "@/components/chat-article";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { PaperCardDiscover } from "@/components/paper-card-discover";
 import { PaperCardDiscoverProfile } from "@/components/paper-card-discover-profile";
+import { Trackable } from "@/components/trackable";
 import { toTitleCaseIfAllCaps } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Header4 } from "@proemial/shadcn-ui";
@@ -63,7 +63,6 @@ export function PaperReader({
 
 			<ChatArticle
 				headline={generatedPaper.generated?.title ?? fetchedPaper.data.title}
-				model="GPT-4 TURBO"
 				type="Summary"
 				trackingKey={analyticsKeys.read.click.model}
 			/>

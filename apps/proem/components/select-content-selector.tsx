@@ -18,9 +18,10 @@ type Props = {
 		label: string;
 		disabled?: boolean;
 	}[];
+	className?: string;
 };
 
-export function SelectContentSelector({ selector }: Props) {
+export function SelectContentSelector({ selector, className = "" }: Props) {
 	function onValueChange(value: string) {
 		// TODO: Implement
 	}
@@ -32,7 +33,9 @@ export function SelectContentSelector({ selector }: Props) {
 				open && trackHandler(analyticsKeys.ask.click.suggestionsCategory)()
 			}
 		>
-			<SelectTrigger className="border-0 w-28 focus:ring-0 focus:ring-offset-0">
+			<SelectTrigger
+				className={`border-0 w-28 focus:ring-0 focus:ring-offset-0 ${className}`}
+			>
 				<SelectValue placeholder={selector[0]?.label ?? ""} />
 			</SelectTrigger>
 			<SelectContent>

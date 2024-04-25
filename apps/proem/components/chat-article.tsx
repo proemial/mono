@@ -1,10 +1,10 @@
+import { Trackable } from "@/components/trackable";
 import { Header2, Header4, Header5, Paragraph } from "@proemial/shadcn-ui";
 import { AlignLeft } from "./icons/AlignLeft";
-import { Trackable } from "@/components/trackable";
+import { ModelSelector } from "./model-selector";
 
 type ChatArticleProps = {
 	type: "Answer" | "Summary";
-	model: string;
 	headline?: string;
 	text?: string;
 	trackingKey?: string;
@@ -13,7 +13,6 @@ type ChatArticleProps = {
 export function ChatArticle({
 	headline,
 	type,
-	model,
 	text,
 	trackingKey,
 }: ChatArticleProps) {
@@ -24,9 +23,9 @@ export function ChatArticle({
 					<AlignLeft />
 					<Header4>{type}</Header4>
 				</div>
-				<div>
+				<div className="flex flex-grow justify-end -mr-2">
 					<Trackable trackingKey={trackingKey}>
-						<Header5>{model}</Header5>
+						<ModelSelector className="w-full" />
 					</Trackable>
 				</div>
 			</div>

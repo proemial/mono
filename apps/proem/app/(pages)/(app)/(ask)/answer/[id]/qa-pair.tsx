@@ -103,7 +103,6 @@ export const QaPair = ({
 					<div className="space-y-4">
 						<ChatArticle
 							type="Answer"
-							model="GPT-4-TURBO"
 							text={answer.content}
 							trackingKey={analyticsKeys.ask.click.model}
 						/>
