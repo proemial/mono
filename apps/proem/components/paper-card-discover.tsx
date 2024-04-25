@@ -1,6 +1,6 @@
 import { PaperCard, PaperCardProps } from "@/components/paper-card";
 import { CardBullet } from "@proemial/shadcn-ui";
-import { Globe01 } from "@untitled-ui/icons-react";
+import { LinkExternal01 } from "@untitled-ui/icons-react";
 
 type PaperCardDiscoverProps = Omit<PaperCardProps, "header">;
 
@@ -10,7 +10,7 @@ export function PaperCardDiscover(props: PaperCardDiscoverProps) {
 			{...props}
 			header={
 				<CardBullet>
-					<Globe01 className="size-4" />
+					<LinkExternal01 className="size-4" />
 				</CardBullet>
 			}
 		/>
