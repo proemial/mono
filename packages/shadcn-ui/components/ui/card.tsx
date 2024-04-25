@@ -11,7 +11,7 @@ const cardVariants = cva(
 		variants: {
 			variant: {
 				default: "",
-				paper: "w-40 h-48",
+				paper: "w-[154px] h-[200px]",
 			},
 		},
 	},
@@ -32,7 +32,7 @@ const cardHeaderVariants = cva(
 );
 
 const cardTitleVariants = cva(
-	"text-2xl font-semibold leading-none tracking-tight ",
+	"text-2xl font-semibold leading-tight tracking-tight",
 	{
 		variants: {
 			variant: {

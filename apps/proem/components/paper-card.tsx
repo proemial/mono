@@ -38,24 +38,20 @@ export function PaperCard({
 				</CardDescription>
 			</CardHeader>
 
-			<CardContent>
-				{loading ? (
-					<div className="flex items-center justify-center mx-auto size-24">
-						<Icons.loader />
-					</div>
-				) : (
-					<CardTitle variant="paper" className="line-clamp-4">
-						{title}
-					</CardTitle>
-				)}
-			</CardContent>
+			{loading ? (
+				<div className="flex items-center justify-center mx-auto size-24">
+					<Icons.loader />
+				</div>
+			) : (
+				<CardTitle variant="paper" className="line-clamp-4  mb-3.5 mt-4">
+					{title}
+				</CardTitle>
+			)}
 
 			{publisher && (
-				<CardFooter>
-					<CardDescription variant="paperPublisher" className="line-clamp-2">
-						{publisher}
-					</CardDescription>
-				</CardFooter>
+				<CardDescription variant="paperPublisher" className="line-clamp-2">
+					{publisher}
+				</CardDescription>
 			)}
 		</Card>
 	);
