@@ -1,6 +1,6 @@
 import { SelectContentSelector } from "./select-content-selector";
 
-export const FakeMoodSelector = () => (
+export const MoodSelector = () => (
 	<SelectContentSelector
 		selector={[
 			{ value: "trending", label: "Trending" },

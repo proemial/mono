@@ -3,8 +3,8 @@
 import { Suggestions, SuggestionsProps } from "@/components/suggestions";
 import { Header4 } from "@proemial/shadcn-ui";
 import { useChat } from "ai/react";
-import { FakeMoodSelector } from "./fake-mood-selector";
 import { GanttChart } from "./icons/GanttChart";
+import { MoodSelector } from "./mood-selector";
 
 export type ChatSuggestedFollowupsProps = Pick<
 	SuggestionsProps,
@@ -25,7 +25,7 @@ export function ChatSuggestedFollowups({
 					<Header4>Suggested questions</Header4>
 				</div>
 				<div className="-mr-2">
-					<FakeMoodSelector />
+					<MoodSelector />
 				</div>
 			</div>
 			<div>

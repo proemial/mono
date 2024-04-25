@@ -1,6 +1,6 @@
 import { ProemLogo } from "@/app/components/icons/brand/logo";
 import { ChatInput } from "@/components/chat-input";
-import { FakeMoodSelector } from "@/components/fake-mood-selector";
+import { MoodSelector } from "@/components/mood-selector";
 import { Suggestions } from "@/components/suggestions";
 import { getThreeRandomStarters } from "./starters";
 
@@ -20,7 +20,7 @@ export default function AskPage() {
 			<div className="flex flex-col gap-10">
 				<div className="flex flex-col gap-2">
 					<div className="flex justify-end -mr-2">
-						<FakeMoodSelector />
+						<MoodSelector />
 					</div>
 					<Suggestions suggestions={starters} starters />
 				</div>
