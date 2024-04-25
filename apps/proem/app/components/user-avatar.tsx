@@ -20,5 +20,9 @@ export function UserAvatar() {
 		);
 	}
 
-	return <User />;
+	return (
+		<div className="w-6 h-6">
+			<User />
+		</div>
+	);
 }
