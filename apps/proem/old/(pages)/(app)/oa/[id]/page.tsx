@@ -51,12 +51,12 @@ export default async function ReaderPage({ params }: Props) {
 				<Tabs defaultValue="QA" className="w-full">
 					<TabsList className="text-[14px] sticky justify-start w-full bg-background top-0 h-[unset] pt-3 pb-3 px-4 z-50">
 						<TabsTrigger value="QA">
-							<Trackable track={analyticsKeys.read.click.answers}>
+							<Trackable trackingKey={analyticsKeys.read.click.answers}>
 								Q & A
 							</Trackable>
 						</TabsTrigger>
 						<TabsTrigger value="metadata">
-							<Trackable track={analyticsKeys.read.click.metadata}>
+							<Trackable trackingKey={analyticsKeys.read.click.metadata}>
 								Metadata
 							</Trackable>
 						</TabsTrigger>
