@@ -39,7 +39,11 @@ function asArray(text: string) {
 	if (!text[0]?.match(/^\d/)) {
 		return [text];
 	}
-	const array = text.split("\n").map((str) => str.substring(3));
+	const array = text
+		.split("\n")
+		.map((str) => str.substring(3))
+		.filter((str) => str.includes("?"));
+
 	console.log("READ starters array: ", array);
 
 	return array;
