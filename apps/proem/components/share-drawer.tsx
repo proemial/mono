@@ -1,4 +1,8 @@
 "use client";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/app/components/analytics/tracking/tracking-keys";
 import { ShareIcon, ShareIconProps } from "@/app/components/share/share-icon";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
 import { Answer } from "@proemial/data/neon/schema/answersTable";
@@ -132,7 +136,10 @@ export function ShareDrawer({ shareId }: ShareDrawerProps) {
 	return (
 		<FullSizeDrawer
 			trigger={
-				<Button variant="ghost">
+				<Button
+					variant="ghost"
+					onClick={trackHandler(analyticsKeys.ask.click.share)}
+				>
 					<Upload01 />
 				</Button>
 			}

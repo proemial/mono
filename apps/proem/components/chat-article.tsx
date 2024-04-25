@@ -1,6 +1,10 @@
 import { Header2, Header4, Header5, Paragraph } from "@proemial/shadcn-ui";
 import { AlignLeft } from "./icons/AlignLeft";
-
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/app/components/analytics/tracking/tracking-keys";
+import { Trackable } from "@/app/components/trackable";
 
 type ChatArticleProps = {
 	type: "Answer" | "Summary";
@@ -18,7 +22,9 @@ export function ChatArticle({ headline, type, model, text }: ChatArticleProps) {
 					<Header4>{type}</Header4>
 				</div>
 				<div>
-					<Header5>{model}</Header5>
+					<Trackable trackingKey={analyticsKeys.ask.click.model}>
+						<Header5>{model}</Header5>
+					</Trackable>
 				</div>
 			</div>
 
