@@ -1,0 +1,29 @@
+---
+import HeroSection from "./HeroSection.astro";
+import Logostorm from "./Logostorm.astro";
+import EmailCapture from "./EmailCapture.astro";
+---
+
+<div id="herosectionid">
+ <HeroSection></HeroSection>
+ <!-- <EmailCapture title="Join the waitlist"></EmailCapture> -->
+ <Logostorm></Logostorm>
+</div>
+<style lang="scss">
+	@import "../variables/global.scss";
+
+  #herosectionid{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 90vh;
+    width: 100%;
+
+  }
+  @media only screen and (max-width: 900px) {
+    #herosectionid{
+      height: 95vh;
+    }
+  }
+</style>

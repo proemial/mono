@@ -3,7 +3,7 @@
 ---
 
 <div class="headline">
-  <div class="text-container mr-3">we make research</div>
+  <div class="mr-3 text-container">we make research</div>
   <div class="animation-container">
     easy to
     <div id="items-container">
@@ -22,7 +22,7 @@
     display: flex;
     color: $color-primary-text;
     font-size: 64px;
-    line-height: 94px;
+    line-height: 92px;
     font-weight: 300;
     max-width: 100%;
     @media only screen and (max-width: 900px) {
@@ -43,11 +43,11 @@
     display: flex;
     gap: 16px;
     overflow: hidden;
-    height: 94px;
+    height: 92px;
     white-space: nowrap;
     @media only screen and (max-width: 900px) {
       height: 64px;
-      gap: 10px;
+      gap: 0px;
     }
   }
 
@@ -107,7 +107,8 @@
   @media only screen and (max-width: 900px) {
     .headline {
       font-size: 40px;
-      gap: 8px;
+      line-height: 64px;
+      gap: 0px;
     }
 
     @keyframes textAnimation {

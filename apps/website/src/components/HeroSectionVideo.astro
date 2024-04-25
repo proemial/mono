@@ -1,0 +1,153 @@
+---
+import { Image } from "astro:assets";
+import iphone from "../assets/feed2.png";
+import EmailCapture from "./EmailCapture.astro";
+// import TextAnimation from './TextAnimation.astro';
+import TextAnimationIteration from "./TextAnimationIteration.astro";
+---
+
+<section>
+	<div class="hero-container">
+    <!-- The video -->
+    <!-- <img class="asset" src="/opengraph.png"> -->
+	<div>
+		<div id="videocontainerid">
+			<video autoplay muted loop id="myVideo">
+				<source src="/Preview_3b_black.mp4" type="video/mp4" />
+			</video>
+		</div>
+		<div id="videocontainermobileid">
+			<video autoplay muted loop id="myVideo">
+				<source src="/Preview_4_black.mp4" type="video/mp4" />
+			</video>
+		</div>
+		<div id="videooverlayid">
+			<h1>Answers to<br>Questions that Matter</h1>
+			<p>Backed by Scientific Research</p>
+			<form action="https://proem.ai">
+				<button id="myBtn" type="submit" onclick="myFunction()">Try The Proem beta Now</button>
+			</form>
+		</div>
+	</div>
+</section>
+
+<style lang="scss">
+	@import "../variables/global.scss";
+
+	section {
+		position: relative;
+		z-index: 10;
+	}
+
+	.hero-container {
+		//display: flex;
+		//flex-direction: column;
+		//align-items: center;
+		//max-width: 1200px;
+		margin-left: auto;
+		margin-right: auto;
+		//margin-top: 94px;
+		//gap: 48px;
+		//padding: 0px 24px;
+	}
+
+	.asset {
+		// max-width: 100%
+		// max-height: 800px;
+	}
+
+	h1 {
+		margin: 0px;
+		padding: 0px;
+		color: #fff;
+		font-size: 72px;
+		line-height: 60px;
+		font-weight: 600;
+		// text-align: center;
+		max-width: 900px;
+	}
+
+	p {
+		margin-top: 10px;
+		margin-bottom: 50px;
+		color: #888;
+		//max-width: 550px;
+		line-height: 24px;
+		font-size: 24px;
+		font-weight: 600;
+	}
+
+	mark {
+		background-color: rgba(49, 49, 49, 0.4);
+		border-radius: $border-radius-standard;
+		color: $color-primary-text;
+		padding: 8px;
+	}
+
+	#videocontainermobileid {
+		display: none;
+	}
+	#videocontainerid {
+		display: block;
+	}
+
+	@media only screen and (max-width: 900px) {
+		h1 {
+			font-size: 48px;
+			line-height: 40px;
+		}
+	}
+	@media only screen and (max-width: 640px) {
+		h1 {
+			font-size: 32px;
+			line-height: 28px;
+		}
+		#videocontainermobileid {
+			display: block;
+		}
+		#videocontainerid {
+			display: none;
+		}
+	}
+
+/* Style the video: 100% width and height to cover the entire window */
+#videocontainerid {
+// position: absolute;
+//   right: 0;
+//   top: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+/* Add some content at the bottom of the video/page */
+#videooverlayid {
+  position: absolute;
+  bottom: 0;
+  background: rgb(0,0,0);
+  background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+  color: #f1f1f1;
+  width: 100%;
+  padding: 40px;
+}
+
+/* Style the button used to pause/play the video */
+#myBtn {
+  width: 250px;
+  font-size: 18px;
+  padding: 10px;
+  border: none;
+  background: #fff;
+  color: #000;
+  cursor: pointer;
+}
+
+#myBtn:hover {
+  background: #ddd;
+  color: #000;
+}
+#myBtn:focus {
+  background: #888;
+  color: #000;
+}
+
+</style>
