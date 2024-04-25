@@ -12,21 +12,23 @@ export type SuggestionsProps = {
 	suggestions?: string[];
 	onClick?: ReturnType<typeof useChat>["append"];
 	starters?: boolean;
+	trackingPrefix: string;
 };
 
 export function Suggestions({
 	suggestions,
 	onClick,
 	starters,
+	trackingPrefix,
 }: SuggestionsProps) {
 	const router = useRouter();
 
 	const handleTracking = () => {
-		trackHandler(analyticsKeys.ask.click.suggestion)();
+		trackHandler(`${trackingPrefix}:${analyticsKeys.chat.click.suggestion}`)();
 		if (starters) {
-			trackHandler(analyticsKeys.ask.click.starter)();
+			trackHandler(`${trackingPrefix}:${analyticsKeys.chat.click.starter}`)();
 		} else {
-			trackHandler(analyticsKeys.ask.click.followup)();
+			trackHandler(`${trackingPrefix}:${analyticsKeys.chat.click.followup}`)();
 		}
 	};
 

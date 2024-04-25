@@ -11,11 +11,13 @@ export type ChatSuggestedFollowupsProps = Pick<
 	"suggestions"
 > & {
 	onClick?: ReturnType<typeof useChat>["append"];
+	trackingPrefix: string;
 };
 
 export function ChatSuggestedFollowups({
 	suggestions,
 	onClick,
+	trackingPrefix,
 }: ChatSuggestedFollowupsProps) {
 	return (
 		<div className="flex flex-col gap-3">
@@ -25,11 +27,15 @@ export function ChatSuggestedFollowups({
 					<Header4>Suggested questions</Header4>
 				</div>
 				<div className="-mr-2">
-					<MoodSelector />
+					<MoodSelector trackingPrefix={trackingPrefix} />
 				</div>
 			</div>
 			<div>
-				<Suggestions suggestions={suggestions} onClick={onClick} />
+				<Suggestions
+					suggestions={suggestions}
+					trackingPrefix={trackingPrefix}
+					onClick={onClick}
+				/>
 			</div>
 		</div>
 	);

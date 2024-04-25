@@ -29,7 +29,7 @@ export function AskInput() {
 		<ChatInputOld
 			chat={chat}
 			placeholder="Ask anything"
-			trackingKey={analyticsKeys.ask.submit.ask}
+			trackingKey={"analyticsKeys.ask.submit.ask"}
 		/>
 	);
 }

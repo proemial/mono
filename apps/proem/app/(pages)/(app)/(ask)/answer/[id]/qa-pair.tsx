@@ -107,7 +107,10 @@ export const QaPair = ({
 							trackingKey={analyticsKeys.ask.click.model}
 						/>
 						{savedAnswer?.shareId && (
-							<ChatActionBarAsk shareId={savedAnswer.shareId} />
+							<ChatActionBarAsk
+								shareId={savedAnswer.shareId}
+								trackingPrefix="ask"
+							/>
 						)}
 					</div>
 				)}

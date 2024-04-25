@@ -1,9 +1,6 @@
 "use client";
 
-import {
-	analyticsKeys,
-	trackHandler,
-} from "@/app/components/analytics/tracking/tracking-keys";
+import { trackHandler } from "@/app/components/analytics/tracking/tracking-keys";
 import {
 	Select,
 	SelectContent,
@@ -18,10 +15,11 @@ type Props = {
 		label: string;
 		disabled?: boolean;
 	}[];
+	trackingKey: string;
 	className?: string;
 };
 
-export function SelectContentSelector({ selector, className = "" }: Props) {
+export function SelectContentSelector({ selector, trackingKey, className = "" }: Props) {
 	function onValueChange(value: string) {
 		// TODO: Implement
 	}
@@ -29,9 +27,7 @@ export function SelectContentSelector({ selector, className = "" }: Props) {
 	return (
 		<Select
 			onValueChange={onValueChange}
-			onOpenChange={(open) =>
-				open && trackHandler(analyticsKeys.ask.click.suggestionsCategory)()
-			}
+			onOpenChange={(open) => open && trackHandler(trackingKey)()}
 		>
 			<SelectTrigger
 				className={`border-0 w-28 focus:ring-0 focus:ring-offset-0 ${className}`}

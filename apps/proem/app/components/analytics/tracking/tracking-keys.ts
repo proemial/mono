@@ -34,28 +34,32 @@ export const analyticsKeys = {
 			},
 		},
 	},
+	chat: {
+		click: {
+			stop: "stop:click",
+			clear: "clear:click",
+			share: "share:click",
+			input: "input:click",
+			submit: "submit:click",
+			starter: "starter:click",
+			followup: "followup:click",
+			suggestion: "suggestion:click",
+			suggestionsCategory: "suggestions:category:click",
+		},
+		submit: {
+			input: "input:submit",
+		},
+	},
 	ask: {
 		click: {
-			stop: "ask:stop:click",
-			clear: "ask:clear:click",
-			share: "ask:share:click",
 			collapse: "ask:papers:collapse:click",
 			paper: "ask:paper:click",
 			avatar: "ask:avatar:click",
 			model: "ask:model:click",
-			input: "ask:input:click",
-			submit: "ask:submit:click",
-			starter: "ask:starter:click",
-			followup: "ask:followup:click",
-			suggestion: "ask:suggestion:click",
-			suggestionsCategory: "ask:suggestions:category:click",
 
 			// TODO: cleanup
 			answerCard: "ask:answer-card:click",
 			answerLink: "ask:answer-link:click",
-		},
-		submit: {
-			ask: "ask:input:submit",
 		},
 	},
 	feed: {

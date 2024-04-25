@@ -26,7 +26,8 @@ export default async function AskPage({ searchParams }: Props) {
 				<ChatInput target={target}>
 					<StarterMessages
 						target={target}
-						trackingKey={analyticsKeys.ask.click.starter} />
+						trackingKey={"analyticsKeys.ask.click.starter"}
+					/>
 				</ChatInput>
 			</div>
 		</PageLayout>

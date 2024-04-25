@@ -17,7 +17,7 @@ export function ClearButton() {
 				className={`${
 					// TODO: Fix fade in/out
 					visible ? "opacity-100" : "opacity-0 hidden"
-					} transition-all ease-in delay-300 duration-500 cursor-pointer`}
+				} transition-all ease-in delay-300 duration-500 cursor-pointer`}
 			>
 				<ClearIcon />
 			</div>
@@ -30,10 +30,11 @@ type Props = {
 	messages: Message[];
 	stop: () => void;
 	clear: () => void;
+	trackingPrefix: string;
 };
 
 export function ClearButtonOld(props: Props) {
-	const { isLoading, messages, clear, stop } = props;
+	const { isLoading, messages, clear, stop, trackingPrefix } = props;
 	const visible = !isLoading && messages.length > 0;
 	const trackAndInvoke = (key: string, callback: () => void) => {
 		Tracker.track(key);
@@ -44,27 +45,33 @@ export function ClearButtonOld(props: Props) {
 		<>
 			<div
 				onClick={() =>
-					trackAndInvoke(analyticsKeys.ask.click.stop, () => {
-						stop();
-						clear();
-					})
+					trackAndInvoke(
+						`${trackingPrefix}:${analyticsKeys.chat.click.stop}`,
+						() => {
+							stop();
+							clear();
+						},
+					)
 				}
 				className={`${
 					// TODO: Fix fade in/out
 					isLoading ? "opacity-100" : "opacity-0 hidden"
-					} transition-all ease-in delay-300 duration-500 cursor-pointer`}
+				} transition-all ease-in delay-300 duration-500 cursor-pointer`}
 			>
 				<ClearIcon />
 			</div>
 
 			<div
 				onClick={() =>
-					trackAndInvoke(analyticsKeys.ask.click.clear, () => clear())
+					trackAndInvoke(
+						`${trackingPrefix}:${analyticsKeys.chat.click.clear}`,
+						() => clear(),
+					)
 				}
 				className={`${
 					// TODO: Fix fade in/out
 					visible ? "opacity-100" : "opacity-0 hidden"
-					} transition-all ease-in delay-300 duration-500 cursor-pointer`}
+				} transition-all ease-in delay-300 duration-500 cursor-pointer`}
 			>
 				<ClearIcon />
 			</div>

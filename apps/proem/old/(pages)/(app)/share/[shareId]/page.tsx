@@ -38,7 +38,7 @@ export default async function SharePage({ params: { shareId } }: Props) {
 				<ChatInput target={target}>
 					<StarterMessages
 						target={target}
-						trackingKey={analyticsKeys.ask.click.starter} />
+						trackingKey={"analyticsKeys.ask.click.starter"} />
 				</ChatInput>
 			</div>
 		</PageLayout>

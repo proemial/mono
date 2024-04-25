@@ -127,9 +127,10 @@ const shareProviders: ShareProviders = [
 
 export type ShareDrawerProps = {
 	shareId: Answer["shareId"];
+	trackingPrefix: string;
 };
 
-export function ShareDrawer({ shareId }: ShareDrawerProps) {
+export function ShareDrawer({ shareId, trackingPrefix }: ShareDrawerProps) {
 	const relativeUrl = `/share/${shareId}`;
 	const fullUrl = `${globalThis?.location?.origin}${relativeUrl}`;
 
@@ -138,7 +139,9 @@ export function ShareDrawer({ shareId }: ShareDrawerProps) {
 			trigger={
 				<Button
 					variant="ghost"
-					onClick={trackHandler(analyticsKeys.ask.click.share)}
+					onClick={trackHandler(
+						`${trackingPrefix}:${analyticsKeys.chat.click.share}`,
+					)}
 				>
 					<Upload01 width={18} height={18} className="text-foreground -mr-3" />
 				</Button>

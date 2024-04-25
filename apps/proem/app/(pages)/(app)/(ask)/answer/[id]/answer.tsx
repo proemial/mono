@@ -77,7 +77,7 @@ export const Answer = ({
 
 	return (
 		<div className="flex flex-col gap-4 flex-grow justify-between">
-			{(!isFocused || isLoading) &&
+			{(!isFocused || isLoading) && (
 				<div className="flex flex-col gap-10">
 					{messages
 						.filter((message) => message.role === "user")
@@ -91,23 +91,24 @@ export const Answer = ({
 									<ChatSuggestedFollowups
 										suggestions={followUps}
 										onClick={append}
+										trackingPrefix="ask"
 									/>
 								}
 								isLatest={index === Math.ceil(messages.length / 2) - 1}
 							/>
 						))}
-
 				</div>
-			}
+			)}
 
-			{isFocused && !isLoading &&
+			{isFocused && !isLoading && (
 				<div className="flex-grow flex flex-col justify-end">
 					<ChatSuggestedFollowups
 						suggestions={followUps}
 						onClick={append}
+						trackingPrefix="ask"
 					/>
 				</div>
-			}
+			)}
 
 			<ChatInput
 				placeholder="Ask a follow-up question…"
@@ -115,6 +116,7 @@ export const Answer = ({
 				isLoading={isLoading}
 				stop={stop}
 				onFocusChange={handleFocusChange}
+				trackingPrefix="ask"
 			/>
 		</div>
 	);

@@ -1,11 +1,17 @@
 import { ShareDrawer, ShareDrawerProps } from "@/components/share-drawer";
 
-type ChatActionBarAskProps = Pick<ShareDrawerProps, "shareId">;
+type ChatActionBarAskProps = Pick<
+	ShareDrawerProps,
+	"shareId" | "trackingPrefix"
+>;
 
-export function ChatActionBarAsk({ shareId }: ChatActionBarAskProps) {
+export function ChatActionBarAsk({
+	shareId,
+	trackingPrefix,
+}: ChatActionBarAskProps) {
 	return (
 		<div className="flex justify-end">
-			<ShareDrawer shareId={shareId} />
+			<ShareDrawer shareId={shareId} trackingPrefix={trackingPrefix} />
 		</div>
 	);
 }

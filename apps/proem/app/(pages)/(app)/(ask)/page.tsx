@@ -20,13 +20,13 @@ export default function AskPage() {
 			<div className="flex flex-col gap-10">
 				<div className="flex flex-col gap-2">
 					<div className="flex justify-end -mr-2">
-						<MoodSelector />
+						<MoodSelector trackingPrefix="ask" />
 					</div>
-					<Suggestions suggestions={starters} starters />
+					<Suggestions suggestions={starters} trackingPrefix="ask" starters />
 				</div>
 			</div>
 			<div>
-				<ChatInput placeholder="Ask a question" />
+				<ChatInput placeholder="Ask a question" trackingPrefix="ask" />
 			</div>
 		</div>
 	);

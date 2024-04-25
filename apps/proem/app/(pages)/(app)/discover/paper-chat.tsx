@@ -73,10 +73,18 @@ export function PaperChat({ suggestions, title, abstract }: PaperChatProps) {
 					</div>
 				</div>
 			) : (
-				<ChatSuggestedFollowups suggestions={suggestions} onClick={append} />
+				<ChatSuggestedFollowups
+					suggestions={suggestions}
+					onClick={append}
+					trackingPrefix="read"
+				/>
 			)}
 
-			<ChatInput placeholder="Ask this paper .." onSend={append} />
+			<ChatInput
+				placeholder="Ask this paper .."
+				onSend={append}
+				trackingPrefix="read"
+			/>
 		</>
 	);
 }

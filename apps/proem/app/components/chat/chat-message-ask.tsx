@@ -72,7 +72,7 @@ export function ChatMessage({
 						<Upload01
 							onClick={() => {
 								onShareHandle();
-								Tracker.track(analyticsKeys.ask.click.share);
+								Tracker.track(`ask:${analyticsKeys.chat.click.share}`);
 							}}
 							className="ml-auto"
 						/>

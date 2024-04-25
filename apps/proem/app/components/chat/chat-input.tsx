@@ -74,7 +74,7 @@ function useInputState(target: ChatTarget) {
 
 	const trackingKey = isRead
 		? analyticsKeys.read.submit.question
-		: analyticsKeys.ask.submit.ask;
+		: `ask:${analyticsKeys.chat.submit.input}`;
 
 	const { userId } = useAuth();
 	const readonly = isRead && !userId;

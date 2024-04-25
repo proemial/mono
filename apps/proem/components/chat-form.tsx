@@ -1,5 +1,8 @@
 "use client";
-import { analyticsKeys, trackHandler } from "@/app/components/analytics/tracking/tracking-keys";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/app/components/analytics/tracking/tracking-keys";
 import { useDeviceType, useVisualViewport } from "@/utils/useVisualViewport";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -8,7 +11,6 @@ import {
 	FormControl,
 	FormField,
 	FormItem,
-	FormMessage,
 	Textarea,
 } from "@proemial/shadcn-ui";
 import { ChevronRight } from "@untitled-ui/icons-react";
@@ -27,12 +29,14 @@ export type ChatFormProps = {
 	placeholder: string;
 	onSend?: ReturnType<typeof useChat>["append"];
 	onFocusChange?: (isFocused: boolean) => void;
+	trackingPrefix: string;
 };
 
 export function ChatForm({
 	placeholder,
 	onSend,
 	onFocusChange,
+	trackingPrefix,
 }: ChatFormProps) {
 	const router = useRouter();
 
@@ -56,7 +60,7 @@ export function ChatForm({
 	}, [isFocused, onFocusChange]);
 
 	const askQuestion = (question: string) => {
-		trackHandler(analyticsKeys.ask.submit.ask)();
+		trackHandler(`${trackingPrefix}:${analyticsKeys.chat.submit.input}`)();
 		if (onSend) {
 			onSend({ role: "user", content: question });
 		} else {
@@ -70,7 +74,7 @@ export function ChatForm({
 
 	const handleFocus = () => {
 		setIsFocused(true);
-		trackHandler(analyticsKeys.ask.click.input)();
+		trackHandler(`${trackingPrefix}:${analyticsKeys.chat.click.input}`)();
 	};
 
 	const handleBlur = () => {
@@ -128,10 +132,11 @@ export function ChatForm({
 											"input",
 											isFocused,
 											simulateKeyboardUp,
-										)} ${form.getFieldState("question").invalid
-											? "border border-red-300"
-											: ""
-											}`}
+										)} ${
+											form.getFieldState("question").invalid
+												? "border border-red-300"
+												: ""
+										}`}
 										onKeyDown={(e) => {
 											const target = e.target as HTMLTextAreaElement;
 											if (e.code === "Enter" || target.value.includes("\n")) {
@@ -160,7 +165,9 @@ export function ChatForm({
 						className={style("button", isFocused, simulateKeyboardUp)}
 						size="icon"
 						type="submit"
-						onClick={trackHandler(analyticsKeys.ask.click.submit)}
+						onClick={trackHandler(
+							`${trackingPrefix}:${analyticsKeys.chat.click.submit}`,
+						)}
 					>
 						<ChevronRight />
 					</Button>
