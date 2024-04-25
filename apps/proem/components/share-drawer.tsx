@@ -140,7 +140,7 @@ export function ShareDrawer({ shareId }: ShareDrawerProps) {
 					variant="ghost"
 					onClick={trackHandler(analyticsKeys.ask.click.share)}
 				>
-					<Upload01 />
+					<Upload01 width={18} height={18} className="text-foreground -mr-3" />
 				</Button>
 			}
 			render={(DrawerClose) => (
