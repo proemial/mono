@@ -4,12 +4,12 @@ import { ReactNode } from "react";
 
 type Props = {
 	children: ReactNode;
-	trackingKey: string;
+	track: string;
 };
 
-export function Trackable({ children, trackingKey }: Props) {
+export function Trackable({ children, track }: Props) {
 	return (
-		<div className="h-full w-full" onClick={() => Tracker.track(trackingKey)}>
+		<div className="h-full w-full" onClick={() => Tracker.track(track)}>
 			{children}
 		</div>
 	);

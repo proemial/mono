@@ -9,7 +9,7 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@/app/components/shadcn-ui/tab";
-import { Trackable } from "@/app/components/trackable";
+import { Trackable } from "@/components/trackable";
 import { generateStarters } from "@/app/prompts/starters";
 import { Metadata } from "@/old/(pages)/(app)/oa/[id]/components/panels/metadata";
 import { OpenAlexPaper } from "@proemial/models/open-alex";

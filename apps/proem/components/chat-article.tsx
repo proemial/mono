@@ -1,10 +1,7 @@
 import { Header2, Header4, Header5, Paragraph } from "@proemial/shadcn-ui";
 import { AlignLeft } from "./icons/AlignLeft";
-import {
-	analyticsKeys,
-	trackHandler,
-} from "@/app/components/analytics/tracking/tracking-keys";
-import { Trackable } from "@/app/components/trackable";
+import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
+import { Trackable } from "@/components/trackable";
 
 type ChatArticleProps = {
 	type: "Answer" | "Summary";

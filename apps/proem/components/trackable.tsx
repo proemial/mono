@@ -2,7 +2,7 @@
 
 import { trackHandler } from "@/app/components/analytics/tracking/tracking-keys";
 
-function Trackable({
+export function Trackable({
 	children,
 	trackingKey,
 }: { children: React.ReactNode; trackingKey: string }) {
