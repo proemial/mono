@@ -44,7 +44,7 @@ export const analyticsKeys = {
 			avatar: "ask:avatar:click",
 			model: "ask:model:click",
 			input: "ask:input:click",
-			submt: "ask:submit:click",
+			submit: "ask:submit:click",
 
 			// TODO: cleanup
 			starter: "ask:starter:click",

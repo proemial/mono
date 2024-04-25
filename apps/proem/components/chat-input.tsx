@@ -5,6 +5,7 @@ import { Stop } from "@untitled-ui/icons-react";
 import { useChat } from "ai/react";
 import { z } from "zod";
 import { ChatForm, ChatFormProps } from "./chat-form";
+import { analyticsKeys, trackHandler } from "@/app/components/analytics/tracking/tracking-keys";
 
 export const QuerySchema = z.object({
 	query: z.string(),
@@ -44,10 +45,16 @@ export function ChatInput({
 }
 
 function StopButton({ stop }: ButtonProps) {
+	const handleStop = () => {
+		if (stop) {
+			stop();
+		}
+		trackHandler(analyticsKeys.ask.click.stop)();
+	}
 	return (
 		<Button
 			className="mb-12 w-12 h-12 p-4 rounded-full"
-			onClick={() => !!stop && stop()}
+			onClick={handleStop}
 		>
 			<Stop className="animate-pulse" />
 		</Button>

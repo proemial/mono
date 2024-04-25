@@ -28,7 +28,7 @@ export default function AskPage() {
 							]}
 						/>
 					</div>
-					<Suggestions suggestions={starters} />
+					<Suggestions suggestions={starters} starters />
 				</div>
 			</div>
 			<div>

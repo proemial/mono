@@ -1,4 +1,5 @@
 "use client";
+import { analyticsKeys, trackHandler } from "@/app/components/analytics/tracking/tracking-keys";
 import { useDeviceType, useVisualViewport } from "@/utils/useVisualViewport";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -55,6 +56,7 @@ export function ChatForm({
 	}, [isFocused, onFocusChange]);
 
 	const askQuestion = (question: string) => {
+		trackHandler(analyticsKeys.ask.submit.ask)();
 		if (onSend) {
 			onSend({ role: "user", content: question });
 		} else {
@@ -68,6 +70,7 @@ export function ChatForm({
 
 	const handleFocus = () => {
 		setIsFocused(true);
+		trackHandler(analyticsKeys.ask.click.input)();
 	};
 
 	const handleBlur = () => {
@@ -125,11 +128,10 @@ export function ChatForm({
 											"input",
 											isFocused,
 											simulateKeyboardUp,
-										)} ${
-											form.getFieldState("question").invalid
-												? "border border-red-300"
-												: ""
-										}`}
+										)} ${form.getFieldState("question").invalid
+											? "border border-red-300"
+											: ""
+											}`}
 										onKeyDown={(e) => {
 											const target = e.target as HTMLTextAreaElement;
 											if (e.code === "Enter" || target.value.includes("\n")) {
@@ -158,6 +160,7 @@ export function ChatForm({
 						className={style("button", isFocused, simulateKeyboardUp)}
 						size="icon"
 						type="submit"
+						onClick={trackHandler(analyticsKeys.ask.click.submit)}
 					>
 						<ChevronRight />
 					</Button>

@@ -1,5 +1,6 @@
 "use client";
 
+import { analyticsKeys, trackHandler } from "@/app/components/analytics/tracking/tracking-keys";
 import { Button } from "@proemial/shadcn-ui";
 import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
@@ -7,12 +8,23 @@ import { useRouter } from "next/navigation";
 export type SuggestionsProps = {
 	suggestions?: string[];
 	onClick?: ReturnType<typeof useChat>["append"];
+	starters?: boolean;
 };
 
-export function Suggestions({ suggestions, onClick }: SuggestionsProps) {
+export function Suggestions({ suggestions, onClick, starters }: SuggestionsProps) {
 	const router = useRouter();
 
+	const handleTracking = () => {
+		trackHandler(analyticsKeys.ask.click.suggestion)();
+		if (starters) {
+			trackHandler(analyticsKeys.ask.click.starter)();
+		} else {
+			trackHandler(analyticsKeys.ask.click.followup)();
+		}
+	}
+
 	function handleClick(suggestion: string) {
+		handleTracking();
 		if (onClick) {
 			onClick({ role: "user", content: suggestion });
 		} else {
