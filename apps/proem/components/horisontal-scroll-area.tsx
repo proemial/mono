@@ -6,11 +6,10 @@ export function HorisontalScrollArea({
 	return (
 		<div className="-m-4">
 			<ScrollArea className="w-full">
-				<div className="flex p-4 space-x-3 w-max">{children}</div>
-				<ScrollBar
-					orientation="horizontal"
-					className="[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-				/>
+				<div className="flex p-4 space-x-3 w-max scrollbar-hide">
+					{children}
+				</div>
+				<ScrollBar orientation="horizontal" />
 			</ScrollArea>
 		</div>
 	);
