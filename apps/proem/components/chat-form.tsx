@@ -108,12 +108,7 @@ export function ChatForm({
 
 	return (
 		<Form {...form}>
-			<form
-				onFocus={handleFocus}
-				onBlur={handleBlur}
-				onSubmit={form.handleSubmit(handleSubmit)}
-				className="w-full"
-			>
+			<form onSubmit={form.handleSubmit(handleSubmit)} className="w-full">
 				<div className="w-full mb-12 mt-3 flex items-center text-foreground bg-card border border-background rounded-3xl">
 					<FormField
 						control={form.control}
@@ -132,6 +127,8 @@ export function ChatForm({
 																		? "border border-red-300"
 																		: ""
 																}`}
+										onFocus={handleFocus}
+										onBlur={handleBlur}
 										onKeyDown={(e) => {
 											const target = e.target as HTMLTextAreaElement;
 											if (e.code === "Enter" || target.value.includes("\n")) {
