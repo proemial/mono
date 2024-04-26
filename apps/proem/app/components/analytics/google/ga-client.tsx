@@ -1,10 +1,8 @@
 "use client";
 import {
-	TrackingInput,
 	analyticsTrace,
 	usePathNames,
 } from "@/app/components/analytics/tracking/tracking-profile";
-import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import ReactGA from "react-ga4";
 import TagManager from "react-gtm-module";
@@ -27,31 +25,21 @@ export function GaClient() {
 }
 
 function useInit() {
-	const { user } = useUser();
 	const [initialized, setInitialized] = useState(false);
 
-	analyticsTrace("[GaClient] useInit");
-
 	useEffect(() => {
-		if (user) {
+		if (!initialized) {
 			analyticsTrace("[GaClient] GA initializing");
 			// const email = user?.primaryEmailAddress?.emailAddress as string;
-			ReactGA.initialize(process.env.NEXT_PUBLIC_GA_ID, {
-				gaOptions: {
-					userId: user.id,
-				},
-			});
+			ReactGA.initialize(process.env.NEXT_PUBLIC_GA_ID);
 
 			analyticsTrace("[GaClient] GTM initializing");
 			TagManager.initialize({
 				gtmId: "GTM-TCS63KTV",
-				dataLayer: {
-					userId: user.id,
-				},
 			});
 			setInitialized(true);
 		}
-	}, [user]);
+	});
 
 	return initialized;
 }

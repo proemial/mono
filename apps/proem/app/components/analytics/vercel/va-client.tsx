@@ -1,11 +1,8 @@
 "use client";
 import {
-	TrackingInput,
 	analyticsTrace,
 	usePathNames,
 } from "@/app/components/analytics/tracking/tracking-profile";
-import { useUser } from "@clerk/nextjs";
-import va from "@vercel/analytics";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { useEffect, useState } from "react";
@@ -13,8 +10,6 @@ import { Tracker } from "../tracking/tracker";
 
 // https://vercel.com/docs/concepts/analytics/custom-events
 export function VaClient() {
-	analyticsTrace("[VaClient]");
-
 	const initialized = useInit();
 	const { pathname, trackingKey } = usePathNames();
 
@@ -37,17 +32,14 @@ export function VaClient() {
 }
 
 function useInit() {
-	const { user } = useUser();
 	const [initialized, setInitialized] = useState(false);
 
-	analyticsTrace("[VaClient] useInit");
-
 	useEffect(() => {
-		if (user) {
+		if (!initialized) {
 			analyticsTrace("[VaClient] initializing");
 			setInitialized(true);
 		}
-	}, [user]);
+	});
 
 	return initialized;
 }
