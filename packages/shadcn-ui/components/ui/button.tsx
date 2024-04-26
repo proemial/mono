@@ -25,7 +25,8 @@ const buttonVariants = cva(
 				icon: "h-10 w-10 rounded-full",
 				pill: "h-6 px-4 py-2 rounded-full",
 				pillLg: "h-10 p-2 pl-[18px] pb-[10px] rounded-full",
-				suggestion: "rounded-2xl h-fit px-3.5 py-2 flex items-center",
+				suggestion:
+					"rounded-2xl h-fit px-3.5 py-2 flex items-center w-full sm:w-auto",
 				actionBar: "size-5 p-0",
 				none: "",
 			},
