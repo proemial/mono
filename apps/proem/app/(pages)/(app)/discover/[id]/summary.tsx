@@ -1,5 +1,5 @@
 import { Header2, Paragraph } from "@proemial/shadcn-ui";
-import { summarise } from "@/app/prompts/summariser";
+import { summarise } from "@/app/prompts/summarise-title";
 import { fetchPaper } from "@/old/(pages)/(app)/oa/[id]/fetch-paper";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
@@ -37,15 +37,13 @@ export default async function Summary(options: {
 	return <OutPut headline={generatedTitle as string} />;
 }
 
-function OutPut({ headline, text }: { headline: string, text?: string }) {
+function OutPut({ headline, text }: { headline: string; text?: string }) {
 	return (
 		<>
 			<Header2>
 				<Markdown>{headline}</Markdown>
 			</Header2>
-			{text &&
-				<Paragraph>{text}</Paragraph>
-			}
+			{text && <Paragraph>{text}</Paragraph>}
 		</>
-	)
+	);
 }

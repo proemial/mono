@@ -1,4 +1,4 @@
-import { summarise } from "@/app/prompts/summariser";
+import { summarise } from "@/app/prompts/summarise-title";
 import { fetchPaper } from "@/old/(pages)/(app)/oa/[id]/fetch-paper";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
