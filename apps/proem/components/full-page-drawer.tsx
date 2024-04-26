@@ -35,7 +35,7 @@ export function FullSizeDrawer({
 			>
 				<div className="flex flex-col h-full">
 					<DrawerHeader className="pt-0 grow-0">
-						<DrawerTitle className="flex justify-between flex-row-reverse text-2xl font-normal items-center">
+						<DrawerTitle className="flex flex-row-reverse items-center justify-between text-2xl font-normal">
 							<DrawerClose onClick={onClose}>
 								<XClose className="w-6 h-6" />
 							</DrawerClose>
@@ -43,7 +43,7 @@ export function FullSizeDrawer({
 							<div>{title}</div>
 						</DrawerTitle>
 					</DrawerHeader>
-					<div className="p-4 overflow-auto">
+					<div className="h-full p-4 overflow-auto">
 						{render ? render(DrawerClose) : children}
 					</div>
 				</div>
