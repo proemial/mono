@@ -80,7 +80,7 @@ export function NavigationMenuBar() {
 						}
 					>
 						<Button variant="ghost" disabled={!hasAnswer}>
-							<Edit05 className="size-4" />
+							<Edit05 className="size-5" />
 						</Button>
 					</Link>
 				</NavigationMenuItem>

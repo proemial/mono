@@ -1,4 +1,7 @@
-import { analyticsKeys, trackHandler } from "@/app/components/analytics/tracking/tracking-keys";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/app/components/analytics/tracking/tracking-keys";
 import { screenMaxWidth } from "@/app/constants";
 import { ProfileYou } from "@/components/profile-you";
 import {
@@ -16,8 +19,12 @@ export function Profile() {
 	return (
 		<Drawer>
 			<DrawerTrigger asChild>
-				<Button variant="ghost" size="sm" onClick={trackHandler(analyticsKeys.ui.menu.click.open)}>
-					<Menu05 className="p-1" />
+				<Button
+					variant="ghost"
+					size="sm"
+					onClick={trackHandler(analyticsKeys.ui.menu.click.open)}
+				>
+					<Menu05 className="p-1 size-8" />
 				</Button>
 			</DrawerTrigger>
 			<DrawerContent
@@ -27,7 +34,11 @@ export function Profile() {
 					<DrawerHeader className="pt-0">
 						<DrawerTitle className="flex justify-end text-2xl font-normal">
 							<DrawerClose asChild>
-								<Button variant="ghost" className="p-0" onClick={trackHandler(analyticsKeys.ui.menu.click.close)}>
+								<Button
+									variant="ghost"
+									className="p-0"
+									onClick={trackHandler(analyticsKeys.ui.menu.click.close)}
+								>
 									<XClose className="w-6 h-6" />
 								</Button>
 							</DrawerClose>
