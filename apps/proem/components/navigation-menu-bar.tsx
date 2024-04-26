@@ -35,7 +35,7 @@ export function NavigationMenuBar() {
 	// 	}
 	// }, [pathname]);
 
-	const hasAnswer = pathname.includes("/answer");
+	const isFrontpage = pathname === "/";
 
 	return (
 		<NavigationMenu className="sticky top-0 px-0 py-2.5 bg-background">
@@ -74,12 +74,12 @@ export function NavigationMenuBar() {
 					<Link
 						href="/"
 						onClick={
-							hasAnswer
+							!isFrontpage
 								? trackHandler(`ask:${analyticsKeys.chat.click.clear}`)
 								: undefined
 						}
 					>
-						<Button variant="ghost" disabled={!hasAnswer}>
+						<Button variant="ghost" disabled={isFrontpage}>
 							<Edit05 className="size-5" />
 						</Button>
 					</Link>
