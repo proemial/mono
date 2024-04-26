@@ -112,22 +112,21 @@ export function ChatForm({
 				onFocus={handleFocus}
 				onBlur={handleBlur}
 				onSubmit={form.handleSubmit(handleSubmit)}
-				className={style("form", isFocused)}
+				className="w-full"
 			>
-				<div className={style("background", isFocused)}>
+				<div className="w-full mb-12 mt-3 flex items-center bg-primary border border-background rounded-3xl">
 					<FormField
 						control={form.control}
 						name="question"
 						render={({ field }) => (
-							<FormItem className={style("inputWrapper", isFocused)}>
+							<FormItem className="w-full">
 								<FormControl>
 									<Textarea
 										{...field}
 										placeholder={placeholder}
-										className={`dark:placeholder:text-[#e5e5e5] placeholder:text-[#2b2b2b] placeholder:opacity-40 ${style(
-											"input",
-											isFocused,
-										)} ${
+										className={`w-full h-12 pl-6 resize-none flex items-center text-lg dark:placeholder:text-[#e5e5e5] placeholder:text-[#2b2b2b] placeholder:opacity-40 ${
+											isFocused ? "rounded-l-3xl" : "rounded-3xl"
+										} ${
 											form.getFieldState("question").invalid
 												? "border border-red-300"
 												: ""
@@ -157,7 +156,9 @@ export function ChatForm({
 								!form.getValues("question")?.length
 							)
 						}
-						className={style("button", isFocused)}
+						className={`"rounded-full text-foreground border-[1px] bg-card p-2 size-8 mr-4 " ${
+							isFocused ? "visible" : "hidden"
+						}`}
 						size="icon"
 						type="submit"
 						onClick={trackHandler(
@@ -170,47 +171,4 @@ export function ChatForm({
 			</form>
 		</Form>
 	);
-}
-
-const formStyles = {
-	form: cva("w-full"),
-	background: cva(
-		"w-full mb-12 flex items-center bg-primary border border-background mt-3",
-		{
-			variants: {
-				variant: {
-					default: "rounded-3xl",
-					focusKeyboardDown: "rounded-3xl",
-				},
-			},
-		},
-	),
-
-	inputWrapper: cva("w-full"), // annoying shadcn/ui div
-	input: cva("w-full h-12 pl-6 resize-none flex items-center text-lg", {
-		variants: {
-			variant: {
-				default: "rounded-3xl",
-				focusKeyboardDown: "rounded-l-3xl",
-			},
-		},
-	}),
-
-	button: cva(
-		"rounded-full text-foreground border border-[1px] bg-card p-2 size-8 mr-4",
-		{
-			variants: {
-				variant: {
-					default: "hidden",
-					focusKeyboardDown: "visible",
-				},
-			},
-		},
-	),
-};
-
-function style(item: keyof typeof formStyles, isFocused: boolean) {
-	return formStyles[item]({
-		variant: isFocused ? "focusKeyboardDown" : "default",
-	});
 }
