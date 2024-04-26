@@ -3,7 +3,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/app/components/analytics/tracking/tracking-keys";
-import { useDeviceType, useVisualViewport } from "@/utils/useVisualViewport";
+import { useVisualViewport } from "@/utils/useVisualViewport";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Button,
@@ -41,8 +41,6 @@ export function ChatForm({
 	const router = useRouter();
 
 	const [isFocused, setIsFocused] = useState(false);
-	const { isMobile } = useDeviceType();
-	const simulateKeyboardUp = isFocused && isMobile;
 
 	const form = useForm<z.infer<typeof QuerySchema>>({
 		resolver: zodResolver(QuerySchema),
@@ -114,16 +112,14 @@ export function ChatForm({
 				onFocus={handleFocus}
 				onBlur={handleBlur}
 				onSubmit={form.handleSubmit(handleSubmit)}
-				className={style("form", isFocused, simulateKeyboardUp)}
+				className={style("form", isFocused)}
 			>
-				<div className={style("background", isFocused, simulateKeyboardUp)}>
+				<div className={style("background", isFocused)}>
 					<FormField
 						control={form.control}
 						name="question"
 						render={({ field }) => (
-							<FormItem
-								className={style("inputWrapper", isFocused, simulateKeyboardUp)}
-							>
+							<FormItem className={style("inputWrapper", isFocused)}>
 								<FormControl>
 									<Textarea
 										{...field}
@@ -131,7 +127,6 @@ export function ChatForm({
 										className={`dark:placeholder:text-[#e5e5e5] placeholder:text-[#2b2b2b] placeholder:opacity-40 ${style(
 											"input",
 											isFocused,
-											simulateKeyboardUp,
 										)} ${
 											form.getFieldState("question").invalid
 												? "border border-red-300"
@@ -162,7 +157,7 @@ export function ChatForm({
 								!form.getValues("question")?.length
 							)
 						}
-						className={style("button", isFocused, simulateKeyboardUp)}
+						className={style("button", isFocused)}
 						size="icon"
 						type="submit"
 						onClick={trackHandler(
@@ -180,13 +175,12 @@ export function ChatForm({
 const formStyles = {
 	form: cva("w-full"),
 	background: cva(
-		"w-full flex items-center bg-primary border border-background mt-3",
+		"w-full mb-12 flex items-center bg-primary border border-background mt-3",
 		{
 			variants: {
 				variant: {
-					default: "mb-12 rounded-3xl",
-					focusKeyboardDown: "mb-6 rounded-3xl",
-					focusKeyboardUp: "w-screen rounded-none mb-0 ml-[-16px]",
+					default: "rounded-3xl",
+					focusKeyboardDown: "rounded-3xl",
 				},
 			},
 		},
@@ -198,7 +192,6 @@ const formStyles = {
 			variant: {
 				default: "rounded-3xl",
 				focusKeyboardDown: "rounded-l-3xl",
-				focusKeyboardUp: "rounded-none",
 			},
 		},
 	}),
@@ -210,23 +203,14 @@ const formStyles = {
 				variant: {
 					default: "hidden",
 					focusKeyboardDown: "visible",
-					focusKeyboardUp: "visible",
 				},
 			},
 		},
 	),
 };
 
-function style(
-	item: keyof typeof formStyles,
-	isFocused: boolean,
-	keyboardUp: boolean,
-) {
+function style(item: keyof typeof formStyles, isFocused: boolean) {
 	return formStyles[item]({
-		variant: keyboardUp
-			? "focusKeyboardUp"
-			: isFocused
-				? "focusKeyboardDown"
-				: "default",
+		variant: isFocused ? "focusKeyboardDown" : "default",
 	});
 }
