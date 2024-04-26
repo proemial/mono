@@ -9,12 +9,14 @@ export async function GET(req: NextRequest) {
 		projectName: "proem",
 		executionOrder: 1,
 		startTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
-		filter: 'eq(name,"Ask")',
+		filter: 'eq(name,"AgentExecutor")',
 	});
 
 	const questions = {} as { [key: string]: number };
 	for await (const run of runs) {
-		const question = run?.inputs?.question;
+		// console.log(dayjs(run.start_time).format("YYYY.MM.DD"));
+
+		const question = run?.inputs?.input;
 
 		if (!questions[question]) {
 			questions[question] = 0;
