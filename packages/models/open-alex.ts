@@ -22,6 +22,7 @@ export type OpenAlexPaper = {
 	data: OpenAlexPaperWithAbstract;
 	generated?: {
 		title?: string;
+		abstract?: string;
 		tags?: string[];
 		starters?: string[];
 	};

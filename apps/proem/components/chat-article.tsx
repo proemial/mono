@@ -1,21 +1,26 @@
 import { Trackable } from "@/components/trackable";
-import { Header2, Header4, Paragraph } from "@proemial/shadcn-ui";
+import { Header2, Header4, Icons, Paragraph } from "@proemial/shadcn-ui";
 import { AlignLeft } from "./icons/AlignLeft";
 import { ModelSelector } from "./model-selector";
+import { Suspense } from "react";
+import { OpenAlexPaper } from "@proemial/models/open-alex";
+import { MicroAbstract } from "./chat-abstract";
 
 type ChatArticleProps = {
 	type: "Answer" | "Summary";
-	headline?: string;
-	text?: string;
 	trackingKey: string;
+	title?: string;
+	paper?: OpenAlexPaper;
 };
 
 export function ChatArticle({
-	headline,
 	type,
-	text,
 	trackingKey,
+	title,
+	paper,
 }: ChatArticleProps) {
+	const paperTitle = title || paper?.generated?.title;
+
 	return (
 		<div className="space-y-3">
 			<div className="flex items-center place-content-between">
@@ -30,8 +35,21 @@ export function ChatArticle({
 				</div>
 			</div>
 
-			{headline ? <Header2>{headline}</Header2> : null}
-			<Paragraph>{text}</Paragraph>
+			{paperTitle ? <Header2>{paperTitle}</Header2> : null}
+
+			{paper && (
+				<Suspense fallback={<Spinner />}>
+					<MicroAbstract paper={paper} />
+				</Suspense>
+			)}
+		</div>
+	);
+}
+
+function Spinner() {
+	return (
+		<div className="flex items-center justify-center mx-auto size-24">
+			<Icons.loader />
 		</div>
 	);
 }

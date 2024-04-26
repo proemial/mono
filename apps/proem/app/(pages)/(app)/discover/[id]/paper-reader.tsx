@@ -62,9 +62,9 @@ export function PaperReader({
 			</CollapsibleSection>
 
 			<ChatArticle
-				headline={generatedPaper.generated?.title ?? fetchedPaper.data.title}
 				type="Summary"
 				trackingKey={analyticsKeys.read.click.model}
+				paper={generatedPaper}
 			/>
 
 			{/* <ChatActionBarDiscover /> */}
