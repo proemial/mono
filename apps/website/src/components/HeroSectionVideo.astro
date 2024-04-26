@@ -18,10 +18,10 @@ import TextAnimationIteration from "./TextAnimationIteration.astro";
 			</video>
 		</div>
 		<div id="videooverlayid">
-			<h1>Answers to<br>Questions that Matter</h1>
+			<h1>Answers to<br>Questions that&nbsp;Matter</h1>
 			<p>Backed by Scientific Research</p>
 			<form action="https://proem.ai">
-					<button id="myBtn" type="submit">Try The Proem beta Now</button>
+					<button id="myBtn" type="submit">Try Proem Beta</button>
 			</form>
 		</div>
 	</div>
@@ -116,13 +116,13 @@ import TextAnimationIteration from "./TextAnimationIteration.astro";
 		background: linear-gradient(0deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 100%);
 		color: #f1f1f1;
 		width: 100%;
-		padding: 40px;
+		padding: 60px 60px 260px 60px;
 	}
 
 	/* Style the button used to pause/play the video */
 	#myBtn {
 		font-size: 18px;
-		padding: 10px 15px;
+		padding: 10px 45px;
 		border: none;
 		background: #fff;
 		color: #000;
@@ -139,10 +139,21 @@ import TextAnimationIteration from "./TextAnimationIteration.astro";
 		color: #000;
 	}
 
+	@media only screen and (max-width: 1400px) {
+		#videooverlayid {
+			padding: 60px 60px 140px 60px;
+		}
+	}
 	@media only screen and (max-width: 900px) {
 		h1 {
 			font-size: 48px;
 			line-height: 40px;
+		}
+		#videooverlayid {
+			padding: 60px 60px 100px 60px;
+		}
+		#myBtn {
+			padding: 10px 20px;
 		}
 	}
 	@media only screen and (max-width: 640px) {

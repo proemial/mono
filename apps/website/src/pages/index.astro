@@ -1,19 +1,19 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from '../layouts/LayoutVideo.astro';
 import Card from '../components/Card.astro';
 import Announcement from '../components/Announcement.astro'
-import Navbar from '../components/Navbar.astro'
+import Navbar from '../components/NavbarLogoOnly.astro'
 import HeroSection from '../components/HeroSection.astro'
 import Logostorm from '../components/Logostorm.astro';
 import FullWidthImage from '../components/FullWidthImage.astro';
 import Quote from '../components/Quote.astro';
-import SignUpSection from '../components/SignUpSection.astro';
+import FinalCTAsection from '../components/FinalCTAsection.astro';
 import Footer from '../components/Footer.astro';
 import AnimationBG from '../components/AnimationBG.astro';
 import FeaturesSection from '../components/FeaturesSection.astro';
 import JobPosts from '../components/JobPosts.astro';
 import BlogCallOut from '../components/BlogCallOut.astro';
-import UpperSection from '../components/UpperSectionEasy.astro';
+import UpperSection from '../components/UpperSectionVideo.astro';
 
 import { Image } from 'astro:assets';
 import proemUI from '../assets/comps.png';
@@ -22,11 +22,11 @@ import proemUI2 from '../assets/comps.png';
 ---
 
 <Layout title="Proemial | Redefining Research">
-<!-- <Announcement title="Proem for GPT is live - try it out" href="https://gpt.proem.ai/"></Announcement> -->
-<Navbar></Navbar>
+	<!-- <Announcement title="Proem for GPT is live - try it out" href="https://gpt.proem.ai/"></Announcement> -->
+	<Navbar></Navbar>
 	<main>
 		<!-- <EmailCaptureReact></EmailCaptureReact> -->
-		<AnimationBG></AnimationBG>
+		<!-- <AnimationBG></AnimationBG> -->
 		<UpperSection></UpperSection>
 		<!-- <HeroSection></HeroSection> -->
 		<!-- <Logostorm></Logostorm> -->
@@ -36,7 +36,7 @@ import proemUI2 from '../assets/comps.png';
 		<FeaturesSection></FeaturesSection>
 		<!-- <FullWidthImage src={proemUI.src}></FullWidthImage> -->
 		<!-- <FullWidthImage src={proemUI2.src}></FullWidthImage> -->
-		<SignUpSection headline="stay in touch"></SignUpSection>
+		<FinalCTAsection headline="Understand Anything"></FinalCTAsection>
 	</main>
 	<Footer></Footer>
 </Layout>

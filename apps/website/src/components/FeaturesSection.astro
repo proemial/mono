@@ -9,7 +9,8 @@ import features3 from '../assets/feature-feed.png';
   <div class="even">
     <div class="headline-container">
       <span>01</span>
-      <h3>Ask questions and get answers supported by research</h3>
+      <h2>Answers</h2>
+      <h3>Get short and concise answers to any question, backed by scientific research</h3>
     </div>
     <div class="asset-container">
       <img class="asset" src={features1.src}>
@@ -21,15 +22,15 @@ import features3 from '../assets/feature-feed.png';
       <img class="asset" src={features2.src}>
     </div>
     <div class="headline-container">
-      <span>02</span>
-      <h3>Join others and dive into specific deatils by asking questions to the paper.</h3>
+      <h2>Understand</h2>
+      <h3>See previous questions from other users and interrogate the paper</h3>
     </div>
   </div>
 
   <div class="even">
     <div class="headline-container">
-      <span>03</span>
-      <h3>Follow topics, researchers, and concepts that interest you. </h3>
+      <h2>Discover</h2>
+      <h3>Follow the latest research, authors, and concepts that interest you, as personalized AI summaries</h3>
     </div>
     <div class="asset-container">
       <img class="asset" src={features3.src}>
@@ -50,21 +51,29 @@ import features3 from '../assets/feature-feed.png';
 
 
 
-  h3{
+  h2{
     font-size: 64px;
+    font-weight: 300;
+    margin: 0 0 20px 0;
+    max-width: 100%;
+    font-weight: 600;
+  }
+  h3{
+    font-size: 42px;
     font-weight: 300;
     margin: 0;
     max-width: 100%;
   }
 
   span{
-    padding: 6px 12px;
-    font-size: 14px;
-    border: 1px solid #fff;
-    text-align: center;
-    border-radius: 8px;
-    display: inline-block;
-    margin-bottom: 16px;
+    display: none;
+    // padding: 6px 12px;
+    // font-size: 14px;
+    // border: 1px solid #fff;
+    // text-align: center;
+    // border-radius: 8px;
+    // display: inline-block;
+    // margin-bottom: 16px;
   }
 
   .even{
@@ -124,24 +133,32 @@ import features3 from '../assets/feature-feed.png';
   }
 
   .asset{
-    max-width: 50%;
+    // width: 280px;
+    max-width: 75%;
     justify-self: center;
   }
 
-  h3{
+  h2{
     font-size: 48px;
-    font-weight: 300;
-    margin: 0;
-    max-width: 100%;
+    margin: 0 0 15px 0;
+  }
+  h3{
+    font-size: 40px;
   }
 
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 750px) {
+  .asset{
+    width: 280px;
+    // max-width: 75%;
+    justify-self: center;
+  }
+  h2{
+    font-size: 36px;
+    margin: 0 0 10px 0;
+  }
   h3{
-    font-size: 32px;
-    font-weight: 300;
-    margin: 0;
-    max-width: 100%;
+    font-size: 24px;
   }
 }
 </style>
