@@ -1,4 +1,5 @@
 "use client";
+import { AnswerSharingCard } from "@/app/(pages)/(app)/share/[shareId]/og/answer-sharing-card";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -6,7 +7,7 @@ import {
 import { ShareIcon, ShareIconProps } from "@/app/components/share/share-icon";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
 import { Answer } from "@proemial/data/neon/schema/answersTable";
-import { Button } from "@proemial/shadcn-ui";
+import { Button, Icons } from "@proemial/shadcn-ui";
 import { Upload01 } from "@untitled-ui/icons-react";
 // TODO: Replace with untitled-ui or custom icon
 import { Link2Icon } from "lucide-react";
@@ -143,20 +144,25 @@ export function ShareDrawer({ shareId, trackingPrefix }: ShareDrawerProps) {
 						`${trackingPrefix}:${analyticsKeys.chat.click.share}`,
 					)}
 				>
-					<Upload01 width={18} height={18} className="text-foreground -mr-3" />
+					<Upload01 width={18} height={18} className="-mr-3 text-foreground" />
 				</Button>
 			}
 			render={(DrawerClose) => (
-				<div className="w-full justify-end h-full flex flex-col py-8">
-					<Image
-						width={600}
-						height={315}
-						src={`${relativeUrl}/og`}
-						alt="Image"
-						className="rounded-lg"
-					/>
+				<div className="flex flex-col justify-end w-full h-full py-8">
+					<div className="relative">
+						<div className="absolute flex items-center justify-center w-full h-full">
+							<Icons.loader />
+						</div>
+						<Image
+							width={600}
+							height={315}
+							src={`${relativeUrl}/og`}
+							alt="Image"
+							className="rounded-lg"
+						/>
+					</div>
 
-					<div className="flex gap-10 justify-center py-10">
+					<div className="flex justify-center gap-10 py-10">
 						{shareProviders.map((provider) => (
 							<DrawerClose key={provider.name}>
 								{"onClick" in provider ? (
