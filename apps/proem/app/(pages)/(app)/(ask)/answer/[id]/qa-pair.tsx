@@ -13,7 +13,7 @@ import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { Paper } from "@/components/icons/Paper";
 import { PaperCardAsk } from "@/components/paper-card-ask";
-import { Header4, Icons } from "@proemial/shadcn-ui";
+import { Header4, Icons, cn } from "@proemial/shadcn-ui";
 import { Message } from "ai/react";
 import { ReactNode, useEffect, useRef } from "react";
 import { useThrobberStatus } from "./use-throbber-status";
@@ -49,9 +49,10 @@ export const QaPair = ({
 	return (
 		<div
 			ref={pairRef}
-			className={`flex flex-col justify-between gap-6 ${
-				isLatest && "min-h-[calc(100dvh-172px)]"
-			}`}
+			className={cn("flex flex-col justify-between gap-6", {
+				// Magic number pulled from a alternative dimension. Cannot be questioned but should probably be adjusted if vertical scroll is broken.
+				"min-h-[calc(100dvh-202px)]": isLatest,
+			})}
 		>
 			<div className="space-y-6">
 				<ChatQuestion
