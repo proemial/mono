@@ -15,9 +15,8 @@ import {
 } from "@proemial/shadcn-ui";
 import { ChevronRight } from "@untitled-ui/icons-react";
 import { useChat } from "ai/react";
-import { cva } from "class-variance-authority";
 import { useRouter } from "next/navigation";
-import { KeyboardEvent, useEffect, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -129,6 +128,7 @@ export function ChatForm({
 																}`}
 										onFocus={handleFocus}
 										onBlur={handleBlur}
+										onFocusOut={handleBlur} // https://github.com/facebook/react/issues/28492
 										onKeyDown={(e) => {
 											const target = e.target as HTMLTextAreaElement;
 											if (e.code === "Enter" || target.value.includes("\n")) {
