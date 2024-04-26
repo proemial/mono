@@ -17,14 +17,18 @@ export function ChatQuestion({
 
 	return (
 		<div className="space-y-5">
-			<div className="flex items-center content-center gap-3.5 font-lg">
-				{/* TODO: has to be user and not you on share pagecv */}
+			<div className="flex items-center content-center gap-3.5 text-lg">
 				{isQuestionByCurrentUser ? (
-					<UserAvatar trackingKey={analyticsKeys.ask.click.avatar} />
+					<>
+						<UserAvatar trackingKey={analyticsKeys.ask.click.avatar} />
+						<p>You</p>
+					</>
 				) : (
-					<User />
+					<>
+						<User />
+						<p>User</p>
+					</>
 				)}
-				<p>You</p>
 			</div>
 
 			<p className="text-2xl leading-normal">{question}</p>
