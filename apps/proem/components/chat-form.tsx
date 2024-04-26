@@ -150,14 +150,14 @@ export function ChatForm({
 						)}
 					/>
 					<Button
-						// disabled={
-						// 	!!(
-						// 		form.formState.isSubmitting ||
-						// 		form.getFieldState("question").error ||
-						// 		!form.getValues("question")?.length
-						// 	)
-						// }
-						className="rounded-full text-background border-[1px] bg-[#2B2B2B] dark:bg-[#e5e5e5] size-8 w-[36px] mr-2"
+						disabled={
+							!!(
+								form.formState.isSubmitting ||
+								form.getFieldState("question").error ||
+								!form.getValues("question")?.length
+							)
+						}
+						className="size-8 w-[36px] mr-2 rounded-full text-background border-[1px] bg-[#2B2B2B] dark:bg-[#e5e5e5] disabled:opacity-1"
 						size="icon"
 						type="submit"
 						onClick={trackHandler(
