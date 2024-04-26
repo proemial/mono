@@ -17,7 +17,7 @@ export function ChatQuestion({
 
 	return (
 		<div className="space-y-5">
-			<div className="flex items-center content-center gap-3.5 text-lg">
+			<div className="flex items-center content-center gap-3.5 text-lg leading-6">
 				{isQuestionByCurrentUser ? (
 					<>
 						<UserAvatar trackingKey={analyticsKeys.ask.click.avatar} />

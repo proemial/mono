@@ -41,7 +41,7 @@ export function CollapsibleSection({
 
 					<div className="flex items-center">
 						{extra}
-						<Button variant="ghost" size="sm" className="p-0 w-9 -mr-2">
+						<Button variant="ghost" size="sm" className="p-0 -my-1 -mr-2 w-9">
 							{isOpen ? (
 								<ChevronUp className="w-4 h-4" />
 							) : (

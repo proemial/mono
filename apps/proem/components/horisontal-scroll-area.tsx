@@ -5,8 +5,8 @@ export function HorisontalScrollArea({
 }: { children: React.ReactNode }) {
 	return (
 		<div className="-m-4">
-			<ScrollArea className="w-full">
-				<div className="flex p-4 space-x-3 w-max scrollbar-hide">
+			<ScrollArea className="w-full pb-6">
+				<div className="flex px-4 space-x-3 pt-7 w-max scrollbar-hide">
 					{children}
 				</div>
 				<ScrollBar orientation="horizontal" />

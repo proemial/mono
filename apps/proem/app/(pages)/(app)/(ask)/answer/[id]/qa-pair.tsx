@@ -101,7 +101,7 @@ export const QaPair = ({
 				)}
 				{/* {isLoadingAnswer && papers && <ChatAnswerSkeleton /> // Relevant once we generate micro titles} */}
 				{answer && (
-					<div className="pt-3 ">
+					<div>
 						<ChatArticle
 							type="Answer"
 							text={answer.content}

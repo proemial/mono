@@ -76,7 +76,7 @@ export const Answer = ({
 	const followUps = getFollowUps(answerEngineData);
 
 	return (
-		<div className="flex flex-col gap-4 flex-grow justify-between">
+		<div className="flex flex-col justify-between flex-grow gap-4">
 			{(!isFocused || isLoading) && (
 				<div className="flex flex-col gap-10">
 					{messages
@@ -101,7 +101,7 @@ export const Answer = ({
 			)}
 
 			{isFocused && !isLoading && (
-				<div className="flex-grow flex flex-col justify-end">
+				<div className="flex flex-col justify-end flex-grow">
 					<ChatSuggestedFollowups
 						suggestions={followUps}
 						onClick={append}
