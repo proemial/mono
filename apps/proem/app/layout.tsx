@@ -42,16 +42,16 @@ export const metadata: Metadata = {
 	},
 	icons: [
 		{
-			rel: 'icon',
-			type: 'image/x-icon',
-			url: '/favicon.ico',
-			media: '(prefers-color-scheme: light)',
+			rel: "icon",
+			type: "image/x-icon",
+			url: "/favicon.ico",
+			media: "(prefers-color-scheme: light)",
 		},
 		{
-			rel: 'icon',
-			type: 'image/x-icon',
-			url: '/favicon-darkmode.ico',
-			media: '(prefers-color-scheme: dark)',
+			rel: "icon",
+			type: "image/x-icon",
+			url: "/favicon-darkmode.ico",
+			media: "(prefers-color-scheme: dark)",
 		},
 	],
 };
@@ -87,7 +87,7 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 					>
 						<ThemeProvider
 							attribute="class"
-							defaultTheme="light"
+							defaultTheme="dark"
 							enableSystem
 							disableTransitionOnChange
 						>
