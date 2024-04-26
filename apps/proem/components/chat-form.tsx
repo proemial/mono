@@ -156,9 +156,7 @@ export function ChatForm({
 								!form.getValues("question")?.length
 							)
 						}
-						className={`"rounded-full text-foreground border-[1px] bg-card p-2 size-8 mr-4 " ${
-							isFocused ? "visible" : "hidden"
-						}`}
+						className="rounded-full text-foreground border-[1px] bg-card p-2 size-8 mr-2"
 						size="icon"
 						type="submit"
 						onClick={trackHandler(
