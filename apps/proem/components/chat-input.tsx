@@ -1,14 +1,14 @@
 "use client";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/app/components/analytics/tracking/tracking-keys";
 import { screenMaxWidth } from "@/app/constants";
 import { Button } from "@proemial/shadcn-ui";
 import { Stop } from "@untitled-ui/icons-react";
 import { useChat } from "ai/react";
 import { z } from "zod";
 import { ChatForm, ChatFormProps } from "./chat-form";
-import {
-	analyticsKeys,
-	trackHandler,
-} from "@/app/components/analytics/tracking/tracking-keys";
 
 export const QuerySchema = z.object({
 	query: z.string(),
@@ -35,7 +35,7 @@ export function ChatInput({
 }: FormProps) {
 	return (
 		<div
-			className={`${screenMaxWidth} sticky bottom-0 mb-[-16px] flex justify-center items-center`}
+			className={`${screenMaxWidth} sticky bottom-0 flex justify-center items-center`}
 		>
 			{isLoading && <StopButton stop={stop} trackingPrefix={trackingPrefix} />}
 			{!isLoading && (
@@ -58,7 +58,7 @@ function StopButton({ stop, trackingPrefix }: ButtonProps) {
 		trackHandler(`${trackingPrefix}:${analyticsKeys.chat.click.stop}`)();
 	};
 	return (
-		<Button className="mb-12 w-12 h-12 p-4 rounded-full" onClick={handleStop}>
+		<Button className="w-12 h-12 p-4 mb-12 rounded-full" onClick={handleStop}>
 			<Stop className="animate-pulse" />
 		</Button>
 	);
