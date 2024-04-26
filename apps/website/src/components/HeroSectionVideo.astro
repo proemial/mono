@@ -10,22 +10,20 @@ import TextAnimationIteration from "./TextAnimationIteration.astro";
 	<div class="hero-container">
     <!-- The video -->
     <!-- <img class="asset" src="/opengraph.png"> -->
-	<div>
-		<div id="videocontainerid">
-			<video autoplay muted loop id="myVideo">
-				<source src="/Preview_3b_black.mp4" type="video/mp4" />
+	<div class="hero-container">
+		<div id="videocontainermobileid">
+			<video autoplay loop muted playsinline id="myVideo1" style="pointer-events: none;" src="/20240425_Colour_Black_16_9_Vertical_Full-x264.mp4" type="video/mp4" controls playsinline />
 			</video>
 		</div>
-		<div id="videocontainermobileid">
-			<video autoplay muted loop id="myVideo">
-				<source src="/Preview_4_black.mp4" type="video/mp4" />
+		<div id="videocontainerid">
+			<video autoplay loop muted playsinline id="myVideo2" style="pointer-events: none;" src="/20240425_Colour_Black_16_9_Horizontal_Full-x264.mp4" type="video/mp4" />
 			</video>
 		</div>
 		<div id="videooverlayid">
 			<h1>Answers to<br>Questions that Matter</h1>
 			<p>Backed by Scientific Research</p>
 			<form action="https://proem.ai">
-				<button id="myBtn" type="submit" onclick="myFunction()">Try The Proem beta Now</button>
+					<button id="myBtn" type="submit">Try The Proem beta Now</button>
 			</form>
 		</div>
 	</div>
@@ -44,11 +42,14 @@ import TextAnimationIteration from "./TextAnimationIteration.astro";
 		//flex-direction: column;
 		//align-items: center;
 		//max-width: 1200px;
+		width: 100vw;
+		// min-height: 100vh;
 		margin-left: auto;
 		margin-right: auto;
 		//margin-top: 94px;
 		//gap: 48px;
 		//padding: 0px 24px;
+		text-shadow: 0px 0px 20px rgb(0,0,0,.5);
 	}
 
 	.asset {
@@ -70,11 +71,11 @@ import TextAnimationIteration from "./TextAnimationIteration.astro";
 	p {
 		margin-top: 10px;
 		margin-bottom: 50px;
-		color: #888;
+		color: #fff;
 		//max-width: 550px;
-		line-height: 24px;
+		line-height: 28px;
 		font-size: 24px;
-		font-weight: 600;
+		font-weight: 300;
 	}
 
 	mark {
@@ -84,11 +85,66 @@ import TextAnimationIteration from "./TextAnimationIteration.astro";
 		padding: 8px;
 	}
 
+	#myVideo1, #myVideo2 {
+		controls: false;
+		// display: none;
+	}
+	video::-webkit-media-controls, video::-moz-media-controls, video::-o-media-controls, video::-ms-media-controls {
+		display: none !important; 
+	} 
+	video::-webkit-media-controls-start-playback-button {
+		display: none !important;
+	}
 	#videocontainermobileid {
 		display: none;
 	}
 	#videocontainerid {
+		margin-top: -20px;
 		display: block;
+	}
+	
+	/* Style the video: 100% width and height to cover the entire window */
+	#videocontainermobileid, #videocontainerid, #myVideo1, #myVideo2  {
+		// // position: absolute;
+		// //   right: 0;
+		// //   top: 0;
+		width: 100vw;
+		// height: 100vh;
+	}
+	#myVideo1, #myVideo2  {
+		opacity: 0.01;
+	}
+
+	/* Add some content at the bottom of the video/page */
+	#videooverlayid {
+		position: absolute;
+		bottom: 0;
+		background: rgb(0,0,0,0);
+		background: linear-gradient(0deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 100%);
+		color: #f1f1f1;
+		width: 100%;
+		padding: 40px;
+	}
+
+	/* Style the button used to pause/play the video */
+	#myBtn {
+		// width: 240px;
+		font-size: 18px;
+		padding: 10px 15px;
+		border: none;
+		background: #fff;
+		color: #000;
+		cursor: pointer;
+		border-radius: 12px;
+	}
+
+	#myBtn:hover {
+		background: #ddd;
+		color: #000;
+	}
+	#myBtn:focus {
+		background: #888;
+		color: #000;
 	}
 
 	@media only screen and (max-width: 900px) {
@@ -99,55 +155,30 @@ import TextAnimationIteration from "./TextAnimationIteration.astro";
 	}
 	@media only screen and (max-width: 640px) {
 		h1 {
-			font-size: 32px;
+			font-size: 44px;
+			line-height: 44px;
+		}
+		p {
+			// color: #fff;
 			line-height: 28px;
+			font-size: 24px;
+			// font-weight: 300;
+		}	
+		.hero-container {
+			text-shadow: 0px 0px 20px rgb(0,0,0,.75);
+		}
+		#videooverlayid {
+			top: 100px;
+			background: rgb(0,0,0,0);
+			background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+			color: #f1f1f1;
 		}
 		#videocontainermobileid {
 			display: block;
+			margin-top: -150px;
 		}
 		#videocontainerid {
 			display: none;
 		}
 	}
-
-/* Style the video: 100% width and height to cover the entire window */
-#videocontainerid {
-// position: absolute;
-//   right: 0;
-//   top: 0;
-  min-width: 100%;
-  min-height: 100%;
-}
-
-/* Add some content at the bottom of the video/page */
-#videooverlayid {
-  position: absolute;
-  bottom: 0;
-  background: rgb(0,0,0);
-  background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
-  color: #f1f1f1;
-  width: 100%;
-  padding: 40px;
-}
-
-/* Style the button used to pause/play the video */
-#myBtn {
-  width: 250px;
-  font-size: 18px;
-  padding: 10px;
-  border: none;
-  background: #fff;
-  color: #000;
-  cursor: pointer;
-}
-
-#myBtn:hover {
-  background: #ddd;
-  color: #000;
-}
-#myBtn:focus {
-  background: #888;
-  color: #000;
-}
-
 </style>

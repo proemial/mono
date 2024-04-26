@@ -1,15 +1,15 @@
 ---
-import features1 from '../assets/features1.png';
-import features2 from '../assets/feature2.png';
-import features3 from '../assets/feature3.png';
+import features1 from '../assets/feature-ask.png';
+import features2 from '../assets/feature-read.png';
+import features3 from '../assets/feature-feed.png';
 
 ---
 
-<section>
+<section class="features-container">
   <div class="even">
     <div class="headline-container">
       <span>01</span>
-      <h3>cutting edge research at your fingertips</h3>
+      <h3>Ask questions and get answers supported by research</h3>
     </div>
     <div class="asset-container">
       <img class="asset" src={features1.src}>
@@ -22,14 +22,14 @@ import features3 from '../assets/feature3.png';
     </div>
     <div class="headline-container">
       <span>02</span>
-      <h3>dive deeper with personal questions</h3>
+      <h3>Join others and dive into specific deatils by asking questions to the paper.</h3>
     </div>
   </div>
 
   <div class="even">
     <div class="headline-container">
       <span>03</span>
-      <h3>learn and share insights together</h3>
+      <h3>Follow topics, researchers, and concepts that interest you. </h3>
     </div>
     <div class="asset-container">
       <img class="asset" src={features3.src}>
@@ -68,20 +68,21 @@ import features3 from '../assets/feature3.png';
   }
 
   .even{
-    display: grid;
+    display: flex;
     grid-template-columns: 1fr 1fr;
-    gap: 48px;
+    gap: 36px;
     justify-content: space-between;
     align-items: center;
+    text-align: right;
   }
   
   .odd{
-    display: grid;
+    display: flex;
     grid-template-columns: 1fr 1fr;
-    gap: 48px;
+    gap: 36px;
     justify-content: space-between;
     align-items: center;
-    margin-top: -64px;
+    margin-top: -100px;
   }
 
   .asset-container{
@@ -101,22 +102,29 @@ import features3 from '../assets/feature3.png';
     .even{
     display: grid;
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: 32px;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 64px;
+    text-align: center;
   }
   
   .odd{
     display: flex;
-    gap: 48px;
+    gap: 32px;
     margin-top: 0px;
     margin-bottom: 64px;
     flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .asset-container, .asset-container-odd{
+    display: grid;
+    justify-self: center;
   }
 
   .asset{
-    max-width: 100%;
+    max-width: 50%;
     justify-self: center;
   }
 
@@ -127,5 +135,13 @@ import features3 from '../assets/feature3.png';
     max-width: 100%;
   }
 
+}
+@media only screen and (max-width: 600px) {
+  h3{
+    font-size: 32px;
+    font-weight: 300;
+    margin: 0;
+    max-width: 100%;
+  }
 }
 </style>
