@@ -11,6 +11,7 @@ const { title } = Astro.props;
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" initial-scale=1.0 maximum-scale=1.0 content="width=device-width, user-scalable=no" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
 		<!-- Google Tag Manager -->
@@ -61,7 +62,7 @@ const { title } = Astro.props;
 			content="4wv4ejwsv7neqxx426so8972s0hk8v"
 		/>
 	</head>
-	<body>
+	<body onload="javascript:hideThemAll();return false;" >
 		<!-- Google Tag Manager (noscript) -->
 		<noscript
 			><iframe
@@ -75,6 +76,26 @@ const { title } = Astro.props;
 	</body>
 </html>
 
+<script is:inline>
+	function blurAll() {
+		// alert("blurAll");
+		if (document.activeElement != document.body) document.activeElement.blur();
+	};
+	function hideThemAll() {
+		// alert("hideThemAll");
+		document.querySelector('#myVideo1').controls = false;
+		document.querySelector('#myVideo2').controls = false;
+		document.querySelector('#myVideo1').style.opacity = "1";
+		document.querySelector('#myVideo2').style.opacity = "1";
+		// document.querySelector('#myVideo').removeAttribute('controls');
+		// document.querySelector('#myVideo1').addEventListener('loadstart', function(e) {
+		// 	// console.log().document.querySelector('#myVideo');
+		// 	e.target.controls = false;
+		// 	e.target.removeAttribute('controls');
+		// }); 
+	}
+</script>
+
 <style lang="scss" is:global>
 	@import "../variables/global.scss";
 
@@ -87,7 +108,7 @@ const { title } = Astro.props;
 
 	html {
 		font-family: system-ui, sans-serif;
-		background: #1a1a1a;
+		background: $color-primary-surface;
 	}
 
 	body {
