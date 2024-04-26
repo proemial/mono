@@ -1,40 +1,42 @@
 "use client";
 
-import { Suggestions } from "@/components/suggestions";
+import { Suggestions, SuggestionsProps } from "@/components/suggestions";
 import { Header4 } from "@proemial/shadcn-ui";
-import { GanttChart } from "lucide-react";
-import { SelectContentSelector } from "./select-content-selector";
+import { useChat } from "ai/react";
+import { GanttChart } from "./icons/GanttChart";
+import { MoodSelector } from "./mood-selector";
 
-export function ChatSuggestedFollowups({ label }: { label: string }) {
-	function onClick() {
-		console.log("Ask follow-up...");
-	}
+export type ChatSuggestedFollowupsProps = Pick<
+	SuggestionsProps,
+	"suggestions"
+> & {
+	onClick?: ReturnType<typeof useChat>["append"];
+	trackingPrefix: string;
+};
 
-	const suggestions = [
-		"What is the purpose of the Statistical Interpretation of quantum theory?",
-		"What is the implication of Bell’s theorem on hidden-variable theories that reproduce quantum mechanics exactly?",
-		"How does the Statistical Interpretation propose to view the quantum state description?",
-	];
-
+export function ChatSuggestedFollowups({
+	suggestions,
+	onClick,
+	trackingPrefix,
+}: ChatSuggestedFollowupsProps) {
 	return (
-		<div className="flex flex-col gap-5 mb-8">
+		<div className="flex flex-col gap-3">
 			<div className="flex items-center place-content-between">
-				<div className="flex items-center gap-4">
-					<GanttChart className="size-4" />
-					<Header4>Suggested follow-ups</Header4>
+				<div className="flex items-center gap-3.5">
+					<GanttChart />
+					<Header4>Suggested questions</Header4>
 				</div>
-				<div>
-					<SelectContentSelector
-						selector={[
-							{ value: "popular", label: "Popular" },
-							{ value: "trending", label: "Trending" },
-							{ value: "curious", label: "Curious" },
-						]}
-					/>
+				<div className="-mr-2">
+					<MoodSelector trackingPrefix={trackingPrefix} />
 				</div>
 			</div>
 			<div>
-				<Suggestions suggestions={suggestions} />
+				<Suggestions
+					suggestions={suggestions}
+					trackingPrefix={trackingPrefix}
+					onClick={onClick}
+					starters={trackingPrefix === "read"}
+				/>
 			</div>
 		</div>
 	);

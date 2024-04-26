@@ -1,7 +1,7 @@
 "use client";
 
-import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
-import { Tracker } from "@/app/components/analytics/tracker";
+import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
+import { Tracker } from "@/app/components/analytics/tracking/tracker";
 import {
 	PaperCard,
 	PaperCardTitle,
@@ -18,7 +18,7 @@ import {
 	AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
 import type { Message } from "ai/react";
-import { ShareIcon } from "lucide-react";
+import { Upload01 } from "@untitled-ui/icons-react";
 import { SinglarThrobber, Throbber } from "../loading/throbber";
 import {
 	FeedbackButtons,
@@ -69,10 +69,10 @@ export function ChatMessage({
 					<FeedbackButtons runId={runId} />
 
 					{onShareHandle && (
-						<ShareIcon
+						<Upload01
 							onClick={() => {
 								onShareHandle();
-								Tracker.track(analyticsKeys.ask.click.share);
+								Tracker.track(`ask:${analyticsKeys.chat.click.share}`);
 							}}
 							className="ml-auto"
 						/>

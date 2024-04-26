@@ -1,0 +1,65 @@
+"use client";
+import { screenMaxWidth } from "@/app/constants";
+import { Button } from "@proemial/shadcn-ui";
+import { Stop } from "@untitled-ui/icons-react";
+import { useChat } from "ai/react";
+import { z } from "zod";
+import { ChatForm, ChatFormProps } from "./chat-form";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/app/components/analytics/tracking/tracking-keys";
+
+export const QuerySchema = z.object({
+	query: z.string(),
+});
+
+type ButtonProps = {
+	stop?: ReturnType<typeof useChat>["stop"];
+	trackingPrefix: string;
+};
+
+type FormProps = ChatFormProps &
+	ButtonProps & {
+		isLoading?: ReturnType<typeof useChat>["isLoading"];
+		onFocusChange?: (isFocused: boolean) => void;
+	};
+
+export function ChatInput({
+	placeholder,
+	onSend,
+	isLoading,
+	stop,
+	onFocusChange,
+	trackingPrefix,
+}: FormProps) {
+	return (
+		<div
+			className={`${screenMaxWidth} sticky bottom-0 mb-[-16px] flex justify-center items-center`}
+		>
+			{isLoading && <StopButton stop={stop} trackingPrefix={trackingPrefix} />}
+			{!isLoading && (
+				<ChatForm
+					placeholder={placeholder}
+					onSend={onSend}
+					onFocusChange={onFocusChange}
+					trackingPrefix={trackingPrefix}
+				/>
+			)}
+		</div>
+	);
+}
+
+function StopButton({ stop, trackingPrefix }: ButtonProps) {
+	const handleStop = () => {
+		if (stop) {
+			stop();
+		}
+		trackHandler(`${trackingPrefix}:${analyticsKeys.chat.click.stop}`)();
+	};
+	return (
+		<Button className="mb-12 w-12 h-12 p-4 rounded-full" onClick={handleStop}>
+			<Stop className="animate-pulse" />
+		</Button>
+	);
+}

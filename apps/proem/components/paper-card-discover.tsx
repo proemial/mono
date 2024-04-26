@@ -1,31 +1,18 @@
-import {
-	Card,
-	CardBullet,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@proemial/shadcn-ui";
-import { Globe } from "lucide-react";
+import { PaperCard, PaperCardProps } from "@/components/paper-card";
+import { CardBullet } from "@proemial/shadcn-ui";
+import { LinkExternal01 } from "@untitled-ui/icons-react";
 
-export function PaperCardDiscover({ paper }: { paper: any }) {
+type PaperCardDiscoverProps = Omit<PaperCardProps, "header">;
+
+export function PaperCardDiscover(props: PaperCardDiscoverProps) {
 	return (
-		<Card variant="paper">
-			<CardHeader variant="paperDiscover">
+		<PaperCard
+			{...props}
+			header={
 				<CardBullet>
-					<Globe className="size-4" />
+					<LinkExternal01 className="size-4" />
 				</CardBullet>
-				<CardDescription variant="paperDate">{paper.date}</CardDescription>
-			</CardHeader>
-			<CardContent variant="paper">
-				<CardTitle variant="paper">{paper.title}</CardTitle>
-			</CardContent>
-			<CardFooter>
-				<CardDescription variant="paperPublisher">
-					{paper.publisher}
-				</CardDescription>
-			</CardFooter>
-		</Card>
+			}
+		/>
 	);
 }

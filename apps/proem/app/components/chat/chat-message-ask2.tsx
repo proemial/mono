@@ -1,7 +1,7 @@
 "use client";
 
-import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
-import { Tracker } from "@/app/components/analytics/tracker";
+import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
+import { Tracker } from "@/app/components/analytics/tracking/tracker";
 import {
 	PaperCard,
 	PaperCardTitle,
@@ -18,8 +18,11 @@ import {
 	AvatarImage,
 } from "@/app/components/shadcn-ui/Avatar";
 import type { Message } from "ai/react";
-import { ChevronDown, ChevronUp, ShareIcon } from "lucide-react";
-import { SinglarThrobber, Throbber as MessageThrobber } from "../loading/throbber";
+import { ChevronDown, ChevronUp, Upload01 } from "@untitled-ui/icons-react";
+import {
+	SinglarThrobber,
+	Throbber as MessageThrobber,
+} from "../loading/throbber";
 import {
 	FeedbackButtons,
 	type FeedbackButtonsProps,
@@ -75,10 +78,10 @@ export function ChatMessage({
 					<FeedbackButtons runId={runId} />
 
 					{onShareHandle && (
-						<ShareIcon
+						<Upload01
 							onClick={() => {
 								onShareHandle();
-								Tracker.track(analyticsKeys.ask.click.share);
+								Tracker.track(`ask:${analyticsKeys.chat.click.share}`);
 							}}
 							className="ml-auto"
 						/>
@@ -120,12 +123,14 @@ export function ChatMessage({
 	);
 }
 
-function Papers({ papers }: { papers?: { link: string; title: string; published?: string }[] }) {
+function Papers({
+	papers,
+}: { papers?: { link: string; title: string; published?: string }[] }) {
 	const [open, setOpen] = useState(false);
 
 	return (
 		<>
-			{papers &&
+			{papers && (
 				<div className="flex flex-col justify-center px-2 py-1 mt-4 mb-1 ml-8 border rounded-sm cursor-pointer">
 					<div className="flex justify-between" onClick={() => setOpen(!open)}>
 						<div>Papers</div>
@@ -134,19 +139,24 @@ function Papers({ papers }: { papers?: { link: string; title: string; published?
 							{!open && <ChevronDown />}
 						</div>
 					</div>
-					{open && papers &&
+					{open && papers && (
 						<ul className="ml-4 list-disc">
-							{papers.map((paper) =>
+							{papers.map((paper) => (
 								<li key={paper.link}>
-									<Link key={paper.link} href={paper.link} className="font-normal text-green-500">{paper.title}</Link>
+									<Link
+										key={paper.link}
+										href={paper.link}
+										className="font-normal text-green-500"
+									>
+										{paper.title}
+									</Link>
 									<span className=" text-slate-500"> ({paper.published})</span>
 								</li>
-
-							)}
+							))}
 						</ul>
-					}
+					)}
 				</div>
-			}
+			)}
 		</>
 	);
 }
@@ -154,9 +164,9 @@ function Papers({ papers }: { papers?: { link: string; title: string; published?
 function Throbber({ throbber }: { throbber?: { message?: string } }) {
 	return (
 		<>
-			{throbber?.message?.length !== undefined &&
+			{throbber?.message?.length !== undefined && (
 				<MessageThrobber text={throbber.message} />
-			}
+			)}
 			{throbber && throbber.message === undefined && <SinglarThrobber />}
 		</>
 	);

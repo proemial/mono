@@ -1,4 +1,4 @@
-import { createSharePageOpenGraphImage } from "@/app/(pages)/(app)/share/[shareId]/og/create-share-page-open-graph-image";
+import { createSharePageOpenGraphImage } from "./og/create-share-page-open-graph-image";
 
 export const runtime = "edge";
 export const alt = "proem - science answers";
@@ -18,10 +18,13 @@ export default async function SharePageOpenGraphImage({
 		}
 
 		return await createSharePageOpenGraphImage(shareId, size);
-	} catch (e: any) {
-		console.log(`${e.message}`);
-		return new Response(`Failed to generate the image`, {
-			status: 500,
-		});
+	} catch (e) {
+		if (e instanceof Error) {
+			console.log(`${e.message}`);
+			return new Response("Failed to generate the image", {
+				status: 500,
+			});
+		}
+		throw e;
 	}
 }

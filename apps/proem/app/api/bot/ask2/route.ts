@@ -1,15 +1,14 @@
 import { AIMessage } from "@/app/api/bot/answer-engine/answer-engine";
+import { chatInputMaxLength } from "@/app/api/bot/input-limit";
+import { INTERNAL_COOKIE_NAME, getInternalUser } from "@/app/hooks/use-user";
 import { toLangChainChatHistory } from "@/app/llm/utils";
 import { Message as VercelChatMessage } from "ai";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { answerEngine } from "./answer-engine";
-import { chatInputMaxLength } from "@/app/api/bot/input-limit";
-import {
-	INTERNAL_COOKIE_NAME,
-	getInternalUser,
-} from "@/app/(pages)/(app)/profile/user";
+
+export const maxDuration = 30;
 
 const answerEngineRouteParams = z.object({
 	slug: z.string().optional().nullable(),

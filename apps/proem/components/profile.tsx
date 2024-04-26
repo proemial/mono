@@ -1,33 +1,45 @@
-import { ProfileBookmarks } from "@/components/profile-bookmarks";
-import { ProfileQuestions } from "@/components/profile-questions";
+import { analyticsKeys, trackHandler } from "@/app/components/analytics/tracking/tracking-keys";
+import { screenMaxWidth } from "@/app/constants";
 import { ProfileYou } from "@/components/profile-you";
 import {
-	Sheet,
-	SheetContent,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger,
+	Button,
+	Drawer,
+	DrawerClose,
+	DrawerContent,
+	DrawerHeader,
+	DrawerTitle,
+	DrawerTrigger,
 } from "@proemial/shadcn-ui";
-import { Menu } from "lucide-react";
+import { Menu05, XClose } from "@untitled-ui/icons-react";
 
 export function Profile() {
 	return (
-		<Sheet>
-			<SheetTrigger asChild>
-				<Menu className="p-1" />
-			</SheetTrigger>
-			<SheetContent side="left" className="p-4 overflow-y-auto">
+		<Drawer>
+			<DrawerTrigger asChild>
+				<Button variant="ghost" size="sm" onClick={trackHandler(analyticsKeys.ui.menu.click.open)}>
+					<Menu05 className="p-1" />
+				</Button>
+			</DrawerTrigger>
+			<DrawerContent
+				className={`${screenMaxWidth} w-full h-full rounded-none mx-auto`}
+			>
 				<div className="flex flex-col gap-6">
-					<SheetHeader>
-						<SheetTitle className="pt-12 text-2xl font-normal">
-							Your Profile
-						</SheetTitle>
-					</SheetHeader>
-					<ProfileYou />
-					<ProfileQuestions />
-					<ProfileBookmarks />
+					<DrawerHeader className="pt-0">
+						<DrawerTitle className="flex justify-end text-2xl font-normal">
+							<DrawerClose asChild>
+								<Button variant="ghost" className="p-0" onClick={trackHandler(analyticsKeys.ui.menu.click.close)}>
+									<XClose className="w-6 h-6" />
+								</Button>
+							</DrawerClose>
+						</DrawerTitle>
+					</DrawerHeader>
+					<div className="px-4">
+						<ProfileYou />
+					</div>
+					{/* <ProfileQuestions />
+					<ProfileBookmarks /> */}
 				</div>
-			</SheetContent>
-		</Sheet>
+			</DrawerContent>
+		</Drawer>
 	);
 }

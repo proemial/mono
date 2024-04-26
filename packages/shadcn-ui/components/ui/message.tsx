@@ -5,10 +5,10 @@ import { VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/utils";
 
-const messageVariants = cva("flex flex-col place-items-end md:max-w-prose", {
+const messageVariants = cva("flex flex-col place-items-start md:max-w-prose", {
 	variants: {
 		variant: {
-			question: "w-fit",
+			question: "w-full",
 			answer: "w-4/5",
 		},
 	},

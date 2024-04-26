@@ -1,10 +1,11 @@
 "use client";
-import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
-import { Tracker } from "@/app/components/analytics/tracker";
+import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
+import { Tracker } from "@/app/components/analytics/tracking/tracker";
 import { Proem } from "@/app/components/icons/brand/proem";
 import { ProemLogo } from "@/app/components/icons/brand/logo";
 import Link from "next/link";
 import { ReactNode } from "react";
+import { screenMaxWidth } from "../constants";
 
 type PageHeaderProps = {
 	title?: string;
@@ -35,7 +36,7 @@ export function PageHeaderUnfixed({
 	};
 
 	return (
-		<div className="flex flex-row items-center justify-between max-w-screen-md px-4 pt-3 mx-auto">
+		<div className={`${screenMaxWidth} flex flex-row items-center justify-between px-4 pt-3 mx-auto`}>
 			<Link href="/" onClick={handleClick}>
 				<div className="flex flex-row gap-4">
 					<ProemLogo size="sm" />

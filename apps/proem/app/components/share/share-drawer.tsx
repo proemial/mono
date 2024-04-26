@@ -2,6 +2,7 @@
 import Drawer from "@/app/components/drawer/drawer";
 import { ShareIcon, ShareIconProps } from "@/app/components/share/share-icon";
 import { useShareDrawerState } from "@/app/components/share/state";
+// TODO: Replace with untitled-ui or custom icon
 import { Link2Icon } from "lucide-react";
 import Image from "next/image";
 

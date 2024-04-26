@@ -22,6 +22,7 @@ export const envVariables = z.object({
 	OPENAI_API_KEY: z.string(),
 	OPENALEX_API_KEY: z.string(),
 	SENTRY_ORG: z.string(),
+	NEXT_PUBLIC_VERCEL_URL: z.string(),
 });
 
 envVariables.parse(process.env);

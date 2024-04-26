@@ -1,7 +1,5 @@
-import { applyLinksAsSpans } from "@/app/components/chat/apply-links";
 import { AnswerSharingCard } from "@/app/(pages)/(app)/share/[shareId]/og/answer-sharing-card";
 import { answers } from "@/app/api/bot/answer-engine/answers";
-import { cn } from "@/app/components/shadcn-ui/utils";
 import { ImageResponse } from "next/og";
 
 export async function createSharePageOpenGraphImage(
@@ -27,11 +25,11 @@ export async function createSharePageOpenGraphImage(
 		),
 	).then((res) => res.arrayBuffer());
 
-	const { content } = applyLinksAsSpans(sharedAnswer.answer);
-	const contentSplittedInSpans = content.map(splitEachWordToSpan);
-
 	return new ImageResponse(
-		<AnswerSharingCard content={contentSplittedInSpans} classNameAttr="tw" />,
+		<AnswerSharingCard
+			content={sharedAnswer.answer ?? ""}
+			classNameAttr="tw"
+		/>,
 		{
 			...size,
 			fonts: [
@@ -48,14 +46,4 @@ export async function createSharePageOpenGraphImage(
 			],
 		},
 	);
-}
-
-function splitEachWordToSpan(element: JSX.Element) {
-	if (element.props.children.props) {
-		return splitEachWordToSpan(element.props.children);
-	}
-
-	return element.props.children.split(" ").map((word: string) => {
-		return <span tw={cn("mr-2", element.props.tw)}>{word}</span>;
-	});
 }

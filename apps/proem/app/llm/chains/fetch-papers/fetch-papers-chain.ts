@@ -6,7 +6,7 @@ import {
 } from "@langchain/core/runnables";
 import { searchParamsChain } from "./search-params-chain";
 import { OpenAlexQueryParams } from "./oa-search-helpers";
-import { Metrics } from "@/app/components/analytics/metrics";
+import { Metrics } from "@/app/components/analytics/sentry/metrics";
 
 type Input = {
 	question: string;
@@ -27,10 +27,13 @@ const queryOpenAlex = RunnableLambda.from<OpenAlexQueryParams, Paper[]>(
 		const promises = Object.keys(input.searchQueries).map((key) =>
 			fetchPapers(input.searchQueries[key] as string, { metadata: key }),
 		);
+
+		const begin = Metrics.now();
 		const results = await Promise.all(promises);
+		Metrics.elapsedSince(begin, "ask.papers.fetchall");
 
 		Object.keys(input.searchQueries).forEach((key, i) => {
-			Metrics.papersFetched(key, results[i]?.length ?? 0);
+			Metrics.paperQueryExecuted(key, results[i]?.length ?? 0);
 		});
 
 		const counts = [];

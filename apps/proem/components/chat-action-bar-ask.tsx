@@ -1,23 +1,17 @@
-import { ButtonBookmark } from "@/components/button-bookmark";
-import { ButtonShare } from "@/components/button-share";
-import { ButtonThumbsDown } from "@/components/button-thumbs-down";
-import { ButtonThumbsUp } from "@/components/button-thumbs-up";
-import {
-	ChatActionBar,
-	ChatActionBarColumn,
-} from "@/components/chat-action-bar";
+import { ShareDrawer, ShareDrawerProps } from "@/components/share-drawer";
 
-export function ChatActionBarAsk() {
+type ChatActionBarAskProps = Pick<
+	ShareDrawerProps,
+	"shareId" | "trackingPrefix"
+>;
+
+export function ChatActionBarAsk({
+	shareId,
+	trackingPrefix,
+}: ChatActionBarAskProps) {
 	return (
-		<ChatActionBar>
-			<ChatActionBarColumn>
-				<ButtonThumbsUp />
-				<ButtonThumbsDown />
-			</ChatActionBarColumn>
-			<ChatActionBarColumn>
-				<ButtonShare />
-				<ButtonBookmark />
-			</ChatActionBarColumn>
-		</ChatActionBar>
+		<div className="flex justify-end">
+			<ShareDrawer shareId={shareId} trackingPrefix={trackingPrefix} />
+		</div>
 	);
 }

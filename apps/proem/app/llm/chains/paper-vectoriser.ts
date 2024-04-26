@@ -1,4 +1,5 @@
 import { Paper } from "@/app/api/paper-search/search";
+import { Metrics } from "@/app/components/analytics/sentry/metrics";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { Time } from "@proemial/utils/time";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
@@ -18,10 +19,11 @@ export async function vectorisePapers(
 				papers.map((paper) => paper?.abstract as string),
 				papers.map((paper) => paper.link),
 				// TODO: Evaluate faster embeddings model
-				new OpenAIEmbeddings(),
+				new OpenAIEmbeddings({ modelName: "text-embedding-3-small" }),
 			);
 		} finally {
 			Time.log(begin, `vectorStore initialized om ${papers.length} papers`);
+			Metrics.elapsedSince(begin, "ask.papers.rerank.vectorize");
 		}
 
 		begin = Time.now();
@@ -39,8 +41,10 @@ export async function vectorisePapers(
 			});
 		} finally {
 			Time.log(begin, `Similarity search performed, returning ${count} papers`);
+			Metrics.elapsedSince(begin, "ask.papers.rerank.search");
 		}
 	} finally {
 		Time.log(start, "Elapsed");
+		Metrics.elapsedSince(start, "ask.papers.rerank");
 	}
 }

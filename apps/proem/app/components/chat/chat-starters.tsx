@@ -1,6 +1,6 @@
 "use client";
-import { Tracker } from "@/app//components/analytics/tracker";
-import { Search } from "lucide-react";
+import { Tracker } from "@/app/components/analytics/tracking/tracker";
+import { SearchMd } from "@untitled-ui/icons-react";
 import { ChatStarter } from "./chat-message";
 import { ChatTarget, useChatState } from "./state";
 import { useAuth } from "@clerk/nextjs";
@@ -41,7 +41,7 @@ export function StarterMessages({
     return (
         <>
             <div className="flex items-center font-sourceCodePro">
-                <Search style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
+                <SearchMd style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
                 SUGGESTED QUESTIONS
             </div>
             {suggestions.slice(0, 3).map((suggestion) => (

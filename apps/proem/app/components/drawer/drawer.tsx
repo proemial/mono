@@ -3,7 +3,6 @@
 
 import { cn } from "@/app/components/shadcn-ui/utils";
 import useMountTransition from "@/app/components/use-mount-transition";
-import "@/app/drawer.css";
 import { MutableRefObject, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 

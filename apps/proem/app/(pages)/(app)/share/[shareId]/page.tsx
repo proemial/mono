@@ -1,12 +1,7 @@
+import { Answer } from "@/app/(pages)/(app)/(ask)/answer/[id]/answer";
+import { SHARED_ANSWER_TRANSACTION_ID } from "@/app/(pages)/(app)/share/constants";
 import { answers } from "@/app/api/bot/answer-engine/answers";
-import { analyticsKeys } from "@/app/components/analytics/analytics-keys";
-import { ChatInput } from "@/app/components/chat/chat-input";
-import { ChatMessages } from "@/app/components/chat/chat-messages-ask";
-import { StarterMessages } from "@/app/components/chat/chat-starters";
 import { redirect } from "next/navigation";
-import { PageLayout } from "../../page-layout";
-
-const target = "ask";
 
 export const revalidate = 1;
 export const metadata = {
@@ -23,24 +18,53 @@ export default async function SharePage({ params: { shareId } }: Props) {
 	if (!sharedAnswer) {
 		redirect("/");
 	}
+	const existingData = [];
+	const existingPapers = sharedAnswer.papers;
+	const existingShareId = sharedAnswer.shareId;
+	const existingFollowUpQuestions = sharedAnswer.followUpQuestions;
+
+	if (existingPapers) {
+		existingData.push({
+			type: "papers-fetched" as const,
+			transactionId: SHARED_ANSWER_TRANSACTION_ID,
+			data: existingPapers,
+		});
+	}
+
+	if (existingShareId) {
+		existingData.push({
+			type: "answer-saved" as const,
+			transactionId: SHARED_ANSWER_TRANSACTION_ID,
+			data: {
+				shareId: existingShareId,
+				runId: existingShareId,
+			},
+		});
+	}
+
+	if (existingFollowUpQuestions) {
+		existingData.push({
+			type: "follow-up-questions-generated" as const,
+			transactionId: SHARED_ANSWER_TRANSACTION_ID,
+			data: existingFollowUpQuestions as { question: string }[],
+		});
+	}
 
 	return (
-		<PageLayout title={target}>
-			<div>
-				<ChatMessages
-					existingShareId={sharedAnswer.shareId ?? undefined}
-					initialMessages={[
-						{ id: "id", role: "assistant", content: sharedAnswer.answer },
-					]} />
-			</div>
-
-			<div className="flex flex-col px-2 pt-1 pb-2">
-				<ChatInput target={target}>
-					<StarterMessages
-						target={target}
-						trackingKey={analyticsKeys.ask.click.starter} />
-				</ChatInput>
-			</div>
-		</PageLayout>
+		<Answer
+			existingData={existingData}
+			initialMessages={[
+				{
+					id: SHARED_ANSWER_TRANSACTION_ID,
+					role: "user",
+					content: sharedAnswer.question,
+				},
+				{
+					id: `${SHARED_ANSWER_TRANSACTION_ID}_response`,
+					role: "assistant",
+					content: sharedAnswer.answer,
+				},
+			]}
+		/>
 	);
 }

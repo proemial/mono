@@ -1,43 +1,67 @@
+import { applyExplainLinks } from "@/app/components/chat/apply-links";
+import { ProemLogo } from "@/app/components/icons/brand/logo";
+import { UserAvatar } from "@/app/components/user-avatar";
 import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage,
-	Button,
 	Message,
-	MessageAction,
 	MessageAuthor,
 	MessageBubble,
 	MessageContent,
 	MessageFooter,
-	MessageReplies,
 } from "@proemial/shadcn-ui";
-import { ButtonHeart } from "./button-heart";
 
-// component that takes in a QAMessage and renders it
-export function QAEntry({ message }: { message: any }) {
+type QAMessageProps = {
+	role: "user" | "assistant";
+	content: string | undefined;
+	onExplainerClick: (msg: string) => void;
+};
+
+export function QAMessage({
+	role,
+	content = "",
+	onExplainerClick,
+}: QAMessageProps) {
+	if (!content) {
+		return undefined;
+	}
+
 	return (
-		<Message variant={message.type}>
+		<Message
+			variant={role === "user" ? "question" : "answer"}
+			className="space-y-1.5"
+		>
 			<MessageContent>
-				<MessageBubble>{message.text}</MessageBubble>
-				<MessageAction>
+				<MessageBubble>
+					{role === "assistant"
+						? applyExplainLinks(content, onExplainerClick)
+						: content}
+				</MessageBubble>
+				{/* <MessageAction>
 					<ButtonHeart small />
 					<span className="leading-tight">{message.likes}</span>
-				</MessageAction>
+				</MessageAction> */}
 			</MessageContent>
 			<MessageFooter>
 				<MessageAuthor>
-					<Avatar className="size-6">
-						<AvatarImage src={message.author.avatar} />
-						<AvatarFallback>CN</AvatarFallback>
-					</Avatar>
-					<p>{message.author.name}</p>
+					{role === "user" ? (
+						<>
+							<UserAvatar />
+							<p>You</p>
+						</>
+					) : (
+						<>
+							<div className="size-6 flex justify-center items-center">
+								<ProemLogo size="xs" />
+							</div>
+							<p>Proem</p>
+						</>
+					)}
 				</MessageAuthor>
-				<MessageReplies>
+				{/* <MessageReplies>
 					{message.replies ? <div>{message.replies} REPLIES</div> : <></>}
 					<Button variant="ghost" size="none">
 						REPLY
 					</Button>
-				</MessageReplies>
+				</MessageReplies> */}
 			</MessageFooter>
 		</Message>
 	);

@@ -22,7 +22,7 @@ export function Header1({ children }: TypographyProps) {
 
 export function Header2({ children }: TypographyProps) {
     return (
-        <h2 className="scroll-m-20 text-2xl/normal">
+        <h2 className="scroll-m-20 text-2xl/normal font-normal">
             {children}
         </h2>
     )

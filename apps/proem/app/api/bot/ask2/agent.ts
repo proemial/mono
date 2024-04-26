@@ -1,4 +1,5 @@
 import { AnswerEngineStreamData } from "@/app/api/bot/answer-engine/answer-engine";
+import { answers } from "@/app/api/bot/answer-engine/answers";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { askAgentPrompt } from "@/app/prompts/ask_agent";
@@ -6,8 +7,8 @@ import {
 	ChatPromptTemplate,
 	MessagesPlaceholder,
 } from "@langchain/core/prompts";
+import { DynamicTool } from "@langchain/core/tools";
 import { createOpenAIFunctionsAgent } from "langchain/agents";
-import { DynamicTool } from "langchain/tools";
 import { Run } from "langsmith";
 import { saveAnswerFromAgent } from "../answer-engine/save-answer";
 
@@ -26,7 +27,7 @@ export const buildAgent = async (
 	const prompt = ChatPromptTemplate.fromMessages([
 		["system", askAgentPrompt],
 		new MessagesPlaceholder("chatHistory"),
-		["human", "Based on science, {input}"],
+		["human", "{input}"],
 		new MessagesPlaceholder("agent_scratchpad"),
 	]);
 	const llm = buildOpenAIChatModel("gpt-4-0125-preview", "ask", {
@@ -76,28 +77,36 @@ export const buildAgent = async (
 								},
 							});
 						}
+						return insertedAnswer;
 					});
 
-					const followUpsQuestionPromise = followUpQuestionChain
+					const followUpsQuestionPromise = followUpQuestionChain()
 						.invoke({
 							question: userInput,
 							answer,
 						})
-						.then((followUpsQuestions) => {
-							// TODO! Save follow-up questions to the database
+						.then((response) => {
+							const followUpQuestions = response
+								.split("?")
+								.filter(Boolean)
+								.map((question) => ({ question: `${question.trim()}?` }));
+
 							data.append({
 								type: "follow-up-questions-generated",
 								transactionId,
-								data: followUpsQuestions
-									.split("?")
-									.filter(Boolean)
-									.map((question) => ({ question: `${question.trim()}?` })),
+								data: followUpQuestions,
 							});
+
+							return followUpQuestions;
 						});
 
-					// Waiting for all sideeffects relying on data to finish before closing the data stream
 					Promise.all([saveAnswerPromise, followUpsQuestionPromise]).then(
-						() => {
+						async ([insertedAnswer, followUpQuestions]) => {
+							if (insertedAnswer && followUpQuestions) {
+								await answers.update(insertedAnswer.id, { followUpQuestions });
+							}
+
+							// Waiting for all sideeffects relying on data to finish before closing the data stream
 							data.close();
 						},
 					);

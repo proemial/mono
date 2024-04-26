@@ -1,8 +1,4 @@
 import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage,
-	Button,
 	Card,
 	CardBullet,
 	CardContent,
@@ -10,28 +6,24 @@ import {
 	CardFooter,
 	CardHeader,
 } from "@proemial/shadcn-ui";
-import { Users } from "lucide-react";
+import { Users01 } from "@untitled-ui/icons-react";
 
 export function PaperCardDiscoverProfile({ name }: { name: string }) {
 	return (
 		<Card variant="paper">
-			<CardHeader variant="paperDiscover">
+			<CardHeader>
 				<CardBullet>
-					<Users className="size-4" />
+					<Users01 className="size-4" />
 				</CardBullet>
-				<CardDescription variant="paperDate">CO-AUTHOR</CardDescription>
+				<CardDescription variant="paperDate">Author</CardDescription>
 			</CardHeader>
-			<CardContent variant="paper">
-				<Avatar className="size-[72px] mx-auto">
-					<AvatarImage src="https://github.com/shadcn.png" />
-					<AvatarFallback>CN</AvatarFallback>
-				</Avatar>
-			</CardContent>
+			<div className="size-[72px] rounded-full mx-auto bg-primary my-5" />
 			<CardFooter>
-				<CardDescription variant="paperCoAuthor">
-					<Button variant="default" size="pill">
-						{name}
-					</Button>
+				<CardDescription
+					variant="paperCoAuthor"
+					className="truncate bg-primary px-4 py-2 rounded-full text-2xs text-nowrap"
+				>
+					{name}
 				</CardDescription>
 			</CardFooter>
 		</Card>

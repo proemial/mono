@@ -1,7 +1,7 @@
 "use client";
 
 import * as SelectPrimitive from "@radix-ui/react-select";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronSelectorVertical } from "@untitled-ui/icons-react";
 import * as React from "react";
 import { cn } from "../../lib/utils";
 
@@ -25,7 +25,7 @@ const SelectTrigger = React.forwardRef<
 	>
 		{children}
 		<SelectPrimitive.Icon asChild>
-			<ChevronsUpDown className="w-4 h-4 opacity-50" />
+			<ChevronSelectorVertical className="w-4 h-4 opacity-50" />
 		</SelectPrimitive.Icon>
 	</SelectPrimitive.Trigger>
 ));
@@ -43,7 +43,7 @@ const SelectScrollUpButton = React.forwardRef<
 		)}
 		{...props}
 	>
-		<ChevronsUpDown className="w-4 h-4" />
+		<ChevronSelectorVertical className="w-4 h-4" />
 	</SelectPrimitive.ScrollUpButton>
 ));
 SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName;
@@ -60,7 +60,7 @@ const SelectScrollDownButton = React.forwardRef<
 		)}
 		{...props}
 	>
-		<ChevronsUpDown className="w-4 h-4" />
+		<ChevronSelectorVertical className="w-4 h-4" />
 	</SelectPrimitive.ScrollDownButton>
 ));
 SelectScrollDownButton.displayName =
@@ -117,7 +117,7 @@ const SelectItem = React.forwardRef<
 	<SelectPrimitive.Item
 		ref={ref}
 		className={cn(
-			"relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-muted focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+			"relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-8 text-sm outline-none focus:bg-muted focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
 			className,
 		)}
 		{...props}

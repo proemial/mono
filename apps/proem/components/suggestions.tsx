@@ -1,40 +1,63 @@
 "use client";
 
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/app/components/analytics/tracking/tracking-keys";
 import { Button } from "@proemial/shadcn-ui";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useChat } from "ai/react";
+import { useRouter } from "next/navigation";
 
-export function Suggestions({ suggestions }: { suggestions: string[] }) {
-	const searchParams = useSearchParams();
-	const pathname = usePathname();
-	const { replace } = useRouter();
+export type SuggestionsProps = {
+	suggestions?: string[];
+	onClick?: ReturnType<typeof useChat>["append"];
+	starters?: boolean;
+	trackingPrefix: string;
+};
 
-	function onClick(suggestion: string) {
-		const params = new URLSearchParams(searchParams);
-		if (suggestion) {
-			params.set("query", suggestion);
+export function Suggestions({
+	suggestions,
+	onClick,
+	starters,
+	trackingPrefix,
+}: SuggestionsProps) {
+	const router = useRouter();
+
+	const handleTracking = () => {
+		trackHandler(`${trackingPrefix}:${analyticsKeys.chat.click.suggestion}`)();
+		if (starters) {
+			trackHandler(`${trackingPrefix}:${analyticsKeys.chat.click.starter}`)();
 		} else {
-			params.delete("query");
+			trackHandler(`${trackingPrefix}:${analyticsKeys.chat.click.followup}`)();
 		}
-		replace(`${pathname}?${params.toString()}`);
+	};
+
+	function handleClick(suggestion: string) {
+		handleTracking();
+		if (onClick) {
+			onClick({ role: "user", content: suggestion });
+		} else {
+			router.push(`/answer/${encodeURIComponent(suggestion)}`);
+		}
 	}
 
 	return (
-		<div className="flex flex-col gap-5 pb-4">
-			<div className="flex flex-col gap-2">
-				{suggestions.map((suggestion, i) => (
+		<div className="flex flex-col gap-5">
+			<div className="space-y-2.5">
+				{suggestions?.map((suggestion) => (
 					<Button
 						variant="suggestion"
 						size="suggestion"
-						key={i}
-						onClick={() => onClick(suggestion)}
+						key={suggestion}
+						onClick={() => handleClick(suggestion)}
 					>
 						{suggestion}
 					</Button>
 				))}
 			</div>
-			<div className="flex justify-center">
+			{/* <div className="flex justify-center">
 				<Button size="pill">More</Button>
-			</div>
+			</div> */}
 		</div>
 	);
 }

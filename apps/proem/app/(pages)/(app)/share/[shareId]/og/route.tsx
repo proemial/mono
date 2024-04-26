@@ -1,4 +1,4 @@
-import { createSharePageOpenGraphImage } from "@/app/(pages)/(app)/share/[shareId]/og/create-share-page-open-graph-image";
+import { createSharePageOpenGraphImage } from "./create-share-page-open-graph-image";
 
 export const runtime = "edge";
 

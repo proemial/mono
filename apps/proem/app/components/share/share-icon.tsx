@@ -1,3 +1,4 @@
+// TODO: Replace with untitled-ui or custom icon
 import { LucideIcon } from "lucide-react";
 
 export type ShareIconProps = {
@@ -6,8 +7,8 @@ export type ShareIconProps = {
 };
 export function ShareIcon({ text, Icon }: ShareIconProps) {
 	return (
-		<div className="flex flex-col text-center">
-			<div className="flex items-center justify-center w-16 h-16 bg-white rounded-full text-red">
+		<div className="flex flex-col text-center gap-2">
+			<div className="flex items-center justify-center w-16 h-16 bg-white rounded-full">
 				<Icon color="black" size={32} />
 			</div>
 			<div className="text-xs font-normal">{text}</div>

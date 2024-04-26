@@ -6,25 +6,23 @@ import * as React from "react";
 import { cn } from "../../lib/utils";
 
 const cardVariants = cva(
-	"rounded-lg border dark:border-0 bg-card text-card-foreground",
+	"rounded-2xl bg-card text-card-foreground shadow p-2.5",
 	{
 		variants: {
 			variant: {
 				default: "",
-				paper: "w-40 h-48",
+				paper: "w-[154px] h-[200px]",
 			},
 		},
 	},
 );
 
 const cardHeaderVariants = cva(
-	"flex flex-row place-content-between p-2 items-center ",
+	"flex flex-row place-content-between items-center",
 	{
 		variants: {
 			variant: {
 				default: "",
-				paperDiscover: "px-[10px]",
-				paperAsk: "",
 			},
 		},
 		defaultVariants: {
@@ -34,7 +32,7 @@ const cardHeaderVariants = cva(
 );
 
 const cardTitleVariants = cva(
-	"text-2xl font-semibold leading-none tracking-tight ",
+	"text-2xl font-semibold leading-tight tracking-tight",
 	{
 		variants: {
 			variant: {
@@ -53,7 +51,8 @@ const cardDescriptionVariants = cva("text-2xs text-foreground uppercase", {
 		variant: {
 			default: "",
 			paperDate: "",
-			paperPublisher: "uppercase text-wrap text-center whitespace-normal",
+			paperPublisher:
+				"uppercase text-wrap text-center whitespace-normal mx-auto",
 			paperCoAuthor:
 				"text-2xs mx-auto text-foreground uppercase text-wrap text-center whitespace-normal",
 		},
@@ -63,17 +62,15 @@ const cardDescriptionVariants = cva("text-2xs text-foreground uppercase", {
 	},
 });
 
-const cardContentVariants = cva("", {
+const cardContentVariants = cva("pt-6 pb-3.5", {
 	variants: {
 		variant: {
 			default: "",
-			paper: "p-4",
-			paperAsk: "p-4 flex place-items-center",
 		},
 	},
 });
 
-const cardFooterVariants = cva("flex items-center p-6 pt-0", {
+const cardFooterVariants = cva("flex items-center", {
 	variants: {
 		variant: {
 			default: "",

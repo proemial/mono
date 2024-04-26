@@ -1,90 +1,170 @@
 "use client";
-
-// import { QuerySchema } from "@/lib/definitions";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/app/components/analytics/tracking/tracking-keys";
+import { useVisualViewport } from "@/utils/useVisualViewport";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Button,
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
-	FormLabel,
-	FormMessage,
 	Textarea,
 } from "@proemial/shadcn-ui";
-import { ChevronRight } from "lucide-react";
-// import { zodResolver } from "@hookform/resolvers/zod"
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
-// import { useForm } from "react-hook-form"
-// import { z } from "zod";
+import { ChevronRight } from "@untitled-ui/icons-react";
+import { useChat } from "ai/react";
+import { cva } from "class-variance-authority";
+import { useRouter } from "next/navigation";
+import { KeyboardEvent, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-export function ChatForm({ placeholder }: { placeholder: string }) {
+export const QuerySchema = z.object({
+	question: z.string(),
+});
+
+export type ChatFormProps = {
+	placeholder: string;
+	onSend?: ReturnType<typeof useChat>["append"];
+	onFocusChange?: (isFocused: boolean) => void;
+	trackingPrefix: string;
+};
+
+export function ChatForm({
+	placeholder,
+	onSend,
+	onFocusChange,
+	trackingPrefix,
+}: ChatFormProps) {
+	const router = useRouter();
+
 	const [isFocused, setIsFocused] = useState(false);
-	const searchParams = useSearchParams();
-	const pathname = usePathname();
-	const { replace } = useRouter();
 
-	// const form = useForm<z.infer<typeof QuerySchema>>({
-	// 	resolver: zodResolver(QuerySchema),
-	// });
+	const form = useForm<z.infer<typeof QuerySchema>>({
+		resolver: zodResolver(QuerySchema),
+	});
 
-	// function onSubmit(data: z.infer<typeof QuerySchema>) {
-	// 	const params = new URLSearchParams(searchParams);
-	// 	if (data.query) {
-	// 		params.set("query", data.query);
-	// 	} else {
-	// 		params.delete("query");
-	// 	}
-	// 	replace(`${pathname}?${params.toString()}`);
-	// }
+	const { keyboardUp } = useVisualViewport();
+	useEffect(() => {
+		if (!keyboardUp && !isFocused) {
+			setIsFocused(false);
+		}
+	}, [keyboardUp, isFocused]);
 
-	function onBlur() {
+	useEffect(() => {
+		!!onFocusChange && onFocusChange(isFocused);
+	}, [isFocused, onFocusChange]);
+
+	const askQuestion = (question: string) => {
+		trackHandler(`${trackingPrefix}:${analyticsKeys.chat.submit.input}`)();
+		if (onSend) {
+			onSend({ role: "user", content: question });
+		} else {
+			router.push(`/answer/${encodeURIComponent(question)}`);
+		}
+	};
+
+	const handleSubmit = (data: z.infer<typeof QuerySchema>) => {
+		setTimeout(() => askQuestion(data.question));
+	};
+
+	const handleFocus = () => {
+		setIsFocused(true);
+		trackHandler(`${trackingPrefix}:${analyticsKeys.chat.click.input}`)();
+	};
+
+	const handleBlur = () => {
 		// Necessary delay to fire the form when the button is clicked and goes invisible
 		setTimeout(() => setIsFocused(false), 100);
-	}
+	};
+
+	const handleFormInput = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+		const target = e.target as HTMLTextAreaElement;
+		if (
+			(e.code === "Enter" || target.value.includes("\n")) &&
+			target.value?.replaceAll("\n", "")?.length
+		) {
+			setIsFocused(false);
+			!!onFocusChange && onFocusChange(false);
+			askQuestion(form.getValues("question"));
+			form.setValue("question", "");
+			return false;
+		}
+	};
+
+	const handleChange = (textarea: HTMLTextAreaElement) => {
+		const initialHeight = 48;
+		const expandAt = 72;
+
+		// reset the height to get the correct scrollHeight
+		textarea.style.height = "inherit";
+		textarea.style.height =
+			textarea.scrollHeight > expandAt
+				? `${textarea.scrollHeight}px`
+				: `${initialHeight}px`;
+	};
 
 	return (
-		// <Form {...form}>
-		// <Form>
-		<form
-			onFocus={() => setIsFocused(true)}
-			onBlur={onBlur}
-			// onSubmit={form.handleSubmit(onSubmit)}
-			className={`${
-				isFocused ? "bg-primary p-0 md:p-4" : "p-4"
-			} w-full flex gap-2 items-center`}
-		>
-			<FormField
-				// control={form.control}
-				name="query"
-				render={({ field }) => (
-					<FormItem
-						className={`${
-							isFocused ? "rounded-none md:rounded-3xl" : "rounded-3xl"
-						} w-full overflow-hidden`}
+		<Form {...form}>
+			<form onSubmit={form.handleSubmit(handleSubmit)} className="w-full">
+				<div className="w-full mb-12 mt-3 flex items-center text-foreground bg-card border border-background rounded-3xl">
+					<FormField
+						control={form.control}
+						name="question"
+						render={({ field }) => (
+							<FormItem className="w-full">
+								<FormControl>
+									<Textarea
+										{...field}
+										placeholder={placeholder}
+										className={`w-full h-12 pl-6 resize-none flex items-center text-lg bg-card 
+										            placeholder:opacity-40 placeholder:text-[#2b2b2b] dark:placeholder:text-[#e5e5e5] ${
+																	isFocused ? "rounded-l-3xl" : "rounded-3xl"
+																} ${
+																	form.getFieldState("question").invalid
+																		? "border border-red-300"
+																		: ""
+																}`}
+										onFocus={handleFocus}
+										onBlur={handleBlur}
+										onKeyDown={(e) => {
+											const target = e.target as HTMLTextAreaElement;
+											if (e.code === "Enter" || target.value.includes("\n")) {
+												e.preventDefault();
+											}
+											return handleFormInput(e);
+										}}
+										onInput={handleFormInput}
+										onChange={(e) => {
+											handleChange(e.target as HTMLTextAreaElement);
+											field.onChange(e);
+										}}
+									/>
+								</FormControl>
+							</FormItem>
+						)}
+					/>
+					<Button
+						disabled={
+							!!(
+								form.formState.isSubmitting ||
+								form.getFieldState("question").error ||
+								!form.getValues("question")?.length
+							)
+						}
+						className="size-8 w-[36px] mr-2 rounded-full text-background border-[1px] bg-[#2B2B2B] dark:bg-[#e5e5e5] disabled:opacity-1"
+						size="icon"
+						type="submit"
+						onClick={trackHandler(
+							`${trackingPrefix}:${analyticsKeys.chat.click.submit}`,
+						)}
 					>
-						<FormControl>
-							<Textarea
-								placeholder={placeholder}
-								className="w-full h-10 pl-4 pt-[10px]"
-								{...field}
-							/>
-						</FormControl>
-						<FormMessage />
-					</FormItem>
-				)}
-			/>
-			<Button
-				className={`${
-					isFocused ? "visible" : "hidden"
-				} rounded-full text-foreground bg-background p-2 size-6`}
-				size="icon"
-				type="submit"
-			>
-				<ChevronRight />
-			</Button>
-		</form>
-		// </Form>
+						<ChevronRight className="size-5" />
+					</Button>
+				</div>
+			</form>
+		</Form>
 	);
 }
