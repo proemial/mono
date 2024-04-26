@@ -7,7 +7,7 @@ import { buildRatelimiter } from "./ratelimiter";
 // geolocation only works on the edge
 export const runtime = "experimental-edge";
 
-const ratelimiter = buildRatelimiter(5, "10 s");
+const ratelimiter = buildRatelimiter(100, "10 s");
 
 export default authMiddleware({
 	publicRoutes: ["/(.*)"],
