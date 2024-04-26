@@ -24,7 +24,7 @@ export function ChatArticle({
 	return (
 		<div className="space-y-3">
 			<div className="flex items-center place-content-between">
-				<div className="flex items-center gap-3">
+				<div className="flex items-center gap-3.5">
 					<AlignLeft />
 					<Header4>{type}</Header4>
 				</div>

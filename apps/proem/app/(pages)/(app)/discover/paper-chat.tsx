@@ -40,7 +40,7 @@ export function PaperChat({ suggestions, title, abstract }: PaperChatProps) {
 			{hasQA ? (
 				<div className="flex flex-col gap-5">
 					<div className="flex items-center place-content-between">
-						<div className="flex items-center gap-4">
+						<div className="flex items-center gap-3.5">
 							<GanttChart />
 							<Header4>Q&A</Header4>
 						</div>

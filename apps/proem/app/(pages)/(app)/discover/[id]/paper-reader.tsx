@@ -25,55 +25,55 @@ export function PaperReader({
 	const generatedPaper = use(generatedPaperPromise);
 
 	return (
-		<div className="space-y-6">
-			<CollapsibleSection
-				trackingKey={analyticsKeys.read.click.collapse}
-				trigger={
-					<div className="flex items-center gap-4">
-						<File02 className="size-5" />
-						<Header4>Research Paper</Header4>
-					</div>
-				}
-			>
-				<HorisontalScrollArea>
-					<Trackable trackingKey={analyticsKeys.read.click.fullPaper}>
-						<a
-							href={fetchedPaper.data.primary_location.landing_page_url}
-							target="_blank"
-							rel="noreferrer"
-						>
-							<PaperCardDiscover
-								title={toTitleCaseIfAllCaps(fetchedPaper.data.title)}
-								date={fetchedPaper.data.publication_date}
-								publisher={
-									fetchedPaper.data.primary_location.source.display_name
-								}
+		<div className="space-y-4">
+			<div className="space-y-5">
+				<CollapsibleSection
+					trackingKey={analyticsKeys.read.click.collapse}
+					trigger={
+						<div className="flex items-center gap-3">
+							<File02 className="size-5" />
+							<Header4>Research Paper</Header4>
+						</div>
+					}
+				>
+					<HorisontalScrollArea>
+						<Trackable trackingKey={analyticsKeys.read.click.fullPaper}>
+							<a
+								href={fetchedPaper.data.primary_location.landing_page_url}
+								target="_blank"
+								rel="noreferrer"
+							>
+								<PaperCardDiscover
+									title={toTitleCaseIfAllCaps(fetchedPaper.data.title)}
+									date={fetchedPaper.data.publication_date}
+									publisher={
+										fetchedPaper.data.primary_location.source.display_name
+									}
+								/>
+							</a>
+						</Trackable>
+
+						{fetchedPaper.data.authorships.map((author) => (
+							<PaperCardDiscoverProfile
+								key={author.author.id}
+								name={author.author.display_name}
 							/>
-						</a>
-					</Trackable>
+						))}
+					</HorisontalScrollArea>
+				</CollapsibleSection>
 
-					{fetchedPaper.data.authorships.map((author) => (
-						<PaperCardDiscoverProfile
-							key={author.author.id}
-							name={author.author.display_name}
-						/>
-					))}
-				</HorisontalScrollArea>
-			</CollapsibleSection>
+				<ChatArticle
+					type="Summary"
+					trackingKey={analyticsKeys.read.click.model}
+					paper={generatedPaper}
+				/>
 
-			<ChatArticle
-				type="Summary"
-				trackingKey={analyticsKeys.read.click.model}
-				paper={generatedPaper}
-			/>
-
-			{/* <ChatActionBarDiscover /> */}
-
-			<PaperChat
-				suggestions={generatedPaper.generated?.starters}
-				title={fetchedPaper.data.title}
-				abstract={fetchedPaper.data.abstract}
-			/>
+				<PaperChat
+					suggestions={generatedPaper.generated?.starters}
+					title={fetchedPaper.data.title}
+					abstract={fetchedPaper.data.abstract}
+				/>
+			</div>
 		</div>
 	);
 }

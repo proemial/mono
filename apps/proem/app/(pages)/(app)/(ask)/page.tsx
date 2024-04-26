@@ -9,10 +9,10 @@ export default function AskPage() {
 	const starters = getThreeRandomStarters();
 
 	return (
-		<div className="flex flex-col gap-4 flex-grow justify-between">
-			<div className="flex flex-col flex-grow justify-center items-center gap-6">
+		<div className="flex flex-col justify-between flex-grow gap-4">
+			<div className="flex flex-col items-center justify-center flex-grow gap-6">
 				<ProemLogo size="md" />
-				<div className="text-center text-xl">
+				<div className="text-xl text-center">
 					<div>Answers based on Scientific</div>
 					<div>Research</div>
 				</div>

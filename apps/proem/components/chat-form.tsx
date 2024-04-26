@@ -108,7 +108,7 @@ export function ChatForm({
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(handleSubmit)} className="w-full">
-				<div className="w-full mb-12 mt-3 flex items-center text-foreground bg-card border border-background rounded-3xl">
+				<div className="flex items-center w-full mt-3.5 mb-12 border text-foreground bg-card border-background rounded-3xl">
 					<FormField
 						control={form.control}
 						name="question"
@@ -118,7 +118,7 @@ export function ChatForm({
 									<Textarea
 										{...field}
 										placeholder={placeholder}
-										className={`w-full h-12 pl-6 resize-none flex items-center text-lg bg-card 
+										className={`w-full h-12 pl-6 resize-none flex items-center text-lg bg-card
 										            placeholder:opacity-40 placeholder:text-[#2b2b2b] dark:placeholder:text-[#e5e5e5] ${
 																	isFocused ? "rounded-l-3xl" : "rounded-3xl"
 																} ${
