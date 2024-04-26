@@ -158,7 +158,7 @@ export function ShareDrawer({ shareId, trackingPrefix }: ShareDrawerProps) {
 							height={315}
 							src={`${relativeUrl}/og`}
 							alt="Image"
-							className="rounded-lg"
+							className="relative z-10 rounded-lg"
 						/>
 					</div>
 
