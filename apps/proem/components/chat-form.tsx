@@ -114,7 +114,7 @@ export function ChatForm({
 				onSubmit={form.handleSubmit(handleSubmit)}
 				className="w-full"
 			>
-				<div className="w-full mb-12 mt-3 flex items-center bg-primary border border-background rounded-3xl">
+				<div className="w-full mb-12 mt-3 flex items-center text-foreground bg-card border border-background rounded-3xl">
 					<FormField
 						control={form.control}
 						name="question"
@@ -124,13 +124,14 @@ export function ChatForm({
 									<Textarea
 										{...field}
 										placeholder={placeholder}
-										className={`w-full h-12 pl-6 resize-none flex items-center text-lg dark:placeholder:text-[#e5e5e5] placeholder:text-[#2b2b2b] placeholder:opacity-40 ${
-											isFocused ? "rounded-l-3xl" : "rounded-3xl"
-										} ${
-											form.getFieldState("question").invalid
-												? "border border-red-300"
-												: ""
-										}`}
+										className={`w-full h-12 pl-6 resize-none flex items-center text-lg bg-card 
+										            placeholder:opacity-40 placeholder:text-[#2b2b2b] dark:placeholder:text-[#e5e5e5] ${
+																	isFocused ? "rounded-l-3xl" : "rounded-3xl"
+																} ${
+																	form.getFieldState("question").invalid
+																		? "border border-red-300"
+																		: ""
+																}`}
 										onKeyDown={(e) => {
 											const target = e.target as HTMLTextAreaElement;
 											if (e.code === "Enter" || target.value.includes("\n")) {
@@ -149,21 +150,21 @@ export function ChatForm({
 						)}
 					/>
 					<Button
-						disabled={
-							!!(
-								form.formState.isSubmitting ||
-								form.getFieldState("question").error ||
-								!form.getValues("question")?.length
-							)
-						}
-						className="rounded-full text-foreground border-[1px] bg-card p-2 size-8 mr-2"
+						// disabled={
+						// 	!!(
+						// 		form.formState.isSubmitting ||
+						// 		form.getFieldState("question").error ||
+						// 		!form.getValues("question")?.length
+						// 	)
+						// }
+						className="rounded-full text-background border-[1px] bg-[#2B2B2B] dark:bg-[#e5e5e5] size-8 w-[36px] mr-2"
 						size="icon"
 						type="submit"
 						onClick={trackHandler(
 							`${trackingPrefix}:${analyticsKeys.chat.click.submit}`,
 						)}
 					>
-						<ChevronRight />
+						<ChevronRight className="size-5" />
 					</Button>
 				</div>
 			</form>
