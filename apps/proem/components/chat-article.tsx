@@ -9,17 +9,17 @@ import { MicroAbstract } from "./chat-abstract";
 type ChatArticleProps = {
 	type: "Answer" | "Summary";
 	trackingKey: string;
-	title?: string;
+	text?: string;
 	paper?: OpenAlexPaper;
 };
 
 export function ChatArticle({
 	type,
 	trackingKey,
-	title,
+	text,
 	paper,
 }: ChatArticleProps) {
-	const paperTitle = title || paper?.generated?.title;
+	const title = paper?.generated?.title;
 
 	return (
 		<div className="space-y-3">
@@ -35,7 +35,9 @@ export function ChatArticle({
 				</div>
 			</div>
 
-			{paperTitle ? <Header2>{paperTitle}</Header2> : null}
+			{title ? <Title title={title} /> : null}
+
+			{text && <Paragraph>{text}</Paragraph>}
 
 			{paper && (
 				<Suspense fallback={<Spinner />}>
@@ -44,6 +46,11 @@ export function ChatArticle({
 			)}
 		</div>
 	);
+}
+
+function Title({ title }: { title: string }) {
+	// Remove potential leading/trailing quotes from the title
+	return <Header2>{title.replace(/(^")|("$)/g, "")}</Header2>;
 }
 
 function Spinner() {
