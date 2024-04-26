@@ -13,6 +13,7 @@ import {
 } from "@proemial/shadcn-ui";
 import { Edit05 } from "@untitled-ui/icons-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 // const navItems = {
 // 	discover: {
@@ -25,7 +26,7 @@ import Link from "next/link";
 // };
 
 export function NavigationMenuBar() {
-	// const pathname = usePathname();
+	const pathname = usePathname();
 	// const [askHref, setAskHref] = useState<string>("/");
 
 	// useEffect(() => {
@@ -33,6 +34,8 @@ export function NavigationMenuBar() {
 	// 		setAskHref(pathname);
 	// 	}
 	// }, [pathname]);
+
+	const hasAnswer = pathname.includes("/answer");
 
 	return (
 		<NavigationMenu className="sticky top-0 px-0 py-2.5 bg-background">
@@ -70,9 +73,13 @@ export function NavigationMenuBar() {
 				<NavigationMenuItem className="flex-none px-1">
 					<Link
 						href="/"
-						onClick={trackHandler(`ask:${analyticsKeys.chat.click.clear}`)}
+						onClick={
+							hasAnswer
+								? trackHandler(`ask:${analyticsKeys.chat.click.clear}`)
+								: undefined
+						}
 					>
-						<Button variant="ghost">
+						<Button variant="ghost" disabled={!hasAnswer}>
 							<Edit05 className="size-4" />
 						</Button>
 					</Link>
