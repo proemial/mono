@@ -8,6 +8,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@proemial/shadcn-ui";
+import { useState } from "react";
 
 type Props = {
 	selector: {
@@ -19,18 +20,24 @@ type Props = {
 	className?: string;
 };
 
-export function SelectContentSelector({ selector, trackingKey, className = "" }: Props) {
-	function onValueChange(value: string) {
-		// TODO: Implement
-	}
+export function SelectContentSelector({
+	selector,
+	trackingKey,
+	className = "",
+}: Props) {
+	const [isOpen, setIsOpen] = useState(false);
+
+	const hadleOpenChange = (open: boolean) => {
+		setIsOpen(open);
+		open && trackHandler(trackingKey)();
+	};
 
 	return (
-		<Select
-			onValueChange={onValueChange}
-			onOpenChange={(open) => open && trackHandler(trackingKey)()}
-		>
+		<Select open={isOpen} onOpenChange={hadleOpenChange}>
 			<SelectTrigger
 				className={`border-0 w-28 focus:ring-0 focus:ring-offset-0 ${className}`}
+				onPointerDown={(e) => e.preventDefault()}
+				onClick={() => setIsOpen((prev) => !prev)}
 			>
 				<SelectValue placeholder={selector[0]?.label ?? ""} />
 			</SelectTrigger>
