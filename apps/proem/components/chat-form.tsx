@@ -98,11 +98,11 @@ export function ChatForm({
 		const expandAt = 72;
 
 		// reset the height to get the correct scrollHeight
-		textarea.style.height = "inherit";
-		textarea.style.height =
-			textarea.scrollHeight > expandAt
-				? `${textarea.scrollHeight}px`
-				: `${initialHeight}px`;
+		textarea.style.height = `${initialHeight}px`;
+
+		if (textarea.scrollHeight > initialHeight) {
+			textarea.style.height = `${textarea.scrollHeight}px`;
+		}
 	};
 
 	return (
