@@ -1,4 +1,5 @@
 "use client";
+import { chatInputMaxLength } from "@/app/api/bot/input-limit";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -141,6 +142,7 @@ export function ChatForm({
 											handleChange(e.target as HTMLTextAreaElement);
 											field.onChange(e);
 										}}
+										maxLength={chatInputMaxLength}
 									/>
 								</FormControl>
 							</FormItem>
@@ -151,7 +153,7 @@ export function ChatForm({
 							!!(
 								form.formState.isSubmitting ||
 								form.getFieldState("question").error ||
-								!form.getValues("question")?.length
+								!form.getValues("question")?.trim().length
 							)
 						}
 						className="size-8 w-[36px] mr-2 rounded-full text-background border-[1px] bg-[#2B2B2B] dark:bg-[#e5e5e5] disabled:opacity-1"

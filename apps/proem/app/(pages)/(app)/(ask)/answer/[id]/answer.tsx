@@ -23,21 +23,11 @@ type Props = {
 export const Answer = ({
 	initialQuestion,
 	initialMessages,
-	existingShareId,
 	existingData,
 }: Props) => {
 	const [sessionSlug, setSessionSlug] = useState<string | undefined>(undefined);
 	const { user } = useUser();
-	const {
-		messages,
-		input,
-		handleInputChange,
-		handleSubmit,
-		data,
-		append,
-		isLoading,
-		stop,
-	} = useChat({
+	const { messages, data, append, isLoading, stop } = useChat({
 		sendExtraMessageFields: true,
 		id: initialQuestion,
 		api: "/api/bot/ask2",
