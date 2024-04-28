@@ -104,7 +104,6 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 								</div>
 							</div>
 							<Analytics.Clients tracking={trackingInput} />
-							<Analytics.Vercel />
 						</ThemeProvider>
 					</body>
 				</html>

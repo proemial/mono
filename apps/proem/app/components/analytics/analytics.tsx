@@ -8,8 +8,11 @@ import {
 export function AnalyticsClients({ tracking }: { tracking?: TrackingInput }) {
 	const { trackingProfile } = useTrackingProfile(tracking);
 
-	// Only enabled for registered users or non-eu citizens
-	if (trackingProfile !== "tracked") return null;
+	return (
+		<>
+			{trackingProfile !== "disabled" && <Analytics.Vercel />}
 
-	return <Analytics.Google />;
+			{trackingProfile === "tracked" && <Analytics.Google />}
+		</>
+	);
 }
