@@ -11,10 +11,5 @@ export function AnalyticsClients({ tracking }: { tracking?: TrackingInput }) {
 	// Only enabled for registered users or non-eu citizens
 	if (trackingProfile !== "tracked") return null;
 
-	return (
-		<>
-			<Analytics.Vercel />
-			<Analytics.Google />
-		</>
-	);
+	return <Analytics.Google />;
 }
