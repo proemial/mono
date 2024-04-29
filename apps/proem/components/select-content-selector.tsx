@@ -41,14 +41,16 @@ export function SelectContentSelector({
 			>
 				<SelectValue placeholder={selector[0]?.label ?? ""} />
 			</SelectTrigger>
-			<SelectContent>
+			<SelectContent
+				ref={(ref) => {
+					if (!ref) return;
+					ref.ontouchstart = (e) => {
+						e.preventDefault();
+					};
+				}}
+			>
 				{selector.map((item, index) => (
-					<SelectItem
-						key={index}
-						value={item.value}
-						disabled={item.disabled}
-						className="pointer-events-none"
-					>
+					<SelectItem key={index} value={item.value} disabled={item.disabled}>
 						{item.label}
 					</SelectItem>
 				))}
