@@ -22,5 +22,3 @@ export function buildRatelimiter(
 	console.log("Rate limiter configured successfully");
 	return ratelimit;
 }
-
-	}
