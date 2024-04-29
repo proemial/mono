@@ -6,8 +6,10 @@ const isDev = process.env.NODE_ENV === "development";
 
 function buildRatelimiter(...args: Parameters<typeof Ratelimit.slidingWindow>) {
 	const redis = new Redis({
-		url: process.env.RATE_LIMITER_ENDPOINT,
-		token: process.env.RATE_LIMITER_PASSWORD,
+		// biome-ignore lint/style/noNonNullAssertion: Redis causes a TS error when reading from process.env
+		url: process.env.RATE_LIMITER_ENDPOINT!,
+		// biome-ignore lint/style/noNonNullAssertion: Redis causes a TS error when reading from process.env
+		token: process.env.RATE_LIMITER_PASSWORD!,
 	});
 
 	const ratelimit = new Ratelimit({
