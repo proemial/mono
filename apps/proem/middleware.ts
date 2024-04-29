@@ -1,13 +1,11 @@
+import { vercelRegions } from "@/app/components/analytics/tracking/tracking-keys";
+import { ratelimitRequest } from "@/utils/ratelimiter";
 import { authMiddleware } from "@clerk/nextjs";
 import { geolocation } from "@vercel/edge";
 import { NextResponse } from "next/server";
-import { vercelRegions } from "./app/components/analytics/tracking/tracking-keys";
-import { buildRatelimiter } from "./ratelimiter";
 
 // geolocation only works on the edge
 export const runtime = "experimental-edge";
-
-const ratelimiter = buildRatelimiter(100, "10 s");
 
 export default authMiddleware({
 	publicRoutes: ["/(.*)"],
@@ -15,7 +13,7 @@ export default authMiddleware({
 		if (!request.ip) {
 			return NextResponse.next();
 		}
-		const { success } = await ratelimiter.limit(request.ip);
+		const { success } = await ratelimitRequest(request);
 		if (success) {
 			return NextResponse.next();
 		}
