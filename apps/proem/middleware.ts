@@ -12,7 +12,7 @@ const ratelimiter = buildRatelimiter(100, "10 s");
 export default authMiddleware({
 	publicRoutes: ["/(.*)"],
 	beforeAuth: async (request, fetchEvent) => {
-		if (!ratelimiter || !request.ip) {
+		if (!request.ip) {
 			return NextResponse.next();
 		}
 		const { success } = await ratelimiter.limit(request.ip);
@@ -26,8 +26,10 @@ export default authMiddleware({
 		const geo = geolocation(request);
 		const requestHeaders = new Headers(request.headers);
 
-		// @ts-ignore
-		requestHeaders.set("x-region", vercelRegions[geo?.region] ?? "eu");
+		requestHeaders.set(
+			"x-region",
+			geo?.region ? vercelRegions[geo.region] ?? "eu" : "eu",
+		);
 		requestHeaders.set("x-country", geo?.country ?? "");
 
 		return NextResponse.next({

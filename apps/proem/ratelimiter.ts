@@ -1,13 +1,8 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
-type SidingWindowParams = Parameters<typeof Ratelimit.slidingWindow>;
-type NoOfRequests = SidingWindowParams[0];
-type WindowDuration = SidingWindowParams[1];
-
 export function buildRatelimiter(
-	noOfRequests: NoOfRequests,
-	windowDuration: WindowDuration,
+	...args: Parameters<typeof Ratelimit.slidingWindow>
 ) {
 	const redis = new Redis({
 		url: process.env.RATE_LIMITER_ENDPOINT,
@@ -16,7 +11,7 @@ export function buildRatelimiter(
 
 	const ratelimit = new Ratelimit({
 		redis,
-		limiter: Ratelimit.slidingWindow(noOfRequests, windowDuration),
+		limiter: Ratelimit.slidingWindow(...args),
 	});
 
 	console.log("Rate limiter configured successfully");

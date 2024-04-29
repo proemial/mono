@@ -110,7 +110,7 @@ function getViewName(path: string) {
 	return path.slice(1);
 }
 
-export const vercelRegions = {
+export const vercelRegions: Record<string, string> = {
 	arn1: "eu-north-1", // Stockholm, Sweden
 	bom1: "ap-south-1", // Mumbai, India
 	cdg1: "eu-west-3", // Paris, France
