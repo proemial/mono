@@ -5,6 +5,7 @@ import {
 	findByEventType,
 	findLatestByEventType,
 } from "@/app/api/bot/answer-engine/events";
+import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { useUser } from "@/app/hooks/use-user";
 import { ChatInput } from "@/components/chat-input";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
@@ -40,11 +41,11 @@ export const Answer = ({
 		? [...existingData, ...(data ? data : [])]
 		: data;
 
-	useEffectOnce(() => {
+	useRunOnFirstRender(() => {
 		if (initialQuestion && messages.length === 0) {
 			append({ role: "user", content: initialQuestion });
 		}
-	}, [initialQuestion, append]);
+	});
 
 	const answerSlug = findByEventType(
 		answerEngineData,

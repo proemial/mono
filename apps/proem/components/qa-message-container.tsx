@@ -1,4 +1,4 @@
-import { useEffectOnce } from "@/app/(pages)/(app)/(ask)/answer/[id]/use-effect-once";
+import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { ReactNode, useRef } from "react";
 
 type QAMessageContainerProps = {
@@ -12,11 +12,11 @@ export const QAMessageContainer = ({
 }: QAMessageContainerProps) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	useEffectOnce(() => {
+	useRunOnFirstRender(() => {
 		if (containerRef.current) {
 			containerRef.current.scrollIntoView({ behavior: "smooth" });
 		}
-	}, []);
+	});
 
 	return (
 		<div
