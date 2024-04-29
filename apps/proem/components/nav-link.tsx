@@ -1,6 +1,4 @@
-// NavLink.js
 "use client";
-
 import { type VariantProps, cva } from "class-variance-authority";
 import Link from "next/link";
 

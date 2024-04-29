@@ -1,5 +1,4 @@
 "use client";
-
 import { trackHandler } from "@/app/components/analytics/tracking/tracking-keys";
 
 export function Trackable({

@@ -1,5 +1,5 @@
 "use client";
-
+import { QaPair } from "@/app/(pages)/(app)/(ask)/answer/[id]/qa-pair";
 import {
 	AnswerEngineEvents,
 	findByEventType,
@@ -11,8 +11,6 @@ import { ChatInput } from "@/components/chat-input";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
 import { Message, useChat } from "ai/react";
 import { useEffect, useState } from "react";
-import { QaPair } from "./qa-pair";
-import { useEffectOnce } from "./use-effect-once";
 
 type Props = {
 	initialQuestion?: string;

@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@proemial/shadcn-ui";
 import { Heart } from "@untitled-ui/icons-react";
 import { useState } from "react";
@@ -14,8 +13,9 @@ export function ButtonHeart({ small }: { small?: boolean }) {
 	return (
 		<Button size="actionBar" variant="ghost" onClick={() => handleClick()}>
 			<Heart
-				className={`${hearted ? "fill-foreground" : "fill-background"} ${small ? "size-3" : ""
-					}`}
+				className={`${hearted ? "fill-foreground" : "fill-background"} ${
+					small ? "size-3" : ""
+				}`}
 			/>
 		</Button>
 	);

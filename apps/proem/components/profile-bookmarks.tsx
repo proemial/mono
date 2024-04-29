@@ -1,5 +1,4 @@
 "use client";
-
 import {
 	Collapsible,
 	CollapsibleContent,
@@ -11,10 +10,10 @@ import {
 	TableRow,
 } from "@proemial/shadcn-ui";
 import { ChevronDown, ChevronUp } from "@untitled-ui/icons-react";
-import * as React from "react";
+import { useState } from "react";
 
 export function ProfileBookmarks() {
-	const [isOpen, setIsOpen] = React.useState(true);
+	const [isOpen, setIsOpen] = useState(true);
 
 	const count = 2;
 

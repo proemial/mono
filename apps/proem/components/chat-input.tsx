@@ -4,11 +4,11 @@ import {
 	trackHandler,
 } from "@/app/components/analytics/tracking/tracking-keys";
 import { screenMaxWidth } from "@/app/constants";
+import { ChatForm, ChatFormProps } from "@/components/chat-form";
 import { Button } from "@proemial/shadcn-ui";
 import { Stop } from "@untitled-ui/icons-react";
 import { useChat } from "ai/react";
 import { z } from "zod";
-import { ChatForm, ChatFormProps } from "./chat-form";
 
 export const QuerySchema = z.object({
 	query: z.string(),

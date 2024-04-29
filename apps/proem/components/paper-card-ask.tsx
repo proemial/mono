@@ -1,8 +1,4 @@
-import {
-	PaperCard,
-	PaperCardProps,
-	PaperCardWithLink,
-} from "@/components/paper-card";
+import { PaperCardProps, PaperCardWithLink } from "@/components/paper-card";
 import { CardBullet } from "@proemial/shadcn-ui";
 
 type PaperCardAskProps = Omit<PaperCardProps, "header"> & {

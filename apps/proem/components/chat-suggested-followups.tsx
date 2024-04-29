@@ -1,10 +1,9 @@
 "use client";
-
+import { GanttChart } from "@/components/icons/GanttChart";
+import { MoodSelector } from "@/components/mood-selector";
 import { Suggestions, SuggestionsProps } from "@/components/suggestions";
 import { Header4 } from "@proemial/shadcn-ui";
 import { useChat } from "ai/react";
-import { GanttChart } from "./icons/GanttChart";
-import { MoodSelector } from "./mood-selector";
 
 export type ChatSuggestedFollowupsProps = Pick<
 	SuggestionsProps,

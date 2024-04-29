@@ -1,15 +1,13 @@
 "use client";
-
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/app/components/analytics/tracking/tracking-keys";
 import { ProfileColorSchemeToggle } from "@/components/profile-color-scheme-toggle";
 import { useClerk, useUser } from "@clerk/nextjs";
 import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage,
 	Collapsible,
 	CollapsibleContent,
-	CollapsibleTrigger,
-	Header4,
 	Table,
 	TableBody,
 	TableCell,
@@ -26,7 +24,6 @@ import {
 import Link from "next/link";
 import * as React from "react";
 import { SignInDrawer } from "./sign-in-drawer";
-import { analyticsKeys, trackHandler } from "@/app/components/analytics/tracking/tracking-keys";
 
 const feedback = "https://tally.so/r/wAv8Ve";
 
@@ -95,7 +92,12 @@ export function ProfileYou() {
 								<File02 className="mx-auto size-4" />
 							</TableCell>
 							<TableCell variant="key">
-								<Link href="/terms" onClick={trackHandler(analyticsKeys.ui.menu.click.terms)}>Terms of Use</Link>
+								<Link
+									href="/terms"
+									onClick={trackHandler(analyticsKeys.ui.menu.click.terms)}
+								>
+									Terms of Use
+								</Link>
 							</TableCell>
 						</TableRow>
 						<TableRow>
@@ -103,7 +105,12 @@ export function ProfileYou() {
 								<Lock01 className="mx-auto size-4" />
 							</TableCell>
 							<TableCell variant="key">
-								<Link href="/privacy" onClick={trackHandler(analyticsKeys.ui.menu.click.privacy)}>Privacy Policy</Link>
+								<Link
+									href="/privacy"
+									onClick={trackHandler(analyticsKeys.ui.menu.click.privacy)}
+								>
+									Privacy Policy
+								</Link>
 							</TableCell>
 						</TableRow>
 						{user ? (
@@ -134,8 +141,12 @@ export function ProfileYou() {
 
 function Feedback() {
 	return (
-		<a href={feedback} target="_blank" rel="noreferrer"
-			onClick={trackHandler(analyticsKeys.ui.menu.click.feedback)}>
+		<a
+			href={feedback}
+			target="_blank"
+			rel="noreferrer"
+			onClick={trackHandler(analyticsKeys.ui.menu.click.feedback)}
+		>
 			Give feedback
 		</a>
 	);
@@ -155,7 +166,10 @@ function Beta() {
 	return (
 		<span
 			className="px-2 py-1.5 text-xs font-bold rounded-md text-secondary-foreground bg-secondary"
-			onClick={trackHandler(analyticsKeys.ui.menu.click.version, { value: "button" })}>
+			onClick={trackHandler(analyticsKeys.ui.menu.click.version, {
+				value: "button",
+			})}
+		>
 			BETA
 		</span>
 	);

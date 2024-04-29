@@ -17,7 +17,7 @@ import {
 import { ChevronRight } from "@untitled-ui/icons-react";
 import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
-import { KeyboardEvent, useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 

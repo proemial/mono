@@ -1,10 +1,10 @@
+import { MicroAbstract } from "@/components/chat-abstract";
+import { AlignLeft } from "@/components/icons/AlignLeft";
+import { ModelSelector } from "@/components/model-selector";
 import { Trackable } from "@/components/trackable";
-import { Header2, Header4, Icons, Paragraph } from "@proemial/shadcn-ui";
-import { AlignLeft } from "./icons/AlignLeft";
-import { ModelSelector } from "./model-selector";
-import { Suspense } from "react";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
-import { MicroAbstract } from "./chat-abstract";
+import { Header2, Header4, Icons, Paragraph } from "@proemial/shadcn-ui";
+import { Suspense } from "react";
 
 type ChatArticleProps = {
 	type: "Answer" | "Summary";

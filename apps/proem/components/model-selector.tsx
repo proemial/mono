@@ -1,4 +1,4 @@
-import { SelectContentSelector } from "./select-content-selector";
+import { SelectContentSelector } from "@/components/select-content-selector";
 
 type Props = {
 	className?: string;

@@ -1,5 +1,4 @@
 "use client";
-import { AnswerSharingCard } from "@/app/(pages)/(app)/share/[shareId]/og/answer-sharing-card";
 import {
 	analyticsKeys,
 	trackHandler,

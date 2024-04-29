@@ -1,5 +1,5 @@
+import { Paper } from "@/components/icons/Paper";
 import { Header5, Icons } from "@proemial/shadcn-ui";
-import { Paper } from "./icons/Paper";
 
 export function ChatPapersSkeleton({ statusText }: { statusText: string }) {
 	return (
