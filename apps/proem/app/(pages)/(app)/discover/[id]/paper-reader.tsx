@@ -39,7 +39,7 @@ export function PaperReader({
 					<HorisontalScrollArea>
 						<Trackable trackingKey={analyticsKeys.read.click.fullPaper}>
 							<a
-								href={fetchedPaper.data.primary_location.landing_page_url}
+								href={fetchedPaper.data.primary_location?.landing_page_url}
 								target="_blank"
 								rel="noreferrer"
 							>
@@ -47,7 +47,7 @@ export function PaperReader({
 									title={toTitleCaseIfAllCaps(fetchedPaper.data.title)}
 									date={fetchedPaper.data.publication_date}
 									publisher={
-										fetchedPaper.data.primary_location.source.display_name
+										fetchedPaper.data.primary_location.source?.display_name
 									}
 								/>
 							</a>
