@@ -1,4 +1,0 @@
-
-### [DEV] Search OpenAlex
-GET http://localhost/api/paper-search?q=title.search:(%22dysmenorrhea%22),abstract.search:(%22period%20pain%22%20OR%20%22menstrual%20cramps%22%20OR%20%22dysmenorrhea%22%20OR%20%22terrible%22%20OR%20%22severe%22%20OR%20%22intense%22%20OR%20%22management%22%20OR%20%22treatment%22%20OR%20%22relief%22)&count=3 HTTP/1.1
-authorization: Bearer gpt_api_key_development
