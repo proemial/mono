@@ -7,7 +7,7 @@ function PaperCardSkeleton() {
 	return (
 		<Card variant="paper">
 			<CardContent className="flex justify-center items-center h-full">
-				<Icons.loader className="size-4" />
+				<Icons.loader className="size-4 fill-foreground" />
 			</CardContent>
 		</Card>
 	);
