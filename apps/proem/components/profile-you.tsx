@@ -95,6 +95,7 @@ export function ProfileYou() {
 								<Link
 									href="/terms"
 									onClick={trackHandler(analyticsKeys.ui.menu.click.terms)}
+									prefetch={false}
 								>
 									Terms of Use
 								</Link>
@@ -108,6 +109,7 @@ export function ProfileYou() {
 								<Link
 									href="/privacy"
 									onClick={trackHandler(analyticsKeys.ui.menu.click.privacy)}
+									prefetch={false}
 								>
 									Privacy Policy
 								</Link>
