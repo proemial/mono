@@ -2,7 +2,7 @@ import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { ChatInput } from "@/app/components/chat/chat-input";
 import { ChatMessages } from "@/app/components/chat/chat-messages-ask";
 import { StarterMessages } from "@/app/components/chat/chat-starters";
-import { ProemLogo } from "@/app/components/icons/brand/logo";
+import { ProemLogo } from "@/components/icons/brand/logo";
 import { PageLayout } from "../page-layout";
 
 const target = "ask";

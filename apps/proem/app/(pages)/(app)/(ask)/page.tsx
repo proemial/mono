@@ -1,4 +1,4 @@
-import { ProemLogo } from "@/app/components/icons/brand/logo";
+import { ProemLogo } from "@/components/icons/brand/logo";
 import { ChatInput } from "@/components/chat-input";
 import { MoodSelector } from "@/components/mood-selector";
 import { Suggestions } from "@/components/suggestions";

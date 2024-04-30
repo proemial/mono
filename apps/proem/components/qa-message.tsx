@@ -1,5 +1,5 @@
 import { applyExplainLinks } from "@/app/components/chat/apply-links";
-import { ProemLogo } from "@/app/components/icons/brand/logo";
+import { ProemLogo } from "@/components/icons/brand/logo";
 import { UserAvatar } from "@/app/components/user-avatar";
 import {
 	Message,

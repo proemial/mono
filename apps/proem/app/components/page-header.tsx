@@ -2,7 +2,7 @@
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Tracker } from "@/components/analytics/tracking/tracker";
 import { Proem } from "@/app/components/icons/brand/proem";
-import { ProemLogo } from "@/app/components/icons/brand/logo";
+import { ProemLogo } from "@/components/icons/brand/logo";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { screenMaxWidth } from "../constants";
