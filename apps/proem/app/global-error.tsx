@@ -16,7 +16,7 @@ export default function GlobalError({
 	}, [error]);
 
 	return (
-		<div className="bg-[#2F2F2F] rounded-sm border border-[#3C3C3C] flex flex-col py-4 px-4 items-left m-auto">
+		<div className="rounded-sm border border-foreground flex flex-col py-4 px-4 items-left m-auto">
 			<h2 className="text-[24px] font-normal leading-[32px]">
 				Something went wrong
 			</h2>
