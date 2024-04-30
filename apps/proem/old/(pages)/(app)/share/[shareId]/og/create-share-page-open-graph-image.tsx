@@ -1,5 +1,5 @@
 import { answers } from "@/app/api/bot/answer-engine/answers";
-import { applyLinksAsSpans } from "@/app/components/chat/apply-links";
+import { applyLinksAsSpans } from "@/components/chat-apply-links";
 import { cn } from "@/app/components/shadcn-ui/utils";
 import { AnswerSharingCard } from "@/old/(pages)/(app)/share/[shareId]/og/answer-sharing-card";
 import { ImageResponse } from "next/og";

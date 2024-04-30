@@ -7,10 +7,7 @@ import {
 	PaperCardTitle,
 	PaperCardTop,
 } from "@/app/components/card/paper-card";
-import {
-	applyLinks,
-	applyLinksAsPills,
-} from "@/app/components/chat/apply-links";
+import { applyLinks, applyLinksAsPills } from "@/components/chat-apply-links";
 import { LinkButton } from "@/app/components/proem-ui/link-button";
 import {
 	Avatar,

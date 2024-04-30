@@ -2,7 +2,7 @@ import {
 	aTaglinkCheckReqex,
 	applyLinks,
 	markdownlinkCheckReqex,
-} from "./apply-links";
+} from "../../../components/chat-apply-links";
 
 const ANSWER_WITH_A_TAG_LINK =
 	'No. Vaccines are <a href="https://proem.ai/oa/W2025926911?title=Vaccines+are+not+associated+with+autism%3A+An+evidence-based+meta-analysis+of+case-control+and+cohort+studies">not associated with the development of autism or autism spectrum disorder</a>. Multiple studies have found no relationship between vaccination and autism or ASD.';

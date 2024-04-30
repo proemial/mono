@@ -8,7 +8,7 @@ import {
 import { useAuth } from "@clerk/nextjs";
 import { Message } from "ai";
 import { useDrawerState } from "../login/state";
-import { applyExplainLinks } from "./apply-links";
+import { applyExplainLinks } from "../../../components/chat-apply-links";
 
 type Props = {
 	message?: Pick<Message, "role" | "content">;
@@ -31,7 +31,7 @@ export function ChatMessage(props: Props) {
 		: applyExplainLinks(
 				message?.content as string,
 				onExplainerClick ?? (() => {}),
-		  );
+			);
 
 	return (
 		<div className="w-full mb-2">
