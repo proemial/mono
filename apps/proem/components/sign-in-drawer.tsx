@@ -4,13 +4,14 @@ import {
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
 import { SoMeLogo } from "@/components/icons/some-logo";
-import { LOGIN_REDIRECT_URL_PARAM_NAME } from "@/app/components/login/login-drawer";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
 import { useSignIn } from "@clerk/nextjs";
 import { Button, TableCell, TableRow } from "@proemial/shadcn-ui";
 import { LogIn01 } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+
+export const LOGIN_REDIRECT_URL_PARAM_NAME = "redirect_url";
 
 const AUTH_PROVIDERS = [
 	{
