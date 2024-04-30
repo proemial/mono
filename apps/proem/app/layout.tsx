@@ -1,9 +1,8 @@
 import { Analytics } from "@/components/analytics";
-import { cn } from "@/app/components/shadcn-ui/utils";
 import "@/app/globals.css";
 import "@/env";
 import { ClerkProvider } from "@clerk/nextjs";
-import { ThemeProvider } from "@proemial/shadcn-ui";
+import { ThemeProvider, cn } from "@proemial/shadcn-ui";
 import { Metadata, Viewport } from "next";
 import { Lato as FontSans } from "next/font/google";
 import { headers } from "next/headers";
