@@ -1,8 +1,8 @@
-import { cn } from "@/app/components/shadcn-ui/utils";
 import github from "@/app/images/github.svg";
 import google from "@/app/images/google.svg";
 import twitter from "@/app/images/twitter.svg";
 import x from "@/app/images/x.svg";
+import { cn } from "@proemial/shadcn-ui";
 import Image from "next/image";
 import React from "react";
 

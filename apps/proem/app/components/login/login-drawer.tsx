@@ -1,7 +1,7 @@
 "use client";
 import Drawer from "@/app/components/drawer/drawer";
 import { Proem } from "@/app/components/icons/brand/proem";
-import { SoMeLogo } from "@/app/components/icons/some-logo";
+import { SoMeLogo } from "@/components/icons/some-logo";
 import { useDrawerState } from "@/app/components/login/state";
 import { Button } from "@/app/components/shadcn-ui/button";
 import { SignedOut, useSignIn } from "@clerk/nextjs";

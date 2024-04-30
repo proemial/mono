@@ -3,7 +3,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { ShareIcon, ShareIconProps } from "@/app/components/share/share-icon";
+import { ShareIcon, ShareIconProps } from "@/components/icons/share-icon";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
 import { Answer } from "@proemial/data/neon/schema/answersTable";
 import { Button, Icons } from "@proemial/shadcn-ui";
