@@ -29,10 +29,6 @@ export const metadata: Metadata = {
 	title,
 	description,
 	metadataBase: new URL(url),
-	robots: {
-		index: false,
-		follow: false,
-	},
 	openGraph: {
 		type: "website",
 		url,
