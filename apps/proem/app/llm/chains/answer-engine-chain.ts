@@ -1,5 +1,4 @@
 import { Paper } from "@/app/api/paper-search/search";
-import { getFeatureFlag } from "@/app/components/feature-flags/server-flags";
 import {
 	PapersAsString,
 	fetchPapersChain,
@@ -10,7 +9,6 @@ import {
 	RunnablePassthrough,
 	RunnableSequence,
 } from "@langchain/core/runnables";
-import { buildOpenAIChatModel } from "../models/openai-model";
 import { LangChainChatHistoryMessage } from "../utils";
 import { generateAnswerChain } from "./generate-answer-chain";
 import { vectorisePapers } from "./paper-vectoriser";
