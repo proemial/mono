@@ -1,5 +1,5 @@
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
-import { UserAvatar } from "@/app/components/user-avatar";
+import { UserAvatar } from "@/components/user-avatar";
 import { User } from "@/components/icons/User";
 
 export type ChatQuestionProps = {
