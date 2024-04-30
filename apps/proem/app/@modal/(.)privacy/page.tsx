@@ -5,7 +5,7 @@ import { PageDrawer } from "@/components/full-page-drawer";
 
 export default function TermsModal() {
 	return (
-		<PageDrawer title="Privacy policy">
+		<PageDrawer>
 			<Privacy />
 		</PageDrawer>
 	);
