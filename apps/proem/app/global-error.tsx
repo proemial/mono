@@ -1,5 +1,5 @@
 "use client";
-import { Button, buttonVariants } from "@/app/components/proem-ui/button";
+import { Button, buttonVariants } from "@proemial/shadcn-ui";
 import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
 
@@ -21,7 +21,7 @@ export default function GlobalError({
 				Something went wrong
 			</h2>
 			<Button
-				className={buttonVariants({ variant: "primary", size: "default" })}
+				className={buttonVariants({ variant: "default", size: "default" })}
 				onClick={
 					// Attempt to recover by trying to re-render the segment
 					() => reset()
