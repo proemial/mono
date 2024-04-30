@@ -1,7 +1,7 @@
 import {
 	analyticsKeys,
 	trackHandler,
-} from "@/app/components/analytics/tracking/tracking-keys";
+} from "@/components/analytics/tracking/tracking-keys";
 import { screenMaxWidth } from "@/app/constants";
 import { ProfileYou } from "@/components/profile-you";
 import {

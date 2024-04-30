@@ -1,5 +1,5 @@
 "use client";
-import { trackHandler } from "@/app/components/analytics/tracking/tracking-keys";
+import { trackHandler } from "@/components/analytics/tracking/tracking-keys";
 import {
 	Select,
 	SelectContent,

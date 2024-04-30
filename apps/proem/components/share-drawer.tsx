@@ -2,7 +2,7 @@
 import {
 	analyticsKeys,
 	trackHandler,
-} from "@/app/components/analytics/tracking/tracking-keys";
+} from "@/components/analytics/tracking/tracking-keys";
 import { ShareIcon, ShareIconProps } from "@/app/components/share/share-icon";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
 import { Answer } from "@proemial/data/neon/schema/answersTable";

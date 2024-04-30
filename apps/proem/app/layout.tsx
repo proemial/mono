@@ -1,4 +1,4 @@
-import { Analytics } from "@/app/components/analytics";
+import { Analytics } from "@/components/analytics";
 import { cn } from "@/app/components/shadcn-ui/utils";
 import "@/app/globals.css";
 import "@/env";

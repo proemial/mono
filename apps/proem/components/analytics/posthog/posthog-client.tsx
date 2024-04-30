@@ -4,7 +4,7 @@ import {
 	analyticsTrace,
 	usePathNames,
 	useTrackingProfile,
-} from "@/app/components/analytics/tracking/tracking-profile";
+} from "@/components/analytics/tracking/tracking-profile";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { ReactNode, useEffect, useState } from "react";

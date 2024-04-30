@@ -1,5 +1,5 @@
 import { answers } from "@/app/api/bot/answer-engine/answers";
-import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { ChatInput } from "@/app/components/chat/chat-input";
 import { ChatMessages } from "@/app/components/chat/chat-messages-ask";
 import { StarterMessages } from "@/app/components/chat/chat-starters";
@@ -31,14 +31,16 @@ export default async function SharePage({ params: { shareId } }: Props) {
 					existingShareId={sharedAnswer.shareId ?? undefined}
 					initialMessages={[
 						{ id: "id", role: "assistant", content: sharedAnswer.answer },
-					]} />
+					]}
+				/>
 			</div>
 
 			<div className="flex flex-col px-2 pt-1 pb-2">
 				<ChatInput target={target}>
 					<StarterMessages
 						target={target}
-						trackingKey={"analyticsKeys.ask.click.starter"} />
+						trackingKey={"analyticsKeys.ask.click.starter"}
+					/>
 				</ChatInput>
 			</div>
 		</PageLayout>

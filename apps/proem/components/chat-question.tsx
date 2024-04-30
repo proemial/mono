@@ -1,4 +1,4 @@
-import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { UserAvatar } from "@/app/components/user-avatar";
 import { User } from "@/components/icons/User";
 

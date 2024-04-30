@@ -1,4 +1,4 @@
-import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { LinkButton } from "@/app/components/proem-ui/link-button";
 import { STARTERS } from "@/old/(pages)/(app)/(answer-engine)/starters";
 import { fetchLatestPapers } from "@/old/(pages)/(app)/oa/[id]/fetch-paper";
@@ -56,7 +56,10 @@ async function Actions() {
 	return (
 		<div className="flex flex-col">
 			<div className="flex items-center font-sourceCodePro">
-				<SearchMd style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
+				<SearchMd
+					style={{ height: "12px", strokeWidth: "3" }}
+					className="w-4"
+				/>
 				SUGGESTED ACTIONS
 			</div>
 			<LinkButton
@@ -86,7 +89,10 @@ function Questions() {
 	return (
 		<div>
 			<div className="flex items-center font-sourceCodePro">
-				<SearchMd style={{ height: "12px", strokeWidth: "3" }} className="w-4" />
+				<SearchMd
+					style={{ height: "12px", strokeWidth: "3" }}
+					className="w-4"
+				/>
 				SUGGESTED QUESTIONS
 			</div>
 			{starters.map((starter) => (

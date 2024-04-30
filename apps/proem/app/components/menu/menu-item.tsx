@@ -1,4 +1,4 @@
-import { Tracker } from "@/app/components/analytics/tracking/tracker";
+import { Tracker } from "@/components/analytics/tracking/tracker";
 import { useIsActive } from "@/app/components/menu/helpers/is-active";
 import { useLinkProps } from "@/app/components/menu/helpers/link-props";
 import Link from "next/link";

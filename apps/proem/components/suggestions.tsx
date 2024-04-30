@@ -2,7 +2,7 @@
 import {
 	analyticsKeys,
 	trackHandler,
-} from "@/app/components/analytics/tracking/tracking-keys";
+} from "@/components/analytics/tracking/tracking-keys";
 import { Button } from "@proemial/shadcn-ui";
 import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";

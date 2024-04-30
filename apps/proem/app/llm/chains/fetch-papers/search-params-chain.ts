@@ -12,7 +12,7 @@ import {
 	synonymGroups,
 	uniqueUnigrams,
 } from "./search-params-helpers";
-import { Metrics } from "@/app/components/analytics/sentry/metrics";
+import { Metrics } from "@/components/analytics/sentry/metrics";
 
 type Input = {
 	question: string;

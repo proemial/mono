@@ -3,7 +3,7 @@
 import { User } from "@/components/icons/User";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
-import { trackHandler } from "./analytics/tracking/tracking-keys";
+import { trackHandler } from "../../components/analytics/tracking/tracking-keys";
 
 export function UserAvatar({ trackingKey }: { trackingKey?: string }) {
 	const { isSignedIn, user, isLoaded } = useUser();

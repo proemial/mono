@@ -1,9 +1,9 @@
 "use client";
-import { Tracker } from "@/app/components/analytics/tracking/tracker";
+import { Tracker } from "@/components/analytics/tracking/tracker";
 import { TextInput } from "@/app/components/proem-ui/text-input";
 import { useAuth } from "@clerk/nextjs";
 import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
-import { analyticsKeys } from "../analytics/tracking/tracking-keys";
+import { analyticsKeys } from "../../../components/analytics/tracking/tracking-keys";
 import { useDrawerState } from "../login/state";
 import { ChatTarget, useChatState } from "./state";
 import { chatInputMaxLength } from "@/app/api/bot/input-limit";

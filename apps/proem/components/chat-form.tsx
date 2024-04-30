@@ -3,7 +3,7 @@ import { chatInputMaxLength } from "@/app/api/bot/input-limit";
 import {
 	analyticsKeys,
 	trackHandler,
-} from "@/app/components/analytics/tracking/tracking-keys";
+} from "@/components/analytics/tracking/tracking-keys";
 import { useVisualViewport } from "@/utils/useVisualViewport";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {

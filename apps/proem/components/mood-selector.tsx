@@ -1,4 +1,4 @@
-import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { SelectContentSelector } from "@/components/select-content-selector";
 
 export const MoodSelector = ({

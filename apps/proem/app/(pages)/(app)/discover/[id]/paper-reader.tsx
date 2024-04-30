@@ -1,5 +1,5 @@
 import { PaperChat } from "@/app/(pages)/(app)/discover/paper-chat";
-import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { ChatArticle } from "@/components/chat-article";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";

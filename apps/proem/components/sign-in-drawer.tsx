@@ -2,7 +2,7 @@
 import {
 	analyticsKeys,
 	trackHandler,
-} from "@/app/components/analytics/tracking/tracking-keys";
+} from "@/components/analytics/tracking/tracking-keys";
 import { SoMeLogo } from "@/app/components/icons/some-logo";
 import { LOGIN_REDIRECT_URL_PARAM_NAME } from "@/app/components/login/login-drawer";
 import { FullSizeDrawer } from "@/components/full-page-drawer";

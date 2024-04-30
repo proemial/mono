@@ -2,7 +2,7 @@
 import {
 	analyticsKeys,
 	trackHandler,
-} from "@/app/components/analytics/tracking/tracking-keys";
+} from "@/components/analytics/tracking/tracking-keys";
 import { ChatInput } from "@/components/chat-input";
 import {
 	ChatSuggestedFollowups,

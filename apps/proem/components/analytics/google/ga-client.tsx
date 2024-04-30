@@ -2,7 +2,7 @@
 import {
 	analyticsTrace,
 	usePathNames,
-} from "@/app/components/analytics/tracking/tracking-profile";
+} from "@/components/analytics/tracking/tracking-profile";
 import { useEffect, useState } from "react";
 import ReactGA from "react-ga4";
 import TagManager from "react-gtm-module";

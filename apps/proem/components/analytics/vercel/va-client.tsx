@@ -2,7 +2,7 @@
 import {
 	analyticsTrace,
 	usePathNames,
-} from "@/app/components/analytics/tracking/tracking-profile";
+} from "@/components/analytics/tracking/tracking-profile";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { useEffect, useState } from "react";

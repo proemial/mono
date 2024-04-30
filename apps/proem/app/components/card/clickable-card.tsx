@@ -1,6 +1,6 @@
 "use client";
-import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
-import { Tracker } from "@/app/components/analytics/tracking/tracker";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
+import { Tracker } from "@/components/analytics/tracking/tracker";
 import { ClickFeedback } from "@/app/components/card/paper-card";
 import Link from "next/link";
 import { ReactNode } from "react";

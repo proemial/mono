@@ -1,4 +1,4 @@
-import { vercelRegions } from "@/app/components/analytics/tracking/tracking-keys";
+import { vercelRegions } from "@/components/analytics/tracking/tracking-keys";
 import { ratelimitRequest } from "@/utils/ratelimiter";
 import { authMiddleware } from "@clerk/nextjs";
 import { geolocation } from "@vercel/edge";

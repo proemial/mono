@@ -1,5 +1,5 @@
 "use client";
-import { analyticsKeys } from "@/app/components/analytics/tracking/tracking-keys";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { screenMaxWidth } from "@/app/constants";
 import { ChatInput } from "@/components/chat-input";
 import { SelectContentSelector } from "@/components/select-content-selector";
