@@ -1,9 +1,9 @@
 import { Header2, Paragraph } from "@proemial/shadcn-ui";
 import { summarise } from "@/app/prompts/summarise-title";
-import { fetchPaper } from "@/old/(pages)/(app)/oa/[id]/fetch-paper";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
 import Markdown from "./markdown";
+import { fetchPaper } from "./fetch-paper";
 
 export default async function Summary(options: {
 	id?: string;
