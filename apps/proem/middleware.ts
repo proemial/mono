@@ -9,17 +9,6 @@ export const runtime = "experimental-edge";
 
 export default authMiddleware({
 	publicRoutes: ["/(.*)"],
-	beforeAuth: async (request, fetchEvent) => {
-		if (!request.ip) {
-			return NextResponse.next();
-		}
-		const { success } = await ratelimitRequest(request);
-		if (success) {
-			return NextResponse.next();
-		}
-		console.warn(`Warning: Rate limited request from ${request.ip}`);
-		return NextResponse.redirect(new URL("/blocked", request.url));
-	},
 	afterAuth: (auth, request) => {
 		const geo = geolocation(request);
 		const requestHeaders = new Headers(request.headers);
