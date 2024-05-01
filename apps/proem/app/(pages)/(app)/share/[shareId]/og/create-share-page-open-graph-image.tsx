@@ -11,16 +11,16 @@ export async function createSharePageOpenGraphImage(
 		throw new Error("no shared answer found for the given shareId");
 	}
 
-	const helveticaBold = await fetch(
+	const latoBold = await fetch(
 		new URL(
-			"../../../../../../assets/fonts/helvetica/Helvetica-Bold.ttf",
+			"../../../../../../assets/fonts/lato/Lato-Bold.ttf",
 			import.meta.url,
 		),
 	).then((res) => res.arrayBuffer());
 
-	const helvetica = await fetch(
+	const latoRegular = await fetch(
 		new URL(
-			"../../../../../../assets/fonts/helvetica/Helvetica.ttf",
+			"../../../../../../assets/fonts/lato/Lato-Regular.ttf",
 			import.meta.url,
 		),
 	).then((res) => res.arrayBuffer());
@@ -34,13 +34,13 @@ export async function createSharePageOpenGraphImage(
 			...size,
 			fonts: [
 				{
-					name: "helvetica",
-					data: helvetica,
+					name: "lato",
+					data: latoRegular,
 					weight: 400,
 				},
 				{
-					name: "helvetica",
-					data: helveticaBold,
+					name: "lato",
+					data: latoBold,
 					weight: 700,
 				},
 			],

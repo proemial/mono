@@ -1,5 +1,5 @@
-import { Analytics } from "@/components/analytics";
 import "@/app/globals.css";
+import { Analytics } from "@/components/analytics";
 import "@/env";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider, cn } from "@proemial/shadcn-ui";
