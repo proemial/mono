@@ -3,8 +3,9 @@ import {
 	askAnswerEngine,
 } from "@/app/api/bot/answer-engine/answer-engine";
 import { INTERNAL_COOKIE_NAME, getInternalUser } from "@/app/hooks/use-user";
+import { ratelimitRequest } from "@/utils/ratelimiter";
 import { cookies } from "next/headers";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 export const maxDuration = 30;
@@ -16,6 +17,11 @@ const answerEngineRouteParams = z.object({
 });
 
 export async function POST(req: NextRequest) {
+	const { success } = await ratelimitRequest(req);
+	if (!success) {
+		return NextResponse.json({ error: "Rate limited" }, { status: 429 });
+	}
+
 	const body = await req.json();
 	const {
 		slug,

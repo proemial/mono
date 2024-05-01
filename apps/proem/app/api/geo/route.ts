@@ -1,11 +1,17 @@
+import { ratelimitRequest } from "@/utils/ratelimiter";
 import { geolocation } from "@vercel/edge";
 import { headers } from "next/headers";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge";
 
-export async function GET(request: Request) {
-	const geo = geolocation(request);
+export async function GET(req: NextRequest) {
+	const { success } = await ratelimitRequest(req);
+	if (!success) {
+		return NextResponse.json({ error: "Rate limited" }, { status: 429 });
+	}
+
+	const geo = geolocation(req);
 
 	const headersList = headers();
 	const continent = headersList.get("x-vercel-ip-continent");

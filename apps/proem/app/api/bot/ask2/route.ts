@@ -2,6 +2,7 @@ import { AIMessage } from "@/app/api/bot/answer-engine/answer-engine";
 import { chatInputMaxLength } from "@/app/api/bot/input-limit";
 import { INTERNAL_COOKIE_NAME, getInternalUser } from "@/app/hooks/use-user";
 import { toLangChainChatHistory } from "@/app/llm/utils";
+import { ratelimitRequest } from "@/utils/ratelimiter";
 import { Message as VercelChatMessage } from "ai";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -17,6 +18,11 @@ const answerEngineRouteParams = z.object({
 });
 
 export async function POST(req: NextRequest) {
+	const { success } = await ratelimitRequest(req);
+	if (!success) {
+		return NextResponse.json({ error: "Rate limited" }, { status: 429 });
+	}
+
 	try {
 		const body = await req.json();
 		const {
