@@ -1,8 +1,9 @@
 import { chatInputMaxLength } from "@/app/api/bot/input-limit";
 import { context, model, question } from "@/app/prompts/chat";
 import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
+import { ratelimitRequest } from "@/utils/ratelimiter";
 import { OpenAIStream, StreamingTextResponse } from "ai";
-import type { NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { Configuration, OpenAIApi } from "openai-edge";
 
 const config = new Configuration({
@@ -14,6 +15,11 @@ const openai = new OpenAIApi(config);
 export const runtime = "edge";
 
 export async function POST(req: NextRequest) {
+	const { success } = await ratelimitRequest(req);
+	if (!success) {
+		return NextResponse.json({ error: "Rate limited" }, { status: 429 });
+	}
+
 	const { messages, title, abstract } = await req.json();
 
 	const moddedMessages = [context(title, abstract), ...messages];
