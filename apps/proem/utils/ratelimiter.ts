@@ -26,7 +26,8 @@ const ratelimiter = buildRatelimiter(100, "10 s");
 export async function ratelimitRequest(request: NextRequest) {
 	const identifier = isDev ? "shared-developer-account" : request.ip;
 	if (!identifier) {
-		throw new Error("No identifier found");
+		// To maintain the same functionality earlier we allow all requestions without an IP to pass through
+		return { success: true };
 	}
 
 	return ratelimiter.limit(identifier);
