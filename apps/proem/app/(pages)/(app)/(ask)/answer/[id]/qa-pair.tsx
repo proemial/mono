@@ -6,7 +6,10 @@ import {
 	findByEventType,
 } from "@/app/api/bot/answer-engine/events";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
-import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/components/analytics/tracking/tracking-keys";
 import { ChatActionBarAsk } from "@/components/chat-action-bar-ask";
 import { ChatArticle } from "@/components/chat-article";
 import { ChatQuestion } from "@/components/chat-question";
@@ -16,6 +19,7 @@ import { Paper } from "@/components/icons/Paper";
 import { PaperCardAsk } from "@/components/paper-card-ask";
 import { Header4, Icons, cn } from "@proemial/shadcn-ui";
 import { Message } from "ai/react";
+import Link from "next/link";
 import { ReactNode, useRef } from "react";
 import { useThrobberStatus } from "./use-throbber-status";
 
@@ -89,14 +93,18 @@ export const QaPair = ({
 					>
 						<HorisontalScrollArea>
 							{papers?.map((paper, index) => (
-								<PaperCardAsk
+								<Link
 									key={index}
-									date={paper?.published}
-									title={paper?.title}
-									loading={!paper}
-									index={`${index + 1}`}
-									link={`/discover/${paper.link.replace("/oa/", "")}`}
-								/>
+									href={`/discover/${paper.link.replace("/oa/", "")}`}
+									onClick={trackHandler(analyticsKeys.ask.click.paper)}
+								>
+									<PaperCardAsk
+										date={paper?.published}
+										title={paper?.title}
+										loading={!paper}
+										index={`${index + 1}`}
+									/>
+								</Link>
 							))}
 						</HorisontalScrollArea>
 					</CollapsibleSection>
