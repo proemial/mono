@@ -5,6 +5,7 @@ import {
 	AnswerEngineEvents,
 	findByEventType,
 } from "@/app/api/bot/answer-engine/events";
+import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { ChatActionBarAsk } from "@/components/chat-action-bar-ask";
 import { ChatArticle } from "@/components/chat-article";
@@ -15,7 +16,7 @@ import { Paper } from "@/components/icons/Paper";
 import { PaperCardAsk } from "@/components/paper-card-ask";
 import { Header4, Icons, cn } from "@proemial/shadcn-ui";
 import { Message } from "ai/react";
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useRef } from "react";
 import { useThrobberStatus } from "./use-throbber-status";
 
 type QaPairProps = {
@@ -40,11 +41,12 @@ export const QaPair = ({
 	const throbberStatus = useThrobberStatus();
 	const pairRef = useRef<HTMLDivElement>(null);
 
-	useEffect(() => {
-		if (pairRef.current) {
+	useRunOnFirstRender(() => {
+		// Only scroll to the latest QaPair if the answer is loading to prevent shared answers from scrolling
+		if (pairRef.current && isLoadingAnswer) {
 			pairRef.current.scrollIntoView({ behavior: "smooth" });
 		}
-	}, []);
+	});
 
 	return (
 		<div
