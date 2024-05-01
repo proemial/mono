@@ -1,3 +1,4 @@
+"use client";
 import { buttonVariants } from "@proemial/shadcn-ui";
 import Link from "next/link";
 
