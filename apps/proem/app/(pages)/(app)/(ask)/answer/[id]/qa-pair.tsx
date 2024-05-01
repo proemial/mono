@@ -51,7 +51,7 @@ export const QaPair = ({
 			ref={pairRef}
 			className={cn("flex flex-col justify-between gap-6", {
 				// Magic number pulled from a alternative dimension. Cannot be questioned but should probably be adjusted if vertical scroll is broken.
-				"min-h-[calc(100dvh-202px)]": isLatest,
+				"min-h-[calc(100dvh-204px)]": isLatest,
 			})}
 		>
 			<div className="space-y-6">

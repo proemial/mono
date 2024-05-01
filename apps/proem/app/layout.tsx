@@ -67,7 +67,12 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 	return (
 		<ClerkProvider>
 			<Analytics.PostHog tracking={trackingInput}>
-				<html lang="en" className="overscroll-none" suppressHydrationWarning>
+				<html
+					lang="en"
+					className="overscroll-none"
+					style={{ scrollbarGutter: "stable" }}
+					suppressHydrationWarning
+				>
 					<head>
 						<meta
 							name="facebook-domain-verification"
