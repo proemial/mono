@@ -48,6 +48,7 @@ export function Suggestions({
 						variant="suggestion"
 						size="suggestion"
 						key={suggestion}
+						className=" active:ring-1 ring-white select-none"
 						onClick={() => handleClick(suggestion)}
 					>
 						{suggestion}
