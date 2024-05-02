@@ -6,12 +6,13 @@ type AnswerSharingCardProps = {
 	classNameAttr?: "className" | "tw";
 };
 
-const maxLength = 270;
+const maxLength = 246;
 const truncate = (str: string) =>
 	str.length <= maxLength
 		? str
-		: `${str.substring(0, maxLength) + str?.substring(maxLength).split(" ")[0]
-		}`;
+		: `${
+				str.substring(0, maxLength) + str?.substring(maxLength).split(" ")[0]
+			}`;
 
 export function AnswerSharingCard({
 	content,
@@ -22,24 +23,25 @@ export function AnswerSharingCard({
 	});
 
 	const truncated = truncate(content);
+	const isTruncated = truncated !== content;
 
 	return (
 		<div
 			{...twcl(
-				"flex flex-col p-12 bg-[#262626] w-full h-full text-white font-sans",
+				"flex flex-col bg-[#262626] w-full h-full text-white font-sans p-[62px] pt-[78px]",
 			)}
 		>
-			<div {...twcl("flex flex-col flex-1 mt-2 mb-12")}>
+			<div {...twcl("flex flex-col flex-1")}>
 				<div
 					{...twcl(
-						"flex flex-wrap line-clamp-3 text-[40px] leading-1.6 p-8 bg-[#474747] rounded-t-[32px] rounded-br-[32px]",
+						"flex flex-wrap text-[44px] leading-[56px] bg-[#474747] rounded-t-[36px] rounded-br-[36px] px-9 pt-6 pb-8",
 					)}
 				>
 					{truncated}
-					{truncated !== content && " ..."}
+					{isTruncated && " ..."}
 				</div>
 				<img
-					{...twcl("w-[74px] h-[46px]")}
+					{...twcl("w-[50px]")}
 					src={`${process.env.NEXT_PUBLIC_VERCEL_URL}/open-graph/corner.png`}
 					alt=""
 				/>
@@ -47,17 +49,19 @@ export function AnswerSharingCard({
 
 			<div {...twcl("flex items-center")}>
 				<img
-					{...twcl("w-14 h-20 mr-8 mt-2")}
+					{...twcl("w-[42px] mr-12")}
 					src={`${process.env.NEXT_PUBLIC_VERCEL_URL}/open-graph/logo.svg`}
 					alt=""
 				/>
 				<div
 					{...twcl(
-						"flex flex-col justify-between text-[32px] w-full text-[40px]",
+						"flex flex-col justify-between leading-[40px] w-full text-[37px] -mt-1.5",
 					)}
 				>
-					<div {...twcl(" pt-1")}>Answers backed by Science Research</div>
-					<div {...twcl("text-white/50 pt-1")}>proem.ai</div>
+					<div {...twcl("font-semibold")}>
+						Answers backed by Science Research
+					</div>
+					<div {...twcl("text-white/50 font-normal")}>proem.ai</div>
 				</div>
 			</div>
 		</div>
