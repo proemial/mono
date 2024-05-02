@@ -94,7 +94,10 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 							<div vaul-drawer-wrapper="">
 								<div className="bg-background">
 									<div
-										className={`${screenMaxWidth} mx-auto min-h-[100dvh] flex flex-col`}
+										className={cn(
+											"mx-auto min-h-[100dvh] flex flex-col",
+											screenMaxWidth,
+										)}
 									>
 										<main className="w-full flex flex-col flex-grow">
 											{children}

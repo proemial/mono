@@ -5,10 +5,12 @@ import {
 	findByEventType,
 	findLatestByEventType,
 } from "@/app/api/bot/answer-engine/events";
+import { screenMaxWidth } from "@/app/constants";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { useUser } from "@/app/hooks/use-user";
 import { ChatInput } from "@/components/chat-input";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
+import { cn } from "@proemial/shadcn-ui";
 import { Message, useChat } from "ai/react";
 import { useEffect, useState } from "react";
 
@@ -65,39 +67,36 @@ export const Answer = ({
 	const followUps = getFollowUps(answerEngineData);
 
 	return (
-		<div className="flex flex-col justify-between flex-grow gap-4">
-			{(!isFocused || isLoading) && (
-				<div className="flex flex-col gap-10">
-					{messages
-						.filter((message) => message.role === "user")
-						.map((message, index) => (
-							<QaPair
-								key={message.id}
-								question={message}
-								answer={getCorrespondingAnswerMessage(index, messages)}
-								data={answerEngineData}
-								followUps={
+		<div className="flex flex-col justify-between flex-grow gap-4 relative">
+			<div className={cn("flex flex-col gap-10")}>
+				{messages
+					.filter((message) => message.role === "user")
+					.map((message, index) => (
+						<QaPair
+							key={message.id}
+							question={message}
+							answer={getCorrespondingAnswerMessage(index, messages)}
+							data={answerEngineData}
+							className={cn({
+								"opacity-0 pointer-events-none": isFocused && !isLoading,
+							})}
+							followUps={
+								<div
+									className={cn(screenMaxWidth, {
+										"sticky bottom-32": isFocused,
+									})}
+								>
 									<ChatSuggestedFollowups
 										suggestions={followUps}
 										onClick={append}
 										trackingPrefix="ask"
 									/>
-								}
-								isLatest={index === Math.ceil(messages.length / 2) - 1}
-							/>
-						))}
-				</div>
-			)}
-
-			{isFocused && !isLoading && (
-				<div className="flex flex-col justify-end flex-grow">
-					<ChatSuggestedFollowups
-						suggestions={followUps}
-						onClick={append}
-						trackingPrefix="ask"
-					/>
-				</div>
-			)}
+								</div>
+							}
+							isLatest={index === Math.ceil(messages.length / 2) - 1}
+						/>
+					))}
+			</div>
 
 			<ChatInput
 				placeholder="Ask a follow-up question…"

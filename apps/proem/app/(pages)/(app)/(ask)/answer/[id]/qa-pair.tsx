@@ -29,6 +29,7 @@ type QaPairProps = {
 	data: AnswerEngineEvents[];
 	followUps: ReactNode;
 	isLatest: boolean;
+	className?: string;
 };
 
 export const QaPair = ({
@@ -37,6 +38,7 @@ export const QaPair = ({
 	data,
 	followUps,
 	isLatest,
+	className,
 }: QaPairProps) => {
 	const isQuestionByCurrentUser = question.id !== SHARED_ANSWER_TRANSACTION_ID;
 	const { papers } = findByEventType(data, "papers-fetched", question.id) ?? {};
@@ -60,7 +62,7 @@ export const QaPair = ({
 				"min-h-[calc(100dvh-204px)]": isLatest,
 			})}
 		>
-			<div className="space-y-6">
+			<div className={cn("space-y-6", className)}>
 				<ChatQuestion
 					question={question.content}
 					isQuestionByCurrentUser={isQuestionByCurrentUser}

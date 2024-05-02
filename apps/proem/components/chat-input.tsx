@@ -1,11 +1,11 @@
 "use client";
+import { screenMaxWidth } from "@/app/constants";
 import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { screenMaxWidth } from "@/app/constants";
 import { ChatForm, ChatFormProps } from "@/components/chat-form";
-import { Button } from "@proemial/shadcn-ui";
+import { Button, cn } from "@proemial/shadcn-ui";
 import { Stop } from "@untitled-ui/icons-react";
 import { useChat } from "ai/react";
 import { z } from "zod";
@@ -35,7 +35,10 @@ export function ChatInput({
 }: FormProps) {
 	return (
 		<div
-			className={`${screenMaxWidth} sticky bottom-0 flex justify-center items-center`}
+			className={cn(
+				screenMaxWidth,
+				"sticky bottom-0 flex justify-center items-center",
+			)}
 		>
 			{isLoading && <StopButton stop={stop} trackingPrefix={trackingPrefix} />}
 			{!isLoading && (
