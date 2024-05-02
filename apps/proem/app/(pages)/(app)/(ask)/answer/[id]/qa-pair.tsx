@@ -75,7 +75,7 @@ export const QaPair = ({
 					</div>
 				)}
 				{papers && papers.length === 0 && (
-					<div className="flex items-center gap-3.5">
+					<div className="flex items-center gap-3.5 min-h-9">
 						<Paper />
 						<Header4>No research papers found</Header4>
 					</div>
@@ -84,7 +84,7 @@ export const QaPair = ({
 					<CollapsibleSection
 						trackingKey={analyticsKeys.ask.click.collapse}
 						trigger={
-							<div className="flex items-center gap-3.5">
+							<div className="flex items-center gap-3.5 min-h-9">
 								<Paper />
 								<Header4>Research papers interrogated</Header4>
 							</div>
