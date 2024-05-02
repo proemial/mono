@@ -24,7 +24,7 @@ export function VaClient() {
 			{initialized && (
 				<>
 					<SpeedInsights />
-					<VercelAnalytics />
+					<VercelAnalytics debug={false} />
 				</>
 			)}
 		</>
