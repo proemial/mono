@@ -1,5 +1,9 @@
 "use client";
 
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/components/analytics/tracking/tracking-keys";
 import { SelectContentSelector } from "@/components/select-content-selector";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -33,12 +37,15 @@ const formSchema = z.object({
 	email: z.string().email().max(50),
 });
 
-type Props = {
-	trackingKey: string;
+export type ModelSelectorProps = {
+	trackingKeys: typeof analyticsKeys.ask | typeof analyticsKeys.read;
 	className?: string;
 };
 
-export const ModelSelector = ({ className, trackingKey }: Props) => {
+export const ModelSelector = ({
+	className,
+	trackingKeys,
+}: ModelSelectorProps) => {
 	const [selectedValue, setSelectedValue] =
 		useState<keyof typeof MODELS>(DEFAULT_MODEL_KEY);
 	const [drawerOpen, setDrawerOpen] = useState(false);
@@ -58,6 +65,7 @@ export const ModelSelector = ({ className, trackingKey }: Props) => {
 			"https://script.google.com/macros/s/AKfycbwY0a6mYqNvcOxtgseR2mzLswCdZcmJCx-3cGbepbZjDu4X2aSXp43VFZYegMKeDRuh/exec";
 		try {
 			setSubscribeResponse("loading");
+			trackHandler(trackingKeys.submit.modelEmail);
 			const result = await fetch(url, {
 				method: "POST",
 				headers: { "Content-Type": "text/plain" },
@@ -101,7 +109,7 @@ export const ModelSelector = ({ className, trackingKey }: Props) => {
 					}))}
 					staticValue="gpt-4-turbo"
 					onValueChange={handleValueChange}
-					trackingKey={trackingKey}
+					trackingKey={trackingKeys.click.model}
 				/>
 			}
 			onDrawerClose={handleDrawerClose}
@@ -128,6 +136,9 @@ export const ModelSelector = ({ className, trackingKey }: Props) => {
 											className="grow bg-white dark:bg-neutral-600"
 											disabled={["loading", "success"].includes(
 												subscribeResponse,
+											)}
+											onClick={trackHandler(
+												trackingKeys.click.modelEmailInputField,
 											)}
 											{...field}
 										/>

@@ -1,6 +1,6 @@
 import { MicroAbstract } from "@/components/chat-abstract";
 import { AlignLeft } from "@/components/icons/AlignLeft";
-import { ModelSelector } from "@/components/model-selector";
+import { ModelSelector, ModelSelectorProps } from "@/components/model-selector";
 import { Trackable } from "@/components/trackable";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Header2, Header4, Icons, Paragraph } from "@proemial/shadcn-ui";
@@ -8,14 +8,14 @@ import { Suspense } from "react";
 
 type ChatArticleProps = {
 	type: "Answer" | "Summary";
-	trackingKey: string;
+	trackingKeys: ModelSelectorProps["trackingKeys"];
 	text?: string;
 	paper?: OpenAlexPaper;
 };
 
 export function ChatArticle({
 	type,
-	trackingKey,
+	trackingKeys,
 	text,
 	paper,
 }: ChatArticleProps) {
@@ -29,8 +29,8 @@ export function ChatArticle({
 					<Header4>{type}</Header4>
 				</div>
 				<div className="flex justify-end flex-grow -mr-2">
-					<Trackable trackingKey={trackingKey}>
-						<ModelSelector className="w-full" trackingKey={trackingKey} />
+					<Trackable trackingKey={trackingKeys.click.model}>
+						<ModelSelector className="w-full" trackingKeys={trackingKeys} />
 					</Trackable>
 				</div>
 			</div>

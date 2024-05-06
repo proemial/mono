@@ -64,7 +64,7 @@ export function PaperReader({
 
 				<ChatArticle
 					type="Summary"
-					trackingKey={analyticsKeys.read.click.model}
+					trackingKeys={analyticsKeys.read}
 					paper={generatedPaper}
 				/>
 

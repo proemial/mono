@@ -56,10 +56,14 @@ export const analyticsKeys = {
 			paper: "ask:paper:click",
 			avatar: "ask:avatar:click",
 			model: "ask:model:click",
+			modelEmailInputField: "ask:model:email_input_field:click",
 
 			// TODO: cleanup
 			answerCard: "ask:answer-card:click",
 			answerLink: "ask:answer-link:click",
+		},
+		submit: {
+			modelEmail: "ask:model:email:submit",
 		},
 	},
 	feed: {
@@ -73,6 +77,7 @@ export const analyticsKeys = {
 			collapse: "read:metadata:collapse:click",
 			fullPaper: "read:full-paper:click",
 			model: "read:model:click",
+			modelEmailInputField: "read:model:email_input_field:click",
 			explainer: "read:chat:explainer:click",
 
 			// TODO: cleanup
@@ -88,6 +93,7 @@ export const analyticsKeys = {
 			// TODO: cleanup
 			ask: "read:ask_input:submit",
 			question: "read:input:submit",
+			modelEmail: "read:model:email:submit",
 		},
 	},
 	profile: {

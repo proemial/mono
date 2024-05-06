@@ -117,7 +117,7 @@ export const QaPair = ({
 						<ChatArticle
 							type="Answer"
 							text={answer.content}
-							trackingKey={analyticsKeys.ask.click.model}
+							trackingKeys={analyticsKeys.ask}
 						/>
 						{savedAnswer?.shareId && (
 							<ChatActionBarAsk
