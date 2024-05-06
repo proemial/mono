@@ -17,28 +17,37 @@ type Props = {
 	}[];
 	trackingKey: string;
 	className?: string;
+	onValueChange?: (value: string) => void;
+	staticValue?: string; // This is used for fake selectors with static values
 };
 
 export function SelectContentSelector({
 	selector,
 	trackingKey,
 	className = "",
+	onValueChange,
+	staticValue,
 }: Props) {
 	const [isOpen, setIsOpen] = useState(false);
 
-	const hadleOpenChange = (open: boolean) => {
+	const handleOpenChange = (open: boolean) => {
 		setIsOpen(open);
 		open && trackHandler(trackingKey)();
 	};
 
 	return (
-		<Select open={isOpen} onOpenChange={hadleOpenChange}>
+		<Select
+			{...(staticValue
+				? { value: staticValue }
+				: { defaultValue: selector[0]?.value })}
+			open={isOpen}
+			onOpenChange={handleOpenChange}
+			onValueChange={onValueChange}
+		>
 			<SelectTrigger
 				className={`border-0 w-28 focus:ring-0 focus:ring-offset-0 ${className}`}
-				onPointerDown={(e) => e.preventDefault()}
-				onClick={() => setIsOpen((prev) => !prev)}
 			>
-				<SelectValue placeholder={selector[0]?.label ?? ""} />
+				<SelectValue />
 			</SelectTrigger>
 			<SelectContent
 				ref={(ref) => {
