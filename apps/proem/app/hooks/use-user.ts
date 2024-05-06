@@ -14,7 +14,7 @@ export type User = {
 	proemialName?: string;
 };
 
-export function useFeature(...email: string[]) {
+export function useExperimental(...email: string[]) {
 	const { user } = useUser();
 
 	if (!email.length) return !!user?.isInternal;
