@@ -64,7 +64,15 @@ export const Answer = ({
 		setIsFocused(isFocused);
 	};
 
+	const showInputMode = isFocused && !isLoading;
 	const followUps = getFollowUps(answerEngineData);
+	const FollowUpComponent = (
+		<ChatSuggestedFollowups
+			suggestions={followUps}
+			onClick={append}
+			trackingPrefix="ask"
+		/>
+	);
 
 	return (
 		<div className="flex flex-col justify-between flex-grow gap-4 relative">
@@ -78,25 +86,16 @@ export const Answer = ({
 							answer={getCorrespondingAnswerMessage(index, messages)}
 							data={answerEngineData}
 							className={cn({
-								"opacity-0 pointer-events-none": isFocused && !isLoading,
+								"opacity-0 pointer-events-none": showInputMode,
 							})}
-							followUps={
-								<div
-									className={cn(screenMaxWidth, {
-										"sticky bottom-32": isFocused,
-									})}
-								>
-									<ChatSuggestedFollowups
-										suggestions={followUps}
-										onClick={append}
-										trackingPrefix="ask"
-									/>
-								</div>
-							}
+							followUps={FollowUpComponent}
 							isLatest={index === Math.ceil(messages.length / 2) - 1}
 						/>
 					))}
 			</div>
+			{showInputMode && (
+				<div className="sticky bottom-32">{FollowUpComponent}</div>
+			)}
 
 			<ChatInput
 				placeholder="Ask a follow-up question…"
