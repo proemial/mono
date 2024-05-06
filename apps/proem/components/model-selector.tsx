@@ -30,7 +30,7 @@ const MODELS = {
 const DEFAULT_MODEL_KEY: keyof typeof MODELS = "gpt-4-turbo";
 
 const formSchema = z.object({
-	email: z.string().min(2).max(50),
+	email: z.string().email().max(50),
 });
 
 type Props = {
