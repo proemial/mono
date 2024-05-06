@@ -1,5 +1,6 @@
 "use client";
 
+import { useExperimental } from "@/app/hooks/use-user";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -9,31 +10,24 @@ import {
 	Button,
 	NavigationMenu,
 	NavigationMenuItem,
+	NavigationMenuLink,
 	NavigationMenuList,
 } from "@proemial/shadcn-ui";
 import { Edit05 } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-// const navItems = {
-// 	discover: {
-// 		name: "Discover",
-// 		href: "/discover",
-// 	},
-// 	ask: {
-// 		name: "Ask",
-// 	},
-// };
+import { useEffect, useState } from "react";
 
 export function NavigationMenuBar() {
 	const pathname = usePathname();
-	// const [askHref, setAskHref] = useState<string>("/");
+	const [askHref, setAskHref] = useState<string>("/");
+	const isProemian = useExperimental();
 
-	// useEffect(() => {
-	// 	if (pathname === "/" || pathname.includes("/answer")) {
-	// 		setAskHref(pathname);
-	// 	}
-	// }, [pathname]);
+	useEffect(() => {
+		if (pathname === "/" || pathname.includes("/answer")) {
+			setAskHref(pathname);
+		}
+	}, [pathname]);
 
 	const isFrontpage = pathname === "/";
 
@@ -44,33 +38,30 @@ export function NavigationMenuBar() {
 					<Profile />
 				</NavigationMenuItem>
 
-				{/* Discover link is disabled until feature is implemented */}
-				{/* <NavigationMenuItem className="flex">
-					<Link
-						href={navItems.discover.href}
-						aria-disabled
-						tabIndex={-1}
-						className={cn(
-							"flex h-7 items-center justify-center rounded-full px-4 text-center text-sm pointer-events-none text-muted-foreground",
-							pathname === navItems.discover.href ? "bg-muted font-medium" : "",
-						)}
-					>
-						{navItems.discover.name}
-					</Link>
-					<Link
-						href={askHref}
-						className={cn(
-							"flex h-7 items-center justify-center rounded-full px-4 text-center text-sm",
-							pathname === askHref
-								? "bg-muted font-medium text-foreground"
-								: "text-foreground",
-						)}
-					>
-						{navItems.ask.name}
-					</Link>
-				</NavigationMenuItem> */}
+				{isProemian && (
+					<div className="flex gap-4">
+						<NavItem
+							label="Discover"
+							href="/discover"
+							isActive={() => pathname.includes("/discover")}
+						/>
+						<NavItem
+							label="Ask"
+							href={askHref}
+							isActive={() => pathname === askHref}
+						/>
+					</div>
+				)}
 
-				<NavigationMenuItem className="flex-none px-1">
+				<NavigationMenuItem
+					className={`flex-none px-1 ${
+						pathname === askHref
+							? "visible"
+							: isProemian
+								? "invisible"
+								: "visible"
+					}`}
+				>
 					<Link
 						href="/"
 						onClick={
@@ -88,3 +79,22 @@ export function NavigationMenuBar() {
 		</NavigationMenu>
 	);
 }
+
+const NavItem = ({
+	label,
+	href,
+	isActive,
+}: { label: string; href: string; isActive: () => boolean }) => {
+	const styles = isActive()
+		? "bg-primary rounded-full text-primary-foreground font-semibold text-[15px]"
+		: "";
+	return (
+		<NavigationMenuItem>
+			<Link href={href} legacyBehavior passHref>
+				<NavigationMenuLink className={`px-4 py-1.5 select-none ${styles}`}>
+					{label}
+				</NavigationMenuLink>
+			</Link>
+		</NavigationMenuItem>
+	);
+};
