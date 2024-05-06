@@ -14,9 +14,12 @@ export type User = {
 	proemialName?: string;
 };
 
-export function useIsInternal() {
+export function useFeature(...email: string[]) {
 	const { user } = useUser();
-	return !!user?.isInternal;
+
+	if (!email.length) return !!user?.isInternal;
+
+	return user && email.includes(user.email);
 }
 
 export function useUser() {
