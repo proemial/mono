@@ -1,8 +1,16 @@
-import { ProemLogo } from "@/components/icons/brand/logo";
 import { ChatInput } from "@/components/chat-input";
+import { ProemLogo } from "@/components/icons/brand/logo";
 import { MoodSelector } from "@/components/mood-selector";
 import { Suggestions } from "@/components/suggestions";
+import { Metadata } from "next";
 import { getThreeRandomStarters } from "./starters";
+
+export const metadata: Metadata = {
+	robots: {
+		index: true,
+		follow: true,
+	},
+};
 
 export default function AskPage() {
 	// TODO: Fetch top nice starters from DB

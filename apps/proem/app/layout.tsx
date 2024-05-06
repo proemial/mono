@@ -35,6 +35,11 @@ export const metadata: Metadata = {
 		description,
 		siteName: title,
 	},
+	robots: {
+		index: false,
+		follow: false,
+	},
+
 	icons: [
 		{
 			rel: "icon",
@@ -64,6 +69,7 @@ type Props = {
 
 export default function RootLayout({ children, modal }: Readonly<Props>) {
 	const trackingInput = getTrackingInput();
+
 	return (
 		<ClerkProvider>
 			<Analytics.PostHog tracking={trackingInput}>
