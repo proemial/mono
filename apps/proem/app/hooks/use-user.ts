@@ -14,6 +14,11 @@ export type User = {
 	proemialName?: string;
 };
 
+export function useIsInternal() {
+	const { user } = useUser();
+	return !!user?.isInternal;
+}
+
 export function useUser() {
 	const { user: clerkUser, isLoaded } = useClerkUser();
 
