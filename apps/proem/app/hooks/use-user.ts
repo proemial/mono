@@ -1,6 +1,7 @@
 import { useUser as useClerkUser } from "@clerk/nextjs";
 import { getProfileFromClerkUser } from "@proemial/models/clerk-user";
 import { getCookie } from "cookies-next";
+import { useEffect, useState } from "react";
 
 export const INTERNAL_COOKIE_NAME = "internalUser";
 
@@ -15,11 +16,15 @@ export type User = {
 };
 
 export function useExperimental(...email: string[]) {
+	const [internal, setInternal] = useState(false);
 	const { user } = useUser();
 
-	if (!email.length) return !!user?.isInternal;
+	useEffect(() => {
+		if (!email.length) setInternal(!!user?.isInternal);
+		else setInternal(!!user && email.includes(user.email));
+	}, [user, email]);
 
-	return user && email.includes(user.email);
+	return internal;
 }
 
 export function useUser() {
