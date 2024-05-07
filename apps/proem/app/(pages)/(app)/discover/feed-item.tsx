@@ -11,12 +11,10 @@ dayjs.extend(relativeTime);
 type FeedItemProps = {
 	id: string;
 	date: string;
-	fields:
-		| Array<{
-				id: string;
-				score: number;
-		  }>
-		| undefined;
+	fields?: Array<{
+		id: string;
+		score: number;
+	}>;
 	tags: string[];
 };
 

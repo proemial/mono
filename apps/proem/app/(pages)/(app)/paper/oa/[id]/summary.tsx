@@ -1,7 +1,6 @@
 import { summarise } from "@/app/prompts/summarise-title";
-import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
-import { Header2, Paragraph } from "@proemial/shadcn-ui";
+import { Paragraph } from "@proemial/shadcn-ui";
 import { fetchPaper } from "./fetch-paper";
 import Markdown from "./markdown";
 
