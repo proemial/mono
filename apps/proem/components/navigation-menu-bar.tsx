@@ -12,6 +12,7 @@ import {
 	NavigationMenuItem,
 	NavigationMenuLink,
 	NavigationMenuList,
+	cn,
 } from "@proemial/shadcn-ui";
 import { Edit05 } from "@untitled-ui/icons-react";
 import Link from "next/link";
@@ -58,13 +59,9 @@ export function NavigationMenuBar() {
 				)}
 
 				<NavigationMenuItem
-					className={`flex-none px-1 ${
-						pathname === askHref
-							? "visible"
-							: isProemian
-								? "invisible"
-								: "visible"
-					}`}
+					className={cn("flex-none px-1 invisible", {
+						visible: pathname === askHref,
+					})}
 				>
 					<Link
 						href="/"
@@ -95,13 +92,16 @@ const NavItem = ({
 	isActive: () => boolean;
 	onClick?: () => void;
 }) => {
-	const styles = isActive()
-		? "bg-primary rounded-full text-primary-foreground font-semibold text-[15px]"
-		: "";
+
 	return (
 		<NavigationMenuItem onClick={onClick}>
 			<Link href={href} legacyBehavior passHref>
-				<NavigationMenuLink className={`px-4 py-1.5 select-none ${styles}`}>
+				<NavigationMenuLink
+					className={cn("px-4 py-1.5 select-none", {
+						"bg-primary rounded-full text-primary-foreground font-semibold text-[15px]":
+							isActive(),
+					})}
+				>
 					{label}
 				</NavigationMenuLink>
 			</Link>
