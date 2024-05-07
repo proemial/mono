@@ -97,7 +97,7 @@ export const QaPair = ({
 							{papers?.map((paper, index) => (
 								<Link
 									key={index}
-									href={`/discover/${paper.link.replace("/oa/", "")}`}
+									href={`/paper/oa/${paper.link.replace("/oa/", "")}`}
 									onClick={trackHandler(analyticsKeys.ask.click.paper)}
 								>
 									<PaperCardAsk

@@ -1,6 +1,6 @@
-import { FeedFilter } from "@/app/(pages)/(app)/discover/[id]/feed-filter";
-import { fetchLatestPapers } from "@/app/(pages)/(app)/discover/[id]/fetch-paper";
+import { FeedFilter } from "@/app/(pages)/(app)/discover/feed-filter";
 import FeedItem from "@/app/(pages)/(app)/discover/feed-item";
+import { fetchLatestPapers } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { OaTopics } from "@proemial/models/open-alex-topics";
@@ -27,7 +27,7 @@ export function Feed({ fetchedPapersPromise }: FeedProps) {
 			</HorisontalScrollArea>
 
 			{papers.map((paper) => (
-				<Link key={paper.id} href={`/discover/${paper.id}`}>
+				<Link key={paper.id} href={`/paper/oa/${paper.id}`}>
 					<FeedItem
 						date={paper.data.publication_date}
 						title={paper.data.title}

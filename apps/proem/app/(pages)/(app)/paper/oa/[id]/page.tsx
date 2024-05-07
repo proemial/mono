@@ -1,7 +1,7 @@
-import { fetchPaper } from "@/app/(pages)/(app)/discover/[id]/fetch-paper";
-import { generate } from "@/app/(pages)/(app)/discover/[id]/llm-generate";
-import { PaperReader } from "@/app/(pages)/(app)/discover/[id]/paper-reader";
-import { PaperReaderSkeleton } from "@/app/(pages)/(app)/discover/[id]/paper-reader-skeleton";
+import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
+import { generate } from "@/app/(pages)/(app)/paper/oa/[id]/llm-generate";
+import { PaperReader } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader";
+import { PaperReaderSkeleton } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-skeleton";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 

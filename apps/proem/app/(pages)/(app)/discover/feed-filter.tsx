@@ -1,10 +1,11 @@
 "use client";
 
+import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { cn } from "@proemial/shadcn-ui";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 const TOPIC_SEARCH_PARAM = "topic";
 
@@ -13,40 +14,45 @@ type Props = {
 	rootPath: string;
 };
 
-function useActiveTab(defaultTab: string) {
+function useActiveTab({
+	defaultTab,
+	rootPath,
+}: { defaultTab?: string; rootPath: string }) {
+	const router = useRouter();
 	const searchParams = useSearchParams();
-	const conceptFromPath = searchParams.get(TOPIC_SEARCH_PARAM);
+	const fromPath = searchParams.get(TOPIC_SEARCH_PARAM);
+	const conceptFromCookie = getCookie("latestFeedConcept");
+	const active = fromPath ?? conceptFromCookie ?? defaultTab;
 
-	const conceptFromCookie = getCookie("latestFeedConcept") as string;
-	const activeTab = conceptFromPath ?? conceptFromCookie ?? defaultTab;
+	useRunOnFirstRender(() => {
+		const conceptFromPath = searchParams.get(TOPIC_SEARCH_PARAM);
+		console.log(conceptFromPath);
+		if (fromPath !== active) {
+			router.replace(`${rootPath}/?${TOPIC_SEARCH_PARAM}=${active}`);
+		}
+	});
 
-	if (conceptFromPath) {
-		if (conceptFromPath !== "all") {
-			setCookie("latestFeedConcept", conceptFromPath);
+	if (fromPath) {
+		if (fromPath !== "all") {
+			setCookie("latestFeedConcept", fromPath);
 		} else {
 			deleteCookie("latestFeedConcept");
 		}
 	}
 
-	return { active: activeTab, fromPath: conceptFromPath };
+	return { active: active, fromPath: fromPath };
 }
 
 export function FeedFilter({ items, rootPath }: Props) {
-	const router = useRouter();
-	const { active, fromPath } = useActiveTab(items[0] as string);
+	const { active } = useActiveTab({ defaultTab: items[0], rootPath });
 	const ref = useRef<HTMLDivElement>(null);
 
-	useEffect(() => {
-		if (fromPath !== active) {
-			router.replace(`${rootPath}/?${TOPIC_SEARCH_PARAM}=${active}`);
-		}
-	}, [active, fromPath]);
-
-	useEffect(() => {
+	useRunOnFirstRender(() => {
+		// TODO! test
 		if (active && ref?.current) {
 			ref.current.scrollIntoView(false);
 		}
-	}, []);
+	});
 
 	return (
 		<>

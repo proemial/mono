@@ -57,7 +57,7 @@ export const fetchLatestPapers = async (
 	const select = openAlexFields.all;
 
 	const filter = [
-		"type:article",
+		"type:article", // TODO! add: preprint
 		"has_abstract:true",
 		`from_created_date:${twoWeeksAgo}`,
 		`publication_date:>${twoWeeksAgo}`, // We do not want old papers that were added recently

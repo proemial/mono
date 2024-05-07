@@ -1,4 +1,4 @@
-import Markdown from "@/app/(pages)/(app)/discover/[id]/markdown";
+import Markdown from "@/app/(pages)/(app)/paper/oa/[id]/markdown";
 import {
 	Card,
 	CardDescription,

@@ -1,4 +1,4 @@
-import ReaderPage from "@/app/(pages)/(app)/discover/[id]/page";
+import ReaderPage from "@/app/(pages)/(app)/paper/oa/[id]/page";
 import { PageDrawer } from "@/components/full-page-drawer";
 
 type ReaderModalProps = {
