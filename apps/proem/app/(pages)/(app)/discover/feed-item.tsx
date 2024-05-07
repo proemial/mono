@@ -39,11 +39,13 @@ export default function FeedItem({
 		<div className="space-y-3">
 			<Link href={href}>
 				<div className="space-y-3">
-					<div className="flex items-center justify-between">
+					<div className="flex items-center justify-between gap-2">
 						{field ? (
 							<div className="flex items-center gap-2">
 								{field.icon}
-								<div className="text-xs uppercase">{field.displayName}</div>
+								<div className="text-xs uppercase line-clamp-1">
+									{field.displayName}
+								</div>
 							</div>
 						) : (
 							<div />
