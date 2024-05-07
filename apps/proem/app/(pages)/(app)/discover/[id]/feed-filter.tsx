@@ -1,8 +1,12 @@
 "use client";
 
+import { cn } from "@proemial/shadcn-ui";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
-import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
+
+const TOPIC_SEARCH_PARAM = "topic";
 
 type Props = {
 	items: string[];
@@ -10,14 +14,11 @@ type Props = {
 };
 
 function useActiveTab(defaultTab: string) {
-	const pathname = usePathname();
+	const searchParams = useSearchParams();
+	const conceptFromPath = searchParams.get(TOPIC_SEARCH_PARAM);
 
-	const conceptFromPath = pathname?.split("/")[2];
 	const conceptFromCookie = getCookie("latestFeedConcept") as string;
 	const activeTab = conceptFromPath ?? conceptFromCookie ?? defaultTab;
-
-	const active = decodeURI(activeTab);
-	const fromPath = conceptFromPath ? decodeURI(conceptFromPath) : undefined;
 
 	if (conceptFromPath) {
 		if (conceptFromPath !== "all") {
@@ -27,7 +28,7 @@ function useActiveTab(defaultTab: string) {
 		}
 	}
 
-	return { active, fromPath };
+	return { active: activeTab, fromPath: conceptFromPath };
 }
 
 export function TabNavigation({ items, rootPath }: Props) {
@@ -37,7 +38,7 @@ export function TabNavigation({ items, rootPath }: Props) {
 
 	useEffect(() => {
 		if (fromPath !== active) {
-			router.replace(`${rootPath}/${active}`);
+			router.replace(`${rootPath}/?${TOPIC_SEARCH_PARAM}=${active}`);
 		}
 	}, [active, fromPath]);
 
@@ -47,29 +48,30 @@ export function TabNavigation({ items, rootPath }: Props) {
 		}
 	}, []);
 
-	const handleChildClick = (item: string) => {
-		router.replace(`${rootPath}/${item}`);
-	};
-
-	const tabStyle = (item: string) =>
-		`px-2 py-1 rounded-[2px] whitespace-nowrap cursor-pointer ${
-			isActive(item) ? "bg-[#7DFA86] text-black" : "text-white/50"
-		}`;
-
-	const isActive = (item: string) => active === item;
-
 	return (
 		<>
-			<div className="max-w-screen-sm px-4 flex gap-1 text-[14px] overflow-x-scroll no-scrollbar scroll-px-5 select-none">
+			<div className="flex gap-1.5">
 				{items.map((item) => (
-					<div
+					<Link
+						href={`${rootPath}/?${TOPIC_SEARCH_PARAM}=${item}`}
 						key={item}
-						className={tabStyle(item)}
-						onClick={() => handleChildClick(item)}
-						ref={isActive(item) ? ref : undefined}
+						prefetch={false}
+						scroll={false}
 					>
-						{item}
-					</div>
+						<div
+							key={item}
+							className={cn(
+								"px-3.5 py-1.5 whitespace-nowrap cursor-pointer bg-primary rounded-full text-[9px] select-none uppercase font-semibold",
+								{
+									"text-secondary-foreground bg-secondary font-extrabold":
+										item === active,
+								},
+							)}
+							ref={item === active ? ref : undefined}
+						>
+							{item}
+						</div>
+					</Link>
 				))}
 			</div>
 		</>

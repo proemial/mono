@@ -1,6 +1,9 @@
+import { TabNavigation } from "@/app/(pages)/(app)/discover/[id]/feed-filter";
 import { fetchLatestPapers } from "@/app/(pages)/(app)/discover/[id]/fetch-paper";
 import FeedItem from "@/app/(pages)/(app)/discover/feed-item";
 import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
+import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
+import { OaTopics } from "@proemial/models/open-alex-topics";
 import { use } from "react";
 
 export type FeedProps = {
@@ -10,11 +13,9 @@ export type FeedProps = {
 export function Feed({ fetchedPapersPromise }: FeedProps) {
 	const papers = use(fetchedPapersPromise);
 
-	console.log(papers);
-
 	return (
 		<div className="space-y-6">
-			{/* <DragScrollContainer className="flex justify-center my-4">
+			<HorisontalScrollArea>
 				<TabNavigation
 					items={[
 						"all",
@@ -22,7 +23,7 @@ export function Feed({ fetchedPapersPromise }: FeedProps) {
 					]}
 					rootPath="/discover"
 				/>
-			</DragScrollContainer> */}
+			</HorisontalScrollArea>
 
 			{papers.map((paper) => (
 				<FeedItem
