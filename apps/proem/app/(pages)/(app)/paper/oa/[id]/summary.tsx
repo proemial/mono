@@ -1,13 +1,19 @@
-import { Header2, Paragraph } from "@proemial/shadcn-ui";
 import { summarise } from "@/app/prompts/summarise-title";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
-import Markdown from "./markdown";
+import { Header2, Paragraph } from "@proemial/shadcn-ui";
 import { fetchPaper } from "./fetch-paper";
+import Markdown from "./markdown";
 
-export default async function Summary(options: {
+export default async function Summary<
+	TPaper extends {
+		id: string;
+		data?: { title: string; abstract: string };
+		generated?: { title: string };
+	},
+>(options: {
 	id?: string;
-	paper?: OpenAlexPaper;
+	paper?: TPaper;
 }) {
 	if (!options.id && !options.paper) throw new Error("No id or paper provided");
 	const paper = options.paper ?? (await fetchPaper(options.id as string));
@@ -40,9 +46,9 @@ export default async function Summary(options: {
 function OutPut({ headline, text }: { headline: string; text?: string }) {
 	return (
 		<>
-			<Header2>
+			<Paragraph>
 				<Markdown>{headline}</Markdown>
-			</Header2>
+			</Paragraph>
 			{text && <Paragraph>{text}</Paragraph>}
 		</>
 	);

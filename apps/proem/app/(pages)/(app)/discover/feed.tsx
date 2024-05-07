@@ -4,6 +4,7 @@ import { fetchLatestPapers } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper
 import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { OaTopics } from "@proemial/models/open-alex-topics";
+import Link from "next/link";
 import { use } from "react";
 
 export type FeedProps = {
@@ -26,21 +27,25 @@ export function Feed({ fetchedPapersPromise }: FeedProps) {
 			</HorisontalScrollArea>
 
 			{papers.map((paper) => (
-				<FeedItem
-					key={paper.id}
-					date={paper.data.publication_date}
-					title={paper.data.title}
-					fields={paper.data.topics?.map((topic) => ({
-						id: topic.field.id,
-						score: topic.score,
-					}))}
-					tags={
-						paper.data.topics
-							?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
-							.filter(Boolean) as string[]
-					}
-					href={`/paper/oa/${paper.id}`}
-				/>
+				<Link key={paper.id} href={`/paper/oa/${paper.id}`}>
+					<FeedItem
+						id={paper.id}
+						key={paper.id}
+						date={paper.data.publication_date}
+						fields={paper.data.topics?.map((topic) => ({
+							id: topic.field.id,
+							score: topic.score,
+						}))}
+						tags={
+							paper.data.topics
+								?.map(
+									(topic) => oaTopicsTranslationMap[topic.id]?.["short-name"],
+								)
+								.filter(Boolean) as string[]
+						}
+						href={`/paper/oa/${paper.id}`}
+					/>
+				</Link>
 			))}
 		</div>
 	);

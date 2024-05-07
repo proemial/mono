@@ -1,5 +1,6 @@
+import Summary from "@/app/(pages)/(app)/paper/oa/[id]/summary";
 import { oaFieldIconMap } from "@/app/data/oa-fields";
-import { Button, Paragraph } from "@proemial/shadcn-ui";
+import { Button } from "@proemial/shadcn-ui";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
@@ -8,8 +9,8 @@ import { useMemo } from "react";
 dayjs.extend(relativeTime);
 
 type FeedItemProps = {
+	id: string;
 	date: string;
-	title: string;
 	fields:
 		| Array<{
 				id: string;
@@ -22,7 +23,7 @@ type FeedItemProps = {
 
 export default function FeedItem({
 	date,
-	title,
+	id,
 	fields,
 	tags,
 	href,
@@ -38,18 +39,18 @@ export default function FeedItem({
 		<div className="space-y-3">
 			<Link href={href}>
 				<div className="space-y-3">
-					<div className="flex justify-between items-center">
+					<div className="flex items-center justify-between">
 						{field ? (
-							<div className="flex gap-2 items-center">
+							<div className="flex items-center gap-2">
 								{field.icon}
-								<div className="uppercase text-xs">{field.displayName}</div>
+								<div className="text-xs uppercase">{field.displayName}</div>
 							</div>
 						) : (
 							<div />
 						)}
 						<div className="uppercase text-2xs">{dayjs(date).fromNow()}</div>
 					</div>
-					<Paragraph>{title}</Paragraph>
+					<Summary id={id} />
 				</div>
 			</Link>
 			<div className="flex flex-row-reverse gap-2 overflow-x-auto scrollbar-hide">
