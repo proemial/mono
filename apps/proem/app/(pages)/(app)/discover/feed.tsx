@@ -15,7 +15,7 @@ export function Feed({ fetchedPapersPromise }: FeedProps) {
 	const papers = use(fetchedPapersPromise);
 
 	return (
-		<div className="space-y-6">
+		<div className="flex flex-col gap-10 pb-10">
 			<HorisontalScrollArea>
 				<FeedFilter
 					items={[
@@ -27,9 +27,8 @@ export function Feed({ fetchedPapersPromise }: FeedProps) {
 			</HorisontalScrollArea>
 
 			{papers.map((paper) => (
-				<Link href={`/discover/${paper.id}`}>
+				<Link key={paper.id} href={`/discover/${paper.id}`}>
 					<FeedItem
-						key={paper.id}
 						date={paper.data.publication_date}
 						title={paper.data.title}
 						tags={
