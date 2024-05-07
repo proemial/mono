@@ -46,9 +46,7 @@ export default async function Summary<
 function OutPut({ headline, text }: { headline: string; text?: string }) {
 	return (
 		<>
-			<Paragraph>
-				<Markdown>{headline}</Markdown>
-			</Paragraph>
+			<Markdown>{headline}</Markdown>
 			{text && <Paragraph>{text}</Paragraph>}
 		</>
 	);

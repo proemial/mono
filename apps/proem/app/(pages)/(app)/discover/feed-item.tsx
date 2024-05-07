@@ -18,16 +18,9 @@ type FeedItemProps = {
 		  }>
 		| undefined;
 	tags: string[];
-	href: string;
 };
 
-export default function FeedItem({
-	date,
-	id,
-	fields,
-	tags,
-	href,
-}: FeedItemProps) {
+export default function FeedItem({ date, id, fields, tags }: FeedItemProps) {
 	const field = useMemo(() => {
 		const field = fields?.reduce((prev, current) =>
 			prev.score > current.score ? prev : current,
@@ -37,7 +30,7 @@ export default function FeedItem({
 
 	return (
 		<div className="space-y-3">
-			<Link href={href}>
+			<Link href={`/paper/oa/${id}`}>
 				<div className="space-y-3">
 					<div className="flex items-center justify-between">
 						{field ? (
@@ -50,6 +43,7 @@ export default function FeedItem({
 						)}
 						<div className="uppercase text-2xs">{dayjs(date).fromNow()}</div>
 					</div>
+
 					<Summary id={id} />
 				</div>
 			</Link>
