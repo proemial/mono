@@ -1,13 +1,12 @@
-import { TabNavigation } from "@/app/(pages)/(app)/discover/[id]/feed-filter";
 import { fetchLatestPapers } from "@/app/(pages)/(app)/discover/[id]/fetch-paper";
 import FeedItem from "@/app/(pages)/(app)/discover/feed-item";
-import { DragScrollContainer } from "@/components/drag-scroll";
-import { OaTopics } from "@proemial/models/open-alex-topics";
+import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
 import { use } from "react";
 
 export type FeedProps = {
 	fetchedPapersPromise: ReturnType<typeof fetchLatestPapers>;
 };
+
 export function Feed({ fetchedPapersPromise }: FeedProps) {
 	const papers = use(fetchedPapersPromise);
 
@@ -30,7 +29,11 @@ export function Feed({ fetchedPapersPromise }: FeedProps) {
 					key={paper.id}
 					date={paper.data.publication_date}
 					title={paper.data.title}
-					tags={["sdf"]}
+					tags={
+						paper.data.topics
+							?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
+							.filter(Boolean) as string[]
+					}
 				/>
 			))}
 		</div>
