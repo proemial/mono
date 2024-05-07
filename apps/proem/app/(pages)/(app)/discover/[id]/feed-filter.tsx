@@ -31,7 +31,7 @@ function useActiveTab(defaultTab: string) {
 	return { active: activeTab, fromPath: conceptFromPath };
 }
 
-export function TabNavigation({ items, rootPath }: Props) {
+export function FeedFilter({ items, rootPath }: Props) {
 	const router = useRouter();
 	const { active, fromPath } = useActiveTab(items[0] as string);
 	const ref = useRef<HTMLDivElement>(null);
