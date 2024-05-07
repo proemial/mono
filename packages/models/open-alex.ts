@@ -112,7 +112,7 @@ export type OpenAlexTopic = {
 };
 
 type OpenAlexTopicItem = {
-	id: number;
+	id: string;
 	display_name: string;
 };
 
