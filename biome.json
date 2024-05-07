@@ -16,7 +16,8 @@
 			},
 			"a11y": {
 				"useKeyWithClickEvents": "off",
-				"useValidAriaRole": "off"
+				"useValidAriaRole": "off",
+				"noSvgWithoutTitle":"off"
 			},
 			"style": {
 				"useImportType": "off"
