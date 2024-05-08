@@ -20,10 +20,13 @@ type FeedItemProps = {
 
 export default function FeedItem({ date, id, fields, tags }: FeedItemProps) {
 	const field = useMemo(() => {
-		const field = fields?.reduce((prev, current) =>
+		if (!fields || fields.length === 0) {
+			return undefined;
+		}
+		const field = fields.reduce((prev, current) =>
 			prev.score > current.score ? prev : current,
 		);
-		return field ? oaFieldIconMap[field.id] : undefined;
+		return oaFieldIconMap[field.id];
 	}, [fields]);
 
 	return (
