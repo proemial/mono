@@ -3,7 +3,7 @@ import FeedItem from "@/app/(pages)/(app)/discover/feed-item";
 import { fetchLatestPapers } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
-import { OaTopics } from "@proemial/models/open-alex-topics";
+import { OaFields } from "@proemial/models/open-alex-topics";
 import { use } from "react";
 
 export type FeedProps = {
@@ -20,7 +20,7 @@ export function Feed({ fetchedPapersPromise }: FeedProps) {
 					// TODO: Higlight selected filter
 					items={[
 						"all",
-						...OaTopics.map((field) => field.display_name.toLowerCase()),
+						...OaFields.map((field) => field.display_name.toLowerCase()),
 					]}
 					rootPath="/discover"
 				/>
