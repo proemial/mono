@@ -35,8 +35,8 @@ export default function FeedItem({ date, id, fields, tags }: FeedItemProps) {
 				<Summary id={id} />
 			</FeedItemCard>
 			<div className="flex flex-row-reverse gap-2 overflow-x-auto scrollbar-hide">
-				{tags.map((tag) => (
-					<FeedItemTag key={tag} tag={tag} />
+				{tags.map((tag, i) => (
+					<FeedItemTag key={i} tag={tag} />
 				))}
 			</div>
 		</div>
