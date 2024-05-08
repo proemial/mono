@@ -17,9 +17,10 @@ export function Feed({ fetchedPapersPromise }: FeedProps) {
 		<div className="flex flex-col gap-10 pb-10">
 			<HorisontalScrollArea>
 				<FeedFilter
+					// TODO: Higlight selected filter
 					items={[
 						"all",
-						...OaTopics.map((concept) => concept.display_name.toLowerCase()),
+						...OaTopics.map((field) => field.display_name.toLowerCase()),
 					]}
 					rootPath="/discover"
 				/>
