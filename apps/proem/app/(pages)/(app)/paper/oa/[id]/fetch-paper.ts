@@ -53,14 +53,14 @@ export const fetchLatestPapers = async (
 	field?: number,
 ): Promise<OpenAlexPaper[]> => {
 	const today = dayjs().format("YYYY-MM-DD");
-	const twoDaysAgo = dayjs(today).subtract(2, "day").format("YYYY-MM-DD");
+	const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
 	const select = openAlexFields.all;
 
 	const filter = [
 		"type:types/preprint|types/article",
 		"has_abstract:true",
-		`from_created_date:${twoDaysAgo}`,
-		`publication_date:>${twoDaysAgo}`, // We do not want old papers that were added recently
+		`from_created_date:${twoWeeksAgo}`,
+		`publication_date:>${twoWeeksAgo}`, // We do not want old papers that were added recently
 		`publication_date:<${today}`, // We do not want papers published in the future
 		"language:en",
 		"open_access.is_oa:true",
