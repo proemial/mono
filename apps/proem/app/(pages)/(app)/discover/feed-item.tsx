@@ -1,17 +1,17 @@
 import Summary from "@/app/(pages)/(app)/paper/oa/[id]/summary";
 import { oaFieldIconMap } from "@/app/data/oa-fields";
-import { Button } from "@proemial/shadcn-ui";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import Link from "next/link";
 import { useMemo } from "react";
+import { FeedItemCard } from "./feed-item-card";
+import { FeedItemTag } from "./feed-item-tag";
 
 dayjs.extend(relativeTime);
 
 type FeedItemProps = {
 	id: string;
 	date: string;
-	fields?: Array<{
+	fields: Array<{
 		id: string;
 		score: number;
 	}>;
@@ -20,7 +20,7 @@ type FeedItemProps = {
 
 export default function FeedItem({ date, id, fields, tags }: FeedItemProps) {
 	const field = useMemo(() => {
-		if (!fields || fields.length === 0) {
+		if (fields.length === 0) {
 			return undefined;
 		}
 		const field = fields.reduce((prev, current) =>
@@ -31,30 +31,12 @@ export default function FeedItem({ date, id, fields, tags }: FeedItemProps) {
 
 	return (
 		<div className="space-y-3">
-			<Link href={`/paper/oa/${id}`}>
-				<div className="space-y-3">
-					<div className="flex items-center justify-between gap-2">
-						{field ? (
-							<div className="flex items-center gap-2">
-								{field.icon}
-								<div className="text-xs uppercase line-clamp-1">
-									{field.displayName}
-								</div>
-							</div>
-						) : (
-							<div />
-						)}
-						<div className="uppercase text-2xs">{dayjs(date).fromNow()}</div>
-					</div>
-
-					<Summary id={id} />
-				</div>
-			</Link>
+			<FeedItemCard id={id} date={date} field={field}>
+				<Summary id={id} />
+			</FeedItemCard>
 			<div className="flex flex-row-reverse gap-2 overflow-x-auto scrollbar-hide">
 				{tags.map((tag) => (
-					<Button key={tag} size="pill">
-						{tag}
-					</Button>
+					<FeedItemTag key={tag} tag={tag} />
 				))}
 			</div>
 		</div>

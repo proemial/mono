@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 
-type Field = {
+export type Field = {
 	displayName: string;
 	icon: ReactElement;
 };

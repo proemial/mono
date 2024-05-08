@@ -30,10 +30,12 @@ export function Feed({ fetchedPapersPromise }: FeedProps) {
 					id={paper.id}
 					key={paper.id}
 					date={paper.data.publication_date}
-					fields={paper.data.topics?.map((topic) => ({
-						id: topic.field.id,
-						score: topic.score,
-					}))}
+					fields={
+						paper.data.topics?.map((topic) => ({
+							id: topic.field.id,
+							score: topic.score,
+						})) ?? []
+					}
 					tags={
 						paper.data.topics
 							?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])

@@ -31,6 +31,8 @@ export const analyticsKeys = {
 			click: {
 				// TODO: cleanup
 				logo: "header:logo:click",
+				discover: "header:discover:click",
+				ask: "header:ask:click",
 			},
 		},
 	},
@@ -70,6 +72,7 @@ export const analyticsKeys = {
 		// TODO: cleanup
 		click: {
 			card: "feed:card:click",
+			tag: "feed:tag:click",
 		},
 	},
 	read: {

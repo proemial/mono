@@ -44,11 +44,15 @@ export function NavigationMenuBar() {
 							label="Discover"
 							href="/discover"
 							isActive={() => pathname.includes("/discover")}
+							onClick={() =>
+								trackHandler(analyticsKeys.ui.header.click.discover)
+							}
 						/>
 						<NavItem
 							label="Ask"
 							href={askHref}
 							isActive={() => pathname === askHref}
+							onClick={() => trackHandler(analyticsKeys.ui.header.click.ask)}
 						/>
 					</div>
 				)}
@@ -84,12 +88,18 @@ const NavItem = ({
 	label,
 	href,
 	isActive,
-}: { label: string; href: string; isActive: () => boolean }) => {
+	onClick,
+}: {
+	label: string;
+	href: string;
+	isActive: () => boolean;
+	onClick?: () => void;
+}) => {
 	const styles = isActive()
 		? "bg-primary rounded-full text-primary-foreground font-semibold text-[15px]"
 		: "";
 	return (
-		<NavigationMenuItem>
+		<NavigationMenuItem onClick={onClick}>
 			<Link href={href} legacyBehavior passHref>
 				<NavigationMenuLink className={`px-4 py-1.5 select-none ${styles}`}>
 					{label}
