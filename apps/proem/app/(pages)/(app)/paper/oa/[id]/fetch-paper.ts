@@ -51,6 +51,7 @@ export const fetchPaper = cache(
 
 export const fetchLatestPapers = async (
 	field?: number,
+	topic?: string,
 ): Promise<OpenAlexPaper[]> => {
 	const today = dayjs().format("YYYY-MM-DD");
 	const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
@@ -65,6 +66,7 @@ export const fetchLatestPapers = async (
 		"language:en",
 		"open_access.is_oa:true",
 		field ? `primary_topic.field.id:${field}` : undefined,
+		topic ? `primary_topic.id:${topic}` : undefined,
 	]
 		.filter((f) => !!f)
 		.join(",");

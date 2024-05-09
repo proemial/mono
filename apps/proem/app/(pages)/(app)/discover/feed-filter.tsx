@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useRef } from "react";
 
-const TOPIC_SEARCH_PARAM = "topic";
+const TOPIC_SEARCH_PARAM = "field";
 
 type Props = {
 	items: string[];
