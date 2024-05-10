@@ -49,6 +49,50 @@ export const fetchPaper = cache(
 	},
 );
 
+export const fetchPapers = async (
+	{ field }: { field?: number } = {},
+	{ limit, offset } = { limit: 25, offset: 0 },
+): Promise<OpenAlexPaper[]> => {
+	const today = dayjs().format("YYYY-MM-DD");
+	const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
+	const select = openAlexFields.all;
+	console.log(offset);
+
+	const filter = [
+		"type:types/preprint|types/article",
+		"has_abstract:true",
+		`from_created_date:${twoWeeksAgo}`,
+		`publication_date:>${twoWeeksAgo}`, // We do not want old papers that were added recently
+		`publication_date:<${today}`, // We do not want papers published in the future
+		"language:en",
+		"open_access.is_oa:true",
+		field ? `primary_topic.field.id:${field}` : undefined,
+	]
+		.filter((f) => !!f)
+		.join(",");
+	const sort = "from_created_date:desc,type:desc";
+	const url = `${oaBaseUrl}?${oaBaseArgs}&select=${select}&filter=${filter}&sort=${sort}&per_page=${limit}&page=${
+		offset ?? 1
+	}`;
+
+	// This will include 25 papers (one pagination page), which seems appropriate
+	// for a feed.
+	const oaPapers = await fetchWithAbstract(url);
+	console.log(oaPapers);
+
+	const papers = (oaPapers || [])
+		.filter((p) => p.data.topics?.length)
+		.map((result) => ({
+			...result,
+			id: result.data.id.replace("https://openalex.org/", ""),
+		}));
+
+	// Overwriting all papers always is not optimal
+	await Redis.papers.upsertAll(papers);
+
+	return [...papers].sort(sortByPublicationDateDesc);
+};
+
 export const fetchLatestPapers = async (
 	field?: number,
 ): Promise<OpenAlexPaper[]> => {
