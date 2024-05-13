@@ -56,7 +56,6 @@ export const fetchPapers = async (
 	const today = dayjs().format("YYYY-MM-DD");
 	const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
 	const select = openAlexFields.all;
-	console.log(offset);
 
 	const filter = [
 		"type:types/preprint|types/article",
@@ -78,7 +77,6 @@ export const fetchPapers = async (
 	// This will include 25 papers (one pagination page), which seems appropriate
 	// for a feed.
 	const oaPapers = await fetchWithAbstract(url);
-	console.log(oaPapers);
 
 	const papers = (oaPapers || [])
 		.filter((p) => p.data.topics?.length)
@@ -86,9 +84,6 @@ export const fetchPapers = async (
 			...result,
 			id: result.data.id.replace("https://openalex.org/", ""),
 		}));
-
-	// Overwriting all papers always is not optimal
-	await Redis.papers.upsertAll(papers);
 
 	return [...papers].sort(sortByPublicationDateDesc);
 };

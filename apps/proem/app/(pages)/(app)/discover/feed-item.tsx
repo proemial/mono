@@ -1,34 +1,30 @@
-import { Summary } from "@/app/(pages)/(app)/paper/oa/[id]/summary";
 import { oaFieldIconMap } from "@/app/data/oa-fields";
+import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
-import { Loading01 } from "@untitled-ui/icons-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { Suspense, useMemo } from "react";
+import { useMemo } from "react";
+import Markdown from "react-markdown";
 import { FeedItemCard } from "./feed-item-card";
 import { FeedItemTag } from "./feed-item-tag";
 
 dayjs.extend(relativeTime);
 
 type FeedItemProps = {
-	id: string;
-	date: string;
-	fields: Array<{
-		id: string;
-		score: number;
-	}>;
-	tags: string[];
 	paper: OpenAlexPaper;
 };
 
-export default function FeedItem({
-	date,
-	id,
-	paper,
-	fields,
-	tags,
-}: FeedItemProps) {
-	console.log(paper);
+export default function FeedItem({ paper }: FeedItemProps) {
+	const tags = paper.data.topics
+		?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
+		.filter(Boolean) as string[];
+
+	const fields =
+		paper.data.topics?.map((topic) => ({
+			id: topic.field.id,
+			score: topic.score,
+		})) ?? [];
+
 	const field = useMemo(() => {
 		if (fields.length === 0) {
 			return undefined;
@@ -41,14 +37,17 @@ export default function FeedItem({
 
 	return (
 		<div className="space-y-3">
-			<FeedItemCard id={id} date={date} field={field}>
-				<Suspense fallback={<Loading01 />}>
-					<Summary id={id} paper={paper} />
-				</Suspense>
+			<FeedItemCard
+				id={paper.id}
+				date={paper.data.publication_date}
+				field={field}
+			>
+				<Markdown>{paper.generated?.title}</Markdown>
 			</FeedItemCard>
+
 			<div className="flex flex-row-reverse gap-2 overflow-x-auto scrollbar-hide">
-				{tags.map((tag, i) => (
-					<FeedItemTag key={i} tag={tag} />
+				{tags.map((tag) => (
+					<FeedItemTag key={tag} tag={tag} />
 				))}
 			</div>
 		</div>

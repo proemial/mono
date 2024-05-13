@@ -1,15 +1,13 @@
 "use client";
 import { FeedFilter } from "@/app/(pages)/(app)/discover/feed-filter";
-import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
-import { OaFields } from "@proemial/models/open-alex-fields";
-import { useEffect, useRef } from "react";
-
 import FeedItem from "@/app/(pages)/(app)/discover/feed-item";
 import { fetchFeed } from "@/app/(pages)/(app)/discover/fetch-feed";
-import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
+import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
+import { OaFields } from "@proemial/models/open-alex-fields";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { Loading01 } from "@untitled-ui/icons-react";
 import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 
 export function Feed() {
@@ -21,31 +19,22 @@ export function Feed() {
 			c.display_name.toLowerCase() === decodeURI(topic).replaceAll("%2C", ","),
 	)?.id;
 
-	const {
-		status,
-		data,
-		error,
-		isFetching,
-		isFetchingNextPage,
-		fetchNextPage,
-		hasNextPage,
-	} = useInfiniteQuery(
-		`feed_${fieldId}`,
-		(ctx) =>
-			fetchFeed({ field: fieldId }, { limit: 10, offset: ctx.pageParam }),
-		{
-			getNextPageParam: (_lastGroup, groups) => groups.length,
-		},
-	);
+	const { status, data, isFetchingNextPage, fetchNextPage, hasNextPage } =
+		useInfiniteQuery(
+			`feed_${fieldId}`,
+			(ctx) => fetchFeed({ field: fieldId }, { offset: ctx.pageParam }),
+			{
+				getNextPageParam: (_lastGroup, groups) => groups.length,
+			},
+		);
 
 	const allRows = data ? data.pages.flatMap((d) => d.rows) : [];
-
-	const parentRef = useRef<HTMLDivElement>(null);
 
 	const rowVirtualizer = useWindowVirtualizer({
 		count: hasNextPage ? allRows.length + 1 : allRows.length,
 		estimateSize: () => 112,
 		overscan: 5,
+		gap: 40,
 	});
 
 	useEffect(() => {
@@ -90,7 +79,7 @@ export function Feed() {
 				<span>Error:</span>
 			) : (
 				<div
-					className="w-full relative space-y-10"
+					className="w-full relative"
 					style={{
 						height: `${rowVirtualizer.getTotalSize()}px`,
 					}}
@@ -123,26 +112,7 @@ export function Feed() {
 										"Nothing more to load"
 									)
 								) : (
-									<FeedItem
-										id={paper.id}
-										key={paper.id}
-										paper={paper}
-										date={paper.data.publication_date}
-										fields={
-											paper.data.topics?.map((topic) => ({
-												id: topic.field.id,
-												score: topic.score,
-											})) ?? []
-										}
-										tags={
-											paper.data.topics
-												?.map(
-													(topic) =>
-														oaTopicsTranslationMap[topic.id]?.["short-name"],
-												)
-												.filter(Boolean) as string[]
-										}
-									/>
+									<FeedItem paper={paper} />
 								)}
 							</div>
 						);
