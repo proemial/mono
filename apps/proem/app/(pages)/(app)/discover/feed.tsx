@@ -9,13 +9,18 @@ import { fetchFeed } from "@/app/(pages)/(app)/discover/fetch-feed";
 import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { Loading01 } from "@untitled-ui/icons-react";
+import { useSearchParams } from "next/navigation";
 import { useInfiniteQuery } from "react-query";
 
-export type FeedProps = {
-	fieldId?: number;
-};
+export function Feed() {
+	const searchParams = useSearchParams();
+	const topic = searchParams.get("topic") ?? "";
 
-export function Feed({ fieldId }: FeedProps) {
+	const fieldId = OaFields.find(
+		(c) =>
+			c.display_name.toLowerCase() === decodeURI(topic).replaceAll("%2C", ","),
+	)?.id;
+
 	const {
 		status,
 		data,
