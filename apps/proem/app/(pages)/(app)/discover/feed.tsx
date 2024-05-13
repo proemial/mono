@@ -38,10 +38,10 @@ export function Feed() {
 
 	const rowVirtualizer = useWindowVirtualizer({
 		count: hasNextPage ? allRows.length + 1 : allRows.length,
-		estimateSize: () => 112,
+		estimateSize: () => 160,
 		overscan: 5,
-		gap: 40,
 	});
+	const items = rowVirtualizer.getVirtualItems();
 
 	useEffect(() => {
 		const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
@@ -66,7 +66,7 @@ export function Feed() {
 	]);
 
 	return (
-		<div className="space-y-10 pb-10">
+		<div className="space-y-5 pb-10">
 			<HorisontalScrollArea>
 				<FeedFilter
 					items={[
@@ -85,38 +85,42 @@ export function Feed() {
 				<div
 					className="w-full relative"
 					style={{
-						height: `${rowVirtualizer.getTotalSize()}px`,
+						height: rowVirtualizer.getTotalSize(),
 					}}
 				>
-					{rowVirtualizer.getVirtualItems().map((virtualRow) => {
-						const isLoaderRow = virtualRow.index > allRows.length - 1;
-						const paper = allRows[virtualRow.index];
+					<div
+						style={{
+							position: "absolute",
+							top: 0,
+							left: 0,
+							width: "100%",
+							transform: `translateY(${items[0]?.start ?? 0}px)`,
+						}}
+					>
+						{items.map((virtualRow) => {
+							const isLoaderRow = virtualRow.index > allRows.length - 1;
+							const paper = allRows[virtualRow.index];
 
-						return (
-							<div
-								ref={rowVirtualizer.measureElement}
-								key={virtualRow.index}
-								style={{
-									position: "absolute",
-									top: 0,
-									left: 0,
-									width: "100%",
-									height: `${virtualRow.size}px`,
-									transform: `translateY(${virtualRow.start}px)`,
-								}}
-							>
-								{isLoaderRow ? (
-									hasNextPage ? (
+							return (
+								<div
+									ref={rowVirtualizer.measureElement}
+									key={virtualRow.key}
+									data-index={virtualRow.index}
+									className="py-5"
+								>
+									{isLoaderRow ? (
+										hasNextPage ? (
+											<Loader />
+										) : null
+									) : paper ? (
+										<FeedItem paper={paper} />
+									) : (
 										<Loader />
-									) : null
-								) : paper ? (
-									<FeedItem paper={paper} />
-								) : (
-									<Loader />
-								)}
-							</div>
-						);
-					})}
+									)}
+								</div>
+							);
+						})}
+					</div>
 				</div>
 			)}
 		</div>

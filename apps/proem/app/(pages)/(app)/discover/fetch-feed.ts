@@ -6,7 +6,6 @@ import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
 
 type FetchFeedParams = Required<Parameters<typeof fetchPapers>>;
-// export const revalidate = 600;
 
 export async function fetchFeed(
 	params: FetchFeedParams[0],
@@ -14,7 +13,7 @@ export async function fetchFeed(
 ) {
 	const fetchedPapers = await fetchPapers(params, { ...options, limit: 5 });
 	const cachedPapers = await Redis.papers.getAll(
-		fetchedPapers.map((paper) => paper.id),
+		fetchedPapers.map((paper) => paper?.id).filter(Boolean),
 	);
 
 	const cachedPapersIds = cachedPapers
