@@ -10,6 +10,12 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 
+const Loader = () => (
+	<div className="w-full h-24 flex justify-center items-center">
+		<Loading01 />
+	</div>
+);
+
 export function Feed() {
 	const searchParams = useSearchParams();
 	const topic = searchParams.get("topic") ?? "";
@@ -72,9 +78,7 @@ export function Feed() {
 			</HorisontalScrollArea>
 
 			{status === "loading" ? (
-				<div className="w-full h-24 flex justify-center items-center">
-					<Loading01 />
-				</div>
+				<Loader />
 			) : status === "error" ? (
 				<span>Error:</span>
 			) : (
@@ -87,10 +91,6 @@ export function Feed() {
 					{rowVirtualizer.getVirtualItems().map((virtualRow) => {
 						const isLoaderRow = virtualRow.index > allRows.length - 1;
 						const paper = allRows[virtualRow.index];
-
-						if (!paper) {
-							return null;
-						}
 
 						return (
 							<div
@@ -107,12 +107,12 @@ export function Feed() {
 							>
 								{isLoaderRow ? (
 									hasNextPage ? (
-										"Loading more..."
-									) : (
-										"Nothing more to load"
-									)
-								) : (
+										<Loader />
+									) : null
+								) : paper ? (
 									<FeedItem paper={paper} />
+								) : (
+									<Loader />
 								)}
 							</div>
 						);
