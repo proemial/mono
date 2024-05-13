@@ -1,6 +1,9 @@
 import { migrate } from "drizzle-orm/neon-http/migrator";
 import { neonDb } from "./db";
 
+/**
+ * @deprecated Run `neon:migrate` script instead.
+ */
 const run = async () => {
 	console.log("start migration...");
 	// this will automatically run needed migrations on the database
