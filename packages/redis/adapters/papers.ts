@@ -2,13 +2,24 @@ import {
 	OpenAlexPaper,
 	getIdFromOpenAlexPaper,
 } from "@proemial/models/open-alex";
-import { UpStash } from "./upstash-client";
 import { Time } from "@proemial/utils/time";
+import { UpStash } from "./upstash-client";
 
 export const OpenAlexPapers = {
 	get: async (id: string) => {
 		try {
 			return (await UpStash.papers().get(`oa:${id}`)) as OpenAlexPaper;
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	},
+
+	getAll: async (ids: string[]) => {
+		try {
+			return (await UpStash.papers().mget(
+				ids.map((id) => `oa:${id}`),
+			)) as OpenAlexPaper[];
 		} catch (error) {
 			console.error(error);
 			throw error;

@@ -1,5 +1,6 @@
 import "@/app/globals.css";
 import { Analytics } from "@/components/analytics";
+import { ReactQueryProvider } from "@/components/providers/react-query";
 import "@/env";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider, cn } from "@proemial/shadcn-ui";
@@ -91,29 +92,31 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 							fontSans.variable,
 						)}
 					>
-						<ThemeProvider
-							attribute="class"
-							defaultTheme="system"
-							enableSystem
-							disableTransitionOnChange
-						>
-							<div vaul-drawer-wrapper="">
-								<div className="bg-background">
-									<div
-										className={cn(
-											"mx-auto min-h-[100dvh] flex flex-col",
-											screenMaxWidth,
-										)}
-									>
-										<main className="w-full flex flex-col flex-grow">
-											{children}
-										</main>
-										{modal}
+						<ReactQueryProvider>
+							<ThemeProvider
+								attribute="class"
+								defaultTheme="system"
+								enableSystem
+								disableTransitionOnChange
+							>
+								<div vaul-drawer-wrapper="">
+									<div className="bg-background">
+										<div
+											className={cn(
+												"mx-auto min-h-[100dvh] flex flex-col",
+												screenMaxWidth,
+											)}
+										>
+											<main className="w-full flex flex-col flex-grow">
+												{children}
+											</main>
+											{modal}
+										</div>
 									</div>
 								</div>
-							</div>
-							<Analytics.Clients tracking={trackingInput} />
-						</ThemeProvider>
+								<Analytics.Clients tracking={trackingInput} />
+							</ThemeProvider>
+						</ReactQueryProvider>
 					</body>
 				</html>
 			</Analytics.PostHog>

@@ -1,23 +1,74 @@
+"use client";
 import { FeedFilter } from "@/app/(pages)/(app)/discover/feed-filter";
 import FeedItem from "@/app/(pages)/(app)/discover/feed-item";
-import { fetchLatestPapers } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
-import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
+import { fetchFeed } from "@/app/(pages)/(app)/discover/fetch-feed";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { OaFields } from "@proemial/models/open-alex-fields";
-import { use } from "react";
+import { useWindowVirtualizer } from "@tanstack/react-virtual";
+import { Loading01 } from "@untitled-ui/icons-react";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { useInfiniteQuery } from "react-query";
 
-export type FeedProps = {
-	fetchedPapersPromise: ReturnType<typeof fetchLatestPapers>;
-};
+const Loader = () => (
+	<div className="w-full h-24 flex justify-center items-center">
+		<Loading01 />
+	</div>
+);
 
-export function Feed({ fetchedPapersPromise }: FeedProps) {
-	const papers = use(fetchedPapersPromise);
+export function Feed() {
+	const searchParams = useSearchParams();
+	const topic = searchParams.get("topic") ?? "";
+
+	const fieldId = OaFields.find(
+		(c) =>
+			c.display_name.toLowerCase() === decodeURI(topic).replaceAll("%2C", ","),
+	)?.id;
+
+	const { status, data, isFetchingNextPage, fetchNextPage, hasNextPage } =
+		useInfiniteQuery(
+			`feed_${fieldId}`,
+			(ctx) => fetchFeed({ field: fieldId }, { offset: ctx.pageParam }),
+			{
+				getNextPageParam: (_lastGroup, groups) => groups.length,
+			},
+		);
+
+	const allRows = data ? data.pages.flatMap((d) => d.rows) : [];
+
+	const rowVirtualizer = useWindowVirtualizer({
+		count: hasNextPage ? allRows.length + 1 : allRows.length,
+		estimateSize: () => 112,
+		overscan: 5,
+		gap: 40,
+	});
+
+	useEffect(() => {
+		const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
+
+		if (!lastItem) {
+			return;
+		}
+
+		if (
+			lastItem.index >= allRows.length - 1 &&
+			hasNextPage &&
+			!isFetchingNextPage
+		) {
+			fetchNextPage();
+		}
+	}, [
+		hasNextPage,
+		fetchNextPage,
+		allRows.length,
+		isFetchingNextPage,
+		rowVirtualizer.getVirtualItems(),
+	]);
 
 	return (
-		<div className="flex flex-col gap-10 pb-10">
+		<div className="space-y-10 pb-10">
 			<HorisontalScrollArea>
 				<FeedFilter
-					// TODO: Higlight selected filter
 					items={[
 						"all",
 						...OaFields.map((field) => field.display_name.toLowerCase()),
@@ -26,24 +77,48 @@ export function Feed({ fetchedPapersPromise }: FeedProps) {
 				/>
 			</HorisontalScrollArea>
 
-			{papers.map((paper) => (
-				<FeedItem
-					id={paper.id}
-					key={paper.id}
-					date={paper.data.publication_date}
-					fields={
-						paper.data.topics?.map((topic) => ({
-							id: topic.field.id,
-							score: topic.score,
-						})) ?? []
-					}
-					tags={
-						paper.data.topics
-							?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
-							.filter(Boolean) as string[]
-					}
-				/>
-			))}
+			{status === "loading" ? (
+				<Loader />
+			) : status === "error" ? (
+				<span>Error:</span>
+			) : (
+				<div
+					className="w-full relative"
+					style={{
+						height: `${rowVirtualizer.getTotalSize()}px`,
+					}}
+				>
+					{rowVirtualizer.getVirtualItems().map((virtualRow) => {
+						const isLoaderRow = virtualRow.index > allRows.length - 1;
+						const paper = allRows[virtualRow.index];
+
+						return (
+							<div
+								ref={rowVirtualizer.measureElement}
+								key={virtualRow.index}
+								style={{
+									position: "absolute",
+									top: 0,
+									left: 0,
+									width: "100%",
+									height: `${virtualRow.size}px`,
+									transform: `translateY(${virtualRow.start}px)`,
+								}}
+							>
+								{isLoaderRow ? (
+									hasNextPage ? (
+										<Loader />
+									) : null
+								) : paper ? (
+									<FeedItem paper={paper} />
+								) : (
+									<Loader />
+								)}
+							</div>
+						);
+					})}
+				</div>
+			)}
 		</div>
 	);
 }

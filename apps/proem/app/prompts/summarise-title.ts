@@ -3,12 +3,12 @@ import OpenAI from "openai";
 
 const model = "gpt-3.5-turbo-0125";
 
-export async function summarise(title: string, abstract: string) {
-	const openai = new OpenAI({
-		apiKey: openAIApiKey,
-		organization: openaiOrganizations.summarization,
-	});
+const openai = new OpenAI({
+	apiKey: openAIApiKey,
+	organization: openaiOrganizations.summarization,
+});
 
+export async function summarise(title: string, abstract: string) {
 	const completion = await openai.chat.completions.create({
 		model,
 		messages: [
