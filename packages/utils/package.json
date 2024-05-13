@@ -5,12 +5,12 @@
   "types": "./index.tsx",
   "license": "MIT",
   "dependencies": {
-    "dayjs": "^1",
+    "dayjs": "^1.11.11",
     "dayjs-plugin-utc": "^0.1.2"
   },
   "devDependencies": {
     "@proemial/typescript-config": "workspace:*",
-    "@types/node": "^20.12.6",
-    "typescript": "^5.4.4"
+    "@types/node": "^20.12.11",
+    "typescript": "^5.4.5"
   }
 }
