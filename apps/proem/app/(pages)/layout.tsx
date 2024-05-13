@@ -1,5 +1,7 @@
 import { NavigationMenuBar } from "@/components/navigation-menu-bar";
 
+export const dynamic = "force-static";
+
 export default function PagesLayout({
 	children,
 }: { children: React.ReactNode }) {
