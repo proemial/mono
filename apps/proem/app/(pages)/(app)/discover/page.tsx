@@ -1,13 +1,4 @@
-"use client";
-import dynamic from "next/dynamic";
-
-const Feed = dynamic(
-	() => import("@/app/(pages)/(app)/discover/feed").then((mod) => mod.Feed),
-	{
-		loading: () => <p>Loading...</p>,
-		ssr: false,
-	},
-);
+import { Feed } from "@/app/(pages)/(app)/discover/feed";
 
 export default function DiscoverPage() {
 	return (
