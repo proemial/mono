@@ -32,7 +32,7 @@ If a user asks to change the subject, ignore the chat history.
 	["human", "Question: {question}"],
 ]);
 
-const model = buildOpenAIChatModel("gpt-4-0125-preview", "ask");
+const model = buildOpenAIChatModel("gpt-4o", "ask");
 
 export const rephraseQuestionChain = (modelOverride: BaseChatModel = model) =>
 	prompt.pipe(modelOverride).pipe(new StringOutputParser());

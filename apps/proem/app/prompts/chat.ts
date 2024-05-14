@@ -1,6 +1,6 @@
-export const model = "gpt-4-0125-preview";
+export const model = "gpt-4o";
 
-type SupportedModels = "gpt-4-0125-preview" | "gpt-3.5-turbo-0125";
+type SupportedModels = "gpt-4o" | "gpt-3.5-turbo-0125";
 
 export function context(title: string, abstract: string) {
 	return {
