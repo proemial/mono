@@ -4,15 +4,15 @@ import FeedItem from "@/app/(pages)/(app)/discover/feed-item";
 import { fetchFeed } from "@/app/(pages)/(app)/discover/fetch-feed";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { OaFields } from "@proemial/models/open-alex-fields";
+import { Icons } from "@proemial/shadcn-ui";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
-import { Loading01 } from "@untitled-ui/icons-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 
 const Loader = () => (
 	<div className="w-full h-24 flex justify-center items-center">
-		<Loading01 />
+		<Icons.loader />
 	</div>
 );
 
