@@ -146,8 +146,8 @@ importers:
         specifier: 0.0.19
         version: 0.0.19(openai@4.39.0)
       '@langchain/openai':
-        specifier: 0.0.28
-        version: 0.0.28
+        specifier: ^0.0.29
+        version: 0.0.29
       '@proemial/data':
         specifier: workspace:*
         version: link:../../packages/data
@@ -2436,7 +2436,7 @@ packages:
         optional: true
     dependencies:
       '@langchain/core': 0.1.61(openai@4.39.0)
-      '@langchain/openai': 0.0.28
+      '@langchain/openai': 0.0.29
       '@upstash/redis': 1.29.0
       expr-eval: 2.0.2
       flat: 5.0.2
@@ -2469,12 +2469,32 @@ packages:
       - openai
     dev: false
 
+  /@langchain/core@0.1.61(openai@4.46.1):
+    resolution: {integrity: sha512-C8OkAly+ugvXsL8TACCmFv9WTTcT4gvQaG6NbrXCOzibBCywfxxcTqEMOyg3zIKpxHEmR0DHqh0OiJRHocnsCg==}
+    engines: {node: '>=18'}
+    dependencies:
+      ansi-styles: 5.2.0
+      camelcase: 6.3.0
+      decamelize: 1.2.0
+      js-tiktoken: 1.0.10
+      langsmith: 0.1.21(openai@4.46.1)
+      ml-distance: 4.0.1
+      mustache: 4.2.0
+      p-queue: 6.6.2
+      p-retry: 4.6.2
+      uuid: 9.0.1
+      zod: 3.23.0
+      zod-to-json-schema: 3.22.5(zod@3.23.0)
+    transitivePeerDependencies:
+      - openai
+    dev: false
+
   /@langchain/groq@0.0.9(openai@4.39.0):
     resolution: {integrity: sha512-/QGGgazYdxlN8FCmPfEVDO9Hg55POvQdnoou+b3lsugmwP1TYPRtqLW6JY7Atb36X4vjEJwiMCnntDXdT7vgaw==}
     engines: {node: '>=18'}
     dependencies:
       '@langchain/core': 0.1.61(openai@4.39.0)
-      '@langchain/openai': 0.0.28
+      '@langchain/openai': 0.0.29
       groq-sdk: 0.3.2
       zod: 3.23.0
       zod-to-json-schema: 3.22.5(zod@3.23.0)
@@ -2497,15 +2517,15 @@ packages:
       - openai
     dev: false
 
-  /@langchain/openai@0.0.28:
-    resolution: {integrity: sha512-2s1RA3/eAnz4ahdzsMPBna9hfAqpFNlWdHiPxVGZ5yrhXsbLWWoPcF+22LCk9t0HJKtazi2GCIWc0HVXH9Abig==}
+  /@langchain/openai@0.0.29:
+    resolution: {integrity: sha512-NMoVgePqflbI8Dzi7QhBAS9wRiaVxIkYkG/RYLU979t/ZLWQjf+9tijc/27UtCP7w/UYCGX/qgQAho40dsZ7LA==}
     engines: {node: '>=18'}
     dependencies:
-      '@langchain/core': 0.1.61(openai@4.39.0)
-      js-tiktoken: 1.0.10
-      openai: 4.39.0
-      zod: 3.22.4
-      zod-to-json-schema: 3.22.5(zod@3.22.4)
+      '@langchain/core': 0.1.61(openai@4.46.1)
+      js-tiktoken: 1.0.11
+      openai: 4.46.1
+      zod: 3.23.0
+      zod-to-json-schema: 3.22.5(zod@3.23.0)
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -9181,7 +9201,7 @@ packages:
       '@anthropic-ai/sdk': 0.9.1
       '@langchain/community': 0.0.53(@upstash/redis@1.29.0)(openai@4.39.0)
       '@langchain/core': 0.1.61(openai@4.39.0)
-      '@langchain/openai': 0.0.28
+      '@langchain/openai': 0.0.29
       '@langchain/textsplitters': 0.0.0(openai@4.39.0)
       binary-extensions: 2.3.0
       js-tiktoken: 1.0.10
@@ -9283,6 +9303,22 @@ packages:
       '@types/uuid': 9.0.8
       commander: 10.0.1
       openai: 4.39.0
+      p-queue: 6.6.2
+      p-retry: 4.6.2
+      uuid: 9.0.1
+    dev: false
+
+  /langsmith@0.1.21(openai@4.46.1):
+    resolution: {integrity: sha512-pC9uujQAQFez9IdkPK4LPJLTnHLRKElImcYGxDrOJTZ2KZ/LIsRn6kPLKx1ZdT9h5CbDbT+ivXiS4bsxQGcbXA==}
+    peerDependencies:
+      openai: '*'
+    peerDependenciesMeta:
+      openai:
+        optional: true
+    dependencies:
+      '@types/uuid': 9.0.8
+      commander: 10.0.1
+      openai: 4.46.1
       p-queue: 6.6.2
       p-retry: 4.6.2
       uuid: 9.0.1
@@ -10820,6 +10856,22 @@ packages:
 
   /openai@4.39.0:
     resolution: {integrity: sha512-8RcdppE8RKC17VnacZxru1OQL76rhI1107i32nE2RsSsvrd2yyDLAKp//2zzJxLY3iz8Sw1ywcwF5kEcreim6Q==}
+    hasBin: true
+    dependencies:
+      '@types/node': 18.19.31
+      '@types/node-fetch': 2.6.11
+      abort-controller: 3.0.0
+      agentkeepalive: 4.5.0
+      form-data-encoder: 1.7.2
+      formdata-node: 4.4.1
+      node-fetch: 2.7.0
+      web-streams-polyfill: 3.3.3
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
+  /openai@4.46.1:
+    resolution: {integrity: sha512-YILOwSwyg6h4FqDCehzZ/vu0hI6eQWXv7BQ/nNNyRHbprerZmkiRYBzq2h4iiJKUOrIw66APE46ZW/iP8y8Fiw==}
     hasBin: true
     dependencies:
       '@types/node': 18.19.31

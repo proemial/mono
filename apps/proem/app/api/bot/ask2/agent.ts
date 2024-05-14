@@ -30,7 +30,7 @@ export const buildAgent = async (
 		["human", "{input}"],
 		new MessagesPlaceholder("agent_scratchpad"),
 	]);
-	const llm = buildOpenAIChatModel("gpt-4-0125-preview", "ask", {
+	const llm = buildOpenAIChatModel("gpt-4o", "ask", {
 		temperature: 0.0,
 		streaming: true,
 	});
