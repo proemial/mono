@@ -1,6 +1,5 @@
 "use client";
 
-import { useExperimental } from "@/app/hooks/use-user";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -22,15 +21,13 @@ import { useEffect, useState } from "react";
 export function NavigationMenuBar() {
 	const pathname = usePathname();
 	const [askHref, setAskHref] = useState<string>("/");
-	const isProemian = useExperimental();
+	const isFrontpage = pathname === "/";
 
 	useEffect(() => {
-		if (pathname === "/" || pathname.includes("/answer")) {
+		if (isFrontpage || pathname.includes("/answer")) {
 			setAskHref(pathname);
 		}
-	}, [pathname]);
-
-	const isFrontpage = pathname === "/";
+	}, [pathname, isFrontpage]);
 
 	return (
 		<NavigationMenu className="sticky top-0 px-0 py-2.5 bg-background">
@@ -39,24 +36,20 @@ export function NavigationMenuBar() {
 					<Profile />
 				</NavigationMenuItem>
 
-				{isProemian && (
-					<div className="flex gap-4">
-						<NavItem
-							label="Discover"
-							href="/discover"
-							isActive={() => pathname.includes("/discover")}
-							onClick={() =>
-								trackHandler(analyticsKeys.ui.header.click.discover)
-							}
-						/>
-						<NavItem
-							label="Ask"
-							href={askHref}
-							isActive={() => pathname === askHref}
-							onClick={() => trackHandler(analyticsKeys.ui.header.click.ask)}
-						/>
-					</div>
-				)}
+				<div className="flex gap-4">
+					<NavItem
+						label="Discover"
+						href="/discover"
+						isActive={() => pathname.includes("/discover")}
+						onClick={() => trackHandler(analyticsKeys.ui.header.click.discover)}
+					/>
+					<NavItem
+						label="Ask"
+						href={askHref}
+						isActive={() => pathname === askHref}
+						onClick={() => trackHandler(analyticsKeys.ui.header.click.ask)}
+					/>
+				</div>
 
 				<NavigationMenuItem
 					className={cn("flex-none px-1 invisible", {
@@ -92,7 +85,6 @@ const NavItem = ({
 	isActive: () => boolean;
 	onClick?: () => void;
 }) => {
-
 	return (
 		<NavigationMenuItem onClick={onClick}>
 			<Link href={href} legacyBehavior passHref>
