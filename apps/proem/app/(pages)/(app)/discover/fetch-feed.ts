@@ -1,17 +1,20 @@
 "use server";
 
-import { fetchPapers } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
+import { fetchPapersByField } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { summarise } from "@/app/prompts/summarise-title";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
 
-type FetchFeedParams = Required<Parameters<typeof fetchPapers>>;
+type FetchFeedParams = Required<Parameters<typeof fetchPapersByField>>;
 
 export async function fetchFeed(
 	params: FetchFeedParams[0],
 	options: Omit<FetchFeedParams[1], "limit">,
 ) {
-	const fetchedPapers = await fetchPapers(params, { ...options, limit: 5 });
+	const fetchedPapers = await fetchPapersByField(params, {
+		...options,
+		limit: 5,
+	});
 	const cachedPapers = await Redis.papers.getAll(
 		fetchedPapers.map((paper) => paper?.id).filter(Boolean),
 	);

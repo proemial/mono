@@ -49,7 +49,7 @@ export const fetchPaper = cache(
 	},
 );
 
-export const fetchPapers = async (
+export const fetchPapersByField = async (
 	{ field }: { field?: number } = {},
 	{ limit, offset } = { limit: 25, offset: 0 },
 ): Promise<OpenAlexPaper[]> => {
