@@ -8,7 +8,7 @@ import { UpStash } from "./upstash-client";
 export const OpenAlexPapers = {
 	get: async (id: string) => {
 		try {
-			return (await UpStash.papers().get(`oa:${id}`)) as OpenAlexPaper;
+			return (await UpStash.papers().get(`oa:${id}`)) as OpenAlexPaper | null;
 		} catch (error) {
 			console.error(error);
 			throw error;

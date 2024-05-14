@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 import { cache } from "react";
 
 export const fetchPaper = cache(
-	async (id: string): Promise<OpenAlexPaper | undefined> => {
+	async (id: string): Promise<OpenAlexPaper | null> => {
 		const paper = await Redis.papers.get(id);
 
 		if (
@@ -28,7 +28,7 @@ export const fetchPaper = cache(
 				console.error(
 					`Failed to fetch paper ${id} from OpenAlex (${oaPaper.status}: ${oaPaper.statusText})`,
 				);
-				return undefined;
+				return null;
 			}
 			const oaPaperJson = (await oaPaper.json()) as OpenAlexWorkMetadata;
 			const data = {
