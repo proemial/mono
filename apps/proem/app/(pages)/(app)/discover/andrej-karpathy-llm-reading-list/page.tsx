@@ -13,13 +13,6 @@ const description =
 export const metadata: Metadata = {
 	title,
 	description,
-	openGraph: {
-		type: "website",
-		url,
-		title,
-		description,
-		siteName: title,
-	},
 	robots: {
 		index: true,
 		follow: false,
