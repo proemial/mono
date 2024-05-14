@@ -11,9 +11,8 @@ const description =
 	"All the papers from Andrej Karpathy's Intro to Large Language Models video.";
 
 export const metadata: Metadata = {
-	title: "Andrej Karpathy's LLM Reading List",
+	title,
 	description,
-	metadataBase: new URL(url),
 	openGraph: {
 		type: "website",
 		url,
