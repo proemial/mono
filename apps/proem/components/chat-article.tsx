@@ -2,6 +2,7 @@ import { MicroAbstract } from "@/components/chat-abstract";
 import { AlignLeft } from "@/components/icons/AlignLeft";
 import { ModelSelector, ModelSelectorProps } from "@/components/model-selector";
 import { Trackable } from "@/components/trackable";
+import { trimForQuotes } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Header2, Header4, Icons, Paragraph } from "@proemial/shadcn-ui";
 import { Suspense } from "react";
@@ -50,7 +51,7 @@ export function ChatArticle({
 
 function Title({ title }: { title: string }) {
 	// Remove potential leading/trailing quotes from the title
-	return <Header2>{title.replace(/(^")|("$)/g, "")}</Header2>;
+	return <Header2>{trimForQuotes(title)}</Header2>;
 }
 
 function Spinner() {

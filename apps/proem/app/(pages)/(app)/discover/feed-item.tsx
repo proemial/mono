@@ -1,5 +1,6 @@
 import { oaFieldIconMap } from "@/app/data/oa-fields";
 import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
+import { trimForQuotes } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -42,7 +43,9 @@ export default function FeedItem({ paper }: FeedItemProps) {
 				date={paper.data.publication_date}
 				field={field}
 			>
-				<Markdown>{paper.generated?.title}</Markdown>
+				<Markdown>
+					{paper.generated?.title && trimForQuotes(paper.generated.title)}
+				</Markdown>
 			</FeedItemCard>
 
 			<div className="flex flex-row-reverse gap-2 overflow-x-auto scrollbar-hide">

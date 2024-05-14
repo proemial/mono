@@ -46,3 +46,5 @@ const toTitleCase = (title: string) => {
 		.trim();
 	return titleCase[0]?.toUpperCase() + titleCase.slice(1);
 };
+
+export const trimForQuotes = (text: string) => text.replace(/(^")|("$)/g, "");
