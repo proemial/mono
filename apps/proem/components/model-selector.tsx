@@ -23,7 +23,8 @@ import { z } from "zod";
 import { BottomDrawer } from "./bottom-drawer";
 
 const MODELS = {
-	"gpt-4-turbo": "GPT-4 Turbo",
+	// "gpt-4-turbo": "GPT-4 Turbo",
+	"gpt-4o": "GPT-4o",
 	"claude-3-opus": "Claude 3 Opus",
 	"gemini-1.5-pro": "Gemini 1.5 Pro",
 	"mistral-large": "Mistral Large",
@@ -31,7 +32,7 @@ const MODELS = {
 	"llama-3": "Llama 3",
 } as const;
 
-const DEFAULT_MODEL_KEY: keyof typeof MODELS = "gpt-4-turbo";
+const DEFAULT_MODEL_KEY: keyof typeof MODELS = "gpt-4o";
 
 const formSchema = z.object({
 	email: z.string().email().max(50),
@@ -107,7 +108,7 @@ export const ModelSelector = ({
 						value,
 						label,
 					}))}
-					staticValue="gpt-4-turbo"
+					staticValue={DEFAULT_MODEL_KEY}
 					onValueChange={handleValueChange}
 					trackingKey={trackingKeys.click.model}
 				/>
