@@ -19,7 +19,7 @@ export const OpenAlexPapers = {
 		try {
 			return (await UpStash.papers().mget(
 				ids.map((id) => `oa:${id}`),
-			)) as OpenAlexPaper[];
+			)) as (OpenAlexPaper | null)[];
 		} catch (error) {
 			console.error(error);
 			throw error;

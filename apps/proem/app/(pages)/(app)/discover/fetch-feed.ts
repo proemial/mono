@@ -17,7 +17,10 @@ export async function fetchFeed(
 	);
 
 	const cachedPapersIds = cachedPapers
-		.map((paper) => paper?.id)
+		.map((cachedPaper) =>
+			// we only consider a cachedPaper valid if it has a generated title
+			cachedPaper?.generated?.title ? cachedPaper?.id : null,
+		)
 		.filter(Boolean);
 
 	const cacheMisses = fetchedPapers.filter(
