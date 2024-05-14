@@ -14,7 +14,9 @@ export function StaticFeed({ feed }: { feed: OpenAlexPaper[] }) {
 
 	return (
 		<div className="space-y-5 pb-10">
-			<h1 className="p-0 m-0">Andrej Karpathy's LLM Reading List</h1>
+			<div className="text-[28px] font-normal pt-6">
+				Andrej Karpathy's LLM Reading List
+			</div>
 			<div
 				className="w-full relative"
 				style={{
