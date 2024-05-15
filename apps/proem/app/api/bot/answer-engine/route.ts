@@ -2,7 +2,8 @@ import {
 	AIMessage,
 	askAnswerEngine,
 } from "@/app/api/bot/answer-engine/answer-engine";
-import { INTERNAL_COOKIE_NAME, getInternalUser } from "@/app/hooks/use-user";
+import { getInternalUser } from "@/app/hooks/get-internal-user";
+import { INTERNAL_COOKIE_NAME } from "@/app/hooks/use-user";
 import { ratelimitRequest } from "@/utils/ratelimiter";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";

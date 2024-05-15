@@ -1,5 +1,6 @@
 "use client";
 
+import { useInternalUser } from "@/app/hooks/use-user";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -22,17 +23,19 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { BottomDrawer } from "./bottom-drawer";
 
+const DEFAULT_MODEL = useInternalUser().isInternal
+	? { "gpt-4o": "GPT-4o" }
+	: { "gpt-4-turbo": "GPT-4 Turbo" };
+const DEFAULT_MODEL_ID = Object.keys(DEFAULT_MODEL)[0] as keyof typeof MODELS;
+
 const MODELS = {
-	// "gpt-4-turbo": "GPT-4 Turbo",
-	"gpt-4o": "GPT-4o",
+	...DEFAULT_MODEL,
 	"claude-3-opus": "Claude 3 Opus",
 	"gemini-1.5-pro": "Gemini 1.5 Pro",
 	"mistral-large": "Mistral Large",
 	"mixtral-8x22b": "Mixtral 8x22B",
 	"llama-3": "Llama 3",
 } as const;
-
-const DEFAULT_MODEL_KEY: keyof typeof MODELS = "gpt-4o";
 
 const formSchema = z.object({
 	email: z.string().email().max(50),
@@ -47,8 +50,7 @@ export const ModelSelector = ({
 	className,
 	trackingKeys,
 }: ModelSelectorProps) => {
-	const [selectedValue, setSelectedValue] =
-		useState<keyof typeof MODELS>(DEFAULT_MODEL_KEY);
+	const [selectedValue, setSelectedValue] = useState(DEFAULT_MODEL_ID);
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const [subscribeResponse, setSubscribeResponse] = useState<
 		"idle" | "loading" | "success" | "error"
@@ -93,7 +95,7 @@ export const ModelSelector = ({
 
 	const handleDrawerClose = () => {
 		setDrawerOpen(false);
-		setSelectedValue(DEFAULT_MODEL_KEY);
+		setSelectedValue(DEFAULT_MODEL_ID);
 		setSubscribeResponse("idle");
 		form.reset();
 	};
@@ -108,7 +110,7 @@ export const ModelSelector = ({
 						value,
 						label,
 					}))}
-					staticValue={DEFAULT_MODEL_KEY}
+					staticValue={DEFAULT_MODEL_ID}
 					onValueChange={handleValueChange}
 					trackingKey={trackingKeys.click.model}
 				/>

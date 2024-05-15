@@ -17,7 +17,7 @@ export type User = {
 	proemialName?: string;
 };
 
-export function useExperimental(...email: string[]) {
+function useExperimental(...email: string[]) {
 	const [internal, setInternal] = useState(false);
 	const { user } = useUser();
 
@@ -33,7 +33,7 @@ export function useUser() {
 	const { user: clerkUser, isLoaded } = useClerkUser();
 
 	const clerkProfile = getProfileFromClerkUser(clerkUser);
-	const internalUser = getInternalUser(clerkProfile?.email);
+	const internalUser = useInternalUser(clerkProfile?.email);
 
 	if (!clerkProfile?.id && !internalUser.isInternal) {
 		return { user: undefined, isLoaded };
@@ -52,7 +52,7 @@ export function useUser() {
 	return { user: user, isLoaded };
 }
 
-export function getInternalUser(email?: string): {
+export function useInternalUser(email?: string): {
 	isInternal: boolean;
 	proemialName?: string;
 	proemialEmail?: string;
@@ -71,7 +71,7 @@ export function getInternalUser(email?: string): {
 	return { isInternal: false as const };
 }
 
-export function getInternalEmailFromCookie() {
+function getInternalEmailFromCookie() {
 	const internalUser = getCookie(INTERNAL_COOKIE_NAME)?.toString();
 	if (internalUser) {
 		return JSON.parse(internalUser).email;

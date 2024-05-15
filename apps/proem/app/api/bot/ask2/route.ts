@@ -1,6 +1,7 @@
 import { AIMessage } from "@/app/api/bot/answer-engine/answer-engine";
 import { chatInputMaxLength } from "@/app/api/bot/input-limit";
-import { INTERNAL_COOKIE_NAME, getInternalUser } from "@/app/hooks/use-user";
+import { getInternalUser } from "@/app/hooks/get-internal-user";
+import { INTERNAL_COOKIE_NAME } from "@/app/hooks/use-user";
 import { toLangChainChatHistory } from "@/app/llm/utils";
 import { ratelimitRequest } from "@/utils/ratelimiter";
 import { Message as VercelChatMessage } from "ai";
