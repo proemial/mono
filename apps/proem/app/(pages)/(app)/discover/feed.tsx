@@ -78,7 +78,7 @@ export function Feed({ children }: { children: ReactNode }) {
 
 			{status === "loading" ? (
 				<Loader />
-			) : status === "error" ? (
+			) : status === "error" && error instanceof Error ? (
 				<span>Error: {error?.message}</span>
 			) : (
 				<div
