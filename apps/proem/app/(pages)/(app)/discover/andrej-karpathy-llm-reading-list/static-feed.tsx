@@ -1,11 +1,12 @@
 "use client";
 import FeedItem from "@/app/(pages)/(app)/discover/feed-item";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
-import { CardTitle } from "@proemial/shadcn-ui";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
-const ANDREJ_KARPATHY_LLM_READING_LIST = "andrej-karpathy-llm-reading-list";
 
-export function StaticFeed({ feed }: { feed: OpenAlexPaper[] }) {
+export function StaticFeed({
+	title,
+	feed,
+}: { title: string; feed: OpenAlexPaper[] }) {
 	const rowVirtualizer = useWindowVirtualizer({
 		count: feed.length,
 		estimateSize: () => 160,
@@ -14,9 +15,7 @@ export function StaticFeed({ feed }: { feed: OpenAlexPaper[] }) {
 
 	return (
 		<div className="space-y-5 pb-10">
-			<div className="text-[28px] font-normal pt-6">
-				Andrej Karpathy's LLM Reading List
-			</div>
+			<div className="text-[28px] font-normal pt-6">{title}</div>
 			<div
 				className="w-full relative"
 				style={{
