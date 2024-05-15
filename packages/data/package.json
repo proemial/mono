@@ -10,13 +10,13 @@
 		"neon:schema:drop": "drizzle-kit drop --config ./neon/drizzle.config.ts",
 		"neon:schema:up": "drizzle-kit up --config ./neon/drizzle.config.ts",
 		"neon:schema:check": "drizzle-kit check --config ./neon/drizzle.config.ts",
-		"neon:studio": "drizzle-kit studio --config ./neon/drizzle.config.ts",
-		"neon:migrate": "drizzle-kit migrate --config ./neon/drizzle.config.ts"
+		"neon:schema:migrate": "drizzle-kit migrate --config ./neon/drizzle.config.ts",
+		"neon:studio": "drizzle-kit studio --config ./neon/drizzle.config.ts"
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",
 		"dotenv": "^16.4.5",
-		"drizzle-kit": "^0.21.1",
+		"drizzle-kit": "^0.21.2",
 		"pg": "^8.11.5",
 		"typescript": "^5.4.5"
 	},
