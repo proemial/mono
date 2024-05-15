@@ -1,4 +1,5 @@
 import Markdown from "@/app/(pages)/(app)/paper/oa/[id]/markdown";
+import { toTitleCaseIfAllCaps } from "@/utils/string-utils";
 import {
 	Card,
 	CardDescription,
@@ -37,7 +38,7 @@ export function PaperCard({
 				</div>
 			) : (
 				<CardTitle variant="paper" className="line-clamp-4 mb-3.5 mt-4">
-					<Markdown>{title}</Markdown>
+					<Markdown>{toTitleCaseIfAllCaps(title)}</Markdown>
 				</CardTitle>
 			)}
 

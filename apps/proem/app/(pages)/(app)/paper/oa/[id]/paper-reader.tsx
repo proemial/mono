@@ -6,7 +6,6 @@ import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { PaperCardDiscover } from "@/components/paper-card-discover";
 import { PaperCardDiscoverProfile } from "@/components/paper-card-discover-profile";
 import { Trackable } from "@/components/trackable";
-import { toTitleCaseIfAllCaps } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Header4 } from "@proemial/shadcn-ui";
 import { File02 } from "@untitled-ui/icons-react";
@@ -44,7 +43,7 @@ export function PaperReader({
 								rel="noreferrer"
 							>
 								<PaperCardDiscover
-									title={toTitleCaseIfAllCaps(fetchedPaper.data.title)}
+									title={fetchedPaper.data.title}
 									date={fetchedPaper.data.publication_date}
 									publisher={
 										fetchedPaper.data.primary_location.source?.display_name
