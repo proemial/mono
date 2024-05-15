@@ -5,26 +5,31 @@ import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { OaFields } from "@proemial/models/open-alex-fields";
 import { use } from "react";
+import { FeedFilterTree } from "./topics/feed-filter-tree";
 
 export type FeedProps = {
 	fetchedPapersPromise: ReturnType<typeof fetchLatestPapers>;
+	treeFilter?: boolean;
 };
 
-export function Feed({ fetchedPapersPromise }: FeedProps) {
+export function Feed({ fetchedPapersPromise, treeFilter }: FeedProps) {
 	const papers = use(fetchedPapersPromise);
 
 	return (
 		<div className="flex flex-col gap-10 pb-10">
-			<HorisontalScrollArea>
-				<FeedFilter
-					// TODO: Higlight selected filter
-					items={[
-						"all",
-						...OaFields.map((field) => field.display_name.toLowerCase()),
-					]}
-					rootPath="/discover"
-				/>
-			</HorisontalScrollArea>
+			{treeFilter && <FeedFilterTree rootPath="/discover/topics" />}
+
+			{!treeFilter && (
+				<HorisontalScrollArea>
+					<FeedFilter
+						items={[
+							"all",
+							...OaFields.map((field) => field.display_name.toLowerCase()),
+						]}
+						rootPath="/discover"
+					/>
+				</HorisontalScrollArea>
+			)}
 
 			{papers.map((paper) => (
 				<FeedItem
