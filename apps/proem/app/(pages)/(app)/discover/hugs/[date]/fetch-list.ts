@@ -31,7 +31,7 @@ export async function fetchReadingList(date: string) {
 
 	for (const id of oaIds) {
 		const paper = await fetchPaper(id);
-		if (!paper.generated) {
+		if (paper && !paper.generated) {
 			await generate(paper);
 			await waitfor(500);
 		}
