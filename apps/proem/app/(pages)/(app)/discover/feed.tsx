@@ -26,14 +26,20 @@ export function Feed({ children }: { children: ReactNode }) {
 			c.display_name.toLowerCase() === decodeURI(topic).replaceAll("%2C", ","),
 	)?.id;
 
-	const { status, data, isFetchingNextPage, fetchNextPage, hasNextPage } =
-		useInfiniteQuery(
-			fieldId ? `feed_${fieldId}` : `filter_${filter}`,
-			(ctx) => fetchFeed({ field: fieldId, filter }, { offset: ctx.pageParam }),
-			{
-				getNextPageParam: (_lastGroup, groups) => groups.length,
-			},
-		);
+	const {
+		status,
+		data,
+		isFetchingNextPage,
+		fetchNextPage,
+		hasNextPage,
+		error,
+	} = useInfiniteQuery(
+		fieldId ? `feed_${fieldId}` : `filter_${filter}`,
+		(ctx) => fetchFeed({ field: fieldId, filter }, { offset: ctx.pageParam }),
+		{
+			getNextPageParam: (_lastGroup, groups) => groups.length,
+		},
+	);
 
 	const allRows = data ? data.pages.flatMap((d) => d.rows) : [];
 
@@ -73,7 +79,7 @@ export function Feed({ children }: { children: ReactNode }) {
 			{status === "loading" ? (
 				<Loader />
 			) : status === "error" ? (
-				<span>Error:</span>
+				<span>Error: {error?.message}</span>
 			) : (
 				<div
 					className="w-full relative"

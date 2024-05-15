@@ -15,6 +15,11 @@ export async function fetchFeed(
 		...options,
 		limit: 5,
 	});
+
+	if (!fetchedPapers.length) {
+		throw new Error("No papers found.");
+	}
+
 	const cachedPapers = await Redis.papers.getAll(
 		fetchedPapers.map((paper) => paper?.id).filter(Boolean),
 	);
