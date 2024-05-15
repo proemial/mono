@@ -50,14 +50,14 @@ export const fetchPaper = cache(
 );
 
 export const fetchPapersByField = async (
-	{ field }: { field?: number } = {},
+	{ field, filter }: { field?: number; filter?: string } = {},
 	{ limit, offset } = { limit: 25, offset: 0 },
 ): Promise<OpenAlexPaper[]> => {
 	const today = dayjs().format("YYYY-MM-DD");
 	const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
 	const select = openAlexFields.all;
 
-	const filter = [
+	const oaFilter = [
 		"type:types/preprint|types/article",
 		"has_abstract:true",
 		`from_created_date:${twoWeeksAgo}`,
@@ -66,11 +66,12 @@ export const fetchPapersByField = async (
 		"language:en",
 		"open_access.is_oa:true",
 		field ? `primary_topic.field.id:${field}` : undefined,
+		filter ? filter : undefined,
 	]
 		.filter((f) => !!f)
 		.join(",");
 	const sort = "from_created_date:desc,type:desc";
-	const url = `${oaBaseUrl}?${oaBaseArgs}&select=${select}&filter=${filter}&sort=${sort}&per_page=${limit}&page=${
+	const url = `${oaBaseUrl}?${oaBaseArgs}&select=${select}&filter=${oaFilter}&sort=${sort}&per_page=${limit}&page=${
 		offset ?? 1
 	}`;
 

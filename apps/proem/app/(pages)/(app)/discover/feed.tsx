@@ -7,7 +7,7 @@ import { OaFields } from "@proemial/models/open-alex-fields";
 import { Icons } from "@proemial/shadcn-ui";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 
 const Loader = () => (
@@ -16,9 +16,10 @@ const Loader = () => (
 	</div>
 );
 
-export function Feed() {
+export function Feed({ children }: { children: ReactNode }) {
 	const searchParams = useSearchParams();
 	const topic = searchParams.get("topic") ?? "";
+	const filter = searchParams.get("filter") ?? "";
 
 	const fieldId = OaFields.find(
 		(c) =>
@@ -27,8 +28,8 @@ export function Feed() {
 
 	const { status, data, isFetchingNextPage, fetchNextPage, hasNextPage } =
 		useInfiniteQuery(
-			`feed_${fieldId}`,
-			(ctx) => fetchFeed({ field: fieldId }, { offset: ctx.pageParam }),
+			fieldId ? `feed_${fieldId}` : `filter_${filter}`,
+			(ctx) => fetchFeed({ field: fieldId, filter }, { offset: ctx.pageParam }),
 			{
 				getNextPageParam: (_lastGroup, groups) => groups.length,
 			},
@@ -67,15 +68,7 @@ export function Feed() {
 
 	return (
 		<div className="space-y-5 pb-10">
-			<HorisontalScrollArea>
-				<FeedFilter
-					items={[
-						"all",
-						...OaFields.map((field) => field.display_name.toLowerCase()),
-					]}
-					rootPath="/discover"
-				/>
-			</HorisontalScrollArea>
+			{children}
 
 			{status === "loading" ? (
 				<Loader />
