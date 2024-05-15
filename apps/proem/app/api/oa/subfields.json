@@ -1,0 +1,3026 @@
+[
+	{
+		"id": "https://openalex.org/subfields/3312",
+		"display_name": "Sociology and Political Science",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1312",
+		"display_name": "Molecular Biology",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/13",
+			"display_name": "Biochemistry, Genetics and Molecular Biology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3320",
+		"display_name": "Political Science and International Relations",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3304",
+		"display_name": "Education",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2208",
+		"display_name": "Electrical and Electronic Engineering",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/22",
+			"display_name": "Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2746",
+		"display_name": "Surgery",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2002",
+		"display_name": "Economics and Econometrics",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/20",
+			"display_name": "Economics, Econometrics and Finance"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1110",
+		"display_name": "Plant Science",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/11",
+			"display_name": "Agricultural and Biological Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3600",
+		"display_name": "General Health Professions",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/36",
+			"display_name": "Health Professions"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1702",
+		"display_name": "Artificial Intelligence",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/17",
+			"display_name": "Computer Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2505",
+		"display_name": "Materials Chemistry",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/25",
+			"display_name": "Materials Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2210",
+		"display_name": "Mechanical Engineering",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/22",
+			"display_name": "Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2204",
+		"display_name": "Biomedical Engineering",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/22",
+			"display_name": "Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2739",
+		"display_name": "Public Health, Environmental and Occupational Health",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2740",
+		"display_name": "Pulmonary and Respiratory Medicine",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1710",
+		"display_name": "Information Systems",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/17",
+			"display_name": "Computer Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2713",
+		"display_name": "Epidemiology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1605",
+		"display_name": "Organic Chemistry",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/16",
+			"display_name": "Chemistry"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1208",
+		"display_name": "Literature and Literary Theory",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/12",
+			"display_name": "Arts and Humanities"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1202",
+		"display_name": "History",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/12",
+			"display_name": "Arts and Humanities"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3107",
+		"display_name": "Atomic and Molecular Physics, and Optics",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/31",
+			"display_name": "Physics and Astronomy"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3103",
+		"display_name": "Astronomy and Astrophysics",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/31",
+			"display_name": "Physics and Astronomy"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3203",
+		"display_name": "Clinical Psychology",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/32",
+			"display_name": "Psychology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2207",
+		"display_name": "Control and Systems Engineering",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/22",
+			"display_name": "Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1311",
+		"display_name": "Genetics",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/13",
+			"display_name": "Biochemistry, Genetics and Molecular Biology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2205",
+		"display_name": "Civil and Structural Engineering",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/22",
+			"display_name": "Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1705",
+		"display_name": "Computer Networks and Communications",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/17",
+			"display_name": "Computer Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1408",
+		"display_name": "Strategy and Management",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/14",
+			"display_name": "Business, Management and Accounting"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2705",
+		"display_name": "Cardiology and Cardiovascular Medicine",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3308",
+		"display_name": "Law",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2737",
+		"display_name": "Physiology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2730",
+		"display_name": "Oncology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2202",
+		"display_name": "Aerospace Engineering",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/22",
+			"display_name": "Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2303",
+		"display_name": "Ecology",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/23",
+			"display_name": "Environmental Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2741",
+		"display_name": "Radiology, Nuclear Medicine and Imaging",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1203",
+		"display_name": "Language and Linguistics",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/12",
+			"display_name": "Arts and Humanities"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2211",
+		"display_name": "Mechanics of Materials",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/22",
+			"display_name": "Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1204",
+		"display_name": "Archeology",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/12",
+			"display_name": "Arts and Humanities"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3207",
+		"display_name": "Social Psychology",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/32",
+			"display_name": "Psychology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3314",
+		"display_name": "Anthropology",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1105",
+		"display_name": "Ecology, Evolution, Behavior and Systematics",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/11",
+			"display_name": "Agricultural and Biological Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1707",
+		"display_name": "Computer Vision and Pattern Recognition",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/17",
+			"display_name": "Computer Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1211",
+		"display_name": "Philosophy",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/12",
+			"display_name": "Arts and Humanities"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2206",
+		"display_name": "Computational Mechanics",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/22",
+			"display_name": "Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2308",
+		"display_name": "Management, Monitoring, Policy and Law",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/23",
+			"display_name": "Environmental Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1106",
+		"display_name": "Food Science",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/11",
+			"display_name": "Agricultural and Biological Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2735",
+		"display_name": "Pediatrics, Perinatology and Child Health",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2306",
+		"display_name": "Global and Planetary Change",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/23",
+			"display_name": "Environmental Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2212",
+		"display_name": "Ocean Engineering",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/22",
+			"display_name": "Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2805",
+		"display_name": "Cognitive Neuroscience",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/28",
+			"display_name": "Neuroscience"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1402",
+		"display_name": "Accounting",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/14",
+			"display_name": "Business, Management and Accounting"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2403",
+		"display_name": "Immunology",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/24",
+			"display_name": "Immunology and Microbiology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3106",
+		"display_name": "Nuclear and High Energy Physics",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/31",
+			"display_name": "Physics and Astronomy"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3316",
+		"display_name": "Cultural Studies",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2725",
+		"display_name": "Infectious Diseases",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3317",
+		"display_name": "Demography",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2712",
+		"display_name": "Endocrinology, Diabetes and Metabolism",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1902",
+		"display_name": "Atmospheric Science",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/19",
+			"display_name": "Earth and Planetary Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2734",
+		"display_name": "Pathology and Forensic Medicine",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1703",
+		"display_name": "Computational Theory and Mathematics",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/17",
+			"display_name": "Computer Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2728",
+		"display_name": "Neurology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1908",
+		"display_name": "Geophysics",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/19",
+			"display_name": "Earth and Planetary Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2105",
+		"display_name": "Renewable Energy, Sustainability and the Environment",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/21",
+			"display_name": "Energy"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2736",
+		"display_name": "Pharmacology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2312",
+		"display_name": "Water Science and Technology",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/23",
+			"display_name": "Environmental Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1803",
+		"display_name": "Management Science and Operations Research",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/18",
+			"display_name": "Decision Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2738",
+		"display_name": "Psychiatry and Mental health",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2003",
+		"display_name": "Finance",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/20",
+			"display_name": "Economics, Econometrics and Finance"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2215",
+		"display_name": "Building and Construction",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/22",
+			"display_name": "Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2209",
+		"display_name": "Industrial and Manufacturing Engineering",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/22",
+			"display_name": "Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2745",
+		"display_name": "Rheumatology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3322",
+		"display_name": "Urban Studies",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1307",
+		"display_name": "Cell Biology",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/13",
+			"display_name": "Biochemistry, Genetics and Molecular Biology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1607",
+		"display_name": "Spectroscopy",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/16",
+			"display_name": "Chemistry"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1207",
+		"display_name": "History and Philosophy of Science",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/12",
+			"display_name": "Arts and Humanities"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2916",
+		"display_name": "Nutrition and Dietetics",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/29",
+			"display_name": "Nursing"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1212",
+		"display_name": "Religious studies",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/12",
+			"display_name": "Arts and Humanities"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3205",
+		"display_name": "Experimental and Cognitive Psychology",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/32",
+			"display_name": "Psychology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2000",
+		"display_name": "General Economics, Econometrics and Finance",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/20",
+			"display_name": "Economics, Econometrics and Finance"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1407",
+		"display_name": "Organizational Behavior and Human Resource Management",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/14",
+			"display_name": "Business, Management and Accounting"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2804",
+		"display_name": "Cellular and Molecular Neuroscience",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/28",
+			"display_name": "Neuroscience"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3204",
+		"display_name": "Developmental and Educational Psychology",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/32",
+			"display_name": "Psychology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1100",
+		"display_name": "General Agricultural and Biological Sciences",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/11",
+			"display_name": "Agricultural and Biological Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2307",
+		"display_name": "Health, Toxicology and Mutagenesis",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/23",
+			"display_name": "Environmental Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1404",
+		"display_name": "Management Information Systems",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/14",
+			"display_name": "Business, Management and Accounting"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2504",
+		"display_name": "Electronic, Optical and Magnetic Materials",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/25",
+			"display_name": "Materials Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1910",
+		"display_name": "Oceanography",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/19",
+			"display_name": "Earth and Planetary Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1306",
+		"display_name": "Cancer Research",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/13",
+			"display_name": "Biochemistry, Genetics and Molecular Biology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3318",
+		"display_name": "Gender Studies",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3109",
+		"display_name": "Statistical and Nonlinear Physics",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/31",
+			"display_name": "Physics and Astronomy"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2309",
+		"display_name": "Nature and Landscape Conservation",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/23",
+			"display_name": "Environmental Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2304",
+		"display_name": "Environmental Chemistry",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/23",
+			"display_name": "Environmental Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2507",
+		"display_name": "Polymers and Plastics",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/25",
+			"display_name": "Materials Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1604",
+		"display_name": "Inorganic Chemistry",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/16",
+			"display_name": "Chemistry"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1406",
+		"display_name": "Marketing",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/14",
+			"display_name": "Business, Management and Accounting"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1213",
+		"display_name": "Visual Arts and Performing Arts",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/12",
+			"display_name": "Arts and Humanities"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2305",
+		"display_name": "Environmental Engineering",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/23",
+			"display_name": "Environmental Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2720",
+		"display_name": "Hematology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2604",
+		"display_name": "Applied Mathematics",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/26",
+			"display_name": "Mathematics"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2502",
+		"display_name": "Biomaterials",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/25",
+			"display_name": "Materials Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1606",
+		"display_name": "Physical and Theoretical Chemistry",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/16",
+			"display_name": "Chemistry"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1102",
+		"display_name": "Agronomy and Crop Science",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/11",
+			"display_name": "Agricultural and Biological Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3311",
+		"display_name": "Safety Research",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1109",
+		"display_name": "Insect Science",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/11",
+			"display_name": "Agricultural and Biological Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2731",
+		"display_name": "Ophthalmology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3104",
+		"display_name": "Condensed Matter Physics",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/31",
+			"display_name": "Physics and Astronomy"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2203",
+		"display_name": "Automotive Engineering",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/22",
+			"display_name": "Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2707",
+		"display_name": "Complementary and alternative medicine",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1405",
+		"display_name": "Management of Technology and Innovation",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/14",
+			"display_name": "Business, Management and Accounting"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3315",
+		"display_name": "Communication",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1802",
+		"display_name": "Information Systems and Management",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/18",
+			"display_name": "Decision Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2213",
+		"display_name": "Safety, Risk, Reliability and Quality",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/22",
+			"display_name": "Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3305",
+		"display_name": "Geography, Planning and Development",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2608",
+		"display_name": "Geometry and Topology",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/26",
+			"display_name": "Mathematics"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2310",
+		"display_name": "Pollution",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/23",
+			"display_name": "Environmental Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2214",
+		"display_name": "Media Technology",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/22",
+			"display_name": "Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2708",
+		"display_name": "Dermatology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1111",
+		"display_name": "Soil Science",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/11",
+			"display_name": "Agricultural and Biological Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1103",
+		"display_name": "Animal Science and Zoology",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/11",
+			"display_name": "Agricultural and Biological Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2743",
+		"display_name": "Reproductive Medicine",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1205",
+		"display_name": "Classics",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/12",
+			"display_name": "Arts and Humanities"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2716",
+		"display_name": "Genetics",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2610",
+		"display_name": "Mathematical Physics",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/26",
+			"display_name": "Mathematics"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2711",
+		"display_name": "Emergency Medicine",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2613",
+		"display_name": "Statistics and Probability",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/26",
+			"display_name": "Mathematics"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1210",
+		"display_name": "Music",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/12",
+			"display_name": "Arts and Humanities"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3108",
+		"display_name": "Radiation",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/31",
+			"display_name": "Physics and Astronomy"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3306",
+		"display_name": "Health",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1711",
+		"display_name": "Signal Processing",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/17",
+			"display_name": "Computer Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2808",
+		"display_name": "Neurology",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/28",
+			"display_name": "Neuroscience"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2311",
+		"display_name": "Industrial and Manufacturing Engineering",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/23",
+			"display_name": "Environmental Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3300",
+		"display_name": "General Social Sciences",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1209",
+		"display_name": "Museology",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/12",
+			"display_name": "Arts and Humanities"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3004",
+		"display_name": "Pharmacology",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/30",
+			"display_name": "Pharmacology, Toxicology and Pharmaceutics"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3604",
+		"display_name": "Emergency Medical Services",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/36",
+			"display_name": "Health Professions"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2729",
+		"display_name": "Obstetrics and Gynecology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1602",
+		"display_name": "Analytical Chemistry",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/16",
+			"display_name": "Chemistry"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2732",
+		"display_name": "Orthopedics and Sports Medicine",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2721",
+		"display_name": "Hepatology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2727",
+		"display_name": "Nephrology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3616",
+		"display_name": "Speech and Hearing",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/36",
+			"display_name": "Health Professions"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1804",
+		"display_name": "Statistics, Probability and Uncertainty",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/18",
+			"display_name": "Decision Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3313",
+		"display_name": "Transportation",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1305",
+		"display_name": "Biotechnology",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/13",
+			"display_name": "Biochemistry, Genetics and Molecular Biology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3612",
+		"display_name": "Physical Therapy, Sports Therapy and Rehabilitation",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/36",
+			"display_name": "Health Professions"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3303",
+		"display_name": "Development",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3310",
+		"display_name": "Linguistics and Language",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1206",
+		"display_name": "Conservation",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/12",
+			"display_name": "Arts and Humanities"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1708",
+		"display_name": "Hardware and Architecture",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/17",
+			"display_name": "Computer Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1907",
+		"display_name": "Geology",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/19",
+			"display_name": "Earth and Planetary Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1706",
+		"display_name": "Computer Science Applications",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/17",
+			"display_name": "Computer Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1104",
+		"display_name": "Aquatic Science",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/11",
+			"display_name": "Agricultural and Biological Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3504",
+		"display_name": "Oral Surgery",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/35",
+			"display_name": "Dentistry"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3404",
+		"display_name": "Small Animals",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/34",
+			"display_name": "Veterinary"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2405",
+		"display_name": "Parasitology",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/24",
+			"display_name": "Immunology and Microbiology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1911",
+		"display_name": "Paleontology",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/19",
+			"display_name": "Earth and Planetary Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3003",
+		"display_name": "Pharmaceutical Science",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/30",
+			"display_name": "Pharmacology, Toxicology and Pharmaceutics"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3605",
+		"display_name": "Health Information Management",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/36",
+			"display_name": "Health Professions"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1904",
+		"display_name": "Earth-Surface Processes",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/19",
+			"display_name": "Earth and Planetary Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2742",
+		"display_name": "Rehabilitation",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2404",
+		"display_name": "Microbiology",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/24",
+			"display_name": "Immunology and Microbiology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3321",
+		"display_name": "Public Administration",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2508",
+		"display_name": "Surfaces, Coatings and Films",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/25",
+			"display_name": "Materials Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2748",
+		"display_name": "Urology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1303",
+		"display_name": "Biochemistry",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/13",
+			"display_name": "Biochemistry, Genetics and Molecular Biology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3609",
+		"display_name": "Occupational Therapy",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/36",
+			"display_name": "Health Professions"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1308",
+		"display_name": "Clinical Biochemistry",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/13",
+			"display_name": "Biochemistry, Genetics and Molecular Biology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1107",
+		"display_name": "Forestry",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/11",
+			"display_name": "Agricultural and Biological Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2715",
+		"display_name": "Gastroenterology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3611",
+		"display_name": "Pharmacy",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/36",
+			"display_name": "Health Professions"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2703",
+		"display_name": "Anesthesiology and Pain Medicine",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1906",
+		"display_name": "Geochemistry and Petrology",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/19",
+			"display_name": "Earth and Planetary Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1507",
+		"display_name": "Fluid Flow and Transfer Processes",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/15",
+			"display_name": "Chemical Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1709",
+		"display_name": "Human-Computer Interaction",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/17",
+			"display_name": "Computer Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2723",
+		"display_name": "Immunology and Allergy",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3309",
+		"display_name": "Library and Information Sciences",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1304",
+		"display_name": "Biophysics",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/13",
+			"display_name": "Biochemistry, Genetics and Molecular Biology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3506",
+		"display_name": "Periodontics",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/35",
+			"display_name": "Dentistry"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2602",
+		"display_name": "Algebra and Number Theory",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/26",
+			"display_name": "Mathematics"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3614",
+		"display_name": "Radiological and Ultrasound Technology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/36",
+			"display_name": "Health Professions"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1503",
+		"display_name": "Catalysis",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/15",
+			"display_name": "Chemical Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2500",
+		"display_name": "General Materials Science",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/25",
+			"display_name": "Materials Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1310",
+		"display_name": "Endocrinology",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/13",
+			"display_name": "Biochemistry, Genetics and Molecular Biology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2733",
+		"display_name": "Otorhinolaryngology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2807",
+		"display_name": "Endocrine and Autonomic Systems",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/28",
+			"display_name": "Neuroscience"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2612",
+		"display_name": "Numerical Analysis",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/26",
+			"display_name": "Mathematics"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3202",
+		"display_name": "Applied Psychology",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/32",
+			"display_name": "Psychology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1704",
+		"display_name": "Computer Graphics and Computer-Aided Design",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/17",
+			"display_name": "Computer Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2702",
+		"display_name": "Anatomy",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2503",
+		"display_name": "Ceramics and Composites",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/25",
+			"display_name": "Materials Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1712",
+		"display_name": "Software",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/17",
+			"display_name": "Computer Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2406",
+		"display_name": "Virology",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/24",
+			"display_name": "Immunology and Microbiology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2611",
+		"display_name": "Modeling and Simulation",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/26",
+			"display_name": "Mathematics"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2706",
+		"display_name": "Critical Care and Intensive Care Medicine",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3505",
+		"display_name": "Orthodontics",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/35",
+			"display_name": "Dentistry"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2717",
+		"display_name": "Geriatrics and Gerontology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2704",
+		"display_name": "Biochemistry",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1603",
+		"display_name": "Electrochemistry",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/16",
+			"display_name": "Chemistry"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1313",
+		"display_name": "Molecular Medicine",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/13",
+			"display_name": "Biochemistry, Genetics and Molecular Biology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2302",
+		"display_name": "Ecological Modeling",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/23",
+			"display_name": "Environmental Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2216",
+		"display_name": "Architecture",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/22",
+			"display_name": "Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2809",
+		"display_name": "Sensory Systems",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/28",
+			"display_name": "Neuroscience"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2724",
+		"display_name": "Internal Medicine",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3105",
+		"display_name": "Instrumentation",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/31",
+			"display_name": "Physics and Astronomy"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1200",
+		"display_name": "General Arts and Humanities",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/12",
+			"display_name": "Arts and Humanities"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1502",
+		"display_name": "Bioengineering",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/15",
+			"display_name": "Chemical Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1314",
+		"display_name": "Physiology",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/13",
+			"display_name": "Biochemistry, Genetics and Molecular Biology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2607",
+		"display_name": "Discrete Mathematics and Combinatorics",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/26",
+			"display_name": "Mathematics"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2910",
+		"display_name": "Issues, ethics and legal aspects",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/29",
+			"display_name": "Nursing"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2614",
+		"display_name": "Theoretical Computer Science",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/26",
+			"display_name": "Mathematics"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2102",
+		"display_name": "Energy Engineering and Power Technology",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/21",
+			"display_name": "Energy"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3307",
+		"display_name": "Human Factors and Ergonomics",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2806",
+		"display_name": "Developmental Neuroscience",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/28",
+			"display_name": "Neuroscience"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3005",
+		"display_name": "Toxicology",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/30",
+			"display_name": "Pharmacology, Toxicology and Pharmaceutics"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3200",
+		"display_name": "General Psychology",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/32",
+			"display_name": "Psychology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3607",
+		"display_name": "Medical Laboratory Technology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/36",
+			"display_name": "Health Professions"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2747",
+		"display_name": "Transplantation",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1403",
+		"display_name": "Business and International Management",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/14",
+			"display_name": "Business, Management and Accounting"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2802",
+		"display_name": "Behavioral Neuroscience",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/28",
+			"display_name": "Neuroscience"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1410",
+		"display_name": "Industrial relations",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/14",
+			"display_name": "Business, Management and Accounting"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3603",
+		"display_name": "Complementary and Manual Therapy",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/36",
+			"display_name": "Health Professions"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2200",
+		"display_name": "General Engineering",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/22",
+			"display_name": "Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2100",
+		"display_name": "General Energy",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/21",
+			"display_name": "Energy"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3206",
+		"display_name": "Neuropsychology and Physiological Psychology",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/32",
+			"display_name": "Psychology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1409",
+		"display_name": "Tourism, Leisure and Hospitality Management",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/14",
+			"display_name": "Business, Management and Accounting"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1508",
+		"display_name": "Process Chemistry and Technology",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/15",
+			"display_name": "Chemical Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2402",
+		"display_name": "Applied Microbiology and Biotechnology",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/24",
+			"display_name": "Immunology and Microbiology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1912",
+		"display_name": "Space and Planetary Science",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/19",
+			"display_name": "Earth and Planetary Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3319",
+		"display_name": "Life-span and Life-course Studies",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1309",
+		"display_name": "Developmental Biology",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/13",
+			"display_name": "Biochemistry, Genetics and Molecular Biology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3302",
+		"display_name": "Archeology",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/33",
+			"display_name": "Social Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1302",
+		"display_name": "Aging",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/13",
+			"display_name": "Biochemistry, Genetics and Molecular Biology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2911",
+		"display_name": "Leadership and Management",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/29",
+			"display_name": "Nursing"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2506",
+		"display_name": "Metals and Alloys",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/25",
+			"display_name": "Materials Science"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2803",
+		"display_name": "Biological Psychiatry",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/28",
+			"display_name": "Neuroscience"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2714",
+		"display_name": "Family Practice",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1800",
+		"display_name": "General Decision Sciences",
+		"domain": {
+			"id": "https://openalex.org/domains/2",
+			"display_name": "Social Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/18",
+			"display_name": "Decision Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3402",
+		"display_name": "Equine",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/34",
+			"display_name": "Veterinary"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2103",
+		"display_name": "Fuel Technology",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/21",
+			"display_name": "Energy"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3500",
+		"display_name": "General Dentistry",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/35",
+			"display_name": "Dentistry"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1506",
+		"display_name": "Filtration and Separation",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/15",
+			"display_name": "Chemical Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1504",
+		"display_name": "Chemical Health and Safety",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/15",
+			"display_name": "Chemical Engineering"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2718",
+		"display_name": "Health Informatics",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2726",
+		"display_name": "Microbiology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/27",
+			"display_name": "Medicine"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1315",
+		"display_name": "Structural Biology",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/13",
+			"display_name": "Biochemistry, Genetics and Molecular Biology"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3608",
+		"display_name": "Medical Terminology",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/36",
+			"display_name": "Health Professions"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3102",
+		"display_name": "Acoustics and Ultrasonics",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/31",
+			"display_name": "Physics and Astronomy"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/1108",
+		"display_name": "Horticulture",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/11",
+			"display_name": "Agricultural and Biological Sciences"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2605",
+		"display_name": "Computational Mathematics",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/26",
+			"display_name": "Mathematics"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2922",
+		"display_name": "Research and Theory",
+		"domain": {
+			"id": "https://openalex.org/domains/4",
+			"display_name": "Health Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/29",
+			"display_name": "Nursing"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/2104",
+		"display_name": "Nuclear Energy and Engineering",
+		"domain": {
+			"id": "https://openalex.org/domains/3",
+			"display_name": "Physical Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/21",
+			"display_name": "Energy"
+		}
+	},
+	{
+		"id": "https://openalex.org/subfields/3002",
+		"display_name": "Drug Discovery",
+		"domain": {
+			"id": "https://openalex.org/domains/1",
+			"display_name": "Life Sciences"
+		},
+		"field": {
+			"id": "https://openalex.org/fields/30",
+			"display_name": "Pharmacology, Toxicology and Pharmaceutics"
+		}
+	}
+]
