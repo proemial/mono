@@ -26,8 +26,14 @@ export async function fetchReadingList(date: string) {
 			),
 		),
 	);
-	const oaObjects = await Promise.all(oaResponses.map((res) => res.json()));
+	const oaObjects = (
+		await Promise.all(oaResponses.map((res) => res.json()))
+	).filter((res) => res.meta.count);
 	const oaIds = oaObjects.map((o) => o.results[0].id.split("/").at(-1));
+
+	if (!oaIds.length) {
+		return { rows: [] };
+	}
 
 	for (const id of oaIds) {
 		const paper = await fetchPaper(id);

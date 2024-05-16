@@ -32,6 +32,7 @@ export function StaticFeed({
 						transform: `translateY(${items[0]?.start ?? 0}px)`,
 					}}
 				>
+					{!items.length && <div>No papers found</div>}
 					{items.map((virtualRow) => {
 						const paper = feed[virtualRow.index];
 						if (!paper) {
