@@ -11,7 +11,7 @@ export const TreeFilterHelpers = {
 		// biome-ignore lint/complexity/noForEach: <explanation>
 		params.forEach((param) => {
 			const [type, value] = param.split(":") as [string, string];
-			const values = value.split("|");
+			const values = value.includes("|") ? value.split("|") : value.split(" ");
 
 			switch (type) {
 				case "topics.id":
@@ -32,11 +32,13 @@ export const TreeFilterHelpers = {
 		return [...domains, ...fields, ...subfield, ...topics];
 	},
 
-	toQueryString: (values: string[]) => {
+	toQueryString: (values: string[], narrow?: boolean) => {
 		const domains: string[] = [];
 		const fields: string[] = [];
 		const subfield: string[] = [];
 		const topics: string[] = [];
+
+		const separator = narrow ? "+" : "|";
 
 		// biome-ignore lint/complexity/noForEach: <explanation>
 		values.forEach((node) => {
@@ -59,16 +61,16 @@ export const TreeFilterHelpers = {
 
 		const params: string[] = [];
 		if (topics.length > 0) {
-			params.push(`topics.id:${topics.join("|")}`);
+			params.push(`topics.id:${topics.join(separator)}`);
 		}
 		if (domains.length > 0) {
-			params.push(`topics.domain.id:${domains.join("|")}`);
+			params.push(`topics.domain.id:${domains.join(separator)}`);
 		}
 		if (fields.length > 0) {
-			params.push(`topics.field.id:${fields.join("|")}`);
+			params.push(`topics.field.id:${fields.join(separator)}`);
 		}
 		if (subfield.length > 0) {
-			params.push(`topics.subfield.id:${subfield.join("|")}`);
+			params.push(`topics.subfield.id:${subfield.join(separator)}`);
 		}
 
 		return params.join(",");

@@ -1,11 +1,13 @@
 // https://docs.openalex.org/api-entities/works/search-works
 export type OpenAlexWorksSearchResult = {
-	meta: {
-		count: number;
-		page: number;
-		per_page: number;
-	};
+	meta: OpenAlexMeta;
 	results: OpenAlexWorksHit[];
+};
+
+export type OpenAlexMeta = {
+	count: number;
+	page: number;
+	per_page: number;
 };
 
 export type OpenAlexWorksHit = OpenAlexWorkCoreMetadata & {

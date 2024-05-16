@@ -42,6 +42,8 @@ export function Feed({ children }: { children: ReactNode }) {
 	);
 
 	const allRows = data ? data.pages.flatMap((d) => d.rows) : [];
+	const count = data?.pages.at(0)?.count;
+	console.log(count, data);
 
 	const rowVirtualizer = useWindowVirtualizer({
 		count: hasNextPage ? allRows.length + 1 : allRows.length,
@@ -74,7 +76,14 @@ export function Feed({ children }: { children: ReactNode }) {
 
 	return (
 		<div className="space-y-5 pb-10">
-			{children}
+			<div>
+				{children}
+				{filter && !!count && (
+					<div className="mt-1 text-right text-xs italic">
+						{count} matching papers
+					</div>
+				)}
+			</div>
 
 			{status === "loading" ? (
 				<Loader />

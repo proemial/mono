@@ -11,17 +11,17 @@ export async function fetchFeed(
 	params: FetchFeedParams[0],
 	options: Omit<FetchFeedParams[1], "limit">,
 ) {
-	const fetchedPapers = await fetchPapersByFieldOrFilter(params, {
+	const { meta, papers } = await fetchPapersByFieldOrFilter(params, {
 		...options,
 		limit: 5,
 	});
 
-	if (!fetchedPapers.length) {
+	if (!papers.length) {
 		throw new Error("No papers found.");
 	}
 
 	const cachedPapers = await Redis.papers.getAll(
-		fetchedPapers.map((paper) => paper?.id).filter(Boolean),
+		papers.map((paper) => paper?.id).filter(Boolean),
 	);
 
 	const cachedPapersIds = cachedPapers
@@ -31,16 +31,20 @@ export async function fetchFeed(
 		)
 		.filter(Boolean);
 
-	const cacheMisses = fetchedPapers.filter(
+	const cacheMisses = papers.filter(
 		(paper) => !cachedPapersIds.includes(paper.id),
 	);
 
 	if (cacheMisses.length === 0) {
-		return { rows: cachedPapers, nextOffset: options.offset + 1 };
+		return {
+			count: meta.count,
+			rows: cachedPapers,
+			nextOffset: options.offset + 1,
+		};
 	}
 
 	const enhancedPapers = await Promise.all(
-		fetchedPapers.map(async (paper) => {
+		papers.map(async (paper) => {
 			const paperTitle = paper?.data?.title;
 			const abstract = paper?.data?.abstract;
 			const generatedTitle = paper?.generated?.title;
@@ -61,5 +65,9 @@ export async function fetchFeed(
 
 	await Redis.papers.upsertAll(enhancedPapers as OpenAlexPaper[]);
 
-	return { rows: enhancedPapers, nextOffset: options.offset + 1 };
+	return {
+		count: meta.count,
+		rows: enhancedPapers,
+		nextOffset: options.offset + 1,
+	};
 }

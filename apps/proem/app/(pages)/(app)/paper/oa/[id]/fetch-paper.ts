@@ -1,4 +1,5 @@
 import {
+	OpenAlexMeta,
 	OpenAlexPaper,
 	OpenAlexWorkMetadata,
 	OpenAlexWorksSearchResult,
@@ -52,7 +53,7 @@ export const fetchPaper = cache(
 export const fetchPapersByField = async (
 	{ field, filter }: { field?: number; filter?: string } = {},
 	{ limit, offset } = { limit: 25, offset: 0 },
-): Promise<OpenAlexPaper[]> => {
+): Promise<{ meta: OpenAlexMeta; papers: OpenAlexPaper[] }> => {
 	const today = dayjs().format("YYYY-MM-DD");
 	const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
 	const select = openAlexFields.all;
@@ -75,29 +76,30 @@ export const fetchPapersByField = async (
 		offset ?? 1
 	}`;
 
-	const oaPapers = await fetchWithAbstract(url);
+	const { meta, papers } = await fetchWithAbstract(url);
 
-	if (oaPapers.length === 0) {
-		return [];
+	if (meta.count === 0) {
+		return { meta, papers };
 	}
 
-	const papers = oaPapers
+	const oaPapers = papers
 		.filter((p) => p.data.topics?.length)
 		.map((result) => ({
 			...result,
 			id: result.data.id.replace("https://openalex.org/", ""),
 		}));
 
-	return [...papers].sort(sortByPublicationDateDesc);
+	return { meta, papers: [...oaPapers].sort(sortByPublicationDateDesc) };
 };
 
 const sortByPublicationDateDesc = (a: OpenAlexPaper, b: OpenAlexPaper) =>
 	b.data.publication_date.localeCompare(a.data.publication_date);
 
 async function fetchWithAbstract(url: string) {
-	const response = await fetchJson<OpenAlexWorksSearchResult>(url);
+	const { meta, results } = await fetchJson<OpenAlexWorksSearchResult>(url);
+	console.log("PAPERS: ", meta.count);
 
-	return response.results.map((paper) => {
+	const papers = results.map((paper) => {
 		// Remove the abstract_inverted_index and relevance_score from the response
 		const { abstract_inverted_index, relevance_score, ...rest } = paper;
 
@@ -108,4 +110,6 @@ async function fetchWithAbstract(url: string) {
 			},
 		} as OpenAlexPaper;
 	});
+
+	return { meta, papers };
 }

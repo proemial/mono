@@ -1,9 +1,10 @@
 "use client";
-import { Button, TreeSelect } from "antd";
+import { Button, Dropdown, MenuProps, Switch, TreeSelect } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
 import oaTopics from "./oa.json";
 import { TreeFilterHelpers as helpers } from "./tree-filter-helpers";
 import { useState } from "react";
+import { Plus, Asterisk02 } from "@untitled-ui/icons-react";
 
 const FILTER_PARAM = "filter";
 
@@ -19,10 +20,26 @@ export function TreeFilter({ rootPath }: Props) {
 	const [value, setValue] = useState<string[]>(
 		helpers.toSelectedIdsArray(filter),
 	);
+	const [narrow, setNarrow] = useState(false);
 
 	const handleClick = () => {
-		const params = helpers.toQueryString(value);
+		const params = helpers.toQueryString(value, narrow);
 		router.replace(`${rootPath}?${FILTER_PARAM}=${params}`);
+	};
+
+	const onMenuClick: MenuProps["onClick"] = (e) => {
+		setNarrow(!narrow);
+	};
+
+	const or = {
+		key: "or",
+		label: "Include any",
+		icon: <Asterisk02 />,
+	};
+	const and = {
+		key: "and",
+		label: "Include all",
+		icon: <Plus />,
 	};
 
 	return (
@@ -41,7 +58,9 @@ export function TreeFilter({ rootPath }: Props) {
 					console.log(input);
 				}}
 			/>
-			<Button onClick={handleClick}>Apply</Button>
+			<div>
+				<Button onClick={handleClick}>Apply</Button>
+			</div>
 		</div>
 	);
 }
