@@ -2,11 +2,12 @@
 import FeedItem from "@/app/(pages)/(app)/discover/feed-item";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
+import { ReactNode } from "react";
 
 export function StaticFeed({
-	title,
 	feed,
-}: { title: string; feed: OpenAlexPaper[] }) {
+	children,
+}: { feed: OpenAlexPaper[]; children: ReactNode }) {
 	const rowVirtualizer = useWindowVirtualizer({
 		count: feed.length,
 		estimateSize: () => 160,
@@ -15,7 +16,7 @@ export function StaticFeed({
 
 	return (
 		<div className="space-y-5 pb-10">
-			<div className="text-[28px] font-normal pt-6">{title}</div>
+			<div className="text-[28px] font-normal pt-6">{children}</div>
 			<div
 				className="w-full relative"
 				style={{

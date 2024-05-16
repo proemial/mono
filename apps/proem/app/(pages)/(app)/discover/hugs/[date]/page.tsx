@@ -3,6 +3,7 @@ import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Metadata } from "next";
 import { fetchReadingList } from "./fetch-list";
 import logo from "./logo.svg";
+import Image from "next/image";
 
 export const dynamic = "force-static";
 
@@ -30,7 +31,12 @@ export default async function HuggingList({ params: { date } }: Props) {
 
 	return (
 		<div className="space-y-6">
-			<StaticFeed title="A hugging tribute to AK" feed={feed} />
+			<StaticFeed feed={feed}>
+				<div className="flex items-center">
+					A hugging tribute to AK
+					<Image className="ml-2 w-6 h-6" src={logo} alt="" />
+				</div>
+			</StaticFeed>
 		</div>
 	);
 }

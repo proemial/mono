@@ -25,7 +25,7 @@ export default async function AndrejKarpathyLLMReadingList() {
 
 	return (
 		<div className="space-y-6">
-			<StaticFeed title="Andrej Karpathy's LLM Reading List" feed={feed} />
+			<StaticFeed feed={feed}>Andrej Karpathy's LLM Reading List</StaticFeed>
 		</div>
 	);
 }
