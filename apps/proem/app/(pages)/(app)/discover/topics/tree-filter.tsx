@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import oaTopics from "./oa.json";
 import { TreeFilterHelpers as helpers } from "./tree-filter-helpers";
 import { useState } from "react";
-import { Plus, Asterisk02 } from "@untitled-ui/icons-react";
+import { Check } from "@untitled-ui/icons-react";
 
 const FILTER_PARAM = "filter";
 
@@ -33,13 +33,13 @@ export function TreeFilter({ rootPath }: Props) {
 
 	const or = {
 		key: "or",
+		icon: !narrow && <Check />,
 		label: "Include any",
-		icon: <Asterisk02 />,
 	};
 	const and = {
 		key: "and",
+		icon: narrow && <Check />,
 		label: "Include all",
-		icon: <Plus />,
 	};
 
 	return (
@@ -59,7 +59,12 @@ export function TreeFilter({ rootPath }: Props) {
 				}}
 			/>
 			<div>
-				<Button onClick={handleClick}>Apply</Button>
+				<Dropdown.Button
+					menu={{ items: [or, and], onClick: onMenuClick }}
+					onClick={handleClick}
+				>
+					Apply
+				</Dropdown.Button>
 			</div>
 		</div>
 	);
