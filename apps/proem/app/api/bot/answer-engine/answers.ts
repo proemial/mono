@@ -3,8 +3,8 @@ import { neonDb } from "@proemial/data";
 import {
 	type Answer,
 	type NewAnswer,
-	answersTable,
-} from "@proemial/data/neon/schema/answersTable";
+	answers as answersTable,
+} from "@proemial/data/neon/schema/answers";
 import { eq } from "drizzle-orm";
 
 export const answers = {

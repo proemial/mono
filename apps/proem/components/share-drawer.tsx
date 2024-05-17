@@ -3,9 +3,9 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { ShareIcon, ShareIconProps } from "@/components/icons/share-icon";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
-import { Answer } from "@proemial/data/neon/schema/answersTable";
+import { ShareIcon, ShareIconProps } from "@/components/icons/share-icon";
+import { Answer } from "@proemial/data/neon/schema/answers";
 import { Button, Icons } from "@proemial/shadcn-ui";
 import { Upload01 } from "@untitled-ui/icons-react";
 // TODO: Replace with untitled-ui or custom icon
