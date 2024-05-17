@@ -87,7 +87,7 @@ export function Feed({ children }: { children: ReactNode }) {
 		fetchNextPage,
 		allRows.length,
 		isFetchingNextPage,
-		rowVirtualizer.getVirtualItems(),
+		rowVirtualizer.getVirtualItems,
 	]);
 
 	return (
