@@ -1,20 +1,15 @@
-import { AlignLeft } from "@/components/icons/AlignLeft";
-import {
-	File02,
-	ChevronDown,
-	ChevronSelectorVertical,
-} from "@untitled-ui/icons-react";
+import { OpenAlexPaper } from "@proemial/models/open-alex";
+import { File02, Calendar } from "@untitled-ui/icons-react";
 
 type AnswerSharingCardProps = {
-	title: string;
-	abstract: string;
+	paper: OpenAlexPaper;
 	/**
 	 * Uses experimental tw to work both in app and with @vercel/og
 	 */
 	classNameAttr?: "className" | "tw";
 };
 
-const maxLength = 246;
+const maxLength = 120;
 const truncate = (str: string) =>
 	str.length <= maxLength
 		? str
@@ -23,61 +18,55 @@ const truncate = (str: string) =>
 			}`;
 
 export function ReadOpenGraphCard({
-	title,
-	abstract,
+	paper,
 	classNameAttr = "className",
 }: AnswerSharingCardProps) {
 	const twcl = (tailwindClasses: string) => ({
 		[classNameAttr]: tailwindClasses,
 	});
 
-	const truncated = truncate(abstract);
-	const isTruncated = truncated !== abstract;
+	const title = paper.generated?.title ?? paper.data.title;
+	let truncated = truncate(title);
+	const isTruncated = truncated !== title;
+	truncated = truncate(title).replace(/^"|"$/g, "");
 
-	const svgProps = { height: "26px", width: "26px" };
+	const svgProps = { height: "42px", width: "42px" };
+
+	const metadata = [
+		{
+			icon: <File02 {...svgProps} />,
+			label: paper.data.primary_location?.source?.display_name,
+		},
+		{
+			icon: <File02 {...svgProps} />,
+			label: paper.data.primary_location?.source?.host_organization_name,
+		},
+		{
+			icon: <Calendar {...svgProps} />,
+			label: paper.data.publication_date,
+		},
+	].filter((m) => !!m.label);
 
 	return (
 		<div
 			{...twcl(
-				"flex flex-col bg-[#000000] w-full h-full text-white font-sans p-[62px] pt-[78px]",
+				"flex flex-col bg-[#474747] w-full h-full text-white font-sans px-[62px] py-[78px]",
 			)}
 		>
-			<div {...twcl("flex flex-col flex-1 text-[24px]")}>
-				<div {...twcl("flex justify-between")}>
-					<div {...twcl("flex items-center")}>
-						<div {...twcl("flex mr-4")}>
-							<File02 {...svgProps} />
-						</div>
-						Research paper
-					</div>
-					<div {...twcl("flex")}>
-						<ChevronDown {...svgProps} />
-					</div>
-				</div>
-
-				<div {...twcl("flex mt-8 justify-between")}>
-					<div {...twcl("flex items-center")}>
-						<div {...twcl("flex mr-4")}>
-							<AlignLeft width={24} height={18} />
-						</div>
-						Summary
-					</div>
-					<div {...twcl("flex items-center")}>
-						GPT-4o
-						<ChevronSelectorVertical {...svgProps} />
-					</div>
-				</div>
-
-				<div {...twcl("flex flex-col mt-4 text-[44px] leading-[56px]")}>
-					{title}
-					<div {...twcl("flex flex-col mt-4 text-[22px] leading-[33px]")}>
-						{truncated}
-						{isTruncated && " ..."}
-					</div>
+			<div {...twcl("flex flex-col flex-1")}>
+				<div {...twcl("flex flex-col text-[66px] leading-[82px]")}>
+					{truncated}
+					{isTruncated && " ..."}
 				</div>
 			</div>
 
-			<div {...twcl("flex justify-end")}>
+			<div {...twcl("flex justify-between items-begin")}>
+				<div {...twcl("flex -mt-3 items-begin text-[42px]")}>
+					<div {...twcl("flex mr-4 mt-2")}>{metadata.at(0)?.icon}</div>
+					<div {...twcl("flex items-begin justify-begin")}>
+						{metadata.at(0)?.label}
+					</div>
+				</div>
 				<img
 					{...twcl("w-[42px]")}
 					src={`${process.env.NEXT_PUBLIC_VERCEL_URL}/open-graph/logo.svg`}

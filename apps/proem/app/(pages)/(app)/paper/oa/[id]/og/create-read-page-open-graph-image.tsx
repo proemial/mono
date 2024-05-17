@@ -28,11 +28,7 @@ export async function createReadPageOpenGraphImage(
 	).then((res) => res.arrayBuffer());
 
 	return new ImageResponse(
-		<ReadOpenGraphCard
-			title={paper.generated?.title ?? ""}
-			abstract={paper.generated?.abstract ?? ""}
-			classNameAttr="tw"
-		/>,
+		<ReadOpenGraphCard paper={paper} classNameAttr="tw" />,
 		{
 			...size,
 			fonts: [

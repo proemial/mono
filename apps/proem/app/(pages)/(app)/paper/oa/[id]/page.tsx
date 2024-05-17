@@ -5,6 +5,8 @@ import { PaperReaderSkeleton } from "@/app/(pages)/(app)/paper/oa/[id]/paper-rea
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
+const description = "Read science fast";
+
 type Props = {
 	params: { id: string };
 };
