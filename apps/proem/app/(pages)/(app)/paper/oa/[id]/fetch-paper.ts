@@ -12,6 +12,7 @@ import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
 import dayjs from "dayjs";
 import { cache } from "react";
+import { TreeFilterHelpers } from "../../../discover/topics/tree-filter-helpers";
 
 export const fetchPaper = cache(
 	async (id: string): Promise<OpenAlexPaper | null> => {
@@ -49,6 +50,34 @@ export const fetchPaper = cache(
 		return paper;
 	},
 );
+
+export async function splitAndFetch(
+	{ field, filter }: { field?: number; filter?: string } = {},
+	{ limit, offset } = { limit: 25, offset: 0 },
+): Promise<{ meta: OpenAlexMeta; papers: OpenAlexPaper[] }> {
+	if (!filter) {
+		return fetchPapersByField({ field, filter }, { limit, offset });
+	}
+
+	const { filters } = TreeFilterHelpers.toOaFilters(filter);
+	const results = await Promise.all(
+		filters.map((f) =>
+			fetchPapersByField({ field, filter: f }, { limit, offset }),
+		),
+	);
+	const reduced = results.reduce((acc, { meta, papers }) => {
+		return {
+			meta: {
+				count: acc.meta.count + meta.count,
+				page: meta.page,
+				per_page: meta.per_page,
+			},
+			papers: [...acc.papers, ...papers],
+		};
+	});
+
+	return reduced;
+}
 
 export const fetchPapersByField = async (
 	{ field, filter }: { field?: number; filter?: string } = {},
@@ -97,7 +126,6 @@ const sortByPublicationDateDesc = (a: OpenAlexPaper, b: OpenAlexPaper) =>
 
 async function fetchWithAbstract(url: string) {
 	const { meta, results } = await fetchJson<OpenAlexWorksSearchResult>(url);
-	console.log("PAPERS: ", meta.count);
 
 	const papers = results.map((paper) => {
 		// Remove the abstract_inverted_index and relevance_score from the response

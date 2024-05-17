@@ -1,5 +1,5 @@
 "use client";
-import { Button, Dropdown, MenuProps, Switch, TreeSelect } from "antd";
+import { Dropdown, MenuProps, Switch, TreeSelect } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
 import oaTopics from "./oa.json";
 import { TreeFilterHelpers as helpers } from "./tree-filter-helpers";
@@ -33,13 +33,13 @@ export function TreeFilter({ rootPath }: Props) {
 
 	const or = {
 		key: "or",
-		icon: !narrow && <Check />,
-		label: "Include any",
+		icon: !narrow ? <Check /> : <div className="w-6" />,
+		label: "Must include any",
 	};
 	const and = {
 		key: "and",
-		icon: narrow && <Check />,
-		label: "Include all",
+		icon: narrow ? <Check /> : <div className="w-6" />,
+		label: "Must include all",
 	};
 
 	return (

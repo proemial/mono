@@ -1,17 +1,17 @@
 "use server";
 
-import { fetchPapersByField as fetchPapersByFieldOrFilter } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
+import { splitAndFetch } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { summarise } from "@/app/prompts/summarise-title";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
 
-type FetchFeedParams = Required<Parameters<typeof fetchPapersByFieldOrFilter>>;
+type FetchFeedParams = Required<Parameters<typeof splitAndFetch>>;
 
 export async function fetchFeed(
 	params: FetchFeedParams[0],
 	options: Omit<FetchFeedParams[1], "limit">,
 ) {
-	const { meta, papers } = await fetchPapersByFieldOrFilter(params, {
+	const { meta, papers } = await splitAndFetch(params, {
 		...options,
 		limit: 5,
 	});

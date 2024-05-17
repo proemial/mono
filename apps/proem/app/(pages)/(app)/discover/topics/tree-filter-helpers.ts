@@ -1,7 +1,8 @@
 export const TreeFilterHelpers = {
 	toSelectedIdsArray: (filter?: string | null) => {
 		if (!filter) return [];
-		const params = filter?.split(",") ?? [];
+
+		const params = filter.split(",") ?? [];
 
 		const domains: string[] = [];
 		const fields: string[] = [];
@@ -10,20 +11,29 @@ export const TreeFilterHelpers = {
 
 		// biome-ignore lint/complexity/noForEach: <explanation>
 		params.forEach((param) => {
-			const [type, value] = param.split(":") as [string, string];
-			const values = value.includes("|") ? value.split("|") : value.split(" ");
+			const filter =
+				param.startsWith("and:") || param.startsWith("or:")
+					? param.substring(param.indexOf(":") + 1)
+					: param;
+
+			const [type, value] = filter.split(":") as [string, string];
+			const values = value.includes("|")
+				? value.split("|")
+				: value.includes("+")
+					? value.split("+")
+					: value.split(" ");
 
 			switch (type) {
-				case "topics.id":
+				case "topic":
 					topics.push(...values.map((v) => `topic:${v}`));
 					break;
-				case "topics.domain.id":
+				case "domain":
 					domains.push(...values.map((v) => `domain:${v}`));
 					break;
-				case "topics.field.id":
+				case "field":
 					fields.push(...values.map((v) => `field:${v}`));
 					break;
-				case "topics.subfield.id":
+				case "subfield":
 					subfield.push(...values.map((v) => `subfield:${v}`));
 					break;
 			}
@@ -61,18 +71,43 @@ export const TreeFilterHelpers = {
 
 		const params: string[] = [];
 		if (topics.length > 0) {
-			params.push(`topics.id:${topics.join(separator)}`);
+			params.push(`topic:${topics.join(separator)}`);
 		}
 		if (domains.length > 0) {
-			params.push(`topics.domain.id:${domains.join(separator)}`);
+			params.push(`domain:${domains.join(separator)}`);
 		}
 		if (fields.length > 0) {
-			params.push(`topics.field.id:${fields.join(separator)}`);
+			params.push(`field:${fields.join(separator)}`);
 		}
 		if (subfield.length > 0) {
-			params.push(`topics.subfield.id:${subfield.join(separator)}`);
+			params.push(`subfield:${subfield.join(separator)}`);
 		}
 
-		return params.join(",");
+		if (values.length < 2) {
+			return params.join(",");
+		}
+
+		return `${narrow ? "and:" : "or:"}${params.join(",")}`;
+	},
+
+	toOaFilter: (filter: string) => {
+		return decodeURI(filter)
+			.replaceAll("topic", "topics.id")
+			.replaceAll("domain", "topics.domain.id")
+			.replaceAll("field", "topics.field.id")
+			.replaceAll("subfield", "topics.subfield.id")
+			.replaceAll("subtopics.field", "topics.subfield");
+	},
+
+	toOaFilters: (filter: string) => {
+		const narrow = filter?.startsWith("and:");
+		const query = TreeFilterHelpers.toOaFilter(
+			filter?.startsWith("and:") || filter?.startsWith("or:")
+				? filter.substring(filter.indexOf(":") + 1)
+				: filter,
+		);
+		const filters = narrow ? [query] : query.split(",");
+
+		return { filters, narrow };
 	},
 };

@@ -43,7 +43,6 @@ export function Feed({ children }: { children: ReactNode }) {
 
 	const allRows = data ? data.pages.flatMap((d) => d.rows) : [];
 	const count = data?.pages.at(0)?.count;
-	console.log(count, data);
 
 	const rowVirtualizer = useWindowVirtualizer({
 		count: hasNextPage ? allRows.length + 1 : allRows.length,
