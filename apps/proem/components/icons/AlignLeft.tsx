@@ -1,9 +1,12 @@
-export function AlignLeft() {
+export function AlignLeft({
+	width = 18,
+	height = 12,
+}: { width?: number; height?: number }) {
 	return (
 		// biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
 		<svg
-			width="18"
-			height="12"
+			width={width}
+			height={height}
 			viewBox="0 0 18 12"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
