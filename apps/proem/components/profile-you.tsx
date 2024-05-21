@@ -1,9 +1,9 @@
 "use client";
+import { ProfileColorSchemeToggle } from "@/app/profile/profile-color-scheme-toggle";
 import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { ProfileColorSchemeToggle } from "@/components/profile-color-scheme-toggle";
 import { useClerk, useOrganization, useUser } from "@clerk/nextjs";
 import {
 	Collapsible,
