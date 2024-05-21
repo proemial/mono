@@ -9,13 +9,31 @@ type AnswerSharingCardProps = {
 	classNameAttr?: "className" | "tw";
 };
 
-const maxLength = 120;
-const truncate = (str: string) =>
-	str.length <= maxLength
+function truncate(str: string, maxLength = 120) {
+	return str.length <= maxLength
 		? str
 		: `${
 				str.substring(0, maxLength) + str?.substring(maxLength).split(" ")[0]
 			}`;
+}
+
+function sanitizeTitle(title: string) {
+	let truncated = truncate(title);
+	const isTruncated = truncated !== title;
+	truncated = truncated.replace(/^"|"$/g, "");
+
+	return [truncated, isTruncated];
+}
+
+function sanitizeSource(source: string) {
+	if (!source) return undefined;
+
+	let truncated = truncate(source.replace(/[\u{0080}-\u{FFFF}]/gu, ""), 40);
+	const isTruncated = truncated !== source;
+	truncated = !isTruncated ? truncated : `${truncated} ...`;
+
+	return truncated;
+}
 
 export function ReadOpenGraphCard({
 	paper,
@@ -26,20 +44,20 @@ export function ReadOpenGraphCard({
 	});
 
 	const title = paper.generated?.title ?? paper.data.title;
-	let truncated = truncate(title);
-	const isTruncated = truncated !== title;
-	truncated = truncate(title).replace(/^"|"$/g, "");
+	const [truncatedTitle, titleIsTruncated] = sanitizeTitle(title);
 
 	const svgProps = { height: "42px", width: "42px" };
 
 	const metadata = [
 		{
 			icon: <File02 {...svgProps} />,
-			label: paper.data.primary_location?.source?.display_name,
+			label: sanitizeSource(
+				paper.data.primary_location?.source?.host_organization_name,
+			),
 		},
 		{
 			icon: <File02 {...svgProps} />,
-			label: paper.data.primary_location?.source?.host_organization_name,
+			label: sanitizeSource(paper.data.primary_location?.source?.display_name),
 		},
 		{
 			icon: <Calendar {...svgProps} />,
@@ -50,22 +68,32 @@ export function ReadOpenGraphCard({
 	return (
 		<div
 			{...twcl(
-				"flex flex-col bg-[#474747] w-full h-full text-white font-sans px-[62px] py-[78px]",
+				"flex flex-col bg-[#474747] w-full h-full text-white font-sans px-[62px] py-[46px]",
 			)}
 		>
 			<div {...twcl("flex flex-col flex-1")}>
 				<div {...twcl("flex flex-col text-[66px] leading-[82px]")}>
-					{truncated}
-					{isTruncated && " ..."}
+					{truncatedTitle}
+					{titleIsTruncated && " ..."}
 				</div>
 			</div>
 
-			<div {...twcl("flex justify-between items-begin")}>
-				<div {...twcl("flex -mt-3 items-begin text-[42px]")}>
-					<div {...twcl("flex mr-4 mt-2")}>{metadata.at(0)?.icon}</div>
-					<div {...twcl("flex items-begin justify-begin")}>
-						{metadata.at(0)?.label}
+			<div {...twcl("flex justify-between items-end")}>
+				<div {...twcl("flex flex-col -mt-3 items-begin text-[42px]")}>
+					<div {...twcl("flex")}>
+						<div {...twcl("flex mr-4 mt-2")}>{metadata.at(0)?.icon}</div>
+						<div {...twcl("flex items-begin justify-begin")}>
+							{metadata.at(0)?.label}
+						</div>
 					</div>
+					{metadata.at(1) && (
+						<div {...twcl("flex")}>
+							<div {...twcl("flex mr-4 mt-2")}>{metadata.at(0)?.icon}</div>
+							<div {...twcl("flex items-begin justify-begin")}>
+								{metadata.at(1)?.label}
+							</div>
+						</div>
+					)}
 				</div>
 				<img
 					{...twcl("w-[42px]")}
