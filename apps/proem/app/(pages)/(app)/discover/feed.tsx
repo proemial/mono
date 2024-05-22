@@ -54,6 +54,7 @@ export function Feed({ children }: { children: ReactNode }) {
 			getNextPageParam: (lastGroup) => {
 				return lastGroup?.nextOffset;
 			},
+			refetchOnWindowFocus: false,
 		},
 	);
 
