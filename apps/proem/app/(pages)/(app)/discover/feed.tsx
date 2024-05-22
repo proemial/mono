@@ -1,14 +1,19 @@
 "use client";
-import { FeedFilter } from "@/app/(pages)/(app)/discover/feed-filter";
 import FeedItem from "@/app/(pages)/(app)/discover/feed-item";
 import { fetchFeed } from "@/app/(pages)/(app)/discover/fetch-feed";
-import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/components/analytics/tracking/tracking-keys";
 import { OaFields } from "@proemial/models/open-alex-fields";
 import { Icons } from "@proemial/shadcn-ui";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useSearchParams } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
+
+// 1-4 is fetched without scrolling
+const initialPageSize = 4;
 
 const Loader = () => (
 	<div className="w-full h-24 flex justify-center items-center">
@@ -35,7 +40,17 @@ export function Feed({ children }: { children: ReactNode }) {
 		error,
 	} = useInfiniteQuery(
 		fieldId ? `feed_${fieldId}` : `filter_${filter}`,
-		(ctx) => fetchFeed({ field: fieldId, filter }, { offset: ctx.pageParam }),
+		(ctx) => {
+			const nextOffset = ctx.pageParam ?? 1;
+			if (nextOffset > initialPageSize) {
+				// Infinite scroll triggered
+				trackHandler(analyticsKeys.feed.scroll.fetch, {
+					offset: `nextOffset: ${nextOffset - initialPageSize}`,
+				})();
+			}
+
+			return fetchFeed({ field: fieldId, filter }, { offset: ctx.pageParam });
+		},
 		{
 			getNextPageParam: (lastGroup) => {
 				return lastGroup?.nextOffset;
@@ -65,6 +80,8 @@ export function Feed({ children }: { children: ReactNode }) {
 			hasNextPage &&
 			!isFetchingNextPage
 		) {
+			console.log("fetchNextPage");
+
 			fetchNextPage();
 		}
 	}, [

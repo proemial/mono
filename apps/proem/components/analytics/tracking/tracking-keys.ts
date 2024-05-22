@@ -2,6 +2,8 @@ import { Tracker } from "./tracker";
 
 export function trackHandler(key: string, properties?: Record<string, string>) {
 	return () => {
+		console.log("Tracking", key, properties);
+
 		Tracker.track(key, properties);
 	};
 }
@@ -73,6 +75,9 @@ export const analyticsKeys = {
 		click: {
 			card: "feed:card:click",
 			tag: "feed:tag:click",
+		},
+		scroll: {
+			fetch: "feed:scroll:fetch",
 		},
 	},
 	read: {
