@@ -79,8 +79,6 @@ export function Feed({ children }: { children: ReactNode }) {
 			hasNextPage &&
 			!isFetchingNextPage
 		) {
-			console.log("fetchNextPage");
-
 			fetchNextPage();
 		}
 	}, [
