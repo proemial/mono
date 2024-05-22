@@ -53,7 +53,7 @@ export const fetchPaper = cache(
 
 export async function splitAndFetch(
 	{ field, filter }: { field?: number; filter?: string } = {},
-	{ limit, offset } = { limit: 25, offset: 0 },
+	{ limit, offset }: { limit?: number; offset?: number } = {},
 ): Promise<{ meta: OpenAlexMeta; papers: OpenAlexPaper[] }> {
 	if (!filter) {
 		return fetchPapersByField({ field, filter }, { limit, offset });
@@ -81,8 +81,10 @@ export async function splitAndFetch(
 
 export const fetchPapersByField = async (
 	{ field, filter }: { field?: number; filter?: string } = {},
-	{ limit, offset } = { limit: 25, offset: 0 },
+	{ limit, offset }: { limit?: number; offset?: number } = {},
 ): Promise<{ meta: OpenAlexMeta; papers: OpenAlexPaper[] }> => {
+	const pageLimit = limit ?? 25;
+	const pageOffset = offset ?? 1;
 	const today = dayjs().format("YYYY-MM-DD");
 	const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
 	const select = openAlexFields.all;
@@ -101,9 +103,7 @@ export const fetchPapersByField = async (
 		.filter((f) => !!f)
 		.join(",");
 	const sort = "from_created_date:desc,type:desc";
-	const url = `${oaBaseUrl}?${oaBaseArgs}&select=${select}&filter=${oaFilter}&sort=${sort}&per_page=${limit}&page=${
-		offset ?? 1
-	}`;
+	const url = `${oaBaseUrl}?${oaBaseArgs}&select=${select}&filter=${oaFilter}&sort=${sort}&per_page=${pageLimit}&page=${pageOffset}`;
 
 	const { meta, papers } = await fetchWithAbstract(url);
 

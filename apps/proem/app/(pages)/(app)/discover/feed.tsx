@@ -37,7 +37,9 @@ export function Feed({ children }: { children: ReactNode }) {
 		fieldId ? `feed_${fieldId}` : `filter_${filter}`,
 		(ctx) => fetchFeed({ field: fieldId, filter }, { offset: ctx.pageParam }),
 		{
-			getNextPageParam: (_lastGroup, groups) => groups.length,
+			getNextPageParam: (lastGroup) => {
+				return lastGroup?.nextOffset;
+			},
 		},
 	);
 

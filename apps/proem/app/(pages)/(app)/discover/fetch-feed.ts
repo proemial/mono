@@ -11,6 +11,7 @@ export async function fetchFeed(
 	params: FetchFeedParams[0],
 	options: Omit<FetchFeedParams[1], "limit">,
 ) {
+	const nextOffset = (options?.offset ?? 1) + 1;
 	const { meta, papers } = await splitAndFetch(params, {
 		...options,
 		limit: 5,
@@ -39,7 +40,7 @@ export async function fetchFeed(
 		return {
 			count: meta.count,
 			rows: cachedPapers,
-			nextOffset: options.offset + 1,
+			nextOffset,
 		};
 	}
 
@@ -68,6 +69,6 @@ export async function fetchFeed(
 	return {
 		count: meta.count,
 		rows: enhancedPapers,
-		nextOffset: options.offset + 1,
+		nextOffset,
 	};
 }
