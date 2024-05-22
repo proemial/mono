@@ -19,17 +19,17 @@ export async function fetchReadingList(date: string) {
 	const hfPapers = (await hfResponse.json()) as DailyPaper[];
 	const arxivIds = hfPapers.map((entry) => entry.paper.id);
 
-	const oaResponses = await Promise.all(
-		arxivIds.map((id) =>
-			fetch(
-				`https://api.openalex.org/works?filter=locations.landing_page_url:http://arxiv.org/abs/${id}|https://arxiv.org/abs/${id}&select=id`,
-			),
-		),
+	const oaObjects = await Promise.all(
+		arxivIds.map(async (id) => {
+			const url = `https://api.openalex.org/works?filter=locations.landing_page_url:http://arxiv.org/abs/${id}|https://arxiv.org/abs/${id}&select=id`;
+			const response = await fetch(url, { cache: "no-store" });
+			return await response.json();
+		}),
 	);
-	const oaObjects = (
-		await Promise.all(oaResponses.map((res) => res.json()))
-	).filter((res) => res.meta.count);
-	const oaIds = oaObjects.map((o) => o.results[0].id.split("/").at(-1));
+
+	const oaIds = oaObjects
+		.filter((res) => res.meta.count)
+		.map((o) => o.results[0].id.split("/").at(-1));
 
 	if (!oaIds.length) {
 		return { rows: [] };
@@ -37,6 +37,8 @@ export async function fetchReadingList(date: string) {
 
 	for (const id of oaIds) {
 		const paper = await fetchPaper(id);
+		// console.log(paper?.id, paper?.generated?.title);
+
 		if (paper && !paper.generated) {
 			await generate(paper);
 			await waitfor(500);
