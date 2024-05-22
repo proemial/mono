@@ -41,11 +41,10 @@ export function Feed({ children }: { children: ReactNode }) {
 	} = useInfiniteQuery(
 		fieldId ? `feed_${fieldId}` : `filter_${filter}`,
 		(ctx) => {
-			const nextOffset = ctx.pageParam ?? 1;
+			const nextOffset = ctx.pageParam;
 			if (nextOffset > initialPageSize) {
-				// Infinite scroll triggered
 				trackHandler(analyticsKeys.feed.scroll.fetch, {
-					offset: `nextOffset: ${nextOffset - initialPageSize}`,
+					offset: `${nextOffset - initialPageSize}`,
 				})();
 			}
 
