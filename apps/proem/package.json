@@ -11,6 +11,7 @@
 		"test:watch": "vitest"
 	},
 	"dependencies": {
+		"@aws-sdk/client-bedrock-runtime": "3.582.0",
 		"@clerk/nextjs": "^4.29.12",
 		"@hookform/resolvers": "^3.3.4",
 		"@langchain/anthropic": "0.1.17",
@@ -37,6 +38,7 @@
 		"@vercel/edge": "^1.1.1",
 		"@vercel/speed-insights": "^1.0.10",
 		"ai": "3.1.7",
+		"antd": "^5.17.2",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.1.1",
 		"cookies-next": "^4.1.1",
@@ -66,8 +68,7 @@
 		"tailwind-scrollbar-hide": "1.1.7",
 		"zod": "3.22.4",
 		"zod-to-json-schema": "3.22.5",
-		"zustand": "^4.5.2",
-		"antd": "^5.17.2"
+		"zustand": "^4.5.2"
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",
