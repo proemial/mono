@@ -1,5 +1,6 @@
 import { oaFieldIconMap } from "@/app/data/oa-fields";
 import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
+import { PaperArt } from "@/components/paper-art/paper-art";
 import { trimForQuotes } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import dayjs from "dayjs";
@@ -43,6 +44,7 @@ export default function FeedItem({ paper }: FeedItemProps) {
 				date={paper.data.publication_date}
 				field={field}
 			>
+				<PaperArt paperId={paper.id} />
 				<Markdown>
 					{paper.generated?.title && trimForQuotes(paper.generated.title)}
 				</Markdown>

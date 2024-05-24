@@ -1,3 +1,5 @@
+"use client";
+
 import { MicroAbstract } from "@/components/chat-abstract";
 import { AlignLeft } from "@/components/icons/AlignLeft";
 import { ModelSelector, ModelSelectorProps } from "@/components/model-selector";
@@ -6,6 +8,7 @@ import { trimForQuotes } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Header2, Header4, Icons, Paragraph } from "@proemial/shadcn-ui";
 import { Suspense } from "react";
+import { PaperArt } from "./paper-art/paper-art";
 
 type ChatArticleProps = {
 	type: "Answer" | "Summary";
@@ -35,6 +38,10 @@ export function ChatArticle({
 					</Trackable>
 				</div>
 			</div>
+
+			{paper && title && (
+				<PaperArt paperId={paper?.id} generateOptions={{ paperTitle: title }} />
+			)}
 
 			{title ? <Title title={title} /> : null}
 
