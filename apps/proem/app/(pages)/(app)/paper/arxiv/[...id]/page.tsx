@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { fetchArxivPaper } from "./fetch-arxiv-paper";
 
-export const description = "Read science fast";
+const description = "Read science fast";
 
 type Props = {
 	params: { id: string[] };
