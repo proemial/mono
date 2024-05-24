@@ -2,20 +2,14 @@ import { XMLParser } from "fast-xml-parser";
 import { RawArxivPaper } from "./arxiv-atom";
 import { OpenAlexPaperWithAbstract } from "../open-alex";
 
-export function fromXml(xml: string) {
-	const parser = new XMLParser({
-		ignoreAttributes: false,
-		attributeNamePrefix: "",
-		allowBooleanAttributes: true,
-		removeNSPrefix: true,
-	});
+export async function fetchFromArxiv(id: string) {
+	const response = await fetch(
+		`https://export.arxiv.org/api/query?id_list=${id}`,
+	);
+	const xml = await response.text();
+	const papers = toOpenAlexPapers(xml);
 
-	const json = parser.parse(xml);
-	if (!Array.isArray(json.feed.entry)) {
-		return [json.feed.entry] as Array<RawArxivPaper>;
-	}
-
-	return json.feed.entry as Array<RawArxivPaper>;
+	return papers.at(0);
 }
 
 export function toOpenAlexPapers(xml: string): OpenAlexPaperWithAbstract[] {
@@ -76,4 +70,20 @@ function asLocation(paper: RawArxivPaper) {
 		pdf_url:
 			paper.link.find((link) => link.type === "application/pdf")?.href ?? "",
 	};
+}
+
+export function fromXml(xml: string) {
+	const parser = new XMLParser({
+		ignoreAttributes: false,
+		attributeNamePrefix: "",
+		allowBooleanAttributes: true,
+		removeNSPrefix: true,
+	});
+
+	const json = parser.parse(xml);
+	if (!Array.isArray(json.feed.entry)) {
+		return [json.feed.entry] as Array<RawArxivPaper>;
+	}
+
+	return json.feed.entry as Array<RawArxivPaper>;
 }
