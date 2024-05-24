@@ -1,6 +1,6 @@
 "use server";
 
-import { splitAndFetch } from "@/app/(pages)/(app)/paper/oa/[[...id]]/fetch-paper";
+import { splitAndFetch } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { summarise } from "@/app/prompts/summarise-title";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
