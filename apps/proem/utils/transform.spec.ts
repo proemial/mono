@@ -7,9 +7,11 @@ describe("arxiv transform", () => {
 		const actual = fromXml(fixtures.arxivAtomPaper);
 
 		expect(actual.length).toEqual(1);
-		expect(actual.at(0).title).toEqual(fixtures.openAlexWork.display_name);
-		expect(actual.at(0).title).toEqual(fixtures.openAlexWork.title);
-		expect(actual.at(0).summary).toEqual(fixtures.openAlexWork.abstract);
+
+		const first = actual.at(0);
+		expect(first?.title).toEqual(fixtures.openAlexWork.display_name);
+		expect(first?.title).toEqual(fixtures.openAlexWork.title);
+		expect(first?.summary).toEqual(fixtures.openAlexWork.abstract);
 	});
 
 	it("can transform format", () => {
