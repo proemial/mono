@@ -1,9 +1,7 @@
 "use server";
 
-import { fetchPapers } from "@/app/api/paper-search/search";
 import { Redis } from "@proemial/redis/redis";
 import { fetchPaper } from "../../../paper/oa/[id]/fetch-paper";
-import { summarise } from "@/app/prompts/summarise-title";
 import { generate } from "../../../paper/oa/[id]/llm-generate";
 
 type DailyPaper = {
