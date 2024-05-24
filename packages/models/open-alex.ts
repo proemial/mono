@@ -47,7 +47,7 @@ export const openAlexFields = {
 export type OpenAlexWorkCoreMetadata = {
 	id: string;
 	ids: {
-		[K in PaperId]: string;
+		[K in PaperId]?: string;
 	};
 	publication_date: string;
 	title: string;
@@ -69,27 +69,27 @@ export type OpenAlexWorkCoreMetadata = {
 };
 
 export type OpenAlexWorkMetadata = OpenAlexWorkCoreMetadata & {
-	doi: string;
-	type: "article" | "preprint";
+	doi?: string;
+	type?: "article" | "preprint";
 
 	updated_date: string;
 	best_oa_location: OpenAlexLocation;
 	locations: OpenAlexLocation[];
 
-	corresponding_author_ids: string[];
-	corresponding_institution_ids: string[];
-	fulltext_origin: string;
-	cited_by_count: number;
-	cited_by_percentile_year: {
+	corresponding_author_ids?: string[];
+	corresponding_institution_ids?: string[];
+	fulltext_origin?: string;
+	cited_by_count?: number;
+	cited_by_percentile_year?: {
 		min: number;
 		max: number;
 	};
-	keywords: OpenAlexKeyword[];
-	concepts: OpenAlexConcept[];
-	referenced_works: string[];
-	ngrams_url: string;
-	cited_by_api_url: string;
-	counts_by_year: OpenAlexCitationCount[];
+	keywords?: OpenAlexKeyword[];
+	concepts?: OpenAlexConcept[];
+	referenced_works?: string[];
+	ngrams_url?: string;
+	cited_by_api_url?: string;
+	counts_by_year?: OpenAlexCitationCount[];
 	topics?: OpenAlexTopic[];
 };
 
@@ -103,7 +103,8 @@ export type PaperId =
 	| "mag"
 	| "hdl"
 	| "purl"
-	| "uri";
+	| "uri"
+	| "arxiv";
 
 export type OpenAlexTopic = {
 	id: string;
@@ -146,17 +147,17 @@ export type OpenAlexKeyword = {
 };
 
 export type OpenAlexAuthorship = {
-	author_position: "first" | "middle" | "last";
+	author_position?: "first" | "middle" | "last";
 	author: {
-		id: string;
+		id?: string;
 		display_name: string;
-		orcid: string;
+		orcid?: string;
 	};
-	institutions: OpenAlexInstitution[];
-	countries: string[];
-	is_corresponding: boolean;
-	raw_affiliation_string: string;
-	raw_affiliation_strings: string[];
+	institutions?: OpenAlexInstitution[];
+	countries?: string[];
+	is_corresponding?: boolean;
+	raw_affiliation_string?: string;
+	raw_affiliation_strings?: string[];
 };
 
 export type OpenAlexInstitution = {
@@ -177,6 +178,6 @@ export type OpenAlexLocation = {
 		type: string;
 	};
 	license: string;
-	version: "publishedVersion";
+	version: string;
 	is_published: boolean;
 };
