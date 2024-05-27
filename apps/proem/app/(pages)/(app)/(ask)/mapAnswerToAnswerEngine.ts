@@ -4,56 +4,64 @@ import { Answer } from "@proemial/data/neon/schema/answersTable";
 import { Message } from "ai/dist";
 
 export const mapAnswerToAnswerEngine = (
-	answer: Answer,
+	answer: Answer | Answer[],
 	isByCurrentUser = false,
 ): { existingData: AnswerEngineEvents[]; initialMessages: Message[] } => {
-	const transactionId = isByCurrentUser
-		? answer.slug
-		: SHARED_ANSWER_TRANSACTION_ID;
-	const existingData = [];
-	const existingPapers = answer.papers;
-	const existingShareId = answer.shareId;
-	const existingFollowUpQuestions = answer.followUpQuestions;
+	const answerArray = Array.isArray(answer) ? answer : [answer];
 
-	if (existingPapers) {
-		existingData.push({
-			type: "papers-fetched" as const,
-			transactionId,
-			data: existingPapers,
-		});
-	}
+	return answerArray.reduce(
+		(acc, answer) => {
+			const transactionId = isByCurrentUser
+				? answer.id.toString()
+				: SHARED_ANSWER_TRANSACTION_ID;
+			const existingPapers = answer.papers;
+			const existingShareId = answer.shareId;
+			const existingFollowUpQuestions = answer.followUpQuestions;
 
-	if (existingShareId) {
-		existingData.push({
-			type: "answer-saved" as const,
-			transactionId,
-			data: {
-				shareId: existingShareId,
-				runId: existingShareId,
-			},
-		});
-	}
+			if (existingPapers) {
+				acc.existingData.push({
+					type: "papers-fetched" as const,
+					transactionId,
+					data: existingPapers,
+				});
+			}
 
-	if (existingFollowUpQuestions) {
-		existingData.push({
-			type: "follow-up-questions-generated" as const,
-			transactionId,
-			data: existingFollowUpQuestions as { question: string }[],
-		});
-	}
-	return {
-		existingData: existingData,
-		initialMessages: [
-			{
+			if (existingShareId) {
+				acc.existingData.push({
+					type: "answer-saved" as const,
+					transactionId,
+					data: {
+						shareId: existingShareId,
+						runId: existingShareId,
+					},
+				});
+			}
+
+			if (existingFollowUpQuestions) {
+				acc.existingData.push({
+					type: "follow-up-questions-generated" as const,
+					transactionId,
+					data: existingFollowUpQuestions as { question: string }[],
+				});
+			}
+
+			acc.initialMessages.push({
 				id: transactionId,
 				role: "user",
 				content: answer.question,
-			},
-			{
+			});
+
+			acc.initialMessages.push({
 				id: `${transactionId}_response`,
 				role: "assistant",
 				content: answer.answer,
-			},
-		],
-	};
+			});
+
+			return acc;
+		},
+		{
+			existingData: [],
+			initialMessages: [],
+		} as { existingData: AnswerEngineEvents[]; initialMessages: Message[] },
+	);
 };

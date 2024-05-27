@@ -11,17 +11,17 @@ type Props = {
 };
 
 export default async function AnswerPage({ params: { slug } }: Props) {
-	const [answer] = await answers.getBySlug(slug);
+	const allAnswers = await answers.getBySlug(slug);
 	const { userId } = auth();
+	const [firstAnswer] = allAnswers;
 
-	if (!answer) {
+	if (!firstAnswer) {
 		redirect("/");
 	}
-	const answerIsByCurrentUser = answer.ownerId === userId;
-	console.log(answerIsByCurrentUser);
+	const answerIsByCurrentUser = firstAnswer.ownerId === userId;
 
 	const { existingData, initialMessages } = mapAnswerToAnswerEngine(
-		answer,
+		allAnswers,
 		answerIsByCurrentUser,
 	);
 
@@ -29,7 +29,7 @@ export default async function AnswerPage({ params: { slug } }: Props) {
 		<Answer
 			existingData={existingData}
 			initialMessages={initialMessages}
-			initialSessionSlug={answer.slug}
+			initialSessionSlug={firstAnswer.slug}
 		/>
 	);
 }
