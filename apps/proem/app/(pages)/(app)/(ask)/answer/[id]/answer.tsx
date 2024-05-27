@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 
 type Props = {
 	initialQuestion?: string;
+	initialSessionSlug?: string;
 	initialMessages?: Message[];
 	existingShareId?: string;
 	existingData?: AnswerEngineEvents[];

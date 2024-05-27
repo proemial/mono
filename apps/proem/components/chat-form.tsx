@@ -62,7 +62,7 @@ export function ChatForm({
 		if (onSend) {
 			onSend({ role: "user", content: question });
 		} else {
-			router.push(`/answer/${encodeURIComponent(question)}`);
+			router.push(`/answer/?q=${encodeURIComponent(question)}`);
 		}
 	};
 
