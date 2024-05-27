@@ -1,13 +1,6 @@
 import { fetchFromArxiv } from "@proemial/models/arxiv/transform";
-import {
-	OpenAlexPaper,
-	OpenAlexWorkMetadata,
-	oaBaseArgs,
-	oaBaseUrl,
-	openAlexFields,
-} from "@proemial/models/open-alex";
+import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
-import { fromInvertedIndex } from "@proemial/utils/string";
 import { cache } from "react";
 
 export const fetchArxivPaper = cache(

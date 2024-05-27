@@ -8,14 +8,16 @@ import { useMemo } from "react";
 import Markdown from "react-markdown";
 import { FeedItemCard } from "./feed-item-card";
 import { FeedItemTag } from "./feed-item-tag";
+import { Prefix } from "@proemial/redis/adapters/papers";
 
 dayjs.extend(relativeTime);
 
 type FeedItemProps = {
 	paper: OpenAlexPaper;
+	provider?: Prefix;
 };
 
-export default function FeedItem({ paper }: FeedItemProps) {
+export default function FeedItem({ paper, provider }: FeedItemProps) {
 	const tags = paper.data.topics
 		?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
 		.filter(Boolean) as string[];
@@ -42,6 +44,7 @@ export default function FeedItem({ paper }: FeedItemProps) {
 				id={paper.id}
 				date={paper.data.publication_date}
 				field={field}
+				provider={provider}
 			>
 				<Markdown>
 					{paper.generated?.title && trimForQuotes(paper.generated.title)}
@@ -49,7 +52,7 @@ export default function FeedItem({ paper }: FeedItemProps) {
 			</FeedItemCard>
 
 			<div className="flex flex-row-reverse gap-2 overflow-x-auto scrollbar-hide">
-				{tags.map((tag) => (
+				{tags?.map((tag) => (
 					<FeedItemTag key={tag} tag={tag} />
 				))}
 			</div>

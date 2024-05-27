@@ -17,6 +17,7 @@ import {
 	hasPaperBookmark,
 	removePaperBookmark,
 } from "./bookmark-paper";
+import { Prefix } from "@proemial/redis/adapters/papers";
 
 dayjs.extend(relativeTime);
 
@@ -25,9 +26,16 @@ type Props = {
 	date: string;
 	field: Field | undefined;
 	children: ReactNode;
+	provider?: Prefix;
 };
 
-export const FeedItemCard = ({ id, date, field, children }: Props) => {
+export const FeedItemCard = ({
+	id,
+	date,
+	field,
+	children,
+	provider,
+}: Props) => {
 	const { user, isSignedIn } = useUser();
 	const queryId = `bookmark-${id}`;
 	const queryClient = useQueryClient();
@@ -83,7 +91,7 @@ export const FeedItemCard = ({ id, date, field, children }: Props) => {
 				</div>
 			</div>
 			<Link
-				href={`/paper/oa/${id}`}
+				href={`/paper/${provider ?? "oa"}/${id}`}
 				onClick={trackHandler(analyticsKeys.feed.click.card)}
 			>
 				{children}
