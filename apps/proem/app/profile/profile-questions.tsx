@@ -1,4 +1,6 @@
 "use client";
+import { fetchQuestionsForCurrentUser } from "@/app/profile/profile-actions";
+import { CollapsibleSection } from "@/components/collapsible-section";
 import {
 	Collapsible,
 	CollapsibleContent,
@@ -10,46 +12,30 @@ import {
 	TableRow,
 } from "@proemial/shadcn-ui";
 import { ChevronDown, ChevronUp } from "@untitled-ui/icons-react";
+import Link from "next/link";
 import * as React from "react";
+import { useQuery } from "react-query";
 
 export function ProfileQuestions() {
-	const [isOpen, setIsOpen] = React.useState(true);
-
-	const questions = [
-		"What are the underlying principles of quantum entanglement?",
-		"How can we effectively reverse the impacts of climate change on biodiversity?",
-	];
+	const { error, data } = useQuery({
+		// queryKey: ["questions"],
+		queryFn: () => fetchQuestionsForCurrentUser(),
+	});
+	console.log(data);
+	if (!data || error) {
+		return null;
+	}
 
 	return (
-		<Collapsible open={isOpen} onOpenChange={setIsOpen}>
-			<CollapsibleTrigger className="w-full">
-				<div className="flex items-center place-content-between">
-					<div className="flex items-center gap-4">
-						<Header4>Questions</Header4>
-					</div>
-					<div className="flex items-center gap-2">
-						<p>{questions.length}</p>
-						{isOpen ? (
-							<ChevronUp className="w-4 h-4" />
-						) : (
-							<ChevronDown className="w-4 h-4" />
-						)}
-					</div>
+		<CollapsibleSection
+			trigger={<Header4>Question</Header4>}
+			extra={data?.length}
+		>
+			{data?.map((question) => (
+				<div key={question.id}>
+					<Link href={`/answer/${question.slug}`}>{question.question}</Link>
 				</div>
-			</CollapsibleTrigger>
-			<CollapsibleContent className="pt-2">
-				<Table className="text-base">
-					<TableBody>
-						{questions.map((question, index) => (
-							<TableRow key={index}>
-								<TableCell variant="text">
-									<p className="line-clamp-1">{question}</p>
-								</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-			</CollapsibleContent>
-		</Collapsible>
+			))}
+		</CollapsibleSection>
 	);
 }

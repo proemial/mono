@@ -49,9 +49,8 @@ export function Profile() {
 							</DrawerClose>
 						</DrawerTitle>
 					</DrawerHeader>
-					<ProfileContent />
 
-					{/* <ProfileBookmarks /> */}
+					<ProfileContent />
 				</div>
 			</DrawerContent>
 		</Drawer>
