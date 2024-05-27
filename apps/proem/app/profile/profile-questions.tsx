@@ -1,28 +1,17 @@
 "use client";
 import { fetchQuestionsForCurrentUser } from "@/app/profile/profile-actions";
 import { CollapsibleSection } from "@/components/collapsible-section";
-import {
-	Collapsible,
-	CollapsibleContent,
-	CollapsibleTrigger,
-	Header4,
-	Table,
-	TableBody,
-	TableCell,
-	TableRow,
-} from "@proemial/shadcn-ui";
-import { ChevronDown, ChevronUp } from "@untitled-ui/icons-react";
+import { DrawerClose, Header4 } from "@proemial/shadcn-ui";
 import Link from "next/link";
-import * as React from "react";
 import { useQuery } from "react-query";
 
 export function ProfileQuestions() {
 	const { error, data } = useQuery({
-		// queryKey: ["questions"],
+		queryKey: ["questions"],
 		queryFn: () => fetchQuestionsForCurrentUser(),
 	});
-	console.log(data);
-	if (!data || error) {
+
+	if (error) {
 		return null;
 	}
 
@@ -33,7 +22,11 @@ export function ProfileQuestions() {
 		>
 			{data?.map((question) => (
 				<div key={question.id}>
-					<Link href={`/answer/${question.slug}`}>{question.question}</Link>
+					<DrawerClose asChild>
+						<Link href={`/answer/${question.slug}`}>
+							<div className="truncate w-full">{question.question}</div>
+						</Link>
+					</DrawerClose>
 				</div>
 			))}
 		</CollapsibleSection>
