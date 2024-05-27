@@ -18,6 +18,7 @@ import {
 	Drop,
 	File02,
 	Lock01,
+	LogIn01,
 	LogOut01,
 	MessageSquare02,
 } from "@untitled-ui/icons-react";
@@ -132,7 +133,22 @@ export function ProfileYou() {
 								</TableCell>
 							</TableRow>
 						) : (
-							<SignInDrawer />
+							<SignInDrawer
+								trigger={
+									<TableRow>
+										<TableCell variant="icon">
+											<LogIn01 className="mx-auto size-4" />
+										</TableCell>
+										<TableCell
+											variant="key"
+											className="cursor-pointer"
+											onClick={trackHandler(analyticsKeys.ui.menu.click.signin)}
+										>
+											Sign in
+										</TableCell>
+									</TableRow>
+								}
+							/>
 						)}
 					</TableBody>
 				</Table>

@@ -5,6 +5,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
+import { SignInDrawer } from "@/components/sign-in-drawer";
 import { useUser } from "@clerk/nextjs";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -27,7 +28,7 @@ type Props = {
 };
 
 export const FeedItemCard = ({ id, date, field, children }: Props) => {
-	const { user } = useUser();
+	const { user, isSignedIn } = useUser();
 	const queryId = `bookmark-${id}`;
 	const queryClient = useQueryClient();
 	const { data } = useQuery(queryId, async () =>
@@ -69,10 +70,14 @@ export const FeedItemCard = ({ id, date, field, children }: Props) => {
 							onClick={handleBookmarkPaperRemove}
 							className="cursor-pointer"
 						/>
-					) : (
+					) : isSignedIn ? (
 						<BookmarkIcon
 							onClick={handleBookmarkPaperAdd}
 							className="cursor-pointer"
+						/>
+					) : (
+						<SignInDrawer
+							trigger={<BookmarkIcon className="cursor-pointer" />}
 						/>
 					)}
 				</div>

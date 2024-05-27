@@ -1,15 +1,12 @@
 "use client";
-import {
-	analyticsKeys,
-	trackHandler,
-} from "@/components/analytics/tracking/tracking-keys";
-import { SoMeLogo } from "@/components/icons/some-logo";
+
 import { FullSizeDrawer } from "@/components/full-page-drawer";
+import { SoMeLogo } from "@/components/icons/some-logo";
 import { useSignIn } from "@clerk/nextjs";
-import { Button, TableCell, TableRow } from "@proemial/shadcn-ui";
-import { LogIn01 } from "@untitled-ui/icons-react";
+import { Button } from "@proemial/shadcn-ui";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import { ReactNode } from "react";
 
 export const LOGIN_REDIRECT_URL_PARAM_NAME = "redirect_url";
 
@@ -32,7 +29,11 @@ const AUTH_PROVIDERS = [
 	},
 ] as const;
 
-export function SignInDrawer() {
+type Props = {
+	trigger: ReactNode;
+};
+
+export function SignInDrawer({ trigger }: Props) {
 	const { signIn, isLoaded } = useSignIn();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
@@ -42,22 +43,7 @@ export function SignInDrawer() {
 	}
 
 	return (
-		<FullSizeDrawer
-			trigger={
-				<TableRow>
-					<TableCell variant="icon">
-						<LogIn01 className="mx-auto size-4" />
-					</TableCell>
-					<TableCell
-						variant="key"
-						className="cursor-pointer"
-						onClick={trackHandler(analyticsKeys.ui.menu.click.signin)}
-					>
-						Sign in
-					</TableCell>
-				</TableRow>
-			}
-		>
+		<FullSizeDrawer trigger={trigger}>
 			<div className="flex flex-col justify-between h-full py-8">
 				<div className="text-[24px] text-center">Get started with Proem</div>
 				<div className="space-y-8">
