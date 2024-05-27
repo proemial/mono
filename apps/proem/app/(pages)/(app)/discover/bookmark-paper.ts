@@ -12,7 +12,7 @@ const bookmarkPaperParams = z.object({
 
 // TODO: Auth and rate limit
 
-export async function getPaperBookmark(
+export async function hasPaperBookmark(
 	params: z.infer<typeof bookmarkPaperParams>,
 ) {
 	const { userId, paperId } = bookmarkPaperParams.parse(params);

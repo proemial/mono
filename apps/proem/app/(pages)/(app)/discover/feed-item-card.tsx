@@ -13,7 +13,7 @@ import { ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
 	addPaperBookmark,
-	getPaperBookmark,
+	hasPaperBookmark,
 	removePaperBookmark,
 } from "./bookmark-paper";
 
@@ -31,7 +31,7 @@ export const FeedItemCard = ({ id, date, field, children }: Props) => {
 	const queryId = `bookmark-${id}`;
 	const queryClient = useQueryClient();
 	const { data } = useQuery(queryId, async () =>
-		getPaperBookmark({ userId: user?.id, paperId: id }),
+		hasPaperBookmark({ userId: user?.id, paperId: id }),
 	);
 	// TODO: Optimistic updates
 	const { mutate: addBookmark } = useMutation(addPaperBookmark, {

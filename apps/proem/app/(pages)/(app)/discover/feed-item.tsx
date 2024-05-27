@@ -1,5 +1,3 @@
-"use client";
-
 import { oaFieldIconMap } from "@/app/data/oa-fields";
 import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
 import { trimForQuotes } from "@/utils/string-utils";

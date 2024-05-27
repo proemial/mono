@@ -28,5 +28,3 @@ export const bookmarksRelations = relations(bookmarks, ({ one }) => ({
 		references: [users.id],
 	}),
 }));
-
-export type Bookmark = typeof bookmarks.$inferSelect;

@@ -9,6 +9,3 @@ export const papers = pgTable("papers", {
 export const papersRelations = relations(papers, ({ many }) => ({
 	bookmarks: many(bookmarks),
 }));
-
-export type Paper = typeof papers.$inferSelect;
-export type NewPaper = typeof papers.$inferInsert;
