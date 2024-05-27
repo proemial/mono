@@ -24,9 +24,12 @@ type Props = {
 export const Answer = ({
 	initialQuestion,
 	initialMessages,
+	initialSessionSlug,
 	existingData,
 }: Props) => {
-	const [sessionSlug, setSessionSlug] = useState<string | undefined>(undefined);
+	const [sessionSlug, setSessionSlug] = useState<string | undefined>(
+		initialSessionSlug,
+	);
 	const { user } = useUser();
 	const { messages, data, append, isLoading, stop } = useChat({
 		sendExtraMessageFields: true,

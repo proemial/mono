@@ -26,6 +26,10 @@ export default async function AnswerPage({ params: { slug } }: Props) {
 	);
 
 	return (
-		<Answer existingData={existingData} initialMessages={initialMessages} />
+		<Answer
+			existingData={existingData}
+			initialMessages={initialMessages}
+			initialSessionSlug={answer.slug}
+		/>
 	);
 }
