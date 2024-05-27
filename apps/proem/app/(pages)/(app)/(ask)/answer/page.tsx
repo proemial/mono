@@ -1,4 +1,4 @@
-import { Answer } from "@/app/(pages)/(app)/(ask)/answer/[id]/answer";
+import { Answer } from "@/app/(pages)/(app)/(ask)/answer/[slug]/answer";
 import { redirect } from "next/navigation";
 
 type Props = {
