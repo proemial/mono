@@ -103,17 +103,8 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 							>
 								<div vaul-drawer-wrapper="">
 									<div className="bg-background">
-										<div
-											className={cn(
-												"mx-auto min-h-[100dvh] flex flex-col",
-												screenMaxWidth,
-											)}
-										>
-											<main className="w-full flex flex-col flex-grow">
-												{children}
-											</main>
-											{modal}
-										</div>
+										{children}
+										{modal}
 									</div>
 								</div>
 								<Analytics.Clients tracking={trackingInput} />

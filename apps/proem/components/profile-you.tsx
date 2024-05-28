@@ -34,7 +34,6 @@ export function ProfileYou() {
 	const { user } = useUser();
 	const { signOut } = useClerk();
 	const { membership } = useOrganization();
-	const orgRole = membership?.role === "org:admin" ? "admin" : "member";
 
 	return (
 		<Collapsible open={isOpen} onOpenChange={setIsOpen}>
@@ -124,12 +123,16 @@ export function ProfileYou() {
 								<TableCell variant="icon">
 									<BuildingIcon className="mx-auto size-4" />
 								</TableCell>
-								<TableCell variant="key" className="flex items-center gap-1">
-									<div>Organization:</div>
-									<div className="flex gap-1">
-										<span>{membership.organization.name}</span>
-										<span>({orgRole})</span>
-									</div>
+								<TableCell variant="key">
+									<Link
+										href={`/org/${membership.organization.id}`}
+										onClick={trackHandler(analyticsKeys.ui.menu.click.org)}
+										prefetch={false}
+										className="flex items-center gap-1"
+									>
+										<div>Organization:</div>
+										<div>{membership.organization.name}</div>
+									</Link>
 								</TableCell>
 							</TableRow>
 						)}

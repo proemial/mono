@@ -21,6 +21,7 @@ export const analyticsKeys = {
 				privacy: "menu:privacy:click",
 				signin: "menu:signin:click",
 				signout: "menu:signout:click",
+				org: "menu:org:click",
 
 				// TODO: cleanup
 				ask: "menu:ask:click",
