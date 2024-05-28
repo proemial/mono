@@ -102,7 +102,7 @@ export const fetchPapersByField = async (
 	]
 		.filter((f) => !!f)
 		.join(",");
-	const sort = "from_created_date:desc,type:desc";
+	const sort = "from_publication_date:desc,type:desc";
 	const url = `${oaBaseUrl}?${oaBaseArgs}&select=${select}&filter=${oaFilter}&sort=${sort}&per_page=${pageLimit}&page=${pageOffset}`;
 
 	const { meta, papers } = await fetchWithAbstract(url);
