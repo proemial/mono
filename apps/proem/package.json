@@ -12,6 +12,7 @@
 	},
 	"dependencies": {
 		"@clerk/nextjs": "^4.29.12",
+		"@clerk/themes": "2.1.8",
 		"@hookform/resolvers": "^3.3.4",
 		"@langchain/anthropic": "0.1.17",
 		"@langchain/community": "0.0.57",
@@ -37,6 +38,7 @@
 		"@vercel/edge": "^1.1.1",
 		"@vercel/speed-insights": "^1.0.10",
 		"ai": "3.1.7",
+		"antd": "^5.17.2",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.1.1",
 		"cookies-next": "^4.1.1",
@@ -62,13 +64,12 @@
 		"rehype-katex": "^7.0.0",
 		"rehype-raw": "7.0.0",
 		"remark-math": "^6.0.0",
+		"rss-parser": "^3.13.0",
 		"sharp": "^0.33.3",
 		"tailwind-scrollbar-hide": "1.1.7",
 		"zod": "3.22.4",
 		"zod-to-json-schema": "3.22.5",
-		"zustand": "^4.5.2",
-		"antd": "^5.17.2",
-		"rss-parser": "^3.13.0"
+		"zustand": "^4.5.2"
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",

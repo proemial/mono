@@ -1,15 +1,14 @@
 import "@/app/globals.css";
 import { Analytics } from "@/components/analytics";
+import { AuthProvider } from "@/components/providers/auth-provider";
 import { ReactQueryProvider } from "@/components/providers/react-query";
-import "@/env";
 import { SetActiveOrganization } from "@/components/set-active-organization";
-import { ClerkProvider } from "@clerk/nextjs";
+import "@/env";
 import { ThemeProvider, cn } from "@proemial/shadcn-ui";
 import { Metadata, Viewport } from "next";
 import { Lato as FontSans } from "next/font/google";
 import { headers } from "next/headers";
 import { ReactNode } from "react";
-import { screenMaxWidth } from "./constants";
 
 export const viewport: Viewport = {
 	width: "device-width",
@@ -73,34 +72,29 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 	const trackingInput = getTrackingInput();
 
 	return (
-		<ClerkProvider>
-			<SetActiveOrganization />
-			<Analytics.PostHog tracking={trackingInput}>
-				<html
-					lang="en"
-					className="overscroll-none"
-					style={{ scrollbarGutter: "stable" }}
-					suppressHydrationWarning
-				>
-					<head>
-						<meta
-							name="facebook-domain-verification"
-							content="ua85vc0pbvtj0hyzp6df2ftzgmmglr"
-						/>
-					</head>
-					<body
-						className={cn(
-							"min-h-[100dvh] h-full font-sans antialiased max-w-full",
-							fontSans.variable,
-						)}
-					>
-						<ReactQueryProvider>
-							<ThemeProvider
-								attribute="class"
-								defaultTheme="system"
-								enableSystem
-								disableTransitionOnChange
-							>
+		<html
+			lang="en"
+			className="overscroll-none"
+			style={{ scrollbarGutter: "stable" }}
+			suppressHydrationWarning
+		>
+			<head>
+				<meta
+					name="facebook-domain-verification"
+					content="ua85vc0pbvtj0hyzp6df2ftzgmmglr"
+				/>
+			</head>
+			<body
+				className={cn(
+					"min-h-[100dvh] h-full font-sans antialiased max-w-full",
+					fontSans.variable,
+				)}
+			>
+				<ThemeProvider>
+					<AuthProvider>
+						<Analytics.PostHog tracking={trackingInput}>
+							<ReactQueryProvider>
+								<SetActiveOrganization />
 								<div vaul-drawer-wrapper="">
 									<div className="bg-background">
 										{children}
@@ -108,12 +102,12 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 									</div>
 								</div>
 								<Analytics.Clients tracking={trackingInput} />
-							</ThemeProvider>
-						</ReactQueryProvider>
-					</body>
-				</html>
-			</Analytics.PostHog>
-		</ClerkProvider>
+							</ReactQueryProvider>
+						</Analytics.PostHog>
+					</AuthProvider>
+				</ThemeProvider>
+			</body>
+		</html>
 	);
 }
 
