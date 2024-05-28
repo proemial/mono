@@ -3,6 +3,7 @@ import { fetchRssItems as fetchArXivRssPapers } from "../../fetch-rss";
 import FeedItem from "../../../discover/feed-item";
 import { Redis } from "@proemial/redis/redis";
 import { Suspense } from "react";
+import { generate } from "../../../paper/oa/[id]/llm-generate";
 
 export const dynamic = "force-static";
 
@@ -22,7 +23,7 @@ type Props = {
 	};
 };
 
-export default async function HuggingList({ params: { category } }: Props) {
+export default async function ArXivRss({ params: { category } }: Props) {
 	return (
 		<div className="space-y-5 pb-10">
 			<div className="text-[28px] font-normal pt-6">
@@ -72,7 +73,11 @@ async function Papers({ category }: { category: string }) {
 }
 
 async function Paper({ id }: { id: string }) {
-	const paper = await Redis.papers.get(id, "arxiv");
+	let paper = await Redis.papers.get(id, "arxiv");
+
+	if (paper && !paper.generated) {
+		paper = await generate(paper, "arxiv");
+	}
 
 	if (!paper) {
 		return null;
