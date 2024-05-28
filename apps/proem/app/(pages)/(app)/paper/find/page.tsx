@@ -1,12 +1,6 @@
-import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
-import { generate } from "@/app/(pages)/(app)/paper/oa/[id]/llm-generate";
-import { PaperReader } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader";
-import { PaperReaderSkeleton } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-skeleton";
-import { Button, Input } from "@proemial/shadcn-ui";
-import { notFound } from "next/navigation";
-import PaperForm from "./form";
 import { getPaperId } from "@/utils/oa-paper";
-import { redirect } from "next/navigation";
+import { Button, Input } from "@proemial/shadcn-ui";
+import { notFound, redirect } from "next/navigation";
 
 const description = "Read science fast";
 
