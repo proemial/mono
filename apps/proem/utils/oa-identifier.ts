@@ -7,10 +7,12 @@ export function getOaPaperSearchUrl(identifier: string) {
 	// arXiv
 	if (
 		identifier.toLowerCase().includes("arxiv") ||
-		identifier.match(/.*(\d{4}\.\d{4,5}v?\d*).*/)
+		identifier.match(/.*(\d{4}\.\d{4,5}).*/)
 	) {
-		const match = identifier.match(/.*(\d{4}\.\d{4,5}v?\d*).*/);
+		const match = identifier.match(/.*(\d{4}\.\d{4,5}).*/);
 		const arxivId = match ? match[1] : identifier;
+		console.log(match, arxivId);
+
 		return `https://api.openalex.org/works?filter=locations.landing_page_url:http://arxiv.org/abs/${arxivId}|https://arxiv.org/abs/${arxivId}`;
 	}
 

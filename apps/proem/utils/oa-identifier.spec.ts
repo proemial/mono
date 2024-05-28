@@ -58,22 +58,22 @@ const identifiers = [
 	},
 	{
 		id: "0706.1234",
-		url: "https://api.openalex.org/works?filter=locations.landing_page_url:http://arxiv.org/abs/0706.1234|https://arxiv.org/abs/0706.1234&select=id",
+		url: "https://api.openalex.org/works?filter=locations.landing_page_url:http://arxiv.org/abs/0706.1234|https://arxiv.org/abs/0706.1234",
 	},
 	{
 		id: "0706.1234v1",
-		url: "https://api.openalex.org/works?filter=locations.landing_page_url:http://arxiv.org/abs/0706.1234v1|https://arxiv.org/abs/0706.1234v1&select=id",
+		url: "https://api.openalex.org/works?filter=locations.landing_page_url:http://arxiv.org/abs/0706.1234|https://arxiv.org/abs/0706.1234",
 	},
 	{
 		id: "https://arxiv.org/abs/0706.1234",
-		url: "https://api.openalex.org/works?filter=locations.landing_page_url:http://arxiv.org/abs/0706.1234|https://arxiv.org/abs/0706.1234&select=id",
+		url: "https://api.openalex.org/works?filter=locations.landing_page_url:http://arxiv.org/abs/0706.1234|https://arxiv.org/abs/0706.1234",
 	},
 	{
 		id: "http://arxiv.org/abs/0706.1234v1",
-		url: "https://api.openalex.org/works?filter=locations.landing_page_url:http://arxiv.org/abs/0706.1234v1|https://arxiv.org/abs/0706.1234v1&select=id",
+		url: "https://api.openalex.org/works?filter=locations.landing_page_url:http://arxiv.org/abs/0706.1234|https://arxiv.org/abs/0706.1234",
 	},
 	{
 		id: "https://pubmed.ncbi.nlm.nih.gov/12345678",
-		url: "https://api.openalex.org/works?filter=ids.pmid:https://pubmed.ncbi.nlm.nih.gov/12345678&select=id",
+		url: "https://api.openalex.org/works?filter=ids.pmid:https://pubmed.ncbi.nlm.nih.gov/12345678",
 	},
 ];
