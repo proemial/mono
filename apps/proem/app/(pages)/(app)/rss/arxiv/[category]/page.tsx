@@ -59,7 +59,7 @@ async function Papers({ category }: { category: string }) {
 	return (
 		<>
 			{!papers.length && <div>No papers found</div>}
-			{papers.slice(0, 5).map((paper, i) => {
+			{papers.map((paper, i) => {
 				return (
 					<div key={i} className="py-5">
 						<Suspense fallback={<div>loading...</div>}>

@@ -10,7 +10,7 @@ export async function fetchRssItems(url: string) {
 
 	const papers = [] as OpenAlexPaper[];
 	for (const id of rssResponse.items
-		.slice(0, 5)
+		.slice(0, 20)
 		.map((item) => item.id as string)) {
 		const paper = await fetchArxivPaper(id.substring(id.lastIndexOf(":") + 1));
 		if (paper) {
