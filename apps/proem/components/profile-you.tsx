@@ -4,7 +4,7 @@ import {
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
 import { ProfileColorSchemeToggle } from "@/components/profile-color-scheme-toggle";
-import { useClerk, useUser } from "@clerk/nextjs";
+import { useClerk, useOrganization, useUser } from "@clerk/nextjs";
 import {
 	Collapsible,
 	CollapsibleContent,
@@ -22,6 +22,7 @@ import {
 	LogOut01,
 	MessageSquare02,
 } from "@untitled-ui/icons-react";
+import { BuildingIcon } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
 import { SignInDrawer } from "./sign-in-drawer";
@@ -32,6 +33,8 @@ export function ProfileYou() {
 	const [isOpen, setIsOpen] = React.useState(true);
 	const { user } = useUser();
 	const { signOut } = useClerk();
+	const { membership } = useOrganization();
+	const orgRole = membership?.role === "org:admin" ? "admin" : "member";
 
 	return (
 		<Collapsible open={isOpen} onOpenChange={setIsOpen}>
@@ -116,6 +119,20 @@ export function ProfileYou() {
 								</Link>
 							</TableCell>
 						</TableRow>
+						{membership && (
+							<TableRow>
+								<TableCell variant="icon">
+									<BuildingIcon className="mx-auto size-4" />
+								</TableCell>
+								<TableCell variant="key" className="flex items-center gap-1">
+									<div>Organization:</div>
+									<div className="flex gap-1">
+										<span>{membership.organization.name}</span>
+										<span>({orgRole})</span>
+									</div>
+								</TableCell>
+							</TableRow>
+						)}
 						{user ? (
 							<TableRow>
 								<TableCell variant="icon">

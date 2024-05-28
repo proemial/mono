@@ -2,6 +2,7 @@ import "@/app/globals.css";
 import { Analytics } from "@/components/analytics";
 import { ReactQueryProvider } from "@/components/providers/react-query";
 import "@/env";
+import { SetActiveOrganization } from "@/components/set-active-organization";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider, cn } from "@proemial/shadcn-ui";
 import { Metadata, Viewport } from "next";
@@ -73,6 +74,7 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 
 	return (
 		<ClerkProvider>
+			<SetActiveOrganization />
 			<Analytics.PostHog tracking={trackingInput}>
 				<html
 					lang="en"
