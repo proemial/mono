@@ -9,7 +9,7 @@ import { fetchPapersTitles } from "./fetch-papers";
 export const AUTOCOMPLETE_FILTER = "ids";
 
 type SearchResult = {
-	results: { id: string; display_name: string }[];
+	results: { id: string; display_name: string; cited_by_count: number }[];
 };
 
 async function handleSearch(input: string): Promise<Option[]> {
@@ -20,7 +20,9 @@ async function handleSearch(input: string): Promise<Option[]> {
 
 	return json.results.map((item) => ({
 		value: item.id,
-		label: `${item.display_name}`,
+		label: `${
+			item.display_name
+		} (${item.cited_by_count.toLocaleString()} citations)`,
 	}));
 }
 
@@ -38,7 +40,6 @@ export function Autocomplete() {
 				if (papers) {
 					setOptions(papers.map((p) => ({ value: p.id, label: p.title })));
 				}
-				// TODO: Extract filter and set filter param in url
 			};
 			fetchData().catch(console.error);
 		}
