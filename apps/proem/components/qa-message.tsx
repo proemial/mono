@@ -1,31 +1,45 @@
+import { UserData } from "@/app/(pages)/(app)/paper/paper-post-utils";
 import { applyExplainLinks } from "@/components/chat-apply-links";
 import { ProemLogo } from "@/components/icons/brand/logo";
 import { UserAvatar } from "@/components/user-avatar";
+import { useUser } from "@clerk/nextjs";
 import {
-	Message,
 	MessageAuthor,
 	MessageBubble,
+	Message as MessageComponent,
 	MessageContent,
 	MessageFooter,
 } from "@proemial/shadcn-ui";
+import { Message } from "ai";
+import { useMemo } from "react";
 
 type QAMessageProps = {
-	role: "user" | "assistant";
-	content: string | undefined;
+	message:
+		| (Message & {
+				authorUserData?: UserData;
+		  })
+		| undefined;
 	onExplainerClick: (msg: string) => void;
 };
 
-export function QAMessage({
-	role,
-	content = "",
-	onExplainerClick,
-}: QAMessageProps) {
-	if (!content) {
+export function QAMessage({ message, onExplainerClick }: QAMessageProps) {
+	if (!message?.content) {
 		return undefined;
 	}
+	const { role, content, authorUserData } = message;
+	const { user, isLoaded, isSignedIn } = useUser();
+	const authorName = useMemo(() => {
+		if (authorUserData) {
+			return `${authorUserData.firstName} ${authorUserData.lastName}`;
+		}
+		if (isLoaded && isSignedIn && user) {
+			return `${user.firstName} ${user.lastName}`;
+		}
+		return "You";
+	}, [authorUserData, isLoaded, isSignedIn, user]);
 
 	return (
-		<Message
+		<MessageComponent
 			variant={role === "user" ? "question" : "answer"}
 			className="space-y-1.5"
 		>
@@ -44,8 +58,8 @@ export function QAMessage({
 				<MessageAuthor>
 					{role === "user" ? (
 						<>
-							<UserAvatar />
-							<p>You</p>
+							<UserAvatar authorUserData={authorUserData} />
+							<p>{authorName}</p>
 						</>
 					) : (
 						<>
@@ -63,6 +77,6 @@ export function QAMessage({
 					</Button>
 				</MessageReplies> */}
 			</MessageFooter>
-		</Message>
+		</MessageComponent>
 	);
 }

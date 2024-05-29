@@ -55,6 +55,7 @@ export async function POST(req: NextRequest) {
 		onFinal: async (completion) => {
 			const { userId } = auth();
 			if (userId) {
+				// Save the post and the AI reply, if the user is signed in
 				await savePostAndReply(
 					{
 						id: paperId,

@@ -4,7 +4,10 @@ import { PaperReader } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader";
 import { PaperReaderSkeleton } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-skeleton";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { getOrgMemberPaperPosts } from "../../org-post-utils";
+import {
+	getOrgMemberPaperPosts,
+	getOwnPaperPosts,
+} from "../../paper-post-utils";
 
 const description = "Read science fast";
 
@@ -25,14 +28,18 @@ export default async function ReaderPage({ params }: Props) {
 		return generate(paper);
 	});
 
-	const orgMemberPaperPosts = await getOrgMemberPaperPosts(params.id);
+	// Get paper posts from org members, or user's own posts if there are none
+	let paperPosts = await getOrgMemberPaperPosts(params.id);
+	if (paperPosts.length === 0) {
+		paperPosts = await getOwnPaperPosts(params.id);
+	}
 
 	return (
 		<Suspense fallback={<PaperReaderSkeleton />}>
 			<PaperReader
 				fetchedPaperPromise={fetchedPaperPromise}
 				generatedPaperPromise={generatedPaperPromise}
-				paperPosts={orgMemberPaperPosts}
+				paperPosts={paperPosts}
 			/>
 		</Suspense>
 	);

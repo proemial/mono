@@ -11,9 +11,9 @@ import {
 import { QAMessage } from "@/components/qa-message";
 import { QAMessageContainer } from "@/components/qa-message-container";
 import { Header4 } from "@proemial/shadcn-ui";
-import { Message } from "ai";
 import { useChat } from "ai/react";
 import { GanttChart } from "lucide-react";
+import { MessageWithAuthorUserData } from "../paper/oa/[id]/paper-reader";
 
 export type PaperChatProps = Pick<
 	ChatSuggestedFollowupsProps,
@@ -21,7 +21,7 @@ export type PaperChatProps = Pick<
 > & {
 	title: string;
 	paperId: string;
-	initialMessages: Message[];
+	initialMessages: MessageWithAuthorUserData[];
 	abstract?: string;
 };
 
@@ -37,7 +37,6 @@ export function PaperChat({
 		api: "/api/bot/chat",
 		initialMessages,
 	});
-
 	const hasQA = messages.length > 0;
 
 	const handleExplainerClick = (msg: string) => {
@@ -75,13 +74,11 @@ export function PaperChat({
 									enabled={initialMessages.length !== messages.length}
 								>
 									<QAMessage
-										content={messages[index * 2]?.content}
-										role="user"
+										message={messages[index * 2]}
 										onExplainerClick={handleExplainerClick}
 									/>
 									<QAMessage
-										content={messages[index * 2 + 1]?.content}
-										role="assistant"
+										message={messages[index * 2 + 1]}
 										onExplainerClick={handleExplainerClick}
 									/>
 								</QAMessageContainer>
