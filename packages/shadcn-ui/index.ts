@@ -9,6 +9,7 @@ export * from "./components/ui/icons";
 export * from "./components/ui/input";
 export * from "./components/ui/label";
 export * from "./components/ui/message";
+export * from "./components/ui/multiple-selector";
 export * from "./components/ui/navigation-menu";
 export * from "./components/ui/scroll-area";
 export * from "./components/ui/select";

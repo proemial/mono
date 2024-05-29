@@ -1,11 +1,11 @@
 import { Feed } from "@/app/(pages)/(app)/discover/feed";
-import { Filter } from "./filter";
+import MultipleSelectorDemo from "./autocomplete";
 
 export default function FiltersPage() {
 	return (
 		<div className="space-y-6">
 			<Feed>
-				<Filter rootPath="/discover/filters" />
+				<MultipleSelectorDemo />
 			</Feed>
 		</div>
 	);

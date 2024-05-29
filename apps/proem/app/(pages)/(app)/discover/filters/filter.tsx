@@ -1,7 +1,7 @@
 "use client";
 import { Dropdown, MenuProps, Switch, TreeSelect } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
-import oaTopics from "./oa.json";
+import oaTopics from "../topics/oa.json";
 import { TreeFilterHelpers as helpers } from "../topics/tree-filter-helpers";
 import { useState } from "react";
 import { Check } from "@untitled-ui/icons-react";
