@@ -19,16 +19,16 @@ export function FilterProfile({
 }
 
 const variants = cva(
-	"m-[1px]", // base styles
+	"m-[1px] cursor-default", // hover:bg-opacity-80 cursor-pointer
 	{
 		variants: {
 			variant: {
-				d: "bg-gray-100 text-gray-800",
-				f: "bg-gray-900 text-gray-100",
-				s: "bg-gray-600 text-gray-300",
-				t: "bg-gray-300 text-gray-600",
-				k: "bg-orange-200 text-gray-800",
-				c: "bg-purple-200 text-gray-800",
+				d: "hover:bg-gray-100 bg-gray-100 text-gray-800",
+				f: "hover:bg-gray-900 bg-gray-900 text-gray-100",
+				s: "hover:bg-gray-600 bg-gray-600 text-gray-300",
+				t: "hover:bg-gray-300 bg-gray-300 text-gray-600",
+				k: "hover:bg-orange-200 bg-orange-200 text-gray-800",
+				c: "hover:bg-purple-200 bg-purple-200 text-gray-800",
 			},
 		},
 		defaultVariants: {
