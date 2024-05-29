@@ -71,6 +71,7 @@ export function PaperReader({
 				<PaperChat
 					suggestions={generatedPaper.generated?.starters}
 					title={fetchedPaper.data.title}
+					paperId={fetchedPaper.id}
 					abstract={fetchedPaper.data.abstract}
 				/>
 			</div>

@@ -19,12 +19,18 @@ export type PaperChatProps = Pick<
 	"suggestions"
 > & {
 	title: string;
+	paperId: string;
 	abstract?: string;
 };
 
-export function PaperChat({ suggestions, title, abstract }: PaperChatProps) {
+export function PaperChat({
+	suggestions,
+	title,
+	paperId,
+	abstract,
+}: PaperChatProps) {
 	const { messages, append } = useChat({
-		body: { title, abstract },
+		body: { title, abstract, paperId },
 		api: "/api/bot/chat",
 	});
 
