@@ -1,6 +1,7 @@
 import { relations, sql } from "drizzle-orm";
 import { pgTable, text } from "drizzle-orm/pg-core";
 import { bookmarks } from "./bookmarks";
+import { posts } from "./posts";
 
 export const users = pgTable("users", {
 	id: text("id").primaryKey(),
@@ -9,4 +10,5 @@ export const users = pgTable("users", {
 
 export const usersRelations = relations(users, ({ many }) => ({
 	bookmarks: many(bookmarks),
+	posts: many(posts),
 }));
