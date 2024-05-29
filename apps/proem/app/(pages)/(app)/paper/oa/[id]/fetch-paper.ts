@@ -15,7 +15,7 @@ import { cache } from "react";
 import { TreeFilterHelpers } from "../../../discover/topics/tree-filter-helpers";
 
 export const fetchPaper = cache(
-	async (id: string): Promise<OpenAlexPaper | null> => {
+	async (id: string): Promise<OpenAlexPaper | undefined> => {
 		const paper = await Redis.papers.get(id);
 
 		if (
@@ -30,7 +30,7 @@ export const fetchPaper = cache(
 				console.error(
 					`Failed to fetch paper ${id} from OpenAlex (${oaPaper.status}: ${oaPaper.statusText})`,
 				);
-				return null;
+				return undefined;
 			}
 			const oaPaperJson = (await oaPaper.json()) as OpenAlexWorkMetadata;
 
@@ -48,7 +48,7 @@ export const fetchPaper = cache(
 				};
 			});
 		}
-		return paper;
+		return paper ?? undefined;
 	},
 );
 

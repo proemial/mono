@@ -1,122 +1,48 @@
 "use client";
 import { Button, Input } from "@proemial/shadcn-ui";
-import { FeatureSet, getPaperFeatures } from "./get-features";
+import { getFingerprintForPaper, getFingerprints } from "./get-features";
 import { useFormState } from "react-dom";
 import { ReactNode, useEffect, useState } from "react";
-import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
 import { cva } from "class-variance-authority";
-
-type Types = "d" | "f" | "s" | "t" | "k" | "c";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Fingerprint, getFingerprintFilter } from "./fingerprint";
 
 export function FeatureForm() {
-	const [featureSet, action] = useFormState(getPaperFeatures, null, "n/a");
-	const [featureSets, setfeatureSets] = useState<FeatureSet[]>([]);
+	const [fingerprint, action] = useFormState(getFingerprints, null, "n/a");
+	const [fingerprints, setFingerprints] = useState<Fingerprint[]>([]);
+
+	const router = useRouter();
+	const searchParams = useSearchParams();
+	const filter = searchParams.get("filter") ?? "";
 
 	useEffect(() => {
-		if (featureSet) {
-			for (const set of featureSet) {
-				if (!featureSets.find((f) => f.id === set.id)) {
-					setfeatureSets([...featureSets, set]);
+		if (filter) {
+			// declare the data fetching function
+			const fetchData = async () => {
+				const identifiers = filter.split(",");
+				const features = await Promise.all(
+					identifiers.map(getFingerprintForPaper),
+				);
+				console.log("features", features);
+
+				setFingerprints(features.filter((f) => !!f) as Fingerprint[]);
+			};
+
+			fetchData().catch(console.error);
+		}
+	}, [filter]);
+
+	useEffect(() => {
+		if (fingerprint) {
+			for (const set of fingerprint) {
+				if (!fingerprints.find((f) => f.id === set.id)) {
+					setFingerprints([...fingerprints, set]);
 				}
 			}
 		}
-	}, [featureSet, featureSets]);
+	}, [fingerprint, fingerprints]);
 
-	const table = {} as {
-		[key: string]: {
-			id: string;
-			label: string;
-			type: Types;
-			count: number;
-			score: number;
-		};
-	};
-	const ids = {
-		topics: [] as string[],
-		concepts: [] as string[],
-		keywords: [] as string[],
-	};
-
-	for (const set of featureSets) {
-		for (const item of set.topics) {
-			// .slice(0, 1)) {
-			const key = item.id;
-			if (!ids.topics.includes(key)) {
-				ids.topics.push(key);
-			}
-
-			const count = table[key]?.count ?? 0;
-			const score = table[key]?.score ?? 0;
-			const label = oaTopicsTranslationMap[item.id]?.["short-name"] as string;
-			table[key] = {
-				id: key,
-				label,
-				type: "t",
-				count: count + 1,
-				score: (score + item.score) / 2,
-			};
-		}
-
-		for (const item of set.concepts) {
-			const key = item.id;
-			if (!ids.concepts.includes(key)) {
-				ids.concepts.push(key);
-			}
-
-			const count = table[key]?.count ?? 0;
-			const score = table[key]?.score ?? 0;
-			table[key] = {
-				id: key,
-				label: item.display_name,
-				type: "c",
-				count: count + 1,
-				score: (score + item.score) / 2,
-			};
-		}
-
-		for (const item of set.keywords) {
-			const key = item.id;
-			if (!ids.keywords.includes(key)) {
-				ids.keywords.push(key);
-			}
-
-			const count = table[key]?.count ?? 0;
-			const score = table[key]?.score ?? 0;
-			table[key] = {
-				id: key,
-				label: item.display_name,
-				type: "k",
-				count: count + 1,
-				score: (score + item.score) / 2,
-			};
-		}
-	}
-
-	const filtered = Object.values(table)
-		.filter(
-			(item) =>
-				// (featureSets.length === 1 || item.count > 1) &&
-				item.score > 0.1,
-		)
-		.sort((a, b) => (a.score > b.score ? -1 : 1))
-		.sort((a, b) => (a.count > b.count ? -1 : 1));
-
-	const topics = filtered
-		.filter((item) => item.type === "t")
-		.map((item) => item.id.split("/").at(-1))
-		.join("|");
-	const concepts = filtered
-		.filter((item) => item.type === "c")
-		.map((item) => item.id.split("/").at(-1))
-		.join("|");
-
-	console.log(
-		`https://api.openalex.org/works?sort=from_publication_date:desc&select=title,publication_date,primary_topic,keywords&filter=type:types/preprint|types/article,publication_date:%3C2024-05-28,publication_date:%3E2024-05-21,primary_topic.id:${topics},concepts.id:${concepts}`,
-	);
-
-	const handleDelete = (id: string) => {
-		setfeatureSets(featureSets.filter((f) => f.id !== id));
-	};
+	const filtered = getFingerprintFilter(fingerprints);
 
 	// https://api.openalex.org/works?sort=from_publication_date:desc&select=title,publication_date,primary_topic,keywords&filter=type:types/preprint|types/article,publication_date:%3C2024-05-28,publication_date:%3E2024-05-21,primary_topic.id:$$,concepts.id:$$
 	// w4385245566,w4226278401,w4384918448,w4386437475,
@@ -133,6 +59,7 @@ export function FeatureForm() {
 					name="identifier"
 					placeholder="Identifier"
 					className="grow bg-white dark:bg-neutral-600"
+					defaultValue={filter}
 				/>
 
 				<div className="flex mb-2 w-full justify-between">
@@ -154,11 +81,7 @@ export function FeatureForm() {
 			</div>
 			<div className="mb-4 flex flex-wrap">
 				{filtered.map((item, i) => (
-					<Badge
-						key={i}
-						variant={item.type}
-						onClick={() => handleDelete(item.id)}
-					>
+					<Badge key={i} variant={item.type}>
 						{`${item.count}x${item.label}: ${item.score.toFixed(2)}`}
 					</Badge>
 				))}
@@ -186,17 +109,12 @@ const variants = cva(
 	},
 );
 
-function Badge({
-	children,
-	variant,
-	onClick,
-}: { children: ReactNode; variant: Types; onClick?: () => void }) {
+function Badge({ children, variant }: { children: ReactNode; variant: Types }) {
 	return (
 		<span
 			className={variants({
 				variant,
 			})}
-			onClick={() => onClick?.()}
 		>
 			{children}
 		</span>
