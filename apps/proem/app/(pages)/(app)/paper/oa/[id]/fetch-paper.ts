@@ -125,7 +125,7 @@ export const fetchPapersByField = async (
 const sortByPublicationDateDesc = (a: OpenAlexPaper, b: OpenAlexPaper) =>
 	b.data.publication_date.localeCompare(a.data.publication_date);
 
-async function fetchWithAbstract(url: string) {
+export async function fetchWithAbstract(url: string) {
 	const { meta, results } = await fetchJson<OpenAlexWorksSearchResult>(url);
 
 	const papers = results.map((paper) => {

@@ -2,38 +2,57 @@
 import MultipleSelector, {
 	Option,
 } from "@proemial/shadcn-ui/components/ui/multiple-selector";
-import React from "react";
-// import { InlineCode } from '@/components/ui/inline-code';
+import React, { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { fetchPapersTitles } from "./fetch-papers";
 
-const OPTIONS: Option[] = [
-	{ label: "nextjs", value: "Nextjs" },
-	{ label: "React", value: "react" },
-	{ label: "Remix", value: "remix" },
-	{ label: "Vite", value: "vite" },
-	{ label: "Nuxt", value: "nuxt" },
-	{ label: "Vue", value: "vue" },
-	{ label: "Svelte", value: "svelte" },
-	{ label: "Angular", value: "angular" },
-	{ label: "Ember", value: "ember" },
-	{ label: "Gatsby", value: "gatsby" },
-	{ label: "Astro", value: "astro" },
-];
+export const AUTOCOMPLETE_FILTER = "ids";
 
-const mockSearch = async (value: string): Promise<Option[]> => {
-	return new Promise((resolve) => {
-		setTimeout(() => {
-			const res = OPTIONS.filter((option) => option.value.includes(value));
-			resolve(res);
-		}, 1000);
-	});
+type SearchResult = {
+	results: { id: string; display_name: string }[];
 };
 
-const MultipleSelectorDemo = () => {
+async function handleSearch(input: string): Promise<Option[]> {
+	const suggestions = await fetch(
+		`https://api.openalex.org/autocomplete/works?q=${input}`,
+	);
+	const json = (await suggestions.json()) as SearchResult;
+
+	return json.results.map((item) => ({
+		value: item.id,
+		label: `${item.display_name} (${item.id})`,
+	}));
+}
+
+export function Autocomplete() {
+	const router = useRouter();
+
+	const searchParams = useSearchParams();
+	const ids = searchParams.get(AUTOCOMPLETE_FILTER);
+	const [options, setOptions] = useState<Option[]>([]);
+
+	useEffect(() => {
+		if (ids) {
+			const fetchData = async () => {
+				const papers = await fetchPapersTitles(ids?.split(",") ?? []);
+				if (papers) {
+					setOptions(papers.map((p) => ({ value: p.id, label: p.title })));
+				}
+			};
+			fetchData().catch(console.error);
+		}
+	}, [ids]);
+
+	const handleChange = (value: Option[]) => {
+		const filter = value.map((v) => v.value.split("/").at(-1)).join(",");
+		router.replace(`/discover/filters?${AUTOCOMPLETE_FILTER}=${filter}`);
+	};
+
 	return (
 		<div className="flex w-full flex-col gap-5">
 			<MultipleSelector
-				onSearch={async (value) => await mockSearch(value)}
-				placeholder="trying to search 'a' to get more options..."
+				onSearch={async (value) => await handleSearch(value)}
+				placeholder="Type to search papers..."
 				loadingIndicator={
 					<p className="py-2 text-center text-lg leading-10 text-muted-foreground">
 						loading...
@@ -44,9 +63,9 @@ const MultipleSelectorDemo = () => {
 						no results found.
 					</p>
 				}
+				value={options}
+				onChange={handleChange}
 			/>
 		</div>
 	);
-};
-
-export default MultipleSelectorDemo;
+}
