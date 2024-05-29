@@ -4,7 +4,10 @@ import { Redis } from "@proemial/redis/redis";
 import { cache } from "react";
 
 export const fetchArxivPaper = cache(
-	async (id: string): Promise<OpenAlexPaper | null> => {
+	async (idStr: string): Promise<OpenAlexPaper | null> => {
+		const id = idStr.split("/").at(0) as string;
+		console.log("[fetchArxivPaper] Fetch", id);
+
 		const paper = await Redis.papers.get(id, "arxiv");
 
 		if (!paper) {

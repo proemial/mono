@@ -8,19 +8,17 @@ import { fetchArxivPaper } from "./fetch-arxiv-paper";
 const description = "Read science fast";
 
 type Props = {
-	params: { id: string[] };
+	params: { id: string };
 };
 
 export default async function ArXivReaderPage({ params }: Props) {
-	const fetchedPaperPromise = fetchArxivPaper(params.id.join("/")).then(
-		(paper) => {
-			if (!paper) {
-				notFound();
-			}
+	const fetchedPaperPromise = fetchArxivPaper(params.id).then((paper) => {
+		if (!paper) {
+			notFound();
+		}
 
-			return paper;
-		},
-	);
+		return paper;
+	});
 
 	const generatedPaperPromise = fetchedPaperPromise.then((paper) => {
 		return generate(paper, "arxiv");
