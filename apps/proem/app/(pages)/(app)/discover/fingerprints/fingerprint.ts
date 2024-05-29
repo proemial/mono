@@ -6,37 +6,39 @@ import {
 	OpenAlexTopic,
 } from "@proemial/models/open-alex";
 
-export type Fingerprint = {
+export type Features = {
 	id: string;
 	topics: OpenAlexTopic[];
 	concepts: OpenAlexConcept[];
 	keywords: OpenAlexKeyword[];
 };
 
-export function getFingerprint(paper?: OpenAlexPaper) {
+export function getFeatures(paper?: OpenAlexPaper) {
 	return {
 		id: paper?.id,
 		topics: paper?.data.topics,
 		concepts: paper?.data.concepts,
 		keywords: paper?.data.keywords,
-	} as Fingerprint;
+	} as Features;
 }
 
 export type Types = "d" | "f" | "s" | "t" | "k" | "c";
 
-export function getFingerprintFilter(fingerprints: Fingerprint[]) {
-	if (!fingerprints.length) {
+export type Fingerprint = {
+	id: string;
+	label: string;
+	type: Types;
+	count: number;
+	score: number;
+};
+
+export function getFingerprintFilter(features: Features[]) {
+	if (!features.length) {
 		return { features: [], filter: "" };
 	}
 
-	const filterTable = {} as {
-		[key: string]: {
-			id: string;
-			label: string;
-			type: Types;
-			count: number;
-			score: number;
-		};
+	const fingerprints = {} as {
+		[key: string]: Fingerprint;
 	};
 	const ids = {
 		topics: [] as string[],
@@ -44,7 +46,7 @@ export function getFingerprintFilter(fingerprints: Fingerprint[]) {
 		keywords: [] as string[],
 	};
 
-	for (const fingerprint of fingerprints) {
+	for (const fingerprint of features) {
 		for (const item of fingerprint.topics) {
 			// .slice(0, 1)) {
 			const key = item.id;
@@ -52,10 +54,10 @@ export function getFingerprintFilter(fingerprints: Fingerprint[]) {
 				ids.topics.push(key);
 			}
 
-			const count = filterTable[key]?.count ?? 0;
-			const score = filterTable[key]?.score ?? 0;
+			const count = fingerprints[key]?.count ?? 0;
+			const score = fingerprints[key]?.score ?? 0;
 			const label = oaTopicsTranslationMap[item.id]?.["short-name"] as string;
-			filterTable[key] = {
+			fingerprints[key] = {
 				id: key,
 				label,
 				type: "t",
@@ -70,9 +72,9 @@ export function getFingerprintFilter(fingerprints: Fingerprint[]) {
 				ids.concepts.push(key);
 			}
 
-			const count = filterTable[key]?.count ?? 0;
-			const score = filterTable[key]?.score ?? 0;
-			filterTable[key] = {
+			const count = fingerprints[key]?.count ?? 0;
+			const score = fingerprints[key]?.score ?? 0;
+			fingerprints[key] = {
 				id: key,
 				label: item.display_name,
 				type: "c",
@@ -87,9 +89,9 @@ export function getFingerprintFilter(fingerprints: Fingerprint[]) {
 				ids.keywords.push(key);
 			}
 
-			const count = filterTable[key]?.count ?? 0;
-			const score = filterTable[key]?.score ?? 0;
-			filterTable[key] = {
+			const count = fingerprints[key]?.count ?? 0;
+			const score = fingerprints[key]?.score ?? 0;
+			fingerprints[key] = {
 				id: key,
 				label: item.display_name,
 				type: "k",
@@ -99,7 +101,7 @@ export function getFingerprintFilter(fingerprints: Fingerprint[]) {
 		}
 	}
 
-	const features = Object.values(filterTable)
+	const filterItems = Object.values(fingerprints)
 		.filter(
 			(item) =>
 				// (featureSets.length === 1 || item.count > 1) &&
@@ -108,16 +110,16 @@ export function getFingerprintFilter(fingerprints: Fingerprint[]) {
 		.sort((a, b) => (a.score > b.score ? -1 : 1))
 		.sort((a, b) => (a.count > b.count ? -1 : 1));
 
-	const topics = features
+	const topics = filterItems
 		.filter((item) => item.type === "t")
 		.map((item) => item.id.split("/").at(-1))
 		.join("|");
-	const concepts = features
+	const concepts = filterItems
 		.filter((item) => item.type === "c")
 		.map((item) => item.id.split("/").at(-1))
 		.join("|");
 
 	const filter = `type:types/preprint|types/article,publication_date:%3C2024-05-28,publication_date:%3E2024-05-21,primary_topic.id:${topics},concepts.id:${concepts}`;
 
-	return { features, filter };
+	return { features: filterItems, filter, fingerprints };
 }

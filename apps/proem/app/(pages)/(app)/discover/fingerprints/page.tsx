@@ -2,6 +2,7 @@ import { Feed } from "@/app/(pages)/(app)/discover/feed";
 import { Autocomplete } from "./autocomplete";
 import { fetchPaperFeatures } from "./fetch-papers";
 import { getFingerprintFilter } from "./fingerprint";
+import { FilterProfile } from "./filter-profile";
 
 type Props = {
 	searchParams?: {
@@ -19,7 +20,10 @@ export default async function FiltersPage({ searchParams }: Props) {
 	return (
 		<div className="space-y-6">
 			<Feed filter={fingerprint.filter}>
-				<Autocomplete />
+				<>
+					<Autocomplete />
+					<FilterProfile fingerprints={fingerprint.features} />
+				</>
 			</Feed>
 		</div>
 	);
