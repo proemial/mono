@@ -20,7 +20,7 @@ async function handleSearch(input: string): Promise<Option[]> {
 
 	return json.results.map((item) => ({
 		value: item.id,
-		label: `${item.display_name} (${item.id})`,
+		label: `${item.display_name}`,
 	}));
 }
 

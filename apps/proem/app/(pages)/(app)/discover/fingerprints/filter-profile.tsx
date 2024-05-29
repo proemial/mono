@@ -1,23 +1,25 @@
 import { cva } from "class-variance-authority";
 import { ReactNode } from "react";
 import { Fingerprint, Types } from "./fingerprint";
+import { Badge } from "@proemial/shadcn-ui/components/ui/badge";
+import { X } from "lucide-react";
 
 export function FilterProfile({
 	fingerprints,
 }: { fingerprints?: Fingerprint[] }) {
 	return (
-		<div className="mb-4 flex flex-wrap">
+		<div className="my-4 flex flex-wrap">
 			{fingerprints?.map((item, i) => (
-				<Badge key={i} variant={item.type}>
+				<FeatureBadge key={i} variant={item.type}>
 					{`${item.count}x${item.label}: ${item.score.toFixed(2)}`}
-				</Badge>
+				</FeatureBadge>
 			))}
 		</div>
 	);
 }
 
 const variants = cva(
-	"px-2 py-1 text-xs rounded-full whitespace-nowrap m-[1px]", // base styles
+	"m-[1px]", // base styles
 	{
 		variants: {
 			variant: {
@@ -35,14 +37,39 @@ const variants = cva(
 	},
 );
 
-function Badge({ children, variant }: { children: ReactNode; variant: Types }) {
+function FeatureBadge({
+	children,
+	variant,
+}: { children: ReactNode; variant: Types }) {
 	return (
-		<span
+		<Badge
 			className={variants({
 				variant,
 			})}
 		>
 			{children}
-		</span>
+			{/* <BadgeClose /> */}
+		</Badge>
+	);
+}
+
+function BadgeClose() {
+	return (
+		<button
+			type="button"
+			className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
+			// onKeyDown={(e) => {
+			// 	if (e.key === "Enter") {
+			// 		handleUnselect(option);
+			// 	}
+			// }}
+			// onMouseDown={(e) => {
+			// 	e.preventDefault();
+			// 	e.stopPropagation();
+			// }}
+			// onClick={() => handleUnselect(option)}
+		>
+			<X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+		</button>
 	);
 }
