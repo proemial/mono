@@ -142,7 +142,8 @@ export type OpenAlexConcept = {
 };
 
 export type OpenAlexKeyword = {
-	keyword: string;
+	id: string;
+	display_name: string;
 	score: number;
 };
 

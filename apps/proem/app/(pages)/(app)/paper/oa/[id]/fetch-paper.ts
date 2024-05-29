@@ -33,6 +33,7 @@ export const fetchPaper = cache(
 				return null;
 			}
 			const oaPaperJson = (await oaPaper.json()) as OpenAlexWorkMetadata;
+
 			const data = {
 				...oaPaperJson,
 				abstract: fromInvertedIndex(oaPaperJson.abstract_inverted_index, 350),
