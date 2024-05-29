@@ -21,10 +21,14 @@ const Loader = () => (
 	</div>
 );
 
-export function Feed({ children }: { children: ReactNode }) {
+export function Feed({
+	children,
+	filter,
+}: { children: ReactNode; filter?: string }) {
 	const searchParams = useSearchParams();
 	const topic = searchParams.get("topic") ?? "";
-	const filter = searchParams.get("filter") ?? "";
+	const query = filter ?? searchParams.get("filter") ?? "";
+	console.log("query", query);
 
 	const fieldId = OaFields.find(
 		(c) =>
@@ -39,7 +43,7 @@ export function Feed({ children }: { children: ReactNode }) {
 		hasNextPage,
 		error,
 	} = useInfiniteQuery(
-		fieldId ? `feed_${fieldId}` : `filter_${filter}`,
+		fieldId ? `feed_${fieldId}` : `filter_${query}`,
 		(ctx) => {
 			const nextOffset = ctx.pageParam;
 			if (nextOffset > initialPageSize) {
@@ -48,7 +52,10 @@ export function Feed({ children }: { children: ReactNode }) {
 				})();
 			}
 
-			return fetchFeed({ field: fieldId, filter }, { offset: ctx.pageParam });
+			return fetchFeed(
+				{ field: fieldId, filter: query },
+				{ offset: ctx.pageParam },
+			);
 		},
 		{
 			getNextPageParam: (lastGroup) => {
@@ -94,7 +101,7 @@ export function Feed({ children }: { children: ReactNode }) {
 		<div className="space-y-5 pb-10">
 			<div>
 				{children}
-				{filter && !!count && (
+				{query && !!count && (
 					<div className="mt-1 text-right text-xs italic">
 						{count} matching papers
 					</div>

@@ -56,7 +56,9 @@ export async function splitAndFetch(
 	{ field, filter }: { field?: number; filter?: string } = {},
 	{ limit, offset }: { limit?: number; offset?: number } = {},
 ): Promise<{ meta: OpenAlexMeta; papers: OpenAlexPaper[] }> {
-	if (!filter) {
+	const treeFilter = filter?.startsWith("and:") || filter?.startsWith("or:");
+
+	if (!filter || !treeFilter) {
 		return fetchPapersByField({ field, filter }, { limit, offset });
 	}
 
