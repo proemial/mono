@@ -38,6 +38,7 @@ export function Autocomplete() {
 				if (papers) {
 					setOptions(papers.map((p) => ({ value: p.id, label: p.title })));
 				}
+				// TODO: Extract filter and set filter param in url
 			};
 			fetchData().catch(console.error);
 		}
@@ -45,7 +46,7 @@ export function Autocomplete() {
 
 	const handleChange = (value: Option[]) => {
 		const filter = value.map((v) => v.value.split("/").at(-1)).join(",");
-		router.replace(`/discover/filters?${AUTOCOMPLETE_FILTER}=${filter}`);
+		router.replace(`/discover/fingerprints?${AUTOCOMPLETE_FILTER}=${filter}`);
 	};
 
 	return (
