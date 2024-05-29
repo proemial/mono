@@ -5,7 +5,7 @@ import { useFormState } from "react-dom";
 import { ReactNode, useEffect, useState } from "react";
 import { cva } from "class-variance-authority";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Fingerprint, getFingerprintFilter } from "./fingerprint";
+import { Fingerprint, Types, getFingerprintFilter } from "./fingerprint";
 
 export function FeatureForm() {
 	const [fingerprint, action] = useFormState(getFingerprints, null, "n/a");
