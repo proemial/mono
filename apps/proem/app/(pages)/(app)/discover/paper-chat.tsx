@@ -11,6 +11,7 @@ import {
 import { QAMessage } from "@/components/qa-message";
 import { QAMessageContainer } from "@/components/qa-message-container";
 import { Header4 } from "@proemial/shadcn-ui";
+import { Message } from "ai";
 import { useChat } from "ai/react";
 import { GanttChart } from "lucide-react";
 
@@ -20,6 +21,7 @@ export type PaperChatProps = Pick<
 > & {
 	title: string;
 	paperId: string;
+	initialMessages: Message[];
 	abstract?: string;
 };
 
@@ -27,11 +29,13 @@ export function PaperChat({
 	suggestions,
 	title,
 	paperId,
+	initialMessages,
 	abstract,
 }: PaperChatProps) {
 	const { messages, append } = useChat({
 		body: { title, abstract, paperId },
 		api: "/api/bot/chat",
+		initialMessages,
 	});
 
 	const hasQA = messages.length > 0;
@@ -68,6 +72,7 @@ export function PaperChat({
 									grow={[index * 2, index * 2 + 1].includes(
 										messages.length - 1,
 									)}
+									enabled={initialMessages.length !== messages.length}
 								>
 									<QAMessage
 										content={messages[index * 2]?.content}

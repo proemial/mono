@@ -29,6 +29,7 @@ export default async function ArXivReaderPage({ params }: Props) {
 			<PaperReader
 				fetchedPaperPromise={fetchedPaperPromise}
 				generatedPaperPromise={generatedPaperPromise}
+				paperPosts={[]} // TODO: Get paper posts
 			/>
 		</Suspense>
 	);

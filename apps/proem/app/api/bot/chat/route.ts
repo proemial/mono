@@ -1,4 +1,5 @@
 import { chatInputMaxLength } from "@/app/api/bot/input-limit";
+import { PAPER_BOT_USER_ID } from "@/app/constants";
 import { context, model, question } from "@/app/prompts/chat";
 import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
 import { ratelimitRequest } from "@/utils/ratelimiter";
@@ -95,7 +96,7 @@ const savePostAndReply = async (
 		// Save paper bot reply
 		await neonDb.insert(comments).values({
 			content: commentContent,
-			authorId: "paper_bot", // TODO: Add as constant
+			authorId: PAPER_BOT_USER_ID,
 			postId: insertedPost[0].id,
 		});
 	}
