@@ -34,6 +34,7 @@ export function PaperReader({
 							<Header4>Research Paper</Header4>
 						</div>
 					}
+					collapsed
 				>
 					<HorisontalScrollArea>
 						<Trackable trackingKey={analyticsKeys.read.click.fullPaper}>
