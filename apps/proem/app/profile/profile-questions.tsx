@@ -16,6 +16,10 @@ export function ProfileQuestions() {
 		return null;
 	}
 
+	if (data?.length === 0) {
+		return null;
+	}
+
 	return (
 		<CollapsibleSection
 			trigger={<Header4>Question</Header4>}
