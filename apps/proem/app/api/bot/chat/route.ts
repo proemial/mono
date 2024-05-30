@@ -1,5 +1,6 @@
 import { chatInputMaxLength } from "@/app/api/bot/input-limit";
 import { PAPER_BOT_USER_ID } from "@/app/constants";
+import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { context, model, question } from "@/app/prompts/chat";
 import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
 import { ratelimitRequest } from "@/utils/ratelimiter";
@@ -54,7 +55,9 @@ export async function POST(req: NextRequest) {
 	const stream = OpenAIStream(response, {
 		onFinal: async (completion) => {
 			const { userId } = auth();
-			if (userId) {
+			// TODO: Remove feature flag
+			const { isInternal } = getInternalUser();
+			if (userId && isInternal) {
 				// Save the post and the AI reply, if the user is signed in
 				await savePostAndReply(
 					{

@@ -2,9 +2,11 @@ import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { generate } from "@/app/(pages)/(app)/paper/oa/[id]/llm-generate";
 import { PaperReader } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader";
 import { PaperReaderSkeleton } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-skeleton";
+import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import {
+	PaperPost,
 	getOrgMemberPaperPosts,
 	getOwnPaperPosts,
 } from "../../paper-post-utils";
@@ -28,10 +30,15 @@ export default async function ReaderPage({ params }: Props) {
 		return generate(paper);
 	});
 
+	// TODO: Remove feature flag
+	const { isInternal } = getInternalUser();
 	// Get paper posts from org members, or user's own posts if there are none
-	let paperPosts = await getOrgMemberPaperPosts(params.id);
-	if (paperPosts.length === 0) {
-		paperPosts = await getOwnPaperPosts(params.id);
+	let paperPosts: PaperPost[] = [];
+	if (isInternal) {
+		paperPosts = await getOrgMemberPaperPosts(params.id);
+		if (paperPosts.length === 0) {
+			paperPosts = await getOwnPaperPosts(params.id);
+		}
 	}
 
 	return (
