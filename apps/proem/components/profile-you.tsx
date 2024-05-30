@@ -8,6 +8,7 @@ import { useClerk, useOrganization, useUser } from "@clerk/nextjs";
 import {
 	Collapsible,
 	CollapsibleContent,
+	Icons,
 	Table,
 	TableBody,
 	TableCell,
@@ -22,7 +23,6 @@ import {
 	LogOut01,
 	MessageSquare02,
 } from "@untitled-ui/icons-react";
-import { BuildingIcon } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
 import { SignInDrawer } from "./sign-in-drawer";
@@ -121,7 +121,7 @@ export function ProfileYou() {
 						{membership && (
 							<TableRow>
 								<TableCell variant="icon">
-									<BuildingIcon className="mx-auto size-4" />
+									<Icons.organization className="mx-auto size-4" />
 								</TableCell>
 								<TableCell variant="key">
 									<Link
