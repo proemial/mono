@@ -41,7 +41,7 @@ export function QAMessage({ message, onExplainerClick }: QAMessageProps) {
 	return (
 		<MessageComponent
 			variant={role === "user" ? "question" : "answer"}
-			className="space-y-1.5"
+			className="space-y-0.5"
 		>
 			<MessageContent>
 				<MessageBubble>
