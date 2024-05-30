@@ -1,6 +1,6 @@
 "use client";
 
-import { UserData } from "@/app/(pages)/(app)/paper/org-post-utils";
+import { UserData } from "@/app/(pages)/(app)/paper/paper-post-utils";
 import { User as UserIcon } from "@/components/icons/User";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
