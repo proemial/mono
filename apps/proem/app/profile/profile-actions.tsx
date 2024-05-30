@@ -9,11 +9,5 @@ export async function fetchQuestionsForCurrentUser() {
 		return [];
 	}
 
-	const answersByCurrentUser = await answers.getByUserId(userId);
-
-	return answersByCurrentUser.map((answer) => ({
-		id: answer.id,
-		question: answer.question,
-		slug: answer.slug,
-	}));
+	return answers.getByUserId(userId);
 }

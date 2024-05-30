@@ -7,12 +7,13 @@ import {
 } from "@/app/api/bot/answer-engine/events";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { useUser } from "@/app/hooks/use-user";
+import { USER_QUESTIONS_QUERY_KEY } from "@/app/profile/profile-questions";
 import { ChatInput } from "@/components/chat-input";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
 import { cn } from "@proemial/shadcn-ui";
 import { Message, useChat } from "ai/react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useQueryClient } from "react-query";
 
 type Props = {
 	initialQuestion?: string;
@@ -30,12 +31,16 @@ export const Answer = ({
 	const [sessionSlug, setSessionSlug] = useState<string | undefined>(
 		initialSessionSlug,
 	);
+	const queryClient = useQueryClient();
 	const { user } = useUser();
 	const { messages, data, append, isLoading, stop } = useChat({
 		sendExtraMessageFields: true,
 		id: initialQuestion,
 		api: "/api/bot/ask2",
 		initialMessages,
+		onFinish: () => {
+			queryClient.invalidateQueries(USER_QUESTIONS_QUERY_KEY);
+		},
 		body: { slug: sessionSlug, userId: user?.id },
 	}) as Omit<ReturnType<typeof useChat>, "data"> & {
 		data: AnswerEngineEvents[];

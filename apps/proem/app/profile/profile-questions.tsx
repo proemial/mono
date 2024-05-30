@@ -4,10 +4,11 @@ import { CollapsibleSection } from "@/components/collapsible-section";
 import { DrawerClose, Header4 } from "@proemial/shadcn-ui";
 import Link from "next/link";
 import { useQuery } from "react-query";
+export const USER_QUESTIONS_QUERY_KEY = "user-questions";
 
 export function ProfileQuestions() {
 	const { error, data } = useQuery({
-		queryKey: ["questions"],
+		queryKey: [USER_QUESTIONS_QUERY_KEY],
 		queryFn: () => fetchQuestionsForCurrentUser(),
 	});
 
@@ -24,7 +25,7 @@ export function ProfileQuestions() {
 				<div key={question.id}>
 					<DrawerClose asChild>
 						<Link href={`/answer/${question.slug}`}>
-							<div className="truncate w-full">{question.question}</div>
+							<div className="truncate w-full pr-20">{question.question}</div>
 						</Link>
 					</DrawerClose>
 				</div>
