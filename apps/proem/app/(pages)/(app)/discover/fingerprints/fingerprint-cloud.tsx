@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 import { ReactNode } from "react";
-import { Fingerprint, Types } from "./fingerprint";
+import { Fingerprint, Types } from "./helpers/fingerprint";
 import { Badge } from "@proemial/shadcn-ui/components/ui/badge";
 
 type Props = {

@@ -34,7 +34,7 @@ export type Fingerprint = {
 
 export function getFingerprints(features: Features[]) {
 	if (!features.length) {
-		return { fingerprints: [], query: "" };
+		return [];
 	}
 
 	const fingerprintMap = {} as {
@@ -110,16 +110,5 @@ export function getFingerprints(features: Features[]) {
 		.sort((a, b) => (a.score > b.score ? -1 : 1))
 		.sort((a, b) => (a.count > b.count ? -1 : 1));
 
-	const topics = fingerprints
-		.filter((item) => item.type === "t")
-		.map((item) => item.id.split("/").at(-1))
-		.join("|");
-	const concepts = fingerprints
-		.filter((item) => item.type === "c")
-		.map((item) => item.id.split("/").at(-1))
-		.join("|");
-
-	const query = `type:types/preprint|types/article,publication_date:%3C2024-05-28,publication_date:%3E2024-05-21,primary_topic.id:${topics},concepts.id:${concepts}`;
-
-	return { fingerprints, query };
+	return fingerprints;
 }

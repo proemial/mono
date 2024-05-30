@@ -9,8 +9,8 @@ import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useSearchParams } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
-import { fetchFeed } from "./fetch-feed";
-import { Fingerprint } from "./fingerprint";
+import { fetchFeed } from "./helpers/fetch-feed";
+import { Fingerprint } from "./helpers/fingerprint";
 
 // 1-4 is fetched without scrolling
 const initialPageSize = 4;
@@ -23,11 +23,8 @@ const Loader = () => (
 
 export function PaperFeed({
 	children,
-	filter,
-	profile,
-}: { children: ReactNode; filter?: string; profile: Fingerprint[] }) {
-	const searchParams = useSearchParams();
-
+	fingerprints,
+}: { children: ReactNode; fingerprints: Fingerprint[] }) {
 	const {
 		status,
 		data,
@@ -36,7 +33,7 @@ export function PaperFeed({
 		hasNextPage,
 		error,
 	} = useInfiniteQuery(
-		`filter_${filter}`,
+		`filter_${fingerprints.map((f) => f.id).join("|")}`,
 		(ctx) => {
 			const nextOffset = ctx.pageParam;
 			if (nextOffset > initialPageSize) {
@@ -45,7 +42,7 @@ export function PaperFeed({
 				})();
 			}
 
-			return fetchFeed({ filter }, { offset: ctx.pageParam });
+			return fetchFeed({ fingerprints }, { offset: ctx.pageParam });
 		},
 		{
 			getNextPageParam: (lastGroup) => {
