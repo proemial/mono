@@ -1,7 +1,7 @@
 import { SHARED_ANSWER_TRANSACTION_ID } from "@/app/(pages)/(app)/share/constants";
 import { AnswerEngineEvents } from "@/app/api/bot/answer-engine/events";
-import { Answer } from "@proemial/data/neon/schema/answersTable";
-import { Message } from "ai/dist";
+import { Answer } from "@proemial/data/neon/schema";
+import { Message } from "ai/react";
 
 export const mapAnswerToAnswerEngine = (
 	answer: Answer | Answer[],
