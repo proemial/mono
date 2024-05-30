@@ -8,7 +8,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ReactNode } from "react";
 
-export const LOGIN_REDIRECT_URL_PARAM_NAME = "redirect_url";
+const LOGIN_REDIRECT_URL_PARAM_NAME = "redirect_url";
 
 const AUTH_PROVIDERS = [
 	{

@@ -15,10 +15,7 @@ import { useChat } from "ai/react";
 import { GanttChart } from "lucide-react";
 import { MessageWithAuthorUserData } from "../paper/oa/[id]/paper-reader";
 
-export type PaperChatProps = Pick<
-	ChatSuggestedFollowupsProps,
-	"suggestions"
-> & {
+type PaperChatProps = Pick<ChatSuggestedFollowupsProps, "suggestions"> & {
 	title: string;
 	paperId: string;
 	initialMessages: MessageWithAuthorUserData[];

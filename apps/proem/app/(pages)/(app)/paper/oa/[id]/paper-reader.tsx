@@ -13,7 +13,7 @@ import { Message, nanoid } from "ai";
 import { use } from "react";
 import { PaperPost, UserData } from "../../paper-post-utils";
 
-export type PaperReaderProps = {
+type PaperReaderProps = {
 	fetchedPaperPromise: Promise<Omit<OpenAlexPaper, "generated">>;
 	generatedPaperPromise: Promise<OpenAlexPaper>;
 	paperPosts: PaperPost[];

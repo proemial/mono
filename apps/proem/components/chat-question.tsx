@@ -1,8 +1,8 @@
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
-import { UserAvatar } from "@/components/user-avatar";
 import { User } from "@/components/icons/User";
+import { UserAvatar } from "@/components/user-avatar";
 
-export type ChatQuestionProps = {
+type ChatQuestionProps = {
 	question?: string;
 	isQuestionByCurrentUser: boolean;
 };

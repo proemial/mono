@@ -1,4 +1,4 @@
-export type ClerkUser =
+type ClerkUser =
 	| {
 			firstName: string | null;
 			lastName: string | null;
