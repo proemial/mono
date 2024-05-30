@@ -24,8 +24,12 @@ export default authMiddleware({
 			},
 		});
 	},
+	ignoredRoutes: ["/((?!api|trpc|paper/arxiv))(_next.*|.+\\.[\\w]+$)"],
 });
 
 export const config = {
-	matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+	// The `paper/arxiv` part is a work-around for Clerk not supporting URLs
+	// with `.` in them.
+	// GitHub issue: https://github.com/clerk/javascript/issues/1656
+	matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc|paper/arxiv)(.*)"],
 };
