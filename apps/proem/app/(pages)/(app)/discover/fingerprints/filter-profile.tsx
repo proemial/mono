@@ -2,74 +2,35 @@ import { cva } from "class-variance-authority";
 import { ReactNode } from "react";
 import { Fingerprint, Types } from "./fingerprint";
 import { Badge } from "@proemial/shadcn-ui/components/ui/badge";
-import { X } from "lucide-react";
 
-export function FilterProfile({
-	fingerprints,
-}: { fingerprints?: Fingerprint[] }) {
+type Props = {
+	fingerprints?: Fingerprint[];
+};
+
+export function FingerprintCloud({ fingerprints }: Props) {
 	return (
 		<div className="my-4 flex flex-wrap">
 			{fingerprints?.map((item, i) => (
-				<FeatureBadge key={i} variant={item.type}>
+				<Badge key={i} className={badgeStyle({ variant: item.type })}>
 					{`${item.count}x${item.label}: ${item.score.toFixed(2)}`}
-				</FeatureBadge>
+				</Badge>
 			))}
 		</div>
 	);
 }
 
-const variants = cva(
+const badgeStyle = cva(
 	"m-[1px] cursor-default", // hover:bg-opacity-80 cursor-pointer
 	{
 		variants: {
 			variant: {
-				d: "hover:bg-gray-100 bg-gray-100 text-gray-800",
-				f: "hover:bg-gray-900 bg-gray-900 text-gray-100",
-				s: "hover:bg-gray-600 bg-gray-600 text-gray-300",
-				t: "hover:bg-gray-300 bg-gray-300 text-gray-600",
-				k: "hover:bg-orange-200 bg-orange-200 text-gray-800",
-				c: "hover:bg-purple-200 bg-purple-200 text-gray-800",
+				topic: "hover:bg-gray-300 bg-gray-300 text-gray-600",
+				keyword: "hover:bg-orange-200 bg-orange-200 text-gray-800",
+				concept: "hover:bg-purple-200 bg-purple-200 text-gray-800",
 			},
 		},
 		defaultVariants: {
-			variant: "t",
+			variant: "topic",
 		},
 	},
 );
-
-function FeatureBadge({
-	children,
-	variant,
-}: { children: ReactNode; variant: Types }) {
-	return (
-		<Badge
-			className={variants({
-				variant,
-			})}
-		>
-			{children}
-			{/* <BadgeClose /> */}
-		</Badge>
-	);
-}
-
-function BadgeClose() {
-	return (
-		<button
-			type="button"
-			className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
-			// onKeyDown={(e) => {
-			// 	if (e.key === "Enter") {
-			// 		handleUnselect(option);
-			// 	}
-			// }}
-			// onMouseDown={(e) => {
-			// 	e.preventDefault();
-			// 	e.stopPropagation();
-			// }}
-			// onClick={() => handleUnselect(option)}
-		>
-			<X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
-		</button>
-	);
-}

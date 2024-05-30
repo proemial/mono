@@ -1,16 +1,16 @@
 "use client";
 import FeedItem from "@/app/(pages)/(app)/discover/feed-item";
-import { fetchFeed } from "@/app/(pages)/(app)/discover/fetch-feed";
 import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { OaFields } from "@proemial/models/open-alex-fields";
 import { Icons } from "@proemial/shadcn-ui";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useSearchParams } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
+import { fetchFeed } from "./fetch-feed";
+import { Fingerprint } from "./fingerprint";
 
 // 1-4 is fetched without scrolling
 const initialPageSize = 4;
@@ -21,15 +21,12 @@ const Loader = () => (
 	</div>
 );
 
-export function Feed({ children }: { children: ReactNode }) {
+export function Feed({
+	children,
+	filter,
+	profile,
+}: { children: ReactNode; filter?: string; profile: Fingerprint[] }) {
 	const searchParams = useSearchParams();
-	const topic = searchParams.get("topic") ?? "";
-	const filter = searchParams.get("filter") ?? "";
-
-	const fieldId = OaFields.find(
-		(c) =>
-			c.display_name.toLowerCase() === decodeURI(topic).replaceAll("%2C", ","),
-	)?.id;
 
 	const {
 		status,
@@ -39,7 +36,7 @@ export function Feed({ children }: { children: ReactNode }) {
 		hasNextPage,
 		error,
 	} = useInfiniteQuery(
-		fieldId ? `feed_${fieldId}` : `filter_${filter}`,
+		`filter_${filter}`,
 		(ctx) => {
 			const nextOffset = ctx.pageParam;
 			if (nextOffset > initialPageSize) {
@@ -48,10 +45,7 @@ export function Feed({ children }: { children: ReactNode }) {
 				})();
 			}
 
-			return fetchFeed(
-				{ field: fieldId, filter: filter },
-				{ offset: ctx.pageParam },
-			);
+			return fetchFeed({ filter }, { offset: ctx.pageParam });
 		},
 		{
 			getNextPageParam: (lastGroup) => {
@@ -72,7 +66,7 @@ export function Feed({ children }: { children: ReactNode }) {
 	const items = rowVirtualizer.getVirtualItems();
 
 	useEffect(() => {
-		const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
+		const [lastItem] = [...items].reverse();
 
 		if (!lastItem) {
 			return;
@@ -85,19 +79,13 @@ export function Feed({ children }: { children: ReactNode }) {
 		) {
 			fetchNextPage();
 		}
-	}, [
-		hasNextPage,
-		fetchNextPage,
-		allRows.length,
-		isFetchingNextPage,
-		rowVirtualizer.getVirtualItems(),
-	]);
+	}, [hasNextPage, fetchNextPage, allRows.length, isFetchingNextPage, items]);
 
 	return (
 		<div className="space-y-5 pb-10">
 			<div>
 				{children}
-				{filter && !!count && (
+				{!!count && (
 					<div className="mt-1 text-right text-xs italic">
 						{count} matching papers
 					</div>

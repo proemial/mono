@@ -22,7 +22,7 @@ export function getFeatures(paper?: OpenAlexPaper) {
 	} as Features;
 }
 
-export type Types = "d" | "f" | "s" | "t" | "k" | "c";
+export type Types = "topic" | "keyword" | "concept";
 
 export type Fingerprint = {
 	id: string;
@@ -32,12 +32,12 @@ export type Fingerprint = {
 	score: number;
 };
 
-export function getFingerprintFilter(features: Features[]) {
+export function getFingerprints(features: Features[]) {
 	if (!features.length) {
-		return { features: [], filter: "" };
+		return { fingerprints: [], query: "" };
 	}
 
-	const fingerprints = {} as {
+	const fingerprintMap = {} as {
 		[key: string]: Fingerprint;
 	};
 	const ids = {
@@ -46,62 +46,62 @@ export function getFingerprintFilter(features: Features[]) {
 		keywords: [] as string[],
 	};
 
-	for (const fingerprint of features) {
-		for (const item of fingerprint.topics) {
+	for (const feature of features) {
+		for (const item of feature.topics) {
 			// .slice(0, 1)) {
 			const key = item.id;
 			if (!ids.topics.includes(key)) {
 				ids.topics.push(key);
 			}
 
-			const count = fingerprints[key]?.count ?? 0;
-			const score = fingerprints[key]?.score ?? 0;
+			const count = fingerprintMap[key]?.count ?? 0;
+			const score = fingerprintMap[key]?.score ?? 0;
 			const label = oaTopicsTranslationMap[item.id]?.["short-name"] as string;
-			fingerprints[key] = {
+			fingerprintMap[key] = {
 				id: key,
 				label,
-				type: "t",
+				type: "topic",
 				count: count + 1,
 				score: (score + item.score) / 2,
 			};
 		}
 
-		for (const item of fingerprint.concepts) {
+		for (const item of feature.concepts) {
 			const key = item.id;
 			if (!ids.concepts.includes(key)) {
 				ids.concepts.push(key);
 			}
 
-			const count = fingerprints[key]?.count ?? 0;
-			const score = fingerprints[key]?.score ?? 0;
-			fingerprints[key] = {
+			const count = fingerprintMap[key]?.count ?? 0;
+			const score = fingerprintMap[key]?.score ?? 0;
+			fingerprintMap[key] = {
 				id: key,
 				label: item.display_name,
-				type: "c",
+				type: "concept",
 				count: count + 1,
 				score: (score + item.score) / 2,
 			};
 		}
 
-		for (const item of fingerprint.keywords) {
+		for (const item of feature.keywords) {
 			const key = item.id;
 			if (!ids.keywords.includes(key)) {
 				ids.keywords.push(key);
 			}
 
-			const count = fingerprints[key]?.count ?? 0;
-			const score = fingerprints[key]?.score ?? 0;
-			fingerprints[key] = {
+			const count = fingerprintMap[key]?.count ?? 0;
+			const score = fingerprintMap[key]?.score ?? 0;
+			fingerprintMap[key] = {
 				id: key,
 				label: item.display_name,
-				type: "k",
+				type: "keyword",
 				count: count + 1,
 				score: (score + item.score) / 2,
 			};
 		}
 	}
 
-	const filterItems = Object.values(fingerprints)
+	const fingerprints = Object.values(fingerprintMap)
 		.filter(
 			(item) =>
 				// (featureSets.length === 1 || item.count > 1) &&
@@ -110,16 +110,16 @@ export function getFingerprintFilter(features: Features[]) {
 		.sort((a, b) => (a.score > b.score ? -1 : 1))
 		.sort((a, b) => (a.count > b.count ? -1 : 1));
 
-	const topics = filterItems
+	const topics = fingerprints
 		.filter((item) => item.type === "t")
 		.map((item) => item.id.split("/").at(-1))
 		.join("|");
-	const concepts = filterItems
+	const concepts = fingerprints
 		.filter((item) => item.type === "c")
 		.map((item) => item.id.split("/").at(-1))
 		.join("|");
 
-	const filter = `type:types/preprint|types/article,publication_date:%3C2024-05-28,publication_date:%3E2024-05-21,primary_topic.id:${topics},concepts.id:${concepts}`;
+	const query = `type:types/preprint|types/article,publication_date:%3C2024-05-28,publication_date:%3E2024-05-21,primary_topic.id:${topics},concepts.id:${concepts}`;
 
-	return { features: filterItems, filter, fingerprints };
+	return { fingerprints, query };
 }

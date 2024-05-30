@@ -1,8 +1,8 @@
-import { Feed } from "@/app/(pages)/(app)/discover/feed";
-import { Autocomplete } from "./autocomplete";
 import { fetchPaperFeatures } from "./fetch-papers";
-import { getFingerprintFilter } from "./fingerprint";
-import { FilterProfile } from "./filter-profile";
+import { getFingerprints } from "./fingerprint";
+import { FingerprintCloud } from "./filter-profile";
+import { AutocompleteInput } from "./autocomplete";
+import { Feed } from "./feed";
 
 type Props = {
 	searchParams?: {
@@ -10,19 +10,19 @@ type Props = {
 	};
 };
 
-export default async function FiltersPage({ searchParams }: Props) {
+export default async function FingerprintsPage({ searchParams }: Props) {
 	const idParam = searchParams?.ids?.length ? searchParams.ids : undefined;
 	const ids = idParam?.split(",") ?? [];
 
 	const paperFeatures = await fetchPaperFeatures(ids);
-	const fingerprint = getFingerprintFilter(paperFeatures);
+	const profile = getFingerprints(paperFeatures);
 
 	return (
 		<div className="space-y-6">
-			<Feed filter={fingerprint.filter}>
+			<Feed filter={profile.query} profile={profile.fingerprints}>
 				<>
-					<Autocomplete />
-					<FilterProfile fingerprints={fingerprint.features} />
+					<AutocompleteInput />
+					<FingerprintCloud fingerprints={profile.fingerprints} />
 				</>
 			</Feed>
 		</div>

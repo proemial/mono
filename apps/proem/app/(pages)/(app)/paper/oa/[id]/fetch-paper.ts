@@ -56,9 +56,7 @@ export async function splitAndFetch(
 	{ field, filter }: { field?: number; filter?: string } = {},
 	{ limit, offset }: { limit?: number; offset?: number } = {},
 ): Promise<{ meta: OpenAlexMeta; papers: OpenAlexPaper[] }> {
-	const treeFilter = filter?.startsWith("and:") || filter?.startsWith("or:");
-
-	if (!filter || !treeFilter) {
+	if (!filter) {
 		return fetchPapersByField({ field, filter }, { limit, offset });
 	}
 
@@ -128,6 +126,8 @@ const sortByPublicationDateDesc = (a: OpenAlexPaper, b: OpenAlexPaper) =>
 	b.data.publication_date.localeCompare(a.data.publication_date);
 
 export async function fetchWithAbstract(url: string) {
+	console.log("[fetchWithAbstract] Fetch", url);
+
 	const { meta, results } = await fetchJson<OpenAlexWorksSearchResult>(url);
 
 	const papers = results.map((paper) => {

@@ -6,9 +6,9 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { fetchPapersTitles } from "./fetch-papers";
 
-export const AUTOCOMPLETE_FILTER = "ids";
+export const AUTOCOMPLETE_QUERY_STRING = "ids";
 
-type SearchResult = {
+type PapersSearchResult = {
 	results: { id: string; display_name: string; cited_by_count: number }[];
 };
 
@@ -16,7 +16,7 @@ async function handleSearch(input: string): Promise<Option[]> {
 	const suggestions = await fetch(
 		`https://api.openalex.org/autocomplete/works?q=${input}`,
 	);
-	const json = (await suggestions.json()) as SearchResult;
+	const json = (await suggestions.json()) as PapersSearchResult;
 
 	return json.results.map((item) => ({
 		value: item.id,
@@ -26,11 +26,11 @@ async function handleSearch(input: string): Promise<Option[]> {
 	}));
 }
 
-export function Autocomplete() {
+export function AutocompleteInput() {
 	const router = useRouter();
 
 	const searchParams = useSearchParams();
-	const ids = searchParams.get(AUTOCOMPLETE_FILTER);
+	const ids = searchParams.get(AUTOCOMPLETE_QUERY_STRING);
 	const [options, setOptions] = useState<Option[]>([]);
 
 	useEffect(() => {
@@ -47,7 +47,9 @@ export function Autocomplete() {
 
 	const handleChange = (value: Option[]) => {
 		const filter = value.map((v) => v.value.split("/").at(-1)).join(",");
-		router.replace(`/discover/fingerprints?${AUTOCOMPLETE_FILTER}=${filter}`);
+		router.replace(
+			`/discover/fingerprints?${AUTOCOMPLETE_QUERY_STRING}=${filter}`,
+		);
 	};
 
 	return (
@@ -55,6 +57,7 @@ export function Autocomplete() {
 			<MultipleSelector
 				onSearch={async (value) => await handleSearch(value)}
 				placeholder="Type to search papers..."
+				hidePlaceholderWhenSelected
 				loadingIndicator={
 					<p className="py-2 text-center text-lg leading-10 text-muted-foreground">
 						loading...
