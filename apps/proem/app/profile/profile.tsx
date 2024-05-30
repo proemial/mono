@@ -1,9 +1,8 @@
+import { screenMaxWidth } from "@/app/constants";
 import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { screenMaxWidth } from "@/app/constants";
-import { ProfileYou } from "@/components/profile-you";
 import {
 	Button,
 	Drawer,
@@ -14,6 +13,12 @@ import {
 	DrawerTrigger,
 } from "@proemial/shadcn-ui";
 import { Menu05, XClose } from "@untitled-ui/icons-react";
+import dynamic from "next/dynamic";
+const ProfileContent = dynamic(
+	() =>
+		import("@/app/profile/profile-content").then((mod) => mod.ProfileContent),
+	{ ssr: false },
+);
 
 export function Profile() {
 	return (
@@ -44,11 +49,8 @@ export function Profile() {
 							</DrawerClose>
 						</DrawerTitle>
 					</DrawerHeader>
-					<div className="px-4">
-						<ProfileYou />
-					</div>
-					{/* <ProfileQuestions />
-					<ProfileBookmarks /> */}
+
+					<ProfileContent />
 				</div>
 			</DrawerContent>
 		</Drawer>

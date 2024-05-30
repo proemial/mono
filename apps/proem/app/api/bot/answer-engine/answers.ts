@@ -5,7 +5,7 @@ import {
 	type NewAnswer,
 	answers as answersTable,
 } from "@proemial/data/neon/schema/answers";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 export const answers = {
 	async create(answer: NewAnswer) {
@@ -29,6 +29,19 @@ export const answers = {
 			.select()
 			.from(answersTable)
 			.where(eq(answersTable.slug, slug));
+	},
+
+	getByUserId(userId: NonNullable<Answer["ownerId"]>) {
+		return neonDb
+			.select({
+				id: answersTable.id,
+				question: answersTable.question,
+				slug: answersTable.slug,
+				createdAt: answersTable.createdAt,
+			})
+			.from(answersTable)
+			.where(eq(answersTable.ownerId, userId))
+			.orderBy(desc(answersTable.createdAt));
 	},
 
 	getStarters() {
@@ -55,7 +68,6 @@ export const answers = {
 	},
 
 	removeAsStarter(answerId: Answer["id"]) {
-		console.log(answerId);
 		return neonDb
 			.update(answersTable)
 			.set({ isStarterQuestion: false })

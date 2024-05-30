@@ -1,38 +1,46 @@
 "use client";
-import { QaPair } from "@/app/(pages)/(app)/(ask)/answer/[id]/qa-pair";
+import { QaPair } from "@/app/(pages)/(app)/(ask)/answer/[slug]/qa-pair";
 import {
 	AnswerEngineEvents,
 	findByEventType,
 	findLatestByEventType,
 } from "@/app/api/bot/answer-engine/events";
-import { screenMaxWidth } from "@/app/constants";
 import { useRunOnFirstRender } from "@/app/hooks/use-run-on-first-render";
 import { useUser } from "@/app/hooks/use-user";
+import { USER_QUESTIONS_QUERY_KEY } from "@/app/profile/profile-questions";
 import { ChatInput } from "@/components/chat-input";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
 import { cn } from "@proemial/shadcn-ui";
 import { Message, useChat } from "ai/react";
 import { useEffect, useState } from "react";
+import { useQueryClient } from "react-query";
 
 type Props = {
 	initialQuestion?: string;
+	initialSessionSlug?: string;
 	initialMessages?: Message[];
-	existingShareId?: string;
 	existingData?: AnswerEngineEvents[];
 };
 
 export const Answer = ({
 	initialQuestion,
 	initialMessages,
+	initialSessionSlug,
 	existingData,
 }: Props) => {
-	const [sessionSlug, setSessionSlug] = useState<string | undefined>(undefined);
+	const [sessionSlug, setSessionSlug] = useState<string | undefined>(
+		initialSessionSlug,
+	);
+	const queryClient = useQueryClient();
 	const { user } = useUser();
 	const { messages, data, append, isLoading, stop } = useChat({
 		sendExtraMessageFields: true,
 		id: initialQuestion,
 		api: "/api/bot/ask2",
 		initialMessages,
+		onFinish: () => {
+			queryClient.invalidateQueries(USER_QUESTIONS_QUERY_KEY);
+		},
 		body: { slug: sessionSlug, userId: user?.id },
 	}) as Omit<ReturnType<typeof useChat>, "data"> & {
 		data: AnswerEngineEvents[];
@@ -58,6 +66,13 @@ export const Answer = ({
 			setSessionSlug(answerSlug);
 		}
 	});
+
+	useEffect(() => {
+		if (initialQuestion && sessionSlug) {
+			// Replacing url without reloading the page with a server call
+			window.history.pushState(null, "", `/answer/${sessionSlug}`);
+		}
+	}, [sessionSlug, initialQuestion]);
 
 	const [isFocused, setIsFocused] = useState(false);
 	const handleFocusChange = (isFocused: boolean) => {
