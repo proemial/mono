@@ -38,7 +38,6 @@
 		"@vercel/edge": "^1.1.1",
 		"@vercel/speed-insights": "^1.0.10",
 		"ai": "3.1.7",
-		"antd": "^5.17.2",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.1.1",
 		"cookies-next": "^4.1.1",

@@ -48,10 +48,7 @@ export function Feed({ children }: { children: ReactNode }) {
 				})();
 			}
 
-			return fetchFeed(
-				{ field: fieldId, filter: filter },
-				{ offset: ctx.pageParam },
-			);
+			return fetchFeed({ field: fieldId }, { offset: ctx.pageParam });
 		},
 		{
 			getNextPageParam: (lastGroup) => {

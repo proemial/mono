@@ -12,7 +12,6 @@ import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
 import dayjs from "dayjs";
 import { cache } from "react";
-import { TreeFilterHelpers } from "../../../discover/topics/tree-filter-helpers";
 
 export const fetchPaper = cache(
 	async (id: string): Promise<OpenAlexPaper | undefined> => {
@@ -52,36 +51,8 @@ export const fetchPaper = cache(
 	},
 );
 
-export async function splitAndFetch(
-	{ field, filter }: { field?: number; filter?: string } = {},
-	{ limit, offset }: { limit?: number; offset?: number } = {},
-): Promise<{ meta: OpenAlexMeta; papers: OpenAlexPaper[] }> {
-	if (!filter) {
-		return fetchPapersByField({ field, filter }, { limit, offset });
-	}
-
-	const { filters } = TreeFilterHelpers.toOaFilters(filter);
-	const results = await Promise.all(
-		filters.map((f) =>
-			fetchPapersByField({ field, filter: f }, { limit, offset }),
-		),
-	);
-	const reduced = results.reduce((acc, { meta, papers }) => {
-		return {
-			meta: {
-				count: acc.meta.count + meta.count,
-				page: meta.page,
-				per_page: meta.per_page,
-			},
-			papers: [...acc.papers, ...papers],
-		};
-	});
-
-	return reduced;
-}
-
 export const fetchPapersByField = async (
-	{ field, filter }: { field?: number; filter?: string } = {},
+	{ field }: { field?: number } = {},
 	{ limit, offset }: { limit?: number; offset?: number } = {},
 ): Promise<{ meta: OpenAlexMeta; papers: OpenAlexPaper[] }> => {
 	const pageLimit = limit ?? 25;
@@ -99,7 +70,6 @@ export const fetchPapersByField = async (
 		"language:en",
 		"open_access.is_oa:true",
 		field ? `primary_topic.field.id:${field}` : undefined,
-		filter ? filter : undefined,
 	]
 		.filter((f) => !!f)
 		.join(",");
