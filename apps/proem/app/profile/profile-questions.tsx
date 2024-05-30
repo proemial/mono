@@ -12,11 +12,7 @@ export function ProfileQuestions() {
 		queryFn: () => fetchQuestionsForCurrentUser(),
 	});
 
-	if (error) {
-		return null;
-	}
-
-	if (data?.length === 0) {
+	if (error || !data || data?.length === 0) {
 		return null;
 	}
 
