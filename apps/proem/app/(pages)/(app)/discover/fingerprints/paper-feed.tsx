@@ -21,7 +21,7 @@ const Loader = () => (
 	</div>
 );
 
-export function Feed({
+export function PaperFeed({
 	children,
 	filter,
 	profile,
