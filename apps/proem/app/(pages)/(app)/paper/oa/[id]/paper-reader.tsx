@@ -9,9 +9,8 @@ import { Trackable } from "@/components/trackable";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Header4 } from "@proemial/shadcn-ui";
 import { File02 } from "@untitled-ui/icons-react";
-import { Message, nanoid } from "ai";
 import { use } from "react";
-import { PaperPost, UserData } from "../../paper-post-utils";
+import { PaperPost, paperPostsToMessages } from "../../paper-post-utils";
 
 type PaperReaderProps = {
 	fetchedPaperPromise: Promise<Omit<OpenAlexPaper, "generated">>;
@@ -84,41 +83,3 @@ export function PaperReader({
 		</div>
 	);
 }
-
-/**
- * Simple conversion from paper posts to Vercel AI messages. Returns posts and
- * replies in a flat array.
- *
- * Additions:
- *   - Added a non-null `createdAt` field to each message.
- *   - Added author user data to each message.
- */
-const paperPostsToMessages = (
-	paperPosts: PaperPost[],
-): MessageWithAuthorUserData[] => {
-	const messages: MessageWithAuthorUserData[] = [];
-	for (const post of paperPosts) {
-		messages.push({
-			id: nanoid(),
-			role: "user",
-			content: post.content,
-			createdAt: post.createdAt,
-			authorUserData: post.authorUserData,
-		});
-		for (const comment of post.comments) {
-			messages.push({
-				id: nanoid(),
-				role: "assistant",
-				content: comment.content,
-				createdAt: comment.createdAt,
-				authorUserData: comment.authorUserData,
-			});
-		}
-	}
-	return messages.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
-};
-
-export type MessageWithAuthorUserData = Message & {
-	createdAt: Date;
-	authorUserData?: UserData;
-};

@@ -12,6 +12,7 @@ import {
 	papers,
 	posts,
 } from "@proemial/data/neon/schema";
+import { Message, nanoid } from "ai";
 import { eq, inArray } from "drizzle-orm";
 
 export type UserData = {
@@ -27,6 +28,44 @@ export type PaperPost = Omit<Post, "paperId"> & {
 	comments: (Omit<Comment, "postId"> & {
 		authorUserData?: UserData;
 	})[];
+};
+
+export type MessageWithAuthorUserData = Message & {
+	createdAt: Date;
+	authorUserData?: UserData;
+};
+
+/**
+ * Simple conversion from paper posts to Vercel AI messages. Returns posts and
+ * comments in a flat array.
+ *
+ * Additions:
+ *   - Added a non-null `createdAt` field to each message.
+ *   - Added author user data to each message.
+ */
+export const paperPostsToMessages = (
+	paperPosts: PaperPost[],
+): MessageWithAuthorUserData[] => {
+	const messages: MessageWithAuthorUserData[] = [];
+	for (const post of paperPosts) {
+		messages.push({
+			id: nanoid(),
+			role: "user",
+			content: post.content,
+			createdAt: post.createdAt,
+			authorUserData: post.authorUserData,
+		});
+		for (const comment of post.comments) {
+			messages.push({
+				id: nanoid(),
+				role: "assistant",
+				content: comment.content,
+				createdAt: comment.createdAt,
+				authorUserData: comment.authorUserData,
+			});
+		}
+	}
+	return messages.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 };
 
 export const getOwnPaperPosts = async (paperId: string) => {
