@@ -1,6 +1,6 @@
-import { fetchPaperFeatures } from "./helpers/fetch-papers";
-import { getFingerprints } from "./helpers/fingerprint";
-import { FingerprintCloud } from "./fingerprint-cloud";
+import { fetchFingerprints } from "./helpers/fetch-papers";
+import { getRankedFeatures } from "./helpers/fingerprint";
+import { RankedFeatureCloud } from "./feature-cloud";
 import { AutocompleteInput } from "./autocomplete-input";
 import { PaperFeed } from "./paper-feed";
 
@@ -14,15 +14,15 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	const idParam = searchParams?.ids?.length ? searchParams.ids : undefined;
 	const ids = idParam?.split(",") ?? [];
 
-	const paperFeatures = await fetchPaperFeatures(ids);
-	const fingerprints = getFingerprints(paperFeatures);
+	const fingerprints = await fetchFingerprints(ids);
+	const rankedFeatures = getRankedFeatures(fingerprints);
 
 	return (
 		<div className="space-y-6">
-			<PaperFeed fingerprints={fingerprints}>
+			<PaperFeed rankedFeatures={rankedFeatures}>
 				<>
 					<AutocompleteInput />
-					<FingerprintCloud fingerprints={fingerprints} />
+					<RankedFeatureCloud rankedFeatures={rankedFeatures} />
 				</>
 			</PaperFeed>
 		</div>

@@ -6,39 +6,39 @@ import {
 	OpenAlexTopic,
 } from "@proemial/models/open-alex";
 
-export type Features = {
+export type Fingerprint = {
 	id: string;
 	topics: OpenAlexTopic[];
 	concepts: OpenAlexConcept[];
 	keywords: OpenAlexKeyword[];
 };
 
-export function getFeatures(paper?: OpenAlexPaper) {
+export function getFingerprint(paper?: OpenAlexPaper) {
 	return {
 		id: paper?.id,
 		topics: paper?.data.topics,
 		concepts: paper?.data.concepts,
 		keywords: paper?.data.keywords,
-	} as Features;
+	} as Fingerprint;
 }
 
-export type Types = "topic" | "keyword" | "concept";
+export type FeatureType = "topic" | "keyword" | "concept";
 
-export type Fingerprint = {
+export type RankedFeature = {
 	id: string;
 	label: string;
-	type: Types;
+	type: FeatureType;
 	count: number;
 	score: number;
 };
 
-export function getFingerprints(features: Features[]) {
-	if (!features.length) {
+export function getRankedFeatures(fingerprints: Fingerprint[]) {
+	if (!fingerprints.length) {
 		return [];
 	}
 
-	const fingerprintMap = {} as {
-		[key: string]: Fingerprint;
+	const rankedFeatureMap = {} as {
+		[key: string]: RankedFeature;
 	};
 	const ids = {
 		topics: [] as string[],
@@ -46,18 +46,18 @@ export function getFingerprints(features: Features[]) {
 		keywords: [] as string[],
 	};
 
-	for (const feature of features) {
-		for (const item of feature.topics) {
+	for (const fingerprint of fingerprints) {
+		for (const item of fingerprint.topics) {
 			// .slice(0, 1)) {
 			const key = item.id;
 			if (!ids.topics.includes(key)) {
 				ids.topics.push(key);
 			}
 
-			const count = fingerprintMap[key]?.count ?? 0;
-			const score = fingerprintMap[key]?.score ?? 0;
+			const count = rankedFeatureMap[key]?.count ?? 0;
+			const score = rankedFeatureMap[key]?.score ?? 0;
 			const label = oaTopicsTranslationMap[item.id]?.["short-name"] as string;
-			fingerprintMap[key] = {
+			rankedFeatureMap[key] = {
 				id: key,
 				label,
 				type: "topic",
@@ -66,15 +66,15 @@ export function getFingerprints(features: Features[]) {
 			};
 		}
 
-		for (const item of feature.concepts) {
+		for (const item of fingerprint.concepts) {
 			const key = item.id;
 			if (!ids.concepts.includes(key)) {
 				ids.concepts.push(key);
 			}
 
-			const count = fingerprintMap[key]?.count ?? 0;
-			const score = fingerprintMap[key]?.score ?? 0;
-			fingerprintMap[key] = {
+			const count = rankedFeatureMap[key]?.count ?? 0;
+			const score = rankedFeatureMap[key]?.score ?? 0;
+			rankedFeatureMap[key] = {
 				id: key,
 				label: item.display_name,
 				type: "concept",
@@ -83,15 +83,15 @@ export function getFingerprints(features: Features[]) {
 			};
 		}
 
-		for (const item of feature.keywords) {
+		for (const item of fingerprint.keywords) {
 			const key = item.id;
 			if (!ids.keywords.includes(key)) {
 				ids.keywords.push(key);
 			}
 
-			const count = fingerprintMap[key]?.count ?? 0;
-			const score = fingerprintMap[key]?.score ?? 0;
-			fingerprintMap[key] = {
+			const count = rankedFeatureMap[key]?.count ?? 0;
+			const score = rankedFeatureMap[key]?.score ?? 0;
+			rankedFeatureMap[key] = {
 				id: key,
 				label: item.display_name,
 				type: "keyword",
@@ -101,7 +101,7 @@ export function getFingerprints(features: Features[]) {
 		}
 	}
 
-	const fingerprints = Object.values(fingerprintMap)
+	const rankedFeatures = Object.values(rankedFeatureMap)
 		.filter(
 			(item) =>
 				// (featureSets.length === 1 || item.count > 1) &&
@@ -110,5 +110,5 @@ export function getFingerprints(features: Features[]) {
 		.sort((a, b) => (a.score > b.score ? -1 : 1))
 		.sort((a, b) => (a.count > b.count ? -1 : 1));
 
-	return fingerprints;
+	return rankedFeatures;
 }

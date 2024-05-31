@@ -1,16 +1,15 @@
 import { cva } from "class-variance-authority";
-import { ReactNode } from "react";
-import { Fingerprint, Types } from "./helpers/fingerprint";
+import { RankedFeature } from "./helpers/fingerprint";
 import { Badge } from "@proemial/shadcn-ui/components/ui/badge";
 
 type Props = {
-	fingerprints?: Fingerprint[];
+	rankedFeatures?: RankedFeature[];
 };
 
-export function FingerprintCloud({ fingerprints }: Props) {
+export function RankedFeatureCloud({ rankedFeatures }: Props) {
 	return (
 		<div className="my-4 flex flex-wrap">
-			{fingerprints?.map((item, i) => (
+			{rankedFeatures?.map((item, i) => (
 				<Badge key={i} className={badgeStyle({ variant: item.type })}>
 					{`${item.count}x${item.label}: ${item.score.toFixed(2)}`}
 				</Badge>

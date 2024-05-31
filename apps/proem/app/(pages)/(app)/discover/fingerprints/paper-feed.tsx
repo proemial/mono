@@ -10,7 +10,7 @@ import { useSearchParams } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 import { fetchFeed } from "./helpers/fetch-feed";
-import { Fingerprint } from "./helpers/fingerprint";
+import { RankedFeature } from "./helpers/fingerprint";
 
 // 1-4 is fetched without scrolling
 const initialPageSize = 4;
@@ -23,8 +23,8 @@ const Loader = () => (
 
 export function PaperFeed({
 	children,
-	fingerprints,
-}: { children: ReactNode; fingerprints: Fingerprint[] }) {
+	rankedFeatures,
+}: { children: ReactNode; rankedFeatures: RankedFeature[] }) {
 	const {
 		status,
 		data,
@@ -33,7 +33,7 @@ export function PaperFeed({
 		hasNextPage,
 		error,
 	} = useInfiniteQuery(
-		`filter_${fingerprints.map((f) => f.id).join("|")}`,
+		`filter_${rankedFeatures.map((f) => f.id).join("|")}`,
 		(ctx) => {
 			const nextOffset = ctx.pageParam;
 			if (nextOffset > initialPageSize) {
@@ -42,7 +42,7 @@ export function PaperFeed({
 				})();
 			}
 
-			return fetchFeed({ fingerprints }, { offset: ctx.pageParam });
+			return fetchFeed({ rankedFeatures }, { offset: ctx.pageParam });
 		},
 		{
 			getNextPageParam: (lastGroup) => {

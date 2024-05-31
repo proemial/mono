@@ -24,7 +24,7 @@ export async function fetchPapersTitles(ids: string[]): Promise<WithTitle[]> {
 	return fetchPapers<WithTitle[]>(ids, "id,title");
 }
 
-export async function fetchPaperFeatures(
+export async function fetchFingerprints(
 	ids: string[],
 ): Promise<WithFeatures[]> {
 	return fetchPapers<WithFeatures[]>(ids, "id,topics,keywords,concepts");

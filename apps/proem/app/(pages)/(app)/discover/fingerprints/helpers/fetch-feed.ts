@@ -10,7 +10,7 @@ import {
 import { Redis } from "@proemial/redis/redis";
 import dayjs from "dayjs";
 import { fetchWithAbstract } from "../../../paper/oa/[id]/fetch-paper";
-import { Fingerprint } from "../helpers/fingerprint";
+import { RankedFeature } from "../helpers/fingerprint";
 
 type FetchFeedParams = Required<Parameters<typeof fetchAndRerankPapers>>;
 
@@ -81,7 +81,7 @@ export async function fetchFeed(
 }
 
 export const fetchAndRerankPapers = async (
-	{ fingerprints }: { fingerprints?: Fingerprint[] } = {},
+	{ rankedFeatures }: { rankedFeatures?: RankedFeature[] } = {},
 	{ limit, offset }: { limit?: number; offset?: number } = {},
 ): Promise<{ meta: OpenAlexMeta; papers: OpenAlexPaper[] }> => {
 	const pageLimit = limit ?? 25;
@@ -89,7 +89,7 @@ export const fetchAndRerankPapers = async (
 	const today = dayjs().format("YYYY-MM-DD");
 	const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
 
-	const filter = getFingerprintFilter(fingerprints);
+	const filter = getOpenAlexFilter(rankedFeatures);
 
 	const oaFilter = [
 		"type:types/preprint|types/article",
@@ -123,12 +123,12 @@ export const fetchAndRerankPapers = async (
 	return { meta, papers: [...oaPapers].sort(sortByPublicationDateDesc) };
 };
 
-function getFingerprintFilter(fingerprints: Fingerprint[] = []) {
-	const topics = fingerprints
+function getOpenAlexFilter(rankedFeatures: RankedFeature[] = []) {
+	const topics = rankedFeatures
 		.filter((item) => item.type === "topic")
 		.map((item) => item.id.split("/").at(-1))
 		.join("|");
-	const concepts = fingerprints
+	const concepts = rankedFeatures
 		.filter((item) => item.type === "concept")
 		.map((item) => item.id.split("/").at(-1))
 		.join("|");
