@@ -3,6 +3,10 @@ import { generate } from "@/app/(pages)/(app)/paper/oa/[id]/llm-generate";
 import { PaperReader } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader";
 import { PaperReaderSkeleton } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-skeleton";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
+import { auth } from "@clerk/nextjs/server";
+import { neonDb } from "@proemial/data";
+import { users } from "@proemial/data/neon/schema";
+import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import {
@@ -41,6 +45,8 @@ export default async function ReaderPage({ params }: Props) {
 		}
 	}
 
+	await addPaperActivity(params.id);
+
 	return (
 		<Suspense fallback={<PaperReaderSkeleton />}>
 			<PaperReader
@@ -51,3 +57,50 @@ export default async function ReaderPage({ params }: Props) {
 		</Suspense>
 	);
 }
+
+const addPaperActivity = async (paperId: string) => {
+	const { userId } = auth();
+	if (!userId) {
+		return;
+	}
+	const user = await neonDb.query.users.findFirst({
+		where: eq(users.id, userId),
+	});
+	if (!user) {
+		return;
+	}
+	const existingActivities = user.paperActivities;
+	const existingActivity = existingActivities.find(
+		(a) => a.paperId === paperId,
+	);
+	if (existingActivity) {
+		existingActivities[existingActivities.indexOf(existingActivity)] = {
+			...existingActivity,
+			lastReadAt: new Date().toISOString(),
+			noOfReads: existingActivity.noOfReads + 1,
+		};
+	} else {
+		existingActivities.push({
+			paperId,
+			lastReadAt: new Date().toISOString(),
+			noOfReads: 1,
+		});
+	}
+	// Sort activities by last read date (desc)
+	const activitiesSortedReadDate = existingActivities.sort(
+		(a, b) =>
+			new Date(b.lastReadAt).getTime() - new Date(a.lastReadAt).getTime(),
+	);
+	await neonDb
+		.insert(users)
+		.values({
+			id: userId,
+			paperActivities: activitiesSortedReadDate,
+		})
+		.onConflictDoUpdate({
+			target: [users.id],
+			set: {
+				paperActivities: activitiesSortedReadDate,
+			},
+		});
+};
