@@ -28,7 +28,7 @@ export function PaperReader({
 	const initialMessages = paperPostsToMessages(paperPosts);
 
 	return (
-		<div className="space-y-4">
+		<div className="flex flex-col gap-5 h-full justify-between">
 			<div className="space-y-5">
 				<CollapsibleSection
 					trackingKey={analyticsKeys.read.click.collapse}
@@ -65,21 +65,20 @@ export function PaperReader({
 						))}
 					</HorisontalScrollArea>
 				</CollapsibleSection>
-
 				<ChatArticle
 					type="Summary"
 					trackingKeys={analyticsKeys.read}
 					paper={generatedPaper}
 				/>
-
-				<PaperChat
-					suggestions={generatedPaper.generated?.starters}
-					title={fetchedPaper.data.title}
-					paperId={fetchedPaper.id}
-					abstract={fetchedPaper.data.abstract}
-					initialMessages={initialMessages}
-				/>
 			</div>
+
+			<PaperChat
+				suggestions={generatedPaper.generated?.starters}
+				title={fetchedPaper.data.title}
+				paperId={fetchedPaper.id}
+				abstract={fetchedPaper.data.abstract}
+				initialMessages={initialMessages}
+			/>
 		</div>
 	);
 }

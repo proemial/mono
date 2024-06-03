@@ -1,6 +1,7 @@
 import { chatInputMaxLength } from "@/app/api/bot/input-limit";
 import { PAPER_BOT_USER_ID } from "@/app/constants";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
+import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { context, model, question } from "@/app/prompts/chat";
 import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
 import { ratelimitRequest } from "@/utils/ratelimiter";
@@ -10,6 +11,7 @@ import { NewPaper, NewUser, papers, users } from "@proemial/data/neon/schema";
 import { NewComment, comments } from "@proemial/data/neon/schema/comments";
 import { NewPost, posts } from "@proemial/data/neon/schema/posts";
 import { OpenAIStream, StreamingTextResponse } from "ai";
+import { StreamData } from "ai";
 import { type NextRequest, NextResponse } from "next/server";
 import { Configuration, OpenAIApi } from "openai-edge";
 
@@ -51,6 +53,8 @@ export async function POST(req: NextRequest) {
 		stream: true,
 		messages: moddedMessages,
 	});
+	const streamData = new StreamData();
+
 	// Convert the response into a friendly text-stream
 	const stream = OpenAIStream(response, {
 		onFinal: async (completion) => {
@@ -74,10 +78,25 @@ export async function POST(req: NextRequest) {
 					completion,
 				);
 			}
+
+			// Generate follow-ups
+			const followUps = await followUpQuestionChain().invoke({
+				question: postContent,
+				answer: completion,
+			});
+			streamData.append({
+				type: "follow-up-questions-generated",
+				transactionId: "foo",
+				data: followUps
+					.split("?")
+					.filter(Boolean)
+					.map((question) => ({ question: `${question.trim()}?` })),
+			});
+			streamData.close();
 		},
 	});
 	// Respond with the stream
-	return new StreamingTextResponse(stream);
+	return new StreamingTextResponse(stream, undefined, streamData);
 }
 
 const savePostAndReply = async (

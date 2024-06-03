@@ -24,7 +24,7 @@ export const QAMessageContainer = ({
 	return (
 		<div
 			ref={containerRef}
-			className={cn("flex flex-col gap-6 place-items-end", {
+			className={cn("flex flex-col gap-6 justify-between", {
 				"min-h-[calc(100dvh-208px)]": grow && enabled,
 			})}
 		>
