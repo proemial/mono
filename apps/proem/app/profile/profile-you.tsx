@@ -25,7 +25,7 @@ export function ProfileYou() {
 
 	return (
 		<div className="space-y-4">
-			<div>
+			<div className="pr-1">
 				<div className="select-none">
 					<Header2>Your profile</Header2>
 				</div>
@@ -36,48 +36,37 @@ export function ProfileYou() {
 								<TableCell variant="icon">
 									<Icons.organization className="mx-auto size-4" />
 								</TableCell>
-								<TableCell variant="key">
+								<TableCell variant="key" className="select-none">
+									Organization
+								</TableCell>
+								<TableCell variant="value">
 									<Link
 										href={`/org/${membership.organization.id}`}
 										onClick={trackHandler(analyticsKeys.ui.menu.click.org)}
 										prefetch={false}
 										className="flex items-center gap-1"
 									>
-										<div>Organization:</div>
-										<div>{membership.organization.name}</div>
+										{membership.organization.name}
 									</Link>
 								</TableCell>
 							</TableRow>
 						)}
-						{user ? (
-							<TableRow>
-								<TableCell variant="icon">
-									{user && <LogOut01 className="mx-auto size-4" />}
-								</TableCell>
-								<TableCell
-									variant="key"
-									onClick={() => {
-										trackHandler(analyticsKeys.ui.menu.click.signout)();
-										signOut();
-									}}
-									className="cursor-pointer"
-								>
-									Sign out
-								</TableCell>
-							</TableRow>
-						) : (
+						{!user && (
 							<SignInDrawer
 								trigger={
 									<TableRow>
 										<TableCell variant="icon">
 											<LogIn01 className="mx-auto size-4" />
 										</TableCell>
-										<TableCell
-											variant="key"
-											className="cursor-pointer"
-											onClick={trackHandler(analyticsKeys.ui.menu.click.signin)}
-										>
-											Sign in
+										<TableCell variant="key" className="flex">
+											<div
+												className="cursor-pointer"
+												onClick={trackHandler(
+													analyticsKeys.ui.menu.click.signin,
+												)}
+											>
+												Sign in
+											</div>
 										</TableCell>
 									</TableRow>
 								}
@@ -94,6 +83,24 @@ export function ProfileYou() {
 								<ProfileColorSchemeToggle />
 							</TableCell>
 						</TableRow>
+						{user && (
+							<TableRow>
+								<TableCell variant="icon">
+									{user && <LogOut01 className="mx-auto size-4" />}
+								</TableCell>
+								<TableCell variant="key" className="flex">
+									<div
+										onClick={() => {
+											trackHandler(analyticsKeys.ui.menu.click.signout)();
+											signOut();
+										}}
+										className="cursor-pointer"
+									>
+										Sign out
+									</div>
+								</TableCell>
+							</TableRow>
+						)}
 					</TableBody>
 				</Table>
 			</div>
