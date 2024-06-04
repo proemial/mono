@@ -44,7 +44,7 @@ export function SignInDrawer({ trigger }: Props) {
 
 	return (
 		<FullSizeDrawer trigger={trigger}>
-			<div className="flex flex-col justify-between h-full py-8">
+			<div className="flex flex-col justify-between h-full py-8 gap-6">
 				<div className="text-[24px] text-center">Get started with Proem</div>
 				<div className="space-y-8">
 					<div className="flex flex-col gap-5">
