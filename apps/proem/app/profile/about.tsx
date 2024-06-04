@@ -4,10 +4,8 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
+import { CollapsibleSection } from "@/components/collapsible-section";
 import {
-	Collapsible,
-	CollapsibleContent,
-	CollapsibleTrigger,
 	Header4,
 	Table,
 	TableBody,
@@ -15,89 +13,70 @@ import {
 	TableRow,
 } from "@proemial/shadcn-ui";
 import {
-	ChevronDown,
-	ChevronUp,
 	ClipboardCheck,
 	File02,
 	Lock01,
 	MessageSquare02,
 } from "@untitled-ui/icons-react";
 import Link from "next/link";
-import * as React from "react";
 
 const feedback = "https://tally.so/r/wAv8Ve";
 
 export const About = () => {
-	const [isOpen, setIsOpen] = React.useState(false);
-
 	return (
-		<Collapsible open={isOpen} onOpenChange={setIsOpen}>
-			<CollapsibleTrigger className="w-full">
-				<div className="flex gap-2 justify-between items-center my-2">
-					<Header4>About</Header4>
-					<div>
-						{isOpen ? (
-							<ChevronUp className="w-4 h-4" />
-						) : (
-							<ChevronDown className="w-4 h-4" />
-						)}
-					</div>
-				</div>
-			</CollapsibleTrigger>
-			<CollapsibleContent>
-				<Table className="text-base">
-					<TableBody>
-						<TableRow>
-							<TableCell variant="icon">
-								<MessageSquare02 className="mx-auto size-4" />
-							</TableCell>
-							<TableCell variant="key">
-								<Feedback />
-							</TableCell>
-						</TableRow>
-						<TableRow>
-							<TableCell variant="icon">
-								<File02 className="mx-auto size-4" />
-							</TableCell>
-							<TableCell variant="key">
-								<Link
-									href="/terms"
-									onClick={trackHandler(analyticsKeys.ui.menu.click.terms)}
-									prefetch={false}
-								>
-									Terms of use
-								</Link>
-							</TableCell>
-						</TableRow>
-						<TableRow>
-							<TableCell variant="icon">
-								<Lock01 className="mx-auto size-4" />
-							</TableCell>
-							<TableCell variant="key">
-								<Link
-									href="/privacy"
-									onClick={trackHandler(analyticsKeys.ui.menu.click.privacy)}
-									prefetch={false}
-								>
-									Privacy policy
-								</Link>
-							</TableCell>
-						</TableRow>
-						<TableRow>
-							<TableCell variant="icon">
-								<ClipboardCheck className="mx-auto size-4" />
-							</TableCell>
-							<TableCell
-								variant="key"
-								className="w-full flex items-center gap-4 select-none"
+		<CollapsibleSection trigger={<Header4>About</Header4>}>
+			<Table className="text-base">
+				<TableBody>
+					<TableRow>
+						<TableCell variant="icon">
+							<MessageSquare02 className="mx-auto size-4" />
+						</TableCell>
+						<TableCell variant="key">
+							<Feedback />
+						</TableCell>
+					</TableRow>
+					<TableRow>
+						<TableCell variant="icon">
+							<File02 className="mx-auto size-4" />
+						</TableCell>
+						<TableCell variant="key">
+							<Link
+								href="/terms"
+								onClick={trackHandler(analyticsKeys.ui.menu.click.terms)}
+								prefetch={false}
 							>
-								<Version />
-							</TableCell>
-						</TableRow>
-					</TableBody>
-				</Table>
-			</CollapsibleContent>
-		</Collapsible>
+								Terms of use
+							</Link>
+						</TableCell>
+					</TableRow>
+					<TableRow>
+						<TableCell variant="icon">
+							<Lock01 className="mx-auto size-4" />
+						</TableCell>
+						<TableCell variant="key">
+							<Link
+								href="/privacy"
+								onClick={trackHandler(analyticsKeys.ui.menu.click.privacy)}
+								prefetch={false}
+							>
+								Privacy policy
+							</Link>
+						</TableCell>
+					</TableRow>
+					<TableRow>
+						<TableCell variant="icon">
+							<ClipboardCheck className="mx-auto size-4" />
+						</TableCell>
+						<TableCell
+							variant="key"
+							className="w-full flex items-center gap-4 select-none"
+						>
+							<Version />
+						</TableCell>
+					</TableRow>
+				</TableBody>
+			</Table>
+		</CollapsibleSection>
 	);
 };
 
