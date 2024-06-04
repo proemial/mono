@@ -12,6 +12,9 @@ import dayjs from "dayjs";
 import { fetchWithAbstract } from "../../../paper/oa/[id]/fetch-paper";
 import { RankedFeature } from "../helpers/fingerprint";
 
+const PER_PAGE = 50;
+const MAX_PAGES = 6;
+
 type FetchFeedParams = Required<Parameters<typeof fetchAndRerankPapers>>;
 
 export async function fetchFeed(
@@ -130,18 +133,18 @@ async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 
 	const url = `${oaBaseUrl}?${oaBaseArgs}&filter=${oaFilter}`;
 
-	const perPage = 50;
-	const paginate = `&per_page=${perPage}&page=`;
+	const paginate = `&per_page=${PER_PAGE}&page=`;
 	console.log("Fetcing page 0");
 	const page1 = await fetchWithAbstract(`${url}${paginate}${1}`);
-	const pages = Math.ceil(page1.meta.count / perPage) - 1;
+	const allPagesCount = Math.ceil(page1.meta.count / PER_PAGE) - 1;
+	const pageCount = allPagesCount < MAX_PAGES ? allPagesCount : MAX_PAGES;
 
 	console.log(
-		`Total pages: ${pages} with a total of ${page1.meta.count} papers`,
+		`Fetching ${pageCount} pages, from a total of ${allPagesCount} pages / ${page1.meta.count} papers`,
 	);
 
 	const queries = await Promise.all(
-		Array.from({ length: pages < 6 ? pages : 6 }).map((_, i) => {
+		Array.from({ length: pageCount }).map((_, i) => {
 			console.log(`Fetcing page ${i + 1}`);
 			return fetchWithAbstract(`${url}${paginate}${i + 1}`);
 		}),
