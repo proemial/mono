@@ -24,7 +24,7 @@ const feedback = "https://tally.so/r/wAv8Ve";
 
 export const About = () => {
 	return (
-		<CollapsibleSection trigger={<Header4>About</Header4>}>
+		<CollapsibleSection trigger={<Header4>About</Header4>} collapsed={true}>
 			<Table className="text-base">
 				<TableBody>
 					<TableRow>

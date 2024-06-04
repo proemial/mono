@@ -18,8 +18,9 @@ export function ProfileQuestions() {
 
 	return (
 		<CollapsibleSection
-			trigger={<Header4>Question</Header4>}
+			trigger={<Header4>Question history</Header4>}
 			extra={data?.length}
+			collapsed={true}
 		>
 			{data?.map((question) => (
 				<div key={question.id}>

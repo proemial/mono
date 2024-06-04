@@ -25,7 +25,7 @@ export function ProfileYou() {
 
 	return (
 		<div className="space-y-4">
-			<div className="pr-1">
+			<div>
 				<div className="select-none">
 					<Header2>Your profile</Header2>
 				</div>
@@ -44,7 +44,7 @@ export function ProfileYou() {
 										href={`/org/${membership.organization.id}`}
 										onClick={trackHandler(analyticsKeys.ui.menu.click.org)}
 										prefetch={false}
-										className="flex items-center gap-1"
+										className="flex items-center gap-1 mr-1"
 									>
 										{membership.organization.name}
 									</Link>
