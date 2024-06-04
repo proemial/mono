@@ -37,7 +37,7 @@ export function ProfileYou() {
 					{isSignedIn && user && (
 						<div className="space-y-2">
 							<Header5>
-								<div className="opacity-50">Profile</div>
+								<div className="opacity-50 select-none">Profile</div>
 							</Header5>
 							<div className="flex gap-4 justify-between items-center">
 								<Avatar className="size-9">
@@ -46,13 +46,13 @@ export function ProfileYou() {
 										{getUserInitials(user.fullName ?? "")}
 									</AvatarFallback>
 								</Avatar>
-								<div>{user.fullName}</div>
+								<div className="select-none">{user.fullName}</div>
 							</div>
 						</div>
 					)}
 					<div>
 						<Header5>
-							<div className="opacity-50">Social</div>
+							<div className="opacity-50 select-none">Social</div>
 						</Header5>
 						<Table className="text-base">
 							<TableBody>
