@@ -5,6 +5,10 @@ import {
 	OpenAlexPaper,
 	OpenAlexTopic,
 } from "@proemial/models/open-alex";
+import { features } from "process";
+
+const MAX_COUNT = 30;
+const MIN_SCORE = 0.1;
 
 export type Fingerprint = {
 	id: string;
@@ -30,11 +34,12 @@ export type RankedFeature = {
 	type: FeatureType;
 	count: number;
 	score: number;
+	disabled?: boolean;
 };
 
-export function getRankedFeatures(fingerprints: Fingerprint[]) {
+export function filterByFingerprints(fingerprints: Fingerprint[]) {
 	if (!fingerprints.length) {
-		return [];
+		return { features: [], filter: [] };
 	}
 
 	const rankedFeatureMap = {} as {
@@ -102,13 +107,15 @@ export function getRankedFeatures(fingerprints: Fingerprint[]) {
 	}
 
 	const rankedFeatures = Object.values(rankedFeatureMap)
-		.filter(
-			(item) =>
-				// (featureSets.length === 1 || item.count > 1) &&
-				item.score > 0.1,
-		)
 		.sort((a, b) => (a.score > b.score ? -1 : 1))
-		.sort((a, b) => (a.count > b.count ? -1 : 1));
+		.sort((a, b) => (a.count > b.count ? -1 : 1))
+		.map((item, i) => ({
+			...item,
+			disabled: i > MAX_COUNT || item.score < MIN_SCORE,
+		}));
 
-	return rankedFeatures;
+	return {
+		features: rankedFeatures,
+		filter: rankedFeatures.filter((f) => !f.disabled),
+	};
 }

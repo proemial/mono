@@ -6,8 +6,7 @@ import {
 } from "@/components/analytics/tracking/tracking-keys";
 import { Icons } from "@proemial/shadcn-ui";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
-import { useSearchParams } from "next/navigation";
-import { ReactNode, useEffect } from "react";
+import { useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 import { fetchFeed } from "./helpers/fetch-feed";
 import { RankedFeature } from "./helpers/fingerprint";
@@ -22,9 +21,9 @@ const Loader = () => (
 );
 
 export function PaperFeed({
-	children,
-	rankedFeatures,
-}: { children: ReactNode; rankedFeatures: RankedFeature[] }) {
+	filter,
+	days,
+}: { filter: RankedFeature[]; days: number }) {
 	const {
 		status,
 		data,
@@ -33,7 +32,7 @@ export function PaperFeed({
 		hasNextPage,
 		error,
 	} = useInfiniteQuery(
-		`filter_${rankedFeatures.map((f) => f.id).join("|")}`,
+		`filter_${filter.map((f) => f.id).join("|")}`,
 		(ctx) => {
 			const nextOffset = ctx.pageParam;
 			if (nextOffset > initialPageSize) {
@@ -42,7 +41,7 @@ export function PaperFeed({
 				})();
 			}
 
-			return fetchFeed({ rankedFeatures }, { offset: ctx.pageParam });
+			return fetchFeed({ filter, days }, { offset: ctx.pageParam });
 		},
 		{
 			getNextPageParam: (lastGroup) => {
@@ -81,7 +80,6 @@ export function PaperFeed({
 	return (
 		<div className="space-y-5 pb-10">
 			<div>
-				{children}
 				{!!count && (
 					<div className="mt-1 text-right text-xs italic">
 						{count} matching papers

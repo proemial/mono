@@ -58,6 +58,7 @@ export async function fetchFeed(
 			const generatedTitle = paper?.generated?.title;
 
 			if (!generatedTitle && paperTitle && abstract) {
+				console.log("Enhancing paper", paper.id);
 				const title = (await summarise(paperTitle, abstract)) as string;
 				const generated = paper.generated
 					? { ...paper.generated, title }
@@ -81,21 +82,43 @@ export async function fetchFeed(
 }
 
 export const fetchAndRerankPapers = async (
-	{ rankedFeatures }: { rankedFeatures?: RankedFeature[] } = {},
+	{ filter, days }: { filter?: RankedFeature[]; days: number },
 	{ limit, offset }: { limit?: number; offset?: number } = {},
 ): Promise<{ meta: OpenAlexMeta; papers: OpenAlexPaper[] }> => {
 	const pageLimit = limit ?? 25;
 	const pageOffset = offset ?? 1;
-	const today = dayjs().format("YYYY-MM-DD");
-	const twoWeeksAgo = dayjs(today).subtract(2, "week").format("YYYY-MM-DD");
 
+	const allPapers = await fetchAllPapers(days, filter);
+	const oaPapers = allPapers.papers
+		.filter((p) => p.data.topics?.length)
+		.map((result) => ({
+			...result,
+			id: result.data.id.replace("https://openalex.org/", ""),
+		}));
+
+	return {
+		meta: allPapers.meta,
+		papers: [...oaPapers]
+			// TODO: sort by filter
+			.sort(sortByPublicationDateDesc)
+			.slice(pageOffset, pageOffset + pageLimit),
+	};
+};
+
+async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
+	const today = dayjs().format("YYYY-MM-DD");
+	const from = dayjs(today)
+		.subtract(days + 1, "day")
+		.format("YYYY-MM-DD");
 	const filter = getOpenAlexFilter(rankedFeatures);
+
+	console.log(days, " - Fetching papers from", from, "to", today);
 
 	const oaFilter = [
 		"type:types/preprint|types/article",
 		"has_abstract:true",
-		`from_created_date:${twoWeeksAgo}`,
-		`publication_date:>${twoWeeksAgo}`, // We do not want old papers that were added recently
+		`from_created_date:${from}`,
+		`publication_date:>${from}`, // We do not want old papers that were added recently
 		`publication_date:<${today}`, // We do not want papers published in the future
 		"language:en",
 		"open_access.is_oa:true",
@@ -104,26 +127,37 @@ export const fetchAndRerankPapers = async (
 	]
 		.filter((f) => !!f)
 		.join(",");
-	const sort = "from_publication_date:desc,type:desc";
-	const url = `${oaBaseUrl}?${oaBaseArgs}&filter=${oaFilter}&sort=${sort}&per_page=${pageLimit}&page=${pageOffset}`;
 
-	const { meta, papers } = await fetchWithAbstract(url);
+	const url = `${oaBaseUrl}?${oaBaseArgs}&filter=${oaFilter}`;
 
-	if (meta.count === 0) {
-		return { meta, papers };
-	}
+	const perPage = 50;
+	const paginate = `&per_page=${perPage}&page=`;
+	console.log("Fetcing page 0");
+	const page1 = await fetchWithAbstract(`${url}${paginate}${1}`);
+	const pages = Math.ceil(page1.meta.count / perPage) - 1;
 
-	const oaPapers = papers
-		.filter((p) => p.data.topics?.length)
-		.map((result) => ({
-			...result,
-			id: result.data.id.replace("https://openalex.org/", ""),
-		}));
+	console.log(
+		`Total pages: ${pages} with a total of ${page1.meta.count} papers`,
+	);
 
-	return { meta, papers: [...oaPapers].sort(sortByPublicationDateDesc) };
-};
+	const queries = await Promise.all(
+		Array.from({ length: pages < 6 ? pages : 6 }).map((_, i) => {
+			console.log(`Fetcing page ${i + 1}`);
+			return fetchWithAbstract(`${url}${paginate}${i + 1}`);
+		}),
+	);
+
+	return {
+		meta: page1.meta as OpenAlexMeta,
+		papers: [page1, ...queries].flatMap((q) => q.papers),
+	};
+}
 
 function getOpenAlexFilter(rankedFeatures: RankedFeature[] = []) {
+	if (!rankedFeatures.length) {
+		return "";
+	}
+
 	const topics = rankedFeatures
 		.filter((item) => item.type === "topic")
 		.map((item) => item.id.split("/").at(-1))
