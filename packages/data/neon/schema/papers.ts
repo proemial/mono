@@ -1,3 +1,4 @@
+// import { collectionsToPapers } from "@/neon/schema/collections";
 import { relations } from "drizzle-orm";
 import { pgTable, text } from "drizzle-orm/pg-core";
 import { bookmarks } from "./bookmarks";
@@ -13,4 +14,5 @@ export type NewPaper = typeof papers.$inferInsert;
 export const papersRelations = relations(papers, ({ many }) => ({
 	bookmarks: many(bookmarks),
 	posts: many(posts),
+	// collectionsToPapers: many(collectionsToPapers),
 }));

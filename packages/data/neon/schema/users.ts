@@ -1,3 +1,4 @@
+// import { collectionsToUsers } from "@/neon/schema/collections";
 import { relations, sql } from "drizzle-orm";
 import { jsonb, pgTable, text } from "drizzle-orm/pg-core";
 import { bookmarks } from "./bookmarks";
@@ -24,6 +25,7 @@ export type NewUser = typeof users.$inferInsert;
 
 export const usersRelations = relations(users, ({ many }) => ({
 	bookmarks: many(bookmarks),
+	// collectionsToUsers: many(collectionsToUsers),
 	posts: many(posts),
 	comments: many(comments),
 }));
