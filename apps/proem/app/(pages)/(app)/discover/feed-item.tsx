@@ -4,7 +4,7 @@ import { trimForQuotes } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { useMemo } from "react";
+import { ReactNode, useMemo } from "react";
 import Markdown from "react-markdown";
 import { FeedItemCard } from "./feed-item-card";
 import { FeedItemTag } from "./feed-item-tag";
@@ -15,9 +15,10 @@ dayjs.extend(relativeTime);
 type FeedItemProps = {
 	paper: OpenAlexPaper;
 	provider?: Prefix;
+	children?: ReactNode;
 };
 
-export default function FeedItem({ paper, provider }: FeedItemProps) {
+export default function FeedItem({ paper, provider, children }: FeedItemProps) {
 	const tags = paper.data.topics
 		?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
 		.filter(Boolean) as string[];
@@ -51,11 +52,15 @@ export default function FeedItem({ paper, provider }: FeedItemProps) {
 				</Markdown>
 			</FeedItemCard>
 
-			<div className="flex flex-row-reverse gap-2 overflow-x-auto scrollbar-hide">
-				{tags?.map((tag) => (
-					<FeedItemTag key={tag} tag={tag} />
-				))}
-			</div>
+			{children}
+
+			{!children && (
+				<div className="flex flex-row-reverse gap-2 overflow-x-auto scrollbar-hide">
+					{tags?.map((tag) => (
+						<FeedItemTag key={tag} tag={tag} />
+					))}
+				</div>
+			)}
 		</div>
 	);
 }

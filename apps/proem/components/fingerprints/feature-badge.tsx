@@ -8,7 +8,7 @@ export function FeatureBadge({
 }: {
 	children: string;
 	score?: number;
-	variant: "topic" | "keyword" | "concept" | "disabled";
+	variant?: "topic" | "keyword" | "concept" | "disabled";
 }) {
 	return (
 		<Badge
@@ -16,7 +16,7 @@ export function FeatureBadge({
 				variant,
 			})}
 		>
-			{`${children}: ${score?.toFixed(2)}`}
+			{`${children}${score ? `: ${score?.toFixed(2)}` : ""}`}
 		</Badge>
 	);
 }
@@ -26,6 +26,7 @@ const badgeStyle = cva(
 	{
 		variants: {
 			variant: {
+				default: "hover:bg-white bg-white text-gray-800 rounded-sm mr-2 px-1",
 				topic: "hover:bg-gray-300 bg-gray-300 text-gray-600",
 				keyword: "hover:bg-orange-200 bg-orange-200 text-gray-800",
 				concept: "hover:bg-purple-200 bg-purple-200 text-gray-800",
@@ -33,7 +34,7 @@ const badgeStyle = cva(
 			},
 		},
 		defaultVariants: {
-			variant: "topic",
+			variant: "default",
 		},
 	},
 );

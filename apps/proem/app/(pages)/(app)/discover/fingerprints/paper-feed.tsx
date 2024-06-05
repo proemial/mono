@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 import { fetchFeed } from "./helpers/fetch-feed";
 import { RankedFeature } from "../../../../../components/fingerprints/features";
-import { PaperCard } from "./paper-card";
+import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
 
 // 1-4 is fetched without scrolling
 const initialPageSize = 4;
@@ -110,7 +110,7 @@ export function PaperFeed({
 					>
 						{items.map((virtualRow) => {
 							const isLoaderRow = virtualRow.index > allRows.length - 1;
-							const paper = allRows[virtualRow.index];
+							const rankedPaper = allRows[virtualRow.index];
 
 							return (
 								<div
@@ -123,9 +123,13 @@ export function PaperFeed({
 										hasNextPage ? (
 											<Loader />
 										) : null
-									) : paper ? (
-										<PaperCard rankedPaper={paper} />
-										// <FeedItem paper={paper} />
+									) : rankedPaper ? (
+										<FeedItem paper={rankedPaper.paper}>
+											<FeatureCloud
+												features={rankedPaper.features}
+												sum={rankedPaper.filterMatchScore}
+											/>
+										</FeedItem>
 									) : (
 										<Loader />
 									)}
