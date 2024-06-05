@@ -16,6 +16,7 @@ type CollapsibleSection = {
 	extra?: React.ReactNode;
 	trackingKey?: string;
 	collapsed?: boolean;
+	className?: string;
 };
 
 export function CollapsibleSection({
@@ -24,6 +25,7 @@ export function CollapsibleSection({
 	extra,
 	trackingKey,
 	collapsed,
+	className = "",
 }: CollapsibleSection) {
 	const [isOpen, setIsOpen] = useState(!collapsed);
 
@@ -37,7 +39,9 @@ export function CollapsibleSection({
 				asChild
 				onClick={() => trackingKey && trackHandler(trackingKey)()}
 			>
-				<div className="flex items-center justify-between space-x-4 cursor-pointer">
+				<div
+					className={`flex items-center justify-between space-x-4 cursor-pointer ${className}`}
+				>
 					{trigger}
 
 					<div className="flex items-center">

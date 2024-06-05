@@ -38,9 +38,10 @@ export function ProfileYou() {
 							<div className="opacity-50 select-none">Profile</div>
 						</Header5>
 						<CollapsibleSection
+							className="space-x-0"
 							collapsed={true}
 							trigger={
-								<div className="flex gap-4 justify-between items-center">
+								<div className="flex w-full gap-4 justify-between items-center">
 									<Avatar className="size-9">
 										<AvatarImage src={user.imageUrl} />
 										<AvatarFallback>
