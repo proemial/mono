@@ -7,7 +7,7 @@ import {
 	oaBaseUrl,
 } from "@proemial/models/open-alex";
 import { fetchJson } from "@proemial/utils/fetch";
-import { Fingerprint } from "./fingerprint";
+import { Fingerprint } from "./fingerprints";
 
 type WithTitle = {
 	id: string;

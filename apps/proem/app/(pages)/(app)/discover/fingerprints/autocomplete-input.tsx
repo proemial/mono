@@ -4,7 +4,7 @@ import MultipleSelector, {
 } from "@proemial/shadcn-ui/components/ui/multiple-selector";
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { fetchPapersTitles } from "./helpers/fetch-papers";
+import { fetchPapersTitles } from "../../../../../components/fingerprints/fetch-fingerprints";
 
 export const AUTOCOMPLETE_QUERY_STRING = "ids";
 

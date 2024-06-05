@@ -1,6 +1,6 @@
-import { fetchFingerprints } from "./helpers/fetch-papers";
-import { filterByFingerprints } from "./helpers/fingerprint";
-import { FeatureCloud } from "./feature-cloud";
+import { fetchFingerprints } from "../../../../../components/fingerprints/fetch-fingerprints";
+import { getFeatureFilter } from "../../../../../components/fingerprints/features";
+import { FeatureCloud } from "../../../../../components/fingerprints/feature-cloud";
 import { AutocompleteInput } from "./autocomplete-input";
 import { PaperFeed } from "./paper-feed";
 
@@ -20,7 +20,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	const ids = params.ids?.split(",") ?? [];
 
 	const fingerprints = await fetchFingerprints(ids);
-	const { features, filter } = filterByFingerprints(fingerprints);
+	const { features, filter } = getFeatureFilter(fingerprints);
 
 	return (
 		<div className="space-y-6">

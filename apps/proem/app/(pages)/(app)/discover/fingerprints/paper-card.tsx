@@ -1,6 +1,6 @@
 import { OpenAlexPaper } from "@proemial/models/open-alex";
-import { FeatureBadge } from "./feature-cloud";
-import { RankedFeature } from "./helpers/fingerprint";
+import { FeatureBadge } from "../../../../../components/fingerprints/feature-badge";
+import { RankedFeature } from "../../../../../components/fingerprints/features";
 import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
 import { trimForQuotes } from "@/utils/string-utils";
 

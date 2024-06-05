@@ -10,7 +10,7 @@ import {
 import { Redis } from "@proemial/redis/redis";
 import dayjs from "dayjs";
 import { fetchWithAbstract } from "../../../paper/oa/[id]/fetch-paper";
-import { RankedFeature } from "../helpers/fingerprint";
+import { RankedFeature } from "../../../../../../components/fingerprints/features";
 
 const PER_PAGE = 50;
 const MAX_PAGES = 6;

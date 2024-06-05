@@ -1,29 +1,8 @@
 import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
-import {
-	OpenAlexConcept,
-	OpenAlexKeyword,
-	OpenAlexPaper,
-	OpenAlexTopic,
-} from "@proemial/models/open-alex";
+import { Fingerprint } from "./fingerprints";
 
 const MAX_COUNT = 30;
 const MIN_SCORE = 0.1;
-
-export type Fingerprint = {
-	id: string;
-	topics: OpenAlexTopic[];
-	concepts: OpenAlexConcept[];
-	keywords: OpenAlexKeyword[];
-};
-
-export function getFingerprint(paper?: OpenAlexPaper) {
-	return {
-		id: paper?.id,
-		topics: paper?.data.topics,
-		concepts: paper?.data.concepts,
-		keywords: paper?.data.keywords,
-	} as Fingerprint;
-}
 
 export type FeatureType = "topic" | "keyword" | "concept";
 
@@ -32,17 +11,22 @@ export type RankedFeature = {
 	label: string;
 	type: FeatureType;
 	count: number;
-	avgOaScore: number;
-	score?: number;
-	disabled?: boolean;
+	avgScore: number;
+	coOccurrenceScore: number;
+	irrelevant?: boolean;
 };
 
-export function filterByFingerprints(fingerprints: Fingerprint[]) {
+export type FeatureFilter = {
+	features: RankedFeature[];
+	filter: RankedFeature[];
+};
+
+export function getFeatureFilter(fingerprints: Fingerprint[]): FeatureFilter {
 	if (!fingerprints.length) {
 		return { features: [], filter: [] };
 	}
 
-	const rankedFeatureMap = {} as {
+	const featureMap = {} as {
 		[key: string]: RankedFeature;
 	};
 	const ids = {
@@ -58,15 +42,16 @@ export function filterByFingerprints(fingerprints: Fingerprint[]) {
 				ids.topics.push(key);
 			}
 
-			const count = rankedFeatureMap[key]?.count ?? 0;
-			const score = rankedFeatureMap[key]?.avgOaScore ?? 0;
+			const count = featureMap[key]?.count ?? 0;
+			const score = featureMap[key]?.avgScore ?? 0;
 			const label = oaTopicsTranslationMap[item.id]?.["short-name"] as string;
-			rankedFeatureMap[key] = {
+			featureMap[key] = {
 				id: key,
 				label,
 				type: "topic",
 				count: count + 1,
-				avgOaScore: (score + item.score) / 2,
+				avgScore: (score + item.score) / 2,
+				coOccurrenceScore: 0,
 			};
 		}
 
@@ -76,14 +61,15 @@ export function filterByFingerprints(fingerprints: Fingerprint[]) {
 				ids.concepts.push(key);
 			}
 
-			const count = rankedFeatureMap[key]?.count ?? 0;
-			const score = rankedFeatureMap[key]?.avgOaScore ?? 0;
-			rankedFeatureMap[key] = {
+			const count = featureMap[key]?.count ?? 0;
+			const score = featureMap[key]?.avgScore ?? 0;
+			featureMap[key] = {
 				id: key,
 				label: item.display_name,
 				type: "concept",
 				count: count + 1,
-				avgOaScore: (score + item.score) / 2,
+				avgScore: (score + item.score) / 2,
+				coOccurrenceScore: 0,
 			};
 		}
 
@@ -93,32 +79,33 @@ export function filterByFingerprints(fingerprints: Fingerprint[]) {
 				ids.keywords.push(key);
 			}
 
-			const count = rankedFeatureMap[key]?.count ?? 0;
-			const score = rankedFeatureMap[key]?.avgOaScore ?? 0;
-			rankedFeatureMap[key] = {
+			const count = featureMap[key]?.count ?? 0;
+			const score = featureMap[key]?.avgScore ?? 0;
+			featureMap[key] = {
 				id: key,
 				label: item.display_name,
 				type: "keyword",
 				count: count + 1,
-				avgOaScore: (score + item.score) / 2,
+				avgScore: (score + item.score) / 2,
+				coOccurrenceScore: 0,
 			};
 		}
 
-		for (const key of Object.keys(rankedFeatureMap)) {
-			const item = rankedFeatureMap[key] as RankedFeature;
-			rankedFeatureMap[key] = {
+		for (const key of Object.keys(featureMap)) {
+			const item = featureMap[key] as RankedFeature;
+			featureMap[key] = {
 				...item,
-				score: (item.count * item.avgOaScore) / fingerprints.length,
+				coOccurrenceScore: (item.count * item.avgScore) / fingerprints.length,
 			};
 		}
 	}
 
-	const rankedFeatures = Object.values(rankedFeatureMap)
-		.sort((a, b) => (a.avgOaScore > b.avgOaScore ? -1 : 1))
+	const rankedFeatures = Object.values(featureMap)
+		.sort((a, b) => (a.avgScore > b.avgScore ? -1 : 1))
 		.sort((a, b) => (a.count > b.count ? -1 : 1))
 		.map((item, i) => ({
 			...item,
-			disabled: i > MAX_COUNT || (item?.score ?? 0) < MIN_SCORE,
+			disabled: i > MAX_COUNT || (item?.coOccurrenceScore ?? 0) < MIN_SCORE,
 		}));
 
 	return {

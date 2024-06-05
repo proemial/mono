@@ -1,28 +1,5 @@
 import { cva } from "class-variance-authority";
-import { RankedFeature } from "./helpers/fingerprint";
 import { Badge } from "@proemial/shadcn-ui/components/ui/badge";
-
-const DEBUG = false;
-
-type Props = {
-	features?: RankedFeature[];
-};
-
-export function FeatureCloud({ features }: Props) {
-	return (
-		<div className="my-4 flex flex-wrap">
-			{features?.map((item, i) => (
-				<FeatureBadge
-					key={i}
-					score={item.score}
-					variant={item.disabled ? "disabled" : item.type}
-				>
-					{item.label}
-				</FeatureBadge>
-			))}
-		</div>
-	);
-}
 
 export function FeatureBadge({
 	children,
