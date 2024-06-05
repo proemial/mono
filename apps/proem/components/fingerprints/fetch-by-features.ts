@@ -112,7 +112,6 @@ async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 	const url = `${oaBaseUrl}?${oaBaseArgs}&filter=${oaFilter}`;
 
 	const paginate = `&per_page=${PER_PAGE}&page=`;
-	console.log("Fetcing page 0");
 	const page1 = await fetchWithAbstract(`${url}${paginate}${1}`);
 	const allPagesCount = Math.ceil(page1.meta.count / PER_PAGE) - 1;
 	const pageCount =
