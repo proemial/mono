@@ -10,8 +10,6 @@ export function FeatureBadge({
 	score?: number;
 	variant?: "topic" | "keyword" | "concept" | "disabled";
 }) {
-	console.log("FeatureBadge", children, score);
-
 	return (
 		<Badge
 			className={badgeStyle({
