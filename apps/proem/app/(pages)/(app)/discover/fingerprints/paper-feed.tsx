@@ -9,7 +9,7 @@ import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 import { fetchFeed } from "./helpers/fetch-feed";
-import { RankedFeature } from "../../../../../components/fingerprints/fingerprints";
+import { RankedFeature } from "../../../../../components/fingerprints/features";
 import { PaperCard } from "./paper-card";
 
 // 1-4 is fetched without scrolling
