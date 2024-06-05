@@ -1,4 +1,3 @@
-import { summarise } from "@/app/prompts/summarise-title";
 import {
 	OpenAlexMeta,
 	OpenAlexPaper,
@@ -6,16 +5,17 @@ import {
 	oaBaseUrl,
 } from "@proemial/models/open-alex";
 import dayjs from "dayjs";
-import { RankedFeature } from "./features";
+import { Feature, FeatureType, RankedFeature, getFeatures } from "./features";
 import { fetchWithAbstract } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
+import { getFingerprint } from "./fingerprints";
 
 const PER_PAGE = 50;
 const MAX_PAGES = 6;
 
 export const fetchAndRerankPapers = async (
-	{ filter, days }: { filter?: RankedFeature[]; days: number },
+	{ filter, days }: { filter: RankedFeature[]; days: number },
 	{ limit, offset }: { limit?: number; offset?: number } = {},
-): Promise<{ meta: OpenAlexMeta; papers: OpenAlexPaper[] }> => {
+): Promise<{ meta: OpenAlexMeta; papers: RankedPaper[] }> => {
 	const pageLimit = limit ?? 25;
 	const pageOffset = offset ?? 1;
 
@@ -23,39 +23,68 @@ export const fetchAndRerankPapers = async (
 
 	return {
 		meta: allPapers.meta,
-		papers: rerankAndLimit(allPapers.papers).slice(
+		papers: rerankAndLimit(allPapers.papers, filter).slice(
 			pageOffset,
 			pageOffset + pageLimit,
 		),
 	};
 };
 
-function rerankAndLimit(papers: OpenAlexPaper[], filter?: RankedFeature[]) {
-	const sanitised = papers
-		.filter((p) => p.data.topics?.length) // Filter out papers without topics
-		.map((result) => ({
-			...result,
-			id: result.data.id.replace("https://openalex.org/", ""),
-		}));
+export type RankedPaper = {
+	paper: OpenAlexPaper;
+	features: {
+		id: string;
+		label: string;
+		featureMatchScore: number;
+		type: FeatureType;
+		irrelevant?: boolean;
+	}[];
+	filterMatchScore: number;
+};
 
-	return sanitised; //sortBySimilarity(sanitised, filter);
+function rerankAndLimit(
+	papers: OpenAlexPaper[],
+	filter: RankedFeature[],
+): RankedPaper[] {
+	const ranked = papers
+		.filter(withTopics) // Filter out papers without topics
+		.map(shortenId)
+		.map((paper) => rankFeature(paper, filter));
+
+	const sorted = ranked.sort((a, b) => b.filterMatchScore - a.filterMatchScore);
+	return sorted; //sortBySimilarity(sanitised, filter);
 }
 
-function getOpenAlexFilter(rankedFeatures: RankedFeature[] = []) {
-	if (!rankedFeatures.length) {
-		return "";
-	}
+function rankFeature(paper: OpenAlexPaper, filter: RankedFeature[]) {
+	const features = getFeatures(getFingerprint(paper)).map((feature) => {
+		const filterScore =
+			filter.find((f) => f.id === feature.id)?.coOccurrenceScore ?? 0;
+		const featureMatchScore = filterScore * feature.score;
 
-	const topics = rankedFeatures
-		.filter((item) => item.type === "topic")
-		.map((item) => item.id.split("/").at(-1))
-		.join("|");
-	const concepts = rankedFeatures
-		.filter((item) => item.type === "concept")
-		.map((item) => item.id.split("/").at(-1))
-		.join("|");
+		return {
+			...feature,
+			featureMatchScore,
+			irrelevant: featureMatchScore < 0.1,
+		};
+	});
 
-	return `primary_topic.id:${topics},concepts.id:${concepts}`;
+	const filterMatchScore = features.reduce(
+		(acc, f) => acc + f.featureMatchScore,
+		0,
+	);
+
+	return { paper, features, filterMatchScore };
+}
+
+function shortenId(paper: OpenAlexPaper) {
+	return {
+		...paper,
+		id: paper.data.id.replace("https://openalex.org/", ""),
+	};
+}
+
+function withTopics(paper: OpenAlexPaper) {
+	return !!paper.data.topics?.length;
 }
 
 async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
@@ -101,8 +130,30 @@ async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 	);
 
 	const papers = [page1, ...queries].flatMap((q) => q.papers);
+	const deduped = papers.filter(
+		(v, i, a) => a.findIndex((t) => t.data.id === v.data.id) === i,
+	);
+	console.log("Deduped papers", deduped.length);
+
 	return {
 		meta: page1.meta as OpenAlexMeta,
-		papers,
+		papers: deduped,
 	};
+}
+
+function getOpenAlexFilter(rankedFeatures: RankedFeature[] = []) {
+	if (!rankedFeatures.length) {
+		return "";
+	}
+
+	const topics = rankedFeatures
+		.filter((item) => item.type === "topic")
+		.map((item) => item.id.split("/").at(-1))
+		.join("|");
+	const concepts = rankedFeatures
+		.filter((item) => item.type === "concept")
+		.map((item) => item.id.split("/").at(-1))
+		.join("|");
+
+	return `primary_topic.id:${topics},concepts.id:${concepts}`;
 }

@@ -2,7 +2,10 @@
 import { summarise } from "@/app/prompts/summarise-title";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { Redis } from "@proemial/redis/redis";
-import { fetchAndRerankPapers } from "@/components/fingerprints/fetch-by-features";
+import {
+	RankedPaper,
+	fetchAndRerankPapers,
+} from "@/components/fingerprints/fetch-by-features";
 
 type FetchFeedParams = Required<Parameters<typeof fetchAndRerankPapers>>;
 
@@ -11,17 +14,17 @@ export async function fetchFeed(
 	options: Omit<FetchFeedParams[1], "limit">,
 ) {
 	const nextOffset = (options?.offset ?? 1) + 1;
-	const { meta, papers } = await fetchAndRerankPapers(params, {
+	const { meta, papers: rankedPapers } = await fetchAndRerankPapers(params, {
 		...options,
 		limit: 5,
 	});
 
-	if (!papers.length) {
+	if (!rankedPapers.length) {
 		throw new Error("No papers found.");
 	}
 
 	const cachedPapers = await Redis.papers.getAll(
-		papers.map((paper) => paper?.id).filter(Boolean),
+		rankedPapers.map((rankedPaper) => rankedPaper.paper?.id).filter(Boolean),
 	);
 
 	const cachedPapersIds = cachedPapers
@@ -31,20 +34,29 @@ export async function fetchFeed(
 		)
 		.filter(Boolean);
 
-	const cacheMisses = papers.filter(
-		(paper) => !cachedPapersIds.includes(paper.id),
+	const cacheMisses = rankedPapers.filter(
+		(rankedPaper) => !cachedPapersIds.includes(rankedPaper.paper.id),
 	);
 
 	if (cacheMisses.length === 0) {
 		return {
 			count: meta.count,
-			rows: cachedPapers,
+			rows: rankedPapers.map(
+				(rankedPaper) =>
+					({
+						...rankedPaper,
+						paper: cachedPapers.find(
+							(cachedPaper) => cachedPaper?.id === rankedPaper.paper.id,
+						),
+					}) as RankedPaper,
+			),
 			nextOffset,
 		};
 	}
 
 	const enhancedPapers = await Promise.all(
-		papers.map(async (paper) => {
+		rankedPapers.map(async (rankedPaper) => {
+			const paper = rankedPaper.paper;
 			const paperTitle = paper?.data?.title;
 			const abstract = paper?.data?.abstract;
 			const generatedTitle = paper?.generated?.title;
@@ -57,18 +69,20 @@ export async function fetchFeed(
 					: { title };
 
 				return {
-					...paper,
-					generated,
+					...rankedPaper,
+					paper: { ...paper, generated },
 				};
 			}
 		}),
 	);
 
-	await Redis.papers.upsertAll(enhancedPapers as OpenAlexPaper[]);
+	await Redis.papers.upsertAll(
+		enhancedPapers.map((p) => p?.paper) as OpenAlexPaper[],
+	);
 
 	return {
 		count: meta.count,
-		rows: enhancedPapers,
+		rows: enhancedPapers as RankedPaper[],
 		nextOffset,
 	};
 }

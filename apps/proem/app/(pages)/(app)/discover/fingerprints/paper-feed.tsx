@@ -124,7 +124,7 @@ export function PaperFeed({
 											<Loader />
 										) : null
 									) : paper ? (
-										<PaperCard paper={paper} filter={filter} />
+										<PaperCard rankedPaper={paper} />
 										// <FeedItem paper={paper} />
 									) : (
 										<Loader />

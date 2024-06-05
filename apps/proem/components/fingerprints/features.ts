@@ -6,6 +6,13 @@ const MIN_SCORE = 0.1;
 
 export type FeatureType = "topic" | "keyword" | "concept";
 
+export type Feature = {
+	id: string;
+	label: string;
+	type: FeatureType;
+	score: number;
+};
+
 export type RankedFeature = {
 	id: string;
 	label: string;
@@ -36,57 +43,19 @@ export function getFeatureFilter(fingerprints: Fingerprint[]): FeatureFilter {
 	};
 
 	for (const fingerprint of fingerprints) {
-		for (const item of fingerprint.topics) {
-			const key = item.id;
+		const features = getFeatures(fingerprint);
+
+		for (const feature of features) {
+			const key = feature.id;
 			if (!ids.topics.includes(key)) {
 				ids.topics.push(key);
 			}
-
-			const count = featureMap[key]?.count ?? 0;
-			const score = featureMap[key]?.avgScore ?? 0;
-			const label = oaTopicsTranslationMap[item.id]?.["short-name"] as string;
-			featureMap[key] = {
-				id: key,
-				label,
-				type: "topic",
-				count: count + 1,
-				avgScore: (score + item.score) / 2,
-				coOccurrenceScore: 0,
-			};
-		}
-
-		for (const item of fingerprint.concepts) {
-			const key = item.id;
-			if (!ids.concepts.includes(key)) {
-				ids.concepts.push(key);
-			}
-
 			const count = featureMap[key]?.count ?? 0;
 			const score = featureMap[key]?.avgScore ?? 0;
 			featureMap[key] = {
-				id: key,
-				label: item.display_name,
-				type: "concept",
+				...feature,
 				count: count + 1,
-				avgScore: (score + item.score) / 2,
-				coOccurrenceScore: 0,
-			};
-		}
-
-		for (const item of fingerprint.keywords) {
-			const key = item.id;
-			if (!ids.keywords.includes(key)) {
-				ids.keywords.push(key);
-			}
-
-			const count = featureMap[key]?.count ?? 0;
-			const score = featureMap[key]?.avgScore ?? 0;
-			featureMap[key] = {
-				id: key,
-				label: item.display_name,
-				type: "keyword",
-				count: count + 1,
-				avgScore: (score + item.score) / 2,
+				avgScore: (score + feature.score) / 2,
 				coOccurrenceScore: 0,
 			};
 		}
@@ -105,13 +74,51 @@ export function getFeatureFilter(fingerprints: Fingerprint[]): FeatureFilter {
 		.sort((a, b) => (a.count > b.count ? -1 : 1))
 		.map((item, i) => ({
 			...item,
-			disabled: i > MAX_COUNT || (item?.coOccurrenceScore ?? 0) < MIN_SCORE,
+			irrelevant: i > MAX_COUNT || (item?.coOccurrenceScore ?? 0) < MIN_SCORE,
 		}));
 
 	return {
 		features: rankedFeatures,
-		filter: rankedFeatures.filter((f) => !f.disabled),
+		filter: rankedFeatures.filter((f) => !f.irrelevant),
 	};
+}
+
+export function getFeatures(fingerprint: Fingerprint): Feature[] {
+	const features = {} as {
+		[key: string]: Feature;
+	};
+
+	const asFeature = (
+		item: { id: string; display_name: string; score: number },
+		type: FeatureType,
+		label?: string,
+	): Feature => ({
+		id: item.id,
+		score: item.score,
+		label: label ?? item.display_name,
+		type,
+	});
+
+	for (const item of fingerprint.topics) {
+		const key = item.id;
+		features[key] = asFeature(
+			item,
+			"topic",
+			oaTopicsTranslationMap[item.id]?.["short-name"] as string,
+		);
+	}
+
+	for (const item of fingerprint.concepts) {
+		const key = item.id;
+		features[key] = asFeature(item, "concept");
+	}
+
+	for (const item of fingerprint.keywords) {
+		const key = item.id;
+		features[key] = asFeature(item, "keyword");
+	}
+
+	return Object.values(features);
 }
 
 export function findFilterHits(
