@@ -5,12 +5,12 @@ import {
 	oaBaseUrl,
 } from "@proemial/models/open-alex";
 import dayjs from "dayjs";
-import { Feature, FeatureType, RankedFeature, getFeatures } from "./features";
+import { FeatureType, RankedFeature, getFeatures } from "./features";
 import { fetchWithAbstract } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { getFingerprint } from "./fingerprints";
 
 const PER_PAGE = 50;
-const MAX_PAGES = 6;
+const MAX_PAGES = 10;
 
 export const fetchAndRerankPapers = async (
 	{ filter, days }: { filter: RankedFeature[]; days: number },
@@ -20,13 +20,14 @@ export const fetchAndRerankPapers = async (
 	const pageOffset = offset ?? 1;
 
 	const allPapers = await fetchAllPapers(days, filter);
+	const papers = rerankAndLimit(allPapers.papers, filter).slice(
+		pageOffset,
+		pageOffset + pageLimit,
+	);
 
 	return {
 		meta: allPapers.meta,
-		papers: rerankAndLimit(allPapers.papers, filter).slice(
-			pageOffset,
-			pageOffset + pageLimit,
-		),
+		papers,
 	};
 };
 
@@ -94,8 +95,6 @@ async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 		.format("YYYY-MM-DD");
 	const filter = getOpenAlexFilter(rankedFeatures);
 
-	console.log(days, " - Fetching papers from", from, "to", today);
-
 	const oaFilter = [
 		"type:types/preprint|types/article",
 		"has_abstract:true",
@@ -119,13 +118,8 @@ async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 	const pageCount =
 		allPagesCount < MAX_PAGES - 1 ? allPagesCount : MAX_PAGES - 1;
 
-	console.log(
-		`Fetching ${pageCount} pages, from a total of ${allPagesCount} pages / ${page1.meta.count} papers`,
-	);
-
 	const queries = await Promise.all(
 		Array.from({ length: pageCount }).map((_, i) => {
-			console.log(`Fetcing page ${i + 1}`);
 			return fetchWithAbstract(`${url}${paginate}${i + 2}`);
 		}),
 	);
@@ -147,10 +141,14 @@ function getOpenAlexFilter(rankedFeatures: RankedFeature[] = []) {
 		.filter((item) => item.type === "topic")
 		.map((item) => item.id.split("/").at(-1))
 		.join("|");
-	const concepts = rankedFeatures
-		.filter((item) => item.type === "concept")
+	// const concepts = rankedFeatures
+	// 	.filter((item) => item.type === "concept")
+	// 	.map((item) => item.id.split("/").at(-1))
+	// 	.join("|");
+	const keywords = rankedFeatures
+		.filter((item) => item.type === "keyword")
 		.map((item) => item.id.split("/").at(-1))
 		.join("|");
 
-	return `primary_topic.id:${topics},concepts.id:${concepts}`;
+	return `primary_topic.id:${topics},keywords.id:${keywords}`;
 }

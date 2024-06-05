@@ -100,11 +100,8 @@ export function getFeatures(fingerprint: Fingerprint): Feature[] {
 
 	for (const item of fingerprint.topics) {
 		const key = item.id;
-		features[key] = asFeature(
-			item,
-			"topic",
-			oaTopicsTranslationMap[item.id]?.["short-name"] as string,
-		);
+		const label = oaTopicsTranslationMap[item.id]?.["short-name"] as string;
+		features[key] = asFeature(item, "topic", label);
 	}
 
 	for (const item of fingerprint.concepts) {
