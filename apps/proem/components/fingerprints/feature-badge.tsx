@@ -16,13 +16,8 @@ export function FeatureBadge({
 				variant,
 			})}
 		>
-			{`${children}${
-				score === undefined
-					? ""
-					: score
-						? `: ${score?.toFixed(2)}`
-						: `: ${score}`
-			}`}
+			{children}
+			{score !== undefined && <>: {score ? score?.toFixed(2) : score}</>}
 		</Badge>
 	);
 }
