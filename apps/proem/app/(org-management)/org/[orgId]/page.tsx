@@ -1,4 +1,5 @@
 import { OrganizationProfile } from "@clerk/nextjs";
+import { InfoCircle } from "@untitled-ui/icons-react";
 
 /**
  * Note:
@@ -6,5 +7,16 @@ import { OrganizationProfile } from "@clerk/nextjs";
  * is not an org profile.
  */
 export default function OrgManagementPage() {
-	return <OrganizationProfile />;
+	return (
+		<div className="flex flex-col items-center gap-4">
+			<div className="flex gap-1 items-center">
+				<InfoCircle className="opacity-75" />
+				<div className="text-base/relaxed">
+					Members must have signed in once, before they accept an invitation to
+					join an organization.
+				</div>
+			</div>
+			<OrganizationProfile />
+		</div>
+	);
 }

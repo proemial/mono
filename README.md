@@ -64,7 +64,6 @@ Finish off by opening the settings and set the default formatter
 ### Apps and Packages
 
 - `apps/proem`: The main app
-- `apps/search`: The search api, used by ChatGPT
 - `apps/website`: The website for proemial.ai
 - `packages/*`: Code and configuration shared between apps
 

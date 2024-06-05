@@ -36,7 +36,7 @@ export function Suggestions({
 		if (onClick) {
 			onClick({ role: "user", content: suggestion });
 		} else {
-			router.push(`/answer/${encodeURIComponent(suggestion)}`);
+			router.push(`/answer/?q=${encodeURIComponent(suggestion)}`);
 		}
 	}
 

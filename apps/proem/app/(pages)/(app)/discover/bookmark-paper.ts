@@ -12,9 +12,7 @@ const bookmarkPaperParams = z.object({
 
 // TODO: Auth and rate limit
 
-export async function hasPaperBookmark(
-	params: z.infer<typeof bookmarkPaperParams>,
-) {
+export async function hasPaperBookmark(params: unknown) {
 	const { userId, paperId } = bookmarkPaperParams.parse(params);
 	if (!userId) {
 		return false;
@@ -25,9 +23,7 @@ export async function hasPaperBookmark(
 	return !!bookmark;
 }
 
-export async function addPaperBookmark(
-	params: z.infer<typeof bookmarkPaperParams>,
-) {
+export async function addPaperBookmark(params: unknown) {
 	const { userId, paperId } = bookmarkPaperParams.parse(params);
 	if (!userId) {
 		return;
@@ -42,9 +38,7 @@ export async function addPaperBookmark(
 		.onConflictDoNothing();
 }
 
-export async function removePaperBookmark(
-	params: z.infer<typeof bookmarkPaperParams>,
-) {
+export async function removePaperBookmark(params: unknown) {
 	const { userId, paperId } = bookmarkPaperParams.parse(params);
 	if (!userId) {
 		return;

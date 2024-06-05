@@ -18,6 +18,7 @@ export const SetActiveOrganization = () => {
 		) {
 			const { organization } = userMemberships.data[0];
 			void setActive({ organization: organization.id });
+			console.log("Active organization set to", organization.name);
 		}
 	}, [isLoaded, userMemberships, setActive, membership]);
 

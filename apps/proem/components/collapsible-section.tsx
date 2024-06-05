@@ -15,6 +15,7 @@ type CollapsibleSection = {
 	children: React.ReactNode;
 	extra?: React.ReactNode;
 	trackingKey?: string;
+	collapsed?: boolean;
 };
 
 export function CollapsibleSection({
@@ -22,8 +23,9 @@ export function CollapsibleSection({
 	trigger,
 	extra,
 	trackingKey,
+	collapsed,
 }: CollapsibleSection) {
-	const [isOpen, setIsOpen] = useState(true);
+	const [isOpen, setIsOpen] = useState(!collapsed);
 
 	return (
 		<Collapsible

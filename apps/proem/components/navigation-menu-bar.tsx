@@ -1,10 +1,10 @@
 "use client";
 
+import { Profile } from "@/app/profile/profile";
 import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { Profile } from "@/components/profile";
 import {
 	Button,
 	NavigationMenu,

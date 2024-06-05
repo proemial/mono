@@ -23,7 +23,7 @@ export function ChatArticle({
 	const title = paper?.generated?.title;
 
 	return (
-		<div className="space-y-3">
+		<div className="space-y-3 text-pretty">
 			<div className="flex items-center place-content-between">
 				<div className="flex items-center gap-3.5">
 					<AlignLeft />

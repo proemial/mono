@@ -1,8 +1,0 @@
-{
-	"extends": ["//"],
-	"pipeline": {
-		"build": {
-			"env": ["REDIS_PAPERS_URL", "REDIS_PAPERS_TOKEN"]
-		}
-	}
-}

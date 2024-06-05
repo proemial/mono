@@ -7,6 +7,7 @@ import {
 	DrawerHeader,
 	DrawerTitle,
 	DrawerTrigger,
+	ScrollArea,
 	cn,
 } from "@proemial/shadcn-ui";
 import { XClose } from "@untitled-ui/icons-react";
@@ -43,9 +44,13 @@ export function FullSizeDrawer({
 							<div>{title}</div>
 						</DrawerTitle>
 					</DrawerHeader>
-					<div className="h-full p-4 overflow-auto">
-						{render ? render(DrawerClose) : children}
-					</div>
+					{render ? (
+						<ScrollArea className="flex p-4 h-full">
+							{render(DrawerClose)}
+						</ScrollArea>
+					) : (
+						<div className="h-full p-4 overflow-auto">{children}</div>
+					)}
 				</div>
 			</DrawerContent>
 		</Drawer>
