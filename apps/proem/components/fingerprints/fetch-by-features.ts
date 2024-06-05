@@ -114,8 +114,11 @@ async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 	const paginate = `&per_page=${PER_PAGE}&page=`;
 	const page1 = await fetchWithAbstract(`${url}${paginate}${1}`);
 	const allPagesCount = Math.ceil(page1.meta.count / PER_PAGE) - 1;
-	const pageCount =
-		allPagesCount < MAX_PAGES - 1 ? allPagesCount : MAX_PAGES - 1;
+	const pageCount = !rankedFeatures?.length
+		? 1
+		: allPagesCount < MAX_PAGES - 1
+			? allPagesCount
+			: MAX_PAGES - 1;
 
 	const queries = await Promise.all(
 		Array.from({ length: pageCount }).map((_, i) => {
