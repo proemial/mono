@@ -10,13 +10,21 @@ export function FeatureBadge({
 	score?: number;
 	variant?: "topic" | "keyword" | "concept" | "disabled";
 }) {
+	console.log("FeatureBadge", children, score);
+
 	return (
 		<Badge
 			className={badgeStyle({
 				variant,
 			})}
 		>
-			{`${children}${score ? `: ${score?.toFixed(2)}` : ""}`}
+			{`${children}${
+				score === undefined
+					? ""
+					: score
+						? `: ${score?.toFixed(2)}`
+						: `: ${score}`
+			}`}
 		</Badge>
 	);
 }
