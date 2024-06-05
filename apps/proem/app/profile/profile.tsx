@@ -35,7 +35,7 @@ export function Profile() {
 			<DrawerContent
 				className={`${screenMaxWidth} w-full h-full rounded-none mx-auto`}
 			>
-				<div className="flex flex-col gap-6">
+				<div className="flex flex-col gap-6 h-full">
 					<DrawerHeader className="pt-0">
 						<DrawerTitle className="flex justify-end text-2xl font-normal">
 							<DrawerClose asChild>

@@ -4,29 +4,34 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { CollapsibleSection } from "@/components/collapsible-section";
-import {
-	Header4,
-	Table,
-	TableBody,
-	TableCell,
-	TableRow,
-} from "@proemial/shadcn-ui";
-import {
-	ClipboardCheck,
-	File02,
-	Lock01,
-	MessageSquare02,
-} from "@untitled-ui/icons-react";
-import Link from "next/link";
+import { useClerk, useUser } from "@clerk/nextjs";
+import { Table, TableBody, TableCell, TableRow } from "@proemial/shadcn-ui";
+import { Drop, LogOut01, MessageSquare02 } from "@untitled-ui/icons-react";
+import { ProfileColorSchemeToggle } from "./profile-color-scheme-toggle";
+import { ProfileQuestions } from "./profile-questions";
 
 const feedback = "https://tally.so/r/wAv8Ve";
+const version = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ?? "local";
 
 export const About = () => {
+	const { user, isSignedIn } = useUser();
+	const { signOut } = useClerk();
+
 	return (
-		<CollapsibleSection trigger={<Header4>About</Header4>} collapsed={true}>
+		<div className="flex flex-col gap-4 justify-between h-full w-full mt-4">
 			<Table className="text-base">
 				<TableBody>
+					<TableRow>
+						<TableCell variant="icon">
+							<Drop className="mx-auto size-4" />
+						</TableCell>
+						<TableCell variant="key" className="select-none">
+							Color scheme
+						</TableCell>
+						<TableCell variant="value">
+							<ProfileColorSchemeToggle />
+						</TableCell>
+					</TableRow>
 					<TableRow>
 						<TableCell variant="icon">
 							<MessageSquare02 className="mx-auto size-4" />
@@ -34,49 +39,38 @@ export const About = () => {
 						<TableCell variant="key">
 							<Feedback />
 						</TableCell>
-					</TableRow>
-					<TableRow>
-						<TableCell variant="icon">
-							<File02 className="mx-auto size-4" />
-						</TableCell>
-						<TableCell variant="key">
-							<Link
-								href="/terms"
-								onClick={trackHandler(analyticsKeys.ui.menu.click.terms)}
-								prefetch={false}
+						<TableCell variant="value">
+							<div
+								className="flex gap-2 items-center"
+								onClick={trackHandler(analyticsKeys.ui.menu.click.version)}
 							>
-								Terms of use
-							</Link>
+								<pre className="text-xs">{version.substring(0, 7)}</pre>
+								<Beta />
+							</div>
 						</TableCell>
 					</TableRow>
-					<TableRow>
-						<TableCell variant="icon">
-							<Lock01 className="mx-auto size-4" />
-						</TableCell>
-						<TableCell variant="key">
-							<Link
-								href="/privacy"
-								onClick={trackHandler(analyticsKeys.ui.menu.click.privacy)}
-								prefetch={false}
-							>
-								Privacy policy
-							</Link>
-						</TableCell>
-					</TableRow>
-					<TableRow>
-						<TableCell variant="icon">
-							<ClipboardCheck className="mx-auto size-4" />
-						</TableCell>
-						<TableCell
-							variant="key"
-							className="w-full flex items-center gap-4 select-none"
-						>
-							<Version />
-						</TableCell>
-					</TableRow>
+					{isSignedIn && (
+						<TableRow>
+							<TableCell variant="icon">
+								{user && <LogOut01 className="mx-auto size-4" />}
+							</TableCell>
+							<TableCell variant="key" className="flex">
+								<div
+									onClick={() => {
+										trackHandler(analyticsKeys.ui.menu.click.signout)();
+										signOut();
+									}}
+									className="cursor-pointer"
+								>
+									Sign out
+								</div>
+							</TableCell>
+						</TableRow>
+					)}
 				</TableBody>
 			</Table>
-		</CollapsibleSection>
+			{user && isSignedIn && <ProfileQuestions />}
+		</div>
 	);
 };
 
@@ -90,23 +84,6 @@ function Feedback() {
 		>
 			Give feedback
 		</a>
-	);
-}
-
-function Version() {
-	const version = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ?? "local";
-	return (
-		// Check if anyone is actually clicking this
-		<div
-			className="flex gap-2 w-full justify-between items-center"
-			onClick={trackHandler(analyticsKeys.ui.menu.click.version)}
-		>
-			<div>Version</div>
-			<div className="flex gap-2 items-center">
-				<pre className="text-xs">{version.substring(0, 7)}</pre>
-				<Beta />
-			</div>
-		</div>
 	);
 }
 
