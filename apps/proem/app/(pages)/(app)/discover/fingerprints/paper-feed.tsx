@@ -8,7 +8,7 @@ import { Icons } from "@proemial/shadcn-ui";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
-import { fetchFeed } from "./helpers/fetch-feed";
+import { fetchFeed } from "./fetch-feed";
 import { RankedFeature } from "../../../../../components/fingerprints/features";
 import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
 
@@ -125,10 +125,12 @@ export function PaperFeed({
 										) : null
 									) : rankedPaper ? (
 										<FeedItem paper={rankedPaper.paper}>
-											<FeatureCloud
-												features={rankedPaper.features}
-												sum={rankedPaper.filterMatchScore}
-											/>
+											{!!rankedPaper.filterMatchScore && (
+												<FeatureCloud
+													features={rankedPaper.features}
+													sum={rankedPaper.filterMatchScore}
+												/>
+											)}
 										</FeedItem>
 									) : (
 										<Loader />
