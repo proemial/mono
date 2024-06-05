@@ -51,27 +51,27 @@ function rerankAndLimit(
 		.map(shortenId)
 		.map((paper) => rankFeature(paper, filter));
 
-	const sorted = ranked.sort((a, b) => b.filterMatchScore - a.filterMatchScore);
-	return sorted; //sortBySimilarity(sanitised, filter);
+	return ranked.sort((a, b) => b.filterMatchScore - a.filterMatchScore);
 }
 
 function rankFeature(paper: OpenAlexPaper, filter: RankedFeature[]) {
-	const features = getFeatures(getFingerprint(paper)).map((feature) => {
-		const filterScore =
-			filter.find((f) => f.id === feature.id)?.coOccurrenceScore ?? 0;
-		const featureMatchScore = filterScore * feature.score;
+	const features = getFeatures(getFingerprint(paper))
+		.map((feature) => {
+			const filterScore =
+				filter.find((f) => f.id === feature.id)?.coOccurrenceScore ?? 0;
+			const featureMatchScore = filterScore * feature.score;
 
-		return {
-			...feature,
-			featureMatchScore,
-			irrelevant: featureMatchScore < 0.1,
-		};
-	});
+			return {
+				...feature,
+				featureMatchScore,
+				irrelevant: featureMatchScore < 0.1,
+			};
+		})
+		.sort((a, b) => b.featureMatchScore - a.featureMatchScore);
 
-	const filterMatchScore = features.reduce(
-		(acc, f) => acc + f.featureMatchScore,
-		0,
-	);
+	const filterMatchScore = features
+		.filter((f) => !f.irrelevant)
+		.reduce((acc, f) => acc + f.featureMatchScore, 0);
 
 	return { paper, features, filterMatchScore };
 }

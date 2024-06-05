@@ -70,8 +70,7 @@ export function getFeatureFilter(fingerprints: Fingerprint[]): FeatureFilter {
 	}
 
 	const rankedFeatures = Object.values(featureMap)
-		.sort((a, b) => (a.avgScore > b.avgScore ? -1 : 1))
-		.sort((a, b) => (a.count > b.count ? -1 : 1))
+		.sort((a, b) => (a.coOccurrenceScore > b.coOccurrenceScore ? -1 : 1))
 		.map((item, i) => ({
 			...item,
 			irrelevant: i > MAX_COUNT || (item?.coOccurrenceScore ?? 0) < MIN_SCORE,
