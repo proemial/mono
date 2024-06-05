@@ -5,7 +5,6 @@ import {
 	OpenAlexPaper,
 	OpenAlexTopic,
 } from "@proemial/models/open-alex";
-import { features } from "process";
 
 const MAX_COUNT = 30;
 const MIN_SCORE = 0.1;
@@ -33,7 +32,8 @@ export type RankedFeature = {
 	label: string;
 	type: FeatureType;
 	count: number;
-	score: number;
+	avgOaScore: number;
+	score?: number;
 	disabled?: boolean;
 };
 
@@ -53,21 +53,20 @@ export function filterByFingerprints(fingerprints: Fingerprint[]) {
 
 	for (const fingerprint of fingerprints) {
 		for (const item of fingerprint.topics) {
-			// .slice(0, 1)) {
 			const key = item.id;
 			if (!ids.topics.includes(key)) {
 				ids.topics.push(key);
 			}
 
 			const count = rankedFeatureMap[key]?.count ?? 0;
-			const score = rankedFeatureMap[key]?.score ?? 0;
+			const score = rankedFeatureMap[key]?.avgOaScore ?? 0;
 			const label = oaTopicsTranslationMap[item.id]?.["short-name"] as string;
 			rankedFeatureMap[key] = {
 				id: key,
 				label,
 				type: "topic",
 				count: count + 1,
-				score: (score + item.score) / 2,
+				avgOaScore: (score + item.score) / 2,
 			};
 		}
 
@@ -78,13 +77,13 @@ export function filterByFingerprints(fingerprints: Fingerprint[]) {
 			}
 
 			const count = rankedFeatureMap[key]?.count ?? 0;
-			const score = rankedFeatureMap[key]?.score ?? 0;
+			const score = rankedFeatureMap[key]?.avgOaScore ?? 0;
 			rankedFeatureMap[key] = {
 				id: key,
 				label: item.display_name,
 				type: "concept",
 				count: count + 1,
-				score: (score + item.score) / 2,
+				avgOaScore: (score + item.score) / 2,
 			};
 		}
 
@@ -95,27 +94,42 @@ export function filterByFingerprints(fingerprints: Fingerprint[]) {
 			}
 
 			const count = rankedFeatureMap[key]?.count ?? 0;
-			const score = rankedFeatureMap[key]?.score ?? 0;
+			const score = rankedFeatureMap[key]?.avgOaScore ?? 0;
 			rankedFeatureMap[key] = {
 				id: key,
 				label: item.display_name,
 				type: "keyword",
 				count: count + 1,
-				score: (score + item.score) / 2,
+				avgOaScore: (score + item.score) / 2,
+			};
+		}
+
+		for (const key of Object.keys(rankedFeatureMap)) {
+			const item = rankedFeatureMap[key] as RankedFeature;
+			rankedFeatureMap[key] = {
+				...item,
+				score: (item.count * item.avgOaScore) / fingerprints.length,
 			};
 		}
 	}
 
 	const rankedFeatures = Object.values(rankedFeatureMap)
-		.sort((a, b) => (a.score > b.score ? -1 : 1))
+		.sort((a, b) => (a.avgOaScore > b.avgOaScore ? -1 : 1))
 		.sort((a, b) => (a.count > b.count ? -1 : 1))
 		.map((item, i) => ({
 			...item,
-			disabled: i > MAX_COUNT || item.score < MIN_SCORE,
+			disabled: i > MAX_COUNT || (item?.score ?? 0) < MIN_SCORE,
 		}));
 
 	return {
 		features: rankedFeatures,
 		filter: rankedFeatures.filter((f) => !f.disabled),
 	};
+}
+
+export function findFilterHits(
+	features: { id: string }[],
+	filter: RankedFeature[],
+) {
+	return features.filter((item) => !!filter.find((f) => f.id === item.id));
 }

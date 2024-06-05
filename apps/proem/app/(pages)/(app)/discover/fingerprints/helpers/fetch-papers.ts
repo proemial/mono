@@ -7,27 +7,20 @@ import {
 	oaBaseUrl,
 } from "@proemial/models/open-alex";
 import { fetchJson } from "@proemial/utils/fetch";
+import { Fingerprint } from "./fingerprint";
 
 type WithTitle = {
 	id: string;
 	title: string;
 };
 
-type WithFeatures = {
-	id: string;
-	topics: OpenAlexTopic[];
-	concepts: OpenAlexConcept[];
-	keywords: OpenAlexKeyword[];
-};
-
 export async function fetchPapersTitles(ids: string[]): Promise<WithTitle[]> {
 	return fetchPapers<WithTitle[]>(ids, "id,title");
 }
 
-export async function fetchFingerprints(
-	ids: string[],
-): Promise<WithFeatures[]> {
-	return fetchPapers<WithFeatures[]>(ids, "id,topics,keywords,concepts");
+// TODO: Support lastRead / readCount
+export async function fetchFingerprints(ids: string[]): Promise<Fingerprint[]> {
+	return fetchPapers<Fingerprint[]>(ids, "id,topics,keywords,concepts");
 }
 
 async function fetchPapers<T>(ids: string[], select: string): Promise<T> {

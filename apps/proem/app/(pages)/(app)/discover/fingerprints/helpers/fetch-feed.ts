@@ -92,21 +92,43 @@ export const fetchAndRerankPapers = async (
 	const pageOffset = offset ?? 1;
 
 	const allPapers = await fetchAllPapers(days, filter);
-	const oaPapers = allPapers.papers
-		.filter((p) => p.data.topics?.length)
+
+	return {
+		meta: allPapers.meta,
+		papers: rerankAndLimit(allPapers.papers).slice(
+			pageOffset,
+			pageOffset + pageLimit,
+		),
+	};
+};
+
+function rerankAndLimit(papers: OpenAlexPaper[], filter?: RankedFeature[]) {
+	const sanitised = papers
+		.filter((p) => p.data.topics?.length) // Filter out papers without topics
 		.map((result) => ({
 			...result,
 			id: result.data.id.replace("https://openalex.org/", ""),
 		}));
 
-	return {
-		meta: allPapers.meta,
-		papers: [...oaPapers]
-			// TODO: sort by filter
-			.sort(sortByPublicationDateDesc)
-			.slice(pageOffset, pageOffset + pageLimit),
-	};
-};
+	return sanitised; //sortBySimilarity(sanitised, filter);
+}
+
+function getOpenAlexFilter(rankedFeatures: RankedFeature[] = []) {
+	if (!rankedFeatures.length) {
+		return "";
+	}
+
+	const topics = rankedFeatures
+		.filter((item) => item.type === "topic")
+		.map((item) => item.id.split("/").at(-1))
+		.join("|");
+	const concepts = rankedFeatures
+		.filter((item) => item.type === "concept")
+		.map((item) => item.id.split("/").at(-1))
+		.join("|");
+
+	return `primary_topic.id:${topics},concepts.id:${concepts}`;
+}
 
 async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 	const today = dayjs().format("YYYY-MM-DD");
@@ -150,28 +172,9 @@ async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 		}),
 	);
 
+	const papers = [page1, ...queries].flatMap((q) => q.papers);
 	return {
 		meta: page1.meta as OpenAlexMeta,
-		papers: [page1, ...queries].flatMap((q) => q.papers),
+		papers,
 	};
 }
-
-function getOpenAlexFilter(rankedFeatures: RankedFeature[] = []) {
-	if (!rankedFeatures.length) {
-		return "";
-	}
-
-	const topics = rankedFeatures
-		.filter((item) => item.type === "topic")
-		.map((item) => item.id.split("/").at(-1))
-		.join("|");
-	const concepts = rankedFeatures
-		.filter((item) => item.type === "concept")
-		.map((item) => item.id.split("/").at(-1))
-		.join("|");
-
-	return `primary_topic.id:${topics},concepts.id:${concepts}`;
-}
-
-const sortByPublicationDateDesc = (a: OpenAlexPaper, b: OpenAlexPaper) =>
-	b.data.publication_date.localeCompare(a.data.publication_date);

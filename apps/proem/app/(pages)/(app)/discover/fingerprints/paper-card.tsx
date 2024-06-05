@@ -1,28 +1,54 @@
-"use server";
 import { OpenAlexPaper } from "@proemial/models/open-alex";
-import { summarise } from "@/app/prompts/summarise-title";
-import FeedItem from "../feed-item";
+import { FeatureBadge } from "./feature-cloud";
+import { RankedFeature } from "./helpers/fingerprint";
+import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
+import { trimForQuotes } from "@/utils/string-utils";
 
-export async function PaperCard({ paper }: { paper: OpenAlexPaper }) {
-	const enhancedPaper = await enhancePaper(paper);
+export function PaperCard({
+	paper,
+	filter,
+}: { paper: OpenAlexPaper; filter: RankedFeature[] }) {
+	const inFilter = (id: string) => {
+		const found = filter.find((f) => f.id === id);
+		return found ? found.type : "disabled";
+	};
 
-	return <FeedItem paper={enhancedPaper} />;
-}
-
-async function enhancePaper(paper: OpenAlexPaper) {
-	if (!paper.generated?.title && paper.data.title && paper.data.abstract) {
-		const title = (await summarise(
-			paper.data.title,
-			paper.data.abstract,
-		)) as string;
-		const generated = paper.generated
-			? { ...paper.generated, title }
-			: { title };
-
-		return {
-			...paper,
-			generated,
-		};
-	}
-	return paper;
+	return (
+		<div>
+			<div>
+				{paper.generated?.title
+					? trimForQuotes(paper.generated?.title)
+					: paper.data.title}
+			</div>
+			<div>
+				{paper.data.topics?.map((topic, i) => (
+					<FeatureBadge
+						key={i}
+						score={topic.score}
+						variant={inFilter(topic.id)}
+					>
+						{oaTopicsTranslationMap[topic.id]?.["short-name"] as string}
+					</FeatureBadge>
+				))}
+				{paper.data.keywords?.map((keyword, i) => (
+					<FeatureBadge
+						key={i}
+						score={keyword.score}
+						variant={inFilter(keyword.id)}
+					>
+						{keyword.display_name}
+					</FeatureBadge>
+				))}
+				{paper.data.concepts?.map((concept, i) => (
+					<FeatureBadge
+						key={i}
+						score={concept.score}
+						variant={inFilter(concept.id)}
+					>
+						{concept.display_name}
+					</FeatureBadge>
+				))}
+			</div>
+		</div>
+	);
 }

@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 import { fetchFeed } from "./helpers/fetch-feed";
 import { RankedFeature } from "./helpers/fingerprint";
+import { PaperCard } from "./paper-card";
 
 // 1-4 is fetched without scrolling
 const initialPageSize = 4;
@@ -123,7 +124,8 @@ export function PaperFeed({
 											<Loader />
 										) : null
 									) : paper ? (
-										<FeedItem paper={paper} />
+										<PaperCard paper={paper} filter={filter} />
+										// <FeedItem paper={paper} />
 									) : (
 										<Loader />
 									)}

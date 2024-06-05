@@ -1,6 +1,6 @@
 import { fetchFingerprints } from "./helpers/fetch-papers";
 import { filterByFingerprints } from "./helpers/fingerprint";
-import { RankedFeatureCloud } from "./feature-cloud";
+import { FeatureCloud } from "./feature-cloud";
 import { AutocompleteInput } from "./autocomplete-input";
 import { PaperFeed } from "./paper-feed";
 
@@ -26,7 +26,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 		<div className="space-y-6">
 			<>
 				<AutocompleteInput />
-				<RankedFeatureCloud features={features} />
+				<FeatureCloud features={features} />
 			</>
 			<PaperFeed filter={filter} days={params.days} />
 		</div>

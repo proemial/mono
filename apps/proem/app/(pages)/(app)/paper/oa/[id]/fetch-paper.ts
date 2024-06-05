@@ -89,11 +89,8 @@ export const fetchPapersByField = async (
 			id: result.data.id.replace("https://openalex.org/", ""),
 		}));
 
-	return { meta, papers: [...oaPapers].sort(sortByPublicationDateDesc) };
+	return { meta, papers: [...oaPapers] };
 };
-
-const sortByPublicationDateDesc = (a: OpenAlexPaper, b: OpenAlexPaper) =>
-	b.data.publication_date.localeCompare(a.data.publication_date);
 
 export async function fetchWithAbstract(url: string) {
 	console.log("[fetchWithAbstract] Fetch", url);

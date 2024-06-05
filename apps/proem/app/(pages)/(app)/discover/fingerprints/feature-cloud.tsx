@@ -2,24 +2,45 @@ import { cva } from "class-variance-authority";
 import { RankedFeature } from "./helpers/fingerprint";
 import { Badge } from "@proemial/shadcn-ui/components/ui/badge";
 
+const DEBUG = false;
+
 type Props = {
 	features?: RankedFeature[];
 };
 
-export function RankedFeatureCloud({ features }: Props) {
+export function FeatureCloud({ features }: Props) {
 	return (
 		<div className="my-4 flex flex-wrap">
 			{features?.map((item, i) => (
-				<Badge
+				<FeatureBadge
 					key={i}
-					className={badgeStyle({
-						variant: item.disabled ? "disabled" : item.type,
-					})}
+					score={item.score}
+					variant={item.disabled ? "disabled" : item.type}
 				>
-					{`${item.count}x${item.label}: ${item.score.toFixed(2)}`}
-				</Badge>
+					{item.label}
+				</FeatureBadge>
 			))}
 		</div>
+	);
+}
+
+export function FeatureBadge({
+	children,
+	score,
+	variant,
+}: {
+	children: string;
+	score?: number;
+	variant: "topic" | "keyword" | "concept" | "disabled";
+}) {
+	return (
+		<Badge
+			className={badgeStyle({
+				variant,
+			})}
+		>
+			{`${children}: ${score?.toFixed(2)}`}
+		</Badge>
 	);
 }
 
