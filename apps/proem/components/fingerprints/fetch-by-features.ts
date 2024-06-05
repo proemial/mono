@@ -104,7 +104,7 @@ async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 		`publication_date:<${today}`, // We do not want papers published in the future
 		"language:en",
 		"open_access.is_oa:true",
-		"type:types/preprint|types/article,publication_date:%3C2024-05-28,publication_date:%3E2024-05-21",
+		"type:types/preprint|types/article",
 		filter ? filter : undefined,
 	]
 		.filter((f) => !!f)
@@ -116,7 +116,8 @@ async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 	console.log("Fetcing page 0");
 	const page1 = await fetchWithAbstract(`${url}${paginate}${1}`);
 	const allPagesCount = Math.ceil(page1.meta.count / PER_PAGE) - 1;
-	const pageCount = allPagesCount < MAX_PAGES ? allPagesCount : MAX_PAGES;
+	const pageCount =
+		allPagesCount < MAX_PAGES - 1 ? allPagesCount : MAX_PAGES - 1;
 
 	console.log(
 		`Fetching ${pageCount} pages, from a total of ${allPagesCount} pages / ${page1.meta.count} papers`,
@@ -125,19 +126,15 @@ async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 	const queries = await Promise.all(
 		Array.from({ length: pageCount }).map((_, i) => {
 			console.log(`Fetcing page ${i + 1}`);
-			return fetchWithAbstract(`${url}${paginate}${i + 1}`);
+			return fetchWithAbstract(`${url}${paginate}${i + 2}`);
 		}),
 	);
 
 	const papers = [page1, ...queries].flatMap((q) => q.papers);
-	const deduped = papers.filter(
-		(v, i, a) => a.findIndex((t) => t.data.id === v.data.id) === i,
-	);
-	console.log("Deduped papers", deduped.length);
 
 	return {
 		meta: page1.meta as OpenAlexMeta,
-		papers: deduped,
+		papers,
 	};
 }
 
