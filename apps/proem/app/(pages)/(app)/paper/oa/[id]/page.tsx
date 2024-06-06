@@ -88,8 +88,7 @@ const addPaperActivity = async (paperId: string) => {
 	}
 	// Sort activities by last read date (desc)
 	const activitiesSortedReadDate = existingActivities.sort(
-		(a, b) =>
-			new Date(b.lastReadAt).getTime() - new Date(a.lastReadAt).getTime(),
+		(a, b) => b.noOfReads - a.noOfReads,
 	);
 	await neonDb
 		.insert(users)
