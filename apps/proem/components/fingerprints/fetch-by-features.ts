@@ -143,14 +143,14 @@ function getOpenAlexFilter(rankedFeatures: RankedFeature[] = []) {
 		.filter((item) => item.type === "topic")
 		.map((item) => item.id.split("/").at(-1))
 		.join("|");
-	// const concepts = rankedFeatures
-	// 	.filter((item) => item.type === "concept")
-	// 	.map((item) => item.id.split("/").at(-1))
-	// 	.join("|");
-	const keywords = rankedFeatures
-		.filter((item) => item.type === "keyword")
+	const concepts = rankedFeatures
+		.filter((item) => item.type === "concept")
 		.map((item) => item.id.split("/").at(-1))
 		.join("|");
+	// const keywords = rankedFeatures
+	// 	.filter((item) => item.type === "keyword")
+	// 	.map((item) => item.id.split("/").at(-1))
+	// 	.join("|");
 
-	return `primary_topic.id:${topics},keywords.id:${keywords}`;
+	return `primary_topic.id:${topics},concepts.id:${concepts}`;
 }
