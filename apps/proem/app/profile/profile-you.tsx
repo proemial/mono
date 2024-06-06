@@ -5,7 +5,7 @@ import {
 } from "@/components/analytics/tracking/tracking-keys";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { CollectionListItem } from "@/components/collections/collection-list-item";
-import { CollectionListItemHeader } from "@/components/collections/collection-list-item-header";
+import { CreateNewCollection } from "@/components/collections/create-new-collection";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import {
 	Avatar,
@@ -17,7 +17,6 @@ import {
 	TableRow,
 } from "@proemial/shadcn-ui";
 import { Building05, LogIn01 } from "@untitled-ui/icons-react";
-import { Plus } from "lucide-react";
 import Link from "next/link";
 import { SignInDrawer } from "../../components/sign-in-drawer";
 import { useInternalUser } from "../hooks/use-user";
@@ -130,12 +129,9 @@ export function ProfileYou() {
 												name={collection.name}
 											/>
 										))}
-										<CollectionListItemHeader
-											onClick={() => alert("Not implemented.")}
-										>
-											<Plus className="size-4 opacity-85" />
-											<div className="text-sm">Create New Collection…</div>
-										</CollectionListItemHeader>
+										<CreateNewCollection
+											onSubmit={() => alert("Not implemented")}
+										/>
 									</div>
 								</CollapsibleSection>
 							)}
