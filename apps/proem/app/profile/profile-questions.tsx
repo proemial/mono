@@ -22,15 +22,17 @@ export function ProfileQuestions() {
 			extra={data?.length}
 			collapsed={true}
 		>
-			{data?.map((question) => (
-				<div key={question.id}>
-					<DrawerClose asChild>
-						<Link href={`/answer/${question.slug}`}>
-							<div className="truncate w-full pr-20">{question.question}</div>
-						</Link>
-					</DrawerClose>
-				</div>
-			))}
+			<div className="max-h-[200px] overflow-y-auto">
+				{data?.map((question) => (
+					<div key={question.id}>
+						<DrawerClose asChild>
+							<Link href={`/answer/${question.slug}`}>
+								<div className="truncate w-full pr-20">{question.question}</div>
+							</Link>
+						</DrawerClose>
+					</div>
+				))}
+			</div>
 		</CollapsibleSection>
 	);
 }
