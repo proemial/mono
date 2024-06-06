@@ -63,11 +63,18 @@ const addPaperActivity = async (paperId: string) => {
 	if (!userId) {
 		return;
 	}
-	const user = await neonDb.query.users.findFirst({
-		where: eq(users.id, userId),
-	});
+	// Add user if not already exists
+	const userResult = await neonDb
+		.insert(users)
+		.values({ id: userId })
+		.onConflictDoUpdate({
+			target: [users.id],
+			set: { id: userId },
+		})
+		.returning();
+	const user = userResult[0];
 	if (!user) {
-		return;
+		throw new Error("Failed to add user to database");
 	}
 	const existingActivities = user.paperActivities;
 	const existingActivity = existingActivities.find(
@@ -86,7 +93,6 @@ const addPaperActivity = async (paperId: string) => {
 			noOfReads: 1,
 		});
 	}
-	// Sort activities by last read date (desc)
 	const activitiesSortedReadDate = existingActivities.sort(
 		(a, b) => b.noOfReads - a.noOfReads,
 	);
