@@ -134,23 +134,34 @@ async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 	};
 }
 
-function getOpenAlexFilter(rankedFeatures: RankedFeature[] = []) {
+function getOpenAlexFilter(
+	rankedFeatures: RankedFeature[] = [],
+	includeKeywords?: boolean,
+) {
 	if (!rankedFeatures.length) {
 		return "";
 	}
 
+	const selectors = [];
 	const topics = rankedFeatures
 		.filter((item) => item.type === "topic")
 		.map((item) => item.id.split("/").at(-1))
 		.join("|");
+	if (topics.length) selectors.push(`primary_topic.id:${topics}`);
+
 	const concepts = rankedFeatures
 		.filter((item) => item.type === "concept")
 		.map((item) => item.id.split("/").at(-1))
 		.join("|");
-	// const keywords = rankedFeatures
-	// 	.filter((item) => item.type === "keyword")
-	// 	.map((item) => item.id.split("/").at(-1))
-	// 	.join("|");
+	if (concepts.length) selectors.push(`concepts.id:${concepts}`);
 
-	return `primary_topic.id:${topics},concepts.id:${concepts}`;
+	if (includeKeywords) {
+		const keywords = rankedFeatures
+			.filter((item) => item.type === "keyword")
+			.map((item) => item.id.split("/").at(-1))
+			.join("|");
+		if (keywords.length) selectors.push(`keywords.id:${keywords}`);
+	}
+
+	return selectors.join(",");
 }
