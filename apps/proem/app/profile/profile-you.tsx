@@ -5,28 +5,36 @@ import {
 } from "@/components/analytics/tracking/tracking-keys";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { CollectionListItem } from "@/components/collections/collection-list-item";
+import { CollectionListItemHeader } from "@/components/collections/collection-list-item-header";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import {
 	Avatar,
 	AvatarFallback,
 	AvatarImage,
 	Header2,
-	Header4,
 	Header5,
-	Icons,
-	Table,
-	TableBody,
 	TableCell,
 	TableRow,
 } from "@proemial/shadcn-ui";
 import { Building05, LogIn01 } from "@untitled-ui/icons-react";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import { SignInDrawer } from "../../components/sign-in-drawer";
+import { useInternalUser } from "../hooks/use-user";
 import { About } from "./about";
+
+// TODO: Replace with type from DB
+type Collection = {
+	id: number;
+	name: string;
+	description: string;
+};
 
 export function ProfileYou() {
 	const { user, isSignedIn } = useUser();
 	const { membership } = useOrganization();
+	const { isInternal } = useInternalUser();
+	const collections: Collection[] = []; // TODO: Fetch user collections
 
 	return (
 		<div className="h-full px-4 flex flex-col gap-4 justify-between">
@@ -101,6 +109,33 @@ export function ProfileYou() {
 												<div>{membership.organization.name}</div>
 											</div>
 										</Link>
+									</div>
+								</CollapsibleSection>
+							)}
+							{isInternal && (
+								<CollapsibleSection
+									collapsed
+									extra={<div>{collections.length}</div>}
+									trigger={<div>Collections</div>}
+								>
+									<div className="space-y-4 mt-4">
+										{collections.length === 0 && (
+											<div className="text-sm">
+												There are no collections to display.
+											</div>
+										)}
+										{collections.map((collection) => (
+											<CollectionListItem
+												key={collection.id}
+												name={collection.name}
+											/>
+										))}
+										<CollectionListItemHeader
+											onClick={() => alert("Not implemented.")}
+										>
+											<Plus className="size-4 opacity-85" />
+											<div className="text-sm">Create New Collection…</div>
+										</CollectionListItemHeader>
 									</div>
 								</CollapsibleSection>
 							)}
