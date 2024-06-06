@@ -20,14 +20,11 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	};
 
 	const ids = params.ids?.split(",") ?? [];
-	console.log("ids", ids);
 
 	if (!ids.length) {
 		const history = await getHistory();
 		if (history.length) {
-			redirect(
-				`/discover/fingerprints?ids=${history.map((h) => h.paperId).join(",")}`,
-			);
+			redirect(`/discover/fingerprints?ids=${history.join(",")}`);
 		}
 	}
 
