@@ -4,12 +4,14 @@ import {
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
 import { CollapsibleSection } from "@/components/collapsible-section";
+import { CollectionListItem } from "@/components/collections/collection-list-item";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import {
 	Avatar,
 	AvatarFallback,
 	AvatarImage,
 	Header2,
+	Header4,
 	Header5,
 	Icons,
 	Table,
@@ -17,7 +19,7 @@ import {
 	TableCell,
 	TableRow,
 } from "@proemial/shadcn-ui";
-import { LogIn01 } from "@untitled-ui/icons-react";
+import { Building05, LogIn01 } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import { SignInDrawer } from "../../components/sign-in-drawer";
 import { About } from "./about";
@@ -32,6 +34,25 @@ export function ProfileYou() {
 				<div className="select-none">
 					<Header2>Your profile</Header2>
 				</div>
+				{!isSignedIn && (
+					<SignInDrawer
+						trigger={
+							<TableRow>
+								<TableCell variant="icon">
+									<LogIn01 className="mx-auto size-4" />
+								</TableCell>
+								<TableCell variant="key" className="flex">
+									<div
+										className="cursor-pointer"
+										onClick={trackHandler(analyticsKeys.ui.menu.click.signin)}
+									>
+										Sign in
+									</div>
+								</TableCell>
+							</TableRow>
+						}
+					/>
+				)}
 				{isSignedIn && user && (
 					<div className="space-y-2">
 						<Header5>
@@ -56,56 +77,36 @@ export function ProfileYou() {
 						</CollapsibleSection>
 					</div>
 				)}
-				<div>
-					<Header5>
-						<div className="opacity-50 select-none">Social</div>
-					</Header5>
-					<Table className="text-base">
-						<TableBody>
+				{isSignedIn && (
+					<div>
+						<Header5>
+							<div className="opacity-50 select-none mb-2">Social</div>
+						</Header5>
+						<div className="flex flex-col gap-6">
 							{membership && (
-								<TableRow>
-									<TableCell variant="icon">
-										<Icons.organization className="mx-auto size-4" />
-									</TableCell>
-									<TableCell variant="key" className="select-none">
-										Organization
-									</TableCell>
-									<TableCell variant="value">
+								<CollapsibleSection
+									collapsed
+									extra={<div>1</div>}
+									trigger={<div>Organisations</div>}
+								>
+									<div className="space-y-4 mt-4">
 										<Link
 											href={`/org/${membership.organization.id}`}
 											onClick={trackHandler(analyticsKeys.ui.menu.click.org)}
 											prefetch={false}
-											className="flex items-center gap-1"
+											className="text-sm"
 										>
-											{membership.organization.name}
+											<div className="flex gap-2 items-center">
+												<Building05 className="size-4 opacity-85" />
+												<div>{membership.organization.name}</div>
+											</div>
 										</Link>
-									</TableCell>
-								</TableRow>
+									</div>
+								</CollapsibleSection>
 							)}
-							{!isSignedIn && (
-								<SignInDrawer
-									trigger={
-										<TableRow>
-											<TableCell variant="icon">
-												<LogIn01 className="mx-auto size-4" />
-											</TableCell>
-											<TableCell variant="key" className="flex">
-												<div
-													className="cursor-pointer"
-													onClick={trackHandler(
-														analyticsKeys.ui.menu.click.signin,
-													)}
-												>
-													Sign in
-												</div>
-											</TableCell>
-										</TableRow>
-									}
-								/>
-							)}
-						</TableBody>
-					</Table>
-				</div>
+						</div>
+					</div>
+				)}
 			</div>
 			<div className="flex gap-8 justify-center py-1 opacity-60">
 				<Link
