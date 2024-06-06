@@ -21,7 +21,9 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 
 	const ids = params.ids?.split(",") ?? [];
 
-	if (!ids.length) {
+	// Only use history when `ids` param is missing (accept clearing the list of papers)
+	const noIds = searchParams?.ids === undefined;
+	if (noIds && !ids.length) {
 		const history = await getHistory();
 		if (history.length) {
 			redirect(`/discover/fingerprints?ids=${history.join(",")}`);
