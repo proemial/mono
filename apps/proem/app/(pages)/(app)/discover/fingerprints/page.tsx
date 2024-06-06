@@ -3,10 +3,8 @@ import { getFeatureFilter } from "../../../../../components/fingerprints/feature
 import { FeatureCloud } from "../../../../../components/fingerprints/feature-cloud";
 import { AutocompleteInput } from "./autocomplete-input";
 import { PaperFeed } from "./paper-feed";
-import { auth } from "@clerk/nextjs/server";
-import { neonDb } from "@proemial/data";
-import { eq } from "drizzle-orm";
-import { users } from "@proemial/data/neon/schema";
+import { getHistory } from "./fetch-history";
+import { redirect } from "next/navigation";
 
 type Props = {
 	searchParams?: {
@@ -22,20 +20,14 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	};
 
 	const ids = params.ids?.split(",") ?? [];
+	console.log("ids", ids);
 
-	if (ids.length === 0) {
-		const { userId } = auth();
-		if (userId) {
-			const user = await neonDb.query.users.findFirst({
-				where: eq(users.id, userId),
-			});
-			const papers = user?.paperActivities.slice(0, 10);
-
-			if (papers) {
-				for (const paper of papers) {
-					ids.push(paper.paperId);
-				}
-			}
+	if (!ids.length) {
+		const history = await getHistory();
+		if (history.length) {
+			redirect(
+				`/discover/fingerprints?ids=${history.map((h) => h.paperId).join(",")}`,
+			);
 		}
 	}
 
