@@ -25,14 +25,11 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 
 	if (ids.length === 0) {
 		const { userId } = auth();
-		console.log("userId", userId);
 		if (userId) {
 			const user = await neonDb.query.users.findFirst({
 				where: eq(users.id, userId),
 			});
-			console.log("user", user);
 			const papers = user?.paperActivities.slice(0, 10);
-			console.log("papers", papers);
 
 			if (papers) {
 				for (const paper of papers) {
