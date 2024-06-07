@@ -20,6 +20,7 @@ export * from "./components/ui/table";
 export * from "./components/ui/textarea";
 export * from "./components/ui/theme-provider";
 export * from "./components/ui/typography";
+export * from "./components/ui/toaster";
 export * from "./lib/utils";
 
 export { useTheme } from "next-themes";
