@@ -50,12 +50,8 @@ export default async function ({ params }: PageProps) {
 	return (
 		<div className="flex flex-col grow gap-8">
 			<div className="flex flex-col gap-2">
-				<Header2>Collection</Header2>
-				<Paragraph>
-					Get up to speed with this list of papers related to our work on
-					Immunology. Feel free to ask the papers questions directly in this
-					list.
-				</Paragraph>
+				<Header2>{collection.name}</Header2>
+				<Paragraph>{collection.description}</Paragraph>
 				<div className="flex gap-2 justify-between items-center">
 					<div className="flex gap-2 items-center">
 						<Avatar className="size-6 bg-pink-300 border border-gray-100" />
