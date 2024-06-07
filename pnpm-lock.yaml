@@ -406,6 +406,9 @@ importers:
       react-hook-form:
         specifier: 7.51.3
         version: 7.51.3(react@18.3.1)
+      sonner:
+        specifier: ^1.4.41
+        version: 1.4.41(react-dom@18.3.1)(react@18.3.1)
       tailwind:
         specifier: ^4.0.0
         version: 4.0.0
@@ -10920,6 +10923,16 @@ packages:
     dependencies:
       solid-js: 1.8.16
       swr-store: 0.10.6
+    dev: false
+
+  /sonner@1.4.41(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-uG511ggnnsw6gcn/X+YKkWPo5ep9il9wYi3QJxHsYe7yTZ4+cOd1wuodOUmOpFuXL+/RE3R04LczdNCDygTDgQ==}
+    peerDependencies:
+      react: ^18.3.1
+      react-dom: ^18.0.0
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
     dev: false
 
   /source-map-js@1.2.0:
