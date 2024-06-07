@@ -4,13 +4,20 @@ import { FeedFilter } from "./feed-filter";
 import { OaFields } from "@proemial/models/open-alex-fields";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { getHistory } from "@/components/fingerprints/fetch-history";
-import { fetchFingerprints } from "@/components/fingerprints/fetch-fingerprints";
+import {
+	fetchFingerprints,
+	fetchPapersTitles,
+} from "@/components/fingerprints/fetch-fingerprints";
 import { getFeatureFilter } from "@/components/fingerprints/features";
+import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
+import { FeatureBadge } from "@/components/fingerprints/feature-badge";
+import { Badge } from "@proemial/shadcn-ui";
 
 type Props = {
 	searchParams?: {
 		topic?: string;
 		days?: string;
+		debug?: boolean;
 	};
 };
 
@@ -18,12 +25,13 @@ export default async function DiscoverPage({ searchParams }: Props) {
 	const params = {
 		topic: searchParams?.topic as string,
 		days: searchParams?.days ? Number.parseInt(searchParams.days) : 14,
+		debug: searchParams?.debug,
 	};
 	const filter = await getFilter(params);
 
 	return (
 		<div className="space-y-6">
-			<Feed filter={filter}>
+			<Feed filter={filter} debug={params.debug}>
 				{!filter.features && (
 					<div className="-my-4">
 						<HorisontalScrollArea>
@@ -37,12 +45,33 @@ export default async function DiscoverPage({ searchParams }: Props) {
 						</HorisontalScrollArea>
 					</div>
 				)}
+				{params.debug && (
+					<>
+						<Titles titles={filter.titles} />
+						<FeatureCloud features={filter.all} />
+					</>
+				)}
 			</Feed>
 		</div>
 	);
 }
 
-async function getFilter(params: { topic: string; days: number }) {
+function Titles({ titles }: { titles?: { id: string; title: string }[] }) {
+	return (
+		<div className="space-1">
+			<span className="text-xs font-bold mr-1">Read history: </span>
+			{titles?.map((paper) => (
+				<Badge key={paper.id}>{paper.title}</Badge>
+			))}
+		</div>
+	);
+}
+
+async function getFilter(params: {
+	topic: string;
+	days: number;
+	debug?: boolean;
+}) {
 	const { isInternal } = getInternalUser();
 
 	if (!isInternal) {
@@ -57,7 +86,8 @@ async function getFilter(params: { topic: string; days: number }) {
 
 	const history = await getHistory();
 	const fingerprints = await fetchFingerprints(history);
-	const { filter } = getFeatureFilter(fingerprints);
+	const { filter, features } = getFeatureFilter(fingerprints);
+	const titles = params.debug ? await fetchPapersTitles(history) : undefined;
 
-	return { features: filter, days: params.days };
+	return { features: filter, days: params.days, titles, all: features };
 }
