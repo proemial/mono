@@ -6,6 +6,11 @@ import { getHistory } from "@/components/fingerprints/fetch-history";
 import { redirect } from "next/navigation";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Feed } from "../feed";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Fingerprints",
+};
 
 type Props = {
 	searchParams?: {

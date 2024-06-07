@@ -5,7 +5,6 @@ import {
 } from "@/components/analytics/tracking/tracking-keys";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { CollectionListItem } from "@/components/collections/collection-list-item";
-import { CollectionListItemHeader } from "@/components/collections/collection-list-item-header";
 import { CreateEditCollection } from "@/components/collections/create-edit-collection";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
 import { useOrganization, useUser } from "@clerk/nextjs";
@@ -137,7 +136,6 @@ export function ProfileYou() {
 											<CollectionListItem
 												key={collection.id}
 												collection={collection}
-												onClick={() => alert("Opening is not implemented")}
 												onShare={() => alert("Sharing is not implemented")}
 												onEdit={() => alert("Editing is not implemented")}
 												onDelete={() => alert("Deletion is not implemented")}
@@ -145,10 +143,10 @@ export function ProfileYou() {
 										))}
 										<FullSizeDrawer
 											trigger={
-												<CollectionListItemHeader>
+												<div className="flex gap-2 items-center hover:opacity-85 active:opacity-75 duration-200 cursor-pointer">
 													<Plus className="size-4 opacity-85" />
 													<div className="text-sm">Create New Collection…</div>
-												</CollectionListItemHeader>
+												</div>
 											}
 										>
 											<CreateEditCollection
