@@ -12,7 +12,6 @@ import { fetchFeedByTopic } from "@/app/(pages)/(app)/discover/fetch-feed";
 import { fetchFeedByFeatures } from "@/components/fingerprints/fetch-feed";
 import { RankedFeature } from "@/components/fingerprints/features";
 import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
-import { OpenAlexPaper } from "@proemial/models/open-alex";
 import { RankedPaper } from "@/components/fingerprints/fetch-by-features";
 
 // 1-4 is fetched without scrolling

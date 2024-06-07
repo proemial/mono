@@ -3,7 +3,7 @@ import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { FeedFilter } from "./feed-filter";
 import { OaFields } from "@proemial/models/open-alex-fields";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
-import { getHistory } from "./fingerprints/fetch-history";
+import { getHistory } from "@/components/fingerprints/fetch-history";
 import { fetchFingerprints } from "@/components/fingerprints/fetch-fingerprints";
 import { getFeatureFilter } from "@/components/fingerprints/features";
 

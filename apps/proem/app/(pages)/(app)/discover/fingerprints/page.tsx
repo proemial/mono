@@ -1,8 +1,8 @@
-import { fetchFingerprints } from "../../../../../components/fingerprints/fetch-fingerprints";
-import { getFeatureFilter } from "../../../../../components/fingerprints/features";
-import { FeatureCloud } from "../../../../../components/fingerprints/feature-cloud";
+import { fetchFingerprints } from "@/components/fingerprints/fetch-fingerprints";
+import { getFeatureFilter } from "@/components/fingerprints/features";
+import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
 import { AutocompleteInput } from "./autocomplete-input";
-import { getHistory } from "./fetch-history";
+import { getHistory } from "@/components/fingerprints/fetch-history";
 import { redirect } from "next/navigation";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Feed } from "../feed";
