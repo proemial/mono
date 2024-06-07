@@ -15,8 +15,6 @@ import {
 	AvatarImage,
 	Header2,
 	Header5,
-	TableCell,
-	TableRow,
 } from "@proemial/shadcn-ui";
 import { Building05, LogIn01, Plus } from "@untitled-ui/icons-react";
 import Link from "next/link";
@@ -58,19 +56,15 @@ export function ProfileYou() {
 				{!isSignedIn && (
 					<SignInDrawer
 						trigger={
-							<TableRow>
-								<TableCell variant="icon">
-									<LogIn01 className="mx-auto size-4" />
-								</TableCell>
-								<TableCell variant="key" className="flex">
-									<div
-										className="cursor-pointer"
-										onClick={trackHandler(analyticsKeys.ui.menu.click.signin)}
-									>
-										Sign in
-									</div>
-								</TableCell>
-							</TableRow>
+							<div className="flex gap-2 items-center">
+								<LogIn01 className="size-4 opacity-85" />
+								<div
+									className="text-sm cursor-pointer"
+									onClick={trackHandler(analyticsKeys.ui.menu.click.signin)}
+								>
+									Sign in
+								</div>
+							</div>
 						}
 					/>
 				)}
@@ -115,11 +109,12 @@ export function ProfileYou() {
 											href={`/org/${membership.organization.id}`}
 											onClick={trackHandler(analyticsKeys.ui.menu.click.org)}
 											prefetch={false}
-											className="text-sm"
 										>
 											<div className="flex gap-2 items-center">
 												<Building05 className="size-4 opacity-85" />
-												<div>{membership.organization.name}</div>
+												<div className="text-sm">
+													{membership.organization.name}
+												</div>
 											</div>
 										</Link>
 									</div>

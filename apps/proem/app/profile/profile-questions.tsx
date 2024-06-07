@@ -1,7 +1,7 @@
 "use client";
 import { fetchQuestionsForCurrentUser } from "@/app/profile/profile-actions";
 import { CollapsibleSection } from "@/components/collapsible-section";
-import { DrawerClose, Header4 } from "@proemial/shadcn-ui";
+import { DrawerClose } from "@proemial/shadcn-ui";
 import Link from "next/link";
 import { useQuery } from "react-query";
 export const USER_QUESTIONS_QUERY_KEY = "user-questions";
@@ -18,7 +18,7 @@ export function ProfileQuestions() {
 
 	return (
 		<CollapsibleSection
-			trigger={<Header4>Question history</Header4>}
+			trigger={<div>Question history</div>}
 			extra={data?.length}
 			collapsed={true}
 		>
@@ -27,7 +27,9 @@ export function ProfileQuestions() {
 					<div key={question.id}>
 						<DrawerClose asChild>
 							<Link href={`/answer/${question.slug}`}>
-								<div className="truncate w-full pr-20">{question.question}</div>
+								<div className="truncate w-full pr-20 text-sm py-0.5">
+									{question.question}
+								</div>
 							</Link>
 						</DrawerClose>
 					</div>
