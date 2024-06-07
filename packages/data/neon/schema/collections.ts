@@ -5,6 +5,7 @@ import { collectionsToUsers } from "./collections-to-users";
 
 export const collections = pgTable("collections", {
 	id: text("id").primaryKey(),
+	ownerId: text("owner_id").notNull(),
 	name: text("name"),
 	description: text("description"),
 });
