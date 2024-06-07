@@ -8,12 +8,14 @@ import { useClerk, useUser } from "@clerk/nextjs";
 import { Drop, LogOut01, MessageSquare02 } from "@untitled-ui/icons-react";
 import { ProfileColorSchemeToggle } from "./profile-color-scheme-toggle";
 import { ProfileQuestions } from "./profile-questions";
+import { useInternalUser } from "../hooks/use-user";
 
 const feedback = "https://tally.so/r/wAv8Ve";
 const version = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ?? "local";
 
 export const About = () => {
 	const { user, isSignedIn } = useUser();
+	const { isInternal } = useInternalUser();
 	const { signOut } = useClerk();
 
 	return (
@@ -48,16 +50,19 @@ export const About = () => {
 					</div>
 				</div>
 				{isSignedIn && (
-					<div className="flex gap-2 items-center">
-						<LogOut01 className="size-4 opacity-85" />
+					<div className="flex justify-between">
 						<div
 							onClick={() => {
 								trackHandler(analyticsKeys.ui.menu.click.signout)();
 								signOut();
 							}}
-							className="text-sm cursor-pointer"
+							className="flex items-center gap-2 text-sm cursor-pointer"
 						>
+							<LogOut01 className="size-4 opacity-85" />
 							Sign out
+						</div>
+						<div className="text-xs text-gray-400">
+							{isInternal && `${user.id}`}
 						</div>
 					</div>
 				)}
