@@ -2,9 +2,10 @@ import { fetchFingerprints } from "../../../../../components/fingerprints/fetch-
 import { getFeatureFilter } from "../../../../../components/fingerprints/features";
 import { FeatureCloud } from "../../../../../components/fingerprints/feature-cloud";
 import { AutocompleteInput } from "./autocomplete-input";
-import { PaperFeed } from "./paper-feed";
 import { getHistory } from "./fetch-history";
 import { redirect } from "next/navigation";
+import { getInternalUser } from "@/app/hooks/get-internal-user";
+import { Feed } from "../feed";
 
 type Props = {
 	searchParams?: {
@@ -21,6 +22,9 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 
 	const ids = params.ids?.split(",") ?? [];
 
+	const internal = getInternalUser();
+	console.log("internal", internal);
+
 	// Only use history when `ids` param is missing (accept clearing the list of papers)
 	const noIds = searchParams?.ids === undefined;
 	if (noIds && !ids.length) {
@@ -35,11 +39,10 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 
 	return (
 		<div className="space-y-6">
-			<>
+			<Feed filter={{ features: filter, days: params.days }} debug>
 				<AutocompleteInput />
 				<FeatureCloud features={features} />
-			</>
-			<PaperFeed filter={filter} days={params.days} />
+			</Feed>
 		</div>
 	);
 }

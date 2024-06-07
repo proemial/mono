@@ -13,14 +13,14 @@ const PER_PAGE = 50;
 const MAX_PAGES = 10;
 
 export const fetchAndRerankPapers = async (
-	{ filter, days }: { filter: RankedFeature[]; days: number },
+	{ features, days }: { features?: RankedFeature[]; days?: number },
 	{ limit, offset }: { limit?: number; offset?: number } = {},
 ): Promise<{ meta: OpenAlexMeta; papers: RankedPaper[] }> => {
 	const pageLimit = limit ?? 25;
 	const pageOffset = offset ?? 1;
 
-	const allPapers = await fetchAllPapers(days, filter);
-	const papers = rerankAndLimit(allPapers.papers, filter).slice(
+	const allPapers = await fetchAllPapers(days ?? 14, features ?? []);
+	const papers = rerankAndLimit(allPapers.papers, features ?? []).slice(
 		pageOffset,
 		pageOffset + pageLimit,
 	);
