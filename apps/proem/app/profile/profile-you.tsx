@@ -5,7 +5,9 @@ import {
 } from "@/components/analytics/tracking/tracking-keys";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { CollectionListItem } from "@/components/collections/collection-list-item";
-import { CreateNewCollection } from "@/components/collections/create-new-collection";
+import { CollectionListItemHeader } from "@/components/collections/collection-list-item-header";
+import { CreateEditCollection } from "@/components/collections/create-edit-collection";
+import { FullSizeDrawer } from "@/components/full-page-drawer";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import {
 	Avatar,
@@ -16,14 +18,14 @@ import {
 	TableCell,
 	TableRow,
 } from "@proemial/shadcn-ui";
-import { Building05, LogIn01 } from "@untitled-ui/icons-react";
+import { Building05, LogIn01, Plus } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import { SignInDrawer } from "../../components/sign-in-drawer";
 import { useInternalUser } from "../hooks/use-user";
 import { About } from "./about";
 
 // TODO: Replace with type from DB
-type Collection = {
+export type Collection = {
 	id: number;
 	name: string;
 	description: string;
@@ -33,7 +35,19 @@ export function ProfileYou() {
 	const { user, isSignedIn } = useUser();
 	const { membership } = useOrganization();
 	const { isInternal } = useInternalUser();
-	const collections: Collection[] = []; // TODO: Fetch user collections
+	const collections: Collection[] = [
+		{
+			id: 1,
+			name: "Your Collection",
+			description: "A collection based on blah, blah and blah.",
+		},
+		{
+			id: 2,
+			name: "Immunology Onboarding",
+			description:
+				"Somebody out there probably knows what this could be about.",
+		},
+	]; // TODO: Fetch user collections
 
 	return (
 		<div className="h-full px-4 flex flex-col gap-4 justify-between">
@@ -111,6 +125,7 @@ export function ProfileYou() {
 									</div>
 								</CollapsibleSection>
 							)}
+							{/* TODO: Remove "internal" flag before launch */}
 							{isInternal && (
 								<CollapsibleSection
 									collapsed
@@ -126,12 +141,27 @@ export function ProfileYou() {
 										{collections.map((collection) => (
 											<CollectionListItem
 												key={collection.id}
-												name={collection.name}
+												collection={collection}
+												onClick={() => alert("Opening is not implemented")}
+												onShare={() => alert("Sharing is not implemented")}
+												onEdit={() => alert("Editing is not implemented")}
+												onDelete={() => alert("Deletion is not implemented")}
 											/>
 										))}
-										<CreateNewCollection
-											onSubmit={() => alert("Not implemented")}
-										/>
+										<FullSizeDrawer
+											trigger={
+												<CollectionListItemHeader>
+													<Plus className="size-4 opacity-85" />
+													<div className="text-sm">Create New Collection…</div>
+												</CollectionListItemHeader>
+											}
+										>
+											<CreateEditCollection
+												collection={{ name: "", description: "" }}
+												mode="create"
+												onSubmit={() => alert("Creation not implemented")}
+											/>
+										</FullSizeDrawer>
 									</div>
 								</CollapsibleSection>
 							)}
