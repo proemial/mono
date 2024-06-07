@@ -71,7 +71,7 @@ export const CollectionListItem = ({
 					</DialogTrigger>
 					<DialogContent>
 						<DialogTitle>Delete {name}?</DialogTitle>
-						<DialogClose>
+						<DialogClose asChild>
 							<div className="flex gap-6 justify-center py-4">
 								<Button className="w-[80px] gap-1" onClick={onDelete}>
 									<Check className="size-4 opacity-75" />
