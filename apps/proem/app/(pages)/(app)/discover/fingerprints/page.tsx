@@ -1,12 +1,11 @@
-import { fetchFingerprints } from "../../../../../components/fingerprints/fetch-fingerprints";
-import { getFeatureFilter } from "../../../../../components/fingerprints/features";
-import { FeatureCloud } from "../../../../../components/fingerprints/feature-cloud";
+import { fetchFingerprints } from "@/components/fingerprints/fetch-fingerprints";
+import { getFeatureFilter } from "@/components/fingerprints/features";
+import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
 import { AutocompleteInput } from "./autocomplete-input";
-import { PaperFeed } from "./paper-feed";
-import { auth } from "@clerk/nextjs/server";
-import { neonDb } from "@proemial/data";
-import { eq } from "drizzle-orm";
-import { users } from "@proemial/data/neon/schema";
+import { getHistory } from "@/components/fingerprints/fetch-history";
+import { redirect } from "next/navigation";
+import { getInternalUser } from "@/app/hooks/get-internal-user";
+import { Feed } from "../feed";
 
 type Props = {
 	searchParams?: {
@@ -23,22 +22,15 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 
 	const ids = params.ids?.split(",") ?? [];
 
-	if (ids.length === 0) {
-		const { userId } = auth();
-		console.log("userId", userId);
-		if (userId) {
-			const user = await neonDb.query.users.findFirst({
-				where: eq(users.id, userId),
-			});
-			console.log("user", user);
-			const papers = user?.paperActivities.slice(0, 10);
-			console.log("papers", papers);
+	const internal = getInternalUser();
+	console.log("internal", internal);
 
-			if (papers) {
-				for (const paper of papers) {
-					ids.push(paper.paperId);
-				}
-			}
+	// Only use history when `ids` param is missing (accept clearing the list of papers)
+	const noIds = searchParams?.ids === undefined;
+	if (noIds && !ids.length) {
+		const history = await getHistory();
+		if (history.length) {
+			redirect(`/discover/fingerprints?ids=${history.join(",")}`);
 		}
 	}
 
@@ -47,11 +39,10 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 
 	return (
 		<div className="space-y-6">
-			<>
+			<Feed filter={{ features: filter, days: params.days }} debug>
 				<AutocompleteInput />
 				<FeatureCloud features={features} />
-			</>
-			<PaperFeed filter={filter} days={params.days} />
+			</Feed>
 		</div>
 	);
 }

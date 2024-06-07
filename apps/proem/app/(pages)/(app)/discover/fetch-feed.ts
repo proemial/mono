@@ -7,7 +7,7 @@ import { Redis } from "@proemial/redis/redis";
 
 type FetchFeedParams = Required<Parameters<typeof fetchPapersByField>>;
 
-export async function fetchFeed(
+export async function fetchFeedByTopic(
 	params: FetchFeedParams[0],
 	options: Omit<FetchFeedParams[1], "limit">,
 ) {
@@ -39,7 +39,7 @@ export async function fetchFeed(
 	if (cacheMisses.length === 0) {
 		return {
 			count: meta.count,
-			rows: cachedPapers,
+			rows: cachedPapers.map((paper) => ({ paper: paper as OpenAlexPaper })),
 			nextOffset,
 		};
 	}
@@ -68,7 +68,7 @@ export async function fetchFeed(
 
 	return {
 		count: meta.count,
-		rows: enhancedPapers,
+		rows: enhancedPapers.map((paper) => ({ paper: paper as OpenAlexPaper })),
 		nextOffset,
 	};
 }

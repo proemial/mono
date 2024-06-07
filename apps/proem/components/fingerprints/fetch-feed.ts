@@ -9,7 +9,7 @@ import {
 
 type FetchFeedParams = Required<Parameters<typeof fetchAndRerankPapers>>;
 
-export async function fetchFeed(
+export async function fetchFeedByFeatures(
 	params: FetchFeedParams[0],
 	options: Omit<FetchFeedParams[1], "limit">,
 ) {

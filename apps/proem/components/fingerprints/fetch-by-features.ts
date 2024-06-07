@@ -8,26 +8,46 @@ import dayjs from "dayjs";
 import { FeatureType, RankedFeature, getFeatures } from "./features";
 import { fetchWithAbstract } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { getFingerprint } from "./fingerprints";
+import { unstable_cache } from "next/cache";
 
 const PER_PAGE = 50;
 const MAX_PAGES = 10;
+const MAX_PAPERS = 100;
+const ONE_HOUR = 60 * 60;
 
 export const fetchAndRerankPapers = async (
-	{ filter, days }: { filter: RankedFeature[]; days: number },
+	{ features, days }: { features?: RankedFeature[]; days?: number },
 	{ limit, offset }: { limit?: number; offset?: number } = {},
 ): Promise<{ meta: OpenAlexMeta; papers: RankedPaper[] }> => {
 	const pageLimit = limit ?? 25;
 	const pageOffset = offset ?? 1;
 
-	const allPapers = await fetchAllPapers(days, filter);
-	const papers = rerankAndLimit(allPapers.papers, filter).slice(
-		pageOffset,
-		pageOffset + pageLimit,
+	const getCachedPapers = unstable_cache(
+		async (f, d) => {
+			const allPapers = await fetchAllPapers(d, f);
+			const papers = rerankAndLimit(allPapers.papers, f);
+
+			console.log(
+				"Fetched papers",
+				papers.length,
+				"of",
+				allPapers.papers.length,
+			);
+			return {
+				meta: allPapers.meta,
+				papers,
+			};
+		},
+		["cachedPapers", `${features?.map((f) => f.id).join("|")}`, `${days}`],
+		{ revalidate: ONE_HOUR },
 	);
 
+	const cached = await getCachedPapers(features ?? [], days);
+	console.log("Cached papers", cached.papers.length, "of", cached.meta.count);
+
 	return {
-		meta: allPapers.meta,
-		papers,
+		...cached,
+		papers: cached.papers.slice(pageOffset, pageOffset + pageLimit),
 	};
 };
 
@@ -52,7 +72,9 @@ function rerankAndLimit(
 		.map(shortenId)
 		.map((paper) => rankFeature(paper, filter));
 
-	return ranked.sort((a, b) => b.filterMatchScore - a.filterMatchScore);
+	return ranked
+		.sort((a, b) => b.filterMatchScore - a.filterMatchScore)
+		.slice(0, MAX_PAPERS);
 }
 
 function rankFeature(paper: OpenAlexPaper, filter: RankedFeature[]) {
