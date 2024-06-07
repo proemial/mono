@@ -2,7 +2,6 @@ export * from "./answers";
 export * from "./bookmarks";
 export * from "./collections";
 export * from "./collections-to-papers";
-export * from "./collections-to-users";
 export * from "./comments";
 export * from "./papers";
 export * from "./posts";
