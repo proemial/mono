@@ -1,5 +1,5 @@
 import { Collection } from "@/app/profile/profile-you";
-import { Button } from "@proemial/shadcn-ui";
+import { Button, DrawerClose } from "@proemial/shadcn-ui";
 import {
 	Dialog,
 	DialogClose,
@@ -15,14 +15,13 @@ import {
 	Upload01,
 	X,
 } from "@untitled-ui/icons-react";
+import Link from "next/link";
 import { FullSizeDrawer } from "../full-page-drawer";
-import { CollectionListItemHeader } from "./collection-list-item-header";
 import { CreateEditCollection } from "./create-edit-collection";
 import { IconButton } from "./icon-button";
 
 type Props = {
 	collection: Collection;
-	onClick?: () => void;
 	onShare?: () => void;
 	onEdit?: () => void;
 	onDelete?: () => void;
@@ -30,18 +29,19 @@ type Props = {
 
 export const CollectionListItem = ({
 	collection,
-	onClick,
 	onShare,
 	onEdit,
 	onDelete,
 }: Props) => {
-	const { name, description } = collection;
+	const { id, name, description } = collection;
 	return (
 		<div className="flex justify-between gap-2">
-			<CollectionListItemHeader onClick={onClick}>
-				<Folder className="size-4 opacity-85" />
-				<div className="text-sm">{name}</div>
-			</CollectionListItemHeader>
+			<Link href={`/collection/${id}`} className="">
+				<DrawerClose className="flex gap-2 items-center hover:opacity-85 active:opacity-75 duration-200">
+					<Folder className="size-4 opacity-85" />
+					<div className="text-sm">{name}</div>
+				</DrawerClose>
+			</Link>
 			<div className="flex gap-6 items-center">
 				{/* Share */}
 				<IconButton onClick={onShare} title="Share">
