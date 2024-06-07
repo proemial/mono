@@ -51,10 +51,13 @@ export function Feed({ children, filter, debug }: Props) {
 				})();
 			}
 
-			if (topic) {
-				return fetchFeedByTopic({ field: topic }, { offset: ctx.pageParam });
+			if (features) {
+				return fetchFeedByFeatures(
+					{ features, days },
+					{ offset: ctx.pageParam },
+				);
 			}
-			return fetchFeedByFeatures({ features, days }, { offset: ctx.pageParam });
+			return fetchFeedByTopic({ field: topic }, { offset: ctx.pageParam });
 		},
 		{
 			getNextPageParam: (lastGroup) => {
