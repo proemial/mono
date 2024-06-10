@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Collection, NewCollection } from "@proemial/data/neon/schema";
 import {
 	Button,
 	Form,
@@ -21,7 +22,7 @@ export const collectionSchema = z.object({
 });
 
 type Props = {
-	collection: z.infer<typeof collectionSchema>;
+	collection: NewCollection | Collection;
 	mode: "create" | "edit";
 	onSubmit: (data: z.infer<typeof collectionSchema>) => void;
 };
@@ -29,7 +30,10 @@ type Props = {
 export const CreateEditCollection = ({ collection, mode, onSubmit }: Props) => {
 	const form = useForm<z.infer<typeof collectionSchema>>({
 		resolver: zodResolver(collectionSchema),
-		values: collection,
+		values: {
+			name: collection.name,
+			description: collection.description ?? undefined,
+		},
 	});
 	const errorStyles = form.getFieldState("name").invalid
 		? "border border-red-300 border"

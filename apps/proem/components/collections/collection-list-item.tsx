@@ -1,4 +1,4 @@
-import { Collection } from "@/app/profile/profile-you";
+import { Collection } from "@proemial/data/neon/schema";
 import { Button, DrawerClose } from "@proemial/shadcn-ui";
 import {
 	Dialog,
@@ -56,7 +56,7 @@ export const CollectionListItem = ({
 					}
 				>
 					<CreateEditCollection
-						collection={{ name, description }}
+						collection={collection}
 						mode="edit"
 						// @ts-ignore: Settle on exact interface once real data is available
 						onSubmit={onEdit}

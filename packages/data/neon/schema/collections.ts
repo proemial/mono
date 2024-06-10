@@ -5,7 +5,7 @@ import { collectionsToPapers } from "./collections-to-papers";
 export const collections = pgTable("collections", {
 	id: text("id").primaryKey(),
 	ownerId: text("owner_id").notNull(),
-	name: text("name"),
+	name: text("name").notNull(),
 	description: text("description"),
 });
 

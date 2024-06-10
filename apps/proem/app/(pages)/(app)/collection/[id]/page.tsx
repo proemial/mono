@@ -7,6 +7,7 @@ import {
 	fetchPapersTitles,
 } from "@/components/fingerprints/fetch-fingerprints";
 import { getHistory } from "@/components/fingerprints/fetch-history";
+import { clerkClient } from "@clerk/nextjs/server";
 import { OaFields } from "@proemial/models/open-alex-fields";
 import { Avatar, Header2, Paragraph } from "@proemial/shadcn-ui";
 import { FilePlus02, Upload01 } from "@untitled-ui/icons-react";
@@ -40,7 +41,19 @@ export default async function ({ params }: PageProps) {
 		name: "Immunology Onboarding",
 		description: "Somebody out there probably knows what this could be about.",
 		papers: feed.rows.map((row) => row.paper),
+		membersIds: [
+			"user_2aTu9O1pC5buNE0ZRWiFnmc1no0", // Brian
+			"user_2admEdGS5DgtTN2vWG2NcaApTcN", // Geet
+			"user_2aVLjaAihC07IGjS8jayQ4FHqub", // Mads
+		],
 	};
+
+	// TODO: Fix "not found" error
+	// Get member information
+	// const members = await Promise.all(
+	// 	collection.membersIds.map((id) => clerkClient.users.getUser(id)),
+	// );
+	// console.log(members);
 
 	// TODO: Remove this check when launching feature
 	if (!isInternal) {
