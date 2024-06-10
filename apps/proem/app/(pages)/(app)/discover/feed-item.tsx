@@ -9,16 +9,23 @@ import Markdown from "react-markdown";
 import { FeedItemCard } from "./feed-item-card";
 import { FeedItemTag } from "./feed-item-tag";
 import { Prefix } from "@proemial/redis/adapters/papers";
+import { RankedPaperFeature } from "@/components/fingerprints/fetch-by-features";
 
 dayjs.extend(relativeTime);
 
 type FeedItemProps = {
 	paper: OpenAlexPaper;
+	features?: RankedPaperFeature[];
 	provider?: Prefix;
 	children?: ReactNode;
 };
 
-export default function FeedItem({ paper, provider, children }: FeedItemProps) {
+export default function FeedItem({
+	paper,
+	features,
+	provider,
+	children,
+}: FeedItemProps) {
 	const tags = paper.data.topics
 		?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
 		.filter(Boolean) as string[];
@@ -39,6 +46,18 @@ export default function FeedItem({ paper, provider, children }: FeedItemProps) {
 		return oaFieldIconMap[field.id];
 	}, [fields]);
 
+	const featureTags = [
+		...new Set(features?.map((feature) => feature.label.toLowerCase())),
+	];
+	// console.log("features", featureTags);
+	// console.log(
+	// 	paper.id,
+	// 	paper.data.publication_date,
+	// 	field,
+	// 	provider,
+	// 	paper.generated?.title,
+	// );
+
 	return (
 		<div className="space-y-3">
 			<FeedItemCard
@@ -54,10 +73,18 @@ export default function FeedItem({ paper, provider, children }: FeedItemProps) {
 
 			{children}
 
-			{!children && (
+			{!children && !features && (
 				<div className="flex flex-row-reverse gap-2 overflow-x-auto scrollbar-hide">
 					{tags?.map((tag) => (
 						<FeedItemTag key={tag} tag={tag} />
+					))}
+				</div>
+			)}
+
+			{!children && features && (
+				<div className="flex flex-row-reverse gap-2 overflow-x-auto scrollbar-hide">
+					{featureTags?.slice(0, 3).map((feature, i) => (
+						<FeedItemTag key={i} tag={feature} />
 					))}
 				</div>
 			)}
