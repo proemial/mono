@@ -49,14 +49,6 @@ export default function FeedItem({
 	const featureTags = [
 		...new Set(features?.map((feature) => feature.label.toLowerCase())),
 	];
-	// console.log("features", featureTags);
-	// console.log(
-	// 	paper.id,
-	// 	paper.data.publication_date,
-	// 	field,
-	// 	provider,
-	// 	paper.generated?.title,
-	// );
 
 	return (
 		<div className="space-y-3">
@@ -67,7 +59,9 @@ export default function FeedItem({
 				provider={provider}
 			>
 				<Markdown>
-					{paper.generated?.title && trimForQuotes(paper.generated.title)}
+					{paper.generated?.title
+						? trimForQuotes(paper.generated.title)
+						: paper.data.title}
 				</Markdown>
 			</FeedItemCard>
 

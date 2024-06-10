@@ -94,7 +94,7 @@ export function SearchForm({ placeholder, value, trackingPrefix }: Props) {
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(handleSubmit)} className="w-full">
-				<div className="flex items-center w-full mt-3.5 mb-12 border text-foreground bg-card border-background rounded-3xl">
+				<div className="flex items-center w-full border text-foreground bg-card border-background rounded-3xl">
 					<FormField
 						control={form.control}
 						name="question"

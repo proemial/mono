@@ -13,12 +13,12 @@ import {
 	NavigationMenuList,
 	cn,
 } from "@proemial/shadcn-ui";
-import { Edit05 } from "@untitled-ui/icons-react";
+import { Edit05, SearchMd, X } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export function NavigationMenuBar() {
+export function NavigationMenuBar({ title }: { title?: string }) {
 	const pathname = usePathname();
 	const [askHref, setAskHref] = useState<string>("/");
 	const isFrontpage = pathname === "/";
@@ -29,6 +29,9 @@ export function NavigationMenuBar() {
 		}
 	}, [pathname, isFrontpage]);
 
+	const showSearch = pathname.includes("/discover");
+	console.log("showSearch", pathname, showSearch);
+
 	return (
 		<NavigationMenu className="sticky top-0 px-0 py-2.5 bg-background">
 			<NavigationMenuList className="justify-between">
@@ -37,40 +40,75 @@ export function NavigationMenuBar() {
 				</NavigationMenuItem>
 
 				<div className="flex gap-4">
-					<NavItem
-						label="Discover"
-						href="/discover"
-						isActive={() => pathname.includes("/discover")}
-						onClick={() => trackHandler(analyticsKeys.ui.header.click.discover)}
-					/>
-					<NavItem
-						label="Ask"
-						href={askHref}
-						isActive={() => pathname === askHref}
-						onClick={() => trackHandler(analyticsKeys.ui.header.click.ask)}
-					/>
+					{title && title}
+					{!title && (
+						<>
+							<NavItem
+								label="Discover"
+								href="/discover"
+								isActive={() => pathname.includes("/discover")}
+								onClick={() =>
+									trackHandler(analyticsKeys.ui.header.click.discover)
+								}
+							/>
+							<NavItem
+								label="Ask"
+								href={askHref}
+								isActive={() => pathname === askHref}
+								onClick={() => trackHandler(analyticsKeys.ui.header.click.ask)}
+							/>
+						</>
+					)}
 				</div>
 
 				<NavigationMenuItem
 					className={cn("flex-none px-1 invisible", {
-						visible: pathname === askHref,
+						visible: title || showSearch || pathname === askHref,
 					})}
 				>
-					<Link
-						href="/"
-						onClick={
-							!isFrontpage
-								? trackHandler(`ask:${analyticsKeys.chat.click.clear}`)
-								: undefined
-						}
-					>
-						<Button variant="ghost" disabled={isFrontpage}>
-							<Edit05 className="size-5" />
-						</Button>
-					</Link>
+					{showSearch && <ShowSearch />}
+					{title && <CloseSearch />}
+					{!title && !showSearch && <ClearChat isFrontpage={isFrontpage} />}
 				</NavigationMenuItem>
 			</NavigationMenuList>
 		</NavigationMenu>
+	);
+}
+
+function ClearChat({ isFrontpage }: { isFrontpage: boolean }) {
+	return (
+		<Link
+			href="/"
+			onClick={
+				!isFrontpage
+					? trackHandler(`ask:${analyticsKeys.chat.click.clear}`)
+					: undefined
+			}
+		>
+			<Button variant="ghost" disabled={isFrontpage}>
+				<Edit05 className="size-5" />
+			</Button>
+		</Link>
+	);
+}
+
+function ShowSearch() {
+	return (
+		<Link href="/search">
+			<Button variant="ghost">
+				<SearchMd className="size-5" />
+			</Button>
+		</Link>
+	);
+}
+
+function CloseSearch() {
+	return (
+		<Link href="/discover">
+			<Button variant="ghost">
+				<X className="size-5" />
+			</Button>
+		</Link>
 	);
 }
 
