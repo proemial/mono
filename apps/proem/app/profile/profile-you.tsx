@@ -5,7 +5,6 @@ import {
 } from "@/components/analytics/tracking/tracking-keys";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { useOrganization, useUser } from "@clerk/nextjs";
-import { Collection } from "@proemial/data/neon/schema";
 import {
 	Avatar,
 	AvatarFallback,
@@ -24,21 +23,6 @@ export function ProfileYou() {
 	const { user, isSignedIn } = useUser();
 	const { membership } = useOrganization();
 	const { isInternal } = useInternalUser();
-	const collections: Collection[] = [
-		{
-			id: "foo",
-			name: "Your Collection",
-			description: "A collection based on blah, blah and blah.",
-			ownerId: "foo",
-		},
-		{
-			id: "bar",
-			name: "Immunology Onboarding",
-			description:
-				"Somebody out there probably knows what this could be about.",
-			ownerId: "bar",
-		},
-	]; // TODO: Fetch user collections
 
 	return (
 		<div className="h-full px-4 flex flex-col gap-4 justify-between">
@@ -114,7 +98,7 @@ export function ProfileYou() {
 								</CollapsibleSection>
 							)}
 							{/* TODO: Remove "internal" flag before launch */}
-							{isInternal && <ProfileCollections collections={collections} />}
+							{isInternal && <ProfileCollections />}
 						</div>
 					</div>
 				)}
