@@ -53,14 +53,16 @@ export const fetchAndRerankPapers = async (
 
 export type RankedPaper = {
 	paper: OpenAlexPaper;
-	features: {
-		id: string;
-		label: string;
-		featureMatchScore: number;
-		type: FeatureType;
-		irrelevant?: boolean;
-	}[];
+	features: RankedPaperFeature[];
 	filterMatchScore: number;
+};
+
+export type RankedPaperFeature = {
+	id: string;
+	label: string;
+	featureMatchScore: number;
+	type: FeatureType;
+	irrelevant?: boolean;
 };
 
 function rerankAndLimit(

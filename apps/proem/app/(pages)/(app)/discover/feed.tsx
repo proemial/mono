@@ -140,7 +140,7 @@ export function Feed({ children, filter, debug }: Props) {
 											<Loader />
 										) : null
 									) : row ? (
-										<FeedItem paper={row.paper}>
+										<FeedItem paper={row.paper} features={row.features}>
 											{debug && !!row.filterMatchScore && (
 												<FeatureCloud
 													features={row.features}
