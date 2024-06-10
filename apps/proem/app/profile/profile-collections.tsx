@@ -2,14 +2,23 @@ import { CollapsibleSection } from "@/components/collapsible-section";
 import { CollectionListItem } from "@/components/collections/collection-list-item";
 import { CreateEditCollection } from "@/components/collections/create-edit-collection";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
+import { useUser } from "@clerk/nextjs";
 import { Collection } from "@proemial/data/neon/schema";
 import { Plus } from "@untitled-ui/icons-react";
+import { useQuery } from "react-query";
+import { getCollections } from "./actions";
 
-type Props = {
-	collections: Collection[];
-};
+export const ProfileCollections = () => {
+	const { user } = useUser();
+	const { data: collections } = useQuery<Collection[]>(
+		"collections",
+		async () => getCollections(user?.id ?? ""),
+	);
 
-export const ProfileCollections = ({ collections }: Props) => {
+	if (!collections) {
+		return undefined;
+	}
+
 	return (
 		<CollapsibleSection
 			collapsed

@@ -4,7 +4,7 @@ import {
 } from "@/app/api/bot/answer-engine/answer-engine";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { INTERNAL_COOKIE_NAME } from "@/app/hooks/use-user";
-import { ratelimitRequest } from "@/utils/ratelimiter";
+import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -18,7 +18,7 @@ const answerEngineRouteParams = z.object({
 });
 
 export async function POST(req: NextRequest) {
-	const { success } = await ratelimitRequest(req);
+	const { success } = await ratelimitByIpAddress(req.ip);
 	if (!success) {
 		return NextResponse.json({ error: "Rate limited" }, { status: 429 });
 	}
