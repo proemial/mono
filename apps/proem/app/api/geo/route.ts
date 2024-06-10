@@ -1,4 +1,4 @@
-import { ratelimitRequest } from "@/utils/ratelimiter";
+import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { geolocation } from "@vercel/edge";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const runtime = "edge";
 
 export async function GET(req: NextRequest) {
-	const { success } = await ratelimitRequest(req);
+	const { success } = await ratelimitByIpAddress(req.ip);
 	if (!success) {
 		return NextResponse.json({ error: "Rate limited" }, { status: 429 });
 	}

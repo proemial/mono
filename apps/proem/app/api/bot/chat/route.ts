@@ -4,7 +4,7 @@ import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { context, model, question } from "@/app/prompts/chat";
 import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
-import { ratelimitRequest } from "@/utils/ratelimiter";
+import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { auth } from "@clerk/nextjs/server";
 import { neonDb } from "@proemial/data";
 import { NewPaper, NewUser, papers, users } from "@proemial/data/neon/schema";
@@ -24,7 +24,7 @@ const openai = new OpenAIApi(config);
 export const runtime = "edge";
 
 export async function POST(req: NextRequest) {
-	const { success } = await ratelimitRequest(req);
+	const { success } = await ratelimitByIpAddress(req.ip);
 	if (!success) {
 		return NextResponse.json({ error: "Rate limited" }, { status: 429 });
 	}

@@ -1,6 +1,5 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
-import { NextRequest } from "next/server";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -23,8 +22,8 @@ function buildRatelimiter(...args: Parameters<typeof Ratelimit.slidingWindow>) {
 
 const ratelimiter = buildRatelimiter(100, "10 s");
 
-export async function ratelimitRequest(request: NextRequest) {
-	const identifier = isDev ? "shared-developer-account" : request.ip;
+export async function ratelimitByIpAddress(ipAddr: string | undefined | null) {
+	const identifier = isDev ? "shared-developer-account" : ipAddr;
 	if (!identifier) {
 		// To maintain the same functionality earlier we allow all requestions without an IP to pass through
 		return { success: true };
