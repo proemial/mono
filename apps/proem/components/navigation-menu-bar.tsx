@@ -1,5 +1,6 @@
 "use client";
 
+import { useExperimental } from "@/app/hooks/use-user";
 import { Profile } from "@/app/profile/profile";
 import {
 	analyticsKeys,
@@ -93,6 +94,9 @@ function ClearChat({ isFrontpage }: { isFrontpage: boolean }) {
 }
 
 function ShowSearch() {
+	const experimental = useExperimental();
+	if (!experimental) return null;
+
 	return (
 		<Link href="/search">
 			<Button variant="ghost">

@@ -17,7 +17,7 @@ export type User = {
 	proemialName?: string;
 };
 
-function useExperimental(...email: string[]) {
+export function useExperimental(...email: string[]) {
 	const [internal, setInternal] = useState(false);
 	const { user } = useUser();
 
