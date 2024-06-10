@@ -8,7 +8,7 @@ export const collections = pgTable("collections", {
 	slug: text("slug")
 		.notNull()
 		.unique()
-		.$defaultFn(() => nanoid()),
+		.$defaultFn(() => nanoid(7).toUpperCase()),
 	ownerId: text("owner_id").notNull(),
 	name: text("name").notNull(),
 	description: text("description"),
