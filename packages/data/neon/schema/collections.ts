@@ -1,9 +1,10 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text } from "drizzle-orm/pg-core";
+import { pgTable, serial, text } from "drizzle-orm/pg-core";
 import { collectionsToPapers } from "./collections-to-papers";
 
 export const collections = pgTable("collections", {
-	id: text("id").primaryKey(),
+	id: serial("id").primaryKey(),
+	slug: text("slug").notNull().unique(),
 	ownerId: text("owner_id").notNull(),
 	name: text("name").notNull(),
 	description: text("description"),
