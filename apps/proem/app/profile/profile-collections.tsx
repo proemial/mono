@@ -47,7 +47,7 @@ export const ProfileCollections = () => {
 					}
 				>
 					<CreateEditCollection
-						collection={{ id: "", name: "", ownerId: "" }}
+						collection={{ id: -1, name: "", ownerId: "" }}
 						mode="create"
 						onSubmit={() => alert("Creation not implemented")}
 					/>
