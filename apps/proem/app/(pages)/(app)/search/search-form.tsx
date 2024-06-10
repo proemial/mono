@@ -15,7 +15,6 @@ import {
 	Textarea,
 } from "@proemial/shadcn-ui";
 import { ChevronRight } from "@untitled-ui/icons-react";
-import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
 import { KeyboardEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -27,17 +26,11 @@ export const QuerySchema = z.object({
 
 export type Props = {
 	placeholder: string;
-	onSearch: (query: string) => void;
-	onFocusChange?: (isFocused: boolean) => void;
 	trackingPrefix: string;
+	value?: string;
 };
 
-export function SearchForm({
-	placeholder,
-	onSearch: onSend,
-	onFocusChange,
-	trackingPrefix,
-}: Props) {
+export function SearchForm({ placeholder, value, trackingPrefix }: Props) {
 	const router = useRouter();
 
 	const [isFocused, setIsFocused] = useState(false);
@@ -53,13 +46,11 @@ export function SearchForm({
 		}
 	}, [keyboardUp, isFocused]);
 
-	useEffect(() => {
-		!!onFocusChange && onFocusChange(isFocused);
-	}, [isFocused, onFocusChange]);
-
 	const askQuestion = (question: string) => {
 		trackHandler(`${trackingPrefix}:${analyticsKeys.chat.submit.input}`)();
-		onSend(question);
+
+		console.log("Forwarding", `/search?query=${question}`);
+		router.replace(`/search?query=${question}`);
 	};
 
 	const handleSubmit = (data: z.infer<typeof QuerySchema>) => {
@@ -83,9 +74,7 @@ export function SearchForm({
 			target.value?.replaceAll("\n", "")?.length
 		) {
 			setIsFocused(false);
-			!!onFocusChange && onFocusChange(false);
 			askQuestion(form.getValues("question"));
-			form.setValue("question", "");
 			return false;
 		}
 	};
@@ -115,6 +104,7 @@ export function SearchForm({
 									<Textarea
 										{...field}
 										placeholder={placeholder}
+										defaultValue={value}
 										className={`w-full h-12 pl-6 resize-none flex items-center text-lg bg-card
 										            placeholder:opacity-40 placeholder:text-[#2b2b2b] dark:placeholder:text-[#e5e5e5] ${
 																	isFocused ? "rounded-l-3xl" : "rounded-3xl"

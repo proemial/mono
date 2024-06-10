@@ -1,53 +1,32 @@
-"use client";
-import Markdown from "react-markdown";
-import { FeedItemCard } from "../discover/feed-item-card";
+import { Suspense } from "react";
+import { findPaperIds } from "./find-paper-ids";
+import { Paper } from "./paper";
 import { SearchForm } from "./search-form";
-import { useQuery } from "react-query";
-import { OpenAlexPaper } from "@proemial/models/open-alex";
-import { useState } from "react";
-import { findPapers } from "./find-papers";
-import FeedItem from "../discover/feed-item";
 
-export default function SearchPage() {
-	const [query, setQuery] = useState("");
-
-	const handleSearch = (query: string) => {
-		console.log("Searching for", query);
-		setQuery(query);
+type Props = {
+	searchParams?: {
+		query: string;
 	};
+};
+
+export default async function SearchPage({ searchParams }: Props) {
+	const { query } = searchParams ?? { query: undefined };
+	const paperIds = query ? await findPaperIds(query) : [];
 
 	return (
 		<div className="space-y-6">
 			<SearchForm
 				placeholder="Search for a paper"
 				trackingPrefix="search"
-				onSearch={handleSearch}
+				value={query}
 			/>
-			<SearchResult query={query} />
-		</div>
-	);
-}
-
-function SearchResult({ query }: { query: string }) {
-	const { data } = usePapers(query);
-
-	console.log("data", data);
-
-	if (!data) {
-		return <div>Loading...</div>;
-	}
-
-	return (
-		<div>
-			{data.map((paper, i) => (
+			{paperIds.map((id, i) => (
 				<div key={i} className="py-5">
-					{paper?.data && <FeedItem paper={paper as OpenAlexPaper} />}
+					<Suspense fallback={<div>Loading...</div>}>
+						<Paper id={id} />
+					</Suspense>
 				</div>
 			))}
 		</div>
 	);
-}
-
-function usePapers(query: string) {
-	return useQuery(["search", query], () => findPapers(query));
 }
