@@ -5,11 +5,10 @@ import FeedItem from "../(pages)/(app)/discover/feed-item";
 
 export async function Paper({ id }: { id: string }) {
 	let paper = await fetchPaper(id);
-	console.log(paper?.id, paper?.generated?.title);
 
 	if (paper && !paper.generated) {
 		paper = await generate(paper);
 	}
 
-	return <div>{paper && <FeedItem paper={paper} />}</div>;
+	return <>{paper && <FeedItem paper={paper} />}</>;
 }
