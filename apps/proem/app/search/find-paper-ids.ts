@@ -1,6 +1,10 @@
 "use server";
 
-import { OpenAlexMeta } from "@proemial/models/open-alex";
+import {
+	OpenAlexMeta,
+	oaBaseArgs,
+	oaBaseUrl,
+} from "@proemial/models/open-alex";
 import dayjs from "dayjs";
 
 export async function findPaperIds(query: string) {
@@ -19,7 +23,7 @@ export async function findPaperIds(query: string) {
 		.filter((f) => !!f)
 		.join(",");
 	const search = await fetch(
-		`https://api.openalex.org/works?select=id&filter=${oaFilter},title.search:${query}`,
+		`${oaBaseUrl}?${oaBaseArgs}select=id&filter=${oaFilter},title.search:${query}`,
 	);
 
 	const json = (await search.json()) as {
