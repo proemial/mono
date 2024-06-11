@@ -33,22 +33,35 @@ export function AddToCollectionButton({
 
 	return (
 		<>
-			<Button onClick={() => showCollectionNotification(paperId)}>1</Button>
-			<Button onClick={() => showCollectionSelector(paperId, currentBookmark)}>
+			<Button
+				onClick={() =>
+					showCollectionNotification({ paperId, bookmarks: currentBookmark })
+				}
+			>
+				1
+			</Button>
+			<Button
+				onClick={() =>
+					showCollectionSelector({ paperId, bookmarks: currentBookmark })
+				}
+			>
 				2
 			</Button>
 			<AddButton
 				isChecked={isBookmarked}
 				onClick={async () => {
 					if (isBookmarked) {
-						return showCollectionSelector(paperId, currentBookmark);
+						return showCollectionSelector({
+							paperId,
+							bookmarks: currentBookmark,
+						});
 					}
 
 					// TODO! Push for user onboarding flow
 					console.log("clicked");
 					const newValue = "true";
 					// addOptimisticMessage(newValue)
-					showCollectionNotification(paperId);
+					showCollectionNotification({ paperId, bookmarks: currentBookmark });
 					await addPapeToDefaultCollection({ paperId });
 					// showCollectionNotification();
 				}}

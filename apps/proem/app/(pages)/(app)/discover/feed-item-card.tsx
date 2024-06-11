@@ -9,11 +9,9 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { showCollectionNotification } from "@/components/show-collection-notification";
 import { SignInDrawer } from "@/components/sign-in-drawer";
 import { useUser } from "@clerk/nextjs";
 import { Prefix } from "@proemial/redis/adapters/papers";
-import { Button } from "@proemial/shadcn-ui";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";

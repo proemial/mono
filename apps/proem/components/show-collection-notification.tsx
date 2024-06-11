@@ -58,6 +58,7 @@ type CollectionNotificationProps = CollectionSelectorProps & {
 export function CollectionManager({
 	onClose,
 	paperId,
+	bookmarks,
 }: CollectionNotificationProps) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isTouched, setIsTouched] = useState(false);
@@ -75,7 +76,7 @@ export function CollectionManager({
 	return (
 		<Notification>
 			{isOpen ? (
-				<CollectionSelector paperId={paperId} />
+				<CollectionSelector paperId={paperId} bookmarks={bookmarks} />
 			) : (
 				<div className="flex justify-between items-center py-0.5 pl-2.5">
 					<div className="flex items-center space-x-2">
@@ -89,9 +90,9 @@ export function CollectionManager({
 						variant="ghost"
 						className="p-2.5 text-sm"
 						onClick={() => {
-							// showCollectionSelector(paperId);
-							// setIsTouched(true);
-							// setIsOpen(true);
+							// showCollectionSelector(paperId, bookmarks);
+							setIsTouched(true);
+							setIsOpen(true);
 						}}
 					>
 						Manage
@@ -102,21 +103,14 @@ export function CollectionManager({
 	);
 }
 
-export function showCollectionSelector(
-	paperId: CollectionSelectorProps["paperId"],
-	bookmarks?: number[],
-) {
-	openUnstyledNotifcation(() => (
-		<CollectionSelector paperId={paperId} bookmarks={bookmarks} />
-	));
+export function showCollectionSelector(props: CollectionSelectorProps) {
+	openUnstyledNotifcation(() => <CollectionSelector {...props} />);
 }
 
-export function showCollectionNotification(
-	paperId: CollectionSelectorProps["paperId"],
-) {
+export function showCollectionNotification(props: CollectionSelectorProps) {
 	openUnstyledNotifcation((toastId) => (
 		<CollectionManager
-			paperId={paperId}
+			{...props}
 			onClose={() => {
 				toast.dismiss(toastId);
 			}}
