@@ -30,10 +30,11 @@ function CollectionSelector({ paperId, bookmarks }: CollectionSelectorProps) {
 								(collectionIdFromExistingBookmarks) =>
 									collectionIdFromExistingBookmarks === collectionId,
 							)}
-							onCheckedChange={async (val) => {
+							onCheckedChange={async (newCheckedValue) => {
 								await togglePaperInCollection({
 									paperId,
 									collectionId: collectionId,
+									isEnabled: Boolean(newCheckedValue),
 								});
 							}}
 						>

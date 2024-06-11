@@ -104,27 +104,26 @@ export async function addPapeToDefaultCollection(
 const togglePaperInCollectionParams = z.object({
 	paperId: z.string(),
 	collectionId: z.number(),
+	isEnabled: z.boolean(),
 });
 
 export async function togglePaperInCollection(
 	params: z.infer<typeof togglePaperInCollectionParams>,
 ) {
 	const { userId } = auth();
-	const { paperId, collectionId } = togglePaperInCollectionParams.parse(params);
+	const { paperId, collectionId, isEnabled } =
+		togglePaperInCollectionParams.parse(params);
+
 	if (!userId) {
 		return;
 	}
 
-	const res = await neonDb
-		.insert(collectionsToPapers)
-		.values({ collectionsId: collectionId, paperId })
-		.onConflictDoNothing();
-	console.log(res);
-	console.log(res.rowCount);
-
-	// If the paper is already in the collection, remove it
-	if (res.rowCount === 0) {
-		console.log("deleting");
+	if (isEnabled) {
+		await neonDb
+			.insert(collectionsToPapers)
+			.values({ collectionsId: collectionId, paperId })
+			.onConflictDoNothing();
+	} else {
 		await neonDb
 			.delete(collectionsToPapers)
 			.where(
