@@ -2,11 +2,11 @@ import { Label, Checkbox as ShadcnUICheckbox, cn } from "@proemial/shadcn-ui";
 
 type CheckProps = Parameters<typeof ShadcnUICheckbox>[0];
 
-function Check({ className, ...rest }: CheckProps) {
+export function Check({ className, ...rest }: CheckProps) {
 	return (
 		<ShadcnUICheckbox
 			className={cn(
-				"data-[state=checked]:bg-green-600/20 data-[state=checked]:text-green-600 data-[state=checked]:border-green-600/20",
+				"data-[state=checked]:bg-green-200 data-[state=checked]:text-green-600 data-[state=checked]:border-green-200",
 				className,
 			)}
 			{...rest}

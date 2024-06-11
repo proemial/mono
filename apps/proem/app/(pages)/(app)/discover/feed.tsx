@@ -1,18 +1,18 @@
 "use client";
 import FeedItem from "@/app/(pages)/(app)/discover/feed-item";
+import { fetchFeedByTopic } from "@/app/(pages)/(app)/discover/fetch-feed";
+import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
 import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
+import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
+import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
+import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
 import { Icons } from "@proemial/shadcn-ui";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode, useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
-import { fetchFeedByTopic } from "@/app/(pages)/(app)/discover/fetch-feed";
-import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
-import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
-import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
-import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
 
 // 1-4 is fetched without scrolling
 const initialPageSize = 4;
@@ -26,11 +26,12 @@ const Loader = () => (
 type Props = {
 	children: ReactNode;
 	filter: { topic?: number; features?: RankedFeature[]; days?: number };
+	bookmarks: Record<string, string>;
 	debug?: boolean;
 	nocache?: boolean;
 };
 
-export function Feed({ children, filter, debug, nocache }: Props) {
+export function Feed({ children, filter, debug, nocache, bookmarks }: Props) {
 	const { topic, features, days } = filter;
 
 	const {
@@ -136,7 +137,11 @@ export function Feed({ children, filter, debug, nocache }: Props) {
 											<Loader />
 										) : null
 									) : row ? (
-										<FeedItem paper={row.paper} fingerprint={row.features}>
+										<FeedItem
+											paper={row.paper}
+											fingerprint={row.features}
+											bookmarks={bookmarks}
+										>
 											{debug && (
 												<FeatureCloud
 													features={row.features}

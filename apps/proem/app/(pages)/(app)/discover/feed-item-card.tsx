@@ -1,12 +1,19 @@
 "use client";
 
+import {
+	AddToCollectionButton,
+	AddToCollectionButtonProps,
+} from "@/app/(pages)/(app)/discover/add-to-collection-button";
 import { Field } from "@/app/data/oa-fields";
 import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
+import { showCollectionNotification } from "@/components/show-collection-notification";
 import { SignInDrawer } from "@/components/sign-in-drawer";
 import { useUser } from "@clerk/nextjs";
+import { Prefix } from "@proemial/redis/adapters/papers";
+import { Button } from "@proemial/shadcn-ui";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
@@ -17,11 +24,13 @@ import {
 	hasPaperBookmark,
 	removePaperBookmark,
 } from "./bookmark-paper";
-import { Prefix } from "@proemial/redis/adapters/papers";
 
 dayjs.extend(relativeTime);
 
-type Props = {
+export type FeedItemCardProps = Pick<
+	AddToCollectionButtonProps,
+	"bookmarks"
+> & {
 	id: string;
 	date: string;
 	field: Field | undefined;
@@ -35,7 +44,8 @@ export const FeedItemCard = ({
 	field,
 	children,
 	provider,
-}: Props) => {
+	bookmarks,
+}: FeedItemCardProps) => {
 	const { user, isSignedIn } = useUser();
 	const queryId = `bookmark-${id}`;
 	const queryClient = useQueryClient();
@@ -72,7 +82,10 @@ export const FeedItemCard = ({
 					<div />
 				)}
 				<div className="flex gap-3 items-center">
-					<div className="uppercase text-2xs">{dayjs(date).fromNow()}</div>
+					<div className="uppercase text-2xs text-nowrap">
+						{dayjs(date).fromNow()}
+					</div>
+					<AddToCollectionButton bookmarks={bookmarks} paperId={id} />
 					{data ? (
 						<BookmarkedIcon
 							onClick={handleBookmarkPaperRemove}
