@@ -8,9 +8,11 @@ import { Button } from "@proemial/shadcn-ui";
 import { useOptimistic } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 
+type PaperId = string;
+type OrganisationSlug = number;
 export type AddToCollectionButtonProps = {
-	paperId: string;
-	bookmarks: Record<string, string>;
+	paperId: PaperId;
+	bookmarks: Record<PaperId, OrganisationSlug[]>;
 };
 
 export function AddToCollectionButton({
@@ -32,12 +34,14 @@ export function AddToCollectionButton({
 	return (
 		<>
 			<Button onClick={() => showCollectionNotification(paperId)}>1</Button>
-			<Button onClick={() => showCollectionSelector(paperId)}>2</Button>
+			<Button onClick={() => showCollectionSelector(paperId, currentBookmark)}>
+				2
+			</Button>
 			<AddButton
 				isChecked={isBookmarked}
 				onClick={async () => {
 					if (isBookmarked) {
-						return showCollectionSelector(paperId);
+						return showCollectionSelector(paperId, currentBookmark);
 					}
 
 					// TODO! Push for user onboarding flow

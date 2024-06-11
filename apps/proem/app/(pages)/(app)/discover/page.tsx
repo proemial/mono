@@ -19,32 +19,35 @@ import { eq } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 import { FeedFilter } from "./feed-filter";
 
-const getBookmarks = (user: string) =>
+const getBookmarks = (userId: string) =>
 	unstable_cache(
-		async (userId?: string) => {
-			console.log(userId);
+		async () => {
 			const usersBookmarks = await neonDb.query.collections.findMany({
 				// where: { ownerId: "user_2Zrcp6UuNROrHQ7jo32HduhYDsJ" },
-				columns: { name: true },
-				where: eq(collections.ownerId, user),
+				columns: { id: true },
+				where: eq(collections.ownerId, userId),
 				with: { collectionsToPapers: true },
 			});
 
-			return usersBookmarks.reduce((acc, collection) => {
-				return {
-					...acc,
-					...collection.collectionsToPapers.reduce((collectionAcc, paper) => {
-						return {
-							...collectionAcc,
-							[paper.paperId]: collection.name,
-						};
-					}, {}),
-				};
-			}, {});
+			return usersBookmarks.reduce(
+				(acc, collection) => {
+					for (const paper of collection.collectionsToPapers) {
+						if (acc[paper.paperId]) {
+							// @ts-expect-error we just checked for it above
+							acc[paper.paperId].push(collection.id);
+						} else {
+							acc[paper.paperId] = [collection.id];
+						}
+					}
+
+					return acc;
+				},
+				{} as Record<string, number[]>,
+			);
 		},
-		["bookmarks", user],
-		{ tags: [getBookmarkCacheTag(user)] },
-	);
+		["bookmarks", userId],
+		{ tags: [getBookmarkCacheTag(userId)] },
+	)();
 
 type Props = {
 	searchParams?: {
@@ -68,7 +71,7 @@ export default async function DiscoverPage({ searchParams }: Props) {
 	const { userId } = auth();
 	const [filter, bookmarks] = await Promise.all([
 		getFilter(params),
-		userId ? getBookmarks(userId)() : {},
+		userId ? getBookmarks(userId) : {},
 	]);
 	console.log(bookmarks);
 

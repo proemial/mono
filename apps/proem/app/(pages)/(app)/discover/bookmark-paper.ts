@@ -103,21 +103,21 @@ export async function addPapeToDefaultCollection(
 
 const togglePaperInCollectionParams = z.object({
 	paperId: z.string(),
+	collectionId: z.number(),
 });
 
 export async function togglePaperInCollection(
 	params: z.infer<typeof togglePaperInCollectionParams>,
 ) {
 	const { userId } = auth();
-	const { paperId } = togglePaperInCollectionParams.parse(params);
+	const { paperId, collectionId } = togglePaperInCollectionParams.parse(params);
 	if (!userId) {
 		return;
 	}
-	const collectionsId = 12;
 
 	const res = await neonDb
 		.insert(collectionsToPapers)
-		.values({ collectionsId, paperId })
+		.values({ collectionsId: collectionId, paperId })
 		.onConflictDoNothing();
 	console.log(res);
 	console.log(res.rowCount);
@@ -130,7 +130,7 @@ export async function togglePaperInCollection(
 			.where(
 				and(
 					eq(collectionsToPapers.paperId, paperId),
-					eq(collectionsToPapers.collectionsId, collectionsId),
+					eq(collectionsToPapers.collectionsId, collectionId),
 				),
 			);
 	}

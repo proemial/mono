@@ -1,4 +1,5 @@
 "use client";
+import { togglePaperInCollection } from "@/app/(pages)/(app)/discover/bookmark-paper";
 import { Checkbox } from "@/components/checkbox";
 import {
 	Notification,
@@ -11,22 +12,33 @@ const TOAST_OPEN_DURATION = 4000;
 
 type CollectionSelectorProps = {
 	paperId: string;
+	bookmarks?: number[];
 };
 
-function CollectionSelector({ paperId }: CollectionSelectorProps) {
-	const collections = [
-		"Your Collection",
-		"immunology onboarding",
-		"Cell therapy latest",
-	];
-
+function CollectionSelector({ paperId, bookmarks }: CollectionSelectorProps) {
+	// TODO! Fetch users collections
+	const collections = [11, 12, 13];
 	return (
 		<Notification>
 			<div className="divide-y pb-3">
 				<p className="font-semibold text-center py-4">Added to Collection</p>
-				{collections.map((collection) => (
-					<div key={collection} className="px-4 py-2 text-base">
-						<Checkbox id={collection}>{collection}</Checkbox>
+				{collections.map((collectionId) => (
+					<div key={collectionId} className="px-4 py-2 text-base">
+						<Checkbox
+							key={collectionId}
+							defaultChecked={bookmarks?.some(
+								(collectionIdFromExistingBookmarks) =>
+									collectionIdFromExistingBookmarks === collectionId,
+							)}
+							onCheckedChange={async (val) => {
+								await togglePaperInCollection({
+									paperId,
+									collectionId: collectionId,
+								});
+							}}
+						>
+							{collectionId}
+						</Checkbox>
 					</div>
 				))}
 				{/* TODO! add */}
@@ -76,7 +88,7 @@ export function CollectionManager({
 						variant="ghost"
 						className="p-2.5 text-sm"
 						onClick={() => {
-							showCollectionSelector(paperId);
+							// showCollectionSelector(paperId);
 							// setIsTouched(true);
 							// setIsOpen(true);
 						}}
@@ -91,8 +103,11 @@ export function CollectionManager({
 
 export function showCollectionSelector(
 	paperId: CollectionSelectorProps["paperId"],
+	bookmarks?: number[],
 ) {
-	openUnstyledNotifcation(() => <CollectionSelector paperId={paperId} />);
+	openUnstyledNotifcation(() => (
+		<CollectionSelector paperId={paperId} bookmarks={bookmarks} />
+	));
 }
 
 export function showCollectionNotification(
