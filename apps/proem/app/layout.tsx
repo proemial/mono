@@ -1,5 +1,6 @@
 import "@/app/globals.css";
 import { Analytics } from "@/components/analytics";
+import { NotificationsToaster } from "@/components/notifications-toaster";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ReactQueryProvider } from "@/components/providers/react-query";
 import { SetActiveOrganization } from "@/components/set-active-organization";
@@ -101,6 +102,8 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 										{modal}
 									</div>
 								</div>
+
+								<NotificationsToaster />
 								<Analytics.Clients tracking={trackingInput} />
 							</ReactQueryProvider>
 						</Analytics.PostHog>

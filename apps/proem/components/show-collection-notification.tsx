@@ -1,22 +1,53 @@
 "use client";
 import { Checkbox } from "@/components/checkbox";
-import { Button, cn, toast } from "@proemial/shadcn-ui";
+import {
+	Notification,
+	openUnstyledNotifcation,
+} from "@/components/notification";
+import { Button, toast } from "@proemial/shadcn-ui";
 import { useEffect, useState } from "react";
-
-type CollectionNotificationProps = {
-	onClose?: () => void;
-};
 
 const TOAST_OPEN_DURATION = 4000;
 
-export function CollectionManager({ onClose }: CollectionNotificationProps) {
-	const [isOpen, setIsOpen] = useState(false);
-	const [isTouched, setIsTouched] = useState(false);
+type CollectionSelectorProps = {
+	paperId: string;
+};
+
+function CollectionSelector({ paperId }: CollectionSelectorProps) {
 	const collections = [
 		"Your Collection",
 		"immunology onboarding",
 		"Cell therapy latest",
 	];
+
+	return (
+		<Notification>
+			<div className="divide-y pb-3">
+				<p className="font-semibold text-center py-4">Added to Collection</p>
+				{collections.map((collection) => (
+					<div key={collection} className="px-4 py-2 text-base">
+						<Checkbox id={collection}>{collection}</Checkbox>
+					</div>
+				))}
+				{/* TODO! add */}
+				{/* <div>
+		<Button>Create new collection</Button>
+	</div> */}
+			</div>
+		</Notification>
+	);
+}
+
+type CollectionNotificationProps = CollectionSelectorProps & {
+	onClose?: () => void;
+};
+
+export function CollectionManager({
+	onClose,
+	paperId,
+}: CollectionNotificationProps) {
+	const [isOpen, setIsOpen] = useState(false);
+	const [isTouched, setIsTouched] = useState(false);
 
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
@@ -29,25 +60,9 @@ export function CollectionManager({ onClose }: CollectionNotificationProps) {
 	}, [isOpen, isTouched, onClose]);
 
 	return (
-		<div
-			className={cn("max-w-72 w-full bg-white rounded-xl shadow-2xl m-auto", {
-				"h-10": !isOpen,
-				"h-auto": isOpen,
-			})}
-		>
+		<Notification>
 			{isOpen ? (
-				<div className="divide-y pb-3">
-					<p className="font-semibold text-center py-4">Added to Collection</p>
-					{collections.map((collection) => (
-						<div key={collection} className="px-4 py-2 text-base">
-							<Checkbox id={collection}>{collection}</Checkbox>
-						</div>
-					))}
-					{/* TODO! add */}
-					{/* <div>
-						<Button>Create new collection</Button>
-					</div> */}
-				</div>
+				<CollectionSelector paperId={paperId} />
 			) : (
 				<div className="flex justify-between items-center py-0.5 pl-2.5">
 					<div className="flex items-center space-x-2">
@@ -61,36 +76,34 @@ export function CollectionManager({ onClose }: CollectionNotificationProps) {
 						variant="ghost"
 						className="p-2.5 text-sm"
 						onClick={() => {
-							setIsTouched(true);
-							setIsOpen(true);
+							showCollectionSelector(paperId);
+							// setIsTouched(true);
+							// setIsOpen(true);
 						}}
 					>
 						Manage
 					</Button>
 				</div>
 			)}
-		</div>
+		</Notification>
 	);
 }
 
-export function showCollectionNotification() {
-	// Dismiss all existing toasts
-	toast.dismiss();
+export function showCollectionSelector(
+	paperId: CollectionSelectorProps["paperId"],
+) {
+	openUnstyledNotifcation(() => <CollectionSelector paperId={paperId} />);
+}
 
-	toast.custom(
-		(toastId) => (
-			<CollectionManager
-				onClose={() => {
-					toast.dismiss(toastId);
-				}}
-			/>
-		),
-		{
-			style: { height: "unset", width: "100%", boxShadow: "none" },
-			unstyled: true,
-			cancel: true,
-			// disabling automatically closing the toast to handle it programmatically instead
-			duration: Number.POSITIVE_INFINITY,
-		},
-	);
+export function showCollectionNotification(
+	paperId: CollectionSelectorProps["paperId"],
+) {
+	openUnstyledNotifcation((toastId) => (
+		<CollectionManager
+			paperId={paperId}
+			onClose={() => {
+				toast.dismiss(toastId);
+			}}
+		/>
+	));
 }
