@@ -1,71 +1,50 @@
 import { addPapeToDefaultCollection } from "@/app/(pages)/(app)/discover/bookmark-paper";
+import { useUser } from "@/app/hooks/use-user";
 import { AddButton } from "@/components/add-button";
-import {
-	showCollectionNotification,
-	showCollectionSelector,
-} from "@/components/show-collection-notification";
-import { Button } from "@proemial/shadcn-ui";
+import { showCollectionSelector } from "@/components/show-collection-notification";
 import { useOptimistic } from "react";
-import { useFormState, useFormStatus } from "react-dom";
 
 type PaperId = string;
 type OrganisationSlug = number;
+type Bookmarks = Record<PaperId, OrganisationSlug[]>;
 export type AddToCollectionButtonProps = {
 	paperId: PaperId;
-	bookmarks: Record<PaperId, OrganisationSlug[]>;
+	bookmarks: Bookmarks;
 };
 
 export function AddToCollectionButton({
 	paperId,
 	bookmarks,
 }: AddToCollectionButtonProps) {
-	console.log(bookmarks);
-	const currentBookmark = bookmarks[paperId];
-	const isBookmarked = Boolean(currentBookmark);
-	console.log(currentBookmark)
-	console.log(isBookmarked);
-	// 	const [optimisticMessages, addOptimisticMessage] = useOptimistic<
-	// 	Message[],
-	// 	string
-	// >(messages, (state, newMessage) => [...state, { message: newMessage }])
+	const { user } = useUser();
+	if (!user) {
+		return null;
+	}
 
-	// const { pending, state } = useFormState();
+	const [optimisticBookmarks, addOptimisticBookmarks] = useOptimistic<
+		Bookmarks,
+		{ paperId: PaperId }
+	>(bookmarks, (state, { paperId }) => ({ ...state, [paperId]: [11] }));
+
+	const currentBookmark = optimisticBookmarks[paperId];
+
+	const isBookmarked = Boolean(currentBookmark);
 
 	return (
-		<>
-			<Button
-				onClick={() =>
-					showCollectionNotification({ paperId, bookmarks: currentBookmark })
+		<AddButton
+			isChecked={isBookmarked}
+			onClick={async () => {
+				// TODO! Push for user onboarding flow if not logged in
+				if (isBookmarked) {
+					return showCollectionSelector({
+						paperId,
+						bookmarks: currentBookmark,
+					});
 				}
-			>
-				1
-			</Button>
-			<Button
-				onClick={() =>
-					showCollectionSelector({ paperId, bookmarks: currentBookmark })
-				}
-			>
-				2
-			</Button>
-			<AddButton
-				isChecked={isBookmarked}
-				onClick={async () => {
-					if (isBookmarked) {
-						return showCollectionSelector({
-							paperId,
-							bookmarks: currentBookmark,
-						});
-					}
 
-					// TODO! Push for user onboarding flow
-					console.log("clicked");
-					const newValue = "true";
-					// addOptimisticMessage(newValue)
-					showCollectionNotification({ paperId, bookmarks: currentBookmark });
-					await addPapeToDefaultCollection({ paperId });
-					// showCollectionNotification();
-				}}
-			/>
-		</>
+				addOptimisticBookmarks({ paperId });
+				await addPapeToDefaultCollection({ paperId });
+			}}
+		/>
 	);
 }

@@ -77,21 +77,25 @@ export async function addPapeToDefaultCollection(
 	if (!userId) {
 		return;
 	}
+
+	// TODO! Turn it around so insert bookmark first and default to create collection afterwards
 	const test = await Promise.all([
-		// neonDb
-		// 	.insert(collections)
-		// 	.values({ ownerId: userId, name: PERSONAL_DEFAULT_COLLECTION_NAME })
-		// 	.returning()
-		// 	.onConflictDoNothing(),
 		neonDb
-			.insert(papers)
-			.values({ id: paperId })
+			.insert(collections)
+			.values({
+				ownerId: userId,
+				name: PERSONAL_DEFAULT_COLLECTION_NAME,
+				slug: userId,
+			})
+			.returning()
 			.onConflictDoNothing(),
+		neonDb.insert(papers).values({ id: paperId }).onConflictDoNothing(),
 	]);
 
 	console.log(test);
 	const collectionsId = 12;
 
+	// TODO:! Use Slug instead of ID
 	await neonDb
 		.insert(collectionsToPapers)
 		.values({ collectionsId, paperId })
