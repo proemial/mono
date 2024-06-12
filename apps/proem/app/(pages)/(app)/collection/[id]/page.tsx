@@ -13,6 +13,7 @@ import { Avatar, Header2, Paragraph } from "@proemial/shadcn-ui";
 import { FilePlus02, Upload01 } from "@untitled-ui/icons-react";
 import { redirect } from "next/navigation";
 import FeedItem from "../../discover/feed-item";
+import { FEED_DEFAULT_DAYS } from "@/components/fingerprints/fetch-by-features";
 
 type PageProps = {
 	params?: {
@@ -27,7 +28,7 @@ export default async function ({ params }: PageProps) {
 	// TODO: Random papers - use papers from collection
 	const filter = await getFilter({
 		topic: "medicine",
-		days: 14,
+		days: FEED_DEFAULT_DAYS,
 		debug: false,
 	});
 	const feed = await fetchFeedByFeatures(

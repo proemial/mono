@@ -19,6 +19,7 @@ export function FeatureCloud({ features, sum }: Props) {
 	return (
 		<div className="my-4 flex flex-wrap">
 			{!!sum && <FeatureBadge>{sum.toFixed(2)}</FeatureBadge>}
+
 			{features?.map((item, i) => (
 				<FeatureBadge
 					key={i}

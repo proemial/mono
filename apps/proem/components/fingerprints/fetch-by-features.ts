@@ -10,10 +10,26 @@ import { fetchWithAbstract } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper
 import { getFingerprint } from "./fingerprints";
 import { unstable_cache } from "next/cache";
 
+// Default number of days to fetch papers for
+export const FEED_DEFAULT_DAYS = 14;
+
+// No. of papers pr. page
 const PER_PAGE = 50;
+
+// Max number of pages to fetch
 const MAX_PAGES = 10;
+
+// Max number of papers to cache for the feed
 const MAX_PAPERS = 100;
-const ONE_HOUR = 60 * 60;
+
+// Min score for a feature
+const MIN_SCORE = 0.1;
+
+// Enable caching
+const ENABLE_CACHE = true;
+
+// Cache feed papers for 1 hour
+const CACHE_FOR = 60 * 60; // 1 hour
 
 export const fetchAndRerankPapers = async (
 	{ features, days }: { features?: RankedFeature[]; days?: number },
@@ -22,28 +38,30 @@ export const fetchAndRerankPapers = async (
 	const pageLimit = limit ?? 25;
 	const pageOffset = offset ?? 1;
 
-	const getCachedPapers = unstable_cache(
-		async (f, d) => {
-			const allPapers = await fetchAllPapers(d, f);
-			const papers = rerankAndLimit(allPapers.papers, f);
+	const cacheWorker = async (f: RankedFeature[], d: number) => {
+		const allPapers = await fetchAllPapers(d, f);
+		const papers = rerankAndLimit(allPapers.papers, f);
 
-			console.log(
-				"Fetched papers",
-				papers.length,
-				"of",
-				allPapers.papers.length,
-			);
-			return {
-				meta: allPapers.meta,
-				papers,
-			};
-		},
+		console.log("Fetched papers", papers.length, "of", allPapers.papers.length);
+		return {
+			meta: allPapers.meta,
+			papers,
+		};
+	};
+
+	const getCachedPapers = unstable_cache(
+		cacheWorker,
 		["cachedPapers", `${features?.map((f) => f.id).join("|")}`, `${days}`],
-		{ revalidate: ONE_HOUR },
+		{ revalidate: CACHE_FOR },
 	);
 
-	const cached = await getCachedPapers(features ?? [], days);
-	console.log("Cached papers", cached.papers.length, "of", cached.meta.count);
+	const cached = ENABLE_CACHE
+		? await getCachedPapers(features ?? [], days ?? FEED_DEFAULT_DAYS)
+		: await cacheWorker(features ?? [], days ?? FEED_DEFAULT_DAYS);
+
+	if (ENABLE_CACHE) {
+		console.log("Cached papers", cached.papers.length, "of", cached.meta.count);
+	}
 
 	return {
 		...cached,
@@ -87,7 +105,7 @@ function rankFeature(paper: OpenAlexPaper, filter: RankedFeature[]) {
 			return {
 				...feature,
 				featureMatchScore,
-				irrelevant: featureMatchScore < 0.1,
+				irrelevant: featureMatchScore < MIN_SCORE,
 			};
 		})
 		.sort((a, b) => b.featureMatchScore - a.featureMatchScore);

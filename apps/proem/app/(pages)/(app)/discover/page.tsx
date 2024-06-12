@@ -12,6 +12,7 @@ import { getFeatureFilter } from "@/components/fingerprints/features";
 import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
 import { FeatureBadge } from "@/components/fingerprints/feature-badge";
 import { Badge } from "@proemial/shadcn-ui";
+import { FEED_DEFAULT_DAYS } from "@/components/fingerprints/fetch-by-features";
 
 type Props = {
 	searchParams?: {
@@ -24,7 +25,9 @@ type Props = {
 export default async function DiscoverPage({ searchParams }: Props) {
 	const params = {
 		topic: searchParams?.topic as string,
-		days: searchParams?.days ? Number.parseInt(searchParams.days) : 14,
+		days: searchParams?.days
+			? Number.parseInt(searchParams.days)
+			: FEED_DEFAULT_DAYS,
 		debug: searchParams?.debug,
 	};
 	const filter = await getFilter(params);
@@ -86,8 +89,8 @@ async function getFilter(params: {
 
 	const history = await getHistory();
 	const fingerprints = await fetchFingerprints(history);
-	const { filter, features } = getFeatureFilter(fingerprints);
+	const { filter, allFeatures } = getFeatureFilter(fingerprints);
 	const titles = params.debug ? await fetchPapersTitles(history) : undefined;
 
-	return { features: filter, days: params.days, titles, all: features };
+	return { features: filter, days: params.days, titles, all: allFeatures };
 }

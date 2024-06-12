@@ -1,7 +1,10 @@
 import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
 import { Fingerprint } from "./fingerprints";
 
+// Max no. of features to use
 const MAX_COUNT = 30;
+
+// Min score for a feature
 const MIN_SCORE = 0.1;
 
 export type FeatureType = "topic" | "keyword" | "concept";
@@ -24,16 +27,16 @@ export type RankedFeature = {
 };
 
 export type FeatureFilter = {
-	features: RankedFeature[];
+	allFeatures: RankedFeature[];
 	filter: RankedFeature[];
 };
 
 export function getFeatureFilter(fingerprints: Fingerprint[]): FeatureFilter {
 	if (!fingerprints.length) {
-		return { features: [], filter: [] };
+		return { allFeatures: [], filter: [] };
 	}
 
-	const featureMap = {} as {
+	const rankedFeatureMap = {} as {
 		[key: string]: RankedFeature;
 	};
 	const ids = {
@@ -50,34 +53,35 @@ export function getFeatureFilter(fingerprints: Fingerprint[]): FeatureFilter {
 			if (!ids.topics.includes(key)) {
 				ids.topics.push(key);
 			}
-			const count = featureMap[key]?.count ?? 0;
-			const score = featureMap[key]?.avgScore ?? 0;
-			featureMap[key] = {
+			const count = rankedFeatureMap[key]?.count ?? 0;
+			const avgScore = rankedFeatureMap[key]?.avgScore ?? 0;
+			rankedFeatureMap[key] = {
 				...feature,
 				count: count + 1,
-				avgScore: (score + feature.score) / 2,
+				avgScore: (avgScore + feature.score) / 2,
 				coOccurrenceScore: 0,
 			};
 		}
 
-		for (const key of Object.keys(featureMap)) {
-			const item = featureMap[key] as RankedFeature;
-			featureMap[key] = {
-				...item,
-				coOccurrenceScore: (item.count * item.avgScore) / fingerprints.length,
+		for (const key of Object.keys(rankedFeatureMap)) {
+			const rankedFeature = rankedFeatureMap[key] as RankedFeature;
+			rankedFeatureMap[key] = {
+				...rankedFeature,
+				coOccurrenceScore:
+					(rankedFeature.count * rankedFeature.avgScore) / fingerprints.length,
 			};
 		}
 	}
 
-	const rankedFeatures = Object.values(featureMap)
-		.sort((a, b) => (a.coOccurrenceScore > b.coOccurrenceScore ? -1 : 1))
+	const rankedFeatures = Object.values(rankedFeatureMap)
+		.sort((a, b) => b.coOccurrenceScore - a.coOccurrenceScore)
 		.map((item, i) => ({
 			...item,
 			irrelevant: i > MAX_COUNT || (item?.coOccurrenceScore ?? 0) < MIN_SCORE,
 		}));
 
 	return {
-		features: rankedFeatures,
+		allFeatures: rankedFeatures,
 		filter: rankedFeatures.filter((f) => !f.irrelevant),
 	};
 }

@@ -4,9 +4,9 @@ import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
 import { AutocompleteInput } from "./autocomplete-input";
 import { getHistory } from "@/components/fingerprints/fetch-history";
 import { redirect } from "next/navigation";
-import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Feed } from "../feed";
 import { Metadata } from "next";
+import { FEED_DEFAULT_DAYS } from "@/components/fingerprints/fetch-by-features";
 
 export const metadata: Metadata = {
 	title: "Fingerprints",
@@ -22,13 +22,12 @@ type Props = {
 export default async function FingerprintsPage({ searchParams }: Props) {
 	const params = {
 		ids: searchParams?.ids?.length ? searchParams.ids : undefined,
-		days: searchParams?.days ? Number.parseInt(searchParams.days) : 14,
+		days: searchParams?.days
+			? Number.parseInt(searchParams.days)
+			: FEED_DEFAULT_DAYS,
 	};
 
 	const ids = params.ids?.split(",") ?? [];
-
-	const internal = getInternalUser();
-	console.log("internal", internal);
 
 	// Only use history when `ids` param is missing (accept clearing the list of papers)
 	const noIds = searchParams?.ids === undefined;
@@ -40,13 +39,13 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	}
 
 	const fingerprints = await fetchFingerprints(ids);
-	const { features, filter } = getFeatureFilter(fingerprints);
+	const { allFeatures, filter } = getFeatureFilter(fingerprints);
 
 	return (
 		<div className="space-y-6">
 			<Feed filter={{ features: filter, days: params.days }} debug>
 				<AutocompleteInput />
-				<FeatureCloud features={features} />
+				<FeatureCloud features={allFeatures} />
 			</Feed>
 		</div>
 	);

@@ -3,6 +3,9 @@ import { neonDb } from "@proemial/data";
 import { eq } from "drizzle-orm";
 import { PaperActivity, users } from "@proemial/data/neon/schema";
 
+// Max no. of papers from read history to use in filter
+const MAX_COUNT = 10;
+
 export async function getHistory() {
 	const ids = [];
 
@@ -12,7 +15,7 @@ export async function getHistory() {
 			where: eq(users.id, userId),
 		});
 
-		const papers = filterPapers(user?.paperActivities);
+		const papers = sortAndFilter(user?.paperActivities);
 		if (papers) {
 			for (const paper of papers) {
 				ids.push(paper.paperId);
@@ -23,13 +26,14 @@ export async function getHistory() {
 	return ids;
 }
 
-function filterPapers(papers?: PaperActivity[]) {
-	const maxCount = 10;
+function sortAndFilter(readHistory?: PaperActivity[]) {
+	const maxCount = MAX_COUNT;
 
-	const multiples = papers?.filter((p) => p.noOfReads > 1);
+	const sortedHistory = readHistory?.sort((a, b) => b.noOfReads - a.noOfReads);
+	const multiples = sortedHistory?.filter((p) => p.noOfReads > 1);
 	if (multiples?.length) {
 		return multiples.slice(0, maxCount);
 	}
 
-	return papers?.slice(0, maxCount);
+	return sortedHistory?.slice(0, maxCount);
 }

@@ -13,6 +13,7 @@ import { fetchFeedByFeatures } from "@/components/fingerprints/fetch-feed";
 import { RankedFeature } from "@/components/fingerprints/features";
 import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
 import { RankedPaper } from "@/components/fingerprints/fetch-by-features";
+import { FeatureBadge } from "@/components/fingerprints/feature-badge";
 
 // 1-4 is fetched without scrolling
 const initialPageSize = 4;
@@ -96,13 +97,7 @@ export function Feed({ children, filter, debug }: Props) {
 	return (
 		<div className="space-y-5 pb-10">
 			<div>{children}</div>
-			<div>
-				{debug && !!count && (
-					<div className="mt-1 text-right text-xs italic">
-						{count} matching papers
-					</div>
-				)}
-			</div>
+			<div>{debug && <DebugInfo count={count} />}</div>
 
 			{status === "loading" ? (
 				<Loader />
@@ -157,6 +152,32 @@ export function Feed({ children, filter, debug }: Props) {
 					</div>
 				</div>
 			)}
+		</div>
+	);
+}
+
+function DebugInfo({ count }: { count?: number }) {
+	return (
+		<div className="flex justify-between italic text-xs text-gray-400">
+			<div className="flex">
+				<div>
+					<FeatureBadge>sum</FeatureBadge>
+				</div>
+				<div>
+					<FeatureBadge variant="topic">topic</FeatureBadge>
+				</div>
+				<div>
+					<FeatureBadge variant="keyword">keyword</FeatureBadge>
+				</div>
+				<div>
+					<FeatureBadge variant="concept">concept</FeatureBadge>
+				</div>
+			</div>
+			<div>
+				{!!count && (
+					<div className="mt-1 text-right">{count} matching papers</div>
+				)}
+			</div>
 		</div>
 	);
 }
