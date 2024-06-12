@@ -1,21 +1,58 @@
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { CollectionListItem } from "@/components/collections/collection-list-item";
-import { CreateEditCollection } from "@/components/collections/create-edit-collection";
+import { CreateCollection } from "@/components/collections/create-collection";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
 import { useUser } from "@clerk/nextjs";
-import { Collection } from "@proemial/data/neon/schema";
+import { Collection, NewCollection } from "@proemial/data/neon/schema";
 import { Plus } from "@untitled-ui/icons-react";
-import { useQuery } from "react-query";
-import { getCollections } from "./actions";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import {
+	addCollection,
+	deleteCollection,
+	editCollection,
+	getCollections,
+} from "./actions";
 
 export const ProfileCollections = () => {
 	const { user } = useUser();
-	const { data: collections } = useQuery<Collection[]>(
-		"collections",
-		async () => getCollections(user?.id ?? ""),
-	);
+	const queryClient = useQueryClient();
 
-	if (!collections) {
+	const { data: collections } = useQuery({
+		queryKey: ["collections", user?.id],
+		queryFn: async () => getCollections(user?.id ?? ""),
+	});
+
+	const { mutate: add } = useMutation({
+		mutationFn: (newCollection: NewCollection) =>
+			addCollection(user?.id ?? "", newCollection),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["collections", user?.id],
+			});
+		},
+	});
+
+	const { mutate: edit } = useMutation({
+		mutationFn: (collection: Collection) =>
+			editCollection(user?.id ?? "", collection),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["collections", user?.id],
+			});
+		},
+	});
+
+	const { mutate: del } = useMutation({
+		mutationFn: (collectionId: Collection["id"]) =>
+			deleteCollection(user?.id ?? "", collectionId),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["collections", user?.id],
+			});
+		},
+	});
+
+	if (!collections || !user) {
 		return undefined;
 	}
 
@@ -33,9 +70,8 @@ export const ProfileCollections = () => {
 					<CollectionListItem
 						key={collection.id}
 						collection={collection}
-						onShare={() => alert("Sharing is not implemented")}
-						onEdit={() => alert("Editing is not implemented")}
-						onDelete={() => alert("Deletion is not implemented")}
+						onEdit={edit}
+						onDelete={del}
 					/>
 				))}
 				<FullSizeDrawer
@@ -46,10 +82,9 @@ export const ProfileCollections = () => {
 						</div>
 					}
 				>
-					<CreateEditCollection
-						collection={{ id: -1, name: "", ownerId: "" }}
-						mode="create"
-						onSubmit={() => alert("Creation not implemented")}
+					<CreateCollection
+						collection={{ name: "", description: "", ownerId: user.id }}
+						onSubmit={add}
 					/>
 				</FullSizeDrawer>
 			</div>

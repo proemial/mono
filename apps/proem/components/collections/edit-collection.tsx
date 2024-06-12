@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Collection, NewCollection } from "@proemial/data/neon/schema";
+import { Collection, collections } from "@proemial/data/neon/schema";
 import {
 	Button,
 	Form,
@@ -12,41 +12,40 @@ import {
 	Input,
 	Textarea,
 } from "@proemial/shadcn-ui";
+import { DialogClose } from "@proemial/shadcn-ui/components/ui/dialog";
+import { createSelectSchema } from "drizzle-zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
-// TODO: Replace with insert type from DB
-export const collectionSchema = z.object({
-	name: z.string(),
-	description: z.string().optional(),
+const editCollectionSchema = createSelectSchema(collections, {
+	name: (schema) => schema.name.min(1).max(50),
+	description: (schema) => schema.description.max(200),
 });
 
 type Props = {
-	collection: NewCollection | Collection;
-	mode: "create" | "edit";
-	onSubmit: (data: z.infer<typeof collectionSchema>) => void;
+	collection: Collection;
+	onSubmit: (collection: Collection) => void;
 };
 
-export const CreateEditCollection = ({ collection, mode, onSubmit }: Props) => {
-	const form = useForm<z.infer<typeof collectionSchema>>({
-		resolver: zodResolver(collectionSchema),
+export const EditCollection = ({ collection, onSubmit }: Props) => {
+	const form = useForm({
+		resolver: zodResolver(editCollectionSchema),
 		values: {
-			name: collection.name,
-			description: collection.description ?? undefined,
+			...collection,
+			description: collection.description ?? "",
 		},
 	});
+
 	const errorStyles = form.getFieldState("name").invalid
 		? "border border-red-300 border"
 		: "";
 
-	const handleSubmit = (data: z.infer<typeof collectionSchema>) => {
-		onSubmit(data);
+	const handleSubmit = (collection: Collection) => {
+		onSubmit(collection);
 	};
 
 	return (
-		<div className="flex flex-col gap-8 h-full">
-			{mode === "create" && <Header2>Create New Collection</Header2>}
-			{mode === "edit" && <Header2>Edit Collection</Header2>}
+		<div className="flex flex-col gap-8">
+			<Header2>Edit Collection</Header2>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(handleSubmit)} className="h-full">
 					<div className="flex flex-col h-full gap-8 justify-between">
@@ -62,7 +61,7 @@ export const CreateEditCollection = ({ collection, mode, onSubmit }: Props) => {
 										<FormControl>
 											<Input
 												{...field}
-												className={`w-full h-10 text bg-card rounded-full border-transparent px-4 outline-none focus-visible:ring-transparent  ${errorStyles}`}
+												className={`w-full h-10 text bg-card rounded-full border-transparent px-4 outline-none focus-visible:ring-transparent ${errorStyles}`}
 											/>
 										</FormControl>
 									</FormItem>
@@ -88,12 +87,14 @@ export const CreateEditCollection = ({ collection, mode, onSubmit }: Props) => {
 							/>
 						</div>
 						<div className="flex justify-center">
-							<Button
-								type="submit"
-								className="bg-[#00AA0C]/5 text-[12px] dark:bg-primary text-[#00AA0C] dark:text-primary-foreground rounded-full w-[114px] h-10 mb-3 hover:bg-[#00AA0C]/10 dark:hover:bg-primary/90 duration-200"
-							>
-								Done
-							</Button>
+							<DialogClose asChild>
+								<Button
+									type="submit"
+									className="bg-[#00AA0C]/5 text-[12px] dark:bg-primary text-[#00AA0C] dark:text-primary-foreground rounded-full w-[114px] h-10 mb-3 hover:bg-[#00AA0C]/10 dark:hover:bg-primary/90 duration-200"
+								>
+									Update
+								</Button>
+							</DialogClose>
 						</div>
 					</div>
 				</form>
