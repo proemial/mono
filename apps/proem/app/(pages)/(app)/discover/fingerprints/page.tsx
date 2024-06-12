@@ -16,7 +16,6 @@ type Props = {
 	searchParams?: {
 		ids?: string;
 		days?: string;
-		verbose?: boolean;
 	};
 };
 
@@ -26,7 +25,6 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 		days: searchParams?.days
 			? Number.parseInt(searchParams.days)
 			: FEED_DEFAULT_DAYS,
-		verbose: searchParams?.verbose,
 	};
 
 	const ids = params.ids?.split(",") ?? [];
@@ -45,13 +43,9 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 
 	return (
 		<div className="space-y-6">
-			<Feed
-				filter={{ features: filter, days: params.days }}
-				debug
-				verbose={params.verbose}
-			>
+			<Feed filter={{ features: filter, days: params.days }} debug>
 				<AutocompleteInput />
-				<FeatureCloud features={allFeatures} verbose={params.verbose} />
+				<FeatureCloud features={allFeatures} />
 			</Feed>
 		</div>
 	);

@@ -13,11 +13,10 @@ type Props = {
 		irrelevant?: boolean;
 	}[];
 	sum?: number;
-	verbose?: boolean;
 };
 
-export function FeatureCloud({ features, sum, verbose }: Props) {
-	const filtered = verbose ? features : features?.filter((f) => !f.irrelevant);
+export function FeatureCloud({ features, sum }: Props) {
+	const filtered = features?.filter((f) => !f.irrelevant);
 	return (
 		<div className="my-4 flex flex-wrap">
 			{!!sum && <FeatureBadge>{sum.toFixed(2)}</FeatureBadge>}
