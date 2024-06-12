@@ -28,9 +28,10 @@ type Props = {
 	children: ReactNode;
 	filter: { topic?: number; features?: RankedFeature[]; days?: number };
 	debug?: boolean;
+	verbose?: boolean;
 };
 
-export function Feed({ children, filter, debug }: Props) {
+export function Feed({ children, filter, debug, verbose }: Props) {
 	const { topic, features, days } = filter;
 
 	const {
@@ -140,6 +141,7 @@ export function Feed({ children, filter, debug }: Props) {
 												<FeatureCloud
 													features={row.features}
 													sum={row.filterMatchScore}
+													verbose={verbose}
 												/>
 											)}
 										</FeedItem>

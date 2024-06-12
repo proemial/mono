@@ -19,6 +19,7 @@ type Props = {
 		topic?: string;
 		days?: string;
 		debug?: boolean;
+		verbose?: boolean;
 	};
 };
 
@@ -29,12 +30,13 @@ export default async function DiscoverPage({ searchParams }: Props) {
 			? Number.parseInt(searchParams.days)
 			: FEED_DEFAULT_DAYS,
 		debug: searchParams?.debug,
+		verbose: searchParams?.verbose,
 	};
 	const filter = await getFilter(params);
 
 	return (
 		<div className="space-y-6">
-			<Feed filter={filter} debug={params.debug}>
+			<Feed filter={filter} debug={params.debug} verbose={params.verbose}>
 				{!filter.features && (
 					<div className="-my-4">
 						<HorisontalScrollArea>
@@ -51,7 +53,7 @@ export default async function DiscoverPage({ searchParams }: Props) {
 				{params.debug && (
 					<>
 						<Titles titles={filter.titles} />
-						<FeatureCloud features={filter.all} />
+						<FeatureCloud features={filter.all} verbose={params.verbose} />
 					</>
 				)}
 			</Feed>
