@@ -23,7 +23,7 @@ const MAX_PAGES = 10;
 const MAX_PAPERS = 100;
 
 // Enable caching
-const ENABLE_CACHE = false;
+const ENABLE_CACHE = true;
 
 // Cache feed papers for 1 hour
 const CACHE_FOR = 60 * 60; // 1 hour
