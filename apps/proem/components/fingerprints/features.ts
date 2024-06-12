@@ -1,12 +1,6 @@
 import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
 import { Fingerprint } from "./fingerprints";
 
-// Max no. of features to use
-const MAX_COUNT = 30;
-
-// Min score for a feature
-const MIN_SCORE = 0.1;
-
 export type FeatureType = "topic" | "keyword" | "concept";
 
 export type Feature = {
@@ -77,7 +71,7 @@ export function getFeatureFilter(fingerprints: Fingerprint[]): FeatureFilter {
 		.sort((a, b) => b.coOccurrenceScore - a.coOccurrenceScore)
 		.map((item, i) => ({
 			...item,
-			irrelevant: i > MAX_COUNT || (item?.coOccurrenceScore ?? 0) < MIN_SCORE,
+			irrelevant: !item?.coOccurrenceScore,
 		}));
 
 	return {

@@ -22,11 +22,8 @@ const MAX_PAGES = 10;
 // Max number of papers to cache for the feed
 const MAX_PAPERS = 100;
 
-// Min score for a feature
-const MIN_SCORE = 0.1;
-
 // Enable caching
-const ENABLE_CACHE = true;
+const ENABLE_CACHE = false;
 
 // Cache feed papers for 1 hour
 const CACHE_FOR = 60 * 60; // 1 hour
@@ -105,7 +102,7 @@ function rankFeature(paper: OpenAlexPaper, filter: RankedFeature[]) {
 			return {
 				...feature,
 				featureMatchScore,
-				irrelevant: featureMatchScore < MIN_SCORE,
+				irrelevant: !featureMatchScore,
 			};
 		})
 		.sort((a, b) => b.featureMatchScore - a.featureMatchScore);
@@ -129,11 +126,53 @@ function withTopics(paper: OpenAlexPaper) {
 }
 
 async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
+	const constrainedFilter = getOpenAlexFilter(rankedFeatures, true);
+	const { papers, meta } = await getAllFor(constrainedFilter, days, MAX_PAGES);
+
+	const pageCount = Math.ceil(meta.count / PER_PAGE);
+	if (pageCount < MAX_PAGES) {
+		const lessConstrainedFilter = getOpenAlexFilter(rankedFeatures, false);
+		const { papers: morePapers, meta: moreMeta } = await getAllFor(
+			lessConstrainedFilter,
+			days,
+			MAX_PAGES - pageCount,
+		);
+		console.log(
+			"found",
+			meta.count,
+			"constrained matching papers, and",
+			moreMeta.count,
+			"less constrained matching papers.",
+		);
+
+		const count = meta.count + moreMeta.count;
+
+		return {
+			meta: {
+				count,
+				page: 1,
+				per_page: PER_PAGE * MAX_PAGES,
+			},
+			papers: merge(papers, morePapers),
+		};
+	}
+	console.log("Identified", meta.count, "constrained matching papers");
+
+	return { meta, papers };
+}
+
+function merge(papers: OpenAlexPaper[], morePapers: OpenAlexPaper[]) {
+	const deDuped = morePapers.filter(
+		(p) => !papers.find((mp) => mp.data.id === p.data.id),
+	);
+	return [...papers, ...deDuped];
+}
+
+async function getAllFor(filter: string, days: number, maxPages: number) {
 	const today = dayjs().format("YYYY-MM-DD");
 	const from = dayjs(today)
 		.subtract(days + 1, "day")
 		.format("YYYY-MM-DD");
-	const filter = getOpenAlexFilter(rankedFeatures);
 
 	const oaFilter = [
 		"type:types/preprint|types/article",
@@ -144,21 +183,16 @@ async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 		"language:en",
 		"open_access.is_oa:true",
 		"type:types/preprint|types/article",
-		filter ? filter : undefined,
 	]
 		.filter((f) => !!f)
 		.join(",");
 
-	const url = `${oaBaseUrl}?${oaBaseArgs}&filter=${oaFilter}`;
+	const url = `${oaBaseUrl}?${oaBaseArgs}&filter=${oaFilter},${filter}`;
 
 	const paginate = `&per_page=${PER_PAGE}&page=`;
 	const page1 = await fetchWithAbstract(`${url}${paginate}${1}`);
 	const allPagesCount = Math.ceil(page1.meta.count / PER_PAGE) - 1;
-	const pageCount = !rankedFeatures?.length
-		? 1
-		: allPagesCount < MAX_PAGES - 1
-			? allPagesCount
-			: MAX_PAGES - 1;
+	const pageCount = allPagesCount < maxPages - 1 ? allPagesCount : maxPages - 1;
 
 	const queries = await Promise.all(
 		Array.from({ length: pageCount }).map((_, i) => {
@@ -187,7 +221,7 @@ function getOpenAlexFilter(
 		.filter((item) => item.type === "topic")
 		.map((item) => item.id.split("/").at(-1))
 		.join("|");
-	if (topics.length) selectors.push(`primary_topic.id:${topics}`);
+	if (topics.length) selectors.push(`topics.id:${topics}`);
 
 	const concepts = rankedFeatures
 		.filter((item) => item.type === "concept")

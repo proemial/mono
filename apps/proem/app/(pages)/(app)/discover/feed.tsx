@@ -137,7 +137,7 @@ export function Feed({ children, filter, debug, verbose }: Props) {
 										) : null
 									) : row ? (
 										<FeedItem paper={row.paper}>
-											{debug && !!row.filterMatchScore && (
+											{debug && (
 												<FeatureCloud
 													features={row.features}
 													sum={row.filterMatchScore}
