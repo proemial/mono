@@ -112,8 +112,8 @@ async function getFilter(params: {
 
 	const history = await getHistory();
 	const fingerprints = await fetchFingerprints(history);
-	const { filter, features } = getFeatureFilter(fingerprints);
+	const { filter, allFeatures } = getFeatureFilter(fingerprints);
 	const titles = params.debug ? await fetchPapersTitles(history) : undefined;
 
-	return { features: filter, days: params.days, titles, all: features };
+	return { features: filter, days: params.days, titles, all: allFeatures };
 }
