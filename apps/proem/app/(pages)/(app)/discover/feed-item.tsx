@@ -75,13 +75,21 @@ export default function FeedItem({
 }
 
 function FeatureTags({ features }: { features: RankedPaperFeature[] }) {
-	const sorted = [...features].sort(
-		(a, b) => typeScore(b.type) - typeScore(a.type),
-	);
+	const sorted = [...features]
+		.filter((f) => !f.irrelevant)
+		.sort((a, b) => typeScore(b.type) - typeScore(a.type));
+
+	const deduped = [] as RankedPaperFeature[];
+	for (const feature of sorted) {
+		if (deduped.find((f) => f.label === feature.label)) {
+			continue;
+		}
+		deduped.push(feature);
+	}
 
 	return (
 		<div className="flex flex-row gap-2 overflow-x-auto scrollbar-hide">
-			{sorted.slice(0, 3).map((feature) => (
+			{deduped.slice(0, 3).map((feature) => (
 				<FeedItemTag key={feature.id} tag={feature.label} />
 			))}
 		</div>
