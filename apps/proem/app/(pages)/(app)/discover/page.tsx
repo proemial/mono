@@ -18,6 +18,7 @@ type Props = {
 		topic?: string;
 		days?: string;
 		debug?: boolean;
+		weights?: string; // weights=c:0.5,t:1.1,k:0.9
 	};
 };
 
@@ -28,6 +29,7 @@ export default async function DiscoverPage({ searchParams }: Props) {
 			? Number.parseInt(searchParams.days)
 			: FEED_DEFAULT_DAYS,
 		debug: searchParams?.debug,
+		weightsRaw: searchParams?.weights,
 	};
 	const filter = await getFilter(params);
 
@@ -73,6 +75,7 @@ async function getFilter(params: {
 	topic: string;
 	days: number;
 	debug?: boolean;
+	weightsRaw?: string;
 }) {
 	const { isInternal } = getInternalUser();
 
@@ -88,7 +91,10 @@ async function getFilter(params: {
 
 	const history = await getHistory();
 	const fingerprints = await fetchFingerprints(history);
-	const { filter, allFeatures } = getFeatureFilter(fingerprints);
+	const { filter, allFeatures } = getFeatureFilter(
+		fingerprints,
+		params.weightsRaw,
+	);
 	const titles = params.debug ? await fetchPapersTitles(history) : undefined;
 
 	return { features: filter, days: params.days, titles, all: allFeatures };

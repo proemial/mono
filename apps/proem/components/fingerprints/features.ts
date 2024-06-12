@@ -25,7 +25,10 @@ export type FeatureFilter = {
 	filter: RankedFeature[];
 };
 
-export function getFeatureFilter(fingerprints: Fingerprint[]): FeatureFilter {
+export function getFeatureFilter(
+	fingerprints: Fingerprint[],
+	weightsRaw?: string,
+): FeatureFilter {
 	if (!fingerprints.length) {
 		return { allFeatures: [], filter: [] };
 	}
@@ -39,6 +42,22 @@ export function getFeatureFilter(fingerprints: Fingerprint[]): FeatureFilter {
 		keywords: [] as string[],
 	};
 
+	const weights = {
+		topic: 1,
+		concept: 1,
+		keyword: 2,
+	};
+
+	const pairs = weightsRaw?.split(",") || [];
+	for (const pair of pairs) {
+		const [t, w] = pair.split(":");
+		if (!t || !w) {
+			continue;
+		}
+		const type = t === "t" ? "topic" : t === "c" ? "concept" : "keyword";
+		weights[type] = Number.parseFloat(w);
+	}
+
 	for (const fingerprint of fingerprints) {
 		const features = getFeatures(fingerprint);
 
@@ -49,10 +68,11 @@ export function getFeatureFilter(fingerprints: Fingerprint[]): FeatureFilter {
 			}
 			const count = rankedFeatureMap[key]?.count ?? 0;
 			const avgScore = rankedFeatureMap[key]?.avgScore ?? 0;
+			const score = feature.score * weights[feature.type];
 			rankedFeatureMap[key] = {
 				...feature,
 				count: count + 1,
-				avgScore: (avgScore + feature.score) / 2,
+				avgScore: (avgScore + score) / 2,
 				coOccurrenceScore: 0,
 			};
 		}

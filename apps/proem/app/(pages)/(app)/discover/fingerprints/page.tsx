@@ -16,6 +16,7 @@ type Props = {
 	searchParams?: {
 		ids?: string;
 		days?: string;
+		weights?: string; // weights=c:0.5,t:1.1,k:0.9
 	};
 };
 
@@ -39,7 +40,10 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	}
 
 	const fingerprints = await fetchFingerprints(ids);
-	const { allFeatures, filter } = getFeatureFilter(fingerprints);
+	const { allFeatures, filter } = getFeatureFilter(
+		fingerprints,
+		searchParams?.weights,
+	);
 
 	return (
 		<div className="space-y-6">
