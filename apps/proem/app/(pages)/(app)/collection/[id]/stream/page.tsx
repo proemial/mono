@@ -32,15 +32,7 @@ export default async function ({ params }: PageProps) {
 	if (!collection) {
 		notFound();
 	}
-
 	const paperIds = collection.collectionsToPapers.map((c) => c.paperId);
-	const fingerprints = await fetchFingerprints(paperIds);
-	const { filter: features } = getFeatureFilter(fingerprints);
-	const { rows } = await fetchFeedByFeatures(
-		{ features, days: FEED_DEFAULT_DAYS },
-		{ offset: 0 },
-	);
-	const papers = rows.map((row) => row.paper);
 
 	if (paperIds.length === 0) {
 		return (
@@ -52,6 +44,14 @@ export default async function ({ params }: PageProps) {
 			</div>
 		);
 	}
+
+	const fingerprints = await fetchFingerprints(paperIds);
+	const { filter: features } = getFeatureFilter(fingerprints);
+	const { rows } = await fetchFeedByFeatures(
+		{ features, days: FEED_DEFAULT_DAYS },
+		{ offset: 0 },
+	);
+	const papers = rows.map((row) => row.paper);
 
 	return (
 		<div className="space-y-8 my-8">

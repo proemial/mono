@@ -29,11 +29,7 @@ export default async function ({ params }: PageProps) {
 	if (!collection) {
 		notFound();
 	}
-
 	const paperIds = collection.collectionsToPapers.map((c) => c.paperId);
-	const papers = await Promise.all(
-		paperIds.map((paperId) => fetchPaper(paperId)),
-	);
 
 	if (paperIds.length === 0) {
 		return (
@@ -44,6 +40,10 @@ export default async function ({ params }: PageProps) {
 			</div>
 		);
 	}
+
+	const papers = await Promise.all(
+		paperIds.map((paperId) => fetchPaper(paperId)),
+	);
 
 	return (
 		<div className="space-y-8 my-8">
