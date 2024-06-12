@@ -80,7 +80,7 @@ export default async function ({ params }: PageProps) {
 				<Paragraph>{collection.description}</Paragraph>
 				<div className="flex gap-2 justify-between items-center">
 					<div className="flex gap-2 items-center">
-						<Avatar className="size-6">
+						<Avatar className="size-6 hover:brightness-110 duration-200">
 							<AvatarImage
 								src={user.imageUrl}
 								title={`${user.firstName} ${user.lastName} (you)`}
@@ -89,7 +89,7 @@ export default async function ({ params }: PageProps) {
 						{otherOrgMembersUserData.map((orgMember) => (
 							<Avatar
 								key={orgMember.userId}
-								className="-ml-[18px] size-6"
+								className="-ml-[18px] size-6 hover:brightness-110 duration-200"
 								title={`${orgMember.firstName} ${orgMember.lastName}`}
 							>
 								<AvatarImage src={orgMember.imageUrl} />
