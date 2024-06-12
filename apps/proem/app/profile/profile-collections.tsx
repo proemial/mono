@@ -58,7 +58,6 @@ export const ProfileCollections = () => {
 
 	return (
 		<CollapsibleSection
-			collapsed
 			extra={<div>{collections.length}</div>}
 			trigger={<div>Collections</div>}
 		>

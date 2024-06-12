@@ -1,9 +1,5 @@
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { IconButton } from "@/components/collections/icon-button";
-import { getFeatureFilter } from "@/components/fingerprints/features";
-import { FEED_DEFAULT_DAYS } from "@/components/fingerprints/fetch-by-features";
-import { fetchFeedByFeatures } from "@/components/fingerprints/fetch-feed";
-import { fetchFingerprints } from "@/components/fingerprints/fetch-fingerprints";
 import {
 	OrganizationMembershipPublicUserData,
 	auth,
@@ -11,20 +7,27 @@ import {
 } from "@clerk/nextjs/server";
 import { neonDb } from "@proemial/data";
 import { collections } from "@proemial/data/neon/schema";
-import { Avatar, AvatarImage, Header2, Paragraph } from "@proemial/shadcn-ui";
-import { FilePlus02, Upload01 } from "@untitled-ui/icons-react";
+import {
+	Avatar,
+	AvatarImage,
+	Header2,
+	Header5,
+	Paragraph,
+} from "@proemial/shadcn-ui";
+import { FilePlus02 } from "@untitled-ui/icons-react";
 import { eq } from "drizzle-orm";
 import { notFound, redirect } from "next/navigation";
-import FeedItem from "../../discover/feed-item";
+import { ReactNode } from "react";
+import { NavButton } from "./nav-item";
 
 type PageProps = {
 	params?: {
 		id: string;
 	};
-	// searchParams?: unknown;
+	children: ReactNode;
 };
 
-export default async function ({ params }: PageProps) {
+export default async function ({ params, children }: PageProps) {
 	// TODO: Remove this check when launching feature
 	const { isInternal } = getInternalUser();
 	if (!isInternal) {
@@ -64,19 +67,13 @@ export default async function ({ params }: PageProps) {
 		// @ts-ignore This is for future-Jon to care about
 		.sort((a, b) => a.firstName.localeCompare(b.firstName));
 
-	const paperIds = collection.collectionsToPapers.map((c) => c.paperId);
-	const fingerprints = await fetchFingerprints(paperIds);
-	const { filter: features } = getFeatureFilter(fingerprints);
-	const { rows } = await fetchFeedByFeatures(
-		{ features, days: FEED_DEFAULT_DAYS },
-		{ offset: 0 },
-	);
-	const papers = rows.map((row) => row.paper);
-
 	return (
 		<div className="flex flex-col grow gap-4">
 			<div className="flex flex-col gap-3">
-				<Header2>{collection.name}</Header2>
+				<div className="flex gap-2 justify-between items-center">
+					<Header2>{collection.name}</Header2>
+					<Header5>{collection.collectionsToPapers.length} papers</Header5>
+				</div>
 				<Paragraph>{collection.description}</Paragraph>
 				<div className="flex gap-2 justify-between items-center">
 					<div className="flex gap-2 items-center">
@@ -109,17 +106,14 @@ export default async function ({ params }: PageProps) {
 					</div>
 				</div>
 			</div>
-			{paperIds.length > 0 ? (
-				<div className="space-y-8 my-8">
-					{papers.map((paper) => (
-						<FeedItem key={paper.id} paper={paper} />
-					))}
-				</div>
-			) : (
-				<div className="flex flex-col items-center justify-center gap-4">
-					<div className="text-sm">There are no papers in this collection.</div>
-				</div>
-			)}
+			<div className="flex gap-4 justify-center">
+				<NavButton href={`/collection/${collection.slug}`} title="Collection" />
+				<NavButton
+					href={`/collection/${collection.slug}/stream`}
+					title="Stream"
+				/>
+			</div>
+			{children}
 		</div>
 	);
 }
