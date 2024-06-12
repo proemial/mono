@@ -66,15 +66,17 @@ export const fetchAndRerankPapers = async (
 	};
 };
 
+export type RankedPaperFeature = {
+	id: string;
+	label: string;
+	featureMatchScore: number;
+	type: FeatureType;
+	irrelevant?: boolean;
+};
+
 export type RankedPaper = {
 	paper: OpenAlexPaper;
-	features: {
-		id: string;
-		label: string;
-		featureMatchScore: number;
-		type: FeatureType;
-		irrelevant?: boolean;
-	}[];
+	features: RankedPaperFeature[];
 	filterMatchScore: number;
 };
 

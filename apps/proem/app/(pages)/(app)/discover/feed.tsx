@@ -135,7 +135,7 @@ export function Feed({ children, filter, debug }: Props) {
 											<Loader />
 										) : null
 									) : row ? (
-										<FeedItem paper={row.paper}>
+										<FeedItem paper={row.paper} fingerprint={row.features}>
 											{debug && (
 												<FeatureCloud
 													features={row.features}
