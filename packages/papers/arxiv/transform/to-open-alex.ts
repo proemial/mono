@@ -1,6 +1,6 @@
 import { XMLParser } from "fast-xml-parser";
 import { RawArxivPaper } from "../models/arxiv-atom";
-import { OpenAlexPaperWithAbstract } from "../../oa/open-alex.models";
+import { OpenAlexPaperWithAbstract } from "../../oa/models/oa-paper";
 
 export function toOpenAlexPapers(xml: string): OpenAlexPaperWithAbstract[] {
 	const arxivPapers = fromXml(xml);

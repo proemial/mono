@@ -5,7 +5,7 @@ import {
 	OpenAlexWorksSearchResult,
 	oaBaseArgs,
 	oaBaseUrl,
-} from "@proemial/papers/oa/open-alex.models";
+} from "@proemial/papers/oa/models/oa-paper";
 import { fetchJson } from "@proemial/utils/fetch";
 import { Fingerprint } from "./fingerprints";
 

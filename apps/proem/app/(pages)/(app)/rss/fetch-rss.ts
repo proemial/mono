@@ -2,7 +2,7 @@
 
 import Parser from "rss-parser";
 import { fetchArxivPaper } from "../paper/arxiv/[id]/fetch-arxiv-paper";
-import { OpenAlexPaper } from "@proemial/papers/oa/open-alex.models";
+import { OpenAlexPaper } from "@proemial/papers/oa/models/oa-paper";
 
 export async function fetchRssItems(url: string) {
 	const parser = new Parser();

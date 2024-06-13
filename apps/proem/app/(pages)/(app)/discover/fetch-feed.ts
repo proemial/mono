@@ -2,7 +2,7 @@
 
 import { fetchPapersByField } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { summarise } from "@/app/prompts/summarise-title";
-import { OpenAlexPaper } from "@proemial/papers/oa/open-alex.models";
+import { OpenAlexPaper } from "@proemial/papers/oa/models/oa-paper";
 import { Redis } from "@proemial/redis/redis";
 
 type FetchFeedParams = Required<Parameters<typeof fetchPapersByField>>;
