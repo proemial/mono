@@ -2,6 +2,7 @@
 import { togglePaperInCollection } from "@/app/(pages)/(app)/discover/bookmark-paper";
 import { useUser } from "@/app/hooks/use-user";
 import { getCollections } from "@/app/profile/actions";
+import { CreateCollectionDrawer } from "@/app/profile/profile-collections";
 import { Checkbox } from "@/components/checkbox";
 import {
 	Notification,
@@ -16,9 +17,14 @@ const TOAST_OPEN_DURATION = 4000;
 type CollectionSelectorProps = {
 	paperId: string;
 	bookmarks?: number[];
+	onClose?: () => void;
 };
 
-function CollectionSelector({ paperId, bookmarks }: CollectionSelectorProps) {
+function CollectionSelector({
+	paperId,
+	bookmarks,
+	onClose,
+}: CollectionSelectorProps) {
 	const { user } = useUser();
 	const { data: collections } = useQuery({
 		queryKey: ["collections", user?.id],
@@ -49,10 +55,18 @@ function CollectionSelector({ paperId, bookmarks }: CollectionSelectorProps) {
 						</Checkbox>
 					</div>
 				))}
-				{/* TODO! add */}
-				{/* <div>
-		<Button>Create new collection</Button>
-	</div> */}
+				{/* <CreateCollectionDrawer
+					trigger={
+						<Button
+							onClick={() => {
+								// TODO! This doesn't work
+								// onClose?.();
+							}}
+						>
+							Create new collection
+						</Button>
+					}
+				/> */}
 			</div>
 		</Notification>
 	);
@@ -83,7 +97,11 @@ export function CollectionManager({
 	return (
 		<Notification>
 			{isOpen ? (
-				<CollectionSelector paperId={paperId} bookmarks={bookmarks} />
+				<CollectionSelector
+					paperId={paperId}
+					bookmarks={bookmarks}
+					onClose={onClose}
+				/>
 			) : (
 				<div className="flex justify-between items-center py-0.5 pl-2.5">
 					<div className="flex items-center space-x-2">
@@ -111,7 +129,14 @@ export function CollectionManager({
 }
 
 export function showCollectionSelector(props: CollectionSelectorProps) {
-	openUnstyledNotifcation(() => <CollectionSelector {...props} />);
+	openUnstyledNotifcation((toastId) => (
+		<CollectionSelector
+			{...props}
+			onClose={() => {
+				toast.dismiss(toastId);
+			}}
+		/>
+	));
 }
 
 export function showCollectionNotification(props: CollectionSelectorProps) {
