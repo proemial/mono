@@ -1,6 +1,5 @@
-// import { Check } from "@/components/checkbox";
 import { Button } from "@proemial/shadcn-ui";
-import { Check, CheckCircle } from "@untitled-ui/icons-react";
+import { Check } from "@untitled-ui/icons-react";
 import { PlusCircle } from "lucide-react";
 
 type AddButtonProps = {
