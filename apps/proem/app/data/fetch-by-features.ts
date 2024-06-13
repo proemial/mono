@@ -17,6 +17,9 @@ import { unstable_cache } from "next/cache";
 // Default number of days to fetch papers for
 export const FEED_DEFAULT_DAYS = 14;
 
+// OpenAlex has a limit of 100 features in a query
+const MAX_FEATURES_IN_QUERY = 100;
+
 // No. of papers pr. page
 const PER_PAGE = 50;
 
@@ -193,16 +196,24 @@ async function getAllFor(filter: string, days: number, maxPages: number) {
 		.filter((f) => !!f)
 		.join(",");
 
-	const url = `${oaBaseUrl}?${oaBaseArgs}&filter=${oaFilter},${filter}`;
-
+	const baseUrl = `${oaBaseUrl}?${oaBaseArgs}&filter=${oaFilter},`;
 	const paginate = `&per_page=${PER_PAGE}&page=`;
-	const page1 = await fetchWithAbstract(`${url}${paginate}${1}`);
+
+	const httpMax = 2048;
+	const maxSelectorLength = httpMax - baseUrl.length - paginate.length + 2; // the 2 chars represents the page number
+	let selector = filter;
+	if (filter.length > maxSelectorLength) {
+		const limited = filter.substring(0, maxSelectorLength);
+		selector = limited.substring(0, limited.lastIndexOf("|"));
+	}
+
+	const page1 = await fetchWithAbstract(`${baseUrl}${selector}${paginate}${1}`);
 	const allPagesCount = Math.ceil(page1.meta.count / PER_PAGE) - 1;
 	const pageCount = allPagesCount < maxPages - 1 ? allPagesCount : maxPages - 1;
 
 	const queries = await Promise.all(
 		Array.from({ length: pageCount }).map((_, i) => {
-			return fetchWithAbstract(`${url}${paginate}${i + 2}`);
+			return fetchWithAbstract(`${baseUrl}${selector}${paginate}${i + 2}`);
 		}),
 	);
 
@@ -225,23 +236,23 @@ function getOpenAlexFilter(
 	const selectors = [];
 	const topics = rankedFeatures
 		.filter((item) => item.type === "topic")
-		.map((item) => item.id.split("/").at(-1))
-		.join("|");
-	if (topics.length) selectors.push(`topics.id:${topics}`);
-
-	const concepts = rankedFeatures
-		.filter((item) => item.type === "concept")
-		.map((item) => item.id.split("/").at(-1))
-		.join("|");
-	if (concepts.length) selectors.push(`concepts.id:${concepts}`);
+		.slice(0, MAX_FEATURES_IN_QUERY)
+		.map((item) => item.id.split("/").at(-1));
+	if (topics.length) selectors.push(`topics.id:${topics.join("|")}`);
 
 	if (includeKeywords) {
 		const keywords = rankedFeatures
 			.filter((item) => item.type === "keyword")
-			.map((item) => item.id.split("/").at(-1))
-			.join("|");
-		if (keywords.length) selectors.push(`keywords.id:${keywords}`);
+			.slice(0, MAX_FEATURES_IN_QUERY)
+			.map((item) => item.id.split("/").at(-1));
+		if (keywords.length) selectors.push(`keywords.id:${keywords.join("|")}`);
 	}
+
+	const concepts = rankedFeatures
+		.filter((item) => item.type === "concept")
+		.slice(0, MAX_FEATURES_IN_QUERY)
+		.map((item) => item.id.split("/").at(-1));
+	if (concepts.length) selectors.push(`concepts.id:${concepts.join("|")}`);
 
 	return selectors.join(",");
 }
