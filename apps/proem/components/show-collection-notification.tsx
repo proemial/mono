@@ -1,5 +1,7 @@
 "use client";
 import { togglePaperInCollection } from "@/app/(pages)/(app)/discover/bookmark-paper";
+import { useUser } from "@/app/hooks/use-user";
+import { getCollections } from "@/app/profile/actions";
 import { Checkbox } from "@/components/checkbox";
 import {
 	Notification,
@@ -7,6 +9,7 @@ import {
 } from "@/components/notification";
 import { Button, toast } from "@proemial/shadcn-ui";
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 
 const TOAST_OPEN_DURATION = 4000;
 
@@ -16,29 +19,33 @@ type CollectionSelectorProps = {
 };
 
 function CollectionSelector({ paperId, bookmarks }: CollectionSelectorProps) {
-	// TODO! Fetch users collections
-	const collections = [11, 12, 13];
+	const { user } = useUser();
+	const { data: collections } = useQuery({
+		queryKey: ["collections", user?.id],
+		queryFn: async () => getCollections(user?.id ?? ""),
+	});
+
 	return (
 		<Notification>
 			<div className="divide-y pb-3">
 				<p className="font-semibold text-center py-4">Added to Collection</p>
-				{collections.map((collectionId) => (
-					<div key={collectionId} className="px-4 py-2 text-base">
+				{collections?.map(({ id, name }) => (
+					<div key={id} className="px-4 py-2 text-base">
 						<Checkbox
-							key={collectionId}
+							key={id}
 							defaultChecked={bookmarks?.some(
 								(collectionIdFromExistingBookmarks) =>
-									collectionIdFromExistingBookmarks === collectionId,
+									collectionIdFromExistingBookmarks === id,
 							)}
 							onCheckedChange={async (newCheckedValue) => {
 								await togglePaperInCollection({
 									paperId,
-									collectionId: collectionId,
+									collectionId: id,
 									isEnabled: Boolean(newCheckedValue),
 								});
 							}}
 						>
-							{collectionId}
+							{name}
 						</Checkbox>
 					</div>
 				))}
