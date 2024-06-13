@@ -64,8 +64,7 @@ export default async function ({ params, children }: PageProps) {
 			.filter(Boolean) as OrganizationMembershipPublicUserData[]
 	)
 		.filter((data) => data.userId !== userId)
-		// @ts-ignore This is for future-Jon to care about
-		.sort((a, b) => a.firstName.localeCompare(b.firstName));
+		.sort((a, b) => (a.firstName ?? "").localeCompare(b.firstName ?? ""));
 
 	return (
 		<div className="flex flex-col grow gap-4">
@@ -106,7 +105,7 @@ export default async function ({ params, children }: PageProps) {
 					</div>
 				</div>
 			</div>
-			<div className="flex gap-4 justify-center">
+			<div className="flex gap-1 justify-center items-center">
 				<NavButton href={`/collection/${collection.slug}`} title="Collection" />
 				<NavButton
 					href={`/collection/${collection.slug}/stream`}

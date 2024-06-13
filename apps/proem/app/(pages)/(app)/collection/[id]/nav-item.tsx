@@ -10,9 +10,8 @@ export const NavButton = ({ href, title }: { href: string; title: string }) => {
 	return (
 		<Link
 			href={href}
-			className={cn("text-sm", {
-				"opacity-75": !isActive,
-				"font-semibold": isActive,
+			className={cn("text-sm px-5 py-1.5 duration-200", {
+				"font-semibold bg-primary rounded-full": isActive,
 			})}
 		>
 			<div>{title}</div>
