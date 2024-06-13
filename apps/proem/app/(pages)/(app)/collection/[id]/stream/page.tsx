@@ -58,7 +58,7 @@ export default async function ({ params }: PageProps) {
 	const papers = rows.map((row) => row.paper);
 
 	return (
-		<div className="space-y-8 my-8">
+		<div className="space-y-8 mb-8">
 			{papers.map((paper) => (
 				<FeedItem key={paper.id} paper={paper} bookmarks={bookmarks} />
 			))}

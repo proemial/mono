@@ -28,8 +28,9 @@ export function Profile() {
 					variant="ghost"
 					size="sm"
 					onClick={trackHandler(analyticsKeys.ui.menu.click.open)}
+					className="p-0"
 				>
-					<Menu05 className="p-1 size-8" />
+					<Menu05 className="p-1 size-7" />
 				</Button>
 			</DrawerTrigger>
 			<DrawerContent
