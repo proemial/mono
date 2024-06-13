@@ -5,7 +5,14 @@ import {
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
 import { useClerk, useUser } from "@clerk/nextjs";
-import { Drop, LogOut01, MessageSquare02 } from "@untitled-ui/icons-react";
+import { DrawerClose } from "@proemial/shadcn-ui";
+import {
+	Drop,
+	LogOut01,
+	MessageQuestionCircle,
+	MessageSquare02,
+} from "@untitled-ui/icons-react";
+import Link from "next/link";
 import { useInternalUser } from "../hooks/use-user";
 import { ProfileColorSchemeToggle } from "./profile-color-scheme-toggle";
 import { ProfileQuestions } from "./profile-questions";
@@ -21,6 +28,14 @@ export const About = () => {
 	return (
 		<div className="flex flex-col gap-4 justify-between h-full w-full mt-4">
 			<div className="space-y-4 mt-4">
+				<DrawerClose asChild>
+					<Link href="/" className="text-sm">
+						<div className="flex gap-2 items-center">
+							<MessageQuestionCircle className="size-4 opacity-85" />
+							<div className="text-sm">Ask anything</div>
+						</div>
+					</Link>
+				</DrawerClose>
 				<div className="flex gap-2 items-center justify-between">
 					<div className="flex gap-2 items-center">
 						<Drop className="size-4 opacity-85" />

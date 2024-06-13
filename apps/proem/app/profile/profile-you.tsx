@@ -9,10 +9,15 @@ import {
 	Avatar,
 	AvatarFallback,
 	AvatarImage,
+	DrawerClose,
 	Header2,
 	Header5,
 } from "@proemial/shadcn-ui";
-import { Building05, LogIn01 } from "@untitled-ui/icons-react";
+import {
+	Building05,
+	LogIn01,
+	MessageQuestionCircle,
+} from "@untitled-ui/icons-react";
 import Link from "next/link";
 import { SignInDrawer } from "../../components/sign-in-drawer";
 import { useInternalUser } from "../hooks/use-user";
@@ -27,47 +32,61 @@ export function ProfileYou() {
 	return (
 		<div className="h-full px-4 flex flex-col gap-4 justify-between">
 			<div className="space-y-8">
-				<div className="select-none">
-					<Header2>Your profile</Header2>
-				</div>
 				{!isSignedIn && (
-					<SignInDrawer
-						trigger={
-							<div className="flex gap-2 items-center">
-								<LogIn01 className="size-4 opacity-85" />
-								<div
-									className="text-sm cursor-pointer"
-									onClick={trackHandler(analyticsKeys.ui.menu.click.signin)}
-								>
-									Sign in
-								</div>
-							</div>
-						}
-					/>
-				)}
-				{isSignedIn && user && (
-					<div className="space-y-2">
-						<Header5>
-							<div className="opacity-50 select-none">Profile</div>
-						</Header5>
-						<CollapsibleSection
-							className="space-x-0"
-							collapsed={true}
+					<div className="space-y-4">
+						<SignInDrawer
 							trigger={
-								<div className="flex w-full gap-4 justify-between items-center">
-									<Avatar className="size-9">
-										<AvatarImage src={user.imageUrl} />
-										<AvatarFallback>
-											{getUserInitials(user.fullName ?? "")}
-										</AvatarFallback>
-									</Avatar>
-									<div>{user.fullName}</div>
+								<div className="flex gap-2 items-center">
+									<LogIn01 className="size-4 opacity-85" />
+									<div
+										className="text-sm cursor-pointer"
+										onClick={trackHandler(analyticsKeys.ui.menu.click.signin)}
+									>
+										Sign in
+									</div>
 								</div>
 							}
-						>
-							<About />
-						</CollapsibleSection>
+						/>
+						<div className="flex">
+							<DrawerClose asChild>
+								<Link href="/" className="text-sm">
+									<div className="flex gap-2 items-center">
+										<MessageQuestionCircle className="size-4 opacity-85" />
+										<div className="text-sm">Ask anything</div>
+									</div>
+								</Link>
+							</DrawerClose>
+						</div>
 					</div>
+				)}
+				{isSignedIn && user && (
+					<>
+						<div className="select-none">
+							<Header2>Your profile</Header2>
+						</div>
+						<div className="space-y-2">
+							<Header5>
+								<div className="opacity-50 select-none">Profile</div>
+							</Header5>
+							<CollapsibleSection
+								className="space-x-0"
+								collapsed={true}
+								trigger={
+									<div className="flex w-full gap-4 justify-between items-center">
+										<Avatar className="size-9">
+											<AvatarImage src={user.imageUrl} />
+											<AvatarFallback>
+												{getUserInitials(user.fullName ?? "")}
+											</AvatarFallback>
+										</Avatar>
+										<div>{user.fullName}</div>
+									</div>
+								}
+							>
+								<About />
+							</CollapsibleSection>
+						</div>
+					</>
 				)}
 				{isSignedIn && (
 					<div>
