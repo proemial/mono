@@ -1,4 +1,4 @@
-import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
+import { oaTopicsTranslationMap } from "@proemial/papers/oa/taxonomy/oa-topics-compact";
 import { Fingerprint } from "./fingerprints";
 
 export type FeatureType = "topic" | "keyword" | "concept";

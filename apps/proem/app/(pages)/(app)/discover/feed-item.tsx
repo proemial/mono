@@ -1,5 +1,5 @@
 import { oaFieldIconMap } from "@/app/data/oa-fields";
-import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
+import { oaTopicsTranslationMap } from "@proemial/papers/oa/taxonomy/oa-topics-compact";
 import { trimForQuotes } from "@/utils/string-utils";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
