@@ -361,6 +361,9 @@ importers:
       '@proemial/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      '@proemial/utils':
+        specifier: workspace:*
+        version: link:../utils
       fast-xml-parser:
         specifier: ^4.4.0
         version: 4.4.0

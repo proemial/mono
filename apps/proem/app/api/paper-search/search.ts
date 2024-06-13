@@ -5,7 +5,7 @@ import {
 	oaBaseArgs,
 	oaBaseUrl,
 	openAlexFields,
-} from "../../../../../packages/repositories/oa/models/oa-paper";
+} from "@proemial/repositories/oa/models/oa-paper";
 // ,publication_date:>2023-10-16,publication_date:<2023-11-16
 import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";

@@ -9,11 +9,11 @@ import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode, useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 import { fetchFeedByTopic } from "@/app/(pages)/(app)/discover/fetch-feed";
-import { fetchFeedByFeatures } from "@/components/fingerprints/fetch-feed";
-import { RankedFeature } from "@/components/fingerprints/features";
+import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
 import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
-import { RankedPaper } from "@/components/fingerprints/fetch-by-features";
 import { FeatureBadge } from "@/components/fingerprints/feature-badge";
+import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
+import { RankedPaper } from "@/app/data/fetch-by-features";
 
 // 1-4 is fetched without scrolling
 const initialPageSize = 4;

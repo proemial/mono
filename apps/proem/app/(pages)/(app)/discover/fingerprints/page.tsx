@@ -1,12 +1,12 @@
-import { fetchFingerprints } from "@/components/fingerprints/fetch-fingerprints";
-import { getFeatureFilter } from "@/components/fingerprints/features";
+import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
+import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
 import { AutocompleteInput } from "./autocomplete-input";
-import { getHistory } from "@/components/fingerprints/fetch-history";
 import { redirect } from "next/navigation";
 import { Feed } from "../feed";
 import { Metadata } from "next";
-import { FEED_DEFAULT_DAYS } from "@/components/fingerprints/fetch-by-features";
+import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
+import { getHistory } from "@/app/data/fetch-history";
 
 export const metadata: Metadata = {
 	title: "Fingerprints",

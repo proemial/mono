@@ -8,6 +8,12 @@
 		"types": ["vitest/globals"],
 		"resolveJsonModule": true
 	},
-	"include": [".", "**/*.ts"],
+	"include": [
+		".",
+		"**/*.ts",
+		"../../apps/proem/app/data/fetch-by-features.ts",
+		"../../apps/proem/app/data/fetch-feed.ts",
+		"../../apps/proem/components/fingerprints/fetch-history.ts"
+	],
 	"exclude": ["node_modules"]
 }

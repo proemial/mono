@@ -1,12 +1,9 @@
+import { fetchJson } from "@proemial/utils/fetch";
 import {
-	OpenAlexConcept,
-	OpenAlexKeyword,
-	OpenAlexTopic,
 	OpenAlexWorksSearchResult,
 	oaBaseArgs,
 	oaBaseUrl,
-} from "../../../../packages/repositories/oa/models/oa-paper";
-import { fetchJson } from "@proemial/utils/fetch";
+} from "../models/oa-paper";
 import { Fingerprint } from "./fingerprints";
 
 type WithTitle = {

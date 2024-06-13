@@ -1,5 +1,5 @@
 import { StaticFeed } from "@/app/(pages)/(app)/discover/andrej-karpathy-llm-reading-list/static-feed";
-import { OpenAlexPaper } from "../../../../../../../../packages/repositories/oa/models/oa-paper";
+import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Metadata } from "next";
 import { fetchReadingList } from "./fetch-list";
 import logo from "./logo.svg";

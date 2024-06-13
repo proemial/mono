@@ -1,6 +1,6 @@
 import { generateStarters } from "@/app/prompts/starters";
 import { summarise } from "@/app/prompts/summarise-title";
-import { OpenAlexPaper } from "../../../../../../../../packages/repositories/oa/models/oa-paper";
+import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Prefix } from "@proemial/redis/adapters/papers";
 import { Redis } from "@proemial/redis/redis";
 

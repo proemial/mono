@@ -2,16 +2,16 @@ import { Feed } from "@/app/(pages)/(app)/discover/feed";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { FeedFilter } from "./feed-filter";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
-import { getHistory } from "@/components/fingerprints/fetch-history";
 import {
 	fetchFingerprints,
 	fetchPapersTitles,
-} from "@/components/fingerprints/fetch-fingerprints";
-import { getFeatureFilter } from "@/components/fingerprints/features";
+} from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
+import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
 import { Badge } from "@proemial/shadcn-ui";
-import { FEED_DEFAULT_DAYS } from "@/components/fingerprints/fetch-by-features";
-import { OaFields } from "../../../../../../packages/repositories/oa/taxonomy/fields";
+import { OaFields } from "@proemial/repositories/oa/taxonomy/fields";
+import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
+import { getHistory } from "@/app/data/fetch-history";
 
 type Props = {
 	searchParams?: {

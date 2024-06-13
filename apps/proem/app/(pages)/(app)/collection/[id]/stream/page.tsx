@@ -1,12 +1,12 @@
-import { getFeatureFilter } from "@/components/fingerprints/features";
-import { FEED_DEFAULT_DAYS } from "@/components/fingerprints/fetch-by-features";
-import { fetchFeedByFeatures } from "@/components/fingerprints/fetch-feed";
-import { fetchFingerprints } from "@/components/fingerprints/fetch-fingerprints";
+import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
+import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { neonDb } from "@proemial/data";
 import { collections } from "@proemial/data/neon/schema";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import FeedItem from "../../../discover/feed-item";
+import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
+import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
 
 type PageProps = {
 	params?: {

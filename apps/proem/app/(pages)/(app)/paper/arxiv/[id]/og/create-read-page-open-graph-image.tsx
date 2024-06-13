@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { ReadOpenGraphCard } from "./read-og-card";
-import { OpenAlexPaper } from "../../../../../../../../../packages/repositories/oa/models/oa-paper";
+import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { fetchArxivPaper } from "../fetch-arxiv-paper";
 
 export async function createReadPageOpenGraphImage(

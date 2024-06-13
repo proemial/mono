@@ -4,7 +4,7 @@ import {
 	OpenAlexMeta,
 	oaBaseArgs,
 	oaBaseUrl,
-} from "../../../../packages/repositories/oa/models/oa-paper";
+} from "@proemial/repositories/oa/models/oa-paper";
 import dayjs from "dayjs";
 
 export async function findPaperIds(query: string) {

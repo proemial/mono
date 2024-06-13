@@ -1,5 +1,5 @@
 import { oaFieldIconMap } from "@/app/data/oa-fields";
-import { oaTopicsTranslationMap } from "../../../../../../packages/repositories/oa/taxonomy/oa-topics-compact";
+import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-topics-compact";
 import { trimForQuotes } from "@/utils/string-utils";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -8,9 +8,9 @@ import Markdown from "react-markdown";
 import { FeedItemCard } from "./feed-item-card";
 import { FeedItemTag } from "./feed-item-tag";
 import { Prefix } from "@proemial/redis/adapters/papers";
-import { RankedPaperFeature } from "@/components/fingerprints/fetch-by-features";
-import { FeatureType } from "@/components/fingerprints/features";
-import { OpenAlexPaper } from "../../../../../../packages/repositories/oa/models/oa-paper";
+import { FeatureType } from "@proemial/repositories/oa/fingerprinting/features";
+import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
+import { RankedPaperFeature } from "@/app/data/fetch-by-features";
 
 dayjs.extend(relativeTime);
 

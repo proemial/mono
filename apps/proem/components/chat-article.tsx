@@ -3,7 +3,7 @@ import { AlignLeft } from "@/components/icons/AlignLeft";
 import { ModelSelector, ModelSelectorProps } from "@/components/model-selector";
 import { Trackable } from "@/components/trackable";
 import { trimForQuotes } from "@/utils/string-utils";
-import { OpenAlexPaper } from "../../../packages/repositories/oa/models/oa-paper";
+import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Header2, Header4, Icons, Paragraph } from "@proemial/shadcn-ui";
 import { Suspense } from "react";
 

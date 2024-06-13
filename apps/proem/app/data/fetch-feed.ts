@@ -1,11 +1,8 @@
 "use server";
 import { summarise } from "@/app/prompts/summarise-title";
-import { OpenAlexPaper } from "../../../../packages/repositories/oa/models/oa-paper";
+import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Redis } from "@proemial/redis/redis";
-import {
-	RankedPaper,
-	fetchAndRerankPapers,
-} from "@/components/fingerprints/fetch-by-features";
+import { RankedPaper, fetchAndRerankPapers } from "./fetch-by-features";
 
 type FetchFeedParams = Required<Parameters<typeof fetchAndRerankPapers>>;
 

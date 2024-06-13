@@ -1,4 +1,4 @@
-import { OpenAlexPaper } from "../../../../../../../../../packages/repositories/oa/models/oa-paper";
+import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { File02, Calendar } from "@untitled-ui/icons-react";
 
 type AnswerSharingCardProps = {

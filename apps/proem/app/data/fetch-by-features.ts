@@ -3,11 +3,15 @@ import {
 	OpenAlexPaper,
 	oaBaseArgs,
 	oaBaseUrl,
-} from "../../../../packages/repositories/oa/models/oa-paper";
+} from "@proemial/repositories/oa/models/oa-paper";
 import dayjs from "dayjs";
-import { FeatureType, RankedFeature, getFeatures } from "./features";
+import {
+	FeatureType,
+	RankedFeature,
+	getFeatures,
+} from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchWithAbstract } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
-import { getFingerprint } from "./fingerprints";
+import { getFingerprint } from "@proemial/repositories/oa/fingerprinting/fingerprints";
 import { unstable_cache } from "next/cache";
 
 // Default number of days to fetch papers for

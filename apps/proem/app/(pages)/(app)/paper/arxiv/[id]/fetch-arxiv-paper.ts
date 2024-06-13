@@ -1,5 +1,5 @@
-import { fetchFromArxiv } from "../../../../../../../../packages/repositories/arxiv/fetch/papers";
-import { OpenAlexPaper } from "../../../../../../../../packages/repositories/oa/models/oa-paper";
+import { fetchFromArxiv } from "@proemial/repositories/arxiv/fetch/papers";
+import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Redis } from "@proemial/redis/redis";
 import { cache } from "react";
 

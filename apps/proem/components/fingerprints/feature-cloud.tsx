@@ -1,4 +1,4 @@
-import { FeatureType } from "@/components/fingerprints/features";
+import { FeatureType } from "@proemial/repositories/oa/fingerprinting/features";
 import { FeatureBadge } from "./feature-badge";
 
 const DEBUG = false;

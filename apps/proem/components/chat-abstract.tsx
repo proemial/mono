@@ -1,6 +1,6 @@
 "use server";
 import { summariseAbstract } from "@/app/prompts/summarise-abstract";
-import { OpenAlexPaper } from "../../../packages/repositories/oa/models/oa-paper";
+import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Redis } from "@proemial/redis/redis";
 import { Paragraph } from "@proemial/shadcn-ui";
 
