@@ -10,8 +10,7 @@ import { ReactNode, useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 import { fetchFeedByTopic } from "@/app/(pages)/(app)/discover/fetch-feed";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
-import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
-import { FeatureBadge } from "@/components/fingerprints/feature-badge";
+import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
 import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
 import { RankedPaper } from "@/app/data/fetch-by-features";
 

@@ -1,6 +1,6 @@
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
-import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
+import { FeatureCloud } from "@/components/feature-badges";
 import { AutocompleteInput } from "./autocomplete-input";
 import { redirect } from "next/navigation";
 import { Feed } from "../feed";

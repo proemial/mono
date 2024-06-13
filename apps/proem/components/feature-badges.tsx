@@ -1,15 +1,45 @@
 import { cva } from "class-variance-authority";
 import { Badge } from "@proemial/shadcn-ui/components/ui/badge";
+import { FeatureType } from "@proemial/repositories/oa/fingerprinting/features";
 
-export function FeatureBadge({
-	children,
-	score,
-	variant,
-}: {
+type CloudProps = {
+	features?: {
+		id: string;
+		label: string;
+		type: FeatureType;
+		coOccurrenceScore?: number;
+		featureMatchScore?: number;
+		irrelevant?: boolean;
+	}[];
+	sum?: number;
+};
+
+export function FeatureCloud({ features, sum }: CloudProps) {
+	const filtered = features?.filter((f) => !f.irrelevant);
+	return (
+		<div className="my-4 flex flex-wrap">
+			{!!sum && <FeatureBadge>{sum.toFixed(2)}</FeatureBadge>}
+
+			{filtered?.map((item, i) => (
+				<FeatureBadge
+					key={i}
+					score={item.coOccurrenceScore ?? item.featureMatchScore}
+					variant={item.irrelevant ? "disabled" : item.type}
+				>
+					{item.label}
+				</FeatureBadge>
+			))}
+		</div>
+	);
+}
+
+type BadgeProps = {
 	children: string;
 	score?: number;
-	variant?: "topic" | "keyword" | "concept" | "disabled";
-}) {
+	variant?: FeatureType | "disabled";
+};
+
+export function FeatureBadge({ children, score, variant }: BadgeProps) {
 	return (
 		<Badge
 			className={badgeStyle({

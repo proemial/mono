@@ -7,7 +7,7 @@ import {
 	fetchPapersTitles,
 } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
-import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
+import { FeatureCloud } from "@/components/feature-badges";
 import { Badge } from "@proemial/shadcn-ui";
 import { OaFields } from "@proemial/repositories/oa/taxonomy/fields";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
