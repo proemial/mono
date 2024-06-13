@@ -5,7 +5,7 @@
 	"types": "./index.ts",
 	"license": "MIT",
 	"dependencies": {
-		"@proemial/papers": "workspace:*",
+		"@proemial/repositories": "workspace:*",
 		"@proemial/utils": "workspace:*",
 		"@upstash/redis": "^1.30.1",
 		"zod": "^3.23.8"

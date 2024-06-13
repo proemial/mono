@@ -11,7 +11,7 @@ import { getFeatureFilter } from "@/components/fingerprints/features";
 import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
 import { Badge } from "@proemial/shadcn-ui";
 import { FEED_DEFAULT_DAYS } from "@/components/fingerprints/fetch-by-features";
-import { OaFields } from "@proemial/papers/oa/taxonomy/fields";
+import { OaFields } from "../../../../../../packages/repositories/oa/taxonomy/fields";
 
 type Props = {
 	searchParams?: {

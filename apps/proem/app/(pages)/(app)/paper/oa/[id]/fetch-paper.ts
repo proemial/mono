@@ -6,7 +6,7 @@ import {
 	oaBaseArgs,
 	oaBaseUrl,
 	openAlexFields,
-} from "@proemial/papers/oa/models/oa-paper";
+} from "../../../../../../../../packages/repositories/oa/models/oa-paper";
 import { Redis } from "@proemial/redis/redis";
 import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";

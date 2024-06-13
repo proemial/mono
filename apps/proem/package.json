@@ -21,7 +21,7 @@
 		"@langchain/mistralai": "0.0.19",
 		"@langchain/openai": "0.0.29",
 		"@proemial/data": "workspace:*",
-		"@proemial/papers": "workspace:*",
+		"@proemial/repositories": "workspace:*",
 		"@proemial/models": "workspace:*",
 		"@proemial/redis": "workspace:*",
 		"@proemial/shadcn-ui": "workspace:*",

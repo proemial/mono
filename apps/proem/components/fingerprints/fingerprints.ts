@@ -3,7 +3,7 @@ import {
 	OpenAlexKeyword,
 	OpenAlexPaper,
 	OpenAlexTopic,
-} from "@proemial/papers/oa/models/oa-paper";
+} from "../../../../packages/repositories/oa/models/oa-paper";
 
 export type Fingerprint = {
 	id: string;

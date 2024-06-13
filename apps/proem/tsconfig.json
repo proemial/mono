@@ -21,7 +21,7 @@
 		"**/*.tsx",
 		"../../packages/data/**/*.ts",
 		"../../packages/models/**/*.ts",
-		"../../packages/papers/**/*.ts"
+		"../../packages/repositories/**/*.ts"
 	],
 	"exclude": ["node_modules"]
 }

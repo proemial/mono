@@ -66,12 +66,12 @@ importers:
       '@proemial/models':
         specifier: workspace:*
         version: link:../../packages/models
-      '@proemial/papers':
-        specifier: workspace:*
-        version: link:../../packages/papers
       '@proemial/redis':
         specifier: workspace:*
         version: link:../../packages/redis
+      '@proemial/repositories':
+        specifier: workspace:*
+        version: link:../../packages/repositories
       '@proemial/shadcn-ui':
         specifier: workspace:*
         version: link:../../packages/shadcn-ui
@@ -331,23 +331,11 @@ importers:
         specifier: ^5.4.5
         version: 5.4.5
 
-  packages/papers:
-    devDependencies:
-      '@proemial/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      fast-xml-parser:
-        specifier: ^4.4.0
-        version: 4.4.0
-      typescript:
-        specifier: ^5.4.5
-        version: 5.4.5
-
   packages/redis:
     dependencies:
-      '@proemial/papers':
+      '@proemial/repositories':
         specifier: workspace:*
-        version: link:../papers
+        version: link:../repositories
       '@proemial/utils':
         specifier: workspace:*
         version: link:../utils
@@ -364,6 +352,18 @@ importers:
       '@types/node':
         specifier: ^20.12.11
         version: 20.12.11
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
+
+  packages/repositories:
+    devDependencies:
+      '@proemial/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      fast-xml-parser:
+        specifier: ^4.4.0
+        version: 4.4.0
       typescript:
         specifier: ^5.4.5
         version: 5.4.5

@@ -1,4 +1,4 @@
-import { getPaperId } from "@proemial/papers/oa/helpers/oa-paper";
+import { getPaperId } from "@proemial/repositories/oa/helpers/oa-paper";
 import { Button, Input } from "@proemial/shadcn-ui";
 import { notFound, redirect } from "next/navigation";
 

@@ -1,6 +1,6 @@
 "use client";
 import FeedItem from "@/app/(pages)/(app)/discover/feed-item";
-import { OpenAlexPaper } from "@proemial/papers/oa/models/oa-paper";
+import { OpenAlexPaper } from "../../../../../../../packages/repositories/oa/models/oa-paper";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode } from "react";
 
