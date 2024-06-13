@@ -18,49 +18,6 @@ import { and, eq } from "drizzle-orm";
 import { revalidateTag, unstable_cache } from "next/cache";
 import { z } from "zod";
 
-const bookmarkPaperParams = z.object({
-	userId: z.string().optional(),
-	paperId: z.string(),
-});
-
-// TODO: Auth and rate limit
-
-export async function hasPaperBookmark(params: unknown) {
-	const { userId, paperId } = bookmarkPaperParams.parse(params);
-	if (!userId) {
-		return false;
-	}
-	const bookmark = await neonDb.query.bookmarks.findFirst({
-		where: and(eq(bookmarks.paperId, paperId), eq(bookmarks.userId, userId)),
-	});
-	return !!bookmark;
-}
-
-export async function addPaperBookmark(params: unknown) {
-	const { userId, paperId } = bookmarkPaperParams.parse(params);
-	if (!userId) {
-		return;
-	}
-	await Promise.all([
-		neonDb.insert(users).values({ id: userId }).onConflictDoNothing(),
-		neonDb.insert(papers).values({ id: paperId }).onConflictDoNothing(),
-	]);
-	await neonDb
-		.insert(bookmarks)
-		.values({ userId, paperId })
-		.onConflictDoNothing();
-}
-
-export async function removePaperBookmark(params: unknown) {
-	const { userId, paperId } = bookmarkPaperParams.parse(params);
-	if (!userId) {
-		return;
-	}
-	await neonDb
-		.delete(bookmarks)
-		.where(and(eq(bookmarks.paperId, paperId), eq(bookmarks.userId, userId)));
-}
-
 const addPapeToDefaultCollectionParams = z.object({
 	paperId: z.string(),
 });

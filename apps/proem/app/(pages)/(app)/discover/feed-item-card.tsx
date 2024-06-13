@@ -58,14 +58,6 @@ export const FeedItemCard = ({
 		onSuccess: () => queryClient.invalidateQueries(queryId),
 	});
 
-	const handleBookmarkPaperAdd = async () => {
-		addBookmark({ userId: user?.id, paperId: id });
-	};
-
-	const handleBookmarkPaperRemove = async () => {
-		removeBookmark({ userId: user?.id, paperId: id });
-	};
-
 	return (
 		<div className="flex flex-col gap-3">
 			<div className="flex items-center justify-between gap-2">
