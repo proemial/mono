@@ -1,5 +1,5 @@
-import { fromXml, toOpenAlexPapers } from "@proemial/models/arxiv/transform";
-import { fixtures } from "@/utils/transform.fixture";
+import { fromXml, toOpenAlexPapers } from "./to-open-alex";
+import { fixtures } from "./to-open-alex.fixture";
 
 describe("arxiv transform", () => {
 	it("can parse xml", () => {

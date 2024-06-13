@@ -1,7 +1,6 @@
 import { Feed } from "@/app/(pages)/(app)/discover/feed";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { FeedFilter } from "./feed-filter";
-import { OaFields } from "@proemial/models/open-alex-fields";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { getHistory } from "@/components/fingerprints/fetch-history";
 import {
@@ -12,6 +11,7 @@ import { getFeatureFilter } from "@/components/fingerprints/features";
 import { FeatureCloud } from "@/components/fingerprints/feature-cloud";
 import { Badge } from "@proemial/shadcn-ui";
 import { FEED_DEFAULT_DAYS } from "@/components/fingerprints/fetch-by-features";
+import { OaFields } from "@proemial/papers/oa/taxonomy/fields";
 
 type Props = {
 	searchParams?: {

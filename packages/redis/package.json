@@ -1,18 +1,18 @@
 {
-  "name": "@proemial/redis",
-  "version": "0.0.0",
-  "main": "./index.ts",
-  "types": "./index.ts",
-  "license": "MIT",
-  "dependencies": {
-    "@proemial/models": "workspace:*",
-    "@proemial/utils": "workspace:*",
-    "@upstash/redis": "^1.30.1",
-    "zod": "^3.23.8"
-  },
-  "devDependencies": {
-    "@proemial/typescript-config": "workspace:*",
-    "@types/node": "^20.12.11",
-    "typescript": "^5.4.5"
-  }
+	"name": "@proemial/redis",
+	"version": "0.0.0",
+	"main": "./index.ts",
+	"types": "./index.ts",
+	"license": "MIT",
+	"dependencies": {
+		"@proemial/papers": "workspace:*",
+		"@proemial/utils": "workspace:*",
+		"@upstash/redis": "^1.30.1",
+		"zod": "^3.23.8"
+	},
+	"devDependencies": {
+		"@proemial/typescript-config": "workspace:*",
+		"@types/node": "^20.12.11",
+		"typescript": "^5.4.5"
+	}
 }

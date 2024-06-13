@@ -1,7 +1,6 @@
 import { oaFieldIconMap } from "@/app/data/oa-fields";
 import { oaTopicsTranslationMap } from "@/app/data/oa-topics-compact";
 import { trimForQuotes } from "@/utils/string-utils";
-import { OpenAlexPaper } from "@proemial/models/open-alex";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { ReactNode, useMemo } from "react";
@@ -11,6 +10,7 @@ import { FeedItemTag } from "./feed-item-tag";
 import { Prefix } from "@proemial/redis/adapters/papers";
 import { RankedPaperFeature } from "@/components/fingerprints/fetch-by-features";
 import { FeatureType } from "@/components/fingerprints/features";
+import { OpenAlexPaper } from "@proemial/papers/oa/open-alex.models";
 
 dayjs.extend(relativeTime);
 

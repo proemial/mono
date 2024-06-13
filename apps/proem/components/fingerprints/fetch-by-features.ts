@@ -3,7 +3,7 @@ import {
 	OpenAlexPaper,
 	oaBaseArgs,
 	oaBaseUrl,
-} from "@proemial/models/open-alex";
+} from "@proemial/papers/oa/open-alex.models";
 import dayjs from "dayjs";
 import { FeatureType, RankedFeature, getFeatures } from "./features";
 import { fetchWithAbstract } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";

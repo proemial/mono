@@ -1,7 +1,7 @@
 "use server";
 
 import { summarise } from "@/app/prompts/summarise-title";
-import { OpenAlexPaper } from "@proemial/models/open-alex";
+import { OpenAlexPaper } from "@proemial/papers/oa/open-alex.models";
 import { Redis } from "@proemial/redis/redis";
 
 // https://www.oxen.ai/blog/reading-list-for-andrej-karpathys-intro-to-large-language-models-video

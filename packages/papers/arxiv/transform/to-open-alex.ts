@@ -1,16 +1,6 @@
 import { XMLParser } from "fast-xml-parser";
-import { RawArxivPaper } from "./arxiv-atom";
-import { OpenAlexPaperWithAbstract } from "../open-alex";
-
-export async function fetchFromArxiv(id: string) {
-	const response = await fetch(
-		`https://export.arxiv.org/api/query?id_list=${id}`,
-	);
-	const xml = await response.text();
-	const papers = toOpenAlexPapers(xml);
-
-	return papers.at(0);
-}
+import { RawArxivPaper } from "../models/arxiv-atom";
+import { OpenAlexPaperWithAbstract } from "../../oa/open-alex.models";
 
 export function toOpenAlexPapers(xml: string): OpenAlexPaperWithAbstract[] {
 	const arxivPapers = fromXml(xml);

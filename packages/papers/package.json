@@ -1,0 +1,16 @@
+{
+	"name": "@proemial/papers",
+	"version": "0.0.0",
+	"main": "./index.tsx",
+	"types": "./index.tsx",
+	"license": "MIT",
+	"scripts": {
+		"test": "vitest run",
+		"test:watch": "vitest"
+	},
+	"devDependencies": {
+		"@proemial/typescript-config": "workspace:*",
+		"typescript": "^5.4.5",
+		"fast-xml-parser": "^4.4.0"
+	}
+}

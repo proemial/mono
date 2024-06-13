@@ -1,6 +1,6 @@
 import { fetchReadingList } from "@/app/(pages)/(app)/discover/andrej-karpathy-llm-reading-list/fetch-list";
 import { StaticFeed } from "@/app/(pages)/(app)/discover/andrej-karpathy-llm-reading-list/static-feed";
-import { OpenAlexPaper } from "@proemial/models/open-alex";
+import { OpenAlexPaper } from "@proemial/papers/oa/open-alex.models";
 import { Metadata } from "next";
 
 export const dynamic = "force-static";

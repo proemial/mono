@@ -1,7 +1,7 @@
 import {
 	OpenAlexPaper,
 	getIdFromOpenAlexPaper,
-} from "@proemial/models/open-alex";
+} from "@proemial/papers/oa/open-alex.models";
 import { Time } from "@proemial/utils/time";
 import { UpStash } from "./upstash-client";
 

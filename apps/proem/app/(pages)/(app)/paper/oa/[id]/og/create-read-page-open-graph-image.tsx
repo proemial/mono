@@ -2,7 +2,7 @@ import { answers } from "@/app/api/bot/answer-engine/answers";
 import { ImageResponse } from "next/og";
 import { ReadOpenGraphCard } from "./read-og-card";
 import { fetchPaper } from "../fetch-paper";
-import { OpenAlexPaper } from "@proemial/models/open-alex";
+import { OpenAlexPaper } from "@proemial/papers/oa/open-alex.models";
 
 export async function createReadPageOpenGraphImage(
 	id: string,
