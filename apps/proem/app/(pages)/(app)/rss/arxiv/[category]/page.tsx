@@ -1,3 +1,5 @@
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { auth } from "@clerk/nextjs";
 import { Redis } from "@proemial/redis/redis";
 import { Metadata } from "next";
 import { Suspense } from "react";
@@ -52,9 +54,11 @@ export default async function ArXivRss({ params: { category } }: Props) {
 	);
 }
 async function Papers({ category }: { category: string }) {
+	const { userId } = await auth();
 	const papers = await fetchArXivRssPapers(
 		`https://rss.arxiv.org/atom/${category}`,
 	);
+	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 
 	return (
 		<>
@@ -63,7 +67,7 @@ async function Papers({ category }: { category: string }) {
 				return (
 					<div key={i} className="py-5">
 						<Suspense fallback={<div>loading...</div>}>
-							<Paper id={paper.id} />
+							<Paper id={paper.id} bookmarks={bookmarks} />
 						</Suspense>
 					</div>
 				);
