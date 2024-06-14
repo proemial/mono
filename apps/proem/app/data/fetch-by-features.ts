@@ -25,15 +25,13 @@ const PER_PAGE = 50;
 // Max number of pages to fetch
 const MAX_PAGES = 10;
 
-// Enable caching
-const ENABLE_CACHE = true;
-
 // Cache feed papers for 1 hour
 const CACHE_FOR = 60 * 60; // 1 hour
 
 export const fetchAndRerankPapers = async (
 	{ features, days }: { features?: RankedFeature[]; days?: number },
 	{ limit, offset }: { limit?: number; offset?: number } = {},
+	nocache?: boolean,
 ): Promise<{ meta: OpenAlexMeta; papers: RankedPaper[] }> => {
 	const pageLimit = limit ?? 25;
 	const pageOffset = offset ?? 1;
@@ -55,11 +53,11 @@ export const fetchAndRerankPapers = async (
 		{ revalidate: CACHE_FOR },
 	);
 
-	const cached = ENABLE_CACHE
-		? await getCachedPapers(features ?? [], days ?? FEED_DEFAULT_DAYS)
-		: await cacheWorker(features ?? [], days ?? FEED_DEFAULT_DAYS);
+	const cached = nocache
+		? await cacheWorker(features ?? [], days ?? FEED_DEFAULT_DAYS)
+		: await getCachedPapers(features ?? [], days ?? FEED_DEFAULT_DAYS);
 
-	if (ENABLE_CACHE) {
+	if (nocache) {
 		console.log("Cached papers", cached.papers.length, "of", cached.meta.count);
 	}
 

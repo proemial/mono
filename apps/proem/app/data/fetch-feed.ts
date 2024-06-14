@@ -10,12 +10,17 @@ type FetchFeedParams = Required<Parameters<typeof fetchAndRerankPapers>>;
 export async function fetchFeedByFeatures(
 	params: FetchFeedParams[0],
 	options: Omit<FetchFeedParams[1], "limit">,
+	nocache?: boolean,
 ) {
 	const nextOffset = (options?.offset ?? 1) + 1;
-	const { meta, papers: rankedPapers } = await fetchAndRerankPapers(params, {
-		...options,
-		limit: 5,
-	});
+	const { meta, papers: rankedPapers } = await fetchAndRerankPapers(
+		params,
+		{
+			...options,
+			limit: 5,
+		},
+		nocache,
+	);
 
 	if (!rankedPapers.length) {
 		throw new Error("No papers found.");

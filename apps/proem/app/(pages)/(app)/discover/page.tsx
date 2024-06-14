@@ -19,6 +19,7 @@ type Props = {
 		days?: string;
 		debug?: boolean;
 		weights?: string; // weights=c:0.5,t:1.1,k:0.9
+		nocache?: boolean;
 	};
 };
 
@@ -35,7 +36,11 @@ export default async function DiscoverPage({ searchParams }: Props) {
 
 	return (
 		<div className="space-y-6">
-			<Feed filter={filter} debug={params.debug}>
+			<Feed
+				filter={filter}
+				debug={params.debug}
+				nocache={searchParams?.nocache}
+			>
 				{!filter.features && (
 					<div className="-my-4">
 						<HorisontalScrollArea>

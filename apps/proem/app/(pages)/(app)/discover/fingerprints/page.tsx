@@ -18,6 +18,7 @@ type Props = {
 		days?: string;
 		weights?: string; // weights=c:0.5,t:1.1,k:0.9
 		clean?: boolean;
+		nocache?: boolean;
 	};
 };
 
@@ -51,6 +52,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 			<Feed
 				filter={{ features: filter, days: params.days }}
 				debug={!searchParams?.clean}
+				nocache={searchParams?.nocache}
 			>
 				<AutocompleteInput />
 				{!searchParams?.clean && <FeatureCloud features={allFeatures} />}

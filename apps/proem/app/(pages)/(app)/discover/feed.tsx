@@ -27,9 +27,10 @@ type Props = {
 	children: ReactNode;
 	filter: { topic?: number; features?: RankedFeature[]; days?: number };
 	debug?: boolean;
+	nocache?: boolean;
 };
 
-export function Feed({ children, filter, debug }: Props) {
+export function Feed({ children, filter, debug, nocache }: Props) {
 	const { topic, features, days } = filter;
 
 	const {
@@ -55,6 +56,7 @@ export function Feed({ children, filter, debug }: Props) {
 				return fetchFeedByFeatures(
 					{ features, days },
 					{ offset: ctx.pageParam },
+					nocache,
 				);
 			}
 			return fetchFeedByTopic({ field: topic }, { offset: ctx.pageParam });
