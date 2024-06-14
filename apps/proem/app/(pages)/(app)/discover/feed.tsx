@@ -69,7 +69,7 @@ export function Feed({ children, filter, debug, nocache }: Props) {
 		},
 	);
 
-	const allRows = data ? data.pages.flatMap((d) => d.rows) : [];
+	const allRows = data ? data.pages?.flatMap((d) => d.rows) : [];
 	const count = data?.pages.at(0)?.count;
 
 	const rowVirtualizer = useWindowVirtualizer({
