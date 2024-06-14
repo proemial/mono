@@ -17,7 +17,7 @@ export function openUnstyledNotifcation(customToast: CustomToast) {
 
 export function Notification({ children }: { children: React.ReactNode }) {
 	return (
-		<div className="max-w-80 w-full bg-white rounded-xl shadow-2xl m-auto">
+		<div className="max-w-80 w-full bg-background rounded-xl shadow-2xl m-auto">
 			{children}
 		</div>
 	);

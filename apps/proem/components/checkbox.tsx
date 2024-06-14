@@ -6,7 +6,7 @@ export function Check({ className, ...rest }: CheckProps) {
 	return (
 		<ShadcnUICheckbox
 			className={cn(
-				"data-[state=checked]:bg-green-200 data-[state=checked]:text-green-600 data-[state=checked]:border-green-200",
+				"data-[state=checked]:bg-secondary data-[state=checked]:text-secondary-foreground data-[state=checked]:border-secondary",
 				className,
 			)}
 			{...rest}
