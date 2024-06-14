@@ -51,7 +51,7 @@ export function Feed({ children, filter, debug }: Props) {
 				})();
 			}
 
-			if (features) {
+			if (features?.length) {
 				return fetchFeedByFeatures(
 					{ features, days },
 					{ offset: ctx.pageParam },
