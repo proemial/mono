@@ -17,6 +17,7 @@ type Props = {
 		ids?: string;
 		days?: string;
 		weights?: string; // weights=c:0.5,t:1.1,k:0.9
+		clean?: boolean;
 	};
 };
 
@@ -47,9 +48,12 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 
 	return (
 		<div className="space-y-6">
-			<Feed filter={{ features: filter, days: params.days }} debug>
+			<Feed
+				filter={{ features: filter, days: params.days }}
+				debug={!searchParams?.clean}
+			>
 				<AutocompleteInput />
-				<FeatureCloud features={allFeatures} />
+				{!searchParams?.clean && <FeatureCloud features={allFeatures} />}
 			</Feed>
 		</div>
 	);
