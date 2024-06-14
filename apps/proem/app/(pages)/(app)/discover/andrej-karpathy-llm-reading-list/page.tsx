@@ -5,8 +5,6 @@ import { auth } from "@clerk/nextjs";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Metadata } from "next";
 
-export const dynamic = "force-static";
-
 const title = "Andrej Karpathy's LLM Reading List";
 const url = "https://proem.ai/discover/andrej-karpathy-llm-reading-list";
 const description =
