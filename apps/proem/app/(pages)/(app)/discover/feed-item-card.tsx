@@ -56,7 +56,7 @@ export const FeedItemCard = ({
 				) : (
 					<div />
 				)}
-				<div className="flex gap-3 items-center">
+				<div className="flex items-center">
 					<div className="uppercase text-2xs text-nowrap">
 						{dayjs(date).fromNow()}
 					</div>
