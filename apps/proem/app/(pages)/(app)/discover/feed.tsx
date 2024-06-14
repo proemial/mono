@@ -1,5 +1,7 @@
 "use client";
-import FeedItem from "@/app/(pages)/(app)/discover/feed-item";
+import FeedItem, {
+	FeedItemProps,
+} from "@/app/(pages)/(app)/discover/feed-item";
 import { fetchFeedByTopic } from "@/app/(pages)/(app)/discover/fetch-feed";
 import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
 import {
@@ -23,10 +25,9 @@ const Loader = () => (
 	</div>
 );
 
-type Props = {
+type Props = Pick<FeedItemProps, "bookmarks"> & {
 	children: ReactNode;
 	filter: { topic?: number; features?: RankedFeature[]; days?: number };
-	bookmarks: Record<string, string>;
 	debug?: boolean;
 	nocache?: boolean;
 };

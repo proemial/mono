@@ -1,9 +1,9 @@
-import { Metadata } from "next";
-import { fetchRssItems as fetchArXivRssPapers } from "../../fetch-rss";
-import FeedItem from "../../../discover/feed-item";
 import { Redis } from "@proemial/redis/redis";
+import { Metadata } from "next";
 import { Suspense } from "react";
+import FeedItem, { FeedItemProps } from "../../../discover/feed-item";
 import { generate } from "../../../paper/oa/[id]/llm-generate";
+import { fetchRssItems as fetchArXivRssPapers } from "../../fetch-rss";
 
 export const dynamic = "force-static";
 
@@ -72,7 +72,11 @@ async function Papers({ category }: { category: string }) {
 	);
 }
 
-async function Paper({ id }: { id: string }) {
+type PaperProps = Pick<FeedItemProps, "bookmarks"> & {
+	id: string;
+};
+
+async function Paper({ id, bookmarks }: PaperProps) {
 	let paper = await Redis.papers.get(id, "arxiv");
 
 	if (paper && !paper.generated) {
@@ -83,5 +87,5 @@ async function Paper({ id }: { id: string }) {
 		return null;
 	}
 
-	return <FeedItem paper={paper} provider="arxiv" />;
+	return <FeedItem paper={paper} provider="arxiv" bookmarks={bookmarks} />;
 }

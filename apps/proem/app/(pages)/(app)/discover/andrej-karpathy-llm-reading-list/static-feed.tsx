@@ -1,13 +1,17 @@
 "use client";
-import FeedItem from "@/app/(pages)/(app)/discover/feed-item";
+import FeedItem, {
+	FeedItemProps,
+} from "@/app/(pages)/(app)/discover/feed-item";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode } from "react";
 
-export function StaticFeed({
-	feed,
-	children,
-}: { feed: OpenAlexPaper[]; children: ReactNode }) {
+type StaticFeedProps = Pick<FeedItemProps, "bookmarks"> & {
+	feed: OpenAlexPaper[];
+	children: ReactNode;
+};
+
+export function StaticFeed({ feed, children, bookmarks }: StaticFeedProps) {
 	const rowVirtualizer = useWindowVirtualizer({
 		count: feed.length,
 		estimateSize: () => 160,
@@ -46,7 +50,7 @@ export function StaticFeed({
 								data-index={virtualRow.index}
 								className="py-5"
 							>
-								<FeedItem paper={paper} />
+								<FeedItem paper={paper} bookmarks={bookmarks} />
 							</div>
 						);
 					})}

@@ -1,3 +1,5 @@
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { auth } from "@clerk/nextjs";
 import { neonDb } from "@proemial/data";
 import { collections } from "@proemial/data/neon/schema";
 import { eq } from "drizzle-orm";
@@ -12,9 +14,11 @@ type PageProps = {
 };
 
 export default async function ({ params }: PageProps) {
+	const { userId } = await auth();
 	if (!params?.id) {
 		notFound();
 	}
+	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 
 	const collection = await neonDb.query.collections.findFirst({
 		where: eq(collections.slug, params.id),
@@ -48,7 +52,10 @@ export default async function ({ params }: PageProps) {
 	return (
 		<div className="space-y-8 my-8">
 			{papers.map(
-				(paper) => paper && <FeedItem key={paper.id} paper={paper} />,
+				(paper) =>
+					paper && (
+						<FeedItem key={paper.id} paper={paper} bookmarks={bookmarks} />
+					),
 			)}
 		</div>
 	);
