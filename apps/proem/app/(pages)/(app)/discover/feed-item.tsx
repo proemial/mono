@@ -1,20 +1,20 @@
 import { oaFieldIconMap } from "@/app/data/oa-fields";
-import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-topics-compact";
 import { trimForQuotes } from "@/utils/string-utils";
+import { Prefix } from "@proemial/redis/adapters/papers";
+import { FeatureType } from "@proemial/repositories/oa/fingerprinting/features";
+import { RankedPaperFeature } from "@proemial/repositories/oa/fingerprinting/rerank";
+import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
+import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-topics-compact";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { ReactNode, useMemo } from "react";
 import Markdown from "react-markdown";
-import { FeedItemCard } from "./feed-item-card";
+import { FeedItemCard, FeedItemCardProps } from "./feed-item-card";
 import { FeedItemTag } from "./feed-item-tag";
-import { Prefix } from "@proemial/redis/adapters/papers";
-import { FeatureType } from "@proemial/repositories/oa/fingerprinting/features";
-import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
-import { RankedPaperFeature } from "@proemial/repositories/oa/fingerprinting/rerank";
 
 dayjs.extend(relativeTime);
 
-type FeedItemProps = {
+export type FeedItemProps = Pick<FeedItemCardProps, "bookmarks"> & {
 	paper: OpenAlexPaper;
 	fingerprint?: RankedPaperFeature[];
 	provider?: Prefix;
@@ -26,6 +26,7 @@ export default function FeedItem({
 	fingerprint,
 	provider,
 	children,
+	bookmarks,
 }: FeedItemProps) {
 	const tags = paper.data.topics
 		?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
@@ -54,6 +55,7 @@ export default function FeedItem({
 				date={paper.data.publication_date}
 				field={field}
 				provider={provider}
+				bookmarks={bookmarks}
 			>
 				<Markdown>
 					{paper.generated?.title

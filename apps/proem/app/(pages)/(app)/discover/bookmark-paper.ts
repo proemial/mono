@@ -1,49 +1,93 @@
 "use server";
 
+import {
+	PERSONAL_DEFAULT_COLLECTION_NAME,
+	getBookmarkCacheTag,
+} from "@/app/constants";
+import { auth } from "@clerk/nextjs";
 import { neonDb } from "@proemial/data";
-import { bookmarks, papers, users } from "@proemial/data/neon/schema";
+import {
+	collections,
+	collectionsToPapers,
+	papers,
+} from "@proemial/data/neon/schema";
 import { and, eq } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
 import { z } from "zod";
 
-const bookmarkPaperParams = z.object({
-	userId: z.string().optional(),
+const addPaperToDefaultCollectionParams = z.object({
 	paperId: z.string(),
 });
 
-// TODO: Auth and rate limit
-
-export async function hasPaperBookmark(params: unknown) {
-	const { userId, paperId } = bookmarkPaperParams.parse(params);
-	if (!userId) {
-		return false;
-	}
-	const bookmark = await neonDb.query.bookmarks.findFirst({
-		where: and(eq(bookmarks.paperId, paperId), eq(bookmarks.userId, userId)),
-	});
-	return !!bookmark;
-}
-
-export async function addPaperBookmark(params: unknown) {
-	const { userId, paperId } = bookmarkPaperParams.parse(params);
+/**
+ * addPapeToDefaultCollection adds a paper to the user's default collection.
+ * Create the default collection for the given user if it doesn't exist.
+ */
+export async function addPaperToDefaultCollection(
+	params: z.infer<typeof addPaperToDefaultCollectionParams>,
+) {
+	const { userId } = auth();
+	const { paperId } = addPaperToDefaultCollectionParams.parse(params);
 	if (!userId) {
 		return;
 	}
+
 	await Promise.all([
-		neonDb.insert(users).values({ id: userId }).onConflictDoNothing(),
+		neonDb
+			.insert(collections)
+			.values({
+				id: userId,
+				ownerId: userId,
+				name: PERSONAL_DEFAULT_COLLECTION_NAME,
+				slug: userId,
+			})
+			.returning()
+			.onConflictDoNothing(),
 		neonDb.insert(papers).values({ id: paperId }).onConflictDoNothing(),
 	]);
+
 	await neonDb
-		.insert(bookmarks)
-		.values({ userId, paperId })
+		.insert(collectionsToPapers)
+		.values({ collectionsId: userId, paperId })
 		.onConflictDoNothing();
+
+	revalidateTag(getBookmarkCacheTag(userId));
+	return {};
 }
 
-export async function removePaperBookmark(params: unknown) {
-	const { userId, paperId } = bookmarkPaperParams.parse(params);
+const togglePaperInCollectionParams = z.object({
+	paperId: z.string(),
+	collectionId: z.string(),
+	isEnabled: z.boolean(),
+});
+
+export async function togglePaperInCollection(
+	params: z.infer<typeof togglePaperInCollectionParams>,
+) {
+	const { userId } = auth();
+	const { paperId, collectionId, isEnabled } =
+		togglePaperInCollectionParams.parse(params);
+
 	if (!userId) {
 		return;
 	}
-	await neonDb
-		.delete(bookmarks)
-		.where(and(eq(bookmarks.paperId, paperId), eq(bookmarks.userId, userId)));
+
+	if (isEnabled) {
+		await neonDb
+			.insert(collectionsToPapers)
+			.values({ collectionsId: collectionId, paperId })
+			.onConflictDoNothing();
+	} else {
+		await neonDb
+			.delete(collectionsToPapers)
+			.where(
+				and(
+					eq(collectionsToPapers.paperId, paperId),
+					eq(collectionsToPapers.collectionsId, collectionId),
+				),
+			);
+	}
+
+	revalidateTag(getBookmarkCacheTag(userId));
+	return {};
 }

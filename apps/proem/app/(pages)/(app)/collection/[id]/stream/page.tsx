@@ -1,12 +1,14 @@
-import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
-import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
+import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
+import { auth } from "@clerk/nextjs";
 import { neonDb } from "@proemial/data";
 import { collections } from "@proemial/data/neon/schema";
+import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
+import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import FeedItem from "../../../discover/feed-item";
-import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
-import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
 
 type PageProps = {
 	params?: {
@@ -15,9 +17,11 @@ type PageProps = {
 };
 
 export default async function ({ params }: PageProps) {
+	const { userId } = await auth();
 	if (!params?.id) {
 		notFound();
 	}
+	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 
 	const collection = await neonDb.query.collections.findFirst({
 		where: eq(collections.slug, params.id),
@@ -56,7 +60,7 @@ export default async function ({ params }: PageProps) {
 	return (
 		<div className="space-y-8 my-8">
 			{papers.map((paper) => (
-				<FeedItem key={paper.id} paper={paper} />
+				<FeedItem key={paper.id} paper={paper} bookmarks={bookmarks} />
 			))}
 		</div>
 	);

@@ -22,16 +22,6 @@ export const ProfileCollections = () => {
 		queryFn: async () => getCollections(user?.id ?? ""),
 	});
 
-	const { mutate: add } = useMutation({
-		mutationFn: (newCollection: NewCollection) =>
-			addCollection(user?.id ?? "", newCollection),
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: ["collections", user?.id],
-			});
-		},
-	});
-
 	const { mutate: edit } = useMutation({
 		mutationFn: (collection: Collection) =>
 			editCollection(user?.id ?? "", collection),
@@ -53,7 +43,7 @@ export const ProfileCollections = () => {
 	});
 
 	if (!collections || !user) {
-		return undefined;
+		return null;
 	}
 
 	return (
@@ -73,20 +63,49 @@ export const ProfileCollections = () => {
 						onDelete={del}
 					/>
 				))}
-				<FullSizeDrawer
+				<CreateCollectionDrawer
 					trigger={
 						<div className="flex gap-2 items-center hover:opacity-85 active:opacity-75 duration-200 cursor-pointer">
 							<Plus className="size-4 opacity-85" />
 							<div className="text-sm">Create New Collection…</div>
 						</div>
 					}
-				>
-					<CreateCollection
-						collection={{ name: "", description: "", ownerId: user.id }}
-						onSubmit={add}
-					/>
-				</FullSizeDrawer>
+				/>
 			</div>
 		</CollapsibleSection>
 	);
 };
+
+type CreateCollectionDrawerProps = {
+	trigger: React.ReactNode;
+};
+
+export function CreateCollectionDrawer({
+	trigger,
+}: CreateCollectionDrawerProps) {
+	const { user } = useUser();
+	const queryClient = useQueryClient();
+
+	const { mutate: add } = useMutation({
+		mutationFn: (newCollection: NewCollection) =>
+			addCollection(user?.id ?? "", newCollection),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["collections", user?.id],
+			});
+		},
+	});
+
+	if (!user) {
+		return null;
+	}
+
+	return (
+		<FullSizeDrawer trigger={trigger}>
+			<CreateCollection
+				collection={{ name: "", description: "", ownerId: user.id }}
+				onSubmit={add}
+			/>
+		</FullSizeDrawer>
+	);
+}

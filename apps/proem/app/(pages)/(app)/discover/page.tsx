@@ -1,17 +1,19 @@
 import { Feed } from "@/app/(pages)/(app)/discover/feed";
-import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
-import { FeedFilter } from "./feed-filter";
+import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
+import { getHistory } from "@/app/data/fetch-history";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
+import { FeatureCloud } from "@/components/feature-badges";
+import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
+import { auth } from "@clerk/nextjs";
+import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import {
 	fetchFingerprints,
 	fetchPapersTitles,
 } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
-import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
-import { FeatureCloud } from "@/components/feature-badges";
-import { Badge } from "@proemial/shadcn-ui";
 import { OaFields } from "@proemial/repositories/oa/taxonomy/fields";
-import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
-import { getHistory } from "@/app/data/fetch-history";
+import { Badge } from "@proemial/shadcn-ui";
+import { FeedFilter } from "./feed-filter";
+import { getBookmarksByUserId } from "./get-bookmarks-by-user-id";
 
 type Props = {
 	searchParams?: {
@@ -32,13 +34,19 @@ export default async function DiscoverPage({ searchParams }: Props) {
 		debug: searchParams?.debug,
 		weightsRaw: searchParams?.weights,
 	};
-	const filter = await getFilter(params);
+	const { userId } = auth();
+
+	const [filter, bookmarks] = await Promise.all([
+		getFilter(params),
+		userId ? getBookmarksByUserId(userId) : {},
+	]);
 
 	return (
 		<div className="space-y-6">
 			<Feed
 				filter={filter}
 				debug={params.debug}
+				bookmarks={bookmarks}
 				nocache={searchParams?.nocache}
 			>
 				{!filter.features && (

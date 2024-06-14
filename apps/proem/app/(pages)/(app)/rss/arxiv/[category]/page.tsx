@@ -1,9 +1,11 @@
-import { Metadata } from "next";
-import { fetchRssItems as fetchArXivRssPapers } from "../../fetch-rss";
-import FeedItem from "../../../discover/feed-item";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { auth } from "@clerk/nextjs";
 import { Redis } from "@proemial/redis/redis";
+import { Metadata } from "next";
 import { Suspense } from "react";
+import FeedItem, { FeedItemProps } from "../../../discover/feed-item";
 import { generate } from "../../../paper/oa/[id]/llm-generate";
+import { fetchRssItems as fetchArXivRssPapers } from "../../fetch-rss";
 
 export const dynamic = "force-static";
 
@@ -52,9 +54,11 @@ export default async function ArXivRss({ params: { category } }: Props) {
 	);
 }
 async function Papers({ category }: { category: string }) {
+	const { userId } = await auth();
 	const papers = await fetchArXivRssPapers(
 		`https://rss.arxiv.org/atom/${category}`,
 	);
+	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 
 	return (
 		<>
@@ -63,7 +67,7 @@ async function Papers({ category }: { category: string }) {
 				return (
 					<div key={i} className="py-5">
 						<Suspense fallback={<div>loading...</div>}>
-							<Paper id={paper.id} />
+							<Paper id={paper.id} bookmarks={bookmarks} />
 						</Suspense>
 					</div>
 				);
@@ -72,7 +76,11 @@ async function Papers({ category }: { category: string }) {
 	);
 }
 
-async function Paper({ id }: { id: string }) {
+type PaperProps = Pick<FeedItemProps, "bookmarks"> & {
+	id: string;
+};
+
+async function Paper({ id, bookmarks }: PaperProps) {
 	let paper = await Redis.papers.get(id, "arxiv");
 
 	if (paper && !paper.generated) {
@@ -83,5 +91,5 @@ async function Paper({ id }: { id: string }) {
 		return null;
 	}
 
-	return <FeedItem paper={paper} provider="arxiv" />;
+	return <FeedItem paper={paper} provider="arxiv" bookmarks={bookmarks} />;
 }
