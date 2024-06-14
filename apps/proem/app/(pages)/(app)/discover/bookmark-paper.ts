@@ -7,18 +7,15 @@ import {
 import { auth } from "@clerk/nextjs";
 import { neonDb } from "@proemial/data";
 import {
-	bookmarks,
-	collectionRelations,
 	collections,
 	collectionsToPapers,
 	papers,
-	users,
 } from "@proemial/data/neon/schema";
 import { and, eq } from "drizzle-orm";
-import { revalidateTag, unstable_cache } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { z } from "zod";
 
-const addPapeToDefaultCollectionParams = z.object({
+const addPaperToDefaultCollectionParams = z.object({
 	paperId: z.string(),
 });
 
@@ -26,20 +23,20 @@ const addPapeToDefaultCollectionParams = z.object({
  * addPapeToDefaultCollection adds a paper to the user's default collection.
  * Create the default collection for the given user if it doesn't exist.
  */
-export async function addPapeToDefaultCollection(
-	params: z.infer<typeof addPapeToDefaultCollectionParams>,
+export async function addPaperToDefaultCollection(
+	params: z.infer<typeof addPaperToDefaultCollectionParams>,
 ) {
 	const { userId } = auth();
-	const { paperId } = addPapeToDefaultCollectionParams.parse(params);
+	const { paperId } = addPaperToDefaultCollectionParams.parse(params);
 	if (!userId) {
 		return;
 	}
 
-	// TODO! Turn it around so insert bookmark first and default to create collection afterwards
-	const test = await Promise.all([
+	await Promise.all([
 		neonDb
 			.insert(collections)
 			.values({
+				id: userId,
 				ownerId: userId,
 				name: PERSONAL_DEFAULT_COLLECTION_NAME,
 				slug: userId,
@@ -49,13 +46,9 @@ export async function addPapeToDefaultCollection(
 		neonDb.insert(papers).values({ id: paperId }).onConflictDoNothing(),
 	]);
 
-	console.log(test);
-	const collectionsId = 12;
-
-	// TODO:! Use Slug instead of ID
 	await neonDb
 		.insert(collectionsToPapers)
-		.values({ collectionsId, paperId })
+		.values({ collectionsId: userId, paperId })
 		.onConflictDoNothing();
 
 	revalidateTag(getBookmarkCacheTag(userId));
@@ -64,7 +57,7 @@ export async function addPapeToDefaultCollection(
 
 const togglePaperInCollectionParams = z.object({
 	paperId: z.string(),
-	collectionId: z.number(),
+	collectionId: z.string(),
 	isEnabled: z.boolean(),
 });
 

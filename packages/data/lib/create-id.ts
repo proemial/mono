@@ -4,6 +4,11 @@ const prefixes = {
 	collection: "col",
 } as const;
 
-export function createId(prefix: keyof typeof prefixes): string {
-	return `${prefixes[prefix]}_${createCuid()}`;
+export function createId(prefix?: keyof typeof prefixes): string {
+	const id = createCuid();
+	if (!prefix) {
+		return id;
+	}
+
+	return `${prefixes[prefix]}_${id}`;
 }

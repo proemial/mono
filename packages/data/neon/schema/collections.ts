@@ -1,14 +1,18 @@
 import { relations } from "drizzle-orm";
-import { pgTable, serial, text } from "drizzle-orm/pg-core";
-import { nanoid } from "nanoid";
+import { pgTable, text } from "drizzle-orm/pg-core";
+import { createId } from "../../lib/create-id";
 import { collectionsToPapers } from "./collections-to-papers";
 
 export const collections = pgTable("collections", {
-	id: serial("id").primaryKey(),
+	id: text("id")
+		.notNull()
+		.unique()
+		.$defaultFn(() => createId("collection"))
+		.primaryKey(),
 	slug: text("slug")
 		.notNull()
 		.unique()
-		.$defaultFn(() => nanoid()), // Secure and URL-friendly
+		.$defaultFn(() => createId()),
 	ownerId: text("owner_id").notNull(),
 	name: text("name").notNull(),
 	description: text("description"),

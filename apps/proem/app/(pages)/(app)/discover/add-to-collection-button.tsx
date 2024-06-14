@@ -1,12 +1,15 @@
-import { addPapeToDefaultCollection } from "@/app/(pages)/(app)/discover/bookmark-paper";
-import { useUser } from "@/app/hooks/use-user";
+import { addPaperToDefaultCollection } from "@/app/(pages)/(app)/discover/bookmark-paper";
 import { AddButton } from "@/components/add-button";
-import { showCollectionSelector } from "@/components/show-collection-notification";
+import {
+	showCollectionNotification,
+	showCollectionSelector,
+} from "@/components/show-collection-notification";
+import { useUser } from "@clerk/nextjs";
 import { useOptimistic } from "react";
 
-type PaperId = string;
-type OrganisationSlug = number;
-type Bookmarks = Record<PaperId, OrganisationSlug[]>;
+export type PaperId = string;
+export type CollectionId = string;
+type Bookmarks = Record<PaperId, CollectionId[]>;
 export type AddToCollectionButtonProps = {
 	paperId: PaperId;
 	bookmarks: Bookmarks;
@@ -20,11 +23,15 @@ export function AddToCollectionButton({
 	if (!user) {
 		return null;
 	}
+	const defaultCollectionId = user.id;
 
 	const [optimisticBookmarks, addOptimisticBookmarks] = useOptimistic<
 		Bookmarks,
 		{ paperId: PaperId }
-	>(bookmarks, (state, { paperId }) => ({ ...state, [paperId]: [11] }));
+	>(bookmarks, (state, { paperId }) => ({
+		...state,
+		[paperId]: [defaultCollectionId],
+	}));
 
 	const currentBookmark = optimisticBookmarks[paperId];
 
@@ -34,16 +41,25 @@ export function AddToCollectionButton({
 		<AddButton
 			isChecked={isBookmarked}
 			onClick={async () => {
-				// TODO! Push for user onboarding flow if not logged in
+				const bookmark = {
+					paperId,
+					bookmarks: currentBookmark,
+				};
 				if (isBookmarked) {
-					return showCollectionSelector({
-						paperId,
-						bookmarks: currentBookmark,
-					});
+					showCollectionSelector(bookmark);
+					return;
 				}
 
 				addOptimisticBookmarks({ paperId });
-				await addPapeToDefaultCollection({ paperId });
+				const optimisticBookmarksWithExtraOptimism = {
+					...optimisticBookmarks,
+					[paperId]: [defaultCollectionId],
+				}[paperId];
+				showCollectionNotification({
+					...bookmark,
+					bookmarks: optimisticBookmarksWithExtraOptimism,
+				});
+				await addPaperToDefaultCollection({ paperId });
 			}}
 		/>
 	);

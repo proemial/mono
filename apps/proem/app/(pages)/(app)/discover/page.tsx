@@ -42,7 +42,7 @@ const getBookmarks = (userId: string) =>
 
 					return acc;
 				},
-				{} as Record<string, number[]>,
+				{} as Record<string, string[]>,
 			);
 		},
 		["bookmarks", userId],
@@ -69,11 +69,11 @@ export default async function DiscoverPage({ searchParams }: Props) {
 		weightsRaw: searchParams?.weights,
 	};
 	const { userId } = auth();
+
 	const [filter, bookmarks] = await Promise.all([
 		getFilter(params),
 		userId ? getBookmarks(userId) : {},
 	]);
-	console.log(bookmarks);
 
 	return (
 		<div className="space-y-6">

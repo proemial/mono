@@ -1,12 +1,12 @@
 import { relations } from "drizzle-orm";
-import { integer, pgTable, primaryKey, text } from "drizzle-orm/pg-core";
+import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
 import { collections } from "./collections";
 import { papers } from "./papers";
 
 export const collectionsToPapers = pgTable(
 	"collections_to_papers",
 	{
-		collectionsId: integer("collection_id")
+		collectionsId: text("collection_id")
 			.notNull()
 			.references(() => collections.id),
 		paperId: text("paper_id")

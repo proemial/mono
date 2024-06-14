@@ -2,7 +2,6 @@
 import { togglePaperInCollection } from "@/app/(pages)/(app)/discover/bookmark-paper";
 import { useUser } from "@/app/hooks/use-user";
 import { getCollections } from "@/app/profile/actions";
-import { CreateCollectionDrawer } from "@/app/profile/profile-collections";
 import { Checkbox } from "@/components/checkbox";
 import {
 	Notification,
@@ -16,7 +15,7 @@ const TOAST_OPEN_DURATION = 4000;
 
 type CollectionSelectorProps = {
 	paperId: string;
-	bookmarks?: number[];
+	bookmarks?: string[];
 	onClose?: () => void;
 };
 
