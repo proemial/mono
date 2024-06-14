@@ -1,12 +1,14 @@
-import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
-import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
-import { FeatureCloud } from "@/components/feature-badges";
-import { AutocompleteInput } from "./autocomplete-input";
-import { redirect } from "next/navigation";
-import { Feed } from "../feed";
-import { Metadata } from "next";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getHistory } from "@/app/data/fetch-history";
+import { FeatureCloud } from "@/components/feature-badges";
+import { auth } from "@clerk/nextjs";
+import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
+import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
+import { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { Feed } from "../feed";
+import { AutocompleteInput } from "./autocomplete-input";
 
 export const metadata: Metadata = {
 	title: "Fingerprints",
@@ -23,6 +25,7 @@ type Props = {
 };
 
 export default async function FingerprintsPage({ searchParams }: Props) {
+	const { userId } = await auth();
 	const params = {
 		ids: searchParams?.ids?.length ? searchParams.ids : undefined,
 		days: searchParams?.days
@@ -30,6 +33,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 			: FEED_DEFAULT_DAYS,
 	};
 
+	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 	const ids = params.ids?.split(",") ?? [];
 
 	// Only use history when `ids` param is missing (accept clearing the list of papers)
@@ -53,6 +57,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 				filter={{ features: filter, days: params.days }}
 				debug={!searchParams?.clean}
 				nocache={searchParams?.nocache}
+				bookmarks={bookmarks}
 			>
 				<AutocompleteInput />
 				{!searchParams?.clean && <FeatureCloud features={allFeatures} />}
