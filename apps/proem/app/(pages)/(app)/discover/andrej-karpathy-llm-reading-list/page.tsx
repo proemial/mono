@@ -1,5 +1,7 @@
 import { fetchReadingList } from "@/app/(pages)/(app)/discover/andrej-karpathy-llm-reading-list/fetch-list";
 import { StaticFeed } from "@/app/(pages)/(app)/discover/andrej-karpathy-llm-reading-list/static-feed";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { auth } from "@clerk/nextjs";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Metadata } from "next";
 
@@ -20,12 +22,16 @@ export const metadata: Metadata = {
 };
 
 export default async function AndrejKarpathyLLMReadingList() {
+	const { userId } = await auth();
 	const readingList = await fetchReadingList();
+	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 	const feed = readingList.rows.filter(Boolean) as OpenAlexPaper[];
 
 	return (
 		<div className="space-y-6">
-			<StaticFeed feed={feed}>Andrej Karpathy's LLM Reading List</StaticFeed>
+			<StaticFeed feed={feed} bookmarks={bookmarks}>
+				Andrej Karpathy's LLM Reading List
+			</StaticFeed>
 		</div>
 	);
 }
