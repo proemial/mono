@@ -20,12 +20,6 @@ export function AddToCollectionButton({
 	bookmarks,
 }: AddToCollectionButtonProps) {
 	const { user } = useUser();
-	const isInternalUser =
-		user?.primaryEmailAddress?.emailAddress.endsWith("proemial.ai");
-	// TODO! remove
-	if (!isInternalUser) {
-		return null;
-	}
 	if (!user) {
 		return null;
 	}

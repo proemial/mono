@@ -5,6 +5,7 @@ import {
 	AddToCollectionButtonProps,
 } from "@/app/(pages)/(app)/discover/add-to-collection-button";
 import { Field } from "@/app/data/oa-fields";
+import { useInternalUser } from "@/app/hooks/use-user";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -40,6 +41,7 @@ export const FeedItemCard = ({
 	bookmarks,
 }: FeedItemCardProps) => {
 	const { isSignedIn } = useUser();
+	const { isInternal } = useInternalUser();
 
 	return (
 		<div className="flex flex-col gap-3">
@@ -58,11 +60,15 @@ export const FeedItemCard = ({
 					<div className="uppercase text-2xs text-nowrap">
 						{dayjs(date).fromNow()}
 					</div>
-					{isSignedIn ? (
-						<AddToCollectionButton bookmarks={bookmarks} paperId={id} />
-					) : (
-						<SignInDrawer trigger={<PlusCircle className="size-4" />} />
-					)}
+					{isInternal ? (
+						<>
+							{isSignedIn ? (
+								<AddToCollectionButton bookmarks={bookmarks} paperId={id} />
+							) : (
+								<SignInDrawer trigger={<PlusCircle className="size-4" />} />
+							)}
+						</>
+					) : null}
 				</div>
 			</div>
 			<Link
