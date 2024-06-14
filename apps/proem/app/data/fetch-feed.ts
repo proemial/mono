@@ -2,7 +2,8 @@
 import { summarise } from "@/app/prompts/summarise-title";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Redis } from "@proemial/redis/redis";
-import { RankedPaper, fetchAndRerankPapers } from "./fetch-by-features";
+import { fetchAndRerankPapers } from "./fetch-by-features";
+import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
 
 type FetchFeedParams = Required<Parameters<typeof fetchAndRerankPapers>>;
 

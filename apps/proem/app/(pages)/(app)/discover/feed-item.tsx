@@ -10,7 +10,7 @@ import { FeedItemTag } from "./feed-item-tag";
 import { Prefix } from "@proemial/redis/adapters/papers";
 import { FeatureType } from "@proemial/repositories/oa/fingerprinting/features";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
-import { RankedPaperFeature } from "@/app/data/fetch-by-features";
+import { RankedPaperFeature } from "@proemial/repositories/oa/fingerprinting/rerank";
 
 dayjs.extend(relativeTime);
 

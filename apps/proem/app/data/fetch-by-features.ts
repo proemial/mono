@@ -1,3 +1,9 @@
+import { fetchWithAbstract } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
+import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
+import {
+	RankedPaper,
+	rerankAndLimit,
+} from "@proemial/repositories/oa/fingerprinting/rerank";
 import {
 	OpenAlexMeta,
 	OpenAlexPaper,
@@ -5,13 +11,6 @@ import {
 	oaBaseUrl,
 } from "@proemial/repositories/oa/models/oa-paper";
 import dayjs from "dayjs";
-import {
-	FeatureType,
-	RankedFeature,
-	getFeatures,
-} from "@proemial/repositories/oa/fingerprinting/features";
-import { fetchWithAbstract } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
-import { getFingerprint } from "@proemial/repositories/oa/fingerprinting/fingerprints";
 import { unstable_cache } from "next/cache";
 
 // Default number of days to fetch papers for
@@ -25,9 +24,6 @@ const PER_PAGE = 50;
 
 // Max number of pages to fetch
 const MAX_PAGES = 10;
-
-// Max number of papers to cache for the feed
-const MAX_PAPERS = 100;
 
 // Enable caching
 const ENABLE_CACHE = true;
@@ -72,67 +68,6 @@ export const fetchAndRerankPapers = async (
 		papers: cached.papers.slice(pageOffset, pageOffset + pageLimit),
 	};
 };
-
-export type RankedPaperFeature = {
-	id: string;
-	label: string;
-	featureMatchScore: number;
-	type: FeatureType;
-	irrelevant?: boolean;
-};
-
-export type RankedPaper = {
-	paper: OpenAlexPaper;
-	features: RankedPaperFeature[];
-	filterMatchScore: number;
-};
-
-function rerankAndLimit(
-	papers: OpenAlexPaper[],
-	filter: RankedFeature[],
-): RankedPaper[] {
-	const ranked = papers
-		.filter(withTopics) // Filter out papers without topics
-		.map(shortenId)
-		.map((paper) => rankFeature(paper, filter));
-
-	return ranked
-		.sort((a, b) => b.filterMatchScore - a.filterMatchScore)
-		.slice(0, MAX_PAPERS);
-}
-
-function rankFeature(paper: OpenAlexPaper, filter: RankedFeature[]) {
-	const features = getFeatures(getFingerprint(paper))
-		.map((feature) => {
-			const filterScore =
-				filter.find((f) => f.id === feature.id)?.coOccurrenceScore ?? 0;
-			const featureMatchScore = filterScore * feature.score;
-
-			return {
-				...feature,
-				featureMatchScore,
-				irrelevant: !featureMatchScore,
-			};
-		})
-		.sort((a, b) => b.featureMatchScore - a.featureMatchScore);
-
-	const filterMatchScore = features
-		.filter((f) => !f.irrelevant)
-		.reduce((acc, f) => acc + f.featureMatchScore, 0);
-
-	return { paper, features, filterMatchScore };
-}
-
-function shortenId(paper: OpenAlexPaper) {
-	return {
-		...paper,
-		id: paper.data.id.replace("https://openalex.org/", ""),
-	};
-}
-
-function withTopics(paper: OpenAlexPaper) {
-	return !!paper.data.topics?.length;
-}
 
 async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 	const constrainedFilter = getOpenAlexFilter(rankedFeatures, true);

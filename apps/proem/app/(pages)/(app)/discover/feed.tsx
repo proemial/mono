@@ -12,7 +12,7 @@ import { fetchFeedByTopic } from "@/app/(pages)/(app)/discover/fetch-feed";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
 import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
 import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
-import { RankedPaper } from "@/app/data/fetch-by-features";
+import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
 
 // 1-4 is fetched without scrolling
 const initialPageSize = 4;
