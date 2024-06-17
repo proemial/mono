@@ -23,7 +23,7 @@ export function Checkbox({ children, id, ...rest }: CheckboxProps) {
 		return (
 			<div className="flex items-center space-x-4">
 				<Check id={id} {...rest} />
-				<Label htmlFor={id} className="text-base">
+				<Label htmlFor={id} className="text-base cursor-pointer">
 					{children}
 				</Label>
 			</div>

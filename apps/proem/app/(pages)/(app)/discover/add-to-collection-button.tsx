@@ -13,24 +13,26 @@ type Bookmarks = Record<PaperId, CollectionId[]>;
 export type AddToCollectionButtonProps = {
 	paperId: PaperId;
 	bookmarks: Bookmarks;
+	customCollectionId?: CollectionId;
 };
 
 export function AddToCollectionButton({
 	paperId,
 	bookmarks,
+	customCollectionId,
 }: AddToCollectionButtonProps) {
 	const { user } = useUser();
 	if (!user) {
 		return null;
 	}
-	const defaultCollectionId = user.id;
+	const collectionId = customCollectionId ?? user.id;
 
 	const [optimisticBookmarks, addOptimisticBookmarks] = useOptimistic<
 		Bookmarks,
 		{ paperId: PaperId }
 	>(bookmarks, (state, { paperId }) => ({
 		...state,
-		[paperId]: [defaultCollectionId],
+		[paperId]: [collectionId],
 	}));
 
 	const currentBookmark = optimisticBookmarks[paperId];
@@ -50,12 +52,15 @@ export function AddToCollectionButton({
 				}
 
 				addOptimisticBookmarks({ paperId });
+				const newBookmarksCollectionId = collectionId;
 				const optimisticBookmarksWithExtraOptimism = {
 					...optimisticBookmarks,
-					[paperId]: [defaultCollectionId],
+					[paperId]: [newBookmarksCollectionId],
 				}[paperId];
+
 				showCollectionNotification({
 					...bookmark,
+					newBookmarksCollectionId,
 					bookmarks: optimisticBookmarksWithExtraOptimism,
 				});
 				await addPaperToDefaultCollection({ paperId });

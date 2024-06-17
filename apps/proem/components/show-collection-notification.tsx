@@ -72,16 +72,25 @@ function CollectionSelector({
 }
 
 type CollectionNotificationProps = CollectionSelectorProps & {
-	onClose?: () => void;
+	newBookmarksCollectionId: string;
 };
 
 export function CollectionManager({
 	onClose,
 	paperId,
 	bookmarks,
+	newBookmarksCollectionId,
 }: CollectionNotificationProps) {
 	const [showSelector, setShowSelector] = useState(false);
 	const [isTouched, setIsTouched] = useState(false);
+	const { user } = useUser();
+	const { data: collections } = useQuery({
+		queryKey: ["collections", user?.id],
+		queryFn: async () => getCollections(user?.id ?? ""),
+	});
+	const currentCollection = collections?.find(
+		({ id }) => id === newBookmarksCollectionId,
+	);
 
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
@@ -106,7 +115,7 @@ export function CollectionManager({
 					<div className="flex items-center space-x-2">
 						<Checkbox checked className="cursor-default" />
 						<span className="text-sm">
-							Added to <strong>Your Collection</strong>
+							Added to <strong>{currentCollection?.name}</strong>
 						</span>
 					</div>
 
@@ -114,7 +123,6 @@ export function CollectionManager({
 						variant="ghost"
 						className="p-2.5 text-sm"
 						onClick={() => {
-							// showCollectionSelector(paperId, bookmarks);
 							setIsTouched(true);
 							setShowSelector(true);
 						}}
@@ -138,7 +146,7 @@ export function showCollectionSelector(props: CollectionSelectorProps) {
 	));
 }
 
-export function showCollectionNotification(props: CollectionSelectorProps) {
+export function showCollectionNotification(props: CollectionNotificationProps) {
 	openUnstyledNotifcation((toastId) => (
 		<CollectionManager
 			{...props}

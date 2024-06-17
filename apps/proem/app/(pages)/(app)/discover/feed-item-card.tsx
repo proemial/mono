@@ -23,7 +23,7 @@ dayjs.extend(relativeTime);
 
 export type FeedItemCardProps = Pick<
 	AddToCollectionButtonProps,
-	"bookmarks"
+	"bookmarks" | "customCollectionId"
 > & {
 	id: string;
 	date: string;
@@ -39,6 +39,7 @@ export const FeedItemCard = ({
 	children,
 	provider,
 	bookmarks,
+	customCollectionId,
 }: FeedItemCardProps) => {
 	const { isSignedIn } = useUser();
 	const { isInternal } = useInternalUser();
@@ -63,7 +64,11 @@ export const FeedItemCard = ({
 					{isInternal ? (
 						<>
 							{isSignedIn ? (
-								<AddToCollectionButton bookmarks={bookmarks} paperId={id} />
+								<AddToCollectionButton
+									bookmarks={bookmarks}
+									paperId={id}
+									customCollectionId={customCollectionId}
+								/>
 							) : (
 								<SignInDrawer trigger={<PlusCircle className="size-4" />} />
 							)}
