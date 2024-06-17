@@ -37,7 +37,7 @@ function CollectionSelector({
 				{collections?.map(({ id, name }) => (
 					<div key={id} className="px-4 py-2 text-base">
 						<Checkbox
-							key={id}
+							id={id}
 							defaultChecked={bookmarks?.some(
 								(collectionIdFromExistingBookmarks) =>
 									collectionIdFromExistingBookmarks === id,
