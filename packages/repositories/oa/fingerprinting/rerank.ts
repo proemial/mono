@@ -3,9 +3,6 @@ import { bucketSort } from "./bucket-sort";
 import { FeatureType, RankedFeature, getFeatures } from "./features";
 import { getFingerprint } from "./fingerprints";
 
-// Max number of papers to cache for the feed
-const MAX_PAPERS = 90;
-
 export type RankedPaperFeature = {
 	id: string;
 	label: string;
@@ -20,16 +17,29 @@ export type RankedPaper = {
 	filterMatchScore: number;
 };
 
+export type RankedPaperId = {
+	id: string;
+	features: RankedPaperFeature[];
+	filterMatchScore: number;
+};
+
 export function rerankAndLimit(
 	papers: OpenAlexPaper[],
 	filter: RankedFeature[],
-): RankedPaper[] {
+): RankedPaperId[] {
 	const ranked = papers
 		.filter(withTopics) // Filter out papers without topics
 		.map(shortenId)
 		.map((paper) => rankFeature(paper, filter));
 
-	return sort(ranked).slice(0, MAX_PAPERS);
+	return sort(ranked).map(
+		(p) =>
+			({
+				filterMatchScore: p.filterMatchScore,
+				features: p.features,
+				id: p.paper.id,
+			}) as RankedPaperId,
+	);
 }
 
 function sort(papers: RankedPaper[]) {

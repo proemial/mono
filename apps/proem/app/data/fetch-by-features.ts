@@ -1,7 +1,7 @@
 import { fetchWithAbstract } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
 import {
-	RankedPaper,
+	RankedPaperId,
 	rerankAndLimit,
 } from "@proemial/repositories/oa/fingerprinting/rerank";
 import {
@@ -28,22 +28,29 @@ const MAX_PAGES = 10;
 // Cache feed papers for 1 hour
 const CACHE_FOR = 60 * 60; // 1 hour
 
-export const fetchAndRerankPapers = async (
+export const fetchAndRerankPaperIds = async (
 	{ features, days }: { features?: RankedFeature[]; days?: number },
 	{ limit, offset }: { limit?: number; offset?: number } = {},
 	nocache?: boolean,
-): Promise<{ meta: OpenAlexMeta; papers: RankedPaper[] }> => {
+): Promise<{ meta: OpenAlexMeta; rankedIds: RankedPaperId[] }> => {
 	const pageLimit = limit ?? 25;
 	const pageOffset = offset ?? 1;
 
 	const cacheWorker = async (f: RankedFeature[], d: number) => {
 		const allPapers = await fetchAllPapers(d, f);
-		const papers = rerankAndLimit(allPapers.papers, f);
+		const paperIds = rerankAndLimit(allPapers.papers, f);
 
-		console.log("Fetched papers", papers.length, "of", allPapers.papers.length);
+		console.log(
+			"Fetched papers",
+			paperIds.length,
+			"of",
+			allPapers.papers.length,
+		);
+		console.log("caching", paperIds);
+
 		return {
 			meta: allPapers.meta,
-			papers,
+			papers: paperIds,
 		};
 	};
 
@@ -63,7 +70,7 @@ export const fetchAndRerankPapers = async (
 
 	return {
 		...cached,
-		papers: cached.papers.slice(pageOffset, pageOffset + pageLimit),
+		rankedIds: cached.papers.slice(pageOffset, pageOffset + pageLimit),
 	};
 };
 

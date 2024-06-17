@@ -2,10 +2,11 @@
 import { summarise } from "@/app/prompts/summarise-title";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Redis } from "@proemial/redis/redis";
-import { fetchAndRerankPapers } from "./fetch-by-features";
+import { fetchAndRerankPaperIds } from "./fetch-by-features";
 import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
+import { fetchPaper } from "../(pages)/(app)/paper/oa/[id]/fetch-paper";
 
-type FetchFeedParams = Required<Parameters<typeof fetchAndRerankPapers>>;
+type FetchFeedParams = Required<Parameters<typeof fetchAndRerankPaperIds>>;
 
 export async function fetchFeedByFeatures(
 	params: FetchFeedParams[0],
@@ -13,7 +14,7 @@ export async function fetchFeedByFeatures(
 	nocache?: boolean,
 ) {
 	const nextOffset = (options?.offset ?? 1) + 1;
-	const { meta, papers: rankedPapers } = await fetchAndRerankPapers(
+	const { meta, rankedIds } = await fetchAndRerankPaperIds(
 		params,
 		{
 			...options,
@@ -22,12 +23,12 @@ export async function fetchFeedByFeatures(
 		nocache,
 	);
 
-	if (!rankedPapers.length) {
+	if (!rankedIds.length) {
 		throw new Error("No papers found.");
 	}
 
 	const cachedPapers = await Redis.papers.getAll(
-		rankedPapers.map((rankedPaper) => rankedPaper.paper?.id).filter(Boolean),
+		rankedIds.map((rankedId) => rankedId?.id).filter(Boolean),
 	);
 
 	const cachedPapersIds = cachedPapers
@@ -37,19 +38,19 @@ export async function fetchFeedByFeatures(
 		)
 		.filter(Boolean);
 
-	const cacheMisses = rankedPapers.filter(
-		(rankedPaper) => !cachedPapersIds.includes(rankedPaper.paper.id),
+	const cacheMisses = rankedIds.filter(
+		(rankedPaper) => !cachedPapersIds.includes(rankedPaper.id),
 	);
 
 	if (cacheMisses.length === 0) {
 		return {
 			count: meta.count,
-			rows: rankedPapers.map(
+			rows: rankedIds.map(
 				(rankedPaper) =>
 					({
 						...rankedPaper,
 						paper: cachedPapers.find(
-							(cachedPaper) => cachedPaper?.id === rankedPaper.paper.id,
+							(cachedPaper) => cachedPaper?.id === rankedPaper.id,
 						),
 					}) as RankedPaper,
 			),
@@ -58,8 +59,8 @@ export async function fetchFeedByFeatures(
 	}
 
 	const enhancedPapers = await Promise.all(
-		rankedPapers.map(async (rankedPaper) => {
-			const paper = rankedPaper.paper;
+		rankedIds.map(async (rankedId) => {
+			const paper = await fetchPaper(rankedId.id);
 			const paperTitle = paper?.data?.title;
 			const abstract = paper?.data?.abstract;
 			const generatedTitle = paper?.generated?.title;
@@ -72,7 +73,7 @@ export async function fetchFeedByFeatures(
 					: { title };
 
 				return {
-					...rankedPaper,
+					...rankedId,
 					paper: { ...paper, generated },
 				};
 			}
