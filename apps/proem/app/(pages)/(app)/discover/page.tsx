@@ -119,12 +119,12 @@ async function getFilter(params: {
 	}
 
 	const history = await getBookmarksAndHistory();
-	const fingerprints = await fetchFingerprints(history);
+	const fingerprints = await fetchFingerprints(...history);
 	const { filter, allFeatures } = getFeatureFilter(
 		fingerprints,
 		params.weightsRaw,
 	);
-	const titles = params.debug ? await fetchPapersTitles(history) : undefined;
+	const titles = params.debug ? await fetchPapersTitles(...history) : undefined;
 
 	return { features: filter, days: params.days, titles, all: allFeatures };
 }

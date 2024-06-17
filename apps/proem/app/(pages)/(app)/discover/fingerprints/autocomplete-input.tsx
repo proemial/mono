@@ -36,7 +36,9 @@ export function AutocompleteInput() {
 	useEffect(() => {
 		if (ids) {
 			const fetchData = async () => {
-				const papers = await fetchPapersTitles(ids?.split(",") ?? []);
+				const papers = (await fetchPapersTitles(ids?.split(",") ?? [])).flatMap(
+					(f) => f,
+				);
 				if (papers) {
 					setOptions(papers.map((p) => ({ value: p.id, label: p.title })));
 				}

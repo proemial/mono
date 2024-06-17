@@ -49,7 +49,7 @@ export default async function ({ params }: PageProps) {
 		);
 	}
 
-	const fingerprints = await fetchFingerprints([paperIds]);
+	const fingerprints = await fetchFingerprints(paperIds);
 	const { filter: features } = getFeatureFilter(fingerprints);
 	const { rows } = await fetchFeedByFeatures(
 		{ features, days: FEED_DEFAULT_DAYS },

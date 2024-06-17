@@ -11,7 +11,7 @@ type WithTitle = {
 	title: string;
 };
 
-export async function fetchPapersTitles(idGroups: Array<string[]>) {
+export async function fetchPapersTitles(...idGroups: Array<string[]>) {
 	return await Promise.all(
 		idGroups.map((ids) => fetchPapers<WithTitle[]>(ids, "id,title")),
 	);
@@ -19,7 +19,7 @@ export async function fetchPapersTitles(idGroups: Array<string[]>) {
 
 // TODO: Support lastRead / readCount
 export async function fetchFingerprints(
-	idGroups: Array<string[]>,
+	...idGroups: Array<string[]>
 ): Promise<Array<Fingerprint[]>> {
 	return await Promise.all(
 		idGroups.map((ids) =>

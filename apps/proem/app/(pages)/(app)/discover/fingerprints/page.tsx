@@ -47,7 +47,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 		}
 	}
 
-	const fingerprints = await fetchFingerprints([ids]);
+	const fingerprints = await fetchFingerprints(ids);
 	const { allFeatures, filter } = getFeatureFilter(
 		fingerprints,
 		searchParams?.weights,
