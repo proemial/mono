@@ -2,9 +2,10 @@ import { auth } from "@clerk/nextjs/server";
 import { neonDb } from "@proemial/data";
 import { eq } from "drizzle-orm";
 import { PaperActivity, users } from "@proemial/data/neon/schema";
+import dayjs from "dayjs";
 
 // Max no. of papers from read history to use in filter
-const MAX_COUNT = 10;
+const MAX_COUNT = 30;
 
 export async function getHistory() {
 	const ids = [];
@@ -29,11 +30,11 @@ export async function getHistory() {
 function sortAndFilter(readHistory?: PaperActivity[]) {
 	const maxCount = MAX_COUNT;
 
-	const sortedHistory = readHistory?.sort((a, b) => b.noOfReads - a.noOfReads);
-	const multiples = sortedHistory?.filter((p) => p.noOfReads > 1);
-	if (multiples?.length) {
-		return multiples.slice(0, maxCount);
-	}
+	const sortedHistory = readHistory
+		?.sort(
+			(a, b) => dayjs(b.lastReadAt).valueOf() - dayjs(a.lastReadAt).valueOf(),
+		)
+		.sort((a, b) => b.noOfReads - a.noOfReads);
 
 	return sortedHistory?.slice(0, maxCount);
 }
