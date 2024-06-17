@@ -73,7 +73,7 @@ export default async function ({ params, children }: PageProps) {
 	return (
 		<>
 			<NavBarV2 action={<OpenSearchAction />} isInternalUser={isInternal}>
-				<SelectSpaceHeader collectionName={collection.name} />
+				<SelectSpaceHeader />
 			</NavBarV2>
 			<Main>
 				<div className="flex flex-col grow gap-10">

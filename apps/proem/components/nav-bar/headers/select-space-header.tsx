@@ -1,29 +1,65 @@
-import { auth } from "@clerk/nextjs/server";
-import { neonDb } from "@proemial/data";
-import { collections } from "@proemial/data/neon/schema";
+"use client";
+
+import { getCollections } from "@/app/profile/actions";
+import { useUser } from "@clerk/nextjs";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "@proemial/shadcn-ui";
 import { ChevronRight } from "@untitled-ui/icons-react";
-import { eq } from "drizzle-orm";
+import { useParams, useRouter } from "next/navigation";
+import { useQuery } from "react-query";
 
-type Props = {
-	collectionName?: string;
-};
+export const SelectSpaceHeader = () => {
+	const { user } = useUser();
+	const params = useParams();
+	const router = useRouter();
 
-export const SelectSpaceHeader = async ({ collectionName }: Props) => {
-	const { userId } = auth();
-	if (!userId) {
-		throw new Error("User is missing");
-	}
-
-	const userCollections = await neonDb.query.collections.findMany({
-		where: eq(collections.ownerId, userId),
+	const { data: collections } = useQuery({
+		queryKey: ["collections", user?.id],
+		queryFn: async () => getCollections(user?.id ?? ""),
+		enabled: !!user?.id,
 	});
 
-	// TODO: Select w/ user's collections
+	const collectionName = collections?.find(
+		(collection) => collection.slug === params.id,
+	)?.name;
+
+	const handleValueChange = (value: string) => {
+		router.push(`/collection/${value}`);
+	};
+
+	if (!collectionName) {
+		return (
+			<div className="flex gap-1 items-center">
+				<div>For You</div>
+				<ChevronRight className="size-4" />
+			</div>
+		);
+	}
 
 	return (
 		<div className="flex gap-1 items-center">
-			<div>{collectionName ?? "For You"}</div>
-			<ChevronRight className="size-4" />
+			<Select onValueChange={handleValueChange} value={params.id as string}>
+				<SelectTrigger className="border-none flex gap-2 text-lg">
+					<SelectValue placeholder={collectionName} />
+				</SelectTrigger>
+				<SelectContent>
+					<SelectGroup>
+						<SelectLabel>Switch Space</SelectLabel>
+						{collections?.map((collection) => (
+							<SelectItem key={collection.id} value={collection.slug}>
+								{collection.name}
+							</SelectItem>
+						))}
+					</SelectGroup>
+				</SelectContent>
+			</Select>
 		</div>
 	);
 };
