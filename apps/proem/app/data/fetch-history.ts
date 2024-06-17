@@ -8,15 +8,18 @@ import { getBookmarksByUserId } from "../(pages)/(app)/discover/get-bookmarks-by
 // Max no. of papers from read history to use in filter
 const MAX_COUNT = 30;
 
-export async function getBookmarksAndHistory(): Promise<Array<string[]>> {
+export async function getBookmarksAndHistory(
+	user?: string,
+): Promise<Array<string[]>> {
 	const { userId } = auth();
+	const uid = user ?? userId;
 
-	if (userId) {
+	if (uid) {
 		const user = await neonDb.query.users.findFirst({
-			where: eq(users.id, userId),
+			where: eq(users.id, uid),
 		});
 
-		const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
+		const bookmarks = uid ? await getBookmarksByUserId(uid) : {};
 		const bookmarkIds = Object.keys(bookmarks);
 
 		const readHistoryIds = sortAndFilter(user?.paperActivities ?? [])?.map(
