@@ -22,7 +22,14 @@ export const mapAnswerToAnswerEngine = (
 				acc.existingData.push({
 					type: "papers-fetched" as const,
 					transactionId,
-					data: existingPapers,
+					data: {
+						papers: existingPapers.papers.map(
+							({ publicationDate, ...restPaper }) => ({
+								...restPaper,
+								published: publicationDate,
+							}),
+						),
+					},
 				});
 			}
 

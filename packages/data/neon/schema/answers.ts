@@ -27,8 +27,12 @@ export const answers = pgTable("answers", {
 	papers:
 		// TODO! infer from centralised paper schema?
 		jsonb("papers").$type<{
-			// TODO! Add date
-			papers: { link: string; abstract: string; title: string }[];
+			papers: {
+				link: string;
+				abstract: string;
+				title: string;
+				publicationDate: string;
+			}[];
 		}>(),
 });
 
