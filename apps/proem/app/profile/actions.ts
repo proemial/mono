@@ -9,6 +9,7 @@ import {
 	collections,
 } from "@proemial/data/neon/schema";
 import { and, asc, eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 export const getCollections = async (userId: string) => {
@@ -36,6 +37,7 @@ export const editCollection = async (
 	collection: Collection,
 ) => {
 	await authAndRatelimit(userId);
+	revalidatePath("/collection/[id]", "layout");
 	return await neonDb
 		.update(collections)
 		.set({
@@ -53,6 +55,7 @@ export const deleteCollection = async (
 	collectionId: Collection["id"],
 ) => {
 	await authAndRatelimit(userId);
+	revalidatePath("/collection/[id]", "layout");
 	return await neonDb
 		.delete(collections)
 		.where(
