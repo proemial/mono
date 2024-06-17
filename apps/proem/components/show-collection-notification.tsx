@@ -31,7 +31,7 @@ function CollectionSelector({
 	});
 
 	return (
-		<Notification>
+		<Notification closeOnBlur>
 			<div className="divide-y pb-3">
 				<p className="font-semibold text-center py-4">Added to Collection</p>
 				{collections?.map(({ id, name }) => (
@@ -85,7 +85,6 @@ export function CollectionManager({
 
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
-			console.log("working");
 			if (!isTouched && !showSelector) {
 				onClose?.();
 			}
@@ -95,7 +94,7 @@ export function CollectionManager({
 	}, [showSelector, isTouched, onClose]);
 
 	return (
-		<Notification>
+		<Notification closeOnBlur={showSelector}>
 			{showSelector ? (
 				<CollectionSelector
 					paperId={paperId}
