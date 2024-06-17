@@ -1,57 +1,9 @@
-import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
-import { generate } from "@/app/(pages)/(app)/paper/oa/[id]/llm-generate";
-import { PaperReader } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader";
-import { PaperReaderSkeleton } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-skeleton";
-import { getInternalUser } from "@/app/hooks/get-internal-user";
-import { notFound } from "next/navigation";
-import { Suspense } from "react";
-import {
-	PaperPost,
-	getOrgMemberPaperPosts,
-	getOwnPaperPosts,
-} from "../../paper-post-utils";
-import { addPaperActivity } from "./paper-activity";
-
-const description = "Read science fast";
+import PaperPage from "./paper-page";
 
 type Props = {
 	params: { id: string };
 };
 
-export default async function ReaderPage({ params }: Props) {
-	const fetchedPaperPromise = fetchPaper(params.id).then((paper) => {
-		if (!paper) {
-			notFound();
-		}
-
-		return paper;
-	});
-
-	const generatedPaperPromise = fetchedPaperPromise.then((paper) => {
-		return generate(paper);
-	});
-
-	// TODO: Remove feature flag
-	const { isInternal } = getInternalUser();
-	// Get paper posts from org members, or user's own posts if there are none
-	let paperPosts: PaperPost[] = [];
-	if (isInternal) {
-		paperPosts = await getOrgMemberPaperPosts(params.id);
-		if (paperPosts.length === 0) {
-			paperPosts = await getOwnPaperPosts(params.id);
-		}
-	}
-
-	const addPaperActivityPromise = addPaperActivity(params.id);
-
-	return (
-		<Suspense fallback={<PaperReaderSkeleton />}>
-			<PaperReader
-				fetchedPaperPromise={fetchedPaperPromise}
-				generatedPaperPromise={generatedPaperPromise}
-				addPaperActivityPromise={addPaperActivityPromise}
-				paperPosts={paperPosts}
-			/>
-		</Suspense>
-	);
+export default async function OAPaperPage({ params }: Props) {
+	return <PaperPage paperId={params.id} type="oa" />;
 }
