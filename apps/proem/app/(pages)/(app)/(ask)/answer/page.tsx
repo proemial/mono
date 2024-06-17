@@ -1,4 +1,5 @@
 import { Answer } from "@/app/(pages)/(app)/(ask)/answer/[slug]/answer";
+import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
 import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
 import { AskHeader } from "@/components/nav-bar/headers/ask-header";
@@ -16,10 +17,11 @@ export default function AnswerPage({ searchParams }: Props) {
 	if (!initialQuestion) {
 		redirect("/");
 	}
+	const { isInternal } = getInternalUser();
 
 	return (
 		<>
-			<NavBarV2 action={<GoBackAction />}>
+			<NavBarV2 action={<GoBackAction />} isInternalUser={isInternal}>
 				<AskHeader />
 			</NavBarV2>
 			<Main>

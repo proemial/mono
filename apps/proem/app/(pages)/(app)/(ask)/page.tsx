@@ -1,3 +1,4 @@
+import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { ChatInput } from "@/components/chat-input";
 import { ProemLogo } from "@/components/icons/brand/logo";
 import { Main } from "@/components/main";
@@ -19,10 +20,11 @@ export const metadata: Metadata = {
 export default function AskPage() {
 	// TODO: Fetch top nice starters from DB
 	const starters = getThreeRandomStarters();
+	const { isInternal } = getInternalUser();
 
 	return (
 		<>
-			<NavBarV2 action={<GoBackAction />}>
+			<NavBarV2 action={<GoBackAction />} isInternalUser={isInternal}>
 				<AskHeader />
 			</NavBarV2>
 			<Main>

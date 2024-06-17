@@ -7,6 +7,7 @@ import {
 	NavigationMenuList,
 } from "@proemial/shadcn-ui";
 import { ReactNode } from "react";
+import { NavigationMenuBar } from "../navigation-menu-bar";
 
 type Props = {
 	/**
@@ -19,9 +20,19 @@ type Props = {
 	 * e.g. an icon button.
 	 */
 	action?: ReactNode;
+	/**
+	 * New nav bar will only be displayed for internal users.
+	 * @deprecated This prop will be removed once we launch the collections
+	 * feature which uses new navigation.
+	 */
+	isInternalUser: boolean;
 };
 
-export const NavBarV2 = ({ children, action }: Props) => {
+export const NavBarV2 = ({ children, action, isInternalUser }: Props) => {
+	if (!isInternalUser) {
+		return <NavigationMenuBar />;
+	}
+
 	return (
 		<NavigationMenu>
 			<NavigationMenuList className="justify-between flex-nowrap">

@@ -39,6 +39,7 @@ export default async function DiscoverPage({ searchParams }: Props) {
 		weightsRaw: searchParams?.weights,
 	};
 	const { userId } = auth();
+	const { isInternal } = getInternalUser();
 
 	const [filter, bookmarks] = await Promise.all([
 		getFilter(params),
@@ -47,7 +48,7 @@ export default async function DiscoverPage({ searchParams }: Props) {
 
 	return (
 		<>
-			<NavBarV2 action={<OpenSearchAction />}>
+			<NavBarV2 action={<OpenSearchAction />} isInternalUser={isInternal}>
 				<SelectSpaceHeader />
 			</NavBarV2>
 			<Main>

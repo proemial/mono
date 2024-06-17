@@ -1,6 +1,7 @@
 import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getHistory } from "@/app/data/fetch-history";
+import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { FeatureCloud } from "@/components/feature-badges";
 import { Main } from "@/components/main";
 import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
@@ -29,6 +30,7 @@ type Props = {
 };
 
 export default async function FingerprintsPage({ searchParams }: Props) {
+	const { isInternal } = getInternalUser();
 	const { userId } = await auth();
 	const params = {
 		ids: searchParams?.ids?.length ? searchParams.ids : undefined,
@@ -57,7 +59,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 
 	return (
 		<>
-			<NavBarV2 action={<GoBackAction />}>
+			<NavBarV2 action={<GoBackAction />} isInternalUser={isInternal}>
 				<SelectSpaceHeader />
 			</NavBarV2>
 			<Main>

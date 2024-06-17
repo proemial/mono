@@ -72,7 +72,7 @@ export default async function ({ params, children }: PageProps) {
 
 	return (
 		<>
-			<NavBarV2 action={<OpenSearchAction />}>
+			<NavBarV2 action={<OpenSearchAction />} isInternalUser={isInternal}>
 				<SelectSpaceHeader collectionName={collection.name} />
 			</NavBarV2>
 			<Main>

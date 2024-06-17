@@ -1,6 +1,7 @@
 import { Answer } from "@/app/(pages)/(app)/(ask)/answer/[slug]/answer";
 import { mapAnswerToAnswerEngine } from "@/app/(pages)/(app)/(ask)/mapAnswerToAnswerEngine";
 import { answers } from "@/app/api/bot/answer-engine/answers";
+import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
 import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
 import { AskHeader } from "@/components/nav-bar/headers/ask-header";
@@ -18,6 +19,7 @@ export default async function AnswerPage({ params: { slug } }: Props) {
 	const allAnswers = await answers.getBySlug(slug);
 	const { userId } = auth();
 	const [firstAnswer] = allAnswers;
+	const { isInternal } = getInternalUser();
 
 	if (!firstAnswer) {
 		redirect("/");
@@ -31,7 +33,7 @@ export default async function AnswerPage({ params: { slug } }: Props) {
 
 	return (
 		<>
-			<NavBarV2 action={<GoBackAction />}>
+			<NavBarV2 action={<GoBackAction />} isInternalUser={isInternal}>
 				<AskHeader />
 			</NavBarV2>
 			<Main>
