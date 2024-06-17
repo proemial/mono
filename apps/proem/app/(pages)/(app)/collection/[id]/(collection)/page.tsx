@@ -13,7 +13,7 @@ type PageProps = {
 	};
 };
 
-export default async function ({ params }: PageProps) {
+export default async function CollectionPage({ params }: PageProps) {
 	const { userId } = await auth();
 	if (!params?.id) {
 		notFound();
@@ -50,7 +50,7 @@ export default async function ({ params }: PageProps) {
 	);
 
 	return (
-		<div className="space-y-8 my-8">
+		<div className="space-y-8 mb-8">
 			{papers.map(
 				(paper) =>
 					paper && (

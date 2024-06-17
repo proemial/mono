@@ -16,7 +16,7 @@ type PageProps = {
 	};
 };
 
-export default async function ({ params }: PageProps) {
+export default async function StreamPage({ params }: PageProps) {
 	const { userId } = await auth();
 	if (!params?.id) {
 		notFound();
@@ -58,9 +58,14 @@ export default async function ({ params }: PageProps) {
 	const papers = rows.map((row) => row.paper);
 
 	return (
-		<div className="space-y-8 my-8">
+		<div className="space-y-8 mb-8">
 			{papers.map((paper) => (
-				<FeedItem key={paper.id} paper={paper} bookmarks={bookmarks} />
+				<FeedItem
+					key={paper.id}
+					paper={paper}
+					bookmarks={bookmarks}
+					customCollectionId={collection.id}
+				/>
 			))}
 		</div>
 	);

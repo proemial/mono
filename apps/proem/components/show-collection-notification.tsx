@@ -31,13 +31,13 @@ function CollectionSelector({
 	});
 
 	return (
-		<Notification>
+		<Notification closeOnBlur>
 			<div className="divide-y pb-3">
 				<p className="font-semibold text-center py-4">Added to Collection</p>
 				{collections?.map(({ id, name }) => (
 					<div key={id} className="px-4 py-2 text-base">
 						<Checkbox
-							key={id}
+							id={id}
 							defaultChecked={bookmarks?.some(
 								(collectionIdFromExistingBookmarks) =>
 									collectionIdFromExistingBookmarks === id,
@@ -72,30 +72,39 @@ function CollectionSelector({
 }
 
 type CollectionNotificationProps = CollectionSelectorProps & {
-	onClose?: () => void;
+	newBookmarksCollectionId: string;
 };
 
 export function CollectionManager({
 	onClose,
 	paperId,
 	bookmarks,
+	newBookmarksCollectionId,
 }: CollectionNotificationProps) {
-	const [isOpen, setIsOpen] = useState(false);
+	const [showSelector, setShowSelector] = useState(false);
 	const [isTouched, setIsTouched] = useState(false);
+	const { user } = useUser();
+	const { data: collections } = useQuery({
+		queryKey: ["collections", user?.id],
+		queryFn: async () => getCollections(user?.id ?? ""),
+	});
+	const currentCollection = collections?.find(
+		({ id }) => id === newBookmarksCollectionId,
+	);
 
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
-			if (!isTouched && isOpen) {
+			if (!isTouched && !showSelector) {
 				onClose?.();
 			}
 		}, TOAST_OPEN_DURATION);
 
 		return () => clearTimeout(timeoutId);
-	}, [isOpen, isTouched, onClose]);
+	}, [showSelector, isTouched, onClose]);
 
 	return (
-		<Notification>
-			{isOpen ? (
+		<Notification closeOnBlur={showSelector}>
+			{showSelector ? (
 				<CollectionSelector
 					paperId={paperId}
 					bookmarks={bookmarks}
@@ -106,7 +115,7 @@ export function CollectionManager({
 					<div className="flex items-center space-x-2">
 						<Checkbox checked className="cursor-default" />
 						<span className="text-sm">
-							Added to <strong>Your Collection</strong>
+							Added to <strong>{currentCollection?.name}</strong>
 						</span>
 					</div>
 
@@ -114,9 +123,8 @@ export function CollectionManager({
 						variant="ghost"
 						className="p-2.5 text-sm"
 						onClick={() => {
-							// showCollectionSelector(paperId, bookmarks);
 							setIsTouched(true);
-							setIsOpen(true);
+							setShowSelector(true);
 						}}
 					>
 						Manage
@@ -138,7 +146,7 @@ export function showCollectionSelector(props: CollectionSelectorProps) {
 	));
 }
 
-export function showCollectionNotification(props: CollectionSelectorProps) {
+export function showCollectionNotification(props: CollectionNotificationProps) {
 	openUnstyledNotifcation((toastId) => (
 		<CollectionManager
 			{...props}

@@ -4,7 +4,11 @@ import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { FeatureCloud } from "@/components/feature-badges";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
-import { auth } from "@clerk/nextjs";
+import { Main } from "@/components/main";
+import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
+import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
+import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { auth } from "@clerk/nextjs/server";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import {
 	fetchFingerprints,
@@ -35,6 +39,7 @@ export default async function DiscoverPage({ searchParams }: Props) {
 		weightsRaw: searchParams?.weights,
 	};
 	const { userId } = auth();
+	const { isInternal } = getInternalUser();
 
 	const [filter, bookmarks] = await Promise.all([
 		getFilter(params),
@@ -42,37 +47,46 @@ export default async function DiscoverPage({ searchParams }: Props) {
 	]);
 
 	return (
-		<div className="space-y-6">
-			<Feed
-				filter={filter}
-				debug={params.debug}
-				bookmarks={bookmarks}
-				nocache={searchParams?.nocache}
-			>
-				{!filter.features && (
-					<div className="-my-4">
-						<HorisontalScrollArea>
-							<FeedFilter
-								items={[
-									"all",
-									...OaFields.map((field) => field.display_name.toLowerCase()),
-								]}
-								rootPath="/discover"
-							/>
-						</HorisontalScrollArea>
-					</div>
-				)}
-				{params.debug && (
-					<>
-						<Titles
-							bookmarked={filter.titles?.at(0)}
-							read={filter.titles?.at(1)}
-						/>
-						<FeatureCloud features={filter.all} />
-					</>
-				)}
-			</Feed>
-		</div>
+		<>
+			<NavBarV2 action={<OpenSearchAction />} isInternalUser={isInternal}>
+				<SelectSpaceHeader />
+			</NavBarV2>
+			<Main>
+				<div className="space-y-6">
+					<Feed
+						filter={filter}
+						debug={params.debug}
+						bookmarks={bookmarks}
+						nocache={searchParams?.nocache}
+					>
+						{!filter.features && (
+							<div className="-my-4">
+								<HorisontalScrollArea>
+									<FeedFilter
+										items={[
+											"all",
+											...OaFields.map((field) =>
+												field.display_name.toLowerCase(),
+											),
+										]}
+										rootPath="/discover"
+									/>
+								</HorisontalScrollArea>
+							</div>
+						)}
+						{params.debug && (
+							<>
+								<Titles
+									bookmarked={filter.titles?.at(0)}
+									read={filter.titles?.at(1)}
+								/>
+								<FeatureCloud features={filter.all} />
+							</>
+						)}
+					</Feed>
+				</div>
+			</Main>
+		</>
 	);
 }
 

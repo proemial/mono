@@ -28,14 +28,16 @@ export const About = () => {
 	return (
 		<div className="flex flex-col gap-4 justify-between h-full w-full mt-4">
 			<div className="space-y-4 mt-4">
-				<DrawerClose asChild>
-					<Link href="/" className="text-sm">
-						<div className="flex gap-2 items-center">
-							<MessageQuestionCircle className="size-4 opacity-85" />
-							<div className="text-sm">Ask anything</div>
-						</div>
-					</Link>
-				</DrawerClose>
+				{isInternal && (
+					<DrawerClose asChild>
+						<Link href="/" className="text-sm">
+							<div className="flex gap-2 items-center">
+								<MessageQuestionCircle className="size-4 opacity-85" />
+								<div className="text-sm">Ask anything</div>
+							</div>
+						</Link>
+					</DrawerClose>
+				)}
 				<div className="flex gap-2 items-center justify-between">
 					<div className="flex gap-2 items-center">
 						<Drop className="size-4 opacity-85" />

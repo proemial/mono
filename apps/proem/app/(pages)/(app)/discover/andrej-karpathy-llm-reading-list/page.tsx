@@ -1,6 +1,10 @@
 import { fetchReadingList } from "@/app/(pages)/(app)/discover/andrej-karpathy-llm-reading-list/fetch-list";
 import { StaticFeed } from "@/app/(pages)/(app)/discover/andrej-karpathy-llm-reading-list/static-feed";
 import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { getInternalUser } from "@/app/hooks/get-internal-user";
+import { Main } from "@/components/main";
+import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
+import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { auth } from "@clerk/nextjs";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Metadata } from "next";
@@ -24,12 +28,20 @@ export default async function AndrejKarpathyLLMReadingList() {
 	const readingList = await fetchReadingList();
 	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 	const feed = readingList.rows.filter(Boolean) as OpenAlexPaper[];
+	const { isInternal } = getInternalUser();
 
 	return (
-		<div className="space-y-6">
-			<StaticFeed feed={feed} bookmarks={bookmarks}>
-				Andrej Karpathy's LLM Reading List
-			</StaticFeed>
-		</div>
+		<>
+			<NavBarV2 action={<OpenSearchAction />} isInternalUser={isInternal}>
+				<div className="truncate">Andrej Karpathy's LLM Reading List</div>
+			</NavBarV2>
+			<Main>
+				<div className="space-y-6">
+					<StaticFeed feed={feed} bookmarks={bookmarks}>
+						Andrej Karpathy's LLM Reading List
+					</StaticFeed>
+				</div>
+			</Main>
+		</>
 	);
 }

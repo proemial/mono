@@ -1,5 +1,9 @@
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { IconButton } from "@/components/collections/icon-button";
+import { Main } from "@/components/main";
+import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
+import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
+import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import {
 	OrganizationMembershipPublicUserData,
 	auth,
@@ -67,52 +71,58 @@ export default async function ({ params, children }: PageProps) {
 		.sort((a, b) => (a.firstName ?? "").localeCompare(b.firstName ?? ""));
 
 	return (
-		<div className="flex flex-col grow gap-4">
-			<div className="flex flex-col gap-3">
-				<div className="flex gap-2 justify-between items-center">
-					<Header2>{collection.name}</Header2>
-					<Header5>{collection.collectionsToPapers.length} papers</Header5>
-				</div>
-				<Paragraph>{collection.description}</Paragraph>
-				<div className="flex gap-2 justify-between items-center">
-					<div className="flex gap-2 items-center">
-						<Avatar className="size-6 hover:brightness-110 duration-200">
-							<AvatarImage
-								src={user.imageUrl}
-								title={`${user.firstName} ${user.lastName} (you)`}
-							/>
-						</Avatar>
-						{otherOrgMembersUserData.map((orgMember) => (
-							<Avatar
-								key={orgMember.userId}
-								className="-ml-[18px] size-6 hover:brightness-110 duration-200"
-								title={`${orgMember.firstName} ${orgMember.lastName}`}
-							>
-								<AvatarImage src={orgMember.imageUrl} />
-							</Avatar>
-						))}
-						<div className="text-sm">
-							{otherOrgMembersUserData.length + 1} members
-						</div>
-					</div>
-					<div className="flex gap-4">
-						<IconButton title="Add a paper…">
-							<FilePlus02 className="size-[18px] opacity-75" />
-						</IconButton>
-						{/* <IconButton>
+		<>
+			<NavBarV2 action={<OpenSearchAction />} isInternalUser={isInternal}>
+				<SelectSpaceHeader />
+			</NavBarV2>
+			<Main>
+				<div className="flex flex-col grow gap-10">
+					<div className="flex flex-col gap-3">
+						<Paragraph>{collection.description}</Paragraph>
+						<div className="flex gap-2 justify-between items-center">
+							<div className="flex gap-2 items-center">
+								<Avatar className="size-6 hover:brightness-110 duration-200">
+									<AvatarImage
+										src={user.imageUrl}
+										title={`${user.firstName} ${user.lastName} (you)`}
+									/>
+								</Avatar>
+								{otherOrgMembersUserData.map((orgMember) => (
+									<Avatar
+										key={orgMember.userId}
+										className="-ml-[18px] size-6 hover:brightness-110 duration-200"
+										title={`${orgMember.firstName} ${orgMember.lastName}`}
+									>
+										<AvatarImage src={orgMember.imageUrl} />
+									</Avatar>
+								))}
+								<div className="text-sm">
+									{otherOrgMembersUserData.length + 1} members
+								</div>
+							</div>
+							<div className="flex gap-4">
+								<IconButton title="Add a paper…">
+									<FilePlus02 className="size-[18px] opacity-75" />
+								</IconButton>
+								{/* <IconButton>
 							<Upload01 className="size-[18px] opacity-75" />
 						</IconButton> */}
+							</div>
+						</div>
 					</div>
+					<div className="flex gap-1 justify-center items-center">
+						<NavButton
+							href={`/collection/${collection.slug}`}
+							title="Collection"
+						/>
+						<NavButton
+							href={`/collection/${collection.slug}/stream`}
+							title="Stream"
+						/>
+					</div>
+					{children}
 				</div>
-			</div>
-			<div className="flex gap-1 justify-center items-center">
-				<NavButton href={`/collection/${collection.slug}`} title="Collection" />
-				<NavButton
-					href={`/collection/${collection.slug}/stream`}
-					title="Stream"
-				/>
-			</div>
-			{children}
-		</div>
+			</Main>
+		</>
 	);
 }

@@ -1,5 +1,9 @@
 import { StaticFeed } from "@/app/(pages)/(app)/discover/andrej-karpathy-llm-reading-list/static-feed";
 import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { getInternalUser } from "@/app/hooks/get-internal-user";
+import { Main } from "@/components/main";
+import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
+import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { auth } from "@clerk/nextjs";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Metadata } from "next";
@@ -32,15 +36,23 @@ export default async function HuggingList({ params: { date } }: Props) {
 	const readingList = await fetchReadingList(date);
 	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 	const feed = readingList.rows.filter(Boolean) as OpenAlexPaper[];
+	const { isInternal } = getInternalUser();
 
 	return (
-		<div className="space-y-6">
-			<StaticFeed feed={feed} bookmarks={bookmarks}>
-				<div className="flex items-center">
-					A hugging tribute to AK
-					<Image className="ml-2 w-6 h-6" src={logo} alt="" />
+		<>
+			<NavBarV2 action={<OpenSearchAction />} isInternalUser={isInternal}>
+				<div className="truncate">A hugging tribute to AK</div>
+			</NavBarV2>
+			<Main>
+				<div className="space-y-6">
+					<StaticFeed feed={feed} bookmarks={bookmarks}>
+						<div className="flex items-center">
+							A hugging tribute to AK
+							<Image className="ml-2 w-6 h-6" src={logo} alt="" />
+						</div>
+					</StaticFeed>
 				</div>
-			</StaticFeed>
-		</div>
+			</Main>
+		</>
 	);
 }

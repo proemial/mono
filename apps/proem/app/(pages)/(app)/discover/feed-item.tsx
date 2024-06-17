@@ -14,7 +14,10 @@ import { FeedItemTag } from "./feed-item-tag";
 
 dayjs.extend(relativeTime);
 
-export type FeedItemProps = Pick<FeedItemCardProps, "bookmarks"> & {
+export type FeedItemProps = Pick<
+	FeedItemCardProps,
+	"bookmarks" | "customCollectionId"
+> & {
 	paper: OpenAlexPaper;
 	fingerprint?: RankedPaperFeature[];
 	provider?: Prefix;
@@ -27,6 +30,7 @@ export default function FeedItem({
 	provider,
 	children,
 	bookmarks,
+	customCollectionId,
 }: FeedItemProps) {
 	const tags = paper.data.topics
 		?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
@@ -56,6 +60,7 @@ export default function FeedItem({
 				field={field}
 				provider={provider}
 				bookmarks={bookmarks}
+				customCollectionId={customCollectionId}
 			>
 				<Markdown>
 					{paper.generated?.title

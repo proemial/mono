@@ -1,6 +1,11 @@
 import { Answer } from "@/app/(pages)/(app)/(ask)/answer/[slug]/answer";
 import { mapAnswerToAnswerEngine } from "@/app/(pages)/(app)/(ask)/mapAnswerToAnswerEngine";
 import { answers } from "@/app/api/bot/answer-engine/answers";
+import { getInternalUser } from "@/app/hooks/get-internal-user";
+import { Main } from "@/components/main";
+import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
+import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
+import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
@@ -14,6 +19,7 @@ export default async function AnswerPage({ params: { slug } }: Props) {
 	const allAnswers = await answers.getBySlug(slug);
 	const { userId } = auth();
 	const [firstAnswer] = allAnswers;
+	const { isInternal } = getInternalUser();
 
 	if (!firstAnswer) {
 		redirect("/");
@@ -26,10 +32,17 @@ export default async function AnswerPage({ params: { slug } }: Props) {
 	);
 
 	return (
-		<Answer
-			existingData={existingData}
-			initialMessages={initialMessages}
-			initialSessionSlug={firstAnswer.slug}
-		/>
+		<>
+			<NavBarV2 action={<GoBackAction />} isInternalUser={isInternal}>
+				<SimpleHeader title="Ask" />
+			</NavBarV2>
+			<Main>
+				<Answer
+					existingData={existingData}
+					initialMessages={initialMessages}
+					initialSessionSlug={firstAnswer.slug}
+				/>
+			</Main>
+		</>
 	);
 }

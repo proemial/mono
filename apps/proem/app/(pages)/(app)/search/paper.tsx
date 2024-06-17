@@ -1,9 +1,9 @@
 "use server";
 import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
 import { auth } from "@clerk/nextjs";
-import FeedItem from "../(pages)/(app)/discover/feed-item";
-import { fetchPaper } from "../(pages)/(app)/paper/oa/[id]/fetch-paper";
-import { generate } from "../(pages)/(app)/paper/oa/[id]/llm-generate";
+import FeedItem from "../discover/feed-item";
+import { fetchPaper } from "../paper/oa/[id]/fetch-paper";
+import { generate } from "../paper/oa/[id]/llm-generate";
 
 export async function Paper({ id }: { id: string }) {
 	const { userId } = await auth();

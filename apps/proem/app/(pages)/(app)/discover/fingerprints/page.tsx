@@ -1,7 +1,12 @@
 import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
+import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { FeatureCloud } from "@/components/feature-badges";
+import { Main } from "@/components/main";
+import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
+import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
+import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { auth } from "@clerk/nextjs";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
@@ -25,6 +30,7 @@ type Props = {
 };
 
 export default async function FingerprintsPage({ searchParams }: Props) {
+	const { isInternal } = getInternalUser();
 	const { userId } = await auth();
 	const params = {
 		ids: searchParams?.ids?.length ? searchParams.ids : undefined,
@@ -54,16 +60,23 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	);
 
 	return (
-		<div className="space-y-6">
-			<Feed
-				filter={{ features: filter, days: params.days }}
-				debug={!searchParams?.clean}
-				nocache={searchParams?.nocache}
-				bookmarks={bookmarks}
-			>
-				<AutocompleteInput />
-				{!searchParams?.clean && <FeatureCloud features={allFeatures} />}
-			</Feed>
-		</div>
+		<>
+			<NavBarV2 action={<GoBackAction />} isInternalUser={isInternal}>
+				<SelectSpaceHeader />
+			</NavBarV2>
+			<Main>
+				<div className="space-y-6">
+					<Feed
+						filter={{ features: filter, days: params.days }}
+						debug={!searchParams?.clean}
+						nocache={searchParams?.nocache}
+						bookmarks={bookmarks}
+					>
+						<AutocompleteInput />
+						{!searchParams?.clean && <FeatureCloud features={allFeatures} />}
+					</Feed>
+				</div>
+			</Main>
+		</>
 	);
 }

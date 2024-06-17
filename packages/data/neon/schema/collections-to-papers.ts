@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
+import { pgTable, primaryKey, text, timestamp } from "drizzle-orm/pg-core";
 import { collections } from "./collections";
 import { papers } from "./papers";
 
@@ -12,6 +12,7 @@ export const collectionsToPapers = pgTable(
 		paperId: text("paper_id")
 			.notNull()
 			.references(() => papers.id),
+		createdAt: timestamp("createdAt").notNull().defaultNow(),
 	},
 	(t) => ({
 		pk: primaryKey({ columns: [t.collectionsId, t.paperId] }),
