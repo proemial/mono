@@ -11,13 +11,21 @@ type WithTitle = {
 	title: string;
 };
 
-export async function fetchPapersTitles(ids: string[]): Promise<WithTitle[]> {
-	return fetchPapers<WithTitle[]>(ids, "id,title");
+export async function fetchPapersTitles(idGroups: Array<string[]>) {
+	return await Promise.all(
+		idGroups.map((ids) => fetchPapers<WithTitle[]>(ids, "id,title")),
+	);
 }
 
 // TODO: Support lastRead / readCount
-export async function fetchFingerprints(ids: string[]): Promise<Fingerprint[]> {
-	return fetchPapers<Fingerprint[]>(ids, "id,topics,keywords,concepts");
+export async function fetchFingerprints(
+	idGroups: Array<string[]>,
+): Promise<Array<Fingerprint[]>> {
+	return await Promise.all(
+		idGroups.map((ids) =>
+			fetchPapers<Fingerprint[]>(ids, "id,topics,keywords,concepts"),
+		),
+	);
 }
 
 async function fetchPapers<T>(ids: string[], select: string): Promise<T> {

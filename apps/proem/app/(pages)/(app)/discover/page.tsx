@@ -64,7 +64,10 @@ export default async function DiscoverPage({ searchParams }: Props) {
 				)}
 				{params.debug && (
 					<>
-						<Titles titles={filter.titles} />
+						<Titles
+							bookmarked={filter.titles?.at(0)}
+							read={filter.titles?.at(1)}
+						/>
 						<FeatureCloud features={filter.all} />
 					</>
 				)}
@@ -73,14 +76,27 @@ export default async function DiscoverPage({ searchParams }: Props) {
 	);
 }
 
-function Titles({ titles }: { titles?: { id: string; title: string }[] }) {
+type WithTitle = { id: string; title: string };
+
+function Titles({
+	bookmarked,
+	read,
+}: { bookmarked?: WithTitle[]; read?: WithTitle[] }) {
 	return (
-		<div className="space-1">
-			<span className="text-xs font-bold mr-1">Read history: </span>
-			{titles?.map((paper) => (
-				<Badge key={paper.id}>{paper.title}</Badge>
-			))}
-		</div>
+		<>
+			<div className="space-1">
+				<span className="text-xs font-bold mr-1">Bookmarked: </span>
+				{bookmarked?.map((paper) => (
+					<Badge key={paper.id}>{paper.title}</Badge>
+				))}
+			</div>
+			<div className="space-1">
+				<span className="text-xs font-bold mr-1">Read: </span>
+				{read?.map((paper) => (
+					<Badge key={paper.id}>{paper.title}</Badge>
+				))}
+			</div>
+		</>
 	);
 }
 
@@ -103,14 +119,12 @@ async function getFilter(params: {
 	}
 
 	const history = await getBookmarksAndHistory();
-	const fingerprints = await fetchFingerprints(history.flatMap((i) => i));
+	const fingerprints = await fetchFingerprints(history);
 	const { filter, allFeatures } = getFeatureFilter(
 		fingerprints,
 		params.weightsRaw,
 	);
-	const titles = params.debug
-		? await fetchPapersTitles(history.flatMap((i) => i))
-		: undefined;
+	const titles = params.debug ? await fetchPapersTitles(history) : undefined;
 
 	return { features: filter, days: params.days, titles, all: allFeatures };
 }

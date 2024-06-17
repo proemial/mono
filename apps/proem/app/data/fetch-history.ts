@@ -26,7 +26,7 @@ export async function getBookmarksAndHistory(): Promise<Array<string[]>> {
 		);
 		console.log("history", readHistoryIds);
 
-		return [readHistoryIds, bookmarkIds];
+		return [bookmarkIds, readHistoryIds];
 	}
 
 	return [];
@@ -35,10 +35,10 @@ export async function getBookmarksAndHistory(): Promise<Array<string[]>> {
 function sortAndFilter(readHistory: PaperActivity[]) {
 	const maxCount = MAX_COUNT;
 
+	const millis = (date: string) => dayjs(date).valueOf();
+
 	const sortedHistory = readHistory
-		?.sort(
-			(a, b) => dayjs(b.lastReadAt).valueOf() - dayjs(a.lastReadAt).valueOf(),
-		)
+		?.sort((a, b) => millis(b.lastReadAt) - millis(a.lastReadAt))
 		.sort((a, b) => b.noOfReads - a.noOfReads);
 
 	return sortedHistory?.slice(0, maxCount);

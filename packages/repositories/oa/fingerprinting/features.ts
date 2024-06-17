@@ -1,3 +1,4 @@
+import { A } from "vitest/dist/reporters-yx5ZTtEV.js";
 import { oaTopicsTranslationMap } from "../taxonomy/oa-topics-compact";
 import { Fingerprint } from "./fingerprints";
 
@@ -26,13 +27,48 @@ export type FeatureFilter = {
 };
 
 export function getFeatureFilter(
-	fingerprints: Fingerprint[],
+	fingerprintGroups: Array<Fingerprint[]>,
 	weightsRaw?: string,
 ): FeatureFilter {
-	if (!fingerprints.length) {
+	if (!fingerprintGroups.length) {
 		return { allFeatures: [], filter: [] };
 	}
 
+	const weights = {
+		topic: 1,
+		concept: 1,
+		keyword: 2,
+	};
+
+	const weightPairs = weightsRaw?.split(",") || [];
+	for (const pair of weightPairs) {
+		const [t, w] = pair.split(":");
+		if (!t || !w) {
+			continue;
+		}
+		const type = t === "t" ? "topic" : t === "c" ? "concept" : "keyword";
+		weights[type] = Number.parseFloat(w);
+	}
+
+	const fingerprints = fingerprintGroups
+		.reverse()
+		.flatMap((f, i) => getRankedFeatureFilter(f, (i + 1) / 10, weights));
+
+	return {
+		allFeatures: fingerprints.reverse().flatMap((f) => f.allFeatures),
+		filter: fingerprints.reverse().flatMap((f) => f.filter),
+	};
+}
+
+function getRankedFeatureFilter(
+	fingerprints: Fingerprint[],
+	importanceFactor: number,
+	weights: {
+		topic: number;
+		concept: number;
+		keyword: number;
+	},
+): FeatureFilter {
 	const rankedFeatureMap = {} as {
 		[key: string]: RankedFeature;
 	};
@@ -41,22 +77,6 @@ export function getFeatureFilter(
 		concepts: [] as string[],
 		keywords: [] as string[],
 	};
-
-	const weights = {
-		topic: 1,
-		concept: 1,
-		keyword: 2,
-	};
-
-	const pairs = weightsRaw?.split(",") || [];
-	for (const pair of pairs) {
-		const [t, w] = pair.split(":");
-		if (!t || !w) {
-			continue;
-		}
-		const type = t === "t" ? "topic" : t === "c" ? "concept" : "keyword";
-		weights[type] = Number.parseFloat(w);
-	}
 
 	for (const fingerprint of fingerprints) {
 		const features = getFeatures(fingerprint);
@@ -68,7 +88,7 @@ export function getFeatureFilter(
 			}
 			const count = rankedFeatureMap[key]?.count ?? 0;
 			const avgScore = rankedFeatureMap[key]?.avgScore ?? 0;
-			const score = feature.score * weights[feature.type];
+			const score = feature.score * weights[feature.type] * importanceFactor;
 			rankedFeatureMap[key] = {
 				...feature,
 				count: count + 1,
