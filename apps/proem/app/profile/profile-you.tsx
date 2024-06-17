@@ -47,16 +47,18 @@ export function ProfileYou() {
 								</div>
 							}
 						/>
-						<div className="flex">
-							<DrawerClose asChild>
-								<Link href="/" className="text-sm">
-									<div className="flex gap-2 items-center">
-										<MessageQuestionCircle className="size-4 opacity-85" />
-										<div className="text-sm">Ask anything</div>
-									</div>
-								</Link>
-							</DrawerClose>
-						</div>
+						{isInternal && (
+							<div className="flex">
+								<DrawerClose asChild>
+									<Link href="/" className="text-sm">
+										<div className="flex gap-2 items-center">
+											<MessageQuestionCircle className="size-4 opacity-85" />
+											<div className="text-sm">Ask anything</div>
+										</div>
+									</Link>
+								</DrawerClose>
+							</div>
+						)}
 					</div>
 				)}
 				{isSignedIn && user && (
