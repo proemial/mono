@@ -4,7 +4,7 @@ import { FeatureType, RankedFeature, getFeatures } from "./features";
 import { getFingerprint } from "./fingerprints";
 
 // Max number of papers to cache for the feed
-const MAX_PAPERS = 100;
+const MAX_PAPERS = 90;
 
 export type RankedPaperFeature = {
 	id: string;
