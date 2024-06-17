@@ -80,22 +80,23 @@ export function CollectionManager({
 	paperId,
 	bookmarks,
 }: CollectionNotificationProps) {
-	const [isOpen, setIsOpen] = useState(false);
+	const [showSelector, setShowSelector] = useState(false);
 	const [isTouched, setIsTouched] = useState(false);
 
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
-			if (!isTouched && isOpen) {
+			console.log("working");
+			if (!isTouched && !showSelector) {
 				onClose?.();
 			}
 		}, TOAST_OPEN_DURATION);
 
 		return () => clearTimeout(timeoutId);
-	}, [isOpen, isTouched, onClose]);
+	}, [showSelector, isTouched, onClose]);
 
 	return (
 		<Notification>
-			{isOpen ? (
+			{showSelector ? (
 				<CollectionSelector
 					paperId={paperId}
 					bookmarks={bookmarks}
@@ -116,7 +117,7 @@ export function CollectionManager({
 						onClick={() => {
 							// showCollectionSelector(paperId, bookmarks);
 							setIsTouched(true);
-							setIsOpen(true);
+							setShowSelector(true);
 						}}
 					>
 						Manage
