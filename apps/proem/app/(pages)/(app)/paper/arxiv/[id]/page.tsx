@@ -4,6 +4,7 @@ import { PaperReaderSkeleton } from "@/app/(pages)/(app)/paper/oa/[id]/paper-rea
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { addPaperActivity } from "../../oa/[id]/paper-activity";
 import {
 	PaperPost,
 	getOrgMemberPaperPosts,
@@ -41,11 +42,14 @@ export default async function ArXivReaderPage({ params }: Props) {
 		}
 	}
 
+	const addPaperActivityPromise = addPaperActivity(params.id);
+
 	return (
 		<Suspense fallback={<PaperReaderSkeleton />}>
 			<PaperReader
 				fetchedPaperPromise={fetchedPaperPromise}
 				generatedPaperPromise={generatedPaperPromise}
+				addPaperActivityPromise={addPaperActivityPromise}
 				paperPosts={paperPosts}
 			/>
 		</Suspense>

@@ -15,17 +15,20 @@ import { PaperPost, paperPostsToMessages } from "../../paper-post-utils";
 type PaperReaderProps = {
 	fetchedPaperPromise: Promise<Omit<OpenAlexPaper, "generated">>;
 	generatedPaperPromise: Promise<OpenAlexPaper>;
+	addPaperActivityPromise: Promise<void>;
 	paperPosts: PaperPost[];
 };
 
 export function PaperReader({
 	fetchedPaperPromise,
 	generatedPaperPromise,
+	addPaperActivityPromise,
 	paperPosts,
 }: PaperReaderProps) {
 	const fetchedPaper = use(fetchedPaperPromise);
 	const generatedPaper = use(generatedPaperPromise);
 	const initialMessages = paperPostsToMessages(paperPosts);
+	void use(addPaperActivityPromise);
 
 	return (
 		<div className="flex flex-col gap-5 h-full justify-between">
