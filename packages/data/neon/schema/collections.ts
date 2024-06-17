@@ -1,12 +1,11 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createId } from "../../lib/create-id";
 import { collectionsToPapers } from "./collections-to-papers";
 
 export const collections = pgTable("collections", {
 	id: text("id")
 		.notNull()
-		.unique()
 		.$defaultFn(() => createId("collection"))
 		.primaryKey(),
 	slug: text("slug")
@@ -16,6 +15,7 @@ export const collections = pgTable("collections", {
 	ownerId: text("owner_id").notNull(),
 	name: text("name").notNull(),
 	description: text("description"),
+	createdAt: timestamp("createdAt").notNull().defaultNow(),
 });
 
 export type Collection = typeof collections.$inferSelect;
