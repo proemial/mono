@@ -1,6 +1,6 @@
 import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
-import { getHistory } from "@/app/data/fetch-history";
+import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { FeatureCloud } from "@/components/feature-badges";
 import { auth } from "@clerk/nextjs";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
@@ -39,9 +39,11 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	// Only use history when `ids` param is missing (accept clearing the list of papers)
 	const noIds = searchParams?.ids === undefined;
 	if (noIds && !ids.length) {
-		const history = await getHistory();
+		const history = await getBookmarksAndHistory();
 		if (history.length) {
-			redirect(`/discover/fingerprints?ids=${history.join(",")}`);
+			redirect(
+				`/discover/fingerprints?ids=${history.flatMap((i) => i).join(",")}`,
+			);
 		}
 	}
 

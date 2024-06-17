@@ -3,31 +3,36 @@ import { neonDb } from "@proemial/data";
 import { eq } from "drizzle-orm";
 import { PaperActivity, users } from "@proemial/data/neon/schema";
 import dayjs from "dayjs";
+import { getBookmarksByUserId } from "../(pages)/(app)/discover/get-bookmarks-by-user-id";
 
 // Max no. of papers from read history to use in filter
 const MAX_COUNT = 30;
 
-export async function getHistory() {
-	const ids = [];
-
+export async function getBookmarksAndHistory(): Promise<Array<string[]>> {
 	const { userId } = auth();
+
 	if (userId) {
 		const user = await neonDb.query.users.findFirst({
 			where: eq(users.id, userId),
 		});
+		console.log("user", user);
 
-		const papers = sortAndFilter(user?.paperActivities);
-		if (papers) {
-			for (const paper of papers) {
-				ids.push(paper.paperId);
-			}
-		}
+		const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
+		const bookmarkIds = Object.keys(bookmarks);
+		console.log("bookmarks", bookmarkIds);
+
+		const readHistoryIds = sortAndFilter(user?.paperActivities ?? [])?.map(
+			(paper) => paper.paperId,
+		);
+		console.log("history", readHistoryIds);
+
+		return [readHistoryIds, bookmarkIds];
 	}
 
-	return ids;
+	return [];
 }
 
-function sortAndFilter(readHistory?: PaperActivity[]) {
+function sortAndFilter(readHistory: PaperActivity[]) {
 	const maxCount = MAX_COUNT;
 
 	const sortedHistory = readHistory

@@ -1,6 +1,6 @@
 import { Feed } from "@/app/(pages)/(app)/discover/feed";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
-import { getHistory } from "@/app/data/fetch-history";
+import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { FeatureCloud } from "@/components/feature-badges";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
@@ -102,13 +102,15 @@ async function getFilter(params: {
 		return { topic };
 	}
 
-	const history = await getHistory();
-	const fingerprints = await fetchFingerprints(history);
+	const history = await getBookmarksAndHistory();
+	const fingerprints = await fetchFingerprints(history.flatMap((i) => i));
 	const { filter, allFeatures } = getFeatureFilter(
 		fingerprints,
 		params.weightsRaw,
 	);
-	const titles = params.debug ? await fetchPapersTitles(history) : undefined;
+	const titles = params.debug
+		? await fetchPapersTitles(history.flatMap((i) => i))
+		: undefined;
 
 	return { features: filter, days: params.days, titles, all: allFeatures };
 }
