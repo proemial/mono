@@ -177,7 +177,8 @@ function getOpenAlexFilter(
 		const keywords = rankedFeatures
 			.filter((item) => item.type === "keyword")
 			.slice(0, MAX_FEATURES_IN_QUERY)
-			.map((item) => item.id.split("/").at(-1));
+			.map((item) => item.id.split("/").at(-1))
+			.map((keyword) => encodeURIComponent(keyword as string));
 		if (keywords.length) selectors.push(`keywords.id:${keywords.join("|")}`);
 	}
 
