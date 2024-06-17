@@ -15,16 +15,13 @@ export async function getBookmarksAndHistory(): Promise<Array<string[]>> {
 		const user = await neonDb.query.users.findFirst({
 			where: eq(users.id, userId),
 		});
-		console.log("user", user);
 
 		const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 		const bookmarkIds = Object.keys(bookmarks);
-		console.log("bookmarks", bookmarkIds);
 
 		const readHistoryIds = sortAndFilter(user?.paperActivities ?? [])?.map(
 			(paper) => paper.paperId,
 		);
-		console.log("history", readHistoryIds);
 
 		return [bookmarkIds, readHistoryIds];
 	}
