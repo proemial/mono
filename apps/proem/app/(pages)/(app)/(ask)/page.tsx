@@ -4,7 +4,7 @@ import { ProemLogo } from "@/components/icons/brand/logo";
 import { Main } from "@/components/main";
 import { MoodSelector } from "@/components/mood-selector";
 import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
-import { AskHeader } from "@/components/nav-bar/headers/ask-header";
+import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { Suggestions } from "@/components/suggestions";
 import { Metadata } from "next";
@@ -25,7 +25,7 @@ export default function AskPage() {
 	return (
 		<>
 			<NavBarV2 action={<GoBackAction />} isInternalUser={isInternal}>
-				<AskHeader />
+				<SimpleHeader title="Ask" />
 			</NavBarV2>
 			<Main>
 				<div className="flex flex-col justify-between flex-grow gap-4">

@@ -14,6 +14,7 @@ import {
 import { ChevronRight } from "@untitled-ui/icons-react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "react-query";
+import { SimpleHeader } from "./simple-header";
 
 export const SelectSpaceHeader = () => {
 	const { user } = useUser();
@@ -36,8 +37,8 @@ export const SelectSpaceHeader = () => {
 
 	if (!collectionName) {
 		return (
-			<div className="flex gap-1 items-center">
-				<div>For You</div>
+			<div className="flex gap-2 items-center">
+				<SimpleHeader title="For You" />
 				<ChevronRight className="size-4" />
 			</div>
 		);

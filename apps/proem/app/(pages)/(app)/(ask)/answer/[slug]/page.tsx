@@ -4,7 +4,7 @@ import { answers } from "@/app/api/bot/answer-engine/answers";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
 import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
-import { AskHeader } from "@/components/nav-bar/headers/ask-header";
+import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -34,7 +34,7 @@ export default async function AnswerPage({ params: { slug } }: Props) {
 	return (
 		<>
 			<NavBarV2 action={<GoBackAction />} isInternalUser={isInternal}>
-				<AskHeader />
+				<SimpleHeader title="Ask" />
 			</NavBarV2>
 			<Main>
 				<Answer
