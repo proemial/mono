@@ -15,7 +15,7 @@ import {
 } from "@proemial/shadcn-ui";
 
 export type PaperCardProps = Partial<
-	Pick<AddToCollectionButtonProps, "paperId" | "bookmarks">
+	Pick<AddToCollectionButtonProps, "paperId" | "bookmarks" | "fromTrackingKey">
 > & {
 	date?: string;
 	header: React.ReactNode;
@@ -32,6 +32,7 @@ export function PaperCard({
 	loading,
 	paperId,
 	bookmarks,
+	fromTrackingKey,
 }: PaperCardProps) {
 	const { isInternal } = useInternalUser();
 
@@ -62,7 +63,7 @@ export function PaperCard({
 				)}
 			</div>
 			{/* TODO: Remove feature toggle */}
-			{isInternal && bookmarks && paperId ? (
+			{isInternal && bookmarks && paperId && fromTrackingKey ? (
 				<div
 					className="-ml-2.5 -mb-2.5 self-start"
 					onClick={(event) => {
@@ -70,7 +71,11 @@ export function PaperCard({
 						event.preventDefault();
 					}}
 				>
-					<AddToCollectionButton bookmarks={bookmarks} paperId={paperId} />
+					<AddToCollectionButton
+						bookmarks={bookmarks}
+						paperId={paperId}
+						fromTrackingKey={fromTrackingKey}
+					/>
 				</div>
 			) : null}
 		</Card>

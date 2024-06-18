@@ -2,6 +2,13 @@
 import { togglePaperInCollection } from "@/app/(pages)/(app)/discover/bookmark-paper";
 import { useUser } from "@/app/hooks/use-user";
 import { getCollections } from "@/app/profile/actions";
+import {
+	AddPaperToCollectionTrackingKey,
+	CollectionFromOptions,
+	RemovePaperToCollectionTrackingKey,
+	analyticsKeys,
+	trackHandler,
+} from "@/components/analytics/tracking/tracking-keys";
 import { Checkbox } from "@/components/checkbox";
 import {
 	Notification,
@@ -13,16 +20,18 @@ import { useQuery } from "react-query";
 
 const TOAST_OPEN_DURATION = 4000;
 
-type CollectionSelectorProps = {
+export type CollectionSelectorProps = {
 	paperId: string;
 	bookmarks?: string[];
 	onClose?: () => void;
+	fromTrackingKey: CollectionFromOptions;
 };
 
 function CollectionSelector({
 	paperId,
 	bookmarks,
 	onClose,
+	fromTrackingKey,
 }: CollectionSelectorProps) {
 	const { user } = useUser();
 	const { data: collections } = useQuery({
@@ -43,10 +52,17 @@ function CollectionSelector({
 									collectionIdFromExistingBookmarks === id,
 							)}
 							onCheckedChange={async (newCheckedValue) => {
+								const isEnabled = Boolean(newCheckedValue);
+								trackHandler(
+									isEnabled
+										? analyticsKeys.collection.addPaper[fromTrackingKey]
+										: analyticsKeys.collection.removePaper[fromTrackingKey],
+								)();
+
 								await togglePaperInCollection({
 									paperId,
 									collectionId: id,
-									isEnabled: Boolean(newCheckedValue),
+									isEnabled,
 								});
 							}}
 						>
@@ -80,9 +96,9 @@ export function CollectionManager({
 	paperId,
 	bookmarks,
 	newBookmarksCollectionId,
+	fromTrackingKey,
 }: CollectionNotificationProps) {
 	const [showSelector, setShowSelector] = useState(false);
-	const [isTouched, setIsTouched] = useState(false);
 	const { user } = useUser();
 	const { data: collections } = useQuery({
 		queryKey: ["collections", user?.id],
@@ -94,13 +110,13 @@ export function CollectionManager({
 
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
-			if (!isTouched && !showSelector) {
+			if (!showSelector) {
 				onClose?.();
 			}
 		}, TOAST_OPEN_DURATION);
 
 		return () => clearTimeout(timeoutId);
-	}, [showSelector, isTouched, onClose]);
+	}, [showSelector, onClose]);
 
 	return (
 		<Notification closeOnBlur={showSelector}>
@@ -109,6 +125,7 @@ export function CollectionManager({
 					paperId={paperId}
 					bookmarks={bookmarks}
 					onClose={onClose}
+					fromTrackingKey={fromTrackingKey}
 				/>
 			) : (
 				<div className="flex justify-between items-center py-0.5 pl-2.5">
@@ -123,7 +140,7 @@ export function CollectionManager({
 						variant="ghost"
 						className="p-2.5 text-sm"
 						onClick={() => {
-							setIsTouched(true);
+							trackHandler(analyticsKeys.collection.addPaper.fromAsk)();
 							setShowSelector(true);
 						}}
 					>

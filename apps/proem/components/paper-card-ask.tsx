@@ -10,6 +10,7 @@ export function PaperCardAsk({ index, ...rest }: PaperCardAskProps) {
 		<PaperCard
 			{...rest}
 			header={<CardBullet variant="numbered">{index}</CardBullet>}
+			fromTrackingKey="fromAsk"
 		/>
 	);
 }

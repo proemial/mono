@@ -2,6 +2,7 @@
 import { addPaperToDefaultCollection } from "@/app/(pages)/(app)/discover/bookmark-paper";
 import { AddButton, AddButtonSkeleton } from "@/components/add-button";
 import {
+	CollectionSelectorProps,
 	showCollectionNotification,
 	showCollectionSelector,
 } from "@/components/show-collection-notification";
@@ -12,7 +13,10 @@ import { useOptimistic } from "react";
 export type PaperId = string;
 export type CollectionId = string;
 type Bookmarks = Record<PaperId, CollectionId[]>;
-export type AddToCollectionButtonProps = {
+export type AddToCollectionButtonProps = Pick<
+	CollectionSelectorProps,
+	"fromTrackingKey"
+> & {
 	paperId: PaperId;
 	bookmarks: Bookmarks;
 	customCollectionId?: CollectionId;
@@ -22,6 +26,7 @@ export function AddToCollectionButton({
 	paperId,
 	bookmarks,
 	customCollectionId,
+	fromTrackingKey,
 }: AddToCollectionButtonProps) {
 	const { user } = useUser();
 	if (!user) {
@@ -46,6 +51,7 @@ export function AddToCollectionButton({
 			onClick={async () => {
 				const bookmark = {
 					paperId,
+					fromTrackingKey,
 					bookmarks: currentBookmark,
 				};
 				if (isBookmarked) {

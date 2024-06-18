@@ -10,6 +10,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
+import { Trackable } from "@/components/trackable";
 import { Prefix } from "@proemial/redis/adapters/papers";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -59,11 +60,16 @@ export const FeedItemCard = ({
 					</div>
 					{isInternal ? (
 						<div className="-mr-2">
-							<AddToCollectionButton
-								bookmarks={bookmarks}
-								paperId={id}
-								customCollectionId={customCollectionId}
-							/>
+							<Trackable
+								trackingKey={analyticsKeys.collection.addPaper.fromAsk}
+							>
+								<AddToCollectionButton
+									fromTrackingKey="fromFeed"
+									bookmarks={bookmarks}
+									paperId={id}
+									customCollectionId={customCollectionId}
+								/>
+							</Trackable>
 						</div>
 					) : null}
 				</div>

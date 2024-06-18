@@ -12,11 +12,22 @@ export function trackHandler(
 	};
 }
 
-const COLLECTION_FROM_OPTIONS = {
+export const COLLECTION_FROM_OPTIONS = {
 	fromFeed: "from_feed",
 	fromAsk: "from_ask",
 	fromRead: "from_read",
 } as const;
+
+export type CollectionFromOptions = keyof typeof COLLECTION_FROM_OPTIONS;
+
+function addCollectionFrom<T extends string>(prefix: T) {
+	return Object.entries(COLLECTION_FROM_OPTIONS).reduce(
+		(acc, [key, value]) => ({ ...acc, [key]: `${prefix}:${value}` }),
+		{},
+	) as {
+		[K in keyof typeof COLLECTION_FROM_OPTIONS]: `${T}:${(typeof COLLECTION_FROM_OPTIONS)[K]}`;
+	};
+}
 
 export const analyticsKeys = {
 	ui: {
@@ -115,6 +126,13 @@ export const analyticsKeys = {
 			modelEmail: "read:model:email:submit",
 		},
 	},
+	collection: {
+		addPaper: addCollectionFrom("collection:add_paper"),
+		removePaper: addCollectionFrom("collection:remove_paper"),
+		openCollectionSelector: addCollectionFrom(
+			"collection:open_collection_selector",
+		),
+	},
 	profile: {
 		// TODO: cleanup
 		click: {
@@ -155,4 +173,11 @@ export const vercelRegions: Record<string, string> = {
 	sin1: "ap-southeast-1", // Singapore
 	syd1: "ap-southeast-2", // Sydney, Australia
 };
+
 export type TrackingKey = ObjectValues<typeof analyticsKeys> | string;
+export type AddPaperToCollectionTrackingKey = ObjectValues<
+	typeof analyticsKeys.collection.addPaper
+>;
+export type RemovePaperToCollectionTrackingKey = ObjectValues<
+	typeof analyticsKeys.collection.removePaper
+>;

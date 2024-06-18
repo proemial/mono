@@ -29,7 +29,11 @@ export function PaperReaderHeadline({
 						event.preventDefault();
 					}}
 				>
-					<AddToCollectionButton bookmarks={bookmarks} paperId={paperId} />
+					<AddToCollectionButton
+						bookmarks={bookmarks}
+						paperId={paperId}
+						fromTrackingKey="fromRead"
+					/>
 				</div>
 			) : null}
 		</div>
