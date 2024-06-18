@@ -17,9 +17,8 @@ import {
 } from "@proemial/shadcn-ui";
 import { PlusCircle } from "lucide-react";
 
-export type PaperCardProps = Pick<
-	AddToCollectionButtonProps,
-	"paperId" | "bookmarks"
+export type PaperCardProps = Partial<
+	Pick<AddToCollectionButtonProps, "paperId" | "bookmarks">
 > & {
 	date?: string;
 	header: React.ReactNode;
@@ -39,8 +38,6 @@ export function PaperCard({
 }: PaperCardProps) {
 	const { isSignedIn } = useUser();
 	const { isInternal } = useInternalUser();
-	console.log(bookmarks);
-	console.log(paperId);
 
 	return (
 		<Card variant="paper" className="flex flex-col justify-between">
@@ -68,7 +65,8 @@ export function PaperCard({
 					</CardDescription>
 				)}
 			</div>
-			{isInternal ? (
+			{/* TODO: Remove feature toggle */}
+			{isInternal && bookmarks && paperId ? (
 				<div
 					className="-ml-2.5 -mb-2.5 self-start"
 					onClick={(event) => {

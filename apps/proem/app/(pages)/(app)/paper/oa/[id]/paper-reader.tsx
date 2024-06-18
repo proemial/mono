@@ -15,7 +15,7 @@ import { File02 } from "@untitled-ui/icons-react";
 import { use } from "react";
 import { PaperPost, paperPostsToMessages } from "../../paper-post-utils";
 
-type PaperReaderProps = Pick<PaperCardDiscoverProps, "bookmarks"> & {
+type PaperReaderProps = {
 	fetchedPaperPromise: Promise<Omit<OpenAlexPaper, "generated">>;
 	generatedPaperPromise: Promise<OpenAlexPaper>;
 	addPaperActivityPromise: Promise<void>;
@@ -27,7 +27,6 @@ export function PaperReader({
 	generatedPaperPromise,
 	addPaperActivityPromise,
 	paperPosts,
-	bookmarks,
 }: PaperReaderProps) {
 	const fetchedPaper = use(fetchedPaperPromise);
 	const generatedPaper = use(generatedPaperPromise);
@@ -55,8 +54,6 @@ export function PaperReader({
 								rel="noreferrer"
 							>
 								<PaperCardDiscover
-									bookmarks={bookmarks}
-									paperId={fetchedPaper.id}
 									title={fetchedPaper.data.title}
 									date={fetchedPaper.data.publication_date}
 									publisher={
