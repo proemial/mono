@@ -76,14 +76,14 @@ export default async function ({ params, children }: PageProps) {
 					<div className="flex flex-col gap-3">
 						<Paragraph>{collection.description}</Paragraph>
 						<div className="flex gap-2 justify-between items-center flex-row-reverse">
-							<div className="flex gap-4">
+							{/* <div className="flex gap-4">
 								<IconButton title="Add a paper…">
 									<FilePlus02 className="size-[18px] opacity-75" />
 								</IconButton>
-								{/* <IconButton>
-							<Upload01 className="size-[18px] opacity-75" />
-						</IconButton> */}
-							</div>
+								<IconButton>
+									<Upload01 className="size-[18px] opacity-75" />
+								</IconButton>
+							</div> */}
 							{collectionIsPublic ? (
 								<div className="flex gap-2 items-center">
 									{otherOrgMembersUserData.map((orgMember) => (
@@ -102,7 +102,8 @@ export default async function ({ params, children }: PageProps) {
 							) : null}
 						</div>
 					</div>
-					<div className="flex gap-1 justify-center items-center">
+					{/* Disabled until we launch dynamic lists */}
+					{/* <div className="flex gap-1 justify-center items-center">
 						<NavButton
 							href={`/collection/${collection.slug}`}
 							title="Collection"
@@ -111,7 +112,7 @@ export default async function ({ params, children }: PageProps) {
 							href={`/collection/${collection.slug}/stream`}
 							title="Stream"
 						/>
-					</div>
+					</div> */}
 					{children}
 				</div>
 			</Main>
