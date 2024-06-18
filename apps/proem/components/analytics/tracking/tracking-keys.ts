@@ -116,7 +116,7 @@ export const analyticsKeys = {
 	viewName: (path: string) => {
 		return `${getViewName(path)}:view`;
 	},
-};
+} as const;
 
 function getViewName(path: string) {
 	if (path === "/") return "ask";
