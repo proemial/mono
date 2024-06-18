@@ -155,4 +155,4 @@ export const vercelRegions: Record<string, string> = {
 	sin1: "ap-southeast-1", // Singapore
 	syd1: "ap-southeast-2", // Sydney, Australia
 };
-export type TrackingKey = ObjectValues<typeof analyticsKeys>;
+export type TrackingKey = ObjectValues<typeof analyticsKeys> | string;
