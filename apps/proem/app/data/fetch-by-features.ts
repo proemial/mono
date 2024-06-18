@@ -46,7 +46,6 @@ export const fetchAndRerankPaperIds = async (
 			"of",
 			allPapers.papers.length,
 		);
-		console.log("caching", paperIds);
 
 		return {
 			meta: allPapers.meta,
