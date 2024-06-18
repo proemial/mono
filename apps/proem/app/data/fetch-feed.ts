@@ -41,6 +41,12 @@ export async function fetchFeedByFeatures(
 	const cacheMisses = rankedIds.filter(
 		(rankedPaper) => !cachedPapersIds.includes(rankedPaper.id),
 	);
+	console.log(
+		"Cache hits",
+		cachedPapers.map((p) => p?.id).join(", "),
+		"Cache misses",
+		cacheMisses.map((p) => p.id).join(", "),
+	);
 
 	if (cacheMisses.length === 0) {
 		return {
@@ -58,8 +64,12 @@ export async function fetchFeedByFeatures(
 		};
 	}
 
-	const enhancedPapers = await Promise.all(
+	console.log("Fetching", rankedIds.length, "papers");
+
+	const enhanced = [] as OpenAlexPaper[];
+	const rankedPapers = await Promise.all(
 		rankedIds.map(async (rankedId) => {
+			console.log("Fetching paper", rankedId.id);
 			const paper = await fetchPaper(rankedId.id);
 			const paperTitle = paper?.data?.title;
 			const abstract = paper?.data?.abstract;
@@ -72,21 +82,27 @@ export async function fetchFeedByFeatures(
 					? { ...paper.generated, title }
 					: { title };
 
+				enhanced.push({ ...paper, generated });
+
 				return {
 					...rankedId,
 					paper: { ...paper, generated },
 				};
 			}
+			return {
+				...rankedId,
+				paper,
+			};
 		}),
 	);
 
-	await Redis.papers.upsertAll(
-		enhancedPapers.map((p) => p?.paper) as OpenAlexPaper[],
-	);
+	console.log("pushing", enhanced.map((p) => p.id).join(", "));
+
+	await Redis.papers.upsertAll(enhanced);
 
 	return {
 		count: meta.count,
-		rows: enhancedPapers as RankedPaper[],
+		rows: rankedPapers as RankedPaper[],
 		nextOffset,
 	};
 }
