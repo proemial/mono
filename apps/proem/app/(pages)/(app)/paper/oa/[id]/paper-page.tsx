@@ -1,8 +1,10 @@
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
 import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { generate } from "@/app/(pages)/(app)/paper/oa/[id]/llm-generate";
 import { PaperReader } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader";
 import { PaperReaderSkeleton } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-skeleton";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
+import { auth } from "@clerk/nextjs";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { fetchArxivPaper } from "../../arxiv/[id]/fetch-arxiv-paper";
@@ -32,6 +34,8 @@ export default async function PaperPage({ paperId, type }: Props) {
 		return generate(paper, type === "oa" ? "oa" : "arxiv");
 	});
 
+	const { userId } = auth();
+	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 	// TODO: Remove feature flag
 	const { isInternal } = getInternalUser();
 	// Get paper posts from org members, or user's own posts if there are none
@@ -48,6 +52,7 @@ export default async function PaperPage({ paperId, type }: Props) {
 	return (
 		<Suspense fallback={<PaperReaderSkeleton />}>
 			<PaperReader
+				bookmarks={bookmarks}
 				fetchedPaperPromise={fetchedPaperPromise}
 				generatedPaperPromise={generatedPaperPromise}
 				addPaperActivityPromise={addPaperActivityPromise}

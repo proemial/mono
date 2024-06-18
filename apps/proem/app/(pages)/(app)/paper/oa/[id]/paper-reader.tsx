@@ -3,7 +3,10 @@ import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { ChatArticle } from "@/components/chat-article";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
-import { PaperCardDiscover } from "@/components/paper-card-discover";
+import {
+	PaperCardDiscover,
+	PaperCardDiscoverProps,
+} from "@/components/paper-card-discover";
 import { PaperCardDiscoverProfile } from "@/components/paper-card-discover-profile";
 import { Trackable } from "@/components/trackable";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
@@ -12,7 +15,7 @@ import { File02 } from "@untitled-ui/icons-react";
 import { use } from "react";
 import { PaperPost, paperPostsToMessages } from "../../paper-post-utils";
 
-type PaperReaderProps = {
+type PaperReaderProps = Pick<PaperCardDiscoverProps, "bookmarks"> & {
 	fetchedPaperPromise: Promise<Omit<OpenAlexPaper, "generated">>;
 	generatedPaperPromise: Promise<OpenAlexPaper>;
 	addPaperActivityPromise: Promise<void>;
@@ -24,6 +27,7 @@ export function PaperReader({
 	generatedPaperPromise,
 	addPaperActivityPromise,
 	paperPosts,
+	bookmarks,
 }: PaperReaderProps) {
 	const fetchedPaper = use(fetchedPaperPromise);
 	const generatedPaper = use(generatedPaperPromise);
@@ -51,6 +55,8 @@ export function PaperReader({
 								rel="noreferrer"
 							>
 								<PaperCardDiscover
+									bookmarks={bookmarks}
+									paperId={fetchedPaper.id}
 									title={fetchedPaper.data.title}
 									date={fetchedPaper.data.publication_date}
 									publisher={
