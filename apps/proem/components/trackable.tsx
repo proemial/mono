@@ -1,10 +1,13 @@
 "use client";
-import { trackHandler } from "@/components/analytics/tracking/tracking-keys";
+import {
+	TrackingKey,
+	trackHandler,
+} from "@/components/analytics/tracking/tracking-keys";
 
 export function Trackable({
 	children,
 	trackingKey,
-}: { children: React.ReactNode; trackingKey?: string }) {
+}: { children: React.ReactNode; trackingKey?: TrackingKey }) {
 	if (!trackingKey) {
 		return <>{children}</>;
 	}

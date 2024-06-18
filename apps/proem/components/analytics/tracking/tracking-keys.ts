@@ -1,12 +1,22 @@
+import { ObjectValues } from "@/utils/object-values";
 import { Tracker } from "./tracker";
 
-export function trackHandler(key: string, properties?: Record<string, string>) {
+export function trackHandler(
+	key: TrackingKey,
+	properties?: Record<string, string>,
+) {
 	return () => {
 		console.log("Tracking", key, properties);
 
 		Tracker.track(key, properties);
 	};
 }
+
+const COLLECTION_FROM_OPTIONS = {
+	fromFeed: "from_feed",
+	fromAsk: "from_ask",
+	fromRead: "from_read",
+} as const;
 
 export const analyticsKeys = {
 	ui: {
@@ -145,3 +155,4 @@ export const vercelRegions: Record<string, string> = {
 	sin1: "ap-southeast-1", // Singapore
 	syd1: "ap-southeast-2", // Sydney, Australia
 };
+export type TrackingKey = ObjectValues<typeof analyticsKeys>;

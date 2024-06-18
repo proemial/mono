@@ -1,3 +1,4 @@
+import { TrackingKey } from "@/components/analytics/tracking/tracking-keys";
 import { analyticsTrace } from "@/components/analytics/tracking/tracking-profile";
 import va from "@vercel/analytics";
 import posthog from "posthog-js";
@@ -5,7 +6,7 @@ import ReactGA from "react-ga4";
 
 export const Tracker = {
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	track: (event: string, properties?: Record<string, any>) => {
+	track: (event: TrackingKey, properties?: Record<string, any>) => {
 		// autocapture is enabled for all users except internal users.
 		if (!posthog.autocapture) {
 			analyticsTrace("[AnalyticsClient] track aborted");
