@@ -9,15 +9,10 @@ import {
 	Avatar,
 	AvatarFallback,
 	AvatarImage,
-	DrawerClose,
 	Header2,
 	Header5,
 } from "@proemial/shadcn-ui";
-import {
-	Building05,
-	LogIn01,
-	MessageQuestionCircle,
-} from "@untitled-ui/icons-react";
+import { Building05, LogIn01 } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import { SignInDrawer } from "../../components/sign-in-drawer";
 import { useInternalUser } from "../hooks/use-user";
@@ -47,18 +42,6 @@ export function ProfileYou() {
 								</div>
 							}
 						/>
-						{isInternal && (
-							<div className="flex">
-								<DrawerClose asChild>
-									<Link href="/" className="text-sm">
-										<div className="flex gap-2 items-center">
-											<MessageQuestionCircle className="size-4 opacity-85" />
-											<div className="text-sm">Ask anything</div>
-										</div>
-									</Link>
-								</DrawerClose>
-							</div>
-						)}
 					</div>
 				)}
 				{isSignedIn && user && (
