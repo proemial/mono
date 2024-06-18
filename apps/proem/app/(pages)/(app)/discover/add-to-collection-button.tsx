@@ -1,9 +1,10 @@
 import { addPaperToDefaultCollection } from "@/app/(pages)/(app)/discover/bookmark-paper";
-import { AddButton } from "@/components/add-button";
+import { AddButton, AddButtonSkeleton } from "@/components/add-button";
 import {
 	showCollectionNotification,
 	showCollectionSelector,
 } from "@/components/show-collection-notification";
+import { SignInDrawer } from "@/components/sign-in-drawer";
 import { useUser } from "@clerk/nextjs";
 import { useOptimistic } from "react";
 
@@ -23,7 +24,7 @@ export function AddToCollectionButton({
 }: AddToCollectionButtonProps) {
 	const { user } = useUser();
 	if (!user) {
-		return null;
+		return <SignInDrawer trigger={<AddButtonSkeleton />} />;
 	}
 	const collectionId = customCollectionId ?? user.id;
 

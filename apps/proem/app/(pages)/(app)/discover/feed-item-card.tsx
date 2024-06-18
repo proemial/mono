@@ -10,12 +10,9 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { SignInDrawer } from "@/components/sign-in-drawer";
-import { useUser } from "@clerk/nextjs";
 import { Prefix } from "@proemial/redis/adapters/papers";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { PlusCircle } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
 
@@ -41,7 +38,6 @@ export const FeedItemCard = ({
 	bookmarks,
 	customCollectionId,
 }: FeedItemCardProps) => {
-	const { isSignedIn } = useUser();
 	const { isInternal } = useInternalUser();
 
 	return (
@@ -62,17 +58,13 @@ export const FeedItemCard = ({
 						{dayjs(date).fromNow()}
 					</div>
 					{isInternal ? (
-						<>
-							{isSignedIn ? (
-								<AddToCollectionButton
-									bookmarks={bookmarks}
-									paperId={id}
-									customCollectionId={customCollectionId}
-								/>
-							) : (
-								<SignInDrawer trigger={<PlusCircle className="size-4" />} />
-							)}
-						</>
+						<div className="-mr-2">
+							<AddToCollectionButton
+								bookmarks={bookmarks}
+								paperId={id}
+								customCollectionId={customCollectionId}
+							/>
+						</div>
 					) : null}
 				</div>
 			</div>

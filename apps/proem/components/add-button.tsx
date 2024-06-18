@@ -20,3 +20,11 @@ export function AddButton({ isChecked, onClick }: AddButtonProps) {
 		</Button>
 	);
 }
+
+export function AddButtonSkeleton() {
+	return (
+		<Button variant="ghost" size="icon">
+			<PlusCircle className="size-4" />
+		</Button>
+	);
+}
