@@ -1,5 +1,8 @@
 "use client";
-import { QaPair } from "@/app/(pages)/(app)/(ask)/answer/[slug]/qa-pair";
+import {
+	QaPair,
+	QaPairProps,
+} from "@/app/(pages)/(app)/(ask)/answer/[slug]/qa-pair";
 import {
 	AnswerEngineEvents,
 	findByEventType,
@@ -15,7 +18,7 @@ import { Message, useChat } from "ai/react";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 
-type Props = {
+type Props = Pick<QaPairProps, "bookmarks"> & {
 	initialQuestion?: string;
 	initialSessionSlug?: string;
 	initialMessages?: Message[];
@@ -27,6 +30,7 @@ export const Answer = ({
 	initialMessages,
 	initialSessionSlug,
 	existingData,
+	bookmarks,
 }: Props) => {
 	const [sessionSlug, setSessionSlug] = useState<string | undefined>(
 		initialSessionSlug,
@@ -96,6 +100,7 @@ export const Answer = ({
 					.filter((message) => message.role === "user")
 					.map((message, index) => (
 						<QaPair
+							bookmarks={bookmarks}
 							key={message.id}
 							question={message}
 							answer={getCorrespondingAnswerMessage(index, messages)}

@@ -1,5 +1,6 @@
 import { Answer } from "@/app/(pages)/(app)/(ask)/answer/[slug]/answer";
 import { mapAnswerToAnswerEngine } from "@/app/(pages)/(app)/(ask)/mapAnswerToAnswerEngine";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
@@ -20,6 +21,7 @@ export default async function AnswerPage({ params: { slug } }: Props) {
 	const { userId } = auth();
 	const [firstAnswer] = allAnswers;
 	const { isInternal } = getInternalUser();
+	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 
 	if (!firstAnswer) {
 		redirect("/");
@@ -41,6 +43,7 @@ export default async function AnswerPage({ params: { slug } }: Props) {
 					existingData={existingData}
 					initialMessages={initialMessages}
 					initialSessionSlug={firstAnswer.slug}
+					bookmarks={bookmarks}
 				/>
 			</Main>
 		</>

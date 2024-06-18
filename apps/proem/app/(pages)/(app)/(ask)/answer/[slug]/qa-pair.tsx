@@ -16,14 +16,14 @@ import { ChatQuestion } from "@/components/chat-question";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { Paper } from "@/components/icons/Paper";
-import { PaperCardAsk } from "@/components/paper-card-ask";
+import { PaperCardAsk, PaperCardAskProps } from "@/components/paper-card-ask";
 import { Header4, Icons, cn } from "@proemial/shadcn-ui";
 import { Message } from "ai/react";
 import Link from "next/link";
 import { ReactNode, useRef } from "react";
 import { useThrobberStatus } from "./use-throbber-status";
 
-type QaPairProps = {
+export type QaPairProps = Pick<PaperCardAskProps, "bookmarks"> & {
 	question: Message;
 	answer: Message | undefined;
 	data: AnswerEngineEvents[];
@@ -39,6 +39,7 @@ export const QaPair = ({
 	followUps,
 	isLatest,
 	className,
+	bookmarks,
 }: QaPairProps) => {
 	const isQuestionByCurrentUser = question.id !== SHARED_ANSWER_TRANSACTION_ID;
 	const { papers } = findByEventType(data, "papers-fetched", question.id) ?? {};
@@ -97,10 +98,12 @@ export const QaPair = ({
 							{papers?.map((paper, index) => (
 								<Link
 									key={index}
-									href={`/paper/oa/${paper.link.replace("/oa/", "")}`}
+									href={`/paper/${paper.link}`}
 									onClick={trackHandler(analyticsKeys.ask.click.paper)}
 								>
 									<PaperCardAsk
+										paperId={paper?.link.replace("/oa/", "")}
+										bookmarks={bookmarks}
 										date={paper?.published}
 										title={paper?.title}
 										loading={!paper}

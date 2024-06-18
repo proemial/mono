@@ -1,9 +1,11 @@
 import { Answer } from "@/app/(pages)/(app)/(ask)/answer/[slug]/answer";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
 import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 type Props = {
@@ -12,8 +14,10 @@ type Props = {
 	};
 };
 
-export default function AnswerPage({ searchParams }: Props) {
+export default async function AnswerPage({ searchParams }: Props) {
 	const initialQuestion = searchParams.q;
+	const { userId } = auth();
+	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 	if (!initialQuestion) {
 		redirect("/");
 	}
@@ -25,7 +29,7 @@ export default function AnswerPage({ searchParams }: Props) {
 				<SimpleHeader title="Ask" />
 			</NavBarV2>
 			<Main>
-				<Answer initialQuestion={searchParams.q} />
+				<Answer initialQuestion={searchParams.q} bookmarks={bookmarks} />
 			</Main>
 		</>
 	);
