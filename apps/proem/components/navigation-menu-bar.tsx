@@ -34,7 +34,7 @@ export function NavigationMenuBar({ title }: { title?: string }) {
 	console.log("showSearch", pathname, showSearch);
 
 	return (
-		<NavigationMenu className="sticky top-0 px-0 py-2.5 bg-background">
+		<NavigationMenu className="sticky top-0 pr-0 bg-background">
 			<NavigationMenuList className="justify-between">
 				<NavigationMenuItem>
 					<Profile />
