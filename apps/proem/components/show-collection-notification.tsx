@@ -3,9 +3,7 @@ import { togglePaperInCollection } from "@/app/(pages)/(app)/discover/bookmark-p
 import { useUser } from "@/app/hooks/use-user";
 import { getCollections } from "@/app/profile/actions";
 import {
-	AddPaperToCollectionTrackingKey,
 	CollectionFromOptions,
-	RemovePaperToCollectionTrackingKey,
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
@@ -140,7 +138,11 @@ export function CollectionManager({
 						variant="ghost"
 						className="p-2.5 text-sm"
 						onClick={() => {
-							trackHandler(analyticsKeys.collection.addPaper.fromAsk)();
+							trackHandler(
+								analyticsKeys.collection.openCollectionSelector[
+									fromTrackingKey
+								],
+							)();
 							setShowSelector(true);
 						}}
 					>
@@ -153,6 +155,10 @@ export function CollectionManager({
 }
 
 export function showCollectionSelector(props: CollectionSelectorProps) {
+	trackHandler(
+		analyticsKeys.collection.openCollectionSelector[props.fromTrackingKey],
+	)();
+
 	openUnstyledNotifcation((toastId) => (
 		<CollectionSelector
 			{...props}
