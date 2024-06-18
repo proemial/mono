@@ -1,5 +1,4 @@
 "use client";
-
 import {
 	AddToCollectionButton,
 	AddToCollectionButtonProps,
@@ -30,9 +29,7 @@ export function PaperReaderHeadline({
 						event.preventDefault();
 					}}
 				>
-					{paperId ? (
-						<AddToCollectionButton bookmarks={bookmarks} paperId={paperId} />
-					) : null}
+					<AddToCollectionButton bookmarks={bookmarks} paperId={paperId} />
 				</div>
 			) : null}
 		</div>

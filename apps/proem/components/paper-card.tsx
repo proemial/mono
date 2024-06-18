@@ -5,9 +5,7 @@ import {
 } from "@/app/(pages)/(app)/discover/add-to-collection-button";
 import Markdown from "@/app/(pages)/(app)/paper/oa/[id]/markdown";
 import { useInternalUser } from "@/app/hooks/use-user";
-import { SignInDrawer } from "@/components/sign-in-drawer";
 import { toTitleCaseIfAllCaps } from "@/utils/string-utils";
-import { useUser } from "@clerk/nextjs";
 import {
 	Card,
 	CardDescription,
@@ -15,7 +13,6 @@ import {
 	CardTitle,
 	Icons,
 } from "@proemial/shadcn-ui";
-import { PlusCircle } from "lucide-react";
 
 export type PaperCardProps = Partial<
 	Pick<AddToCollectionButtonProps, "paperId" | "bookmarks">
@@ -36,7 +33,6 @@ export function PaperCard({
 	paperId,
 	bookmarks,
 }: PaperCardProps) {
-	const { isSignedIn } = useUser();
 	const { isInternal } = useInternalUser();
 
 	return (
@@ -74,13 +70,7 @@ export function PaperCard({
 						event.preventDefault();
 					}}
 				>
-					<>
-						{isSignedIn ? (
-							<AddToCollectionButton bookmarks={bookmarks} paperId={paperId} />
-						) : (
-							<SignInDrawer trigger={<PlusCircle className="size-4" />} />
-						)}
-					</>
+					<AddToCollectionButton bookmarks={bookmarks} paperId={paperId} />
 				</div>
 			) : null}
 		</Card>
