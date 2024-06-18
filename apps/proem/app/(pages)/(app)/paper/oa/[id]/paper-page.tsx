@@ -35,6 +35,7 @@ export default async function PaperPage({ paperId, type }: Props) {
 	});
 
 	const { userId } = auth();
+	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 	// TODO: Remove feature flag
 	const { isInternal } = getInternalUser();
 	// Get paper posts from org members, or user's own posts if there are none
@@ -51,6 +52,7 @@ export default async function PaperPage({ paperId, type }: Props) {
 	return (
 		<Suspense fallback={<PaperReaderSkeleton />}>
 			<PaperReader
+				bookmarks={bookmarks}
 				fetchedPaperPromise={fetchedPaperPromise}
 				generatedPaperPromise={generatedPaperPromise}
 				addPaperActivityPromise={addPaperActivityPromise}

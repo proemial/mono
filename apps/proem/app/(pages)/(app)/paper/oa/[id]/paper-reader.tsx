@@ -1,21 +1,20 @@
 import { PaperChat } from "@/app/(pages)/(app)/discover/paper-chat";
+import {
+	PaperReaderHeadline,
+	PaperReaderHeadlineProps,
+} from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-headline";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { ChatArticle } from "@/components/chat-article";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
-import {
-	PaperCardDiscover,
-	PaperCardDiscoverProps,
-} from "@/components/paper-card-discover";
+import { PaperCardDiscover } from "@/components/paper-card-discover";
 import { PaperCardDiscoverProfile } from "@/components/paper-card-discover-profile";
 import { Trackable } from "@/components/trackable";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
-import { Header4 } from "@proemial/shadcn-ui";
-import { File02 } from "@untitled-ui/icons-react";
 import { use } from "react";
 import { PaperPost, paperPostsToMessages } from "../../paper-post-utils";
 
-type PaperReaderProps = {
+type PaperReaderProps = Pick<PaperReaderHeadlineProps, "bookmarks"> & {
 	fetchedPaperPromise: Promise<Omit<OpenAlexPaper, "generated">>;
 	generatedPaperPromise: Promise<OpenAlexPaper>;
 	addPaperActivityPromise: Promise<void>;
@@ -27,6 +26,7 @@ export function PaperReader({
 	generatedPaperPromise,
 	addPaperActivityPromise,
 	paperPosts,
+	bookmarks,
 }: PaperReaderProps) {
 	const fetchedPaper = use(fetchedPaperPromise);
 	const generatedPaper = use(generatedPaperPromise);
@@ -39,10 +39,10 @@ export function PaperReader({
 				<CollapsibleSection
 					trackingKey={analyticsKeys.read.click.collapse}
 					trigger={
-						<div className="flex items-center gap-3">
-							<File02 className="size-5" />
-							<Header4>Research Paper</Header4>
-						</div>
+						<PaperReaderHeadline
+							paperId={fetchedPaper.id}
+							bookmarks={bookmarks}
+						/>
 					}
 					collapsed
 				>

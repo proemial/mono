@@ -1,3 +1,4 @@
+"use client";
 import { addPaperToDefaultCollection } from "@/app/(pages)/(app)/discover/bookmark-paper";
 import { AddButton, AddButtonSkeleton } from "@/components/add-button";
 import {
