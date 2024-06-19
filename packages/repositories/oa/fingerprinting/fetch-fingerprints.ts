@@ -32,7 +32,9 @@ async function fetchPapers<T>(ids: string[], select: string): Promise<T> {
 	if (!ids?.length) {
 		return [] as T;
 	}
-	const filter = `ids.openalex:${ids.join("|")}`;
+	const filter = `ids.openalex:${ids
+		.filter((str) => /^W\d+/.test(str)) // Remove invalid paper ids
+		.join("|")}`;
 	const url = `${oaBaseUrl}?${oaBaseArgs}&select=${select}&filter=${filter}`;
 
 	const result = await fetchJson<OpenAlexWorksSearchResult>(url);

@@ -20,6 +20,10 @@ export async function fetchJson<T>(url: string) {
 		});
 		const json = await response.json();
 
+		if (!response.ok) {
+			throw new Error(json.message || json);
+		}
+
 		return json as T;
 	} finally {
 		Time.log(begin, "fetchJson");
