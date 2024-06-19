@@ -13,7 +13,6 @@ import {
 	getOrgMemberPaperPosts,
 	getOwnPaperPosts,
 } from "../../paper-post-utils";
-import { addPaperActivity } from "./paper-activity";
 
 type Props = {
 	paperId: string;
@@ -47,15 +46,12 @@ export default async function PaperPage({ paperId, type }: Props) {
 		}
 	}
 
-	const addPaperActivityPromise = addPaperActivity(paperId);
-
 	return (
 		<Suspense fallback={<PaperReaderSkeleton />}>
 			<PaperReader
 				bookmarks={bookmarks}
 				fetchedPaperPromise={fetchedPaperPromise}
 				generatedPaperPromise={generatedPaperPromise}
-				addPaperActivityPromise={addPaperActivityPromise}
 				paperPosts={paperPosts}
 			/>
 		</Suspense>
