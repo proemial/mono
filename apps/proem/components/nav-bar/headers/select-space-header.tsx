@@ -1,8 +1,7 @@
 "use client";
 
 import { PERSONAL_DEFAULT_COLLECTION_NAME } from "@/app/constants";
-import { getCollections } from "@/app/profile/actions";
-import { useUser } from "@clerk/nextjs";
+import { Collection } from "@proemial/data/neon/schema";
 import {
 	Select,
 	SelectContent,
@@ -13,23 +12,23 @@ import {
 	SelectValue,
 } from "@proemial/shadcn-ui";
 import { useParams, useRouter } from "next/navigation";
-import { useQuery } from "react-query";
 
-export const SelectSpaceHeader = () => {
-	const { user } = useUser();
+type Props = {
+	collections: Collection[];
+	userId: string;
+};
+
+export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 	const params = useParams();
 	const router = useRouter();
 
-	const { data: collections } = useQuery({
-		queryKey: ["collections", user?.id],
-		queryFn: async () => getCollections(user?.id ?? ""),
-		enabled: !!user?.id,
-	});
-
-	const collectionName =
-		collections?.find((collection) => collection.slug === params.id)?.name ??
-		PERSONAL_DEFAULT_COLLECTION_NAME;
-	const defaultCollectionId = user?.id;
+	const selectedCollection = collections.find(
+		(collection) => collection.slug === params.id,
+	);
+	const defaultCollection = {
+		id: userId,
+		name: PERSONAL_DEFAULT_COLLECTION_NAME,
+	};
 
 	const handleValueChange = (value: string) => {
 		router.push(`/collection/${value}`);
@@ -39,10 +38,12 @@ export const SelectSpaceHeader = () => {
 		<div className="flex gap-1 items-center">
 			<Select
 				onValueChange={handleValueChange}
-				value={(params.id as string) ?? defaultCollectionId}
+				value={selectedCollection?.slug ?? defaultCollection.id}
 			>
 				<SelectTrigger className="border-none flex gap-2 text-lg">
-					<SelectValue placeholder={collectionName} />
+					<SelectValue
+						placeholder={selectedCollection?.name ?? defaultCollection.name}
+					/>
 				</SelectTrigger>
 				<SelectContent>
 					<SelectGroup>

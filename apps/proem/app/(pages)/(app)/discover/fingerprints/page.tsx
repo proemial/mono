@@ -8,8 +8,11 @@ import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { auth } from "@clerk/nextjs";
+import { neonDb } from "@proemial/data";
+import { collections } from "@proemial/data/neon/schema";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
+import { eq } from "drizzle-orm";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Feed } from "../feed";
@@ -31,7 +34,7 @@ type Props = {
 
 export default async function FingerprintsPage({ searchParams }: Props) {
 	const { isInternal } = getInternalUser();
-	const { userId } = await auth();
+	const { userId } = auth();
 	const params = {
 		ids: searchParams?.ids?.length ? searchParams.ids : undefined,
 		days: searchParams?.days
@@ -58,11 +61,19 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 		fingerprints,
 		searchParams?.weights,
 	);
+	const userCollections = userId
+		? await neonDb.query.collections.findMany({
+				where: eq(collections.ownerId, userId),
+			})
+		: [];
 
 	return (
 		<>
 			<NavBarV2 action={<GoBackAction />} isInternalUser={isInternal}>
-				<SelectSpaceHeader />
+				<SelectSpaceHeader
+					collections={userCollections}
+					userId={userId ?? ""}
+				/>
 			</NavBarV2>
 			<Main>
 				<div className="space-y-6">

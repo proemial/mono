@@ -14,7 +14,7 @@ type PageProps = {
 };
 
 export default async function CollectionPage({ params }: PageProps) {
-	const { userId } = await auth();
+	const { userId } = auth();
 	if (!params?.id) {
 		notFound();
 	}

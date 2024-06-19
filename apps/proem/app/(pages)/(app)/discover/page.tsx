@@ -9,6 +9,8 @@ import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-actio
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { auth } from "@clerk/nextjs/server";
+import { neonDb } from "@proemial/data";
+import { collections } from "@proemial/data/neon/schema";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import {
 	fetchFingerprints,
@@ -16,6 +18,7 @@ import {
 } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { OaFields } from "@proemial/repositories/oa/taxonomy/fields";
 import { Badge } from "@proemial/shadcn-ui";
+import { eq } from "drizzle-orm";
 import { FeedFilter } from "./feed-filter";
 import { getBookmarksByUserId } from "./get-bookmarks-by-user-id";
 
@@ -43,15 +46,23 @@ export default async function DiscoverPage({ searchParams }: Props) {
 	const { userId } = auth();
 	const { isInternal } = getInternalUser();
 
-	const [filter, bookmarks] = await Promise.all([
+	const [filter, bookmarks, userCollections] = await Promise.all([
 		getFilter(params),
 		userId ? getBookmarksByUserId(userId) : {},
+		userId
+			? neonDb.query.collections.findMany({
+					where: eq(collections.ownerId, userId),
+				})
+			: [],
 	]);
 
 	return (
 		<>
 			<NavBarV2 action={<OpenSearchAction />} isInternalUser={isInternal}>
-				<SelectSpaceHeader />
+				<SelectSpaceHeader
+					collections={userCollections}
+					userId={userId ?? ""}
+				/>
 			</NavBarV2>
 			<Main>
 				<div className="space-y-6">

@@ -48,6 +48,9 @@ export default async function ({ params, children }: PageProps) {
 			},
 		},
 	});
+	const userCollections = await neonDb.query.collections.findMany({
+		where: eq(collections.ownerId, userId),
+	});
 
 	if (!collection) {
 		notFound();
@@ -69,7 +72,7 @@ export default async function ({ params, children }: PageProps) {
 	return (
 		<>
 			<NavBarV2 action={<OpenSearchAction />} isInternalUser={isInternal}>
-				<SelectSpaceHeader />
+				<SelectSpaceHeader collections={userCollections} userId={userId} />
 			</NavBarV2>
 			<Main>
 				<div className="flex flex-col grow gap-10">
