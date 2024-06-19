@@ -6,6 +6,7 @@ import { trimForQuotes } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Header2, Header4, Icons, Paragraph } from "@proemial/shadcn-ui";
 import { Suspense } from "react";
+import Markdown from "./markdown";
 
 type ChatArticleProps = {
 	type: "Answer" | "Summary";
@@ -38,7 +39,11 @@ export function ChatArticle({
 
 			{title ? <Title title={title} /> : null}
 
-			{text && <Paragraph>{text}</Paragraph>}
+			{text && (
+				<Paragraph>
+					<Markdown>{text}</Markdown>
+				</Paragraph>
+			)}
 
 			{paper && (
 				<Suspense fallback={<Spinner />}>
@@ -51,7 +56,11 @@ export function ChatArticle({
 
 function Title({ title }: { title: string }) {
 	// Remove potential leading/trailing quotes from the title
-	return <Header2>{trimForQuotes(title)}</Header2>;
+	return (
+		<Header2>
+			<Markdown>{trimForQuotes(title)}</Markdown>
+		</Header2>
+	);
 }
 
 function Spinner() {

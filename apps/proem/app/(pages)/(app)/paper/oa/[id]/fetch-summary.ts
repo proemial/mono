@@ -2,9 +2,7 @@
 
 import { summarise } from "@/app/prompts/summarise-title";
 import { Redis } from "@proemial/redis/redis";
-import { Paragraph } from "@proemial/shadcn-ui";
 import { fetchPaper } from "./fetch-paper";
-import Markdown from "./markdown";
 
 export async function fetchSummary<
 	TPaper extends {

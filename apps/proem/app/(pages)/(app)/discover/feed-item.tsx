@@ -8,9 +8,9 @@ import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-to
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { ReactNode, useMemo } from "react";
-import Markdown from "react-markdown";
 import { FeedItemCard, FeedItemCardProps } from "./feed-item-card";
 import { FeedItemTag } from "./feed-item-tag";
+import Markdown from "@/components/markdown";
 
 dayjs.extend(relativeTime);
 

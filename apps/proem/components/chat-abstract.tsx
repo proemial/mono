@@ -3,12 +3,17 @@ import { summariseAbstract } from "@/app/prompts/summarise-abstract";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Redis } from "@proemial/redis/redis";
 import { Paragraph } from "@proemial/shadcn-ui";
+import Markdown from "./markdown";
 
 export async function MicroAbstract({ paper }: { paper: OpenAlexPaper }) {
 	if (!paper.data.title || !paper.data.abstract) return;
 
 	if (paper.generated?.abstract) {
-		return <Paragraph>{paper.generated?.abstract}</Paragraph>;
+		return (
+			<Paragraph>
+				<Markdown>{paper.generated?.abstract}</Markdown>
+			</Paragraph>
+		);
 	}
 
 	const microAbstract = await summariseAbstract(
@@ -28,5 +33,9 @@ export async function MicroAbstract({ paper }: { paper: OpenAlexPaper }) {
 		};
 	});
 
-	return <Paragraph>{microAbstract}</Paragraph>;
+	return (
+		<Paragraph>
+			<Markdown>{microAbstract ?? ""}</Markdown>
+		</Paragraph>
+	);
 }

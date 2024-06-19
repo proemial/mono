@@ -3,7 +3,6 @@ import {
 	AddToCollectionButton,
 	AddToCollectionButtonProps,
 } from "@/app/(pages)/(app)/discover/add-to-collection-button";
-import Markdown from "@/app/(pages)/(app)/paper/oa/[id]/markdown";
 import { useInternalUser } from "@/app/hooks/use-user";
 import { toTitleCaseIfAllCaps } from "@/utils/string-utils";
 import {
@@ -13,6 +12,7 @@ import {
 	CardTitle,
 	Icons,
 } from "@proemial/shadcn-ui";
+import Markdown from "./markdown";
 
 export type PaperCardProps = Partial<
 	Pick<AddToCollectionButtonProps, "paperId" | "bookmarks" | "fromTrackingKey">
