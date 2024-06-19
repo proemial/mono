@@ -25,6 +25,7 @@ type Props = {
 	onShare?: () => void;
 	onEdit: (collection: Collection) => void;
 	onDelete: (collectionId: Collection["id"]) => void;
+	readonly?: boolean;
 };
 
 export const CollectionListItem = ({
@@ -32,6 +33,7 @@ export const CollectionListItem = ({
 	onShare,
 	onEdit,
 	onDelete,
+	readonly,
 }: Props) => {
 	const { name, slug } = collection;
 	return (
@@ -42,51 +44,53 @@ export const CollectionListItem = ({
 					<div className="text-sm">{name}</div>
 				</DrawerClose>
 			</Link>
-			<div className="flex gap-6 items-center">
-				{/* Share */}
-				{/* <IconButton onClick={onShare} title="Share">
-					<Upload01 className="size-4" />
-				</IconButton> */}
-				{/* Edit */}
-				<FullSizeDrawer
-					trigger={
-						<IconButton title="Edit">
-							<Edit03 className="size-4" />
-						</IconButton>
-					}
-				>
-					<EditCollection collection={collection} onSubmit={onEdit} />
-				</FullSizeDrawer>
-				{/* Delete */}
-				<Dialog>
-					<DialogTrigger>
-						<IconButton title="Delete">
-							<Trash01 className="size-4" />
-						</IconButton>
-					</DialogTrigger>
-					<DialogContent>
-						<DialogTitle>Delete {name}?</DialogTitle>
-						<div className="flex gap-6 justify-center py-4">
-							<DialogClose asChild>
-								<Button
-									className="w-[80px] gap-1"
-									onClick={() => onDelete(collection.id)}
-									autoFocus
-								>
-									<Check className="size-4 opacity-75" />
-									Yes
-								</Button>
-							</DialogClose>
-							<DialogClose asChild>
-								<Button className="w-[80px] gap-1">
-									<X className="size-4 opacity-75" />
-									No
-								</Button>
-							</DialogClose>
-						</div>
-					</DialogContent>
-				</Dialog>
-			</div>
+			{!readonly && (
+				<div className="flex gap-6 items-center">
+					{/* Share */}
+					{/* <IconButton onClick={onShare} title="Share">
+						<Upload01 className="size-4" />
+					</IconButton> */}
+					{/* Edit */}
+					<FullSizeDrawer
+						trigger={
+							<IconButton title="Edit">
+								<Edit03 className="size-4" />
+							</IconButton>
+						}
+					>
+						<EditCollection collection={collection} onSubmit={onEdit} />
+					</FullSizeDrawer>
+					{/* Delete */}
+					<Dialog>
+						<DialogTrigger>
+							<IconButton title="Delete">
+								<Trash01 className="size-4" />
+							</IconButton>
+						</DialogTrigger>
+						<DialogContent>
+							<DialogTitle>Delete {name}?</DialogTitle>
+							<div className="flex gap-6 justify-center py-4">
+								<DialogClose asChild>
+									<Button
+										className="w-[80px] gap-1"
+										onClick={() => onDelete(collection.id)}
+										autoFocus
+									>
+										<Check className="size-4 opacity-75" />
+										Yes
+									</Button>
+								</DialogClose>
+								<DialogClose asChild>
+									<Button className="w-[80px] gap-1">
+										<X className="size-4 opacity-75" />
+										No
+									</Button>
+								</DialogClose>
+							</div>
+						</DialogContent>
+					</Dialog>
+				</div>
+			)}
 		</div>
 	);
 };

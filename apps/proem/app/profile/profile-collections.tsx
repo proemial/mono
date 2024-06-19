@@ -61,6 +61,7 @@ export const ProfileCollections = () => {
 						collection={collection}
 						onEdit={edit}
 						onDelete={del}
+						readonly={collection.id === user.id}
 					/>
 				))}
 				<CreateCollectionDrawer
