@@ -29,22 +29,19 @@ type Props = {
 };
 
 export const NavBarV2 = ({ children, action, isInternalUser }: Props) => {
-	// if (!isInternalUser) {
-	return <NavigationMenuBar />;
-	// }
+	if (!isInternalUser) {
+		return <NavigationMenuBar />;
+	}
 
-	/**
-	 * Disable until we launch the new nav bar.
-	 */
-	// return (
-	// 	<NavigationMenu>
-	// 		<NavigationMenuList className="justify-between flex-nowrap">
-	// 			<NavigationMenuItem>
-	// 				<Profile />
-	// 			</NavigationMenuItem>
-	// 			<NavigationMenuItem className="truncate">{children}</NavigationMenuItem>
-	// 			<NavigationMenuItem>{action}</NavigationMenuItem>
-	// 		</NavigationMenuList>
-	// 	</NavigationMenu>
-	// );
+	return (
+		<NavigationMenu>
+			<NavigationMenuList className="justify-between flex-nowrap">
+				<NavigationMenuItem>
+					<Profile />
+				</NavigationMenuItem>
+				<NavigationMenuItem className="truncate">{children}</NavigationMenuItem>
+				<NavigationMenuItem>{action}</NavigationMenuItem>
+			</NavigationMenuList>
+		</NavigationMenu>
+	);
 };
