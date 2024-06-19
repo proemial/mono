@@ -13,11 +13,11 @@ import { neonDb } from "@proemial/data";
 import { isCollectionId } from "@proemial/data/lib/create-id";
 import { collections } from "@proemial/data/neon/schema";
 import { Avatar, AvatarImage, Paragraph } from "@proemial/shadcn-ui";
-import { FilePlus02 } from "@untitled-ui/icons-react";
+import { FilePlus02, Upload01 } from "@untitled-ui/icons-react";
 import { eq } from "drizzle-orm";
 import { notFound, redirect } from "next/navigation";
 import { ReactNode } from "react";
-import { NavButton } from "./nav-item";
+import { NavItem } from "./nav-item";
 
 type PageProps = {
 	params?: {
@@ -60,7 +60,7 @@ export default async function ({ params, children }: PageProps) {
 			})
 		: [];
 
-	const otherOrgMembersUserData = (
+	const orgMembersUserData = (
 		[...orgMemberships]
 			.map((membership) => membership.publicUserData)
 			.filter(Boolean) as OrganizationMembershipPublicUserData[]
@@ -76,27 +76,27 @@ export default async function ({ params, children }: PageProps) {
 					<div className="flex flex-col gap-3">
 						<Paragraph>{collection.description}</Paragraph>
 						<div className="flex gap-2 justify-between items-center flex-row-reverse">
-							{/* <div className="flex gap-4">
-								<IconButton title="Add a paper…">
+							<div className="flex gap-4">
+								{/* <IconButton title="Add a paper…">
 									<FilePlus02 className="size-[18px] opacity-75" />
 								</IconButton>
 								<IconButton>
 									<Upload01 className="size-[18px] opacity-75" />
-								</IconButton>
-							</div> */}
+								</IconButton> */}
+							</div>
 							{collectionIsPublic ? (
 								<div className="flex gap-2 items-center">
-									{otherOrgMembersUserData.map((orgMember) => (
+									{orgMembersUserData.map((orgMember) => (
 										<Avatar
 											key={orgMember.userId}
-											className="-ml-[18px] size-6 hover:brightness-110 duration-200"
+											className="-ml-[18px] first:ml-0 size-6 hover:brightness-110 duration-200"
 											title={`${orgMember.firstName} ${orgMember.lastName}`}
 										>
 											<AvatarImage src={orgMember.imageUrl} />
 										</Avatar>
 									))}
 									<div className="text-sm">
-										{otherOrgMembersUserData.length} members
+										{orgMembersUserData.length} members
 									</div>
 								</div>
 							) : null}
@@ -104,11 +104,11 @@ export default async function ({ params, children }: PageProps) {
 					</div>
 					{/* Disabled until we launch dynamic lists */}
 					{/* <div className="flex gap-1 justify-center items-center">
-						<NavButton
+						<NavItem
 							href={`/collection/${collection.slug}`}
 							title="Collection"
 						/>
-						<NavButton
+						<NavItem
 							href={`/collection/${collection.slug}/stream`}
 							title="Stream"
 						/>

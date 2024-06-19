@@ -4,7 +4,7 @@ import { cn } from "@proemial/shadcn-ui";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export const NavButton = ({ href, title }: { href: string; title: string }) => {
+export const NavItem = ({ href, title }: { href: string; title: string }) => {
 	const pathname = usePathname();
 	const isActive = pathname === href;
 	return (
