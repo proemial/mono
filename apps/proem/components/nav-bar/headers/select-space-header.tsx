@@ -26,7 +26,7 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 		(collection) => collection.slug === params.id,
 	);
 	const defaultCollection = {
-		id: userId,
+		slug: userId,
 		name: PERSONAL_DEFAULT_COLLECTION_NAME,
 	};
 
@@ -38,23 +38,25 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 		<div className="flex gap-1 items-center">
 			<Select
 				onValueChange={handleValueChange}
-				value={selectedCollection?.slug ?? defaultCollection.id}
+				value={selectedCollection?.slug ?? defaultCollection.slug}
 			>
 				<SelectTrigger className="border-none flex gap-2 text-lg">
 					<SelectValue
 						placeholder={selectedCollection?.name ?? defaultCollection.name}
 					/>
 				</SelectTrigger>
-				<SelectContent>
-					<SelectGroup>
-						<SelectLabel>Switch Space</SelectLabel>
-						{collections?.map((collection) => (
-							<SelectItem key={collection.id} value={collection.slug}>
-								{collection.name}
-							</SelectItem>
-						))}
-					</SelectGroup>
-				</SelectContent>
+				{collections.length > 0 && (
+					<SelectContent>
+						<SelectGroup>
+							<SelectLabel>Switch Space</SelectLabel>
+							{collections?.map((collection) => (
+								<SelectItem key={collection.id} value={collection.slug}>
+									{collection.name}
+								</SelectItem>
+							))}
+						</SelectGroup>
+					</SelectContent>
+				)}
 			</Select>
 		</div>
 	);
