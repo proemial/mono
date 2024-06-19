@@ -6,6 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { Collection, NewCollection } from "@proemial/data/neon/schema";
 import { Plus } from "@untitled-ui/icons-react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { PERSONAL_DEFAULT_COLLECTION_NAME } from "../constants";
 import {
 	addCollection,
 	deleteCollection,
@@ -46,6 +47,10 @@ export const ProfileCollections = () => {
 		return null;
 	}
 
+	const customCollections = collections.filter(
+		(collection) => collection.id !== user.id,
+	);
+
 	return (
 		<CollapsibleSection
 			extra={<div>{collections.length}</div>}
@@ -55,13 +60,25 @@ export const ProfileCollections = () => {
 				{collections.length === 0 && (
 					<div className="text-sm">There are no collections to display.</div>
 				)}
-				{collections.map((collection) => (
+				<CollectionListItem
+					collection={{
+						name: PERSONAL_DEFAULT_COLLECTION_NAME,
+						id: user.id,
+						slug: user.id,
+						ownerId: user.id,
+						description: "",
+						createdAt: new Date(),
+					}}
+					onEdit={edit}
+					onDelete={del}
+					readonly={true}
+				/>
+				{customCollections.map((collection) => (
 					<CollectionListItem
 						key={collection.id}
 						collection={collection}
 						onEdit={edit}
 						onDelete={del}
-						readonly={collection.id === user.id}
 					/>
 				))}
 				<CreateCollectionDrawer
