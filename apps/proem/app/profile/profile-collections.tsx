@@ -4,6 +4,7 @@ import { CreateCollection } from "@/components/collections/create-collection";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
 import { useUser } from "@clerk/nextjs";
 import { Collection, NewCollection } from "@proemial/data/neon/schema";
+import { ScrollArea } from "@proemial/shadcn-ui";
 import { Plus } from "@untitled-ui/icons-react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { PERSONAL_DEFAULT_COLLECTION_NAME } from "../constants";
@@ -56,40 +57,42 @@ export const ProfileCollections = () => {
 			extra={<div>{collections.length}</div>}
 			trigger={<div>Collections</div>}
 		>
-			<div className="space-y-4 mt-4">
-				{collections.length === 0 && (
-					<div className="text-sm">There are no collections to display.</div>
-				)}
-				<CollectionListItem
-					collection={{
-						name: PERSONAL_DEFAULT_COLLECTION_NAME,
-						id: user.id,
-						slug: user.id,
-						ownerId: user.id,
-						description: "",
-						createdAt: new Date(),
-					}}
-					onEdit={edit}
-					onDelete={del}
-					readonly={true}
-				/>
-				{customCollections.map((collection) => (
+			<ScrollArea className="h-[200px]">
+				<div className="space-y-4 mt-4">
+					{collections.length === 0 && (
+						<div className="text-sm">There are no collections to display.</div>
+					)}
 					<CollectionListItem
-						key={collection.id}
-						collection={collection}
+						collection={{
+							name: PERSONAL_DEFAULT_COLLECTION_NAME,
+							id: user.id,
+							slug: user.id,
+							ownerId: user.id,
+							description: "",
+							createdAt: new Date(),
+						}}
 						onEdit={edit}
 						onDelete={del}
+						readonly={true}
 					/>
-				))}
-				<CreateCollectionDrawer
-					trigger={
-						<div className="flex gap-2 items-center hover:opacity-85 active:opacity-75 duration-200 cursor-pointer">
-							<Plus className="size-4 opacity-85" />
-							<div className="text-sm">Create New Collection…</div>
-						</div>
-					}
-				/>
-			</div>
+					{customCollections.map((collection) => (
+						<CollectionListItem
+							key={collection.id}
+							collection={collection}
+							onEdit={edit}
+							onDelete={del}
+						/>
+					))}
+				</div>
+			</ScrollArea>
+			<CreateCollectionDrawer
+				trigger={
+					<div className="flex gap-2 items-center hover:opacity-85 active:opacity-75 duration-200 cursor-pointer">
+						<Plus className="size-4 opacity-85" />
+						<div className="text-sm">Create New Collection…</div>
+					</div>
+				}
+			/>
 		</CollapsibleSection>
 	);
 };
