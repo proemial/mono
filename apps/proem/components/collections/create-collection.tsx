@@ -14,6 +14,7 @@ import {
 } from "@proemial/shadcn-ui";
 import { DialogClose } from "@proemial/shadcn-ui/components/ui/dialog";
 import { createInsertSchema } from "drizzle-zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 const newCollectionSchema = createInsertSchema(collections, {
@@ -24,9 +25,10 @@ const newCollectionSchema = createInsertSchema(collections, {
 type Props = {
 	collection: NewCollection;
 	onSubmit: (collection: NewCollection) => void;
+	noDialog?: boolean;
 };
 
-export const CreateCollection = ({ collection, onSubmit }: Props) => {
+export const CreateCollection = ({ collection, onSubmit, noDialog }: Props) => {
 	const form = useForm({
 		resolver: zodResolver(newCollectionSchema),
 		values: {
@@ -34,6 +36,7 @@ export const CreateCollection = ({ collection, onSubmit }: Props) => {
 			description: collection.description ?? "",
 		},
 	});
+	const router = useRouter();
 
 	const errorStyles = form.getFieldState("name").invalid
 		? "border border-red-300 border"
@@ -87,14 +90,24 @@ export const CreateCollection = ({ collection, onSubmit }: Props) => {
 							/>
 						</div>
 						<div className="flex justify-center">
-							<DialogClose asChild>
+							{noDialog ? (
 								<Button
 									type="submit"
 									className="bg-[#00AA0C]/5 text-[12px] dark:bg-primary text-[#00AA0C] dark:text-primary-foreground rounded-full w-[114px] h-10 mb-3 hover:bg-[#00AA0C]/10 dark:hover:bg-primary/90 duration-200"
+									onClick={() => router.back()}
 								>
 									Create
 								</Button>
-							</DialogClose>
+							) : (
+								<DialogClose asChild>
+									<Button
+										type="submit"
+										className="bg-[#00AA0C]/5 text-[12px] dark:bg-primary text-[#00AA0C] dark:text-primary-foreground rounded-full w-[114px] h-10 mb-3 hover:bg-[#00AA0C]/10 dark:hover:bg-primary/90 duration-200"
+									>
+										Create
+									</Button>
+								</DialogClose>
+							)}
 						</div>
 					</div>
 				</form>

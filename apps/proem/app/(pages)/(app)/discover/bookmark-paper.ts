@@ -7,53 +7,82 @@ import {
 import { auth } from "@clerk/nextjs";
 import { neonDb } from "@proemial/data";
 import {
+	NewCollection,
 	collections,
 	collectionsToPapers,
 	papers,
 } from "@proemial/data/neon/schema";
 import { and, eq } from "drizzle-orm";
+import { createInsertSchema } from "drizzle-zod";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
 
-const addPaperToDefaultCollectionParams = z.object({
+const addPaperToCollectionParams = z.object({
 	paperId: z.string(),
+	collection: createInsertSchema(collections).optional(),
 });
 
 /**
- * addPapeToDefaultCollection adds a paper to the user's default collection.
- * Create the default collection for the given user if it doesn't exist.
+ * Adds a given paper to a collection. If a collection is not specified, the
+ * paper will be added to the user's default collection.
+ *
+ * In any case, this will create a collection if it doesn't exist.
  */
-export async function addPaperToDefaultCollection(
-	params: z.infer<typeof addPaperToDefaultCollectionParams>,
+export async function addPaperToCollection(
+	params: z.infer<typeof addPaperToCollectionParams>,
 ) {
 	const { userId } = auth();
-	const { paperId } = addPaperToDefaultCollectionParams.parse(params);
+	const { paperId, collection } = addPaperToCollectionParams.parse(params);
+
 	if (!userId) {
 		return;
 	}
 
-	await Promise.all([
+	const results = await Promise.all([
+		// Ensure paper exists in db
 		neonDb
-			.insert(collections)
-			.values({
-				id: userId,
-				ownerId: userId,
-				name: PERSONAL_DEFAULT_COLLECTION_NAME,
-				slug: userId,
-			})
-			.returning()
+			.insert(papers)
+			.values({ id: paperId })
 			.onConflictDoNothing(),
-		neonDb.insert(papers).values({ id: paperId }).onConflictDoNothing(),
+		// Ensure collection exists in db
+		...[
+			collection
+				? ensureCollectionExists(collection)
+				: ensureDefaultCollectionExists(userId),
+		],
 	]);
+
+	const newCollectionId = results[1]?.[0]?.id;
+	if (collection && !newCollectionId) {
+		throw new Error("Failed to create collection");
+	}
 
 	await neonDb
 		.insert(collectionsToPapers)
-		.values({ collectionsId: userId, paperId })
+		.values({
+			collectionsId: collection && newCollectionId ? newCollectionId : userId,
+			paperId,
+		})
 		.onConflictDoNothing();
 
 	revalidateTag(getBookmarkCacheTag(userId));
 	return {};
 }
+
+const ensureDefaultCollectionExists = (userId: string) =>
+	ensureCollectionExists({
+		id: userId,
+		ownerId: userId,
+		name: PERSONAL_DEFAULT_COLLECTION_NAME,
+		slug: userId,
+	});
+
+const ensureCollectionExists = (collection: NewCollection) =>
+	neonDb
+		.insert(collections)
+		.values(collection)
+		.returning()
+		.onConflictDoNothing();
 
 const togglePaperInCollectionParams = z.object({
 	paperId: z.string(),

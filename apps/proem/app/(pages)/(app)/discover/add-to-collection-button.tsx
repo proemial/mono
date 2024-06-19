@@ -1,5 +1,5 @@
 "use client";
-import { addPaperToDefaultCollection } from "@/app/(pages)/(app)/discover/bookmark-paper";
+import { addPaperToCollection } from "@/app/(pages)/(app)/discover/bookmark-paper";
 import { AddButton, AddButtonSkeleton } from "@/components/add-button";
 import {
 	CollectionSelectorProps,
@@ -71,7 +71,7 @@ export function AddToCollectionButton({
 					newBookmarksCollectionId,
 					bookmarks: optimisticBookmarksWithExtraOptimism,
 				});
-				await addPaperToDefaultCollection({ paperId });
+				await addPaperToCollection({ paperId });
 			}}
 		/>
 	);

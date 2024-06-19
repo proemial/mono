@@ -13,6 +13,8 @@ import {
 	openUnstyledNotifcation,
 } from "@/components/notification";
 import { Button, toast } from "@proemial/shadcn-ui";
+import { Plus } from "@untitled-ui/icons-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
@@ -64,22 +66,19 @@ function CollectionSelector({
 								});
 							}}
 						>
-							{name}
+							<span className="font-normal">{name}</span>
 						</Checkbox>
 					</div>
 				))}
-				{/* <CreateCollectionDrawer
-					trigger={
-						<Button
-							onClick={() => {
-								// TODO! This doesn't work
-								// onClose?.();
-							}}
-						>
-							Create new collection
-						</Button>
-					}
-				/> */}
+				<Link
+					href={`/collection/new?paperId=${paperId}`}
+					onClick={() => onClose?.()}
+				>
+					<div className="flex gap-4 px-4 py-2 text-base items-center">
+						<Plus className="size-4" />
+						<span>Create new collection</span>
+					</div>
+				</Link>
 			</div>
 		</Notification>
 	);
