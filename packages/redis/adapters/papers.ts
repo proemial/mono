@@ -96,17 +96,21 @@ export const OpenAlexPapers = {
 				pipeline.get(`${prefix}:${id}`);
 			}
 			const dbPapers = await pipeline.exec<OpenAlexPaper[]>();
+			console.log("[upsertAll] fetched", dbPapers.length, "papers");
 
 			// Update existing papers
 			const updatePipeline = UpStash.papers().pipeline();
 			for (const paper of dbPapers) {
+				if (!paper) continue;
 				const updated = papersArray.find((p) => p.id === paper.id);
 				updatePipeline.set(`${prefix}:${paper.id}`, {
 					...paper,
 					...updated,
 				});
 			}
-			await updatePipeline.exec<OpenAlexPaper[]>();
+			if (updatePipeline.length() > 0) {
+				await updatePipeline.exec<OpenAlexPaper[]>();
+			}
 
 			// Push missing papers
 			const dbPaperIds = dbPapers.map((paper) => paper?.id);
