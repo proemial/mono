@@ -70,7 +70,8 @@
 		"tailwind-scrollbar-hide": "1.1.7",
 		"zod": "3.22.4",
 		"zod-to-json-schema": "3.22.5",
-		"zustand": "^4.5.2"
+		"zustand": "^4.5.2",
+		"inngest": "^3.19.16"
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",
