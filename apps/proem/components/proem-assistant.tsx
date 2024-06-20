@@ -9,6 +9,10 @@ import {
 } from "@proemial/shadcn-ui";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "./analytics/tracking/tracking-keys";
 import { ProemLogo } from "./icons/brand/logo";
 
 type Props = {
@@ -27,7 +31,23 @@ export const ProemAssistant = ({ internalUser }: Props) => {
 		e.preventDefault();
 		const encodedInput = encodeURIComponent(input);
 		setDrawerOpen(false);
+		trackHandler(analyticsKeys.assistant.askAQuestion);
 		router.push(`/answer/?q=${encodedInput}`);
+	};
+
+	const handleOpen = () => {
+		trackHandler(analyticsKeys.assistant.open);
+		setDrawerOpen(true);
+	};
+
+	const handleOpenChange = (open: boolean) => {
+		if (!open) {
+			trackHandler(analyticsKeys.assistant.close);
+			setDrawerOpen(false);
+		} else {
+			// This gets triggered multiple times during transitions
+			setDrawerOpen(open);
+		}
 	};
 
 	if (!internalUser) {
@@ -41,7 +61,7 @@ export const ProemAssistant = ({ internalUser }: Props) => {
 				variant="default"
 				size="icon"
 				className="bg-white dark:bg-primary drop-shadow-xl hover:drop-shadow-lg pointer-events-auto"
-				onClick={() => setDrawerOpen(true)}
+				onClick={handleOpen}
 			>
 				<ProemLogo size="xs" />
 			</Button>
@@ -49,14 +69,15 @@ export const ProemAssistant = ({ internalUser }: Props) => {
 				shouldScaleBackground={false}
 				setBackgroundColorOnScale={false} // For some reason, this is not working
 				open={drawerOpen}
-				onOpenChange={(openState) => setDrawerOpen(openState)}
-				snapPoints={[0.2, 0.5, 0.8]} // Background color not changed until last snap point
+				onOpenChange={handleOpenChange}
+				// snapPoints={[0.2, 0.3]} // 1) Background color not changed until last snap point. 2) Breaks exit animation
 			>
-				<DrawerContent className="max-w-xl mx-auto h-full">
+				<DrawerContent className="max-w-xl mx-auto">
 					<ScrollArea>
 						<div className="flex flex-col gap-6 py-4 pb-5 px-3">
 							<form onSubmit={handleSubmit}>
 								<Input
+									autoFocus
 									placeholder="Ask anything…"
 									className="rounded-full bg-white dark:bg-primary border-none placeholder:opacity-75"
 									value={input}

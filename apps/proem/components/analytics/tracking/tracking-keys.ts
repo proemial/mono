@@ -158,6 +158,11 @@ export const analyticsKeys = {
 			logout: "profile:logout:click",
 		},
 	},
+	assistant: {
+		open: "assistant:open",
+		close: "assistant:close",
+		askAQuestion: "assistant:ask_a_question",
+	},
 	viewName: (path: string) => {
 		return `${getViewName(path)}:view`;
 	},
