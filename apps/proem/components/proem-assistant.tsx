@@ -1,6 +1,5 @@
 "use client";
 
-import { useInternalUser } from "@/app/hooks/use-user";
 import {
 	Button,
 	Drawer,
@@ -11,9 +10,6 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { ProemLogo } from "./icons/brand/logo";
-
-// Do not show on ASK page
-const IGNORED_PATHS = ["/"];
 
 type Props = {
 	/**
@@ -35,12 +31,12 @@ export const ProemAssistant = ({ internalUser }: Props) => {
 		router.push(`/answer/?q=${encodedInput}`);
 	};
 
-	if (IGNORED_PATHS.includes(pathname) || !internalUser) {
+	if (!internalUser || pathname === "/" || pathname.includes("/answer")) {
 		return undefined;
 	}
 
 	return (
-		<div className="fixed bottom-0 left-0 bg-gradient-to-b pt-5 from-transparent to-background h-[100px] w-full flex justify-center pointer-events-none">
+		<div className="fixed bottom-0 left-0 bg-gradient-to-b pt-5 from-transparent to-background h-[80px] sm:h-[100px] w-full flex justify-center pointer-events-none">
 			<Button
 				type="button"
 				variant="default"
@@ -52,11 +48,11 @@ export const ProemAssistant = ({ internalUser }: Props) => {
 			</Button>
 			<Drawer
 				shouldScaleBackground={false}
-				setBackgroundColorOnScale={false}
+				setBackgroundColorOnScale={false} // For some reason, this is not working
 				open={drawerOpen}
 				onOpenChange={(openState) => setDrawerOpen(openState)}
 			>
-				<DrawerContent>
+				<DrawerContent className="max-w-xl mx-auto">
 					<ScrollArea>
 						<div className="flex flex-col gap-6 py-4 pb-5 px-3">
 							<form onSubmit={handleSubmit}>
