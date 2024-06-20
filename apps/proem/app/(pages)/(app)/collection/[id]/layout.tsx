@@ -35,7 +35,7 @@ export default async function ({ params, children }: PageProps) {
 	}
 
 	const { userId, orgId } = auth();
-	if (!userId || !orgId || !params?.id) {
+	if (!userId || !params?.id) {
 		notFound();
 	}
 
@@ -57,17 +57,20 @@ export default async function ({ params, children }: PageProps) {
 
 	const collectionIsPublic = isCollectionId(collection.id);
 
-	const orgMemberships = collectionIsPublic
-		? await clerkClient.organizations.getOrganizationMembershipList({
-				organizationId: orgId,
-			})
-		: [];
+	const orgMemberships =
+		collectionIsPublic && orgId
+			? await clerkClient.organizations.getOrganizationMembershipList({
+					organizationId: orgId,
+				})
+			: null;
 
-	const orgMembersUserData = (
-		[...orgMemberships]
-			.map((membership) => membership.publicUserData)
-			.filter(Boolean) as OrganizationMembershipPublicUserData[]
-	).sort((a, b) => (a.firstName ?? "").localeCompare(b.firstName ?? ""));
+	const orgMembersUserData =
+		orgMemberships &&
+		(
+			[...orgMemberships]
+				.map((membership) => membership.publicUserData)
+				.filter(Boolean) as OrganizationMembershipPublicUserData[]
+		).sort((a, b) => (a.firstName ?? "").localeCompare(b.firstName ?? ""));
 
 	return (
 		<>
@@ -87,7 +90,7 @@ export default async function ({ params, children }: PageProps) {
 									<Upload01 className="size-[18px] opacity-75" />
 								</IconButton> */}
 							</div>
-							{collectionIsPublic ? (
+							{collectionIsPublic && orgMembersUserData ? (
 								<div className="flex gap-2 items-center">
 									{orgMembersUserData.map((orgMember) => (
 										<Avatar
