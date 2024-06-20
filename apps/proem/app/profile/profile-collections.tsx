@@ -4,7 +4,7 @@ import { CreateCollection } from "@/components/collections/create-collection";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
 import { useUser } from "@clerk/nextjs";
 import { Collection, NewCollection } from "@proemial/data/neon/schema";
-import { ScrollArea } from "@proemial/shadcn-ui";
+import { ScrollArea, cn } from "@proemial/shadcn-ui";
 import { Plus } from "@untitled-ui/icons-react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { PERSONAL_DEFAULT_COLLECTION_NAME } from "../constants";
@@ -57,7 +57,7 @@ export const ProfileCollections = () => {
 			extra={<div>{collections.length}</div>}
 			trigger={<div>Collections</div>}
 		>
-			<ScrollArea className="h-[200px]">
+			<ScrollArea className={cn({ "h-[200px]": collections.length > 0 })}>
 				<div className="space-y-4 mt-4">
 					<CollectionListItem
 						collection={{
