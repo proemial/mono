@@ -6,6 +6,7 @@ import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { auth } from "@clerk/nextjs";
+import { Edit05 } from "@untitled-ui/icons-react";
 import { redirect } from "next/navigation";
 
 type Props = {
@@ -25,11 +26,19 @@ export default async function AnswerPage({ searchParams }: Props) {
 
 	return (
 		<>
-			<NavBarV2 action={<GoBackAction />} isInternalUser={isInternal}>
+			<NavBarV2
+				action={
+					<GoBackAction
+						target={"/"}
+						iconOverride={<Edit05 className="size-5" />}
+					/>
+				}
+				isInternalUser={isInternal}
+			>
 				<SimpleHeader title="Ask" />
 			</NavBarV2>
 			<Main>
-				<Answer initialQuestion={searchParams.q} bookmarks={bookmarks} />
+				<Answer initialQuestion={initialQuestion} bookmarks={bookmarks} />
 			</Main>
 		</>
 	);

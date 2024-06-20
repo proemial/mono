@@ -21,7 +21,10 @@ export default async function SearchPage({ searchParams }: Props) {
 
 	return (
 		<>
-			<NavBarV2 action={<GoBackAction />} isInternalUser={isInternal}>
+			<NavBarV2
+				action={<GoBackAction target="/discover" />}
+				isInternalUser={isInternal}
+			>
 				<SimpleHeader title="Search" />
 			</NavBarV2>
 			<Main>

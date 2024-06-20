@@ -35,7 +35,10 @@ export default function NewCollectionPage() {
 
 	return (
 		<>
-			<NavBarV2 action={<GoBackAction />} isInternalUser={isInternal}>
+			<NavBarV2
+				action={<GoBackAction target={`/collection/${user.id}`} />}
+				isInternalUser={isInternal}
+			>
 				<SimpleHeader title="Create new collection" />
 			</NavBarV2>
 			<Main>

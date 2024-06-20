@@ -24,7 +24,10 @@ export default async function OAPaperPage({ params }: Props) {
 
 	return (
 		<>
-			<NavBarV2 action={<GoBackAction />} isInternalUser={isInternal}>
+			<NavBarV2
+				action={<GoBackAction target="/discover" />}
+				isInternalUser={isInternal}
+			>
 				<SelectSpaceHeader
 					collections={userCollections}
 					userId={userId ?? ""}

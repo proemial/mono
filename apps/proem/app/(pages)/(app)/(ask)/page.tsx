@@ -24,7 +24,10 @@ export default function AskPage() {
 
 	return (
 		<>
-			<NavBarV2 action={<GoBackAction />} isInternalUser={isInternal}>
+			<NavBarV2
+				action={<GoBackAction target="/discover" />}
+				isInternalUser={isInternal}
+			>
 				<SimpleHeader title="Ask" />
 			</NavBarV2>
 			<Main>
