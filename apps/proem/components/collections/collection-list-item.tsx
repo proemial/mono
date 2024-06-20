@@ -1,3 +1,5 @@
+"use client";
+
 import { Collection } from "@proemial/data/neon/schema";
 import { Button, DrawerClose } from "@proemial/shadcn-ui";
 import {
@@ -16,6 +18,10 @@ import {
 	X,
 } from "@untitled-ui/icons-react";
 import Link from "next/link";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "../analytics/tracking/tracking-keys";
 import { FullSizeDrawer } from "../full-page-drawer";
 import { EditCollection } from "./edit-collection";
 import { IconButton } from "./icon-button";
@@ -36,9 +42,20 @@ export const CollectionListItem = ({
 	readonly,
 }: Props) => {
 	const { name, slug } = collection;
+
+	const handleCollectionDelete = () => {
+		trackHandler(analyticsKeys.collection.deleteFromMenuConfirmation);
+		onDelete(collection.id);
+	};
+
 	return (
 		<div className="flex justify-between gap-2">
-			<Link href={`/collection/${slug}`} className="">
+			<Link
+				href={`/collection/${slug}`}
+				onClick={() => {
+					trackHandler(analyticsKeys.collection.openFromMenu);
+				}}
+			>
 				<DrawerClose className="flex gap-2 items-center hover:opacity-85 active:opacity-75 duration-200">
 					<Folder className="size-4 opacity-85" />
 					<div className="text-sm">{name}</div>
@@ -53,7 +70,12 @@ export const CollectionListItem = ({
 					{/* Edit */}
 					<FullSizeDrawer
 						trigger={
-							<IconButton title="Edit">
+							<IconButton
+								title="Edit"
+								onClick={() => {
+									trackHandler(analyticsKeys.collection.openEditFormFromMenu);
+								}}
+							>
 								<Edit03 className="size-4" />
 							</IconButton>
 						}
@@ -63,7 +85,12 @@ export const CollectionListItem = ({
 					{/* Delete */}
 					<Dialog>
 						<DialogTrigger>
-							<IconButton title="Delete">
+							<IconButton
+								title="Delete"
+								onClick={() => {
+									trackHandler(analyticsKeys.collection.openDeleteFormFromMenu);
+								}}
+							>
 								<Trash01 className="size-4" />
 							</IconButton>
 						</DialogTrigger>
@@ -73,7 +100,7 @@ export const CollectionListItem = ({
 								<DialogClose asChild>
 									<Button
 										className="w-[80px] gap-1"
-										onClick={() => onDelete(collection.id)}
+										onClick={handleCollectionDelete}
 										autoFocus
 									>
 										<Check className="size-4 opacity-75" />
@@ -81,7 +108,14 @@ export const CollectionListItem = ({
 									</Button>
 								</DialogClose>
 								<DialogClose asChild>
-									<Button className="w-[80px] gap-1">
+									<Button
+										className="w-[80px] gap-1"
+										onClick={() =>
+											trackHandler(
+												analyticsKeys.collection.deleteFromMenuCancelation,
+											)
+										}
+									>
 										<X className="size-4 opacity-75" />
 										No
 									</Button>

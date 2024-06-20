@@ -1,3 +1,5 @@
+"use client";
+
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { CollectionListItem } from "@/components/collections/collection-list-item";

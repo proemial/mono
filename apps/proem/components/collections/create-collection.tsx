@@ -16,6 +16,10 @@ import { DialogClose } from "@proemial/shadcn-ui/components/ui/dialog";
 import { createInsertSchema } from "drizzle-zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "../analytics/tracking/tracking-keys";
 
 const newCollectionSchema = createInsertSchema(collections, {
 	name: (schema) => schema.name.min(1).max(50),
@@ -43,6 +47,7 @@ export const CreateCollection = ({ collection, onSubmit, noDialog }: Props) => {
 		: "";
 
 	const handleSubmit = (collection: NewCollection) => {
+		trackHandler(analyticsKeys.collection.createFormSubmit);
 		onSubmit(collection);
 	};
 

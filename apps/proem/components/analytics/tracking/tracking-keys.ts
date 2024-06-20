@@ -142,6 +142,13 @@ export const analyticsKeys = {
 		openCollectionSelector: addCollectionFrom(
 			"collection:open_collection_selector",
 		),
+		openFromMenu: "collection:open_from_menu",
+		openEditFormFromMenu: "collection:open_edit_form_from_menu",
+		openDeleteFormFromMenu: "collection:open_delete_form_from_menu",
+		deleteFromMenuConfirmation: "collection:delete_from_menu_confirmation",
+		deleteFromMenuCancelation: "collection:delete_from_menu_cancelation",
+		createFormSubmit: "collection:create_form_submit",
+		editFormSubmit: "collection:edit_form_submit",
 	},
 	profile: {
 		// TODO: cleanup

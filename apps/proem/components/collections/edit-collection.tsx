@@ -15,6 +15,10 @@ import {
 import { DialogClose } from "@proemial/shadcn-ui/components/ui/dialog";
 import { createSelectSchema } from "drizzle-zod";
 import { useForm } from "react-hook-form";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "../analytics/tracking/tracking-keys";
 
 const editCollectionSchema = createSelectSchema(collections, {
 	name: (schema) => schema.name.min(1).max(50),
@@ -40,6 +44,7 @@ export const EditCollection = ({ collection, onSubmit }: Props) => {
 		: "";
 
 	const handleSubmit = (collection: Collection) => {
+		trackHandler(analyticsKeys.collection.editFormSubmit);
 		onSubmit(collection);
 	};
 
