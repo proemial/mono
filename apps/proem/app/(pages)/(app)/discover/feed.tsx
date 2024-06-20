@@ -7,6 +7,7 @@ import {
 	InfinityScollListProps,
 	InfinityScrollList,
 } from "@/components/infinite-list";
+import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
 import { ReactNode } from "react";
 
 type FeedProps = Pick<FeedItemProps, "bookmarks"> &
@@ -38,16 +39,17 @@ export function Feed({
 				nocache={nocache}
 				renderHeadline={debug ? (count) => <DebugInfo count={count} /> : null}
 				renderRow={(row) => {
+					const paper = row as RankedPaper;
 					return (
 						<FeedItem
-							paper={row.paper}
-							fingerprint={row.features}
+							paper={paper.paper}
+							fingerprint={paper.features}
 							bookmarks={bookmarks}
 						>
 							{debug && (
 								<FeatureCloud
-									features={row.features}
-									sum={row.filterMatchScore}
+									features={paper.features}
+									sum={paper.filterMatchScore}
 								/>
 							)}
 						</FeedItem>

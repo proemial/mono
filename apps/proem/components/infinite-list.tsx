@@ -25,7 +25,7 @@ export type InfinityScollListProps = {
 	filter: { topic?: number; features?: RankedFeature[]; days?: number };
 	nocache?: boolean;
 	renderHeadline?: ((count?: number) => ReactNode) | null;
-	renderRow: (row: RankedPaper) => ReactNode;
+	renderRow: (row: unknown) => ReactNode;
 	queryKey: string;
 };
 
