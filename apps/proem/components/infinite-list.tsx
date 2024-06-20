@@ -1,19 +1,8 @@
 "use client";
-import { fetchFeedByTopic } from "@/app/(pages)/(app)/discover/fetch-feed";
-import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
-import {
-	analyticsKeys,
-	trackHandler,
-} from "@/components/analytics/tracking/tracking-keys";
-import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
-import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
 import { Icons } from "@proemial/shadcn-ui";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode, useEffect } from "react";
-import { useInfiniteQuery } from "react-query";
-
-// 1-4 is fetched without scrolling
-const initialPageSize = 4;
+import { QueryFunction, useInfiniteQuery } from "react-query";
 
 const Loader = () => (
 	<div className="w-full h-24 flex justify-center items-center">
@@ -21,22 +10,25 @@ const Loader = () => (
 	</div>
 );
 
-export type InfinityScollListProps = {
-	filter: { topic?: number; features?: RankedFeature[]; days?: number };
-	nocache?: boolean;
-	renderHeadline?: ((count?: number) => ReactNode) | null;
-	renderRow: (row: unknown) => ReactNode;
-	queryKey: string;
+type QueryReturnType<TRow> = {
+	count: number;
+	nextOffset: number;
+	rows: TRow[];
 };
 
-export function InfinityScrollList({
-	filter,
-	nocache,
+export type InfinityScollListProps<TQueryKey extends string, TRow> = {
+	renderHeadline?: ((count?: number) => ReactNode) | null;
+	renderRow: (row: TRow) => ReactNode;
+	queryKey: TQueryKey;
+	queryFn: QueryFunction<QueryReturnType<TRow>, TQueryKey>;
+};
+
+export function InfinityScrollList<TQueryKey extends string, TRow>({
 	renderHeadline: renderSection,
 	renderRow,
 	queryKey,
-}: InfinityScollListProps) {
-	const { topic, features, days } = filter;
+	queryFn,
+}: InfinityScollListProps<TQueryKey, TRow>) {
 	const {
 		status,
 		data,
@@ -44,32 +36,12 @@ export function InfinityScrollList({
 		fetchNextPage,
 		hasNextPage,
 		error,
-	} = useInfiniteQuery(
-		queryKey,
-		(ctx) => {
-			const nextOffset = ctx.pageParam;
-			if (nextOffset > initialPageSize) {
-				trackHandler(analyticsKeys.feed.scroll.fetch, {
-					offset: `${nextOffset - initialPageSize}`,
-				})();
-			}
-
-			if (features?.length) {
-				return fetchFeedByFeatures(
-					{ features, days },
-					{ offset: ctx.pageParam },
-					nocache,
-				);
-			}
-			return fetchFeedByTopic({ field: topic }, { offset: ctx.pageParam });
+	} = useInfiniteQuery(queryKey, queryFn, {
+		getNextPageParam: (lastGroup) => {
+			return lastGroup?.nextOffset;
 		},
-		{
-			getNextPageParam: (lastGroup) => {
-				return lastGroup?.nextOffset;
-			},
-			refetchOnWindowFocus: false,
-		},
-	);
+		refetchOnWindowFocus: false,
+	});
 
 	const allRows = data ? data.pages?.flatMap((d) => d.rows) : [];
 	const count = data?.pages.at(0)?.count;

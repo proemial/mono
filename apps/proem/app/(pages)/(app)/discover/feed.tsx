@@ -2,19 +2,26 @@
 import FeedItem, {
 	FeedItemProps,
 } from "@/app/(pages)/(app)/discover/feed-item";
-import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
+import { fetchFeedByTopic } from "@/app/(pages)/(app)/discover/fetch-feed";
+import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
 import {
-	InfinityScollListProps,
-	InfinityScrollList,
-} from "@/components/infinite-list";
+	analyticsKeys,
+	trackHandler,
+} from "@/components/analytics/tracking/tracking-keys";
+import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
+import { InfinityScrollList } from "@/components/infinite-list";
+import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
 import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
 import { ReactNode } from "react";
 
-type FeedProps = Pick<FeedItemProps, "bookmarks"> &
-	Pick<InfinityScollListProps, "filter" | "nocache"> & {
-		children: ReactNode;
-		debug?: boolean;
-	};
+// 1-4 is fetched without scrolling
+const initialPageSize = 4;
+type FeedProps = Pick<FeedItemProps, "bookmarks"> & {
+	children: ReactNode;
+	debug?: boolean;
+	filter: { topic?: number; features?: RankedFeature[]; days?: number };
+	nocache?: boolean;
+};
 
 export function Feed({
 	children,
@@ -23,6 +30,7 @@ export function Feed({
 	nocache,
 	bookmarks,
 }: FeedProps) {
+	const { topic, features, days } = filter;
 	return (
 		<div className="space-y-5 pb-10">
 			<div>{children}</div>
@@ -35,10 +43,26 @@ export function Feed({
 								?.map((f) => f.id)
 								.join("|")}`
 				}
-				filter={filter}
-				nocache={nocache}
+				queryFn={(ctx) => {
+					const nextOffset = ctx.pageParam;
+					if (nextOffset > initialPageSize) {
+						trackHandler(analyticsKeys.feed.scroll.fetch, {
+							offset: `${nextOffset - initialPageSize}`,
+						})();
+					}
+
+					if (features?.length) {
+						return fetchFeedByFeatures(
+							{ features, days },
+							{ offset: ctx.pageParam },
+							nocache,
+						);
+					}
+					return fetchFeedByTopic({ field: topic }, { offset: ctx.pageParam });
+				}}
 				renderHeadline={debug ? (count) => <DebugInfo count={count} /> : null}
 				renderRow={(row) => {
+					// TODO! why are we casting here?
 					const paper = row as RankedPaper;
 					return (
 						<FeedItem
