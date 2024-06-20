@@ -26,7 +26,7 @@ const PER_PAGE = 50;
 const MAX_PAGES = 10;
 
 // Cache feed papers for 1 hour
-const CACHE_FOR = 60 * 60; // 1 hour
+const CACHE_FOR = 8 * 60 * 60; // 8 hours
 
 export const fetchAndRerankPaperIds = async (
 	{ features, days }: { features?: RankedFeature[]; days?: number },
