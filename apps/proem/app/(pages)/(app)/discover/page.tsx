@@ -9,6 +9,7 @@ import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-actio
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { ProemAssistant } from "@/components/proem-assistant";
 import { auth } from "@clerk/nextjs/server";
 import { neonDb } from "@proemial/data";
 import { collections } from "@proemial/data/neon/schema";
@@ -101,6 +102,7 @@ export default async function DiscoverPage({ searchParams }: Props) {
 					</Feed>
 				</div>
 			</Main>
+			<ProemAssistant internalUser={isInternal} />
 		</>
 	);
 }

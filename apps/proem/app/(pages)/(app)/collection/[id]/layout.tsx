@@ -5,6 +5,7 @@ import { Main } from "@/components/main";
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { ProemAssistant } from "@/components/proem-assistant";
 import {
 	OrganizationMembershipPublicUserData,
 	auth,
@@ -122,6 +123,7 @@ export default async function ({ params, children }: PageProps) {
 					{children}
 				</div>
 			</Main>
+			<ProemAssistant internalUser={isInternal} />
 		</>
 	);
 }

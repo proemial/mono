@@ -7,7 +7,7 @@ import {
 	Input,
 	ScrollArea,
 } from "@proemial/shadcn-ui";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { ProemLogo } from "./icons/brand/logo";
 
@@ -19,7 +19,6 @@ type Props = {
 };
 
 export const ProemAssistant = ({ internalUser }: Props) => {
-	const pathname = usePathname();
 	const router = useRouter();
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const [input, setInput] = useState("");
@@ -31,7 +30,7 @@ export const ProemAssistant = ({ internalUser }: Props) => {
 		router.push(`/answer/?q=${encodedInput}`);
 	};
 
-	if (!internalUser || pathname === "/" || pathname.includes("/answer")) {
+	if (!internalUser) {
 		return undefined;
 	}
 
@@ -51,8 +50,9 @@ export const ProemAssistant = ({ internalUser }: Props) => {
 				setBackgroundColorOnScale={false} // For some reason, this is not working
 				open={drawerOpen}
 				onOpenChange={(openState) => setDrawerOpen(openState)}
+				snapPoints={[0.2, 0.5, 0.8]} // Background color not changed until last snap point
 			>
-				<DrawerContent className="max-w-xl mx-auto">
+				<DrawerContent className="max-w-xl mx-auto h-full">
 					<ScrollArea>
 						<div className="flex flex-col gap-6 py-4 pb-5 px-3">
 							<form onSubmit={handleSubmit}>

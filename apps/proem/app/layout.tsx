@@ -103,7 +103,6 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 									<div className="bg-background">
 										{children}
 										{modal}
-										<ProemAssistant internalUser={isInternal} />
 									</div>
 								</div>
 
