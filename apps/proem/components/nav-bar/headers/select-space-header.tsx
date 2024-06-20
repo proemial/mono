@@ -1,6 +1,10 @@
 "use client";
 
 import { getPersonalDefaultCollection } from "@/app/constants";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/components/analytics/tracking/tracking-keys";
 import { Collection } from "@proemial/data/neon/schema";
 import {
 	Select,
@@ -24,6 +28,7 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 	const allCollections = ensureDefaultCollection(collections, userId);
 
 	const handleValueChange = (value: string) => {
+		trackHandler(analyticsKeys.ui.header.click.changeSpace);
 		router.push(`/collection/${value}`);
 	};
 

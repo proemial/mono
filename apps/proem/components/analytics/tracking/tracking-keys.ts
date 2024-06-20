@@ -59,6 +59,8 @@ export const analyticsKeys = {
 				ask: "header:ask:click",
 				close: "header:close:click",
 				search: "header:search:click",
+				simple: "header:simple:click",
+				changeSpace: "header:change-space:click",
 			},
 		},
 	},
