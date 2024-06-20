@@ -161,7 +161,7 @@ export const analyticsKeys = {
 	assistant: {
 		open: "assistant:open",
 		close: "assistant:close",
-		askAQuestion: "assistant:ask_a_question",
+		ask: "assistant:ask",
 	},
 	viewName: (path: string) => {
 		return `${getViewName(path)}:view`;

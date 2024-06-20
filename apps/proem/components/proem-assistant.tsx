@@ -27,11 +27,21 @@ export const ProemAssistant = ({ internalUser }: Props) => {
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const [input, setInput] = useState("");
 
+	const handleClick = () => {
+		trackHandler(analyticsKeys.assistant.ask);
+		router.push("/");
+	};
+
+	/**
+	 * Drawer up state is buggy in Arc on mobile (Safari is okay'ish), so we
+	 * fall back to a simple button for this first iteration.
+	 */
+
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const encodedInput = encodeURIComponent(input);
 		setDrawerOpen(false);
-		trackHandler(analyticsKeys.assistant.askAQuestion);
+		trackHandler(analyticsKeys.assistant.ask);
 		router.push(`/answer/?q=${encodedInput}`);
 	};
 
@@ -50,9 +60,9 @@ export const ProemAssistant = ({ internalUser }: Props) => {
 		}
 	};
 
-	// if (!internalUser) {
-	return undefined;
-	// }
+	if (!internalUser) {
+		return undefined;
+	}
 
 	return (
 		<div className="fixed bottom-0 left-0 bg-gradient-to-b pt-5 from-transparent to-background h-[80px] sm:h-[100px] w-full flex justify-center pointer-events-none">
@@ -61,11 +71,11 @@ export const ProemAssistant = ({ internalUser }: Props) => {
 				variant="default"
 				size="icon"
 				className="bg-white dark:bg-primary drop-shadow-xl hover:drop-shadow-lg pointer-events-auto"
-				onClick={handleOpen}
+				onClick={handleClick}
 			>
 				<ProemLogo size="xs" />
 			</Button>
-			<Drawer
+			{/* <Drawer
 				shouldScaleBackground={false}
 				setBackgroundColorOnScale={false} // For some reason, this is not working
 				open={drawerOpen}
@@ -87,7 +97,7 @@ export const ProemAssistant = ({ internalUser }: Props) => {
 						</div>
 					</ScrollArea>
 				</DrawerContent>
-			</Drawer>
+			</Drawer> */}
 		</div>
 	);
 };
