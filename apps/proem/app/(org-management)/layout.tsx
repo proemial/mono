@@ -1,13 +1,19 @@
-import { NavigationMenuBar } from "@/components/navigation-menu-bar";
+import { Main } from "@/components/main";
+import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
+import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
+import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { cn } from "@proemial/shadcn-ui";
 import { ReactNode } from "react";
 import { screenMaxWidthOrgManagement } from "../constants";
+import { getInternalUser } from "../hooks/get-internal-user";
 
 type Props = {
 	children: ReactNode;
 };
 
 export default function OrgManagementLayout({ children }: Props) {
+	const { isInternal } = getInternalUser();
+
 	return (
 		<div
 			className={cn(
@@ -15,10 +21,13 @@ export default function OrgManagementLayout({ children }: Props) {
 				screenMaxWidthOrgManagement,
 			)}
 		>
-			<NavigationMenuBar />
-			<main className="w-full p-4 pb-0 flex flex-col flex-grow items-center">
-				{children}
-			</main>
+			<NavBarV2
+				action={<GoBackAction target="/discover" />}
+				isInternalUser={isInternal}
+			>
+				<SimpleHeader title="Organization Management" />
+			</NavBarV2>
+			<Main>{children}</Main>
 		</div>
 	);
 }
