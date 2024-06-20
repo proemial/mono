@@ -26,6 +26,7 @@ export type InfinityScollListProps = {
 	nocache?: boolean;
 	renderHeadline?: ((count?: number) => ReactNode) | null;
 	renderRow: (row: RankedPaper) => ReactNode;
+	queryKey: string;
 };
 
 export function InfinityScrollList({
@@ -33,6 +34,7 @@ export function InfinityScrollList({
 	nocache,
 	renderHeadline: renderSection,
 	renderRow,
+	queryKey,
 }: InfinityScollListProps) {
 	const { topic, features, days } = filter;
 	const {
@@ -43,9 +45,7 @@ export function InfinityScrollList({
 		hasNextPage,
 		error,
 	} = useInfiniteQuery(
-		topic
-			? `feed_${topic}`
-			: `filter_${days}:${features?.map((f) => f.id).join("|")}`,
+		queryKey,
 		(ctx) => {
 			const nextOffset = ctx.pageParam;
 			if (nextOffset > initialPageSize) {
@@ -122,7 +122,7 @@ export function InfinityScrollList({
 					>
 						{items.map((virtualRow) => {
 							const isLoaderRow = virtualRow.index > allRows.length - 1;
-							const row = allRows[virtualRow.index] as RankedPaper;
+							const row = allRows[virtualRow.index];
 
 							return (
 								<div

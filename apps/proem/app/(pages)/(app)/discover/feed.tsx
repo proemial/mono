@@ -27,6 +27,13 @@ export function Feed({
 			<div>{children}</div>
 
 			<InfinityScrollList
+				queryKey={
+					filter.topic
+						? `feed_${filter.topic}`
+						: `filter_${filter.days}:${filter.features
+								?.map((f) => f.id)
+								.join("|")}`
+				}
 				filter={filter}
 				nocache={nocache}
 				renderHeadline={debug ? (count) => <DebugInfo count={count} /> : null}
