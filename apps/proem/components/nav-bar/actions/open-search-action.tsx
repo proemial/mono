@@ -1,12 +1,23 @@
+"use client";
+
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/components/analytics/tracking/tracking-keys";
 import { SearchMd } from "@untitled-ui/icons-react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export const OpenSearchAction = () => {
+	const router = useRouter();
+
+	const handleAction = () => {
+		trackHandler(analyticsKeys.ui.header.click.close);
+		router.push("/search");
+	};
+
 	return (
-		<Link href="/search">
-			<div className="p-1">
-				<SearchMd className="size-5" />
-			</div>
-		</Link>
+		<div className="p-1 cursor-pointer" onClick={handleAction}>
+			<SearchMd className="size-5" />
+		</div>
 	);
 };

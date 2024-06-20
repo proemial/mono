@@ -57,6 +57,8 @@ export const analyticsKeys = {
 				logo: "header:logo:click",
 				discover: "header:discover:click",
 				ask: "header:ask:click",
+				close: "header:close:click",
+				search: "header:search:click",
 			},
 		},
 	},
