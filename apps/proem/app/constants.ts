@@ -11,7 +11,7 @@ export const getPersonalDefaultCollection = (userId: string) =>
 		name: PERSONAL_DEFAULT_COLLECTION_NAME,
 		ownerId: userId,
 		slug: userId,
-		description: "",
+		description: null,
 		createdAt: new Date(),
 	}) satisfies Collection;
 export const getBookmarkCacheTag = (userId: string) => `bookmarks:${userId}`;

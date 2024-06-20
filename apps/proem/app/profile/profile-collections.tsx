@@ -59,9 +59,6 @@ export const ProfileCollections = () => {
 		>
 			<ScrollArea className="h-[200px]">
 				<div className="space-y-4 mt-4">
-					{collections.length === 0 && (
-						<div className="text-sm">There are no collections to display.</div>
-					)}
 					<CollectionListItem
 						collection={{
 							name: PERSONAL_DEFAULT_COLLECTION_NAME,

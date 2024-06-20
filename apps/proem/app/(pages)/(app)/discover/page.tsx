@@ -7,6 +7,7 @@ import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { Main } from "@/components/main";
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
+import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { auth } from "@clerk/nextjs/server";
 import { neonDb } from "@proemial/data";
@@ -59,10 +60,11 @@ export default async function DiscoverPage({ searchParams }: Props) {
 	return (
 		<>
 			<NavBarV2 action={<OpenSearchAction />} isInternalUser={isInternal}>
-				<SelectSpaceHeader
+				<SimpleHeader title="For You" />
+				{/* <SelectSpaceHeader
 					collections={userCollections}
 					userId={userId ?? ""}
-				/>
+				/> */}
 			</NavBarV2>
 			<Main>
 				<div className="space-y-6">
