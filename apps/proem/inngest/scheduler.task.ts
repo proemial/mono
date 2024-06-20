@@ -14,7 +14,7 @@ export const scheduler = inngest.createFunction(
 			})),
 		);
 
-		return { event, body: { userIds } };
+		return { event, body: { userIds, result: result.ids } };
 	},
 );
 
