@@ -1,6 +1,8 @@
 "use client";
-import { FeedItemProps } from "@/app/(pages)/(app)/discover/feed-item";
-import { FeatureBadge } from "@/components/feature-badges";
+import FeedItem, {
+	FeedItemProps,
+} from "@/app/(pages)/(app)/discover/feed-item";
+import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
 import {
 	InfinityScollListProps,
 	InfinityScrollList,
@@ -8,7 +10,7 @@ import {
 import { ReactNode } from "react";
 
 type FeedProps = Pick<FeedItemProps, "bookmarks"> &
-	Pick<InfinityScollListProps, "filter" | "debug" | "nocache"> & {
+	Pick<InfinityScollListProps, "filter" | "nocache"> & {
 		children: ReactNode;
 		debug?: boolean;
 	};
@@ -26,10 +28,24 @@ export function Feed({
 
 			<InfinityScrollList
 				filter={filter}
-				debug={debug}
 				nocache={nocache}
-				bookmarks={bookmarks}
-				renderSection={debug ? (count) => <DebugInfo count={count} /> : null}
+				renderHeadline={debug ? (count) => <DebugInfo count={count} /> : null}
+				renderRow={(row) => {
+					return (
+						<FeedItem
+							paper={row.paper}
+							fingerprint={row.features}
+							bookmarks={bookmarks}
+						>
+							{debug && (
+								<FeatureCloud
+									features={row.features}
+									sum={row.filterMatchScore}
+								/>
+							)}
+						</FeedItem>
+					);
+				}}
 			/>
 		</div>
 	);

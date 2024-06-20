@@ -1,14 +1,10 @@
 "use client";
-import FeedItem, {
-	FeedItemProps,
-} from "@/app/(pages)/(app)/discover/feed-item";
 import { fetchFeedByTopic } from "@/app/(pages)/(app)/discover/fetch-feed";
 import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
 import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { FeatureCloud } from "@/components/feature-badges";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
 import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
 import { Icons } from "@proemial/shadcn-ui";
@@ -25,19 +21,18 @@ const Loader = () => (
 	</div>
 );
 
-export type InfinityScollListProps = Pick<FeedItemProps, "bookmarks"> & {
+export type InfinityScollListProps = {
 	filter: { topic?: number; features?: RankedFeature[]; days?: number };
-	debug?: boolean;
 	nocache?: boolean;
-	renderSection?: ((count?: number) => ReactNode) | null;
+	renderHeadline?: ((count?: number) => ReactNode) | null;
+	renderRow: (row: RankedPaper) => ReactNode;
 };
 
 export function InfinityScrollList({
 	filter,
-	debug,
 	nocache,
-	bookmarks,
-	renderSection,
+	renderHeadline: renderSection,
+	renderRow,
 }: InfinityScollListProps) {
 	const { topic, features, days } = filter;
 	const {
@@ -141,18 +136,7 @@ export function InfinityScrollList({
 											<Loader />
 										) : null
 									) : row ? (
-										<FeedItem
-											paper={row.paper}
-											fingerprint={row.features}
-											bookmarks={bookmarks}
-										>
-											{debug && (
-												<FeatureCloud
-													features={row.features}
-													sum={row.filterMatchScore}
-												/>
-											)}
-										</FeedItem>
+										renderRow(row)
 									) : (
 										<Loader />
 									)}
