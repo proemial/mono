@@ -84,6 +84,7 @@ export function ProfileYou() {
 										<div>{user.fullName}</div>
 									</div>
 								}
+								trackingKey={analyticsKeys.ui.menu.click.collapse.profile}
 							>
 								<About />
 							</CollapsibleSection>
@@ -101,6 +102,9 @@ export function ProfileYou() {
 									collapsed
 									extra={<div>1</div>}
 									trigger={<div>Organisations</div>}
+									trackingKey={
+										analyticsKeys.ui.menu.click.collapse.organizations
+									}
 								>
 									<div className="space-y-4 mt-4">
 										<Link

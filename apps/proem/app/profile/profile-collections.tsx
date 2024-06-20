@@ -1,3 +1,4 @@
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { CollectionListItem } from "@/components/collections/collection-list-item";
 import { CreateCollection } from "@/components/collections/create-collection";
@@ -56,6 +57,7 @@ export const ProfileCollections = () => {
 		<CollapsibleSection
 			extra={<div>{collections.length}</div>}
 			trigger={<div>Collections</div>}
+			trackingKey={analyticsKeys.ui.menu.click.collapse.collections}
 		>
 			<ScrollArea className={cn({ "h-[200px]": collections.length > 0 })}>
 				<div className="space-y-4 mt-4">

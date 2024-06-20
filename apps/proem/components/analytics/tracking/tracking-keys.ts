@@ -49,6 +49,12 @@ export const analyticsKeys = {
 				feed: "menu:feed:click",
 				read: "menu:read:click",
 				you: "menu:profile:click",
+
+				collapse: {
+					profile: "menu:profile:collapse:click",
+					organizations: "menu:organizations:collapse:click",
+					collections: "menu:collections:collapse:click",
+				},
 			},
 		},
 		header: {
