@@ -3,7 +3,7 @@
 import { useInternalUser } from "@/app/hooks/use-user";
 import { CreateCollection } from "@/components/collections/create-collection";
 import { Main } from "@/components/main";
-import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
+import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { useUser } from "@clerk/nextjs";
@@ -36,7 +36,7 @@ export default function NewCollectionPage() {
 	return (
 		<>
 			<NavBarV2
-				action={<GoBackAction target={`/collection/${user.id}`} />}
+				action={<CloseAction target={`/collection/${user.id}`} />}
 				isInternalUser={isInternal}
 			>
 				<SimpleHeader title="Create new collection" />

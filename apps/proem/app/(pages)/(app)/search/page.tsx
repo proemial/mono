@@ -1,6 +1,6 @@
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
-import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
+import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { Suspense } from "react";
@@ -22,7 +22,7 @@ export default async function SearchPage({ searchParams }: Props) {
 	return (
 		<>
 			<NavBarV2
-				action={<GoBackAction target="/discover" />}
+				action={<CloseAction target="/discover" />}
 				isInternalUser={isInternal}
 			>
 				<SimpleHeader title="Search" />

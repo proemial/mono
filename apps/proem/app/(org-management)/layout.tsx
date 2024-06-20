@@ -1,5 +1,5 @@
 import { Main } from "@/components/main";
-import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
+import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { cn } from "@proemial/shadcn-ui";
@@ -22,7 +22,7 @@ export default function OrgManagementLayout({ children }: Props) {
 			)}
 		>
 			<NavBarV2
-				action={<GoBackAction target="/discover" />}
+				action={<CloseAction target="/discover" />}
 				isInternalUser={isInternal}
 			>
 				<SimpleHeader title="Organization Management" />

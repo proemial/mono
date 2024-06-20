@@ -3,7 +3,7 @@ import { ChatInput } from "@/components/chat-input";
 import { ProemLogo } from "@/components/icons/brand/logo";
 import { Main } from "@/components/main";
 import { MoodSelector } from "@/components/mood-selector";
-import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
+import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { Suggestions } from "@/components/suggestions";
@@ -25,7 +25,7 @@ export default function AskPage() {
 	return (
 		<>
 			<NavBarV2
-				action={<GoBackAction target="/discover" />}
+				action={<CloseAction target="/discover" />}
 				isInternalUser={isInternal}
 			>
 				<SimpleHeader title="Ask" />

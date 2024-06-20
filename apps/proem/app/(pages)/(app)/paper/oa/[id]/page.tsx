@@ -1,6 +1,6 @@
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
-import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
+import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { auth } from "@clerk/nextjs/server";
@@ -25,7 +25,7 @@ export default async function OAPaperPage({ params }: Props) {
 	return (
 		<>
 			<NavBarV2
-				action={<GoBackAction target="/discover" />}
+				action={<CloseAction target="/discover" />}
 				isInternalUser={isInternal}
 			>
 				<SelectSpaceHeader

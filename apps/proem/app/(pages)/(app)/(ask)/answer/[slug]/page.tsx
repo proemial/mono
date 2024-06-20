@@ -4,7 +4,7 @@ import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
-import { GoBackAction } from "@/components/nav-bar/actions/go-back-action";
+import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { auth } from "@clerk/nextjs/server";
@@ -38,7 +38,7 @@ export default async function AnswerPage({ params: { slug } }: Props) {
 		<>
 			<NavBarV2
 				action={
-					<GoBackAction
+					<CloseAction
 						target={"/"}
 						iconOverride={<Edit05 className="size-5" />}
 					/>

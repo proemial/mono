@@ -9,7 +9,7 @@ type Props = {
 	iconOverride?: ReactNode;
 };
 
-export const GoBackAction = ({ target, iconOverride }: Props) => {
+export const CloseAction = ({ target, iconOverride }: Props) => {
 	const router = useRouter();
 
 	return (
