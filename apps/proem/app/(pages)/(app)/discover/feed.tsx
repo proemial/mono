@@ -9,7 +9,7 @@ import {
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
 import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
-import { InfinityScrollList } from "@/components/infinite-list";
+import { InfinityScrollList } from "@/components/infinity-scroll-list";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
 import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
 import { ReactNode } from "react";
