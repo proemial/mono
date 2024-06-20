@@ -50,9 +50,9 @@ export const ProemAssistant = ({ internalUser }: Props) => {
 		}
 	};
 
-	if (!internalUser) {
-		return undefined;
-	}
+	// if (!internalUser) {
+	return undefined;
+	// }
 
 	return (
 		<div className="fixed bottom-0 left-0 bg-gradient-to-b pt-5 from-transparent to-background h-[80px] sm:h-[100px] w-full flex justify-center pointer-events-none">
