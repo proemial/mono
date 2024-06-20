@@ -1,4 +1,5 @@
 import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { getPersonalDefaultCollection } from "@/app/constants";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
 import { auth } from "@clerk/nextjs";
@@ -24,12 +25,12 @@ export default async function StreamPage({ params }: PageProps) {
 	notFound();
 
 	// const { userId } = await auth();
-	// if (!params?.id) {
+	// if (!params?.id || !userId) {
 	// 	notFound();
 	// }
 	// const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 
-	// const collection = await neonDb.query.collections.findFirst({
+	// const collection = (await neonDb.query.collections.findFirst({
 	// 	where: eq(collections.slug, params.id),
 	// 	with: {
 	// 		collectionsToPapers: {
@@ -38,10 +39,8 @@ export default async function StreamPage({ params }: PageProps) {
 	// 			},
 	// 		},
 	// 	},
-	// });
-	// if (!collection) {
-	// 	notFound();
-	// }
+	// })) ?? { ...getPersonalDefaultCollection(userId), collectionsToPapers: [] };
+
 	// const paperIds = collection.collectionsToPapers.map((c) => c.paperId);
 
 	// if (paperIds.length === 0) {

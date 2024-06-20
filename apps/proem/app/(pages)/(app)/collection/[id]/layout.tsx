@@ -1,3 +1,4 @@
+import { getPersonalDefaultCollection } from "@/app/constants";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { IconButton } from "@/components/collections/icon-button";
 import { Main } from "@/components/main";
@@ -38,23 +39,22 @@ export default async function ({ params, children }: PageProps) {
 		notFound();
 	}
 
-	const collection = await neonDb.query.collections.findFirst({
-		where: eq(collections.slug, params.id),
-		with: {
-			collectionsToPapers: {
-				columns: {
-					paperId: true,
+	const collection =
+		(await neonDb.query.collections.findFirst({
+			where: eq(collections.slug, params.id),
+			with: {
+				collectionsToPapers: {
+					columns: {
+						paperId: true,
+					},
 				},
 			},
-		},
-	});
+		})) ?? getPersonalDefaultCollection(userId);
+
 	const userCollections = await neonDb.query.collections.findMany({
 		where: eq(collections.ownerId, userId),
 	});
 
-	if (!collection) {
-		notFound();
-	}
 	const collectionIsPublic = isCollectionId(collection.id);
 
 	const orgMemberships = collectionIsPublic

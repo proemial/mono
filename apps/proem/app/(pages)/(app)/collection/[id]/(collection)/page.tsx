@@ -1,4 +1,5 @@
 import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { getPersonalDefaultCollection } from "@/app/constants";
 import { auth } from "@clerk/nextjs";
 import { neonDb } from "@proemial/data";
 import { collections } from "@proemial/data/neon/schema";
@@ -15,12 +16,12 @@ type PageProps = {
 
 export default async function CollectionPage({ params }: PageProps) {
 	const { userId } = auth();
-	if (!params?.id) {
+	if (!params?.id || !userId) {
 		notFound();
 	}
 	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 
-	const collection = await neonDb.query.collections.findFirst({
+	const collection = (await neonDb.query.collections.findFirst({
 		where: eq(collections.slug, params.id),
 		with: {
 			collectionsToPapers: {
@@ -29,10 +30,8 @@ export default async function CollectionPage({ params }: PageProps) {
 				},
 			},
 		},
-	});
-	if (!collection) {
-		notFound();
-	}
+	})) ?? { ...getPersonalDefaultCollection(userId), collectionsToPapers: [] };
+
 	const paperIds = collection.collectionsToPapers.map((c) => c.paperId);
 
 	if (paperIds.length === 0) {
