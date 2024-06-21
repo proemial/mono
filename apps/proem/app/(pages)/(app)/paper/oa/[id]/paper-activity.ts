@@ -53,5 +53,5 @@ export const addPaperActivity = async (paperId: string) => {
 				paperActivities: activitiesSortedReadDate,
 			},
 		});
-	await streamCacheUpdate.run(userId);
+	await streamCacheUpdate.run(userId, "user");
 };

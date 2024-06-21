@@ -67,7 +67,7 @@ export async function addPaperToCollection(
 		.onConflictDoNothing();
 
 	revalidateTag(getBookmarkCacheTag(userId));
-	void streamCacheUpdate.run(userId);
+	void streamCacheUpdate.run(userId, "user");
 	return {};
 }
 
@@ -122,6 +122,6 @@ export async function togglePaperInCollection(
 	}
 
 	revalidateTag(getBookmarkCacheTag(userId));
-	void streamCacheUpdate.run(userId);
+	void streamCacheUpdate.run(userId, "user");
 	return {};
 }
