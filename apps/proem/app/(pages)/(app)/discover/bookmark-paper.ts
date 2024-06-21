@@ -77,6 +77,8 @@ const ensureDefaultCollectionExists = (userId: string) =>
 		ownerId: userId,
 		name: PERSONAL_DEFAULT_COLLECTION_NAME,
 		slug: userId,
+		description:
+			"This is your private collection. Papers you save will be stored here, unless you specify another collection.",
 	});
 
 const ensureCollectionExists = (collection: NewCollection) =>
