@@ -9,19 +9,41 @@ import { Time } from "@proemial/utils/time";
 import { NonRetriableError } from "inngest";
 import { inngest } from "./client";
 
-export const populator = inngest.createFunction(
-	{ id: "populate-cache", concurrency: 1 },
-	{ event: "feed/cache.populate" },
-	async ({ event }) => {
-		console.log("event", event);
+const scheduledCacheUpdateEvent = "streams/cache.update.scheduled";
+export const scheduledCacheUpdate = {
+	event: scheduledCacheUpdateEvent,
+	worker: inngest.createFunction(
+		{ id: "scheduled-cache-update", concurrency: 3 },
+		{ event: scheduledCacheUpdateEvent },
+		async ({ event }) => {
+			console.log("event", event);
 
-		if (!event.data.userId) {
-			throw new NonRetriableError("No userId provided.");
-		}
+			if (!event.data.userId) {
+				throw new NonRetriableError("No userId provided.");
+			}
 
-		return await populateCache(event.data.userId, event);
-	},
-);
+			return await populateCache(event.data.userId, event);
+		},
+	),
+};
+
+const cacheUpdateEvent = "streams/cache.update";
+export const cacheUpdate = {
+	event: cacheUpdateEvent,
+	worker: inngest.createFunction(
+		{ id: "cache-update" },
+		{ event: cacheUpdateEvent },
+		async ({ event }) => {
+			console.log("event", event);
+
+			if (!event.data.userId) {
+				throw new NonRetriableError("No userId provided.");
+			}
+
+			return await populateCache(event.data.userId, event);
+		},
+	),
+};
 
 export async function populateCache(userId: string, event?: { name?: string }) {
 	const begin = Time.now();

@@ -1,15 +1,16 @@
 import { neonDb } from "@proemial/data";
 import { Time } from "@proemial/utils/time";
 import { inngest } from "./client";
+import { scheduledCacheUpdate } from "./populator.task";
 
 export const scheduler = inngest.createFunction(
-	{ id: "feed-scheduler" },
-	{ cron: "*/20 * * * *" },
-	async ({ event, step }) => {
+	{ id: "streams-scheduler" },
+	{ cron: "* */6 * * *" },
+	async ({ event }) => {
 		const userIds = await getUserIds();
 		const result = await inngest.send(
 			userIds.map((userId) => ({
-				name: "feed/cache.populate",
+				name: scheduledCacheUpdate.event,
 				data: { userId },
 			})),
 		);
