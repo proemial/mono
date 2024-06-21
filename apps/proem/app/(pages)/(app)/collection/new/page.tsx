@@ -39,7 +39,7 @@ export default function NewCollectionPage() {
 				action={<CloseAction target={`/collection/${user.id}`} />}
 				isInternalUser={isInternal}
 			>
-				<SimpleHeader title="Create new collection" />
+				<SimpleHeader title="Create new space" />
 			</NavBarV2>
 			<Main>
 				<CreateCollection

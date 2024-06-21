@@ -58,7 +58,7 @@ export const ProfileCollections = () => {
 	return (
 		<CollapsibleSection
 			extra={<div>{collections.length}</div>}
-			trigger={<div>Collections</div>}
+			trigger={<div>Spaces</div>}
 			trackingKey={analyticsKeys.ui.menu.click.collapse.collections}
 		>
 			<ScrollArea className={cn({ "h-[200px]": collections.length > 0 })}>
@@ -90,7 +90,7 @@ export const ProfileCollections = () => {
 				trigger={
 					<div className="flex gap-2 items-center hover:opacity-85 active:opacity-75 duration-200 cursor-pointer">
 						<Plus className="size-4 opacity-85" />
-						<div className="text-sm">Create New Collection…</div>
+						<div className="text-sm">Create New Space</div>
 					</div>
 				}
 			/>
