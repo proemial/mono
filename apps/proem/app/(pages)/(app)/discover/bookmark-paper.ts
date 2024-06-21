@@ -13,6 +13,7 @@ import {
 	collectionsToPapers,
 	papers,
 } from "@proemial/data/neon/schema";
+import { waitUntil } from "@vercel/functions";
 import { and, eq } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { revalidateTag } from "next/cache";
@@ -67,7 +68,7 @@ export async function addPaperToCollection(
 		.onConflictDoNothing();
 
 	revalidateTag(getBookmarkCacheTag(userId));
-	void streamCacheUpdate.run(userId, "user");
+	waitUntil(streamCacheUpdate.run(userId, "user"));
 	return {};
 }
 
@@ -122,6 +123,6 @@ export async function togglePaperInCollection(
 	}
 
 	revalidateTag(getBookmarkCacheTag(userId));
-	void streamCacheUpdate.run(userId, "user");
+	waitUntil(streamCacheUpdate.run(userId, "user"));
 	return {};
 }
