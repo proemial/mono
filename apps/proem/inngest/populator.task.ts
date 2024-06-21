@@ -56,13 +56,8 @@ async function getHistory(userId: string) {
 async function getFilter(history: string[][]) {
 	const begin = Time.now();
 	try {
-		console.log("history", history);
-
 		const fingerprints = await fetchFingerprints(...history);
-		console.log("fingerprints", fingerprints);
-
 		const { filter } = getFeatureFilter(fingerprints);
-		console.log("filter", filter);
 
 		return filter;
 	} finally {

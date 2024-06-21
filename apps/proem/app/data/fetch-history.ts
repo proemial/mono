@@ -20,15 +20,10 @@ export async function getBookmarksAndHistory(
 		});
 
 		const bookmarks = uid ? await getBookmarksByUserId(uid) : {};
-		console.log("bookmarks", bookmarks);
-
 		const bookmarkIds = Object.keys(bookmarks);
-		console.log("bookmarkIds", bookmarkIds);
-
 		const readHistoryIds = sortAndFilter(user?.paperActivities ?? [])?.map(
 			(paper) => paper.paperId,
 		);
-		console.log("readHistoryIds", readHistoryIds);
 
 		return [bookmarkIds, readHistoryIds];
 	}

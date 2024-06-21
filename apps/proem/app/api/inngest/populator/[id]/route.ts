@@ -3,7 +3,6 @@ import { NextRequest } from "next/server";
 
 export const revalidate = 1;
 
-// user_2hYK6W88BSMGFdUrXEiehLncd1f
 export async function GET(
 	req: NextRequest,
 	{ params }: { params: { id: string } },

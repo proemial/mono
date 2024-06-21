@@ -41,10 +41,7 @@ export const fetchAndRerankPaperIds = async (
 		const paperIds = rerankAndLimit(allPapers.papers, f);
 
 		console.log(
-			"Fetched papers",
-			paperIds.length,
-			"of",
-			allPapers.papers.length,
+			`Fetched papers ${paperIds.length} of ${allPapers.papers.length} for ${features?.length} features`,
 		);
 
 		return {
@@ -62,10 +59,6 @@ export const fetchAndRerankPaperIds = async (
 	const cached = nocache
 		? await cacheWorker(features ?? [], days ?? FEED_DEFAULT_DAYS)
 		: await getCachedPapers(features ?? [], days ?? FEED_DEFAULT_DAYS);
-
-	if (nocache) {
-		console.log("Cached papers", cached.papers.length, "of", cached.meta.count);
-	}
 
 	return {
 		...cached,
@@ -135,7 +128,7 @@ async function getAllFor(filter: string, days: number, maxPages: number) {
 		.filter((f) => !!f)
 		.join(",");
 
-	const baseUrl = `${oaBaseUrl}?${oaBaseArgs}&filter=${oaFilter},`;
+	const baseUrl = `${oaBaseUrl}?${oaBaseArgs}&filter=${oaFilter}`;
 	const paginate = `&per_page=${PER_PAGE}&page=`;
 
 	const httpMax = 2048;
@@ -144,6 +137,9 @@ async function getAllFor(filter: string, days: number, maxPages: number) {
 	if (filter.length > maxSelectorLength) {
 		const limited = filter.substring(0, maxSelectorLength);
 		selector = limited.substring(0, limited.lastIndexOf("|"));
+	}
+	if (selector.length) {
+		selector = `,${selector}`;
 	}
 
 	const page1 = await fetchWithAbstract(`${baseUrl}${selector}${paginate}${1}`);
