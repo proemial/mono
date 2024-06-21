@@ -4,7 +4,7 @@ import { inngest } from "./client";
 
 export const scheduler = inngest.createFunction(
 	{ id: "feed-scheduler" },
-	{ cron: "0 */6 * * *" },
+	{ cron: "*/20 * * * *" },
 	async ({ event, step }) => {
 		const userIds = await getUserIds();
 		const result = await inngest.send(
