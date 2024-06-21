@@ -2,6 +2,7 @@ import { streamCacheUpdate } from "@/inngest/populator.task";
 import { auth } from "@clerk/nextjs/server";
 import { neonDb } from "@proemial/data";
 import { users } from "@proemial/data/neon/schema";
+import { waitUntil } from "@vercel/functions";
 
 export const addPaperActivity = async (paperId: string) => {
 	const { userId } = auth();
@@ -53,5 +54,5 @@ export const addPaperActivity = async (paperId: string) => {
 				paperActivities: activitiesSortedReadDate,
 			},
 		});
-	await streamCacheUpdate.run(userId, "user");
+	waitUntil(streamCacheUpdate.run(userId, "user"));
 };
