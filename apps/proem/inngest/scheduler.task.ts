@@ -5,7 +5,7 @@ import { streamScheduledCacheUpdate } from "./populator.task";
 
 export const streamCacheUpdateScheduler = inngest.createFunction(
 	{ id: "streams/cache-update-scheduler" },
-	{ cron: "* */6 * * *" },
+	{ cron: "0 */6 * * *" },
 	async ({ event }) => {
 		const userIds = await getUserIds();
 		const result = await inngest.send(
