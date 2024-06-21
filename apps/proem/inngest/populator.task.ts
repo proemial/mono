@@ -9,12 +9,12 @@ import { Time } from "@proemial/utils/time";
 import { NonRetriableError } from "inngest";
 import { inngest } from "./client";
 
-const scheduledCacheUpdateEvent = "streams/cache.update.scheduled";
-export const scheduledCacheUpdate = {
-	event: scheduledCacheUpdateEvent,
+const scheduledCacheUpdateEventName = "streams/cache.update.scheduled";
+export const streamScheduledCacheUpdate = {
+	name: scheduledCacheUpdateEventName,
 	worker: inngest.createFunction(
-		{ id: "scheduled-cache-update", concurrency: 3 },
-		{ event: scheduledCacheUpdateEvent },
+		{ id: "streams/scheduled-cache-update", concurrency: 3 },
+		{ event: scheduledCacheUpdateEventName },
 		async ({ event }) => {
 			console.log("event", event);
 
@@ -27,12 +27,12 @@ export const scheduledCacheUpdate = {
 	),
 };
 
-const cacheUpdateEvent = "streams/cache.update";
-export const cacheUpdate = {
-	event: cacheUpdateEvent,
+const cacheUpdateEventName = "streams/cache.update";
+export const streamCacheUpdate = {
+	name: cacheUpdateEventName,
 	worker: inngest.createFunction(
-		{ id: "cache-update" },
-		{ event: cacheUpdateEvent },
+		{ id: "streams/cache-update" },
+		{ event: cacheUpdateEventName },
 		async ({ event }) => {
 			console.log("event", event);
 
@@ -43,6 +43,12 @@ export const cacheUpdate = {
 			return await populateCache(event.data.userId, event);
 		},
 	),
+	run: async (userId: string) => {
+		await inngest.send({
+			name: cacheUpdateEventName,
+			data: { userId },
+		});
+	},
 };
 
 export async function populateCache(userId: string, event?: { name?: string }) {
