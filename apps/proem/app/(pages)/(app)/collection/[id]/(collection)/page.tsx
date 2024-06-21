@@ -1,12 +1,8 @@
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
-import { getPersonalDefaultCollection } from "@/app/constants";
 import { auth } from "@clerk/nextjs";
-import { neonDb } from "@proemial/data";
-import { collections } from "@proemial/data/neon/schema";
-import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import FeedItem from "../../../discover/feed-item";
 import { fetchPaper } from "../../../paper/oa/[id]/fetch-paper";
+import { getCollectionPapersAndBookmarks } from "../collection-utils";
 
 type PageProps = {
 	params?: {
@@ -19,20 +15,10 @@ export default async function CollectionPage({ params }: PageProps) {
 	if (!params?.id || !userId) {
 		notFound();
 	}
-	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
-
-	const collection = (await neonDb.query.collections.findFirst({
-		where: eq(collections.slug, params.id),
-		with: {
-			collectionsToPapers: {
-				columns: {
-					paperId: true,
-				},
-			},
-		},
-	})) ?? { ...getPersonalDefaultCollection(userId), collectionsToPapers: [] };
-
-	const paperIds = collection.collectionsToPapers.map((c) => c.paperId);
+	const { paperIds, bookmarks } = await getCollectionPapersAndBookmarks(
+		userId,
+		params.id,
+	);
 
 	if (paperIds.length === 0) {
 		return (

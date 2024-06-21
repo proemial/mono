@@ -1,14 +1,10 @@
 import { StreamList } from "@/app/(pages)/(app)/collection/[id]/stream/stream-list";
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
-import { getPersonalDefaultCollection } from "@/app/constants";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { auth } from "@clerk/nextjs";
-import { neonDb } from "@proemial/data";
-import { collections } from "@proemial/data/neon/schema";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
-import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
+import { getCollectionPapersAndBookmarks } from "../collection-utils";
 
 type PageProps = {
 	params?: {
@@ -17,24 +13,15 @@ type PageProps = {
 };
 
 export default async function StreamPage({ params }: PageProps) {
-	const { userId } = await auth();
+	const { userId } = auth();
 	if (!params?.id || !userId) {
 		notFound();
 	}
-	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 
-	const collection = (await neonDb.query.collections.findFirst({
-		where: eq(collections.slug, params.id),
-		with: {
-			collectionsToPapers: {
-				columns: {
-					paperId: true,
-				},
-			},
-		},
-	})) ?? { ...getPersonalDefaultCollection(userId), collectionsToPapers: [] };
-
-	const paperIds = collection.collectionsToPapers.map((c) => c.paperId);
+	const { paperIds, bookmarks } = await getCollectionPapersAndBookmarks(
+		userId,
+		params.id,
+	);
 
 	if (paperIds.length === 0) {
 		return (

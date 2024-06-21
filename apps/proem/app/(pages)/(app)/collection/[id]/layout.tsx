@@ -109,8 +109,7 @@ export default async function ({ params, children }: PageProps) {
 							) : null}
 						</div>
 					</div>
-					{/* Disabled until we launch dynamic lists */}
-					{/* <div className="flex gap-1 justify-center items-center">
+					<div className="flex gap-1 justify-center items-center">
 						<NavItem
 							href={`/collection/${collection.slug}`}
 							title="Collection"
@@ -119,7 +118,7 @@ export default async function ({ params, children }: PageProps) {
 							href={`/collection/${collection.slug}/stream`}
 							title="Stream"
 						/>
-					</div> */}
+					</div>
 					{children}
 				</div>
 			</Main>
