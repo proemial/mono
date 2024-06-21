@@ -4,6 +4,7 @@ import {
 	PERSONAL_DEFAULT_COLLECTION_NAME,
 	getBookmarkCacheTag,
 } from "@/app/constants";
+import { streamCacheUpdate } from "@/inngest/populator.task";
 import { auth } from "@clerk/nextjs";
 import { neonDb } from "@proemial/data";
 import {
@@ -66,6 +67,7 @@ export async function addPaperToCollection(
 		.onConflictDoNothing();
 
 	revalidateTag(getBookmarkCacheTag(userId));
+	void streamCacheUpdate.run(userId);
 	return {};
 }
 
@@ -118,5 +120,6 @@ export async function togglePaperInCollection(
 	}
 
 	revalidateTag(getBookmarkCacheTag(userId));
+	void streamCacheUpdate.run(userId);
 	return {};
 }
