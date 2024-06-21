@@ -19,24 +19,30 @@ export const populator = inngest.createFunction(
 			throw new NonRetriableError("No userId provided.");
 		}
 
-		const begin = Time.now();
-		try {
-			const history = await getHistory(event.data.userId);
-			const features = await getFilter(history);
-			const papers = await getFeed(features);
-
-			return {
-				event,
-				body: {
-					papers: papers.count,
-					elapsed: Time.elapsed(begin),
-				},
-			};
-		} finally {
-			Time.log(begin, "populateCache");
-		}
+		return await populateCache(event.data.userId, event);
 	},
 );
+
+export async function populateCache(userId: string, event?: { name?: string }) {
+	const begin = Time.now();
+	try {
+		const history = await getHistory(userId);
+		const features = await getFilter(history);
+
+		// Implicitely updates the next unstable_cache
+		const papers = await getFeed(features);
+
+		return {
+			event,
+			body: {
+				papers: papers.count,
+				elapsed: Time.elapsed(begin),
+			},
+		};
+	} finally {
+		Time.log(begin, "populateCache");
+	}
+}
 
 async function getHistory(userId: string) {
 	const begin = Time.now();
