@@ -1,10 +1,11 @@
 import { StreamList } from "@/app/(pages)/(app)/collection/[id]/stream/stream-list";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { auth } from "@clerk/nextjs";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { notFound } from "next/navigation";
-import { getCollectionPapersAndBookmarks } from "../collection-utils";
+import { getPaperIdsForCollection } from "../collection-utils";
 
 type PageProps = {
 	params?: {
@@ -18,12 +19,12 @@ export default async function StreamPage({ params }: PageProps) {
 		notFound();
 	}
 
-	const { paperIds, bookmarks } = await getCollectionPapersAndBookmarks(
-		userId,
-		params.id,
-	);
+	const [paperIds, bookmarks] = await Promise.all([
+		getPaperIdsForCollection(params.id),
+		getBookmarksByUserId(userId),
+	]);
 
-	if (paperIds.length === 0) {
+	if (paperIds?.length === 0) {
 		return (
 			<div className="flex flex-col items-center justify-center gap-4">
 				<div className="text-sm">
@@ -34,7 +35,7 @@ export default async function StreamPage({ params }: PageProps) {
 		);
 	}
 
-	const fingerprints = await fetchFingerprints(paperIds);
+	const fingerprints = paperIds ? await fetchFingerprints(paperIds) : [];
 	const { filter: features } = getFeatureFilter(fingerprints);
 	return (
 		<StreamList
