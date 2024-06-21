@@ -1,3 +1,4 @@
+import { getPaperIdsForCollection } from "@/app/(pages)/(app)/collection/[id]/collection-utils";
 import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import {
@@ -18,11 +19,11 @@ export const streamScheduledCacheUpdate = {
 		async ({ event }) => {
 			console.log("event", event);
 
-			if (!event.data.userId) {
-				throw new NonRetriableError("No userId provided.");
+			if (!event.data.id) {
+				throw new NonRetriableError("No id provided.");
 			}
 
-			return await populateCache(event.data.userId, event);
+			return await populateCache(event.data, event);
 		},
 	),
 };
@@ -36,26 +37,35 @@ export const streamCacheUpdate = {
 		async ({ event }) => {
 			console.log("event", event);
 
-			if (!event.data.userId) {
-				throw new NonRetriableError("No userId provided.");
+			if (!event.data.id) {
+				throw new NonRetriableError("No id provided.");
 			}
 
-			return await populateCache(event.data.userId, event);
+			return await populateCache(event.data, event);
 		},
 	),
-	run: async (userId: string) => {
+	run: async (id: string, type: "user" | "space") => {
 		await inngest.send({
 			name: cacheUpdateEventName,
-			data: { userId },
+			data: { id, type },
 		});
 	},
 };
 
-export async function populateCache(userId: string, event?: { name?: string }) {
+export async function populateCache(
+	{ id, type }: { id: string; type: "user" | "space" },
+	event?: { name?: string },
+) {
 	const begin = Time.now();
 	try {
-		const history = await getHistory(userId);
-		const features = await getFilter(history);
+		const paperIds =
+			type === "user"
+				? await getHistory(id)
+				: await getPaperIdsForCollection(id).then((ids) =>
+						ids ? [ids] : [[]],
+					);
+
+		const features = await getFilter(paperIds);
 
 		// Implicitely updates the next unstable_cache
 		const papers = await getFeed(features);
