@@ -40,10 +40,6 @@ export const fetchAndRerankPaperIds = async (
 		const allPapers = await fetchAllPapers(d, f);
 		const paperIds = rerankAndLimit(allPapers.papers, f);
 
-		console.log(
-			`Fetched papers ${paperIds.length} of ${allPapers.papers.length} for ${features?.length} features`,
-		);
-
 		return {
 			meta: allPapers.meta,
 			papers: paperIds,
@@ -51,7 +47,15 @@ export const fetchAndRerankPaperIds = async (
 	};
 
 	const getCachedPapers = unstable_cache(
-		cacheWorker,
+		(f, d) => {
+			console.log(
+				"Cache miss, fetching papers for",
+				"cachedPapers",
+				`${features?.length} features`,
+				`${days} days.`,
+			);
+			return cacheWorker(f, d);
+		},
 		["cachedPapers", `${features?.map((f) => f.id).join("|")}`, `${days}`],
 		{ revalidate: CACHE_FOR },
 	);
