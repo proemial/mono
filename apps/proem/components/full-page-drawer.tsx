@@ -34,7 +34,7 @@ export function FullSizeDrawer({
 			<DrawerContent
 				className={cn(screenMaxWidth, "w-full h-full mx-auto rounded-none")}
 			>
-				<div className="flex flex-col h-full">
+				<div className="flex flex-col h-full select-text">
 					<DrawerHeader className="pt-0 grow-0">
 						<DrawerTitle className="flex flex-row-reverse items-center justify-between text-2xl font-normal">
 							<DrawerClose onClick={onClose}>
