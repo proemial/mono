@@ -50,8 +50,7 @@ export const fetchAndRerankPaperIds = async (
 		(f, d) => {
 			console.log(
 				"Cache miss, fetching papers for",
-				"cachedPapers",
-				`${features?.length} features`,
+				`${features?.length} features /`,
 				`${days} days.`,
 			);
 			return cacheWorker(f, d);
