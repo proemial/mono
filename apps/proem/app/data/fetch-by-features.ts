@@ -10,6 +10,7 @@ import {
 	oaBaseArgs,
 	oaBaseUrl,
 } from "@proemial/repositories/oa/models/oa-paper";
+import { sha256 } from "@proemial/utils/string";
 import dayjs from "dayjs";
 import { unstable_cache } from "next/cache";
 
@@ -46,16 +47,17 @@ export const fetchAndRerankPaperIds = async (
 		};
 	};
 
+	const cacheKey = await sha256(
+		`cachedPapers ${features?.map((f) => f.id).join("|")} ${days}`,
+	);
 	const getCachedPapers = unstable_cache(
-		(f, d) => {
+		async (f, d) => {
 			console.log(
-				"Cache miss, fetching papers for",
-				`${features?.length} features /`,
-				`${days} days.`,
+				`Cache miss, fetching papers for ${cacheKey} (${f.length} features)`,
 			);
 			return cacheWorker(f, d);
 		},
-		["cachedPapers", `${features?.map((f) => f.id).join("|")}`, `${days}`],
+		[cacheKey],
 		{ revalidate: CACHE_FOR },
 	);
 
