@@ -1,4 +1,7 @@
-import { getPersonalDefaultCollection } from "@/app/constants";
+import {
+	PERSONAL_DEFAULT_COLLECTION_NAME,
+	getPersonalDefaultCollection,
+} from "@/app/constants";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { IconButton } from "@/components/collections/icon-button";
 import { Main } from "@/components/main";
@@ -81,7 +84,9 @@ export default async function ({ params, children }: PageProps) {
 			<Main>
 				<div className="flex flex-col grow gap-10">
 					<div className="flex flex-col gap-3">
-						<Paragraph>{collection.description}</Paragraph>
+						{collection.name !== PERSONAL_DEFAULT_COLLECTION_NAME && (
+							<Paragraph>{collection.description}</Paragraph>
+						)}
 						<div className="flex gap-2 justify-between items-center flex-row-reverse">
 							<div className="flex gap-4">
 								{/* <IconButton title="Add a paper…">
