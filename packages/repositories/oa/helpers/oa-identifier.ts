@@ -1,6 +1,4 @@
 export function getOaPaperSearchUrl(identifier: string) {
-	console.log("getOaPaperSearchUrl", identifier);
-
 	// Pubmed
 	if (identifier.toLowerCase().includes("pubmed")) {
 		return `https://api.openalex.org/works?filter=ids.pmid:${identifier}`;
@@ -24,7 +22,6 @@ export function getOaPaperSearchUrl(identifier: string) {
 
 	// 	return `https://api.openalex.org/autocomplete?q=${identifier}`;
 	// }
-	console.log(`https://api.openalex.org/autocomplete?q=${identifier}`);
 
 	return `https://api.openalex.org/autocomplete?q=${identifier}`;
 }
