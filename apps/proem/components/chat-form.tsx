@@ -138,7 +138,7 @@ export function ChatForm({
 											}
 											return handleFormInput(e);
 										}}
-										onInput={handleFormInput}
+										// onInput={handleFormInput}
 										onChange={(e) => {
 											handleChange(e.target as HTMLTextAreaElement);
 											field.onChange(e);
