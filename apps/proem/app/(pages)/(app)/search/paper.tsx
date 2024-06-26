@@ -1,22 +1,40 @@
 "use server";
 import { getBookmarksByUserId } from "@/app/(pages)/(app)/(discover)/get-bookmarks-by-user-id";
 import { auth } from "@clerk/nextjs";
-import FeedItem from "../(discover)/feed-item";
-import { fetchPaper } from "../paper/oa/[id]/fetch-paper";
-import { generate } from "../paper/oa/[id]/llm-generate";
+import { OpenAlexWorkMetadata } from "@proemial/repositories/oa/models/oa-paper";
+import { FeedItemCard } from "../(discover)/feed-item-card";
+import Markdown from "@/components/markdown";
+import { Users01 } from "@untitled-ui/icons-react";
 
-export async function Paper({ id }: { id: string }) {
+export async function Paper({ paper }: { paper: OpenAlexWorkMetadata }) {
 	const { userId } = await auth();
 	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
-	let paper = await fetchPaper(id);
-
-	if (paper && !paper.generated) {
-		paper = await generate(paper);
-	}
 
 	if (!paper) {
 		return null;
 	}
 
-	return <FeedItem paper={paper} bookmarks={bookmarks} />;
+	return (
+		<div className="space-y-3 bg-white dark:bg-primary rounded-lg p-4">
+			<FeedItemCard
+				id={paper.id}
+				date={paper.publication_date}
+				topics={paper.topics}
+				// provider={provider}
+				bookmarks={bookmarks}
+				// customCollectionId={customCollectionId}
+			>
+				<Markdown>{paper.title}</Markdown>
+			</FeedItemCard>
+
+			<div className="flex flex-row gap-3 overflow-x-auto scrollbar-hide text-muted-foreground">
+				{paper.authorships?.map((author, i) => (
+					<div key={i} className="flex items-center gap-1 text-nowrap">
+						<Users01 className="size-4" />
+						{author.author.display_name}
+					</div>
+				))}
+			</div>
+		</div>
+	);
 }

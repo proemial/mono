@@ -1,15 +1,15 @@
 "use server";
 
 import {
-	OpenAlexMeta,
+	OpenAlexWorkMetadata,
 	oaBaseArgs,
 	oaBaseUrl,
 } from "@proemial/repositories/oa/models/oa-paper";
 import dayjs from "dayjs";
 
-export async function findPaperIds(query: string) {
+export async function findPapers(query: string) {
 	if (!query.length) {
-		return [];
+		return { results: [] };
 	}
 
 	const today = dayjs().format("YYYY-MM-DD");
@@ -22,14 +22,19 @@ export async function findPaperIds(query: string) {
 	]
 		.filter((f) => !!f)
 		.join(",");
+
 	const search = await fetch(
-		`${oaBaseUrl}?${oaBaseArgs}select=id&filter=${oaFilter},title.search:${query}`,
+		`${oaBaseUrl}?${oaBaseArgs}&filter=${oaFilter},title.search:${query}`,
+	);
+	console.log(
+		`${oaBaseUrl}?${oaBaseArgs}&filter=${oaFilter},title.search:${query}`,
 	);
 
-	const json = (await search.json()) as {
-		meta: OpenAlexMeta;
-		results: { id: string }[];
+	const papers = (await search.json()) as { results: OpenAlexWorkMetadata[] };
+	return {
+		results: papers.results.map((paper) => ({
+			...paper,
+			id: paper.id.split("/").at(-1) as string,
+		})),
 	};
-
-	return json.results.map((result) => result.id.split("/").at(-1) as string);
 }

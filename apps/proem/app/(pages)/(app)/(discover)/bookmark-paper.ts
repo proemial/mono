@@ -18,6 +18,8 @@ import { and, eq } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
+import { fetchPaper } from "../paper/oa/[id]/fetch-paper";
+import { generate } from "../paper/oa/[id]/llm-generate";
 
 const addPaperToCollectionParams = z.object({
 	paperId: z.string(),
@@ -38,6 +40,12 @@ export async function addPaperToCollection(
 
 	if (!userId) {
 		return;
+	}
+
+	// Ensure paper is summarised
+	const paper = await fetchPaper(paperId);
+	if (paper && !paper.generated) {
+		await generate(paper);
 	}
 
 	const results = await Promise.all([
