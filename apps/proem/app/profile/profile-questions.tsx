@@ -1,6 +1,7 @@
 "use client";
 import { fetchQuestionsForCurrentUser } from "@/app/profile/profile-actions";
 import { CollapsibleSection } from "@/components/collapsible-section";
+import { routes } from "@/routes";
 import { DrawerClose } from "@proemial/shadcn-ui";
 import Link from "next/link";
 import { useQuery } from "react-query";
@@ -26,7 +27,7 @@ export function ProfileQuestions() {
 				{data?.map((question) => (
 					<div key={question.id}>
 						<DrawerClose asChild>
-							<Link href={`/answer/${question.slug}`}>
+							<Link href={`${routes.answer}/${question.slug}`}>
 								<div className="truncate w-full pr-20 text-sm py-0.5">
 									{question.question}
 								</div>

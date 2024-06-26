@@ -7,6 +7,7 @@ import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs";
 import { neonDb } from "@proemial/data";
 import { collections } from "@proemial/data/neon/schema";
@@ -51,7 +52,9 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 		const history = await getBookmarksAndHistory();
 		if (history.length) {
 			redirect(
-				`/discover/fingerprints?ids=${history.flatMap((i) => i).join(",")}`,
+				`${routes.discover}fingerprints?ids=${history
+					.flatMap((i) => i)
+					.join(",")}`,
 			);
 		}
 	}
@@ -70,7 +73,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	return (
 		<>
 			<NavBarV2
-				action={<CloseAction target="/discover" />}
+				action={<CloseAction target={routes.discover} />}
 				isInternalUser={isInternal}
 			>
 				<SelectSpaceHeader

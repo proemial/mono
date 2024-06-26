@@ -7,6 +7,7 @@ import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { Suggestions } from "@/components/suggestions";
+import { routes } from "@/routes";
 import { Metadata } from "next";
 import { getThreeRandomStarters } from "./starters";
 
@@ -25,7 +26,7 @@ export default function AskPage() {
 	return (
 		<>
 			<NavBarV2
-				action={<CloseAction target="/discover" />}
+				action={<CloseAction target={routes.discover} />}
 				isInternalUser={isInternal}
 			>
 				<SimpleHeader title="Ask" />

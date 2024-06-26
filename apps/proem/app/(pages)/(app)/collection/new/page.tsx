@@ -6,6 +6,7 @@ import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { routes } from "@/routes";
 import { useUser } from "@clerk/nextjs";
 import { NewCollection } from "@proemial/data/neon/schema";
 import { useSearchParams } from "next/navigation";
@@ -36,7 +37,7 @@ export default function NewCollectionPage() {
 	return (
 		<>
 			<NavBarV2
-				action={<CloseAction target={`/collection/${user.id}`} />}
+				action={<CloseAction target={`${routes.collection}/${user.id}`} />}
 				isInternalUser={isInternal}
 			>
 				<SimpleHeader title="Create new space" />

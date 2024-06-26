@@ -3,6 +3,7 @@ import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { routes } from "@/routes";
 import { Suspense } from "react";
 import { findPaperIds } from "./find-paper-ids";
 import { Paper } from "./paper";
@@ -22,7 +23,7 @@ export default async function SearchPage({ searchParams }: Props) {
 	return (
 		<>
 			<NavBarV2
-				action={<CloseAction target="/discover" />}
+				action={<CloseAction target={routes.discover} />}
 				isInternalUser={isInternal}
 			>
 				<SimpleHeader title="Search" />

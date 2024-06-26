@@ -3,6 +3,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
+import { routes } from "@/routes";
 import { Button } from "@proemial/shadcn-ui";
 import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
@@ -36,7 +37,7 @@ export function Suggestions({
 		if (onClick) {
 			onClick({ role: "user", content: suggestion });
 		} else {
-			router.push(`/answer/?q=${encodeURIComponent(suggestion)}`);
+			router.push(`${routes.answer}/?q=${encodeURIComponent(suggestion)}`);
 		}
 	}
 

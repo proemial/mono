@@ -5,6 +5,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
+import { routes } from "@/routes";
 import { Collection } from "@proemial/data/neon/schema";
 import {
 	Select,
@@ -30,7 +31,7 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 
 	const handleValueChange = (value: string) => {
 		trackHandler(analyticsKeys.ui.header.click.changeSpace);
-		router.push(`/collection/${value}`);
+		router.push(`${routes.collection}/${value}`);
 	};
 
 	const defaultSpace = allCollections.length < 2;

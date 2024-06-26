@@ -8,6 +8,7 @@ import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-actio
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
 import { ProemAssistant } from "@/components/proem-assistant";
+import { routes } from "@/routes";
 import {
 	OrganizationMembershipPublicUserData,
 	auth,
@@ -33,7 +34,7 @@ export default async function ({ params, children }: PageProps) {
 	// TODO: Remove this check when launching feature
 	const { isInternal } = getInternalUser();
 	if (!isInternal) {
-		redirect("/");
+		redirect(routes.discover);
 	}
 
 	const { userId, orgId } = auth();
@@ -104,10 +105,13 @@ export default async function ({ params, children }: PageProps) {
 					</div>
 					<div className="flex gap-1 justify-center items-center">
 						<NavItem
-							href={`/collection/${collection.slug}/stream`}
+							href={`${routes.collection}/${collection.slug}/stream`}
 							title="Latest"
 						/>
-						<NavItem href={`/collection/${collection.slug}`} title="Saved" />
+						<NavItem
+							href={`${routes.collection}/${collection.slug}`}
+							title="Saved"
+						/>
 					</div>
 					{children}
 				</div>

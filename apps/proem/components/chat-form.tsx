@@ -4,6 +4,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
+import { routes } from "@/routes";
 import { useVisualViewport } from "@/utils/useVisualViewport";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -62,7 +63,7 @@ export function ChatForm({
 		if (onSend) {
 			onSend({ role: "user", content: question });
 		} else {
-			router.push(`/answer/?q=${encodeURIComponent(question)}`);
+			router.push(`${routes.answer}/?q=${encodeURIComponent(question)}`);
 		}
 	};
 

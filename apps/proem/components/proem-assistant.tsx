@@ -1,5 +1,6 @@
 "use client";
 
+import { routes } from "@/routes";
 import {
 	Button,
 	Drawer,
@@ -29,7 +30,7 @@ export const ProemAssistant = ({ internalUser }: Props) => {
 
 	const handleClick = () => {
 		trackHandler(analyticsKeys.assistant.ask);
-		router.push("/");
+		router.push(routes.ask);
 	};
 
 	/**
@@ -42,7 +43,7 @@ export const ProemAssistant = ({ internalUser }: Props) => {
 		const encodedInput = encodeURIComponent(input);
 		setDrawerOpen(false);
 		trackHandler(analyticsKeys.assistant.ask);
-		router.push(`/answer/?q=${encodedInput}`);
+		router.push(`${routes.answer}/?q=${encodedInput}`);
 	};
 
 	const handleOpen = () => {

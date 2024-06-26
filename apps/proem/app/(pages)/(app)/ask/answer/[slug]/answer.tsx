@@ -13,6 +13,7 @@ import { useUser } from "@/app/hooks/use-user";
 import { USER_QUESTIONS_QUERY_KEY } from "@/app/profile/profile-questions";
 import { ChatInput } from "@/components/chat-input";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
+import { routes } from "@/routes";
 import { cn } from "@proemial/shadcn-ui";
 import { Message, useChat } from "ai/react";
 import { useEffect, useState } from "react";
@@ -74,7 +75,7 @@ export const Answer = ({
 	useEffect(() => {
 		if (initialQuestion && sessionSlug) {
 			// Replacing url without reloading the page with a server call
-			window.history.pushState(null, "", `/answer/${sessionSlug}`);
+			window.history.pushState(null, "", `${routes.answer}/${sessionSlug}`);
 		}
 	}, [sessionSlug, initialQuestion]);
 

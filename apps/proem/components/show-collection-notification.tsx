@@ -12,6 +12,7 @@ import {
 	Notification,
 	openUnstyledNotifcation,
 } from "@/components/notification";
+import { routes } from "@/routes";
 import { Button, toast } from "@proemial/shadcn-ui";
 import { Plus } from "@untitled-ui/icons-react";
 import Link from "next/link";
@@ -71,7 +72,7 @@ function CollectionSelector({
 					</div>
 				))}
 				<Link
-					href={`/collection/new?paperId=${paperId}`}
+					href={`${routes.collection}/new?paperId=${paperId}`}
 					onClick={() => onClose?.()}
 				>
 					<div className="flex gap-4 px-4 py-2 text-base items-center">

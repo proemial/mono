@@ -4,6 +4,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
+import { routes } from "@/routes";
 import { SearchMd } from "@untitled-ui/icons-react";
 import { useRouter } from "next/navigation";
 
@@ -12,7 +13,7 @@ export const OpenSearchAction = () => {
 
 	const handleAction = () => {
 		trackHandler(analyticsKeys.ui.header.click.close);
-		router.push("/search");
+		router.push(routes.search);
 	};
 
 	return (

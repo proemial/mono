@@ -7,6 +7,7 @@ import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
@@ -26,7 +27,7 @@ export default async function SharePage({ params: { shareId } }: Props) {
 	const { isInternal } = getInternalUser();
 
 	if (!sharedAnswer) {
-		redirect("/");
+		redirect(routes.discover);
 	}
 
 	const { existingData, initialMessages } =
@@ -35,7 +36,7 @@ export default async function SharePage({ params: { shareId } }: Props) {
 	return (
 		<>
 			<NavBarV2
-				action={<CloseAction target="/discover" />}
+				action={<CloseAction target={routes.discover} />}
 				isInternalUser={isInternal}
 			>
 				<SimpleHeader title="Ask" />

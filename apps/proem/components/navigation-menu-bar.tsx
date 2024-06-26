@@ -6,6 +6,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
+import { routes } from "@/routes";
 import {
 	Button,
 	NavigationMenu,
@@ -21,16 +22,16 @@ import { useEffect, useState } from "react";
 
 export function NavigationMenuBar({ title }: { title?: string }) {
 	const pathname = usePathname();
-	const [askHref, setAskHref] = useState<string>("/");
-	const isFrontpage = pathname === "/";
+	const [askHref, setAskHref] = useState<string>(routes.ask);
+	const isAskPage = pathname === routes.ask;
 
 	useEffect(() => {
-		if (isFrontpage || pathname.includes("/answer")) {
+		if (isAskPage || pathname.includes(routes.answer)) {
 			setAskHref(pathname);
 		}
-	}, [pathname, isFrontpage]);
+	}, [pathname, isAskPage]);
 
-	const showSearch = pathname.includes("/discover");
+	const showSearch = pathname === routes.discover;
 	console.log("showSearch", pathname, showSearch);
 
 	return (
@@ -46,8 +47,8 @@ export function NavigationMenuBar({ title }: { title?: string }) {
 						<>
 							<NavItem
 								label="Discover"
-								href="/discover"
-								isActive={() => pathname.includes("/discover")}
+								href={routes.discover}
+								isActive={() => pathname === routes.discover}
 								onClick={() =>
 									trackHandler(analyticsKeys.ui.header.click.discover)
 								}
@@ -55,7 +56,7 @@ export function NavigationMenuBar({ title }: { title?: string }) {
 							<NavItem
 								label="Ask"
 								href={askHref}
-								isActive={() => pathname === askHref}
+								isActive={() => pathname.includes(routes.ask)}
 								onClick={() => trackHandler(analyticsKeys.ui.header.click.ask)}
 							/>
 						</>
@@ -69,7 +70,7 @@ export function NavigationMenuBar({ title }: { title?: string }) {
 				>
 					{showSearch && <ShowSearch />}
 					{title && <CloseSearch />}
-					{!title && !showSearch && <ClearChat isFrontpage={isFrontpage} />}
+					{!title && !showSearch && <ClearChat isFrontpage={isAskPage} />}
 				</NavigationMenuItem>
 			</NavigationMenuList>
 		</NavigationMenu>
@@ -79,7 +80,7 @@ export function NavigationMenuBar({ title }: { title?: string }) {
 function ClearChat({ isFrontpage }: { isFrontpage: boolean }) {
 	return (
 		<Link
-			href="/"
+			href={routes.ask}
 			onClick={
 				!isFrontpage
 					? trackHandler(`ask:${analyticsKeys.chat.click.clear}`)
@@ -98,7 +99,7 @@ function ShowSearch() {
 	if (!experimental) return null;
 
 	return (
-		<Link href="/search">
+		<Link href={routes.search}>
 			<Button variant="ghost">
 				<SearchMd className="size-5" />
 			</Button>
@@ -108,7 +109,7 @@ function ShowSearch() {
 
 function CloseSearch() {
 	return (
-		<Link href="/discover">
+		<Link href={routes.discover}>
 			<Button variant="ghost">
 				<X className="size-5" />
 			</Button>

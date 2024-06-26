@@ -5,6 +5,7 @@ import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs";
 import { Edit05 } from "@untitled-ui/icons-react";
 import { redirect } from "next/navigation";
@@ -20,7 +21,7 @@ export default async function AnswerPage({ searchParams }: Props) {
 	const { userId } = auth();
 	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
 	if (!initialQuestion) {
-		redirect("/");
+		redirect(routes.ask);
 	}
 	const { isInternal } = getInternalUser();
 
@@ -29,7 +30,7 @@ export default async function AnswerPage({ searchParams }: Props) {
 			<NavBarV2
 				action={
 					<CloseAction
-						target={"/"}
+						target={routes.ask}
 						iconOverride={<Edit05 className="size-5" />}
 					/>
 				}

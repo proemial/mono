@@ -1,4 +1,5 @@
 "use client";
+import { routes } from "@/routes";
 import { buttonVariants } from "@proemial/shadcn-ui";
 import Link from "next/link";
 
@@ -12,7 +13,7 @@ export default function NotFound() {
 				</p>
 				<div className="flex mt-10 gap-x-2">
 					<Link
-						href="/"
+						href={routes.discover}
 						className={buttonVariants({ variant: "default", size: "default" })}
 					>
 						Go to home

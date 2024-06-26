@@ -1,5 +1,6 @@
 "use client";
 
+import { routes } from "@/routes";
 import { Collection } from "@proemial/data/neon/schema";
 import { Button, DrawerClose } from "@proemial/shadcn-ui";
 import {
@@ -51,7 +52,7 @@ export const CollectionListItem = ({
 	return (
 		<div className="flex justify-between gap-2">
 			<Link
-				href={`/collection/${slug}/stream`}
+				href={`${routes.collection}/${slug}/stream`}
 				onClick={() => {
 					trackHandler(analyticsKeys.collection.openFromMenu);
 				}}
