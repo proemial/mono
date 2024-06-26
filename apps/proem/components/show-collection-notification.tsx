@@ -72,7 +72,7 @@ function CollectionSelector({
 					</div>
 				))}
 				<Link
-					href={`${routes.collection}/new?paperId=${paperId}`}
+					href={`${routes.space}/new?paperId=${paperId}`}
 					onClick={() => onClose?.()}
 				>
 					<div className="flex gap-4 px-4 py-2 text-base items-center">

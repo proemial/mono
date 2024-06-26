@@ -1,4 +1,4 @@
-import { getPaperIdsForCollection } from "@/app/(pages)/(app)/collection/[id]/collection-utils";
+import { getPaperIdsForCollection } from "@/app/(pages)/(app)/space/[id]/collection-utils";
 import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import {

@@ -16,7 +16,7 @@ import {
 } from "@clerk/nextjs/server";
 import {
 	findCollectionWithPaperIdsBySlug,
-	findCollectionsByUserIdAndOrgMembership,
+	findCollectionsByUserIdAndOrgMemberIds,
 } from "@proemial/data/repository/collection";
 import { Avatar, AvatarImage, Paragraph } from "@proemial/shadcn-ui";
 import { notFound, redirect } from "next/navigation";
@@ -60,7 +60,7 @@ export default async function ({ params, children }: PageProps) {
 			.filter(Boolean) as OrganizationMembershipPublicUserData[]
 	).sort((a, b) => (a.firstName ?? "").localeCompare(b.firstName ?? ""));
 
-	const userCollections = await findCollectionsByUserIdAndOrgMembership(
+	const userCollections = await findCollectionsByUserIdAndOrgMemberIds(
 		userId,
 		orgMembersUserData.map((m) => m.userId),
 	);
@@ -105,11 +105,11 @@ export default async function ({ params, children }: PageProps) {
 					</div>
 					<div className="flex gap-1 justify-center items-center">
 						<NavItem
-							href={`${routes.collection}/${collection.slug}/stream`}
+							href={`${routes.space}/${collection.slug}/stream`}
 							title="Latest"
 						/>
 						<NavItem
-							href={`${routes.collection}/${collection.slug}`}
+							href={`${routes.space}/${collection.slug}`}
 							title="Saved"
 						/>
 					</div>

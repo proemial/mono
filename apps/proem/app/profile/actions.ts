@@ -1,5 +1,6 @@
 "use server";
 
+import { routes } from "@/routes";
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import {
 	OrganizationMembershipPublicUserData,
@@ -15,7 +16,7 @@ import {
 } from "@proemial/data/neon/schema";
 import {
 	findCollectionsByUserId,
-	findCollectionsByUserIdAndOrgMembership,
+	findCollectionsByUserIdAndOrgMemberIds,
 } from "@proemial/data/repository/collection";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -23,7 +24,7 @@ import { headers } from "next/headers";
 
 export const getAvailableCollections = async () => {
 	const { userId, orgMemberIds } = await authAndRatelimit();
-	return await findCollectionsByUserIdAndOrgMembership(userId, orgMemberIds);
+	return await findCollectionsByUserIdAndOrgMemberIds(userId, orgMemberIds);
 };
 
 export const getOwnCollections = async () => {
@@ -42,7 +43,7 @@ export const addCollection = async (collection: NewCollection) => {
 
 export const editCollection = async (collection: Collection) => {
 	const { userId } = await authAndRatelimit();
-	revalidatePath("/collection/[id]", "layout");
+	revalidatePath(`${routes.space}/[id]`, "layout");
 	return await neonDb
 		.update(collections)
 		.set({
@@ -63,7 +64,7 @@ export const deleteCollection = async (collectionId: Collection["id"]) => {
 		.delete(collectionsToPapers)
 		.where(eq(collectionsToPapers.collectionsId, collectionId));
 
-	revalidatePath("/collection/[id]", "layout");
+	revalidatePath(`${routes.space}/[id]`, "layout");
 	return await neonDb
 		.delete(collections)
 		.where(

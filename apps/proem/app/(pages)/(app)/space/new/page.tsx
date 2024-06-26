@@ -37,7 +37,7 @@ export default function NewCollectionPage() {
 	return (
 		<>
 			<NavBarV2
-				action={<CloseAction target={`${routes.collection}/${user.id}`} />}
+				action={<CloseAction target={`${routes.space}/${user.id}`} />}
 				isInternalUser={isInternal}
 			>
 				<SimpleHeader title="Create new space" />

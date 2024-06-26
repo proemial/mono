@@ -1,5 +1,5 @@
 import { getBookmarksByUserId } from "@/app/(pages)/(app)/(discover)/get-bookmarks-by-user-id";
-import { StreamList } from "@/app/(pages)/(app)/collection/[id]/stream/stream-list";
+import { StreamList } from "@/app/(pages)/(app)/space/[id]/stream/stream-list";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { auth } from "@clerk/nextjs";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
@@ -28,8 +28,7 @@ export default async function StreamPage({ params }: PageProps) {
 		return (
 			<div className="flex flex-col items-center justify-center gap-4">
 				<div className="text-sm">
-					Add at least one paper to this collection, to get a stream of related
-					content.
+					Save at least one paper, to access the latest related content.
 				</div>
 			</div>
 		);

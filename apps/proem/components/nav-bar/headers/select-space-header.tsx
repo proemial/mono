@@ -31,7 +31,7 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 
 	const handleValueChange = (value: string) => {
 		trackHandler(analyticsKeys.ui.header.click.changeSpace);
-		router.push(`${routes.collection}/${value}`);
+		router.push(`${routes.space}/${value}`);
 	};
 
 	const defaultSpace = allCollections.length < 2;

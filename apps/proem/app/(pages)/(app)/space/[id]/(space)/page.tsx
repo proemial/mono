@@ -24,9 +24,7 @@ export default async function CollectionPage({ params }: PageProps) {
 	if (paperIds?.length === 0) {
 		return (
 			<div className="flex flex-col items-center justify-center gap-4">
-				<div className="text-sm">
-					There are no papers in this collection yet.
-				</div>
+				<div className="text-sm">You have yet to save a paper…</div>
 			</div>
 		);
 	}

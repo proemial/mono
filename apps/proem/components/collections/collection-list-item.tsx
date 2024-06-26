@@ -52,7 +52,7 @@ export const CollectionListItem = ({
 	return (
 		<div className="flex justify-between gap-2">
 			<Link
-				href={`${routes.collection}/${slug}/stream`}
+				href={`${routes.space}/${slug}/stream`}
 				onClick={() => {
 					trackHandler(analyticsKeys.collection.openFromMenu);
 				}}

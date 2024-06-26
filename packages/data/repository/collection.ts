@@ -5,7 +5,7 @@ import { Collection, collections } from "../neon/schema";
 /**
  * Returns the user's own collections and public collections of org members.
  */
-export const findCollectionsByUserIdAndOrgMembership = async (
+export const findCollectionsByUserIdAndOrgMemberIds = async (
 	userId: string,
 	orgMemberIds: string[] = [],
 ) => {
@@ -25,7 +25,6 @@ export const findCollectionsByUserIdAndOrgMembership = async (
 		orderBy: asc(collections.name),
 	});
 	return [
-		// Put the user's default collection first
 		...allCollections.filter((c) => c.id === userId),
 		...allCollections.filter((c) => c.id !== userId),
 	];
