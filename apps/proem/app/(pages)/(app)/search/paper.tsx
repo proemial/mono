@@ -1,7 +1,7 @@
 "use server";
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/(discover)/get-bookmarks-by-user-id";
 import { auth } from "@clerk/nextjs";
-import FeedItem from "../discover/feed-item";
+import FeedItem from "../(discover)/feed-item";
 import { fetchPaper } from "../paper/oa/[id]/fetch-paper";
 import { generate } from "../paper/oa/[id]/llm-generate";
 

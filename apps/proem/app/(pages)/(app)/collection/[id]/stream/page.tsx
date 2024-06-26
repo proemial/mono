@@ -1,5 +1,5 @@
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/(discover)/get-bookmarks-by-user-id";
 import { StreamList } from "@/app/(pages)/(app)/collection/[id]/stream/stream-list";
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { auth } from "@clerk/nextjs";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";

@@ -1,7 +1,7 @@
 "use client";
 import FeedItem, {
 	FeedItemProps,
-} from "@/app/(pages)/(app)/discover/feed-item";
+} from "@/app/(pages)/(app)/(discover)/feed-item";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode } from "react";

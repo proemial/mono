@@ -10,7 +10,7 @@ import { useUser } from "@clerk/nextjs";
 import { NewCollection } from "@proemial/data/neon/schema";
 import { useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "react-query";
-import { addPaperToCollection } from "../../discover/bookmark-paper";
+import { addPaperToCollection } from "../../(discover)/bookmark-paper";
 
 export default function NewCollectionPage() {
 	const { user } = useUser();

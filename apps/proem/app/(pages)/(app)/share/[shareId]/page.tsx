@@ -1,6 +1,6 @@
-import { Answer } from "@/app/(pages)/(app)/(ask)/answer/[slug]/answer";
-import { mapAnswerToAnswerEngine } from "@/app/(pages)/(app)/(ask)/mapAnswerToAnswerEngine";
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/(discover)/get-bookmarks-by-user-id";
+import { Answer } from "@/app/(pages)/(app)/ask/answer/[slug]/answer";
+import { mapAnswerToAnswerEngine } from "@/app/(pages)/(app)/ask/mapAnswerToAnswerEngine";
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";

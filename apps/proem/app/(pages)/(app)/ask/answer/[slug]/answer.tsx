@@ -2,7 +2,7 @@
 import {
 	QaPair,
 	QaPairProps,
-} from "@/app/(pages)/(app)/(ask)/answer/[slug]/qa-pair";
+} from "@/app/(pages)/(app)/ask/answer/[slug]/qa-pair";
 import {
 	AnswerEngineEvents,
 	findByEventType,

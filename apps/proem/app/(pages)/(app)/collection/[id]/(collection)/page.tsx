@@ -1,7 +1,7 @@
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/(discover)/get-bookmarks-by-user-id";
 import { auth } from "@clerk/nextjs";
 import { notFound } from "next/navigation";
-import FeedItem from "../../../discover/feed-item";
+import FeedItem from "../../../(discover)/feed-item";
 import { fetchPaper } from "../../../paper/oa/[id]/fetch-paper";
 import { getPaperIdsForCollection } from "../collection-utils";
 

@@ -1,4 +1,4 @@
-import { PaperChat } from "@/app/(pages)/(app)/discover/paper-chat";
+import { PaperChat } from "@/app/(pages)/(app)/(discover)/paper-chat";
 import {
 	PaperReaderHeadline,
 	PaperReaderHeadlineProps,

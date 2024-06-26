@@ -1,4 +1,4 @@
-import { Feed } from "@/app/(pages)/(app)/discover/feed";
+import { Feed } from "@/app/(pages)/(app)/(discover)/feed";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
