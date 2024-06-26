@@ -1,37 +1,50 @@
+import dayjs from "dayjs";
+import { Client } from "langsmith";
 import { NextRequest } from "next/server";
 
 export const revalidate = 1;
 
+type Month =
+	| "Jan"
+	| "Feb"
+	| "Mar"
+	| "Apr"
+	| "May"
+	| "Jun"
+	| "Jul"
+	| "Aug"
+	| "Sep"
+	| "Oct"
+	| "Nov"
+	| "Dec";
+type Value = { [key: string]: number };
+
 export async function GET(req: NextRequest) {
-	// const client = new Client();
-	// const runs = client.listRuns({
-	// 	projectName: "proem",
-	// 	executionOrder: 1,
-	// 	startTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
-	// 	filter: 'eq(name,"AgentExecutor")',
-	// });
+	const data = {} as { [key in Month]: Value };
 
-	// const questions = {} as { [key: string]: number };
-	// for await (const run of runs) {
-	// 	// console.log(dayjs(run.start_time).format("YYYY.MM.DD"));
+	const client = new Client();
+	const runs = client.listRuns({
+		projectName: "proem",
+		executionOrder: 1,
+		select: ["start_time", "name"],
+	});
 
-	// 	const question = run?.inputs?.input;
+	let logCounter = 0;
+	for await (const run of runs) {
+		const month = dayjs(run.start_time).format("MMM") as Month;
+		const name = run.name;
 
-	// 	if (!questions[question]) {
-	// 		questions[question] = 0;
-	// 	}
-	// 	questions[question] += 1;
-	// }
+		if (!Object.keys(data).includes(month)) {
+			data[month] = {};
+		}
+		if (!Object.keys(data[month]).includes(name)) {
+			data[month][name] = 0;
+		}
+		data[month][name] += 1;
 
-	// const sortedKeys = Object.keys(questions).sort(
-	// 	(a, b) => (questions[b] as number) - (questions[a] as number),
-	// );
-	// const result = {} as { [key: string]: number };
-	// // biome-ignore lint/complexity/noForEach: <explanation>
-	// sortedKeys.forEach((key) => {
-	// 	result[key] = questions[key] as number;
-	// });
-
-	// return Response.json(result);
-	return Response.json({});
+		if (++logCounter % 500) {
+			console.log(`Still running... " ${logCounter} runs processed`);
+		}
+	}
+	return Response.json(data);
 }
