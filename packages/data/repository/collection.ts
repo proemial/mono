@@ -1,4 +1,4 @@
-import { and, eq, inArray, notInArray, or } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, notInArray, or } from "drizzle-orm";
 import { neonDb } from "..";
 import { Collection, collections } from "../neon/schema";
 
@@ -12,7 +12,7 @@ export const getAvailableCollections = async (
 	const orgMemberIdsWithoutCurrentUser = orgMemberIds.filter(
 		(id) => id !== userId,
 	);
-	return await neonDb.query.collections.findMany({
+	const allCollections = await neonDb.query.collections.findMany({
 		where: or(
 			// The user's own collections
 			eq(collections.ownerId, userId),
@@ -22,7 +22,13 @@ export const getAvailableCollections = async (
 				notInArray(collections.id, orgMemberIdsWithoutCurrentUser),
 			),
 		),
+		orderBy: asc(collections.name),
 	});
+	return [
+		// Put the user's default collection first
+		...allCollections.filter((c) => c.id === userId),
+		...allCollections.filter((c) => c.id !== userId),
+	];
 };
 
 export const getCollectionBySlugWithPaperIds = async (

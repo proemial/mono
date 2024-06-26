@@ -1,7 +1,11 @@
 "use server";
 
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
-import { auth } from "@clerk/nextjs/server";
+import {
+	OrganizationMembershipPublicUserData,
+	auth,
+	clerkClient,
+} from "@clerk/nextjs/server";
 import { neonDb } from "@proemial/data";
 import {
 	Collection,
@@ -9,23 +13,18 @@ import {
 	collections,
 	collectionsToPapers,
 } from "@proemial/data/neon/schema";
-import { and, asc, eq } from "drizzle-orm";
+import { getAvailableCollections } from "@proemial/data/repository/collection";
+import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
-export const getCollections = async (userId: string) => {
-	await authAndRatelimit(userId);
-	return neonDb.query.collections.findMany({
-		where: eq(collections.ownerId, userId),
-		orderBy: [asc(collections.name)],
-	});
+export const getCollections = async () => {
+	const { userId, orgMemberIds } = await authAndRatelimit();
+	return await getAvailableCollections(userId, orgMemberIds);
 };
 
-export const addCollection = async (
-	userId: string,
-	collection: NewCollection,
-) => {
-	await authAndRatelimit(userId);
+export const addCollection = async (collection: NewCollection) => {
+	await authAndRatelimit();
 	const userCollections = await neonDb
 		.insert(collections)
 		.values(collection)
@@ -33,11 +32,8 @@ export const addCollection = async (
 	return userCollections;
 };
 
-export const editCollection = async (
-	userId: string,
-	collection: Collection,
-) => {
-	await authAndRatelimit(userId);
+export const editCollection = async (collection: Collection) => {
+	const { userId } = await authAndRatelimit();
 	revalidatePath("/collection/[id]", "layout");
 	return await neonDb
 		.update(collections)
@@ -51,11 +47,8 @@ export const editCollection = async (
 		.returning();
 };
 
-export const deleteCollection = async (
-	userId: string,
-	collectionId: Collection["id"],
-) => {
-	await authAndRatelimit(userId);
+export const deleteCollection = async (collectionId: Collection["id"]) => {
+	const { userId } = await authAndRatelimit();
 
 	// Delete any entries in the junction table prior to deleting the collection
 	await neonDb
@@ -71,10 +64,10 @@ export const deleteCollection = async (
 		.returning();
 };
 
-const authAndRatelimit = async (userId: string) => {
+const authAndRatelimit = async () => {
 	// Auth
 	const authenticatedUser = auth();
-	if (!authenticatedUser || authenticatedUser.userId !== userId) {
+	if (!authenticatedUser || !authenticatedUser.userId) {
 		throw new Error("Unauthorized");
 	}
 	// Rate limit
@@ -83,4 +76,21 @@ const authAndRatelimit = async (userId: string) => {
 	if (!success) {
 		throw new Error("Rate limit exceeded");
 	}
+
+	// Org membership info
+	const orgMemberships = authenticatedUser.orgId
+		? await clerkClient.organizations.getOrganizationMembershipList({
+				organizationId: authenticatedUser.orgId,
+			})
+		: [];
+	const orgMembersUserData = (
+		orgMemberships
+			.map((membership) => membership.publicUserData)
+			.filter(Boolean) as OrganizationMembershipPublicUserData[]
+	).sort((a, b) => (a.firstName ?? "").localeCompare(b.firstName ?? ""));
+
+	return {
+		userId: authenticatedUser.userId,
+		orgMemberIds: orgMembersUserData.map((m) => m.userId),
+	};
 };

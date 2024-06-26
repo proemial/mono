@@ -24,12 +24,11 @@ export const ProfileCollections = () => {
 
 	const { data: collections } = useQuery({
 		queryKey: ["collections", user?.id],
-		queryFn: async () => getCollections(user?.id ?? ""),
+		queryFn: async () => getCollections(),
 	});
 
 	const { mutate: edit } = useMutation({
-		mutationFn: (collection: Collection) =>
-			editCollection(user?.id ?? "", collection),
+		mutationFn: (collection: Collection) => editCollection(collection),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["collections", user?.id],
@@ -39,7 +38,7 @@ export const ProfileCollections = () => {
 
 	const { mutate: del } = useMutation({
 		mutationFn: (collectionId: Collection["id"]) =>
-			deleteCollection(user?.id ?? "", collectionId),
+			deleteCollection(collectionId),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["collections", user?.id],
@@ -109,8 +108,7 @@ export function CreateCollectionDrawer({
 	const queryClient = useQueryClient();
 
 	const { mutate: add } = useMutation({
-		mutationFn: (newCollection: NewCollection) =>
-			addCollection(user?.id ?? "", newCollection),
+		mutationFn: (newCollection: NewCollection) => addCollection(newCollection),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["collections", user?.id],

@@ -36,7 +36,7 @@ function CollectionSelector({
 	const { user } = useUser();
 	const { data: collections } = useQuery({
 		queryKey: ["collections", user?.id],
-		queryFn: async () => getCollections(user?.id ?? ""),
+		queryFn: async () => getCollections(),
 	});
 
 	return (
@@ -99,7 +99,7 @@ export function CollectionManager({
 	const { user } = useUser();
 	const { data: collections } = useQuery({
 		queryKey: ["collections", user?.id],
-		queryFn: async () => getCollections(user?.id ?? ""),
+		queryFn: async () => getCollections(),
 	});
 	const currentCollection = collections?.find(
 		({ id }) => id === newBookmarksCollectionId,
