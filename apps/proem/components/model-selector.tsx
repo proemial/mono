@@ -1,6 +1,5 @@
 "use client";
 
-import { useInternalUser } from "@/app/hooks/use-user";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -23,9 +22,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { BottomDrawer } from "./bottom-drawer";
 
-const DEFAULT_MODEL = useInternalUser().isInternal
-	? { "gpt-4o": "GPT-4o" }
-	: { "gpt-4-turbo": "GPT-4 Turbo" };
+const DEFAULT_MODEL = { "gpt-4-turbo": "GPT-4 Turbo" };
 const DEFAULT_MODEL_ID = Object.keys(DEFAULT_MODEL)[0] as keyof typeof MODELS;
 
 const MODELS = {

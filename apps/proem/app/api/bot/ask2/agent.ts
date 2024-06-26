@@ -1,6 +1,5 @@
 import { AnswerEngineStreamData } from "@/app/api/bot/answer-engine/answer-engine";
 import { answers } from "@/app/api/bot/answer-engine/answers";
-import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { askAgentPrompt } from "@/app/prompts/ask_agent";
@@ -31,9 +30,7 @@ export const buildAgent = async (
 		["human", "{input}"],
 		new MessagesPlaceholder("agent_scratchpad"),
 	]);
-	const modelId = getInternalUser().isInternal
-		? "gpt-4o"
-		: "gpt-4-0125-preview";
+	const modelId = "gpt-4-0125-preview";
 	const llm = buildOpenAIChatModel(modelId, "ask", {
 		temperature: 0.0,
 		streaming: true,
