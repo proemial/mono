@@ -3,7 +3,6 @@ import {
 	getPersonalDefaultCollection,
 } from "@/app/constants";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
-import { IconButton } from "@/components/collections/icon-button";
 import { Main } from "@/components/main";
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
@@ -14,12 +13,11 @@ import {
 	auth,
 	clerkClient,
 } from "@clerk/nextjs/server";
-import { neonDb } from "@proemial/data";
-import { isCollectionId } from "@proemial/data/lib/create-id";
-import { collections } from "@proemial/data/neon/schema";
+import {
+	getAvailableCollections,
+	getCollectionBySlugWithPaperIds,
+} from "@proemial/data/repository/collection";
 import { Avatar, AvatarImage, Paragraph } from "@proemial/shadcn-ui";
-import { FilePlus02, Upload01 } from "@untitled-ui/icons-react";
-import { eq } from "drizzle-orm";
 import { notFound, redirect } from "next/navigation";
 import { ReactNode } from "react";
 import { NavItem } from "./nav-item";
@@ -44,37 +42,27 @@ export default async function ({ params, children }: PageProps) {
 	}
 
 	const collection =
-		(await neonDb.query.collections.findFirst({
-			where: eq(collections.slug, params.id),
-			with: {
-				collectionsToPapers: {
-					columns: {
-						paperId: true,
-					},
-				},
-			},
-		})) ?? getPersonalDefaultCollection(userId);
+		(await getCollectionBySlugWithPaperIds(params.id)) ??
+		getPersonalDefaultCollection(userId);
 
-	const userCollections = await neonDb.query.collections.findMany({
-		where: eq(collections.ownerId, userId),
-	});
+	const isDefaultCollection = collection.id === userId;
 
-	const collectionIsPublic = isCollectionId(collection.id);
+	const orgMemberships = orgId
+		? await clerkClient.organizations.getOrganizationMembershipList({
+				organizationId: orgId,
+			})
+		: [];
 
-	const orgMemberships =
-		collectionIsPublic && orgId
-			? await clerkClient.organizations.getOrganizationMembershipList({
-					organizationId: orgId,
-				})
-			: null;
+	const orgMembersUserData = (
+		orgMemberships
+			.map((membership) => membership.publicUserData)
+			.filter(Boolean) as OrganizationMembershipPublicUserData[]
+	).sort((a, b) => (a.firstName ?? "").localeCompare(b.firstName ?? ""));
 
-	const orgMembersUserData =
-		orgMemberships &&
-		(
-			[...orgMemberships]
-				.map((membership) => membership.publicUserData)
-				.filter(Boolean) as OrganizationMembershipPublicUserData[]
-		).sort((a, b) => (a.firstName ?? "").localeCompare(b.firstName ?? ""));
+	const userCollections = await getAvailableCollections(
+		userId,
+		orgMembersUserData.map((m) => m.userId),
+	);
 
 	return (
 		<>
@@ -96,7 +84,7 @@ export default async function ({ params, children }: PageProps) {
 									<Upload01 className="size-[18px] opacity-75" />
 								</IconButton> */}
 							</div>
-							{collectionIsPublic && orgMembersUserData ? (
+							{!isDefaultCollection && orgMembersUserData ? (
 								<div className="flex gap-2 items-center">
 									{orgMembersUserData.map((orgMember) => (
 										<Avatar
