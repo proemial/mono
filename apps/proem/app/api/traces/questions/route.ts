@@ -5,6 +5,9 @@ import { NextRequest } from "next/server";
 export const revalidate = 1;
 export const maxDuration = 300;
 
+// Will time out in production
+const enabled = false;
+
 type Month =
 	| "Jan"
 	| "Feb"
@@ -22,6 +25,10 @@ type Value = { [key: string]: number };
 
 export async function GET(req: NextRequest) {
 	const data = {} as { [key in Month]: Value };
+
+	if (!enabled) {
+		return Response.json({ information: "disabled in prod" });
+	}
 
 	const client = new Client();
 	const runs = client.listRuns({
