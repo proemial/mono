@@ -13,14 +13,22 @@ import {
 	collections,
 	collectionsToPapers,
 } from "@proemial/data/neon/schema";
-import { getAvailableCollections } from "@proemial/data/repository/collection";
+import {
+	findCollectionsByUserId,
+	findCollectionsByUserIdAndOrgMembership,
+} from "@proemial/data/repository/collection";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
-export const getCollections = async () => {
+export const getAvailableCollections = async () => {
 	const { userId, orgMemberIds } = await authAndRatelimit();
-	return await getAvailableCollections(userId, orgMemberIds);
+	return await findCollectionsByUserIdAndOrgMembership(userId, orgMemberIds);
+};
+
+export const getOwnCollections = async () => {
+	const { userId } = await authAndRatelimit();
+	return await findCollectionsByUserId(userId);
 };
 
 export const addCollection = async (collection: NewCollection) => {

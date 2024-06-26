@@ -15,7 +15,7 @@ import {
 	addCollection,
 	deleteCollection,
 	editCollection,
-	getCollections,
+	getAvailableCollections,
 } from "./actions";
 
 export const ProfileCollections = () => {
@@ -24,7 +24,7 @@ export const ProfileCollections = () => {
 
 	const { data: collections } = useQuery({
 		queryKey: ["collections", user?.id],
-		queryFn: async () => getCollections(),
+		queryFn: async () => getAvailableCollections(),
 	});
 
 	const { mutate: edit } = useMutation({

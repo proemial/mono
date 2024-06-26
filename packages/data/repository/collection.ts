@@ -1,11 +1,11 @@
-import { and, asc, desc, eq, inArray, notInArray, or } from "drizzle-orm";
+import { and, asc, eq, inArray, notInArray, or } from "drizzle-orm";
 import { neonDb } from "..";
 import { Collection, collections } from "../neon/schema";
 
 /**
  * Returns the user's own collections and public collections of org members.
  */
-export const getAvailableCollections = async (
+export const findCollectionsByUserIdAndOrgMembership = async (
 	userId: string,
 	orgMemberIds: string[] = [],
 ) => {
@@ -31,7 +31,19 @@ export const getAvailableCollections = async (
 	];
 };
 
-export const getCollectionBySlugWithPaperIds = async (
+export const findCollectionsByUserId = async (userId: string) => {
+	const userCollections = await neonDb.query.collections.findMany({
+		where: eq(collections.ownerId, userId),
+		orderBy: asc(collections.name),
+	});
+	return [
+		// Put the user's default collection first
+		...userCollections.filter((c) => c.id === userId),
+		...userCollections.filter((c) => c.id !== userId),
+	];
+};
+
+export const findCollectionWithPaperIdsBySlug = async (
 	slug: Collection["slug"],
 ) => {
 	return await neonDb.query.collections.findFirst({

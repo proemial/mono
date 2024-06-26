@@ -15,8 +15,8 @@ import {
 	clerkClient,
 } from "@clerk/nextjs/server";
 import {
-	getAvailableCollections,
-	getCollectionBySlugWithPaperIds,
+	findCollectionWithPaperIdsBySlug,
+	findCollectionsByUserIdAndOrgMembership,
 } from "@proemial/data/repository/collection";
 import { Avatar, AvatarImage, Paragraph } from "@proemial/shadcn-ui";
 import { notFound, redirect } from "next/navigation";
@@ -43,7 +43,7 @@ export default async function ({ params, children }: PageProps) {
 	}
 
 	const collection =
-		(await getCollectionBySlugWithPaperIds(params.id)) ??
+		(await findCollectionWithPaperIdsBySlug(params.id)) ??
 		getPersonalDefaultCollection(userId);
 
 	const isDefaultCollection = collection.id === userId;
@@ -60,7 +60,7 @@ export default async function ({ params, children }: PageProps) {
 			.filter(Boolean) as OrganizationMembershipPublicUserData[]
 	).sort((a, b) => (a.firstName ?? "").localeCompare(b.firstName ?? ""));
 
-	const userCollections = await getAvailableCollections(
+	const userCollections = await findCollectionsByUserIdAndOrgMembership(
 		userId,
 		orgMembersUserData.map((m) => m.userId),
 	);
