@@ -10,7 +10,7 @@ import { Collection, NewCollection } from "@proemial/data/neon/schema";
 import { ScrollArea, cn } from "@proemial/shadcn-ui";
 import { Plus } from "@untitled-ui/icons-react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { PERSONAL_DEFAULT_COLLECTION_NAME } from "../constants";
+import { getPersonalDefaultCollection } from "../constants";
 import {
 	addCollection,
 	deleteCollection,
@@ -63,14 +63,7 @@ export const ProfileCollections = () => {
 			<ScrollArea className={cn({ "h-[200px]": collections.length > 0 })}>
 				<div className="space-y-4 mt-4">
 					<CollectionListItem
-						collection={{
-							name: PERSONAL_DEFAULT_COLLECTION_NAME,
-							id: user.id,
-							slug: user.id,
-							ownerId: user.id,
-							description: "",
-							createdAt: new Date(),
-						}}
+						collection={getPersonalDefaultCollection(user.id)}
 						onEdit={edit}
 						onDelete={del}
 						readonly={true}

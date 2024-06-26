@@ -11,8 +11,7 @@ export const getPersonalDefaultCollection = (userId: string) =>
 		name: PERSONAL_DEFAULT_COLLECTION_NAME,
 		ownerId: userId,
 		slug: userId,
-		description:
-			"This is your private collection. Papers you save will be stored here, unless you specify a different collection.",
+		description: "",
 		createdAt: new Date(),
 	}) satisfies Collection;
 export const getBookmarkCacheTag = (userId: string) => `bookmarks:${userId}`;

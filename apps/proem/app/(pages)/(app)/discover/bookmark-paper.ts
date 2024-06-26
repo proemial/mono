@@ -1,8 +1,8 @@
 "use server";
 
 import {
-	PERSONAL_DEFAULT_COLLECTION_NAME,
 	getBookmarkCacheTag,
+	getPersonalDefaultCollection,
 } from "@/app/constants";
 import { streamCacheUpdate } from "@/inngest/populator.task";
 import { auth } from "@clerk/nextjs";
@@ -73,14 +73,7 @@ export async function addPaperToCollection(
 }
 
 const ensureDefaultCollectionExists = (userId: string) =>
-	ensureCollectionExists({
-		id: userId,
-		ownerId: userId,
-		name: PERSONAL_DEFAULT_COLLECTION_NAME,
-		slug: userId,
-		description:
-			"This is your private collection. Papers you save will be stored here, unless you specify another collection.",
-	});
+	ensureCollectionExists(getPersonalDefaultCollection(userId));
 
 const ensureCollectionExists = (collection: NewCollection) =>
 	neonDb
