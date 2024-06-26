@@ -62,7 +62,7 @@ async function fetchWithAbstract(q: string, count: number, tokens: number) {
 			} as OpenAlexPaperWithAbstract;
 		});
 	} finally {
-		Time.log(begin, `[fetchWithAbstract] ${query}`);
+		Time.log(begin, "[fetchWithAbstract]");
 		Metrics.elapsedSince(begin, "ask.papers.fetch");
 	}
 }

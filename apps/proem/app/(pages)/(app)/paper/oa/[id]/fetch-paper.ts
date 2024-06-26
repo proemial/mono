@@ -93,8 +93,6 @@ export const fetchPapersByField = async (
 };
 
 export async function fetchWithAbstract(url: string) {
-	console.log("[fetchWithAbstract] Fetch", url);
-
 	const { meta, results } = await fetchJson<OpenAlexWorksSearchResult>(url);
 
 	const papers = results.map((paper) => {
