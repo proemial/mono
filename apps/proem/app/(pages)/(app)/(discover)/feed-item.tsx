@@ -1,4 +1,3 @@
-import { oaFieldIconMap } from "@/app/data/oa-fields";
 import { trimForQuotes } from "@/utils/string-utils";
 import { Prefix } from "@proemial/redis/adapters/papers";
 import { FeatureType } from "@proemial/repositories/oa/fingerprinting/features";
@@ -7,7 +6,7 @@ import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-topics-compact";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { ReactNode, useMemo } from "react";
+import { ReactNode } from "react";
 import { FeedItemCard, FeedItemCardProps } from "./feed-item-card";
 import { FeedItemTag } from "./feed-item-tag";
 import Markdown from "@/components/markdown";
@@ -36,28 +35,12 @@ export default function FeedItem({
 		?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
 		.filter(Boolean) as string[];
 
-	const fields =
-		paper.data.topics?.map((topic) => ({
-			id: topic.field.id,
-			score: topic.score,
-		})) ?? [];
-
-	const field = useMemo(() => {
-		if (fields.length === 0) {
-			return undefined;
-		}
-		const field = fields.reduce((prev, current) =>
-			prev.score > current.score ? prev : current,
-		);
-		return oaFieldIconMap[field.id];
-	}, [fields]);
-
 	return (
 		<div className="space-y-3">
 			<FeedItemCard
 				id={paper.id}
 				date={paper.data.publication_date}
-				field={field}
+				topics={paper.data.topics}
 				provider={provider}
 				bookmarks={bookmarks}
 				customCollectionId={customCollectionId}

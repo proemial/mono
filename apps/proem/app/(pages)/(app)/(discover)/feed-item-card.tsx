@@ -12,10 +12,12 @@ import {
 } from "@/components/analytics/tracking/tracking-keys";
 import { Trackable } from "@/components/trackable";
 import { Prefix } from "@proemial/redis/adapters/papers";
+import { OpenAlexTopic } from "@proemial/repositories/oa/models/oa-paper";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
 import { ReactNode } from "react";
+import { FeedItemField } from "./feed-item-field";
 
 dayjs.extend(relativeTime);
 
@@ -25,7 +27,7 @@ export type FeedItemCardProps = Pick<
 > & {
 	id: string;
 	date: string;
-	field: Field | undefined;
+	topics?: OpenAlexTopic[];
 	children: ReactNode;
 	provider?: Prefix;
 };
@@ -33,7 +35,7 @@ export type FeedItemCardProps = Pick<
 export const FeedItemCard = ({
 	id,
 	date,
-	field,
+	topics,
 	children,
 	provider,
 	bookmarks,
@@ -44,16 +46,7 @@ export const FeedItemCard = ({
 	return (
 		<div className="flex flex-col gap-3">
 			<div className="flex items-center justify-between gap-2">
-				{field ? (
-					<div className="flex items-center gap-2">
-						{field.icon}
-						<div className="text-xs uppercase line-clamp-1">
-							{field.displayName}
-						</div>
-					</div>
-				) : (
-					<div />
-				)}
+				<FeedItemField topics={topics} />
 				<div className="flex items-center">
 					<div className="uppercase text-2xs text-nowrap">
 						{dayjs(date).fromNow()}
