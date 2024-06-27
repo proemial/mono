@@ -53,7 +53,7 @@ export const CreateCollection = ({ collection, onSubmit, noDialog }: Props) => {
 
 	return (
 		<div className="flex flex-col gap-8">
-			{!noDialog && <Header2>Create New Collection</Header2>}
+			{!noDialog && <Header2>Create New Space</Header2>}
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(handleSubmit)} className="h-full">
 					<div className="flex flex-col h-full gap-8 justify-between">

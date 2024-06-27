@@ -1,5 +1,5 @@
 import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
-import { StreamList } from "@/app/(pages)/(app)/space/[id]/stream/stream-list";
+import { StreamList } from "@/app/(pages)/(app)/space/[id]/(latest)/stream-list";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { auth } from "@clerk/nextjs";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
@@ -13,7 +13,7 @@ type PageProps = {
 	};
 };
 
-export default async function StreamPage({ params }: PageProps) {
+export default async function LatestPage({ params }: PageProps) {
 	const { userId } = auth();
 	if (!params?.id || !userId) {
 		notFound();

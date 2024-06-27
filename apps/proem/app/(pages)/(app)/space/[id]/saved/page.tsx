@@ -11,7 +11,7 @@ type PageProps = {
 	};
 };
 
-export default async function CollectionPage({ params }: PageProps) {
+export default async function SavedPage({ params }: PageProps) {
 	const { userId } = auth();
 	if (!params?.id || !userId) {
 		notFound();

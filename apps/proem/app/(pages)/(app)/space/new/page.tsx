@@ -13,7 +13,7 @@ import { useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "react-query";
 import { addPaperToCollection } from "../../discover/bookmark-paper";
 
-export default function NewCollectionPage() {
+export default function NewSpacePage() {
 	const { user } = useUser();
 	const queryClient = useQueryClient();
 	const { isInternal } = useInternalUser();

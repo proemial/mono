@@ -1,7 +1,4 @@
-import {
-	PERSONAL_DEFAULT_COLLECTION_NAME,
-	getPersonalDefaultCollection,
-} from "@/app/constants";
+import { getPersonalDefaultCollection } from "@/app/constants";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
@@ -73,7 +70,7 @@ export default async function ({ params, children }: PageProps) {
 			<Main>
 				<div className="flex flex-col grow gap-10">
 					<div className="flex flex-col gap-3">
-						{collection.name !== PERSONAL_DEFAULT_COLLECTION_NAME && (
+						{!isDefaultCollection && (
 							<Paragraph>{collection.description}</Paragraph>
 						)}
 						<div className="flex gap-2 justify-between items-center flex-row-reverse">
@@ -105,11 +102,11 @@ export default async function ({ params, children }: PageProps) {
 					</div>
 					<div className="flex gap-1 justify-center items-center">
 						<NavItem
-							href={`${routes.space}/${collection.slug}/stream`}
+							href={`${routes.space}/${collection.slug}`}
 							title="Latest"
 						/>
 						<NavItem
-							href={`${routes.space}/${collection.slug}`}
+							href={`${routes.space}/${collection.slug}/saved`}
 							title="Saved"
 						/>
 					</div>
