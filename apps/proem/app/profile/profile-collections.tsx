@@ -74,7 +74,6 @@ export const ProfileCollections = () => {
 							collection={collection}
 							onEdit={edit}
 							onDelete={del}
-							readonly={collection.ownerId !== user.id}
 						/>
 					))}
 				</div>

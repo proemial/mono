@@ -1,7 +1,7 @@
 "use client";
 import { togglePaperInCollection } from "@/app/(pages)/(app)/space/(discover)/bookmark-paper";
 import { useUser } from "@/app/hooks/use-user";
-import { getOwnCollections } from "@/app/profile/actions";
+import { getAvailableCollections } from "@/app/profile/actions";
 import {
 	CollectionFromOptions,
 	analyticsKeys,
@@ -37,7 +37,7 @@ function CollectionSelector({
 	const { user } = useUser();
 	const { data: collections } = useQuery({
 		queryKey: ["collections", user?.id],
-		queryFn: async () => getOwnCollections(),
+		queryFn: async () => getAvailableCollections(),
 	});
 
 	return (
@@ -100,7 +100,7 @@ export function CollectionManager({
 	const { user } = useUser();
 	const { data: collections } = useQuery({
 		queryKey: ["collections", user?.id],
-		queryFn: async () => getOwnCollections(),
+		queryFn: async () => getAvailableCollections(),
 	});
 	const currentCollection = collections?.find(
 		({ id }) => id === newBookmarksCollectionId,
