@@ -5,7 +5,9 @@ import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { auth } from "@clerk/nextjs";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
+import { Fingerprint } from "@proemial/repositories/oa/fingerprinting/fingerprints";
 import { notFound } from "next/navigation";
+import { getPaperIdsForCollection } from "../collection-utils";
 
 type PageProps = {
 	params?: {
@@ -19,10 +21,26 @@ export default async function LatestPage({ params }: PageProps) {
 		notFound();
 	}
 
-	const [bookmarks] = await Promise.all([getBookmarksByUserId(userId)]);
+	const [paperIds, bookmarks] = await Promise.all([
+		getPaperIdsForCollection(params.id),
+		getBookmarksByUserId(userId),
+	]);
 
-	const history = await getBookmarksAndHistory(userId);
-	const fingerprints = await fetchFingerprints(...history);
+	const isDefaultSpace = params.id === userId;
+	const fingerprints: Fingerprint[][] = [];
+	if (isDefaultSpace) {
+		// Default space uses the user's bookmarks and history to generate the feed
+		const history = await getBookmarksAndHistory(userId);
+		const fingerprintsBasedOnHistory = await fetchFingerprints(...history);
+		fingerprints.push(...fingerprintsBasedOnHistory);
+	} else {
+		// Custom spaces use the papers in the space to generate the feed
+		const fingerprintsBasedOnPapers = paperIds
+			? await fetchFingerprints(paperIds)
+			: [];
+		fingerprints.push(...fingerprintsBasedOnPapers);
+	}
+
 	const { filter: features } = getFeatureFilter(fingerprints);
 	return (
 		<StreamList
