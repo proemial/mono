@@ -65,9 +65,12 @@ export const fetchAndRerankPaperIds = async (
 		? await cacheWorker(features ?? [], days ?? FEED_DEFAULT_DAYS)
 		: await getCachedPapers(features ?? [], days ?? FEED_DEFAULT_DAYS);
 
+	// Subtract 1 from pageOffset to match the zero index in an array. First page should start at 0
+	const nextOffset = (pageOffset - 1) * pageLimit;
+	const rankedIds = cached.papers.slice(nextOffset, nextOffset + pageLimit);
 	return {
 		...cached,
-		rankedIds: cached.papers.slice(pageOffset, pageOffset + pageLimit),
+		rankedIds,
 	};
 };
 
