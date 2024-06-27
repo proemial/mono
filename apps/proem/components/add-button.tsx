@@ -1,6 +1,7 @@
 import { Button } from "@proemial/shadcn-ui";
 import { Check } from "@untitled-ui/icons-react";
 import { PlusCircle } from "lucide-react";
+import { ForwardedRef, forwardRef } from "react";
 
 type AddButtonProps = {
 	isChecked: boolean;
@@ -21,10 +22,12 @@ export function AddButton({ isChecked, onClick }: AddButtonProps) {
 	);
 }
 
-export function AddButtonSkeleton() {
-	return (
-		<Button variant="ghost" type="button" size="icon">
-			<PlusCircle className="size-4" />
-		</Button>
-	);
-}
+export const AddButtonSkeleton = forwardRef(
+	(props, ref: ForwardedRef<HTMLButtonElement>) => {
+		return (
+			<Button variant="ghost" type="button" size="icon" ref={ref} {...props}>
+				<PlusCircle className="size-4" />
+			</Button>
+		);
+	},
+);
