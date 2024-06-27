@@ -10,9 +10,9 @@ import { ChevronRight } from "@untitled-ui/icons-react";
 import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { z } from "zod";
+import { Bookmarks } from "../discover/add-to-collection-button";
 import { OptionalResult, findPapersAction } from "./find-papers";
 import { Papers } from "./papers";
-import { Bookmarks } from "../(discover)/add-to-collection-button";
 
 export const QuerySchema = z.object({
 	question: z.string(),

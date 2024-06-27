@@ -2,7 +2,7 @@
 import {
 	AddToCollectionButton,
 	AddToCollectionButtonProps,
-} from "@/app/(pages)/(app)/(discover)/add-to-collection-button";
+} from "@/app/(pages)/(app)/discover/add-to-collection-button";
 import { useInternalUser } from "@/app/hooks/use-user";
 import { Header4 } from "@proemial/shadcn-ui";
 import { File02 } from "@untitled-ui/icons-react";

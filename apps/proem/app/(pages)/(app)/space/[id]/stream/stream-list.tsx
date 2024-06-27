@@ -2,7 +2,7 @@
 
 import FeedItem, {
 	FeedItemProps,
-} from "@/app/(pages)/(app)/(discover)/feed-item";
+} from "@/app/(pages)/(app)/discover/feed-item";
 import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
 import { InfinityScrollList } from "@/components/infinity-scroll-list";
 

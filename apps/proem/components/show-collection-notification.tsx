@@ -1,5 +1,5 @@
 "use client";
-import { togglePaperInCollection } from "@/app/(pages)/(app)/(discover)/bookmark-paper";
+import { togglePaperInCollection } from "@/app/(pages)/(app)/discover/bookmark-paper";
 import { useUser } from "@/app/hooks/use-user";
 import { getOwnCollections } from "@/app/profile/actions";
 import {

@@ -48,7 +48,7 @@ export function NavigationMenuBar({ title }: { title?: string }) {
 							<NavItem
 								label="Discover"
 								href={routes.discover}
-								isActive={() => pathname === routes.discover}
+								isActive={() => pathname.includes(routes.discover)}
 								onClick={() =>
 									trackHandler(analyticsKeys.ui.header.click.discover)
 								}

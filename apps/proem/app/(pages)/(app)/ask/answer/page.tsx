@@ -1,5 +1,5 @@
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/(discover)/get-bookmarks-by-user-id";
 import { Answer } from "@/app/(pages)/(app)/ask/answer/[slug]/answer";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";

@@ -1,9 +1,9 @@
 "use client";
-import { OpenAlexWorkMetadata } from "@proemial/repositories/oa/models/oa-paper";
-import { FeedItemCard } from "../(discover)/feed-item-card";
 import Markdown from "@/components/markdown";
+import { OpenAlexWorkMetadata } from "@proemial/repositories/oa/models/oa-paper";
 import { Users01 } from "@untitled-ui/icons-react";
-import { Bookmarks } from "../(discover)/add-to-collection-button";
+import { Bookmarks } from "../discover/add-to-collection-button";
+import { FeedItemCard } from "../discover/feed-item-card";
 
 export function Paper({
 	paper,
