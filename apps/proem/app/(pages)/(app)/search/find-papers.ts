@@ -33,19 +33,34 @@ async function findPapers(query: string) {
 		.filter((f) => !!f)
 		.join(",");
 
-	const search = await fetch(
-		`${oaBaseUrl}?${oaBaseArgs}&filter=${oaFilter},title.search:${query}`,
-	);
-	console.log(
-		`${oaBaseUrl}?${oaBaseArgs}&filter=${oaFilter},title.search:${query}`,
-	);
+	const byDoi = await findByDoi(query, oaFilter);
+	const byTitle = await findByTitle(query, oaFilter);
 
-	const papers = (await search.json()) as Result;
+	const papers = [...byDoi.results, ...byTitle.results];
 
 	return {
-		results: papers.results.map((paper) => ({
+		results: papers.map((paper) => ({
 			...paper,
 			id: paper.id.split("/").at(-1) as string,
 		})),
 	};
+}
+
+async function findByDoi(query: string, baseFilter: string): Promise<Result> {
+	// This regexp doesn't support doi as url: https://doi.org/10.1111/1475-6773.14324
+	// if (!query.match(/^10.\d{4,9}\/[-._;()/:A-Z0-9]+$/i)) {
+	// 	return { results: [] };
+	// }
+
+	const byDoi = await fetch(
+		`${oaBaseUrl}?${oaBaseArgs}&filter=${baseFilter},doi:${query}`,
+	);
+	return (await byDoi.json()) as Result;
+}
+
+async function findByTitle(query: string, baseFilter: string): Promise<Result> {
+	const byTitle = await fetch(
+		`${oaBaseUrl}?${oaBaseArgs}&filter=${baseFilter},title.search:${query}`,
+	);
+	return (await byTitle.json()) as Result;
 }
