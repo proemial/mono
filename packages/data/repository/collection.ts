@@ -12,18 +12,26 @@ export const findCollectionsByUserIdAndOrgMemberIds = async (
 	const orgMemberIdsWithoutCurrentUser = orgMemberIds.filter(
 		(id) => id !== userId,
 	);
-	const allCollections = await neonDb.query.collections.findMany({
-		where: or(
-			// The user's own collections
-			eq(collections.ownerId, userId),
-			and(
-				// Org member public collections
-				inArray(collections.ownerId, orgMemberIdsWithoutCurrentUser),
-				notInArray(collections.id, orgMemberIdsWithoutCurrentUser),
-			),
-		),
-		orderBy: asc(collections.name),
-	});
+
+	const allCollections =
+		orgMemberIdsWithoutCurrentUser.length > 0
+			? await neonDb.query.collections.findMany({
+					where: or(
+						// The user's own collections
+						eq(collections.ownerId, userId),
+						and(
+							// Org member public collections
+							inArray(collections.ownerId, orgMemberIdsWithoutCurrentUser),
+							notInArray(collections.id, orgMemberIdsWithoutCurrentUser),
+						),
+					),
+					orderBy: asc(collections.name),
+				})
+			: await neonDb.query.collections.findMany({
+					where: or(eq(collections.ownerId, userId)),
+					orderBy: asc(collections.name),
+				});
+
 	return [
 		...allCollections.filter((c) => c.id === userId),
 		...allCollections.filter((c) => c.id !== userId),
