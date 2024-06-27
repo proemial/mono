@@ -16,7 +16,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@proemial/shadcn-ui";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { SimpleHeader } from "./simple-header";
 
 type Props = {
@@ -24,14 +24,19 @@ type Props = {
 	userId: string;
 };
 
+function changeSpaceId(pathname: string, id: string) {
+	return pathname.replace(/(?<=\/space\/)(\w+)(?=\/)/, id);
+}
+
 export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 	const params = useParams();
+	const pathname = usePathname();
 	const router = useRouter();
 	const allCollections = ensureDefaultCollection(collections, userId);
 
 	const handleValueChange = (slug: string) => {
 		trackHandler(analyticsKeys.ui.header.click.changeSpace);
-		router.push(`${routes.space}/${slug}`);
+		router.push(changeSpaceId(pathname, slug));
 	};
 
 	const defaultSpace = allCollections.length < 2;
