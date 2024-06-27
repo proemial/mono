@@ -62,7 +62,7 @@ function FormInputs({
 				<div className="flex items-center w-full border text-foreground bg-card border-background rounded-3xl">
 					<input
 						name="query"
-						placeholder="Search for a paper title"
+						placeholder="Search for a paper title or DOI"
 						// defaultValue={value}
 						className="w-full h-12 pl-6 resize-none flex items-center text-lg bg-card placeholder:opacity-40 placeholder:text-[#2b2b2b] dark:placeholder:text-[#e5e5e5] rounded-l-3xl outline-none"
 						maxLength={chatInputMaxLength}
