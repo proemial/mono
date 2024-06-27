@@ -18,6 +18,11 @@ export const About = () => {
 	const { isInternal } = useInternalUser();
 	const { signOut } = useClerk();
 
+	const handleSignOut = () => {
+		trackHandler(analyticsKeys.ui.menu.click.signout)();
+		signOut();
+	};
+
 	return (
 		<div className="flex flex-col gap-4 justify-between h-full w-full mt-4">
 			<div className="space-y-4 mt-4">
@@ -52,10 +57,7 @@ export const About = () => {
 				{isSignedIn && (
 					<div className="flex justify-between gap-2 items-center">
 						<div
-							onClick={() => {
-								trackHandler(analyticsKeys.ui.menu.click.signout)();
-								signOut();
-							}}
+							onClick={handleSignOut}
 							className="flex items-center gap-2 text-sm cursor-pointer"
 						>
 							<LogOut01 className="size-4 opacity-85" />

@@ -15,7 +15,7 @@ import {
 	findCollectionsByUserIdAndOrgMemberIds,
 } from "@proemial/data/repository/collection";
 import { Avatar, AvatarImage, Paragraph } from "@proemial/shadcn-ui";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 import { NavItem } from "./nav-item";
 
@@ -29,12 +29,13 @@ type PageProps = {
 export default async function ({ params, children }: PageProps) {
 	const { userId, orgId } = auth();
 	if (!userId || !params?.id) {
-		notFound();
+		redirect(routes.space);
 	}
 
-	const collection =
-		(await findCollectionWithPaperIdsBySlug(params.id)) ??
-		getPersonalDefaultCollection(userId);
+	const collection = await getCollection(params.id, userId);
+	if (!collection) {
+		redirect(routes.space);
+	}
 
 	const isDefaultCollection = collection.id === userId;
 
@@ -110,3 +111,14 @@ export default async function ({ params, children }: PageProps) {
 		</>
 	);
 }
+
+const getCollection = async (slug: string, userId: string) => {
+	const collection = await findCollectionWithPaperIdsBySlug(slug);
+	if (collection) {
+		return collection;
+	}
+	if (slug === userId) {
+		return getPersonalDefaultCollection(userId);
+	}
+	return undefined;
+};
