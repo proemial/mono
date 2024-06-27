@@ -1,16 +1,15 @@
 import { getBookmarkCacheTag } from "@/app/constants";
 import { neonDb } from "@proemial/data";
-import { collections } from "@proemial/data/neon/schema";
+import { Collection, collections } from "@proemial/data/neon/schema";
 import { eq } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 
-export const getBookmarksByUserId = (userId: string) =>
+export const getBookmarksByUserId = (ownerId: Collection["ownerId"]) =>
 	unstable_cache(
 		async () => {
 			const usersBookmarks = await neonDb.query.collections.findMany({
-				// where: { ownerId: "user_2Zrcp6UuNROrHQ7jo32HduhYDsJ" },
 				columns: { id: true },
-				where: eq(collections.ownerId, userId),
+				where: eq(collections.ownerId, ownerId),
 				with: { collectionsToPapers: true },
 			});
 
@@ -18,7 +17,7 @@ export const getBookmarksByUserId = (userId: string) =>
 				(acc, collection) => {
 					for (const paper of collection.collectionsToPapers) {
 						if (acc[paper.paperId]) {
-							// @ts-expect-error
+							// @ts-expect-error Updating TS should fix this
 							acc[paper.paperId].push(collection.id);
 						} else {
 							acc[paper.paperId] = [collection.id];
@@ -30,6 +29,6 @@ export const getBookmarksByUserId = (userId: string) =>
 				{} as Record<string, string[]>,
 			);
 		},
-		["bookmarks", userId],
-		{ tags: [getBookmarkCacheTag(userId)] },
+		["bookmarks", ownerId],
+		{ tags: [getBookmarkCacheTag(ownerId)] },
 	)();

@@ -5,14 +5,12 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { routes } from "@/routes";
 import { Collection } from "@proemial/data/neon/schema";
 import {
 	Select,
 	SelectContent,
 	SelectGroup,
 	SelectItem,
-	SelectLabel,
 	SelectTrigger,
 	SelectValue,
 } from "@proemial/shadcn-ui";
@@ -25,7 +23,7 @@ type Props = {
 };
 
 function changeSpaceId(pathname: string, id: string) {
-	return pathname.replace(/(?<=\/space\/)(\w+)(?=\/?)/, id);
+	return pathname.replace(/(?<=\/space\/|^\/space\/)(\w*)(?=\/|$)/, id);
 }
 
 export const SelectSpaceHeader = ({ collections, userId }: Props) => {
@@ -34,9 +32,9 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 	const router = useRouter();
 	const allCollections = ensureDefaultCollection(collections, userId);
 
-	const handleValueChange = (slug: string) => {
+	const handleValueChange = (id: string) => {
 		trackHandler(analyticsKeys.ui.header.click.changeSpace);
-		router.push(changeSpaceId(pathname, slug));
+		router.push(changeSpaceId(pathname, id));
 	};
 
 	const defaultSpace = allCollections.length < 2;
@@ -58,7 +56,7 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 					<SelectContent>
 						<SelectGroup>
 							{allCollections.map((collection) => (
-								<SelectItem key={collection.id} value={collection.slug}>
+								<SelectItem key={collection.id} value={collection.id}>
 									{collection.name}
 								</SelectItem>
 							))}
@@ -72,7 +70,7 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 
 const ensureDefaultCollection = (collections: Collection[], userId: string) => {
 	const existingDefaultCollection = collections.find(
-		(collection) => collection.slug === userId,
+		(collection) => collection.id === userId,
 	);
 	if (existingDefaultCollection) {
 		return collections;

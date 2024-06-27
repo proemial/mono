@@ -51,10 +51,10 @@ export const findCollectionsByUserId = async (userId: string) => {
 };
 
 export const findCollectionWithPaperIdsBySlug = async (
-	slug: Collection["slug"],
+	id: Collection["id"],
 ) => {
 	return await neonDb.query.collections.findFirst({
-		where: eq(collections.slug, slug),
+		where: eq(collections.id, id),
 		with: {
 			collectionsToPapers: {
 				columns: {

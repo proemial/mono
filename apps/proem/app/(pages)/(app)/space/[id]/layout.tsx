@@ -95,12 +95,9 @@ export default async function ({ params, children }: PageProps) {
 						</div>
 					</div>
 					<div className="flex gap-1 justify-center items-center">
+						<NavItem href={`${routes.space}/${collection.id}`} title="Latest" />
 						<NavItem
-							href={`${routes.space}/${collection.slug}`}
-							title="Latest"
-						/>
-						<NavItem
-							href={`${routes.space}/${collection.slug}/saved`}
+							href={`${routes.space}/${collection.id}/saved`}
 							title="Saved"
 						/>
 					</div>
