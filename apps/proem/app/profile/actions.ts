@@ -42,7 +42,7 @@ export const addCollection = async (collection: NewCollection) => {
 };
 
 export const editCollection = async (collection: Collection) => {
-	const { userId } = await authAndRatelimit();
+	await authAndRatelimit();
 	revalidatePath(`${routes.space}/[id]`, "layout");
 	return await neonDb
 		.update(collections)
@@ -50,14 +50,12 @@ export const editCollection = async (collection: Collection) => {
 			name: collection.name,
 			description: collection.description,
 		})
-		.where(
-			and(eq(collections.id, collection.id), eq(collections.ownerId, userId)),
-		)
+		.where(eq(collections.id, collection.id))
 		.returning();
 };
 
 export const deleteCollection = async (collectionId: Collection["id"]) => {
-	const { userId } = await authAndRatelimit();
+	await authAndRatelimit();
 
 	// Delete any entries in the junction table prior to deleting the collection
 	await neonDb
@@ -67,9 +65,7 @@ export const deleteCollection = async (collectionId: Collection["id"]) => {
 	revalidatePath(`${routes.space}/[id]`, "layout");
 	return await neonDb
 		.delete(collections)
-		.where(
-			and(eq(collections.id, collectionId), eq(collections.ownerId, userId)),
-		)
+		.where(eq(collections.id, collectionId))
 		.returning();
 };
 
