@@ -34,9 +34,10 @@ async function findPapers(query: string) {
 		.join(",");
 
 	const byDoi = await findByDoi(query, oaFilter);
+	const byArxiv = await findByArxiv(query, oaFilter);
 	const byTitle = await findByTitle(query, oaFilter);
 
-	const papers = [...byDoi.results, ...byTitle.results];
+	const papers = [...byDoi.results, ...byArxiv.results, ...byTitle.results];
 
 	return {
 		results: papers.map((paper) => ({
@@ -44,6 +45,13 @@ async function findPapers(query: string) {
 			id: paper.id.split("/").at(-1) as string,
 		})),
 	};
+}
+
+async function findByArxiv(query: string, baseFilter: string): Promise<Result> {
+	const byArxiv = await fetch(
+		`${oaBaseUrl}?${oaBaseArgs}&filter=${baseFilter},locations.landing_page_url:http://arxiv.org/abs/${query}|https://arxiv.org/abs/${query}|${query}`,
+	);
+	return (await byArxiv.json()) as Result;
 }
 
 async function findByDoi(query: string, baseFilter: string): Promise<Result> {
