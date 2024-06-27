@@ -163,6 +163,14 @@ export const analyticsKeys = {
 		close: "assistant:close",
 		ask: "assistant:ask",
 	},
+	search: {
+		click: {
+			submit: "search:submit:click",
+		},
+		submit: {
+			query: "search:query:submit",
+		},
+	},
 	viewName: (path: string) => {
 		return `${getViewName(path)}:view`;
 	},

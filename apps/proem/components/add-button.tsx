@@ -9,7 +9,7 @@ type AddButtonProps = {
 
 export function AddButton({ isChecked, onClick }: AddButtonProps) {
 	return (
-		<Button variant="ghost" size="icon" onClick={onClick}>
+		<Button variant="ghost" type="button" size="icon" onClick={onClick}>
 			{isChecked ? (
 				<div className="size-4 bg-secondary text-secondary-foreground rounded-full flex items-center justify-center">
 					<Check className="size-2.5" />
@@ -23,7 +23,7 @@ export function AddButton({ isChecked, onClick }: AddButtonProps) {
 
 export function AddButtonSkeleton() {
 	return (
-		<Button variant="ghost" size="icon">
+		<Button variant="ghost" type="button" size="icon">
 			<PlusCircle className="size-4" />
 		</Button>
 	);

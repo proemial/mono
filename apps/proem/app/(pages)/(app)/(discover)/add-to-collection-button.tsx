@@ -12,7 +12,7 @@ import { useOptimistic } from "react";
 
 export type PaperId = string;
 export type CollectionId = string;
-type Bookmarks = Record<PaperId, CollectionId[]>;
+export type Bookmarks = Record<PaperId, CollectionId[]>;
 export type AddToCollectionButtonProps = Pick<
 	CollectionSelectorProps,
 	"fromTrackingKey"

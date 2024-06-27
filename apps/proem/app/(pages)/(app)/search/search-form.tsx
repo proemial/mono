@@ -5,39 +5,23 @@ import {
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
 import { useVisualViewport } from "@/utils/useVisualViewport";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-	Button,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	Textarea,
-} from "@proemial/shadcn-ui";
+import { Button } from "@proemial/shadcn-ui";
 import { ChevronRight } from "@untitled-ui/icons-react";
-import { useRouter } from "next/navigation";
-import { KeyboardEvent, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useFormState, useFormStatus } from "react-dom";
 import { z } from "zod";
+import { OptionalResult, findPapersAction } from "./find-papers";
+import { Papers } from "./papers";
+import { Bookmarks } from "../(discover)/add-to-collection-button";
 
 export const QuerySchema = z.object({
 	question: z.string(),
 });
 
-export type Props = {
-	placeholder: string;
-	trackingPrefix: string;
-	value?: string;
-};
-
-export function SearchForm({ placeholder, value, trackingPrefix }: Props) {
-	const router = useRouter();
+export function SearchForm({ bookmarks }: { bookmarks: Bookmarks }) {
+	const [state, formAction] = useFormState(findPapersAction, undefined);
 
 	const [isFocused, setIsFocused] = useState(false);
-
-	const form = useForm<z.infer<typeof QuerySchema>>({
-		resolver: zodResolver(QuerySchema),
-	});
 
 	const { keyboardUp } = useVisualViewport();
 	useEffect(() => {
@@ -46,113 +30,61 @@ export function SearchForm({ placeholder, value, trackingPrefix }: Props) {
 		}
 	}, [keyboardUp, isFocused]);
 
-	const askQuestion = (question: string) => {
-		trackHandler(`${trackingPrefix}:${analyticsKeys.chat.submit.input}`)();
-
-		console.log("Forwarding", `/search?query=${question}`);
-		router.replace(`/search?query=${question}`);
+	const handleSubmit = () => {
+		trackHandler(`${analyticsKeys.search.submit.query}`)();
 	};
 
-	const handleSubmit = (data: z.infer<typeof QuerySchema>) => {
-		setTimeout(() => askQuestion(data.question));
-	};
-
-	const handleFocus = () => {
-		setIsFocused(true);
-		trackHandler(`${trackingPrefix}:${analyticsKeys.chat.click.input}`)();
-	};
-
-	const handleBlur = () => {
-		// Necessary delay to fire the form when the button is clicked and goes invisible
-		setTimeout(() => setIsFocused(false), 100);
-	};
-
-	const handleFormInput = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-		const target = e.target as HTMLTextAreaElement;
-		if (
-			(e.code === "Enter" || target.value.includes("\n")) &&
-			target.value?.replaceAll("\n", "")?.length
-		) {
-			setIsFocused(false);
-			askQuestion(form.getValues("question"));
-			return false;
-		}
-	};
-
-	const handleChange = (textarea: HTMLTextAreaElement) => {
-		const initialHeight = 48;
-		const expandAt = 72;
-
-		// reset the height to get the correct scrollHeight
-		textarea.style.height = `${initialHeight}px`;
-
-		if (textarea.scrollHeight > initialHeight) {
-			textarea.style.height = `${textarea.scrollHeight}px`;
-		}
-	};
+	console.log("state", state);
 
 	return (
-		<Form {...form}>
-			<form onSubmit={form.handleSubmit(handleSubmit)} className="w-full">
+		<>
+			<form
+				action={formAction}
+				className="w-full"
+				onSubmit={handleSubmit}
+				autoComplete="off"
+			>
+				<FormInputs state={state} bookmarks={bookmarks} />
+			</form>
+		</>
+	);
+}
+
+function FormInputs({
+	state,
+	bookmarks,
+}: { state: OptionalResult; bookmarks: Bookmarks }) {
+	const { pending } = useFormStatus();
+
+	return (
+		<>
+			<div className="flex items-center w-full border text-foreground bg-card border-background rounded-3xl">
 				<div className="flex items-center w-full border text-foreground bg-card border-background rounded-3xl">
-					<FormField
-						control={form.control}
-						name="question"
-						render={({ field }) => (
-							<FormItem className="w-full">
-								<FormControl>
-									<Textarea
-										{...field}
-										placeholder={placeholder}
-										defaultValue={value}
-										className={`w-full h-12 pl-6 resize-none flex items-center text-lg bg-card
-										            placeholder:opacity-40 placeholder:text-[#2b2b2b] dark:placeholder:text-[#e5e5e5] ${
-																	isFocused ? "rounded-l-3xl" : "rounded-3xl"
-																} ${
-																	form.getFieldState("question").invalid
-																		? "border border-red-300"
-																		: ""
-																}`}
-										onFocus={handleFocus}
-										onBlur={handleBlur}
-										onFocusOut={handleBlur} // https://github.com/facebook/react/issues/28492
-										onKeyDown={(e) => {
-											const target = e.target as HTMLTextAreaElement;
-											if (e.code === "Enter" || target.value.includes("\n")) {
-												e.preventDefault();
-											}
-											return handleFormInput(e);
-										}}
-										onInput={handleFormInput}
-										onChange={(e) => {
-											handleChange(e.target as HTMLTextAreaElement);
-											field.onChange(e);
-										}}
-										maxLength={chatInputMaxLength}
-									/>
-								</FormControl>
-							</FormItem>
-						)}
+					<input
+						name="query"
+						placeholder="Search for a paper title"
+						// defaultValue={value}
+						className="w-full h-12 pl-6 resize-none flex items-center text-lg bg-card placeholder:opacity-40 placeholder:text-[#2b2b2b] dark:placeholder:text-[#e5e5e5] rounded-l-3xl outline-none"
+						maxLength={chatInputMaxLength}
+						disabled={pending}
 					/>
 					<Button
-						disabled={
-							!!(
-								form.formState.isSubmitting ||
-								form.getFieldState("question").error ||
-								!form.getValues("question")?.trim().length
-							)
-						}
+						disabled={pending}
 						className="size-8 w-[36px] bg-card mr-2 disabled:opacity-1"
 						size="icon"
 						type="submit"
-						onClick={trackHandler(
-							`${trackingPrefix}:${analyticsKeys.chat.click.submit}`,
-						)}
+						onClick={trackHandler(analyticsKeys.search.click.submit)}
 					>
 						<ChevronRight className="size-5" />
 					</Button>
 				</div>
-			</form>
-		</Form>
+			</div>
+
+			{pending && <div>Finding papers...</div>}
+
+			{!pending && state?.results?.length && (
+				<Papers papers={state.results} bookmarks={bookmarks} />
+			)}
+		</>
 	);
 }

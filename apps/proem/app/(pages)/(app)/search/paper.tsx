@@ -1,15 +1,14 @@
-"use server";
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/(discover)/get-bookmarks-by-user-id";
-import { auth } from "@clerk/nextjs";
+"use client";
 import { OpenAlexWorkMetadata } from "@proemial/repositories/oa/models/oa-paper";
 import { FeedItemCard } from "../(discover)/feed-item-card";
 import Markdown from "@/components/markdown";
 import { Users01 } from "@untitled-ui/icons-react";
+import { Bookmarks } from "../(discover)/add-to-collection-button";
 
-export async function Paper({ paper }: { paper: OpenAlexWorkMetadata }) {
-	const { userId } = await auth();
-	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
-
+export function Paper({
+	paper,
+	bookmarks,
+}: { paper: OpenAlexWorkMetadata; bookmarks: Bookmarks }) {
 	if (!paper) {
 		return null;
 	}
