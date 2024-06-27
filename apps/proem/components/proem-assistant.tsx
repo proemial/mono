@@ -16,14 +16,7 @@ import {
 } from "./analytics/tracking/tracking-keys";
 import { ProemLogo } from "./icons/brand/logo";
 
-type Props = {
-	/**
-	 * @deprecated Will be remove once we launch the Proem assistant
-	 */
-	internalUser: boolean;
-};
-
-export const ProemAssistant = ({ internalUser }: Props) => {
+export const ProemAssistant = () => {
 	const router = useRouter();
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const [input, setInput] = useState("");
@@ -60,10 +53,6 @@ export const ProemAssistant = ({ internalUser }: Props) => {
 			setDrawerOpen(open);
 		}
 	};
-
-	if (!internalUser) {
-		return undefined;
-	}
 
 	return (
 		<div className="fixed bottom-0 left-0 bg-gradient-to-b pt-5 from-transparent to-background h-[80px] sm:h-[100px] w-full flex justify-center pointer-events-none">

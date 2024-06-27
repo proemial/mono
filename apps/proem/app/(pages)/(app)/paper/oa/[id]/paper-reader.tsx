@@ -19,6 +19,7 @@ type PaperReaderProps = Pick<PaperReaderHeadlineProps, "bookmarks"> & {
 	fetchedPaperPromise: Promise<Omit<OpenAlexPaper, "generated">>;
 	generatedPaperPromise: Promise<OpenAlexPaper>;
 	paperPosts: PaperPost[];
+	type: "oa" | "arxiv";
 };
 
 export function PaperReader({
@@ -26,11 +27,16 @@ export function PaperReader({
 	generatedPaperPromise,
 	paperPosts,
 	bookmarks,
+	type,
 }: PaperReaderProps) {
 	const fetchedPaper = use(fetchedPaperPromise);
 	const generatedPaper = use(generatedPaperPromise);
 	const initialMessages = paperPostsToMessages(paperPosts);
-	void use(addPaperActivity(fetchedPaper.id));
+
+	if (type === "oa") {
+		// Only register paper read activity on OpenAlex papers
+		void use(addPaperActivity(fetchedPaper.id));
+	}
 
 	return (
 		<div className="flex flex-col gap-5 h-full justify-between">

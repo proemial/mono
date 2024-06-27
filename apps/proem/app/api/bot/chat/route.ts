@@ -1,6 +1,5 @@
 import { chatInputMaxLength } from "@/app/api/bot/input-limit";
 import { PAPER_BOT_USER_ID } from "@/app/constants";
-import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { context, model, question } from "@/app/prompts/chat";
 import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
@@ -10,8 +9,7 @@ import { neonDb } from "@proemial/data";
 import { NewPaper, NewUser, papers, users } from "@proemial/data/neon/schema";
 import { NewComment, comments } from "@proemial/data/neon/schema/comments";
 import { NewPost, posts } from "@proemial/data/neon/schema/posts";
-import { OpenAIStream, StreamingTextResponse } from "ai";
-import { StreamData } from "ai";
+import { OpenAIStream, StreamData, StreamingTextResponse } from "ai";
 import { type NextRequest, NextResponse } from "next/server";
 import { Configuration, OpenAIApi } from "openai-edge";
 
@@ -59,9 +57,7 @@ export async function POST(req: NextRequest) {
 	const stream = OpenAIStream(response, {
 		onFinal: async (completion) => {
 			const { userId } = auth();
-			// TODO: Remove feature flag
-			const { isInternal } = getInternalUser();
-			if (userId && isInternal) {
+			if (userId) {
 				// Save the post and the AI reply, if the user is signed in
 				await savePostAndReply(
 					{

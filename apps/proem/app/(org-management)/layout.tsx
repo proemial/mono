@@ -1,20 +1,17 @@
 import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
-import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
 import { cn } from "@proemial/shadcn-ui";
 import { ReactNode } from "react";
 import { screenMaxWidthOrgManagement } from "../constants";
-import { getInternalUser } from "../hooks/get-internal-user";
 
 type Props = {
 	children: ReactNode;
 };
 
 export default function OrgManagementLayout({ children }: Props) {
-	const { isInternal } = getInternalUser();
-
 	return (
 		<div
 			className={cn(
@@ -22,12 +19,9 @@ export default function OrgManagementLayout({ children }: Props) {
 				screenMaxWidthOrgManagement,
 			)}
 		>
-			<NavBarV2
-				action={<CloseAction target={routes.space} />}
-				isInternalUser={isInternal}
-			>
+			<NavBar action={<CloseAction target={routes.space} />}>
 				<SimpleHeader title="Organization Management" />
-			</NavBarV2>
+			</NavBar>
 			<Main>{children}</Main>
 		</div>
 	);

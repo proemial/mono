@@ -1,9 +1,8 @@
 import { getPersonalDefaultCollection } from "@/app/constants";
-import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
-import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { NavBar } from "@/components/nav-bar/nav-bar";
 import { ProemAssistant } from "@/components/proem-assistant";
 import { routes } from "@/routes";
 import {
@@ -16,7 +15,7 @@ import {
 	findCollectionsByUserIdAndOrgMemberIds,
 } from "@proemial/data/repository/collection";
 import { Avatar, AvatarImage, Paragraph } from "@proemial/shadcn-ui";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { ReactNode } from "react";
 import { NavItem } from "./nav-item";
 
@@ -28,12 +27,6 @@ type PageProps = {
 };
 
 export default async function ({ params, children }: PageProps) {
-	// TODO: Remove this check when launching feature
-	const { isInternal } = getInternalUser();
-	if (!isInternal) {
-		redirect(routes.space);
-	}
-
 	const { userId, orgId } = auth();
 	if (!userId || !params?.id) {
 		notFound();
@@ -64,9 +57,9 @@ export default async function ({ params, children }: PageProps) {
 
 	return (
 		<>
-			<NavBarV2 action={<OpenSearchAction />} isInternalUser={isInternal}>
+			<NavBar action={<OpenSearchAction />}>
 				<SelectSpaceHeader collections={userCollections} userId={userId} />
-			</NavBarV2>
+			</NavBar>
 			<Main>
 				<div className="flex flex-col grow gap-2">
 					<div className="flex flex-col gap-3">
@@ -113,7 +106,7 @@ export default async function ({ params, children }: PageProps) {
 					{children}
 				</div>
 			</Main>
-			<ProemAssistant internalUser={isInternal} />
+			<ProemAssistant />
 		</>
 	);
 }

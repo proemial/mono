@@ -4,8 +4,6 @@ import {
 	AddToCollectionButton,
 	AddToCollectionButtonProps,
 } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
-import { Field } from "@/app/data/oa-fields";
-import { useInternalUser } from "@/app/hooks/use-user";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -41,8 +39,6 @@ export const FeedItemCard = ({
 	bookmarks,
 	customCollectionId,
 }: FeedItemCardProps) => {
-	const { isInternal } = useInternalUser();
-
 	return (
 		<div className="flex flex-col gap-3">
 			<div className="flex items-center justify-between gap-2">
@@ -51,20 +47,16 @@ export const FeedItemCard = ({
 					<div className="uppercase text-2xs text-nowrap">
 						{dayjs(date).fromNow()}
 					</div>
-					{isInternal ? (
-						<div className="-mr-2">
-							<Trackable
-								trackingKey={analyticsKeys.collection.addPaper.fromAsk}
-							>
-								<AddToCollectionButton
-									fromTrackingKey="fromFeed"
-									bookmarks={bookmarks}
-									paperId={id}
-									customCollectionId={customCollectionId}
-								/>
-							</Trackable>
-						</div>
-					) : null}
+					<div className="-mr-2">
+						<Trackable trackingKey={analyticsKeys.collection.addPaper.fromAsk}>
+							<AddToCollectionButton
+								fromTrackingKey="fromFeed"
+								bookmarks={bookmarks}
+								paperId={id}
+								customCollectionId={customCollectionId}
+							/>
+						</Trackable>
+					</div>
 				</div>
 			</div>
 			<Link

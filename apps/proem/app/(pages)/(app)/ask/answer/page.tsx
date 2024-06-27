@@ -1,10 +1,9 @@
 import { Answer } from "@/app/(pages)/(app)/ask/answer/[slug]/answer";
 import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
-import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
-import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs";
 import { Edit05 } from "@untitled-ui/icons-react";
@@ -23,21 +22,19 @@ export default async function AnswerPage({ searchParams }: Props) {
 	if (!initialQuestion) {
 		redirect(routes.ask);
 	}
-	const { isInternal } = getInternalUser();
 
 	return (
 		<>
-			<NavBarV2
+			<NavBar
 				action={
 					<CloseAction
 						target={routes.ask}
 						iconOverride={<Edit05 className="size-5" />}
 					/>
 				}
-				isInternalUser={isInternal}
 			>
 				<SimpleHeader title="Ask" />
-			</NavBarV2>
+			</NavBar>
 			<Main>
 				<Answer initialQuestion={initialQuestion} bookmarks={bookmarks} />
 			</Main>

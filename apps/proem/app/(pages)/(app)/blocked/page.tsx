@@ -1,13 +1,12 @@
-import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
-import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { CloseAction } from "@/components/nav-bar/actions/close-action";
+import { NavBar } from "@/components/nav-bar/nav-bar";
+import { routes } from "@/routes";
 
 export default function BlockedPage() {
-	const { isInternal } = getInternalUser();
-
 	return (
 		<>
-			<NavBarV2 isInternalUser={isInternal} />
+			<NavBar action={<CloseAction target={routes.home} />} />
 			<Main>
 				<div className="flex flex-col flex-grow justify-center -mt-[60px]">
 					<h1>Request blocked</h1>

@@ -1,11 +1,10 @@
-import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { ChatInput } from "@/components/chat-input";
 import { ProemLogo } from "@/components/icons/brand/logo";
 import { Main } from "@/components/main";
 import { MoodSelector } from "@/components/mood-selector";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
-import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { NavBar } from "@/components/nav-bar/nav-bar";
 import { Suggestions } from "@/components/suggestions";
 import { routes } from "@/routes";
 import { Metadata } from "next";
@@ -21,16 +20,12 @@ export const metadata: Metadata = {
 export default function AskPage() {
 	// TODO: Fetch top nice starters from DB
 	const starters = getThreeRandomStarters();
-	const { isInternal } = getInternalUser();
 
 	return (
 		<>
-			<NavBarV2
-				action={<CloseAction target={routes.space} />}
-				isInternalUser={isInternal}
-			>
+			<NavBar action={<CloseAction target={routes.space} />}>
 				<SimpleHeader title="Ask" />
-			</NavBarV2>
+			</NavBar>
 			<Main>
 				<div className="flex flex-col justify-between flex-grow gap-4">
 					<div className="flex flex-col items-center justify-center flex-grow gap-6">

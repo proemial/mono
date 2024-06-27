@@ -2,11 +2,10 @@ import { Answer } from "@/app/(pages)/(app)/ask/answer/[slug]/answer";
 import { mapAnswerToAnswerEngine } from "@/app/(pages)/(app)/ask/mapAnswerToAnswerEngine";
 import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { answers } from "@/app/api/bot/answer-engine/answers";
-import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
-import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
@@ -24,7 +23,6 @@ export default async function SharePage({ params: { shareId } }: Props) {
 	const [sharedAnswer] = await answers.getByShareId(shareId);
 	const { userId } = auth();
 	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
-	const { isInternal } = getInternalUser();
 
 	if (!sharedAnswer) {
 		redirect(routes.space);
@@ -35,12 +33,9 @@ export default async function SharePage({ params: { shareId } }: Props) {
 
 	return (
 		<>
-			<NavBarV2
-				action={<CloseAction target={routes.space} />}
-				isInternalUser={isInternal}
-			>
+			<NavBar action={<CloseAction target={routes.space} />}>
 				<SimpleHeader title="Ask" />
-			</NavBarV2>
+			</NavBar>
 			<Main>
 				<Answer
 					existingData={existingData}

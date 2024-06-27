@@ -15,14 +15,12 @@ import {
 import { Building05, LogIn01 } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import { SignInDrawer } from "../../components/sign-in-drawer";
-import { useInternalUser } from "../hooks/use-user";
 import { About } from "./about";
 import { ProfileCollections } from "./profile-collections";
 
 export function ProfileYou() {
 	const { user, isSignedIn } = useUser();
 	const { membership } = useOrganization();
-	const { isInternal } = useInternalUser();
 
 	return (
 		<div className="h-full px-4 flex flex-col gap-4 justify-between">
@@ -105,8 +103,7 @@ export function ProfileYou() {
 									</div>
 								</CollapsibleSection>
 							)}
-							{/* TODO: Remove "internal" flag before launch */}
-							{isInternal && <ProfileCollections />}
+							<ProfileCollections />
 						</div>
 					</div>
 				)}

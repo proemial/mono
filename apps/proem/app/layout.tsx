@@ -1,7 +1,6 @@
 import "@/app/globals.css";
 import { Analytics } from "@/components/analytics";
 import { NotificationsToaster } from "@/components/notifications-toaster";
-import { ProemAssistant } from "@/components/proem-assistant";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ReactQueryProvider } from "@/components/providers/react-query";
 import { SetActiveOrganization } from "@/components/set-active-organization";
@@ -11,7 +10,6 @@ import { Metadata, Viewport } from "next";
 import { Lato as FontSans } from "next/font/google";
 import { headers } from "next/headers";
 import { ReactNode } from "react";
-import { getInternalUser } from "./hooks/get-internal-user";
 
 export const viewport: Viewport = {
 	width: "device-width",
@@ -73,7 +71,6 @@ type Props = {
 
 export default function RootLayout({ children, modal }: Readonly<Props>) {
 	const trackingInput = getTrackingInput();
-	const { isInternal } = getInternalUser();
 
 	return (
 		<html

@@ -1,14 +1,13 @@
 import { Feed } from "@/app/(pages)/(app)/space/(discover)/feed";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
-import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { FeatureCloud } from "@/components/feature-badges";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { Main } from "@/components/main";
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
-import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { NavBar } from "@/components/nav-bar/nav-bar";
 import { ProemAssistant } from "@/components/proem-assistant";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs/server";
@@ -39,10 +38,8 @@ type Props = {
 
 export default async function DiscoverPage({ searchParams }: Props) {
 	const { userId } = auth();
-	const { isInternal } = getInternalUser();
 
-	// TODO: Remove internal check when we launch the new nav
-	if (userId && isInternal) {
+	if (userId) {
 		redirect(`${routes.space}/${userId}`);
 	}
 
@@ -68,13 +65,13 @@ export default async function DiscoverPage({ searchParams }: Props) {
 
 	return (
 		<>
-			<NavBarV2 action={<OpenSearchAction />} isInternalUser={isInternal}>
+			<NavBar action={<OpenSearchAction />}>
 				<SimpleHeader title="For You" />
 				{/* <SelectSpaceHeader
 					collections={userCollections}
 					userId={userId ?? ""}
 				/> */}
-			</NavBarV2>
+			</NavBar>
 			<Main>
 				<div className="space-y-6">
 					<Feed
@@ -110,7 +107,7 @@ export default async function DiscoverPage({ searchParams }: Props) {
 					</Feed>
 				</div>
 			</Main>
-			<ProemAssistant internalUser={isInternal} />
+			<ProemAssistant />
 		</>
 	);
 }
@@ -146,18 +143,6 @@ async function getFilter(params: {
 	weightsRaw?: string;
 	user?: string;
 }) {
-	const { isInternal } = getInternalUser();
-
-	if (!isInternal) {
-		const topic = OaFields.find(
-			(c) =>
-				c.display_name.toLowerCase() ===
-				decodeURI(params.topic).replaceAll("%2C", ","),
-		)?.id;
-
-		return { topic };
-	}
-
 	const history = await getBookmarksAndHistory(params.user);
 	const fingerprints = await fetchFingerprints(...history);
 	const { filter, allFeatures } = getFeatureFilter(

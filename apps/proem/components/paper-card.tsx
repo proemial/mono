@@ -3,7 +3,6 @@ import {
 	AddToCollectionButton,
 	AddToCollectionButtonProps,
 } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
-import { useInternalUser } from "@/app/hooks/use-user";
 import { toTitleCaseIfAllCaps } from "@/utils/string-utils";
 import {
 	Card,
@@ -34,8 +33,6 @@ export function PaperCard({
 	bookmarks,
 	fromTrackingKey,
 }: PaperCardProps) {
-	const { isInternal } = useInternalUser();
-
 	return (
 		<Card variant="paper" className="flex flex-col justify-between">
 			<div>
@@ -62,8 +59,7 @@ export function PaperCard({
 					</CardDescription>
 				)}
 			</div>
-			{/* TODO: Remove feature toggle */}
-			{isInternal && bookmarks && paperId && fromTrackingKey ? (
+			{bookmarks && paperId && fromTrackingKey ? (
 				<div
 					className="-ml-2.5 -mb-2.5 self-start"
 					onClick={(event) => {

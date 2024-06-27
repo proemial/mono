@@ -1,11 +1,10 @@
 "use client";
 
-import { useInternalUser } from "@/app/hooks/use-user";
 import { CreateCollection } from "@/components/collections/create-collection";
 import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
-import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
 import { useUser } from "@clerk/nextjs";
 import { NewCollection } from "@proemial/data/neon/schema";
@@ -16,7 +15,6 @@ import { addPaperToCollection } from "../(discover)/bookmark-paper";
 export default function NewSpacePage() {
 	const { user } = useUser();
 	const queryClient = useQueryClient();
-	const { isInternal } = useInternalUser();
 	const queryParams = useSearchParams();
 	const paperId = queryParams.get("paperId");
 
@@ -36,12 +34,9 @@ export default function NewSpacePage() {
 
 	return (
 		<>
-			<NavBarV2
-				action={<CloseAction target={`${routes.space}/${user.id}`} />}
-				isInternalUser={isInternal}
-			>
+			<NavBar action={<CloseAction target={`${routes.space}/${user.id}`} />}>
 				<SimpleHeader title="Create new space" />
-			</NavBarV2>
+			</NavBar>
 			<Main>
 				<CreateCollection
 					noDialog

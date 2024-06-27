@@ -1,8 +1,7 @@
-import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
-import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs/server";
 import { neonDb } from "@proemial/data";
@@ -15,7 +14,6 @@ type Props = {
 };
 
 export default async function ArXivPaperPage({ params }: Props) {
-	const { isInternal } = getInternalUser();
 	const { userId } = auth();
 	const userCollections = userId
 		? await neonDb.query.collections.findMany({
@@ -25,15 +23,12 @@ export default async function ArXivPaperPage({ params }: Props) {
 
 	return (
 		<>
-			<NavBarV2
-				action={<CloseAction target={routes.space} />}
-				isInternalUser={isInternal}
-			>
+			<NavBar action={<CloseAction target={routes.space} />}>
 				<SelectSpaceHeader
 					collections={userCollections}
 					userId={userId ?? ""}
 				/>
-			</NavBarV2>
+			</NavBar>
 			<Main>
 				<PaperPage paperId={params.id} type="arxiv" />
 			</Main>

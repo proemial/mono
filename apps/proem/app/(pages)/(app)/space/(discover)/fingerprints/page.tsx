@@ -1,12 +1,11 @@
 import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
-import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { FeatureCloud } from "@/components/feature-badges";
 import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
-import { NavBarV2 } from "@/components/nav-bar/nav-bar-v2";
+import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs";
 import { neonDb } from "@proemial/data";
@@ -34,7 +33,6 @@ type Props = {
 };
 
 export default async function FingerprintsPage({ searchParams }: Props) {
-	const { isInternal } = getInternalUser();
 	const { userId } = auth();
 	const params = {
 		ids: searchParams?.ids?.length ? searchParams.ids : undefined,
@@ -72,15 +70,12 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 
 	return (
 		<>
-			<NavBarV2
-				action={<CloseAction target={routes.space} />}
-				isInternalUser={isInternal}
-			>
+			<NavBar action={<CloseAction target={routes.space} />}>
 				<SelectSpaceHeader
 					collections={userCollections}
 					userId={userId ?? ""}
 				/>
-			</NavBarV2>
+			</NavBar>
 			<Main>
 				<div className="space-y-6">
 					<Feed
