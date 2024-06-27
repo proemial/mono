@@ -1,10 +1,10 @@
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { auth } from "@clerk/nextjs";
 import { Redis } from "@proemial/redis/redis";
 import { Metadata } from "next";
 import { Suspense } from "react";
-import FeedItem, { FeedItemProps } from "../../../discover/feed-item";
 import { generate } from "../../../paper/oa/[id]/llm-generate";
+import FeedItem, { FeedItemProps } from "../../../space/(discover)/feed-item";
 import { fetchRssItems as fetchArXivRssPapers } from "../../fetch-rss";
 
 export const dynamic = "force-static";

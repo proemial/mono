@@ -1,8 +1,8 @@
 "use client";
 import FeedItem, {
 	FeedItemProps,
-} from "@/app/(pages)/(app)/discover/feed-item";
-import { fetchFeedByTopic } from "@/app/(pages)/(app)/discover/fetch-feed";
+} from "@/app/(pages)/(app)/space/(discover)/feed-item";
+import { fetchFeedByTopic } from "@/app/(pages)/(app)/space/(discover)/fetch-feed";
 import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
 import {
 	analyticsKeys,

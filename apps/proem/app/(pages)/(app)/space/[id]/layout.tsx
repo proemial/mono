@@ -31,7 +31,7 @@ export default async function ({ params, children }: PageProps) {
 	// TODO: Remove this check when launching feature
 	const { isInternal } = getInternalUser();
 	if (!isInternal) {
-		redirect(routes.discover);
+		redirect(routes.space);
 	}
 
 	const { userId, orgId } = auth();

@@ -1,4 +1,4 @@
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
@@ -16,7 +16,7 @@ export default async function SearchPage() {
 	return (
 		<>
 			<NavBarV2
-				action={<CloseAction target={routes.discover} />}
+				action={<CloseAction target={routes.space} />}
 				isInternalUser={isInternal}
 			>
 				<SimpleHeader title="Search" />

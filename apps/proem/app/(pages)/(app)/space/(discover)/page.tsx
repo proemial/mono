@@ -1,4 +1,4 @@
-import { Feed } from "@/app/(pages)/(app)/discover/feed";
+import { Feed } from "@/app/(pages)/(app)/space/(discover)/feed";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
@@ -22,6 +22,7 @@ import {
 import { OaFields } from "@proemial/repositories/oa/taxonomy/fields";
 import { Badge } from "@proemial/shadcn-ui";
 import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
 import { FeedFilter } from "./feed-filter";
 import { getBookmarksByUserId } from "./get-bookmarks-by-user-id";
 
@@ -37,6 +38,14 @@ type Props = {
 };
 
 export default async function DiscoverPage({ searchParams }: Props) {
+	const { userId } = auth();
+	const { isInternal } = getInternalUser();
+
+	// TODO: Remove internal check when we launch the new nav
+	if (userId && isInternal) {
+		redirect(`${routes.space}/${userId}`);
+	}
+
 	const params = {
 		topic: searchParams?.topic as string,
 		days: searchParams?.days
@@ -46,8 +55,6 @@ export default async function DiscoverPage({ searchParams }: Props) {
 		weightsRaw: searchParams?.weights,
 		user: searchParams?.user,
 	};
-	const { userId } = auth();
-	const { isInternal } = getInternalUser();
 
 	const [filter, bookmarks, userCollections] = await Promise.all([
 		getFilter(params),
@@ -86,7 +93,7 @@ export default async function DiscoverPage({ searchParams }: Props) {
 												field.display_name.toLowerCase(),
 											),
 										]}
-										rootPath={routes.discover}
+										rootPath={routes.space}
 									/>
 								</HorisontalScrollArea>
 							</div>

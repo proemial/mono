@@ -1,4 +1,4 @@
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { StreamList } from "@/app/(pages)/(app)/space/[id]/(latest)/stream-list";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { auth } from "@clerk/nextjs";

@@ -26,7 +26,7 @@ export default function AskPage() {
 	return (
 		<>
 			<NavBarV2
-				action={<CloseAction target={routes.discover} />}
+				action={<CloseAction target={routes.space} />}
 				isInternalUser={isInternal}
 			>
 				<SimpleHeader title="Ask" />

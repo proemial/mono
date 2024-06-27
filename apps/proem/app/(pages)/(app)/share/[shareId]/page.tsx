@@ -1,6 +1,6 @@
 import { Answer } from "@/app/(pages)/(app)/ask/answer/[slug]/answer";
 import { mapAnswerToAnswerEngine } from "@/app/(pages)/(app)/ask/mapAnswerToAnswerEngine";
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { Main } from "@/components/main";
@@ -27,7 +27,7 @@ export default async function SharePage({ params: { shareId } }: Props) {
 	const { isInternal } = getInternalUser();
 
 	if (!sharedAnswer) {
-		redirect(routes.discover);
+		redirect(routes.space);
 	}
 
 	const { existingData, initialMessages } =
@@ -36,7 +36,7 @@ export default async function SharePage({ params: { shareId } }: Props) {
 	return (
 		<>
 			<NavBarV2
-				action={<CloseAction target={routes.discover} />}
+				action={<CloseAction target={routes.space} />}
 				isInternalUser={isInternal}
 			>
 				<SimpleHeader title="Ask" />

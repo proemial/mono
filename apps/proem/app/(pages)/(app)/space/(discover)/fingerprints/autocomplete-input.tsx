@@ -1,10 +1,10 @@
 "use client";
+import { fetchPapersTitles } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import MultipleSelector, {
 	Option,
 } from "@proemial/shadcn-ui/components/ui/multiple-selector";
-import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { fetchPapersTitles } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
+import React, { useEffect, useState } from "react";
 
 export const AUTOCOMPLETE_QUERY_STRING = "ids";
 
@@ -50,7 +50,7 @@ export function AutocompleteInput() {
 	const handleChange = (value: Option[]) => {
 		const filter = value.map((v) => v.value.split("/").at(-1)).join(",");
 		router.replace(
-			`/discover/fingerprints?${AUTOCOMPLETE_QUERY_STRING}=${filter}`,
+			`/space/fingerprints?${AUTOCOMPLETE_QUERY_STRING}=${filter}`,
 		);
 	};
 

@@ -1,8 +1,8 @@
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
 import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { generate } from "@/app/(pages)/(app)/paper/oa/[id]/llm-generate";
 import { PaperReader } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader";
 import { PaperReaderSkeleton } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-skeleton";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { auth } from "@clerk/nextjs";
 import { notFound } from "next/navigation";

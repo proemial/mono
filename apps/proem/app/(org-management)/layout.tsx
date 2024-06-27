@@ -23,7 +23,7 @@ export default function OrgManagementLayout({ children }: Props) {
 			)}
 		>
 			<NavBarV2
-				action={<CloseAction target={routes.discover} />}
+				action={<CloseAction target={routes.space} />}
 				isInternalUser={isInternal}
 			>
 				<SimpleHeader title="Organization Management" />

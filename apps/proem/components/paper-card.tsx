@@ -2,7 +2,7 @@
 import {
 	AddToCollectionButton,
 	AddToCollectionButtonProps,
-} from "@/app/(pages)/(app)/discover/add-to-collection-button";
+} from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
 import { useInternalUser } from "@/app/hooks/use-user";
 import { toTitleCaseIfAllCaps } from "@/utils/string-utils";
 import {

@@ -26,7 +26,7 @@ export default async function OAPaperPage({ params }: Props) {
 	return (
 		<>
 			<NavBarV2
-				action={<CloseAction target={routes.discover} />}
+				action={<CloseAction target={routes.space} />}
 				isInternalUser={isInternal}
 			>
 				<SelectSpaceHeader

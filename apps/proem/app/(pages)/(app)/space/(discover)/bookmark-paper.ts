@@ -18,8 +18,8 @@ import { and, eq } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
-import { fetchPaper } from "../paper/oa/[id]/fetch-paper";
-import { generate } from "../paper/oa/[id]/llm-generate";
+import { fetchPaper } from "../../paper/oa/[id]/fetch-paper";
+import { generate } from "../../paper/oa/[id]/llm-generate";
 
 const addPaperToCollectionParams = z.object({
 	paperId: z.string(),

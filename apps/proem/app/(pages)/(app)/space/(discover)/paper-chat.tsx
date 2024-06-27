@@ -17,7 +17,7 @@ import { QAMessageContainer } from "@/components/qa-message-container";
 import { Header4 } from "@proemial/shadcn-ui";
 import { useChat } from "ai/react";
 import { GanttChart } from "lucide-react";
-import { MessageWithAuthorUserData } from "../paper/paper-post-utils";
+import { MessageWithAuthorUserData } from "../../paper/paper-post-utils";
 
 type PaperChatProps = Pick<ChatSuggestedFollowupsProps, "suggestions"> & {
 	title: string;

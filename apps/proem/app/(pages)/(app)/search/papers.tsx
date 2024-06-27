@@ -1,6 +1,6 @@
 "use client";
 import { OpenAlexWorkMetadata } from "@proemial/repositories/oa/models/oa-paper";
-import { Bookmarks } from "../discover/add-to-collection-button";
+import { Bookmarks } from "../space/(discover)/add-to-collection-button";
 import { Paper } from "./paper";
 
 export function Papers({

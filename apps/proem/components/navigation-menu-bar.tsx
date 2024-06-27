@@ -31,7 +31,7 @@ export function NavigationMenuBar({ title }: { title?: string }) {
 		}
 	}, [pathname, isAskPage]);
 
-	const showSearch = pathname === routes.discover;
+	const showSearch = pathname === routes.space;
 	console.log("showSearch", pathname, showSearch);
 
 	return (
@@ -47,8 +47,8 @@ export function NavigationMenuBar({ title }: { title?: string }) {
 						<>
 							<NavItem
 								label="Discover"
-								href={routes.discover}
-								isActive={() => pathname.includes(routes.discover)}
+								href={routes.space}
+								isActive={() => pathname.includes(routes.space)}
 								onClick={() =>
 									trackHandler(analyticsKeys.ui.header.click.discover)
 								}
@@ -109,7 +109,7 @@ function ShowSearch() {
 
 function CloseSearch() {
 	return (
-		<Link href={routes.discover}>
+		<Link href={routes.space}>
 			<Button variant="ghost">
 				<X className="size-5" />
 			</Button>

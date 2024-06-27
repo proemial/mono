@@ -1,4 +1,4 @@
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/discover/get-bookmarks-by-user-id";
+import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
@@ -52,7 +52,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 		const history = await getBookmarksAndHistory();
 		if (history.length) {
 			redirect(
-				`${routes.discover}fingerprints?ids=${history
+				`${routes.space}/fingerprints?ids=${history
 					.flatMap((i) => i)
 					.join(",")}`,
 			);
@@ -73,7 +73,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	return (
 		<>
 			<NavBarV2
-				action={<CloseAction target={routes.discover} />}
+				action={<CloseAction target={routes.space} />}
 				isInternalUser={isInternal}
 			>
 				<SelectSpaceHeader

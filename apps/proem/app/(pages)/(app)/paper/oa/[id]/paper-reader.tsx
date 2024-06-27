@@ -1,8 +1,8 @@
-import { PaperChat } from "@/app/(pages)/(app)/discover/paper-chat";
 import {
 	PaperReaderHeadline,
 	PaperReaderHeadlineProps,
 } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-headline";
+import { PaperChat } from "@/app/(pages)/(app)/space/(discover)/paper-chat";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { ChatArticle } from "@/components/chat-article";
 import { CollapsibleSection } from "@/components/collapsible-section";

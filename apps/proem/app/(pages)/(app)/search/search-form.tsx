@@ -10,7 +10,7 @@ import { ChevronRight } from "@untitled-ui/icons-react";
 import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { z } from "zod";
-import { Bookmarks } from "../discover/add-to-collection-button";
+import { Bookmarks } from "../space/(discover)/add-to-collection-button";
 import { OptionalResult, findPapersAction } from "./find-papers";
 import { Papers } from "./papers";
 

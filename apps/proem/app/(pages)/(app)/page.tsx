@@ -7,7 +7,6 @@ export default async function RootPage() {
 	if (userId) {
 		redirect(`${routes.space}/${userId}`);
 	} else {
-		// TODO: Should redirect to feed (maybe `/space`)
-		redirect(routes.discover);
+		redirect(routes.space);
 	}
 }

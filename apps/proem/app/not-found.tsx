@@ -13,7 +13,7 @@ export default function NotFound() {
 				</p>
 				<div className="flex mt-10 gap-x-2">
 					<Link
-						href={routes.discover}
+						href={routes.space}
 						className={buttonVariants({ variant: "default", size: "default" })}
 					>
 						Go to home
