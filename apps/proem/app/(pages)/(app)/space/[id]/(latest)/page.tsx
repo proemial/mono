@@ -6,7 +6,6 @@ import { auth } from "@clerk/nextjs";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { notFound } from "next/navigation";
-import { getPaperIdsForCollection } from "../collection-utils";
 
 type PageProps = {
 	params?: {
@@ -20,20 +19,7 @@ export default async function LatestPage({ params }: PageProps) {
 		notFound();
 	}
 
-	const [paperIds, bookmarks] = await Promise.all([
-		getPaperIdsForCollection(params.id),
-		getBookmarksByUserId(userId),
-	]);
-
-	if (paperIds?.length === 0) {
-		return (
-			<div className="flex flex-col items-center justify-center gap-4">
-				<div className="text-sm">
-					Save at least one paper, to access the latest related content.
-				</div>
-			</div>
-		);
-	}
+	const [bookmarks] = await Promise.all([getBookmarksByUserId(userId)]);
 
 	const history = await getBookmarksAndHistory(userId);
 	const fingerprints = await fetchFingerprints(...history);
