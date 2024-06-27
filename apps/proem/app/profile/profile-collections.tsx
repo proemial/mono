@@ -54,9 +54,11 @@ export const ProfileCollections = () => {
 		(collection) => collection.id !== user.id,
 	);
 
+	const noOfCollections = collections.length > 0 ? collections.length : 1;
+
 	return (
 		<CollapsibleSection
-			extra={<div>{collections.length}</div>}
+			extra={<div>{noOfCollections}</div>}
 			trigger={<div>Spaces</div>}
 			trackingKey={analyticsKeys.ui.menu.click.collapse.collections}
 		>
