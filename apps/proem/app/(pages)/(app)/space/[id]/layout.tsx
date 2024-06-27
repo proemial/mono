@@ -68,7 +68,7 @@ export default async function ({ params, children }: PageProps) {
 				<SelectSpaceHeader collections={userCollections} userId={userId} />
 			</NavBarV2>
 			<Main>
-				<div className="flex flex-col grow gap-10">
+				<div className="flex flex-col grow gap-2">
 					<div className="flex flex-col gap-3">
 						{!isDefaultCollection && (
 							<Paragraph>{collection.description}</Paragraph>
