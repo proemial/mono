@@ -80,11 +80,18 @@ function FormInputs({
 				</div>
 			</div>
 
-			{pending && <div>Finding papers...</div>}
+			<div className="mt-2">
+				{pending && <div>Finding papers...</div>}
 
-			{!pending && state?.results?.length && (
-				<Papers papers={state.results} bookmarks={bookmarks} />
-			)}
+				{!pending && (
+					<>
+						{state?.results?.length === 0 && <div>0 papers found</div>}
+						{state?.results && state.results.length > 0 && (
+							<Papers papers={state.results} bookmarks={bookmarks} />
+						)}
+					</>
+				)}
+			</div>
 		</>
 	);
 }
