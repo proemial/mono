@@ -2,6 +2,7 @@ import * as Sentry from "@sentry/nextjs";
 import process from "process";
 
 Sentry.init({
+	enabled: process.env.NODE_ENV === "production",
 	dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 	// Replay may only be enabled for the client-side
 	integrations: [
@@ -16,7 +17,7 @@ Sentry.init({
 
 	// Capture Replay for 10% of all sessions,
 	// plus for 100% of sessions with an error
-	replaysSessionSampleRate: 0.1,
+	replaysSessionSampleRate: 0,
 	replaysOnErrorSampleRate: 1.0,
 
 	// ...
