@@ -9,11 +9,13 @@ import {
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
 import { Trackable } from "@/components/trackable";
+import { routes } from "@/routes";
 import { Prefix } from "@proemial/redis/adapters/papers";
 import { OpenAlexTopic } from "@proemial/repositories/oa/models/oa-paper";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 import { FeedItemField } from "./feed-item-field";
 
@@ -39,6 +41,10 @@ export const FeedItemCard = ({
 	bookmarks,
 	customCollectionId,
 }: FeedItemCardProps) => {
+	const pathname = usePathname();
+	const spaceSpecificPrefix = pathname.includes(routes.space)
+		? `${routes.space}/${pathname.split("/")[2]}`
+		: "";
 	return (
 		<div className="flex flex-col gap-3">
 			<div className="flex items-center justify-between gap-2">
@@ -60,7 +66,7 @@ export const FeedItemCard = ({
 				</div>
 			</div>
 			<Link
-				href={`/paper/${provider ?? "oa"}/${id}`}
+				href={`${spaceSpecificPrefix}/paper/${provider ?? "oa"}/${id}`}
 				onClick={trackHandler(analyticsKeys.feed.click.card)}
 			>
 				{children}
