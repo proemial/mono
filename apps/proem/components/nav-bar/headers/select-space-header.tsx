@@ -34,9 +34,6 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 	const defaultSpace = allCollections.length < 2;
 	const selectedSpace =
 		params.collectionId ?? userId ?? allCollections.at(0)?.id;
-	console.log(selectedSpace);
-	console.log(allCollections);
-
 	const handleValueChange = (id: string) => {
 		trackHandler(analyticsKeys.ui.header.click.changeSpace);
 		router.push(changeSpaceId(pathname, id));
@@ -51,7 +48,7 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 			{!defaultSpace && (
 				<Select
 					onValueChange={handleValueChange}
-					value={(params.id as string | undefined) ?? userId}
+					value={selectedSpace as string}
 				>
 					<SelectTrigger className="flex gap-2 text-lg border-none">
 						<SelectValue />
