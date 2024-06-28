@@ -4,8 +4,14 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { useClerk, useUser } from "@clerk/nextjs";
-import { Drop, LogOut01, MessageSquare02 } from "@untitled-ui/icons-react";
+import { useClerk, useOrganization, useUser } from "@clerk/nextjs";
+import {
+	Building05,
+	Drop,
+	LogOut01,
+	MessageSquare02,
+} from "@untitled-ui/icons-react";
+import Link from "next/link";
 import { useInternalUser } from "../hooks/use-user";
 import { ProfileColorSchemeToggle } from "./profile-color-scheme-toggle";
 import { ProfileQuestions } from "./profile-questions";
@@ -17,6 +23,7 @@ export const About = () => {
 	const { user, isSignedIn } = useUser();
 	const { isInternal } = useInternalUser();
 	const { signOut } = useClerk();
+	const { membership } = useOrganization();
 
 	const handleSignOut = () => {
 		trackHandler(analyticsKeys.ui.menu.click.signout)();
@@ -26,6 +33,20 @@ export const About = () => {
 	return (
 		<div className="flex flex-col gap-4 justify-between h-full w-full mt-4">
 			<div className="space-y-4 mt-4">
+				{membership && (
+					<div className="space-y-4 mt-4">
+						<Link
+							href={`/org/${membership.organization.id}`}
+							onClick={trackHandler(analyticsKeys.ui.menu.click.org)}
+							prefetch={false}
+						>
+							<div className="flex gap-2 items-center">
+								<Building05 className="size-4 opacity-85" />
+								<div className="text-sm">{membership.organization.name}</div>
+							</div>
+						</Link>
+					</div>
+				)}
 				<div className="flex gap-2 items-center justify-between">
 					<div className="flex gap-2 items-center">
 						<Drop className="size-4 opacity-85" />
@@ -86,3 +107,13 @@ function Beta() {
 		</span>
 	);
 }
+
+const getUserInitials = (fullname: string) => {
+	const names = fullname.split(" ");
+	if (names.length === 1) {
+		return names[0]?.charAt(0).toUpperCase();
+	}
+	// @ts-ignore: Length of `names` is guaranteed to be at least 2
+	const initials = names[0]?.charAt(0) + names[names.length - 1].charAt(0);
+	return initials.toUpperCase();
+};

@@ -12,7 +12,7 @@ import {
 	Header2,
 	Header5,
 } from "@proemial/shadcn-ui";
-import { Building05, LogIn01 } from "@untitled-ui/icons-react";
+import { LogIn01 } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import { SignInDrawer } from "../../components/sign-in-drawer";
 import { About } from "./about";
@@ -78,31 +78,6 @@ export function ProfileYou() {
 							<div className="opacity-50 select-none mb-2">Social</div>
 						</Header5>
 						<div className="flex flex-col gap-6">
-							{membership && (
-								<CollapsibleSection
-									collapsed
-									extra={<div>1</div>}
-									trigger={<div>Organisations</div>}
-									trackingKey={
-										analyticsKeys.ui.menu.click.collapse.organizations
-									}
-								>
-									<div className="space-y-4 mt-4">
-										<Link
-											href={`/org/${membership.organization.id}`}
-											onClick={trackHandler(analyticsKeys.ui.menu.click.org)}
-											prefetch={false}
-										>
-											<div className="flex gap-2 items-center">
-												<Building05 className="size-4 opacity-85" />
-												<div className="text-sm">
-													{membership.organization.name}
-												</div>
-											</div>
-										</Link>
-									</div>
-								</CollapsibleSection>
-							)}
 							<ProfileCollections orgName={membership?.organization.name} />
 						</div>
 					</div>
