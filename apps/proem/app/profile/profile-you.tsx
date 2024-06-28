@@ -17,6 +17,7 @@ import Link from "next/link";
 import { SignInDrawer } from "../../components/sign-in-drawer";
 import { About } from "./about";
 import { ProfileCollections } from "./profile-collections";
+import { ProfileQuestions } from "./profile-questions";
 
 export function ProfileYou() {
 	const { user, isSignedIn } = useUser();
@@ -77,8 +78,9 @@ export function ProfileYou() {
 						<Header5>
 							<div className="opacity-50 select-none mb-2">Social</div>
 						</Header5>
-						<div className="flex flex-col gap-6">
+						<div className="flex flex-col gap-4">
 							<ProfileCollections orgName={membership?.organization.name} />
+							<ProfileQuestions />
 						</div>
 					</div>
 				)}

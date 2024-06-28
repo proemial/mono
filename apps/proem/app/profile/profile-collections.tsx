@@ -67,7 +67,7 @@ export const ProfileCollections = ({ orgName }: Props) => {
 			trackingKey={analyticsKeys.ui.menu.click.collapse.collections}
 		>
 			<ScrollArea className={cn({ "h-[237px]": collections.length > 0 })}>
-				<div className="space-y-4">
+				<div className="space-y-3">
 					<CollectionListItem
 						collection={getPersonalDefaultCollection(user.id)}
 						onEdit={edit}

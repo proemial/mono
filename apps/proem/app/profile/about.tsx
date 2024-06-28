@@ -14,7 +14,6 @@ import {
 import Link from "next/link";
 import { useInternalUser } from "../hooks/use-user";
 import { ProfileColorSchemeToggle } from "./profile-color-scheme-toggle";
-import { ProfileQuestions } from "./profile-questions";
 
 const feedback = "https://tally.so/r/wAv8Ve";
 const version = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ?? "local";
@@ -89,7 +88,6 @@ export const About = () => {
 						</div>
 					</div>
 				)}
-				{user && isSignedIn && <ProfileQuestions />}
 			</div>
 		</div>
 	);
@@ -107,13 +105,3 @@ function Beta() {
 		</span>
 	);
 }
-
-const getUserInitials = (fullname: string) => {
-	const names = fullname.split(" ");
-	if (names.length === 1) {
-		return names[0]?.charAt(0).toUpperCase();
-	}
-	// @ts-ignore: Length of `names` is guaranteed to be at least 2
-	const initials = names[0]?.charAt(0) + names[names.length - 1].charAt(0);
-	return initials.toUpperCase();
-};

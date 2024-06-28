@@ -23,7 +23,7 @@ export function ProfileQuestions() {
 			extra={data?.length}
 			collapsed={true}
 		>
-			<div className="max-h-[200px] overflow-y-auto">
+			<div className="max-h-[207px] overflow-y-auto">
 				{data?.map((question) => (
 					<div key={question.id}>
 						<DrawerClose asChild>
