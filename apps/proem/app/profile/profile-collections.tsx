@@ -66,7 +66,7 @@ export const ProfileCollections = ({ orgName }: Props) => {
 			trigger={<div>Spaces</div>}
 			trackingKey={analyticsKeys.ui.menu.click.collapse.collections}
 		>
-			<ScrollArea className={cn({ "h-[200px]": collections.length > 0 })}>
+			<ScrollArea className={cn({ "h-[207px]": collections.length > 0 })}>
 				<div className="space-y-4 mt-4">
 					<CollectionListItem
 						collection={getPersonalDefaultCollection(user.id)}
