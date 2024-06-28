@@ -16,9 +16,14 @@ import {
 type Props = {
 	paperId: string;
 	type: "oa" | "arxiv";
+	collectionId?: string;
 };
 
-export default async function PaperPage({ paperId, type }: Props) {
+export default async function PaperPage({
+	paperId,
+	type,
+	collectionId,
+}: Props) {
 	const fetchPaperFn = type === "oa" ? fetchPaper : fetchArxivPaper;
 	const fetchedPaperPromise = fetchPaperFn(paperId).then((paper) => {
 		if (!paper) {
@@ -33,7 +38,10 @@ export default async function PaperPage({ paperId, type }: Props) {
 	});
 
 	const { userId } = auth();
-	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
+	const currentCollectionId = collectionId ?? userId;
+	const bookmarks = currentCollectionId
+		? await getBookmarksByCollectionId(currentCollectionId)
+		: {};
 
 	// Get paper posts from org members, or user's own posts if there are none
 	let paperPosts: PaperPost[] = [];
