@@ -7,7 +7,6 @@ import { CreateCollection } from "@/components/collections/create-collection";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
 import { useUser } from "@clerk/nextjs";
 import { Collection, NewCollection } from "@proemial/data/neon/schema";
-import { ScrollArea, cn } from "@proemial/shadcn-ui";
 import { Plus } from "@untitled-ui/icons-react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getPersonalDefaultCollection } from "../constants";
@@ -66,26 +65,24 @@ export const ProfileCollections = ({ orgName }: Props) => {
 			trigger={<div>Spaces</div>}
 			trackingKey={analyticsKeys.ui.menu.click.collapse.collections}
 		>
-			<ScrollArea className={cn({ "h-[237px]": collections.length > 0 })}>
-				<div className="space-y-3">
+			<div className="space-y-3">
+				<CollectionListItem
+					collection={getPersonalDefaultCollection(user.id)}
+					onEdit={edit}
+					onDelete={del}
+					readonly={true}
+				/>
+				{customCollections.map((collection) => (
 					<CollectionListItem
-						collection={getPersonalDefaultCollection(user.id)}
+						key={collection.id}
+						collection={collection}
 						onEdit={edit}
 						onDelete={del}
-						readonly={true}
+						orgName={orgName}
+						userId={user.id}
 					/>
-					{customCollections.map((collection) => (
-						<CollectionListItem
-							key={collection.id}
-							collection={collection}
-							onEdit={edit}
-							onDelete={del}
-							orgName={orgName}
-							userId={user.id}
-						/>
-					))}
-				</div>
-			</ScrollArea>
+				))}
+			</div>
 			<CreateCollectionDrawer
 				trigger={
 					<div className="flex gap-2 items-center hover:opacity-85 active:opacity-75 duration-200 cursor-pointer">

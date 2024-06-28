@@ -23,12 +23,12 @@ export function ProfileQuestions() {
 			extra={data?.length}
 			collapsed={true}
 		>
-			<div className="max-h-[207px] overflow-y-auto">
+			<div className="space-y-3">
 				{data?.map((question) => (
 					<div key={question.id}>
 						<DrawerClose asChild>
 							<Link href={`${routes.answer}/${question.slug}`}>
-								<div className="truncate w-full pr-20 text-sm py-0.5">
+								<div className="truncate w-full text-sm pl-6">
 									{question.question}
 								</div>
 							</Link>
