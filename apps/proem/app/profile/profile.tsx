@@ -22,7 +22,7 @@ const ProfileContent = dynamic(
 
 export function Profile() {
 	return (
-		<Drawer>
+		<Drawer direction="left">
 			<DrawerTrigger asChild>
 				<Button
 					variant="ghost"
