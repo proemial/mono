@@ -2,7 +2,7 @@
 
 import { routes } from "@/routes";
 import { Collection } from "@proemial/data/neon/schema";
-import { Button, DrawerClose } from "@proemial/shadcn-ui";
+import { Button, DrawerClose, Header5 } from "@proemial/shadcn-ui";
 import {
 	Dialog,
 	DialogClose,
@@ -33,6 +33,8 @@ type Props = {
 	onEdit: (collection: Collection) => void;
 	onDelete: (collectionId: Collection["id"]) => void;
 	readonly?: boolean;
+	orgName?: string;
+	userId?: string;
 };
 
 export const CollectionListItem = ({
@@ -41,6 +43,8 @@ export const CollectionListItem = ({
 	onEdit,
 	onDelete,
 	readonly,
+	orgName,
+	userId,
 }: Props) => {
 	const { name, slug } = collection;
 
@@ -48,6 +52,8 @@ export const CollectionListItem = ({
 		trackHandler(analyticsKeys.collection.deleteFromMenuConfirmation);
 		onDelete(collection.id);
 	};
+
+	const isOrgSpace = collection.ownerId !== userId;
 
 	return (
 		<div className="flex justify-between gap-2">
@@ -64,6 +70,11 @@ export const CollectionListItem = ({
 			</Link>
 			{!readonly && (
 				<div className="flex gap-6 items-center">
+					{isOrgSpace && (
+						<div className="text-2xs uppercase opacity-50 truncate">
+							{orgName}
+						</div>
+					)}
 					{/* Share */}
 					{/* <IconButton onClick={onShare} title="Share">
 						<Upload01 className="size-4" />

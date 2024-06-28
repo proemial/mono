@@ -103,7 +103,7 @@ export function ProfileYou() {
 									</div>
 								</CollapsibleSection>
 							)}
-							<ProfileCollections />
+							<ProfileCollections orgName={membership?.organization.name} />
 						</div>
 					</div>
 				)}

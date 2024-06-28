@@ -18,7 +18,11 @@ import {
 	getAvailableCollections,
 } from "./actions";
 
-export const ProfileCollections = () => {
+type Props = {
+	orgName?: string;
+};
+
+export const ProfileCollections = ({ orgName }: Props) => {
 	const { user } = useUser();
 	const queryClient = useQueryClient();
 
@@ -76,6 +80,8 @@ export const ProfileCollections = () => {
 							collection={collection}
 							onEdit={edit}
 							onDelete={del}
+							orgName={orgName}
+							userId={user.id}
 						/>
 					))}
 				</div>
