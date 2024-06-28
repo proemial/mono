@@ -22,7 +22,7 @@ const ProfileContent = dynamic(
 
 export function Profile() {
 	return (
-		<Drawer direction="left" disablePreventScroll>
+		<Drawer disablePreventScroll>
 			<DrawerTrigger asChild>
 				<Button
 					variant="ghost"
@@ -36,7 +36,7 @@ export function Profile() {
 			<DrawerContent
 				className={`${screenMaxWidth} h-dvh overflow-y-auto rounded-none mx-auto`}
 			>
-				<div className="flex flex-col gap-6 h-full">
+				<div className="flex flex-col h-full gap-6">
 					<DrawerHeader className="pt-0">
 						<DrawerTitle className="flex justify-end text-2xl font-normal">
 							<DrawerClose asChild>
