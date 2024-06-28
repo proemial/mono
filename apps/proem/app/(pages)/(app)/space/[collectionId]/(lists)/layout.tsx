@@ -1,4 +1,5 @@
-import { NavItem } from "@/app/(pages)/(app)/space/[id]/nav-item";
+import { NavItem } from "@/app/(pages)/(app)/space/[collectionId]/nav-item";
+import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { getPersonalDefaultCollection } from "@/app/constants";
 import { routes } from "@/routes";
 import {
@@ -14,19 +15,16 @@ import { Avatar, AvatarImage, Paragraph } from "@proemial/shadcn-ui";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 
-type Props = {
-	params?: {
-		id: string;
-	};
+type Props = CollectionIdParams & {
 	children: ReactNode;
 };
 export default async function ({ params, children }: Props) {
 	const { userId, orgId } = auth();
-	if (!userId || !params?.id) {
+	if (!userId || !params?.collectionId) {
 		redirect(routes.space);
 	}
 
-	const collection = await getCollection(params.id, userId);
+	const collection = await getCollection(params.collectionId, userId);
 	if (!collection) {
 		redirect(routes.space);
 	}

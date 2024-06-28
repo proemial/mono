@@ -1,3 +1,4 @@
+import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { getPersonalDefaultCollection } from "@/app/constants";
 import { Main } from "@/components/main";
 import { ToggleSearchAction } from "@/components/nav-bar/actions/toggle-search-action";
@@ -17,20 +18,17 @@ import {
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 
-type PageProps = {
-	params?: {
-		id: string;
-	};
+type PageProps = CollectionIdParams & {
 	children: ReactNode;
 };
 
 export default async function ({ params, children }: PageProps) {
 	const { userId, orgId } = auth();
-	if (!userId || !params?.id) {
+	if (!userId || !params?.collectionId) {
 		redirect(routes.space);
 	}
 
-	const collection = await getCollection(params.id, userId);
+	const collection = await getCollection(params.collectionId, userId);
 	if (!collection) {
 		redirect(routes.space);
 	}

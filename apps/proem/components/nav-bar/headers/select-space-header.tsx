@@ -31,16 +31,19 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 	const pathname = usePathname();
 	const router = useRouter();
 	const allCollections = ensureDefaultCollection(collections, userId);
+	const defaultSpace = allCollections.length < 2;
+	const selectedSpace =
+		params.collectionId ?? userId ?? allCollections.at(0)?.id;
+	console.log(selectedSpace);
+	console.log(allCollections);
 
 	const handleValueChange = (id: string) => {
 		trackHandler(analyticsKeys.ui.header.click.changeSpace);
 		router.push(changeSpaceId(pathname, id));
 	};
 
-	const defaultSpace = allCollections.length < 2;
-
 	return (
-		<div className="flex gap-1 items-center">
+		<div className="flex items-center gap-1">
 			{defaultSpace && (
 				<SimpleHeader title={allCollections.at(0)?.name as string} />
 			)}
@@ -50,7 +53,7 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 					onValueChange={handleValueChange}
 					value={(params.id as string | undefined) ?? userId}
 				>
-					<SelectTrigger className="border-none flex gap-2 text-lg">
+					<SelectTrigger className="flex gap-2 text-lg border-none">
 						<SelectValue />
 					</SelectTrigger>
 					<SelectContent>

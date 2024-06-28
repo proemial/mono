@@ -1,24 +1,21 @@
+import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
+import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getPaperIdsForCollection } from "@/app/(pages)/(app)/space/[collectionId]/collection-utils";
+import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { auth } from "@clerk/nextjs";
 import { notFound } from "next/navigation";
-import FeedItem from "../../../(discover)/feed-item";
-import { fetchPaper } from "../../../../paper/oa/[id]/fetch-paper";
-import { getPaperIdsForCollection } from "../../collection-utils";
 
-type PageProps = {
-	params?: {
-		id: string;
-	};
-};
+type SavedPageProps = CollectionIdParams;
 
-export default async function SavedPage({ params }: PageProps) {
+export default async function SavedPage({ params }: SavedPageProps) {
 	const { userId } = auth();
-	if (!params?.id || !userId) {
+	if (!params?.collectionId || !userId) {
 		notFound();
 	}
 	const [paperIds, bookmarks] = await Promise.all([
-		getPaperIdsForCollection(params.id),
-		getBookmarksByCollectionId(params.id),
+		getPaperIdsForCollection(params.collectionId),
+		getBookmarksByCollectionId(params.collectionId),
 	]);
 
 	if (paperIds?.length === 0) {

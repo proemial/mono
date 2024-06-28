@@ -1,6 +1,7 @@
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
-import { StreamList } from "@/app/(pages)/(app)/space/[id]/(lists)/(latest)/stream-list";
-import { getPaperIdsForCollection } from "@/app/(pages)/(app)/space/[id]/collection-utils";
+import { StreamList } from "@/app/(pages)/(app)/space/[collectionId]/(lists)/(latest)/stream-list";
+import { getPaperIdsForCollection } from "@/app/(pages)/(app)/space/[collectionId]/collection-utils";
+import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { auth } from "@clerk/nextjs";
@@ -9,24 +10,20 @@ import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetc
 import { Fingerprint } from "@proemial/repositories/oa/fingerprinting/fingerprints";
 import { notFound } from "next/navigation";
 
-type PageProps = {
-	params?: {
-		id: string;
-	};
-};
+type LatestPageProps = CollectionIdParams;
 
-export default async function LatestPage({ params }: PageProps) {
+export default async function LatestPage({ params }: LatestPageProps) {
 	const { userId } = auth();
-	if (!params?.id || !userId) {
+	if (!params?.collectionId || !userId) {
 		notFound();
 	}
 
 	const [paperIds, bookmarks] = await Promise.all([
-		getPaperIdsForCollection(params.id),
+		getPaperIdsForCollection(params.collectionId),
 		getBookmarksByCollectionId(userId),
 	]);
 
-	const isDefaultSpace = params.id === userId;
+	const isDefaultSpace = params.collectionId === userId;
 	const fingerprints: Fingerprint[][] = [];
 	if (isDefaultSpace) {
 		// Default space uses the user's bookmarks and history to generate the feed
@@ -44,7 +41,7 @@ export default async function LatestPage({ params }: PageProps) {
 	const { filter: features } = getFeatureFilter(fingerprints);
 	return (
 		<StreamList
-			id={params.id}
+			id={params.collectionId}
 			features={features}
 			days={FEED_DEFAULT_DAYS}
 			bookmarks={bookmarks}
