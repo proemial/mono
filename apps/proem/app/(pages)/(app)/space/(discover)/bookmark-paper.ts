@@ -21,74 +21,92 @@ import { z } from "zod";
 import { fetchPaper } from "../../paper/oa/[id]/fetch-paper";
 import { generate } from "../../paper/oa/[id]/llm-generate";
 
-const addPaperToCollectionParams = z.object({
+const addPaperToExistingCollectionParaps = z.object({
 	paperId: z.string(),
-	collection: createInsertSchema(collections).optional(),
+	collectionId: z.string(),
 });
 
-/**
- * Adds a given paper to a collection. If a collection is not specified, the
- * paper will be added to the user's default collection.
- *
- * In any case, this will create a collection if it doesn't exist.
- */
-export async function addPaperToCollection(
+export async function addPaperToExistingCollection(
+	params: z.infer<typeof addPaperToExistingCollectionParaps>,
+) {
+	const { userId } = auth();
+	const { paperId, collectionId } =
+		addPaperToExistingCollectionParaps.parse(params);
+	if (!userId) {
+		return;
+	}
+	await ensurePaperIsSummarized(paperId);
+	await ensurePaperExistsInDb(paperId);
+	if (collectionId === userId) {
+		await ensureDefaultCollectionExistsInDb(userId);
+	}
+	await neonDb
+		.insert(collectionsToPapers)
+		.values({ collectionsId: collectionId, paperId });
+
+	revalidateTag(getBookmarkCacheTag(userId));
+	waitUntil(streamCacheUpdate.run(userId, "user"));
+}
+
+const addPaperToCollectionParams = z.object({
+	paperId: z.string(),
+	collection: createInsertSchema(collections),
+});
+
+export async function addPaperToNewCollection(
 	params: z.infer<typeof addPaperToCollectionParams>,
 ) {
 	const { userId } = auth();
 	const { paperId, collection } = addPaperToCollectionParams.parse(params);
-
 	if (!userId) {
 		return;
 	}
-
-	// Ensure paper is summarised
-	const paper = await fetchPaper(paperId);
-	if (paper && !paper.generated) {
-		await generate(paper);
-	}
-
-	const results = await Promise.all([
-		// Ensure paper exists in db
-		neonDb
-			.insert(papers)
-			.values({ id: paperId })
-			.onConflictDoNothing(),
-		// Ensure collection exists in db
-		...[
-			collection
-				? ensureCollectionExists(collection)
-				: ensureDefaultCollectionExists(userId),
-		],
-	]);
-
-	const newCollectionId = results[1]?.[0]?.id;
-	if (collection && !newCollectionId) {
-		throw new Error("Failed to create collection");
-	}
-
-	await neonDb
-		.insert(collectionsToPapers)
-		.values({
-			collectionsId: collection && newCollectionId ? newCollectionId : userId,
-			paperId,
-		})
-		.onConflictDoNothing();
+	await ensurePaperIsSummarized(paperId);
+	await ensurePaperExistsInDb(paperId);
+	const existingCollection =
+		collection.id === userId
+			? await ensureDefaultCollectionExistsInDb(userId)
+			: await ensureCollectionExistsInDb(collection);
+	await neonDb.insert(collectionsToPapers).values({
+		collectionsId: existingCollection.id,
+		paperId,
+	});
 
 	revalidateTag(getBookmarkCacheTag(userId));
 	waitUntil(streamCacheUpdate.run(userId, "user"));
 	return {};
 }
 
-const ensureDefaultCollectionExists = (userId: string) =>
-	ensureCollectionExists(getPersonalDefaultCollection(userId));
+const ensureDefaultCollectionExistsInDb = (userId: string) =>
+	ensureCollectionExistsInDb(getPersonalDefaultCollection(userId));
 
-const ensureCollectionExists = (collection: NewCollection) =>
-	neonDb
+const ensureCollectionExistsInDb = async (collection: NewCollection) => {
+	const existingCollection = await neonDb.query.collections.findFirst({
+		where: eq(collections.id, collection.id ?? ""),
+	});
+	if (existingCollection) {
+		return existingCollection;
+	}
+	const [newCollection] = await neonDb
 		.insert(collections)
 		.values(collection)
-		.returning()
-		.onConflictDoNothing();
+		.returning();
+	if (!newCollection) {
+		throw new Error("Failed to create collection");
+	}
+	return newCollection;
+};
+
+const ensurePaperIsSummarized = async (paperId: string) => {
+	const paper = await fetchPaper(paperId);
+	if (paper && !paper.generated) {
+		await generate(paper);
+	}
+};
+
+const ensurePaperExistsInDb = async (paperId: string) => {
+	await neonDb.insert(papers).values({ id: paperId }).onConflictDoNothing();
+};
 
 const togglePaperInCollectionParams = z.object({
 	paperId: z.string(),

@@ -1,5 +1,5 @@
 "use client";
-import { addPaperToCollection } from "@/app/(pages)/(app)/space/(discover)/bookmark-paper";
+import { addPaperToExistingCollection } from "@/app/(pages)/(app)/space/(discover)/bookmark-paper";
 import { AddButton, AddButtonSkeleton } from "@/components/add-button";
 import {
 	CollectionSelectorProps,
@@ -71,7 +71,7 @@ export function AddToCollectionButton({
 					newBookmarksCollectionId,
 					bookmarks: optimisticBookmarksWithExtraOptimism,
 				});
-				await addPaperToCollection({ paperId });
+				await addPaperToExistingCollection({ paperId, collectionId });
 			}}
 		/>
 	);

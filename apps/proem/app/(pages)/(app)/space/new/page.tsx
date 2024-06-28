@@ -10,7 +10,7 @@ import { useUser } from "@clerk/nextjs";
 import { NewCollection } from "@proemial/data/neon/schema";
 import { useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "react-query";
-import { addPaperToCollection } from "../(discover)/bookmark-paper";
+import { addPaperToNewCollection } from "../(discover)/bookmark-paper";
 
 export default function NewSpacePage() {
 	const { user } = useUser();
@@ -23,8 +23,8 @@ export default function NewSpacePage() {
 	}
 
 	const { mutate: add } = useMutation({
-		mutationFn: (newCollection: NewCollection) =>
-			addPaperToCollection({ paperId, collection: newCollection }),
+		mutationFn: (collection: NewCollection) =>
+			addPaperToNewCollection({ paperId, collection }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["collections", user?.id],

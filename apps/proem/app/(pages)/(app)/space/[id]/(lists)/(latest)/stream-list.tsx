@@ -41,6 +41,7 @@ export function StreamList({ id, bookmarks, features, days }: StreamListProps) {
 						paper={row.paper}
 						fingerprint={row.features}
 						bookmarks={bookmarks}
+						customCollectionId={id}
 					>
 						{/* TODO! add debug mode */}
 						{/* {debug && (
