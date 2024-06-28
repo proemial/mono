@@ -1,5 +1,6 @@
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
-import { StreamList } from "@/app/(pages)/(app)/space/[id]/(latest)/stream-list";
+import { StreamList } from "@/app/(pages)/(app)/space/[id]/(lists)/(latest)/stream-list";
+import { getPaperIdsForCollection } from "@/app/(pages)/(app)/space/[id]/collection-utils";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { auth } from "@clerk/nextjs";
@@ -7,7 +8,6 @@ import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/featu
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { Fingerprint } from "@proemial/repositories/oa/fingerprinting/fingerprints";
 import { notFound } from "next/navigation";
-import { getPaperIdsForCollection } from "../collection-utils";
 
 type PageProps = {
 	params?: {

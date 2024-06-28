@@ -1,9 +1,9 @@
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { auth } from "@clerk/nextjs";
 import { notFound } from "next/navigation";
-import FeedItem from "../../(discover)/feed-item";
-import { fetchPaper } from "../../../paper/oa/[id]/fetch-paper";
-import { getPaperIdsForCollection } from "../collection-utils";
+import FeedItem from "../../../(discover)/feed-item";
+import { fetchPaper } from "../../../../paper/oa/[id]/fetch-paper";
+import { getPaperIdsForCollection } from "../../collection-utils";
 
 type PageProps = {
 	params?: {
@@ -34,7 +34,7 @@ export default async function SavedPage({ params }: PageProps) {
 		: [];
 
 	return (
-		<div className="space-y-8 mb-8">
+		<div className="mb-8 space-y-8">
 			{papers.map(
 				(paper) =>
 					paper && (
