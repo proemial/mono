@@ -50,7 +50,7 @@ export const EditCollection = ({ collection, onSubmit }: Props) => {
 
 	return (
 		<div className="flex flex-col gap-8">
-			<Header2>Edit Collection</Header2>
+			<Header2>Edit Space</Header2>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(handleSubmit)} className="h-full">
 					<div className="flex flex-col h-full gap-8 justify-between">
@@ -61,7 +61,7 @@ export const EditCollection = ({ collection, onSubmit }: Props) => {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="opacity-50">
-											<Header5>Collection name</Header5>
+											<Header5>Name</Header5>
 										</FormLabel>
 										<FormControl>
 											<Input
@@ -78,7 +78,7 @@ export const EditCollection = ({ collection, onSubmit }: Props) => {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="opacity-50">
-											<Header5>Collection description</Header5>
+											<Header5>Description</Header5>
 										</FormLabel>
 										<FormControl>
 											<Textarea

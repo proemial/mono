@@ -64,7 +64,7 @@ export const CreateCollection = ({ collection, onSubmit, noDialog }: Props) => {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="opacity-50">
-											<Header5>Collection name</Header5>
+											<Header5>Name</Header5>
 										</FormLabel>
 										<FormControl>
 											<Input
@@ -81,7 +81,7 @@ export const CreateCollection = ({ collection, onSubmit, noDialog }: Props) => {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="opacity-50">
-											<Header5>Collection description</Header5>
+											<Header5>Description</Header5>
 										</FormLabel>
 										<FormControl>
 											<Textarea
