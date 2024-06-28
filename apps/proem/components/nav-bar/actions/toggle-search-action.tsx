@@ -19,7 +19,7 @@ export const ToggleSearchAction = () => {
 
 		if (isSearchPage) {
 			trackHandler(analyticsKeys.ui.header.click.close);
-			router.push(`/${space}/${collectionId}`);
+			router.push(`/${space}/${collectionId}/saved`);
 		} else {
 			trackHandler(analyticsKeys.ui.header.click.search);
 			router.push(`/${space}/${collectionId}${routes.search}`);
