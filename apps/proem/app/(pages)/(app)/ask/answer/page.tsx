@@ -1,5 +1,5 @@
 import { Answer } from "@/app/(pages)/(app)/ask/answer/[slug]/answer";
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
@@ -18,7 +18,7 @@ type Props = {
 export default async function AnswerPage({ searchParams }: Props) {
 	const initialQuestion = searchParams.q;
 	const { userId } = auth();
-	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
+	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
 	if (!initialQuestion) {
 		redirect(routes.ask);
 	}

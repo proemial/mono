@@ -1,5 +1,5 @@
 import { StaticFeed } from "@/app/(pages)/(app)/space/(discover)/andrej-karpathy-llm-reading-list/static-feed";
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { Main } from "@/components/main";
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
 import { NavBar } from "@/components/nav-bar/nav-bar";
@@ -33,7 +33,7 @@ type Props = {
 export default async function HuggingList({ params: { date } }: Props) {
 	const { userId } = await auth();
 	const readingList = await fetchReadingList(date);
-	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
+	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
 	const feed = readingList.rows.filter(Boolean) as OpenAlexPaper[];
 
 	return (

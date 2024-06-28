@@ -1,4 +1,4 @@
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { StreamList } from "@/app/(pages)/(app)/space/[id]/(latest)/stream-list";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
@@ -23,7 +23,7 @@ export default async function LatestPage({ params }: PageProps) {
 
 	const [paperIds, bookmarks] = await Promise.all([
 		getPaperIdsForCollection(params.id),
-		getBookmarksByUserId(userId),
+		getBookmarksByCollectionId(userId),
 	]);
 
 	const isDefaultSpace = params.id === userId;

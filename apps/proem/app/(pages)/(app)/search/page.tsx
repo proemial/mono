@@ -1,4 +1,4 @@
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
@@ -9,7 +9,7 @@ import { SearchForm } from "./search-form";
 
 export default async function SearchPage() {
 	const { userId } = await auth();
-	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
+	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
 
 	return (
 		<>

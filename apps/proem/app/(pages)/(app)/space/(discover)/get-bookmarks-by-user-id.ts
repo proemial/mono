@@ -4,16 +4,16 @@ import { Collection, collections } from "@proemial/data/neon/schema";
 import { eq } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 
-export const getBookmarksByUserId = (ownerId: Collection["ownerId"]) =>
+export const getBookmarksByCollectionId = (ownerId: Collection["id"]) =>
 	unstable_cache(
 		async () => {
-			const usersBookmarks = await neonDb.query.collections.findMany({
+			const bookmarks = await neonDb.query.collections.findMany({
 				columns: { id: true },
-				where: eq(collections.ownerId, ownerId),
+				where: eq(collections.id, ownerId),
 				with: { collectionsToPapers: true },
 			});
 
-			return usersBookmarks.reduce(
+			return bookmarks.reduce(
 				(acc, collection) => {
 					for (const paper of collection.collectionsToPapers) {
 						if (acc[paper.paperId]) {

@@ -23,7 +23,7 @@ import { Badge } from "@proemial/shadcn-ui";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { FeedFilter } from "./feed-filter";
-import { getBookmarksByUserId } from "./get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "./get-bookmarks-by-user-id";
 
 type Props = {
 	searchParams?: {
@@ -55,7 +55,7 @@ export default async function DiscoverPage({ searchParams }: Props) {
 
 	const [filter, bookmarks, userCollections] = await Promise.all([
 		getFilter(params),
-		userId ? getBookmarksByUserId(userId) : {},
+		userId ? getBookmarksByCollectionId(userId) : {},
 		userId
 			? neonDb.query.collections.findMany({
 					where: eq(collections.ownerId, userId),

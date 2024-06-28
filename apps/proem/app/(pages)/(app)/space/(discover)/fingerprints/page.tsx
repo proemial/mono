@@ -1,4 +1,4 @@
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { FeatureCloud } from "@/components/feature-badges";
@@ -41,7 +41,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 			: FEED_DEFAULT_DAYS,
 	};
 
-	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
+	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
 	const ids = params.ids?.split(",") ?? [];
 
 	// Only use history when `ids` param is missing (accept clearing the list of papers)

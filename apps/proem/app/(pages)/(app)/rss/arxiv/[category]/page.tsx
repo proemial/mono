@@ -1,4 +1,4 @@
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { auth } from "@clerk/nextjs";
 import { Redis } from "@proemial/redis/redis";
 import { Metadata } from "next";
@@ -58,7 +58,7 @@ async function Papers({ category }: { category: string }) {
 	const papers = await fetchArXivRssPapers(
 		`https://rss.arxiv.org/atom/${category}`,
 	);
-	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
+	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
 
 	return (
 		<>

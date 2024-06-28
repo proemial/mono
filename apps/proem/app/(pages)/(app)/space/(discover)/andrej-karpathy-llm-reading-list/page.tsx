@@ -1,6 +1,6 @@
 import { fetchReadingList } from "@/app/(pages)/(app)/space/(discover)/andrej-karpathy-llm-reading-list/fetch-list";
 import { StaticFeed } from "@/app/(pages)/(app)/space/(discover)/andrej-karpathy-llm-reading-list/static-feed";
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { Main } from "@/components/main";
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
 import { NavBar } from "@/components/nav-bar/nav-bar";
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 export default async function AndrejKarpathyLLMReadingList() {
 	const { userId } = await auth();
 	const readingList = await fetchReadingList();
-	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
+	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
 	const feed = readingList.rows.filter(Boolean) as OpenAlexPaper[];
 
 	return (

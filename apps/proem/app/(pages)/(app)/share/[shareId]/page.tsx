@@ -1,6 +1,6 @@
 import { Answer } from "@/app/(pages)/(app)/ask/answer/[slug]/answer";
 import { mapAnswerToAnswerEngine } from "@/app/(pages)/(app)/ask/mapAnswerToAnswerEngine";
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
@@ -22,7 +22,7 @@ type Props = {
 export default async function SharePage({ params: { shareId } }: Props) {
 	const [sharedAnswer] = await answers.getByShareId(shareId);
 	const { userId } = auth();
-	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
+	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
 
 	if (!sharedAnswer) {
 		redirect(routes.space);

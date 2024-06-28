@@ -1,4 +1,4 @@
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { auth } from "@clerk/nextjs";
 import { notFound } from "next/navigation";
 import FeedItem from "../../(discover)/feed-item";
@@ -18,7 +18,7 @@ export default async function SavedPage({ params }: PageProps) {
 	}
 	const [paperIds, bookmarks] = await Promise.all([
 		getPaperIdsForCollection(params.id),
-		getBookmarksByUserId(userId),
+		getBookmarksByCollectionId(params.id),
 	]);
 
 	if (paperIds?.length === 0) {

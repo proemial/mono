@@ -1,6 +1,6 @@
 import { Answer } from "@/app/(pages)/(app)/ask/answer/[slug]/answer";
 import { mapAnswerToAnswerEngine } from "@/app/(pages)/(app)/ask/mapAnswerToAnswerEngine";
-import { getBookmarksByUserId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
@@ -21,7 +21,7 @@ export default async function AnswerPage({ params: { slug } }: Props) {
 	const allAnswers = await answers.getBySlug(slug);
 	const { userId } = auth();
 	const [firstAnswer] = allAnswers;
-	const bookmarks = userId ? await getBookmarksByUserId(userId) : {};
+	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
 
 	if (!firstAnswer) {
 		redirect(routes.ask);
