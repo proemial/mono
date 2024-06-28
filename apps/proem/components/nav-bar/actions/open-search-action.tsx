@@ -12,7 +12,7 @@ export const OpenSearchAction = () => {
 	const router = useRouter();
 
 	const handleAction = () => {
-		trackHandler(analyticsKeys.ui.header.click.close);
+		trackHandler(analyticsKeys.ui.header.click.search);
 		router.push(routes.search);
 	};
 
