@@ -1,8 +1,7 @@
 "use server";
 import { summariseAbstract } from "@/app/prompts/summarise-abstract";
-import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Redis } from "@proemial/redis/redis";
-import { Paragraph } from "@proemial/shadcn-ui";
+import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import Markdown from "./markdown";
 
 export async function MicroAbstract({ paper }: { paper: OpenAlexPaper }) {
@@ -10,9 +9,9 @@ export async function MicroAbstract({ paper }: { paper: OpenAlexPaper }) {
 
 	if (paper.generated?.abstract) {
 		return (
-			<Paragraph>
+			<div className="text-base/relaxed break-words">
 				<Markdown>{paper.generated?.abstract}</Markdown>
-			</Paragraph>
+			</div>
 		);
 	}
 
@@ -34,8 +33,8 @@ export async function MicroAbstract({ paper }: { paper: OpenAlexPaper }) {
 	});
 
 	return (
-		<Paragraph>
+		<div className="text-base/relaxed break-words">
 			<Markdown>{microAbstract ?? ""}</Markdown>
-		</Paragraph>
+		</div>
 	);
 }

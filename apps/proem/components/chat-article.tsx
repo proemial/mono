@@ -4,7 +4,7 @@ import { ModelSelector, ModelSelectorProps } from "@/components/model-selector";
 import { Trackable } from "@/components/trackable";
 import { trimForQuotes } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
-import { Header2, Header4, Icons, Paragraph } from "@proemial/shadcn-ui";
+import { Header2, Header4, Icons } from "@proemial/shadcn-ui";
 import { Suspense } from "react";
 import Markdown from "./markdown";
 
@@ -40,9 +40,9 @@ export function ChatArticle({
 			{title ? <Title title={title} /> : null}
 
 			{text && (
-				<Paragraph>
+				<div className="text-base/relaxed break-words">
 					<Markdown>{text}</Markdown>
-				</Paragraph>
+				</div>
 			)}
 
 			{paper && (
