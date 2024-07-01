@@ -34,7 +34,7 @@ async function fetchUser(user?: string) {
 }
 
 export async function getBookmarksAndHistory(
-	userId: Parameters<typeof fetchUser>[0],
+	userId?: Parameters<typeof fetchUser>[0],
 ): Promise<Array<string[]>> {
 	const user = await fetchUser(userId);
 
