@@ -31,7 +31,7 @@ export type FeedItemCardProps = Pick<
 	topics?: OpenAlexTopic[];
 	children: ReactNode;
 	provider?: Prefix;
-	hasAbstract?: boolean;
+	hasAbstract: boolean;
 };
 
 export const FeedItemCard = ({

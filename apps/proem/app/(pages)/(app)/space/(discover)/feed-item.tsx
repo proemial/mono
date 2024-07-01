@@ -44,6 +44,7 @@ export default function FeedItem({
 				provider={provider}
 				bookmarks={bookmarks}
 				customCollectionId={customCollectionId}
+				hasAbstract={!!paper.data.abstract}
 			>
 				<Markdown>
 					{paper.generated?.title
