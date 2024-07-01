@@ -1,3 +1,4 @@
+import Markdown from "@/components/markdown";
 import { trimForQuotes } from "@/utils/string-utils";
 import { Prefix } from "@proemial/redis/adapters/papers";
 import { FeatureType } from "@proemial/repositories/oa/fingerprinting/features";
@@ -9,7 +10,6 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { ReactNode } from "react";
 import { FeedItemCard, FeedItemCardProps } from "./feed-item-card";
 import { FeedItemTag } from "./feed-item-tag";
-import Markdown from "@/components/markdown";
 
 dayjs.extend(relativeTime);
 
@@ -55,7 +55,7 @@ export default function FeedItem({
 
 			{children}
 
-			<div className="flex flex-row-reverse gap-2 overflow-x-auto scrollbar-hide">
+			<div className="flex gap-2 overflow-x-auto scrollbar-hide">
 				{!fingerprint &&
 					tags?.map((tag) => <FeedItemTag key={tag} tag={tag} />)}
 
