@@ -32,7 +32,7 @@ export default async function SearchPage({ searchParams }: Params) {
 					<SearchForm
 						bookmarks={bookmarks}
 						searchQuery={searchParams?.query}
-						searchResults={searchResults}
+						initialSearchResults={searchResults}
 					/>
 				</div>
 			</Main>

@@ -30,7 +30,7 @@ export default async function SearchPage({
 			bookmarks={bookmarks}
 			collectionId={collectionId}
 			searchQuery={searchParams?.query}
-			searchResults={searchResults}
+			initialSearchResults={searchResults}
 		/>
 	);
 }

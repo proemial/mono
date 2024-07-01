@@ -19,20 +19,21 @@ type Props = {
 	bookmarks: Bookmarks;
 	collectionId?: Collection["id"];
 	searchQuery?: string;
-	searchResults?: OptionalResult;
+	initialSearchResults?: OptionalResult;
 };
 
 export function SearchForm({
 	bookmarks,
 	collectionId,
 	searchQuery,
-	searchResults,
+	initialSearchResults,
 }: Props) {
-	const [state, formAction] = useFormState(findPapersAction, searchResults);
+	const [state, formAction] = useFormState(
+		findPapersAction,
+		initialSearchResults,
+	);
 	const [isFocused, setIsFocused] = useState(false);
-	const { pending } = useFormStatus();
 	const [inputValue, setInputValue] = useState(searchQuery ?? "");
-	const router = useRouter();
 
 	const { keyboardUp } = useVisualViewport();
 	useEffect(() => {
@@ -43,7 +44,6 @@ export function SearchForm({
 
 	const handleSubmit = () => {
 		trackHandler(`${analyticsKeys.search.submit.query}`)();
-		router.replace(`?query=${encodeURIComponent(inputValue)}`);
 	};
 
 	console.log("state", state);
@@ -56,46 +56,88 @@ export function SearchForm({
 				onSubmit={handleSubmit}
 				autoComplete="off"
 			>
-				<div className="flex items-center w-full border text-foreground bg-card border-background rounded-3xl">
-					<div className="flex items-center w-full border text-foreground bg-card border-background rounded-3xl">
-						<input
-							name="query"
-							placeholder="Search for a paper title or DOI"
-							className="w-full h-12 pl-6 resize-none flex items-center text-lg bg-card placeholder:opacity-40 placeholder:text-[#2b2b2b] dark:placeholder:text-[#e5e5e5] rounded-l-3xl outline-none"
-							maxLength={chatInputMaxLength}
-							disabled={pending}
-							value={inputValue}
-							onChange={(e) => setInputValue(e.target.value)}
-						/>
-						<Button
-							disabled={pending}
-							className="size-8 w-[36px] bg-card mr-2 disabled:opacity-1"
-							size="icon"
-							type="submit"
-							onClick={trackHandler(analyticsKeys.search.click.submit)}
-						>
-							<ChevronRight className="size-5" />
-						</Button>
-					</div>
-				</div>
-
-				<div className="mt-2">
-					{pending && <div>Finding papers...</div>}
-
-					{!pending && (
-						<>
-							{state?.results?.length === 0 && <div>0 papers found</div>}
-							{state?.results && state.results.length > 0 && (
-								<Papers
-									papers={state.results}
-									bookmarks={bookmarks}
-									collectionId={collectionId}
-								/>
-							)}
-						</>
-					)}
-				</div>
+				<FormInputs
+					state={state}
+					bookmarks={bookmarks}
+					collectionId={collectionId}
+					inputValue={inputValue}
+					setInputValue={setInputValue}
+				/>
 			</form>
+		</>
+	);
+}
+
+/**
+ * This component must be inside the form component above for the
+ * `useFormStatus` hook to work correctly.
+ *
+ * https://react.dev/reference/react-dom/hooks/useFormStatus
+ */
+function FormInputs({
+	state,
+	bookmarks,
+	collectionId,
+	inputValue,
+	setInputValue,
+}: {
+	state: OptionalResult;
+	bookmarks: Bookmarks;
+	collectionId?: Collection["id"];
+	inputValue: string;
+	setInputValue: (s: string) => void;
+}) {
+	const { pending } = useFormStatus();
+	const router = useRouter();
+
+	useEffect(() => {
+		// Update the URL query param when the search results are back
+		if (!pending && state) {
+			router.replace(`?query=${encodeURIComponent(inputValue)}`);
+		}
+	}, [pending, state, inputValue, router]);
+
+	return (
+		<>
+			<div className="flex items-center w-full border text-foreground bg-card border-background rounded-3xl">
+				<div className="flex items-center w-full border text-foreground bg-card border-background rounded-3xl">
+					<input
+						name="query"
+						placeholder="Search for a paper title or DOI"
+						className="w-full h-12 pl-6 resize-none flex items-center text-lg bg-card placeholder:opacity-40 placeholder:text-[#2b2b2b] dark:placeholder:text-[#e5e5e5] rounded-l-3xl outline-none"
+						maxLength={chatInputMaxLength}
+						disabled={pending}
+						value={inputValue}
+						onChange={(e) => setInputValue(e.target.value)}
+					/>
+					<Button
+						disabled={pending}
+						className="size-8 w-[36px] bg-card mr-2 disabled:opacity-1"
+						size="icon"
+						type="submit"
+						onClick={trackHandler(analyticsKeys.search.click.submit)}
+					>
+						<ChevronRight className="size-5" />
+					</Button>
+				</div>
+			</div>
+
+			<div className="mt-2">
+				{pending && <div>Finding papers...</div>}
+
+				{!pending && (
+					<>
+						{state?.results?.length === 0 && <div>0 papers found</div>}
+						{state?.results && state.results.length > 0 && (
+							<Papers
+								papers={state.results}
+								bookmarks={bookmarks}
+								collectionId={collectionId}
+							/>
+						)}
+					</>
+				)}
+			</div>
 		</>
 	);
 }
