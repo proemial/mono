@@ -27,10 +27,10 @@ export type FeatureFilter = {
 };
 
 export function getFeatureFilter(
-	fingerprintGroups: Array<Fingerprint[]>,
+	fingerprintGroups?: Array<Fingerprint[]>,
 	weightsRaw?: string,
 ): FeatureFilter {
-	if (!fingerprintGroups.length) {
+	if (!fingerprintGroups || !fingerprintGroups.length) {
 		return { allFeatures: [], filter: [] };
 	}
 

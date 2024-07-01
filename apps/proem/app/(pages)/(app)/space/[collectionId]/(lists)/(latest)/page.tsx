@@ -29,8 +29,10 @@ export default async function LatestPage({ params }: LatestPageProps) {
 	if (isDefaultSpace) {
 		// Default space uses the user's bookmarks and history to generate the feed
 		const history = await getBookmarksAndHistory(userId);
-		const fingerprintsBasedOnHistory = await fetchFingerprints(...history);
-		fingerprints.push(...fingerprintsBasedOnHistory);
+		if (history?.length) {
+			const fingerprintsBasedOnHistory = await fetchFingerprints(...history);
+			fingerprints.push(...fingerprintsBasedOnHistory);
+		}
 	} else {
 		// Custom spaces use the papers in the space to generate the feed
 		const fingerprintsBasedOnPapers = paperIds

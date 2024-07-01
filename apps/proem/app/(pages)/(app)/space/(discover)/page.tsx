@@ -121,13 +121,13 @@ function Titles({
 	return (
 		<>
 			<div className="space-1">
-				<span className="text-xs font-bold mr-1">Bookmarked: </span>
+				<span className="mr-1 text-xs font-bold">Bookmarked: </span>
 				{bookmarked?.map((paper) => (
 					<Badge key={paper.id}>{paper.title}</Badge>
 				))}
 			</div>
 			<div className="space-1">
-				<span className="text-xs font-bold mr-1">Read: </span>
+				<span className="mr-1 text-xs font-bold">Read: </span>
 				{read?.map((paper) => (
 					<Badge key={paper.id}>{paper.title}</Badge>
 				))}
@@ -144,12 +144,15 @@ async function getFilter(params: {
 	user?: string;
 }) {
 	const history = await getBookmarksAndHistory(params.user);
-	const fingerprints = await fetchFingerprints(...history);
+	const fingerprints = history?.length && (await fetchFingerprints(...history));
 	const { filter, allFeatures } = getFeatureFilter(
 		fingerprints,
 		params.weightsRaw,
 	);
-	const titles = params.debug ? await fetchPapersTitles(...history) : undefined;
+	const titles =
+		params.debug && history?.length
+			? await fetchPapersTitles(...history)
+			: undefined;
 
 	return { features: filter, days: params.days, titles, all: allFeatures };
 }

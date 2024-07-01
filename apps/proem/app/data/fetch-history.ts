@@ -50,12 +50,13 @@ export function getHistoryByUser<TUserId extends Pick<User, "paperActivities">>(
 	return readHistoryIds;
 }
 
+export type PaperId = string;
 export async function getBookmarksAndHistory(
 	userId?: Parameters<typeof fetchUser>[0],
-): Promise<Array<string[]>> {
+): Promise<[PaperId[], PaperId[]] | null> {
 	return fetchUser(userId).then(async (user) => {
 		if (!user) {
-			return [];
+			return null;
 		}
 		const bookmarkIds = await getBookmarksByUser(user);
 		const readHistoryIds = getHistoryByUser(user);

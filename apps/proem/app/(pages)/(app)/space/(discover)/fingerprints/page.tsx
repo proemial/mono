@@ -48,7 +48,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	const noIds = searchParams?.ids === undefined;
 	if (noIds && !ids.length) {
 		const history = await getBookmarksAndHistory();
-		if (history.length) {
+		if (history?.length) {
 			redirect(
 				`${routes.space}/fingerprints?ids=${history
 					.flatMap((i) => i)
