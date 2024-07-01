@@ -1,15 +1,21 @@
 "use client";
 import Markdown from "@/components/markdown";
+import { Collection } from "@proemial/data/neon/schema";
 import { OpenAlexWorkMetadata } from "@proemial/repositories/oa/models/oa-paper";
+import { Button, buttonVariants } from "@proemial/shadcn-ui";
 import { Users01 } from "@untitled-ui/icons-react";
 import { Bookmarks } from "../space/(discover)/add-to-collection-button";
 import { FeedItemCard } from "../space/(discover)/feed-item-card";
-import { Button, buttonVariants } from "@proemial/shadcn-ui";
 
 export function Paper({
 	paper,
 	bookmarks,
-}: { paper: OpenAlexWorkMetadata; bookmarks: Bookmarks }) {
+	collectionId,
+}: {
+	paper: OpenAlexWorkMetadata;
+	bookmarks: Bookmarks;
+	collectionId?: Collection["id"];
+}) {
 	if (!paper) {
 		return null;
 	}
@@ -24,6 +30,7 @@ export function Paper({
 				bookmarks={bookmarks}
 				// customCollectionId={customCollectionId}
 				hasAbstract={!!paper.abstract_inverted_index}
+				customCollectionId={collectionId}
 			>
 				<Markdown>{paper.title}</Markdown>
 			</FeedItemCard>

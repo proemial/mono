@@ -8,7 +8,7 @@ import { auth } from "@clerk/nextjs";
 import { SearchForm } from "./search-form";
 
 export default async function SearchPage() {
-	const { userId } = await auth();
+	const { userId } = auth();
 	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
 
 	return (

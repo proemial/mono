@@ -5,6 +5,7 @@ import {
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
 import { useVisualViewport } from "@/utils/useVisualViewport";
+import { Collection } from "@proemial/data/neon/schema";
 import { Button } from "@proemial/shadcn-ui";
 import { ChevronRight } from "@untitled-ui/icons-react";
 import { useEffect, useState } from "react";
@@ -18,7 +19,10 @@ export const QuerySchema = z.object({
 	question: z.string(),
 });
 
-export function SearchForm({ bookmarks }: { bookmarks: Bookmarks }) {
+export function SearchForm({
+	bookmarks,
+	collectionId,
+}: { bookmarks: Bookmarks; collectionId?: Collection["id"] }) {
 	const [state, formAction] = useFormState(findPapersAction, undefined);
 
 	const [isFocused, setIsFocused] = useState(false);
@@ -44,7 +48,11 @@ export function SearchForm({ bookmarks }: { bookmarks: Bookmarks }) {
 				onSubmit={handleSubmit}
 				autoComplete="off"
 			>
-				<FormInputs state={state} bookmarks={bookmarks} />
+				<FormInputs
+					state={state}
+					bookmarks={bookmarks}
+					collectionId={collectionId}
+				/>
 			</form>
 		</>
 	);
@@ -53,7 +61,12 @@ export function SearchForm({ bookmarks }: { bookmarks: Bookmarks }) {
 function FormInputs({
 	state,
 	bookmarks,
-}: { state: OptionalResult; bookmarks: Bookmarks }) {
+	collectionId,
+}: {
+	state: OptionalResult;
+	bookmarks: Bookmarks;
+	collectionId?: Collection["id"];
+}) {
 	const { pending } = useFormStatus();
 
 	return (
@@ -87,7 +100,11 @@ function FormInputs({
 					<>
 						{state?.results?.length === 0 && <div>0 papers found</div>}
 						{state?.results && state.results.length > 0 && (
-							<Papers papers={state.results} bookmarks={bookmarks} />
+							<Papers
+								papers={state.results}
+								bookmarks={bookmarks}
+								collectionId={collectionId}
+							/>
 						)}
 					</>
 				)}
