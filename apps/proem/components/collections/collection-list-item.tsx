@@ -46,7 +46,7 @@ export const CollectionListItem = ({
 	orgName,
 	userId,
 }: Props) => {
-	const { name, slug } = collection;
+	const { name, id } = collection;
 
 	const handleCollectionDelete = () => {
 		trackHandler(analyticsKeys.collection.deleteFromMenuConfirmation);
@@ -58,7 +58,7 @@ export const CollectionListItem = ({
 	return (
 		<div className="flex justify-between gap-2">
 			<Link
-				href={`${routes.space}/${slug}`}
+				href={`${routes.space}/${id}`}
 				onClick={() => {
 					trackHandler(analyticsKeys.collection.openFromMenu);
 				}}
