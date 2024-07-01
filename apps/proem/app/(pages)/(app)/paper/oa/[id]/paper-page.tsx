@@ -38,9 +38,8 @@ export default async function PaperPage({
 	});
 
 	const { userId } = auth();
-	const currentCollectionId = collectionId ?? userId;
-	const bookmarks = currentCollectionId
-		? await getBookmarksByCollectionId(currentCollectionId)
+	const bookmarks = userId
+		? await getBookmarksByCollectionId(collectionId ?? userId)
 		: {};
 
 	// Get paper posts from org members, or user's own posts if there are none

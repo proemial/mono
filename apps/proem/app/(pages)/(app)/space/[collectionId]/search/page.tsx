@@ -3,7 +3,7 @@ import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)
 import { auth } from "@clerk/nextjs";
 
 export default async function SearchPage() {
-	const { userId } = await auth();
+	const { userId } = auth();
 	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
 
 	return <SearchForm bookmarks={bookmarks} />;

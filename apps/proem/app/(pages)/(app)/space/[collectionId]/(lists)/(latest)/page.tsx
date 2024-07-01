@@ -14,16 +14,17 @@ type LatestPageProps = CollectionIdParams;
 
 export default async function LatestPage({ params }: LatestPageProps) {
 	const { userId } = auth();
-	if (!params?.collectionId || !userId) {
+	const collectionId = params?.collectionId;
+	if (!collectionId || !userId) {
 		notFound();
 	}
 
 	const [paperIds, bookmarks] = await Promise.all([
-		getPaperIdsForCollection(params.collectionId),
-		getBookmarksByCollectionId(userId),
+		getPaperIdsForCollection(collectionId),
+		getBookmarksByCollectionId(collectionId),
 	]);
 
-	const isDefaultSpace = params.collectionId === userId;
+	const isDefaultSpace = collectionId === userId;
 	const fingerprints: Fingerprint[][] = [];
 	if (isDefaultSpace) {
 		// Default space uses the user's bookmarks and history to generate the feed
@@ -41,7 +42,7 @@ export default async function LatestPage({ params }: LatestPageProps) {
 	const { filter: features } = getFeatureFilter(fingerprints);
 	return (
 		<StreamList
-			id={params.collectionId}
+			id={collectionId}
 			features={features}
 			days={FEED_DEFAULT_DAYS}
 			bookmarks={bookmarks}

@@ -10,12 +10,13 @@ type SavedPageProps = CollectionIdParams;
 
 export default async function SavedPage({ params }: SavedPageProps) {
 	const { userId } = auth();
-	if (!params?.collectionId || !userId) {
+	const collectionId = params?.collectionId;
+	if (!collectionId || !userId) {
 		notFound();
 	}
 	const [paperIds, bookmarks] = await Promise.all([
-		getPaperIdsForCollection(params.collectionId),
-		getBookmarksByCollectionId(params.collectionId),
+		getPaperIdsForCollection(collectionId),
+		getBookmarksByCollectionId(collectionId),
 	]);
 
 	if (paperIds?.length === 0) {
