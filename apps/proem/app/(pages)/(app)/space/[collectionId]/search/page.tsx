@@ -1,5 +1,5 @@
 import { SearchForm } from "@/app/(pages)/(app)/search/search-form";
-import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { auth } from "@clerk/nextjs";
 
 export default async function SearchPage() {

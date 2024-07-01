@@ -1,4 +1,4 @@
-import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { FeatureCloud } from "@/components/feature-badges";

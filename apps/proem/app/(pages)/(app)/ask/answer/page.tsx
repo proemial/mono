@@ -1,5 +1,5 @@
 import { Answer } from "@/app/(pages)/(app)/ask/answer/[slug]/answer";
-import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";

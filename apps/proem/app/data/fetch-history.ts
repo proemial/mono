@@ -3,7 +3,7 @@ import { neonDb } from "@proemial/data";
 import { PaperActivity, users } from "@proemial/data/neon/schema";
 import dayjs from "dayjs";
 import { eq } from "drizzle-orm";
-import { getBookmarksByCollectionId } from "../(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "../(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 
 // Max no. of papers from read history to use in filter
 const MAX_COUNT = 30;

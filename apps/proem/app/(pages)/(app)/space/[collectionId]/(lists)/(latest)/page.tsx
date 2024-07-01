@@ -1,4 +1,4 @@
-import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { StreamList } from "@/app/(pages)/(app)/space/[collectionId]/(lists)/(latest)/stream-list";
 import { getPaperIdsForCollection } from "@/app/(pages)/(app)/space/[collectionId]/collection-utils";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";

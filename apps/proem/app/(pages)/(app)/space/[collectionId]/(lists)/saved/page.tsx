@@ -1,6 +1,6 @@
 import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
-import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { getPaperIdsForCollection } from "@/app/(pages)/(app)/space/[collectionId]/collection-utils";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { auth } from "@clerk/nextjs";

@@ -1,4 +1,4 @@
-import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { auth } from "@clerk/nextjs";
 import { Redis } from "@proemial/redis/redis";
 import { Metadata } from "next";
@@ -27,12 +27,12 @@ type Props = {
 
 export default async function ArXivRss({ params: { category } }: Props) {
 	return (
-		<div className="space-y-5 pb-10">
+		<div className="pb-10 space-y-5">
 			<div className="text-[28px] font-normal pt-6">
 				Latest {title} for {category}
 			</div>
 			<div
-				className="w-full relative"
+				className="relative w-full"
 				style={{
 					height: 5,
 				}}

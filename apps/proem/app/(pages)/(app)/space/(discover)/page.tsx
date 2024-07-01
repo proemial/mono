@@ -23,7 +23,7 @@ import { Badge } from "@proemial/shadcn-ui";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { FeedFilter } from "./feed-filter";
-import { getBookmarksByCollectionId } from "./get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "./get-bookmarks-by-collection-id";
 
 type Props = {
 	searchParams?: {

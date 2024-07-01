@@ -1,5 +1,4 @@
-import { StaticFeed } from "../../andrej-karpathy-llm-reading-list/static-feed";
-import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { Main } from "@/components/main";
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
 import { NavBar } from "@/components/nav-bar/nav-bar";
@@ -7,6 +6,7 @@ import { auth } from "@clerk/nextjs";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Metadata } from "next";
 import Image from "next/image";
+import { StaticFeed } from "../../andrej-karpathy-llm-reading-list/static-feed";
 import { fetchReadingList } from "./fetch-list";
 import logo from "./logo.svg";
 
@@ -46,7 +46,7 @@ export default async function HuggingList({ params: { date } }: Props) {
 					<StaticFeed feed={feed} bookmarks={bookmarks}>
 						<div className="flex items-center">
 							A hugging tribute to AK
-							<Image className="ml-2 w-6 h-6" src={logo} alt="" />
+							<Image className="w-6 h-6 ml-2" src={logo} alt="" />
 						</div>
 					</StaticFeed>
 				</div>

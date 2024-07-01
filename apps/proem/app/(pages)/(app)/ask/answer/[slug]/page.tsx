@@ -1,6 +1,6 @@
 import { Answer } from "@/app/(pages)/(app)/ask/answer/[slug]/answer";
 import { mapAnswerToAnswerEngine } from "@/app/(pages)/(app)/ask/mapAnswerToAnswerEngine";
-import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { answers } from "@/app/api/bot/answer-engine/answers";
 import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
