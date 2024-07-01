@@ -1,5 +1,5 @@
-import { fetchReadingList } from "@/app/(pages)/(app)/space/(discover)/andrej-karpathy-llm-reading-list/fetch-list";
-import { StaticFeed } from "@/app/(pages)/(app)/space/(discover)/andrej-karpathy-llm-reading-list/static-feed";
+import { fetchReadingList } from "./fetch-list";
+import { StaticFeed } from "./static-feed";
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-user-id";
 import { Main } from "@/components/main";
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
