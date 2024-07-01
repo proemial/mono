@@ -43,7 +43,7 @@ export function SearchForm({
 
 	const handleSubmit = () => {
 		trackHandler(`${analyticsKeys.search.submit.query}`)();
-		router.push(`?query=${encodeURIComponent(inputValue)}`);
+		router.replace(`?query=${encodeURIComponent(inputValue)}`);
 	};
 
 	console.log("state", state);
