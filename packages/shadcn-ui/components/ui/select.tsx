@@ -1,7 +1,11 @@
 "use client";
 
 import * as SelectPrimitive from "@radix-ui/react-select";
-import { Check, ChevronSelectorVertical } from "@untitled-ui/icons-react";
+import {
+	Check,
+	ChevronRight,
+	ChevronSelectorVertical,
+} from "@untitled-ui/icons-react";
 import * as React from "react";
 import { cn } from "../../lib/utils";
 
@@ -25,12 +29,11 @@ const SelectTrigger = React.forwardRef<
 	>
 		{children}
 		<SelectPrimitive.Icon asChild>
-			<ChevronSelectorVertical className="w-4 h-4 opacity-50" />
+			<ChevronRight className="w-4 h-4 opacity-50" />
 		</SelectPrimitive.Icon>
 	</SelectPrimitive.Trigger>
 ));
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
-
 const SelectScrollUpButton = React.forwardRef<
 	React.ElementRef<typeof SelectPrimitive.ScrollUpButton>,
 	React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollUpButton>
@@ -147,13 +150,13 @@ SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 
 export {
 	Select,
-	SelectGroup,
-	SelectValue,
-	SelectTrigger,
 	SelectContent,
-	SelectLabel,
+	SelectGroup,
 	SelectItem,
-	SelectSeparator,
-	SelectScrollUpButton,
+	SelectLabel,
 	SelectScrollDownButton,
+	SelectScrollUpButton,
+	SelectSeparator,
+	SelectTrigger,
+	SelectValue,
 };
