@@ -57,6 +57,7 @@ export default async function PaperPage({
 				generatedPaperPromise={generatedPaperPromise}
 				paperPosts={paperPosts}
 				type={type}
+				collectionId={collectionId}
 			/>
 		</Suspense>
 	);

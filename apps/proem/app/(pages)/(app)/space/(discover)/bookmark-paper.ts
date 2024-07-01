@@ -38,13 +38,14 @@ export async function addPaperToExistingCollection(
 	await ensurePaperIsSummarized(paperId);
 	await ensurePaperExistsInDb(paperId);
 	if (collectionId === userId) {
+		// This is necessary because the default collection is created lazily
 		await ensureDefaultCollectionExistsInDb(userId);
 	}
 	await neonDb
 		.insert(collectionsToPapers)
 		.values({ collectionsId: collectionId, paperId });
 
-	revalidateTag(getBookmarkCacheTag(userId));
+	revalidateTag(getBookmarkCacheTag(collectionId));
 	waitUntil(streamCacheUpdate.run(userId, "user"));
 }
 
@@ -63,6 +64,7 @@ export async function addPaperToNewCollection(
 	}
 	await ensurePaperIsSummarized(paperId);
 	await ensurePaperExistsInDb(paperId);
+	// Create new collection
 	const existingCollection =
 		collection.id === userId
 			? await ensureDefaultCollectionExistsInDb(userId)
@@ -72,7 +74,7 @@ export async function addPaperToNewCollection(
 		paperId,
 	});
 
-	revalidateTag(getBookmarkCacheTag(userId));
+	revalidateTag(getBookmarkCacheTag(existingCollection.id));
 	waitUntil(streamCacheUpdate.run(userId, "user"));
 	return {};
 }
@@ -141,7 +143,7 @@ export async function togglePaperInCollection(
 			);
 	}
 
-	revalidateTag(getBookmarkCacheTag(userId));
+	revalidateTag(getBookmarkCacheTag(collectionId));
 	waitUntil(streamCacheUpdate.run(userId, "user"));
 	return {};
 }

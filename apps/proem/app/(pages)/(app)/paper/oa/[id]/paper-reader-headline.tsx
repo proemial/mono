@@ -8,11 +8,12 @@ import { File02 } from "@untitled-ui/icons-react";
 
 export type PaperReaderHeadlineProps = Pick<
 	AddToCollectionButtonProps,
-	"bookmarks" | "paperId"
+	"bookmarks" | "paperId" | "customCollectionId"
 >;
 export function PaperReaderHeadline({
 	bookmarks,
 	paperId,
+	customCollectionId,
 }: PaperReaderHeadlineProps) {
 	return (
 		<div className="flex items-center gap-3">
@@ -29,6 +30,7 @@ export function PaperReaderHeadline({
 					bookmarks={bookmarks}
 					paperId={paperId}
 					fromTrackingKey="fromRead"
+					customCollectionId={customCollectionId}
 				/>
 			</div>
 		</div>

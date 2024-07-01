@@ -10,6 +10,7 @@ import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { PaperCardDiscover } from "@/components/paper-card-discover";
 import { PaperCardDiscoverProfile } from "@/components/paper-card-discover-profile";
 import { Trackable } from "@/components/trackable";
+import { Collection } from "@proemial/data/neon/schema";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { use } from "react";
 import { PaperPost, paperPostsToMessages } from "../../paper-post-utils";
@@ -20,6 +21,7 @@ type PaperReaderProps = Pick<PaperReaderHeadlineProps, "bookmarks"> & {
 	generatedPaperPromise: Promise<OpenAlexPaper>;
 	paperPosts: PaperPost[];
 	type: "oa" | "arxiv";
+	collectionId?: Collection["id"];
 };
 
 export function PaperReader({
@@ -28,6 +30,7 @@ export function PaperReader({
 	paperPosts,
 	bookmarks,
 	type,
+	collectionId,
 }: PaperReaderProps) {
 	const fetchedPaper = use(fetchedPaperPromise);
 	const generatedPaper = use(generatedPaperPromise);
@@ -47,6 +50,7 @@ export function PaperReader({
 						<PaperReaderHeadline
 							paperId={fetchedPaper.id}
 							bookmarks={bookmarks}
+							customCollectionId={collectionId}
 						/>
 					}
 					collapsed
