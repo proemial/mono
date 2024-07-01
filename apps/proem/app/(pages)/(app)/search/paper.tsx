@@ -13,6 +13,8 @@ export function Paper({
 		return null;
 	}
 
+	console.log("paper.abstract_inverted_index", paper.abstract_inverted_index);
+
 	return (
 		<div className="space-y-3 bg-white dark:bg-primary rounded-lg p-4">
 			<FeedItemCard
@@ -22,6 +24,7 @@ export function Paper({
 				// provider={provider}
 				bookmarks={bookmarks}
 				// customCollectionId={customCollectionId}
+				hasAbstract={!!paper.abstract_inverted_index}
 			>
 				<Markdown>{paper.title}</Markdown>
 			</FeedItemCard>

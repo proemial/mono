@@ -33,8 +33,8 @@ async function findPapers(query: string) {
 		.filter((f) => !!f)
 		.join(",");
 
-	const byDoi = await findByDoi(query, oaFilter);
-	const byArxiv = await findByArxiv(query, oaFilter);
+	const byDoi = await findByDoi(query);
+	const byArxiv = await findByArxiv(query);
 	const byTitle = await findByTitle(query, oaFilter);
 
 	const papers = [...byDoi.results, ...byArxiv.results, ...byTitle.results];
@@ -47,22 +47,20 @@ async function findPapers(query: string) {
 	};
 }
 
-async function findByArxiv(query: string, baseFilter: string): Promise<Result> {
+async function findByArxiv(query: string): Promise<Result> {
 	const byArxiv = await fetch(
-		`${oaBaseUrl}?${oaBaseArgs}&filter=${baseFilter},locations.landing_page_url:http://arxiv.org/abs/${query}|https://arxiv.org/abs/${query}|${query}`,
+		`${oaBaseUrl}?${oaBaseArgs}&filter=locations.landing_page_url:http://arxiv.org/abs/${query}|https://arxiv.org/abs/${query}|${query}`,
 	);
 	return (await byArxiv.json()) as Result;
 }
 
-async function findByDoi(query: string, baseFilter: string): Promise<Result> {
+async function findByDoi(query: string): Promise<Result> {
 	// This regexp doesn't support doi as url: https://doi.org/10.1111/1475-6773.14324
 	// if (!query.match(/^10.\d{4,9}\/[-._;()/:A-Z0-9]+$/i)) {
 	// 	return { results: [] };
 	// }
 
-	const byDoi = await fetch(
-		`${oaBaseUrl}?${oaBaseArgs}&filter=${baseFilter},doi:${query}`,
-	);
+	const byDoi = await fetch(`${oaBaseUrl}?${oaBaseArgs}&filter=doi:${query}`);
 	return (await byDoi.json()) as Result;
 }
 
