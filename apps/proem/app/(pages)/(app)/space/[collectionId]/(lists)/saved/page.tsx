@@ -36,7 +36,12 @@ export default async function SavedPage({ params }: SavedPageProps) {
 			{papers.map(
 				(paper) =>
 					paper && (
-						<FeedItem key={paper.id} paper={paper} bookmarks={bookmarks} />
+						<FeedItem
+							key={paper.id}
+							paper={paper}
+							bookmarks={bookmarks}
+							customCollectionId={collectionId}
+						/>
 					),
 			)}
 		</div>
