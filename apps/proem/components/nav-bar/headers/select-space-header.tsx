@@ -14,7 +14,12 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@proemial/shadcn-ui";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import {
+	useParams,
+	usePathname,
+	useRouter,
+	useSearchParams,
+} from "next/navigation";
 import { SimpleHeader } from "./simple-header";
 
 type Props = {
@@ -29,14 +34,22 @@ function changeSpaceId(pathname: string, id: string) {
 export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 	const params = useParams();
 	const pathname = usePathname();
+	const searchParams = useSearchParams();
 	const router = useRouter();
 	const allCollections = ensureDefaultCollection(collections, userId);
 	const defaultSpace = allCollections.length < 2;
 	const selectedSpace =
 		params.collectionId ?? userId ?? allCollections.at(0)?.id;
+
 	const handleValueChange = (id: string) => {
 		trackHandler(analyticsKeys.ui.header.click.changeSpace);
-		router.push(changeSpaceId(pathname, id));
+		const searchPapersQuery = searchParams.get("query");
+		if (searchPapersQuery) {
+			// Persist URL query params when changing spaces (i.e. for search)
+			router.push(`${changeSpaceId(pathname, id)}?query=${searchPapersQuery}`);
+		} else {
+			router.push(changeSpaceId(pathname, id));
+		}
 	};
 
 	return (

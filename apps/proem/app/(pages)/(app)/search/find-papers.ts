@@ -5,6 +5,7 @@ import {
 	oaBaseUrl,
 } from "@proemial/repositories/oa/models/oa-paper";
 import dayjs from "dayjs";
+import { unstable_cache } from "next/cache";
 
 type Result = { results: OpenAlexWorkMetadata[] };
 export type OptionalResult = Result | undefined;
@@ -21,30 +22,38 @@ export async function findPapersAction(
 	return await findPapers(query);
 }
 
-async function findPapers(query: string) {
-	const today = dayjs().format("YYYY-MM-DD");
-	const oaFilter = [
-		"type:types/preprint|types/article",
-		"has_abstract:true",
-		`publication_date:<${today}`, // We do not want papers published in the future
-		"language:en",
-		"open_access.is_oa:true",
-	]
-		.filter((f) => !!f)
-		.join(",");
+export async function findPapers(query: string) {
+	// Cache search results for 60 seconds to avoid redoing identical searches
+	// every time a user changes between spaces on the search page.
+	return unstable_cache(
+		async () => {
+			const today = dayjs().format("YYYY-MM-DD");
+			const oaFilter = [
+				"type:types/preprint|types/article",
+				"has_abstract:true",
+				`publication_date:<${today}`, // We do not want papers published in the future
+				"language:en",
+				"open_access.is_oa:true",
+			]
+				.filter((f) => !!f)
+				.join(",");
 
-	const byDoi = await findByDoi(query);
-	const byArxiv = await findByArxiv(query);
-	const byTitle = await findByTitle(query, oaFilter);
+			const byDoi = await findByDoi(query);
+			const byArxiv = await findByArxiv(query);
+			const byTitle = await findByTitle(query, oaFilter);
 
-	const papers = [...byDoi.results, ...byArxiv.results, ...byTitle.results];
+			const papers = [...byDoi.results, ...byArxiv.results, ...byTitle.results];
 
-	return {
-		results: papers.map((paper) => ({
-			...paper,
-			id: paper.id.split("/").at(-1) as string,
-		})),
-	};
+			return {
+				results: papers.map((paper) => ({
+					...paper,
+					id: paper.id.split("/").at(-1) as string,
+				})),
+			};
+		},
+		["papersearch", query],
+		{ revalidate: 60 },
+	)();
 }
 
 async function findByArxiv(query: string): Promise<Result> {

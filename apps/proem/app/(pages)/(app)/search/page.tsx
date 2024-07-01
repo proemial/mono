@@ -5,11 +5,22 @@ import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs";
+import { findPapers } from "./find-papers";
 import { SearchForm } from "./search-form";
 
-export default async function SearchPage() {
+type Params = {
+	searchParams?: {
+		query: string;
+	};
+};
+
+export default async function SearchPage({ searchParams }: Params) {
 	const { userId } = auth();
 	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
+
+	const searchResults = searchParams?.query
+		? await findPapers(searchParams.query)
+		: undefined;
 
 	return (
 		<>
@@ -18,7 +29,11 @@ export default async function SearchPage() {
 			</NavBar>
 			<Main>
 				<div className="space-y-6">
-					<SearchForm bookmarks={bookmarks} />
+					<SearchForm
+						bookmarks={bookmarks}
+						searchQuery={searchParams?.query}
+						searchResults={searchResults}
+					/>
 				</div>
 			</Main>
 		</>
