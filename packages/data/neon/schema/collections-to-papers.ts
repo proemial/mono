@@ -1,5 +1,11 @@
 import { relations } from "drizzle-orm";
-import { pgTable, primaryKey, text, timestamp } from "drizzle-orm/pg-core";
+import {
+	boolean,
+	pgTable,
+	primaryKey,
+	text,
+	timestamp,
+} from "drizzle-orm/pg-core";
 import { collections } from "./collections";
 import { papers } from "./papers";
 
@@ -12,6 +18,7 @@ export const collectionsToPapers = pgTable(
 		paperId: text("paper_id")
 			.notNull()
 			.references(() => papers.id),
+		isEnabled: boolean("is_enabled").notNull().default(true),
 		createdAt: timestamp("createdAt").notNull().defaultNow(),
 	},
 	(t) => ({
