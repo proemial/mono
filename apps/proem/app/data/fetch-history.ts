@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { neonDb } from "@proemial/data";
-import { PaperActivity, users } from "@proemial/data/neon/schema";
+import { PaperActivity, User, users } from "@proemial/data/neon/schema";
 import dayjs from "dayjs";
 import { eq } from "drizzle-orm";
 import { getBookmarksByCollectionId } from "../(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
@@ -33,20 +33,32 @@ async function fetchUser(user?: string) {
 	});
 }
 
+export async function getBookmarksByUser<TUserId extends Pick<User, "id">>(
+	user: TUserId,
+) {
+	const bookmarks = await getBookmarksByCollectionId(user.id);
+	const bookmarkIds = Object.keys(bookmarks);
+	return bookmarkIds;
+}
+
+export function getHistoryByUser<TUserId extends Pick<User, "paperActivities">>(
+	user: TUserId,
+) {
+	const readHistoryIds = sortAndFilter(user.paperActivities)?.map(
+		(paper) => paper.paperId,
+	);
+	return readHistoryIds;
+}
+
 export async function getBookmarksAndHistory(
 	userId?: Parameters<typeof fetchUser>[0],
 ): Promise<Array<string[]>> {
-	const user = await fetchUser(userId);
-
-	if (!user) {
-		return [];
-	}
-
-	const bookmarks = await getBookmarksByCollectionId(user.id);
-	const bookmarkIds = Object.keys(bookmarks);
-	const readHistoryIds = sortAndFilter(user.paperActivities ?? [])?.map(
-		(paper) => paper.paperId,
-	);
-
-	return [bookmarkIds, readHistoryIds];
+	return fetchUser(userId).then(async (user) => {
+		if (!user) {
+			return [];
+		}
+		const bookmarkIds = await getBookmarksByUser(user);
+		const readHistoryIds = getHistoryByUser(user);
+		return [bookmarkIds, readHistoryIds];
+	});
 }
