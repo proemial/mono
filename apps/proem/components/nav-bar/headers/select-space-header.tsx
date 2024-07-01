@@ -50,13 +50,20 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 					onValueChange={handleValueChange}
 					value={selectedSpace as string}
 				>
-					<SelectTrigger className="flex gap-2 text-lg border-none">
+					<SelectTrigger className="flex gap-2 text-lg border-none min-w-40">
 						<SelectValue />
 					</SelectTrigger>
-					<SelectContent>
-						<SelectGroup>
+					<SelectContent
+						align="center"
+						className="border-none shadow-2xl min-w-64 max-w-80 rounded-xl"
+					>
+						<SelectGroup className="p-0 divide-y">
 							{allCollections.map((collection) => (
-								<SelectItem key={collection.id} value={collection.id}>
+								<SelectItem
+									key={collection.id}
+									value={collection.id}
+									className="py-2 text-base cursor-pointer"
+								>
 									{collection.name}
 								</SelectItem>
 							))}
