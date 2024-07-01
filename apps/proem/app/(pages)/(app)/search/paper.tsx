@@ -4,6 +4,7 @@ import { OpenAlexWorkMetadata } from "@proemial/repositories/oa/models/oa-paper"
 import { Users01 } from "@untitled-ui/icons-react";
 import { Bookmarks } from "../space/(discover)/add-to-collection-button";
 import { FeedItemCard } from "../space/(discover)/feed-item-card";
+import { Button, buttonVariants } from "@proemial/shadcn-ui";
 
 export function Paper({
 	paper,
@@ -12,8 +13,6 @@ export function Paper({
 	if (!paper) {
 		return null;
 	}
-
-	console.log("paper.abstract_inverted_index", paper.abstract_inverted_index);
 
 	return (
 		<div className="space-y-3 bg-white dark:bg-primary rounded-lg p-4">
