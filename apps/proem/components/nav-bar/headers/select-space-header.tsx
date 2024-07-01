@@ -50,7 +50,7 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 					onValueChange={handleValueChange}
 					value={selectedSpace as string}
 				>
-					<SelectTrigger className="flex gap-2 text-lg border-none min-w-40">
+					<SelectTrigger className="flex gap-2 text-lg border-none">
 						<SelectValue />
 					</SelectTrigger>
 					<SelectContent
