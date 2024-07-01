@@ -91,10 +91,10 @@ async function getHistory(userId: string) {
 	}
 }
 
-async function getFilter(history: string[][]) {
+async function getFilter(history?: string[][] | null) {
 	const begin = Time.now();
 	try {
-		const fingerprints = await fetchFingerprints(...history);
+		const fingerprints = history && (await fetchFingerprints(...history));
 		const { filter } = getFeatureFilter(fingerprints);
 
 		return filter;
