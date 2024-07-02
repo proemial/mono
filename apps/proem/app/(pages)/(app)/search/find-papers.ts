@@ -34,9 +34,9 @@ export async function findPapers(query: string) {
 			const typeFilter = "type:types/preprint|types/article";
 			const queries = [
 				`${oaBaseUrl}?${oaBaseArgs}&filter=doi:${query}`,
-				// `${oaBaseUrl}?${oaBaseArgs}&filter=locations.landing_page_url:http://arxiv.org/abs/${query}|https://arxiv.org/abs/${query}|${query}`,
+				`${oaBaseUrl}?${oaBaseArgs}&filter=locations.landing_page_url:http://arxiv.org/abs/${query}|https://arxiv.org/abs/${query}|${query}`,
 				`${oaBaseUrl}?${oaBaseArgs}&filter=${typeFilter},title.search:${query}`,
-				// `${oaBaseUrl}?${oaBaseArgs}&filter=title.search:${query}`,
+				`${oaBaseUrl}?${oaBaseArgs}&filter=title.search:${query}`,
 			];
 
 			for (let i = 0; i < queries.length; i++) {
