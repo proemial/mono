@@ -62,7 +62,7 @@ export function PaperCard({
 					</CardDescription>
 				)}
 			</div>
-			{isBookmarked && paperId && fromTrackingKey ? (
+			{paperId && fromTrackingKey ? (
 				<div
 					className="-ml-2.5 -mb-2.5 self-start"
 					onClick={(event) => {
