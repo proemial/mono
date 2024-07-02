@@ -16,3 +16,6 @@ export const getPersonalDefaultCollection = (userId: string) =>
 	}) satisfies Collection;
 export const getBookmarkCacheTag = (collectionId: Collection["id"]) =>
 	`bookmarks:${collectionId}`;
+
+export const getBookmarkedPapersCacheTag = (collectionId: Collection["id"]) =>
+	`bookmarked-papers:${collectionId}`;

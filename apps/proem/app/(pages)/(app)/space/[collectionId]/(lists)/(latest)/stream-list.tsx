@@ -1,18 +1,16 @@
 "use client";
 
-import FeedItem, {
-	FeedItemProps,
-} from "@/app/(pages)/(app)/space/(discover)/feed-item";
+import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
 import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
 import { InfinityScrollList } from "@/components/infinity-scroll-list";
 
 type FetchFeedByFeaturesProps = Required<
 	Parameters<typeof fetchFeedByFeatures>[0]
 >;
-export type StreamListProps = Pick<FeedItemProps, "bookmarks"> &
-	FetchFeedByFeaturesProps & {
-		id: string;
-	};
+export type StreamListProps = FetchFeedByFeaturesProps & {
+	id: string;
+	bookmarks?: string[];
+};
 
 export function StreamList({ id, bookmarks, features, days }: StreamListProps) {
 	return (
@@ -40,8 +38,10 @@ export function StreamList({ id, bookmarks, features, days }: StreamListProps) {
 					<FeedItem
 						paper={row.paper}
 						fingerprint={row.features}
-						bookmarks={bookmarks}
 						customCollectionId={id}
+						isBookmarked={Boolean(
+							bookmarks?.some((bookmarkId) => row.paper.id === bookmarkId),
+						)}
 					>
 						{/* TODO! add debug mode */}
 						{/* {debug && (

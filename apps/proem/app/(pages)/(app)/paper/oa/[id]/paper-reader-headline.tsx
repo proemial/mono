@@ -8,10 +8,10 @@ import { File02 } from "@untitled-ui/icons-react";
 
 export type PaperReaderHeadlineProps = Pick<
 	AddToCollectionButtonProps,
-	"bookmarks" | "paperId" | "customCollectionId"
+	"isBookmarked" | "paperId" | "customCollectionId"
 >;
 export function PaperReaderHeadline({
-	bookmarks,
+	isBookmarked,
 	paperId,
 	customCollectionId,
 }: PaperReaderHeadlineProps) {
@@ -27,7 +27,7 @@ export function PaperReaderHeadline({
 				}}
 			>
 				<AddToCollectionButton
-					bookmarks={bookmarks}
+					isBookmarked={isBookmarked}
 					paperId={paperId}
 					fromTrackingKey="fromRead"
 					customCollectionId={customCollectionId}

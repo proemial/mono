@@ -1,14 +1,14 @@
 "use client";
-import FeedItem, {
-	FeedItemProps,
-} from "@/app/(pages)/(app)/space/(discover)/feed-item";
+import { Bookmarks } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
+import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode } from "react";
 
-type StaticFeedProps = Pick<FeedItemProps, "bookmarks"> & {
+type StaticFeedProps = {
 	feed: OpenAlexPaper[];
 	children: ReactNode;
+	bookmarks: Bookmarks;
 };
 
 export function StaticFeed({ feed, children, bookmarks }: StaticFeedProps) {
@@ -42,6 +42,7 @@ export function StaticFeed({ feed, children, bookmarks }: StaticFeedProps) {
 						if (!paper) {
 							return null;
 						}
+						const isBookmarked = Boolean(bookmarks?.[paper.id] ?? false);
 
 						return (
 							<div
@@ -50,7 +51,7 @@ export function StaticFeed({ feed, children, bookmarks }: StaticFeedProps) {
 								data-index={virtualRow.index}
 								className="py-5"
 							>
-								<FeedItem paper={paper} bookmarks={bookmarks} />
+								<FeedItem paper={paper} isBookmarked={isBookmarked} />
 							</div>
 						);
 					})}

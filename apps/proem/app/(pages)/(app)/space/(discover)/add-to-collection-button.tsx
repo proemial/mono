@@ -1,11 +1,11 @@
 "use client";
-import { addPaperToExistingCollection } from "@/app/(pages)/(app)/space/(discover)/bookmark-paper";
+import { togglePaperInCollection } from "@/app/(pages)/(app)/space/(discover)/bookmark-paper";
 import { AddButton, AddButtonSkeleton } from "@/components/add-button";
 import {
-	CollectionSelectorProps,
-	showCollectionNotification,
-	showCollectionSelector,
-} from "@/components/show-collection-notification";
+	analyticsKeys,
+	trackHandler,
+} from "@/components/analytics/tracking/tracking-keys";
+import { CollectionSelectorProps } from "@/components/show-collection-notification";
 import { SignInDrawer } from "@/components/sign-in-drawer";
 import { useUser } from "@clerk/nextjs";
 import { useOptimistic } from "react";
@@ -18,60 +18,52 @@ export type AddToCollectionButtonProps = Pick<
 	"fromTrackingKey"
 > & {
 	paperId: PaperId;
-	bookmarks: Bookmarks;
+	/**
+	 * @deprecated use isBookmarked instead
+	 */
+	bookmarks?: Bookmarks;
+	isBookmarked?: boolean;
 	customCollectionId?: CollectionId;
+	onClick?: (isEnabled: boolean) => void;
 };
 
 export function AddToCollectionButton({
 	paperId,
-	bookmarks,
 	customCollectionId,
 	fromTrackingKey,
+	onClick,
+	isBookmarked = false,
 }: AddToCollectionButtonProps) {
 	const { user } = useUser();
+
+	const [optimisticBookmark, addOptimisticBookmark] = useOptimistic<
+		boolean,
+		boolean
+	>(isBookmarked, (_, isEnabled) => isEnabled);
+
 	if (!user) {
 		return <SignInDrawer trigger={<AddButtonSkeleton />} />;
 	}
 	const collectionId = customCollectionId ?? user.id;
 
-	const [optimisticBookmarks, addOptimisticBookmarks] = useOptimistic<
-		Bookmarks,
-		{ paperId: PaperId }
-	>(bookmarks, (state, { paperId }) => ({
-		...state,
-		[paperId]: [collectionId],
-	}));
-
-	const currentBookmark = optimisticBookmarks[paperId];
-	const isBookmarked = Boolean(currentBookmark);
-
 	return (
 		<AddButton
-			isChecked={isBookmarked}
+			isChecked={optimisticBookmark}
 			onClick={async () => {
-				const bookmark = {
+				onClick?.(isBookmarked);
+				const isEnabled = !isBookmarked;
+				addOptimisticBookmark(isEnabled);
+				await togglePaperInCollection({
 					paperId,
-					fromTrackingKey,
-					bookmarks: currentBookmark,
-				};
-				if (isBookmarked) {
-					showCollectionSelector(bookmark);
-					return;
-				}
-
-				addOptimisticBookmarks({ paperId });
-				const newBookmarksCollectionId = collectionId;
-				const optimisticBookmarksWithExtraOptimism = {
-					...optimisticBookmarks,
-					[paperId]: [newBookmarksCollectionId],
-				}[paperId];
-
-				showCollectionNotification({
-					...bookmark,
-					newBookmarksCollectionId,
-					bookmarks: optimisticBookmarksWithExtraOptimism,
+					collectionId,
+					isEnabled,
 				});
-				await addPaperToExistingCollection({ paperId, collectionId });
+
+				trackHandler(
+					isEnabled
+						? analyticsKeys.collection.addPaper[fromTrackingKey]
+						: analyticsKeys.collection.removePaper[fromTrackingKey],
+				)();
 			}}
 		/>
 	);

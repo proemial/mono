@@ -16,7 +16,7 @@ import { use } from "react";
 import { PaperPost, paperPostsToMessages } from "../../paper-post-utils";
 import { addPaperActivity } from "./paper-activity";
 
-type PaperReaderProps = Pick<PaperReaderHeadlineProps, "bookmarks"> & {
+type PaperReaderProps = Pick<PaperReaderHeadlineProps, "isBookmarked"> & {
 	fetchedPaperPromise: Promise<Omit<OpenAlexPaper, "generated">>;
 	generatedPaperPromise: Promise<OpenAlexPaper>;
 	paperPosts: PaperPost[];
@@ -28,7 +28,7 @@ export function PaperReader({
 	fetchedPaperPromise,
 	generatedPaperPromise,
 	paperPosts,
-	bookmarks,
+	isBookmarked,
 	type,
 	collectionId,
 }: PaperReaderProps) {
@@ -49,7 +49,7 @@ export function PaperReader({
 					trigger={
 						<PaperReaderHeadline
 							paperId={fetchedPaper.id}
-							bookmarks={bookmarks}
+							isBookmarked={isBookmarked}
 							customCollectionId={collectionId}
 						/>
 					}

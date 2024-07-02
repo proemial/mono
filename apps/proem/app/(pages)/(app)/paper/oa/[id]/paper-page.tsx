@@ -48,11 +48,12 @@ export default async function PaperPage({
 	if (paperPosts.length === 0) {
 		paperPosts = await getOwnPaperPosts(paperId);
 	}
+	const isBookmarked = Boolean(bookmarks[paperId]);
 
 	return (
 		<Suspense fallback={<PaperReaderSkeleton />}>
 			<PaperReader
-				bookmarks={bookmarks}
+				isBookmarked={isBookmarked}
 				fetchedPaperPromise={fetchedPaperPromise}
 				generatedPaperPromise={generatedPaperPromise}
 				paperPosts={paperPosts}

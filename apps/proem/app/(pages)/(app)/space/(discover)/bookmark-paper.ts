@@ -2,6 +2,7 @@
 
 import {
 	getBookmarkCacheTag,
+	getBookmarkedPapersCacheTag,
 	getPersonalDefaultCollection,
 } from "@/app/constants";
 import { streamCacheUpdate } from "@/inngest/populator.task";
@@ -126,24 +127,27 @@ export async function togglePaperInCollection(
 	if (!userId) {
 		return;
 	}
-
-	if (isEnabled) {
-		await neonDb
-			.insert(collectionsToPapers)
-			.values({ collectionsId: collectionId, paperId })
-			.onConflictDoNothing();
-	} else {
-		await neonDb
-			.delete(collectionsToPapers)
-			.where(
-				and(
-					eq(collectionsToPapers.paperId, paperId),
-					eq(collectionsToPapers.collectionsId, collectionId),
-				),
-			);
+	// TODO! Consider moving to better?
+	await ensurePaperIsSummarized(paperId);
+	await ensurePaperExistsInDb(paperId);
+	if (collectionId === userId) {
+		// This is necessary because the default collection is created lazily
+		await ensureDefaultCollectionExistsInDb(userId);
 	}
+	console.log({ paperId, collectionId });
 
-	revalidateTag(getBookmarkCacheTag(collectionId));
-	waitUntil(streamCacheUpdate.run(userId, "user"));
+	console.log({ collectionsId: collectionId, paperId });
+	const test = await neonDb
+		.insert(collectionsToPapers)
+		.values({ collectionsId: collectionId, paperId, isEnabled })
+		.onConflictDoUpdate({
+			target: [collectionsToPapers.paperId, collectionsToPapers.collectionsId],
+			set: { isEnabled },
+		});
+
+	console.log(test);
+	// revalidateTag(getBookmarkedPapersCacheTag(collectionId));
+	// revalidateTag(getBookmarkCacheTag(collectionId));
+	// waitUntil(streamCacheUpdate.run(userId, "user"));
 	return {};
 }
