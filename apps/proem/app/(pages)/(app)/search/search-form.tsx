@@ -33,7 +33,6 @@ export function SearchForm({
 		initialSearchResults,
 	);
 	const [isFocused, setIsFocused] = useState(false);
-	const [inputValue, setInputValue] = useState(searchQuery ?? "");
 
 	const { keyboardUp } = useVisualViewport();
 	useEffect(() => {
@@ -60,8 +59,7 @@ export function SearchForm({
 					state={state}
 					bookmarks={bookmarks}
 					collectionId={collectionId}
-					inputValue={inputValue}
-					setInputValue={setInputValue}
+					defaultValue={searchQuery ?? ""}
 				/>
 			</form>
 		</>
@@ -78,24 +76,25 @@ function FormInputs({
 	state,
 	bookmarks,
 	collectionId,
-	inputValue,
-	setInputValue,
+	defaultValue,
 }: {
 	state: OptionalResult;
 	bookmarks: Bookmarks;
 	collectionId?: Collection["id"];
-	inputValue: string;
-	setInputValue: (s: string) => void;
+	defaultValue: string;
 }) {
-	const { pending } = useFormStatus();
+	const { pending, data } = useFormStatus();
 	const router = useRouter();
 
 	useEffect(() => {
 		// Update the URL query param when the search results are back
-		if (!pending && state) {
-			router.replace(`?query=${encodeURIComponent(inputValue)}`);
+		if (data && pending) {
+			const query = data.get("query");
+			if (query) {
+				router.replace(`?query=${encodeURIComponent(query.toString())}`);
+			}
 		}
-	}, [pending, state, inputValue, router]);
+	}, [data, pending, router]);
 
 	return (
 		<>
@@ -103,12 +102,11 @@ function FormInputs({
 				<div className="flex items-center w-full border text-foreground bg-card border-background rounded-3xl">
 					<input
 						name="query"
+						defaultValue={defaultValue}
 						placeholder="Search for a paper title or DOI"
 						className="w-full h-12 pl-6 resize-none flex items-center text-lg bg-card placeholder:opacity-40 placeholder:text-[#2b2b2b] dark:placeholder:text-[#e5e5e5] rounded-l-3xl outline-none"
 						maxLength={chatInputMaxLength}
 						disabled={pending}
-						value={inputValue}
-						onChange={(e) => setInputValue(e.target.value)}
 					/>
 					<Button
 						disabled={pending}
