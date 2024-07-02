@@ -18,7 +18,7 @@ dayjs.extend(relativeTime);
 
 export type FeedItemProps = Pick<
 	FeedItemCardProps,
-	"isBookmarked" | "customCollectionId"
+	"isBookmarked" | "customCollectionId" | "onBookmarkToggleClick"
 > & {
 	paper: OpenAlexPaper;
 	fingerprint?: RankedPaperFeature[];
@@ -33,69 +33,38 @@ export default function FeedItem({
 	children,
 	isBookmarked,
 	customCollectionId,
+	onBookmarkToggleClick,
 }: FeedItemProps) {
-	// TODO! This has to work on /latest page
-	const [isDisabled, setIsDisabled] = useState(false);
-	const onBookmarkToggleClick = (isDisabled: boolean) =>
-		setIsDisabled(isDisabled);
 	const tags = paper.data.topics
 		?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
 		.filter(Boolean) as string[];
 
 	return (
-		<div className="relative">
-			{isDisabled && (
-				<div className="absolute top-0 left-0 z-10 flex items-center justify-center w-full h-full">
-					{customCollectionId && (
-						<Button
-							type="button"
-							variant="default"
-							className="bg-white pointer-events-auto dark:bg-primary drop-shadow-xl hover:drop-shadow-lg"
-							onClick={async () => {
-								setIsDisabled(false);
-								await togglePaperInCollection({
-									paperId: paper.id,
-									collectionId: customCollectionId,
-									isEnabled: true,
-								});
-							}}
-						>
-							BRING BACK BOOKMARK
-						</Button>
-					)}
-				</div>
-			)}
-
-			<div
-				className={cn("z-0 space-y-3", {
-					"opacity-50 pointer-events-auto  blur-sm": isDisabled,
-				})}
+		<div className={cn("z-0 space-y-3", {})}>
+			<FeedItemCard
+				isBookmarked={isBookmarked}
+				id={paper.id}
+				onBookmarkToggleClick={onBookmarkToggleClick}
+				date={paper.data.publication_date}
+				topics={paper.data.topics}
+				provider={provider}
+				customCollectionId={customCollectionId}
+				hasAbstract={!!paper.data.abstract}
 			>
-				<FeedItemCard
-					isBookmarked={isBookmarked}
-					id={paper.id}
-					onBookmarkToggleClick={onBookmarkToggleClick}
-					date={paper.data.publication_date}
-					topics={paper.data.topics}
-					provider={provider}
-					customCollectionId={customCollectionId}
-					hasAbstract={!!paper.data.abstract}
-				>
-					<Markdown>
-						{paper.generated?.title
-							? trimForQuotes(paper.generated.title)
-							: paper.data.title}
-					</Markdown>
-				</FeedItemCard>
+				<Markdown>
+					{paper.generated?.title
+						? trimForQuotes(paper.generated.title)
+						: paper.data.title}
+				</Markdown>
+			</FeedItemCard>
 
-				{children}
+			{children}
 
-				<div className="flex gap-2 overflow-x-auto scrollbar-hide">
-					{!fingerprint &&
-						tags?.map((tag) => <FeedItemTag key={tag} tag={tag} />)}
+			<div className="flex gap-2 overflow-x-auto scrollbar-hide">
+				{!fingerprint &&
+					tags?.map((tag) => <FeedItemTag key={tag} tag={tag} />)}
 
-					{fingerprint && <FeatureTags features={fingerprint} />}
-				</div>
+				{fingerprint && <FeatureTags features={fingerprint} />}
 			</div>
 		</div>
 	);

@@ -1,6 +1,6 @@
 import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
-import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
 import { getBookmarkedPapersByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarked-papers-by-collection-id";
+import { FeedItemWithDisabledOverlay } from "@/app/(pages)/(app)/space/[collectionId]/(lists)/saved/feed-item-with-disabled-overlay";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { ProemAssistant } from "@/components/proem-assistant";
 import { auth } from "@clerk/nextjs";
@@ -39,7 +39,7 @@ export default async function SavedPage({ params }: SavedPageProps) {
 					if (!paper) return null;
 					const isBookmarked = paperIds?.includes(paper.id) ?? false;
 					return (
-						<FeedItem
+						<FeedItemWithDisabledOverlay
 							key={paper.id}
 							paper={paper}
 							isBookmarked={isBookmarked}
