@@ -22,34 +22,6 @@ import { z } from "zod";
 import { fetchPaper } from "../../paper/oa/[id]/fetch-paper";
 import { generate } from "../../paper/oa/[id]/llm-generate";
 
-const addPaperToExistingCollectionParaps = z.object({
-	paperId: z.string(),
-	collectionId: z.string(),
-});
-
-export async function addPaperToExistingCollection(
-	params: z.infer<typeof addPaperToExistingCollectionParaps>,
-) {
-	const { userId } = auth();
-	const { paperId, collectionId } =
-		addPaperToExistingCollectionParaps.parse(params);
-	if (!userId) {
-		return;
-	}
-	await ensurePaperIsSummarized(paperId);
-	await ensurePaperExistsInDb(paperId);
-	if (collectionId === userId) {
-		// This is necessary because the default collection is created lazily
-		await ensureDefaultCollectionExistsInDb(userId);
-	}
-	await neonDb
-		.insert(collectionsToPapers)
-		.values({ collectionsId: collectionId, paperId });
-
-	revalidateTag(getBookmarkCacheTag(collectionId));
-	waitUntil(streamCacheUpdate.run(userId, "user"));
-}
-
 const addPaperToCollectionParams = z.object({
 	paperId: z.string(),
 	collection: createInsertSchema(collections),
@@ -76,6 +48,7 @@ export async function addPaperToNewCollection(
 	});
 
 	revalidateTag(getBookmarkCacheTag(existingCollection.id));
+	revalidateTag(getBookmarkedPapersCacheTag(existingCollection.id));
 	waitUntil(streamCacheUpdate.run(userId, "user"));
 	return {};
 }
