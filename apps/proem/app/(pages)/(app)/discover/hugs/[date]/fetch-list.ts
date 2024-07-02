@@ -2,6 +2,7 @@
 
 import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { generate } from "@/app/(pages)/(app)/paper/oa/[id]/llm-generate";
+import { waitFor } from "@/utils/sleep";
 import { Redis } from "@proemial/redis/redis";
 
 type DailyPaper = {
@@ -39,7 +40,7 @@ export async function fetchReadingList(date: string) {
 
 		if (paper && !paper.generated) {
 			await generate(paper);
-			await waitfor(500);
+			await waitFor(500);
 		}
 	}
 
@@ -57,12 +58,4 @@ export async function fetchReadingList(date: string) {
 	);
 
 	return { rows: cachedPapers };
-}
-
-function waitfor(millis: number) {
-	return new Promise((resolve) => {
-		setTimeout(() => {
-			resolve("");
-		}, millis);
-	});
 }

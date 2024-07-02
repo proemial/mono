@@ -45,8 +45,6 @@ export function SearchForm({
 		trackHandler(`${analyticsKeys.search.submit.query}`)();
 	};
 
-	console.log("state", state);
-
 	return (
 		<>
 			<form

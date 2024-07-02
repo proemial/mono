@@ -1,9 +1,11 @@
 "use server";
+import { waitFor } from "@/utils/sleep";
 import {
 	OpenAlexWorkMetadata,
 	oaBaseArgs,
 	oaBaseUrl,
 } from "@proemial/repositories/oa/models/oa-paper";
+import { Time } from "@proemial/utils/time";
 import dayjs from "dayjs";
 import { unstable_cache } from "next/cache";
 
@@ -27,23 +29,24 @@ export async function findPapers(query: string) {
 	// every time a user changes between spaces on the search page.
 	return unstable_cache(
 		async () => {
-			const today = dayjs().format("YYYY-MM-DD");
-			const oaFilter = [
-				"type:types/preprint|types/article",
-				"has_abstract:true",
-				`publication_date:<${today}`, // We do not want papers published in the future
-				"language:en",
-				"open_access.is_oa:true",
-			]
-				.filter((f) => !!f)
-				.join(",");
+			const papers = [] as OpenAlexWorkMetadata[];
 
-			const byDoi = await findByDoi(query);
-			const byArxiv = await findByArxiv(query);
-			const byTitle = await findByTitle(query, oaFilter);
+			const typeFilter = "type:types/preprint|types/article";
+			const queries = [
+				`${oaBaseUrl}?${oaBaseArgs}&filter=doi:${query}`,
+				`${oaBaseUrl}?${oaBaseArgs}&filter=locations.landing_page_url:http://arxiv.org/abs/${query}|https://arxiv.org/abs/${query}|${query}`,
+				`${oaBaseUrl}?${oaBaseArgs}&filter=${typeFilter},title.search:${query}`,
+				`${oaBaseUrl}?${oaBaseArgs}&filter=title.search:${query}`,
+			];
 
-			const papers = [...byDoi.results, ...byArxiv.results, ...byTitle.results];
-
+			for (let i = 0; i < queries.length; i++) {
+				const result = await safeFetchSearchResults(queries[i] as string);
+				if (result?.results?.length) {
+					papers.push(...(result?.results ?? []));
+					break;
+				}
+				await waitFor((i + 1) * 100);
+			}
 			return {
 				results: papers.map((paper) => ({
 					...paper,
@@ -64,38 +67,30 @@ const safeFetchSearchResults = async (
 	url: string,
 	options: RequestInit = {},
 ) => {
+	const begin = Time.now();
 	const fetchResult = await fetch(url, {
 		headers: {
 			Accept: "application/json",
 		},
 		...options,
 	});
+	console.log(
+		`[${dayjs(begin).format("HH.mm:ss.SSS")}] `,
+		url,
+		fetchResult.status,
+		fetchResult.statusText,
+	);
+
 	try {
 		return fetchResult.json() as Promise<Result>;
 	} catch (error) {
 		console.error("Error fetching search results", error);
+		console.log(
+			fetchResult.status,
+			fetchResult.statusText,
+			await fetchResult.text(),
+		);
+
 		return { results: [] };
 	}
 };
-
-function findByArxiv(query: string): Promise<Result> {
-	return safeFetchSearchResults(
-		`${oaBaseUrl}?${oaBaseArgs}&filter=locations.landing_page_url:http://arxiv.org/abs/${query}|https://arxiv.org/abs/${query}|${query}`,
-	);
-}
-
-function findByDoi(query: string): Promise<Result> {
-	// This regexp doesn't support doi as url: https://doi.org/10.1111/1475-6773.14324
-	// if (!query.match(/^10.\d{4,9}\/[-._;()/:A-Z0-9]+$/i)) {
-	// 	return { results: [] };
-	// }
-	return safeFetchSearchResults(
-		`${oaBaseUrl}?${oaBaseArgs}&filter=doi:${query}`,
-	);
-}
-
-function findByTitle(query: string, baseFilter: string): Promise<Result> {
-	return safeFetchSearchResults(
-		`${oaBaseUrl}?${oaBaseArgs}&filter=${baseFilter},title.search:${query}`,
-	);
-}
