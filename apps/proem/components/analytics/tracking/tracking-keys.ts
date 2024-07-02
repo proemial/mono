@@ -67,6 +67,7 @@ export const analyticsKeys = {
 				search: "header:search:click",
 				simple: "header:simple:click",
 				changeSpace: "header:change-space:click",
+				back: "header:back:click",
 			},
 		},
 	},
