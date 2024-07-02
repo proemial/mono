@@ -50,8 +50,8 @@ export function AddToCollectionButton({
 		<AddButton
 			isChecked={optimisticBookmark}
 			onClick={async () => {
-				onClick?.(isBookmarked);
-				const isEnabled = !isBookmarked;
+				onClick?.(optimisticBookmark);
+				const isEnabled = !optimisticBookmark;
 
 				if (revalidateCache) {
 					addOptimisticBookmark(isEnabled);
