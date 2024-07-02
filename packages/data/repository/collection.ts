@@ -1,6 +1,6 @@
 import { and, asc, eq, inArray, notInArray, or } from "drizzle-orm";
 import { neonDb } from "..";
-import { Collection, collections } from "../neon/schema";
+import { Collection, collections, collectionsToPapers } from "../neon/schema";
 
 /**
  * Returns the user's own collections and public collections of org members.
@@ -57,6 +57,7 @@ export const findCollectionWithPaperIdsBySlug = async (
 		where: eq(collections.id, id),
 		with: {
 			collectionsToPapers: {
+				where: eq(collectionsToPapers.isEnabled, true),
 				columns: {
 					paperId: true,
 				},

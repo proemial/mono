@@ -41,6 +41,7 @@ export default async function PaperPage({
 	const bookmarks = userId
 		? await getBookmarksByCollectionId(collectionId ?? userId)
 		: {};
+	const isBookmarked = Boolean(bookmarks[paperId]);
 
 	// Get paper posts from org members, or user's own posts if there are none
 	let paperPosts: PaperPost[] = [];
@@ -48,7 +49,6 @@ export default async function PaperPage({
 	if (paperPosts.length === 0) {
 		paperPosts = await getOwnPaperPosts(paperId);
 	}
-	const isBookmarked = Boolean(bookmarks[paperId]);
 
 	return (
 		<Suspense fallback={<PaperReaderSkeleton />}>
