@@ -22,12 +22,12 @@ export function FeedItemWithDisabledOverlay({
 			{isDisabled && (
 				<div className="absolute top-0 left-0 z-10 flex items-center justify-center w-full h-full">
 					{customCollectionId && (
-						<div className="bg-background shadow rounded-xl flex justify-between gap-5 items-center py-0.5 pl-2.5">
+						<div className="bg-white shadow rounded-xl flex justify-between gap-5 items-center py-1 pl-3.5">
 							<span className="text-sm">This paper has been removed</span>
 
 							<Button
 								variant="ghost"
-								className="p-2.5 text-sm underline"
+								className="text-sm underline"
 								onClick={async () => {
 									onBookmarkToggleClick(false);
 									await togglePaperInCollection({
