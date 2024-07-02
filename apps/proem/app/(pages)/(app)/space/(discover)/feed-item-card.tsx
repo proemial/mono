@@ -12,13 +12,13 @@ import { Trackable } from "@/components/trackable";
 import { routes } from "@/routes";
 import { Prefix } from "@proemial/redis/adapters/papers";
 import { OpenAlexTopic } from "@proemial/repositories/oa/models/oa-paper";
+import { AlertTriangle } from "@untitled-ui/icons-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 import { FeedItemField } from "./feed-item-field";
-import { AlertTriangle } from "@untitled-ui/icons-react";
 
 dayjs.extend(relativeTime);
 
@@ -45,9 +45,10 @@ export const FeedItemCard = ({
 	hasAbstract,
 }: FeedItemCardProps) => {
 	const pathname = usePathname();
-	const spaceSpecificPrefix = pathname.includes(routes.space)
-		? `${routes.space}/${pathname.split("/")[2]}`
-		: "";
+	const spaceSpecificPrefix =
+		pathname.includes(routes.space) && customCollectionId
+			? `${routes.space}/${pathname.split("/")[2]}`
+			: "";
 	return (
 		<div className="flex flex-col gap-3">
 			{hasAbstract && (
