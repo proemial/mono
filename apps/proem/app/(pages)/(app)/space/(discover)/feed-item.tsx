@@ -40,7 +40,7 @@ export default function FeedItem({
 		.filter(Boolean) as string[];
 
 	return (
-		<div className={cn("z-0 space-y-3", {})}>
+		<div className="space-y-3">
 			<FeedItemCard
 				isBookmarked={isBookmarked}
 				id={paper.id}

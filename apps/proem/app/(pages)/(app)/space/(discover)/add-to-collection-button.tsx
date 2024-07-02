@@ -35,7 +35,7 @@ export function AddToCollectionButton({
 	isBookmarked = false,
 }: AddToCollectionButtonProps) {
 	const { user } = useUser();
-
+	const revalidateCache = !onClick;
 	const [optimisticBookmark, addOptimisticBookmark] = useOptimistic<
 		boolean,
 		boolean
@@ -52,11 +52,16 @@ export function AddToCollectionButton({
 			onClick={async () => {
 				onClick?.(isBookmarked);
 				const isEnabled = !isBookmarked;
-				addOptimisticBookmark(isEnabled);
+
+				if (revalidateCache) {
+					addOptimisticBookmark(isEnabled);
+				}
+
 				await togglePaperInCollection({
 					paperId,
 					collectionId,
 					isEnabled,
+					revalidateCache,
 				});
 
 				trackHandler(

@@ -115,13 +115,15 @@ const togglePaperInCollectionParams = z.object({
 	paperId: z.string(),
 	collectionId: z.string(),
 	isEnabled: z.boolean(),
+	// TODO: Hacky solution
+	revalidateCache: z.boolean().optional(),
 });
 
 export async function togglePaperInCollection(
 	params: z.infer<typeof togglePaperInCollectionParams>,
 ) {
 	const { userId } = auth();
-	const { paperId, collectionId, isEnabled } =
+	const { paperId, collectionId, isEnabled, revalidateCache } =
 		togglePaperInCollectionParams.parse(params);
 
 	if (!userId) {
@@ -134,10 +136,8 @@ export async function togglePaperInCollection(
 		// This is necessary because the default collection is created lazily
 		await ensureDefaultCollectionExistsInDb(userId);
 	}
-	console.log({ paperId, collectionId });
 
-	console.log({ collectionsId: collectionId, paperId });
-	const test = await neonDb
+	await neonDb
 		.insert(collectionsToPapers)
 		.values({ collectionsId: collectionId, paperId, isEnabled })
 		.onConflictDoUpdate({
@@ -145,9 +145,11 @@ export async function togglePaperInCollection(
 			set: { isEnabled },
 		});
 
-	console.log(test);
-	// revalidateTag(getBookmarkedPapersCacheTag(collectionId));
-	// revalidateTag(getBookmarkCacheTag(collectionId));
-	// waitUntil(streamCacheUpdate.run(userId, "user"));
+	if (revalidateCache !== false) {
+		revalidateTag(getBookmarkedPapersCacheTag(collectionId));
+		revalidateTag(getBookmarkCacheTag(collectionId));
+		waitUntil(streamCacheUpdate.run(userId, "user"));
+	}
+
 	return {};
 }

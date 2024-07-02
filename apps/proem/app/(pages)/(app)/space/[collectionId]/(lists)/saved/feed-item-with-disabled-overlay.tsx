@@ -22,21 +22,26 @@ export function FeedItemWithDisabledOverlay({
 			{isDisabled && (
 				<div className="absolute top-0 left-0 z-10 flex items-center justify-center w-full h-full">
 					{customCollectionId && (
-						<Button
-							type="button"
-							variant="default"
-							className="bg-white pointer-events-auto dark:bg-primary drop-shadow-xl hover:drop-shadow-lg"
-							onClick={async () => {
-								onBookmarkToggleClick(false);
-								await togglePaperInCollection({
-									paperId: paper.id,
-									collectionId: customCollectionId,
-									isEnabled: true,
-								});
-							}}
-						>
-							BRING BACK BOOKMARK
-						</Button>
+						<div className="flex items-center gap-5">
+							<p className="font-medium">This paper has been removed.</p>
+							<Button
+								type="button"
+								variant="default"
+								size="sm"
+								className="bg-white pointer-events-auto dark:bg-primary drop-shadow-xl hover:drop-shadow-lg"
+								onClick={async () => {
+									onBookmarkToggleClick(false);
+									await togglePaperInCollection({
+										paperId: paper.id,
+										collectionId: customCollectionId,
+										isEnabled: true,
+										revalidateCache: false,
+									});
+								}}
+							>
+								Undo
+							</Button>
+						</div>
 					)}
 				</div>
 			)}
