@@ -103,7 +103,6 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 									</div>
 								</div>
 
-								<NotificationsToaster />
 								<Analytics.Clients tracking={trackingInput} />
 							</ReactQueryProvider>
 						</Analytics.PostHog>
