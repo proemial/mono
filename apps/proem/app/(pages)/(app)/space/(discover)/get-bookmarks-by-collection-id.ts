@@ -8,6 +8,9 @@ import {
 import { eq } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 
+/**
+ * @deprecated use {@link getBookmarkedPapersCacheTag} instead
+ */
 export const getBookmarksByCollectionId = (collectionId: Collection["id"]) =>
 	unstable_cache(
 		async () => {
