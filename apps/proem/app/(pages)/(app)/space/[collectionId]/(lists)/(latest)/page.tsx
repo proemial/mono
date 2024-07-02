@@ -4,6 +4,7 @@ import { getPaperIdsForCollection } from "@/app/(pages)/(app)/space/[collectionI
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
+import { ProemAssistant } from "@/components/proem-assistant";
 import { auth } from "@clerk/nextjs";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
@@ -43,11 +44,14 @@ export default async function LatestPage({ params }: LatestPageProps) {
 
 	const { filter: features } = getFeatureFilter(fingerprints);
 	return (
-		<StreamList
-			id={collectionId}
-			features={features}
-			days={FEED_DEFAULT_DAYS}
-			bookmarks={bookmarks}
-		/>
+		<>
+			<StreamList
+				id={collectionId}
+				features={features}
+				days={FEED_DEFAULT_DAYS}
+				bookmarks={bookmarks}
+			/>
+			<ProemAssistant />
+		</>
 	);
 }

@@ -3,6 +3,7 @@ import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { getPaperIdsForCollection } from "@/app/(pages)/(app)/space/[collectionId]/collection-utils";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
+import { ProemAssistant } from "@/components/proem-assistant";
 import { auth } from "@clerk/nextjs";
 import { notFound } from "next/navigation";
 
@@ -32,18 +33,21 @@ export default async function SavedPage({ params }: SavedPageProps) {
 		: [];
 
 	return (
-		<div className="mb-8 space-y-8">
-			{papers.map(
-				(paper) =>
-					paper && (
-						<FeedItem
-							key={paper.id}
-							paper={paper}
-							bookmarks={bookmarks}
-							customCollectionId={collectionId}
-						/>
-					),
-			)}
-		</div>
+		<>
+			<div className="mb-8 space-y-8">
+				{papers.map(
+					(paper) =>
+						paper && (
+							<FeedItem
+								key={paper.id}
+								paper={paper}
+								bookmarks={bookmarks}
+								customCollectionId={collectionId}
+							/>
+						),
+				)}
+			</div>
+			<ProemAssistant />
+		</>
 	);
 }

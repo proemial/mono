@@ -4,7 +4,6 @@ import { Main } from "@/components/main";
 import { ToggleSearchAction } from "@/components/nav-bar/actions/toggle-search-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { NavBar } from "@/components/nav-bar/nav-bar";
-import { ProemAssistant } from "@/components/proem-assistant";
 import { routes } from "@/routes";
 import {
 	OrganizationMembershipPublicUserData,
@@ -56,7 +55,6 @@ export default async function ({ params, children }: PageProps) {
 				<SelectSpaceHeader collections={userCollections} userId={userId} />
 			</NavBar>
 			<Main>{children}</Main>
-			<ProemAssistant />
 		</>
 	);
 }
