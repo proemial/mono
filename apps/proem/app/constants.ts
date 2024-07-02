@@ -14,5 +14,12 @@ export const getPersonalDefaultCollection = (userId: string) =>
 		description: "",
 		createdAt: new Date(),
 	}) satisfies Collection;
+
+/**
+ * @deprecated use {@link getBookmarkCacheTag} instead
+ */
 export const getBookmarkCacheTag = (collectionId: Collection["id"]) =>
 	`bookmarks:${collectionId}`;
+
+export const getBookmarkedPapersCacheTag = (collectionId: Collection["id"]) =>
+	`bookmarked-papers:${collectionId}`;

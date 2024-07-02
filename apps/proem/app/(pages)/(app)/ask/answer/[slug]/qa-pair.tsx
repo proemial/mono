@@ -1,6 +1,7 @@
 "use client";
 
 import { SHARED_ANSWER_TRANSACTION_ID } from "@/app/(pages)/(app)/share/constants";
+import { Bookmarks } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
 import {
 	AnswerEngineEvents,
 	findByEventType,
@@ -16,20 +17,21 @@ import { ChatQuestion } from "@/components/chat-question";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { Paper } from "@/components/icons/Paper";
-import { PaperCardAsk, PaperCardAskProps } from "@/components/paper-card-ask";
+import { PaperCardAsk } from "@/components/paper-card-ask";
 import { Header4, Icons, cn } from "@proemial/shadcn-ui";
 import { Message } from "ai/react";
 import Link from "next/link";
 import { ReactNode, useRef } from "react";
 import { useThrobberStatus } from "./use-throbber-status";
 
-export type QaPairProps = Pick<PaperCardAskProps, "bookmarks"> & {
+export type QaPairProps = {
 	question: Message;
 	answer: Message | undefined;
 	data: AnswerEngineEvents[];
 	followUps: ReactNode;
 	isLatest: boolean;
 	className?: string;
+	bookmarks?: Bookmarks;
 };
 
 export const QaPair = ({
@@ -95,22 +97,26 @@ export const QaPair = ({
 						extra={papers?.length}
 					>
 						<HorisontalScrollArea>
-							{papers?.map((paper, index) => (
-								<Link
-									key={index}
-									href={`/paper/${paper.link}`}
-									onClick={trackHandler(analyticsKeys.ask.click.paper)}
-								>
-									<PaperCardAsk
-										paperId={paper?.link.replace("/oa/", "")}
-										bookmarks={bookmarks}
-										date={paper?.published}
-										title={paper?.title}
-										loading={!paper}
-										index={`${index + 1}`}
-									/>
-								</Link>
-							))}
+							{papers?.map((paper, index) => {
+								const paperId = paper?.link.replace("/oa/", "");
+								const isBookmarked = Boolean(bookmarks?.[paperId] ?? false);
+								return (
+									<Link
+										key={index}
+										href={`/paper/${paper.link}`}
+										onClick={trackHandler(analyticsKeys.ask.click.paper)}
+									>
+										<PaperCardAsk
+											paperId={paperId}
+											isBookmarked={isBookmarked}
+											date={paper?.published}
+											title={paper?.title}
+											loading={!paper}
+											index={`${index + 1}`}
+										/>
+									</Link>
+								);
+							})}
 						</HorisontalScrollArea>
 					</CollapsibleSection>
 				)}

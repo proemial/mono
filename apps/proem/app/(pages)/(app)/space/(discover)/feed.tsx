@@ -1,4 +1,5 @@
 "use client";
+import { Bookmarks } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
 import FeedItem, {
 	FeedItemProps,
 } from "@/app/(pages)/(app)/space/(discover)/feed-item";
@@ -16,11 +17,12 @@ import { ReactNode } from "react";
 
 // 1-4 is fetched without scrolling
 const initialPageSize = 4;
-type FeedProps = Pick<FeedItemProps, "bookmarks"> & {
+type FeedProps = {
 	children: ReactNode;
 	debug?: boolean;
 	filter: { topic?: number; features?: RankedFeature[]; days?: number };
 	nocache?: boolean;
+	bookmarks: Bookmarks;
 };
 
 export function Feed({
@@ -64,11 +66,12 @@ export function Feed({
 				renderRow={(row) => {
 					// TODO! why are we casting here?
 					const paper = row as RankedPaper;
+					const isBookmarked = Boolean(bookmarks[paper.paper.id]);
 					return (
 						<FeedItem
 							paper={paper.paper}
 							fingerprint={paper.features}
-							bookmarks={bookmarks}
+							isBookmarked={isBookmarked}
 						>
 							{debug && (
 								<FeatureCloud

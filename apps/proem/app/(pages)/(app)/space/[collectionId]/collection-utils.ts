@@ -1,5 +1,5 @@
 import { neonDb } from "@proemial/data";
-import { collections } from "@proemial/data/neon/schema";
+import { collections, collectionsToPapers } from "@proemial/data/neon/schema";
 import { eq } from "drizzle-orm";
 
 export const getPaperIdsForCollection = async (collectionId: string) => {
@@ -7,6 +7,7 @@ export const getPaperIdsForCollection = async (collectionId: string) => {
 		where: eq(collections.id, collectionId),
 		with: {
 			collectionsToPapers: {
+				where: eq(collectionsToPapers.isEnabled, true),
 				columns: {
 					paperId: true,
 				},

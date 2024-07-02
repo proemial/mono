@@ -1,6 +1,5 @@
-import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
+import { getBookmarkedPapersByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarked-papers-by-collection-id";
 import { StreamList } from "@/app/(pages)/(app)/space/[collectionId]/(lists)/(latest)/stream-list";
-import { getPaperIdsForCollection } from "@/app/(pages)/(app)/space/[collectionId]/collection-utils";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
@@ -19,11 +18,10 @@ export default async function LatestPage({ params }: LatestPageProps) {
 	if (!collectionId || !userId) {
 		notFound();
 	}
+	const bookmarkedPapers =
+		await getBookmarkedPapersByCollectionId(collectionId);
 
-	const [paperIds, bookmarks] = await Promise.all([
-		getPaperIdsForCollection(collectionId),
-		getBookmarksByCollectionId(collectionId),
-	]);
+	const paperIds = bookmarkedPapers?.map(({ paperId }) => paperId);
 
 	const isDefaultSpace = collectionId === userId;
 	const fingerprints: Fingerprint[][] = [];
@@ -49,7 +47,7 @@ export default async function LatestPage({ params }: LatestPageProps) {
 				id={collectionId}
 				features={features}
 				days={FEED_DEFAULT_DAYS}
-				bookmarks={bookmarks}
+				bookmarks={paperIds}
 			/>
 			<ProemAssistant />
 		</>

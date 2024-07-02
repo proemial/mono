@@ -65,9 +65,12 @@ async function Papers({ category }: { category: string }) {
 			{!papers.length && <div>No papers found</div>}
 			{papers.map((paper, i) => {
 				return (
-					<div key={i} className="py-5">
+					<div key={paper.id} className="py-5">
 						<Suspense fallback={<div>loading...</div>}>
-							<Paper id={paper.id} bookmarks={bookmarks} />
+							<Paper
+								id={paper.id}
+								isBookmarked={Boolean(bookmarks[paper.id])}
+							/>
 						</Suspense>
 					</div>
 				);
@@ -76,11 +79,11 @@ async function Papers({ category }: { category: string }) {
 	);
 }
 
-type PaperProps = Pick<FeedItemProps, "bookmarks"> & {
+type PaperProps = Pick<FeedItemProps, "isBookmarked"> & {
 	id: string;
 };
 
-async function Paper({ id, bookmarks }: PaperProps) {
+async function Paper({ id, isBookmarked }: PaperProps) {
 	let paper = await Redis.papers.get(id, "arxiv");
 
 	if (paper && !paper.generated) {
@@ -91,5 +94,7 @@ async function Paper({ id, bookmarks }: PaperProps) {
 		return null;
 	}
 
-	return <FeedItem paper={paper} provider="arxiv" bookmarks={bookmarks} />;
+	return (
+		<FeedItem paper={paper} provider="arxiv" isBookmarked={isBookmarked} />
+	);
 }

@@ -2,6 +2,7 @@
 
 import {
 	getBookmarkCacheTag,
+	getBookmarkedPapersCacheTag,
 	getPersonalDefaultCollection,
 } from "@/app/constants";
 import { streamCacheUpdate } from "@/inngest/populator.task";
@@ -20,34 +21,6 @@ import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { fetchPaper } from "../../paper/oa/[id]/fetch-paper";
 import { generate } from "../../paper/oa/[id]/llm-generate";
-
-const addPaperToExistingCollectionParaps = z.object({
-	paperId: z.string(),
-	collectionId: z.string(),
-});
-
-export async function addPaperToExistingCollection(
-	params: z.infer<typeof addPaperToExistingCollectionParaps>,
-) {
-	const { userId } = auth();
-	const { paperId, collectionId } =
-		addPaperToExistingCollectionParaps.parse(params);
-	if (!userId) {
-		return;
-	}
-	await ensurePaperIsSummarized(paperId);
-	await ensurePaperExistsInDb(paperId);
-	if (collectionId === userId) {
-		// This is necessary because the default collection is created lazily
-		await ensureDefaultCollectionExistsInDb(userId);
-	}
-	await neonDb
-		.insert(collectionsToPapers)
-		.values({ collectionsId: collectionId, paperId });
-
-	revalidateTag(getBookmarkCacheTag(collectionId));
-	waitUntil(streamCacheUpdate.run(userId, "user"));
-}
 
 const addPaperToCollectionParams = z.object({
 	paperId: z.string(),
@@ -75,6 +48,7 @@ export async function addPaperToNewCollection(
 	});
 
 	revalidateTag(getBookmarkCacheTag(existingCollection.id));
+	revalidateTag(getBookmarkedPapersCacheTag(existingCollection.id));
 	waitUntil(streamCacheUpdate.run(userId, "user"));
 	return {};
 }
@@ -114,36 +88,41 @@ const togglePaperInCollectionParams = z.object({
 	paperId: z.string(),
 	collectionId: z.string(),
 	isEnabled: z.boolean(),
+	// TODO: Hacky solution
+	revalidateCache: z.boolean().optional(),
 });
 
 export async function togglePaperInCollection(
 	params: z.infer<typeof togglePaperInCollectionParams>,
 ) {
 	const { userId } = auth();
-	const { paperId, collectionId, isEnabled } =
+	const { paperId, collectionId, isEnabled, revalidateCache } =
 		togglePaperInCollectionParams.parse(params);
 
 	if (!userId) {
 		return;
 	}
-
-	if (isEnabled) {
-		await neonDb
-			.insert(collectionsToPapers)
-			.values({ collectionsId: collectionId, paperId })
-			.onConflictDoNothing();
-	} else {
-		await neonDb
-			.delete(collectionsToPapers)
-			.where(
-				and(
-					eq(collectionsToPapers.paperId, paperId),
-					eq(collectionsToPapers.collectionsId, collectionId),
-				),
-			);
+	// TODO! Consider moving to better?
+	await ensurePaperIsSummarized(paperId);
+	await ensurePaperExistsInDb(paperId);
+	if (collectionId === userId) {
+		// This is necessary because the default collection is created lazily
+		await ensureDefaultCollectionExistsInDb(userId);
 	}
 
-	revalidateTag(getBookmarkCacheTag(collectionId));
-	waitUntil(streamCacheUpdate.run(userId, "user"));
+	await neonDb
+		.insert(collectionsToPapers)
+		.values({ collectionsId: collectionId, paperId, isEnabled })
+		.onConflictDoUpdate({
+			target: [collectionsToPapers.paperId, collectionsToPapers.collectionsId],
+			set: { isEnabled },
+		});
+
+	if (revalidateCache !== false) {
+		revalidateTag(getBookmarkedPapersCacheTag(collectionId));
+		revalidateTag(getBookmarkCacheTag(collectionId));
+		waitUntil(streamCacheUpdate.run(userId, "user"));
+	}
+
 	return {};
 }

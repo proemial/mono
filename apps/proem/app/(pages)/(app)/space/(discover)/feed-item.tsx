@@ -1,3 +1,5 @@
+"use client";
+import { togglePaperInCollection } from "@/app/(pages)/(app)/space/(discover)/bookmark-paper";
 import Markdown from "@/components/markdown";
 import { trimForQuotes } from "@/utils/string-utils";
 import { Prefix } from "@proemial/redis/adapters/papers";
@@ -5,9 +7,10 @@ import { FeatureType } from "@proemial/repositories/oa/fingerprinting/features";
 import { RankedPaperFeature } from "@proemial/repositories/oa/fingerprinting/rerank";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-topics-compact";
+import { Button, cn } from "@proemial/shadcn-ui";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { FeedItemCard, FeedItemCardProps } from "./feed-item-card";
 import { FeedItemTag } from "./feed-item-tag";
 
@@ -15,7 +18,7 @@ dayjs.extend(relativeTime);
 
 export type FeedItemProps = Pick<
 	FeedItemCardProps,
-	"bookmarks" | "customCollectionId"
+	"isBookmarked" | "customCollectionId" | "onBookmarkToggleClick"
 > & {
 	paper: OpenAlexPaper;
 	fingerprint?: RankedPaperFeature[];
@@ -28,8 +31,9 @@ export default function FeedItem({
 	fingerprint,
 	provider,
 	children,
-	bookmarks,
+	isBookmarked,
 	customCollectionId,
+	onBookmarkToggleClick,
 }: FeedItemProps) {
 	const tags = paper.data.topics
 		?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
@@ -38,11 +42,12 @@ export default function FeedItem({
 	return (
 		<div className="space-y-3">
 			<FeedItemCard
+				isBookmarked={isBookmarked}
 				id={paper.id}
+				onBookmarkToggleClick={onBookmarkToggleClick}
 				date={paper.data.publication_date}
 				topics={paper.data.topics}
 				provider={provider}
-				bookmarks={bookmarks}
 				customCollectionId={customCollectionId}
 				hasAbstract={!!paper.data.abstract}
 			>

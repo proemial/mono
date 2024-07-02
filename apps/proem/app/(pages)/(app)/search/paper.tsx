@@ -2,7 +2,6 @@
 import Markdown from "@/components/markdown";
 import { Collection } from "@proemial/data/neon/schema";
 import { OpenAlexWorkMetadata } from "@proemial/repositories/oa/models/oa-paper";
-import { Button, buttonVariants } from "@proemial/shadcn-ui";
 import { Users01 } from "@untitled-ui/icons-react";
 import { Bookmarks } from "../space/(discover)/add-to-collection-button";
 import { FeedItemCard } from "../space/(discover)/feed-item-card";
@@ -21,14 +20,12 @@ export function Paper({
 	}
 
 	return (
-		<div className="space-y-3 bg-white dark:bg-primary rounded-lg p-4">
+		<div className="p-4 space-y-3 bg-white rounded-lg dark:bg-primary">
 			<FeedItemCard
 				id={paper.id}
 				date={paper.publication_date}
 				topics={paper.topics}
-				// provider={provider}
-				bookmarks={bookmarks}
-				// customCollectionId={customCollectionId}
+				isBookmarked={Boolean(bookmarks?.[paper.id] ?? false)}
 				hasAbstract={!!paper.abstract_inverted_index}
 				customCollectionId={collectionId}
 			>

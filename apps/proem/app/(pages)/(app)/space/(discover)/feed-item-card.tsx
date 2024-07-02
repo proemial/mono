@@ -24,7 +24,7 @@ dayjs.extend(relativeTime);
 
 export type FeedItemCardProps = Pick<
 	AddToCollectionButtonProps,
-	"bookmarks" | "customCollectionId"
+	"isBookmarked" | "customCollectionId"
 > & {
 	id: string;
 	date: string;
@@ -32,6 +32,7 @@ export type FeedItemCardProps = Pick<
 	children: ReactNode;
 	provider?: Prefix;
 	hasAbstract: boolean;
+	onBookmarkToggleClick?: AddToCollectionButtonProps["onClick"];
 };
 
 export const FeedItemCard = ({
@@ -40,9 +41,10 @@ export const FeedItemCard = ({
 	topics,
 	children,
 	provider,
-	bookmarks,
+	isBookmarked,
 	customCollectionId,
 	hasAbstract,
+	onBookmarkToggleClick,
 }: FeedItemCardProps) => {
 	const pathname = usePathname();
 	const spaceSpecificPrefix =
@@ -52,7 +54,7 @@ export const FeedItemCard = ({
 	return (
 		<div className="flex flex-col gap-3">
 			{hasAbstract && (
-				<>
+				<div>
 					<div className="flex items-center justify-between gap-2">
 						<FeedItemField topics={topics} />
 						<div className="flex items-center">
@@ -64,8 +66,9 @@ export const FeedItemCard = ({
 									trackingKey={analyticsKeys.collection.addPaper.fromAsk}
 								>
 									<AddToCollectionButton
+										onClick={onBookmarkToggleClick}
 										fromTrackingKey="fromFeed"
-										bookmarks={bookmarks}
+										isBookmarked={isBookmarked}
 										paperId={id}
 										customCollectionId={customCollectionId}
 									/>
@@ -79,11 +82,11 @@ export const FeedItemCard = ({
 					>
 						{children}
 					</Link>
-				</>
+				</div>
 			)}
 			{!hasAbstract && (
 				<>
-					<div className="font-bold flex gap-2 items-center">
+					<div className="flex items-center gap-2 font-bold">
 						<AlertTriangle className="size-4 opacity-85" />
 						This paper is not publicly available.
 					</div>

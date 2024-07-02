@@ -14,7 +14,10 @@ import {
 import Markdown from "./markdown";
 
 export type PaperCardProps = Partial<
-	Pick<AddToCollectionButtonProps, "paperId" | "bookmarks" | "fromTrackingKey">
+	Pick<
+		AddToCollectionButtonProps,
+		"paperId" | "fromTrackingKey" | "isBookmarked"
+	>
 > & {
 	date?: string;
 	header: React.ReactNode;
@@ -30,7 +33,7 @@ export function PaperCard({
 	header,
 	loading,
 	paperId,
-	bookmarks,
+	isBookmarked,
 	fromTrackingKey,
 }: PaperCardProps) {
 	return (
@@ -59,7 +62,7 @@ export function PaperCard({
 					</CardDescription>
 				)}
 			</div>
-			{bookmarks && paperId && fromTrackingKey ? (
+			{paperId && fromTrackingKey ? (
 				<div
 					className="-ml-2.5 -mb-2.5 self-start"
 					onClick={(event) => {
@@ -68,7 +71,7 @@ export function PaperCard({
 					}}
 				>
 					<AddToCollectionButton
-						bookmarks={bookmarks}
+						isBookmarked={isBookmarked}
 						paperId={paperId}
 						fromTrackingKey={fromTrackingKey}
 					/>
