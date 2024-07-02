@@ -14,7 +14,7 @@ const scheduledCacheUpdateEventName = "streams/cache.update.scheduled";
 export const streamScheduledCacheUpdate = {
 	name: scheduledCacheUpdateEventName,
 	worker: inngest.createFunction(
-		{ id: "streams/scheduled-cache-update", concurrency: 3 },
+		{ id: "streams/scheduled-cache-update", concurrency: 1 },
 		{ event: scheduledCacheUpdateEventName },
 		async ({ event }) => {
 			console.log("event", event);
@@ -33,7 +33,7 @@ export const streamCacheUpdate = {
 	name: cacheUpdateEventName,
 	worker: inngest.createFunction(
 		{ id: "streams/cache-update" },
-		{ event: cacheUpdateEventName },
+		{ event: cacheUpdateEventName, concurrency: 1 },
 		async ({ event }) => {
 			console.log("event", event);
 
