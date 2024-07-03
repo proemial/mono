@@ -28,7 +28,9 @@ type Props = {
 };
 
 function changeSpaceId(pathname: string, id: string) {
-	return pathname.replace(/(?<=\/space\/|^\/space\/)(\w*)(?=\/|$)/, id);
+	const path = pathname.replace(/(?<=\/space\/|^\/space\/)(\w*)(?=\/|$)/, id);
+	const subpaths = path.split("/");
+	return subpaths.filter((path) => path !== "saved").join("/");
 }
 
 export const SelectSpaceHeader = ({ collections, userId }: Props) => {
