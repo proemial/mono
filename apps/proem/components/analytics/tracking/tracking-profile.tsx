@@ -3,6 +3,7 @@ import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { INTERNAL_COOKIE_NAME, User, useUser } from "@/app/hooks/use-user";
 import { getCookie, setCookie } from "cookies-next";
 import { usePathname } from "next/navigation";
+import { useOrganization as useClerkOrganisation } from "@clerk/nextjs";
 
 const traceEnabled = false;
 
@@ -13,12 +14,25 @@ export type TrackingInput = {
 
 export function useTrackingProfile(trackingInput?: TrackingInput) {
 	const { user, isLoaded } = useUser();
+	const organisation = useOrganization();
 
 	if (!isLoaded) return {};
 
 	const trackingProfile = getTrackingProfile(user, trackingInput);
 
-	return { trackingProfile, user };
+	return { trackingProfile, user, organisation };
+}
+
+function useOrganization() {
+	const { membership } = useClerkOrganisation();
+
+	if (!membership) return undefined;
+
+	const { organization } = membership;
+	return {
+		id: organization.id,
+		name: organization.name,
+	};
 }
 
 export function getTrackingProfile(

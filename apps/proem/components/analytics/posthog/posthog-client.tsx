@@ -22,7 +22,8 @@ export function PostHogClient({
 }
 
 function useInit(trackingInput?: TrackingInput) {
-	const { trackingProfile, user } = useTrackingProfile(trackingInput);
+	const { trackingProfile, user, organisation } =
+		useTrackingProfile(trackingInput);
 	const [initialized, setInitialized] = useState(false);
 	const [identified, setIdentified] = useState(false);
 	const { pathname, trackingKey } = usePathNames();
@@ -61,15 +62,19 @@ function useInit(trackingInput?: TrackingInput) {
 		// we may need to stop overwriting the default distinctID, if we want to keep trafic after initial login
 		const distinctID = user?.email || user?.id;
 
+		const props = organisation
+			? { organisation: organisation.name }
+			: undefined;
 		if (!user?.isInternal && distinctID) {
 			analyticsTrace(
 				"[PosthogClient] identifying",
 				`distinctID: ${distinctID}`,
+				`organisation: ${organisation}`,
 			);
-			posthog.identify(distinctID);
+			posthog.identify(distinctID, props);
 			setIdentified(true);
 		}
-	}, [user?.isInternal, user?.email, user?.id]);
+	}, [user?.isInternal, user?.email, user?.id, organisation]);
 
 	useEffect(() => {
 		if (initialized) {
