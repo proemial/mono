@@ -5,8 +5,7 @@ import {
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
 import { routes } from "@/routes";
-import { cn } from "@proemial/shadcn-ui";
-import { Plus } from "@untitled-ui/icons-react";
+import { SearchMd, X } from "@untitled-ui/icons-react";
 import { usePathname, useRouter } from "next/navigation";
 
 export const ToggleSearchAction = () => {
@@ -19,7 +18,7 @@ export const ToggleSearchAction = () => {
 
 		if (isSearchPage) {
 			trackHandler(analyticsKeys.ui.header.click.close);
-			router.push(`/${space}/${collectionId}/saved`);
+			router.push(`/${space}/${collectionId}`);
 		} else {
 			trackHandler(analyticsKeys.ui.header.click.search);
 			router.push(`/${space}/${collectionId}${routes.search}`);
@@ -28,11 +27,11 @@ export const ToggleSearchAction = () => {
 
 	return (
 		<div className="p-1 cursor-pointer" onClick={handleAction}>
-			<Plus
-				className={cn("transition-all duration-150 ease-out size-5", {
-					"rotate-45": isSearchPage,
-				})}
-			/>
+			{isSearchPage ? (
+				<X className={"size-5"} />
+			) : (
+				<SearchMd className={"size-5"} />
+			)}
 		</div>
 	);
 };
