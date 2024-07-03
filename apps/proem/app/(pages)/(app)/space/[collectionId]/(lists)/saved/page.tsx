@@ -3,8 +3,10 @@ import { getBookmarkedPapersByCollectionId } from "@/app/(pages)/(app)/space/(di
 import { FeedItemWithDisabledOverlay } from "@/app/(pages)/(app)/space/[collectionId]/(lists)/saved/feed-item-with-disabled-overlay";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { ProemAssistant } from "@/components/proem-assistant";
+import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs";
-import { notFound } from "next/navigation";
+import { isPublicSpace } from "@proemial/data/lib/create-id";
+import { notFound, redirect } from "next/navigation";
 
 type SavedPageProps = CollectionIdParams;
 
@@ -13,6 +15,11 @@ export default async function SavedPage({ params }: SavedPageProps) {
 	const collectionId = params?.collectionId;
 	if (!collectionId || !userId) {
 		notFound();
+	}
+
+	// Disallow access to other users' default space
+	if (params.collectionId !== userId && !isPublicSpace(params.collectionId)) {
+		redirect(routes.home);
 	}
 
 	const bookmarkedPapers =

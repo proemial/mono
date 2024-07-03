@@ -4,11 +4,13 @@ import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/par
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { ProemAssistant } from "@/components/proem-assistant";
+import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs";
+import { isPublicSpace } from "@proemial/data/lib/create-id";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { Fingerprint } from "@proemial/repositories/oa/fingerprinting/fingerprints";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 type LatestPageProps = CollectionIdParams;
 
@@ -18,6 +20,12 @@ export default async function LatestPage({ params }: LatestPageProps) {
 	if (!collectionId || !userId) {
 		notFound();
 	}
+
+	// Disallow access to other users' default space
+	if (params.collectionId !== userId && !isPublicSpace(params.collectionId)) {
+		redirect(routes.home);
+	}
+
 	const bookmarkedPapers =
 		await getBookmarkedPapersByCollectionId(collectionId);
 
