@@ -48,6 +48,7 @@ const formSchema = z.object({
 	email: z.string().email(),
 });
 
+// TODO! consider moving to Clerk elements when out of beta: https://clerk.com/docs/elements/overview
 export function SignInDrawer({ trigger }: SignInDrawerProps) {
 	const [signInState, setSignInState] = useState<
 		"idle" | "awaiting-server" | "awaiting-user"
@@ -92,7 +93,7 @@ export function SignInDrawer({ trigger }: SignInDrawerProps) {
 			setSignInState("awaiting-user");
 			const su = await startEmailLinkFlow({
 				emailAddressId: emailAddressId,
-				redirectUrl: "http://localhost:4242/verification",
+				redirectUrl: `${process.env.NEXT_PUBLIC_VERCEL_URL}/verification`,
 			});
 			// TODO: add expired and verified states
 			// const verification = su.firstFactorVerification;
