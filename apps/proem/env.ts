@@ -3,6 +3,8 @@ import { z } from "zod";
 export const envVariables = z.object({
 	CLERK_SECRET_KEY: z.string(),
 	DATABASE_URL: z.string(),
+	INNGEST_EVENT_KEY: z.string(),
+	INNGEST_SIGNING_KEY: z.string(),
 	LANGCHAIN_API_KEY: z.string(),
 	LANGCHAIN_ENDPOINT: z.string(),
 	LANGCHAIN_PROJECT: z.string(),
@@ -17,12 +19,17 @@ export const envVariables = z.object({
 	NEXT_PUBLIC_POSTHOG_HOST: z.string(),
 	NEXT_PUBLIC_POSTHOG_KEY: z.string(),
 	NEXT_PUBLIC_SENTRY_DSN: z.string(),
+	NEXT_PUBLIC_VERCEL_URL: z.string(),
 	/** TODO: This is only used for evaluation but the code is build and running in production  */
 	OPENAI_API_KEY_TEST: z.string().optional(),
 	OPENAI_API_KEY: z.string(),
 	OPENALEX_API_KEY: z.string(),
 	SENTRY_ORG: z.string(),
-	NEXT_PUBLIC_VERCEL_URL: z.string(),
+	RATE_LIMITER_ENDPOINT: z.string(),
+	RATE_LIMITER_PASSWORD: z.string(),
+	REDIS_PAPERS_TOKEN: z.string(),
+	REDIS_PAPERS_URL: z.string(),
+	SENTRY_AUTH_TOKEN: z.string(),
 });
 
 envVariables.parse(process.env);
