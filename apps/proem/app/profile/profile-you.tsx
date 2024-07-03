@@ -63,7 +63,9 @@ export function ProfileYou() {
 												{getUserInitials(user.fullName ?? "")}
 											</AvatarFallback>
 										</Avatar>
-										<div>{user.fullName}</div>
+										<div>
+											{user.fullName ?? user.primaryEmailAddress?.emailAddress}
+										</div>
 									</div>
 								}
 								trackingKey={analyticsKeys.ui.menu.click.collapse.profile}
