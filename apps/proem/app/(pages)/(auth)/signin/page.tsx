@@ -4,15 +4,30 @@ import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { SignInState } from "@/components/sign-in-drawer";
 import { SignInForm } from "@/components/sign-in-form";
 import { SignInTerms } from "@/components/sign-in-terms";
+import { useAuth } from "@clerk/nextjs";
 import {
 	NavigationMenu,
 	NavigationMenuItem,
 	NavigationMenuList,
 } from "@proemial/shadcn-ui";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function SignInPage() {
 	const [signInState, setSignInState] = useState<SignInState>("idle");
+
+	const router = useRouter();
+	const { isSignedIn } = useAuth();
+
+	useEffect(() => {
+		if (isSignedIn) {
+			router.replace("/");
+		}
+	}, [isSignedIn, router]);
+
+	const handleComplete = () => {
+		router.replace("/");
+	};
 
 	return (
 		<>
@@ -43,6 +58,7 @@ export default function SignInPage() {
 							<SignInForm
 								signInState={signInState}
 								setSignInState={setSignInState}
+								onComplete={handleComplete}
 								className="w-full flex flex-col gap-2 items-end"
 							/>
 						)}

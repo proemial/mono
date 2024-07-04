@@ -22,10 +22,16 @@ const formSchema = z.object({
 type Props = {
 	signInState: SignInState;
 	setSignInState: (state: SignInState) => void;
+	onComplete?: () => void;
 	className?: string;
 };
 
-export function SignInForm({ signInState, setSignInState, className }: Props) {
+export function SignInForm({
+	signInState,
+	setSignInState,
+	onComplete,
+	className,
+}: Props) {
 	const { signIn, isLoaded, setActive } = useSignIn();
 	const {
 		signUp,
@@ -85,6 +91,7 @@ export function SignInForm({ signInState, setSignInState, className }: Props) {
 
 			if (su.status === "complete") {
 				setActive({ session: su.createdSessionId });
+				if (onComplete) onComplete();
 				return;
 			}
 		} catch (error) {
@@ -106,6 +113,7 @@ export function SignInForm({ signInState, setSignInState, className }: Props) {
 					session: su.createdSessionId,
 					// beforeEmit: () => router.push("/after-sign-up-path"),
 				});
+				if (onComplete) onComplete();
 				return;
 			}
 		}
