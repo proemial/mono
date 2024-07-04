@@ -47,7 +47,11 @@ export default async function ({ params, children }: Props) {
 								<Avatar
 									key={orgMember.userId}
 									className="-ml-[18px] first:ml-0 size-6 hover:brightness-110 duration-200"
-									title={`${orgMember.firstName} ${orgMember.lastName}`}
+									title={
+										orgMember.firstName && orgMember.lastName
+											? `${orgMember.firstName} ${orgMember.lastName}`
+											: undefined
+									}
 								>
 									<AvatarImage src={orgMember.imageUrl} />
 								</Avatar>
