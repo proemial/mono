@@ -1,14 +1,8 @@
 "use client";
-import { Icons } from "@proemial/shadcn-ui";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode, useEffect } from "react";
 import { QueryFunction, useInfiniteQuery } from "react-query";
-
-const Loader = () => (
-	<div className="w-full h-24 flex justify-center items-center">
-		<Icons.loader />
-	</div>
-);
+import { Throbber } from "./throbber";
 
 type QueryReturnType<TRow> = {
 	count: number;
@@ -73,7 +67,7 @@ export function InfinityScrollList<TQueryKey extends string, TRow>({
 			{renderSection?.(count)}
 
 			{status === "loading" ? (
-				<Loader />
+				<Throbber />
 			) : status === "error" && error instanceof Error ? (
 				<span>Error: {error?.message}</span>
 			) : (
@@ -105,12 +99,12 @@ export function InfinityScrollList<TQueryKey extends string, TRow>({
 								>
 									{isLoaderRow ? (
 										hasNextPage ? (
-											<Loader />
+											<Throbber />
 										) : null
 									) : row ? (
 										renderRow(row)
 									) : (
-										<Loader />
+										<Throbber />
 									)}
 								</div>
 							);

@@ -1,5 +1,6 @@
 "use client";
 
+import { Throbber } from "@/components/throbber";
 import { EmailLinkErrorCode, isEmailLinkError, useClerk } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 
@@ -50,6 +51,9 @@ export default function VerificationPage() {
 	}
 
 	return (
-		<div>Successfully signed up. Return to the original tab to continue.</div>
+		<div className="min-h-[100dvh] flex flex-col gap-4 justify-center items-center">
+			<div>Successfully signed in. Forwarding you to proem...</div>
+			<Throbber />
+		</div>
 	);
 }
