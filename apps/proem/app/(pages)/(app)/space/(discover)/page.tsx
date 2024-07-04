@@ -5,14 +5,11 @@ import { FeatureCloud } from "@/components/feature-badges";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { Main } from "@/components/main";
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
-import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBar } from "@/components/nav-bar/nav-bar";
 import { ProemAssistant } from "@/components/proem-assistant";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs/server";
-import { neonDb } from "@proemial/data";
-import { collections } from "@proemial/data/neon/schema";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import {
 	fetchFingerprints,
@@ -20,7 +17,6 @@ import {
 } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { OaFields } from "@proemial/repositories/oa/taxonomy/fields";
 import { Badge } from "@proemial/shadcn-ui";
-import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { FeedFilter } from "./feed-filter";
 import { getBookmarksByCollectionId } from "./get-bookmarks-by-collection-id";
@@ -53,24 +49,15 @@ export default async function DiscoverPage({ searchParams }: Props) {
 		user: searchParams?.user,
 	};
 
-	const [filter, bookmarks, userCollections] = await Promise.all([
+	const [filter, bookmarks] = await Promise.all([
 		getFilter(params),
 		userId ? getBookmarksByCollectionId(userId) : {},
-		userId
-			? neonDb.query.collections.findMany({
-					where: eq(collections.ownerId, userId),
-				})
-			: [],
 	]);
 
 	return (
 		<>
 			<NavBar action={<OpenSearchAction />}>
 				<SimpleHeader title="For You" />
-				{/* <SelectSpaceHeader
-					collections={userCollections}
-					userId={userId ?? ""}
-				/> */}
 			</NavBar>
 			<Main>
 				<div className="space-y-6">

@@ -2,15 +2,9 @@ import { NavItem } from "@/app/(pages)/(app)/space/[collectionId]/nav-item";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { getPersonalDefaultCollection } from "@/app/constants";
 import { routes } from "@/routes";
-import {
-	OrganizationMembershipPublicUserData,
-	auth,
-	clerkClient,
-} from "@clerk/nextjs/server";
-import {
-	findCollectionWithPaperIdsBySlug,
-	findCollectionsByUserIdAndOrgMemberIds,
-} from "@proemial/data/repository/collection";
+import { getOrgMembersUserData } from "@/utils/auth";
+import { auth } from "@clerk/nextjs/server";
+import { findCollectionWithPaperIdsBySlug } from "@proemial/data/repository/collection";
 import { Avatar, AvatarImage, Paragraph } from "@proemial/shadcn-ui";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
@@ -19,7 +13,7 @@ type Props = CollectionIdParams & {
 	children: ReactNode;
 };
 export default async function ({ params, children }: Props) {
-	const { userId, orgId } = auth();
+	const { userId } = auth();
 	if (!userId || !params?.collectionId) {
 		redirect(routes.space);
 	}
@@ -29,22 +23,8 @@ export default async function ({ params, children }: Props) {
 		redirect(routes.space);
 	}
 
-	const orgMemberships = orgId
-		? await clerkClient.organizations.getOrganizationMembershipList({
-				organizationId: orgId,
-			})
-		: [];
+	const orgMembersUserData = await getOrgMembersUserData();
 
-	const orgMembersUserData = (
-		orgMemberships
-			.map((membership) => membership.publicUserData)
-			.filter(Boolean) as OrganizationMembershipPublicUserData[]
-	).sort((a, b) => (a.firstName ?? "").localeCompare(b.firstName ?? ""));
-
-	const userCollections = await findCollectionsByUserIdAndOrgMemberIds(
-		userId,
-		orgMembersUserData.map((m) => m.userId),
-	);
 	const isDefaultCollection = collection.id === userId;
 	return (
 		<div className="flex flex-col gap-2 grow">

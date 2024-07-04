@@ -1,12 +1,9 @@
 "use server";
 
 import { routes } from "@/routes";
+import { getOrgMemberIds } from "@/utils/auth";
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
-import {
-	OrganizationMembershipPublicUserData,
-	auth,
-	clerkClient,
-} from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { neonDb } from "@proemial/data";
 import {
 	Collection,
@@ -18,7 +15,7 @@ import {
 	findCollectionsByUserId,
 	findCollectionsByUserIdAndOrgMemberIds,
 } from "@proemial/data/repository/collection";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
@@ -72,6 +69,7 @@ export const deleteCollection = async (collectionId: Collection["id"]) => {
 const authAndRatelimit = async () => {
 	// Auth
 	const authenticatedUser = auth();
+	const orgMemberIds = await getOrgMemberIds();
 	if (!authenticatedUser || !authenticatedUser.userId) {
 		throw new Error("Unauthorized");
 	}
@@ -82,20 +80,8 @@ const authAndRatelimit = async () => {
 		throw new Error("Rate limit exceeded");
 	}
 
-	// Org membership info
-	const orgMemberships = authenticatedUser.orgId
-		? await clerkClient.organizations.getOrganizationMembershipList({
-				organizationId: authenticatedUser.orgId,
-			})
-		: [];
-	const orgMembersUserData = (
-		orgMemberships
-			.map((membership) => membership.publicUserData)
-			.filter(Boolean) as OrganizationMembershipPublicUserData[]
-	).sort((a, b) => (a.firstName ?? "").localeCompare(b.firstName ?? ""));
-
 	return {
 		userId: authenticatedUser.userId,
-		orgMemberIds: orgMembersUserData.map((m) => m.userId),
+		orgMemberIds,
 	};
 };

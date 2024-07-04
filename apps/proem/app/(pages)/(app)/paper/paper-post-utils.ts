@@ -1,9 +1,6 @@
 import { PAPER_BOT_USER_ID } from "@/app/constants";
-import {
-	OrganizationMembershipPublicUserData,
-	auth,
-	clerkClient,
-} from "@clerk/nextjs/server";
+import { getOrgMembersUserData } from "@/utils/auth";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { neonDb } from "@proemial/data";
 import {
 	Comment,
@@ -100,7 +97,10 @@ export const getOwnPaperPosts = async (paperId: string) => {
 	/**
 	 * Add author user data to posts and their comments.
 	 */
-	const user = await clerkClient.users.getUser(userId);
+	const user = await currentUser();
+	if (!user) {
+		return [];
+	}
 	const authorUserData: UserData = {
 		userId,
 		firstName: user.firstName,
@@ -214,20 +214,4 @@ export const getOrgMemberPaperPosts = async (paperId: string) => {
 		}
 	}
 	return paperPosts;
-};
-
-const getOrgMembersUserData = async () => {
-	const authData = auth();
-	if (!authData.orgId) {
-		return [];
-	}
-	const orgMemberships =
-		await clerkClient.organizations.getOrganizationMembershipList({
-			organizationId: authData.orgId,
-		});
-	return orgMemberships
-		.filter((membership) => membership.publicUserData)
-		.map(
-			(membership) => membership.publicUserData,
-		) as OrganizationMembershipPublicUserData[];
 };

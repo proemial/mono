@@ -5,11 +5,8 @@ import { ToggleSearchAction } from "@/components/nav-bar/actions/toggle-search-a
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
-import {
-	OrganizationMembershipPublicUserData,
-	auth,
-	clerkClient,
-} from "@clerk/nextjs/server";
+import { getOrgMemberIds } from "@/utils/auth";
+import { auth } from "@clerk/nextjs/server";
 import {
 	findCollectionWithPaperIdsBySlug,
 	findCollectionsByUserIdAndOrgMemberIds,
@@ -22,7 +19,7 @@ type PageProps = CollectionIdParams & {
 };
 
 export default async function ({ params, children }: PageProps) {
-	const { userId, orgId } = auth();
+	const { userId } = auth();
 	if (!userId || !params?.collectionId) {
 		redirect(routes.space);
 	}
@@ -32,21 +29,11 @@ export default async function ({ params, children }: PageProps) {
 		redirect(routes.space);
 	}
 
-	const orgMemberships = orgId
-		? await clerkClient.organizations.getOrganizationMembershipList({
-				organizationId: orgId,
-			})
-		: [];
-
-	const orgMembersUserData = (
-		orgMemberships
-			.map((membership) => membership.publicUserData)
-			.filter(Boolean) as OrganizationMembershipPublicUserData[]
-	).sort((a, b) => (a.firstName ?? "").localeCompare(b.firstName ?? ""));
+	const orgMemberIds = await getOrgMemberIds();
 
 	const userCollections = await findCollectionsByUserIdAndOrgMemberIds(
 		userId,
-		orgMembersUserData.map((m) => m.userId),
+		orgMemberIds,
 	);
 
 	return (

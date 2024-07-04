@@ -28,7 +28,7 @@ export const findCollectionsByUserIdAndOrgMemberIds = async (
 					orderBy: asc(collections.name),
 				})
 			: await neonDb.query.collections.findMany({
-					where: or(eq(collections.ownerId, userId)),
+					where: eq(collections.ownerId, userId),
 					orderBy: asc(collections.name),
 				});
 
