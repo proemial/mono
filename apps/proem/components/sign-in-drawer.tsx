@@ -93,12 +93,12 @@ export function SignInDrawer({ trigger }: SignInDrawerProps) {
 								})}
 							</div>
 
-							{/* <h3 className="text-center">or</h3>
+							<h3 className="text-center">or</h3>
 
 							<SignInForm
 								signInState={signInState}
 								setSignInState={setSignInState}
-							/> */}
+							/>
 						</>
 					)}
 					<SignInTerms />
