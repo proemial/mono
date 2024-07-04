@@ -3,21 +3,11 @@
 import { FullSizeDrawer } from "@/components/full-page-drawer";
 import { SoMeLogo } from "@/components/icons/some-logo";
 import { useSignIn, useSignUp } from "@clerk/nextjs";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-	Button,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormMessage,
-	Input,
-} from "@proemial/shadcn-ui";
-import Link from "next/link";
+import { Button } from "@proemial/shadcn-ui";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ReactNode, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { SignInForm } from "./sign-in-form";
+import { SignInTerms } from "./sign-in-terms";
 
 const LOGIN_REDIRECT_URL_PARAM_NAME = "redirect_url";
 
@@ -44,99 +34,17 @@ type SignInDrawerProps = {
 	trigger: ReactNode;
 };
 
-const formSchema = z.object({
-	email: z.string().email(),
-});
+export type SignInState = "idle" | "awaiting-server" | "awaiting-user";
 
 // TODO! consider moving to Clerk elements when out of beta: https://clerk.com/docs/elements/overview
 export function SignInDrawer({ trigger }: SignInDrawerProps) {
-	const [signInState, setSignInState] = useState<
-		"idle" | "awaiting-server" | "awaiting-user"
-	>("idle");
-	const { signIn, isLoaded, setActive } = useSignIn();
-	const {
-		signUp,
-		isLoaded: signUpIsLoaded,
-		setActive: signUpSetActive,
-	} = useSignUp();
+	const [signInState, setSignInState] = useState<SignInState>("idle");
+	const { signIn, isLoaded } = useSignIn();
+	const { isLoaded: signUpIsLoaded } = useSignUp();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
-	const form = useForm<z.infer<typeof formSchema>>({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-			email: "",
-		},
-	});
-
 	if (!isLoaded || !signUpIsLoaded) {
 		return;
-	}
-	async function passwordlessSignInOnSubmit({
-		email,
-	}: z.infer<typeof formSchema>) {
-		if (!signIn || !signUp) return;
-		setSignInState("awaiting-server");
-
-		try {
-			// Try to sign in with the user and default to an signup if the user doesn't exist
-			const { startEmailLinkFlow } = signIn.createEmailLinkFlow();
-
-			const si = await signIn.create({
-				identifier: email,
-			});
-
-			// @ts-expect-error wrong type
-			const { emailAddressId } = si.supportedFirstFactors.find(
-				(ff) => ff.strategy === "email_link" && ff.safeIdentifier === email,
-			);
-
-			setSignInState("awaiting-user");
-			const su = await startEmailLinkFlow({
-				emailAddressId: emailAddressId,
-				redirectUrl: `${process.env.NEXT_PUBLIC_VERCEL_URL}/verification`,
-			});
-			// TODO: add expired and verified states
-			// const verification = su.firstFactorVerification;
-			// if (verification.verifiedFromTheSameClient()) {
-			// 	// setVerified(true);
-			// 	// If you're handling the verification result from
-			// 	// another route/component, you should return here.
-			// 	// See the <Verification/> component as an
-			// 	// example below.
-			// 	// If you want to complete the flow on this tab,
-			// 	// don't return. Simply check the sign in status.
-			// 	// return;
-			// } else if (verification.status === "expired") {
-			// 	// setExpired(true);
-			// }
-
-			if (su.status === "complete") {
-				setActive({ session: su.createdSessionId });
-				return;
-			}
-		} catch (error) {
-			console.log(error);
-
-			const { startEmailLinkFlow } = signUp.createEmailLinkFlow();
-
-			await signUp.create({
-				emailAddress: email,
-			});
-
-			setSignInState("awaiting-user");
-			const su = await startEmailLinkFlow({
-				redirectUrl: `${process.env.NEXT_PUBLIC_VERCEL_URL}/verification`,
-			});
-
-			if (su.status === "complete") {
-				signUpSetActive({
-					session: su.createdSessionId,
-					// beforeEmit: () => router.push("/after-sign-up-path"),
-				});
-				return;
-			}
-		}
-		setSignInState("idle");
 	}
 
 	return (
@@ -185,52 +93,15 @@ export function SignInDrawer({ trigger }: SignInDrawerProps) {
 								})}
 							</div>
 
-							<h3 className="text-center">or</h3>
+							{/* <h3 className="text-center">or</h3>
 
-							<Form {...form}>
-								<form
-									onSubmit={form.handleSubmit(passwordlessSignInOnSubmit)}
-									className="flex gap-2 items-start"
-								>
-									<FormField
-										disabled={signInState !== "idle"}
-										control={form.control}
-										name="email"
-										render={({ field }) => (
-											<FormItem className="grow">
-												<FormControl>
-													<Input
-														placeholder="Email address…"
-														className="grow bg-white dark:bg-neutral-600"
-														{...field}
-													/>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<Button
-										type="submit"
-										className="text-xs tracking-wider"
-										disabled={signInState !== "idle"}
-									>
-										Continue
-									</Button>
-								</form>
-							</Form>
+							<SignInForm
+								signInState={signInState}
+								setSignInState={setSignInState}
+							/> */}
 						</>
 					)}
-					<div className="text-gray-400 text-sm">
-						By using Proem, you consent to our{" "}
-						<Link href="/privacy" className="underline">
-							Privacy Policy
-						</Link>{" "}
-						and{" "}
-						<Link href="/terms" className="underline">
-							Terms of Service
-						</Link>
-						.
-					</div>
+					<SignInTerms />
 				</div>
 			</div>
 		</FullSizeDrawer>
