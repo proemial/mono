@@ -6,19 +6,19 @@ import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 import { NewCollection } from "@proemial/data/neon/schema";
 import { useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "react-query";
 import { addPaperToNewCollection } from "../(discover)/bookmark-paper";
 
 export default function NewSpacePage() {
-	const { user } = useUser();
+	const { userId, orgId } = useAuth();
 	const queryClient = useQueryClient();
 	const queryParams = useSearchParams();
 	const paperId = queryParams.get("paperId");
 
-	if (!user || !paperId) {
+	if (!userId || !paperId) {
 		return null;
 	}
 
@@ -27,20 +27,20 @@ export default function NewSpacePage() {
 			addPaperToNewCollection({ paperId, collection }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: ["collections", user?.id],
+				queryKey: ["collections", userId],
 			});
 		},
 	});
 
 	return (
 		<>
-			<NavBar action={<CloseAction target={`${routes.space}/${user.id}`} />}>
+			<NavBar action={<CloseAction target={`${routes.space}/${userId}`} />}>
 				<SimpleHeader title="Create new space" />
 			</NavBar>
 			<Main>
 				<CreateCollection
 					noDialog
-					collection={{ name: "", description: "", ownerId: user.id }}
+					collection={{ name: "", description: "", ownerId: userId, orgId }}
 					onSubmit={add}
 				/>
 			</Main>

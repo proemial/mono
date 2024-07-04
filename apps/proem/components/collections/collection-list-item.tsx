@@ -53,8 +53,6 @@ export const CollectionListItem = ({
 		onDelete(collection.id);
 	};
 
-	const isOrgSpace = collection.ownerId !== userId;
-
 	return (
 		<div className="flex justify-between gap-2">
 			<Link
@@ -70,7 +68,7 @@ export const CollectionListItem = ({
 			</Link>
 			{!readonly && (
 				<div className="flex gap-6 items-center">
-					{isOrgSpace && (
+					{collection.ownerId !== userId && (
 						<div className="text-2xs uppercase opacity-50 truncate">
 							{orgName}
 						</div>

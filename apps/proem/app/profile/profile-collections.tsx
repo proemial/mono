@@ -5,7 +5,7 @@ import { CollapsibleSection } from "@/components/collapsible-section";
 import { CollectionListItem } from "@/components/collections/collection-list-item";
 import { CreateCollection } from "@/components/collections/create-collection";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 import { Collection, NewCollection } from "@proemial/data/neon/schema";
 import { Plus } from "@untitled-ui/icons-react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -22,11 +22,11 @@ type Props = {
 };
 
 export const ProfileCollections = ({ orgName }: Props) => {
-	const { user } = useUser();
+	const { userId } = useAuth();
 	const queryClient = useQueryClient();
 
 	const { data: collections } = useQuery({
-		queryKey: ["collections", user?.id],
+		queryKey: ["collections", userId],
 		queryFn: async () => getAvailableCollections(),
 	});
 
@@ -34,7 +34,7 @@ export const ProfileCollections = ({ orgName }: Props) => {
 		mutationFn: (collection: Collection) => editCollection(collection),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: ["collections", user?.id],
+				queryKey: ["collections", userId],
 			});
 		},
 	});
@@ -44,17 +44,17 @@ export const ProfileCollections = ({ orgName }: Props) => {
 			deleteCollection(collectionId),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: ["collections", user?.id],
+				queryKey: ["collections", userId],
 			});
 		},
 	});
 
-	if (!collections || !user) {
+	if (!collections || !userId) {
 		return null;
 	}
 
 	const customCollections = collections.filter(
-		(collection) => collection.id !== user.id,
+		(collection) => collection.id !== userId,
 	);
 
 	const noOfCollections = collections.length > 0 ? collections.length : 1;
@@ -67,7 +67,7 @@ export const ProfileCollections = ({ orgName }: Props) => {
 		>
 			<div className="space-y-3">
 				<CollectionListItem
-					collection={getPersonalDefaultCollection(user.id)}
+					collection={getPersonalDefaultCollection(userId)}
 					onEdit={edit}
 					onDelete={del}
 					readonly={true}
@@ -79,7 +79,7 @@ export const ProfileCollections = ({ orgName }: Props) => {
 						onEdit={edit}
 						onDelete={del}
 						orgName={orgName}
-						userId={user.id}
+						userId={userId}
 					/>
 				))}
 			</div>
@@ -102,26 +102,26 @@ type CreateCollectionDrawerProps = {
 export function CreateCollectionDrawer({
 	trigger,
 }: CreateCollectionDrawerProps) {
-	const { user } = useUser();
+	const { userId, orgId } = useAuth();
 	const queryClient = useQueryClient();
 
 	const { mutate: add } = useMutation({
 		mutationFn: (newCollection: NewCollection) => addCollection(newCollection),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: ["collections", user?.id],
+				queryKey: ["collections", userId],
 			});
 		},
 	});
 
-	if (!user) {
+	if (!userId) {
 		return null;
 	}
 
 	return (
 		<FullSizeDrawer trigger={trigger}>
 			<CreateCollection
-				collection={{ name: "", description: "", ownerId: user.id }}
+				collection={{ name: "", description: "", ownerId: userId, orgId }}
 				onSubmit={add}
 			/>
 		</FullSizeDrawer>

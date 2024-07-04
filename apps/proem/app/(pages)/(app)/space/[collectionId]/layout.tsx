@@ -5,11 +5,10 @@ import { ToggleSearchAction } from "@/components/nav-bar/actions/toggle-search-a
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
-import { getOrgMemberIds } from "@/utils/auth";
 import { auth } from "@clerk/nextjs/server";
 import {
-	findCollectionWithPaperIdsBySlug,
-	findCollectionsByUserIdAndOrgMemberIds,
+	findCollectionWithBookmarksById,
+	findCollectionsByOwnerIdAndOrgId,
 } from "@proemial/data/repository/collection";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
@@ -19,7 +18,7 @@ type PageProps = CollectionIdParams & {
 };
 
 export default async function ({ params, children }: PageProps) {
-	const { userId } = auth();
+	const { userId, orgId } = auth();
 	if (!userId || !params?.collectionId) {
 		redirect(routes.space);
 	}
@@ -29,12 +28,7 @@ export default async function ({ params, children }: PageProps) {
 		redirect(routes.space);
 	}
 
-	const orgMemberIds = await getOrgMemberIds();
-
-	const userCollections = await findCollectionsByUserIdAndOrgMemberIds(
-		userId,
-		orgMemberIds,
-	);
+	const userCollections = await findCollectionsByOwnerIdAndOrgId(userId, orgId);
 
 	return (
 		<>
@@ -46,12 +40,12 @@ export default async function ({ params, children }: PageProps) {
 	);
 }
 
-const getCollection = async (slug: string, userId: string) => {
-	const collection = await findCollectionWithPaperIdsBySlug(slug);
+const getCollection = async (collectionId: string, userId: string) => {
+	const collection = await findCollectionWithBookmarksById(collectionId);
 	if (collection) {
 		return collection;
 	}
-	if (slug === userId) {
+	if (collectionId === userId) {
 		return getPersonalDefaultCollection(userId);
 	}
 	return undefined;

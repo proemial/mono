@@ -1,7 +1,6 @@
 "use server";
 
 import { routes } from "@/routes";
-import { getOrgMemberIds } from "@/utils/auth";
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { auth } from "@clerk/nextjs/server";
 import { neonDb } from "@proemial/data";
@@ -11,22 +10,14 @@ import {
 	collections,
 	collectionsToPapers,
 } from "@proemial/data/neon/schema";
-import {
-	findCollectionsByUserId,
-	findCollectionsByUserIdAndOrgMemberIds,
-} from "@proemial/data/repository/collection";
+import { findCollectionsByOwnerIdAndOrgId } from "@proemial/data/repository/collection";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 export const getAvailableCollections = async () => {
-	const { userId, orgMemberIds } = await authAndRatelimit();
-	return await findCollectionsByUserIdAndOrgMemberIds(userId, orgMemberIds);
-};
-
-export const getOwnCollections = async () => {
-	const { userId } = await authAndRatelimit();
-	return await findCollectionsByUserId(userId);
+	const { userId, orgId } = await authAndRatelimit();
+	return await findCollectionsByOwnerIdAndOrgId(userId, orgId);
 };
 
 export const addCollection = async (collection: NewCollection) => {
@@ -69,7 +60,6 @@ export const deleteCollection = async (collectionId: Collection["id"]) => {
 const authAndRatelimit = async () => {
 	// Auth
 	const authenticatedUser = auth();
-	const orgMemberIds = await getOrgMemberIds();
 	if (!authenticatedUser || !authenticatedUser.userId) {
 		throw new Error("Unauthorized");
 	}
@@ -82,6 +72,6 @@ const authAndRatelimit = async () => {
 
 	return {
 		userId: authenticatedUser.userId,
-		orgMemberIds,
+		orgId: authenticatedUser.orgId,
 	};
 };

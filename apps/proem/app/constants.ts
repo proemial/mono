@@ -10,6 +10,7 @@ export const getPersonalDefaultCollection = (userId: string) =>
 		id: userId,
 		name: PERSONAL_DEFAULT_COLLECTION_NAME,
 		ownerId: userId,
+		orgId: null,
 		slug: userId,
 		description: "",
 		createdAt: new Date(),

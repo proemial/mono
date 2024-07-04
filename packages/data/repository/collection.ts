@@ -1,44 +1,46 @@
-import { and, asc, eq, inArray, notInArray, or } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { neonDb } from "..";
+import { isPublicSpace } from "../lib/create-id";
 import { Collection, collections, collectionsToPapers } from "../neon/schema";
 
 /**
- * Returns the user's own collections and public collections of org members.
+ * Returns the user's own collections and optional org collections (excluding
+ * the members' default collection).
  */
-export const findCollectionsByUserIdAndOrgMemberIds = async (
+export const findCollectionsByOwnerIdAndOrgId = async (
 	userId: string,
-	orgMemberIds: string[] = [],
+	orgId: string | undefined,
 ) => {
-	const orgMemberIdsWithoutCurrentUser = orgMemberIds.filter(
-		(id) => id !== userId,
+	const userCollections = await findCollectionsByOwnerId(userId);
+	const orgCollections = orgId ? await findCollectionsByOrgId(orgId) : [];
+	const publicOrgCollections = orgCollections
+		.filter((c) => isPublicSpace(c.id))
+		.filter((c) => c.ownerId !== userId);
+	const allCollections = [...userCollections, ...publicOrgCollections].sort(
+		(a, b) => a.name.localeCompare(b.name),
 	);
-
-	const allCollections =
-		orgMemberIdsWithoutCurrentUser.length > 0
-			? await neonDb.query.collections.findMany({
-					where: or(
-						// The user's own collections
-						eq(collections.ownerId, userId),
-						and(
-							// Org member public collections
-							inArray(collections.ownerId, orgMemberIdsWithoutCurrentUser),
-							notInArray(collections.id, orgMemberIdsWithoutCurrentUser),
-						),
-					),
-					orderBy: asc(collections.name),
-				})
-			: await neonDb.query.collections.findMany({
-					where: eq(collections.ownerId, userId),
-					orderBy: asc(collections.name),
-				});
-
 	return [
+		// Put the user's default collection first
 		...allCollections.filter((c) => c.id === userId),
 		...allCollections.filter((c) => c.id !== userId),
 	];
 };
 
-export const findCollectionsByUserId = async (userId: string) => {
+export const findCollectionWithBookmarksById = async (id: Collection["id"]) => {
+	return await neonDb.query.collections.findFirst({
+		where: eq(collections.id, id),
+		with: {
+			collectionsToPapers: {
+				where: eq(collectionsToPapers.isEnabled, true),
+				columns: {
+					paperId: true,
+				},
+			},
+		},
+	});
+};
+
+const findCollectionsByOwnerId = async (userId: string) => {
 	const userCollections = await neonDb.query.collections.findMany({
 		where: eq(collections.ownerId, userId),
 		orderBy: asc(collections.name),
@@ -50,18 +52,8 @@ export const findCollectionsByUserId = async (userId: string) => {
 	];
 };
 
-export const findCollectionWithPaperIdsBySlug = async (
-	id: Collection["id"],
-) => {
-	return await neonDb.query.collections.findFirst({
-		where: eq(collections.id, id),
-		with: {
-			collectionsToPapers: {
-				where: eq(collectionsToPapers.isEnabled, true),
-				columns: {
-					paperId: true,
-				},
-			},
-		},
+const findCollectionsByOrgId = async (orgId: string) => {
+	return await neonDb.query.collections.findMany({
+		where: eq(collections.orgId, orgId),
 	});
 };

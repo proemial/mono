@@ -13,6 +13,7 @@ export const collections = pgTable("collections", {
 		.unique()
 		.$defaultFn(() => createId()),
 	ownerId: text("owner_id").notNull(),
+	orgId: text("org_id"),
 	name: text("name").notNull(),
 	description: text("description"),
 	createdAt: timestamp("createdAt").notNull().defaultNow(),

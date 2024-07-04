@@ -4,7 +4,7 @@ import { getPersonalDefaultCollection } from "@/app/constants";
 import { routes } from "@/routes";
 import { getOrgMembersUserData } from "@/utils/auth";
 import { auth } from "@clerk/nextjs/server";
-import { findCollectionWithPaperIdsBySlug } from "@proemial/data/repository/collection";
+import { findCollectionWithBookmarksById } from "@proemial/data/repository/collection";
 import { Avatar, AvatarImage, Paragraph } from "@proemial/shadcn-ui";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
@@ -72,12 +72,12 @@ export default async function ({ params, children }: Props) {
 		</div>
 	);
 }
-const getCollection = async (slug: string, userId: string) => {
-	const collection = await findCollectionWithPaperIdsBySlug(slug);
+const getCollection = async (collectionId: string, userId: string) => {
+	const collection = await findCollectionWithBookmarksById(collectionId);
 	if (collection) {
 		return collection;
 	}
-	if (slug === userId) {
+	if (collectionId === userId) {
 		return getPersonalDefaultCollection(userId);
 	}
 	return undefined;
