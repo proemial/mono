@@ -68,7 +68,7 @@ export const CollectionListItem = ({
 			</Link>
 			{!readonly && (
 				<div className="flex gap-6 items-center">
-					{collection.ownerId !== userId && (
+					{collection.orgId && (
 						<div className="text-2xs uppercase opacity-50 truncate">
 							{orgName}
 						</div>
