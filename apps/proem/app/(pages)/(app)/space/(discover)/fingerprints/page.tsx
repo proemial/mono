@@ -8,11 +8,9 @@ import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-hea
 import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs";
-import { neonDb } from "@proemial/data";
-import { collections } from "@proemial/data/neon/schema";
+import { findCollectionsByOwnerId } from "@proemial/data/repository/collection";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
-import { eq } from "drizzle-orm";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Feed } from "../feed";
@@ -62,11 +60,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 		fingerprints,
 		searchParams?.weights,
 	);
-	const userCollections = userId
-		? await neonDb.query.collections.findMany({
-				where: eq(collections.ownerId, userId),
-			})
-		: [];
+	const userCollections = userId ? await findCollectionsByOwnerId(userId) : [];
 
 	return (
 		<>

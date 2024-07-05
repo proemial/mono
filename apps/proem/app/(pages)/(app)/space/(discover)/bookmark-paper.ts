@@ -15,7 +15,7 @@ import {
 	papers,
 } from "@proemial/data/neon/schema";
 import { waitUntil } from "@vercel/functions";
-import { and, eq } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
@@ -58,7 +58,10 @@ const ensureDefaultCollectionExistsInDb = (userId: string) =>
 
 const ensureCollectionExistsInDb = async (collection: NewCollection) => {
 	const existingCollection = await neonDb.query.collections.findFirst({
-		where: eq(collections.id, collection.id ?? ""),
+		where: and(
+			eq(collections.id, collection.id ?? ""),
+			isNull(collections.deletedAt),
+		),
 	});
 	if (existingCollection) {
 		return existingCollection;
@@ -66,6 +69,10 @@ const ensureCollectionExistsInDb = async (collection: NewCollection) => {
 	const [newCollection] = await neonDb
 		.insert(collections)
 		.values(collection)
+		.onConflictDoUpdate({
+			target: collections.id,
+			set: collection,
+		})
 		.returning();
 	if (!newCollection) {
 		throw new Error("Failed to create collection");

@@ -14,6 +14,7 @@ export const getPersonalDefaultCollection = (userId: string) =>
 		slug: userId,
 		description: "",
 		createdAt: new Date(),
+		deletedAt: null,
 	}) satisfies Collection;
 
 /**

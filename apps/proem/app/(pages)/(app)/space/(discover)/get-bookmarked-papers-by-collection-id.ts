@@ -5,7 +5,7 @@ import {
 	collections,
 	collectionsToPapers,
 } from "@proemial/data/neon/schema";
-import { eq } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 
 export async function getBookmarkedPapersByCollectionId(
@@ -15,7 +15,10 @@ export async function getBookmarkedPapersByCollectionId(
 		async () => {
 			const collection = await neonDb.query.collections.findFirst({
 				columns: { id: true },
-				where: eq(collections.id, collectionId),
+				where: and(
+					eq(collections.id, collectionId),
+					isNull(collections.deletedAt),
+				),
 				with: {
 					collectionsToPapers: {
 						where: eq(collectionsToPapers.isEnabled, true),

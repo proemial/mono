@@ -1,10 +1,10 @@
 import { neonDb } from "@proemial/data";
 import { collections, collectionsToPapers } from "@proemial/data/neon/schema";
-import { eq } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 
 export const getPaperIdsForCollection = async (collectionId: string) => {
 	const collection = await neonDb.query.collections.findFirst({
-		where: eq(collections.id, collectionId),
+		where: and(eq(collections.id, collectionId), isNull(collections.deletedAt)),
 		with: {
 			collectionsToPapers: {
 				where: eq(collectionsToPapers.isEnabled, true),

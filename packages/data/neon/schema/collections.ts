@@ -17,6 +17,7 @@ export const collections = pgTable("collections", {
 	name: text("name").notNull(),
 	description: text("description"),
 	createdAt: timestamp("createdAt").notNull().defaultNow(),
+	deletedAt: timestamp("deleted_at"),
 });
 
 export type Collection = typeof collections.$inferSelect;

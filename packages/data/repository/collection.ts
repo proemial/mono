@@ -1,4 +1,4 @@
-import { asc, eq } from "drizzle-orm";
+import { and, asc, eq, isNull } from "drizzle-orm";
 import { neonDb } from "..";
 import { isPublicSpace } from "../lib/create-id";
 import { Collection, collections, collectionsToPapers } from "../neon/schema";
@@ -28,7 +28,7 @@ export const findCollectionsByOwnerIdAndOrgId = async (
 
 export const findCollectionWithBookmarksById = async (id: Collection["id"]) => {
 	return await neonDb.query.collections.findFirst({
-		where: eq(collections.id, id),
+		where: and(eq(collections.id, id), isNull(collections.deletedAt)),
 		with: {
 			collectionsToPapers: {
 				where: eq(collectionsToPapers.isEnabled, true),
@@ -40,9 +40,9 @@ export const findCollectionWithBookmarksById = async (id: Collection["id"]) => {
 	});
 };
 
-const findCollectionsByOwnerId = async (userId: string) => {
+export const findCollectionsByOwnerId = async (userId: string) => {
 	const userCollections = await neonDb.query.collections.findMany({
-		where: eq(collections.ownerId, userId),
+		where: and(eq(collections.ownerId, userId), isNull(collections.deletedAt)),
 		orderBy: asc(collections.name),
 	});
 	return [
@@ -54,6 +54,6 @@ const findCollectionsByOwnerId = async (userId: string) => {
 
 const findCollectionsByOrgId = async (orgId: string) => {
 	return await neonDb.query.collections.findMany({
-		where: eq(collections.orgId, orgId),
+		where: and(eq(collections.orgId, orgId), isNull(collections.deletedAt)),
 	});
 };

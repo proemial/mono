@@ -4,9 +4,7 @@ import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-hea
 import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs/server";
-import { neonDb } from "@proemial/data";
-import { collections } from "@proemial/data/neon/schema";
-import { eq } from "drizzle-orm";
+import { findCollectionsByOwnerId } from "@proemial/data/repository/collection";
 import PaperPage from "./paper-page";
 
 type Props = {
@@ -15,11 +13,7 @@ type Props = {
 
 export default async function OAPaperPage({ params }: Props) {
 	const { userId } = auth();
-	const userCollections = userId
-		? await neonDb.query.collections.findMany({
-				where: eq(collections.ownerId, userId),
-			})
-		: [];
+	const userCollections = userId ? await findCollectionsByOwnerId(userId) : [];
 
 	return (
 		<>
