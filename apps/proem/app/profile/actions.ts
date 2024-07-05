@@ -50,16 +50,18 @@ export const editCollection = async (collection: Collection) => {
 	}
 };
 
-/**
- * Note: Soft deletion
- */
 export const deleteCollection = async (collectionId: Collection["id"]) => {
+	// Note: This is doing soft delete
 	const { userId, orgId } = await authAndRatelimit();
 	const collection = await neonDb.query.collections.findFirst({
 		where: eq(collections.id, collectionId),
 	});
 
-	if (collection?.ownerId === userId || collection?.orgId === orgId) {
+	if (!collection || collection.deletedAt) {
+		return;
+	}
+
+	if (collection.ownerId === userId || collection.orgId === orgId) {
 		// Allow deletion by owning users or org members
 		revalidatePath(`${routes.space}/[id]`, "layout");
 		return await neonDb
