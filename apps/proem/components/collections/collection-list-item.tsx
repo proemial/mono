@@ -2,7 +2,7 @@
 
 import { routes } from "@/routes";
 import { Collection } from "@proemial/data/neon/schema";
-import { Button, DrawerClose, Header5 } from "@proemial/shadcn-ui";
+import { Button, DrawerClose } from "@proemial/shadcn-ui";
 import {
 	Dialog,
 	DialogClose,
@@ -10,14 +10,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@proemial/shadcn-ui/components/ui/dialog";
-import {
-	Check,
-	Edit03,
-	Folder,
-	Trash01,
-	Upload01,
-	X,
-} from "@untitled-ui/icons-react";
+import { Check, Edit03, Folder, Trash01, X } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import {
 	analyticsKeys,
@@ -29,55 +22,46 @@ import { IconButton } from "./icon-button";
 
 type Props = {
 	collection: Collection;
-	onShare?: () => void;
-	onEdit: (collection: Collection) => void;
-	onDelete: (collectionId: Collection["id"]) => void;
-	readonly?: boolean;
+	editable:
+		| {
+				onEdit: (collection: Collection) => void;
+				onDelete: (collectionId: Collection["id"]) => void;
+		  }
+		| false;
 	orgName?: string;
-	userId?: string;
 };
 
 export const CollectionListItem = ({
 	collection,
-	onShare,
-	onEdit,
-	onDelete,
-	readonly,
+	editable,
 	orgName,
-	userId,
 }: Props) => {
-	const { name, id } = collection;
-
 	const handleCollectionDelete = () => {
+		if (!editable) return;
 		trackHandler(analyticsKeys.collection.deleteFromMenuConfirmation);
-		onDelete(collection.id);
+		editable.onDelete(collection.id);
 	};
 
 	return (
 		<div className="flex justify-between gap-2">
 			<Link
-				href={`${routes.space}/${id}`}
+				href={`${routes.space}/${collection.id}`}
 				onClick={() => {
 					trackHandler(analyticsKeys.collection.openFromMenu);
 				}}
 			>
 				<DrawerClose className="flex gap-2 items-center hover:opacity-85 active:opacity-75 duration-200">
 					<Folder className="size-4 opacity-85" />
-					<div className="text-sm">{name}</div>
+					<div className="text-sm">{collection.name}</div>
 				</DrawerClose>
 			</Link>
-			{!readonly && (
-				<div className="flex gap-6 items-center">
-					{collection.orgId && (
-						<div className="text-2xs uppercase opacity-50 truncate">
-							{orgName}
-						</div>
-					)}
-					{/* Share */}
-					{/* <IconButton onClick={onShare} title="Share">
-						<Upload01 className="size-4" />
-					</IconButton> */}
-					{/* Edit */}
+			<div className="flex gap-6 items-center">
+				{/* Share state */}
+				<div className="text-2xs uppercase opacity-50 truncate">
+					{collection.shared === "organization" ? orgName : collection.shared}
+				</div>
+				{/* Edit */}
+				{editable ? (
 					<FullSizeDrawer
 						trigger={
 							<IconButton
@@ -90,9 +74,16 @@ export const CollectionListItem = ({
 							</IconButton>
 						}
 					>
-						<EditCollection collection={collection} onSubmit={onEdit} />
+						<EditCollection
+							collection={collection}
+							onSubmit={editable.onEdit}
+						/>
 					</FullSizeDrawer>
-					{/* Delete */}
+				) : (
+					<div className="size-4" />
+				)}
+				{/* Delete */}
+				{editable ? (
 					<Dialog>
 						<DialogTrigger>
 							<IconButton
@@ -105,7 +96,7 @@ export const CollectionListItem = ({
 							</IconButton>
 						</DialogTrigger>
 						<DialogContent>
-							<DialogTitle>Delete {name}?</DialogTitle>
+							<DialogTitle>Delete {collection.name}?</DialogTitle>
 							<div className="flex gap-6 justify-center py-4">
 								<DialogClose asChild>
 									<Button
@@ -133,8 +124,10 @@ export const CollectionListItem = ({
 							</div>
 						</DialogContent>
 					</Dialog>
-				</div>
-			)}
+				) : (
+					<div className="size-4" />
+				)}
+			</div>
 		</div>
 	);
 };

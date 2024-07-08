@@ -4,7 +4,7 @@ import {
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
 import { CollapsibleSection } from "@/components/collapsible-section";
-import { useOrganization, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import {
 	Avatar,
 	AvatarFallback,
@@ -21,7 +21,6 @@ import { ProfileQuestions } from "./profile-questions";
 
 export function ProfileYou() {
 	const { user, isSignedIn } = useUser();
-	const { membership } = useOrganization();
 
 	return (
 		<div className="h-full px-4 flex flex-col gap-4 justify-between">
@@ -81,7 +80,7 @@ export function ProfileYou() {
 							<div className="opacity-50 select-none mb-2">Social</div>
 						</Header5>
 						<div className="flex flex-col gap-4">
-							<ProfileCollections orgName={membership?.organization.name} />
+							<ProfileCollections />
 							<ProfileQuestions />
 						</div>
 					</div>

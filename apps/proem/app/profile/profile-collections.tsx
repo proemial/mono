@@ -5,7 +5,7 @@ import { CollapsibleSection } from "@/components/collapsible-section";
 import { CollectionListItem } from "@/components/collections/collection-list-item";
 import { CreateCollection } from "@/components/collections/create-collection";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, useOrganization } from "@clerk/nextjs";
 import { Collection, NewCollection } from "@proemial/data/neon/schema";
 import { Plus } from "@untitled-ui/icons-react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -17,13 +17,10 @@ import {
 	getAvailableCollections,
 } from "./actions";
 
-type Props = {
-	orgName?: string;
-};
-
-export const ProfileCollections = ({ orgName }: Props) => {
+export const ProfileCollections = () => {
 	const { userId } = useAuth();
 	const queryClient = useQueryClient();
+	const { membership } = useOrganization();
 
 	const { data: collections } = useQuery({
 		queryKey: ["collections", userId],
@@ -53,7 +50,7 @@ export const ProfileCollections = ({ orgName }: Props) => {
 		return null;
 	}
 
-	const customCollections = collections.filter(
+	const nonDefaultCollections = collections.filter(
 		(collection) => collection.id !== userId,
 	);
 
@@ -68,18 +65,17 @@ export const ProfileCollections = ({ orgName }: Props) => {
 			<div className="space-y-3">
 				<CollectionListItem
 					collection={getPersonalDefaultCollection(userId)}
-					onEdit={edit}
-					onDelete={del}
-					readonly={true}
+					editable={false}
 				/>
-				{customCollections.map((collection) => (
+				{nonDefaultCollections.map((collection) => (
 					<CollectionListItem
 						key={collection.id}
 						collection={collection}
-						onEdit={edit}
-						onDelete={del}
-						orgName={orgName}
-						userId={userId}
+						editable={{
+							onEdit: edit,
+							onDelete: del,
+						}}
+						orgName={membership?.organization.name}
 					/>
 				))}
 			</div>
