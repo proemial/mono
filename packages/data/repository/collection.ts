@@ -1,28 +1,29 @@
-import { and, asc, eq, isNull } from "drizzle-orm";
+import { and, asc, eq, inArray, isNull, ne, or } from "drizzle-orm";
 import { neonDb } from "..";
-import { isPublicSpace } from "../lib/create-id";
 import { Collection, collections, collectionsToPapers } from "../neon/schema";
 
-/**
- * Returns the user's own collections and optional org collections (excluding
- * the members' default collection).
- */
-export const findCollectionsByOwnerIdAndOrgId = async (
+export const findAvailableCollections = async (
 	userId: string,
 	orgId: string | undefined,
 ) => {
-	const userCollections = await findCollectionsByOwnerId(userId);
-	const orgCollections = orgId ? await findCollectionsByOrgId(orgId) : [];
-	const publicOrgCollections = orgCollections
-		.filter((c) => isPublicSpace(c.id))
-		.filter((c) => c.ownerId !== userId);
-	const allCollections = [...userCollections, ...publicOrgCollections].sort(
-		(a, b) => a.name.localeCompare(b.name),
-	);
+	const result = await neonDb.query.collections.findMany({
+		where: or(
+			// User's own spaces
+			and(eq(collections.ownerId, userId), isNull(collections.deletedAt)),
+			and(
+				// Org members' "org" and "public" spaces
+				ne(collections.ownerId, userId),
+				eq(collections.orgId, orgId ?? ""),
+				inArray(collections.shared, ["organization", "public"]),
+				isNull(collections.deletedAt),
+			),
+		),
+		orderBy: asc(collections.name),
+	});
 	return [
-		// Put the user's default collection first
-		...allCollections.filter((c) => c.id === userId),
-		...allCollections.filter((c) => c.id !== userId),
+		// Put the user's default space first
+		...result.filter((c) => c.id === userId),
+		...result.filter((c) => c.id !== userId),
 	];
 };
 
@@ -50,10 +51,4 @@ export const findCollectionsByOwnerId = async (userId: string) => {
 		...userCollections.filter((c) => c.id === userId),
 		...userCollections.filter((c) => c.id !== userId),
 	];
-};
-
-const findCollectionsByOrgId = async (orgId: string) => {
-	return await neonDb.query.collections.findMany({
-		where: and(eq(collections.orgId, orgId), isNull(collections.deletedAt)),
-	});
 };

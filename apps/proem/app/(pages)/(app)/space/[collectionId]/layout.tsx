@@ -7,8 +7,8 @@ import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs/server";
 import {
+	findAvailableCollections,
 	findCollectionWithBookmarksById,
-	findCollectionsByOwnerIdAndOrgId,
 } from "@proemial/data/repository/collection";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
@@ -28,7 +28,7 @@ export default async function ({ params, children }: PageProps) {
 		redirect(routes.space);
 	}
 
-	const userCollections = await findCollectionsByOwnerIdAndOrgId(userId, orgId);
+	const userCollections = await findAvailableCollections(userId, orgId);
 
 	return (
 		<>

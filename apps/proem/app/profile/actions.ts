@@ -8,45 +8,49 @@ import {
 	Collection,
 	NewCollection,
 	collections,
-	collectionsToPapers,
 } from "@proemial/data/neon/schema";
-import { findCollectionsByOwnerIdAndOrgId } from "@proemial/data/repository/collection";
-import { and, eq, isNull } from "drizzle-orm";
+import { findAvailableCollections } from "@proemial/data/repository/collection";
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 export const getAvailableCollections = async () => {
 	const { userId, orgId } = await authAndRatelimit();
-	return await findCollectionsByOwnerIdAndOrgId(userId, orgId);
+	return await findAvailableCollections(userId, orgId);
 };
 
 export const addCollection = async (collection: NewCollection) => {
 	const { userId, orgId } = await authAndRatelimit();
-	const userCollections = await neonDb
+	const [result] = await neonDb
 		.insert(collections)
 		.values({
 			name: collection.name,
 			description: collection.description,
 			ownerId: userId,
 			orgId,
+			// Default to "org" for org members and "public" for anyone else
+			// (can be changed later, in space settings)
+			shared: orgId ? "organization" : "public",
 		} satisfies NewCollection)
 		.returning();
-	return userCollections;
+	return result;
 };
 
 export const editCollection = async (collection: Collection) => {
 	const { userId, orgId } = await authAndRatelimit();
-	revalidatePath(`${routes.space}/[id]`, "layout");
 	if (collection.ownerId === userId || collection.orgId === orgId) {
-		// Allow edit by owning users or org members
-		return await neonDb
+		// Allow edits by owner and org members
+		const [result] = await neonDb
 			.update(collections)
 			.set({
 				name: collection.name,
 				description: collection.description,
-			})
+				shared: collection.shared,
+			} satisfies Omit<NewCollection, "ownerId">)
 			.where(eq(collections.id, collection.id))
 			.returning();
+		revalidatePath(`${routes.space}/[id]`, "layout");
+		return result;
 	}
 };
 
@@ -63,13 +67,13 @@ export const deleteCollection = async (collectionId: Collection["id"]) => {
 
 	if (collection.ownerId === userId || collection.orgId === orgId) {
 		// Allow deletion by owning users or org members
-		revalidatePath(`${routes.space}/[id]`, "layout");
-		return await neonDb
+		await neonDb
 			.update(collections)
 			.set({
 				deletedAt: new Date(),
 			})
 			.where(eq(collections.id, collection.id));
+		revalidatePath(`${routes.space}/[id]`, "layout");
 	}
 };
 

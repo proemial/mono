@@ -15,6 +15,7 @@ export const getPersonalDefaultCollection = (userId: string) =>
 		description: "",
 		createdAt: new Date(),
 		deletedAt: null,
+		shared: "private",
 	}) satisfies Collection;
 
 /**
