@@ -1,7 +1,13 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createId } from "../../lib/create-id";
 import { collectionsToPapers } from "./collections-to-papers";
+
+export const collectionSharedType = pgEnum("shared", [
+	"private",
+	"organization",
+	"public",
+]);
 
 export const collections = pgTable("collections", {
 	id: text("id")
@@ -18,6 +24,7 @@ export const collections = pgTable("collections", {
 	description: text("description"),
 	createdAt: timestamp("createdAt").notNull().defaultNow(),
 	deletedAt: timestamp("deleted_at"),
+	shared: collectionSharedType("shared").notNull().default("private"),
 });
 
 export type Collection = typeof collections.$inferSelect;
