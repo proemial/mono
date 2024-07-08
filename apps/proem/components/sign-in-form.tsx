@@ -10,7 +10,6 @@ import {
 	FormMessage,
 	Input,
 } from "@proemial/shadcn-ui";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { SignInState } from "./sign-in-drawer";
@@ -85,9 +84,12 @@ export function SignInForm({
 			// 	// If you want to complete the flow on this tab,
 			// 	// don't return. Simply check the sign in status.
 			// 	// return;
-			// } else if (verification.status === "expired") {
-			// 	// setExpired(true);
 			// }
+
+			// Check for email link expiry
+			if (su.firstFactorVerification.status === "expired") {
+				setSignInState("expired");
+			}
 
 			if (su.status === "complete") {
 				setActive({ session: su.createdSessionId });
@@ -124,32 +126,39 @@ export function SignInForm({
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(passwordlessSignInOnSubmit)}
-				className={className ?? "w-full flex gap-2 items-start"}
+				className="w-full flex flex-col gap-2"
 			>
-				<FormField
-					disabled={signInState !== "idle"}
-					control={form.control}
-					name="email"
-					render={({ field }) => (
-						<FormItem className="w-full grow">
-							<FormControl>
-								<Input
-									placeholder="Email address…"
-									className="grow bg-white dark:bg-neutral-600"
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<Button
-					type="submit"
-					className="text-xs tracking-wider max-w-[100px]"
-					disabled={signInState !== "idle"}
-				>
-					Continue
-				</Button>
+				<div className={className ?? "w-full flex gap-2 items-start"}>
+					<FormField
+						disabled={signInState !== "idle"}
+						control={form.control}
+						name="email"
+						render={({ field }) => (
+							<FormItem className="w-full grow">
+								<FormControl>
+									<Input
+										placeholder="Email address…"
+										className="grow bg-white dark:bg-neutral-600"
+										{...field}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<Button
+						type="submit"
+						className="text-xs tracking-wider max-w-[100px]"
+						disabled={signInState !== "idle"}
+					>
+						Continue
+					</Button>
+				</div>
+				{signInState === "idle" && (
+					<div className="text-sm text-blue-700 dark:text-blue-400">
+						The link in the verification email has expired. Please try again.
+					</div>
+				)}
 			</form>
 		</Form>
 	);

@@ -34,7 +34,11 @@ type SignInDrawerProps = {
 	trigger: ReactNode;
 };
 
-export type SignInState = "idle" | "awaiting-server" | "awaiting-user";
+export type SignInState =
+	| "idle"
+	| "awaiting-server"
+	| "awaiting-user"
+	| "expired";
 
 // TODO! consider moving to Clerk elements when out of beta: https://clerk.com/docs/elements/overview
 export function SignInDrawer({ trigger }: SignInDrawerProps) {
