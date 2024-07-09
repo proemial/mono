@@ -32,7 +32,14 @@ const cacheUpdateEventName = "streams/cache.update";
 export const streamCacheUpdate = {
 	name: cacheUpdateEventName,
 	worker: inngest.createFunction(
-		{ id: "streams/cache-update" },
+		{
+			id: "streams/cache-update",
+			rateLimit: {
+				limit: 1,
+				period: "10m",
+				key: "event.data.id",
+			},
+		},
 		{ event: cacheUpdateEventName, concurrency: 1 },
 		async ({ event }) => {
 			console.log("event", event);
