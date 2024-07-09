@@ -1,5 +1,9 @@
 import { neonDb } from "@proemial/data";
-import { collections, collectionsToPapers } from "@proemial/data/neon/schema";
+import {
+	NewCollection,
+	collections,
+	collectionsToPapers,
+} from "@proemial/data/neon/schema";
 import { and, eq, isNull } from "drizzle-orm";
 
 export const getPaperIdsForCollection = async (collectionId: string) => {
@@ -17,3 +21,15 @@ export const getPaperIdsForCollection = async (collectionId: string) => {
 
 	return collection?.collectionsToPapers.map(({ paperId }) => paperId);
 };
+
+export const getNewCollectionTemplate = (
+	userId: string,
+	orgId: string | null,
+) =>
+	({
+		name: "",
+		description: "",
+		ownerId: userId,
+		orgId,
+		shared: orgId ? "organization" : "public",
+	}) satisfies NewCollection;

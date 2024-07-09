@@ -87,7 +87,7 @@ export const CreateCollection = ({ collection, onSubmit, noDialog }: Props) => {
 											<Textarea
 												{...field}
 												className="w-full text bg-card rounded-xl px-4 resize-none min-h-32 placeholder:opacity-50"
-												placeholder="Add a description of the collection here…"
+												placeholder="Add a description of the space here…"
 											/>
 										</FormControl>
 									</FormItem>

@@ -4,12 +4,18 @@ import {
 	Button,
 	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	Header2,
 	Header5,
 	Input,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
 	Textarea,
 } from "@proemial/shadcn-ui";
 import { DialogClose } from "@proemial/shadcn-ui/components/ui/dialog";
@@ -84,9 +90,52 @@ export const EditCollection = ({ collection, onSubmit }: Props) => {
 											<Textarea
 												{...field}
 												className="w-full text bg-card rounded-xl px-4 resize-none min-h-32 placeholder:opacity-50"
-												placeholder="Add a description of the collection here…"
+												placeholder="Add a description of the space here…"
 											/>
 										</FormControl>
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="shared"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel className="opacity-50">
+											<Header5>Shared</Header5>
+										</FormLabel>
+										<Select
+											onValueChange={field.onChange}
+											defaultValue={field.value}
+										>
+											<FormControl>
+												<SelectTrigger className="bg-card border-none focus:ring-transparent">
+													<SelectValue />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												<SelectItem
+													value={"private" satisfies Collection["shared"]}
+												>
+													Private
+												</SelectItem>
+												<SelectItem
+													value={"organization" satisfies Collection["shared"]}
+												>
+													Organization
+												</SelectItem>
+												<SelectItem
+													value={"public" satisfies Collection["shared"]}
+												>
+													Public
+												</SelectItem>
+											</SelectContent>
+										</Select>
+										{getSharedDescription(field.value) && (
+											<FormDescription className="text-xs">
+												{getSharedDescription(field.value)}
+											</FormDescription>
+										)}
 									</FormItem>
 								)}
 							/>
@@ -106,4 +155,17 @@ export const EditCollection = ({ collection, onSubmit }: Props) => {
 			</Form>
 		</div>
 	);
+};
+
+const getSharedDescription = (value: Collection["shared"]) => {
+	switch (value) {
+		case "private":
+			return "Only you can see and edit this space.";
+		case "organization":
+			return "Only you and members of your organization can see and edit this space.";
+		case "public":
+			return "Anyone can see this space, but only you can edit it.";
+		default:
+			return undefined;
+	}
 };
