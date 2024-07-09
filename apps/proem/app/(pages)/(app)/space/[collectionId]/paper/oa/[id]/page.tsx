@@ -3,29 +3,26 @@ import { routes } from "@/routes";
 import { CollectionService } from "@/services/collection-service";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { CollectionIdParams } from "../../../params";
 
-type Props = {
-	params: { id: string; collectionId: string };
+type Props = CollectionIdParams & {
+	params: { id: string };
 };
 
-export default async function OAPaperPage({ params }: Props) {
+export default async function OAPaperPage({
+	params: { collectionId, id: paperId },
+}: Props) {
 	const { userId, orgId } = auth();
 
 	const collection = await CollectionService.getCollection(
-		params.collectionId,
+		collectionId,
 		userId,
 		orgId,
 	);
 	if (!collection) {
 		// If no space permissions, reopen paper in unspaced Reader
-		redirect(`${routes.paper}/oa/${params.id}`);
+		redirect(`${routes.paper}/oa/${paperId}`);
 	}
 
-	return (
-		<PaperPage
-			paperId={params.id}
-			type="oa"
-			collectionId={params.collectionId}
-		/>
-	);
+	return <PaperPage paperId={paperId} type="oa" collectionId={collectionId} />;
 }

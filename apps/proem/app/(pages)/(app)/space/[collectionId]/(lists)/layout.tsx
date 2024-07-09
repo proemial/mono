@@ -6,20 +6,17 @@ import { routes } from "@/routes";
 import { CollectionService } from "@/services/collection-service";
 import { auth } from "@clerk/nextjs/server";
 import { Paragraph } from "@proemial/shadcn-ui";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { ReactNode } from "react";
 
 type Props = CollectionIdParams & {
 	children: ReactNode;
 };
-export default async function ({ params, children }: Props) {
+export default async function ({ params: { collectionId }, children }: Props) {
 	const { userId, orgId } = auth();
-	if (!params?.collectionId) {
-		redirect(routes.space);
-	}
 
 	const collection = await CollectionService.getCollection(
-		params.collectionId,
+		collectionId,
 		userId,
 		orgId,
 	);

@@ -3,25 +3,24 @@ import { Main } from "@/components/main";
 import { ToggleSearchAction } from "@/components/nav-bar/actions/toggle-search-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { NavBar } from "@/components/nav-bar/nav-bar";
-import { routes } from "@/routes";
 import { CollectionService } from "@/services/collection-service";
 import { auth } from "@clerk/nextjs/server";
 import { findAvailableCollections } from "@proemial/data/repository/collection";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { ReactNode } from "react";
 
 type PageProps = CollectionIdParams & {
 	children: ReactNode;
 };
 
-export default async function ({ params, children }: PageProps) {
+export default async function ({
+	params: { collectionId },
+	children,
+}: PageProps) {
 	const { userId, orgId } = auth();
-	if (!params?.collectionId) {
-		redirect(routes.space);
-	}
 
 	const collectionFromParams = await CollectionService.getCollection(
-		params.collectionId,
+		collectionId,
 		userId,
 		orgId,
 	);

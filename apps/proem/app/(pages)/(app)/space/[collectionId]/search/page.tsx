@@ -5,11 +5,9 @@ import { CollectionService } from "@/services/collection-service";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { findPapers } from "../../../search/find-papers";
+import { CollectionIdParams } from "../params";
 
-type Params = {
-	params: {
-		collectionId: string;
-	};
+type Params = CollectionIdParams & {
 	searchParams?: {
 		query: string;
 	};
