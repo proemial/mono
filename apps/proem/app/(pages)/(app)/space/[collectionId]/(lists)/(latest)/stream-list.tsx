@@ -10,9 +10,16 @@ type FetchFeedByFeaturesProps = Required<
 export type StreamListProps = FetchFeedByFeaturesProps & {
 	id: string;
 	bookmarks?: string[];
+	readonly: boolean;
 };
 
-export function StreamList({ id, bookmarks, features, days }: StreamListProps) {
+export function StreamList({
+	id,
+	bookmarks,
+	features,
+	days,
+	readonly,
+}: StreamListProps) {
 	return (
 		<InfinityScrollList
 			queryKey={`space_stream_${id}`}
@@ -42,6 +49,7 @@ export function StreamList({ id, bookmarks, features, days }: StreamListProps) {
 						isBookmarked={Boolean(
 							bookmarks?.some((bookmarkId) => row.paper.id === bookmarkId),
 						)}
+						readonly={readonly}
 					>
 						{/* TODO! add debug mode */}
 						{/* {debug && (

@@ -4,17 +4,30 @@ import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/par
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { ProemAssistant } from "@/components/proem-assistant";
+import { CollectionService } from "@/services/collection-service";
+import { PermissionUtils } from "@/utils/permission-utils";
 import { auth } from "@clerk/nextjs";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { Fingerprint } from "@proemial/repositories/oa/fingerprinting/fingerprints";
+import { notFound } from "next/navigation";
 
 type LatestPageProps = CollectionIdParams;
 
 export default async function LatestPage({
 	params: { collectionId },
 }: LatestPageProps) {
-	const { userId } = auth();
+	const { userId, orgId } = auth();
+	const collection = await CollectionService.getCollection(
+		collectionId,
+		userId,
+		orgId,
+	);
+	if (!collection) {
+		notFound();
+	}
+	const canEdit = PermissionUtils.canEditCollection(collection, userId, orgId);
+	console.log("canEdit", canEdit);
 
 	const bookmarkedPapers =
 		await getBookmarkedPapersByCollectionId(collectionId);
@@ -46,6 +59,7 @@ export default async function LatestPage({
 				features={features}
 				days={FEED_DEFAULT_DAYS}
 				bookmarks={paperIds}
+				readonly={!canEdit}
 			/>
 			<ProemAssistant />
 		</>
