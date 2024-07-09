@@ -154,7 +154,7 @@ export function SignInForm({
 						Continue
 					</Button>
 				</div>
-				{signInState === "idle" && (
+				{signInState === "expired" && (
 					<div className="text-sm text-blue-700 dark:text-blue-400">
 						The link in the verification email has expired. Please try again.
 					</div>
