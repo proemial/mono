@@ -18,7 +18,7 @@ import {
 } from "./actions";
 
 export const ProfileCollections = () => {
-	const { userId } = useAuth();
+	const { userId, orgId } = useAuth();
 	const queryClient = useQueryClient();
 	const { membership } = useOrganization();
 
@@ -71,10 +71,14 @@ export const ProfileCollections = () => {
 					<CollectionListItem
 						key={collection.id}
 						collection={collection}
-						editable={{
-							onEdit: edit,
-							onDelete: del,
-						}}
+						editable={
+							hasEditPermissions(collection, userId, orgId)
+								? {
+										onEdit: edit,
+										onDelete: del,
+									}
+								: false
+						}
 						orgName={membership?.organization.name}
 					/>
 				))}
@@ -129,3 +133,19 @@ export function CreateCollectionDrawer({
 		</FullSizeDrawer>
 	);
 }
+
+const hasEditPermissions = (
+	collection: Collection,
+	userId: string,
+	orgId: string | null,
+) => {
+	// Allow edits by owner
+	if (collection.ownerId === userId) return true;
+	// Allow edits by org members, if the space is shared with the org or public
+	if (
+		collection.orgId === orgId &&
+		["organization", "public"].includes(collection.shared)
+	)
+		return true;
+	return false;
+};

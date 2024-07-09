@@ -6,7 +6,7 @@ export const findAvailableCollections = async (
 	userId: string,
 	orgId: string | undefined,
 ) => {
-	const result = await neonDb.query.collections.findMany({
+	const results = await neonDb.query.collections.findMany({
 		where: or(
 			// User's own spaces
 			and(eq(collections.ownerId, userId), isNull(collections.deletedAt)),
@@ -22,8 +22,8 @@ export const findAvailableCollections = async (
 	});
 	return [
 		// Put the user's default space first
-		...result.filter((c) => c.id === userId),
-		...result.filter((c) => c.id !== userId),
+		...results.filter((c) => c.id === userId),
+		...results.filter((c) => c.id !== userId),
 	];
 };
 

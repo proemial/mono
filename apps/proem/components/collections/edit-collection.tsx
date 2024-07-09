@@ -164,7 +164,7 @@ const getSharedDescription = (value: Collection["shared"]) => {
 		case "organization":
 			return "Only you and members of your organization can see and edit this space.";
 		case "public":
-			return "Anyone can see this space, but only you can edit it.";
+			return "Anyone can see this space, but only you and members of your organization can edit it.";
 		default:
 			return undefined;
 	}
