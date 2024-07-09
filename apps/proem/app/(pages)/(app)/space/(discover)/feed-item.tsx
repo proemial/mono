@@ -24,6 +24,7 @@ export type FeedItemProps = Pick<
 	fingerprint?: RankedPaperFeature[];
 	provider?: Prefix;
 	children?: ReactNode;
+	readonly?: boolean;
 };
 
 export default function FeedItem({
@@ -34,6 +35,7 @@ export default function FeedItem({
 	isBookmarked,
 	customCollectionId,
 	onBookmarkToggleClick,
+	readonly,
 }: FeedItemProps) {
 	const tags = paper.data.topics
 		?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
@@ -50,6 +52,7 @@ export default function FeedItem({
 				provider={provider}
 				customCollectionId={customCollectionId}
 				hasAbstract={!!paper.data.abstract}
+				readonly={readonly}
 			>
 				<Markdown>
 					{paper.generated?.title

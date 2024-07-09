@@ -6,6 +6,7 @@ import {
 	getPersonalDefaultCollection,
 } from "@/app/constants";
 import { streamCacheUpdate } from "@/inngest/populator.task";
+import { PermissionUtils } from "@/utils/permission-utils";
 import { auth } from "@clerk/nextjs";
 import { neonDb } from "@proemial/data";
 import {
@@ -102,11 +103,17 @@ const togglePaperInCollectionParams = z.object({
 export async function togglePaperInCollection(
 	params: z.infer<typeof togglePaperInCollectionParams>,
 ) {
-	const { userId } = auth();
+	const { userId, orgId } = auth();
 	const { paperId, collectionId, isEnabled, revalidateCache } =
 		togglePaperInCollectionParams.parse(params);
 
-	if (!userId) {
+	const collection = await neonDb.query.collections.findFirst({
+		where: and(eq(collections.id, collectionId), isNull(collections.deletedAt)),
+	});
+	if (
+		!collection ||
+		!PermissionUtils.canEditCollection(collection, userId, orgId)
+	) {
 		return;
 	}
 	// TODO! Consider moving to better?

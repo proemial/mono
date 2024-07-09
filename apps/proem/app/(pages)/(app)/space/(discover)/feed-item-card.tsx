@@ -33,6 +33,7 @@ export type FeedItemCardProps = Pick<
 	provider?: Prefix;
 	hasAbstract: boolean;
 	onBookmarkToggleClick?: AddToCollectionButtonProps["onClick"];
+	readonly?: boolean;
 };
 
 export const FeedItemCard = ({
@@ -45,6 +46,7 @@ export const FeedItemCard = ({
 	customCollectionId,
 	hasAbstract,
 	onBookmarkToggleClick,
+	readonly,
 }: FeedItemCardProps) => {
 	const pathname = usePathname();
 	const spaceSpecificPrefix =
@@ -61,18 +63,20 @@ export const FeedItemCard = ({
 							<div className="uppercase text-2xs text-nowrap">
 								{dayjs(date).fromNow()}
 							</div>
-							<div className="-mr-2">
-								<Trackable
-									trackingKey={analyticsKeys.collection.addPaper.fromAsk}
-								>
-									<AddToCollectionButton
-										onClick={onBookmarkToggleClick}
-										fromTrackingKey="fromFeed"
-										isBookmarked={isBookmarked}
-										paperId={id}
-										customCollectionId={customCollectionId}
-									/>
-								</Trackable>
+							<div className="-mr-2 min-h-10">
+								{!readonly && (
+									<Trackable
+										trackingKey={analyticsKeys.collection.addPaper.fromAsk}
+									>
+										<AddToCollectionButton
+											onClick={onBookmarkToggleClick}
+											fromTrackingKey="fromFeed"
+											isBookmarked={isBookmarked}
+											paperId={id}
+											customCollectionId={customCollectionId}
+										/>
+									</Trackable>
+								)}
 							</div>
 						</div>
 					</div>

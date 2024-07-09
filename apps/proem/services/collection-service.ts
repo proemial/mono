@@ -1,5 +1,5 @@
 import { getPersonalDefaultCollection } from "@/app/constants";
-import { CollectionUtils } from "@/utils/collections";
+import { PermissionUtils } from "@/utils/permission-utils";
 import { findCollectionWithBookmarksById } from "@proemial/data/repository/collection";
 
 export const CollectionService = {
@@ -9,7 +9,10 @@ export const CollectionService = {
 		orgId: string | null | undefined,
 	) => {
 		const collection = await findCollectionWithBookmarksById(collectionId);
-		if (collection && CollectionUtils.canRead(collection, userId, orgId)) {
+		if (
+			collection &&
+			PermissionUtils.canReadCollection(collection, userId, orgId)
+		) {
 			return collection;
 		}
 		if (collectionId === userId) {

@@ -4,15 +4,25 @@ import { FeedItemWithDisabledOverlay } from "@/app/(pages)/(app)/space/[collecti
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { ProemAssistant } from "@/components/proem-assistant";
 import { routes } from "@/routes";
-import { redirect } from "next/navigation";
+import { CollectionService } from "@/services/collection-service";
+import { PermissionUtils } from "@/utils/permission-utils";
+import { auth } from "@clerk/nextjs/server";
+import { notFound, redirect } from "next/navigation";
 
 type SavedPageProps = CollectionIdParams;
 
 export default async function SavedPage({ params }: SavedPageProps) {
-	const collectionId = params?.collectionId;
-	if (!collectionId) {
-		redirect(routes.space);
+	const collectionId = params.collectionId;
+	const { userId, orgId } = auth();
+	const collection = await CollectionService.getCollection(
+		collectionId,
+		userId,
+		orgId,
+	);
+	if (!collection) {
+		notFound();
 	}
+	const canEdit = PermissionUtils.canEditCollection(collection, userId, orgId);
 
 	const bookmarkedPapers =
 		await getBookmarkedPapersByCollectionId(collectionId);
@@ -43,6 +53,7 @@ export default async function SavedPage({ params }: SavedPageProps) {
 							paper={paper}
 							isBookmarked={isBookmarked}
 							customCollectionId={collectionId}
+							readonly={!canEdit}
 						/>
 					);
 				})}

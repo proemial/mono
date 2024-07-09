@@ -5,7 +5,7 @@ import { CollapsibleSection } from "@/components/collapsible-section";
 import { CollectionListItem } from "@/components/collections/collection-list-item";
 import { CreateCollection } from "@/components/collections/create-collection";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
-import { CollectionUtils } from "@/utils/collections";
+import { PermissionUtils } from "@/utils/permission-utils";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 import { Collection, NewCollection } from "@proemial/data/neon/schema";
 import { Plus } from "@untitled-ui/icons-react";
@@ -73,7 +73,7 @@ export const ProfileCollections = () => {
 						key={collection.id}
 						collection={collection}
 						editable={
-							CollectionUtils.canEdit(collection, userId, orgId)
+							PermissionUtils.canEditCollection(collection, userId, orgId)
 								? {
 										onEdit: edit,
 										onDelete: del,

@@ -6,12 +6,13 @@ import FeedItem, {
 import { Button, cn } from "@proemial/shadcn-ui";
 import { useState } from "react";
 
-type FeedItemWithDisabledOverlayProps = FeedItemProps;
+type FeedItemWithDisabledOverlayProps = FeedItemProps & { readonly: boolean };
 
 export function FeedItemWithDisabledOverlay({
 	paper,
 	isBookmarked,
 	customCollectionId,
+	readonly,
 }: FeedItemWithDisabledOverlayProps) {
 	const [isDisabled, setIsDisabled] = useState(false);
 	const onBookmarkToggleClick = (isDisabled: boolean) =>
@@ -24,7 +25,6 @@ export function FeedItemWithDisabledOverlay({
 					{customCollectionId && (
 						<div className="bg-white shadow rounded-xl flex justify-between gap-5 items-center py-1 pl-3.5">
 							<span className="text-sm">This paper has been removed</span>
-
 							<Button
 								variant="ghost"
 								className="text-sm underline"
@@ -54,6 +54,7 @@ export function FeedItemWithDisabledOverlay({
 					isBookmarked={isBookmarked}
 					customCollectionId={customCollectionId}
 					onBookmarkToggleClick={onBookmarkToggleClick}
+					readonly={readonly}
 				/>
 			</div>
 		</div>

@@ -1,5 +1,5 @@
 export type CollectionIdParams = {
-	params?: {
+	params: {
 		collectionId: string;
 	};
 };

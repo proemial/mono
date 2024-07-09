@@ -1,7 +1,7 @@
 import { Collection } from "@proemial/data/neon/schema";
 
-export const CollectionUtils = {
-	canRead: (
+export const PermissionUtils = {
+	canReadCollection: (
 		collection: Collection,
 		userId: string | null | undefined,
 		orgId: string | null | undefined,
@@ -16,7 +16,7 @@ export const CollectionUtils = {
 		return false;
 	},
 
-	canEdit: (
+	canEditCollection: (
 		collection: Collection,
 		userId: string | null | undefined,
 		orgId: string | null | undefined,
