@@ -10,7 +10,7 @@ type Props = {
 export const SpaceContributorsIndicator = async ({ collection }: Props) => {
 	const { ownerId, shared } = collection;
 	const ownerUser = await getUser(ownerId);
-	if (!ownerUser) return undefined;
+	if (!ownerUser) return <div />;
 
 	switch (shared) {
 		case "private": {

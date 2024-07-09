@@ -65,10 +65,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	return (
 		<>
 			<NavBar action={<CloseAction target={routes.space} />}>
-				<SelectSpaceHeader
-					collections={userCollections}
-					userId={userId ?? ""}
-				/>
+				<SelectSpaceHeader collections={userCollections} userId={userId} />
 			</NavBar>
 			<Main>
 				<div className="space-y-6">

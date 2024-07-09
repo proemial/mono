@@ -13,6 +13,3 @@ export function createId(prefix?: keyof typeof prefixes): string {
 
 	return `${prefixes[prefix]}${seperator}${id}`;
 }
-
-export const isPublicSpace = (collectionId: string) =>
-	collectionId.startsWith(`${prefixes.collection}${seperator}`);

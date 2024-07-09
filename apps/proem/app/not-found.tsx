@@ -7,9 +7,10 @@ export default function NotFound() {
 	return (
 		<main className="flex mt-[25%]">
 			<div className="rounded-sm border border-background flex flex-col py-4 px-4 items-left m-auto">
-				<h1 className="text-[24px] font-normal leading-[32px]">Page missing</h1>
+				<h1 className="text-[24px] font-normal leading-[32px]">Not found</h1>
 				<p className="leading-snug text-[14px] font-normal text-left">
-					Sorry, we are working on fixing this.
+					The content you are looking for could not be found, or you do not have
+					sufficient permissions to access it.
 				</p>
 				<div className="flex mt-10 gap-x-2">
 					<Link

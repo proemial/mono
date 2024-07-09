@@ -5,6 +5,7 @@ import { CollapsibleSection } from "@/components/collapsible-section";
 import { CollectionListItem } from "@/components/collections/collection-list-item";
 import { CreateCollection } from "@/components/collections/create-collection";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
+import { CollectionUtils } from "@/utils/collections";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 import { Collection, NewCollection } from "@proemial/data/neon/schema";
 import { Plus } from "@untitled-ui/icons-react";
@@ -72,7 +73,7 @@ export const ProfileCollections = () => {
 						key={collection.id}
 						collection={collection}
 						editable={
-							hasEditPermissions(collection, userId, orgId)
+							CollectionUtils.canEdit(collection, userId, orgId)
 								? {
 										onEdit: edit,
 										onDelete: del,
@@ -133,19 +134,3 @@ export function CreateCollectionDrawer({
 		</FullSizeDrawer>
 	);
 }
-
-const hasEditPermissions = (
-	collection: Collection,
-	userId: string,
-	orgId: string | null,
-) => {
-	// Allow edits by owner
-	if (collection.ownerId === userId) return true;
-	// Allow edits by org members, if the space is shared with the org or public
-	if (
-		collection.orgId === orgId &&
-		["organization", "public"].includes(collection.shared)
-	)
-		return true;
-	return false;
-};

@@ -1,16 +1,13 @@
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
-import { getPersonalDefaultCollection } from "@/app/constants";
 import { Main } from "@/components/main";
 import { ToggleSearchAction } from "@/components/nav-bar/actions/toggle-search-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
+import { CollectionService } from "@/services/collection-service";
 import { auth } from "@clerk/nextjs/server";
-import {
-	findAvailableCollections,
-	findCollectionWithBookmarksById,
-} from "@proemial/data/repository/collection";
-import { redirect } from "next/navigation";
+import { findAvailableCollections } from "@proemial/data/repository/collection";
+import { notFound, redirect } from "next/navigation";
 import { ReactNode } from "react";
 
 type PageProps = CollectionIdParams & {
@@ -19,34 +16,44 @@ type PageProps = CollectionIdParams & {
 
 export default async function ({ params, children }: PageProps) {
 	const { userId, orgId } = auth();
-	if (!userId || !params?.collectionId) {
+	if (!params?.collectionId) {
 		redirect(routes.space);
 	}
 
-	const collection = await getCollection(params.collectionId, userId);
-	if (!collection) {
-		redirect(routes.space);
+	const collectionFromParams = await CollectionService.getCollection(
+		params.collectionId,
+		userId,
+		orgId,
+	);
+	if (!collectionFromParams) {
+		notFound();
 	}
 
-	const userCollections = await findAvailableCollections(userId, orgId);
+	const availableCollections = userId
+		? await findAvailableCollections(userId, orgId)
+		: [];
+	const containsCollection = availableCollections.some(
+		(c) => c.id === collectionFromParams.id,
+	);
+	const combinedCollections = containsCollection
+		? availableCollections
+		: [...availableCollections, collectionFromParams].sort((a, b) =>
+				a.name.localeCompare(b.name),
+			);
 
 	return (
 		<>
 			<NavBar action={<ToggleSearchAction />}>
-				<SelectSpaceHeader collections={userCollections} userId={userId} />
+				<SelectSpaceHeader
+					collections={[
+						// Put the user's default space first
+						...combinedCollections.filter((c) => c.id === userId),
+						...combinedCollections.filter((c) => c.id !== userId),
+					]}
+					userId={userId}
+				/>
 			</NavBar>
 			<Main>{children}</Main>
 		</>
 	);
 }
-
-const getCollection = async (collectionId: string, userId: string) => {
-	const collection = await findCollectionWithBookmarksById(collectionId);
-	if (collection) {
-		return collection;
-	}
-	if (collectionId === userId) {
-		return getPersonalDefaultCollection(userId);
-	}
-	return undefined;
-};

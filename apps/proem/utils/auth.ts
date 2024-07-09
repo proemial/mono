@@ -6,7 +6,12 @@ import {
 
 export const getUser = async (userId: string) => {
 	if (!userId) return undefined;
-	return await clerkClient.users.getUser(userId);
+	try {
+		return await clerkClient.users.getUser(userId);
+	} catch (error) {
+		console.error("Error fetching user from auth provieder", error);
+		return undefined;
+	}
 };
 
 export const getOrgMembersUserData = async () => {

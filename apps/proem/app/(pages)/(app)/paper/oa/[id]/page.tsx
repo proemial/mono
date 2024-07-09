@@ -18,10 +18,7 @@ export default async function OAPaperPage({ params }: Props) {
 	return (
 		<>
 			<NavBar action={<CloseAction target={routes.space} />}>
-				<SelectSpaceHeader
-					collections={userCollections}
-					userId={userId ?? ""}
-				/>
+				<SelectSpaceHeader collections={userCollections} userId={userId} />
 			</NavBar>
 			<Main>
 				<PaperPage paperId={params.id} type="oa" />

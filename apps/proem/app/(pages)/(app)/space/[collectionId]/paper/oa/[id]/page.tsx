@@ -1,7 +1,7 @@
 import PaperPage from "@/app/(pages)/(app)/paper/oa/[id]/paper-page";
 import { routes } from "@/routes";
+import { CollectionService } from "@/services/collection-service";
 import { auth } from "@clerk/nextjs/server";
-import { isPublicSpace } from "@proemial/data/lib/create-id";
 import { redirect } from "next/navigation";
 
 type Props = {
@@ -9,9 +9,15 @@ type Props = {
 };
 
 export default async function OAPaperPage({ params }: Props) {
-	const { userId } = auth();
-	// Disallow access to other users' default space, but reopen paper in unspaced Reader
-	if (params.collectionId !== userId && !isPublicSpace(params.collectionId)) {
+	const { userId, orgId } = auth();
+
+	const collection = await CollectionService.getCollection(
+		params.collectionId,
+		userId,
+		orgId,
+	);
+	if (!collection) {
+		// If no space permissions, reopen paper in unspaced Reader
 		redirect(`${routes.paper}/oa/${params.id}`);
 	}
 

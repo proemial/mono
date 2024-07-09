@@ -1,27 +1,30 @@
 import { NavItem } from "@/app/(pages)/(app)/space/[collectionId]/nav-item";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
-import { getPersonalDefaultCollection } from "@/app/constants";
 import { SpaceContributorsIndicator } from "@/components/space-contributors-indicator";
 import { SpaceShareIndicator } from "@/components/space-share-indicator";
 import { routes } from "@/routes";
+import { CollectionService } from "@/services/collection-service";
 import { auth } from "@clerk/nextjs/server";
-import { findCollectionWithBookmarksById } from "@proemial/data/repository/collection";
 import { Paragraph } from "@proemial/shadcn-ui";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { ReactNode } from "react";
 
 type Props = CollectionIdParams & {
 	children: ReactNode;
 };
 export default async function ({ params, children }: Props) {
-	const { userId } = auth();
-	if (!userId || !params?.collectionId) {
+	const { userId, orgId } = auth();
+	if (!params?.collectionId) {
 		redirect(routes.space);
 	}
 
-	const collection = await getCollection(params.collectionId, userId);
+	const collection = await CollectionService.getCollection(
+		params.collectionId,
+		userId,
+		orgId,
+	);
 	if (!collection) {
-		redirect(routes.space);
+		notFound();
 	}
 
 	const isDefaultCollection = collection.id === userId;
@@ -47,13 +50,3 @@ export default async function ({ params, children }: Props) {
 		</div>
 	);
 }
-const getCollection = async (collectionId: string, userId: string) => {
-	const collection = await findCollectionWithBookmarksById(collectionId);
-	if (collection) {
-		return collection;
-	}
-	if (collectionId === userId) {
-		return getPersonalDefaultCollection(userId);
-	}
-	return undefined;
-};
