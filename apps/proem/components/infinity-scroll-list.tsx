@@ -37,7 +37,9 @@ export function InfinityScrollList<TQueryKey extends string, TRow>({
 		refetchOnWindowFocus: false,
 	});
 
-	const allRows = data ? data.pages?.flatMap((d) => d.rows) : [];
+	const allRows = data
+		? data.pages?.filter((d) => !!d).flatMap((d) => d.rows)
+		: [];
 	const count = data?.pages.at(0)?.count;
 
 	const rowVirtualizer = useWindowVirtualizer({
