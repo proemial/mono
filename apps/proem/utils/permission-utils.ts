@@ -9,7 +9,11 @@ export const PermissionUtils = {
 		// Allow reads by anyone, if the space is shared with the public
 		if (collection.shared === "public") return true;
 		// Allow reads by org members, if the space is shared with the org
-		if (collection.orgId === orgId && collection.shared === "organization")
+		if (
+			orgId &&
+			collection.orgId === orgId &&
+			collection.shared === "organization"
+		)
 			return true;
 		// Allow reads by owner
 		if (collection.ownerId === userId) return true;
@@ -25,6 +29,7 @@ export const PermissionUtils = {
 		if (collection.ownerId === userId) return true;
 		// Allow edits by org members, if the space is shared with the org or public
 		if (
+			orgId &&
 			collection.orgId === orgId &&
 			["organization", "public"].includes(collection.shared)
 		)
