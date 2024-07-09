@@ -38,8 +38,8 @@ export const addCollection = async (collection: NewCollection) => {
 
 export const editCollection = async (collection: Collection) => {
 	const { userId, orgId } = await authAndRatelimit();
-	if (collection.ownerId === userId || collection.orgId === orgId) {
-		// Allow edits by owner and org members
+
+	async function doEditCollection() {
 		const [result] = await neonDb
 			.update(collections)
 			.set({
@@ -51,6 +51,24 @@ export const editCollection = async (collection: Collection) => {
 			.returning();
 		revalidatePath(`${routes.space}/[id]`, "layout");
 		return result;
+	}
+
+	switch (collection.shared) {
+		case "private": {
+			if (collection.ownerId === userId) {
+				// Allow edits by owner
+				return await doEditCollection();
+			}
+			break;
+		}
+		case "organization":
+		case "public": {
+			if (collection.ownerId === userId || collection.orgId === orgId) {
+				// Allow edits by owner and org members
+				return await doEditCollection();
+			}
+			break;
+		}
 	}
 };
 
