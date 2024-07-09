@@ -9,7 +9,6 @@ import { useAuth, useOrganization } from "@clerk/nextjs";
 import { Collection, NewCollection } from "@proemial/data/neon/schema";
 import { Plus } from "@untitled-ui/icons-react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getNewCollectionTemplate } from "../(pages)/(app)/space/[collectionId]/collection-utils";
 import { getPersonalDefaultCollection } from "../constants";
 import {
 	addCollection,
@@ -118,7 +117,13 @@ export function CreateCollectionDrawer({
 	return (
 		<FullSizeDrawer trigger={trigger}>
 			<CreateCollection
-				collection={getNewCollectionTemplate(userId, orgId)}
+				collection={{
+					name: "",
+					description: "",
+					ownerId: userId,
+					orgId,
+					shared: orgId ? "organization" : "public",
+				}}
 				onSubmit={add}
 			/>
 		</FullSizeDrawer>

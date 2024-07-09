@@ -11,7 +11,6 @@ import { NewCollection } from "@proemial/data/neon/schema";
 import { useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "react-query";
 import { addPaperToNewCollection } from "../(discover)/bookmark-paper";
-import { getNewCollectionTemplate } from "../[collectionId]/collection-utils";
 
 export default function NewSpacePage() {
 	const { userId, orgId } = useAuth();
@@ -41,7 +40,13 @@ export default function NewSpacePage() {
 			<Main>
 				<CreateCollection
 					noDialog
-					collection={getNewCollectionTemplate(userId, orgId)}
+					collection={{
+						name: "",
+						description: "",
+						ownerId: userId,
+						orgId,
+						shared: orgId ? "organization" : "public",
+					}}
 					onSubmit={add}
 				/>
 			</Main>
