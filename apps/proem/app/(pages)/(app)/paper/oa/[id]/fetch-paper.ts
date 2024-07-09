@@ -109,3 +109,31 @@ export async function fetchWithAbstract(url: string) {
 
 	return { meta, papers };
 }
+
+export const fetchPapersByInstitution = async (
+	{ id }: { id?: string } = {},
+	{ limit, offset }: { limit?: number; offset?: number } = {},
+): Promise<{ meta: OpenAlexMeta; papers: OpenAlexPaper[] }> => {
+	const pageLimit = limit ?? 25;
+	const pageOffset = offset ?? 1;
+	const select = openAlexFields.all;
+	const oaFilter = `authorships.institutions.id:${id}`;
+
+	const sort = "from_publication_date:desc";
+	const url = `${oaBaseUrl}?${oaBaseArgs}&select=${select}&filter=${oaFilter}&sort=${sort}&per_page=${pageLimit}&page=${pageOffset}`;
+
+	const { meta, papers } = await fetchWithAbstract(url);
+
+	if (meta.count === 0) {
+		return { meta, papers };
+	}
+
+	const oaPapers = papers
+		.filter((p) => p.data.topics?.length)
+		.map((result) => ({
+			...result,
+			id: result.data.id.replace("https://openalex.org/", ""),
+		}));
+
+	return { meta, papers: [...oaPapers] };
+};

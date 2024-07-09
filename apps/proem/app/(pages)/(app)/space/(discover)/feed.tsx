@@ -3,7 +3,10 @@ import { Bookmarks } from "@/app/(pages)/(app)/space/(discover)/add-to-collectio
 import FeedItem, {
 	FeedItemProps,
 } from "@/app/(pages)/(app)/space/(discover)/feed-item";
-import { fetchFeedByTopic } from "@/app/(pages)/(app)/space/(discover)/fetch-feed";
+import {
+	fetchFeedByInstitution,
+	fetchFeedByTopic,
+} from "@/app/(pages)/(app)/space/(discover)/fetch-feed";
 import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
 import {
 	analyticsKeys,
@@ -20,7 +23,12 @@ const initialPageSize = 4;
 type FeedProps = {
 	children: ReactNode;
 	debug?: boolean;
-	filter: { topic?: number; features?: RankedFeature[]; days?: number };
+	filter: {
+		topic?: number;
+		features?: RankedFeature[];
+		days?: number;
+		institution?: string;
+	};
 	nocache?: boolean;
 	bookmarks: Bookmarks;
 };
@@ -32,7 +40,9 @@ export function Feed({
 	nocache,
 	bookmarks,
 }: FeedProps) {
-	const { topic, features, days } = filter;
+	const { topic, features, days, institution } = filter;
+	console.log("Feed", filter);
+
 	return (
 		<div className="space-y-5 pb-10">
 			<div>{children}</div>
@@ -58,6 +68,12 @@ export function Feed({
 							{ features, days },
 							{ offset: ctx.pageParam },
 							nocache,
+						);
+					}
+					if (institution) {
+						return fetchFeedByInstitution(
+							{ id: institution },
+							{ offset: ctx.pageParam },
 						);
 					}
 					return fetchFeedByTopic({ field: topic }, { offset: ctx.pageParam });
