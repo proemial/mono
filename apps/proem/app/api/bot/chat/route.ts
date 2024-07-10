@@ -5,10 +5,7 @@ import { context, model, question } from "@/app/prompts/chat";
 import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { auth } from "@clerk/nextjs/server";
-import { neonDb } from "@proemial/data";
-import { NewPaper, NewUser, papers, users } from "@proemial/data/neon/schema";
-import { NewComment, comments } from "@proemial/data/neon/schema/comments";
-import { NewPost, posts } from "@proemial/data/neon/schema/posts";
+import { savePostAndReply } from "@proemial/data/repository/post";
 import { OpenAIStream, StreamData, StreamingTextResponse } from "ai";
 import { type NextRequest, NextResponse } from "next/server";
 import { Configuration, OpenAIApi } from "openai-edge";
@@ -72,6 +69,7 @@ export async function POST(req: NextRequest) {
 						paperId,
 					},
 					completion,
+					PAPER_BOT_USER_ID,
 				);
 			}
 
@@ -94,29 +92,3 @@ export async function POST(req: NextRequest) {
 	// Respond with the stream
 	return new StreamingTextResponse(stream, undefined, streamData);
 }
-
-const savePostAndReply = async (
-	paper: NewPaper,
-	user: NewUser,
-	post: NewPost,
-	commentContent: NewComment["content"],
-) => {
-	// Create paper and user if not already exists
-	await Promise.all([
-		neonDb.insert(papers).values(paper).onConflictDoNothing(),
-		neonDb.insert(users).values(user).onConflictDoNothing(),
-	]);
-	// Save post
-	const insertedPost = await neonDb
-		.insert(posts)
-		.values(post)
-		.returning({ id: posts.id });
-	if (insertedPost[0]) {
-		// Save paper bot reply
-		await neonDb.insert(comments).values({
-			content: commentContent,
-			authorId: PAPER_BOT_USER_ID,
-			postId: insertedPost[0].id,
-		});
-	}
-};
