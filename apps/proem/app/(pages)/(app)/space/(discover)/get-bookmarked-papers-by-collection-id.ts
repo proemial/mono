@@ -1,11 +1,6 @@
 import { getBookmarkedPapersCacheTag } from "@/app/constants";
-import { neonDb } from "@proemial/data";
-import {
-	Collection,
-	collections,
-	collectionsToPapers,
-} from "@proemial/data/neon/schema";
-import { and, eq, isNull } from "drizzle-orm";
+import { Collection } from "@proemial/data/neon/schema";
+import { getCollectionByCollectionId } from "@proemial/data/repository/collection";
 import { unstable_cache as cache } from "next/cache";
 
 export async function getBookmarkedPapersByCollectionId(
@@ -13,22 +8,7 @@ export async function getBookmarkedPapersByCollectionId(
 ) {
 	return cache(
 		async () => {
-			const collection = await neonDb.query.collections.findFirst({
-				columns: { id: true },
-				where: and(
-					eq(collections.id, collectionId),
-					isNull(collections.deletedAt),
-				),
-				with: {
-					collectionsToPapers: {
-						where: eq(collectionsToPapers.isEnabled, true),
-						columns: {
-							paperId: true,
-							isEnabled: true,
-						},
-					},
-				},
-			});
+			const collection = await getCollectionByCollectionId(collectionId);
 
 			return collection?.collectionsToPapers;
 		},

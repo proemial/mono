@@ -52,3 +52,19 @@ export const findCollectionsByOwnerId = async (userId: string) => {
 		...userCollections.filter((c) => c.id !== userId),
 	];
 };
+
+export async function getCollectionByCollectionId(collectionId: string) {
+	return await neonDb.query.collections.findFirst({
+		columns: { id: true },
+		where: and(eq(collections.id, collectionId), isNull(collections.deletedAt)),
+		with: {
+			collectionsToPapers: {
+				where: eq(collectionsToPapers.isEnabled, true),
+				columns: {
+					paperId: true,
+					isEnabled: true,
+				},
+			},
+		},
+	});
+}
