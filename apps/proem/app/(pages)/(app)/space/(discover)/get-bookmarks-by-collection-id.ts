@@ -1,11 +1,6 @@
 import { getBookmarkCacheTag } from "@/app/constants";
-import { neonDb } from "@proemial/data";
-import {
-	Collection,
-	collections,
-	collectionsToPapers,
-} from "@proemial/data/neon/schema";
-import { and, eq, isNull } from "drizzle-orm";
+import { Collection } from "@proemial/data/neon/schema";
+import { getCollectionsByCollectionId } from "@proemial/data/repository/collection";
 import { unstable_cache } from "next/cache";
 
 /**
@@ -14,18 +9,7 @@ import { unstable_cache } from "next/cache";
 export const getBookmarksByCollectionId = (collectionId: Collection["id"]) =>
 	unstable_cache(
 		async () => {
-			const bookmarks = await neonDb.query.collections.findMany({
-				columns: { id: true },
-				where: and(
-					eq(collections.id, collectionId),
-					isNull(collections.deletedAt),
-				),
-				with: {
-					collectionsToPapers: {
-						where: eq(collectionsToPapers.isEnabled, true),
-					},
-				},
-			});
+			const bookmarks = await getCollectionsByCollectionId(collectionId);
 
 			return bookmarks.reduce(
 				(acc, collection) => {

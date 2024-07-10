@@ -69,6 +69,18 @@ export async function getCollectionByCollectionId(collectionId: string) {
 	});
 }
 
+export async function getCollectionsByCollectionId(collectionId: string) {
+	return await neonDb.query.collections.findMany({
+		columns: { id: true },
+		where: and(eq(collections.id, collectionId), isNull(collections.deletedAt)),
+		with: {
+			collectionsToPapers: {
+				where: eq(collectionsToPapers.isEnabled, true),
+			},
+		},
+	});
+}
+
 export async function getAllSpaceIds() {
 	const collections = await neonDb.query.collections.findMany();
 	return collections.map((collection) => collection.id);
