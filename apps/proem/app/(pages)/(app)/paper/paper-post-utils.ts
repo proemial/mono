@@ -1,16 +1,9 @@
 import { PAPER_BOT_USER_ID } from "@/app/constants";
 import { getOrgMembersUserData } from "@/utils/auth";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { neonDb } from "@proemial/data";
-import {
-	Comment,
-	Post,
-	comments,
-	papers,
-	posts,
-} from "@proemial/data/neon/schema";
+import { Comment, Post } from "@proemial/data/neon/schema";
+import { getPaperPostsForUsers } from "@proemial/data/repository/paper";
 import { Message, nanoid } from "ai";
-import { eq, inArray } from "drizzle-orm";
 
 export type UserData = {
 	userId: string;
@@ -70,27 +63,10 @@ export const getOwnPaperPosts = async (paperId: string) => {
 	if (!userId) {
 		return [];
 	}
-	const paper = await neonDb.query.papers.findFirst({
-		where: eq(papers.id, paperId),
-		with: {
-			posts: {
-				columns: {
-					paperId: false,
-				},
-				with: {
-					comments: {
-						columns: {
-							postId: false,
-						},
-						// Only include own comments
-						where: inArray(comments.authorId, [userId, PAPER_BOT_USER_ID]),
-					},
-				},
-				// Only include own posts
-				where: inArray(posts.authorId, [userId, PAPER_BOT_USER_ID]),
-			},
-		},
-	});
+	const paper = await getPaperPostsForUsers(paperId, [
+		userId,
+		PAPER_BOT_USER_ID,
+	]);
 	if (!paper) {
 		return [];
 	}
@@ -136,30 +112,11 @@ export const getOrgMemberPaperPosts = async (paperId: string) => {
 		return [];
 	}
 	const orgMemberIds = orgMembersUserData.map((data) => data.userId);
-	const paper = await neonDb.query.papers.findFirst({
-		where: eq(papers.id, paperId),
-		with: {
-			posts: {
-				columns: {
-					paperId: false,
-				},
-				with: {
-					comments: {
-						columns: {
-							postId: false,
-						},
-						// Only include comments from org members and AI assistant
-						where: inArray(comments.authorId, [
-							...orgMemberIds,
-							PAPER_BOT_USER_ID,
-						]),
-					},
-				},
-				// Only include posts from org members and AI assistant
-				where: inArray(posts.authorId, [...orgMemberIds, PAPER_BOT_USER_ID]),
-			},
-		},
-	});
+
+	const paper = await getPaperPostsForUsers(paperId, [
+		...orgMemberIds,
+		PAPER_BOT_USER_ID,
+	]);
 	if (!paper) {
 		return [];
 	}
