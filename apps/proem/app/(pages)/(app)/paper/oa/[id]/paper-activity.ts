@@ -1,7 +1,9 @@
 import { streamCacheUpdate } from "@/inngest/populator.task";
 import { auth } from "@clerk/nextjs/server";
-import { neonDb } from "@proemial/data";
-import { users } from "@proemial/data/neon/schema";
+import {
+	getOrCreateUser,
+	getOrCreateUserActivities,
+} from "@proemial/data/repository/user";
 import { waitUntil } from "@vercel/functions";
 
 export const addPaperActivity = async (paperId: string) => {
@@ -10,14 +12,7 @@ export const addPaperActivity = async (paperId: string) => {
 		return;
 	}
 	// Add user if not already exists
-	const userResult = await neonDb
-		.insert(users)
-		.values({ id: userId })
-		.onConflictDoUpdate({
-			target: [users.id],
-			set: { id: userId },
-		})
-		.returning();
+	const userResult = await getOrCreateUser(userId);
 	const user = userResult[0];
 	if (!user) {
 		throw new Error("Failed to add user to database");
@@ -42,17 +37,6 @@ export const addPaperActivity = async (paperId: string) => {
 	const activitiesSortedReadDate = existingActivities.sort(
 		(a, b) => b.noOfReads - a.noOfReads,
 	);
-	await neonDb
-		.insert(users)
-		.values({
-			id: userId,
-			paperActivities: activitiesSortedReadDate,
-		})
-		.onConflictDoUpdate({
-			target: [users.id],
-			set: {
-				paperActivities: activitiesSortedReadDate,
-			},
-		});
+	await getOrCreateUserActivities(userId, activitiesSortedReadDate);
 	waitUntil(streamCacheUpdate.run(userId, "user"));
 };
