@@ -34,9 +34,10 @@ const editCollectionSchema = createSelectSchema(collections, {
 type Props = {
 	collection: Collection;
 	onSubmit: (collection: Collection) => void;
+	orgName: string | undefined;
 };
 
-export const EditCollection = ({ collection, onSubmit }: Props) => {
+export const EditCollection = ({ collection, onSubmit, orgName }: Props) => {
 	const form = useForm({
 		resolver: zodResolver(editCollectionSchema),
 		values: {
@@ -48,6 +49,8 @@ export const EditCollection = ({ collection, onSubmit }: Props) => {
 	const errorStyles = form.getFieldState("name").invalid
 		? "border border-red-300 border"
 		: "";
+
+	const showOrgSharingOption = orgName || collection.shared === "organization";
 
 	const handleSubmit = (collection: Collection) => {
 		trackHandler(analyticsKeys.collection.editFormSubmit);
@@ -119,11 +122,15 @@ export const EditCollection = ({ collection, onSubmit }: Props) => {
 												>
 													Private
 												</SelectItem>
-												<SelectItem
-													value={"organization" satisfies Collection["shared"]}
-												>
-													Organization
-												</SelectItem>
+												{showOrgSharingOption && (
+													<SelectItem
+														value={
+															"organization" satisfies Collection["shared"]
+														}
+													>
+														Organization
+													</SelectItem>
+												)}
 												<SelectItem
 													value={"public" satisfies Collection["shared"]}
 												>

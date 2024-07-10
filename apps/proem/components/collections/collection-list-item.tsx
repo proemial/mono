@@ -58,7 +58,9 @@ export const CollectionListItem = ({
 			<div className="flex gap-6 items-center">
 				{/* Share state */}
 				<div className="text-2xs uppercase opacity-50 truncate">
-					{collection.shared === "organization" ? orgName : collection.shared}
+					{collection.shared === "organization"
+						? orgName ?? collection.shared
+						: collection.shared}
 				</div>
 				{/* Edit */}
 				{editable ? (
@@ -77,6 +79,7 @@ export const CollectionListItem = ({
 						<EditCollection
 							collection={collection}
 							onSubmit={editable.onEdit}
+							orgName={orgName}
 						/>
 					</FullSizeDrawer>
 				) : (
