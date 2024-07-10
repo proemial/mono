@@ -24,9 +24,12 @@ importers:
       turbo:
         specifier: ^1.13.3
         version: 1.13.3
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
       vite-tsconfig-paths:
         specifier: ^4.3.2
-        version: 4.3.2
+        version: 4.3.2(typescript@5.4.5)
       vitest:
         specifier: ^1.6.0
         version: 1.6.0
@@ -268,9 +271,6 @@ importers:
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@types/node@20.12.12)(typescript@5.4.5)
-      typescript:
-        specifier: 5.4.5
-        version: 5.4.5
 
   apps/website:
     dependencies:
@@ -285,7 +285,7 @@ importers:
         version: 1.2.2(next@14.2.3)(react@18.3.1)
       astro:
         specifier: ^4.5.17
-        version: 4.5.17(sass@1.74.1)(typescript@5.4.4)
+        version: 4.5.17(sass@1.74.1)(typescript@5.4.5)
       tailwindcss:
         specifier: ^3.4.3
         version: 3.4.3(ts-node@10.9.2)
@@ -293,9 +293,6 @@ importers:
       sass:
         specifier: ^1.74.1
         version: 1.74.1
-      typescript:
-        specifier: ^5.4.4
-        version: 5.4.4
 
   packages/data:
     dependencies:
@@ -324,9 +321,6 @@ importers:
       pg:
         specifier: ^8.11.5
         version: 8.11.5
-      typescript:
-        specifier: ^5.4.5
-        version: 5.4.5
 
   packages/models:
     devDependencies:
@@ -336,9 +330,6 @@ importers:
       fast-xml-parser:
         specifier: ^4.4.0
         version: 4.4.0
-      typescript:
-        specifier: ^5.4.5
-        version: 5.4.5
 
   packages/redis:
     dependencies:
@@ -361,9 +352,6 @@ importers:
       '@types/node':
         specifier: ^20.12.11
         version: 20.12.11
-      typescript:
-        specifier: ^5.4.5
-        version: 5.4.5
 
   packages/repositories:
     dependencies:
@@ -380,9 +368,6 @@ importers:
       '@proemial/utils':
         specifier: workspace:*
         version: link:../utils
-      typescript:
-        specifier: ^5.4.5
-        version: 5.4.5
 
   packages/shadcn-ui:
     dependencies:
@@ -474,9 +459,6 @@ importers:
       '@types/react-dom':
         specifier: ^18.3.0
         version: 18.3.0
-      typescript:
-        specifier: ^5.4.5
-        version: 5.4.5
 
   packages/typescript-config: {}
 
@@ -495,9 +477,6 @@ importers:
       '@types/node':
         specifier: ^20.12.11
         version: 20.12.11
-      typescript:
-        specifier: ^5.4.5
-        version: 5.4.5
 
 packages:
 
@@ -612,7 +591,7 @@ packages:
       astro: ^3.0.0 || ^4.0.0
       tailwindcss: ^3.0.24
     dependencies:
-      astro: 4.5.17(sass@1.74.1)(typescript@5.4.4)
+      astro: 4.5.17(sass@1.74.1)(typescript@5.4.5)
       autoprefixer: 10.4.19(postcss@8.4.38)
       postcss: 8.4.38
       postcss-load-config: 4.0.2(postcss@8.4.38)(ts-node@10.9.2)
@@ -645,7 +624,7 @@ packages:
       '@vercel/analytics': 1.2.2(next@14.2.3)(react@18.3.1)
       '@vercel/edge': 1.1.1
       '@vercel/nft': 0.26.4
-      astro: 4.5.17(sass@1.74.1)(typescript@5.4.4)
+      astro: 4.5.17(sass@1.74.1)(typescript@5.4.5)
       esbuild: 0.19.12
       fast-glob: 3.3.2
       set-cookie-parser: 2.6.0
@@ -4778,7 +4757,7 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /astro@4.5.17(sass@1.74.1)(typescript@5.4.4):
+  /astro@4.5.17(sass@1.74.1)(typescript@5.4.5):
     resolution: {integrity: sha512-fr5onZt7MOe+6v08Ub1AZL9eUVo4f0y0nvL55AFMpVG2bMM1/omcwAH1uU2mkvwMLLtcd4RDtYz4mtJzd54Nfw==}
     engines: {node: '>=18.14.1', npm: '>=6.14.0'}
     hasBin: true
@@ -4836,7 +4815,7 @@ packages:
       shiki: 1.2.4
       string-width: 7.1.0
       strip-ansi: 7.1.0
-      tsconfck: 3.0.3(typescript@5.4.4)
+      tsconfck: 3.0.3(typescript@5.4.5)
       unist-util-visit: 5.0.0
       vfile: 6.0.1
       vite: 5.2.8(sass@1.74.1)
@@ -11813,7 +11792,7 @@ packages:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
 
-  /tsconfck@3.0.3(typescript@5.4.4):
+  /tsconfck@3.0.3(typescript@5.4.5):
     resolution: {integrity: sha512-4t0noZX9t6GcPTfBAbIbbIU4pfpCwh0ueq3S4O/5qXI1VwK1outmxhe9dOiEWqMz3MW2LKgDTpqWV+37IWuVbA==}
     engines: {node: ^18 || >=20}
     hasBin: true
@@ -11823,7 +11802,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      typescript: 5.4.4
+      typescript: 5.4.5
 
   /tslib@2.4.1:
     resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
@@ -11976,11 +11955,6 @@ packages:
   /typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
     dev: true
-
-  /typescript@5.4.4:
-    resolution: {integrity: sha512-dGE2Vv8cpVvw28v8HCPqyb08EzbBURxDpuhJvTrusShUfGnhHBafDsLdS1EhhxyL6BJQE+2cT3dDPAv+MQ6oLw==}
-    engines: {node: '>=14.17'}
-    hasBin: true
 
   /typescript@5.4.5:
     resolution: {integrity: sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==}
@@ -12341,7 +12315,7 @@ packages:
       - terser
     dev: true
 
-  /vite-tsconfig-paths@4.3.2:
+  /vite-tsconfig-paths@4.3.2(typescript@5.4.5):
     resolution: {integrity: sha512-0Vd/a6po6Q+86rPlntHye7F31zA2URZMbH8M3saAZ/xR9QoGN/L21bxEGfXdWmFdNkqPpRdxFT7nmNe12e9/uA==}
     peerDependencies:
       vite: '*'
@@ -12351,7 +12325,7 @@ packages:
     dependencies:
       debug: 4.3.4(supports-color@8.1.1)
       globrex: 0.1.2
-      tsconfck: 3.0.3(typescript@5.4.4)
+      tsconfck: 3.0.3(typescript@5.4.5)
     transitivePeerDependencies:
       - supports-color
       - typescript

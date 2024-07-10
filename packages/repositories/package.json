@@ -14,7 +14,6 @@
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",
-		"@proemial/utils": "workspace:*",
-		"typescript": "^5.4.5"
+		"@proemial/utils": "workspace:*"
 	}
 }

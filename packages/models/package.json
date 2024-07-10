@@ -6,7 +6,6 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",
-		"typescript": "^5.4.5",
 		"fast-xml-parser": "^4.4.0"
 	}
 }

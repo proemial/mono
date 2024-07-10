@@ -90,7 +90,6 @@
 		"tailwindcss": "^3.4.3",
 		"tailwindcss-animate": "^1.0.7",
 		"tailwindcss-animation-delay": "^1.2.0",
-		"ts-node": "10.9.2",
-		"typescript": "5.4.5"
+		"ts-node": "10.9.2"
 	}
 }
