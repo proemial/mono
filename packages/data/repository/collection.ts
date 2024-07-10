@@ -68,3 +68,8 @@ export async function getCollectionByCollectionId(collectionId: string) {
 		},
 	});
 }
+
+export async function getAllSpaceIds() {
+	const collections = await neonDb.query.collections.findMany();
+	return collections.map((collection) => collection.id);
+}

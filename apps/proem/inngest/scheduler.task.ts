@@ -1,7 +1,8 @@
-import { neonDb } from "@proemial/data";
 import { Time } from "@proemial/utils/time";
 import { inngest } from "./client";
 import { streamScheduledCacheUpdate } from "./populator.task";
+import { getAllSpaceIds } from "@proemial/data/repository/collection";
+import { getAllUserIds } from "@proemial/data/repository/user";
 
 export const streamCacheUpdateScheduler = inngest.createFunction(
 	{ id: "streams/cache-update-scheduler" },
@@ -39,8 +40,7 @@ async function getUserIds() {
 	const begin = Time.now();
 
 	try {
-		const users = await neonDb.query.users.findMany();
-		return users.map((user) => user.id);
+		return await getAllUserIds();
 	} finally {
 		Time.log(begin, "getUserIds");
 	}
@@ -50,8 +50,7 @@ async function getSpaceIds() {
 	const begin = Time.now();
 
 	try {
-		const collections = await neonDb.query.collections.findMany();
-		return collections.map((collection) => collection.id);
+		return await getAllSpaceIds();
 	} finally {
 		Time.log(begin, "getSpacesIds");
 	}
