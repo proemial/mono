@@ -33,6 +33,7 @@ export const addCollection = async (collection: NewCollection) => {
 			shared: orgId ? "organization" : "public",
 		} satisfies NewCollection)
 		.returning();
+	revalidatePath(`${routes.space}/[id]`, "layout");
 	return result;
 };
 

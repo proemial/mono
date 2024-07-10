@@ -27,7 +27,6 @@ export default async function LatestPage({
 		notFound();
 	}
 	const canEdit = PermissionUtils.canEditCollection(collection, userId, orgId);
-	console.log("canEdit", canEdit);
 
 	const bookmarkedPapers =
 		await getBookmarkedPapersByCollectionId(collectionId);
