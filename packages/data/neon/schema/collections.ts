@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm";
 import { pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { createId } from "../../lib/create-id";
+import { createId } from "../../utils/create-id";
 import { collectionsToPapers } from "./collections-to-papers";
 
 export const collectionSharedType = pgEnum("shared", [

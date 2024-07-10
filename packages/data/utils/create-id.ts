@@ -1,4 +1,4 @@
-import { createId as createCuid } from "@paralleldrive/cuid2";
+import { uuid } from "@proemial/utils/uid";
 
 export const seperator = "_";
 export const prefixes = {
@@ -6,7 +6,7 @@ export const prefixes = {
 } as const;
 
 export function createId(prefix?: keyof typeof prefixes): string {
-	const id = createCuid();
+	const id = uuid();
 	if (!prefix) {
 		return id;
 	}

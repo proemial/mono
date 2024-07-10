@@ -5,6 +5,7 @@
 	"types": "./index.tsx",
 	"license": "MIT",
 	"dependencies": {
+		"@paralleldrive/cuid2": "^2.2.2",
 		"dayjs": "^1.11.11",
 		"dayjs-plugin-utc": "^0.1.2"
 	},

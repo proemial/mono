@@ -1,2 +1,2 @@
 export { neonDb } from "./neon/db";
-export { createId } from "./lib/create-id";
+export { createId } from "./utils/create-id";
