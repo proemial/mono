@@ -27,7 +27,7 @@ export const findAvailableCollections = async (
 	];
 };
 
-export const findCollectionWithBookmarksById = async (id: Collection["id"]) => {
+export const findCollectionById = async (id: Collection["id"]) => {
 	return await neonDb.query.collections.findFirst({
 		where: and(eq(collections.id, id), isNull(collections.deletedAt)),
 		with: {

@@ -1,6 +1,6 @@
 import { getPersonalDefaultCollection } from "@/app/constants";
 import { PermissionUtils } from "@/utils/permission-utils";
-import { findCollectionWithBookmarksById } from "@proemial/data/repository/collection";
+import { findCollectionById } from "@proemial/data/repository/collection";
 
 export const CollectionService = {
 	getCollection: async (
@@ -8,7 +8,7 @@ export const CollectionService = {
 		userId: string | null | undefined,
 		orgId: string | null | undefined,
 	) => {
-		const collection = await findCollectionWithBookmarksById(collectionId);
+		const collection = await findCollectionById(collectionId);
 		if (
 			collection &&
 			PermissionUtils.canReadCollection(collection, userId, orgId)
