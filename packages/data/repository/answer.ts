@@ -1,10 +1,10 @@
-import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
-import { neonDb } from "@proemial/data";
+import { neonDb } from "..";
+import { prettySlug } from "@proemial/utils/pretty-slug";
 import {
 	type Answer,
 	type NewAnswer,
 	answers as answersTable,
-} from "@proemial/data/neon/schema/answers";
+} from "../neon/schema/answers";
 import { desc, eq } from "drizzle-orm";
 
 export const answers = {

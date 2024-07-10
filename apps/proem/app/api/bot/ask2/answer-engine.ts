@@ -6,12 +6,12 @@ import {
 	createStreamDataTransformer,
 } from "ai";
 import { AgentExecutor } from "langchain/agents";
-import { answers } from "../answer-engine/answers";
+import { answers } from "@proemial/data/repository/answer";
 import {
 	handleAnswerEngineEvents,
 	stepStartedEvents,
 } from "../answer-engine/events";
-import { prettySlug } from "../answer-engine/prettySlug";
+import { prettySlug } from "@proemial/utils/pretty-slug";
 import { buildAgent } from "./agent";
 import { getTools } from "./tools";
 

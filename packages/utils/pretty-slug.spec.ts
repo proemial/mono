@@ -1,4 +1,4 @@
-import { prettySlug } from "./prettySlug";
+import { prettySlug } from "./pretty-slug";
 
 describe("prettyslug", () => {
 	it("should convert a string to a pretty slug", () => {

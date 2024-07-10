@@ -1,6 +1,6 @@
 "use server";
 
-import { answers } from "@/app/api/bot/answer-engine/answers";
+import { answers } from "@proemial/data/repository/answer";
 import { auth } from "@clerk/nextjs/server";
 
 export async function fetchQuestionsForCurrentUser() {

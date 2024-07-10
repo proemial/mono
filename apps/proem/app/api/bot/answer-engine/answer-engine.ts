@@ -1,10 +1,10 @@
-import { answers } from "@/app/api/bot/answer-engine/answers";
+import { answers } from "@proemial/data/repository/answer";
 import {
 	type AnswerEngineEvents,
 	handleAnswerEngineEvents,
 	stepStartedEvents,
 } from "@/app/api/bot/answer-engine/events";
-import { prettySlug } from "@/app/api/bot/answer-engine/prettySlug";
+import { prettySlug } from "@proemial/utils/pretty-slug";
 import { saveAnswer } from "@/app/api/bot/answer-engine/save-answer";
 import { answerEngineChain } from "@/app/llm/chains/answer-engine-chain";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";

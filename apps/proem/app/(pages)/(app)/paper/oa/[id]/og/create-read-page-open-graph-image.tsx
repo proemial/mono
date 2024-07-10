@@ -1,4 +1,4 @@
-import { answers } from "@/app/api/bot/answer-engine/answers";
+import { answers } from "@proemial/data/repository/answer";
 import { ImageResponse } from "next/og";
 import { ReadOpenGraphCard } from "./read-og-card";
 import { fetchPaper } from "../fetch-paper";

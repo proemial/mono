@@ -1,4 +1,4 @@
-import { answers } from "@/app/api/bot/answer-engine/answers";
+import { answers } from "@proemial/data/repository/answer";
 import { findRun } from "@/app/llm/helpers/find-run";
 import type { Run } from "langsmith";
 
@@ -38,7 +38,7 @@ export async function saveAnswer({
 					papers: {
 						papers: fetchedPapers,
 					},
-			  };
+				};
 
 		return answers.create({
 			slug,
@@ -71,7 +71,7 @@ export async function saveAnswerFromAgent({
 					papers: {
 						papers: fetchedPapers,
 					},
-			  }
+				}
 			: {};
 
 		return answers.create({

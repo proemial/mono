@@ -1,5 +1,5 @@
 import { AnswerSharingCard } from "@/app/(pages)/(app)/share/[shareId]/og/answer-sharing-card";
-import { answers } from "@/app/api/bot/answer-engine/answers";
+import { answers } from "@proemial/data/repository/answer";
 import { ImageResponse } from "next/og";
 
 export async function createSharePageOpenGraphImage(

@@ -1,5 +1,5 @@
 import { AnswerEngineStreamData } from "@/app/api/bot/answer-engine/answer-engine";
-import { answers } from "@/app/api/bot/answer-engine/answers";
+import { answers } from "@proemial/data/repository/answer";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { askAgentPrompt } from "@/app/prompts/ask_agent";
