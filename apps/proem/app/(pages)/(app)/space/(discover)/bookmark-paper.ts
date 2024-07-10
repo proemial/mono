@@ -135,7 +135,7 @@ export async function togglePaperInCollection(
 	if (revalidateCache !== false) {
 		revalidateTag(getBookmarkedPapersCacheTag(collectionId));
 		revalidateTag(getBookmarkCacheTag(collectionId));
-		waitUntil(streamCacheUpdate.run(userId, "user"));
+		if (userId) waitUntil(streamCacheUpdate.run(userId, "user"));
 	}
 
 	return {};
