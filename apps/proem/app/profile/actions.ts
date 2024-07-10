@@ -41,12 +41,15 @@ export const editCollection = async (collection: Collection) => {
 	const { userId, orgId } = await authAndRatelimit();
 
 	async function doEditCollection() {
+		const isOrgAccessible =
+			orgId && ["organization", "public"].includes(collection.shared);
 		const [result] = await neonDb
 			.update(collections)
 			.set({
 				name: collection.name,
 				description: collection.description,
 				shared: collection.shared,
+				orgId: isOrgAccessible ? orgId : null,
 			} satisfies Omit<NewCollection, "ownerId">)
 			.where(eq(collections.id, collection.id))
 			.returning();
