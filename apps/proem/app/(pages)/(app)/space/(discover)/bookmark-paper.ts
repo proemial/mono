@@ -8,34 +8,33 @@ import {
 import { streamCacheUpdate } from "@/inngest/populator.task";
 import { PermissionUtils } from "@/utils/permission-utils";
 import { auth } from "@clerk/nextjs";
-import { neonDb } from "@proemial/data";
+import { NewCollection } from "@proemial/data/neon/schema";
 import {
-	NewCollection,
-	collections,
-	collectionsToPapers,
-	papers,
-} from "@proemial/data/neon/schema";
+	addPaperToCollection,
+	ensureCollectionExistsInDb,
+	findCollection,
+	toggleCollectionPaper,
+} from "@proemial/data/repository/collection";
+import { ensurePaperExistsInDb } from "@proemial/data/repository/paper";
 import { waitUntil } from "@vercel/functions";
-import { and, eq, isNull } from "drizzle-orm";
-import { createInsertSchema } from "drizzle-zod";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { fetchPaper } from "../../paper/oa/[id]/fetch-paper";
 import { generate } from "../../paper/oa/[id]/llm-generate";
 
-const addPaperToCollectionParams = z.object({
-	paperId: z.string(),
-	collection: createInsertSchema(collections),
-});
+type Params = {
+	paperId: string;
+	collection: NewCollection;
+};
 
-export async function addPaperToNewCollection(
-	params: z.infer<typeof addPaperToCollectionParams>,
-) {
+export async function addPaperToNewCollection(params: Params) {
 	const { userId } = auth();
-	const { paperId, collection } = addPaperToCollectionParams.parse(params);
 	if (!userId) {
 		return;
 	}
+
+	const { paperId, collection } = params;
+
 	await ensurePaperIsSummarized(paperId);
 	await ensurePaperExistsInDb(paperId);
 	// Create new collection
@@ -43,10 +42,8 @@ export async function addPaperToNewCollection(
 		collection.id === userId
 			? await ensureDefaultCollectionExistsInDb(userId)
 			: await ensureCollectionExistsInDb(collection);
-	await neonDb.insert(collectionsToPapers).values({
-		collectionsId: existingCollection.id,
-		paperId,
-	});
+
+	await addPaperToCollection(existingCollection.id, paperId);
 
 	revalidateTag(getBookmarkCacheTag(existingCollection.id));
 	revalidateTag(getBookmarkedPapersCacheTag(existingCollection.id));
@@ -57,39 +54,11 @@ export async function addPaperToNewCollection(
 const ensureDefaultCollectionExistsInDb = (userId: string) =>
 	ensureCollectionExistsInDb(getPersonalDefaultCollection(userId));
 
-const ensureCollectionExistsInDb = async (collection: NewCollection) => {
-	const existingCollection = await neonDb.query.collections.findFirst({
-		where: and(
-			eq(collections.id, collection.id ?? ""),
-			isNull(collections.deletedAt),
-		),
-	});
-	if (existingCollection) {
-		return existingCollection;
-	}
-	const [newCollection] = await neonDb
-		.insert(collections)
-		.values(collection)
-		.onConflictDoUpdate({
-			target: collections.id,
-			set: collection,
-		})
-		.returning();
-	if (!newCollection) {
-		throw new Error("Failed to create collection");
-	}
-	return newCollection;
-};
-
 const ensurePaperIsSummarized = async (paperId: string) => {
 	const paper = await fetchPaper(paperId);
 	if (paper && !paper.generated) {
 		await generate(paper);
 	}
-};
-
-const ensurePaperExistsInDb = async (paperId: string) => {
-	await neonDb.insert(papers).values({ id: paperId }).onConflictDoNothing();
 };
 
 const togglePaperInCollectionParams = z.object({
@@ -107,9 +76,7 @@ export async function togglePaperInCollection(
 	const { paperId, collectionId, isEnabled, revalidateCache } =
 		togglePaperInCollectionParams.parse(params);
 
-	const collection = await neonDb.query.collections.findFirst({
-		where: and(eq(collections.id, collectionId), isNull(collections.deletedAt)),
-	});
+	const collection = await findCollection(collectionId);
 	if (
 		!collection ||
 		!PermissionUtils.canEditCollection(collection, userId, orgId)
@@ -124,13 +91,7 @@ export async function togglePaperInCollection(
 		await ensureDefaultCollectionExistsInDb(userId);
 	}
 
-	await neonDb
-		.insert(collectionsToPapers)
-		.values({ collectionsId: collectionId, paperId, isEnabled })
-		.onConflictDoUpdate({
-			target: [collectionsToPapers.paperId, collectionsToPapers.collectionsId],
-			set: { isEnabled },
-		});
+	await toggleCollectionPaper(collectionId, paperId, isEnabled);
 
 	if (revalidateCache !== false) {
 		revalidateTag(getBookmarkedPapersCacheTag(collectionId));
