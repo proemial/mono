@@ -111,8 +111,10 @@ export async function togglePaperInCollection(
 		where: and(eq(collections.id, collectionId), isNull(collections.deletedAt)),
 	});
 	if (
-		!collection ||
-		!PermissionUtils.canEditCollection(collection, userId, orgId)
+		// For non-default spaces, require edit permissions
+		collectionId !== userId &&
+		(!collection ||
+			!PermissionUtils.canEditCollection(collection, userId, orgId))
 	) {
 		return;
 	}
