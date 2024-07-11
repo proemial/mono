@@ -7,8 +7,7 @@
 	"dependencies": {
 		"@proemial/repositories": "workspace:*",
 		"@proemial/utils": "workspace:*",
-		"@upstash/redis": "^1.30.1",
-		"zod": "^3.23.8"
+		"@upstash/redis": "^1.30.1"
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",

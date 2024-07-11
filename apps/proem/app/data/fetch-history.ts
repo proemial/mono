@@ -1,9 +1,8 @@
 import { auth } from "@clerk/nextjs/server";
-import { neonDb } from "@proemial/data";
-import { PaperActivity, User, users } from "@proemial/data/neon/schema";
+import { PaperActivity, User } from "@proemial/data/neon/schema";
 import dayjs from "dayjs";
-import { eq } from "drizzle-orm";
 import { getBookmarksByCollectionId } from "../(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
+import { getUser } from "@proemial/data/repository/user";
 
 // Max no. of papers from read history to use in filter
 const MAX_COUNT = 30;
@@ -28,9 +27,7 @@ async function fetchUser(user?: string) {
 		return;
 	}
 
-	return neonDb.query.users.findFirst({
-		where: eq(users.id, uid),
-	});
+	return await getUser(uid);
 }
 
 export async function getBookmarksByUser<TUserId extends Pick<User, "id">>(

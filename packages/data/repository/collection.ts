@@ -6,9 +6,6 @@ import {
 	collectionsToPapers,
 	NewCollection,
 } from "../neon/schema";
-import { createInsertSchema } from "drizzle-zod";
-
-export const collectionsInsertSchema = createInsertSchema(collections);
 
 export async function findAvailableCollections(
 	userId: string,
@@ -146,4 +143,52 @@ export async function ensureCollectionExistsInDb(collection: NewCollection) {
 		throw new Error("Failed to create collection");
 	}
 	return newCollection;
+}
+
+export async function createCollection(
+	name: Collection["name"],
+	description: Collection["description"] | undefined,
+	ownerId: Collection["ownerId"],
+	orgId: Collection["orgId"] | undefined,
+) {
+	return await neonDb
+		.insert(collections)
+		.values({
+			name,
+			description,
+			ownerId,
+			orgId,
+			// Default to "org" for org members and "public" for anyone else
+			// (can be changed later, in space settings)
+			shared: orgId ? "organization" : "public",
+		} satisfies NewCollection)
+		.returning();
+}
+
+export async function updateCollection(
+	id: Collection["id"],
+	name: Collection["name"],
+	description: Collection["description"],
+	shared: Collection["shared"],
+	orgId: Collection["orgId"],
+) {
+	return await neonDb
+		.update(collections)
+		.set({
+			name,
+			description,
+			shared,
+			orgId,
+		} satisfies Omit<NewCollection, "ownerId">)
+		.where(eq(collections.id, id))
+		.returning();
+}
+
+export async function deleteCollection(collectionId: Collection["id"]) {
+	await neonDb
+		.update(collections)
+		.set({
+			deletedAt: new Date(),
+		})
+		.where(eq(collections.id, collectionId));
 }

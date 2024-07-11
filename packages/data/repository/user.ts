@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { neonDb } from "..";
 import { PaperActivity, users } from "../neon/schema";
 
@@ -16,6 +17,12 @@ export async function getOrCreateUser(userId: string) {
 			set: { id: userId },
 		})
 		.returning();
+}
+
+export async function getUser(userId: string) {
+	return await neonDb.query.users.findFirst({
+		where: eq(users.id, userId),
+	});
 }
 
 export async function getOrCreateUserActivities(

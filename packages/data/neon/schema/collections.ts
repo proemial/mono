@@ -8,6 +8,8 @@ export const collectionSharedType = pgEnum("shared", [
 	"organization",
 	"public",
 ]);
+import { createInsertSchema } from "drizzle-zod";
+import { ZodSchema } from "zod";
 
 export const collections = pgTable("collections", {
 	id: text("id")
@@ -33,3 +35,9 @@ export type NewCollection = typeof collections.$inferInsert;
 export const collectionRelations = relations(collections, ({ many }) => ({
 	collectionsToPapers: many(collectionsToPapers),
 }));
+
+// @ts-ignore
+export const CollectionSchema = createInsertSchema(collections, {
+	name: (schema) => schema.name.min(1).max(50),
+	description: (schema) => schema.description.max(200),
+}) as ZodSchema<NewCollection>;

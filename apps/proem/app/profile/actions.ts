@@ -3,14 +3,14 @@
 import { routes } from "@/routes";
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { auth } from "@clerk/nextjs/server";
-import { neonDb } from "@proemial/data";
+import { Collection, NewCollection } from "@proemial/data/neon/schema";
 import {
-	Collection,
-	NewCollection,
-	collections,
-} from "@proemial/data/neon/schema";
-import { findAvailableCollections } from "@proemial/data/repository/collection";
-import { eq } from "drizzle-orm";
+	createCollection,
+	findAvailableCollections,
+	findCollection,
+	updateCollection,
+	deleteCollection as deleteCollectionFromDb,
+} from "@proemial/data/repository/collection";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
@@ -21,18 +21,12 @@ export const getAvailableCollections = async () => {
 
 export const addCollection = async (collection: NewCollection) => {
 	const { userId, orgId } = await authAndRatelimit();
-	const [result] = await neonDb
-		.insert(collections)
-		.values({
-			name: collection.name,
-			description: collection.description,
-			ownerId: userId,
-			orgId,
-			// Default to "org" for org members and "public" for anyone else
-			// (can be changed later, in space settings)
-			shared: orgId ? "organization" : "public",
-		} satisfies NewCollection)
-		.returning();
+	const [result] = await createCollection(
+		collection.name,
+		collection.description,
+		userId,
+		orgId,
+	);
 	revalidatePath(`${routes.space}/[id]`, "layout");
 	return result;
 };
@@ -43,16 +37,13 @@ export const editCollection = async (collection: Collection) => {
 	async function doEditCollection() {
 		const isOrgAccessible =
 			orgId && ["organization", "public"].includes(collection.shared);
-		const [result] = await neonDb
-			.update(collections)
-			.set({
-				name: collection.name,
-				description: collection.description,
-				shared: collection.shared,
-				orgId: isOrgAccessible ? orgId : null,
-			} satisfies Omit<NewCollection, "ownerId">)
-			.where(eq(collections.id, collection.id))
-			.returning();
+		const [result] = await updateCollection(
+			collection.id,
+			collection.name,
+			collection.description,
+			collection.shared,
+			isOrgAccessible ? orgId : null,
+		);
 		revalidatePath(`${routes.space}/[id]`, "layout");
 		return result;
 	}
@@ -79,9 +70,7 @@ export const editCollection = async (collection: Collection) => {
 export const deleteCollection = async (collectionId: Collection["id"]) => {
 	// Note: This is doing soft delete
 	const { userId, orgId } = await authAndRatelimit();
-	const collection = await neonDb.query.collections.findFirst({
-		where: eq(collections.id, collectionId),
-	});
+	const collection = await findCollection(collectionId);
 
 	if (!collection || collection.deletedAt) {
 		return;
@@ -89,12 +78,7 @@ export const deleteCollection = async (collectionId: Collection["id"]) => {
 
 	if (collection.ownerId === userId || collection.orgId === orgId) {
 		// Allow deletion by owning users or org members
-		await neonDb
-			.update(collections)
-			.set({
-				deletedAt: new Date(),
-			})
-			.where(eq(collections.id, collection.id));
+		await deleteCollectionFromDb(collection.id);
 		revalidatePath(`${routes.space}/[id]`, "layout");
 	}
 };

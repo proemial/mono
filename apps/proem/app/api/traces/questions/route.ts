@@ -48,7 +48,9 @@ export async function GET(req: NextRequest) {
 		if (!Object.keys(data[month]).includes(name)) {
 			data[month][name] = 0;
 		}
-		data[month][name] += 1;
+		if (data[month]?.[name]) {
+			data[month][name] += 1;
+		}
 
 		if (++logCounter % 500) {
 			console.log(`Still running... " ${logCounter} runs processed`);

@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Collection, collections } from "@proemial/data/neon/schema";
+import { Collection, CollectionSchema } from "@proemial/data/neon/schema";
 import {
 	Button,
 	Form,
@@ -19,17 +19,11 @@ import {
 	Textarea,
 } from "@proemial/shadcn-ui";
 import { DialogClose } from "@proemial/shadcn-ui/components/ui/dialog";
-import { createSelectSchema } from "drizzle-zod";
 import { useForm } from "react-hook-form";
 import {
 	analyticsKeys,
 	trackHandler,
 } from "../analytics/tracking/tracking-keys";
-
-const editCollectionSchema = createSelectSchema(collections, {
-	name: (schema) => schema.name.min(1).max(50),
-	description: (schema) => schema.description.max(200),
-});
 
 type Props = {
 	collection: Collection;
@@ -39,7 +33,7 @@ type Props = {
 
 export const EditCollection = ({ collection, onSubmit, orgName }: Props) => {
 	const form = useForm({
-		resolver: zodResolver(editCollectionSchema),
+		resolver: zodResolver(CollectionSchema),
 		values: {
 			...collection,
 			description: collection.description ?? "",
