@@ -93,6 +93,7 @@ export function PaperReader({
 				paperId={fetchedPaper.id}
 				abstract={fetchedPaper.data.abstract}
 				initialMessages={initialMessages}
+				spaceId={collectionId}
 			/>
 		</div>
 	);

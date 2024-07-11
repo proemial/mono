@@ -1,10 +1,14 @@
 import { chatInputMaxLength } from "@/app/api/bot/input-limit";
-import { PAPER_BOT_USER_ID } from "@/app/constants";
+import {
+	PAPER_BOT_USER_ID,
+	getPersonalDefaultCollection,
+} from "@/app/constants";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { context, model, question } from "@/app/prompts/chat";
 import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { auth } from "@clerk/nextjs/server";
+import { findCollection } from "@proemial/data/repository/collection";
 import { savePostAndReply } from "@proemial/data/repository/post";
 import { OpenAIStream, StreamData, StreamingTextResponse } from "ai";
 import { type NextRequest, NextResponse } from "next/server";
@@ -24,7 +28,7 @@ export async function POST(req: NextRequest) {
 		return NextResponse.json({ error: "Rate limited" }, { status: 429 });
 	}
 
-	const { messages, title, paperId, abstract } = await req.json();
+	const { messages, title, paperId, spaceId, abstract } = await req.json();
 	const postContent = messages.at(-1).content;
 
 	const moddedMessages = [context(title, abstract), ...messages];
@@ -56,6 +60,10 @@ export async function POST(req: NextRequest) {
 			const { userId } = auth();
 			if (userId) {
 				// Save the post and the AI reply, if the user is signed in
+				const space =
+					spaceId === userId
+						? getPersonalDefaultCollection(userId)
+						: await findCollection(spaceId);
 				await savePostAndReply(
 					{
 						id: paperId,
@@ -67,6 +75,8 @@ export async function POST(req: NextRequest) {
 						content: postContent,
 						authorId: userId,
 						paperId,
+						// Inherit the space's sharing setting, or `public` if no space
+						shared: space?.shared ?? "public",
 					},
 					completion,
 					PAPER_BOT_USER_ID,

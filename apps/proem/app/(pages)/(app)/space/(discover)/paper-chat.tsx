@@ -22,6 +22,7 @@ import { MessageWithAuthorUserData } from "../../paper/paper-post-utils";
 type PaperChatProps = Pick<ChatSuggestedFollowupsProps, "suggestions"> & {
 	title: string;
 	paperId: string;
+	spaceId: string | undefined;
 	initialMessages: MessageWithAuthorUserData[];
 	abstract?: string;
 };
@@ -30,11 +31,12 @@ export function PaperChat({
 	suggestions,
 	title,
 	paperId,
+	spaceId,
 	initialMessages,
 	abstract,
 }: PaperChatProps) {
 	const { messages, append, data, isLoading } = useChat({
-		body: { title, abstract, paperId },
+		body: { title, abstract, paperId, spaceId },
 		api: "/api/bot/chat",
 		initialMessages,
 	});
