@@ -1,3 +1,4 @@
+import { Redis } from "@proemial/redis/redis";
 import {
 	OpenAlexMeta,
 	OpenAlexPaper,
@@ -7,7 +8,6 @@ import {
 	oaBaseUrl,
 	openAlexFields,
 } from "@proemial/repositories/oa/models/oa-paper";
-import { Redis } from "@proemial/redis/redis";
 import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
 import dayjs from "dayjs";

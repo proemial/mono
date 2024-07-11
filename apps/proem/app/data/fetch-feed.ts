@@ -1,10 +1,11 @@
 "use server";
 import { summarise } from "@/app/prompts/summarise-title";
-import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Redis } from "@proemial/redis/redis";
-import { fetchAndRerankPaperIds } from "./fetch-by-features";
 import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
+import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { fetchPaper } from "../(pages)/(app)/paper/oa/[id]/fetch-paper";
+import { getPaperIdsWithPosts } from "../(pages)/(app)/paper/paper-post-utils";
+import { fetchAndRerankPaperIds } from "./fetch-by-features";
 
 type FetchFeedParams = Required<Parameters<typeof fetchAndRerankPaperIds>>;
 
@@ -95,3 +96,26 @@ export async function fetchFeedByFeatures(
 		nextOffset,
 	};
 }
+
+export const fetchFeedByFeaturesWithPosts = async (
+	params: FetchFeedParams[0],
+	options: Omit<FetchFeedParams[1], "limit">,
+	nocache: boolean | undefined,
+	spaceId: string | undefined,
+) => {
+	const feedByFeatures = await fetchFeedByFeatures(params, options, nocache);
+	const paperIds = feedByFeatures.rows.map(({ paper }) => paper.id);
+	const papersWithPosts = await getPaperIdsWithPosts(paperIds, spaceId);
+	return {
+		...feedByFeatures,
+		rows: feedByFeatures.rows.map((row) => ({
+			...row,
+			paper: {
+				...row.paper,
+				posts:
+					papersWithPosts.find((paper) => paper.id === row.paper.id)?.posts ??
+					[],
+			},
+		})),
+	};
+};

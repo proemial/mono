@@ -1,4 +1,5 @@
 import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
+import { getPaperIdsWithPosts } from "@/app/(pages)/(app)/paper/paper-post-utils";
 import { getBookmarkedPapersByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarked-papers-by-collection-id";
 import { FeedItemWithDisabledOverlay } from "@/app/(pages)/(app)/space/[collectionId]/(lists)/saved/feed-item-with-disabled-overlay";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
@@ -40,6 +41,10 @@ export default async function SavedPage({
 	const papers = paperIds
 		? await Promise.all(paperIds.map((paperId) => fetchPaper(paperId)))
 		: [];
+	const paperIdsWithPosts = await getPaperIdsWithPosts(
+		papers.filter((p) => typeof p !== "undefined").map((p) => p.id),
+		collectionId,
+	);
 
 	return (
 		<>
@@ -50,7 +55,11 @@ export default async function SavedPage({
 					return (
 						<FeedItemWithDisabledOverlay
 							key={paper.id}
-							paper={paper}
+							paper={{
+								...paper,
+								posts:
+									paperIdsWithPosts.find((p) => p.id === paper.id)?.posts ?? [],
+							}}
 							isBookmarked={isBookmarked}
 							customCollectionId={collectionId}
 							readonly={!canEdit}

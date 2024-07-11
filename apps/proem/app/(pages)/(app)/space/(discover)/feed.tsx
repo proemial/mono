@@ -1,13 +1,11 @@
 "use client";
 import { Bookmarks } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
-import FeedItem, {
-	FeedItemProps,
-} from "@/app/(pages)/(app)/space/(discover)/feed-item";
+import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
 import {
-	fetchFeedByInstitution,
-	fetchFeedByTopic,
+	fetchFeedByInstitutionWithPosts,
+	fetchFeedByTopicWithPosts,
 } from "@/app/(pages)/(app)/space/(discover)/fetch-feed";
-import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
+import { fetchFeedByFeaturesWithPosts } from "@/app/data/fetch-feed";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -64,24 +62,31 @@ export function Feed({
 					}
 
 					if (features?.length) {
-						return fetchFeedByFeatures(
+						return fetchFeedByFeaturesWithPosts(
 							{ features, days },
 							{ offset: ctx.pageParam },
 							nocache,
+							undefined,
 						);
 					}
 					if (institution) {
-						return fetchFeedByInstitution(
+						return fetchFeedByInstitutionWithPosts(
 							{ id: institution },
 							{ offset: ctx.pageParam },
+							undefined,
 						);
 					}
-					return fetchFeedByTopic({ field: topic }, { offset: ctx.pageParam });
+					return fetchFeedByTopicWithPosts(
+						{ field: topic },
+						{ offset: ctx.pageParam },
+						undefined,
+					);
 				}}
 				renderHeadline={debug ? (count) => <DebugInfo count={count} /> : null}
 				renderRow={(row) => {
-					// TODO! why are we casting here?
-					const paper = row as RankedPaper;
+					const paper = row as RankedPaper & {
+						paper: RankedPaper["paper"] & { posts: unknown[] };
+					};
 					const isBookmarked = Boolean(bookmarks[paper.paper.id]);
 					return (
 						<FeedItem

@@ -1,6 +1,7 @@
 import { Main } from "@/components/main";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
+import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs/server";
@@ -18,7 +19,11 @@ export default async function ArXivPaperPage({ params }: Props) {
 	return (
 		<>
 			<NavBar action={<CloseAction target={routes.space} />}>
-				<SelectSpaceHeader collections={userCollections} userId={userId} />
+				{userCollections.length > 0 ? (
+					<SelectSpaceHeader collections={userCollections} userId={userId} />
+				) : (
+					<SimpleHeader title="For You" />
+				)}
 			</NavBar>
 			<Main>
 				<PaperPage paperId={params.id} type="arxiv" />

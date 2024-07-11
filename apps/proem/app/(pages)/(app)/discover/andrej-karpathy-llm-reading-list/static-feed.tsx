@@ -6,7 +6,7 @@ import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode } from "react";
 
 type StaticFeedProps = {
-	feed: OpenAlexPaper[];
+	feed: (OpenAlexPaper & { posts: unknown[] })[];
 	children: ReactNode;
 	bookmarks: Bookmarks;
 };

@@ -4,6 +4,7 @@ import { Redis } from "@proemial/redis/redis";
 import { Metadata } from "next";
 import { Suspense } from "react";
 import { generate } from "../../../paper/oa/[id]/llm-generate";
+import { getSinglePaperIdWithPosts } from "../../../paper/paper-post-utils";
 import FeedItem, { FeedItemProps } from "../../../space/(discover)/feed-item";
 import { fetchRssItems as fetchArXivRssPapers } from "../../fetch-rss";
 
@@ -94,7 +95,16 @@ async function Paper({ id, isBookmarked }: PaperProps) {
 		return null;
 	}
 
+	const paperWithPosts = await getSinglePaperIdWithPosts(paper.id, undefined);
+
 	return (
-		<FeedItem paper={paper} provider="arxiv" isBookmarked={isBookmarked} />
+		<FeedItem
+			paper={{
+				...paper,
+				posts: paperWithPosts?.posts ?? [],
+			}}
+			provider="arxiv"
+			isBookmarked={isBookmarked}
+		/>
 	);
 }

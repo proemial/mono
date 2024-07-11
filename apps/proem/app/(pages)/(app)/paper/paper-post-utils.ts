@@ -1,8 +1,12 @@
 import { PAPER_BOT_USER_ID } from "@/app/constants";
 import { getOrgMembersUserData } from "@/utils/auth";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { Comment, Post } from "@proemial/data/neon/schema";
+import { Comment, Paper, Post } from "@proemial/data/neon/schema";
 import { getPaperPostsForUsers } from "@proemial/data/repository/paper";
+import {
+	findPapersWithPosts,
+	findSinglePaperWithPosts,
+} from "@proemial/data/repository/post";
 import { Message, nanoid } from "ai";
 
 export type UserData = {
@@ -58,7 +62,38 @@ export const paperPostsToMessages = (
 	return messages.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 };
 
-export const getOwnPaperPosts = async (paperId: string) => {
+export const getSinglePaperIdWithPosts = async (
+	paperId: string,
+	spaceId: string | undefined,
+) => {
+	const { userId } = auth();
+	const orgMembersUserData = await getOrgMembersUserData();
+	const orgMemberIds = orgMembersUserData.map((m) => m.userId);
+	return await findSinglePaperWithPosts(paperId, userId, orgMemberIds, spaceId);
+};
+
+export const getPaperIdsWithPosts = async (
+	paperIds: string[],
+	spaceId: string | undefined,
+) => {
+	const { userId } = auth();
+	const orgMembersUserData = await getOrgMembersUserData();
+	const orgMemberIds = orgMembersUserData.map((m) => m.userId);
+	return await findPapersWithPosts(paperIds, userId, orgMemberIds, spaceId);
+};
+
+// TODO: Get rid of the following functions and use the above functions instead
+
+export const getPaperPosts = async (paperId: Paper["id"]) => {
+	// Get paper posts from org members, or user's own posts if there are none
+	const paperPosts = await getOrgMemberPaperPosts(paperId);
+	if (paperPosts.length === 0) {
+		return await getOwnPaperPosts(paperId);
+	}
+	return paperPosts;
+};
+
+const getOwnPaperPosts = async (paperId: string) => {
 	const { userId } = auth();
 	if (!userId) {
 		return [];
@@ -106,7 +141,7 @@ export const getOwnPaperPosts = async (paperId: string) => {
 	return paperPosts;
 };
 
-export const getOrgMemberPaperPosts = async (paperId: string) => {
+const getOrgMemberPaperPosts = async (paperId: string) => {
 	const orgMembersUserData = await getOrgMembersUserData();
 	if (orgMembersUserData.length === 0) {
 		return [];

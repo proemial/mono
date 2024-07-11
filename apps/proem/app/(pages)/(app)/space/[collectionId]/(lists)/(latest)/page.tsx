@@ -54,7 +54,7 @@ export default async function LatestPage({
 	return (
 		<>
 			<StreamList
-				id={collectionId}
+				collectionId={collectionId}
 				features={features}
 				days={FEED_DEFAULT_DAYS}
 				bookmarks={paperIds}

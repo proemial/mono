@@ -1,5 +1,4 @@
 "use client";
-import { togglePaperInCollection } from "@/app/(pages)/(app)/space/(discover)/bookmark-paper";
 import Markdown from "@/components/markdown";
 import { trimForQuotes } from "@/utils/string-utils";
 import { Prefix } from "@proemial/redis/adapters/papers";
@@ -7,10 +6,9 @@ import { FeatureType } from "@proemial/repositories/oa/fingerprinting/features";
 import { RankedPaperFeature } from "@proemial/repositories/oa/fingerprinting/rerank";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-topics-compact";
-import { Button, cn } from "@proemial/shadcn-ui";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import { FeedItemCard, FeedItemCardProps } from "./feed-item-card";
 import { FeedItemTag } from "./feed-item-tag";
 
@@ -20,7 +18,7 @@ export type FeedItemProps = Pick<
 	FeedItemCardProps,
 	"isBookmarked" | "customCollectionId" | "onBookmarkToggleClick"
 > & {
-	paper: OpenAlexPaper;
+	paper: OpenAlexPaper & { posts: unknown[] };
 	fingerprint?: RankedPaperFeature[];
 	provider?: Prefix;
 	children?: ReactNode;
@@ -69,9 +67,17 @@ export default function FeedItem({
 
 				{fingerprint && <FeatureTags features={fingerprint} />}
 			</div>
+			{paper.posts?.length > 0 && (
+				<div className="text-sm opacity-90">
+					{formatQuestionsAskedLabel(paper.posts.length)}
+				</div>
+			)}
 		</div>
 	);
 }
+
+const formatQuestionsAskedLabel = (count: number) =>
+	count === 1 ? "1 question asked" : `${count} questions asked`;
 
 function FeatureTags({ features }: { features: RankedPaperFeature[] }) {
 	const sorted = [...features]

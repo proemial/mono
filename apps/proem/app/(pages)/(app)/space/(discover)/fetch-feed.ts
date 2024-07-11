@@ -5,12 +5,57 @@ import {
 	fetchPapersByInstitution,
 } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { summarise } from "@/app/prompts/summarise-title";
-import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Redis } from "@proemial/redis/redis";
+import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
+import { getPaperIdsWithPosts } from "../../paper/paper-post-utils";
+
+export const fetchFeedByTopicWithPosts = async (
+	params: FetchFeedParams[0],
+	options: Omit<FetchFeedParams[1], "limit">,
+	spaceId: string | undefined,
+) => {
+	const feedByTopic = await fetchFeedByTopic(params, options);
+	const paperIds = feedByTopic.rows.map(({ paper }) => paper.id);
+	const papersWithPosts = await getPaperIdsWithPosts(paperIds, spaceId);
+	return {
+		...feedByTopic,
+		rows: feedByTopic.rows.map((row) => ({
+			...row,
+			paper: {
+				...row.paper,
+				posts:
+					papersWithPosts.find((paper) => paper.id === row.paper.id)?.posts ??
+					[],
+			},
+		})),
+	};
+};
+
+export const fetchFeedByInstitutionWithPosts = async (
+	params: { id: string },
+	options: Omit<FetchFeedParams[1], "limit">,
+	spaceId: string | undefined,
+) => {
+	const feedByInstitution = await fetchFeedByInstitution(params, options);
+	const paperIds = feedByInstitution.rows.map(({ paper }) => paper.id);
+	const papersWithPosts = await getPaperIdsWithPosts(paperIds, spaceId);
+	return {
+		...feedByInstitution,
+		rows: feedByInstitution.rows.map((row) => ({
+			...row,
+			paper: {
+				...row.paper,
+				posts:
+					papersWithPosts.find((paper) => paper.id === row.paper.id)?.posts ??
+					[],
+			},
+		})),
+	};
+};
 
 type FetchFeedParams = Required<Parameters<typeof fetchPapersByField>>;
 
-export async function fetchFeedByTopic(
+async function fetchFeedByTopic(
 	params: FetchFeedParams[0],
 	options: Omit<FetchFeedParams[1], "limit">,
 ) {
@@ -76,7 +121,7 @@ export async function fetchFeedByTopic(
 	};
 }
 
-export async function fetchFeedByInstitution(
+async function fetchFeedByInstitution(
 	params: { id: string },
 	options: Omit<FetchFeedParams[1], "limit">,
 ) {

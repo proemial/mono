@@ -6,6 +6,7 @@ import { auth } from "@clerk/nextjs";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Metadata } from "next";
 import Image from "next/image";
+import { getPaperIdsWithPosts } from "../../../paper/paper-post-utils";
 import { StaticFeed } from "../../andrej-karpathy-llm-reading-list/static-feed";
 import { fetchReadingList } from "./fetch-list";
 import logo from "./logo.svg";
@@ -35,6 +36,8 @@ export default async function HuggingList({ params: { date } }: Props) {
 	const readingList = await fetchReadingList(date);
 	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
 	const feed = readingList.rows.filter(Boolean) as OpenAlexPaper[];
+	const paperIds = feed.map((paper) => paper.id);
+	const papersWithPosts = await getPaperIdsWithPosts(paperIds, undefined);
 
 	return (
 		<>
@@ -43,7 +46,14 @@ export default async function HuggingList({ params: { date } }: Props) {
 			</NavBar>
 			<Main>
 				<div className="space-y-6">
-					<StaticFeed feed={feed} bookmarks={bookmarks}>
+					<StaticFeed
+						feed={feed.map((paper) => ({
+							...paper,
+							posts:
+								papersWithPosts.find((p) => p.id === paper.id)?.posts ?? [],
+						}))}
+						bookmarks={bookmarks}
+					>
 						<div className="flex items-center">
 							A hugging tribute to AK
 							<Image className="w-6 h-6 ml-2" src={logo} alt="" />

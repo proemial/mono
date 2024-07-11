@@ -7,11 +7,7 @@ import { auth } from "@clerk/nextjs";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { fetchArxivPaper } from "../../arxiv/[id]/fetch-arxiv-paper";
-import {
-	PaperPost,
-	getOrgMemberPaperPosts,
-	getOwnPaperPosts,
-} from "../../paper-post-utils";
+import { getPaperPosts } from "../../paper-post-utils";
 
 type Props = {
 	paperId: string;
@@ -42,13 +38,7 @@ export default async function PaperPage({
 		? await getBookmarksByCollectionId(collectionId ?? userId)
 		: {};
 	const isBookmarked = Boolean(bookmarks[paperId]);
-
-	// Get paper posts from org members, or user's own posts if there are none
-	let paperPosts: PaperPost[] = [];
-	paperPosts = await getOrgMemberPaperPosts(paperId);
-	if (paperPosts.length === 0) {
-		paperPosts = await getOwnPaperPosts(paperId);
-	}
+	const paperPosts = await getPaperPosts(paperId);
 
 	return (
 		<Suspense fallback={<PaperReaderSkeleton />}>
