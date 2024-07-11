@@ -78,8 +78,10 @@ export async function togglePaperInCollection(
 
 	const collection = await findCollection(collectionId);
 	if (
-		!collection ||
-		!PermissionUtils.canEditCollection(collection, userId, orgId)
+		// For non-default spaces, require edit permissions
+		collectionId !== userId &&
+		(!collection ||
+			!PermissionUtils.canEditCollection(collection, userId, orgId))
 	) {
 		return;
 	}

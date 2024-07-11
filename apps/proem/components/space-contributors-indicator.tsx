@@ -43,23 +43,27 @@ export const SpaceContributorsIndicator = async ({ collection }: Props) => {
 								{getInitials(ownerUser)}
 							</AvatarFallback>
 						</Avatar>
-						<Plus className="size-4 opacity-75" />
-						<div className="flex gap-2">
-							{orgMembersUserData
-								.filter((orgMember) => orgMember.userId !== ownerId)
-								.map((orgMember) => (
-									<Avatar
-										key={orgMember.userId}
-										className="-ml-[18px] first:ml-0 size-6 hover:brightness-110 duration-200"
-										title={getFullName(orgMember)}
-									>
-										<AvatarImage src={orgMember.imageUrl} />
-										<AvatarFallback className="text-xs">
-											{getInitials(orgMember)}
-										</AvatarFallback>
-									</Avatar>
-								))}
-						</div>
+						{orgMembersUserData.length > 1 && (
+							<>
+								<Plus className="size-4 opacity-75" />
+								<div className="flex gap-2">
+									{orgMembersUserData
+										.filter((orgMember) => orgMember.userId !== ownerId)
+										.map((orgMember) => (
+											<Avatar
+												key={orgMember.userId}
+												className="-ml-[18px] first:ml-0 size-6 hover:brightness-110 duration-200"
+												title={getFullName(orgMember)}
+											>
+												<AvatarImage src={orgMember.imageUrl} />
+												<AvatarFallback className="text-xs">
+													{getInitials(orgMember)}
+												</AvatarFallback>
+											</Avatar>
+										))}
+								</div>
+							</>
+						)}
 					</div>
 					<div className="text-sm">{orgMembersUserData.length} People</div>
 				</div>
