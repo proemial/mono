@@ -1,5 +1,7 @@
 import { relations } from "drizzle-orm";
 import { pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
+import { ZodSchema } from "zod";
 import { createId } from "../../utils/create-id";
 import { collectionsToPapers } from "./collections-to-papers";
 
@@ -8,8 +10,6 @@ export const collectionSharedType = pgEnum("shared", [
 	"organization",
 	"public",
 ]);
-import { createInsertSchema } from "drizzle-zod";
-import { ZodSchema } from "zod";
 
 export const collections = pgTable("collections", {
 	id: text("id")
