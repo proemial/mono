@@ -145,7 +145,7 @@ export const EditCollection = ({ collection, onSubmit, orgName }: Props) => {
 							<DialogClose asChild>
 								<Button
 									type="submit"
-									className="bg-[#00AA0C]/5 text-[12px] dark:bg-primary text-[#00AA0C] dark:text-primary-foreground rounded-full w-[114px] h-10 mb-3 hover:bg-[#00AA0C]/10 dark:hover:bg-primary/90 duration-200"
+									className="bg-[#00AA0C]/5 text-[12px] text-[#00AA0C] rounded-full w-[114px] h-10 mb-3 hover:bg-[#00AA0C]/10 duration-200"
 								>
 									Update
 								</Button>

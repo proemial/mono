@@ -5,7 +5,7 @@ import { AuthProvider } from "@/components/providers/auth-provider";
 import { ReactQueryProvider } from "@/components/providers/react-query";
 import { SetActiveOrganization } from "@/components/set-active-organization";
 import "@/env";
-import { ThemeProvider, cn } from "@proemial/shadcn-ui";
+import { cn } from "@proemial/shadcn-ui";
 import { Metadata, Viewport } from "next";
 import { Lato as FontSans } from "next/font/google";
 import { headers } from "next/headers";
@@ -92,28 +92,26 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 					fontSans.variable,
 				)}
 			>
-				<ThemeProvider>
-					<AuthProvider>
-						<Analytics.PostHog tracking={trackingInput}>
-							<ReactQueryProvider>
-								<SetActiveOrganization />
-								<div className="bg-background">
-									<div
-										className={cn(
-											"mx-auto min-h-[100dvh] flex flex-col",
-											screenMaxWidth,
-										)}
-									>
-										{children}
-										{modal}
-									</div>
+				<AuthProvider>
+					<Analytics.PostHog tracking={trackingInput}>
+						<ReactQueryProvider>
+							<SetActiveOrganization />
+							<div className="bg-background">
+								<div
+									className={cn(
+										"mx-auto min-h-[100dvh] flex flex-col",
+										screenMaxWidth,
+									)}
+								>
+									{children}
+									{modal}
 								</div>
+							</div>
 
-								<Analytics.Clients tracking={trackingInput} />
-							</ReactQueryProvider>
-						</Analytics.PostHog>
-					</AuthProvider>
-				</ThemeProvider>
+							<Analytics.Clients tracking={trackingInput} />
+						</ReactQueryProvider>
+					</Analytics.PostHog>
+				</AuthProvider>
 			</body>
 		</html>
 	);

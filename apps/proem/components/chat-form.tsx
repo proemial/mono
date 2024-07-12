@@ -121,7 +121,7 @@ export function ChatForm({
 										{...field}
 										placeholder={placeholder}
 										className={`w-full h-12 pl-6 resize-none flex items-center text-lg bg-card
-										            placeholder:opacity-40 placeholder:text-[#2b2b2b] dark:placeholder:text-[#e5e5e5] ${
+										            placeholder:opacity-40 placeholder:text-[#2b2b2b] ${
 																	isFocused ? "rounded-l-3xl" : "rounded-3xl"
 																} ${
 																	form.getFieldState("question").invalid
@@ -157,7 +157,7 @@ export function ChatForm({
 								!form.getValues("question")?.trim().length
 							)
 						}
-						className="size-8 w-[36px] mr-2 rounded-full text-background border-[1px] bg-[#2B2B2B] dark:bg-[#e5e5e5] disabled:opacity-1"
+						className="size-8 w-[36px] mr-2 rounded-full text-background border-[1px] bg-[#2B2B2B] disabled:opacity-1"
 						size="icon"
 						type="submit"
 						onClick={trackHandler(

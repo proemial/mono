@@ -12,7 +12,7 @@ export function applyExplainLinks(
 
 		return (
 			<span
-				className="font-normal bg-neutral-200 dark:bg-neutral-600 cursor-pointer"
+				className="font-normal bg-neutral-200 cursor-pointer"
 				onClick={() => onClick(sanitized)}
 			>
 				{sanitized}
@@ -106,7 +106,7 @@ export const applyLinks = applyElement((link) => {
 export const applyLinksAsPills = applyElement((link) => {
 	return (
 		<Link href={link.href}>
-			<span className="bg-green-100 text-green-800 text-xs font-medium me-1 px-2 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+			<span className="bg-green-100 text-green-800 text-xs font-medium me-1 px-2 py-0.5 rounded-full">
 				{link.content}
 			</span>
 		</Link>

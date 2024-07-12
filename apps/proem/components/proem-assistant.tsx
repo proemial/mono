@@ -60,7 +60,7 @@ export const ProemAssistant = () => {
 				type="button"
 				variant="default"
 				size="icon"
-				className="bg-white dark:bg-primary drop-shadow-xl hover:drop-shadow-lg pointer-events-auto"
+				className="bg-white drop-shadow-xl hover:drop-shadow-lg pointer-events-auto"
 				onClick={handleClick}
 			>
 				<ProemLogo size="xs" />
@@ -79,7 +79,7 @@ export const ProemAssistant = () => {
 								<Input
 									autoFocus
 									placeholder="Ask anything…"
-									className="rounded-full bg-white dark:bg-primary border-none placeholder:opacity-75"
+									className="rounded-full bg-white border-none placeholder:opacity-75"
 									value={input}
 									onChange={(e) => setInput(e.target.value)}
 								/>

@@ -133,7 +133,7 @@ export const ModelSelector = ({
 									<FormControl>
 										<Input
 											placeholder="Email address…"
-											className="grow bg-white dark:bg-neutral-600"
+											className="grow bg-white"
 											disabled={["loading", "success"].includes(
 												subscribeResponse,
 											)}
