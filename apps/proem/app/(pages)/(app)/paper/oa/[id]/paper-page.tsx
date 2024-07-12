@@ -7,7 +7,7 @@ import {
 	MessageWithAuthorUserData,
 	PostService,
 } from "@/services/post-service";
-import { getUser } from "@/utils/auth";
+import { getUsers } from "@/utils/auth";
 import { auth } from "@clerk/nextjs";
 import { nanoid } from "ai";
 import { notFound } from "next/navigation";
@@ -71,9 +71,12 @@ const toInitialMessages = async (
 		return [];
 	}
 	const messages: MessageWithAuthorUserData[] = [];
+	const authors = await getUsers(
+		paperIdWithPosts.posts.map((post) => post.authorId),
+	);
 
 	for (const post of paperIdWithPosts.posts) {
-		const author = await getUser(post.authorId);
+		const author = authors.find((user) => user.id === post.authorId);
 		// Skip post if author user does not exist in auth provider
 		if (!author) {
 			continue;

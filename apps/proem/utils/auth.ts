@@ -14,6 +14,15 @@ export const getUser = async (userId: string) => {
 	}
 };
 
+export const getUsers = async (userIds: string[]) => {
+	try {
+		return await clerkClient.users.getUserList({ userId: userIds });
+	} catch (error) {
+		console.error("Error fetching users from auth provieder", error);
+		return [];
+	}
+};
+
 export const getOrgMembersUserData = async () => {
 	const orgMemberships = await getOrgMemberships();
 	return orgMemberships

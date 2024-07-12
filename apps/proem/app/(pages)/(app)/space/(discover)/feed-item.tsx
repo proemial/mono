@@ -1,5 +1,7 @@
 "use client";
+import { AuthorAvatar } from "@/components/author-avatar";
 import Markdown from "@/components/markdown";
+import { PaperPost } from "@/services/post-service";
 import { trimForQuotes } from "@/utils/string-utils";
 import { Prefix } from "@proemial/redis/adapters/papers";
 import { FeatureType } from "@proemial/repositories/oa/fingerprinting/features";
@@ -18,7 +20,7 @@ export type FeedItemProps = Pick<
 	FeedItemCardProps,
 	"isBookmarked" | "customCollectionId" | "onBookmarkToggleClick"
 > & {
-	paper: OpenAlexPaper & { posts: unknown[] };
+	paper: OpenAlexPaper & { posts: PaperPost[] };
 	fingerprint?: RankedPaperFeature[];
 	provider?: Prefix;
 	children?: ReactNode;
@@ -38,6 +40,16 @@ export default function FeedItem({
 	const tags = paper.data.topics
 		?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
 		.filter(Boolean) as string[];
+
+	const distinctAuthors = paper.posts.reduce(
+		(authors: PaperPost["author"][], post) => {
+			if (!authors.find((author) => author.id === post.author.id)) {
+				authors.push(post.author);
+			}
+			return authors;
+		},
+		[],
+	);
 
 	return (
 		<div className="space-y-3">
@@ -67,9 +79,21 @@ export default function FeedItem({
 
 				{fingerprint && <FeatureTags features={fingerprint} />}
 			</div>
-			{paper.posts?.length > 0 && (
-				<div className="text-sm opacity-90">
-					{formatQuestionsAskedLabel(paper.posts.length)}
+			{paper.posts.length > 0 && (
+				<div className="flex gap-2">
+					<div className="flex gap-2">
+						{distinctAuthors.map((author, index) => (
+							<AuthorAvatar
+								key={index}
+								firstName={author.firstName}
+								lastName={author.lastName}
+								imageUrl={author.imageUrl}
+							/>
+						))}
+					</div>
+					<div className="text-sm opacity-90">
+						{formatQuestionsAskedLabel(paper.posts.length)}
+					</div>
 				</div>
 			)}
 		</div>

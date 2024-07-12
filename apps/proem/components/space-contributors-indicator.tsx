@@ -2,6 +2,7 @@ import { getOrgMembersUserData, getUser } from "@/utils/auth";
 import { Collection } from "@proemial/data/neon/schema";
 import { Avatar, AvatarFallback, AvatarImage } from "@proemial/shadcn-ui";
 import { Plus } from "@untitled-ui/icons-react";
+import { AuthorAvatar, getFullName, getInitials } from "./author-avatar";
 
 type Props = {
 	collection: Collection;
@@ -18,11 +19,11 @@ export const SpaceContributorsIndicator = async ({ collection }: Props) => {
 				<div className="flex items-center gap-2">
 					<Avatar
 						className="size-6 hover:brightness-110 duration-200"
-						title={getFullName(ownerUser)}
+						title={getFullName(ownerUser.firstName, ownerUser.lastName)}
 					>
 						<AvatarImage src={ownerUser.imageUrl} />
 						<AvatarFallback className="text-xs">
-							{getInitials(ownerUser)}
+							{getInitials(ownerUser.firstName, ownerUser.lastName)}
 						</AvatarFallback>
 					</Avatar>
 					<div className="text-sm">Only You</div>
@@ -36,11 +37,11 @@ export const SpaceContributorsIndicator = async ({ collection }: Props) => {
 					<div className="flex items-center gap-1">
 						<Avatar
 							className="size-6 hover:brightness-110 duration-200"
-							title={getFullName(ownerUser)}
+							title={getFullName(ownerUser.firstName, ownerUser.lastName)}
 						>
 							<AvatarImage src={ownerUser.imageUrl} />
 							<AvatarFallback className="text-xs">
-								{getInitials(ownerUser)}
+								{getInitials(ownerUser.firstName, ownerUser.lastName)}
 							</AvatarFallback>
 						</Avatar>
 						{orgMembersUserData.length > 1 && (
@@ -50,16 +51,12 @@ export const SpaceContributorsIndicator = async ({ collection }: Props) => {
 									{orgMembersUserData
 										.filter((orgMember) => orgMember.userId !== ownerId)
 										.map((orgMember) => (
-											<Avatar
+											<AuthorAvatar
 												key={orgMember.userId}
-												className="-ml-[18px] first:ml-0 size-6 hover:brightness-110 duration-200"
-												title={getFullName(orgMember)}
-											>
-												<AvatarImage src={orgMember.imageUrl} />
-												<AvatarFallback className="text-xs">
-													{getInitials(orgMember)}
-												</AvatarFallback>
-											</Avatar>
+												firstName={orgMember.firstName}
+												lastName={orgMember.lastName}
+												imageUrl={orgMember.imageUrl}
+											/>
 										))}
 								</div>
 							</>
@@ -74,36 +71,18 @@ export const SpaceContributorsIndicator = async ({ collection }: Props) => {
 				<div className="flex items-center gap-2">
 					<Avatar
 						className="size-6 hover:brightness-110 duration-200"
-						title={getFullName(ownerUser)}
+						title={getFullName(ownerUser.firstName, ownerUser.lastName)}
 					>
 						<AvatarImage src={ownerUser.imageUrl} />
 						<AvatarFallback className="text-xs">
-							{getInitials(ownerUser)}
+							{getInitials(ownerUser.firstName, ownerUser.lastName)}
 						</AvatarFallback>
 					</Avatar>
-					<div className="text-sm">{getFullName(ownerUser)}</div>
+					<div className="text-sm">
+						{getFullName(ownerUser.firstName, ownerUser.lastName)}
+					</div>
 				</div>
 			);
 		}
 	}
-};
-
-const getFullName = ({
-	firstName,
-	lastName,
-}: { firstName: string | null; lastName: string | null }) => {
-	if (firstName && lastName) return `${firstName} ${lastName}`;
-	if (firstName) return firstName;
-	if (lastName) return lastName;
-	return undefined;
-};
-
-const getInitials = ({
-	firstName,
-	lastName,
-}: { firstName: string | null; lastName: string | null }) => {
-	if (firstName && lastName) return `${firstName[0]}${lastName[0]}`;
-	if (firstName) return firstName[0];
-	if (lastName) return lastName[0];
-	return "?";
 };
