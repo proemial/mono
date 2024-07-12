@@ -37,7 +37,10 @@ export async function findPapers(query: string) {
 				`${oaBaseUrl}?${oaBaseArgs}&filter=locations.landing_page_url:http://arxiv.org/abs/${query}|https://arxiv.org/abs/${query}|${query}`,
 				`${oaBaseUrl}?${oaBaseArgs}&filter=${typeFilter},title.search:${query}`,
 				`${oaBaseUrl}?${oaBaseArgs}&filter=title.search:${query}`,
+				`${oaBaseUrl}?${oaBaseArgs}&filter=ids.openalex:https://openalex.org/${query}`,
 			];
+			console.log("Searching for papers");
+			console.log(queries);
 
 			for (let i = 0; i < queries.length; i++) {
 				const result = await safeFetchSearchResults(queries[i] as string);
