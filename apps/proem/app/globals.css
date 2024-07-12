@@ -26,8 +26,8 @@ body { @apply !min-w-full; }
 
 @layer base {
   :root {
-    --background: #F5F5F5;
-    --foreground: #2B2B2B;
+    --background: 0 0% 96%;
+    --foreground: 0 0% 17%;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
