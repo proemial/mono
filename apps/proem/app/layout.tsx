@@ -10,6 +10,7 @@ import { Metadata, Viewport } from "next";
 import { Lato as FontSans } from "next/font/google";
 import { headers } from "next/headers";
 import { ReactNode } from "react";
+import { screenMaxWidth } from "./constants";
 
 export const viewport: Viewport = {
 	width: "device-width",
@@ -96,8 +97,13 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 						<Analytics.PostHog tracking={trackingInput}>
 							<ReactQueryProvider>
 								<SetActiveOrganization />
-								<div vaul-drawer-wrapper="">
-									<div className="bg-background">
+								<div className="bg-background">
+									<div
+										className={cn(
+											"mx-auto min-h-[100dvh] flex flex-col",
+											screenMaxWidth,
+										)}
+									>
 										{children}
 										{modal}
 									</div>
