@@ -1,6 +1,9 @@
 import { getBookmarkedPapersByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarked-papers-by-collection-id";
 import { StreamList } from "@/app/(pages)/(app)/space/[collectionId]/(lists)/(latest)/stream-list";
-import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
+import {
+	CollectionIdParams,
+	StreamDebugParams,
+} from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { ProemAssistant } from "@/components/proem-assistant";
@@ -12,11 +15,14 @@ import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetc
 import { Fingerprint } from "@proemial/repositories/oa/fingerprinting/fingerprints";
 import { notFound } from "next/navigation";
 
-type LatestPageProps = CollectionIdParams;
+type Props = CollectionIdParams & {
+	searchParams?: StreamDebugParams;
+};
 
 export default async function LatestPage({
 	params: { collectionId },
-}: LatestPageProps) {
+	searchParams,
+}: Props) {
 	const { userId, orgId } = auth();
 	const collection = await CollectionService.getCollection(
 		collectionId,
@@ -55,6 +61,7 @@ export default async function LatestPage({
 		<>
 			<StreamList
 				collectionId={collectionId}
+				debugParams={searchParams}
 				features={features}
 				days={FEED_DEFAULT_DAYS}
 				bookmarks={paperIds}

@@ -3,6 +3,8 @@
 import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
 import { fetchFeedByFeaturesWithPosts } from "@/app/data/fetch-feed";
 import { InfinityScrollList } from "@/components/infinity-scroll-list";
+import { StreamDebugParams } from "../../params";
+import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
 
 type FetchFeedByFeaturesProps = Required<
 	Parameters<typeof fetchFeedByFeaturesWithPosts>[0]
@@ -11,6 +13,7 @@ export type StreamListProps = FetchFeedByFeaturesProps & {
 	collectionId: string;
 	bookmarks?: string[];
 	readonly: boolean;
+	debugParams?: StreamDebugParams;
 };
 
 export function StreamList({
@@ -19,6 +22,7 @@ export function StreamList({
 	features,
 	days,
 	readonly,
+	debugParams,
 }: StreamListProps) {
 	return (
 		<InfinityScrollList
@@ -40,7 +44,9 @@ export function StreamList({
 				);
 				// return fetchFeedByTopic({ field: topic }, { offset: ctx.pageParam });
 			}}
-			// renderHeadline={debug ? (count) => <DebugInfo count={count} /> : null}
+			renderHeadline={
+				debugParams?.debug ? (count) => <DebugInfo count={count} /> : null
+			}
 			renderRow={(row) => {
 				return (
 					<FeedItem
@@ -53,15 +59,41 @@ export function StreamList({
 						readonly={readonly}
 					>
 						{/* TODO! add debug mode */}
-						{/* {debug && (
+						{debugParams?.debug && (
 							<FeatureCloud
-								features={paper.features}
-								sum={paper.filterMatchScore}
+								features={row.features}
+								sum={row.filterMatchScore}
 							/>
-						)} */}
+						)}
 					</FeedItem>
 				);
 			}}
 		/>
+	);
+}
+
+function DebugInfo({ count }: { count?: number }) {
+	return (
+		<div className="flex justify-between italic text-xs text-gray-400">
+			<div className="flex">
+				<div>
+					<FeatureBadge>sum</FeatureBadge>
+				</div>
+				<div>
+					<FeatureBadge variant="topic">topic</FeatureBadge>
+				</div>
+				<div>
+					<FeatureBadge variant="keyword">keyword</FeatureBadge>
+				</div>
+				<div>
+					<FeatureBadge variant="concept">concept</FeatureBadge>
+				</div>
+			</div>
+			<div>
+				{Boolean(count) && (
+					<div className="mt-1 text-right">{count} matching papers</div>
+				)}
+			</div>
+		</div>
 	);
 }
