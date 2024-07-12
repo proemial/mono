@@ -1,7 +1,7 @@
 "use client";
 
-import { UserData } from "@/app/(pages)/(app)/paper/paper-post-utils";
 import { User as UserIcon } from "@/components/icons/User";
+import { UserData } from "@/services/post-service";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { trackHandler } from "./analytics/tracking/tracking-keys";

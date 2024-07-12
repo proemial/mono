@@ -52,7 +52,11 @@ export const findSinglePaperWithPosts = async (
 	return await neonDb.query.papers.findFirst({
 		where: eq(papers.id, paperId),
 		with: {
-			posts: getPaperPostsQueryFragment(userId, orgMemberIds, space),
+			posts: {
+				where: getPostsWhereClause(userId, orgMemberIds, space),
+				with: { comments: { orderBy: [asc(comments.createdAt)] } },
+				orderBy: [desc(posts.createdAt)],
+			},
 		},
 	});
 };
@@ -72,46 +76,39 @@ export const findPapersWithPosts = async (
 	return await neonDb.query.papers.findMany({
 		where: inArray(papers.id, paperIds),
 		with: {
-			posts: getPaperPostsQueryFragment(userId, orgMemberIds, space),
+			posts: {
+				where: getPostsWhereClause(userId, orgMemberIds, space),
+				with: { comments: { orderBy: [asc(comments.createdAt)] } },
+				orderBy: [desc(posts.createdAt)],
+			},
 		},
 	});
 };
 
-const getPaperPostsQueryFragment = (
+const getPostsWhereClause = (
 	userId: string | null,
 	orgMemberIds: string[],
 	space: Collection | undefined,
 ) => {
 	switch (space?.shared) {
 		case "public":
-			return {
-				where: eq(posts.shared, "public"), // Public posts by anyone
-			};
+			return eq(posts.shared, "public"); // Public posts by anyone
 		case "organization":
-			return {
-				where: and(
-					eq(posts.shared, "organization"),
-					// Org members' posts (incl. own posts)
-					inArray(
-						posts.authorId,
-						orgMemberIds.length > 0 ? orgMemberIds : [""],
-					),
-				),
-			};
+			return and(
+				eq(posts.shared, "organization"),
+				// Org members' posts (incl. own posts)
+				inArray(posts.authorId, orgMemberIds.length > 0 ? orgMemberIds : [""]),
+			);
 		case "private":
-			return {
-				where: and(
-					eq(posts.shared, "private"),
-					eq(posts.authorId, userId ?? ""), // Own posts
-				),
-			};
+			return and(
+				eq(posts.shared, "private"),
+				eq(posts.authorId, userId ?? ""), // Own posts
+			);
 	}
 
 	// Case: No space
-	return {
-		where: or(
-			and(eq(posts.shared, "private"), eq(posts.authorId, userId ?? "")), // Own posts
-			eq(posts.shared, "public"), // Public posts by anyone
-		),
-	};
+	return or(
+		and(eq(posts.shared, "private"), eq(posts.authorId, userId ?? "")), // Own posts
+		eq(posts.shared, "public"), // Public posts by anyone
+	);
 };

@@ -2,10 +2,10 @@ import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)
 import { Main } from "@/components/main";
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
 import { NavBar } from "@/components/nav-bar/nav-bar";
+import { PostService } from "@/services/post-service";
 import { auth } from "@clerk/nextjs";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Metadata } from "next";
-import { getPaperIdsWithPosts } from "../../paper/paper-post-utils";
 import { fetchReadingList } from "./fetch-list";
 import { StaticFeed } from "./static-feed";
 
@@ -29,7 +29,10 @@ export default async function AndrejKarpathyLLMReadingList() {
 	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
 	const feed = readingList.rows.filter(Boolean) as OpenAlexPaper[];
 	const paperIds = feed.map((paper) => paper.id);
-	const papersWithPosts = await getPaperIdsWithPosts(paperIds, undefined);
+	const papersWithPosts = await PostService.getPaperIdsWithPosts(
+		paperIds,
+		undefined,
+	);
 
 	return (
 		<>

@@ -1,10 +1,10 @@
 import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
-import { getPaperIdsWithPosts } from "@/app/(pages)/(app)/paper/paper-post-utils";
 import { getBookmarkedPapersByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarked-papers-by-collection-id";
 import { FeedItemWithDisabledOverlay } from "@/app/(pages)/(app)/space/[collectionId]/(lists)/saved/feed-item-with-disabled-overlay";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { ProemAssistant } from "@/components/proem-assistant";
 import { CollectionService } from "@/services/collection-service";
+import { PostService } from "@/services/post-service";
 import { PermissionUtils } from "@/utils/permission-utils";
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
@@ -41,7 +41,7 @@ export default async function SavedPage({
 	const papers = paperIds
 		? await Promise.all(paperIds.map((paperId) => fetchPaper(paperId)))
 		: [];
-	const paperIdsWithPosts = await getPaperIdsWithPosts(
+	const paperIdsWithPosts = await PostService.getPaperIdsWithPosts(
 		papers.filter((p) => typeof p !== "undefined").map((p) => p.id),
 		collectionId,
 	);

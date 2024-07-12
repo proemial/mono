@@ -1,10 +1,10 @@
 "use server";
 import { summarise } from "@/app/prompts/summarise-title";
+import { PostService } from "@/services/post-service";
 import { Redis } from "@proemial/redis/redis";
 import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { fetchPaper } from "../(pages)/(app)/paper/oa/[id]/fetch-paper";
-import { getPaperIdsWithPosts } from "../(pages)/(app)/paper/paper-post-utils";
 import { fetchAndRerankPaperIds } from "./fetch-by-features";
 
 type FetchFeedParams = Required<Parameters<typeof fetchAndRerankPaperIds>>;
@@ -105,7 +105,10 @@ export const fetchFeedByFeaturesWithPosts = async (
 ) => {
 	const feedByFeatures = await fetchFeedByFeatures(params, options, nocache);
 	const paperIds = feedByFeatures.rows.map(({ paper }) => paper.id);
-	const papersWithPosts = await getPaperIdsWithPosts(paperIds, spaceId);
+	const papersWithPosts = await PostService.getPaperIdsWithPosts(
+		paperIds,
+		spaceId,
+	);
 	return {
 		...feedByFeatures,
 		rows: feedByFeatures.rows.map((row) => ({

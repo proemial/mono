@@ -1,7 +1,7 @@
-import { UserData } from "@/app/(pages)/(app)/paper/paper-post-utils";
 import { applyExplainLinks } from "@/components/chat-apply-links";
 import { ProemLogo } from "@/components/icons/brand/logo";
 import { UserAvatar } from "@/components/user-avatar";
+import { UserData } from "@/services/post-service";
 import { useUser } from "@clerk/nextjs";
 import {
 	MessageAuthor,

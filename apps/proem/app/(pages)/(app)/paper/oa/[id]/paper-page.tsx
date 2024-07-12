@@ -3,11 +3,16 @@ import { generate } from "@/app/(pages)/(app)/paper/oa/[id]/llm-generate";
 import { PaperReader } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader";
 import { PaperReaderSkeleton } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-skeleton";
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
+import {
+	MessageWithAuthorUserData,
+	PostService,
+} from "@/services/post-service";
+import { getUser } from "@/utils/auth";
 import { auth } from "@clerk/nextjs";
+import { nanoid } from "ai";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { fetchArxivPaper } from "../../arxiv/[id]/fetch-arxiv-paper";
-import { getPaperPosts } from "../../paper-post-utils";
 
 type Props = {
 	paperId: string;
@@ -25,7 +30,6 @@ export default async function PaperPage({
 		if (!paper) {
 			notFound();
 		}
-
 		return paper;
 	});
 
@@ -38,7 +42,11 @@ export default async function PaperPage({
 		? await getBookmarksByCollectionId(collectionId ?? userId)
 		: {};
 	const isBookmarked = Boolean(bookmarks[paperId]);
-	const paperPosts = await getPaperPosts(paperId);
+	const paperIdWithPosts = await PostService.getSinglePaperIdWithPosts(
+		paperId,
+		collectionId,
+	);
+	const initialMessages = await toInitialMessages(paperIdWithPosts);
 
 	return (
 		<Suspense fallback={<PaperReaderSkeleton />}>
@@ -46,10 +54,53 @@ export default async function PaperPage({
 				isBookmarked={isBookmarked}
 				fetchedPaperPromise={fetchedPaperPromise}
 				generatedPaperPromise={generatedPaperPromise}
-				paperPosts={paperPosts}
+				initialMessages={initialMessages}
 				type={type}
 				collectionId={collectionId}
 			/>
 		</Suspense>
 	);
 }
+
+const toInitialMessages = async (
+	paperIdWithPosts: Awaited<
+		ReturnType<typeof PostService.getSinglePaperIdWithPosts>
+	>,
+): Promise<MessageWithAuthorUserData[]> => {
+	if (!paperIdWithPosts) {
+		return [];
+	}
+	const messages: MessageWithAuthorUserData[] = [];
+
+	for (const post of paperIdWithPosts.posts) {
+		const author = await getUser(post.authorId);
+		// Skip post if author user does not exist in auth provider
+		if (!author) {
+			continue;
+		}
+		messages.push({
+			id: nanoid(),
+			role: "user",
+			content: post.content,
+			createdAt: post.createdAt,
+			authorUserData: {
+				userId: post.authorId,
+				firstName: author.firstName,
+				lastName: author.lastName,
+				hasImage: author.hasImage,
+				imageUrl: author.imageUrl,
+			},
+			shared: post.shared,
+		});
+		for (const comment of post.comments) {
+			messages.push({
+				id: nanoid(),
+				role: "assistant",
+				content: comment.content,
+				createdAt: comment.createdAt,
+				shared: post.shared,
+			});
+		}
+	}
+	return messages;
+};

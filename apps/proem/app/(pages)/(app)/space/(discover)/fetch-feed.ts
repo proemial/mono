@@ -5,9 +5,9 @@ import {
 	fetchPapersByInstitution,
 } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { summarise } from "@/app/prompts/summarise-title";
+import { PostService } from "@/services/post-service";
 import { Redis } from "@proemial/redis/redis";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
-import { getPaperIdsWithPosts } from "../../paper/paper-post-utils";
 
 export const fetchFeedByTopicWithPosts = async (
 	params: FetchFeedParams[0],
@@ -16,7 +16,10 @@ export const fetchFeedByTopicWithPosts = async (
 ) => {
 	const feedByTopic = await fetchFeedByTopic(params, options);
 	const paperIds = feedByTopic.rows.map(({ paper }) => paper.id);
-	const papersWithPosts = await getPaperIdsWithPosts(paperIds, spaceId);
+	const papersWithPosts = await PostService.getPaperIdsWithPosts(
+		paperIds,
+		spaceId,
+	);
 	return {
 		...feedByTopic,
 		rows: feedByTopic.rows.map((row) => ({
@@ -38,7 +41,10 @@ export const fetchFeedByInstitutionWithPosts = async (
 ) => {
 	const feedByInstitution = await fetchFeedByInstitution(params, options);
 	const paperIds = feedByInstitution.rows.map(({ paper }) => paper.id);
-	const papersWithPosts = await getPaperIdsWithPosts(paperIds, spaceId);
+	const papersWithPosts = await PostService.getPaperIdsWithPosts(
+		paperIds,
+		spaceId,
+	);
 	return {
 		...feedByInstitution,
 		rows: feedByInstitution.rows.map((row) => ({

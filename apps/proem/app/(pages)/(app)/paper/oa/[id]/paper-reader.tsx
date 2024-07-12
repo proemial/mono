@@ -10,16 +10,16 @@ import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { PaperCardDiscover } from "@/components/paper-card-discover";
 import { PaperCardDiscoverProfile } from "@/components/paper-card-discover-profile";
 import { Trackable } from "@/components/trackable";
+import { MessageWithAuthorUserData } from "@/services/post-service";
 import { Collection } from "@proemial/data/neon/schema";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { use } from "react";
-import { PaperPost, paperPostsToMessages } from "../../paper-post-utils";
 import { addPaperActivity } from "./paper-activity";
 
 type PaperReaderProps = Pick<PaperReaderHeadlineProps, "isBookmarked"> & {
 	fetchedPaperPromise: Promise<Omit<OpenAlexPaper, "generated">>;
 	generatedPaperPromise: Promise<OpenAlexPaper>;
-	paperPosts: PaperPost[];
+	initialMessages: MessageWithAuthorUserData[];
 	type: "oa" | "arxiv";
 	collectionId?: Collection["id"];
 };
@@ -27,14 +27,13 @@ type PaperReaderProps = Pick<PaperReaderHeadlineProps, "isBookmarked"> & {
 export function PaperReader({
 	fetchedPaperPromise,
 	generatedPaperPromise,
-	paperPosts,
+	initialMessages,
 	isBookmarked,
 	type,
 	collectionId,
 }: PaperReaderProps) {
 	const fetchedPaper = use(fetchedPaperPromise);
 	const generatedPaper = use(generatedPaperPromise);
-	const initialMessages = paperPostsToMessages(paperPosts);
 
 	if (type === "oa") {
 		// Only register paper read activity on OpenAlex papers

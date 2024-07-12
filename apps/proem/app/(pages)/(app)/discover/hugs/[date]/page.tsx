@@ -2,11 +2,11 @@ import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)
 import { Main } from "@/components/main";
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
 import { NavBar } from "@/components/nav-bar/nav-bar";
+import { PostService } from "@/services/post-service";
 import { auth } from "@clerk/nextjs";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Metadata } from "next";
 import Image from "next/image";
-import { getPaperIdsWithPosts } from "../../../paper/paper-post-utils";
 import { StaticFeed } from "../../andrej-karpathy-llm-reading-list/static-feed";
 import { fetchReadingList } from "./fetch-list";
 import logo from "./logo.svg";
@@ -37,7 +37,10 @@ export default async function HuggingList({ params: { date } }: Props) {
 	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
 	const feed = readingList.rows.filter(Boolean) as OpenAlexPaper[];
 	const paperIds = feed.map((paper) => paper.id);
-	const papersWithPosts = await getPaperIdsWithPosts(paperIds, undefined);
+	const papersWithPosts = await PostService.getPaperIdsWithPosts(
+		paperIds,
+		undefined,
+	);
 
 	return (
 		<>
