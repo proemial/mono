@@ -13,7 +13,6 @@ import {
 } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import { useInternalUser } from "../hooks/use-user";
-import { ProfileColorSchemeToggle } from "./profile-color-scheme-toggle";
 
 const feedback = "https://tally.so/r/wAv8Ve";
 const version = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ?? "local";
