@@ -48,13 +48,6 @@ export const About = () => {
 				)}
 				<div className="flex gap-2 items-center justify-between">
 					<div className="flex gap-2 items-center">
-						<Drop className="size-4 opacity-85" />
-						<div className="text-sm select-none">Color scheme</div>
-					</div>
-					<ProfileColorSchemeToggle />
-				</div>
-				<div className="flex gap-2 items-center justify-between">
-					<div className="flex gap-2 items-center">
 						<MessageSquare02 className="size-4 opacity-85" />
 						<a
 							href={feedback}

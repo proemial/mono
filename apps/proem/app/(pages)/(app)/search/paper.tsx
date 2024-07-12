@@ -20,7 +20,7 @@ export function Paper({
 	}
 
 	return (
-		<div className="p-4 space-y-3 bg-white rounded-lg dark:bg-primary">
+		<div className="p-4 space-y-3 bg-white rounded-lg">
 			<FeedItemCard
 				id={paper.id}
 				date={paper.publication_date}

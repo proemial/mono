@@ -26,7 +26,7 @@ export default async function ReaderInputPage() {
 				<Input
 					name="identifier"
 					placeholder="Identifier"
-					className="grow bg-white dark:bg-neutral-600"
+					className="grow bg-white"
 				/>
 				<Button type="submit" className="text-xs tracking-wider">
 					Find paper
