@@ -18,7 +18,7 @@ export function FeatureCloud({ features, sum }: CloudProps) {
 	const filtered = features?.filter((f) => !f.irrelevant);
 	return (
 		<div className="my-4 flex flex-wrap">
-			{!!sum && <FeatureBadge>{sum.toFixed(2)}</FeatureBadge>}
+			{!!sum && <FeatureBadge>{sum.toFixed(3)}</FeatureBadge>}
 
 			{filtered?.map((item, i) => (
 				<FeatureBadge
@@ -47,7 +47,7 @@ export function FeatureBadge({ children, score, variant }: BadgeProps) {
 			})}
 		>
 			{children}
-			{score !== undefined && <>: {score ? score?.toFixed(2) : score}</>}
+			{score !== undefined && <>: {score ? score?.toFixed(3) : score}</>}
 		</Badge>
 	);
 }
