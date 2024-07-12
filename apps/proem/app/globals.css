@@ -24,6 +24,11 @@ h3 {
 }
 body { @apply !min-w-full; }
 
+.markdown > * > a {
+  color: #0842A1;
+  text-decoration: underline;
+}
+
 @layer base {
   :root {
     --background: #F5F5F5;

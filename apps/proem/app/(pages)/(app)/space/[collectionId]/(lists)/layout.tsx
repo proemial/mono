@@ -1,5 +1,6 @@
 import { NavItem } from "@/app/(pages)/(app)/space/[collectionId]/nav-item";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
+import Markdown from "@/components/markdown";
 import { SpaceContributorsIndicator } from "@/components/space-contributors-indicator";
 import { SpaceShareIndicator } from "@/components/space-share-indicator";
 import { routes } from "@/routes";
@@ -29,7 +30,9 @@ export default async function ({ params: { collectionId }, children }: Props) {
 		<div className="flex flex-col gap-2 grow">
 			<div className="flex flex-col gap-3">
 				{!isDefaultCollection && (
-					<Paragraph>{collection.description}</Paragraph>
+					<div className="text-base/relaxed break-words markdown">
+						<Markdown>{collection.description ?? ""}</Markdown>
+					</div>
 				)}
 				<div className="flex items-center justify-between gap-2">
 					<SpaceContributorsIndicator collection={collection} />
