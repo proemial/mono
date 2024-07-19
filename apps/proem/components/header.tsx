@@ -8,20 +8,20 @@ const colors = ["#AFB3C3", "#9FBBBD", "#BDE6D0", "#DED5D5", "#E2D1B7"];
 
 const images = [
 	{
-		top: "patterns_01_posterized.png",
-		bottom: "patterns_01_posterized_top.png",
+		regular: "patterns_01_posterized.png",
+		faded: "patterns_01_posterized_top.png",
 	},
 	{
-		top: "patterns_02_posterized.png",
-		bottom: "patterns_02_posterized_top.png",
+		regular: "patterns_02_posterized.png",
+		faded: "patterns_02_posterized_top.png",
 	},
 	{
-		top: "patterns_03_posterized.png",
-		bottom: "patterns_03_posterized_top.png",
+		regular: "patterns_03_posterized.png",
+		faded: "patterns_03_posterized_top.png",
 	},
 	{
-		top: "patterns_04_posterized.png",
-		bottom: "patterns_04_posterized_top.png",
+		regular: "patterns_04_posterized.png",
+		faded: "patterns_04_posterized_top.png",
 	},
 ];
 
@@ -34,7 +34,7 @@ export function headerStyle(seed: string, position?: "top" | "bottom") {
 			backgroundSize: "50%",
 			backgroundPosition: "top",
 			backgroundImage: `url('/backgrounds/${
-				image?.bottom
+				image?.faded
 			}'),linear-gradient(${hex2rgba(color)}, ${hex2rgba(bgColor)})`,
 		};
 	}
@@ -42,7 +42,7 @@ export function headerStyle(seed: string, position?: "top" | "bottom") {
 	return {
 		backgroundSize: "50%",
 		backgroundPosition: "bottom",
-		backgroundImage: `url('/backgrounds/${image?.top}')`,
+		backgroundImage: `url('/backgrounds/${image?.regular}')`,
 		backgroundColor: color,
 	};
 }
