@@ -8,6 +8,7 @@ type Params = {
 	};
 };
 
+// This is just a test page for testing our headers, based on various seed titles
 export default async function HeaderTestPage({ searchParams }: Params) {
 	const pageTitle =
 		searchParams?.title ??
