@@ -1,6 +1,4 @@
 "use client";
-
-import { getPersonalDefaultCollection } from "@/app/constants";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -14,30 +12,29 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@proemial/shadcn-ui";
-import {
-	useParams,
-	usePathname,
-	useRouter,
-	useSearchParams,
-} from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { getActiveSpace } from "./active-space";
 
 type Props = {
 	collections: Collection[];
 	userId: string | null;
+	collectionId?: string;
 };
 
-export const SelectSpaceHeader = ({ collections, userId }: Props) => {
+export const SelectSpaceHeader = ({
+	collections,
+	userId,
+	collectionId,
+}: Props) => {
 	const pathname = usePathname();
-	const { collectionId } = useParams<{ collectionId?: string }>();
 	const searchParams = useSearchParams();
 	const router = useRouter();
 
-	const collectionsWithDefaultFallback = ensureDefaultCollection(
+	const { collectionsWithDefaultFallback, selectedSpace } = getActiveSpace(
 		collections,
 		userId,
+		collectionId,
 	);
-	const selectedSpace =
-		collectionId ?? collectionsWithDefaultFallback.at(0)?.id;
 
 	const handleValueChange = (id: string) => {
 		trackHandler(analyticsKeys.ui.header.click.changeSpace);
@@ -75,21 +72,6 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 			</Select>
 		</div>
 	);
-};
-
-const ensureDefaultCollection = (
-	collections: Collection[],
-	userId: string | null,
-) => {
-	const existingDefaultCollection = collections.find(
-		(collection) => collection.id === userId,
-	);
-	if (existingDefaultCollection) {
-		return collections;
-	}
-	return userId
-		? [getPersonalDefaultCollection(userId), ...collections]
-		: collections;
 };
 
 const changeSpaceId = (pathname: string, spaceId: string) => {

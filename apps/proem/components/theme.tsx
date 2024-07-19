@@ -59,6 +59,28 @@ export const Theme = {
 	header: ({ children, title }: { children: ReactNode; title: string }) => (
 		<ThemedHeader title={title}>{children}</ThemedHeader>
 	),
+
+	headers: {
+		top: ({
+			children,
+			seed,
+			unstyled,
+		}: { children: ReactNode; seed: string; unstyled?: boolean }) => (
+			<ThemedTopHeader seed={seed} unstyled={unstyled}>
+				{children}
+			</ThemedTopHeader>
+		),
+
+		bottom: ({
+			children,
+			seed,
+			unstyled,
+		}: { children: ReactNode; seed: string; unstyled?: boolean }) => (
+			<ThemedBottomHeader seed={seed} unstyled={unstyled}>
+				{children}
+			</ThemedBottomHeader>
+		),
+	},
 };
 
 function ThemedHeader({
@@ -67,15 +89,36 @@ function ThemedHeader({
 }: { children: ReactNode; title: string }) {
 	return (
 		<div>
-			<div className="pb-16" style={{ ...Theme.style(title) }}>
-				{children}
-			</div>
-			<div
-				className={`px-4 pb-8 text-black text-2xl leading-9"`}
-				style={{ ...Theme.style(title, "bottom") }}
-			>
-				{title}
-			</div>
+			<ThemedTopHeader seed={title}>{children}</ThemedTopHeader>
+			<ThemedBottomHeader seed={title}>{title}</ThemedBottomHeader>
+		</div>
+	);
+}
+
+function ThemedTopHeader({
+	children,
+	seed,
+	unstyled,
+}: { children: ReactNode; seed: string; unstyled?: boolean }) {
+	const style = unstyled ? {} : Theme.style(seed);
+
+	return (
+		<div className="pb-16" style={style}>
+			{children}
+		</div>
+	);
+}
+
+function ThemedBottomHeader({
+	children,
+	seed,
+	unstyled,
+}: { children: ReactNode; seed: string; unstyled?: boolean }) {
+	const style = unstyled ? {} : Theme.style(seed, "bottom");
+
+	return (
+		<div className={`px-4 pb-8 text-black text-2xl leading-9"`} style={style}>
+			{children}
 		</div>
 	);
 }
