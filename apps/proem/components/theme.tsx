@@ -1,0 +1,77 @@
+import { hex2rgba } from "@proemial/utils/color";
+import { numberFrom } from "@proemial/utils/string";
+import { ReactNode } from "react";
+
+const bgColor = "£F5F5F5";
+
+const colors = ["#AFB3C3", "#9FBBBD", "#BDE6D0", "#DED5D5", "#E2D1B7"];
+
+const images = [
+	{
+		regular: "patterns_01_posterized.png",
+		faded: "patterns_01_posterized_top.png",
+	},
+	{
+		regular: "patterns_02_posterized.png",
+		faded: "patterns_02_posterized_top.png",
+	},
+	{
+		regular: "patterns_03_posterized.png",
+		faded: "patterns_03_posterized_top.png",
+	},
+	{
+		regular: "patterns_04_posterized.png",
+		faded: "patterns_04_posterized_top.png",
+	},
+];
+
+export const Theme = {
+	color: (seed: string) => colors[numberFrom(seed, 4)] as string,
+
+	image: (seed: string) => images[numberFrom(seed, 3)],
+
+	style: (seed: string, position?: "top" | "bottom") => {
+		const color = Theme.color(seed);
+		const image = Theme.image(seed);
+
+		if (position === "bottom") {
+			return {
+				backgroundSize: "50%",
+				backgroundPosition: "top",
+				backgroundImage: `url('/backgrounds/${
+					image?.faded
+				}'),linear-gradient(${hex2rgba(color)}, ${hex2rgba(bgColor)})`,
+			};
+		}
+
+		return {
+			backgroundSize: "50%",
+			backgroundPosition: "bottom",
+			backgroundImage: `url('/backgrounds/${image?.regular}')`,
+			backgroundColor: color,
+		};
+	},
+
+	header: ({ children, title }: { children: ReactNode; title: string }) => (
+		<ThemedHeader title={title}>{children}</ThemedHeader>
+	),
+};
+
+function ThemedHeader({
+	children,
+	title,
+}: { children: ReactNode; title: string }) {
+	return (
+		<div>
+			<div className="pb-16" style={{ ...Theme.style(title) }}>
+				{children}
+			</div>
+			<div
+				className={`px-4 pb-8 text-black text-2xl leading-9"`}
+				style={{ ...Theme.style(title, "bottom") }}
+			>
+				{title}
+			</div>
+		</div>
+	);
+}

@@ -1,4 +1,4 @@
-import StyledHeader from "@/components/header";
+import { Theme } from "@/components/theme";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBar } from "@/components/nav-bar/nav-bar";
 
@@ -15,11 +15,11 @@ export default async function HeaderTestPage({ searchParams }: Params) {
 
 	return (
 		<div>
-			<StyledHeader title={pageTitle}>
+			<Theme.header title={pageTitle}>
 				<NavBar action={<div className="w-8" />}>
 					<SimpleHeader title="Infectious Immunology" />
 				</NavBar>
-			</StyledHeader>
+			</Theme.header>
 
 			<div className="mb-4">
 				<h1>
