@@ -49,3 +49,19 @@ export async function sha256(rawData: string) {
 	const hashArray = Array.from(new Uint8Array(hashBuffer));
 	return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
+
+export function hashFrom(str: string): number {
+	let hash = 0;
+	for (let i = 0; i < str.length; i++) {
+		const char = str.charCodeAt(i);
+		hash = (hash << 5) - hash + char;
+		hash |= 0; // Convert to 32bit integer
+	}
+	return hash;
+}
+
+export function numberFrom(text: string, max = 9): number {
+	const index = Math.abs(hashFrom(text)) % max;
+
+	return index;
+}
