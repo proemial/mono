@@ -37,7 +37,7 @@ export function ChatArticle({
 				</div>
 			</div>
 
-			{title ? <Title title={title} /> : null}
+			{/* {title ? <Title title={title} /> : null} */}
 
 			{text && (
 				<div className="text-base/relaxed break-words">
@@ -54,14 +54,14 @@ export function ChatArticle({
 	);
 }
 
-function Title({ title }: { title: string }) {
-	// Remove potential leading/trailing quotes from the title
-	return (
-		<Header2>
-			<Markdown>{trimForQuotes(title)}</Markdown>
-		</Header2>
-	);
-}
+// function Title({ title }: { title: string }) {
+// 	// Remove potential leading/trailing quotes from the title
+// 	return (
+// 		<Header2>
+// 			<Markdown>{trimForQuotes(title)}</Markdown>
+// 		</Header2>
+// 	);
+// }
 
 function Spinner() {
 	return (
