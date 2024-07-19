@@ -3,10 +3,10 @@ import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/par
 import Markdown from "@/components/markdown";
 import { SpaceContributorsIndicator } from "@/components/space-contributors-indicator";
 import { SpaceShareIndicator } from "@/components/space-share-indicator";
+import { Theme } from "@/components/theme";
 import { routes } from "@/routes";
 import { CollectionService } from "@/services/collection-service";
 import { auth } from "@clerk/nextjs/server";
-import { Paragraph } from "@proemial/shadcn-ui";
 import { notFound } from "next/navigation";
 import { ReactNode } from "react";
 
@@ -26,27 +26,38 @@ export default async function ({ params: { collectionId }, children }: Props) {
 	}
 
 	const isDefaultCollection = collection.id === userId;
+	console.log(
+		"collection.description",
+		collection.description,
+		isDefaultCollection,
+	);
+
 	return (
-		<div className="flex flex-col gap-2 grow">
-			<div className="flex flex-col gap-3">
-				{!isDefaultCollection && (
-					<div className="text-base/relaxed break-words markdown">
-						<Markdown>{collection.description ?? ""}</Markdown>
+		<>
+			<div className="mt-[-16px] mx-[-16px]">
+				<Theme.headers.bottom
+					seed={collection.name}
+					unstyled={isDefaultCollection}
+				>
+					<Markdown>{collection.description ?? ""}</Markdown>
+				</Theme.headers.bottom>
+			</div>
+			<div className="flex flex-col gap-2 grow">
+				<div className="flex flex-col gap-3">
+					<div className="flex items-center justify-between gap-2">
+						<SpaceContributorsIndicator collection={collection} />
+						<SpaceShareIndicator shared={collection.shared} />
 					</div>
-				)}
-				<div className="flex items-center justify-between gap-2">
-					<SpaceContributorsIndicator collection={collection} />
-					<SpaceShareIndicator shared={collection.shared} />
 				</div>
+				<div className="flex items-center justify-center gap-1">
+					<NavItem href={`${routes.space}/${collection.id}`} title="Latest" />
+					<NavItem
+						href={`${routes.space}/${collection.id}/saved`}
+						title="Saved"
+					/>
+				</div>
+				{children}
 			</div>
-			<div className="flex items-center justify-center gap-1">
-				<NavItem href={`${routes.space}/${collection.id}`} title="Latest" />
-				<NavItem
-					href={`${routes.space}/${collection.id}/saved`}
-					title="Saved"
-				/>
-			</div>
-			{children}
-		</div>
+		</>
 	);
 }

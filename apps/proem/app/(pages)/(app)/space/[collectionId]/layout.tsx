@@ -2,7 +2,9 @@ import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/par
 import { Main } from "@/components/main";
 import { ToggleSearchAction } from "@/components/nav-bar/actions/toggle-search-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
+import { getActiveSpace } from "@/components/nav-bar/headers/active-space";
 import { NavBar } from "@/components/nav-bar/nav-bar";
+import { Theme } from "@/components/theme";
 import { CollectionService } from "@/services/collection-service";
 import { auth } from "@clerk/nextjs/server";
 import { findAvailableCollections } from "@proemial/data/repository/collection";
@@ -40,18 +42,30 @@ export default async function ({
 				a.name.localeCompare(b.name),
 			);
 
+	const activeSpace = getActiveSpace(
+		combinedCollections,
+		userId,
+		collectionId,
+	).activeSpace;
+	const seed = activeSpace?.name ?? "";
+
+	const isDefaultCollection = activeSpace?.id === userId;
+
 	return (
 		<>
-			<NavBar action={<ToggleSearchAction />}>
-				<SelectSpaceHeader
-					collections={[
-						// Put the user's default space first
-						...combinedCollections.filter((c) => c.id === userId),
-						...combinedCollections.filter((c) => c.id !== userId),
-					]}
-					userId={userId}
-				/>
-			</NavBar>
+			<Theme.headers.top seed={seed} unstyled={isDefaultCollection}>
+				<NavBar action={<ToggleSearchAction />}>
+					<SelectSpaceHeader
+						collections={[
+							// Put the user's default space first
+							...combinedCollections.filter((c) => c.id === userId),
+							...combinedCollections.filter((c) => c.id !== userId),
+						]}
+						userId={userId}
+						collectionId={collectionId}
+					/>
+				</NavBar>
+			</Theme.headers.top>
 			<Main>{children}</Main>
 		</>
 	);
