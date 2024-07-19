@@ -28,9 +28,11 @@ const colors = ["#AFB3C3", "#9FBBBD", "#BDE6D0", "#DED5D5", "#E2D1B7"];
 const bgColor = "#F5F5F5";
 
 export const Theme = {
-	color: (seed: string) => colors[numberFrom(seed, 4)] as string,
+	color: (seed: string) =>
+		colors[numberFrom(seed, colors.length - 1)] as string,
 
-	image: (seed: string) => images[numberFrom(seed, 3)] as BackgroundImage,
+	image: (seed: string) =>
+		images[numberFrom(seed, images.length - 1)] as BackgroundImage,
 
 	style: (seed: string, position?: "top" | "bottom") => {
 		const color = Theme.color(seed);
