@@ -2,9 +2,9 @@ import { hex2rgba } from "@proemial/utils/color";
 import { numberFrom } from "@proemial/utils/string";
 import { ReactNode } from "react";
 
-type ThemeBackground = { regular: string; faded: string };
+type BackgroundImage = { regular: string; faded: string };
 
-const images: Array<ThemeBackground> = [
+const images: Array<BackgroundImage> = [
 	{
 		regular: "patterns_01_posterized.png",
 		faded: "patterns_01_posterized_top.png",
@@ -30,7 +30,7 @@ const bgColor = "#F5F5F5";
 export const Theme = {
 	color: (seed: string) => colors[numberFrom(seed, 4)] as string,
 
-	image: (seed: string) => images[numberFrom(seed, 3)] as ThemeBackground,
+	image: (seed: string) => images[numberFrom(seed, 3)] as BackgroundImage,
 
 	style: (seed: string, position?: "top" | "bottom") => {
 		const color = Theme.color(seed);
