@@ -1,8 +1,8 @@
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { Main } from "@/components/main";
 import { ToggleSearchAction } from "@/components/nav-bar/actions/toggle-search-action";
-import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { getActiveSpace } from "@/components/nav-bar/headers/active-space";
+import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { NavBar } from "@/components/nav-bar/nav-bar";
 import { Theme } from "@/components/theme";
 import { CollectionService } from "@/services/collection-service";

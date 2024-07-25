@@ -1,3 +1,4 @@
+import { cn } from "@proemial/shadcn-ui";
 import { hex2rgba } from "@proemial/utils/color";
 import { numberFrom } from "@proemial/utils/string";
 import { ReactNode } from "react";
@@ -66,9 +67,9 @@ export const Theme = {
 			seed,
 			unstyled,
 		}: { children: ReactNode; seed: string; unstyled?: boolean }) => (
-			<ThemedTopHeader seed={seed} unstyled={unstyled}>
-				{children}
-			</ThemedTopHeader>
+				<ThemedTopHeader seed={seed} unstyled={unstyled}>
+					{children}
+				</ThemedTopHeader>
 		),
 
 		bottom: ({
@@ -103,7 +104,7 @@ function ThemedTopHeader({
 	const style = unstyled ? {} : Theme.style(seed);
 
 	return (
-		<div className="pb-16" style={style}>
+		<div className={cn({ "pb-16": !unstyled })} style={style}>
 			{children}
 		</div>
 	);
@@ -117,7 +118,7 @@ function ThemedBottomHeader({
 	const style = unstyled ? {} : Theme.style(seed, "bottom");
 
 	return (
-		<div className={`px-4 pb-8 text-black text-2xl leading-9"`} style={style}>
+		<div className="px-4 pb-8 text-black text-2xl leading-9" style={style}>
 			{children}
 		</div>
 	);
