@@ -84,6 +84,12 @@ export const Theme = {
 	},
 };
 
+type ThemedHeaderProps = {
+	children: ReactNode;
+	seed: string;
+	unstyled?: boolean;
+};
+
 function ThemedHeader({
 	children,
 	title,
@@ -96,11 +102,7 @@ function ThemedHeader({
 	);
 }
 
-function ThemedTopHeader({
-	children,
-	seed,
-	unstyled,
-}: { children: ReactNode; seed: string; unstyled?: boolean }) {
+function ThemedTopHeader({ children, seed, unstyled }: ThemedHeaderProps) {
 	const style = unstyled ? {} : Theme.style(seed);
 
 	return (
@@ -110,11 +112,7 @@ function ThemedTopHeader({
 	);
 }
 
-function ThemedBottomHeader({
-	children,
-	seed,
-	unstyled,
-}: { children: ReactNode; seed: string; unstyled?: boolean }) {
+function ThemedBottomHeader({ children, seed, unstyled }: ThemedHeaderProps) {
 	const style = unstyled ? {} : Theme.style(seed, "bottom");
 
 	return (
