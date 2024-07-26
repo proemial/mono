@@ -57,9 +57,6 @@ export const Theme = {
 		};
 	},
 
-	header: ({ children, title }: { children: ReactNode; title: string }) => (
-		<ThemedHeader title={title}>{children}</ThemedHeader>
-	),
 
 	headers: {
 		top: ({
@@ -67,9 +64,9 @@ export const Theme = {
 			seed,
 			unstyled,
 		}: { children: ReactNode; seed: string; unstyled?: boolean }) => (
-				<ThemedTopHeader seed={seed} unstyled={unstyled}>
-					{children}
-				</ThemedTopHeader>
+			<ThemedTopHeader seed={seed} unstyled={unstyled}>
+				{children}
+			</ThemedTopHeader>
 		),
 
 		bottom: ({
@@ -89,18 +86,6 @@ type ThemedHeaderProps = {
 	seed: string;
 	unstyled?: boolean;
 };
-
-function ThemedHeader({
-	children,
-	title,
-}: { children: ReactNode; title: string }) {
-	return (
-		<div>
-			<ThemedTopHeader seed={title}>{children}</ThemedTopHeader>
-			<ThemedBottomHeader seed={title}>{title}</ThemedBottomHeader>
-		</div>
-	);
-}
 
 function ThemedTopHeader({ children, seed, unstyled }: ThemedHeaderProps) {
 	const style = unstyled ? {} : Theme.style(seed);
