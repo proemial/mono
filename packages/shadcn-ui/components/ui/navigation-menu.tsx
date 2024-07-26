@@ -1,8 +1,8 @@
 "use client";
 
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
-import { cva } from "class-variance-authority";
 import { ChevronDown } from "@untitled-ui/icons-react";
+import { cva } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/utils";
 
@@ -12,7 +12,7 @@ const NavigationMenu = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
 	<NavigationMenuPrimitive.Root
 		ref={ref}
-		className={cn("sticky top-0 px-4 p-4 z-10 w-full", className)}
+		className={cn("sticky top-0 px-4 p-4 z-10 w-full bg-background", className)}
 		{...props}
 	>
 		{children}
