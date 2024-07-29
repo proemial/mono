@@ -1,5 +1,6 @@
 "use client";
 
+import { useInternalUser } from "@/app/hooks/use-user";
 import { Profile } from "@/app/profile/profile";
 import { Theme } from "@/components/theme";
 import { routes } from "@/routes";
@@ -35,7 +36,8 @@ export const NavBar = ({ children, action }: Props) => {
 	const seed = params.collectionId ?? "";
 	const image = Theme.image(seed);
 	const color = Theme.color(seed);
-	const hasTheme = false;
+	const { isInternal } = useInternalUser();
+	const hasTheme = isInternal && seed.includes("col_");
 
 	return (
 		<>
@@ -71,7 +73,7 @@ export const NavBar = ({ children, action }: Props) => {
 
 			{hasTheme ? (
 				<div
-					className="w-full h-60 -top-32 -mt-16 left-0 sticky -mb-32"
+					className="w-full h-60 -top-32 -mt-16 left-0 sticky -mb-28"
 					style={{
 						backgroundImage: `url('/backgrounds/${image?.regular}')`,
 						backgroundColor: color,
