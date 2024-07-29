@@ -77,6 +77,7 @@ export async function POST(req: NextRequest) {
 						paperId,
 						// Inherit the space's sharing setting, or `public` if no space
 						shared: space?.shared ?? "public",
+						spaceId: space?.id,
 					},
 					completion,
 					PAPER_BOT_USER_ID,

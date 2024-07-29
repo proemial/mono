@@ -1,7 +1,10 @@
+import { eq, inArray } from "drizzle-orm";
 import { neonDb } from "..";
 import { comments, papers, posts } from "../neon/schema";
-import { eq, inArray } from "drizzle-orm";
 
+/**
+ * @deprecated Will be removed, as it is currently unused.
+ */
 export const getPaperPostsForUsers = async (
 	paperId: string,
 	users: string[],

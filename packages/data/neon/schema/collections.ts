@@ -4,6 +4,7 @@ import { createInsertSchema } from "drizzle-zod";
 import { ZodSchema } from "zod";
 import { createId } from "../../utils/create-id";
 import { collectionsToPapers } from "./collections-to-papers";
+import { posts } from "./posts";
 
 export const collectionSharedType = pgEnum("shared", [
 	"private",
@@ -34,6 +35,7 @@ export type NewCollection = typeof collections.$inferInsert;
 
 export const collectionRelations = relations(collections, ({ many }) => ({
 	collectionsToPapers: many(collectionsToPapers),
+	posts: many(posts),
 }));
 
 // @ts-ignore
