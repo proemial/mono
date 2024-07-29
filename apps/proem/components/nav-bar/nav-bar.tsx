@@ -15,6 +15,7 @@ import { useParams, usePathname } from "next/navigation";
 import { ReactNode } from "react";
 import { GoToSpaceAction } from "./actions/go-to-space-action";
 
+const bgColor = "#F5F5F5";
 type Props = {
 	/**
 	 * The "header" content to display in the center of the navigation bar, e.g.
@@ -34,8 +35,6 @@ type Props = {
 // TODO! Move to css variables
 // TODO! Name both components
 
-const bgColor = "#F5F5F5";
-
 export const NavBar = ({ children, action }: Props) => {
 	const pathname = usePathname();
 	const params = useParams<{ id?: string; collectionId?: string }>();
@@ -44,8 +43,7 @@ export const NavBar = ({ children, action }: Props) => {
 	// TODO! refactor theme
 	const image = Theme.image(seed);
 	const color = Theme.color(seed);
-	// TODO! Add unstyled
-	const unstyled = false;
+	const hasTheme = seed.includes("col_");
 
 	return (
 		<>
@@ -53,17 +51,19 @@ export const NavBar = ({ children, action }: Props) => {
 				<div
 					className="absolute top-0 left-0 w-full h-full"
 					style={{
-						backgroundImage: `url('/backgrounds/${
-							image?.regular
-						}'),linear-gradient(${hex2rgba(color, 1)} 0px, ${hex2rgba(
-							color,
-							1,
-						)} 58px, transparent 72px)`,
+						background: hasTheme
+							? `url('/backgrounds/${
+									image?.regular
+								}'),linear-gradient(${hex2rgba(color, 1)} 0px, ${hex2rgba(
+									color,
+									1,
+								)} 58px, transparent 72px)`
+							: bgColor,
 						maskImage:
 							"linear-gradient(black 0px, black 54px, transparent 72px)",
 						backgroundPosition: "top",
 						backgroundAttachment: "fixed",
-						backgroundSize: "75%",
+						backgroundSize: "50%",
 					}}
 				/>
 				<NavigationMenuList className="justify-between flex-nowrap">
@@ -77,17 +77,19 @@ export const NavBar = ({ children, action }: Props) => {
 				</NavigationMenuList>
 			</NavigationMenu>
 
-			<div
-				className="w-full h-60 -top-32 -mt-16 left-0 sticky -mb-32"
-				style={{
-					backgroundImage: `url('/backgrounds/${image?.regular}')`,
-					backgroundColor: color,
-					maskImage: "linear-gradient(to top, transparent 0px, black 48px)",
-					backgroundPosition: "top",
-					backgroundAttachment: "fixed",
-					backgroundSize: "75%",
-				}}
-			/>
+			{hasTheme ? (
+				<div
+					className="w-full h-60 -top-32 -mt-16 left-0 sticky -mb-28"
+					style={{
+						backgroundImage: `url('/backgrounds/${image?.regular}')`,
+						backgroundColor: color,
+						maskImage: "linear-gradient(to top, transparent 0px, black 48px)",
+						backgroundPosition: "top",
+						backgroundAttachment: "fixed",
+						backgroundSize: "50%",
+					}}
+				/>
+			) : null}
 		</>
 	);
 };
