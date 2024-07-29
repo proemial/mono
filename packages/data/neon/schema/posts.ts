@@ -1,9 +1,15 @@
 import { relations } from "drizzle-orm";
-import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
-import { collectionSharedType, collections } from "./collections";
+import { pgEnum, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { collections } from "./collections";
 import { comments } from "./comments";
 import { papers } from "./papers";
 import { users } from "./users";
+
+export const collectionSharedType = pgEnum("shared", [
+	"private",
+	"organization",
+	"public",
+]);
 
 export const posts = pgTable("posts", {
 	id: serial("id").primaryKey(),
