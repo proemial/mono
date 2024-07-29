@@ -53,7 +53,7 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 	return (
 		<div className="flex items-center gap-1">
 			<Select onValueChange={handleValueChange} value={selectedSpace}>
-				<SelectTrigger className="flex gap-2 text-lg border-none">
+				<SelectTrigger className="flex gap-2 text-lg border-none bg-transparent">
 					<SelectValue />
 				</SelectTrigger>
 				<SelectContent

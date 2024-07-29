@@ -41,7 +41,7 @@ export const NavBar = ({ children, action }: Props) => {
 
 	return (
 		<>
-			<NavigationMenu className="z-20">
+			<NavigationMenu className="z-20 bg-transparent">
 				<div
 					className="absolute top-0 left-0 w-full h-full"
 					style={{
