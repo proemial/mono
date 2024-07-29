@@ -57,7 +57,7 @@ export const NavBar = ({ children, action }: Props) => {
 							"linear-gradient(black 0px, black 54px, transparent 72px)",
 						backgroundPosition: "top",
 						backgroundAttachment: "fixed",
-						backgroundSize: "50%",
+						backgroundSize: "300px",
 					}}
 				/>
 				<NavigationMenuList className="justify-between flex-nowrap">
@@ -80,7 +80,7 @@ export const NavBar = ({ children, action }: Props) => {
 						maskImage: "linear-gradient(to top, transparent 0px, black 48px)",
 						backgroundPosition: "top",
 						backgroundAttachment: "fixed",
-						backgroundSize: "50%",
+						backgroundSize: "300px",
 					}}
 				/>
 			) : null}
