@@ -80,13 +80,8 @@ export const NavBar = ({ children, action }: Props) => {
 						maskImage: "linear-gradient(to top, transparent 0px, black 48px)",
 					}}
 				>
-					<div className="fixed top-0 left-0 w-full">
-						<div
-							className={cn(
-								"mx-auto w-full h-60 overflow-hidden",
-								screenMaxWidth,
-							)}
-						>
+					<div className="fixed top-0">
+						<div className={cn("mx-auto w-screen h-60", screenMaxWidth)}>
 							<ThemeBackgroundImage src={`/backgrounds/${image.regular}`} />
 						</div>
 					</div>
