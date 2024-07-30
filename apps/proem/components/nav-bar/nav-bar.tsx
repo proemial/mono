@@ -29,35 +29,40 @@ type Props = {
 	action?: ReactNode;
 };
 
-const bgColor = "#F5F5F5";
+const defaultBgColor = "#F5F5F5";
 
 export const NavBar = ({ children, action }: Props) => {
 	const pathname = usePathname();
 	const params = useParams<{ id?: string; collectionId?: string }>();
 	const isReaderPage = params.id && pathname.includes(routes.paper);
 	const seed = params.collectionId ?? "";
-	const image = Theme.image(seed);
-	const color = Theme.color(seed);
 	const hasTheme = seed.includes("col_");
+	const theme = {
+		image: hasTheme ? Theme.image(seed) : null,
+		color: hasTheme ? Theme.color(seed) : defaultBgColor,
+	};
 
 	return (
 		<>
+			<head>
+				<meta name="theme-color" content={theme.color} />
+			</head>
 			<NavigationMenu className="z-20 bg-transparent">
 				<div
 					className="absolute top-0 left-0 w-full h-full overflow-hidden"
 					style={{
-						background: hasTheme
-							? `linear-gradient(${hex2rgba(color, 1)} 0px, ${hex2rgba(
-									color,
-									1,
-								)} 58px, transparent 72px)`
-							: bgColor,
+						background: `linear-gradient(${hex2rgba(
+							theme.color,
+							1,
+						)} 0px, ${hex2rgba(theme.color, 1)} 58px, transparent 72px)`,
 						maskImage:
 							"linear-gradient(black 0px, black 54px, transparent 72px)",
 					}}
 				>
 					{hasTheme && (
-						<ThemeBackgroundImage src={`/backgrounds/${image.regular}`} />
+						<ThemeBackgroundImage
+							src={`/backgrounds/${theme.image?.regular}`}
+						/>
 					)}
 				</div>
 
@@ -76,13 +81,15 @@ export const NavBar = ({ children, action }: Props) => {
 				<div
 					className="w-full h-60 -top-32 -mt-[72px] left-0 sticky -mb-36"
 					style={{
-						backgroundColor: color,
 						maskImage: "linear-gradient(to top, transparent 0px, black 48px)",
 					}}
 				>
 					<div className="fixed top-0">
+							backgroundColor: theme.color,
 						<div className={cn("mx-auto w-screen h-60", screenMaxWidth)}>
-							<ThemeBackgroundImage src={`/backgrounds/${image.regular}`} />
+							<ThemeBackgroundImage
+								src={`/backgrounds/${theme.image?.regular}`}
+							/>
 						</div>
 					</div>
 				</div>
