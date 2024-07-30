@@ -47,6 +47,7 @@ export const NavBar = ({ children, action }: Props) => {
 			<head>
 				<meta name="theme-color" content={theme.color} />
 			</head>
+
 			<NavigationMenu className="z-20 bg-transparent">
 				<div
 					className="absolute top-0 left-0 w-full h-full overflow-hidden"
@@ -81,11 +82,17 @@ export const NavBar = ({ children, action }: Props) => {
 				<div
 					className="w-full h-60 -top-32 -mt-[72px] left-0 sticky -mb-36"
 					style={{
-						maskImage: "linear-gradient(to top, transparent 0px, black 48px)",
+						maskImage: "linear-gradient(to top, transparent 0px, black 56px)",
 					}}
 				>
-					<div className="fixed top-0">
+					<div
+						className="fixed top-0"
+						style={{
 							backgroundColor: theme.color,
+							maskImage:
+								"linear-gradient(to bottom, black 0px , black 72px, transparent)",
+						}}
+					>
 						<div className={cn("mx-auto w-screen h-60", screenMaxWidth)}>
 							<ThemeBackgroundImage
 								src={`/backgrounds/${theme.image?.regular}`}
