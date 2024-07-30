@@ -6,6 +6,7 @@ import { SpaceShareIndicator } from "@/components/space-share-indicator";
 import { routes } from "@/routes";
 import { CollectionService } from "@/services/collection-service";
 import { auth } from "@clerk/nextjs/server";
+import { Header2 } from "@proemial/shadcn-ui";
 import { notFound } from "next/navigation";
 import { ReactNode } from "react";
 
@@ -30,9 +31,9 @@ export default async function ({ params: { collectionId }, children }: Props) {
 			<div className="flex flex-col gap-3">
 				{!isDefaultCollection && (
 					<div className="min-h-36 flex flex-col justify-end">
-						<div className="text-2xl font-normal leading-9 break-words markdown line-clamp-4">
+						<Header2 className="break-words markdown line-clamp-4">
 							<Markdown>{collection.description ?? ""}</Markdown>
-						</div>
+						</Header2>
 					</div>
 				)}
 				<div className="flex items-center justify-between gap-2">
