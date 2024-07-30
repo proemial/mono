@@ -74,12 +74,7 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 	const trackingInput = getTrackingInput();
 
 	return (
-		<html
-			lang="en"
-			className="overscroll-none"
-			style={{ scrollbarGutter: "stable" }}
-			suppressHydrationWarning
-		>
+		<html lang="en" className="overscroll-none" suppressHydrationWarning>
 			<head>
 				<meta
 					name="facebook-domain-verification"

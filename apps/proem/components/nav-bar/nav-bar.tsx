@@ -1,7 +1,6 @@
 "use client";
 
 import { screenMaxWidth } from "@/app/constants";
-import { useInternalUser } from "@/app/hooks/use-user";
 import { Profile } from "@/app/profile/profile";
 import { Theme } from "@/components/theme";
 import { routes } from "@/routes";
@@ -39,8 +38,7 @@ export const NavBar = ({ children, action }: Props) => {
 	const seed = params.collectionId ?? "";
 	const image = Theme.image(seed);
 	const color = Theme.color(seed);
-	const { isInternal } = useInternalUser();
-	const hasTheme = isInternal && seed.includes("col_");
+	const hasTheme = seed.includes("col_");
 
 	return (
 		<>
@@ -58,7 +56,7 @@ export const NavBar = ({ children, action }: Props) => {
 							"linear-gradient(black 0px, black 54px, transparent 72px)",
 					}}
 				>
-					{image?.regular && (
+					{hasTheme && (
 						<ThemeBackgroundImage src={`/backgrounds/${image.regular}`} />
 					)}
 				</div>
@@ -89,9 +87,7 @@ export const NavBar = ({ children, action }: Props) => {
 								screenMaxWidth,
 							)}
 						>
-							{image?.regular && (
-								<ThemeBackgroundImage src={`/backgrounds/${image.regular}`} />
-							)}
+							<ThemeBackgroundImage src={`/backgrounds/${image.regular}`} />
 						</div>
 					</div>
 				</div>
