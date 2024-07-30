@@ -73,7 +73,7 @@ export const NavBar = ({ children, action }: Props) => {
 
 			{hasTheme ? (
 				<div
-					className="w-full h-60 -top-32 -mt-16 left-0 sticky -mb-28"
+					className="w-full h-60 -top-32 -mt-16 left-0 sticky -mb-36"
 					style={{
 						backgroundImage: `url('/backgrounds/${image?.regular}')`,
 						backgroundColor: color,
