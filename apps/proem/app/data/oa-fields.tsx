@@ -7,7 +7,7 @@ export type Field = {
 	theme?: Theme;
 };
 
-export const oaFieldIconMap: Record<string, Field> = {
+export const oaFieldConfigMap: Record<string, Field> = {
 	"https://openalex.org/fields/22": {
 		displayName: "Engineering",
 		icon: (

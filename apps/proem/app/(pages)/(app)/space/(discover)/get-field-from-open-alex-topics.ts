@@ -1,4 +1,4 @@
-import { oaFieldIconMap } from "@/app/data/oa-fields";
+import { oaFieldConfigMap } from "@/app/data/oa-fields";
 import { OpenAlexTopic } from "@proemial/repositories/oa/models/oa-paper";
 
 export function getFieldFromOpenAlexTopics(topics: OpenAlexTopic[]) {
@@ -10,5 +10,5 @@ export function getFieldFromOpenAlexTopics(topics: OpenAlexTopic[]) {
 		prev.score > current.score ? prev : current,
 	);
 
-	return oaFieldIconMap[field.field.id];
+	return oaFieldConfigMap[field.field.id];
 }
