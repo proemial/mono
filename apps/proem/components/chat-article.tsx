@@ -1,3 +1,4 @@
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { MicroAbstract } from "@/components/chat-abstract";
 import { AIGeneratedIcon } from "@/components/icons/AIGeneratedIcon";
 import { ModelSelector, ModelSelectorProps } from "@/components/model-selector";
@@ -5,7 +6,7 @@ import { Trackable } from "@/components/trackable";
 import { trimForQuotes } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Header2, Header4, Icons } from "@proemial/shadcn-ui";
-import { Users01 } from "@untitled-ui/icons-react";
+import { BookOpen01, ChevronRight, Users01 } from "@untitled-ui/icons-react";
 import { Suspense } from "react";
 import Markdown from "./markdown";
 
@@ -24,18 +25,45 @@ export function ChatArticle({
 }: ChatArticleProps) {
 	const title = paper?.generated?.title;
 	const authors = paper?.data.authorships;
+	const publisher = paper?.data.primary_location.source?.display_name;
 
 	return (
 		<div className="space-y-3 text-pretty">
 			{title ? <Title title={title} /> : null}
 
 			{authors ? (
-				<div className="flex items-center gap-2.5 opacity-50 pr-1.5">
-					<Users01 className="size-5" />
-					<span className="truncate text-[10px] uppercase">
-						{authors.map((author) => author.author.display_name).join(", ")}
-					</span>
-				</div>
+				<Trackable trackingKey={analyticsKeys.read.click.fullPaper}>
+					<a
+						href={paper.data.primary_location?.landing_page_url}
+						target="_blank"
+						rel="noreferrer"
+						className="opacity-50 flex items-center justify-between gap-1 uppercase text-[10px] hover:opacity-75 transition-opacity"
+					>
+						<div className="flex-grow w-1/2">
+							{publisher && (
+								<div className="flex items-center gap-2.5">
+									<div>
+										<BookOpen01 className="size-2.5" />
+									</div>
+									<div className="truncate">{publisher}</div>
+								</div>
+							)}
+
+							<div className="flex items-center gap-2.5">
+								<div>
+									<Users01 className="size-2.5" />
+								</div>
+								<span className="truncate flex-grow">
+									{authors
+										.map((author) => author.author.display_name)
+										.join(", ")}
+								</span>
+							</div>
+						</div>
+
+						<ChevronRight className="size-5 opacity-50" />
+					</a>
+				</Trackable>
 			) : null}
 
 			<div className="flex items-center place-content-between">
@@ -82,3 +110,40 @@ function Spinner() {
 		</div>
 	);
 }
+
+/* <CollapsibleSection
+					trackingKey={analyticsKeys.read.click.collapse}
+					trigger={
+						<PaperReaderHeadline
+							paperId={fetchedPaper.id}
+							isBookmarked={isBookmarked}
+							customCollectionId={collectionId}
+						/>
+					}
+					collapsed
+				>
+					<HorisontalScrollArea>
+						<Trackable trackingKey={analyticsKeys.read.click.fullPaper}>
+							<a
+								href={fetchedPaper.data.primary_location?.landing_page_url}
+								target="_blank"
+								rel="noreferrer"
+							>
+								<PaperCardDiscover
+									title={fetchedPaper.data.title}
+									date={fetchedPaper.data.publication_date}
+									publisher={
+										fetchedPaper.data.primary_location.source?.display_name
+									}
+								/>
+							</a>
+						</Trackable>
+
+						{fetchedPaper.data.authorships.map((author) => (
+							<PaperCardDiscoverProfile
+								key={author.author.id}
+								name={author.author.display_name}
+							/>
+						))}
+					</HorisontalScrollArea>
+				</CollapsibleSection> */
