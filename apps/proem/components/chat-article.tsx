@@ -31,7 +31,7 @@ export function ChatArticle({
 
 			{authors ? (
 				<div className="flex items-center gap-2.5 opacity-50 pr-1.5">
-					<Users01 className="size-3" />
+					<Users01 className="size-5" />
 					<span className="truncate text-[10px] uppercase">
 						{authors.map((author) => author.author.display_name).join(", ")}
 					</span>
