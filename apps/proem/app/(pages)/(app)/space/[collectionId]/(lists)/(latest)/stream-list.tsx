@@ -2,9 +2,10 @@
 
 import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
 import { fetchFeedByFeaturesWithPosts } from "@/app/data/fetch-feed";
-import { InfinityScrollList } from "@/components/infinity-scroll-list";
-import { StreamDebugParams } from "../../params";
 import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
+import { InfinityScrollList } from "@/components/infinity-scroll-list";
+import { ThemeColoredCard } from "@/components/theme-colored-card";
+import { StreamDebugParams } from "../../params";
 
 type FetchFeedByFeaturesProps = Required<
 	Parameters<typeof fetchFeedByFeaturesWithPosts>[0]
@@ -14,6 +15,7 @@ export type StreamListProps = FetchFeedByFeaturesProps & {
 	bookmarks?: string[];
 	readonly: boolean;
 	debugParams?: StreamDebugParams;
+	showThemeColors?: boolean;
 };
 
 export function StreamList({
@@ -23,6 +25,7 @@ export function StreamList({
 	days,
 	readonly,
 	debugParams,
+	showThemeColors = false,
 }: StreamListProps) {
 	return (
 		<InfinityScrollList
@@ -48,27 +51,31 @@ export function StreamList({
 				debugParams?.debug ? (count) => <DebugInfo count={count} /> : null
 			}
 			renderRow={(row) => {
-				return (
-					<div className="py-5">
-						<FeedItem
-							paper={row.paper}
-							fingerprint={row.features}
-							customCollectionId={collectionId}
-							isBookmarked={Boolean(
-								bookmarks?.some((bookmarkId) => row.paper.id === bookmarkId),
-							)}
-							readonly={readonly}
-						>
-							{/* TODO! add debug mode */}
-							{debugParams?.debug && (
-								<FeatureCloud
-									features={row.features}
-									sum={row.filterMatchScore}
-								/>
-							)}
-						</FeedItem>
-					</div>
+				const item = (
+					<FeedItem
+						paper={row.paper}
+						fingerprint={row.features}
+						customCollectionId={collectionId}
+						isBookmarked={Boolean(
+							bookmarks?.some((bookmarkId) => row.paper.id === bookmarkId),
+						)}
+						readonly={readonly}
+					>
+						{/* TODO! add debug mode */}
+						{debugParams?.debug && (
+							<FeatureCloud
+								features={row.features}
+								sum={row.filterMatchScore}
+							/>
+						)}
+					</FeedItem>
 				);
+
+				if (showThemeColors) {
+					return <ThemeColoredCard className="my-2">{item}</ThemeColoredCard>;
+				}
+
+				return <div className="py-5">{item}</div>;
 			}}
 		/>
 	);
