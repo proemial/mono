@@ -1,8 +1,10 @@
+import { Theme } from "@/components/theme";
 import { ReactElement } from "react";
 
 export type Field = {
 	displayName: string;
 	icon: ReactElement;
+	theme?: Theme;
 };
 
 export const oaFieldIconMap: Record<string, Field> = {
