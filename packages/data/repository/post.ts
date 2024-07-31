@@ -3,9 +3,7 @@ import { neonDb } from "../neon/db";
 import {
 	Collection,
 	NewComment,
-	NewPaper,
 	NewPost,
-	NewUser,
 	collections,
 	comments,
 	papers,
@@ -13,17 +11,14 @@ import {
 	users,
 } from "../neon/schema";
 
-export async function savePostAndReply(
-	paper: NewPaper,
-	user: NewUser,
+export async function savePostWithComment(
 	post: NewPost,
-	commentContent: NewComment["content"],
-	author: string,
+	comment: Omit<NewComment, "postId">,
 ) {
 	// Create paper and user if not already exists
 	await Promise.all([
-		neonDb.insert(papers).values(paper).onConflictDoNothing(),
-		neonDb.insert(users).values(user).onConflictDoNothing(),
+		neonDb.insert(papers).values({ id: post.paperId }).onConflictDoNothing(),
+		neonDb.insert(users).values({ id: post.authorId }).onConflictDoNothing(),
 	]);
 	// Save post
 	const insertedPost = await neonDb
@@ -33,8 +28,8 @@ export async function savePostAndReply(
 	if (insertedPost[0]) {
 		// Save paper bot reply
 		await neonDb.insert(comments).values({
-			content: commentContent,
-			authorId: author,
+			content: comment.content,
+			authorId: comment.authorId,
 			postId: insertedPost[0].id,
 		});
 	}

@@ -9,7 +9,7 @@ import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { auth } from "@clerk/nextjs/server";
 import { findCollection } from "@proemial/data/repository/collection";
-import { savePostAndReply } from "@proemial/data/repository/post";
+import { savePostWithComment } from "@proemial/data/repository/post";
 import { OpenAIStream, StreamData, StreamingTextResponse } from "ai";
 import { type NextRequest, NextResponse } from "next/server";
 import { Configuration, OpenAIApi } from "openai-edge";
@@ -64,13 +64,7 @@ export async function POST(req: NextRequest) {
 					spaceId === userId
 						? getPersonalDefaultCollection(userId)
 						: await findCollection(spaceId);
-				await savePostAndReply(
-					{
-						id: paperId,
-					},
-					{
-						id: userId,
-					},
+				await savePostWithComment(
 					{
 						content: postContent,
 						authorId: userId,
@@ -79,8 +73,10 @@ export async function POST(req: NextRequest) {
 						shared: space?.shared ?? "public",
 						spaceId: space?.id,
 					},
-					completion,
-					PAPER_BOT_USER_ID,
+					{
+						content: completion,
+						authorId: PAPER_BOT_USER_ID,
+					},
 				);
 			}
 
