@@ -52,7 +52,7 @@ export default async function ({
 					userId={userId}
 				/>
 			</NavBar>
-			<Main>{children}</Main>
+			<Main className="pt-0">{children}</Main>
 		</>
 	);
 }
