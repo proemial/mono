@@ -90,18 +90,20 @@ export function Feed({
 					};
 					const isBookmarked = Boolean(bookmarks[paper.paper.id]);
 					return (
-						<FeedItem
-							paper={paper.paper}
-							fingerprint={paper.features}
-							isBookmarked={isBookmarked}
-						>
-							{debug && (
-								<FeatureCloud
-									features={paper.features}
-									sum={paper.filterMatchScore}
-								/>
-							)}
-						</FeedItem>
+						<div className="py-5">
+							<FeedItem
+								paper={paper.paper}
+								fingerprint={paper.features}
+								isBookmarked={isBookmarked}
+							>
+								{debug && (
+									<FeatureCloud
+										features={paper.features}
+										sum={paper.filterMatchScore}
+									/>
+								)}
+							</FeedItem>
+						</div>
 					);
 				}}
 			/>

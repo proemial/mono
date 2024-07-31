@@ -49,23 +49,25 @@ export function StreamList({
 			}
 			renderRow={(row) => {
 				return (
-					<FeedItem
-						paper={row.paper}
-						fingerprint={row.features}
-						customCollectionId={collectionId}
-						isBookmarked={Boolean(
-							bookmarks?.some((bookmarkId) => row.paper.id === bookmarkId),
-						)}
-						readonly={readonly}
-					>
-						{/* TODO! add debug mode */}
-						{debugParams?.debug && (
-							<FeatureCloud
-								features={row.features}
-								sum={row.filterMatchScore}
-							/>
-						)}
-					</FeedItem>
+					<div className="py-5">
+						<FeedItem
+							paper={row.paper}
+							fingerprint={row.features}
+							customCollectionId={collectionId}
+							isBookmarked={Boolean(
+								bookmarks?.some((bookmarkId) => row.paper.id === bookmarkId),
+							)}
+							readonly={readonly}
+						>
+							{/* TODO! add debug mode */}
+							{debugParams?.debug && (
+								<FeatureCloud
+									features={row.features}
+									sum={row.filterMatchScore}
+								/>
+							)}
+						</FeedItem>
+					</div>
 				);
 			}}
 		/>

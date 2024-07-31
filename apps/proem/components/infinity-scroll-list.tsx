@@ -97,7 +97,6 @@ export function InfinityScrollList<TQueryKey extends string, TRow>({
 									ref={rowVirtualizer.measureElement}
 									key={virtualRow.key}
 									data-index={virtualRow.index}
-									className="py-5"
 								>
 									{isLoaderRow ? (
 										hasNextPage ? (
