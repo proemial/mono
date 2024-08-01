@@ -2,6 +2,7 @@
 
 import { screenMaxWidth } from "@/app/constants";
 import { Profile } from "@/app/profile/profile";
+import { SetThemeColor } from "@/components/set-theme-color";
 import { Theme } from "@/components/theme";
 import { routes } from "@/routes";
 import {
@@ -44,10 +45,7 @@ export const NavBar = ({ children, action }: Props) => {
 
 	return (
 		<>
-			<head>
-				<meta name="theme-color" content={theme.color} />
-			</head>
-
+			<SetThemeColor color={theme.color} />
 			<NavigationMenu className="z-20 bg-transparent">
 				<div
 					className="absolute top-0 left-0 w-full h-full overflow-hidden"
