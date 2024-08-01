@@ -4,6 +4,7 @@ import { screenMaxWidth } from "@/app/constants";
 import { Profile } from "@/app/profile/profile";
 import { SetThemeColor } from "@/components/set-theme-color";
 import { Theme } from "@/components/theme";
+import { ThemeBackgroundImage } from "@/components/theme-background-image";
 import { routes } from "@/routes";
 import {
 	NavigationMenu,
@@ -102,14 +103,3 @@ export const NavBar = ({ children, action }: Props) => {
 		</>
 	);
 };
-
-const ThemeBackgroundImage = ({ src }: { src: string }) => (
-	<Image
-		src={src}
-		alt="Theme background image"
-		quality={100}
-		className="w-full min-w-72"
-		width={600}
-		height={600}
-	/>
-);
