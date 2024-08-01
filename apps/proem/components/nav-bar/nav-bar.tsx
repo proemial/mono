@@ -2,8 +2,8 @@
 
 import { screenMaxWidth } from "@/app/constants";
 import { Profile } from "@/app/profile/profile";
+import { getRandomThemeColor } from "@/app/theme/color-theme";
 import { SetThemeColor } from "@/components/set-theme-color";
-import { Theme } from "@/components/theme";
 import { ThemeBackgroundImage } from "@/components/theme-background-image";
 import { routes } from "@/routes";
 import {
@@ -12,8 +12,6 @@ import {
 	NavigationMenuList,
 	cn,
 } from "@proemial/shadcn-ui";
-import { hex2rgba } from "@proemial/utils/color";
-import Image from "next/image";
 import { useParams, usePathname } from "next/navigation";
 import { ReactNode } from "react";
 import { GoToSpaceAction } from "./actions/go-to-space-action";
@@ -31,36 +29,28 @@ type Props = {
 	action?: ReactNode;
 };
 
-
 export const NavBar = ({ children, action }: Props) => {
 	const pathname = usePathname();
 	const params = useParams<{ id?: string; collectionId?: string }>();
 	const isReaderPage = params.id && pathname.includes(routes.paper);
 	const seed = params.collectionId ?? "";
 	const hasTheme = seed.includes("col_");
-	const theme = {
-		image: hasTheme ? Theme.image(seed) : null,
-		color: hasTheme ? Theme.color(seed) : defaultBgColor,
-	};
+	const theme = getRandomThemeColor(seed);
 
 	return (
 		<>
-			<SetThemeColor color={theme.color} />
+			{hasTheme && <SetThemeColor color={theme.color} />}
 			<NavigationMenu className="z-20 bg-transparent">
 				<div
-					className="absolute top-0 left-0 w-full h-full overflow-hidden"
+					className="absolute top-0 left-0 w-full h-full overflow-hidden bg-gradient-to-b from-80% from-theme-400 to-transparent"
 					style={{
-						background: `linear-gradient(${hex2rgba(
-							theme.color,
-							1,
-						)} 0px, ${hex2rgba(theme.color, 1)} 58px, transparent 72px)`,
 						maskImage:
 							"linear-gradient(black 0px, black 54px, transparent 72px)",
 					}}
 				>
 					{hasTheme && (
 						<ThemeBackgroundImage
-							src={`/backgrounds/${theme.image?.regular}`}
+							src={`/backgrounds/patterns_${theme.image}.png`}
 						/>
 					)}
 				</div>
@@ -84,16 +74,15 @@ export const NavBar = ({ children, action }: Props) => {
 					}}
 				>
 					<div
-						className="fixed top-0"
+						className="fixed top-0 bg-theme-400"
 						style={{
-							backgroundColor: theme.color,
 							maskImage:
 								"linear-gradient(to bottom, black 0px , black 72px, transparent)",
 						}}
 					>
 						<div className={cn("mx-auto w-screen h-60", screenMaxWidth)}>
 							<ThemeBackgroundImage
-								src={`/backgrounds/${theme.image?.regular}`}
+								src={`/backgrounds/patterns_${theme.image}.png`}
 							/>
 						</div>
 					</div>

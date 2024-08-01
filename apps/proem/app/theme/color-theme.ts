@@ -1,5 +1,10 @@
-export type ThemePatterns = "silicon" | "leafs" | "paint" | "fingerprint";
-export type ThemeColor = "purple" | "teal" | "green" | "rose" | "gold";
+import { numberFrom } from "@proemial/utils/string";
+
+const themePatterns = ["silicon", "leafs", "paint", "fingerprint"] as const;
+const themeColors = ["purple", "teal", "green", "rose", "gold"] as const;
+
+export type ThemePatterns = (typeof themePatterns)[number];
+export type ThemeColor = (typeof themeColors)[number];
 
 export type Theme = {
 	image?: ThemePatterns;
@@ -41,6 +46,13 @@ export const generateThemeCssVariables = (themeColor: ThemeColor) => {
   --color-theme-900: var(--color-${themeColor}-900);
   --color-theme-950: var(--color-${themeColor}-950);
 	`;
+};
+
+export const getRandomThemeColor = (seed: string): Theme => {
+	return {
+		color: themeColors[numberFrom(seed, themeColors.length - 1)]!,
+		image: themePatterns[numberFrom(seed, themePatterns.length - 1)]!,
+	};
 };
 
 export const customColorTheme = {
