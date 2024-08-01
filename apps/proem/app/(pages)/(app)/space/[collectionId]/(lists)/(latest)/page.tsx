@@ -60,6 +60,7 @@ export default async function LatestPage({
 	return (
 		<>
 			<StreamList
+				showThemeColors={isDefaultSpace}
 				collectionId={collectionId}
 				debugParams={searchParams}
 				features={features}
