@@ -125,8 +125,17 @@ body { @apply !min-w-full; }
 		--color-gold-900: #b2a694;
 		--color-gold-950: #857660;
 
-
-		/* --theme-400: var(--themed-purple-400); */
+		--theme-50: white
+		--theme-100: white
+		--theme-200: white
+		--theme-300: white
+		--theme-400: white
+		--theme-500: white
+		--theme-600: white
+		--theme-700: white
+		--theme-800: white
+		--theme-900: white
+		--theme-950: white
   }
 }
 
