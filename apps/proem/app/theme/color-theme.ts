@@ -1,4 +1,4 @@
-export type ThemePatterns = "silicon" | "leafs" | "paints" | "fingerprint";
+export type ThemePatterns = "silicon" | "leafs" | "paint" | "fingerprint";
 export type ThemeColor = "purple" | "teal" | "green" | "rose" | "gold";
 
 export type Theme = {

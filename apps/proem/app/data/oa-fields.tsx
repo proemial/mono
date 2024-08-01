@@ -1,4 +1,4 @@
-import { Theme } from "@/components/theme";
+import { Theme } from "@/app/theme/color-theme";
 import { ReactElement } from "react";
 
 export type Field = {
@@ -322,7 +322,7 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	"https://openalex.org/fields/27": {
 		displayName: "Medicine",
 		theme: {
-			image: "paints",
+			image: "paint",
 			color: "purple",
 		},
 		icon: (
@@ -351,7 +351,7 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	"https://openalex.org/fields/36": {
 		displayName: "Health Professions",
 		theme: {
-			image: "paints",
+			image: "paint",
 			color: "teal",
 		},
 		icon: (
@@ -374,7 +374,7 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	"https://openalex.org/fields/29": {
 		displayName: "Nursing",
 		theme: {
-			image: "paints",
+			image: "paint",
 			color: "green",
 		},
 		icon: (
@@ -399,7 +399,7 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	"https://openalex.org/fields/35": {
 		displayName: "Dentistry",
 		theme: {
-			image: "paints",
+			image: "paint",
 			color: "green",
 		},
 		icon: (
@@ -428,7 +428,7 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	"https://openalex.org/fields/13": {
 		displayName: "Biochemistry, Genetics and Molecular Biology",
 		theme: {
-			image: "paints",
+			image: "paint",
 			color: "rose",
 		},
 		icon: (
@@ -475,7 +475,7 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	"https://openalex.org/fields/11": {
 		displayName: "Agricultural and Biological Sciences",
 		theme: {
-			image: "paints",
+			image: "paint",
 			color: "gold",
 		},
 		icon: (
