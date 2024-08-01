@@ -31,7 +31,6 @@ type Props = {
 	action?: ReactNode;
 };
 
-const defaultBgColor = "#F5F5F5";
 
 export const NavBar = ({ children, action }: Props) => {
 	const pathname = usePathname();
