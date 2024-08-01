@@ -93,8 +93,9 @@ export default async function DiscoverPage({ searchParams }: Props) {
 						)}
 					</Feed>
 				</div>
+
+				<ProemAssistant />
 			</Main>
-			<ProemAssistant />
 		</>
 	);
 }
