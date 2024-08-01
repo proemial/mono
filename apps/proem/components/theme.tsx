@@ -2,8 +2,9 @@ import { hex2rgba } from "@proemial/utils/color";
 import { numberFrom } from "@proemial/utils/string";
 import { ReactNode } from "react";
 
-type ThemePatterns = "leafs" | "paints" | "silicon" | "fingerprint";
-type ThemeColor = "purple" | "teal" | "mint" | "rose" | "brown";
+export type ThemePatterns = "leafs" | "paints" | "silicon" | "fingerprint";
+export type ThemeColor = "purple" | "teal" | "green" | "rose" | "gold";
+
 export type Theme = {
 	image?: ThemePatterns;
 	color: ThemeColor;

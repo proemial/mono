@@ -60,6 +60,73 @@ body { @apply !min-w-full; }
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+		/* THEME COLORS */
+		/* https://www.tints.dev/?purplelow=A0A1B6&purplehigh=42436E&teallow=82A1A6&tealhigh=82A1A6&greenlow=8BB99F&greenhigh=8BB99F&roselow=AD96A2&rosehigh=5C2E45&goldlow=B2A694&goldhigh=B2A694
+			1) set low to 400 (generates 50-700)
+			2) set high to 900 (generates 800-950)
+			3) toggle luminance on
+			4) copy values from tailwindcss version 4
+			5) paste here and manually adjust the the two schemas
+		*/
+		--color-purple-50: #f6f6f8;
+		--color-purple-100: #ebebef;
+		--color-purple-200: #d7d7e0;
+		--color-purple-300: #bdbdcc;
+		--color-purple-400: #a0a1b6;
+		--color-purple-500: #9193ab;
+		--color-purple-600: #8384a0;
+		--color-purple-700: #727392;
+		--color-purple-800: #6c6da7;
+		--color-purple-900: #42436e;
+		--color-purple-950: #2e2e4d;
+		--color-teal-50: #f3f6f7;
+		--color-teal-100: #e7edee;
+		--color-teal-200: #c9d7d9;
+		--color-teal-300: #acc0c4;
+		--color-teal-400: #82a1a6;
+		--color-teal-500: #709499;
+		--color-teal-600: #64878c;
+		--color-teal-700: #57757a;
+		--color-teal-800: #94afb3;
+		--color-teal-900: #82a1a6;
+		--color-teal-950: #57757a;
+		--color-green-50: #f5f9f7;
+		--color-green-100: #e6f0ea;
+		--color-green-200: #cce0d5;
+		--color-green-300: #b0cfbd;
+		--color-green-400: #8bb99f;
+		--color-green-500: #79ae90;
+		--color-green-600: #5e9c79;
+		--color-green-700: #53896a;
+		--color-green-800: #9cc3ad;
+		--color-green-900: #8bb99f;
+		--color-green-950: #53896a;
+		--color-rose-50: #f8f6f7;
+		--color-rose-100: #efebed;
+		--color-rose-200: #ddd4d9;
+		--color-rose-300: #c7b7c0;
+		--color-rose-400: #ad96a2;
+		--color-rose-500: #a38a97;
+		--color-rose-600: #967888;
+		--color-rose-700: #896b7b;
+		--color-rose-800: #a3527a;
+		--color-rose-900: #5c2e45;
+		--color-rose-950: #3a1d2b;
+		--color-gold-50: #f6f5f3;
+		--color-gold-100: #f0eeea;
+		--color-gold-200: #ddd8d0;
+		--color-gold-300: #cac1b5;
+		--color-gold-400: #b2a694;
+		--color-gold-500: #a59782;
+		--color-gold-600: #998971;
+		--color-gold-700: #857660;
+		--color-gold-800: #bdb3a3;
+		--color-gold-900: #b2a694;
+		--color-gold-950: #857660;
+
+
+		/* --theme-400: var(--themed-purple-400); */
   }
 }
 
