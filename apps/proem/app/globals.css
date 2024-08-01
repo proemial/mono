@@ -68,74 +68,70 @@ body { @apply !min-w-full; }
 			3) toggle luminance on
 			4) copy values from tailwindcss version 4
 			5) paste here and manually adjust the the two schemas
+			6) convert the color to rgb channels
 		*/
-		--color-purple-50: #f6f6f8;
-		--color-purple-100: #ebebef;
-		--color-purple-200: #d7d7e0;
-		--color-purple-300: #bdbdcc;
-		--color-purple-400: #a0a1b6;
-		--color-purple-500: #9193ab;
-		--color-purple-600: #8384a0;
-		--color-purple-700: #727392;
-		--color-purple-800: #6c6da7;
-		--color-purple-900: #42436e;
-		--color-purple-950: #2e2e4d;
-		--color-teal-50: #f3f6f7;
-		--color-teal-100: #e7edee;
-		--color-teal-200: #c9d7d9;
-		--color-teal-300: #acc0c4;
-		--color-teal-400: #82a1a6;
-		--color-teal-500: #709499;
-		--color-teal-600: #64878c;
-		--color-teal-700: #57757a;
-		--color-teal-800: #94afb3;
-		--color-teal-900: #82a1a6;
-		--color-teal-950: #57757a;
-		--color-green-50: #f5f9f7;
-		--color-green-100: #e6f0ea;
-		--color-green-200: #cce0d5;
-		--color-green-300: #b0cfbd;
-		--color-green-400: #8bb99f;
-		--color-green-500: #79ae90;
-		--color-green-600: #5e9c79;
-		--color-green-700: #53896a;
-		--color-green-800: #9cc3ad;
-		--color-green-900: #8bb99f;
-		--color-green-950: #53896a;
-		--color-rose-50: #f8f6f7;
-		--color-rose-100: #efebed;
-		--color-rose-200: #ddd4d9;
-		--color-rose-300: #c7b7c0;
-		--color-rose-400: #ad96a2;
-		--color-rose-500: #a38a97;
-		--color-rose-600: #967888;
-		--color-rose-700: #896b7b;
-		--color-rose-800: #a3527a;
-		--color-rose-900: #5c2e45;
-		--color-rose-950: #3a1d2b;
-		--color-gold-50: #f6f5f3;
-		--color-gold-100: #f0eeea;
-		--color-gold-200: #ddd8d0;
-		--color-gold-300: #cac1b5;
-		--color-gold-400: #b2a694;
-		--color-gold-500: #a59782;
-		--color-gold-600: #998971;
-		--color-gold-700: #857660;
-		--color-gold-800: #bdb3a3;
-		--color-gold-900: #b2a694;
-		--color-gold-950: #857660;
+		--color-purple-50: 246 246 248;
+		--color-purple-100: 235 235 239;
+		--color-purple-200: 215 215 224;
+		--color-purple-300: 189 189 204;
+		--color-purple-400: 92 93 153;
+		--color-purple-500: 145 147 171;
+		--color-purple-600: 131 132 160;
+		--color-purple-700: 114 115 146;
+		--color-purple-800: 108 109 167;
+		--color-purple-900: 66 67 110;
+		--color-purple-950: 46 46 77;
+		--color-teal-50: 243 246 247;
+		--color-teal-100: 231 237 238;
+		--color-teal-200: 201 215 217;
+		--color-teal-300: 172 192 196;
+		--color-teal-400: 130 161 166;
+		--color-teal-500: 112 148 153;
+		--color-teal-600: 100 135 140;
+		--color-teal-700: 87 117 122;
+		--color-teal-800: 148 175 179;
+		--color-teal-900: 130 161 166;
+		--color-teal-950: 87 117 122;
+		--color-green-50: 245 249 247;
+		--color-green-100: 230 240 234;
+		--color-green-200: 204 224 213;
+		--color-green-300: 176 207 189;
+		--color-green-400: 139 185 159;
+		--color-green-500: 121 174 144;
+		--color-green-600: 94 156 121;
+		--color-green-700: 83 137 106;
+		--color-green-800: 156 195 173;
+		--color-green-900: 139 185 159;
+		--color-green-950: 83 137 106;
+		--color-rose-50: 248 246 247;
+		--color-rose-100: 239 235 237;
+		--color-rose-200: 221 212 217;
+		--color-rose-300: 199 183 192;
+		--color-rose-400: 173 150 162;
+		--color-rose-500: 163 138 151;
+		--color-rose-600: 150 120 136;
+		--color-rose-700: 137 107 123;
+		--color-rose-800: 163 82 122;
+		--color-rose-900: 92 46 69;
+		--color-rose-950: 58 29 43;
+		--color-gold-50: 246 245 243;
+		--color-gold-100: 240 238 234;
+		--color-gold-200: 221 216 208;
+		--color-gold-300: 202 193 181;
+		--color-gold-400: 178 166 148;
+		--color-gold-500: 165 151 130;
 
-		--theme-50: white
-		--theme-100: white
-		--theme-200: white
-		--theme-300: white
-		--theme-400: white
-		--theme-500: white
-		--theme-600: white
-		--theme-700: white
-		--theme-800: white
-		--theme-900: white
-		--theme-950: white
+		--theme-50: 255 255 255;
+		--theme-100: 255 255 255;
+		--theme-200: 255 255 255;
+		--theme-300: 255 255 255;
+		--theme-400: 255 255 255;
+		--theme-500: 255 255 255;
+		--theme-600: 255 255 255;
+		--theme-700: 255 255 255;
+		--theme-800: 255 255 255;
+		--theme-900: 255 255 255;
+		--theme-950: 255 255 255;
   }
 }
 
