@@ -4,12 +4,16 @@ import { ReactElement } from "react";
 export type Field = {
 	displayName: string;
 	icon: ReactElement;
-	theme?: Theme;
+	theme: Theme;
 };
 
 export const oaFieldConfigMap: Record<string, Field> = {
 	"https://openalex.org/fields/22": {
 		displayName: "Engineering",
+		theme: {
+			image: "silicon",
+			color: "purple",
+		},
 		icon: (
 			<svg
 				width="14"
@@ -65,6 +69,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/17": {
 		displayName: "Computer Science",
+		theme: {
+			image: "silicon",
+			color: "teal",
+		},
 		icon: (
 			<svg
 				width="16"
@@ -84,6 +92,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/23": {
 		displayName: "Environmental Science",
+		theme: {
+			image: "silicon",
+			color: "green",
+		},
 		icon: (
 			<svg
 				width="16"
@@ -103,6 +115,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/31": {
 		displayName: "Physics and Astronomy",
+		theme: {
+			image: "silicon",
+			color: "rose",
+		},
 		icon: (
 			<svg
 				width="15"
@@ -122,6 +138,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/25": {
 		displayName: "Materials Science",
+		theme: {
+			image: "silicon",
+			color: "gold",
+		},
 		icon: (
 			<svg
 				width="16"
@@ -141,6 +161,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/16": {
 		displayName: "Chemistry",
+		theme: {
+			image: "leafs",
+			color: "purple",
+		},
 		icon: (
 			<svg
 				width="14"
@@ -166,6 +190,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/19": {
 		displayName: "Earth and Planetary Sciences",
+		theme: {
+			image: "leafs",
+			color: "teal",
+		},
 		icon: (
 			<svg
 				width="14"
@@ -197,6 +225,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/26": {
 		displayName: "Mathematics",
+		theme: {
+			image: "leafs",
+			color: "green",
+		},
 		icon: (
 			<svg
 				width="14"
@@ -228,6 +260,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/21": {
 		displayName: "Energy",
+		theme: {
+			image: "leafs",
+			color: "rose",
+		},
 		icon: (
 			<svg
 				width="16"
@@ -247,6 +283,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/15": {
 		displayName: "Chemical Engineering",
+		theme: {
+			image: "leafs",
+			color: "gold",
+		},
 		icon: (
 			<svg
 				width="18"
@@ -281,6 +321,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/27": {
 		displayName: "Medicine",
+		theme: {
+			image: "paints",
+			color: "purple",
+		},
 		icon: (
 			<svg
 				width="14"
@@ -306,6 +350,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/36": {
 		displayName: "Health Professions",
+		theme: {
+			image: "paints",
+			color: "teal",
+		},
 		icon: (
 			<svg
 				width="16"
@@ -325,6 +373,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/29": {
 		displayName: "Nursing",
+		theme: {
+			image: "paints",
+			color: "green",
+		},
 		icon: (
 			<svg
 				width="16"
@@ -346,6 +398,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/35": {
 		displayName: "Dentistry",
+		theme: {
+			image: "paints",
+			color: "green",
+		},
 		icon: (
 			<svg
 				width="14"
@@ -371,6 +427,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/13": {
 		displayName: "Biochemistry, Genetics and Molecular Biology",
+		theme: {
+			image: "paints",
+			color: "rose",
+		},
 		icon: (
 			<svg
 				width="14"
@@ -414,6 +474,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/11": {
 		displayName: "Agricultural and Biological Sciences",
+		theme: {
+			image: "paints",
+			color: "gold",
+		},
 		icon: (
 			<svg
 				width="14"
@@ -451,6 +515,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/28": {
 		displayName: "Neuroscience",
+		theme: {
+			image: "fingerprint",
+			color: "purple",
+		},
 		icon: (
 			<svg
 				width="14"
@@ -512,6 +580,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/24": {
 		displayName: "Immunology and Microbiology",
+		theme: {
+			image: "fingerprint",
+			color: "teal",
+		},
 		icon: (
 			<svg
 				width="16"
@@ -531,6 +603,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/30": {
 		displayName: "Pharmacology, Toxicology and Pharmaceutics",
+		theme: {
+			image: "fingerprint",
+			color: "green",
+		},
 		icon: (
 			<svg
 				width="14"
@@ -568,6 +644,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/33": {
 		displayName: "Social Sciences",
+		theme: {
+			image: "fingerprint",
+			color: "rose",
+		},
 		icon: (
 			<svg
 				width="15"
@@ -587,6 +667,10 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/12": {
 		displayName: "Arts and Humanities",
+		theme: {
+			image: "fingerprint",
+			color: "gold",
+		},
 		icon: (
 			<svg
 				width="16"
@@ -606,6 +690,9 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/14": {
 		displayName: "Business, Management and Accounting",
+		theme: {
+			color: "purple",
+		},
 		icon: (
 			<svg
 				width="16"
@@ -625,6 +712,9 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/20": {
 		displayName: "Economics, Econometrics and Finance",
+		theme: {
+			color: "teal",
+		},
 		icon: (
 			<svg
 				width="16"
@@ -644,6 +734,9 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/32": {
 		displayName: "Psychology",
+		theme: {
+			color: "green",
+		},
 		icon: (
 			<svg
 				width="16"
@@ -663,6 +756,9 @@ export const oaFieldConfigMap: Record<string, Field> = {
 	},
 	"https://openalex.org/fields/18": {
 		displayName: "Decision Sciences",
+		theme: {
+			color: "rose",
+		},
 		icon: (
 			<svg
 				width="16"

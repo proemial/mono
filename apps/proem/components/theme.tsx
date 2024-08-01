@@ -2,7 +2,7 @@ import { hex2rgba } from "@proemial/utils/color";
 import { numberFrom } from "@proemial/utils/string";
 import { ReactNode } from "react";
 
-export type ThemePatterns = "leafs" | "paints" | "silicon" | "fingerprint";
+export type ThemePatterns = "silicon" | "leafs" | "paints" | "fingerprint";
 export type ThemeColor = "purple" | "teal" | "green" | "rose" | "gold";
 
 export type Theme = {
