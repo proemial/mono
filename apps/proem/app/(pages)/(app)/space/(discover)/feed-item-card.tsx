@@ -4,6 +4,7 @@ import {
 	AddToCollectionButton,
 	AddToCollectionButtonProps,
 } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
+import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -17,7 +18,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 import { FeedItemField } from "./feed-item-field";
 
 dayjs.extend(relativeTime);
@@ -49,6 +50,10 @@ export const FeedItemCard = ({
 	readonly,
 }: FeedItemCardProps) => {
 	const pathname = usePathname();
+	const field = useMemo(
+		() => topics && getFieldFromOpenAlexTopics(topics),
+		[topics],
+	);
 	const spaceSpecificPrefix =
 		pathname.includes(routes.space) && customCollectionId
 			? `${routes.space}/${pathname.split("/")[2]}`
@@ -81,7 +86,11 @@ export const FeedItemCard = ({
 						</div>
 					</div>
 					<Link
-						href={`${spaceSpecificPrefix}/paper/${provider ?? "oa"}/${id}`}
+						href={`${spaceSpecificPrefix}/paper/${provider ?? "oa"}/${id}${
+							field
+								? `?color=${field.theme.color}&image=${field.theme.image}`
+								: ""
+						}`}
 						onClick={trackHandler(analyticsKeys.feed.click.card)}
 					>
 						{children}
