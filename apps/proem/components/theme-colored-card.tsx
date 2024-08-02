@@ -36,7 +36,7 @@ export const ThemeColoredCard = ({
 			{theme?.image ? (
 				<div className="absolute inset-0 opacity-50">
 					<ThemeBackgroundImage
-						src={`/backgrounds/patterns_${theme.image}.png`}
+						pattern={theme.image}
 						style={{
 							maskImage:
 								"linear-gradient(rgba(0,0,0,1) 0%, rgba(0,0,0,0.37) 51%, rgba(0,0,0,0) 100%)",

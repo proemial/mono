@@ -63,11 +63,7 @@ export const NavBar = ({ children, action }: Props) => {
 							"linear-gradient(black 0px, black 54px, transparent 72px)",
 					}}
 				>
-					{theme?.image && (
-						<ThemeBackgroundImage
-							src={`/backgrounds/patterns_${theme.image}.png`}
-						/>
-					)}
+					{theme?.image && <ThemeBackgroundImage pattern={theme.image} />}
 				</div>
 
 				<NavigationMenuList className="justify-between flex-nowrap">
@@ -96,11 +92,7 @@ export const NavBar = ({ children, action }: Props) => {
 						}}
 					>
 						<div className={cn("mx-auto w-screen h-60", screenMaxWidth)}>
-							{theme.image && (
-								<ThemeBackgroundImage
-									src={`/backgrounds/patterns_${theme.image}.png`}
-								/>
-							)}
+							{theme.image && <ThemeBackgroundImage pattern={theme.image} />}
 						</div>
 					</div>
 				</div>
