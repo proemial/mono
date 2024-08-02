@@ -74,13 +74,14 @@ body { @apply !min-w-full; }
 		--color-purple-100: 235 235 239;
 		--color-purple-200: 215 215 224;
 		--color-purple-300: 189 189 204;
-		--color-purple-400: 92 93 153;
+		--color-purple-400: 160 161 182;
 		--color-purple-500: 145 147 171;
 		--color-purple-600: 131 132 160;
 		--color-purple-700: 114 115 146;
 		--color-purple-800: 108 109 167;
 		--color-purple-900: 66 67 110;
 		--color-purple-950: 46 46 77;
+
 		--color-teal-50: 243 246 247;
 		--color-teal-100: 231 237 238;
 		--color-teal-200: 201 215 217;
@@ -92,6 +93,7 @@ body { @apply !min-w-full; }
 		--color-teal-800: 148 175 179;
 		--color-teal-900: 130 161 166;
 		--color-teal-950: 87 117 122;
+
 		--color-green-50: 245 249 247;
 		--color-green-100: 230 240 234;
 		--color-green-200: 204 224 213;
@@ -103,6 +105,7 @@ body { @apply !min-w-full; }
 		--color-green-800: 156 195 173;
 		--color-green-900: 139 185 159;
 		--color-green-950: 83 137 106;
+
 		--color-rose-50: 248 246 247;
 		--color-rose-100: 239 235 237;
 		--color-rose-200: 221 212 217;
@@ -114,12 +117,18 @@ body { @apply !min-w-full; }
 		--color-rose-800: 163 82 122;
 		--color-rose-900: 92 46 69;
 		--color-rose-950: 58 29 43;
+
 		--color-gold-50: 246 245 243;
 		--color-gold-100: 240 238 234;
 		--color-gold-200: 221 216 208;
 		--color-gold-300: 202 193 181;
 		--color-gold-400: 178 166 148;
 		--color-gold-500: 165 151 130;
+		--color-gold-600: 153 137 113;
+		--color-gold-700: 133 118 96;
+		--color-gold-800: 189 179 163;
+		--color-gold-900: 178 166 148;
+		--color-gold-950: 133 118 96;
 
 		--color-theme-50: 245 245 245;
 		--color-theme-100: 245 245 245;
