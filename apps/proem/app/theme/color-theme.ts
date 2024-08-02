@@ -63,3 +63,14 @@ export const customColorTheme = {
 	gold: generateColorTheme("gold"),
 	theme: generateColorTheme(DEFUALT_THEME_KEY),
 };
+
+/**
+ * Fallback colors for when the css variables are not available.
+ */
+export const customColorThemeStaticFallback = {
+	purple: "rgb(160, 161, 182)",
+	teal: "rgb(130, 161, 166)",
+	green: "rgb(139, 185, 159)",
+	rose: "rgb(173, 150, 162)",
+	gold: "rgb(178, 166, 148)",
+};
