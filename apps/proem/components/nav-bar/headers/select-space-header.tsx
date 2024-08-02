@@ -93,10 +93,10 @@ const ensureDefaultCollection = (
 };
 
 const changeSpaceId = (pathname: string, spaceId: string) => {
-	const path = pathname.replace(
-		/(?<=\/space\/|^\/space\/)(\w*)(?=\/|$)/,
-		spaceId,
-	);
+	const path = pathname.includes("/space/")
+		? pathname.replace(/(?<=\/space\/|^\/space\/)(\w*)(?=\/|$)/, spaceId)
+		: `/space/${spaceId}/${pathname}`;
+
 	const subpaths = path.split("/");
 	return subpaths.filter((path) => path !== "saved").join("/");
 };
