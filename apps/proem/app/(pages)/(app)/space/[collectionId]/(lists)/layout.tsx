@@ -15,32 +15,35 @@ type Props = CollectionIdParams & {
 };
 export default async function ({ params: { collectionId }, children }: Props) {
 	const { userId, orgId } = auth();
-
 	const collection = await CollectionService.getCollection(
 		collectionId,
 		userId,
 		orgId,
 	);
+
 	if (!collection) {
 		notFound();
 	}
 
 	const isDefaultCollection = collection.id === userId;
+
 	return (
 		<div className="flex flex-col gap-2 grow">
-			<div className="flex flex-col gap-3">
-				{!isDefaultCollection && (
+			{!isDefaultCollection && (
+				<div className="flex flex-col gap-3">
 					<div className="min-h-36 flex flex-col justify-end">
 						<Header2 className="break-words markdown line-clamp-4">
 							<Markdown>{collection.description ?? ""}</Markdown>
 						</Header2>
 					</div>
-				)}
-				<div className="flex items-center justify-between gap-2">
-					<SpaceContributorsIndicator collection={collection} />
-					<SpaceShareIndicator shared={collection.shared} />
+
+					<div className="flex items-center justify-between gap-2">
+						<SpaceContributorsIndicator collection={collection} />
+						<SpaceShareIndicator shared={collection.shared} />
+					</div>
 				</div>
-			</div>
+			)}
+
 			<div className="flex items-center justify-center gap-1">
 				<NavItem href={`${routes.space}/${collection.id}`} title="Latest" />
 				<NavItem
@@ -48,6 +51,7 @@ export default async function ({ params: { collectionId }, children }: Props) {
 					title="Saved"
 				/>
 			</div>
+
 			{children}
 		</div>
 	);
