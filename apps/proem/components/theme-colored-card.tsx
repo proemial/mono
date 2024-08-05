@@ -17,7 +17,7 @@ export const ThemeColoredCard = ({
 	return (
 		<div
 			className={cn(
-				"p-3 pt-0.5 rounded-2xl relative overflow-hidden",
+				"p-3 pt-1 rounded-2xl relative overflow-hidden",
 				{
 					"bg-gradient-to-b from-purple-400/60 to-purple-400/20":
 						theme?.color === "purple",
