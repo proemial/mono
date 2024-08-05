@@ -37,7 +37,7 @@ export function ChatArticle({
 						href={paper.data.primary_location?.landing_page_url}
 						target="_blank"
 						rel="noreferrer"
-						className="opacity-50 flex items-center justify-between gap-1 uppercase text-[10px] hover:opacity-75 transition-opacity"
+						className="opacity-50 flex items-center justify-between gap-1 uppercase text-2xs hover:opacity-75 transition-opacity"
 					>
 						<div className="flex-grow w-1/2">
 							{publisher && (

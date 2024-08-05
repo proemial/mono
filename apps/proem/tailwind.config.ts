@@ -79,7 +79,7 @@ const config = {
 				"accordion-up": "accordion-up 0.2s ease-out",
 			},
 			fontSize: {
-				"2xs": "0.563rem",
+				"2xs": "0.625rem",
 			},
 		},
 	},
