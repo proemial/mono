@@ -12,7 +12,7 @@ export function AddButton({ isChecked, onClick }: AddButtonProps) {
 	return (
 		<Button variant="ghost" type="button" size="icon" onClick={onClick}>
 			{isChecked ? (
-				<div className="size-6 bg-foreground text-white rounded-full flex items-center justify-center">
+				<div className="size-6 bg-foreground/80 text-white rounded-full flex items-center justify-center">
 					<Check className="size-4" />
 				</div>
 			) : (

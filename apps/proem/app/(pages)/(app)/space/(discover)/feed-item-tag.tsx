@@ -11,7 +11,7 @@ export const FeedItemTag = ({ tag }: { tag: string }) => {
 		<Button
 			key={tag}
 			size="pill"
-			className="bg-foreground/5"
+			className="bg-background/30"
 			onClick={trackHandler(analyticsKeys.feed.click.tag)}
 		>
 			{tag}

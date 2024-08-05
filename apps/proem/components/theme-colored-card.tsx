@@ -17,18 +17,13 @@ export const ThemeColoredCard = ({
 	return (
 		<div
 			className={cn(
-				"p-3 pt-1 rounded-2xl relative overflow-hidden",
+				"p-3.5 pt-2 rounded-2xl relative overflow-hidden",
 				{
-					"bg-gradient-to-b from-purple-400/60 to-purple-400/20":
-						theme?.color === "purple",
-					"bg-gradient-to-b from-gold-400/60 to-gold-400/20":
-						theme?.color === "gold",
-					"bg-gradient-to-b from-teal-400/60 to-teal-400/20":
-						theme?.color === "teal",
-					"bg-gradient-to-b from-green-400/60 to-green-400/20":
-						theme?.color === "green",
-					"bg-gradient-to-b from-rose-400/60 to-rose-400/20":
-						theme?.color === "rose",
+					"bg-purple-400/30": theme?.color === "purple",
+					"bg-teal-400/30": theme?.color === "teal",
+					"bg-gold-400/30": theme?.color === "gold",
+					"bg-green-400/40": theme?.color === "green",
+					"bg-rose-400/30": theme?.color === "rose",
 				},
 				className,
 			)}

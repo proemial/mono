@@ -57,13 +57,18 @@ export const NavBar = ({ children, action }: Props) => {
 			{theme && <SetThemeColor color={theme.color} />}
 			<NavigationMenu className="z-20 bg-transparent">
 				<div
-					className="absolute top-0 left-0 w-full h-full overflow-hidden bg-gradient-to-b from-80% from-theme-400 to-transparent"
+					className="absolute top-0 left-0 w-full h-full overflow-hidden bg-gradient-to-b from-80% from-theme-300 to-transparent "
 					style={{
 						maskImage:
 							"linear-gradient(black 0px, black 54px, transparent 72px)",
 					}}
 				>
-					{theme?.image && <ThemeBackgroundImage pattern={theme.image} />}
+					{theme?.image && (
+						<ThemeBackgroundImage
+							className="opacity-75"
+							pattern={theme.image}
+						/>
+					)}
 				</div>
 
 				<NavigationMenuList className="justify-between flex-nowrap">
@@ -79,20 +84,31 @@ export const NavBar = ({ children, action }: Props) => {
 
 			{theme && (
 				<div
-					className="w-full h-60 -top-32 -mt-[72px] left-0 sticky -mb-36"
+					className="w-full h-72 -top-40 -mt-[72px] left-0 sticky -mb-36"
 					style={{
 						maskImage: "linear-gradient(to top, transparent 0px, black 56px)",
 					}}
 				>
 					<div
-						className="fixed top-0 bg-theme-400"
+						className="fixed top-0 bg-theme-300"
 						style={{
 							maskImage:
 								"linear-gradient(to bottom, black 0px , black 72px, transparent)",
 						}}
 					>
-						<div className={cn("mx-auto w-screen h-60", screenMaxWidth)}>
-							{theme.image && <ThemeBackgroundImage pattern={theme.image} />}
+						<div
+							className={cn("mx-auto w-screen h-72", screenMaxWidth)}
+							style={{
+								maskImage:
+									"linear-gradient(to bottom, black 0px , black 72px, transparent)",
+							}}
+						>
+							{theme.image && (
+								<ThemeBackgroundImage
+									className="opacity-75"
+									pattern={theme.image}
+								/>
+							)}
 						</div>
 					</div>
 				</div>
