@@ -88,7 +88,9 @@ export const FeedItemCard = ({
 					<Link
 						href={`${spaceSpecificPrefix}/paper/${provider ?? "oa"}/${id}${
 							field
-								? `?color=${field.theme.color}&image=${field.theme.image}`
+								? `?color=${field.theme.color}${
+										field.theme.image ? `&image=${field.theme.image}` : ""
+									}`
 								: ""
 						}`}
 						onClick={trackHandler(analyticsKeys.feed.click.card)}
