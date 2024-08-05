@@ -5,13 +5,16 @@ import {
 	fetchFeedByInstitutionWithPosts,
 	fetchFeedByTopicWithPosts,
 } from "@/app/(pages)/(app)/space/(discover)/fetch-feed";
+import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
 import { fetchFeedByFeaturesWithPosts } from "@/app/data/fetch-feed";
+import { useInternalUser } from "@/app/hooks/use-user";
 import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
 import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
 import { InfinityScrollList } from "@/components/infinity-scroll-list";
+import { ThemeColoredCard } from "@/components/theme-colored-card";
 import { PaperPost } from "@/services/post-service";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
 import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
@@ -41,9 +44,10 @@ export function Feed({
 }: FeedProps) {
 	const { topic, features, days, institution } = filter;
 	console.log("Feed", filter);
+	const { isInternal } = useInternalUser();
 
 	return (
-		<div className="space-y-5 pb-10">
+		<div className="space-y-5 pb-10 -mt-10">
 			<div>{children}</div>
 
 			<InfinityScrollList
@@ -89,22 +93,33 @@ export function Feed({
 						paper: RankedPaper["paper"] & { posts: PaperPost[] };
 					};
 					const isBookmarked = Boolean(bookmarks[paper.paper.id]);
-					return (
-						<div className="py-5">
-							<FeedItem
-								paper={paper.paper}
-								fingerprint={paper.features}
-								isBookmarked={isBookmarked}
-							>
-								{debug && (
-									<FeatureCloud
-										features={paper.features}
-										sum={paper.filterMatchScore}
-									/>
-								)}
-							</FeedItem>
-						</div>
+					const topics = row.paper.data.topics;
+					const field = topics && getFieldFromOpenAlexTopics(topics);
+
+					const item = (
+						<FeedItem
+							paper={paper.paper}
+							fingerprint={paper.features}
+							isBookmarked={isBookmarked}
+						>
+							{debug && (
+								<FeatureCloud
+									features={paper.features}
+									sum={paper.filterMatchScore}
+								/>
+							)}
+						</FeedItem>
 					);
+
+					if (isInternal && field?.theme) {
+						return (
+							<ThemeColoredCard className="mb-3" theme={field.theme}>
+								{item}
+							</ThemeColoredCard>
+						);
+					}
+
+					return <div className="py-5">{item}</div>;
 				}}
 			/>
 		</div>
