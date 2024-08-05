@@ -1,8 +1,10 @@
 import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { getBookmarkedPapersByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarked-papers-by-collection-id";
+import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
 import { FeedItemWithDisabledOverlay } from "@/app/(pages)/(app)/space/[collectionId]/(lists)/saved/feed-item-with-disabled-overlay";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { ProemAssistant } from "@/components/proem-assistant";
+import { ThemeColoredCard } from "@/components/theme-colored-card";
 import { CollectionService } from "@/services/collection-service";
 import { PostService } from "@/services/post-service";
 import { PermissionUtils } from "@/utils/permission-utils";
@@ -48,11 +50,13 @@ export default async function SavedPage({
 
 	return (
 		<>
-			<div className="mb-8 space-y-8">
+			<div className="pb-20">
 				{papers.map((paper) => {
 					if (!paper) return null;
 					const isBookmarked = paperIds?.includes(paper.id) ?? false;
-					return (
+					const topics = paper.data.topics;
+					const field = topics && getFieldFromOpenAlexTopics(topics);
+					const item = (
 						<FeedItemWithDisabledOverlay
 							key={paper.id}
 							paper={{
@@ -64,6 +68,19 @@ export default async function SavedPage({
 							customCollectionId={collectionId}
 							readonly={!canEdit}
 						/>
+					);
+
+					if (field?.theme) {
+						return (
+							<ThemeColoredCard className="mb-3" theme={field.theme}>
+								{item}
+							</ThemeColoredCard>
+						);
+					}
+					return (
+						<div key={paper.id} className="py-5">
+							{item}
+						</div>
 					);
 				})}
 			</div>
