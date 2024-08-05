@@ -60,54 +60,53 @@ export const FeedItemCard = ({
 			: "";
 	return (
 		<div className="flex flex-col gap-3">
-			{hasAbstract && (
-				<div>
-					<div className="flex items-center justify-between gap-2">
-						<FeedItemField topics={topics} />
-						<div className="flex items-center">
-							<div className="uppercase text-2xs text-nowrap">
-								{dayjs(date).fromNow()}
-							</div>
-							<div className="-mr-2 min-h-10">
-								{!readonly && (
-									<Trackable
-										trackingKey={analyticsKeys.collection.addPaper.fromAsk}
-									>
-										<AddToCollectionButton
-											onClick={onBookmarkToggleClick}
-											fromTrackingKey="fromFeed"
-											isBookmarked={isBookmarked}
-											paperId={id}
-											customCollectionId={customCollectionId}
-										/>
-									</Trackable>
-								)}
+			<Link
+				href={`${spaceSpecificPrefix}/paper/${provider ?? "oa"}/${id}${
+					field
+						? `?color=${field.theme.color}${
+								field.theme.image ? `&image=${field.theme.image}` : ""
+							}`
+						: ""
+				}`}
+				onClick={trackHandler(analyticsKeys.feed.click.card)}
+			>
+				{hasAbstract ? (
+					<div>
+						<div className="flex items-center justify-between gap-2">
+							<FeedItemField topics={topics} />
+							<div className="flex items-center">
+								<div className="uppercase text-2xs text-nowrap">
+									{dayjs(date).fromNow()}
+								</div>
+								<div className="-mr-2 min-h-10">
+									{!readonly && (
+										<Trackable
+											trackingKey={analyticsKeys.collection.addPaper.fromAsk}
+										>
+											<AddToCollectionButton
+												onClick={onBookmarkToggleClick}
+												fromTrackingKey="fromFeed"
+												isBookmarked={isBookmarked}
+												paperId={id}
+												customCollectionId={customCollectionId}
+											/>
+										</Trackable>
+									)}
+								</div>
 							</div>
 						</div>
-					</div>
-					<Link
-						href={`${spaceSpecificPrefix}/paper/${provider ?? "oa"}/${id}${
-							field
-								? `?color=${field.theme.color}${
-										field.theme.image ? `&image=${field.theme.image}` : ""
-									}`
-								: ""
-						}`}
-						onClick={trackHandler(analyticsKeys.feed.click.card)}
-					>
 						{children}
-					</Link>
-				</div>
-			)}
-			{!hasAbstract && (
-				<>
-					<div className="flex items-center gap-2 font-bold">
-						<AlertTriangle className="size-4 opacity-85" />
-						This paper is not publicly available.
 					</div>
-					<div className="text-muted-foreground">{children}</div>
-				</>
-			)}
+				) : (
+					<>
+						<div className="flex items-center gap-2 font-bold">
+							<AlertTriangle className="size-4 opacity-85" />
+							This paper is not publicly available.
+						</div>
+						<div className="text-muted-foreground">{children}</div>
+					</>
+				)}
+			</Link>
 		</div>
 	);
 };

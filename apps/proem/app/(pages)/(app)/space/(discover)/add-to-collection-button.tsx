@@ -49,7 +49,8 @@ export function AddToCollectionButton({
 	return (
 		<AddButton
 			isChecked={optimisticBookmark}
-			onClick={async () => {
+			onClick={async (event) => {
+				event.preventDefault();
 				onClick?.(optimisticBookmark);
 				const isEnabled = !optimisticBookmark;
 

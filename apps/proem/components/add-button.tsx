@@ -1,11 +1,10 @@
-import { Button } from "@proemial/shadcn-ui";
+import { Button, ButtonProps } from "@proemial/shadcn-ui";
 import { Check } from "@untitled-ui/icons-react";
 import { PlusCircle } from "lucide-react";
 import { ForwardedRef, forwardRef } from "react";
 
-type AddButtonProps = {
+type AddButtonProps = Pick<ButtonProps, "onClick"> & {
 	isChecked: boolean;
-	onClick: () => void;
 };
 
 export function AddButton({ isChecked, onClick }: AddButtonProps) {
