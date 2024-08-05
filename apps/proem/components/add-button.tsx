@@ -12,11 +12,11 @@ export function AddButton({ isChecked, onClick }: AddButtonProps) {
 	return (
 		<Button variant="ghost" type="button" size="icon" onClick={onClick}>
 			{isChecked ? (
-				<div className="size-4 bg-secondary text-secondary-foreground rounded-full flex items-center justify-center">
-					<Check className="size-2.5" />
+				<div className="size-6 bg-foreground text-white rounded-full flex items-center justify-center">
+					<Check className="size-4" />
 				</div>
 			) : (
-				<PlusCircle className="size-4" />
+				<PlusCircle className="size-6 stroke-1" />
 			)}
 		</Button>
 	);

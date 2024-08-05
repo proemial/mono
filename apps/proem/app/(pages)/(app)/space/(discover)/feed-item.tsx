@@ -79,6 +79,7 @@ export default function FeedItem({
 
 				{fingerprint && <FeatureTags features={fingerprint} />}
 			</div>
+
 			{paper.posts.length > 0 && (
 				<div className="flex gap-2">
 					<div className="flex gap-2">

@@ -14,7 +14,9 @@ export function FeedItemField({ topics = [] }: { topics?: OpenAlexTopic[] }) {
 	return (
 		<div className="flex items-center gap-2">
 			{field.icon}
-			<div className="text-xs uppercase line-clamp-1">{field.displayName}</div>
+			<div className="text-2xs  uppercase line-clamp-1">
+				{field.displayName}
+			</div>
 		</div>
 	);
 }
