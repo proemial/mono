@@ -1,7 +1,9 @@
+import { AddToCollectionButtonProps } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { MicroAbstract } from "@/components/chat-abstract";
 import { AIGeneratedIcon } from "@/components/icons/AIGeneratedIcon";
 import { ModelSelector, ModelSelectorProps } from "@/components/model-selector";
+import { PaperMetaData } from "@/components/paper-meta-data";
 import { Trackable } from "@/components/trackable";
 import { trimForQuotes } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
@@ -10,7 +12,10 @@ import { BookOpen01, ChevronRight, Users01 } from "@untitled-ui/icons-react";
 import { Suspense } from "react";
 import Markdown from "./markdown";
 
-type ChatArticleProps = {
+type ChatArticleProps = Pick<
+	AddToCollectionButtonProps,
+	"isBookmarked" | "customCollectionId"
+> & {
 	type: "Answer" | "Paper Summary";
 	trackingKeys: ModelSelectorProps["trackingKeys"];
 	text?: string;
@@ -22,6 +27,8 @@ export function ChatArticle({
 	trackingKeys,
 	text,
 	paper,
+	isBookmarked,
+	customCollectionId,
 }: ChatArticleProps) {
 	const title = paper?.generated?.title;
 	const authors = paper?.data.authorships;
@@ -29,7 +36,23 @@ export function ChatArticle({
 
 	return (
 		<div className="space-y-3 text-pretty">
-			{title ? <Title title={title} /> : null}
+			{title ? (
+				<div>
+					{type === "Paper Summary" ? (
+						<PaperMetaData
+							topics={paper.data.topics}
+							date={paper.data.publication_date}
+							readonly={false}
+							isBookmarked={isBookmarked}
+							id={paper.id}
+							customCollectionId={customCollectionId}
+						/>
+					) : null}
+					<Header2 className="break-words markdown line-clamp-4 m-0">
+						<Markdown>{trimForQuotes(title)}</Markdown>
+					</Header2>
+				</div>
+			) : null}
 
 			{authors ? (
 				<Trackable trackingKey={analyticsKeys.read.click.fullPaper}>
@@ -94,15 +117,6 @@ export function ChatArticle({
 	);
 }
 
-function Title({ title }: { title: string }) {
-	// Remove potential leading/trailing quotes from the title
-	return (
-		<Header2 className="break-words markdown line-clamp-4">
-			<Markdown>{trimForQuotes(title)}</Markdown>
-		</Header2>
-	);
-}
-
 function Spinner() {
 	return (
 		<div className="flex items-center justify-center mx-auto size-24">
@@ -110,40 +124,3 @@ function Spinner() {
 		</div>
 	);
 }
-
-/* <CollapsibleSection
-					trackingKey={analyticsKeys.read.click.collapse}
-					trigger={
-						<PaperReaderHeadline
-							paperId={fetchedPaper.id}
-							isBookmarked={isBookmarked}
-							customCollectionId={collectionId}
-						/>
-					}
-					collapsed
-				>
-					<HorisontalScrollArea>
-						<Trackable trackingKey={analyticsKeys.read.click.fullPaper}>
-							<a
-								href={fetchedPaper.data.primary_location?.landing_page_url}
-								target="_blank"
-								rel="noreferrer"
-							>
-								<PaperCardDiscover
-									title={fetchedPaper.data.title}
-									date={fetchedPaper.data.publication_date}
-									publisher={
-										fetchedPaper.data.primary_location.source?.display_name
-									}
-								/>
-							</a>
-						</Trackable>
-
-						{fetchedPaper.data.authorships.map((author) => (
-							<PaperCardDiscoverProfile
-								key={author.author.id}
-								name={author.author.display_name}
-							/>
-						))}
-					</HorisontalScrollArea>
-				</CollapsibleSection> */

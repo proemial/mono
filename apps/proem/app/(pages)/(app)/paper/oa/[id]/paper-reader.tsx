@@ -22,6 +22,7 @@ export function PaperReader({
 	initialMessages,
 	type,
 	collectionId,
+	isBookmarked,
 }: PaperReaderProps) {
 	const fetchedPaper = use(fetchedPaperPromise);
 	const generatedPaper = use(generatedPaperPromise);
@@ -38,6 +39,8 @@ export function PaperReader({
 					type="Paper Summary"
 					trackingKeys={analyticsKeys.read}
 					paper={generatedPaper}
+					customCollectionId={collectionId}
+					isBookmarked={isBookmarked}
 				/>
 			</div>
 

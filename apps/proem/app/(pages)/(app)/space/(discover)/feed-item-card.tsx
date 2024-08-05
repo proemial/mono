@@ -1,40 +1,25 @@
 "use client";
 
-import {
-	AddToCollectionButton,
-	AddToCollectionButtonProps,
-} from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
 import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
 import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { Trackable } from "@/components/trackable";
+import {
+	PaperMetaData,
+	PaperMetaDataProps,
+} from "@/components/paper-meta-data"; // Updated import
 import { routes } from "@/routes";
 import { Prefix } from "@proemial/redis/adapters/papers";
-import { OpenAlexTopic } from "@proemial/repositories/oa/models/oa-paper";
 import { AlertTriangle } from "@untitled-ui/icons-react";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode, useMemo } from "react";
-import { FeedItemField } from "./feed-item-field";
 
-dayjs.extend(relativeTime);
-
-export type FeedItemCardProps = Pick<
-	AddToCollectionButtonProps,
-	"isBookmarked" | "customCollectionId"
-> & {
-	id: string;
-	date: string;
-	topics?: OpenAlexTopic[];
+export type FeedItemCardProps = PaperMetaDataProps & {
 	children: ReactNode;
-	provider?: Prefix;
 	hasAbstract: boolean;
-	onBookmarkToggleClick?: AddToCollectionButtonProps["onClick"];
-	readonly?: boolean;
+	provider?: Prefix;
 };
 
 export const FeedItemCard = ({
@@ -58,6 +43,8 @@ export const FeedItemCard = ({
 		pathname.includes(routes.space) && customCollectionId
 			? `${routes.space}/${pathname.split("/")[2]}`
 			: "";
+
+	console.log(date);
 	return (
 		<div className="flex flex-col gap-3">
 			<Link
@@ -72,29 +59,15 @@ export const FeedItemCard = ({
 			>
 				{hasAbstract ? (
 					<div>
-						<div className="flex items-center justify-between gap-2">
-							<FeedItemField topics={topics} />
-							<div className="flex items-center">
-								<div className="uppercase text-2xs text-nowrap">
-									{dayjs(date).fromNow()}
-								</div>
-								<div className="-mr-2 min-h-10">
-									{!readonly && (
-										<Trackable
-											trackingKey={analyticsKeys.collection.addPaper.fromAsk}
-										>
-											<AddToCollectionButton
-												onClick={onBookmarkToggleClick}
-												fromTrackingKey="fromFeed"
-												isBookmarked={isBookmarked}
-												paperId={id}
-												customCollectionId={customCollectionId}
-											/>
-										</Trackable>
-									)}
-								</div>
-							</div>
-						</div>
+						<PaperMetaData
+							topics={topics}
+							date={date}
+							readonly={readonly}
+							isBookmarked={isBookmarked}
+							id={id}
+							customCollectionId={customCollectionId}
+							onBookmarkToggleClick={onBookmarkToggleClick}
+						/>
 						{children}
 					</div>
 				) : (
