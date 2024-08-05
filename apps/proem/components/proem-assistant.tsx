@@ -95,7 +95,7 @@ export const ProemAssistant = () => {
 										maxLength={chatInputMaxLength}
 									/>
 									<Button
-										className="size-8 w-[36px] mr-2 rounded-full text-background border-[1px] bg-[#2B2B2B] disabled:opacity-1"
+										className="size-8 w-[36px] mr-2 rounded-full text-background border-[1px] bg-foreground disabled:opacity-1"
 										size="icon"
 										type="submit"
 										onClick={trackHandler(analyticsKeys.chat.click.submit)}

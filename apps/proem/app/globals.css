@@ -31,8 +31,8 @@ body { @apply !min-w-full; }
 
 @layer base {
   :root {
-    --background: #F5F5F5;
-    --foreground: #2B2B2B;
+    --background: 245 245 245;
+    --foreground: 43 43 43;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -130,17 +130,17 @@ body { @apply !min-w-full; }
 		--color-gold-900: 178 166 148;
 		--color-gold-950: 133 118 96;
 
-		--color-theme-50: 245 245 245;
-		--color-theme-100: 245 245 245;
-		--color-theme-200: 245 245 245;
-		--color-theme-300: 245 245 245;
-		--color-theme-400: 245 245 245;
-		--color-theme-500: 245 245 245;
-		--color-theme-600: 245 245 245;
-		--color-theme-700: 245 245 245;
-		--color-theme-800: 245 245 245;
-		--color-theme-900: 245 245 245;
-		--color-theme-950: 245 245 245;
+		--color-theme-50: var(--background);
+		--color-theme-100: var(--background);
+		--color-theme-200: var(--background);
+		--color-theme-300: var(--background);
+		--color-theme-400: var(--background);
+		--color-theme-500: var(--background);
+		--color-theme-600: var(--background);
+		--color-theme-700: var(--background);
+		--color-theme-800: var(--background);
+		--color-theme-900: var(--background);
+		--color-theme-950: var(--background);
   }
 }
 
