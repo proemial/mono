@@ -7,7 +7,6 @@ import {
 } from "@/app/(pages)/(app)/space/(discover)/fetch-feed";
 import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
 import { fetchFeedByFeaturesWithPosts } from "@/app/data/fetch-feed";
-import { useInternalUser } from "@/app/hooks/use-user";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -44,7 +43,6 @@ export function Feed({
 }: FeedProps) {
 	const { topic, features, days, institution } = filter;
 	console.log("Feed", filter);
-	const { isInternal } = useInternalUser();
 
 	return (
 		<div className="space-y-5 pb-10 -mt-10">
@@ -111,7 +109,7 @@ export function Feed({
 						</FeedItem>
 					);
 
-					if (isInternal && field?.theme) {
+					if (field?.theme) {
 						return (
 							<ThemeColoredCard className="mb-3" theme={field.theme}>
 								{item}

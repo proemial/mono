@@ -3,7 +3,6 @@
 import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
 import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
 import { fetchFeedByFeaturesWithPosts } from "@/app/data/fetch-feed";
-import { useInternalUser } from "@/app/hooks/use-user";
 import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
 import { InfinityScrollList } from "@/components/infinity-scroll-list";
 import { ThemeColoredCard } from "@/components/theme-colored-card";
@@ -29,7 +28,6 @@ export function StreamList({
 	debugParams,
 	showThemeColors = false,
 }: StreamListProps) {
-	const { isInternal } = useInternalUser();
 	return (
 		<InfinityScrollList
 			queryKey={`space_stream_${collectionId}`}
@@ -77,7 +75,7 @@ export function StreamList({
 					</FeedItem>
 				);
 
-				if (isInternal && showThemeColors && field?.theme) {
+				if (showThemeColors && field?.theme) {
 					return (
 						<ThemeColoredCard className="mb-3" theme={field.theme}>
 							{item}
