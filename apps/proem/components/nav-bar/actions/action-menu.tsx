@@ -12,8 +12,16 @@ export function ActionMenu({ children }: { children: React.ReactNode }) {
 	return (
 		<Popover>
 			<PopoverTrigger>
-				<Button variant="ghost" type="button" size="icon" className="-mr-3">
-					<DotsHorizontal className="size-5" />
+				<Button
+					variant="ghost"
+					type="button"
+					size="icon"
+					className="-mr-3"
+					asChild
+				>
+					<div>
+						<DotsHorizontal className="size-5" />
+					</div>
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent
