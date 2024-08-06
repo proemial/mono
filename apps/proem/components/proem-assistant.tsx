@@ -64,15 +64,14 @@ export const ProemAssistant = () => {
 	};
 
 	return (
-		<div className="fixed bottom-0 left-0 bg-gradient-to-b pt-5 from-transparent to-background h-[80px] sm:h-[100px] w-full flex justify-center pointer-events-none">
+		<div className="fixed bottom-0 left-0 bg-gradient-to-b from-transparent to-background h-[80px] sm:h-[100px] w-full flex justify-center pointer-events-none">
 			<Button
 				type="button"
 				variant="default"
-				size="icon"
-				className="bg-white drop-shadow-xl hover:drop-shadow-lg pointer-events-auto"
+				className="bg-theme-900 hover:bg-theme-950 drop-shadow-xl hover:drop-shadow-lg pointer-events-auto w-16 h-16 rounded-full"
 				onClick={handleOpen}
 			>
-				<ProemLogo size="xs" />
+				<ProemLogo size="sm" className="text-white" />
 			</Button>
 			<Drawer
 				shouldScaleBackground={false}

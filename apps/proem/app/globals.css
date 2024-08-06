@@ -148,18 +148,6 @@ body { @apply !min-w-full; }
 		--color-gold-900: 178 166 148;
 		--color-gold-950: 133 118 96;
 
-		--color-theme-50: var(--background);
-		--color-theme-100: var(--background);
-		--color-theme-200: var(--background);
-		--color-theme-300: var(--background);
-		--color-theme-400: var(--background);
-		--color-theme-500: var(--background);
-		--color-theme-600: var(--background);
-		--color-theme-700: var(--background);
-		--color-theme-800: var(--background);
-		--color-theme-900: var(--background);
-		--color-theme-950: var(--background);
-
 		--color-theme-50: 252 252 252;
 		--color-theme-100: 252 252 252;
 		--color-theme-200: 250 250 250;
