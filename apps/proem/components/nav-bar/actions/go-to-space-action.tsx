@@ -33,7 +33,7 @@ export const GoToSpaceAction = () => {
 			className="-ml-3"
 			onClick={handleAction}
 		>
-			<ChevronLeft className="size-5" />
+			<ChevronLeft className="size-6" />
 		</Button>
 	);
 };
