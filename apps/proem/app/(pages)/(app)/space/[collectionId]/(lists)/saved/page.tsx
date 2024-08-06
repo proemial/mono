@@ -48,6 +48,8 @@ export default async function SavedPage({
 		collectionId,
 	);
 
+	const isDefaultSpace = collectionId === userId;
+	const showThemeColors = isDefaultSpace;
 	return (
 		<>
 			<div className="pb-20">
@@ -70,7 +72,7 @@ export default async function SavedPage({
 						/>
 					);
 
-					if (field?.theme) {
+					if (showThemeColors && field?.theme) {
 						return (
 							<ThemeColoredCard className="mb-3" theme={field.theme}>
 								{item}
