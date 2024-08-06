@@ -8,6 +8,7 @@ import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-actio
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBar } from "@/components/nav-bar/nav-bar";
 import { ProemAssistant } from "@/components/proem-assistant";
+import { SignInDrawer } from "@/components/sign-in-drawer";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs/server";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
@@ -17,6 +18,7 @@ import {
 } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { OaFields } from "@proemial/repositories/oa/taxonomy/fields";
 import { Badge } from "@proemial/shadcn-ui";
+import { Menu05 } from "@untitled-ui/icons-react";
 import { redirect } from "next/navigation";
 import { FeedFilter } from "./feed-filter";
 import { getBookmarksByCollectionId } from "./get-bookmarks-by-collection-id";
@@ -56,7 +58,18 @@ export default async function DiscoverPage({ searchParams }: Props) {
 
 	return (
 		<>
-			<NavBar action={<OpenSearchAction />}>
+			<NavBar
+				action={<OpenSearchAction />}
+				menu={
+					<SignInDrawer
+						trigger={
+							<div className="rounded-full -ml-3 size-10 flex items-center justify-center cursor-pointer">
+								<Menu05 className="size-5" />
+							</div>
+						}
+					/>
+				}
+			>
 				<SimpleHeader title="For You" />
 			</NavBar>
 			<Main>
