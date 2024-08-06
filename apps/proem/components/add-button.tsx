@@ -25,7 +25,7 @@ export const AddButtonSkeleton = forwardRef(
 	(props, ref: ForwardedRef<HTMLButtonElement>) => {
 		return (
 			<Button variant="ghost" type="button" size="icon" ref={ref} {...props}>
-				<PlusCircle className="size-4" />
+				<PlusCircle className="size-6 stroke-1" />
 			</Button>
 		);
 	},
