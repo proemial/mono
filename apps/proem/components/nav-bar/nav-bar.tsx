@@ -41,15 +41,13 @@ export const NavBar = ({ children, action }: Props) => {
 	const params = useParams<{ id?: string; collectionId?: string }>();
 	const isReaderPage = params.id && pathname.includes(routes.paper);
 	const seed = params.collectionId ?? "";
-	const theme = seed.includes("col_")
-		? getRandomThemeColor(seed)
-		: seed.includes("user_")
-			? themeColor
-				? {
-						color: themeColor as ThemeColor,
-						image: themeImage as ThemePatterns,
-					}
-				: null
+	const theme = themeColor
+		? {
+				color: themeColor as ThemeColor,
+				image: themeImage as ThemePatterns,
+			}
+		: seed.includes("col_")
+			? getRandomThemeColor(seed)
 			: null;
 
 	return (
