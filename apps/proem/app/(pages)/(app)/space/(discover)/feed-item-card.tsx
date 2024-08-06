@@ -44,7 +44,6 @@ export const FeedItemCard = ({
 			? `${routes.space}/${pathname.split("/")[2]}`
 			: "";
 
-	console.log(date);
 	return (
 		<div className="flex flex-col gap-3">
 			<Link

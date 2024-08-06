@@ -117,6 +117,10 @@ function FeatureTags({ features }: { features: RankedPaperFeature[] }) {
 		deduped.push(feature);
 	}
 
+	if (deduped.length === 0) {
+		return null;
+	}
+
 	return (
 		<div className="flex flex-row gap-2 overflow-x-auto scrollbar-hide">
 			{deduped.slice(0, 3).map((feature) => (

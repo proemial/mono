@@ -80,7 +80,7 @@ body { @apply !min-w-full; }
     --radius: 0.5rem;
 
 		/* THEME COLORS */
-		/* https://www.tints.dev/?purplelow=A0A1B6&purplehigh=42436E&teallow=82A1A6&tealhigh=82A1A6&greenlow=8BB99F&greenhigh=8BB99F&roselow=AD96A2&rosehigh=5C2E45&goldlow=B2A694&goldhigh=B2A694
+		/* https://www.tints.dev/?purplelow=A0A1B6&purplehigh=42436E&teallow=82A1A6&tealhigh=82A1A6&greenlow=8BB99F&greenhigh=8BB99F&roselow=AD96A2&rosehigh=5C2E45&goldlow=B2A694&goldhigh=B2A694&blue=3B82F6&themeLow=F5F5F5&red=F5F5F5&themeHigh=2B2B2B
 			1) set low to 400 (generates 50-700)
 			2) set high to 900 (generates 800-950)
 			3) toggle luminance on
@@ -159,6 +159,20 @@ body { @apply !min-w-full; }
 		--color-theme-800: var(--background);
 		--color-theme-900: var(--background);
 		--color-theme-950: var(--background);
+
+		--color-theme-50: 252 252 252;
+		--color-theme-100: 252 252 252;
+		--color-theme-200: 250 250 250;
+		--color-theme-200: 250 250 250;
+		--color-theme-300: 247 247 247;
+		--color-theme-400: 245 245 245;
+		--color-theme-500: 227 227 227;
+		--color-theme-600: 204 204 204;
+		--color-theme-700: 181 181 181;
+		--color-theme-800: 102 102 102;
+		--color-theme-900: 43 43 43;
+		--color-theme-950: 26 26 26;
+
   }
 }
 
