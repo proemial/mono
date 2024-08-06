@@ -1,6 +1,7 @@
 import { Feed } from "@/app/(pages)/(app)/space/(discover)/feed";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
+import { MenuButton } from "@/app/profile/menu-button";
 import { FeatureCloud } from "@/components/feature-badges";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { Main } from "@/components/main";
@@ -18,7 +19,6 @@ import {
 } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { OaFields } from "@proemial/repositories/oa/taxonomy/fields";
 import { Badge } from "@proemial/shadcn-ui";
-import { Menu05 } from "@untitled-ui/icons-react";
 import { redirect } from "next/navigation";
 import { FeedFilter } from "./feed-filter";
 import { getBookmarksByCollectionId } from "./get-bookmarks-by-collection-id";
@@ -59,19 +59,20 @@ export default async function DiscoverPage({ searchParams }: Props) {
 	return (
 		<>
 			<NavBar
+				menu={
+					<SignInDrawer
+						trigger={
+							// extra div to make the trigger a ref
+							<div>
+								<MenuButton />
+							</div>
+						}
+					/>
+				}
 				action={
 					<ActionMenu>
 						<SignInDrawer trigger={<div>View saved items</div>} />
 					</ActionMenu>
-				}
-				menu={
-					<SignInDrawer
-						trigger={
-							<div className="rounded-full -ml-3 size-10 flex items-center justify-center cursor-pointer">
-								<Menu05 className="size-5" />
-							</div>
-						}
-					/>
 				}
 			>
 				<SimpleHeader title="For You" />

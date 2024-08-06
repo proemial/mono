@@ -1,4 +1,5 @@
 import { screenMaxWidth } from "@/app/constants";
+import { MenuButton } from "@/app/profile/menu-button";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -12,7 +13,7 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 } from "@proemial/shadcn-ui";
-import { Menu05, XClose } from "@untitled-ui/icons-react";
+import { XClose } from "@untitled-ui/icons-react";
 import dynamic from "next/dynamic";
 const ProfileContent = dynamic(
 	() =>
@@ -23,27 +24,23 @@ const ProfileContent = dynamic(
 export function Profile() {
 	return (
 		<Drawer>
-			<DrawerTrigger asChild>
-				<Button
-					variant="ghost"
-					size="icon"
-					onClick={trackHandler(analyticsKeys.ui.menu.click.open)}
-					className="-ml-3"
-				>
-					<Menu05 className="size-5" />
-				</Button>
+			<DrawerTrigger>
+				<MenuButton asChild />
 			</DrawerTrigger>
 			<DrawerContent className={`${screenMaxWidth} h-dvh rounded-none mx-auto`}>
 				<div className="flex flex-col h-full overflow-y-auto gap-6">
 					<DrawerHeader className="pt-0">
 						<DrawerTitle className="flex justify-end text-2xl font-normal">
-							<DrawerClose asChild>
+							<DrawerClose>
 								<Button
+									asChild
 									variant="ghost"
 									className="p-0"
 									onClick={trackHandler(analyticsKeys.ui.menu.click.close)}
 								>
-									<XClose className="size-6" />
+									<div>
+										<XClose className="size-6" />
+									</div>
 								</Button>
 							</DrawerClose>
 						</DrawerTitle>
