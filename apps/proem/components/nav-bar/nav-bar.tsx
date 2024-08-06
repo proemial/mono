@@ -22,6 +22,11 @@ import { GoToSpaceAction } from "./actions/go-to-space-action";
 
 type Props = {
 	/**
+	 * The "menu" content to display in the left of the navigation bar, e.g.
+	 * a menu, a back button etc.
+	 */
+	menu?: ReactNode;
+	/**
 	 * The "header" content to display in the center of the navigation bar, e.g.
 	 * a title, a dropdown etc.
 	 */
@@ -33,7 +38,8 @@ type Props = {
 	action?: ReactNode;
 };
 
-export const NavBar = ({ children, action }: Props) => {
+export const NavBar = ({ menu, children, action }: Props) => {
+	console.log(menu);
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 	const themeColor = searchParams.get("color");
@@ -53,6 +59,7 @@ export const NavBar = ({ children, action }: Props) => {
 	return (
 		<>
 			{theme && <SetThemeColor color={theme.color} />}
+
 			<NavigationMenu className="z-20 bg-transparent">
 				<div
 					className="absolute top-0 left-0 w-full h-full overflow-hidden bg-gradient-to-b from-80% from-theme-300 to-transparent "
@@ -71,7 +78,7 @@ export const NavBar = ({ children, action }: Props) => {
 
 				<NavigationMenuList className="justify-between flex-nowrap">
 					<NavigationMenuItem>
-						{isReaderPage ? <GoToSpaceAction /> : <Profile />}
+						{menu ? menu : isReaderPage ? <GoToSpaceAction /> : <Profile />}
 					</NavigationMenuItem>
 					<NavigationMenuItem className="truncate">
 						{children}
