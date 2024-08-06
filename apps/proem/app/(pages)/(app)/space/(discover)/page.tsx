@@ -4,7 +4,7 @@ import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { FeatureCloud } from "@/components/feature-badges";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { Main } from "@/components/main";
-import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
+import { ActionMenu } from "@/components/nav-bar/actions/action-menu";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBar } from "@/components/nav-bar/nav-bar";
 import { ProemAssistant } from "@/components/proem-assistant";
@@ -59,7 +59,11 @@ export default async function DiscoverPage({ searchParams }: Props) {
 	return (
 		<>
 			<NavBar
-				action={<OpenSearchAction />}
+				action={
+					<ActionMenu>
+						<SignInDrawer trigger={<div>View saved items</div>} />
+					</ActionMenu>
+				}
 				menu={
 					<SignInDrawer
 						trigger={
