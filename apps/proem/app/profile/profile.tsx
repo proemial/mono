@@ -26,11 +26,11 @@ export function Profile() {
 			<DrawerTrigger asChild>
 				<Button
 					variant="ghost"
-					size="sm"
+					size="icon"
 					onClick={trackHandler(analyticsKeys.ui.menu.click.open)}
-					className="p-0"
+					className="-ml-3"
 				>
-					<Menu05 className="p-1 size-7" />
+					<Menu05 className="size-5" />
 				</Button>
 			</DrawerTrigger>
 			<DrawerContent className={`${screenMaxWidth} h-dvh rounded-none mx-auto`}>
@@ -43,7 +43,7 @@ export function Profile() {
 									className="p-0"
 									onClick={trackHandler(analyticsKeys.ui.menu.click.close)}
 								>
-									<XClose className="w-6 h-6" />
+									<XClose className="size-6" />
 								</Button>
 							</DrawerClose>
 						</DrawerTitle>

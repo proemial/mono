@@ -5,6 +5,7 @@ import {
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
 import { routes } from "@/routes";
+import { Button } from "@proemial/shadcn-ui";
 import { ChevronLeft } from "@untitled-ui/icons-react";
 import { useParams, useRouter } from "next/navigation";
 
@@ -25,8 +26,14 @@ export const GoToSpaceAction = () => {
 	};
 
 	return (
-		<div className="p-1 cursor-pointer" onClick={handleAction}>
+		<Button
+			variant="ghost"
+			type="button"
+			size="icon"
+			className="-ml-3"
+			onClick={handleAction}
+		>
 			<ChevronLeft className="size-5" />
-		</div>
+		</Button>
 	);
 };
