@@ -73,7 +73,13 @@ export default function FeedItem({
 
 			{children}
 
-			<div className="flex gap-2 overflow-x-auto scrollbar-hide">
+			<div
+				className="flex gap-2 scrollbar-hide overflow-x-auto w-[calc(100%+12px)] -mx-[12px] pl-[12px]"
+				style={{
+					maskImage:
+						"linear-gradient(to right, transparent 0px, black 12px, black calc(100% - 12px), transparent 100%)",
+				}}
+			>
 				{!fingerprint &&
 					tags?.map((tag) => <FeedItemTag key={tag} tag={tag} />)}
 
@@ -122,11 +128,11 @@ function FeatureTags({ features }: { features: RankedPaperFeature[] }) {
 	}
 
 	return (
-		<div className="flex flex-row gap-2 overflow-x-auto scrollbar-hide">
+		<>
 			{deduped.slice(0, 3).map((feature) => (
 				<FeedItemTag key={feature.id} tag={feature.label} />
 			))}
-		</div>
+		</>
 	);
 }
 
