@@ -1,4 +1,4 @@
-// https://api.openalex.org/fields?select=id,display_name,domain,works_count&sort=domain.id,works_count:desc (Last fetch 2024-02-09)
+// https://api.openalex.org/fields?per_page=30&select=id,display_name,domain,works_count&sort=domain.id,works_count:desc (Last fetch 2024-02-09)
 // Re-ordered manually by domain: Physical Sciences, Health Sciences, Life Sciences, Social Sciences
 export const OaFields = [
 	{
