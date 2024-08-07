@@ -304,7 +304,7 @@ export const oaFieldConfigMap: Record<string, Field> = {
 				<path
 					d="M13.7456 9.67825H17"
 					stroke="currentColor"
-					stroke-linecap="round"
+					strokeLinecap="round"
 				/>
 				<path
 					d="M2.13818 1L3.87197 3.75404"
@@ -390,6 +390,53 @@ export const oaFieldConfigMap: Record<string, Field> = {
 					clipRule="evenodd"
 					d="M7.9949 2.85186C6.49535 1.0988 3.99481 0.627232 2.11602 2.23251C0.23723 3.83779 -0.0272721 6.52175 1.44815 8.4203C2.67487 9.99883 6.38733 13.3281 7.60408 14.4056C7.7402 14.5262 7.8083 14.5864 7.88765 14.6101C7.95695 14.6308 8.03277 14.6308 8.10207 14.6101C8.18142 14.5864 8.24953 14.5262 8.38565 14.4056C9.60238 13.3281 13.3149 9.99883 14.5416 8.4203C16.017 6.52175 15.7848 3.8209 13.8737 2.23251C11.9626 0.644121 9.49438 1.0988 7.9949 2.85186Z"
 					stroke="currentColor"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				/>
+			</svg>
+		),
+	},
+	"https://openalex.org/fields/34": {
+		displayName: "Veterinary",
+		theme: {
+			image: "paint",
+			color: "green",
+		},
+		icon: (
+			<svg
+				width="14"
+				height="14"
+				viewBox="0 0 14 14"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path
+					d="M1.5 8.5C2.05228 8.5 2.5 7.82843 2.5 7C2.5 6.17157 2.05228 5.5 1.5 5.5C0.947715 5.5 0.5 6.17157 0.5 7C0.5 7.82843 0.947715 8.5 1.5 8.5Z"
+					stroke="black"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				/>
+				<path
+					d="M4.5 4C5.05228 4 5.5 3.32843 5.5 2.5C5.5 1.67157 5.05228 1 4.5 1C3.94772 1 3.5 1.67157 3.5 2.5C3.5 3.32843 3.94772 4 4.5 4Z"
+					stroke="black"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				/>
+				<path
+					d="M9.5 4C10.0523 4 10.5 3.32843 10.5 2.5C10.5 1.67157 10.0523 1 9.5 1C8.94772 1 8.5 1.67157 8.5 2.5C8.5 3.32843 8.94772 4 9.5 4Z"
+					stroke="black"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				/>
+				<path
+					d="M12.5 8.5C13.0523 8.5 13.5 7.82843 13.5 7C13.5 6.17157 13.0523 5.5 12.5 5.5C11.9477 5.5 11.5 6.17157 11.5 7C11.5 7.82843 11.9477 8.5 12.5 8.5Z"
+					stroke="black"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				/>
+				<path
+					d="M10 9C10 10.38 8.38 11 7 11C5.62 11 4 10.38 4 9C4 7.62 5 5.5 7 5.5C9 5.5 10 7.62 10 9Z"
+					stroke="black"
 					strokeLinecap="round"
 					strokeLinejoin="round"
 				/>
