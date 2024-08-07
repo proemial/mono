@@ -119,6 +119,15 @@ export const OaFields = [
 		works_count: 982151,
 	},
 	{
+		id: 34,
+		display_name: "Veterinary",
+		domain: {
+			id: 4,
+			display_name: "Health Sciences",
+		},
+		works_count: 355227,
+	},
+	{
 		id: 35,
 		display_name: "Dentistry",
 		domain: {
