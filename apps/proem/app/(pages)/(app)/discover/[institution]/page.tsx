@@ -46,7 +46,7 @@ export default async function DiscoverPage({
 				<SimpleHeader title="For You" />
 			</NavBar>
 			<Main>
-				<div className="space-y-6">
+				<div className="pt-16 space-y-6">
 					{institutions?.results?.length > 0 && (
 						<Feed
 							filter={{ institution: institutions.results.at(0)?.id }}
