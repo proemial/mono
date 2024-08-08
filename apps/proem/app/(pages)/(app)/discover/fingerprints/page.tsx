@@ -14,7 +14,7 @@ import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/featu
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Feed } from "../feed";
+import { Feed } from "../../space/(discover)/feed";
 import { AutocompleteInput } from "./autocomplete-input";
 
 export const metadata: Metadata = {
@@ -49,9 +49,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 		const history = await getBookmarksAndHistory();
 		if (history?.length) {
 			redirect(
-				`${routes.space}/fingerprints?ids=${history
-					.flatMap((i) => i)
-					.join(",")}`,
+				`/discover/fingerprints?ids=${history.flatMap((i) => i).join(",")}`,
 			);
 		}
 	}
@@ -73,7 +71,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 				)}
 			</NavBar>
 			<Main>
-				<div className="space-y-6">
+				<div className="pt-8 space-y-6">
 					<Feed
 						filter={{ features: filter, days: params.days }}
 						debug={!searchParams?.clean}

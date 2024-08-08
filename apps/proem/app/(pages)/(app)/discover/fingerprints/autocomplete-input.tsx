@@ -50,7 +50,7 @@ export function AutocompleteInput() {
 	const handleChange = (value: Option[]) => {
 		const filter = value.map((v) => v.value.split("/").at(-1)).join(",");
 		router.replace(
-			`/space/fingerprints?${AUTOCOMPLETE_QUERY_STRING}=${filter}`,
+			`/discover/fingerprints?${AUTOCOMPLETE_QUERY_STRING}=${filter}`,
 		);
 	};
 
