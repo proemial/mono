@@ -58,7 +58,7 @@ export default async function DiscoverPage({
 					title={institutions?.results.at(0)?.display_name ?? institution}
 				/>
 			</NavBar>
-			<Main>
+			<Main className="z-0">
 				<div className="pt-16 space-y-6">
 					{institutions?.results?.length > 0 && (
 						<Feed
