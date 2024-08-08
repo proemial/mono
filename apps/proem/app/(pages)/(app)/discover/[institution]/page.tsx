@@ -8,6 +8,20 @@ import { auth } from "@clerk/nextjs/server";
 import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
 import { fetchJson } from "@proemial/utils/fetch";
 import Link from "next/link";
+import { getRandomThemeColor, Theme } from "@/app/theme/color-theme";
+
+const themeMappings: { [name: string]: Theme } = {
+	nvidia: { color: "green", image: "silicon" },
+	zeiss: { color: "purple", image: "fingerprint" },
+	novo: { color: "purple", image: "fingerprint" },
+	google: { color: "gold", image: "silicon" },
+};
+
+function themeFor(institution: string): Theme {
+	return Object.keys(themeMappings).includes(institution)
+		? (themeMappings[institution as keyof typeof themeMappings] as Theme)
+		: getRandomThemeColor(institution);
+}
 
 export default async function DiscoverPage({
 	params,
@@ -17,6 +31,7 @@ export default async function DiscoverPage({
 	};
 }) {
 	const { userId } = auth();
+	const { institution } = params;
 
 	const bookmarks = (await userId)
 		? getBookmarksByCollectionId(userId as string)
@@ -33,13 +48,15 @@ export default async function DiscoverPage({
 	};
 
 	const institutions = await fetchJson<InstitutionResponse>(
-		`https://api.openalex.org/institutions?filter=display_name.search:${params.institution}&select=id,display_name,works_count,counts_by_year`,
+		`https://api.openalex.org/institutions?filter=display_name.search:${institution}&select=id,display_name,works_count,counts_by_year`,
 	);
 
 	return (
 		<>
-			<NavBar action={<OpenSearchAction />}>
-				<SimpleHeader title="For You" />
+			<NavBar action={<OpenSearchAction />} theme={themeFor(institution)}>
+				<SimpleHeader
+					title={institutions?.results.at(0)?.display_name ?? institution}
+				/>
 			</NavBar>
 			<Main>
 				<div className="pt-16 space-y-6">
@@ -52,13 +69,15 @@ export default async function DiscoverPage({
 								<>
 									{institutions?.results?.length > 0 && (
 										<div>
-											Showing{" "}
 											{institutions.results.at(0)?.works_count.toLocaleString()}{" "}
-											papers from {institutions.results.at(0)?.display_name}
+											papers authored by individuals affiliated with{" "}
+											<span className="font-bold italic">
+												{institutions.results.at(0)?.display_name}
+											</span>
 										</div>
 									)}
 									{institutions?.results?.length > 1 && (
-										<div className="text-xs italic">
+										<div className="text-xs">
 											Did you mean:
 											{institutions.results.slice(1).map((institution) => (
 												<Link

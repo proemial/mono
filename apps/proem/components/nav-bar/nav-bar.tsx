@@ -2,11 +2,7 @@
 
 import { screenMaxWidth } from "@/app/constants";
 import { Profile } from "@/app/profile/profile";
-import {
-	ThemeColor,
-	ThemePatterns,
-	getRandomThemeColor,
-} from "@/app/theme/color-theme";
+import { Theme, asTheme, fromSeed } from "@/app/theme/color-theme";
 import { SetThemeColor } from "@/components/set-theme-color";
 import { ThemeBackgroundImage } from "@/components/theme-background-image";
 import { routes } from "@/routes";
@@ -36,9 +32,14 @@ type Props = {
 	 * e.g. an icon button.
 	 */
 	action?: ReactNode;
+
+	/**
+	 * Explicit seed text.
+	 */
+	theme?: Theme;
 };
 
-export const NavBar = ({ menu, children, action }: Props) => {
+export const NavBar = ({ menu, children, action, theme }: Props) => {
 	console.log(menu);
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
@@ -47,18 +48,16 @@ export const NavBar = ({ menu, children, action }: Props) => {
 	const params = useParams<{ id?: string; collectionId?: string }>();
 	const isReaderPage = params.id && pathname.includes(routes.paper);
 	const seed = params.collectionId ?? "";
-	const theme = themeColor
-		? {
-				color: themeColor as ThemeColor,
-				image: themeImage as ThemePatterns,
-			}
-		: seed.includes("col_")
-			? getRandomThemeColor(seed)
-			: null;
+
+	const activeTheme = theme
+		? theme
+		: themeColor
+			? asTheme(themeColor, themeImage)
+			: fromSeed(seed);
 
 	return (
 		<>
-			{theme && <SetThemeColor color={theme.color} />}
+			{activeTheme && <SetThemeColor color={activeTheme.color} />}
 
 			<NavigationMenu className="z-20 bg-transparent">
 				<div
@@ -68,10 +67,10 @@ export const NavBar = ({ menu, children, action }: Props) => {
 							"linear-gradient(black 0px, black 54px, transparent 72px)",
 					}}
 				>
-					{theme?.image && (
+					{activeTheme?.image && (
 						<ThemeBackgroundImage
 							className="opacity-75"
-							pattern={theme.image}
+							pattern={activeTheme.image}
 						/>
 					)}
 				</div>
@@ -87,7 +86,7 @@ export const NavBar = ({ menu, children, action }: Props) => {
 				</NavigationMenuList>
 			</NavigationMenu>
 
-			{theme && (
+			{activeTheme && (
 				<div
 					className="w-full h-72 -top-40 -mt-[72px] left-0 sticky -mb-36"
 					style={{
@@ -108,10 +107,10 @@ export const NavBar = ({ menu, children, action }: Props) => {
 									"linear-gradient(to bottom, black 0px , black 72px, transparent)",
 							}}
 						>
-							{theme.image && (
+							{activeTheme.image && (
 								<ThemeBackgroundImage
 									className="opacity-75"
-									pattern={theme.image}
+									pattern={activeTheme.image}
 								/>
 							)}
 						</div>

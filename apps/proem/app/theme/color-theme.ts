@@ -74,3 +74,14 @@ export const customColorThemeStaticFallback = {
 	rose: "rgb(173, 150, 162)",
 	gold: "rgb(178, 166, 148)",
 };
+
+export function asTheme(themeColor: string, themeImage?: string | null) {
+	return {
+		color: themeColor as ThemeColor,
+		image: themeImage as ThemePatterns,
+	};
+}
+
+export function fromSeed(seed: string) {
+	return seed.includes("col_") ? getRandomThemeColor(seed) : null;
+}
