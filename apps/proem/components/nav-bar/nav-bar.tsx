@@ -34,7 +34,7 @@ type Props = {
 	action?: ReactNode;
 
 	/**
-	 * Explicit seed text.
+	 * Explicit theme.
 	 */
 	theme?: Theme;
 };
