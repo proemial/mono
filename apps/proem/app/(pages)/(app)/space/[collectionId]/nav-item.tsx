@@ -10,8 +10,8 @@ export const NavItem = ({ href, title }: { href: string; title: string }) => {
 	return (
 		<Link
 			href={href}
-			className={cn("text-sm px-5 py-1.5 duration-200", {
-				"font-semibold bg-primary rounded-full": isActive,
+			className={cn("text-base px-5 py-1.5 bg-theme-200/30 rounded-full", {
+				"bg-theme-900 text-white": isActive,
 			})}
 		>
 			<div>{title}</div>

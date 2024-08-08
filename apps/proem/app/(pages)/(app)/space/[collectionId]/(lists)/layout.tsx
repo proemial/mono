@@ -44,7 +44,7 @@ export default async function ({ params: { collectionId }, children }: Props) {
 				</div>
 			)}
 
-			<div className="flex items-center justify-center gap-1">
+			<div className="flex gap-2 pt-2">
 				<NavItem href={`${routes.space}/${collection.id}`} title="Latest" />
 				<NavItem
 					href={`${routes.space}/${collection.id}/saved`}
