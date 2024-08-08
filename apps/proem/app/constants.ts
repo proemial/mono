@@ -5,6 +5,10 @@ export const screenMaxWidthOrgManagement = "max-w-screen-lg";
 
 export const PAPER_BOT_USER_ID = "paper_bot";
 export const PERSONAL_DEFAULT_COLLECTION_NAME = "For You";
+
+/**
+ * Empty personal default collection fallback for users without a collection in the database
+ */
 export const getPersonalDefaultCollection = (userId: string) =>
 	({
 		id: userId,
