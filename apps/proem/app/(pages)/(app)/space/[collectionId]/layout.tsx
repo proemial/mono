@@ -13,7 +13,7 @@ type PageProps = CollectionIdParams & {
 	children: ReactNode;
 };
 
-export default async function ({
+export default async function SpaceLayout({
 	params: { collectionId },
 	children,
 }: PageProps) {
@@ -42,15 +42,8 @@ export default async function ({
 
 	return (
 		<>
-			<NavBar action={<ToggleSearchAction />}>
-				<SelectSpaceHeader
-					collections={[
-						// Put the user's default space first
-						...combinedCollections.filter((c) => c.id === userId),
-						...combinedCollections.filter((c) => c.id !== userId),
-					]}
-					userId={userId}
-				/>
+			<NavBar {...getActionMenuByPageUrl("sdf")}>
+				<SelectSpaceHeader collections={combinedCollections} userId={userId} />
 			</NavBar>
 			<Main className="pt-0">{children}</Main>
 		</>
