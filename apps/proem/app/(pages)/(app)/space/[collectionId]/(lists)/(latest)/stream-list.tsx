@@ -105,6 +105,9 @@ function DebugInfo({ count }: { count?: number }) {
 				<div>
 					<FeatureBadge variant="concept">concept</FeatureBadge>
 				</div>
+				<div>
+					<FeatureBadge variant="disabled">skipped</FeatureBadge>
+				</div>
 			</div>
 			<div>
 				{Boolean(count) && (

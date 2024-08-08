@@ -4,13 +4,9 @@ import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-actio
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { NavBar } from "@/components/nav-bar/nav-bar";
 import { ProemAssistant } from "@/components/proem-assistant";
-import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
 import { fetchJson } from "@proemial/utils/fetch";
-import { FeatureBadge } from "@/components/feature-badges";
-import { Badge } from "@proemial/shadcn-ui/components/ui/badge";
 import Link from "next/link";
 
 export default async function DiscoverPage({

@@ -53,15 +53,15 @@ export function FeatureBadge({ children, score, variant }: BadgeProps) {
 }
 
 const badgeStyle = cva(
-	"m-[1px] cursor-default", // hover:bg-opacity-80 cursor-pointer
+	"m-[1px] cursor-default text-gray-800", // hover:bg-opacity-80 cursor-pointer
 	{
 		variants: {
 			variant: {
-				default: "hover:bg-white bg-white text-gray-800 rounded-sm mr-2 px-1",
-				topic: "hover:bg-gray-300 bg-gray-300 text-gray-600",
-				keyword: "hover:bg-orange-200 bg-orange-200 text-gray-800",
-				concept: "hover:bg-purple-200 bg-purple-200 text-gray-800",
-				disabled: "hover:bg-gray-100 bg-gray-100 text-gray-300",
+				default: "hover:bg-white bg-white rounded-sm mr-2 px-1",
+				topic: "hover:bg-lime-600 bg-lime-600",
+				keyword: "hover:bg-amber-600 bg-amber-600",
+				concept: "hover:bg-rose-500 bg-rose-500",
+				disabled: "hover:bg-gray-300 bg-gray-300",
 			},
 		},
 		defaultVariants: {
