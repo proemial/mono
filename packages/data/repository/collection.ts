@@ -2,14 +2,14 @@ import { and, asc, eq, inArray, isNull, ne, or } from "drizzle-orm";
 import { neonDb } from "..";
 import {
 	Collection,
+	NewCollection,
 	collections,
 	collectionsToPapers,
-	NewCollection,
 } from "../neon/schema";
 
 export async function findAvailableCollections(
 	userId: string,
-	orgId: string | undefined,
+	orgId?: string | null,
 ) {
 	const results = await neonDb.query.collections.findMany({
 		where: or(
