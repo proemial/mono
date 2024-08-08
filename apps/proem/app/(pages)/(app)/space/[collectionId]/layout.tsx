@@ -42,7 +42,7 @@ export default async function SpaceLayout({
 
 	return (
 		<>
-			<NavBar {...getActionMenuByPageUrl("sdf")}>
+			<NavBar action={<ToggleSearchAction />}>
 				<SelectSpaceHeader collections={combinedCollections} userId={userId} />
 			</NavBar>
 			<Main className="pt-0">{children}</Main>
