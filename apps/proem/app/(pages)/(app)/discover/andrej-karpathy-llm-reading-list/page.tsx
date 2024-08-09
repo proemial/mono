@@ -1,7 +1,5 @@
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { Main } from "@/components/main";
-import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
-import { NavBar } from "@/components/nav-bar/nav-bar";
 import { PostService } from "@/services/post-service";
 import { auth } from "@clerk/nextjs";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
