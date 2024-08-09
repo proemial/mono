@@ -65,8 +65,11 @@ export const fetchPapersByField = async (
 		"type:types/preprint|types/article",
 		"has_abstract:true",
 		`from_created_date:${twoWeeksAgo}`,
-		`created_date_date:>${twoWeeksAgo}`, // We do not want old papers that were added recently
-		`created_date_date:<${today}`, // We do not want papers published in the future
+
+		// Should have been `created_date`, but OpenAlex does not allow filtering on that field (also in fetch-by-features.ts)
+		// `created_date:>${twoWeeksAgo}`, // We do not want old papers that were added recently
+		// `created_date:<${today}`, // We do not want papers published in the future
+
 		"language:en",
 		"open_access.is_oa:true",
 		field ? `primary_topic.field.id:${field}` : undefined,
