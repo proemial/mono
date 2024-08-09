@@ -89,7 +89,7 @@ export function TopNavigation() {
 					<NavigationMenuItem className="truncate">
 						{title ? (
 							<SimpleHeader title={title} />
-						) : (
+						) : userId ? (
 							<SelectSpaceHeader
 								collections={collections ?? []}
 								selectedSpace={selectedSpace}
@@ -97,8 +97,9 @@ export function TopNavigation() {
 									startTransition(() => setOptimisticUrl(url))
 								}
 							/>
+						) : (
+							<SimpleHeader title="For You" />
 						)}
-						{/* {children} */}
 					</NavigationMenuItem>
 					<NavigationMenuItem>
 						{action ?? <CloseAction target={routes.home} />}

@@ -3,13 +3,7 @@ import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { FeatureCloud } from "@/components/feature-badges";
 import { Main } from "@/components/main";
-import { CloseAction } from "@/components/nav-bar/actions/close-action";
-import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
-import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
-import { NavBar } from "@/components/nav-bar/nav-bar";
-import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs";
-import { findCollectionsByOwnerId } from "@proemial/data/repository/collection";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { Metadata } from "next";
@@ -59,30 +53,20 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 		fingerprints,
 		searchParams?.weights,
 	);
-	const userCollections = userId ? await findCollectionsByOwnerId(userId) : [];
 
 	return (
-		<>
-			<NavBar action={<CloseAction target={routes.space} />}>
-				{userCollections.length > 0 ? (
-					<SelectSpaceHeader collections={userCollections} userId={userId} />
-				) : (
-					<SimpleHeader title="For You" />
-				)}
-			</NavBar>
-			<Main>
-				<div className="pt-8 space-y-6">
-					<Feed
-						filter={{ features: filter, days: params.days }}
-						debug={!searchParams?.clean}
-						nocache={searchParams?.nocache}
-						bookmarks={bookmarks}
-					>
-						<AutocompleteInput />
-						{!searchParams?.clean && <FeatureCloud features={allFeatures} />}
-					</Feed>
-				</div>
-			</Main>
-		</>
+		<Main>
+			<div className="pt-8 space-y-6">
+				<Feed
+					filter={{ features: filter, days: params.days }}
+					debug={!searchParams?.clean}
+					nocache={searchParams?.nocache}
+					bookmarks={bookmarks}
+				>
+					<AutocompleteInput />
+					{!searchParams?.clean && <FeatureCloud features={allFeatures} />}
+				</Feed>
+			</div>
+		</Main>
 	);
 }
