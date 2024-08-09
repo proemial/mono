@@ -2,7 +2,7 @@
 import { getPersonalDefaultCollection, screenMaxWidth } from "@/app/constants";
 import { getAvailableCollections } from "@/app/profile/actions";
 import { Profile } from "@/app/profile/profile";
-import { fromSeed } from "@/app/theme/color-theme";
+import { asTheme, fromSeed } from "@/app/theme/color-theme";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
@@ -42,7 +42,8 @@ export function TopNavigation() {
 	// const isReaderPage = params.id && pathname.includes(routes.paper);
 	const seed = params.collectionId ?? "";
 
-	const { action, title, menu } = getTopNavigationContentByUrl(optimisticUrl);
+	const { action, title, menu, theme } =
+		getTopNavigationContentByUrl(optimisticUrl);
 
 	const collectionsWithDefaultFallback = ensureDefaultCollection(
 		collections ?? [],
@@ -53,15 +54,14 @@ export function TopNavigation() {
 		params.collectionId ?? collectionsWithDefaultFallback.at(0)?.id;
 
 	// TODO! This doesn't work work with the clientside cachce as it's instant
-	const activeTheme = fromSeed(pathname);
-	const optimisticTheme = fromSeed(optimisticUrl);
-	// const activeTheme = theme
-	// 	? theme
-	// 	: themeColor
-	// 	: themeColor
-	// 		? asTheme(themeColor, themeImage)
-	// 		: fromSeed(seed);
-	console.log(activeTheme?.image);
+	// const activeTheme = fromSeed(pathname);
+	// const optimisticTheme = fromSeed(optimisticUrl);
+	const activeTheme = theme
+		? theme
+		: themeColor
+			? asTheme(themeColor, themeImage)
+			: fromSeed(seed);
+
 	return (
 		<>
 			{activeTheme && <SetThemeColor color={activeTheme.color} />}

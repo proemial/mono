@@ -1,4 +1,5 @@
 import { MenuButton } from "@/app/profile/menu-button";
+import { Theme, themeForInstitution } from "@/app/theme/color-theme";
 import { ActionMenu } from "@/components/nav-bar/actions/action-menu";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { GoToSpaceAction } from "@/components/nav-bar/actions/go-to-space-action";
@@ -24,6 +25,7 @@ type TopNavigationContent = {
 	 * defaults to close action back to home
 	 */
 	action?: JSX.Element;
+	theme?: Theme;
 };
 export function getTopNavigationContentByUrl(
 	url: string,
@@ -100,7 +102,7 @@ export function getTopNavigationContentByUrl(
 			title: "For You",
 			action: (
 				<ActionMenu>
-					<SignInDrawer trigger=<div>View saved items</div> />
+					<SignInDrawer trigger={<div>View saved items</div>} />
 				</ActionMenu>
 			),
 		};
@@ -113,10 +115,9 @@ export function getTopNavigationContentByUrl(
 			action: <CloseAction target={routes.space} />,
 		};
 	}
-	// org-management /org  <CloseAction target={routes.space} />
 	if (url.includes("/org")) {
 		// start with?
-		return { action: <CloseAction target={routes.space} /> };
+		return { title: "Organization Management" };
 	}
 
 	if (url.includes("/blocked")) {
@@ -161,6 +162,17 @@ export function getTopNavigationContentByUrl(
 			return { action: <CloseAction target={routes.space} /> };
 		}
 
+		// Institution page
+		if (url.includes("/discover/")) {
+			const institution = url.split("/").at(-1);
+			const shortName = institution?.split("(")[0] ?? institution;
+			return {
+				// TODO!: find a better way to do this
+				title: shortName,
+				action: <OpenSearchAction />,
+				theme: institution && themeForInstitution(institution),
+			};
+		}
 		return { action: <OpenSearchAction /> };
 	}
 
