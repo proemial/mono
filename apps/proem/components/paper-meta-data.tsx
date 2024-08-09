@@ -34,7 +34,9 @@ export const PaperMetaData = ({
 		<div className="flex items-center justify-between gap-2">
 			<FeedItemField topics={topics} />
 			<div className="flex items-center">
-				<div className="uppercase text-2xs text-nowrap">{formatDate(date)}</div>
+				<div className="uppercase text-2xs text-nowrap">
+					{formatDate(date, "relative")}
+				</div>
 				<div
 					className="-mr-2 min-h-10 min-w-10"
 					onClick={(event) => {
