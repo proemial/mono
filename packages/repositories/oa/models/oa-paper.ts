@@ -49,7 +49,10 @@ export type OpenAlexWorkCoreMetadata = {
 	ids: {
 		[K in PaperId]?: string;
 	};
-	publication_date: string;
+
+	// @deprecated
+	publication_date?: string;
+
 	created_date: string;
 	title: string;
 	language: string;

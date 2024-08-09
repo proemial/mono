@@ -41,8 +41,11 @@ export function ChatArticle({
 					{type === "Paper Summary" ? (
 						<PaperMetaData
 							topics={paper.data.topics}
-							// Fall back to updated_date for backwards compatibility
-							date={paper.data.created_date || paper.data.updated_date}
+							// Fall back to publication_date for backwards compatibility
+							date={
+								paper.data.created_date ||
+								(paper.data.publication_date as string)
+							}
 							readonly={false}
 							isBookmarked={isBookmarked}
 							id={paper.id}
