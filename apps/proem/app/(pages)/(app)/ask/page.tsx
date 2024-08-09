@@ -2,11 +2,7 @@ import { ChatInput } from "@/components/chat-input";
 import { ProemLogo } from "@/components/icons/brand/logo";
 import { Main } from "@/components/main";
 import { MoodSelector } from "@/components/mood-selector";
-import { CloseAction } from "@/components/nav-bar/actions/close-action";
-import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
-import { NavBar } from "@/components/nav-bar/nav-bar";
 import { Suggestions } from "@/components/suggestions";
-import { routes } from "@/routes";
 import { Metadata } from "next";
 import { getThreeRandomStarters } from "./starters";
 

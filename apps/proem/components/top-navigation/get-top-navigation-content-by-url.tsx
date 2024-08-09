@@ -110,10 +110,8 @@ export function getTopNavigationContentByUrl(
 		return { action: <CloseAction target={routes.space} /> };
 	}
 
-	// BLOCKED /blocked	<CloseAction target={routes.home} /j>
 	if (url.includes("/blocked")) {
-		// start with?
-		return { action: <CloseAction target={routes.space} /> };
+		return { title: "Request Blocked" };
 	}
 
 	// ASK / ask	<CloseAction target={routes.space} />
