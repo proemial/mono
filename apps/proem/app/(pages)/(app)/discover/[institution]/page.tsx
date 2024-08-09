@@ -8,14 +8,9 @@ import { auth } from "@clerk/nextjs/server";
 import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
 import { fetchJson } from "@proemial/utils/fetch";
 import { getRandomThemeColor, Theme } from "@/app/theme/color-theme";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "@proemial/shadcn-ui/components/ui/dropdown-menu";
 import { OrgSelector } from "./org-selector";
+import { Button, cn } from "@proemial/shadcn-ui";
+import { FollowButton } from "./follow";
 
 const themeMappings: { [name: string]: Theme } = {
 	nvidia: { color: "green", image: "silicon" },
@@ -63,7 +58,13 @@ export default async function DiscoverPage({
 	const name = institutions?.at(0)?.display_name ?? institution;
 	const shortName = name.split("(")[0] ?? name;
 
-	// Papers authored by individuals affiliated with Amazon (United States).
+	const header = (
+		<div className="mt-2 flex flex-row justify-between items-center">
+			{institutions?.at(0)?.works_count} papers published
+			<FollowButton id={institutions?.at(0)?.id as string} />
+		</div>
+	);
+
 	return (
 		<>
 			<NavBar action={<OpenSearchAction />} theme={themeFor(institution)}>
@@ -75,6 +76,7 @@ export default async function DiscoverPage({
 						<Feed
 							filter={{ institution: institutions.at(0)?.id }}
 							bookmarks={bookmarks}
+							header={header}
 						>
 							<OrgSelector institutions={institutions} selected={name} />
 						</Feed>

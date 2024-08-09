@@ -32,6 +32,7 @@ type FeedProps = {
 	};
 	nocache?: boolean;
 	bookmarks: Bookmarks;
+	header?: ReactNode;
 };
 
 export function Feed({
@@ -40,6 +41,7 @@ export function Feed({
 	debug,
 	nocache,
 	bookmarks,
+	header,
 }: FeedProps) {
 	const { topic, features, days, institution } = filter;
 	console.log("Feed", filter);
@@ -47,7 +49,7 @@ export function Feed({
 	return (
 		<div className="space-y-5 pb-10 -mt-10">
 			<div>{children}</div>
-
+			{header}
 			<InfinityScrollList
 				queryKey={
 					filter.topic
