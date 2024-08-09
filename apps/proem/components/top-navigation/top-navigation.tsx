@@ -86,7 +86,7 @@ export function TopNavigation() {
 							<SimpleHeader title={title} />
 						) : userId ? (
 							<SelectSpaceHeader
-								collections={collections ?? []}
+								collections={collectionsWithDefaultFallback}
 								selectedSpace={selectedSpace}
 								onRouteChange={(url) =>
 									startTransition(() => setOptimisticUrl(url))
