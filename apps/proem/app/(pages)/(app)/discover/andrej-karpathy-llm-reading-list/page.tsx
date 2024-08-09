@@ -35,24 +35,18 @@ export default async function AndrejKarpathyLLMReadingList() {
 	);
 
 	return (
-		<>
-			<NavBar action={<OpenSearchAction />}>
-				<div className="truncate">Andrej Karpathy's LLM Reading List</div>
-			</NavBar>
-			<Main>
-				<div className="space-y-6">
-					<StaticFeed
-						feed={feed.map((paper) => ({
-							...paper,
-							posts:
-								papersWithPosts.find((p) => p.id === paper.id)?.posts ?? [],
-						}))}
-						bookmarks={bookmarks}
-					>
-						Andrej Karpathy's LLM Reading List
-					</StaticFeed>
-				</div>
-			</Main>
-		</>
+		<Main>
+			<div className="space-y-6">
+				<StaticFeed
+					feed={feed.map((paper) => ({
+						...paper,
+						posts: papersWithPosts.find((p) => p.id === paper.id)?.posts ?? [],
+					}))}
+					bookmarks={bookmarks}
+				>
+					Andrej Karpathy's LLM Reading List
+				</StaticFeed>
+			</div>
+		</Main>
 	);
 }

@@ -136,13 +136,16 @@ export function getTopNavigationContentByUrl(
 		return { title: "Ask", action: <CloseAction target={routes.space} /> };
 	}
 
-	// app/share <CloseAction target={routes.space} />
 	if (url.includes("/share")) {
 		return { title: "Ask", action: <CloseAction target={routes.space} /> };
 	}
-	// app/discover <OpenSearchAction />
-	// app/discover/hugs <OpenSearchAction />
 	if (url.includes("/discover")) {
+		if (url.includes("/andrej-karpathy-llm-reading-list")) {
+			return {
+				title: "Andrej Karpathy's LLM Reading List",
+				action: <OpenSearchAction />,
+			};
+		}
 		if (url.includes("/hugs")) {
 			return { title: "A hugging tribute to AK", action: <OpenSearchAction /> };
 		}
