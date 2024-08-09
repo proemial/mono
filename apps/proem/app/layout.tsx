@@ -5,6 +5,7 @@ import { AuthProvider } from "@/components/providers/auth-provider";
 import { ReactQueryProvider } from "@/components/providers/react-query";
 import { SetActiveOrganization } from "@/components/set-active-organization";
 import "@/env";
+import { TopNavigation } from "@/components/top-navigation/top-navigation";
 import { cn } from "@proemial/shadcn-ui";
 import { Metadata, Viewport } from "next";
 import { Lato as FontSans } from "next/font/google";
@@ -98,6 +99,7 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 										screenMaxWidth,
 									)}
 								>
+									<TopNavigation />
 									{children}
 									{modal}
 								</div>

@@ -1,0 +1,152 @@
+import { ActionMenu } from "@/components/nav-bar/actions/action-menu";
+import { CloseAction } from "@/components/nav-bar/actions/close-action";
+import { GoToSpaceAction } from "@/components/nav-bar/actions/go-to-space-action";
+import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
+import { routes } from "@/routes";
+import Link from "next/link";
+
+type TopNavigationContent = {
+	/**
+	 * The menu to be displayed in the nav bar
+	 * defaults to the main menu
+	 */
+	menu?: JSX.Element;
+	/**
+	 * The title to be displayed in the nav bar
+	 * defaults to the space selector
+	 */
+	title?: string;
+	/**
+	 * The action to be displayed in the nav bar
+	 * defaults to close action back to home
+	 */
+	action?: JSX.Element;
+};
+export function getTopNavigationContentByUrl(
+	url: string,
+): TopNavigationContent {
+	console.log(url);
+
+	if (url.includes("/space")) {
+		// All papers inside space
+		if (url.includes("/paper")) {
+			return {
+				menu: <GoToSpaceAction />,
+				action: (
+					<ActionMenu>
+						<Link href={`${url}/saved`}>Save Paper</Link>
+						{/* <Link href={url.replace("/paper", "/search")}>Search</Link> */}
+					</ActionMenu>
+				),
+			};
+		}
+		// "For you" feed for logged in users
+		if (url.includes("/user_")) {
+			// Saved bookmarks
+			if (url.includes("/saved")) {
+				return {
+					action: (
+						<ActionMenu>
+							<Link href={url.replace("/saved", "")}>View Latest Items</Link>
+						</ActionMenu>
+					),
+				};
+			}
+			return {
+				action: (
+					<ActionMenu>
+						<Link href={`${url}/saved`}>View Saved Items</Link>
+					</ActionMenu>
+				),
+			};
+		}
+
+		// Collection space
+		if (url.includes("/col_")) {
+			// Collections bookmarks
+			if (url.includes("/search")) {
+				return {
+					action: <CloseAction target={url.replace("/search", "")} />,
+				};
+			}
+
+			// Discover/latest feed
+			return {
+				action: (
+					<ActionMenu>
+						<Link href={`${url}/search`}>Search</Link>
+					</ActionMenu>
+				),
+			};
+		}
+
+		// All papers
+		if (url.includes("/paper")) {
+			return {
+				menu: <GoToSpaceAction />,
+				action: <CloseAction target={routes.space} />,
+			};
+		}
+
+		// "For you" feed for anonymous users
+		// app/space SignInDrawer + SignInDrawer
+		// app/space/new <CloseAction target={routes.space} />
+		return {
+			title: "For You",
+			action: (
+				<ActionMenu>
+					<div>
+						<Link href="/">1</Link>
+					</div>
+				</ActionMenu>
+			),
+		};
+	}
+
+	// org-management /org  <CloseAction target={routes.space} />
+	if (url.includes("/org")) {
+		// start with?
+		return { action: <CloseAction target={routes.space} /> };
+	}
+
+	// BLOCKED /blocked	<CloseAction target={routes.home} /j>
+	if (url.includes("/blocked")) {
+		// start with?
+		return { action: <CloseAction target={routes.space} /> };
+	}
+
+	// ASK / ask	<CloseAction target={routes.space} />
+	if (url.includes("/ask")) {
+		// start with?
+
+		// ASK answer / ask/answer	<CloseAction target={routes.ask} />
+		if (url.includes("/answer")) {
+			return { action: <CloseAction target={routes.ask} /> };
+		}
+
+		return { title: "Ask", action: <CloseAction target={routes.space} /> };
+	}
+
+	// app/discover <OpenSearchAction />
+	// app/discover/hugs <OpenSearchAction />
+	if (url.includes("/discover")) {
+		// app/discover/fingerprints <CloseAction target={routes.space} />
+		if (url.includes("/fingerprints")) {
+			return { action: <CloseAction target={routes.space} /> };
+		}
+
+		return { action: <OpenSearchAction /> };
+	}
+
+	// app/search <CloseAction target={routes.space} />
+	if (url.includes("/search")) {
+		return { action: <CloseAction target={routes.space} /> };
+	}
+
+	// app/share <CloseAction target={routes.space} />
+	if (url.includes("/share")) {
+		return { action: <CloseAction target={routes.space} /> };
+	}
+
+	return {};
+}
