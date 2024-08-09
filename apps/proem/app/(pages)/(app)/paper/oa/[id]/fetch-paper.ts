@@ -65,15 +65,15 @@ export const fetchPapersByField = async (
 		"type:types/preprint|types/article",
 		"has_abstract:true",
 		`from_created_date:${twoWeeksAgo}`,
-		`publication_date:>${twoWeeksAgo}`, // We do not want old papers that were added recently
-		`publication_date:<${today}`, // We do not want papers published in the future
+		`created_date_date:>${twoWeeksAgo}`, // We do not want old papers that were added recently
+		`created_date_date:<${today}`, // We do not want papers published in the future
 		"language:en",
 		"open_access.is_oa:true",
 		field ? `primary_topic.field.id:${field}` : undefined,
 	]
 		.filter((f) => !!f)
 		.join(",");
-	const sort = "from_publication_date:desc,type:desc";
+	const sort = "from_created_date:desc,type:desc";
 	const url = `${oaBaseUrl}?${oaBaseArgs}&select=${select}&filter=${oaFilter}&sort=${sort}&per_page=${pageLimit}&page=${pageOffset}`;
 
 	const { meta, papers } = await fetchWithAbstract(url);
@@ -119,7 +119,7 @@ export const fetchPapersByInstitution = async (
 	const select = openAlexFields.all;
 	const oaFilter = `authorships.institutions.id:${id}`;
 
-	const sort = "from_publication_date:desc";
+	const sort = "from_created_date:desc";
 	const url = `${oaBaseUrl}?${oaBaseArgs}&select=${select}&filter=${oaFilter}&sort=${sort}&per_page=${pageLimit}&page=${pageOffset}`;
 
 	const { meta, papers } = await fetchWithAbstract(url);

@@ -7,11 +7,8 @@ import {
 import { FeedItemField } from "@/app/(pages)/(app)/space/(discover)/feed-item-field";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Trackable } from "@/components/trackable";
+import { formatDate } from "@/utils/date";
 import { OpenAlexTopic } from "@proemial/repositories/oa/models/oa-paper";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-
-dayjs.extend(relativeTime);
 
 export type PaperMetaDataProps = Pick<
 	AddToCollectionButtonProps,
@@ -37,9 +34,7 @@ export const PaperMetaData = ({
 		<div className="flex items-center justify-between gap-2">
 			<FeedItemField topics={topics} />
 			<div className="flex items-center">
-				<div className="uppercase text-2xs text-nowrap">
-					{dayjs(date).fromNow()}
-				</div>
+				<div className="uppercase text-2xs text-nowrap">{formatDate(date)}</div>
 				<div
 					className="-mr-2 min-h-10 min-w-10"
 					onClick={(event) => {

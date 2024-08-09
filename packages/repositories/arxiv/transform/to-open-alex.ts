@@ -10,7 +10,8 @@ export function toOpenAlexPapers(xml: string): OpenAlexPaperWithAbstract[] {
 		title: paper.title,
 		display_name: paper.title,
 		abstract: paper.summary,
-		publication_date: paper.published.substring(0, 10),
+		// TODO: Change to the creation date
+		created_date: paper.published.substring(0, 10),
 		publication_year: Number.parseInt(paper.published.substring(0, 4)),
 		ids: { arxiv: paper.id },
 		authorships: Array.isArray(paper.author)

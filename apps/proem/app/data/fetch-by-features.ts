@@ -127,8 +127,8 @@ async function getAllFor(filter: string, days: number, maxPages: number) {
 		"type:types/preprint|types/article",
 		"has_abstract:true",
 		`from_created_date:${from}`,
-		`publication_date:>${from}`, // We do not want old papers that were added recently
-		`publication_date:<${today}`, // We do not want papers published in the future
+		`created_date:>${from}`, // We do not want old papers that were added recently
+		`created_date:<${today}`, // We do not want papers published in the future
 		"language:en",
 		"open_access.is_oa:true",
 		"type:types/preprint|types/article",

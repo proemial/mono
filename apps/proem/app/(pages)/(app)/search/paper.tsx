@@ -23,7 +23,7 @@ export function Paper({
 		<div className="p-4 space-y-3 bg-white rounded-lg">
 			<FeedItemCard
 				id={paper.id}
-				date={paper.publication_date}
+				date={paper.created_date}
 				topics={paper.topics}
 				isBookmarked={Boolean(bookmarks?.[paper.id] ?? false)}
 				hasAbstract={!!paper.abstract_inverted_index}

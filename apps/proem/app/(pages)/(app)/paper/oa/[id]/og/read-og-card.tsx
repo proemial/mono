@@ -61,7 +61,7 @@ export function ReadOpenGraphCard({
 		},
 		{
 			icon: <Calendar {...svgProps} />,
-			label: paper.data.publication_date,
+			label: paper.data.created_date,
 		},
 	].filter((m) => !!m.label);
 

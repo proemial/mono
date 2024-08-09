@@ -41,7 +41,7 @@ export function ChatArticle({
 					{type === "Paper Summary" ? (
 						<PaperMetaData
 							topics={paper.data.topics}
-							date={paper.data.publication_date}
+							date={paper.data.created_date}
 							readonly={false}
 							isBookmarked={isBookmarked}
 							id={paper.id}

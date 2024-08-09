@@ -6,7 +6,6 @@ import {
 	oaBaseUrl,
 	openAlexFields,
 } from "@proemial/repositories/oa/models/oa-paper";
-// ,publication_date:>2023-10-16,publication_date:<2023-11-16
 import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
 import { Time } from "@proemial/utils/time";
@@ -40,7 +39,7 @@ export async function fetchPapers(q: string, config?: FetchConfig) {
 		abstract: o.abstract,
 		title: o.title,
 		metadata: config?.metadata,
-		publicationDate: o.publication_date,
+		publicationDate: o.created_date,
 	}));
 }
 
