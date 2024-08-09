@@ -30,8 +30,6 @@ type TopNavigationContent = {
 export function getTopNavigationContentByUrl(
 	url: string,
 ): TopNavigationContent {
-	console.log(url);
-
 	if (url.includes("/space")) {
 		// All papers inside space
 		if (url.includes("/paper")) {
@@ -170,7 +168,7 @@ export function getTopNavigationContentByUrl(
 				// TODO!: find a better way to do this
 				title: shortName,
 				action: <OpenSearchAction />,
-				theme: institution && themeForInstitution(institution),
+				theme: institution ? themeForInstitution(institution) : undefined,
 			};
 		}
 		return { action: <OpenSearchAction /> };

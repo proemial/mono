@@ -26,7 +26,7 @@ export function TopNavigation() {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 	const params = useParams<{ id?: string; collectionId?: string }>();
-	const { userId, orgId } = useAuth();
+	const { userId } = useAuth();
 	const { data: collections } = useQuery({
 		queryKey: ["collections", userId],
 		// TODO!: Missing public collections i'm not a part of
