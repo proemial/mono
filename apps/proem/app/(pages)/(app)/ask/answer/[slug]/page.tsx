@@ -1,14 +1,10 @@
 import { Answer } from "@/app/(pages)/(app)/ask/answer/[slug]/answer";
 import { mapAnswerToAnswerEngine } from "@/app/(pages)/(app)/ask/mapAnswerToAnswerEngine";
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
-import { answers } from "@proemial/data/repository/answer";
 import { Main } from "@/components/main";
-import { CloseAction } from "@/components/nav-bar/actions/close-action";
-import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
-import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs/server";
-import { Edit05 } from "@untitled-ui/icons-react";
+import { answers } from "@proemial/data/repository/answer";
 import { redirect } from "next/navigation";
 
 type Props = {
@@ -34,25 +30,13 @@ export default async function AnswerPage({ params: { slug } }: Props) {
 	);
 
 	return (
-		<>
-			<NavBar
-				action={
-					<CloseAction
-						target={routes.ask}
-						iconOverride={<Edit05 className="size-5" />}
-					/>
-				}
-			>
-				<SimpleHeader title="Ask" />
-			</NavBar>
-			<Main>
-				<Answer
-					existingData={existingData}
-					initialMessages={initialMessages}
-					initialSessionSlug={firstAnswer.slug}
-					bookmarks={bookmarks}
-				/>
-			</Main>
-		</>
+		<Main>
+			<Answer
+				existingData={existingData}
+				initialMessages={initialMessages}
+				initialSessionSlug={firstAnswer.slug}
+				bookmarks={bookmarks}
+			/>
+		</Main>
 	);
 }

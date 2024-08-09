@@ -3,6 +3,7 @@ import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { GoToSpaceAction } from "@/components/nav-bar/actions/go-to-space-action";
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
 import { routes } from "@/routes";
+import { Edit05 } from "@untitled-ui/icons-react";
 import Link from "next/link";
 
 type TopNavigationContent = {
@@ -121,7 +122,15 @@ export function getTopNavigationContentByUrl(
 
 		// ASK answer / ask/answer	<CloseAction target={routes.ask} />
 		if (url.includes("/answer")) {
-			return { action: <CloseAction target={routes.ask} /> };
+			return {
+				title: "Ask",
+				action: (
+					<CloseAction
+						target={routes.ask}
+						iconOverride={<Edit05 className="size-5" />}
+					/>
+				),
+			};
 		}
 
 		return { title: "Ask", action: <CloseAction target={routes.space} /> };

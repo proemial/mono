@@ -24,20 +24,8 @@ export default async function AnswerPage({ searchParams }: Props) {
 	}
 
 	return (
-		<>
-			<NavBar
-				action={
-					<CloseAction
-						target={routes.ask}
-						iconOverride={<Edit05 className="size-5" />}
-					/>
-				}
-			>
-				<SimpleHeader title="Ask" />
-			</NavBar>
-			<Main>
-				<Answer initialQuestion={initialQuestion} bookmarks={bookmarks} />
-			</Main>
-		</>
+		<Main>
+			<Answer initialQuestion={initialQuestion} bookmarks={bookmarks} />
+		</Main>
 	);
 }
