@@ -69,7 +69,7 @@ export const SelectSpaceHeader = ({
 								value={collection.id}
 								className="py-2 text-base cursor-pointer"
 							>
-								{collection.name}
+								{collection.id.includes("user_") ? "For You" : collection.name}
 							</SelectItem>
 						))}
 					</SelectGroup>
