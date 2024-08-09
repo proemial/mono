@@ -63,7 +63,7 @@ export function TopNavigation() {
 
 			<NavigationMenu className="z-20 bg-transparent">
 				<div
-					className="absolute top-0 left-0 w-full h-full overflow-hidden bg-theme-300 transition duration-1000 ease-in-out"
+					className="absolute top-0 left-0 w-full h-full overflow-hidden bg-theme-300"
 					style={{
 						maskImage:
 							"linear-gradient(black 0px, black 54px, transparent 72px)",
@@ -71,8 +71,8 @@ export function TopNavigation() {
 				>
 					{activeTheme?.image && (
 						<ThemeBackgroundImage
-							className={cn("transition-all opacity-75", {
-								"opacity-0": pending,
+							className={cn("opacity-75", {
+								// "opacity-0": pending,
 							})}
 							pattern={activeTheme.image}
 						/>
@@ -110,7 +110,7 @@ export function TopNavigation() {
 					}}
 				>
 					<div
-						className="fixed top-0 bg-theme-300 transition duration-1000 ease-in-out"
+						className="fixed top-0 bg-theme-300"
 						style={{
 							maskImage:
 								"linear-gradient(to bottom, black 0px , black 72px, transparent)",
@@ -125,8 +125,8 @@ export function TopNavigation() {
 						>
 							{activeTheme.image && (
 								<ThemeBackgroundImage
-									className={cn("transition-all opacity-75", {
-										"opacity-0": pending,
+									className={cn("opacity-75", {
+										// "opacity-0": pending,
 									})}
 									pattern={activeTheme.image}
 								/>
