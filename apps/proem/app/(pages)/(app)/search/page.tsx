@@ -23,19 +23,14 @@ export default async function SearchPage({ searchParams }: Params) {
 		: undefined;
 
 	return (
-		<>
-			<NavBar action={<CloseAction target={routes.space} />}>
-				<SimpleHeader title="Search" />
-			</NavBar>
-			<Main>
-				<div className="space-y-6">
-					<SearchForm
-						bookmarks={bookmarks}
-						searchQuery={searchParams?.query}
-						initialSearchResults={searchResults}
-					/>
-				</div>
-			</Main>
-		</>
+		<Main>
+			<div className="space-y-6">
+				<SearchForm
+					bookmarks={bookmarks}
+					searchQuery={searchParams?.query}
+					initialSearchResults={searchResults}
+				/>
+			</div>
+		</Main>
 	);
 }

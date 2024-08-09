@@ -151,9 +151,8 @@ export function getTopNavigationContentByUrl(
 		return { action: <OpenSearchAction /> };
 	}
 
-	// app/search <CloseAction target={routes.space} />
 	if (url.includes("/search")) {
-		return { action: <CloseAction target={routes.space} /> };
+		return { title: "Search" };
 	}
 
 	return {};
