@@ -136,6 +136,10 @@ export function getTopNavigationContentByUrl(
 		return { title: "Ask", action: <CloseAction target={routes.space} /> };
 	}
 
+	// app/share <CloseAction target={routes.space} />
+	if (url.includes("/share")) {
+		return { title: "Ask", action: <CloseAction target={routes.space} /> };
+	}
 	// app/discover <OpenSearchAction />
 	// app/discover/hugs <OpenSearchAction />
 	if (url.includes("/discover")) {
@@ -149,11 +153,6 @@ export function getTopNavigationContentByUrl(
 
 	// app/search <CloseAction target={routes.space} />
 	if (url.includes("/search")) {
-		return { action: <CloseAction target={routes.space} /> };
-	}
-
-	// app/share <CloseAction target={routes.space} />
-	if (url.includes("/share")) {
 		return { action: <CloseAction target={routes.space} /> };
 	}
 

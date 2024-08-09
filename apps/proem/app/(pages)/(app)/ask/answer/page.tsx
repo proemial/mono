@@ -1,12 +1,8 @@
 import { Answer } from "@/app/(pages)/(app)/ask/answer/[slug]/answer";
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { Main } from "@/components/main";
-import { CloseAction } from "@/components/nav-bar/actions/close-action";
-import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
-import { NavBar } from "@/components/nav-bar/nav-bar";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs";
-import { Edit05 } from "@untitled-ui/icons-react";
 import { redirect } from "next/navigation";
 
 type Props = {
