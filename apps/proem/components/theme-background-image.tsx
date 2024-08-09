@@ -32,7 +32,7 @@ export const ThemeBackgroundImage = ({
 			alt="Theme background image"
 			quality={100}
 			placeholder="blur"
-			className={cn("w-full min-w-72", className)}
+			className={cn("w-full min-w-72 transition-all duration-1000", className)}
 			width={600}
 			height={600}
 		/>

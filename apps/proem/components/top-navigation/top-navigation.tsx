@@ -26,7 +26,6 @@ export function TopNavigation() {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 	const params = useParams<{ id?: string; collectionId?: string }>();
-	// const collections =
 	const { userId, orgId } = useAuth();
 	const { data: collections } = useQuery({
 		queryKey: ["collections", userId],
@@ -39,7 +38,6 @@ export function TopNavigation() {
 	const themeImage = searchParams.get("image");
 	const [optimisticUrl, setOptimisticUrl] = useOptimistic(pathname);
 	const [pending, startTransition] = useTransition();
-	// const isReaderPage = params.id && pathname.includes(routes.paper);
 	const seed = params.collectionId ?? "";
 
 	const { action, title, menu, theme } =
@@ -53,9 +51,6 @@ export function TopNavigation() {
 	const selectedSpace =
 		params.collectionId ?? collectionsWithDefaultFallback.at(0)?.id;
 
-	// TODO! This doesn't work work with the clientside cachce as it's instant
-	// const activeTheme = fromSeed(pathname);
-	// const optimisticTheme = fromSeed(optimisticUrl);
 	const activeTheme = theme
 		? theme
 		: themeColor
