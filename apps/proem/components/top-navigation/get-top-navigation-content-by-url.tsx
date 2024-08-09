@@ -13,8 +13,9 @@ type TopNavigationContent = {
 	/**
 	 * The menu to be displayed in the nav bar
 	 * defaults to the main menu
+	 * null means no menu
 	 */
-	menu?: JSX.Element;
+	menu?: JSX.Element | null;
 	/**
 	 * The title to be displayed in the nav bar
 	 * defaults to the space selector
@@ -23,8 +24,9 @@ type TopNavigationContent = {
 	/**
 	 * The action to be displayed in the nav bar
 	 * defaults to close action back to home
+	 * null means no action
 	 */
-	action?: JSX.Element;
+	action?: JSX.Element | null;
 	theme?: Theme;
 };
 export function getTopNavigationContentByUrl(
@@ -35,12 +37,7 @@ export function getTopNavigationContentByUrl(
 		if (url.includes("/paper")) {
 			return {
 				menu: <GoToSpaceAction />,
-				action: (
-					<ActionMenu>
-						<Link href={`${url}/saved`}>Save Paper</Link>
-						{/* <Link href={url.replace("/paper", "/search")}>Search</Link> */}
-					</ActionMenu>
-				),
+				action: null,
 			};
 		}
 		// "For you" feed for logged in users
@@ -110,7 +107,7 @@ export function getTopNavigationContentByUrl(
 	if (url.includes("/paper")) {
 		return {
 			menu: <GoToSpaceAction />,
-			action: <CloseAction target={routes.space} />,
+			action: null,
 		};
 	}
 	if (url.includes("/org")) {

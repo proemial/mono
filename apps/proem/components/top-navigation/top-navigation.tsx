@@ -80,7 +80,9 @@ export function TopNavigation() {
 				</div>
 
 				<NavigationMenuList className="justify-between flex-nowrap">
-					<NavigationMenuItem>{menu ?? <Profile />}</NavigationMenuItem>
+					<NavigationMenuItem className="min-w-7">
+						{menu === null ? null : menu ?? <Profile />}
+					</NavigationMenuItem>
 					<NavigationMenuItem className="truncate">
 						{title ? (
 							<SimpleHeader title={title} />
@@ -96,8 +98,10 @@ export function TopNavigation() {
 							<SimpleHeader title="For You" />
 						)}
 					</NavigationMenuItem>
-					<NavigationMenuItem>
-						{action ?? <CloseAction target={routes.home} />}
+					<NavigationMenuItem className="min-w-7">
+						{action === null
+							? null
+							: action ?? <CloseAction target={routes.home} />}
 					</NavigationMenuItem>
 				</NavigationMenuList>
 			</NavigationMenu>
