@@ -143,6 +143,9 @@ export function getTopNavigationContentByUrl(
 	// app/discover <OpenSearchAction />
 	// app/discover/hugs <OpenSearchAction />
 	if (url.includes("/discover")) {
+		if (url.includes("/hugs")) {
+			return { title: "A hugging tribute to AK", action: <OpenSearchAction /> };
+		}
 		// app/discover/fingerprints <CloseAction target={routes.space} />
 		if (url.includes("/fingerprints")) {
 			return { action: <CloseAction target={routes.space} /> };
