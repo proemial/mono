@@ -7,8 +7,15 @@ import { ProemAssistant } from "@/components/proem-assistant";
 import { auth } from "@clerk/nextjs/server";
 import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
 import { fetchJson } from "@proemial/utils/fetch";
-import Link from "next/link";
 import { getRandomThemeColor, Theme } from "@/app/theme/color-theme";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@proemial/shadcn-ui/components/ui/dropdown-menu";
+import { OrgSelector } from "./org-selector";
 
 const themeMappings: { [name: string]: Theme } = {
 	nvidia: { color: "green", image: "silicon" },
@@ -47,58 +54,29 @@ export default async function DiscoverPage({
 		results: Institution[];
 	};
 
-	const institutions = await fetchJson<InstitutionResponse>(
-		`https://api.openalex.org/institutions?filter=display_name.search:${institution}&select=id,display_name,works_count,counts_by_year`,
-	);
+	const institutions = (
+		await fetchJson<InstitutionResponse>(
+			`https://api.openalex.org/institutions?filter=display_name.search:${institution}&select=id,display_name,works_count,counts_by_year`,
+		)
+	).results.sort((a, b) => b.works_count - a.works_count);
 
+	const name = institutions?.at(0)?.display_name ?? institution;
+	const shortName = name.split("(")[0] ?? name;
+
+	// Papers authored by individuals affiliated with Amazon (United States).
 	return (
 		<>
 			<NavBar action={<OpenSearchAction />} theme={themeFor(institution)}>
-				<SimpleHeader
-					title={institutions?.results.at(0)?.display_name ?? institution}
-				/>
+				<SimpleHeader title={shortName} />
 			</NavBar>
 			<Main className="z-0">
 				<div className="pt-16 space-y-6">
-					{institutions?.results?.length > 0 && (
+					{institutions?.length > 0 && (
 						<Feed
-							filter={{ institution: institutions.results.at(0)?.id }}
+							filter={{ institution: institutions.at(0)?.id }}
 							bookmarks={bookmarks}
 						>
-							<div>
-								<>
-									{institutions?.results?.length > 0 && (
-										<div>
-											{institutions.results.at(0)?.works_count.toLocaleString()}{" "}
-											papers authored by individuals affiliated with{" "}
-											<span className="font-bold italic">
-												{institutions.results.at(0)?.display_name}
-											</span>
-										</div>
-									)}
-									{institutions?.results?.length > 1 && (
-										<div className="text-xs">
-											Did you mean:
-											{institutions.results.slice(1).map((institution) => (
-												<Link
-													key={institution.id}
-													href={`/discover/${institution.display_name}`}
-													className="text-blue-500 underline ml-1"
-												>
-													{`${institution.display_name}`}
-													{/* 
-														{`${institution.display_name} (${
-															institution.counts_by_year
-																.filter((o) => o.year === 2024)
-																.at(0)?.works_count
-														} / ${institution.works_count})`}
-													 */}
-												</Link>
-											))}
-										</div>
-									)}
-								</>
-							</div>
+							<OrgSelector institutions={institutions} selected={name} />
 						</Feed>
 					)}
 				</div>
