@@ -57,7 +57,8 @@ export default function FeedItem({
 				isBookmarked={isBookmarked}
 				id={paper.id}
 				onBookmarkToggleClick={onBookmarkToggleClick}
-				date={paper.data.created_date}
+				// Fall back to updated_date for backwards compatibility
+				date={paper.data.created_date || paper.data.updated_date}
 				topics={paper.data.topics}
 				provider={provider}
 				customCollectionId={customCollectionId}
