@@ -1,7 +1,9 @@
+import { MenuButton } from "@/app/profile/menu-button";
 import { ActionMenu } from "@/components/nav-bar/actions/action-menu";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { GoToSpaceAction } from "@/components/nav-bar/actions/go-to-space-action";
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
+import { SignInDrawer } from "@/components/sign-in-drawer";
 import { routes } from "@/routes";
 import { Edit05 } from "@untitled-ui/icons-react";
 import Link from "next/link";
@@ -81,29 +83,36 @@ export function getTopNavigationContentByUrl(
 			};
 		}
 
-		// All papers
-		if (url.includes("/paper")) {
-			return {
-				menu: <GoToSpaceAction />,
-				action: <CloseAction target={routes.space} />,
-			};
-		}
-
 		// "For you" feed for anonymous users
 		// app/space SignInDrawer + SignInDrawer
 		// app/space/new <CloseAction target={routes.space} />
 		return {
+			menu: (
+				<SignInDrawer
+					trigger={
+						// extra div to make the trigger a ref
+						<div>
+							<MenuButton />
+						</div>
+					}
+				/>
+			),
 			title: "For You",
 			action: (
 				<ActionMenu>
-					<div>
-						<Link href="/">1</Link>
-					</div>
+					<SignInDrawer trigger=<div>View saved items</div> />
 				</ActionMenu>
 			),
 		};
 	}
 
+	// Papers outside of a space
+	if (url.includes("/paper")) {
+		return {
+			menu: <GoToSpaceAction />,
+			action: <CloseAction target={routes.space} />,
+		};
+	}
 	// org-management /org  <CloseAction target={routes.space} />
 	if (url.includes("/org")) {
 		// start with?

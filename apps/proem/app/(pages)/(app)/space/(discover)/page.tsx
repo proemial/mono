@@ -1,15 +1,10 @@
 import { Feed } from "@/app/(pages)/(app)/space/(discover)/feed";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
-import { MenuButton } from "@/app/profile/menu-button";
 import { FeatureCloud } from "@/components/feature-badges";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { Main } from "@/components/main";
-import { ActionMenu } from "@/components/nav-bar/actions/action-menu";
-import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
-import { NavBar } from "@/components/nav-bar/nav-bar";
 import { ProemAssistant } from "@/components/proem-assistant";
-import { SignInDrawer } from "@/components/sign-in-drawer";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs/server";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
@@ -57,64 +52,43 @@ export default async function DiscoverPage({ searchParams }: Props) {
 	]);
 
 	return (
-		<>
-			<NavBar
-				menu={
-					<SignInDrawer
-						trigger={
-							// extra div to make the trigger a ref
-							<div>
-								<MenuButton />
-							</div>
-						}
-					/>
-				}
-				action={
-					<ActionMenu>
-						<SignInDrawer trigger={<div>View saved items</div>} />
-					</ActionMenu>
-				}
-			>
-				<SimpleHeader title="For You" />
-			</NavBar>
-			<Main>
-				<div className="space-y-6">
-					<Feed
-						filter={filter}
-						debug={params.debug}
-						bookmarks={bookmarks}
-						nocache={searchParams?.nocache}
-					>
-						{!filter.features && (
-							<div className="-my-4">
-								<HorisontalScrollArea>
-									<FeedFilter
-										items={[
-											"all",
-											...OaFields.map((field) =>
-												field.display_name.toLowerCase(),
-											),
-										]}
-										rootPath={routes.space}
-									/>
-								</HorisontalScrollArea>
-							</div>
-						)}
-						{params.debug && (
-							<>
-								<Titles
-									bookmarked={filter.titles?.at(0)}
-									read={filter.titles?.at(1)}
+		<Main>
+			<div className="space-y-6">
+				<Feed
+					filter={filter}
+					debug={params.debug}
+					bookmarks={bookmarks}
+					nocache={searchParams?.nocache}
+				>
+					{!filter.features && (
+						<div className="-my-4">
+							<HorisontalScrollArea>
+								<FeedFilter
+									items={[
+										"all",
+										...OaFields.map((field) =>
+											field.display_name.toLowerCase(),
+										),
+									]}
+									rootPath={routes.space}
 								/>
-								<FeatureCloud features={filter.all} />
-							</>
-						)}
-					</Feed>
-				</div>
+							</HorisontalScrollArea>
+						</div>
+					)}
+					{params.debug && (
+						<>
+							<Titles
+								bookmarked={filter.titles?.at(0)}
+								read={filter.titles?.at(1)}
+							/>
+							<FeatureCloud features={filter.all} />
+						</>
+					)}
+				</Feed>
+			</div>
 
-				<ProemAssistant />
-			</Main>
-		</>
+			<ProemAssistant />
+		</Main>
 	);
 }
 
