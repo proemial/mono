@@ -20,6 +20,7 @@ import {
 	NavigationMenuList,
 	cn,
 } from "@proemial/shadcn-ui";
+import { ChevronRight } from "@untitled-ui/icons-react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useOptimistic, useTransition } from "react";
 import { useQuery } from "react-query";
@@ -37,13 +38,12 @@ export function TopNavigation() {
 		? optimisticUrl.split("/")[2]
 		: "";
 
-	const { data: collections } = useQuery({
+	const { data: collections, isLoading } = useQuery({
 		queryKey: ["collections-with-public", collectionId, userId],
 		queryFn: async () => getAvailableCollections(collectionId),
 	});
 
 	const [pending, startTransition] = useTransition();
-	const seed = collectionId ?? "";
 
 	const { action, title, menu, theme } =
 		getTopNavigationContentByUrl(optimisticUrl);
@@ -54,7 +54,7 @@ export function TopNavigation() {
 		? theme
 		: themeColor
 			? asTheme(themeColor, themeImage)
-			: fromSeed(seed);
+			: fromSeed(collectionId ?? "");
 
 	return (
 		<>
@@ -88,7 +88,9 @@ export function TopNavigation() {
 						{menu ?? <Profile />}
 					</NavigationMenuItem>
 					<NavigationMenuItem className="truncate">
-						{title ? (
+						{isLoading ? (
+							<SelectSkeleton collectionId={collectionId} />
+						) : title ? (
 							<SimpleHeader title={title} />
 						) : !collections || collections.length <= 1 ? (
 							<SimpleHeader title={PERSONAL_DEFAULT_COLLECTION_NAME} />
@@ -148,3 +150,10 @@ export function TopNavigation() {
 		</>
 	);
 }
+
+const SelectSkeleton = ({ collectionId }: { collectionId: string }) => (
+	<div className="flex items-center gap-1">
+		<div className="h-6 w-16 bg-theme-200/75 rounded-md animate-pulse" />
+		{collectionId && <ChevronRight className="w-4 h-4 opacity-50" />}
+	</div>
+);
