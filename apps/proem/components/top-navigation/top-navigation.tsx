@@ -154,6 +154,6 @@ export function TopNavigation() {
 const SelectSkeleton = ({ collectionId }: { collectionId?: string }) => (
 	<div className="flex items-center gap-1">
 		<div className="h-6 w-16 bg-theme-200/75 rounded-md animate-pulse" />
-		{collectionId && <ChevronRight className="w-4 h-4 opacity-50" />}
 	</div>
+			{collectionId && <ChevronRight className="w-4 h-4 opacity-75 mt-0.5" />}
 );
