@@ -114,12 +114,17 @@ export function Feed({
 						</FeedItem>
 					);
 
-					if (i % 2 === 0 && (theme || field?.theme)) {
+					if (!theme && field?.theme) {
 						return (
-							<ThemeColoredCard
-								className="mb-3"
-								theme={theme ?? (field?.theme as Theme)}
-							>
+							<ThemeColoredCard className="mb-3" theme={field?.theme}>
+								{item}
+							</ThemeColoredCard>
+						);
+					}
+
+					if (theme && i % 2 === 0) {
+						return (
+							<ThemeColoredCard className="mb-3" theme={theme}>
 								{item}
 							</ThemeColoredCard>
 						);
