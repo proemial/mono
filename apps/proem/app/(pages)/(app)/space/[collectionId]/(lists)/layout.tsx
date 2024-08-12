@@ -28,9 +28,9 @@ export default async function ({ params: { collectionId }, children }: Props) {
 	const isDefaultCollection = collection.id === userId;
 
 	return (
-		<div className="flex flex-col gap-2 grow">
+		<div className="flex flex-col gap-5 grow">
 			{!isDefaultCollection && (
-				<>
+				<div className="flex flex-col gap-2">
 					<div className="flex flex-col gap-3">
 						<div className="min-h-36 flex flex-col justify-end">
 							<Header2 className="break-words markdown line-clamp-4">
@@ -52,7 +52,7 @@ export default async function ({ params: { collectionId }, children }: Props) {
 							title="Saved"
 						/>
 					</div>
-				</>
+				</div>
 			)}
 
 			{children}

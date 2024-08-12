@@ -80,6 +80,7 @@ export function InfinityScrollList<TQueryKey extends string, TRow>({
 					}}
 				>
 					<div
+						className="space-y-3"
 						style={{
 							position: "absolute",
 							top: 0,

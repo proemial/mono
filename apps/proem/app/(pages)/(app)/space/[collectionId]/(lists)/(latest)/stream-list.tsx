@@ -77,13 +77,11 @@ export function StreamList({
 
 				if (showThemeColors && field?.theme) {
 					return (
-						<ThemeColoredCard className="mb-3" theme={field.theme}>
-							{item}
-						</ThemeColoredCard>
+						<ThemeColoredCard theme={field.theme}>{item}</ThemeColoredCard>
 					);
 				}
 
-				return <div className="py-5">{item}</div>;
+				return <div className="py-2">{item}</div>;
 			}}
 		/>
 	);
