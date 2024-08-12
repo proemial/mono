@@ -1,7 +1,6 @@
 "use client";
 import {
 	PERSONAL_DEFAULT_COLLECTION_NAME,
-	getPersonalDefaultCollection,
 	screenMaxWidth,
 } from "@/app/constants";
 import { getAvailableCollections } from "@/app/profile/actions";
@@ -15,45 +14,41 @@ import { ThemeBackgroundImage } from "@/components/theme-background-image";
 import { getTopNavigationContentByUrl } from "@/components/top-navigation/get-top-navigation-content-by-url";
 import { routes } from "@/routes";
 import { useAuth } from "@clerk/nextjs";
-import { Collection } from "@proemial/data/neon/schema";
 import {
 	NavigationMenu,
 	NavigationMenuItem,
 	NavigationMenuList,
 	cn,
 } from "@proemial/shadcn-ui";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useOptimistic, useTransition } from "react";
 import { useQuery } from "react-query";
 
 export function TopNavigation() {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
-	const params = useParams<{ id?: string; collectionId?: string }>();
 	const { userId } = useAuth();
-	const { data: collections } = useQuery({
-		queryKey: ["collections", userId],
-		// TODO!: Missing public collections i'm not a part of
-		queryFn: async () => getAvailableCollections(),
-	});
-	console.log({ collections });
 
 	const themeColor = searchParams.get("color");
 	const themeImage = searchParams.get("image");
 	const [optimisticUrl, setOptimisticUrl] = useOptimistic(pathname);
+
+	const collectionId = optimisticUrl.includes("/space/")
+		? optimisticUrl.split("/")[2]
+		: "";
+
+	const { data: collections } = useQuery({
+		queryKey: ["collections-with-public", collectionId, userId],
+		queryFn: async () => getAvailableCollections(collectionId),
+	});
+
 	const [pending, startTransition] = useTransition();
-	const seed = params.collectionId ?? "";
+	const seed = collectionId ?? "";
 
 	const { action, title, menu, theme } =
 		getTopNavigationContentByUrl(optimisticUrl);
 
-	const collectionsWithDefaultFallback = ensureDefaultCollection(
-		collections ?? [],
-		userId ?? "",
-	);
-	// TODO: optimistic
-	const selectedSpace =
-		params.collectionId ?? collectionsWithDefaultFallback.at(0)?.id;
+	const selectedSpace = collectionId ?? collections?.at(0)?.id;
 
 	const activeTheme = theme
 		? theme
@@ -67,7 +62,12 @@ export function TopNavigation() {
 
 			<NavigationMenu className="z-20 bg-transparent">
 				<div
-					className="absolute top-0 left-0 w-full h-full overflow-hidden bg-theme-300"
+					className={cn(
+						"absolute top-0 left-0 w-full h-full overflow-hidden bg-theme-300",
+						// {
+						// 	"transition duration-1000 ease-in-out": activeTheme,
+						// },
+					)}
 					style={{
 						maskImage:
 							"linear-gradient(black 0px, black 54px, transparent 72px)",
@@ -75,8 +75,8 @@ export function TopNavigation() {
 				>
 					{activeTheme?.image && (
 						<ThemeBackgroundImage
-							className={cn("opacity-75", {
-								// "opacity-0": pending,
+							className={cn("transition-all opacity-75", {
+								"opacity-0": pending,
 							})}
 							pattern={activeTheme.image}
 						/>
@@ -85,24 +85,24 @@ export function TopNavigation() {
 
 				<NavigationMenuList className="justify-between flex-nowrap">
 					<NavigationMenuItem className="min-w-7">
-						{menu === null ? null : menu ?? <Profile />}
+						{menu ?? <Profile />}
 					</NavigationMenuItem>
 					<NavigationMenuItem className="truncate">
 						{title ? (
 							<SimpleHeader title={title} />
-						) : userId ? (
+						) : !collections || collections.length <= 1 ? (
+							<SimpleHeader title={PERSONAL_DEFAULT_COLLECTION_NAME} />
+						) : (
 							<SelectSpaceHeader
-								collections={collectionsWithDefaultFallback}
+								collections={collections}
 								selectedSpace={selectedSpace}
 								onRouteChange={(url) =>
 									startTransition(() => setOptimisticUrl(url))
 								}
 							/>
-						) : (
-							<SimpleHeader title={PERSONAL_DEFAULT_COLLECTION_NAME} />
 						)}
 					</NavigationMenuItem>
-					<NavigationMenuItem className="min-w-7">
+					<NavigationMenuItem>
 						{action === null
 							? null
 							: action ?? <CloseAction target={routes.home} />}
@@ -118,7 +118,9 @@ export function TopNavigation() {
 					}}
 				>
 					<div
-						className="fixed top-0 bg-theme-300"
+						className={cn("fixed top-0 bg-theme-300", {
+							// "transition duration-1000 ease-in-out": activeTheme,
+						})}
 						style={{
 							maskImage:
 								"linear-gradient(to bottom, black 0px , black 72px, transparent)",
@@ -133,8 +135,8 @@ export function TopNavigation() {
 						>
 							{activeTheme.image && (
 								<ThemeBackgroundImage
-									className={cn("opacity-75", {
-										// "opacity-0": pending,
+									className={cn("transition-all opacity-75", {
+										"opacity-0": pending,
 									})}
 									pattern={activeTheme.image}
 								/>
@@ -146,18 +148,3 @@ export function TopNavigation() {
 		</>
 	);
 }
-
-const ensureDefaultCollection = (
-	collections: Collection[],
-	userId: string | null,
-) => {
-	const existingDefaultCollection = collections.find(
-		(collection) => collection.id === userId,
-	);
-	if (existingDefaultCollection) {
-		return collections;
-	}
-	return userId
-		? [getPersonalDefaultCollection(userId), ...collections]
-		: collections;
-};
