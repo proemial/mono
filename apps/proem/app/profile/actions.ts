@@ -18,7 +18,6 @@ export const getAvailableCollections = async (
 	publicCollectionId?: Collection["id"],
 ) => {
 	const { userId, orgId } = await auth();
-	console.log({ userId, orgId, publicCollectionId });
 
 	return await findAvailableCollections({ userId, orgId, publicCollectionId });
 };
