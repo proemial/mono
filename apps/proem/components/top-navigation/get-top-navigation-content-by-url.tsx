@@ -1,3 +1,4 @@
+import { PERSONAL_DEFAULT_COLLECTION_NAME } from "@/app/constants";
 import { MenuButton } from "@/app/profile/menu-button";
 import { Theme, themeForInstitution } from "@/app/theme/color-theme";
 import { ActionMenu } from "@/components/nav-bar/actions/action-menu";
@@ -94,7 +95,7 @@ export function getTopNavigationContentByUrl(
 					}
 				/>
 			),
-			title: "For You",
+			title: PERSONAL_DEFAULT_COLLECTION_NAME,
 			action: (
 				<ActionMenu>
 					<SignInDrawer trigger={<div>View saved items</div>} />

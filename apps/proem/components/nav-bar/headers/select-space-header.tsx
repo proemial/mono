@@ -1,6 +1,9 @@
 "use client";
 
-import { getPersonalDefaultCollection } from "@/app/constants";
+import {
+	PERSONAL_DEFAULT_COLLECTION_NAME,
+	getPersonalDefaultCollection,
+} from "@/app/constants";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -69,7 +72,9 @@ export const SelectSpaceHeader = ({
 								value={collection.id}
 								className="py-2 text-base cursor-pointer"
 							>
-								{collection.id.includes("user_") ? "For You" : collection.name}
+								{collection.id.includes("user_")
+									? PERSONAL_DEFAULT_COLLECTION_NAME
+									: collection.name}
 							</SelectItem>
 						))}
 					</SelectGroup>

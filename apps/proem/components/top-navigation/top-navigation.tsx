@@ -1,5 +1,9 @@
 "use client";
-import { getPersonalDefaultCollection, screenMaxWidth } from "@/app/constants";
+import {
+	PERSONAL_DEFAULT_COLLECTION_NAME,
+	getPersonalDefaultCollection,
+	screenMaxWidth,
+} from "@/app/constants";
 import { getAvailableCollections } from "@/app/profile/actions";
 import { Profile } from "@/app/profile/profile";
 import { asTheme, fromSeed } from "@/app/theme/color-theme";
@@ -95,7 +99,7 @@ export function TopNavigation() {
 								}
 							/>
 						) : (
-							<SimpleHeader title="For You" />
+							<SimpleHeader title={PERSONAL_DEFAULT_COLLECTION_NAME} />
 						)}
 					</NavigationMenuItem>
 					<NavigationMenuItem className="min-w-7">
