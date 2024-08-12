@@ -113,7 +113,7 @@ export function TopNavigation() {
 							/>
 						)}
 					</NavigationMenuItem>
-					<NavigationMenuItem>
+					<NavigationMenuItem className="min-w-7">
 						{action === null
 							? null
 							: action ?? <CloseAction target={routes.home} />}
