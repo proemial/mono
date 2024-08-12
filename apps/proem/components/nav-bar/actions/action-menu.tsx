@@ -3,6 +3,7 @@
 import {
 	Button,
 	Popover,
+	PopoverClose,
 	PopoverContent,
 	PopoverTrigger,
 } from "@proemial/shadcn-ui";
@@ -24,13 +25,15 @@ export function ActionMenu({ children }: { children: React.ReactNode }) {
 					</div>
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent
-				side="left"
-				align="start"
-				className="border-none shadow-2xl rounded-xl p-0 w-auto divide-y *:py-2 *:px-4 text-base *:cursor-pointer *:block min-w-44"
-			>
-				{children}
-			</PopoverContent>
+			<PopoverClose asChild>
+				<PopoverContent
+					side="left"
+					align="start"
+					className="border-none shadow-2xl rounded-xl p-0 w-auto divide-y *:py-2 *:px-4 text-base *:cursor-pointer *:block min-w-44"
+				>
+					{children}
+				</PopoverContent>
+			</PopoverClose>
 		</Popover>
 	);
 }
