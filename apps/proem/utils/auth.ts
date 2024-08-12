@@ -34,11 +34,12 @@ export const getOrgMembersUserData = async () => {
 
 export const getOrgMemberships = async () => {
 	const { orgId } = auth();
-	const memberships = orgId
-		? await clerkClient.organizations.getOrganizationMembershipList({
-				organizationId: orgId,
-			})
-		: [];
+	if (!orgId) return [];
+	// todo: add pagination
+	const { data: memberships } =
+		await clerkClient.organizations.getOrganizationMembershipList({
+			organizationId: orgId,
+		});
 	return memberships.sort((a, b) =>
 		(a.publicUserData?.firstName ?? "").localeCompare(
 			b.publicUserData?.firstName ?? "",
