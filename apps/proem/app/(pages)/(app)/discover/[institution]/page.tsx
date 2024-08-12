@@ -7,6 +7,7 @@ import { FollowButton } from "./follow";
 import { OrgSelector } from "./org-selector";
 
 import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
+import { themeForInstitution } from "@/app/theme/color-theme";
 
 export default async function DiscoverPage({
 	params,
@@ -47,6 +48,7 @@ export default async function DiscoverPage({
 			<FollowButton id={institutions?.at(0)?.id as string} />
 		</div>
 	);
+	const theme = themeForInstitution(institution);
 
 	return (
 		<>
@@ -57,6 +59,7 @@ export default async function DiscoverPage({
 							filter={{ institution: institutions.at(0)?.id }}
 							bookmarks={bookmarks}
 							header={header}
+							theme={theme}
 						>
 							<OrgSelector institutions={institutions} selected={name} />
 						</Feed>

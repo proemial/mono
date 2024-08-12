@@ -12,7 +12,7 @@ type QueryReturnType<TRow> = {
 
 export type InfinityScollListProps<TQueryKey extends string, TRow> = {
 	renderHeadline?: ((count?: number) => ReactNode) | null;
-	renderRow: (row: TRow) => ReactNode;
+	renderRow: (row: TRow, index: number) => ReactNode;
 	queryKey: TQueryKey;
 	queryFn: QueryFunction<QueryReturnType<TRow>, TQueryKey>;
 };
@@ -88,7 +88,7 @@ export function InfinityScrollList<TQueryKey extends string, TRow>({
 							transform: `translateY(${items[0]?.start ?? 0}px)`,
 						}}
 					>
-						{items.map((virtualRow) => {
+						{items.map((virtualRow, i) => {
 							const isLoaderRow = virtualRow.index > allRows.length - 1;
 							const row = allRows[virtualRow.index];
 
@@ -103,7 +103,7 @@ export function InfinityScrollList<TQueryKey extends string, TRow>({
 											<Throbber />
 										) : null
 									) : row ? (
-										renderRow(row)
+										renderRow(row, i)
 									) : (
 										<Throbber />
 									)}

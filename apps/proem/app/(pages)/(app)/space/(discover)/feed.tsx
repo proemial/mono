@@ -7,6 +7,7 @@ import {
 } from "@/app/(pages)/(app)/space/(discover)/fetch-feed";
 import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
 import { fetchFeedByFeaturesWithPosts } from "@/app/data/fetch-feed";
+import { Theme } from "@/app/theme/color-theme";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -33,6 +34,7 @@ type FeedProps = {
 	nocache?: boolean;
 	bookmarks: Bookmarks;
 	header?: ReactNode;
+	theme?: Theme;
 };
 
 export function Feed({
@@ -42,6 +44,7 @@ export function Feed({
 	nocache,
 	bookmarks,
 	header,
+	theme,
 }: FeedProps) {
 	const { topic, features, days, institution } = filter;
 	console.log("Feed", filter);
@@ -88,7 +91,7 @@ export function Feed({
 					);
 				}}
 				renderHeadline={debug ? (count) => <DebugInfo count={count} /> : null}
-				renderRow={(row) => {
+				renderRow={(row, i) => {
 					const paper = row as RankedPaper & {
 						paper: RankedPaper["paper"] & { posts: PaperPost[] };
 					};
@@ -111,15 +114,18 @@ export function Feed({
 						</FeedItem>
 					);
 
-					if (field?.theme) {
+					if (i % 2 === 0 && (theme || field?.theme)) {
 						return (
-							<ThemeColoredCard className="mb-3" theme={field.theme}>
+							<ThemeColoredCard
+								className="mb-3"
+								theme={theme ?? (field?.theme as Theme)}
+							>
 								{item}
 							</ThemeColoredCard>
 						);
 					}
 
-					return <div className="py-5">{item}</div>;
+					return <div className="mb-3">{item}</div>;
 				}}
 			/>
 		</div>
