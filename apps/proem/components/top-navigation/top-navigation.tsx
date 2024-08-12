@@ -123,7 +123,7 @@ export function TopNavigation() {
 
 			{activeTheme && (
 				<div
-					className="w-full h-72 -top-40 -mt-[72px] left-0 sticky -mb-36"
+					className="w-full h-72 -top-40 -mt-[72px] left-0 sticky -mb-48"
 					style={{
 						maskImage: "linear-gradient(to top, transparent 0px, black 56px)",
 					}}
