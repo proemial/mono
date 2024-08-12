@@ -8,6 +8,7 @@ import {
 	PopoverTrigger,
 } from "@proemial/shadcn-ui";
 import { DotsHorizontal } from "@untitled-ui/icons-react";
+import React from "react";
 
 export function ActionMenu({ children }: { children: React.ReactNode }) {
 	return (
@@ -25,15 +26,15 @@ export function ActionMenu({ children }: { children: React.ReactNode }) {
 					</div>
 				</Button>
 			</PopoverTrigger>
-			<PopoverClose asChild>
-				<PopoverContent
-					side="left"
-					align="start"
-					className="border-none shadow-2xl rounded-xl p-0 w-auto divide-y *:py-2 *:px-4 text-base *:cursor-pointer *:block min-w-44"
-				>
-					{children}
-				</PopoverContent>
-			</PopoverClose>
+			<PopoverContent
+				side="left"
+				align="start"
+				className="border-none shadow-2xl rounded-xl p-0 w-auto divide-y *:py-2 *:px-4 text-base *:cursor-pointer *:block min-w-44"
+			>
+				{React.Children.map(children, (child) => (
+					<PopoverClose asChild>{child}</PopoverClose>
+				))}
+			</PopoverContent>
 		</Popover>
 	);
 }
