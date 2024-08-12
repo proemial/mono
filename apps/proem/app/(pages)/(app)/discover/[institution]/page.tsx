@@ -7,6 +7,7 @@ import { OrgSelector } from "./org-selector";
 
 import { themeForInstitution } from "@/app/theme/color-theme";
 import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
+import { institutionalLogos as logos } from "@/app/theme/logos";
 
 export default async function DiscoverPage({
 	params,
@@ -49,20 +50,30 @@ export default async function DiscoverPage({
 	);
 	const theme = themeForInstitution(institution);
 
+	const logo =
+		logos[decodeURIComponent(institution).toLowerCase() as keyof typeof logos]
+			?.url;
+
 	return (
 		<>
-			<div className="pt-10">
-				{institutions?.length > 0 && (
-					<Feed
-						filter={{ institution: institutions.at(0)?.id }}
-						bookmarks={bookmarks}
-						theme={theme}
-						header={header}
-					>
-						<OrgSelector institutions={institutions} selected={name} />
-					</Feed>
-				)}
-			</div>
+			{logo && (
+				<div
+					className="h-24 mb-8 bg-contain bg-no-repeat bg-center"
+					style={{
+						backgroundImage: `url("${logo}")`,
+					}}
+				/>
+			)}
+			{institutions?.length > 0 && (
+				<Feed
+					filter={{ institution: institutions.at(0)?.id }}
+					bookmarks={bookmarks}
+					theme={theme}
+					header={header}
+				>
+					<OrgSelector institutions={institutions} selected={name} />
+				</Feed>
+			)}
 			<ProemAssistant />
 		</>
 	);
