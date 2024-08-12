@@ -1,9 +1,6 @@
 "use client";
 
-import {
-	PERSONAL_DEFAULT_COLLECTION_NAME,
-	getPersonalDefaultCollection,
-} from "@/app/constants";
+import { PERSONAL_DEFAULT_COLLECTION_NAME } from "@/app/constants";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -17,12 +14,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@proemial/shadcn-ui";
-import {
-	useParams,
-	usePathname,
-	useRouter,
-	useSearchParams,
-} from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export type SelectSpaceHeaderProps = {
 	collections: Collection[];
@@ -85,6 +77,11 @@ export const SelectSpaceHeader = ({
 };
 
 const changeSpaceId = (pathname: string, spaceId: string) => {
+	if (spaceId === "user_anonymous") {
+		const [_, _space, _spaceId, ...pathToKeep] = pathname.split("/");
+		return `/${pathToKeep.join("/")}`;
+	}
+
 	const path = pathname.includes("/space/")
 		? pathname.replace(/(?<=\/space\/|^\/space\/)(\w*)(?=\/|$)/, spaceId)
 		: `/space/${spaceId}/${pathname}`;

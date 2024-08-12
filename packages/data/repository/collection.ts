@@ -8,10 +8,10 @@ import {
 } from "../neon/schema";
 
 const PERSONAL_DEFAULT_COLLECTION_NAME = "For You";
-const ANONYMOUS_USER_ID = "user_anonomous";
+const ANONYMOUS_USER_ID = "user_anonymous";
 const getPersonalDefaultCollection = (userId?: string | null) =>
 	({
-		id: userId ?? "/",
+		id: userId ?? ANONYMOUS_USER_ID,
 		name: PERSONAL_DEFAULT_COLLECTION_NAME,
 		ownerId: userId ?? ANONYMOUS_USER_ID,
 		orgId: null,
