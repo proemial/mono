@@ -15,6 +15,7 @@ import { getTopNavigationContentByUrl } from "@/components/top-navigation/get-to
 import { routes } from "@/routes";
 import { useAuth } from "@clerk/nextjs";
 import {
+	Button,
 	NavigationMenu,
 	NavigationMenuItem,
 	NavigationMenuList,
@@ -32,7 +33,11 @@ export function TopNavigation() {
 
 	const themeColor = searchParams.get("color");
 	const themeImage = searchParams.get("image");
-	const [optimisticUrl, setOptimisticUrl] = useOptimistic(pathname);
+	const [{ url: optimisticUrl, name: optimisticName }, setOptimisticUrl] =
+		useOptimistic<{
+			url: string;
+			name?: string;
+		}>({ url: pathname });
 
 	const collectionId = optimisticUrl.includes("/space/")
 		? optimisticUrl.split("/")[2]
@@ -75,9 +80,10 @@ export function TopNavigation() {
 				>
 					{activeTheme?.image && (
 						<ThemeBackgroundImage
-							className={cn("transition-all opacity-75", {
-								"opacity-0": pending,
-							})}
+							className="opacity-75"
+							// className={cn("transition-all opacity-75", {
+							// 	"opacity-0": pending,
+							// })}
 							pattern={activeTheme.image}
 						/>
 					)}
@@ -89,7 +95,10 @@ export function TopNavigation() {
 					</NavigationMenuItem>
 					<NavigationMenuItem className="truncate">
 						{isLoading ? (
-							<SelectSkeleton collectionId={collectionId} />
+							<SelectSkeleton
+								collectionId={collectionId}
+								title={optimisticName}
+							/>
 						) : title ? (
 							<SimpleHeader title={title} />
 						) : !collections || collections.length <= 1 ? (
@@ -137,9 +146,10 @@ export function TopNavigation() {
 						>
 							{activeTheme.image && (
 								<ThemeBackgroundImage
-									className={cn("transition-all opacity-75", {
-										"opacity-0": pending,
-									})}
+									className="opacity-75"
+									// className={cn("transition-all opacity-75", {
+									// 	"opacity-0": pending,
+									// })}
 									pattern={activeTheme.image}
 								/>
 							)}
@@ -151,9 +161,19 @@ export function TopNavigation() {
 	);
 }
 
-const SelectSkeleton = ({ collectionId }: { collectionId?: string }) => (
-	<div className="flex items-center gap-1">
-		<div className="h-6 w-16 bg-theme-200/75 rounded-md animate-pulse" />
-	</div>
+const SelectSkeleton = ({
+	collectionId,
+	title,
+}: { collectionId?: string; title?: string }) => (
+	<Button variant="ghost">
+		<div className="flex items-center gap-2">
+			{title ? (
+				<div className="text-lg">{title}</div>
+			) : (
+				<div className="h-6 w-[60px] bg-theme-200/75 rounded-md animate-pulse" />
+			)}
+
 			{collectionId && <ChevronRight className="w-4 h-4 opacity-75 mt-0.5" />}
+		</div>
+	</Button>
 );

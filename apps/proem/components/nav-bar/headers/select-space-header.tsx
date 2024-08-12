@@ -18,7 +18,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export type SelectSpaceHeaderProps = {
 	collections: Collection[];
-	onRouteChange?: (url: string) => void;
+	onRouteChange?: ({ url, name }: { url: string; name?: string }) => void;
 	selectedSpace?: string;
 };
 
@@ -33,15 +33,17 @@ export const SelectSpaceHeader = ({
 
 	const handleValueChange = (id: string) => {
 		trackHandler(analyticsKeys.ui.header.click.changeSpace);
+		const selectedCollection = collections.find((c) => c.id === id);
 		const searchPapersQuery = searchParams.get("query");
 		const route = searchPapersQuery
 			? // Persist URL query params when changing spaces (i.e. for search)
 				`${changeSpaceId(pathname, id)}?query=${searchPapersQuery}`
 			: changeSpaceId(pathname, id);
 
-		onRouteChange?.(route);
+		onRouteChange?.({ url: route, name: selectedCollection?.name });
 		router.push(route);
 	};
+
 	return (
 		<div className="flex items-center gap-1">
 			<Select onValueChange={handleValueChange} value={selectedSpace}>
