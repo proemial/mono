@@ -16,7 +16,11 @@ export const getUser = async (userId: string) => {
 
 export const getUsers = async (userIds: string[]) => {
 	try {
-		return await clerkClient.users.getUserList({ userId: userIds });
+		// todo: handle pagination
+		const { data: users } = await clerkClient.users.getUserList({
+			userId: userIds,
+		});
+		return users;
 	} catch (error) {
 		console.error("Error fetching users from auth provieder", error);
 		return [];
@@ -35,7 +39,8 @@ export const getOrgMembersUserData = async () => {
 export const getOrgMemberships = async () => {
 	const { orgId } = auth();
 	if (!orgId) return [];
-	// todo: add pagination
+
+	// todo: handle pagination
 	const { data: memberships } =
 		await clerkClient.organizations.getOrganizationMembershipList({
 			organizationId: orgId,
