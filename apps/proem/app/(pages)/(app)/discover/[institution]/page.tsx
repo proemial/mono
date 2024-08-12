@@ -1,29 +1,12 @@
 import { Feed } from "@/app/(pages)/(app)/space/(discover)/feed";
 import { Main } from "@/components/main";
-import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
-import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
-import { NavBar } from "@/components/nav-bar/nav-bar";
 import { ProemAssistant } from "@/components/proem-assistant";
 import { auth } from "@clerk/nextjs/server";
-import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
 import { fetchJson } from "@proemial/utils/fetch";
-import { getRandomThemeColor, Theme } from "@/app/theme/color-theme";
-import { OrgSelector } from "./org-selector";
-import { Button, cn } from "@proemial/shadcn-ui";
 import { FollowButton } from "./follow";
+import { OrgSelector } from "./org-selector";
 
-const themeMappings: { [name: string]: Theme } = {
-	nvidia: { color: "green", image: "silicon" },
-	zeiss: { color: "purple", image: "fingerprint" },
-	novo: { color: "purple", image: "fingerprint" },
-	google: { color: "gold", image: "silicon" },
-};
-
-function themeFor(institution: string): Theme {
-	return Object.keys(themeMappings).includes(institution)
-		? (themeMappings[institution as keyof typeof themeMappings] as Theme)
-		: getRandomThemeColor(institution);
-}
+import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
 
 export default async function DiscoverPage({
 	params,
@@ -45,6 +28,7 @@ export default async function DiscoverPage({
 		works_count: number;
 		counts_by_year: Record<string, number>[];
 	};
+
 	type InstitutionResponse = {
 		results: Institution[];
 	};
@@ -56,7 +40,6 @@ export default async function DiscoverPage({
 	).results.sort((a, b) => b.works_count - a.works_count);
 
 	const name = institutions?.at(0)?.display_name ?? institution;
-	const shortName = name.split("(")[0] ?? name;
 
 	const header = (
 		<div className="mt-2 flex flex-row justify-between items-center">
@@ -67,9 +50,6 @@ export default async function DiscoverPage({
 
 	return (
 		<>
-			<NavBar action={<OpenSearchAction />} theme={themeFor(institution)}>
-				<SimpleHeader title={shortName} />
-			</NavBar>
 			<Main className="z-0">
 				<div className="pt-16 space-y-6">
 					{institutions?.length > 0 && (
@@ -82,8 +62,8 @@ export default async function DiscoverPage({
 						</Feed>
 					)}
 				</div>
+				<ProemAssistant />
 			</Main>
-			<ProemAssistant />
 		</>
 	);
 }

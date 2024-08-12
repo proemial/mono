@@ -30,28 +30,30 @@ export default async function ({ params: { collectionId }, children }: Props) {
 	return (
 		<div className="flex flex-col gap-2 grow">
 			{!isDefaultCollection && (
-				<div className="flex flex-col gap-3">
-					<div className="min-h-36 flex flex-col justify-end">
-						<Header2 className="break-words markdown line-clamp-4">
-							<Markdown>{collection.description ?? ""}</Markdown>
-						</Header2>
+				<>
+					<div className="flex flex-col gap-3">
+						<div className="min-h-36 flex flex-col justify-end">
+							<Header2 className="break-words markdown line-clamp-4">
+								<Markdown>{collection.description ?? ""}</Markdown>
+							</Header2>
+						</div>
+
+						<div className="flex items-center justify-between gap-2">
+							<SpaceContributorsIndicator collection={collection} />
+							<SpaceShareIndicator shared={collection.shared} />
+						</div>
 					</div>
 
-					<div className="flex items-center justify-between gap-2">
-						<SpaceContributorsIndicator collection={collection} />
-						<SpaceShareIndicator shared={collection.shared} />
+					{/* TODO! left align if navItem contains over 2 */}
+					<div className="flex items-center justify-center gap-2">
+						<NavItem href={`${routes.space}/${collection.id}`} title="Latest" />
+						<NavItem
+							href={`${routes.space}/${collection.id}/saved`}
+							title="Saved"
+						/>
 					</div>
-				</div>
+				</>
 			)}
-
-			{/* TODO! left align if navItem contains over 2 */}
-			<div className="flex items-center justify-center gap-2">
-				<NavItem href={`${routes.space}/${collection.id}`} title="Latest" />
-				<NavItem
-					href={`${routes.space}/${collection.id}/saved`}
-					title="Saved"
-				/>
-			</div>
 
 			{children}
 		</div>

@@ -27,7 +27,7 @@ export function ActionMenu({ children }: { children: React.ReactNode }) {
 			<PopoverContent
 				side="left"
 				align="start"
-				className="border-none shadow-2xl rounded-xl p-0 w-auto divide-y *:py-2 *:px-4 text-base *:cursor-pointer"
+				className="border-none shadow-2xl rounded-xl p-0 w-auto divide-y *:py-2 *:px-4 text-base *:cursor-pointer *:block min-w-44"
 			>
 				{children}
 			</PopoverContent>

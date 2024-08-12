@@ -1,6 +1,6 @@
 "use client";
 
-import { getPersonalDefaultCollection } from "@/app/constants";
+import { PERSONAL_DEFAULT_COLLECTION_NAME } from "@/app/constants";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -14,60 +14,61 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@proemial/shadcn-ui";
-import {
-	useParams,
-	usePathname,
-	useRouter,
-	useSearchParams,
-} from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-type Props = {
+export type SelectSpaceHeaderProps = {
 	collections: Collection[];
-	userId: string | null;
+	onRouteChange?: ({ url, name }: { url: string; name?: string }) => void;
+	selectedSpace?: string;
 };
 
-export const SelectSpaceHeader = ({ collections, userId }: Props) => {
+export const SelectSpaceHeader = ({
+	collections,
+	onRouteChange,
+	selectedSpace,
+}: SelectSpaceHeaderProps) => {
 	const pathname = usePathname();
-	const { collectionId } = useParams<{ collectionId?: string }>();
 	const searchParams = useSearchParams();
 	const router = useRouter();
 
-	const collectionsWithDefaultFallback = ensureDefaultCollection(
-		collections,
-		userId,
-	);
-	const selectedSpace =
-		collectionId ?? collectionsWithDefaultFallback.at(0)?.id;
-
 	const handleValueChange = (id: string) => {
 		trackHandler(analyticsKeys.ui.header.click.changeSpace);
+		const selectedCollection = collections.find((c) => c.id === id);
 		const searchPapersQuery = searchParams.get("query");
-		if (searchPapersQuery) {
-			// Persist URL query params when changing spaces (i.e. for search)
-			router.push(`${changeSpaceId(pathname, id)}?query=${searchPapersQuery}`);
-		} else {
-			router.push(changeSpaceId(pathname, id));
-		}
+		const route = searchPapersQuery
+			? // Persist URL query params when changing spaces (i.e. for search)
+				`${changeSpaceId(pathname, id)}?query=${searchPapersQuery}`
+			: changeSpaceId(pathname, id);
+
+		onRouteChange?.({ url: route, name: selectedCollection?.name });
+		router.push(route);
 	};
 
 	return (
 		<div className="flex items-center gap-1">
 			<Select onValueChange={handleValueChange} value={selectedSpace}>
-				<SelectTrigger className="flex gap-2 text-lg border-none bg-transparent focus:ring-0 focus:ring-offset-0">
-					<SelectValue />
+				<SelectTrigger
+					data-placeholder="data placeholder"
+					className="flex gap-2 text-lg border-none bg-transparent focus:ring-0 focus:ring-offset-0"
+				>
+					<SelectValue
+						placeholder={collections.find((c) => c.id === selectedSpace)?.name}
+					/>
 				</SelectTrigger>
 				<SelectContent
 					align="center"
 					className="border-none shadow-2xl min-w-64 max-w-80 rounded-xl"
 				>
 					<SelectGroup className="p-0 divide-y">
-						{collectionsWithDefaultFallback.map((collection) => (
+						{collections.map((collection) => (
 							<SelectItem
 								key={collection.id}
 								value={collection.id}
 								className="py-2 text-base cursor-pointer"
 							>
-								{collection.name}
+								{collection.id.includes("user_")
+									? PERSONAL_DEFAULT_COLLECTION_NAME
+									: collection.name}
 							</SelectItem>
 						))}
 					</SelectGroup>
@@ -77,22 +78,12 @@ export const SelectSpaceHeader = ({ collections, userId }: Props) => {
 	);
 };
 
-const ensureDefaultCollection = (
-	collections: Collection[],
-	userId: string | null,
-) => {
-	const existingDefaultCollection = collections.find(
-		(collection) => collection.id === userId,
-	);
-	if (existingDefaultCollection) {
-		return collections;
-	}
-	return userId
-		? [getPersonalDefaultCollection(userId), ...collections]
-		: collections;
-};
-
 const changeSpaceId = (pathname: string, spaceId: string) => {
+	if (spaceId === "user_anonymous") {
+		const [_, _space, _spaceId, ...pathToKeep] = pathname.split("/");
+		return `/${pathToKeep.join("/")}`;
+	}
+
 	const path = pathname.includes("/space/")
 		? pathname.replace(/(?<=\/space\/|^\/space\/)(\w*)(?=\/|$)/, spaceId)
 		: `/space/${spaceId}/${pathname}`;

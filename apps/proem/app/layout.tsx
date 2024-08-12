@@ -1,9 +1,9 @@
 import "@/app/globals.css";
 import { Analytics } from "@/components/analytics";
-import { NotificationsToaster } from "@/components/notifications-toaster";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ReactQueryProvider } from "@/components/providers/react-query";
 import { SetActiveOrganization } from "@/components/set-active-organization";
+import { TopNavigation } from "@/components/top-navigation/top-navigation";
 import "@/env";
 import { cn } from "@proemial/shadcn-ui";
 import { Metadata, Viewport } from "next";
@@ -72,7 +72,6 @@ type Props = {
 
 export default function RootLayout({ children, modal }: Readonly<Props>) {
 	const trackingInput = getTrackingInput();
-
 	return (
 		<html lang="en" className="overscroll-none" suppressHydrationWarning>
 			<head>
@@ -93,11 +92,15 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 							<SetActiveOrganization />
 							<div className="bg-background">
 								<div
+									style={{
+										boxShadow: "0 0 120px rgba(0, 0, 0, .15)",
+									}}
 									className={cn(
 										"mx-auto min-h-[100dvh] flex flex-col",
 										screenMaxWidth,
 									)}
 								>
+									<TopNavigation />
 									{children}
 									{modal}
 								</div>

@@ -85,3 +85,16 @@ export function asTheme(themeColor: string, themeImage?: string | null) {
 export function fromSeed(seed: string) {
 	return seed.includes("col_") ? getRandomThemeColor(seed) : null;
 }
+
+const themeMappings: { [name: string]: Theme } = {
+	nvidia: { color: "green", image: "silicon" },
+	zeiss: { color: "purple", image: "fingerprint" },
+	novo: { color: "purple", image: "fingerprint" },
+	google: { color: "gold", image: "silicon" },
+};
+
+export function themeForInstitution(institution: string): Theme {
+	return Object.keys(themeMappings).includes(institution)
+		? (themeMappings[institution as keyof typeof themeMappings] as Theme)
+		: getRandomThemeColor(institution);
+}

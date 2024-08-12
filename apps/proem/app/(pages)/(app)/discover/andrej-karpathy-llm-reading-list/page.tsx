@@ -1,7 +1,5 @@
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { Main } from "@/components/main";
-import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
-import { NavBar } from "@/components/nav-bar/nav-bar";
 import { PostService } from "@/services/post-service";
 import { auth } from "@clerk/nextjs";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
@@ -35,24 +33,18 @@ export default async function AndrejKarpathyLLMReadingList() {
 	);
 
 	return (
-		<>
-			<NavBar action={<OpenSearchAction />}>
-				<div className="truncate">Andrej Karpathy's LLM Reading List</div>
-			</NavBar>
-			<Main>
-				<div className="space-y-6">
-					<StaticFeed
-						feed={feed.map((paper) => ({
-							...paper,
-							posts:
-								papersWithPosts.find((p) => p.id === paper.id)?.posts ?? [],
-						}))}
-						bookmarks={bookmarks}
-					>
-						Andrej Karpathy's LLM Reading List
-					</StaticFeed>
-				</div>
-			</Main>
-		</>
+		<Main>
+			<div className="space-y-6">
+				<StaticFeed
+					feed={feed.map((paper) => ({
+						...paper,
+						posts: papersWithPosts.find((p) => p.id === paper.id)?.posts ?? [],
+					}))}
+					bookmarks={bookmarks}
+				>
+					Andrej Karpathy's LLM Reading List
+				</StaticFeed>
+			</div>
+		</Main>
 	);
 }

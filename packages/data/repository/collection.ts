@@ -7,28 +7,70 @@ import {
 	collectionsToPapers,
 } from "../neon/schema";
 
-export async function findAvailableCollections(
-	userId: string,
-	orgId?: string | null,
-) {
+const PERSONAL_DEFAULT_COLLECTION_NAME = "For You";
+const ANONYMOUS_USER_ID = "user_anonymous";
+const getPersonalDefaultCollection = (userId?: string | null) =>
+	({
+		id: userId ?? ANONYMOUS_USER_ID,
+		name: PERSONAL_DEFAULT_COLLECTION_NAME,
+		ownerId: userId ?? ANONYMOUS_USER_ID,
+		orgId: null,
+		slug: userId ?? "",
+		description: "",
+		createdAt: new Date(),
+		deletedAt: null,
+		shared: "private",
+	}) satisfies Collection;
+
+const ensureDefaultCollection = (
+	collections: Collection[],
+	userId: string | null,
+) => {
+	const existingDefaultCollection = collections.find(
+		(collection) => collection.id === userId,
+	);
+	if (existingDefaultCollection) {
+		return collections;
+	}
+	return [getPersonalDefaultCollection(userId), ...collections];
+};
+
+export async function findAvailableCollections({
+	userId,
+	orgId,
+	publicCollectionId,
+}: {
+	userId: string | null;
+	orgId?: string | null;
+	publicCollectionId?: string | null;
+}) {
 	const results = await neonDb.query.collections.findMany({
 		where: or(
 			// User's own spaces
-			and(eq(collections.ownerId, userId), isNull(collections.deletedAt)),
+			and(eq(collections.ownerId, userId ?? ""), isNull(collections.deletedAt)),
 			and(
 				// Org members' "org" and "public" spaces
-				ne(collections.ownerId, userId),
+				ne(collections.ownerId, userId ?? ""),
 				eq(collections.orgId, orgId ?? ""),
 				inArray(collections.shared, ["organization", "public"]),
+				isNull(collections.deletedAt),
+			),
+			and(
+				// Public spaces
+				eq(collections.id, publicCollectionId ?? ""),
+				inArray(collections.shared, ["public"]),
 				isNull(collections.deletedAt),
 			),
 		),
 		orderBy: asc(collections.name),
 	});
+
+	const resultsWithDefault = ensureDefaultCollection(results, userId);
+
 	return [
 		// Put the user's default space first
-		...results.filter((c) => c.id === userId),
-		...results.filter((c) => c.id !== userId),
+		...resultsWithDefault.filter((c) => c.id === userId),
+		...resultsWithDefault.filter((c) => c.id !== userId),
 	];
 }
 

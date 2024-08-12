@@ -6,17 +6,20 @@ import { auth } from "@clerk/nextjs/server";
 import { Collection, NewCollection } from "@proemial/data/neon/schema";
 import {
 	createCollection,
+	deleteCollection as deleteCollectionFromDb,
 	findAvailableCollections,
 	findCollection,
 	updateCollection,
-	deleteCollection as deleteCollectionFromDb,
 } from "@proemial/data/repository/collection";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
-export const getAvailableCollections = async () => {
-	const { userId, orgId } = await authAndRatelimit();
-	return await findAvailableCollections(userId, orgId);
+export const getAvailableCollections = async (
+	publicCollectionId?: Collection["id"],
+) => {
+	const { userId, orgId } = await auth();
+
+	return await findAvailableCollections({ userId, orgId, publicCollectionId });
 };
 
 export const addCollection = async (collection: NewCollection) => {
@@ -83,21 +86,27 @@ export const deleteCollection = async (collectionId: Collection["id"]) => {
 	}
 };
 
-const authAndRatelimit = async () => {
-	// Auth
+const authenticate = async () => {
 	const authenticatedUser = auth();
 	if (!authenticatedUser || !authenticatedUser.userId) {
 		throw new Error("Unauthorized");
 	}
-	// Rate limit
+	return {
+		userId: authenticatedUser.userId,
+		orgId: authenticatedUser.orgId,
+	};
+};
+
+const rateLimit = async () => {
 	const ip = headers().get("x-forwarded-for") ?? headers().get("x-real-ip");
 	const { success } = await ratelimitByIpAddress(ip);
 	if (!success) {
 		throw new Error("Rate limit exceeded");
 	}
+};
 
-	return {
-		userId: authenticatedUser.userId,
-		orgId: authenticatedUser.orgId,
-	};
+// Replace authAndRatelimit with separate function calls
+const authAndRatelimit = async () => {
+	await rateLimit();
+	return await authenticate();
 };
