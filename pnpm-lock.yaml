@@ -5,8 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@langchain/core': 0.1.63
-  drizzle-orm: 0.31.0
+  drizzle-orm: 0.33.0
   react: ^18.3.1
   '@types/react': ^18.3.2
   '@types/react-dom': ^18.3.0
@@ -280,7 +279,7 @@ importers:
         version: 1.3.1(next@14.2.5)(react@18.3.1)
       astro:
         specifier: ^4.13.3
-        version: 4.13.3(sass@1.77.8)
+        version: 4.13.3(sass@1.77.8)(typescript@5.5.4)
       tailwindcss:
         specifier: ^3.4.9
         version: 3.4.9(ts-node@10.9.2)
@@ -659,7 +658,7 @@ packages:
       astro: ^3.0.0 || ^4.0.0
       tailwindcss: ^3.0.24
     dependencies:
-      astro: 4.13.3(sass@1.77.8)
+      astro: 4.13.3(sass@1.77.8)(typescript@5.5.4)
       autoprefixer: 10.4.20(postcss@8.4.41)
       postcss: 8.4.41
       postcss-load-config: 4.0.2(postcss@8.4.41)(ts-node@10.9.2)
@@ -692,7 +691,7 @@ packages:
       '@vercel/analytics': 1.3.1(next@14.2.5)(react@18.3.1)
       '@vercel/edge': 1.1.2
       '@vercel/nft': 0.27.2
-      astro: 4.13.3(sass@1.77.8)
+      astro: 4.13.3(sass@1.77.8)(typescript@5.5.4)
       esbuild: 0.21.5
       fast-glob: 3.3.2
       set-cookie-parser: 2.6.0
@@ -2011,7 +2010,7 @@ packages:
     engines: {node: '>=18'}
     dependencies:
       '@anthropic-ai/sdk': 0.22.0
-      '@langchain/core': 0.1.63(langchain@0.2.15)(openai@4.55.4)
+      '@langchain/core': 0.2.23(langchain@0.2.15)(openai@4.55.4)
       fast-xml-parser: 4.4.1
       zod: 3.23.8
       zod-to-json-schema: 3.23.2(zod@3.23.8)
@@ -2387,7 +2386,7 @@ packages:
       youtubei.js:
         optional: true
     dependencies:
-      '@langchain/core': 0.1.63(langchain@0.2.15)(openai@4.55.4)
+      '@langchain/core': 0.2.23(langchain@0.2.15)(openai@4.55.4)
       '@langchain/openai': 0.2.6(langchain@0.2.15)
       '@upstash/ratelimit': 2.0.1
       '@upstash/redis': 1.34.0
@@ -2396,7 +2395,7 @@ packages:
       flat: 5.0.2
       js-yaml: 4.1.0
       langchain: 0.2.15(@langchain/anthropic@0.2.14)(@langchain/community@0.2.26)(@langchain/groq@0.0.16)(@langchain/mistralai@0.0.28)(openai@4.55.4)
-      langsmith: 0.1.41(@langchain/core@0.1.63)(langchain@0.2.15)(openai@4.55.4)
+      langsmith: 0.1.41(@langchain/core@0.2.23)(langchain@0.2.15)(openai@4.55.4)
       uuid: 10.0.0
       zod: 3.23.8
       zod-to-json-schema: 3.23.2(zod@3.23.8)
@@ -2417,27 +2416,6 @@ packages:
       - openai
       - peggy
       - pyodide
-    dev: false
-
-  /@langchain/core@0.1.63(langchain@0.2.15)(openai@4.55.4):
-    resolution: {integrity: sha512-+fjyYi8wy6x1P+Ee1RWfIIEyxd9Ee9jksEwvrggPwwI/p45kIDTdYTblXsM13y4mNWTiACyLSdbwnPaxxdoz+w==}
-    engines: {node: '>=18'}
-    dependencies:
-      ansi-styles: 5.2.0
-      camelcase: 6.3.0
-      decamelize: 1.2.0
-      js-tiktoken: 1.0.12
-      langsmith: 0.1.41(@langchain/core@0.1.63)(langchain@0.2.15)(openai@4.55.4)
-      ml-distance: 4.0.1
-      mustache: 4.2.0
-      p-queue: 6.6.2
-      p-retry: 4.6.2
-      uuid: 9.0.1
-      zod: 3.23.8
-      zod-to-json-schema: 3.23.2(zod@3.23.8)
-    transitivePeerDependencies:
-      - langchain
-      - openai
     dev: false
 
   /@langchain/core@0.2.23(langchain@0.2.15)(openai@4.55.4):
@@ -2464,7 +2442,7 @@ packages:
     resolution: {integrity: sha512-rwD57PzT54clE4WigMzTMmA9rIifXq82uQ9nqFHJ4hfDV38P2lbQ1/N21QE0+L8c9oKvdY+TVm0vlilxV4w22A==}
     engines: {node: '>=18'}
     dependencies:
-      '@langchain/core': 0.1.63(langchain@0.2.15)(openai@4.55.4)
+      '@langchain/core': 0.2.23(langchain@0.2.15)(openai@4.55.4)
       '@langchain/openai': 0.2.6(langchain@0.2.15)
       groq-sdk: 0.5.0
       zod: 3.23.8
@@ -2479,7 +2457,7 @@ packages:
     resolution: {integrity: sha512-6+6AUlRtNTw+fZatbrYNBaZn2Qgn8s+EMBhrpmT5pG4n5usQ57zIKT9VKfv4nJOauBF9J3+3+GiA4bwC8tmkNw==}
     engines: {node: '>=18'}
     dependencies:
-      '@langchain/core': 0.1.63(langchain@0.2.15)(openai@4.55.4)
+      '@langchain/core': 0.2.23(langchain@0.2.15)(openai@4.55.4)
       '@mistralai/mistralai': 0.4.0
       uuid: 10.0.0
       zod: 3.23.8
@@ -2494,7 +2472,7 @@ packages:
     resolution: {integrity: sha512-LZgSzHOZPJGsZr2ZXJICqZo1GN0kUyP9/RN+T45g7HDdMRfS5Df7fJgY9w7EIfznT83Q0Ywhz+At/UvWMR3xhw==}
     engines: {node: '>=18'}
     dependencies:
-      '@langchain/core': 0.1.63(langchain@0.2.15)(openai@4.55.4)
+      '@langchain/core': 0.2.23(langchain@0.2.15)(openai@4.55.4)
       js-tiktoken: 1.0.12
       openai: 4.55.4(zod@3.23.8)
       zod: 3.23.8
@@ -2508,7 +2486,7 @@ packages:
     resolution: {integrity: sha512-cXWgKE3sdWLSqAa8ykbCcUsUF1Kyr5J3HOWYGuobhPEycXW4WI++d5DhzdpL238mzoEXTi90VqfSCra37l5YqA==}
     engines: {node: '>=18'}
     dependencies:
-      '@langchain/core': 0.1.63(langchain@0.2.15)(openai@4.55.4)
+      '@langchain/core': 0.2.23(langchain@0.2.15)(openai@4.55.4)
       js-tiktoken: 1.0.12
     transitivePeerDependencies:
       - langchain
@@ -4955,12 +4933,6 @@ packages:
       undici-types: 5.26.5
     dev: false
 
-  /@types/node@20.14.15:
-    resolution: {integrity: sha512-Fz1xDMCF/B00/tYSVMlmK7hVeLh7jE5f3B7X1/hmV0MJBwE27KlS7EvD/Yp+z1lm8mVhwV5w+n8jOZG8AfTlKw==}
-    dependencies:
-      undici-types: 5.26.5
-    dev: false
-
   /@types/node@22.2.0:
     resolution: {integrity: sha512-bm6EG6/pCpkxDf/0gDNDdtDILMOHgaQBVOJGdwsqClnxA3xL6jtMv76rLBc006RVMWbmaf0xbmom4Z/5o2nRkQ==}
     dependencies:
@@ -5186,7 +5158,7 @@ packages:
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
-      debug: 4.3.6
+      debug: 4.3.6(supports-color@8.1.1)
       istanbul-lib-coverage: 3.2.2
       istanbul-lib-report: 3.0.1
       istanbul-lib-source-maps: 5.0.6
@@ -5797,7 +5769,7 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /astro@4.13.3(sass@1.77.8):
+  /astro@4.13.3(sass@1.77.8)(typescript@5.5.4):
     resolution: {integrity: sha512-MyhmM0v5sphiVwxAm5jjKxWeuPZijWPJ8Ajdign9QzEmLWSH8vUYIJWx/dWRQ6vF1I0jXrksoj3wtw5nzXt9nw==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
@@ -5854,7 +5826,7 @@ packages:
       shiki: 1.12.1
       string-width: 7.2.0
       strip-ansi: 7.1.0
-      tsconfck: 3.1.1
+      tsconfck: 3.1.1(typescript@5.5.4)
       unist-util-visit: 5.0.0
       vfile: 6.0.2
       vite: 5.4.0(sass@1.77.8)
@@ -6001,10 +5973,6 @@ packages:
   /binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
-
-  /binary-search@1.3.6:
-    resolution: {integrity: sha512-nbE1WxOTTrUWIfsfZ4aHGYu5DOuNkbxGokjV6Z2kxfJK3uaAb8zNK1muzOeipoLHZjInT4Br88BHpzevc681xA==}
-    dev: false
 
   /bindings@1.5.0:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
@@ -6750,18 +6718,6 @@ packages:
       ms: 2.1.2
     dev: false
 
-  /debug@4.3.6:
-    resolution: {integrity: sha512-O/09Bd4Z1fBrU4VzkhFqVgpPzaGbw6Sm9FEkBT1A/YBXQFGuuSxa1dN2nxgxS34JmKXqYx8CZAwEVoJFImUXIg==}
-    engines: {node: '>=6.0'}
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
-    dependencies:
-      ms: 2.1.2
-    dev: true
-
   /debug@4.3.6(supports-color@8.1.1):
     resolution: {integrity: sha512-O/09Bd4Z1fBrU4VzkhFqVgpPzaGbw6Sm9FEkBT1A/YBXQFGuuSxa1dN2nxgxS34JmKXqYx8CZAwEVoJFImUXIg==}
     engines: {node: '>=6.0'}
@@ -7026,7 +6982,7 @@ packages:
   /drizzle-zod@0.5.1(drizzle-orm@0.33.0)(zod@3.23.8):
     resolution: {integrity: sha512-C/8bvzUH/zSnVfwdSibOgFjLhtDtbKYmkbPbUCq46QZyZCH6kODIMSOgZ8R7rVjoI+tCj3k06MRJMDqsIeoS4A==}
     peerDependencies:
-      drizzle-orm: 0.31.0
+      drizzle-orm: 0.33.0
       zod: '*'
     dependencies:
       drizzle-orm: 0.33.0(@neondatabase/serverless@0.9.4)(pg@8.12.0)
@@ -8389,10 +8345,6 @@ packages:
       is-decimal: 2.0.1
     dev: false
 
-  /is-any-array@2.0.1:
-    resolution: {integrity: sha512-UtilS7hLRu++wb/WBAw9bNuP1Eg04Ivn1vERJck8zJthEvXCBEBpGR/33u/xLKWEQf95803oalHrVDptcAvFdQ==}
-    dev: false
-
   /is-arguments@1.1.1:
     resolution: {integrity: sha512-8Q7EARjzEnKpt/PCD7e1cgUS0a6X8u5tdSiMqXhojOdoV9TsMsiO+9VLC5vAmO8N7/GmXn7yjR8qnA6bVAEzfA==}
     engines: {node: '>= 0.4'}
@@ -8689,7 +8641,7 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
-      debug: 4.3.6
+      debug: 4.3.6(supports-color@8.1.1)
       istanbul-lib-coverage: 3.2.2
     transitivePeerDependencies:
       - supports-color
@@ -8734,7 +8686,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 20.14.15
+      '@types/node': 22.2.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: false
@@ -9096,7 +9048,7 @@ packages:
     dependencies:
       '@langchain/anthropic': 0.2.14(langchain@0.2.15)(openai@4.55.4)
       '@langchain/community': 0.2.26(@langchain/anthropic@0.2.14)(@langchain/groq@0.0.16)(@langchain/mistralai@0.0.28)(@upstash/ratelimit@2.0.1)(@upstash/redis@1.34.0)(openai@4.55.4)
-      '@langchain/core': 0.1.63(langchain@0.2.15)(openai@4.55.4)
+      '@langchain/core': 0.2.23(langchain@0.2.15)(openai@4.55.4)
       '@langchain/groq': 0.0.16(langchain@0.2.15)(openai@4.55.4)
       '@langchain/mistralai': 0.0.28(langchain@0.2.15)(openai@4.55.4)
       '@langchain/openai': 0.2.6(langchain@0.2.15)
@@ -9105,7 +9057,7 @@ packages:
       js-tiktoken: 1.0.12
       js-yaml: 4.1.0
       jsonpointer: 5.0.1
-      langsmith: 0.1.41(@langchain/core@0.1.63)(langchain@0.2.15)(openai@4.55.4)
+      langsmith: 0.1.41(@langchain/core@0.2.23)(langchain@0.2.15)(openai@4.55.4)
       openapi-types: 12.1.3
       p-retry: 4.6.2
       uuid: 10.0.0
@@ -9117,35 +9069,10 @@ packages:
       - openai
     dev: false
 
-  /langsmith@0.1.41(@langchain/core@0.1.63)(langchain@0.2.15)(openai@4.55.4):
-    resolution: {integrity: sha512-8R7s/225Pxmv0ipMfd6sqmWVsfHLQivYlQZ0vx5K+ReoknummTenQlVK8gapk3kqRMnzkrouuRHMhWjMR6RgUA==}
-    peerDependencies:
-      '@langchain/core': 0.1.63
-      langchain: '*'
-      openai: '*'
-    peerDependenciesMeta:
-      '@langchain/core':
-        optional: true
-      langchain:
-        optional: true
-      openai:
-        optional: true
-    dependencies:
-      '@langchain/core': 0.1.63(langchain@0.2.15)(openai@4.55.4)
-      '@types/uuid': 9.0.8
-      commander: 10.0.1
-      langchain: 0.2.15(@langchain/anthropic@0.2.14)(@langchain/community@0.2.26)(@langchain/groq@0.0.16)(@langchain/mistralai@0.0.28)(openai@4.55.4)
-      openai: 4.55.4(zod@3.23.8)
-      p-queue: 6.6.2
-      p-retry: 4.6.2
-      semver: 7.6.3
-      uuid: 9.0.1
-    dev: false
-
   /langsmith@0.1.41(@langchain/core@0.2.23)(langchain@0.2.15)(openai@4.55.4):
     resolution: {integrity: sha512-8R7s/225Pxmv0ipMfd6sqmWVsfHLQivYlQZ0vx5K+ReoknummTenQlVK8gapk3kqRMnzkrouuRHMhWjMR6RgUA==}
     peerDependencies:
-      '@langchain/core': 0.1.63
+      '@langchain/core': '*'
       langchain: '*'
       openai: '*'
     peerDependenciesMeta:
@@ -10012,37 +9939,6 @@ packages:
     hasBin: true
     dev: false
 
-  /ml-array-mean@1.1.6:
-    resolution: {integrity: sha512-MIdf7Zc8HznwIisyiJGRH9tRigg3Yf4FldW8DxKxpCCv/g5CafTw0RRu51nojVEOXuCQC7DRVVu5c7XXO/5joQ==}
-    dependencies:
-      ml-array-sum: 1.1.6
-    dev: false
-
-  /ml-array-sum@1.1.6:
-    resolution: {integrity: sha512-29mAh2GwH7ZmiRnup4UyibQZB9+ZLyMShvt4cH4eTK+cL2oEMIZFnSyB3SS8MlsTh6q/w/yh48KmqLxmovN4Dw==}
-    dependencies:
-      is-any-array: 2.0.1
-    dev: false
-
-  /ml-distance-euclidean@2.0.0:
-    resolution: {integrity: sha512-yC9/2o8QF0A3m/0IXqCTXCzz2pNEzvmcE/9HFKOZGnTjatvBbsn4lWYJkxENkA4Ug2fnYl7PXQxnPi21sgMy/Q==}
-    dev: false
-
-  /ml-distance@4.0.1:
-    resolution: {integrity: sha512-feZ5ziXs01zhyFUUUeZV5hwc0f5JW0Sh0ckU1koZe/wdVkJdGxcP06KNQuF0WBTj8FttQUzcvQcpcrOp/XrlEw==}
-    dependencies:
-      ml-array-mean: 1.1.6
-      ml-distance-euclidean: 2.0.0
-      ml-tree-similarity: 1.0.0
-    dev: false
-
-  /ml-tree-similarity@1.0.0:
-    resolution: {integrity: sha512-XJUyYqjSuUQkNQHMscr6tcjldsOoAekxADTplt40QKfwW6nd++1wHWV9AArl0Zvw/TIHgNaZZNvr8QGvE8wLRg==}
-    dependencies:
-      binary-search: 1.3.6
-      num-sort: 2.1.0
-    dev: false
-
   /module-details-from-path@1.0.3:
     resolution: {integrity: sha512-ySViT69/76t8VhE1xXHK6Ch4NcDd26gx0MzKXLO+F7NOtnqH68d9zF94nT8ZWSxXh8ELOERsnJO/sWt1xZYw5A==}
     dev: false
@@ -10381,11 +10277,6 @@ packages:
       console-control-strings: 1.1.0
       gauge: 3.0.2
       set-blocking: 2.0.0
-    dev: false
-
-  /num-sort@2.1.0:
-    resolution: {integrity: sha512-1MQz1Ed8z2yckoBeSfkQHHO9K1yDRxxtotKSJ9yvcTUUxSvfvzEq5GwBrjjHEpMlq/k5gvXdmJ1SbYxWtpNoVg==}
-    engines: {node: '>=8'}
     dev: false
 
   /number-allocator@1.0.14:
@@ -12471,17 +12362,6 @@ packages:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
 
-  /tsconfck@3.1.1:
-    resolution: {integrity: sha512-00eoI6WY57SvZEVjm13stEVE90VkEdJAFGgpFLTsZbJyW/LwFQ7uQxJHWpZ2hzSWgCPKc9AnBnNP+0X7o3hAmQ==}
-    engines: {node: ^18 || >=20}
-    hasBin: true
-    peerDependencies:
-      typescript: ^5.0.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dev: false
-
   /tsconfck@3.1.1(typescript@5.5.4):
     resolution: {integrity: sha512-00eoI6WY57SvZEVjm13stEVE90VkEdJAFGgpFLTsZbJyW/LwFQ7uQxJHWpZ2hzSWgCPKc9AnBnNP+0X7o3hAmQ==}
     engines: {node: ^18 || >=20}
@@ -12493,7 +12373,6 @@ packages:
         optional: true
     dependencies:
       typescript: 5.5.4
-    dev: true
 
   /tslib@2.4.1:
     resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
@@ -12963,10 +12842,10 @@ packages:
     hasBin: true
     dependencies:
       cac: 6.7.14
-      debug: 4.3.6
+      debug: 4.3.6(supports-color@8.1.1)
       pathe: 1.1.2
       tinyrainbow: 1.2.0
-      vite: 5.4.0
+      vite: 5.4.0(sass@1.77.8)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -12987,50 +12866,12 @@ packages:
       vite:
         optional: true
     dependencies:
-      debug: 4.3.6
+      debug: 4.3.6(supports-color@8.1.1)
       globrex: 0.1.2
       tsconfck: 3.1.1(typescript@5.5.4)
     transitivePeerDependencies:
       - supports-color
       - typescript
-    dev: true
-
-  /vite@5.4.0:
-    resolution: {integrity: sha512-5xokfMX0PIiwCMCMb9ZJcMyh5wbBun0zUzKib+L65vAZ8GY9ePZMXxFrHbr/Kyll2+LSCY7xtERPpxkBDKngwg==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^18.0.0 || >=20.0.0
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      sass-embedded: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      sass-embedded:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      esbuild: 0.21.5
-      postcss: 8.4.41
-      rollup: 4.20.0
-    optionalDependencies:
-      fsevents: 2.3.3
     dev: true
 
   /vite@5.4.0(sass@1.77.8):
@@ -13070,7 +12911,6 @@ packages:
       sass: 1.77.8
     optionalDependencies:
       fsevents: 2.3.3
-    dev: false
 
   /vitefu@0.2.5(vite@5.4.0):
     resolution: {integrity: sha512-SgHtMLoqaeeGnd2evZ849ZbACbnwQCIwRH57t18FxcXoZop0uQu0uzlIhJBlF/eWVzuce0sHeqPcDo+evVcg8Q==}
@@ -13116,7 +12956,7 @@ packages:
       '@vitest/spy': 2.0.5
       '@vitest/utils': 2.0.5
       chai: 5.1.1
-      debug: 4.3.6
+      debug: 4.3.6(supports-color@8.1.1)
       execa: 8.0.1
       magic-string: 0.30.11
       pathe: 1.1.2
@@ -13124,7 +12964,7 @@ packages:
       tinybench: 2.9.0
       tinypool: 1.0.0
       tinyrainbow: 1.2.0
-      vite: 5.4.0
+      vite: 5.4.0(sass@1.77.8)
       vite-node: 2.0.5
       why-is-node-running: 2.3.0
     transitivePeerDependencies:
