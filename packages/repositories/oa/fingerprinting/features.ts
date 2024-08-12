@@ -1,4 +1,3 @@
-import { A } from "vitest/dist/reporters-yx5ZTtEV.js";
 import { oaTopicsTranslationMap } from "../taxonomy/oa-topics-compact";
 import { Fingerprint } from "./fingerprints";
 
