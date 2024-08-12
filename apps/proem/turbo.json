@@ -1,9 +1,15 @@
 {
-	"extends": ["//"],
-	"pipeline": {
-		"build": {
-			"dependsOn": ["@proemial/data#schema:push"],
-			"env": ["DATABASE_URL"]
-		}
-	}
+  "extends": [
+    "//"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": [
+        "@proemial/data#schema:push"
+      ],
+      "env": [
+        "DATABASE_URL"
+      ]
+    }
+  }
 }
