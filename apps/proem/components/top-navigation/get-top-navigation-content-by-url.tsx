@@ -41,6 +41,13 @@ export function getTopNavigationContentByUrl(
 				action: null,
 			};
 		}
+
+		if (url.includes("/search")) {
+			return {
+				action: <CloseAction target={url.replace("/search", "")} />,
+			};
+		}
+
 		// "For you" feed for logged in users
 		if (url.includes("/user_")) {
 			// Saved bookmarks
@@ -53,6 +60,7 @@ export function getTopNavigationContentByUrl(
 					),
 				};
 			}
+
 			return {
 				action: (
 					<ActionMenu>
@@ -64,13 +72,6 @@ export function getTopNavigationContentByUrl(
 
 		// Collection space
 		if (url.includes("/col_")) {
-			// Collections bookmarks
-			if (url.includes("/search")) {
-				return {
-					action: <CloseAction target={url.replace("/search", "")} />,
-				};
-			}
-
 			// Discover/latest feed
 			return {
 				action: (
