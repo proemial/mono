@@ -8,7 +8,7 @@ import {
 	PostService,
 } from "@/services/post-service";
 import { getUsers } from "@/utils/auth";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { nanoid } from "ai";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";

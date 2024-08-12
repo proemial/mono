@@ -9,7 +9,7 @@ import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { ProemAssistant } from "@/components/proem-assistant";
 import { CollectionService } from "@/services/collection-service";
 import { PermissionUtils } from "@/utils/permission-utils";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { Fingerprint } from "@proemial/repositories/oa/fingerprinting/fingerprints";

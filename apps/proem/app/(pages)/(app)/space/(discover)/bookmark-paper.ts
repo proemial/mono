@@ -7,7 +7,7 @@ import {
 } from "@/app/constants";
 import { streamCacheUpdate } from "@/inngest/populator.task";
 import { PermissionUtils } from "@/utils/permission-utils";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { NewCollection } from "@proemial/data/neon/schema";
 import {
 	addPaperToCollection,
