@@ -1,5 +1,6 @@
 import "@/app/globals.css";
 import { Analytics } from "@/components/analytics";
+import { Main } from "@/components/main";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ReactQueryProvider } from "@/components/providers/react-query";
 import { SetActiveOrganization } from "@/components/set-active-organization";
@@ -101,7 +102,7 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 									)}
 								>
 									<TopNavigation />
-									{children}
+									<Main>{children}</Main>
 									{modal}
 								</div>
 							</div>

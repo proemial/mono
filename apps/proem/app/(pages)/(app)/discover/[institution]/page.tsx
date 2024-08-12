@@ -1,13 +1,12 @@
 import { Feed } from "@/app/(pages)/(app)/space/(discover)/feed";
-import { Main } from "@/components/main";
 import { ProemAssistant } from "@/components/proem-assistant";
 import { auth } from "@clerk/nextjs/server";
 import { fetchJson } from "@proemial/utils/fetch";
 import { FollowButton } from "./follow";
 import { OrgSelector } from "./org-selector";
 
-import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
 import { themeForInstitution } from "@/app/theme/color-theme";
+import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
 
 export default async function DiscoverPage({
 	params,
@@ -52,21 +51,19 @@ export default async function DiscoverPage({
 
 	return (
 		<>
-			<Main className="z-0">
-				<div className="pt-16 space-y-6">
-					{institutions?.length > 0 && (
-						<Feed
-							filter={{ institution: institutions.at(0)?.id }}
-							bookmarks={bookmarks}
-							header={header}
-							theme={theme}
-						>
-							<OrgSelector institutions={institutions} selected={name} />
-						</Feed>
-					)}
-				</div>
-				<ProemAssistant />
-			</Main>
+			<div className="pt-10">
+				{institutions?.length > 0 && (
+					<Feed
+						filter={{ institution: institutions.at(0)?.id }}
+						bookmarks={bookmarks}
+						theme={theme}
+						header={header}
+					>
+						<OrgSelector institutions={institutions} selected={name} />
+					</Feed>
+				)}
+			</div>
+			<ProemAssistant />
 		</>
 	);
 }

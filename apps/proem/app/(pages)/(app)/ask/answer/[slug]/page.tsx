@@ -1,7 +1,6 @@
 import { Answer } from "@/app/(pages)/(app)/ask/answer/[slug]/answer";
 import { mapAnswerToAnswerEngine } from "@/app/(pages)/(app)/ask/mapAnswerToAnswerEngine";
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
-import { Main } from "@/components/main";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs/server";
 import { answers } from "@proemial/data/repository/answer";
@@ -30,13 +29,11 @@ export default async function AnswerPage({ params: { slug } }: Props) {
 	);
 
 	return (
-		<Main>
-			<Answer
-				existingData={existingData}
-				initialMessages={initialMessages}
-				initialSessionSlug={firstAnswer.slug}
-				bookmarks={bookmarks}
-			/>
-		</Main>
+		<Answer
+			existingData={existingData}
+			initialMessages={initialMessages}
+			initialSessionSlug={firstAnswer.slug}
+			bookmarks={bookmarks}
+		/>
 	);
 }

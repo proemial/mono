@@ -2,7 +2,6 @@ import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { FeatureCloud } from "@/components/feature-badges";
-import { Main } from "@/components/main";
 import { auth } from "@clerk/nextjs";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
@@ -55,18 +54,16 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	);
 
 	return (
-		<Main>
-			<div className="pt-8 space-y-6">
-				<Feed
-					filter={{ features: filter, days: params.days }}
-					debug={!searchParams?.clean}
-					nocache={searchParams?.nocache}
-					bookmarks={bookmarks}
-				>
-					<AutocompleteInput />
-					{!searchParams?.clean && <FeatureCloud features={allFeatures} />}
-				</Feed>
-			</div>
-		</Main>
+		<div className="pt-8 space-y-6">
+			<Feed
+				filter={{ features: filter, days: params.days }}
+				debug={!searchParams?.clean}
+				nocache={searchParams?.nocache}
+				bookmarks={bookmarks}
+			>
+				<AutocompleteInput />
+				{!searchParams?.clean && <FeatureCloud features={allFeatures} />}
+			</Feed>
+		</div>
 	);
 }

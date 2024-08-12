@@ -1,4 +1,3 @@
-import { Main } from "@/components/main";
 import { cn } from "@proemial/shadcn-ui";
 import { ReactNode } from "react";
 import { screenMaxWidthOrgManagement } from "../constants";
@@ -15,7 +14,7 @@ export default function OrgManagementLayout({ children }: Props) {
 				screenMaxWidthOrgManagement,
 			)}
 		>
-			<Main>{children}</Main>
+			{children}
 		</div>
 	);
 }

@@ -95,7 +95,7 @@ export const Answer = ({
 	);
 
 	return (
-		<div className="flex flex-col justify-between flex-grow gap-4 relative">
+		<div className="flex flex-col justify-between flex-grow gap-4 relative pt-4">
 			<div className={cn("flex flex-col gap-10")}>
 				{messages
 					.filter((message) => message.role === "user")

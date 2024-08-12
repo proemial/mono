@@ -3,7 +3,6 @@ import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { FeatureCloud } from "@/components/feature-badges";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
-import { Main } from "@/components/main";
 import { ProemAssistant } from "@/components/proem-assistant";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs/server";
@@ -52,43 +51,40 @@ export default async function DiscoverPage({ searchParams }: Props) {
 	]);
 
 	return (
-		<Main>
-			<div className="space-y-6">
-				<Feed
-					filter={filter}
-					debug={params.debug}
-					bookmarks={bookmarks}
-					nocache={searchParams?.nocache}
-				>
-					{!filter.features && (
-						<div className="-my-4">
-							<HorisontalScrollArea>
-								<FeedFilter
-									items={[
-										"all",
-										...OaFields.map((field) =>
-											field.display_name.toLowerCase(),
-										),
-									]}
-									rootPath={routes.space}
-								/>
-							</HorisontalScrollArea>
-						</div>
-					)}
-					{params.debug && (
-						<>
-							<Titles
-								bookmarked={filter.titles?.at(0)}
-								read={filter.titles?.at(1)}
+		<>
+			{params.debug ? (
+				<>
+					<Titles
+						bookmarked={filter.titles?.at(0)}
+						read={filter.titles?.at(1)}
+					/>
+					<FeatureCloud features={filter.all} />
+				</>
+			) : null}
+
+			<Feed
+				filter={filter}
+				debug={params.debug}
+				bookmarks={bookmarks}
+				nocache={searchParams?.nocache}
+			>
+				{!filter.features ? (
+					<div className="-my-4">
+						<HorisontalScrollArea>
+							<FeedFilter
+								items={[
+									"all",
+									...OaFields.map((field) => field.display_name.toLowerCase()),
+								]}
+								rootPath={routes.space}
 							/>
-							<FeatureCloud features={filter.all} />
-						</>
-					)}
-				</Feed>
-			</div>
+						</HorisontalScrollArea>
+					</div>
+				) : null}
+			</Feed>
 
 			<ProemAssistant />
-		</Main>
+		</>
 	);
 }
 

@@ -50,8 +50,8 @@ export function Feed({
 	console.log("Feed", filter);
 
 	return (
-		<div className="space-y-5 pb-10 -mt-10">
-			<div>{children}</div>
+		<div className="space-y-5 pb-10">
+			{children ? <div>{children}</div> : null}
 			{header}
 			<InfinityScrollList
 				queryKey={

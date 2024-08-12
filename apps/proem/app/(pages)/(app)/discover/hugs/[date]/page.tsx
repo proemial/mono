@@ -1,5 +1,4 @@
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
-import { Main } from "@/components/main";
 import { PostService } from "@/services/post-service";
 import { auth } from "@clerk/nextjs";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
@@ -41,21 +40,19 @@ export default async function HuggingList({ params: { date } }: Props) {
 	);
 
 	return (
-		<Main>
-			<div className="space-y-6">
-				<StaticFeed
-					feed={feed.map((paper) => ({
-						...paper,
-						posts: papersWithPosts.find((p) => p.id === paper.id)?.posts ?? [],
-					}))}
-					bookmarks={bookmarks}
-				>
-					<div className="flex items-center">
-						A hugging tribute to AK
-						<Image className="w-6 h-6 ml-2" src={logo} alt="" />
-					</div>
-				</StaticFeed>
-			</div>
-		</Main>
+		<div className="space-y-6">
+			<StaticFeed
+				feed={feed.map((paper) => ({
+					...paper,
+					posts: papersWithPosts.find((p) => p.id === paper.id)?.posts ?? [],
+				}))}
+				bookmarks={bookmarks}
+			>
+				<div className="flex items-center">
+					A hugging tribute to AK
+					<Image className="w-6 h-6 ml-2" src={logo} alt="" />
+				</div>
+			</StaticFeed>
+		</div>
 	);
 }

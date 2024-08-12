@@ -1,5 +1,4 @@
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
-import { Main } from "@/components/main";
 import { PostService } from "@/services/post-service";
 import { auth } from "@clerk/nextjs";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
@@ -33,18 +32,16 @@ export default async function AndrejKarpathyLLMReadingList() {
 	);
 
 	return (
-		<Main>
-			<div className="space-y-6">
-				<StaticFeed
-					feed={feed.map((paper) => ({
-						...paper,
-						posts: papersWithPosts.find((p) => p.id === paper.id)?.posts ?? [],
-					}))}
-					bookmarks={bookmarks}
-				>
-					Andrej Karpathy's LLM Reading List
-				</StaticFeed>
-			</div>
-		</Main>
+		<div className="space-y-6">
+			<StaticFeed
+				feed={feed.map((paper) => ({
+					...paper,
+					posts: papersWithPosts.find((p) => p.id === paper.id)?.posts ?? [],
+				}))}
+				bookmarks={bookmarks}
+			>
+				Andrej Karpathy's LLM Reading List
+			</StaticFeed>
+		</div>
 	);
 }
