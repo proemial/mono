@@ -68,7 +68,7 @@ it("Generate `logos.json` from `csvFiles`", () => {
 			...logos,
 			...Object.fromEntries(
 				result.map((item) => [
-					item[1],
+					item[1]?.trim(),
 					{
 						...{
 							logo: item[2]

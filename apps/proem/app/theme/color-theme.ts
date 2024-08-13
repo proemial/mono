@@ -48,7 +48,7 @@ export const generateThemeCssVariables = (themeColor: ThemeColor) => {
 	`;
 };
 
-export const getRandomThemeColor = (seed: string): Theme => {
+export const getRandomTheme = (seed: string): Theme => {
 	return {
 		color: themeColors[numberFrom(seed, themeColors.length - 1)]!,
 		image: themePatterns[numberFrom(seed, themePatterns.length - 1)]!,
@@ -83,5 +83,5 @@ export function asTheme(themeColor: string, themeImage?: string | null) {
 }
 
 export function fromSeed(seed: string) {
-	return seed.includes("col_") ? getRandomThemeColor(seed) : null;
+	return seed.includes("col_") ? getRandomTheme(seed) : null;
 }

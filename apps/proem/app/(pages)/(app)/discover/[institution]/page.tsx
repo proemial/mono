@@ -76,6 +76,18 @@ export default async function DiscoverPage({
 function Logo({ branding }: { branding: Branding }) {
 	if (!branding.logo) return null;
 
+	// mix-blend-mode works but not on our background https://codepen.io/summercodes/pen/eYaYoVO
+	// return (
+	// 	<div className="mb-8 flex justify-center">
+	// 		<img
+	// 			src={branding.logo.url}
+	// 			alt=""
+	// 			className={`max-h-24 ${
+	// 				branding.logo.whiteOnBlack ? "mix-blend-multiply" : ""
+	// 			}`}
+	// 		/>
+	// 	</div>
+	// );
 	return (
 		<div
 			className="h-24 mb-8 bg-contain bg-no-repeat bg-center"

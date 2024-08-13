@@ -9,44 +9,68 @@
       "image": "silicon"
     }
   },
-  "robinhood markets, inc.": {
+  "robinhood markets": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/HOOD-3f9aec90.png?t=1720244492"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "advanced micro devices, inc.": {
+  "advanced micro devices": {
     "logo": {
       "url": "https://w7.pngwing.com/pngs/125/529/png-transparent-advanced-micro-devices-inc-v-intel-corp-central-processing-unit-openacc-intel-angle-text-triangle.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "marathon digital holdings, inc.": {
+  "marathon digital": {
     "logo": {
       "url": "https://d1io3yog0oux5.cloudfront.net/_41bf32252b8ff532f963c37a5a9259b3/marathondh/db/469/6887/image.svg"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "rivian automotive, inc.": {
+  "rivian automotive": {
     "logo": {
       "url": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Rivian_Logo_Black.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "lyft, inc.": {
+  "lyft": {
     "logo": {
       "url": "https://i.pinimg.com/736x/46/c5/ff/46c5ff2bd12e7bbc1532f966bd5914b0.jpg"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "sofi technologies, inc.": {
+  "sofi technologies": {
     "logo": {
       "url": "https://www.sec.gov/Archives/edgar/data/1742912/000089418921002046/sofilogo1.jpg"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "monster beverage corporation": {
+  "monster beverage": {
     "logo": {
       "url": "https://www.pngall.com/wp-content/uploads/5/Monster-PNG.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "lucid group, inc.": {
+  "lucid": {
     "logo": {
       "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvs2bOhkGBQjXyR3duvopH9BjXcrUHAFrb0Q&s"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
   "alphabet": {
@@ -58,491 +82,758 @@
       "image": "silicon"
     }
   },
-  "grab holdings limited": {
+  "grab": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/GRAB_BIG.D-21864850.png?t=1720244492",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "micron technology, inc.": {
+  "micron technology": {
     "logo": {
       "url": "https://cdn.freebiesupply.com/logos/large/2x/micron-technology-logo-black-and-white.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "telefonaktiebolaget lm ericsson (publ)": {
+  "ericsson": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/ERIC_BIG.D-a6e54d97.png?t=1720244491",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "zoominfo technologies inc.": {
+  "zoominfo technologies": {
     "logo": {
       "url": "https://www.cogilex.com/zoominfo.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "viatris inc.": {
+  "viatris": {
     "logo": {
       "url": "https://uspto.report/TM/98423674/mark.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "sunrun inc.": {
+  "sunrun": {
     "logo": {
       "url": "https://s.yimg.com/ny/api/res/1.2/gAlCXy9Q9UT3d_wlwAkgig--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD0yMjg-/https://media.zenfs.com/en/globenewswire.com/35efcd70a889f0bf2d8a393a13ae0e76"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "marvell technology, inc.": {
+  "marvell technology": {
     "logo": {
       "url": "https://jobs.sevendaysvt.com/wp-content/uploads/2021/10/marvell-700-700x430.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "zillow group, inc.": {
+  "zillow": {
     "logo": {
       "url": "https://fineproxy.org/wp-content/uploads/2023/07/zillow.com_logo-2048x1152.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "ast spacemobile, inc.": {
+  "ast spacemobile": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/ASTS_BIG.D-33e0f383.png?t=1720244490",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "comcast corporation": {
+  "comcast": {
     "logo": {
-      "url": "https://cdn.freebiesupply.com/images/large/2x/comcast-logo-black-transparent.png"
+      "url": "https://i.pinimg.com/originals/6a/db/d3/6adbd3ff5b21bf275028eae71db288aa.jpg"
     }
   },
-  "agnc investment corp.": {
+  "agnc investment": {
     "logo": {
       "url": "https://api.getkoala.com/web/companies/agnc.com/logo",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "super micro computer, inc.": {
+  "super micro computer": {
     "logo": {
       "url": "https://uspto.report/TM/86555758/mark"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "celsius holdings, inc.": {
+  "celsius": {
     "logo": {
       "url": "https://media.glassdoor.com/sqll/354415/celsius-holdings-squareLogo-1649983455121.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "fortinet, inc.": {
+  "fortinet": {
     "logo": {
       "url": "https://5.imimg.com/data5/SELLER/Default/2023/6/317454451/XH/JO/OI/46159964/fortinet--500x500.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "huntington bancshares incorporated": {
+  "huntington bancshares": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/HBAN.D-205a7694.png?t=1720244492",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "microstrategy incorporated": {
+  "microstrategy": {
     "logo": {
       "url": "https://www.marketbeat.com/logos/microstrategy-incorporated-logo.png?v=20240214205455"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "arm holdings plc": {
+  "arm": {
     "logo": {
       "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Arm_logo_2017.svg/2560px-Arm_logo_2017.svg.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "datadog, inc.": {
+  "datadog": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/DDOG.D-996b6e86.png?t=1720244491",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "paypal holdings, inc.": {
+  "paypal": {
     "logo": {
       "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyDON5rKX4oYzGbKtw6W-Tcq1q0OTqa5YRqnFPc_ild9Cu9zNH"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "sirius xm holdings inc.": {
+  "sirius xm": {
     "logo": {
       "url": "https://d1io3yog0oux5.cloudfront.net/_d52da129dcb9c7d4843aefc9143c1ee3/siriusxm/db/2301/21011/hover_image.png",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "on semiconductor corporation": {
+  "on semiconductor": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/ON_BIG.D-1bbc7604.png?t=1720244493",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "applovin corporation": {
+  "applovin": {
     "logo": {
       "url": "https://woodensword.games/wp-content/uploads/partner_al_en.jpg"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "host hotels & resorts, inc.": {
+  "host hotels & resorts": {
     "logo": {
       "url": "https://companiesmarketcap.com/img/company-logos/256/HST.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "r1 rcm inc.": {
+  "r1 rcm": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/RCM_BIG.D-0d44eeb8.png?t=1720248253",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "applied materials, inc.": {
+  "applied materials": {
     "logo": {
       "url": "https://dwglogo.com/wp-content/uploads/2016/05/Applied_Materials_logo_black.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "microchip technology incorporated": {
+  "microchip technology": {
     "logo": {
       "url": "https://w7.pngwing.com/pngs/772/896/png-transparent-microchip-technology-integrated-circuits-chips-nasdaq-mchp-nxp-semiconductors-special-offer-miscellaneous-company-text.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "csx corporation": {
+  "csx": {
     "logo": {
       "url": "https://i.pinimg.com/originals/5b/7f/22/5b7f22f34199730c413368add921a9f1.jpg"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "aurora innovation, inc.": {
+  "aurora innovation": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/AUR_BIG.D-5a55839f.png?t=1720244490"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "airbnb, inc.": {
+  "airbnb": {
     "logo": {
       "url": "https://static-00.iconduck.com/assets.00/airbnb-icon-951x1024-k9ex1vkq.png",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "draftkings inc.": {
+  "draftkings": {
     "logo": {
       "url": "https://www.draftkings.com/v2/landingpages-assets/blt02fb52e5e7a6fbb9/bltc1af4319dc7e4034/62b20f0b2680af5922337881/DraftKings_White.png",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "gilead sciences, inc.": {
+  "gilead sciences": {
     "logo": {
       "url": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcS27PAYzbKL_pRRjmJjg2-L0vLtQHAj6vs-YFdyTVkKedqJrEw6"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "coinbase global, inc.": {
+  "coinbase global": {
     "logo": {
       "url": "https://vectorseek.com/wp-content/uploads/2023/09/Coinbase-New-2021-Logo-Vector.svg-.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "exelon corporation": {
+  "exelon": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/EXC.D-2ab44429.png?t=1720244491"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "roivant sciences ltd.": {
+  "roivant sciences": {
     "logo": {
       "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVX4eLNwEfyfIzO_Uk1tEc2HcZH9XxClN_5w&s"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "crowdstrike holdings, inc.": {
+  "crowdstrike": {
     "logo": {
       "url": "https://www.content.shi.com/cms-content/accelerator/media/logos/logo-crowdstrike-white.png",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "bilibili inc.": {
+  "bilibili": {
     "logo": {
       "url": "https://seeklogo.com/images/B/bilibili-logo-B437BF5C3E-seeklogo.com.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "the kraft heinz company": {
+  "kraft heinz": {
     "logo": {
       "url": "https://seeklogo.com/images/H/h-j-heinz-company-logo-F89045A969-seeklogo.com.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "united airlines holdings, inc.": {
+  "united airlines": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/UAL.D-45780229.png?t=1720244494",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "texas instruments incorporated": {
+  "texas instruments": {
     "logo": {
       "url": "https://logodix.com/logo/1998618.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "astera labs, inc.": {
+  "astera labs": {
     "logo": {
       "url": "https://www.asteralabs.com/wp-content/uploads/2022/12/AsteraLabs-WhitewBug-Hz-300x91.png",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "the trade desk, inc.": {
+  "trade desk": {
     "logo": {
       "url": "https://www.thetradedesk.com/c/visual-identity/media/db55c09bb40e21bcde891154f89c2016/icons-white-full.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "mondelez international, inc.": {
+  "mondelez international": {
     "logo": {
       "url": "https://1000logos.net/wp-content/uploads/2020/09/Mondelez-Logo.jpg"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "western digital corporation": {
+  "western digital": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/WDC.D-ca8ed6f6.png?t=1720244494",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "li auto inc.": {
+  "li auto": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/LI.D-ca19aaad.png?t=1720244492",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "pdd holdings inc.": {
+  "pdd": {
     "logo": {
       "url": "https://quartr.com/_next/image?url=https%3A%2F%2Ffiles.quartr.com%2Fcompany-logos%2F566f2-2023-05-26-11-51-45.png&w=256&q=100",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "dexcom, inc.": {
+  "dexcom": {
     "logo": {
       "url": "https://childrenwithdiabetes.com/wp-content/uploads/dexcom-category-logo-white-crop-1-1024x305.png",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "t-mobile us, inc.": {
+  "t-mobile us": {
     "logo": {
       "url": "https://www.svgrepo.com/show/342298/t-mobile.svg"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "patterson-uti energy, inc.": {
+  "patterson-uti energy": {
     "logo": {
       "url": "https://ulterra.com/wp-content/uploads/2022/05/Patterson_uti_Button_White_Rgb_900px_w_300ppi-002.png%22",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "doordash, inc.": {
+  "doordash": {
     "logo": {
       "url": "https://uspto.report/TM/88363301/mark.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "sabra health care reit, inc.": {
+  "sabra health care reit": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/SBRA-a67c676a.png?t=1720244493"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "baker hughes company": {
+  "baker hughes": {
     "logo": {
       "url": "https://aliarp.com.br/wp-content/uploads/2024/01/baker-hughes-logo-branco-1.png",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "xp inc.": {
+  "xp": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/XP-e2cdea0d.png?t=1720244494"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "keurig dr pepper inc.": {
+  "keurig dr pepper": {
     "logo": {
       "url": "https://getlogovector.com/wp-content/uploads/2020/11/keurig-dr-pepper-inc-logo-vector.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "pepsico, inc.": {
+  "pepsico": {
     "logo": {
-      "url": "https://static.wikia.nocookie.net/logopedia/images/1/1d/PepsiCo_logo_old_%28Print%29.svg/revision/latest?cb=20220625100656"
+      "url": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQ6p0l1S027s9iaRADrutouTAgcm4BG-ekd0aOfBr0ca8bpxiU7"
     }
   },
-  "royalty pharma plc": {
+  "royalty pharma": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/RPRX.D-6e127a7e.png?t=1720244493",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "amicus therapeutics, inc.": {
+  "amicus therapeutics": {
     "logo": {
       "url": "https://uspto.report/TM/78809293/mark.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "copart, inc.": {
+  "copart": {
     "logo": {
       "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Copart-Logo-3.0-rgb.svg/1280px-Copart-Logo-3.0-rgb.svg.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "guardant health, inc.": {
+  "guardant health": {
     "logo": {
       "url": "https://media.licdn.com/dms/image/C510BAQFOPPzXItZrRQ/company-logo_200_200/0/1630577577194/guardant_health_amea_logo?e=2147483647&v=beta&t=00PzFv9kQveXyKeVykUBXFqq3w6FSy0UipJmSVh_N-M"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "vodafone group public limited company": {
+  "vodafone": {
     "logo": {
       "url": "https://gillcreative.co/wp-content/uploads/2021/09/Vodafone-Logo-White-768x432.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "match group, inc.": {
+  "match": {
     "logo": {
       "url": "https://uspto.report/TM/90668076/mark.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "apa corporation": {
+  "apa": {
     "logo": {
       "url": "https://uspto.report/TM/90539562/mark"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
   "valley national bancorp": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/VLY_BIG.D-7e91e934.png?t=1720244494"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "lattice semiconductor corporation": {
+  "lattice semiconductor": {
     "logo": {
       "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZV99Qrum8aWZ4l2ABFPmLWdcPBsgB9ldNfMdghBpA4QM5Oy4nwBBh0V2c2BhYkSUPfhk&usqp=CAU"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "analog devices, inc.": {
+  "analog devices": {
     "logo": {
       "url": "https://hightechcampus.com/storage/899/ADI-Logo-large.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "apellis pharmaceuticals, inc.": {
+  "apellis pharmaceuticals": {
     "logo": {
       "url": "https://uspto.report/TM/88616568/mark"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "akamai technologies, inc.": {
+  "akamai technologies": {
     "logo": {
       "url": "https://seeklogo.com/images/A/akamai-logo-E9C6B4967B-seeklogo.com.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "affirm holdings, inc.": {
+  "affirm": {
     "logo": {
       "url": "https://cdn-assets.affirm.com/images/white_logo-transparent_bg.png",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "news corporation": {
+  "news": {
     "logo": {
       "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCYTv34LN8ErgZ-p4Smf5FNOKK5xL6oxD11g&s"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "the wendy's company": {
+  "wendy's": {
     "logo": {
       "url": "https://www.chutegerdeman.com/wp-content/uploads/2017/03/Wendys_logo_300_bw.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "exelixis, inc.": {
+  "exelixis": {
     "logo": {
       "url": "https://ir.exelixis.com/static-files/854e1b52-c35f-4d9d-8065-15d3263f8fab"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "confluent, inc.": {
+  "confluent": {
     "logo": {
       "url": "https://www.datanami.com/wp-content/uploads/2024/02/Confluent-300x300.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "mobileye global inc.": {
+  "mobileye global": {
     "logo": {
       "url": "https://capedge.com/proxy/S-1/0001104659-22-104640/lg_mobileyetmfrnt-4c.jpg"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "roku, inc.": {
+  "roku": {
     "logo": {
       "url": "https://www.i3investor.com/pubus/stock/company/icon/2150/roku.png",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "dropbox, inc.": {
+  "dropbox": {
     "logo": {
       "url": "https://cdn-icons-png.flaticon.com/256/1216/1216894.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "dentsply sirona inc.": {
+  "dentsply sirona": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/XRAY.D-b0c4984e.png?t=1720244494",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "astrazeneca plc": {
+  "astrazeneca": {
     "logo": {
-      "url": "https://companieslogo.com/img/orig/AZN.D-c70a049f.png?t=1720244490"
+      "url": "https://cdn-icons-png.freepik.com/512/5968/5968203.png"
     }
   },
-  "caesars entertainment, inc.": {
+  "caesars entertainment": {
     "logo": {
       "url": "https://investor.caesars.com/sites/g/files/knoqqb81016/themes/site/nir_pid933/dist/images/1528848252454.png",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "gitlab inc.": {
+  "gitlab": {
     "logo": {
       "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnNMlCD2KO_Rkvj2KHb0miCPBqsxCoNqYPtg&s"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "new fortress energy inc.": {
+  "new fortress energy": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/NFE.D-e621432e.png?t=1720244493",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "stoneco ltd.": {
+  "stoneco": {
     "logo": {
       "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRywmDDu7lpJ6jYkPJGSSHQmNmpErlu4vURnQ&s"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "gen digital inc.": {
+  "gen digital": {
     "logo": {
       "url": "https://cxotoday.com/wp-content/uploads/2023/10/Gen.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "viking therapeutics, inc.": {
+  "viking therapeutics": {
     "logo": {
       "url": "https://www.marketbeat.com/logos/viking-therapeutics-inc-logo.png?v=20240306130605"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "formula one group": {
+  "formula one": {
     "logo": {
       "url": "https://selectionrs.com/img/m/175-medium_default.jpg",
       "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "moderna, inc.": {
+  "moderna": {
     "logo": {
       "url": "https://i0.wp.com/www.phdata.io/wp-content/uploads/2023/10/moderna-logo-white.png"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "sarepta therapeutics, inc.": {
+  "sarepta therapeutics": {
     "logo": {
       "url": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTxxABnX97Ci7hbtYp4SthSa01-6QiLg9pid95JHt-MThAz9HmZ"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "expedia group, inc.": {
+  "expedia": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/EXPE.D-1d74d80e.png?t=1720244491"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "maplebear inc.": {
+  "maplebear": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/CART.D-bec06046.png?t=1720244491"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "baidu, inc.": {
+  "baidu": {
     "logo": {
       "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUZ95H2r9FBMnVjCiSllBI0sk-Cww3S0DcLp544TdfP4EfLjuB"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "cognizant technology solutions corporation": {
+  "cognizant technology solutions": {
     "logo": {
       "url": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQcZWSwO9nosSp8A63RobzuUR003PP-Fc_guJiKUVyJlQsT9ljR"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "cadence design systems, inc.": {
+  "cadence design systems": {
     "logo": {
       "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlqRde5Guj48ZQCn00CIVwFYYiYlWdEDDXFQ&s"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "constellation energy corporation": {
+  "constellation energy": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/CEG.D-15cf41cb.png?t=1720244491"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
-  "kanzhun limited": {
+  "kanzhun": {
     "logo": {
       "url": "https://www.marketbeat.com/logos/kanzhun-limited-logo.jpg?v=20240424093447"
+    },
+    "theme": {
+      "image": "silicon"
     }
   },
   "walmart": {
@@ -926,11 +1217,6 @@
       "url": "https://www.zoeess.com/static/img/about/partbg3.png"
     }
   },
-  "comcast": {
-    "logo": {
-      "url": "https://i.pinimg.com/originals/6a/db/d3/6adbd3ff5b21bf275028eae71db288aa.jpg"
-    }
-  },
   "at&t": {
     "logo": {
       "url": "https://generatoricon.com/_next/image/?url=https%3A%2F%2Fstorage.googleapis.com%2Ficon_svgs%2Fphotos%2Ftech-brand-logos-mo%2Fat-and-t_341622.png&w=1080&q=75"
@@ -1225,11 +1511,6 @@
   "crédit agricole": {
     "logo": {
       "url": "https://cdn.prod.website-files.com/56cf02e3183bcaa02f35e349/64ad34ea2ca618712b5b5539_Credit_Agricole_Logo.png"
-    }
-  },
-  "pepsico": {
-    "logo": {
-      "url": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQ6p0l1S027s9iaRADrutouTAgcm4BG-ekd0aOfBr0ca8bpxiU7"
     }
   },
   "zhejiang rongsheng holding group": {
@@ -2234,11 +2515,6 @@
     "logo": {
       "url": "https://www.idesis.de/wp-content/uploads/2020/12/Thyssenkrupp_AG_Logo_2015.png",
       "whiteOnBlack": "TRUE"
-    }
-  },
-  "astrazeneca": {
-    "logo": {
-      "url": "https://cdn-icons-png.freepik.com/512/5968/5968203.png"
     }
   },
   "vale": {

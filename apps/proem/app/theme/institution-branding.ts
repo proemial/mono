@@ -1,5 +1,6 @@
 import * as brands from "@proemial/repositories/oa/institutions/branding.json";
-import { getRandomThemeColor, Theme } from "./color-theme";
+import { getRandomTheme, Theme } from "./color-theme";
+import { get } from "http";
 
 export type Branding = {
 	logo?: {
@@ -12,18 +13,18 @@ export type Branding = {
 export function brandingForInstitution(institution: string) {
 	const sanitized = decodeURI(institution).toLowerCase();
 
-	if (!Object.keys(brands).includes(sanitized)) {
-		console.log("No branding found for", sanitized);
-
-		return { theme: getRandomThemeColor(sanitized) };
-	}
-
+	const template = { theme: getRandomTheme(sanitized) };
 	const branding = brands[sanitized as keyof typeof brands] as Branding;
 
-	if (!branding.theme) {
-		console.log("No theme found for", sanitized);
-		return { ...branding, theme: getRandomThemeColor(sanitized) };
+	if (!branding) {
+		return template;
 	}
 
-	return branding;
+	return {
+		theme: {
+			...template.theme,
+			...branding.theme,
+		},
+		logo: branding.logo,
+	};
 }
