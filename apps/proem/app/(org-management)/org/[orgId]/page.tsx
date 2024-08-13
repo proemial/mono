@@ -13,12 +13,16 @@ export default function OrgManagementPage() {
 				<div>
 					<InfoCircle className="size-5 opacity-75" />
 				</div>
-				<div className="text-base/relaxed">
+				<div className="text-xs/relaxed">
 					Members must have signed in once, before they accept an invitation to
 					join an organization.
 				</div>
 			</div>
-			<OrganizationProfile routing="hash" />
+			<div className="relative">
+				<div className="absolute left-1/2 -translate-x-1/2 pb-10">
+					<OrganizationProfile routing="hash" />
+				</div>
+			</div>
 		</div>
 	);
 }
