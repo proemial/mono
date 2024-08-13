@@ -7,7 +7,7 @@ import {
 export const getUser = async (userId: string) => {
 	if (!userId) return undefined;
 	try {
-		return await clerkClient.users.getUser(userId);
+		return await clerkClient().users.getUser(userId);
 	} catch (error) {
 		console.error("Error fetching user from auth provieder", error);
 		return undefined;
@@ -17,7 +17,7 @@ export const getUser = async (userId: string) => {
 export const getUsers = async (userIds: string[]) => {
 	try {
 		// todo: handle pagination
-		const { data: users } = await clerkClient.users.getUserList({
+		const { data: users } = await clerkClient().users.getUserList({
 			userId: userIds,
 		});
 		return users;
@@ -42,7 +42,7 @@ export const getOrgMemberships = async () => {
 
 	// todo: handle pagination
 	const { data: memberships } =
-		await clerkClient.organizations.getOrganizationMembershipList({
+		await clerkClient().organizations.getOrganizationMembershipList({
 			organizationId: orgId,
 		});
 	return memberships.sort((a, b) =>

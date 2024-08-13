@@ -1,4 +1,3 @@
 {
 	"extends": ["//"],
-	"globalEnv": ["REDIS_PAPERS_URL", "REDIS_PAPERS_TOKEN"]
 }
