@@ -1,13 +1,4 @@
 {
-  "extends": [
-    "//"
-  ],
-  "tasks": {
-    "schema:push": {
-      "env": [
-        "REDIS_PAPERS_URL",
-        "REDIS_PAPERS_TOKEN"
-      ]
-    }
-  }
+	"extends": ["//"],
+	"globalEnv": ["REDIS_PAPERS_URL", "REDIS_PAPERS_TOKEN"]
 }
