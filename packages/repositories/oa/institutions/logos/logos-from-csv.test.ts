@@ -3,7 +3,8 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { parse } from "csv-parse/sync";
 
-const location = "oa/institutions/logos";
+// Download CSV's from:
+// https://docs.google.com/spreadsheets/d/10olMaxZjloMMxbIIz8uaI87J9W4tL3gHAGK6vpKI_wo/edit?gid=821123776#gid=821123776
 
 const csvFiles = [
 	{
@@ -16,7 +17,9 @@ const csvFiles = [
 	},
 ];
 
-it("Generate `logos.ts` from `csvFiles`", () => {
+const directory = "oa/institutions/logos";
+
+it("Generate `logos.json` from `csvFiles`", () => {
 	let logos: {
 		[identifier: string]: { url: string; whiteOnBlack?: boolean };
 	} = {};
@@ -24,7 +27,7 @@ it("Generate `logos.ts` from `csvFiles`", () => {
 	for (const file of csvFiles) {
 		const { name, columnIndices: column } = file;
 
-		const fileContent = fs.readFileSync(path.resolve(location, name), {
+		const fileContent = fs.readFileSync(path.resolve(directory, name), {
 			encoding: "utf-8",
 		});
 		console.log(name, "file size:", fileContent.length);
@@ -60,7 +63,7 @@ it("Generate `logos.ts` from `csvFiles`", () => {
 
 	console.log("Number of logos:", Object.keys(logos).length);
 	fs.writeFileSync(
-		path.resolve(location, "logos.json"),
+		path.resolve(directory, "logos.json"),
 		JSON.stringify(logos, null, 2),
 	);
 });
