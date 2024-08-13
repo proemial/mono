@@ -1,10 +1,10 @@
+import { fetchReadingList } from "@/app/(pages)/(app)/discover/andrej-karpathy-llm-reading-list/fetch-list";
+import { StaticFeed } from "@/app/(pages)/(app)/discover/andrej-karpathy-llm-reading-list/static-feed";
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { PostService } from "@/services/post-service";
 import { auth } from "@clerk/nextjs/server";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Metadata } from "next";
-import { fetchReadingList } from "./fetch-list";
-import { StaticFeed } from "./static-feed";
 
 const title = "Andrej Karpathy's LLM Reading List";
 const url = "https://proem.ai/space/andrej-karpathy-llm-reading-list";
