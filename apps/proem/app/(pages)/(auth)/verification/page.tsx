@@ -1,7 +1,8 @@
 "use client";
 
 import { Throbber } from "@/components/throbber";
-import { EmailLinkErrorCode, isEmailLinkError, useClerk } from "@clerk/nextjs";
+import { useClerk } from "@clerk/nextjs";
+import { EmailLinkErrorCode, isEmailLinkError } from "@clerk/nextjs/errors";
 import { useEffect, useState } from "react";
 
 // Handle email link verification results. This is

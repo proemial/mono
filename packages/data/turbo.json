@@ -1,8 +1,12 @@
 {
-	"extends": ["//"],
-	"pipeline": {
-		"schema:push": {
-			"env": ["DATABASE_URL"]
-		}
-	}
+  "extends": [
+    "//"
+  ],
+  "tasks": {
+    "schema:push": {
+      "env": [
+        "DATABASE_URL"
+      ]
+    }
+  }
 }

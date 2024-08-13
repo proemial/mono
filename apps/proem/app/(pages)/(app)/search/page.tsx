@@ -1,5 +1,5 @@
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { findPapers } from "./find-papers";
 import { SearchForm } from "./search-form";
 

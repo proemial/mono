@@ -2,7 +2,7 @@ import { SearchForm } from "@/app/(pages)/(app)/search/search-form";
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { routes } from "@/routes";
 import { CollectionService } from "@/services/collection-service";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { findPapers } from "../../../search/find-papers";
 import { CollectionIdParams } from "../params";

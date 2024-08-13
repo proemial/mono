@@ -7,7 +7,6 @@ import {
 import { useClerk, useOrganization, useUser } from "@clerk/nextjs";
 import {
 	Building05,
-	Drop,
 	LogOut01,
 	MessageSquare02,
 } from "@untitled-ui/icons-react";

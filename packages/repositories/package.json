@@ -9,8 +9,8 @@
 		"test:watch": "vitest"
 	},
 	"dependencies": {
-		"dayjs": "^1.11.11",
-		"fast-xml-parser": "^4.4.0"
+		"dayjs": "^1.11.12",
+		"fast-xml-parser": "^4.4.1"
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",

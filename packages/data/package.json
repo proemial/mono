@@ -18,13 +18,13 @@
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",
 		"dotenv": "^16.4.5",
-		"drizzle-kit": "^0.22.1",
+		"drizzle-kit": "^0.24.0",
 		"pg": "^8.11.5"
 	},
 	"dependencies": {
 		"@neondatabase/serverless": "^0.9.3",
 		"@proemial/utils": "workspace:*",
-		"drizzle-orm": "0.31.0",
+		"drizzle-orm": "0.33.0",
 		"drizzle-zod": "0.5.1"
 	}
 }

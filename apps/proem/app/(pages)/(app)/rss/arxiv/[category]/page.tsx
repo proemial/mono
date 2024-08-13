@@ -1,6 +1,6 @@
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { PostService } from "@/services/post-service";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { Redis } from "@proemial/redis/redis";
 import { Metadata } from "next";
 import { Suspense } from "react";

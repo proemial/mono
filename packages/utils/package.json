@@ -6,11 +6,11 @@
 	"license": "MIT",
 	"dependencies": {
 		"@paralleldrive/cuid2": "^2.2.2",
-		"dayjs": "^1.11.11",
+		"dayjs": "^1.11.12",
 		"dayjs-plugin-utc": "^0.1.2"
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",
-		"@types/node": "^20.12.11"
+		"@types/node": "^22.2.0"
 	}
 }
