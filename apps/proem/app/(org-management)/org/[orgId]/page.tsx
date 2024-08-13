@@ -18,7 +18,7 @@ export default function OrgManagementPage() {
 					join an organization.
 				</div>
 			</div>
-			<OrganizationProfile />
+			<OrganizationProfile routing="hash" />
 		</div>
 	);
 }
