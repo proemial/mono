@@ -1,6 +1,7 @@
 import { PERSONAL_DEFAULT_COLLECTION_NAME } from "@/app/constants";
 import { MenuButton } from "@/app/profile/menu-button";
-import { Theme, themeForInstitution } from "@/app/theme/color-theme";
+import { Theme } from "@/app/theme/color-theme";
+import { brandingForInstitution } from "@/app/theme/institution-branding";
 import { ActionMenu } from "@/components/nav-bar/actions/action-menu";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { GoToSpaceAction } from "@/components/nav-bar/actions/go-to-space-action";
@@ -161,13 +162,15 @@ export function getTopNavigationContentByUrl(
 
 		// Institution page
 		if (url.includes("/discover/")) {
-			const institution = url.split("/").at(-1);
+			const institution = decodeURI(url).split("/").at(-1);
 			const shortName = institution?.split("(")[0] ?? institution;
 			return {
 				// TODO!: find a better way to do this
 				title: shortName,
 				action: <OpenSearchAction />,
-				theme: institution ? themeForInstitution(institution) : undefined,
+				theme: institution
+					? brandingForInstitution(institution).theme
+					: undefined,
 			};
 		}
 		return { action: <OpenSearchAction /> };

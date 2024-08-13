@@ -5,9 +5,8 @@ import { fetchJson } from "@proemial/utils/fetch";
 import { FollowButton } from "./follow";
 import { OrgSelector } from "./org-selector";
 
-import { themeForInstitution } from "@/app/theme/color-theme";
+import { brandingForInstitution } from "@/app/theme/institution-branding";
 import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
-import * as logos from "@proemial/repositories/oa/institutions/logos/logos.json";
 
 export default async function DiscoverPage({
 	params,
@@ -48,19 +47,17 @@ export default async function DiscoverPage({
 			<FollowButton id={institutions?.at(0)?.id as string} />
 		</div>
 	);
-	const theme = themeForInstitution(institution);
 
-	const logo =
-		logos[decodeURIComponent(institution).toLowerCase() as keyof typeof logos]
-			?.url;
+	const branding = brandingForInstitution(institution);
+	console.log("branding", branding);
 
 	return (
 		<>
-			{logo && (
+			{branding.logo && (
 				<div
 					className="h-24 mb-8 bg-contain bg-no-repeat bg-center"
 					style={{
-						backgroundImage: `url("${logo}")`,
+						backgroundImage: `url("${branding.logo.url}")`,
 					}}
 				/>
 			)}
@@ -68,7 +65,7 @@ export default async function DiscoverPage({
 				<Feed
 					filter={{ institution: institutions.at(0)?.id }}
 					bookmarks={bookmarks}
-					theme={theme}
+					theme={branding.theme}
 					header={header}
 				>
 					<OrgSelector institutions={institutions} selected={name} />

@@ -9,15 +9,27 @@ import { parse } from "csv-parse/sync";
 const csvFiles = [
 	{
 		name: "Fortune 500 - Nasdac500.csv",
-		columnIndices: { identifier: 6, url: 7, whiteOnBlack: 8 },
+		columnIndices: {
+			identifier: 6,
+			url: 7,
+			whiteOnBlack: 8,
+			themeColor: 9,
+			themeImage: 10,
+		},
 	},
 	{
 		name: "Fortune 500 - fortune500.csv",
-		columnIndices: { identifier: 0, url: 5, whiteOnBlack: 6 },
+		columnIndices: {
+			identifier: 0,
+			url: 5,
+			whiteOnBlack: 6,
+			themeColor: 7,
+			themeImage: 8,
+		},
 	},
 ];
 
-const directory = "oa/institutions/logos";
+const directory = "oa/institutions";
 
 it("Generate `logos.json` from `csvFiles`", () => {
 	let logos: {
@@ -46,6 +58,8 @@ it("Generate `logos.json` from `csvFiles`", () => {
 								record[column.identifier].toLowerCase(),
 								record[column.url],
 								record[column.whiteOnBlack],
+								record[column.themeColor],
+								record[column.themeImage],
 							],
 		});
 		console.log(name, "entries:", result.length);
@@ -55,7 +69,23 @@ it("Generate `logos.json` from `csvFiles`", () => {
 			...Object.fromEntries(
 				result.map((item) => [
 					item[1],
-					{ url: item[2], whiteOnBlack: item[3] },
+					{
+						...{
+							logo: item[2]
+								? {
+										url: item[2],
+										whiteOnBlack: item[3] ? item[3] : undefined,
+									}
+								: undefined,
+							theme:
+								item[4] || item[5]
+									? {
+											color: item[4] ? item[4] : undefined,
+											image: item[5] ? item[5] : undefined,
+										}
+									: undefined,
+						},
+					},
 				]),
 			),
 		};
@@ -63,7 +93,7 @@ it("Generate `logos.json` from `csvFiles`", () => {
 
 	console.log("Number of logos:", Object.keys(logos).length);
 	fs.writeFileSync(
-		path.resolve(directory, "logos.json"),
+		path.resolve(directory, "branding.json"),
 		JSON.stringify(logos, null, 2),
 	);
 });
