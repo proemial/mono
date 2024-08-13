@@ -7,7 +7,7 @@ import { OrgSelector } from "./org-selector";
 
 import { themeForInstitution } from "@/app/theme/color-theme";
 import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
-import { institutionalLogos as logos } from "@/app/theme/logos";
+import * as logos from "@proemial/repositories/oa/institutions/logos/logos.json";
 
 export default async function DiscoverPage({
 	params,

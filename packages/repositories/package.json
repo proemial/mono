@@ -14,6 +14,7 @@
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",
-		"@proemial/utils": "workspace:*"
+		"@proemial/utils": "workspace:*",
+		"csv-parse": "^5.5.6"
 	}
 }
