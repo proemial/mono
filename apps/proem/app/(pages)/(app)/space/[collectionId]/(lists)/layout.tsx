@@ -32,11 +32,9 @@ export default async function ({ params: { collectionId }, children }: Props) {
 			{!isDefaultCollection && (
 				<div className="flex flex-col gap-2">
 					<div className="flex flex-col gap-3">
-						<div className="min-h-36 flex flex-col justify-end">
-							<Header2 className="break-words markdown line-clamp-4">
-								<Markdown>{collection.description ?? ""}</Markdown>
-							</Header2>
-						</div>
+						<Header2 className="break-words markdown">
+							<Markdown>{collection.description ?? ""}</Markdown>
+						</Header2>
 
 						<div className="flex items-center justify-between gap-2">
 							<SpaceContributorsIndicator collection={collection} />
