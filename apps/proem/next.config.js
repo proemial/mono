@@ -22,11 +22,6 @@ const nextConfig = {
 			},
 		];
 	},
-	sentry: {
-		// https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration
-		hideSourceMaps: true,
-		widenClientFileUpload: true,
-	},
 	images: {
 		remotePatterns: [
 			{
@@ -37,10 +32,11 @@ const nextConfig = {
 	},
 };
 
-const sentryWebpackPluginOptions = {
+module.exports = withSentryConfig(nextConfig, {
 	org: "proemial",
 	project: "proem",
 	authToken: process.env.SENTRY_AUTH_TOKEN,
-};
-
-module.exports = withSentryConfig(nextConfig, sentryWebpackPluginOptions);
+	// https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration
+	hideSourceMaps: true,
+	widenClientFileUpload: true,
+});
