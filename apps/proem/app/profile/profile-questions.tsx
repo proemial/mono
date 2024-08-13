@@ -3,8 +3,8 @@ import { fetchQuestionsForCurrentUser } from "@/app/profile/profile-actions";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { routes } from "@/routes";
 import { DrawerClose } from "@proemial/shadcn-ui";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { useQuery } from "react-query";
 export const USER_QUESTIONS_QUERY_KEY = "user-questions";
 
 export function ProfileQuestions() {

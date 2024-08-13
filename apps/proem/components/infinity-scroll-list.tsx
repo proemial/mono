@@ -1,7 +1,7 @@
 "use client";
+import { QueryFunction, useInfiniteQuery } from "@tanstack/react-query";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode, useEffect } from "react";
-import { QueryFunction, useInfiniteQuery } from "react-query";
 import { Throbber } from "./throbber";
 
 type QueryReturnType<TRow> = {
@@ -10,27 +10,35 @@ type QueryReturnType<TRow> = {
 	rows: TRow[];
 };
 
-export type InfinityScollListProps<TQueryKey extends string, TRow> = {
+type UseInfinityQuery = Pick<
+	Parameters<typeof useInfiniteQuery>[0],
+	"queryKey" | "queryFn"
+>;
+export type InfinityScollListProps<MyTQueryKey extends string[], TRow> = {
 	renderHeadline?: ((count?: number) => ReactNode) | null;
 	renderRow: (row: TRow, index: number) => ReactNode;
-	queryKey: TQueryKey;
-	queryFn: QueryFunction<QueryReturnType<TRow>, TQueryKey>;
+	queryKey: MyTQueryKey;
+	queryFn: QueryFunction<QueryReturnType<TRow>, MyTQueryKey, number>;
 };
 
-export function InfinityScrollList<TQueryKey extends string, TRow>({
+export function InfinityScrollList<MyTQueryKey extends string[], TRow>({
 	renderHeadline: renderSection,
 	renderRow,
 	queryKey,
 	queryFn,
-}: InfinityScollListProps<TQueryKey, TRow>) {
+}: InfinityScollListProps<MyTQueryKey, TRow>) {
 	const {
 		status,
+		isLoading,
 		data,
 		isFetchingNextPage,
 		fetchNextPage,
 		hasNextPage,
 		error,
-	} = useInfiniteQuery(queryKey, queryFn, {
+	} = useInfiniteQuery({
+		queryKey,
+		queryFn,
+		initialPageParam: 1,
 		getNextPageParam: (lastGroup) => {
 			return lastGroup?.nextOffset;
 		},
@@ -68,7 +76,7 @@ export function InfinityScrollList<TQueryKey extends string, TRow>({
 		<>
 			{renderSection?.(count)}
 
-			{status === "loading" ? (
+			{status === "pending" ? (
 				<Throbber />
 			) : status === "error" && error instanceof Error ? (
 				<span>Error: {error?.message}</span>

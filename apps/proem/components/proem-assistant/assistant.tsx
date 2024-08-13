@@ -3,9 +3,9 @@
 import { AssistantData } from "@/app/api/assistant/route";
 import { useAuth } from "@clerk/nextjs";
 import { Drawer } from "@proemial/shadcn-ui";
+import { useQuery } from "@tanstack/react-query";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
 import {
 	analyticsKeys,
 	trackHandler,

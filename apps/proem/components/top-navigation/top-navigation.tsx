@@ -21,10 +21,10 @@ import {
 	NavigationMenuList,
 	cn,
 } from "@proemial/shadcn-ui";
+import { useQuery } from "@tanstack/react-query";
 import { ChevronRight } from "@untitled-ui/icons-react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useOptimistic, useTransition } from "react";
-import { useQuery } from "react-query";
 
 export function TopNavigation() {
 	const pathname = usePathname();
@@ -48,7 +48,7 @@ export function TopNavigation() {
 		queryFn: async () => getAvailableCollections(collectionId),
 	});
 
-	const [pending, startTransition] = useTransition();
+	const [_pending, startTransition] = useTransition();
 
 	const { action, title, menu, theme } =
 		getTopNavigationContentByUrl(optimisticUrl);

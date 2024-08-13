@@ -8,8 +8,8 @@ import { FullSizeDrawer } from "@/components/full-page-drawer";
 import { PermissionUtils } from "@/utils/permission-utils";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 import { Collection, NewCollection } from "@proemial/data/neon/schema";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus } from "@untitled-ui/icons-react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getPersonalDefaultCollection } from "../constants";
 import {
 	addCollection,

@@ -14,10 +14,10 @@ import {
 } from "@/components/notification";
 import { routes } from "@/routes";
 import { Button, toast } from "@proemial/shadcn-ui";
+import { useQuery } from "@tanstack/react-query";
 import { Plus } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
 
 const TOAST_OPEN_DURATION = 4000;
 

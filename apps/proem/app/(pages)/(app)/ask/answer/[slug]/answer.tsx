@@ -15,9 +15,9 @@ import { ChatInput } from "@/components/chat-input";
 import { ChatSuggestedFollowups } from "@/components/chat-suggested-followups";
 import { routes } from "@/routes";
 import { cn } from "@proemial/shadcn-ui";
+import { useQueryClient } from "@tanstack/react-query";
 import { Message, useChat } from "ai/react";
 import { useEffect, useState } from "react";
-import { useQueryClient } from "react-query";
 
 type Props = Pick<QaPairProps, "bookmarks"> & {
 	initialQuestion?: string;
@@ -44,7 +44,9 @@ export const Answer = ({
 		api: "/api/bot/ask2",
 		initialMessages,
 		onFinish: () => {
-			queryClient.invalidateQueries(USER_QUESTIONS_QUERY_KEY);
+			queryClient.invalidateQueries({
+				queryKey: [USER_QUESTIONS_QUERY_KEY],
+			});
 		},
 		body: { slug: sessionSlug, userId: user?.id },
 	}) as Omit<ReturnType<typeof useChat>, "data"> & {

@@ -30,7 +30,7 @@ export function StreamList({
 }: StreamListProps) {
 	return (
 		<InfinityScrollList
-			queryKey={`space_stream_${collectionId}`}
+			queryKey={[`space_stream_${collectionId}`]}
 			queryFn={(ctx) => {
 				const nextOffset = ctx.pageParam;
 				//TODO! Add tracking

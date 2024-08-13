@@ -54,13 +54,13 @@ export function Feed({
 			{children ? <div>{children}</div> : null}
 			{header}
 			<InfinityScrollList
-				queryKey={
+				queryKey={[
 					filter.topic
 						? `feed_${filter.topic}`
 						: `filter_${filter.days}:${filter.features
 								?.map((f) => f.id)
-								.join("|")}`
-				}
+								.join("|")}`,
+				]}
 				queryFn={(ctx) => {
 					const nextOffset = ctx.pageParam;
 					if (nextOffset > initialPageSize) {
