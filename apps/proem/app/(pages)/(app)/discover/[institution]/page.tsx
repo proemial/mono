@@ -5,7 +5,10 @@ import { fetchJson } from "@proemial/utils/fetch";
 import { FollowButton } from "./follow";
 import { OrgSelector } from "./org-selector";
 
-import { brandingForInstitution } from "@/app/theme/institution-branding";
+import {
+	Branding,
+	brandingForInstitution,
+} from "@/app/theme/institution-branding";
 import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
 
 export default async function DiscoverPage({
@@ -49,18 +52,11 @@ export default async function DiscoverPage({
 	);
 
 	const branding = brandingForInstitution(institution);
-	console.log("branding", branding);
 
 	return (
 		<>
-			{branding.logo && (
-				<div
-					className="h-24 mb-8 bg-contain bg-no-repeat bg-center"
-					style={{
-						backgroundImage: `url("${branding.logo.url}")`,
-					}}
-				/>
-			)}
+			<Logo branding={branding} />
+
 			{institutions?.length > 0 && (
 				<Feed
 					filter={{ institution: institutions.at(0)?.id }}
@@ -71,7 +67,21 @@ export default async function DiscoverPage({
 					<OrgSelector institutions={institutions} selected={name} />
 				</Feed>
 			)}
+
 			<ProemAssistant />
 		</>
+	);
+}
+
+function Logo({ branding }: { branding: Branding }) {
+	if (!branding.logo) return null;
+
+	return (
+		<div
+			className="h-24 mb-8 bg-contain bg-no-repeat bg-center"
+			style={{
+				backgroundImage: `url("${branding.logo.url}")`,
+			}}
+		/>
 	);
 }
