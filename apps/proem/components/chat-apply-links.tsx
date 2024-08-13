@@ -1,9 +1,11 @@
+import clsx from "clsx";
 import Link from "next/link";
 import React from "react";
 
 export function applyExplainLinks(
 	msg: string,
 	onClick: (concept: string) => void,
+	className?: string,
 ): React.ReactNode {
 	const re = /\(\(.*?\)\)/gi;
 
@@ -12,7 +14,7 @@ export function applyExplainLinks(
 
 		return (
 			<span
-				className="font-normal bg-neutral-200 cursor-pointer"
+				className={clsx("font-normal bg-neutral-200 cursor-pointer", className)}
 				onClick={() => onClick(sanitized)}
 			>
 				{sanitized}

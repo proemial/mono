@@ -3,7 +3,6 @@ import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { FeatureCloud } from "@/components/feature-badges";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
-import { ProemAssistant } from "@/components/proem-assistant";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs/server";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
@@ -82,8 +81,6 @@ export default async function DiscoverPage({ searchParams }: Props) {
 					</div>
 				) : null}
 			</Feed>
-
-			<ProemAssistant />
 		</>
 	);
 }

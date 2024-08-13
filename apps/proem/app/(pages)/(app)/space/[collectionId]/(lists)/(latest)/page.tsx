@@ -6,7 +6,6 @@ import {
 } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
-import { ProemAssistant } from "@/components/proem-assistant";
 import { CollectionService } from "@/services/collection-service";
 import { PermissionUtils } from "@/utils/permission-utils";
 import { auth } from "@clerk/nextjs/server";
@@ -58,17 +57,14 @@ export default async function LatestPage({
 
 	const { filter: features } = getFeatureFilter(fingerprints);
 	return (
-		<>
-			<StreamList
-				showThemeColors={isDefaultSpace}
-				collectionId={collectionId}
-				debugParams={searchParams}
-				features={features}
-				days={FEED_DEFAULT_DAYS}
-				bookmarks={paperIds}
-				readonly={!canEdit}
-			/>
-			<ProemAssistant />
-		</>
+		<StreamList
+			showThemeColors={isDefaultSpace}
+			collectionId={collectionId}
+			debugParams={searchParams}
+			features={features}
+			days={FEED_DEFAULT_DAYS}
+			bookmarks={paperIds}
+			readonly={!canEdit}
+		/>
 	);
 }

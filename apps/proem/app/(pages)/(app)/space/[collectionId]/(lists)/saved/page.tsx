@@ -3,7 +3,6 @@ import { getBookmarkedPapersByCollectionId } from "@/app/(pages)/(app)/space/(di
 import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
 import { FeedItemWithDisabledOverlay } from "@/app/(pages)/(app)/space/[collectionId]/(lists)/saved/feed-item-with-disabled-overlay";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
-import { ProemAssistant } from "@/components/proem-assistant";
 import { ThemeColoredCard } from "@/components/theme-colored-card";
 import { CollectionService } from "@/services/collection-service";
 import { PostService } from "@/services/post-service";
@@ -51,42 +50,39 @@ export default async function SavedPage({
 	const isDefaultSpace = collectionId === userId;
 	const showThemeColors = isDefaultSpace;
 	return (
-		<>
-			<div className="pb-20">
-				{papers.map((paper) => {
-					if (!paper) return null;
-					const isBookmarked = paperIds?.includes(paper.id) ?? false;
-					const topics = paper.data.topics;
-					const field = topics && getFieldFromOpenAlexTopics(topics);
-					const item = (
-						<FeedItemWithDisabledOverlay
-							key={paper.id}
-							paper={{
-								...paper,
-								posts:
-									paperIdsWithPosts.find((p) => p.id === paper.id)?.posts ?? [],
-							}}
-							isBookmarked={isBookmarked}
-							customCollectionId={collectionId}
-							readonly={!canEdit}
-						/>
-					);
+		<div className="mb-8 space-y-8">
+			{papers.map((paper) => {
+				if (!paper) return null;
+				const isBookmarked = paperIds?.includes(paper.id) ?? false;
+				const topics = paper.data.topics;
+				const field = topics && getFieldFromOpenAlexTopics(topics);
+				const item = (
+					<FeedItemWithDisabledOverlay
+						key={paper.id}
+						paper={{
+							...paper,
+							posts:
+								paperIdsWithPosts.find((p) => p.id === paper.id)?.posts ?? [],
+						}}
+						isBookmarked={isBookmarked}
+						customCollectionId={collectionId}
+						readonly={!canEdit}
+					/>
+				);
 
-					if (showThemeColors && field?.theme) {
-						return (
-							<ThemeColoredCard className="mb-3" theme={field.theme}>
-								{item}
-							</ThemeColoredCard>
-						);
-					}
+				if (showThemeColors && field?.theme) {
 					return (
-						<div key={paper.id} className="py-5">
+						<ThemeColoredCard className="mb-3" theme={field.theme}>
 							{item}
-						</div>
+						</ThemeColoredCard>
 					);
-				})}
-			</div>
-			<ProemAssistant />
-		</>
+				}
+				return (
+					<div key={paper.id} className="py-5">
+						{item}
+					</div>
+				);
+			})}
+		</div>
 	);
 }

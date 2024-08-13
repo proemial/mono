@@ -162,7 +162,16 @@ export const analyticsKeys = {
 	assistant: {
 		open: "assistant:open",
 		close: "assistant:close",
-		ask: "assistant:ask",
+		reactivate: "assistant:reactivate",
+		ask: {
+			userQuestion: "assistant:ask:user_question",
+			suggestion: {
+				starter: "assistant:ask:suggestion:starter",
+				generated: "assistant:ask:suggestion:generated",
+				followUp: "assistant:ask:suggestion:follow_up",
+			},
+		},
+		regenSuggestions: "assistant:regen_suggestions",
 	},
 	search: {
 		click: {

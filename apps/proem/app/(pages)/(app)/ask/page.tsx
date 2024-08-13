@@ -30,7 +30,7 @@ export default function AskPage() {
 					<div className="flex justify-end -mr-2">
 						<MoodSelector trackingPrefix="ask" />
 					</div>
-					<Suggestions suggestions={starters} trackingPrefix="ask" starters />
+					<Suggestions suggestions={starters} type="starter" />
 				</div>
 			</div>
 			<div>

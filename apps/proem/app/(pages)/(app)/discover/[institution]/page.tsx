@@ -1,5 +1,4 @@
 import { Feed } from "@/app/(pages)/(app)/space/(discover)/feed";
-import { ProemAssistant } from "@/components/proem-assistant";
 import { auth } from "@clerk/nextjs/server";
 import { fetchJson } from "@proemial/utils/fetch";
 import { FollowButton } from "./follow";
@@ -67,8 +66,6 @@ export default async function DiscoverPage({
 					<OrgSelector institutions={institutions} selected={name} />
 				</Feed>
 			)}
-
-			<ProemAssistant />
 		</>
 	);
 }

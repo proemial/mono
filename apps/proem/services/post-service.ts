@@ -1,24 +1,15 @@
 import { getOrgMembersUserData, getUsers } from "@/utils/auth";
 import { User, auth } from "@clerk/nextjs/server";
-import { Post } from "@proemial/data/neon/schema";
 import {
 	findPapersWithPosts,
 	findSinglePaperWithPosts,
 } from "@proemial/data/repository/post";
-import { Message } from "ai";
 
 export type UserData = {
 	userId: string;
 	firstName: string | null;
 	lastName: string | null;
-	hasImage: boolean;
-	imageUrl: string;
-};
-
-export type MessageWithAuthorUserData = Message & {
-	createdAt: Date;
-	authorUserData?: UserData;
-	shared: Post["shared"];
+	imageUrl: string | undefined;
 };
 
 export type PaperPost = NonNullable<

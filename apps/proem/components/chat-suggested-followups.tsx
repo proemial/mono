@@ -18,6 +18,10 @@ export function ChatSuggestedFollowups({
 	onClick,
 	trackingPrefix,
 }: ChatSuggestedFollowupsProps) {
+	const handleOnClick = (input: string) => {
+		onClick?.({ role: "user", content: input });
+	};
+
 	return (
 		<div className="flex flex-col gap-3">
 			<div className="flex items-center place-content-between">
@@ -32,9 +36,8 @@ export function ChatSuggestedFollowups({
 			<div>
 				<Suggestions
 					suggestions={suggestions}
-					trackingPrefix={trackingPrefix}
-					onClick={onClick}
-					starters={trackingPrefix === "read"}
+					onClick={handleOnClick}
+					type={trackingPrefix === "read" ? "starter" : "followup"}
 				/>
 			</div>
 		</div>

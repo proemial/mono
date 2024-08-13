@@ -45,7 +45,7 @@ export function SelectContentSelector({
 			onValueChange={onValueChange}
 		>
 			<SelectTrigger
-				className={`border-0 w-28 focus:ring-0 focus:ring-offset-0 ${className}`}
+				className={`border-0 w-28 focus:ring-0 focus:ring-offset-0 bg-transparent ${className}`}
 			>
 				<SelectValue />
 			</SelectTrigger>

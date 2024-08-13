@@ -5,60 +5,55 @@ import {
 } from "@/components/analytics/tracking/tracking-keys";
 import { routes } from "@/routes";
 import { Button } from "@proemial/shadcn-ui";
-import { useChat } from "ai/react";
 import { useRouter } from "next/navigation";
+import { MouseEvent } from "react";
 
 export type SuggestionsProps = {
-	suggestions?: string[];
-	onClick?: ReturnType<typeof useChat>["append"];
-	starters?: boolean;
-	trackingPrefix: string;
+	suggestions: string[];
+	onClick?: (input: string) => void;
+	type: "starter" | "generated" | "followup"; // `starter` means the static, hand-picked starters
 };
 
-export function Suggestions({
-	suggestions,
-	onClick,
-	starters,
-	trackingPrefix,
-}: SuggestionsProps) {
+export function Suggestions({ suggestions, onClick, type }: SuggestionsProps) {
 	const router = useRouter();
 
 	const handleTracking = () => {
-		trackHandler(`${trackingPrefix}:${analyticsKeys.chat.click.suggestion}`)();
-		if (starters) {
-			trackHandler(`${trackingPrefix}:${analyticsKeys.chat.click.starter}`)();
-		} else {
-			trackHandler(`${trackingPrefix}:${analyticsKeys.chat.click.followup}`)();
+		switch (type) {
+			case "starter":
+				trackHandler(analyticsKeys.assistant.ask.suggestion.starter)();
+				break;
+			case "generated":
+				trackHandler(analyticsKeys.assistant.ask.suggestion.generated)();
+				break;
+			case "followup":
+				trackHandler(analyticsKeys.assistant.ask.suggestion.followUp)();
+				break;
 		}
 	};
 
-	function handleClick(suggestion: string) {
-		handleTracking();
-		if (onClick) {
-			onClick({ role: "user", content: suggestion });
-		} else {
-			router.push(`${routes.answer}/?q=${encodeURIComponent(suggestion)}`);
-		}
-	}
+	const handleClick =
+		(suggestion: string) => (event: MouseEvent<HTMLButtonElement>) => {
+			handleTracking();
+			if (onClick) {
+				onClick(suggestion);
+			} else {
+				router.push(`${routes.answer}/?q=${encodeURIComponent(suggestion)}`);
+			}
+		};
 
 	return (
-		<div className="flex flex-col gap-5">
-			<div className="space-y-2.5">
-				{suggestions?.map((suggestion) => (
-					<Button
-						variant="suggestion"
-						size="suggestion"
-						key={suggestion}
-						className=" active:ring-1 ring-foreground select-none"
-						onClick={() => handleClick(suggestion)}
-					>
-						{suggestion}
-					</Button>
-				))}
-			</div>
-			{/* <div className="flex justify-center">
-				<Button size="pill">More</Button>
-			</div> */}
+		<div className="space-y-2 w-full">
+			{suggestions?.map((suggestion) => (
+				<Button
+					variant="suggestion"
+					size="suggestion"
+					key={suggestion}
+					className="active:ring-1 ring-foreground select-none px-3 bg-theme-700 text-white"
+					onClick={handleClick(suggestion)}
+				>
+					{suggestion}
+				</Button>
+			))}
 		</div>
 	);
 }

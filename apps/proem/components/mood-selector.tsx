@@ -1,10 +1,14 @@
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { SelectContentSelector } from "@/components/select-content-selector";
 
-export const MoodSelector = ({
-	trackingPrefix,
-}: { trackingPrefix: string }) => (
+type Props = {
+	trackingPrefix: string;
+	className?: string;
+};
+
+export const MoodSelector = ({ trackingPrefix, className }: Props) => (
 	<SelectContentSelector
+		className={className}
 		selector={[
 			{ value: "trending", label: "Trending" },
 			{ value: "popular", label: "Popular", disabled: true },

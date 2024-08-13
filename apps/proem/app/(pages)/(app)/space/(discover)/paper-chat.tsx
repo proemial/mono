@@ -12,9 +12,9 @@ import {
 	ChatSuggestedFollowups,
 	ChatSuggestedFollowupsProps,
 } from "@/components/chat-suggested-followups";
+import { MessageWithAuthorUserData } from "@/components/proem-assistant/assistant-content";
 import { QAMessage } from "@/components/qa-message";
 import { QAMessageContainer } from "@/components/qa-message-container";
-import { MessageWithAuthorUserData } from "@/services/post-service";
 import { Header4 } from "@proemial/shadcn-ui";
 import { useChat } from "ai/react";
 import { GanttChart } from "lucide-react";
@@ -27,7 +27,10 @@ type PaperChatProps = Pick<ChatSuggestedFollowupsProps, "suggestions"> & {
 	abstract?: string;
 };
 
-export function PaperChat({
+/**
+ * @deprecated Kept for reference
+ */
+function PaperChat({
 	suggestions,
 	title,
 	paperId,

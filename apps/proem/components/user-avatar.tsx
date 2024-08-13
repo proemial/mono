@@ -16,7 +16,7 @@ export function UserAvatar({ authorUserData, trackingKey }: Props) {
 
 	// If message has author data, use it with icon fallback
 	if (authorUserData) {
-		if (authorUserData.hasImage) {
+		if (authorUserData.imageUrl) {
 			return (
 				<Image
 					src={authorUserData.imageUrl}
