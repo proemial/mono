@@ -4,6 +4,9 @@ const { withSentryConfig } = require("@sentry/nextjs");
 
 const nextConfig = {
 	transpilePackages: ["@repo/utils"],
+	experimental: {
+		instrumentationHook: true,
+	},
 	async redirects() {
 		return [
 			{
