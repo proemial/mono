@@ -70,13 +70,15 @@ export const About = () => {
 				</div>
 				{isSignedIn && (
 					<div className="flex justify-between gap-2 items-center">
-						<div
-							onClick={handleSignOut}
-							className="flex items-center gap-2 text-sm cursor-pointer"
-						>
-							<LogOut01 className="size-4 opacity-85" />
-							Sign out
-						</div>
+						<DrawerClose asChild>
+							<div
+								onClick={handleSignOut}
+								className="flex items-center gap-2 text-sm cursor-pointer"
+							>
+								<LogOut01 className="size-4 opacity-85" />
+								Sign out
+							</div>
+						</DrawerClose>
 						<div className="text-xs text-gray-400">
 							{isInternal && `${user.id}`}
 						</div>
