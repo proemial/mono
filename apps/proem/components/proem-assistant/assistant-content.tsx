@@ -71,8 +71,9 @@ export const AssistantContent = ({
 			abstract: data?.paper?.data.abstract,
 			paperId: data?.paper?.id,
 			spaceId,
+			userId: user?.id,
 		},
-		api: "/api/bot/chat",
+		api: paperId ? "/api/bot/chat" : "/api/bot/ask2",
 		initialMessages,
 	});
 

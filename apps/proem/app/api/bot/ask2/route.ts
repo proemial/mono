@@ -1,4 +1,3 @@
-import { AIMessage } from "@/app/api/bot/answer-engine/answer-engine";
 import { chatInputMaxLength } from "@/app/api/bot/input-limit";
 import { getInternalUser } from "@/app/hooks/get-internal-user";
 import { INTERNAL_COOKIE_NAME } from "@/app/hooks/use-user";
@@ -7,16 +6,9 @@ import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { Message as VercelChatMessage } from "ai";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 import { answerEngine } from "./answer-engine";
 
 export const maxDuration = 30;
-
-const answerEngineRouteParams = z.object({
-	slug: z.string().optional().nullable(),
-	userId: z.string().optional(),
-	messages: z.array(AIMessage),
-});
 
 export async function POST(req: NextRequest) {
 	const { success } = await ratelimitByIpAddress(req.ip);
@@ -25,13 +17,7 @@ export async function POST(req: NextRequest) {
 	}
 
 	try {
-		const body = await req.json();
-		const {
-			slug,
-			userId: userIdFromHeader,
-			messages,
-		} = answerEngineRouteParams.parse(body);
-
+		const { slug, userId: userIdFromHeader, messages } = await req.json();
 		const { name, userId } = nameAndIdFromCookie(userIdFromHeader);
 		const { input, chatHistory } = parseMessages(messages);
 
