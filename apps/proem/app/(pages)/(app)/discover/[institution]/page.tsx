@@ -7,7 +7,7 @@ import {
 	Branding,
 	brandingForInstitution,
 } from "@/app/theme/institution-branding";
-import { fetchInstitutions } from "@proemial/repositories/oa/institutions/fetch-institutions";
+import { fetchInstitutions, Institution } from "@proemial/repositories/oa/institutions/fetch-institutions";
 import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
 
 export default async function DiscoverPage({
@@ -30,7 +30,7 @@ export default async function DiscoverPage({
 
 	const header = (
 		<div className="mt-2 flex flex-row justify-between items-center">
-			{institution?.works_count?.toLocaleString()} papers published
+			<WorksCount institution={institution} />
 			<FollowButton id={institution?.id as string} />
 		</div>
 	);
@@ -53,6 +53,14 @@ export default async function DiscoverPage({
 			)}
 		</>
 	);
+}
+
+function WorksCount({institution}: {institution?: Institution}) {
+	const thisYear = institution?.counts_by_year.find(works => works.year === 2024)?.works_count;
+	if(thisYear) {
+		return <>{thisYear.toLocaleString()} papers published this year</>;
+	}
+	return <>{institution?.works_count?.toLocaleString()} papers published</>
 }
 
 function Logo({ name, branding }: { name: string, branding: Branding }) {

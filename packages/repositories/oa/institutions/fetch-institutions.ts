@@ -4,8 +4,14 @@ export type Institution = {
 	id: string;
 	display_name: string;
 	works_count: number;
-	counts_by_year: Record<string, number>[];
+	counts_by_year: Array<AnnualWorksCount>;
 };
+
+type AnnualWorksCount = {
+	year: number;
+	works_count: number;
+	cited_by_count: number;
+}
 
 type InstitutionResponse = {
 	results: Institution[];
