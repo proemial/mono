@@ -8,6 +8,36 @@ import { parse } from "csv-parse/sync";
 
 const csvFiles = [
 	{
+		name: "Fortune 500 - EU 100.csv",
+		columnIndices: {
+			identifier: 0,
+			url: 1,
+			whiteOnBlack: 2,
+			themeColor: 3,
+			themeImage: 4,
+		},
+	},
+	{
+		name: "Fortune 500 - bigPharma.csv",
+		columnIndices: {
+			identifier: 2,
+			url: 3,
+			whiteOnBlack: 4,
+			themeColor: 5,
+			themeImage: 6,
+		},
+	},
+	{
+		name: "Fortune 500 - Partners etc.csv",
+		columnIndices: {
+			identifier: 1,
+			url: 2,
+			whiteOnBlack: 3,
+			themeColor: 4,
+			themeImage: 5,
+		},
+	},
+	{
 		name: "Fortune 500 - Nasdac500.csv",
 		columnIndices: {
 			identifier: 6,

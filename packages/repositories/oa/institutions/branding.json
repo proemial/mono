@@ -1,4 +1,1214 @@
 {
+  "reneault": {
+    "logo": {
+      "url": "https://logowik.com/content/uploads/images/renault-new-black5686.logowik.com.webp"
+    }
+  },
+  "lvmh": {
+    "logo": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/LVMH-black.png/1200px-LVMH-black.png"
+    }
+  },
+  "sap": {
+    "logo": {
+      "url": "https://theartian.com/wp-content/uploads/2021/05/SAP-LOGO-BLACK.png"
+    }
+  },
+  "hermès": {
+    "logo": {
+      "url": "https://i.pinimg.com/originals/e2/26/64/e2266418052fc44184aa196d239861e5.jpg",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "l'oréal": {
+    "logo": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/L%27Or%C3%A9al_logo.svg/2560px-L%27Or%C3%A9al_logo.svg.png"
+    }
+  },
+  "accenture": {
+    "logo": {
+      "url": "https://cdn.freebiesupply.com/images/large/2x/accenture-logo-black-and-white.png"
+    }
+  },
+  "prosus": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRs-kmK_XbRm6KbNUgZONZvEhcWE_jMXmFieQ&s",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "totalenergies": {
+    "logo": {
+      "url": "https://www.mm.be/userfiles/media/1622383159apture-d-ecran-2021-05-30-a-15.58.06.jpg"
+    }
+  },
+  "inditex": {
+    "logo": {
+      "url": "https://imgraftmaroc.es/wp-content/uploads/2023/11/WhatsApp-Image-2023-11-19-at-21.16.39_9fbe9fd0.jpg"
+    }
+  },
+  "siemens": {
+    "logo": {
+      "url": "https://cdn.freebiesupply.com/logos/large/2x/siemens-3-logo-black-and-white.png"
+    }
+  },
+  "deutsche telekom": {
+    "logo": {
+      "url": "https://cdn.worldvectorlogo.com/logos/telekom.svg"
+    }
+  },
+  "sanofi": {
+    "logo": {
+      "url": "https://qtxasset.com/cdn-cgi/image/w=384,h=216,f=auto,fit=crop,g=0.5x0.5/https://qtxasset.com/quartz/qcloud5/media/image/fiercepharma/1643911445/211125_SANOFI_LOGO_RGB.png?VersionId=OMpFG4JDGfUAqlOFOmgnVsWJ9p8X8X.v"
+    }
+  },
+  "schneider electric": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/SU.PA.D-d8bd8523.png?t=1720244494",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "anheuser-busch inbev": {
+    "logo": {
+      "url": "https://www.tvisioninsights.com/hubfs/2022%20Assets%20TMK/Logo-Jun_02-Anheuser-Busch_InBev.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "eaton": {
+    "logo": {
+      "url": "https://cdn.worldvectorlogo.com/logos/eaton.svg"
+    }
+  },
+  "airbus": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8T9bTuG2GYXchLJK6aXxv-fHqyzQ3XB-ZRj-_TDjT3WMWiu4_"
+    }
+  },
+  "dior": {
+    "logo": {
+      "url": "https://i.pinimg.com/originals/3c/c6/08/3cc6083de740c085fef611885fb9f654.jpg",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "allianz": {
+    "logo": {
+      "url": "https://thecitylifer.com/blog/wp-content/uploads/sites/4/2022/11/Allianz-Logo-Black-Small.png"
+    }
+  },
+  "medtronic": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjgc1gNM036s4mkTqBnwgfpOGgv92zr-pnzw&s",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "essilorluxottica": {
+    "logo": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Logo_EssilorLuxottica.svg/2560px-Logo_EssilorLuxottica.svg.png"
+    }
+  },
+  "air liquide": {
+    "logo": {
+      "url": "https://www.elneo.com/sites/default/files/customer-logo/logo.png"
+    }
+  },
+  "safran": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXYTnchfy5cW87NDXJSP7COkeVIUvJlCEKQg&s",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "iberdrola": {
+    "logo": {
+      "url": "https://www.bmcsoftware.cn/content/dam/bmc/logos/third-party/logo-Iberdrola-white.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "investor ab": {
+    "logo": {
+      "url": "https://images.teamtailor-cdn.com/images/s3/teamtailor-production/logotype-v3/image_uploads/206243cb-014f-4a8a-ae12-7911025d12f1/original.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "atlas copco": {
+    "logo": {
+      "url": "https://mining.com/wp-content/uploads/2017/11/d.png"
+    }
+  },
+  "axa": {
+    "logo": {
+      "url": "https://1000logos.net/wp-content/uploads/2017/12/Axa-Logo-1985.png"
+    }
+  },
+  "merck kgaa": {
+    "logo": {
+      "url": "https://inno3.fr/wp-content/uploads/2022/07/langfr-2880px-Logo_Merck_KGaA_2015.svg-1568x253.png"
+    }
+  },
+  "ferrari": {
+    "logo": {
+      "url": "https://jetpunk.b-cdn.net/img/user-photo-library/6d/6d2e3b3fef-450.jpg",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "trane technologies": {
+    "logo": {
+      "url": "https://s.yimg.com/ny/api/res/1.2/54qzW_8ovak3k9I5EF6JpA--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD00MTg-/https://media.zenfs.com/en/business-wire.com/0b61d3bd939bc038bca4f7eedd7cdbee"
+    }
+  },
+  "bnp paribas": {
+    "logo": {
+      "url": "https://play-lh.googleusercontent.com/98HprxE8ZNgB_TAJtw3CiacyPDUtDcUCaWziAKsN4zl-NPAV6IAycF8W8kqFDB-aGCg=w240-h480-rw"
+    }
+  },
+  "enel": {
+    "logo": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Enel_Group_logo.svg/400px-Enel_Group_logo.svg.png"
+    }
+  },
+  "santander": {
+    "logo": {
+      "url": "https://suade.org/content/images/2024/02/santander_logo.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "intesa sanpaolo": {
+    "logo": {
+      "url": "https://static-00.iconduck.com/assets.00/intesa-icon-256x254-990iscwx.png"
+    }
+  },
+  "mercedes-benz": {
+    "logo": {
+      "url": "https://pbs.twimg.com/profile_images/194400600/MBlogohvitsort_400x400.jpg",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "spotify": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS93Wr6oqLlvn7PEypbAR0cO22gRB-oudxgJQ&s"
+    }
+  },
+  "porsche": {
+    "logo": {
+      "url": "https://villageautomotive.com/wp-content/uploads/Porsche-White-OEM-Logo.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "vinci": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/DG.PA_BIG.D-8db617a1.png?t=1720244491",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "munich re": {
+    "logo": {
+      "url": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSAbWA8fxyNXcqENkAVmjkF_sfuScK3wnmxV4PNrSXnwn2cpZ3S"
+    }
+  },
+  "nxp semiconductors": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9xyFwLNOC8JRUOFc4bnu984rlYSUBIAIAow&s",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "siemens healthineers": {
+    "logo": {
+      "url": "https://marvel-b1-cdn.bc0a.com/f00000000004333/www.zuora.com/wp-content/uploads/2020/12/Siemens-Healthineers-White-Logo-1280x299.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "unicredit": {
+    "logo": {
+      "url": "https://cdn.prod.website-files.com/65f9d6e83f4e9e35d6d95289/661e422bdd313eee71d51ef9_Unicredit.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "banco bilbao vizcaya argentaria": {
+    "logo": {
+      "url": "https://querohoje.com/wp-content/uploads/2024/03/Tarjeta-BBVA-Mastercard-Black.png"
+    }
+  },
+  "cement roadstone holding": {
+    "logo": {
+      "url": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT7lkOIuFhidWw5kGfAyUUq8OLYHZorvcFPMbti3ZAJ8ehr71B-"
+    }
+  },
+  "bmw": {
+    "logo": {
+      "url": "https://www.destroyordie.com/cdn/shop/collections/Black_Square_1200x1200.jpg?v=1626184768",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "ing": {
+    "logo": {
+      "url": "https://cdn.freebiesupply.com/images/large/2x/ing-logo-black-and-white.png"
+    }
+  },
+  "volkswagen": {
+    "logo": {
+      "url": "https://1000logos.net/wp-content/uploads/2019/12/Volkswagen-Logo-1948.png"
+    }
+  },
+  "volvo group": {
+    "logo": {
+      "url": "https://static.matchwork.com/company/logo/DK/new1716389566_logo_small.png"
+    }
+  },
+  "eni": {
+    "logo": {
+      "url": "https://thumbs.dreamstime.com/b/eni-logo-eni-logo-station-vector-format-available-ai-petrol-pump-gas-station-petrol-station-134361242.jpg"
+    }
+  },
+  "heineken": {
+    "logo": {
+      "url": "https://brandslogos.com/wp-content/uploads/images/large/heineken-logo-black-and-white-1.png"
+    }
+  },
+  "dassault systèmes": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/DSY.PA_BIG.D-f1789d0b.png?t=1720244491",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "dhl group (deutsche post)": {
+    "logo": {
+      "url": "https://files.survalyzer.eu/files/dpdhl/Shared/Images/DHL_Group_logo_rgb_black.png?sv=2022-11-02&se=2123-07-17T00%3A00%3A00Z&sr=b&sp=r&sig=s5Qw%2FccJOs%2BSWnaCwo98mCiUYgluJJ1exCLNvNdwOiM%3D"
+    }
+  },
+  "stellantis": {
+    "logo": {
+      "url": "https://1000logos.net/wp-content/uploads/2024/04/Stellantis-Emblem.png"
+    }
+  },
+  "johnson controls": {
+    "logo": {
+      "url": "https://www.matternow.com/wp-content/uploads/2022/06/JCI-Logo-White.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "universal music group": {
+    "logo": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Universal_Music_Group_logo.svg"
+    }
+  },
+  "crédit agricole": {
+    "logo": {
+      "url": "https://cdn.prod.website-files.com/56cf02e3183bcaa02f35e349/64ad34ea2ca618712b5b5539_Credit_Agricole_Logo.png"
+    }
+  },
+  "infineon": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSqBqT6bbd-VZ_F0BbB7TUwcG5gh-KO-SRrg&s",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "danone": {
+    "logo": {
+      "url": "https://home.messagexchange.com/wp-content/uploads/2019/08/Danone-logo-white.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "adidas": {
+    "logo": {
+      "url": "https://static.euronews.com/articles/stories/08/30/56/48/1200x675_cmsv2_91d4f3ef-cbc9-543f-a310-5a68cfd56c27-8305648.jpg",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "experian": {
+    "logo": {
+      "url": "https://www.precisely.com/app/uploads/2022/10/cs-experian-white.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "engie": {
+    "logo": {
+      "url": "https://www.moon-event.fr/wp-content/uploads/2021/01/engie-noir.png"
+    }
+  },
+  "basf": {
+    "logo": {
+      "url": "https://logos-world.net/wp-content/uploads/2022/06/BASF-Logo.png"
+    }
+  },
+  "compagnie de saint-gobain": {
+    "logo": {
+      "url": "https://www.thebesmartproject.eu/sites/default/files/styles/logo/public/2019-02/logo-saint-gobain-black.png?itok=ElT4D8Uq"
+    }
+  },
+  "caixabank": {
+    "logo": {
+      "url": "https://themilk.es/wp-content/uploads/2020/11/CaixaBank.jpg",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "nordea bank": {
+    "logo": {
+      "url": "https://cdn.videosync.fi/events/nordea/common/logos/nordea_white.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "wolters kluwer": {
+    "logo": {
+      "url": "https://5.imimg.com/data5/SELLER/Default/2024/6/429321244/XG/MJ/LG/142205106/taxwise-tax-preparation-software-250x250.jpeg"
+    }
+  },
+  "adyen": {
+    "logo": {
+      "url": "https://www.zuora.com/wp-content/uploads/2023/02/Adyen-p.png"
+    }
+  },
+  "generali": {
+    "logo": {
+      "url": "https://seeklogo.com/images/G/generali-black-logo-80312E0C2F-seeklogo.com.png"
+    }
+  },
+  "deutsche börse": {
+    "logo": {
+      "url": "https://brandslogos.com/wp-content/uploads/images/large/deutsche-borse-group-logo-black-and-white.png"
+    }
+  },
+  "dsv": {
+    "logo": {
+      "url": "https://dashboards.dsv.com/img/dsv-logo.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "ingersoll rand": {
+    "logo": {
+      "url": "https://www.shopperssupplyaz.com/wordpress/wp-content/uploads/2017/04/ingersol-rand.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "eqt": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/EQT.ST.D-06b6a46b.png?t=1720244491",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "e.on": {
+    "logo": {
+      "url": "https://felipe-design.de/wp-content/uploads/2019/05/felipe_design_customers_logo_eon.jpg"
+    }
+  },
+  "exor": {
+    "logo": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Exor_NV_logo_2017.svg/640px-Exor_NV_logo_2017.svg.png"
+    }
+  },
+  "henkel": {
+    "logo": {
+      "url": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSUh4xqP3A2AePay3b9U3MUTDF92n_IZqE62_ku2bCb1SjrUvSv"
+    }
+  },
+  "flutter entertainment": {
+    "logo": {
+      "url": "https://media.licdn.com/dms/image/D5616AQEPUkf59Wb9Ew/profile-displaybackgroundimage-shrink_200_800/0/1669776255581?e=2147483647&v=beta&t=EHlbbekdPJqtFuHZGhyS8bc3nI66RTQ6F9sgJzb3ouk",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "kering": {
+    "logo": {
+      "url": "https://cdn.worldvectorlogo.com/logos/kering-logo.svg"
+    }
+  },
+  "pernod ricard": {
+    "logo": {
+      "url": "https://images.ctfassets.net/64x6cdp3vzq9/76I83Kd4XbALNiQsmukj3m/5a0d991ee73a0feabb92f045cc2f1ef6/Artboard_1_2x.png"
+    }
+  },
+  "thales": {
+    "logo": {
+      "url": "https://www.unitingaviation.com/wp-content/uploads/2020/07/Logo.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "capgemini": {
+    "logo": {
+      "url": "https://hatch-digital.com/wp-content/uploads/2023/03/CAP.PA_BIG.D-679c041e.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "assa abloy": {
+    "logo": {
+      "url": "https://cdn.cookielaw.org/logos/275398a4-ad09-4041-b5dc-7e8d51543d93/a261af0d-3056-41b2-9d1a-2ee248649e73/4002c29d-44e9-46d3-b90a-2b545b94d194/ASSAABLOY_black_150mm150dpi.png"
+    }
+  },
+  "ucb": {
+    "logo": {
+      "url": "https://seeklogo.com/images/U/UCB_Pharma-logo-4F3EEA0FC9-seeklogo.com.png"
+    }
+  },
+  "argenx": {
+    "logo": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Argenx_logo.jpeg/800px-Argenx_logo.jpeg"
+    }
+  },
+  "asm international": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/ASM.AS_BIG.D-55bce354.png?t=1720244490",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "beiersdorf": {
+    "logo": {
+      "url": "https://images.squarespace-cdn.com/content/v1/63eb9929af50773636e637fb/8826aceb-abba-41dd-b690-fa6c09035285/Beiersdorf.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "hapag-lloyd": {
+    "logo": {
+      "url": "https://cdn.freebiesupply.com/logos/thumbs/2x/hapag-lloyd-1-logo.png"
+    }
+  },
+  "hannover rück": {
+    "logo": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/HannoverRe.svg/1200px-HannoverRe.svg.png"
+    }
+  },
+  "ahold delhaize": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuGXDjcePmoMq_2gf9WusS3xzNCWbuMIw8Dg&s"
+    }
+  },
+  "orange": {
+    "logo": {
+      "url": "https://www.kaliop.com/app/uploads/2019/01/orange_black.png"
+    }
+  },
+  "coloplast": {
+    "logo": {
+      "url": "https://logodix.com/logo/1712630.jpg"
+    }
+  },
+  "novozymes": {
+    "logo": {
+      "url": "https://content.sportyfriends.com/uploads/groups/2429/1663854276.webp",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "skandinaviska enskilda banken": {
+    "logo": {
+      "url": "https://logonoid.com/images/seb-logo.png"
+    }
+  },
+  "daimler truck": {
+    "logo": {
+      "url": "https://federate-sdv.eu/wp-content/uploads/2024/05/DaimlerTruck.png"
+    }
+  },
+  "verbund ag": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/OEWA.F_BIG.D-5a1bec68.png?t=1720244493",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "aena": {
+    "logo": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Aena_Logo_New.svg/1280px-Aena_Logo_New.svg.png"
+    }
+  },
+  "ferrovial": {
+    "logo": {
+      "url": "https://cdn.prod.website-files.com/64afb0a17ac709727783ca29/65a101e0a223a757c8c8295c_ferrovial.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "kbc": {
+    "logo": {
+      "url": "https://kollective.com/wp-content/uploads/resources/uncat/video-testimonial-kbc-bank_ID-68708/KBC-white.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "deutsche bank": {
+    "logo": {
+      "url": "https://cdn.icon-icons.com/icons2/3914/PNG/512/deutschebank_logo_icon_249040.png"
+    }
+  },
+  "bayer": {
+    "logo": {
+      "url": "https://atlantic-technologies.com/wp-content/uploads/2021/01/Logo-bayer-Black-300x300.png"
+    }
+  },
+  "amadeus it group": {
+    "logo": {
+      "url": "https://ucarecdn.com/0bb963e3-1e5d-4795-a5a5-cb8b7381a3e6/-/crop/1973x657/0,3/-/crop/3:1/-/quality/lightest/-/format/webp/",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "eli lilly": {
+    "logo": {
+      "url": "https://www.pngkey.com/png/full/216-2163239_lilly-logo-eli-lilly-and-company.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "amgen": {
+    "logo": {
+      "url": "https://lh6.googleusercontent.com/proxy/oC3fsApJ6iIdZyK-dOCYE0JTeStuybtFbvu8bNAXf5L83yBip4Ce5bCGPmi9G8y6yUjV3Gk-t6tSwIYfxNEV-csf_blE8gvxfr8LcnD3d1SxV84Zyck"
+    }
+  },
+  "regeneron pharmaceuticals": {
+    "logo": {
+      "url": "https://cdn.cookielaw.org/logos/df5f6708-6e7d-4110-a239-60f9733416f1/4d957ccf-c23f-449c-8e19-d821c9a6599c/5c2b6d7b-c36f-4341-8e32-9bec8a605246/regeneronlogo.png"
+    }
+  },
+  "vertex pharmaceuticals": {
+    "logo": {
+      "url": "https://p7.hiclipart.com/preview/251/586/548/vertex-pharmaceuticals-nasdaq-vrtx-pharmaceutical-drug-company-biotechnology-others.jpg"
+    }
+  },
+  "csl": {
+    "logo": {
+      "url": "https://mma.prnewswire.com/media/1173050/CSLTM_RGB_Logo.jpg?w=300"
+    }
+  },
+  "zoetis": {
+    "logo": {
+      "url": "https://wearecmyk.com/wp-content/uploads/2022/12/Zoetis-logo-SVG-RGB.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "glaxosmithkline": {
+    "logo": {
+      "url": "https://static.wikia.nocookie.net/logopedia/images/a/aa/GSK_logo_2014_%28print%29.svg/revision/latest/scale-to-width-down/250?cb=20240414044323"
+    }
+  },
+  "daiichi sankyō": {
+    "logo": {
+      "url": "https://uspto.report/TM/97099574/mark.png"
+    }
+  },
+  "chugai pharmaceutical": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyzBI481UuLM4L1zOstT0k2S0HW2aQAZV4-v11QDLrlOd3OBLNpGnq0OoIvXotR8mgMo8&usqp=CAU"
+    }
+  },
+  "sun pharmaceutical": {
+    "logo": {
+      "url": "https://media.licdn.com/dms/image/D4D22AQFtGPqTBC7NDA/feedshare-shrink_2048_1536/0/1713190956912?e=2147483647&v=beta&t=2DIdhXXJikWrI1Gq4Kr632ejBySxVHz5uq0va0KRJxA"
+    }
+  },
+  "lonza": {
+    "logo": {
+      "url": "https://images.squarespace-cdn.com/content/v1/6363da0c2a598338482372ad/95724293-a6f0-4e1f-a7d5-a4eb89637542/Lonza.png"
+    }
+  },
+  "takeda pharmaceutical": {
+    "logo": {
+      "url": "https://www.unbridled.com/wp-content/uploads/2021/02/Takeda-Logo-White.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "jiangsu hengrui medicine": {
+    "logo": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Jiangsu_Hengrui_Pharmaceuticals.png"
+    }
+  },
+  "alnylam pharmaceuticals": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/ALNY_BIG.D-689884a6.png?t=1720244490"
+    }
+  },
+  "moderna": {
+    "logo": {
+      "url": "https://i0.wp.com/www.phdata.io/wp-content/uploads/2023/10/moderna-logo-white.png"
+    },
+    "theme": {
+      "image": "silicon"
+    }
+  },
+  "biogen": {
+    "logo": {
+      "url": "https://www.thinkfa.com/wp-content/uploads/2023/12/biogen.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "celltrion": {
+    "logo": {
+      "url": "https://media.licdn.com/dms/image/D5622AQEvj1ChnubbpQ/feedshare-shrink_2048_1536/0/1708513868484?e=2147483647&v=beta&t=TAqV5xOXT_PPZqVfpglNiueqzg3iPO3qn4Nu6RgG538"
+    }
+  },
+  "otsuka holdings": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/4578.T_BIG.D-5196ca9b.png?t=1720244490",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "icon plc": {
+    "logo": {
+      "url": "https://www.johnsonhana.com/wp-content/uploads/2022/02/ICON-plc-Logo-SVG-black.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "west pharmaceutical": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/WST_BIG.D-4189159f.png?t=1720244494"
+    }
+  },
+  "beigene": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/BGNE-a692560d.png?t=1720244491"
+    }
+  },
+  "astellas pharma": {
+    "logo": {
+      "url": "https://seeklogo.com/images/A/astellas-pharma-logo-D5CCB5DF64-seeklogo.com.png"
+    }
+  },
+  "biontech": {
+    "logo": {
+      "url": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQK2XrKCqR0nRIgaJFWUcbzi5i5UrvG3qL198EDSImXz9YrEH8h"
+    }
+  },
+  "teva pharmaceutical industries": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/TEVA_BIG.D-79fadcc2.png?t=1720244494",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "labcorp": {
+    "logo": {
+      "url": "https://mediakit.labcorp.com/Labcorp_Logo_Horizontal_Black_RGB.png"
+    }
+  },
+  "sandoz group": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/SDZ.SW_BIG.D-1c93d1be.png?t=1720244493",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "baxter": {
+    "logo": {
+      "url": "https://cdn.cookielaw.org/logos/62c73e36-7fb0-4370-957e-89d3852381b0/0ca1e1a2-7b61-4a51-bbd3-121370c575e6/wordmark600_white_300dpi.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "biomarin pharmaceutical": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/BMRN.D-6928851a.png?t=1720244491",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "genmab": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/GMAB_BIG.D-43445778.png?t=1720244492",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "wuxi apptec": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/2359.HK.D-cf6ce99f.png?t=1720244490",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "royalty pharma": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/RPRX.D-6e127a7e.png?t=1720244493",
+      "whiteOnBlack": "TRUE"
+    },
+    "theme": {
+      "image": "silicon"
+    }
+  },
+  "divis laboratories": {
+    "logo": {
+      "url": "https://upload.wikimedia.org/wikipedia/en/thumb/3/30/Divi%27s_Laboratories_Logo.svg/250px-Divi%27s_Laboratories_Logo.svg.png"
+    }
+  },
+  "neurocrine biosciences": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/NBIX.D-a3bc5a83.png?t=1720244493",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "cipla": {
+    "logo": {
+      "url": "https://ciplaleuprolide.com/wp-content/uploads/2022/01/Cipla-KO-Logo.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "united therapeutics": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/UTHR.D-9768fb46.png?t=1720244494",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "zydus lifesciences": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/ZYDUSLIFE.NS-ed3a9e6f.png?t=1720244494"
+    }
+  },
+  "hansoh pharma": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/3692.HK-96267e94.png?t=1720244490"
+    }
+  },
+  "dr. reddy's": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/RDY.D-7d93fc0a.png?t=1720244493",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "viatris": {
+    "logo": {
+      "url": "https://uspto.report/TM/98423674/mark.png"
+    },
+    "theme": {
+      "image": "silicon"
+    }
+  },
+  "torrent pharmaceuticals": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/TORNTPOWER.NS.D-bb7b6a2f.png?t=1720244494",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "insmed": {
+    "logo": {
+      "url": "https://www.aboutntm.com/_assets/img/Icon-Insmed-logo.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "shionogi": {
+    "logo": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/8/89/Shionogi_Seiyaku_logo.svg"
+    }
+  },
+  "medpace": {
+    "logo": {
+      "url": "https://iconape.com/wp-content/files/zf/261290/svg/medpace-logo-logo-icon-png-svg.png"
+    }
+  },
+  "incyte": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/INCY.D-09028ed2.png?t=1720244492"
+    }
+  },
+  "bio-techne": {
+    "logo": {
+      "url": "https://www.bio-techne401k.com/wps/wcm/connect/e57f9a6f-5f9f-45e8-81f0-e1bc0678c998/1/BT-logo-white.png?MOD=AJPERES",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "lupin limited": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/LUPIN.NS.D-bcc9235d.png?t=1720774266",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "alteogen": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/196170.KQ-0ed8f914.png?t=1720617866"
+    }
+  },
+  "recordati": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/REC.MI-cf1e0e06.png?t=1720244493"
+    }
+  },
+  "eisai": {
+    "logo": {
+      "url": "https://us.eisai.com/-/media/Project/EIsai/USEisaiRedesign/media-center/media-kit/Downloadable-Files/Eisai-Logos/CorporateLogomark_allK_png.png"
+    }
+  },
+  "kyowa kirin": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/4151.T-b80c1a98.png?t=1720244490"
+    }
+  },
+  "catalent": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/CTLT_BIG.D-6ad6ed2f.png?t=1720244491",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "aurobindo pharma": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/AUROPHARMA.NS.D-1074d9c7.png?t=1721227258",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "mankind pharma": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/MANKIND.NS.D-00bcc35c.png?t=1720244492",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "legend biotech": {
+    "logo": {
+      "url": "https://images.ctfassets.net/x75k2igozkgb/7Lkc8eQGDGvBsRTF7cNwwm/77c627b52a1d82370674cdabea162614/LEGEND_Logo_RGB.png"
+    }
+  },
+  "ipsen": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/IPN.PA_BIG.D-053ea1e1.png?t=1720244492",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "zealand pharma": {
+    "logo": {
+      "url": "https://technolution-tn.com/wp-content/uploads/2024/01/zealand_logo_RGB_011-1024x369.png"
+    }
+  },
+  "swedish orphan biovitrum": {
+    "logo": {
+      "url": "https://www.sobi.com/sites/default/files/ma/SOBI_logo_PNG_0.png"
+    }
+  },
+  "vaxcyte": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/PCVX_BIG-3ce7dbe1.png?t=1720244493"
+    }
+  },
+  "roivant sciences": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVX4eLNwEfyfIzO_Uk1tEc2HcZH9XxClN_5w&s"
+    },
+    "theme": {
+      "image": "silicon"
+    }
+  },
+  "cerevel therapeutics": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/CERE.D-2a116177.png?t=1720244491",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "sinopharm": {
+    "logo": {
+      "url": "https://www.drugdiscoverytrends.com/wp-content/uploads/2021/05/Sinopharm-300x210.png"
+    }
+  },
+  "alkem laboratories": {
+    "logo": {
+      "url": "https://marvel-b1-cdn.bc0a.com/f00000000272227/www.anaplan.com/content/dam/anaplan/wp-content/uploads/2022/10/alkem-600.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "intra-cellular therapies": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/ITCI.D-aeaf4dcd.png?t=1720244492",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "summit therapeutics": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwNTmy-Vaf4LQEmSiF9RJgp8Pfgcu7Cu34tw&s",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "ascendis pharma": {
+    "logo": {
+      "url": "https://ascendispharma.dk/wp-content/uploads/sites/4/2020/08/AscendisLogo-white.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "exelixis": {
+    "logo": {
+      "url": "https://ir.exelixis.com/static-files/854e1b52-c35f-4d9d-8065-15d3263f8fab"
+    },
+    "theme": {
+      "image": "silicon"
+    }
+  },
+  "revolution medicines": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/RVMD.D-ea8b1ecd.png?t=1720244493",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "halozyme therapeutics": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/HALO.D-56392a40.png?t=1720244492",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "elanco": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/ELAN_BIG.D-4ddc368a.png?t=1720244491",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "jazz pharmaceuticals": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/JAZZ-a825d5fe.png?t=1720244492"
+    }
+  },
+  "sino biopharmaceutical": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/1177.HK-9c68346c.png?t=1720244490"
+    }
+  },
+  "abbott india": {
+    "logo": {
+      "url": "https://www.indianpharmapost.com/public/thumbs/news/2021/08/9896/Abbott-Logo-.png"
+    }
+  },
+  "ionis pharmaceuticals": {
+    "logo": {
+      "url": "https://uspto.report/TM/97618804/mark.png"
+    }
+  },
+  "bachem": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzDQmCUCqYYJgucY0G-CrpoYSTvZPYKd8hIA&s"
+    }
+  },
+  "orion corporation": {
+    "logo": {
+      "url": "https://companieslogo.com/img/orig/ORNAV.HE_BIG.D-15d80386.png?t=1720244493",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "ono pharmaceutical": {
+    "logo": {
+      "url": "https://www.onscope.com/ipowner/en/ip/tmus/image/79378203"
+    }
+  },
+  "glaukos": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOUjmB8MJkXVmiqcFqDOIhJH4YJzobTpK12cAtdKSReBMSrxlLKCt9S4pisYc3pFrQMA&usqp=CAU"
+    }
+  },
+  "cytokinetics": {
+    "logo": {
+      "url": "https://www.sec.gov/Archives/edgar/data/1061983/000119312520194746/g939913g97t32.jpg"
+    }
+  },
+  "viking therapeutics": {
+    "logo": {
+      "url": "https://www.marketbeat.com/logos/viking-therapeutics-inc-logo.png?v=20240306130605"
+    },
+    "theme": {
+      "image": "silicon"
+    }
+  },
+  "wuxi biologics": {
+    "logo": {
+      "url": "https://abi-lab.com/wp-content/uploads/2024/01/wuxi-biologics-logo.png"
+    }
+  },
+  "lundbeck": {
+    "logo": {
+      "url": "https://banner2.cleanpng.com/20180702/oof/kisspng-lundbeck-business-pharmaceutical-industry-pharmace-lundbeck-5b39c299615e50.7825384915305120253988.jpg"
+    }
+  },
+  "blueprint medicines": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWMb5CdihRNrfMm3xbbqBQHhW58SfYS5Gb0Q&s",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "celgene": {
+    "logo": {
+      "url": "https://cdn.worldvectorlogo.com/logos/celgene-1.svg"
+    }
+  },
+  "kvantify": {
+    "logo": {
+      "url": "https://uspto.report/TM/97725089/mark.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "norfalk": {
+    "logo": {
+      "url": "https://nor-falk.com/wp-content/uploads/2023/12/Icon_NorFalk_Black-300x275.png"
+    }
+  },
+  "textile change": {
+    "logo": {
+      "url": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRBmpSGVu4FCVHprkPOyXB6s-2Yutr3bRHuyksu2AutKHvllLDk"
+    }
+  },
+  "ento": {
+    "logo": {
+      "url": "https://thehub-io.imgix.net/files/s3/20230424130915-f1200a70118dca5e1fcba1eb8ab27417.png?fit=crop&w=300&h=300&auto=format&q=60"
+    }
+  },
+  "pond bio": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSn53cRG1Kot-kxnkMJZDuoMnHZG0jWEDQEzQ&s",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "systematic": {
+    "logo": {
+      "url": "https://cdn.systematic.com/media/k2ldonbh/sse_logo_white_400x51px.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "enode": {
+    "logo": {
+      "url": "https://bookface-images.s3.amazonaws.com/logos/9084abbaf369a2b9f253e57ceba4dbb230e38d1a.png"
+    }
+  },
+  "beyond work": {
+    "logo": {
+      "url": "https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/vzzfzjdsqbaj32rhr94p"
+    }
+  },
+  "partisia": {
+    "logo": {
+      "url": "https://partisiablockchain.com/wp-content/uploads/2023/09/2.-Partisia-Blockchain-graphic-e1695214517610.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "zeiss": {
+    "logo": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Zeiss_logo.svg/2048px-Zeiss_logo.svg.png"
+    }
+  },
+  "m3e": {
+    "logo": {
+      "url": "https://m3e-gmbh.com/images/template/M3e-GmbH_logo.png"
+    }
+  },
+  "housetest": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWtiMxq-QHgz8ygeqEgM4JQUEYrFvnEKXc4g&s"
+    }
+  },
+  "daredisrupt": {
+    "logo": {
+      "url": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ-20hkTL7KRuW4V5S16hVYaCtHJLCS1fSSHWbSbto7ANobt9XB",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "greenlab": {
+    "logo": {
+      "url": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcS84LUtqbnpLgqCKQT6mTcB6Piniodfq3q0WutFKOVgwS-zIRNl",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "content avenue": {
+    "logo": {
+      "url": "https://contentavenue.com/assets/logo.svg"
+    }
+  },
+  "21st bio": {
+    "logo": {
+      "url": "https://21st.bio/wp-content/uploads/2021/01/21bio_logo_200x200px_neg.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "alexandra institute": {
+    "logo": {
+      "url": "https://www.earto.eu/wp-content/uploads/GTS-Alexandra-Institute.png"
+    }
+  },
+  "cognitive revolution": {
+    "logo": {
+      "url": "https://www.cognitiverevolution.ai/content/images/2024/03/Untitled-design.png"
+    }
+  },
+  "grundfos": {
+    "logo": {
+      "url": "https://strongminds.dk/wp-content/uploads/2018/11/grundfos-logo-e1544515860430.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "novo nordisk": {
+    "logo": {
+      "url": "https://pointwork.com/wp-content/uploads/2023/06/NVO_BIG.D-1e40a3a3.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "cordulus": {
+    "logo": {
+      "url": "https://cdn.prod.website-files.com/63d28ee5f4787a0ad6d05f5b/63dcc0d03f268858343bbddb_Cordulus%20Logo.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "draupnir bio": {
+    "logo": {
+      "url": "https://ml-eu.globenewswire.com/Resource/Download/95bb87ed-e268-4fcd-a840-366c5c7e3e2c"
+    }
+  },
+  "neurospace.ai": {
+    "logo": {
+      "url": "https://neurospace.io/img/brand/logo.svg",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "trifork": {
+    "logo": {
+      "url": "https://cdn.prod.website-files.com/63c7edd0b76bfe63668c00e7/63c7edd0b76bfe22928c01ea_Trifork_logo_RGB.png"
+    }
+  },
+  "sens innovation": {
+    "logo": {
+      "url": "https://www.sens.dk/wp-content/uploads/2021/02/cropped-sens-logo-small.png"
+    }
+  },
+  "rigdev": {
+    "logo": {
+      "url": "https://avatars.githubusercontent.com/u/143799880?v=4",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "sentispec": {
+    "logo": {
+      "url": "https://media.licdn.com/dms/image/D4D0BAQFqVziBje5Kkg/company-logo_200_200/0/1706168963440/sentispec_logo?e=2147483647&v=beta&t=uDDx5AiW02Obu05o6hoj1w_WfP62TTbfNoLhZoyZM7k"
+    }
+  },
+  "uber": {
+    "logo": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
+    }
+  },
+  "aura energy": {
+    "logo": {
+      "url": "https://companiesmarketcap.com/img/company-logos/256/AURA.L.png"
+    }
+  },
+  "bispebjerg hospital": {
+    "logo": {
+      "url": "https://www.regionh.dk/til-fagfolk/Om-Region-H/regionens-design/logo-og-grundelementer/logo-til-print-og-web/PublishingImages/Logo_Bispebjerg_png.png"
+    }
+  },
+  "cercare": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJPvzjSIcKaKfRRjIq5HN02Ll2DzEciu8jvg&s"
+    }
+  },
+  "brainbotics": {
+    "logo": {
+      "url": "https://www.brainbotics.com/wp-content/uploads/Brainbotics_icon_xs.png"
+    }
+  },
+  "biograil": {
+    "logo": {
+      "url": "https://biograil.com/wp-content/uploads/2020/02/biograil-logo-pos.png"
+    }
+  },
+  "emento": {
+    "logo": {
+      "url": "https://cdn.prod.website-files.com/63492035405ff764653ea383/663b2eb46b7ad38ae0f68d82_Emento_Logo_CMYK_01%20(1).jpg"
+    }
+  },
+  "alipes": {
+    "logo": {
+      "url": "https://www.alipes.dk/images/logos/logo.desktop.png",
+      "whiteOnBlack": "TRUE"
+    }
+  },
+  "siana": {
+    "logo": {
+      "url": "https://thehub-io.imgix.net/files/s3/20211210081241-1d0b5662ae5c0cbf21175e9c2af49076.png?fit=crop&w=300&h=300&auto=format&q=60"
+    }
+  },
+  "exordo": {
+    "logo": {
+      "url": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTTBNEpYqsa-3dH4xhNxCNxDjk8_ldKfZTe51aUNjBO1lqzbfEv"
+    }
+  },
+  "qvin": {
+    "logo": {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3XN0Jj7L7ARW-uLXJ03SNWr4nKX7FugdSffXWH4hD2q5uA23vozqjJXl4BjTb7Ronfwc&usqp=CAU"
+    }
+  },
+  "biosynex": {
+    "logo": {
+      "url": "https://chembio.com/wp-content/uploads/2023/04/Biosynex-Newsroom-1920x1080-1-600x403.png"
+    }
+  },
   "nvidia": {
     "logo": {
       "url": "https://investcurb.com/images/2023/07/08/nvidia.jpg",
@@ -111,14 +1321,6 @@
   "zoominfo technologies": {
     "logo": {
       "url": "https://www.cogilex.com/zoominfo.png"
-    },
-    "theme": {
-      "image": "silicon"
-    }
-  },
-  "viatris": {
-    "logo": {
-      "url": "https://uspto.report/TM/98423674/mark.png"
     },
     "theme": {
       "image": "silicon"
@@ -354,14 +1556,6 @@
       "image": "silicon"
     }
   },
-  "roivant sciences": {
-    "logo": {
-      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVX4eLNwEfyfIzO_Uk1tEc2HcZH9XxClN_5w&s"
-    },
-    "theme": {
-      "image": "silicon"
-    }
-  },
   "crowdstrike": {
     "logo": {
       "url": "https://www.content.shi.com/cms-content/accelerator/media/logos/logo-crowdstrike-white.png",
@@ -528,15 +1722,6 @@
       "url": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQ6p0l1S027s9iaRADrutouTAgcm4BG-ekd0aOfBr0ca8bpxiU7"
     }
   },
-  "royalty pharma": {
-    "logo": {
-      "url": "https://companieslogo.com/img/orig/RPRX.D-6e127a7e.png?t=1720244493",
-      "whiteOnBlack": "TRUE"
-    },
-    "theme": {
-      "image": "silicon"
-    }
-  },
   "amicus therapeutics": {
     "logo": {
       "url": "https://uspto.report/TM/78809293/mark.png"
@@ -650,14 +1835,6 @@
       "image": "silicon"
     }
   },
-  "exelixis": {
-    "logo": {
-      "url": "https://ir.exelixis.com/static-files/854e1b52-c35f-4d9d-8065-15d3263f8fab"
-    },
-    "theme": {
-      "image": "silicon"
-    }
-  },
   "confluent": {
     "logo": {
       "url": "https://www.datanami.com/wp-content/uploads/2024/02/Confluent-300x300.png"
@@ -747,26 +1924,10 @@
       "image": "silicon"
     }
   },
-  "viking therapeutics": {
-    "logo": {
-      "url": "https://www.marketbeat.com/logos/viking-therapeutics-inc-logo.png?v=20240306130605"
-    },
-    "theme": {
-      "image": "silicon"
-    }
-  },
   "formula one": {
     "logo": {
       "url": "https://selectionrs.com/img/m/175-medium_default.jpg",
       "whiteOnBlack": "TRUE"
-    },
-    "theme": {
-      "image": "silicon"
-    }
-  },
-  "moderna": {
-    "logo": {
-      "url": "https://i0.wp.com/www.phdata.io/wp-content/uploads/2023/10/moderna-logo-white.png"
     },
     "theme": {
       "image": "silicon"
@@ -908,11 +2069,6 @@
       "url": "https://images.crunchbase.com/image/upload/c_pad,f_auto,q_auto:eco,dpr_1/vsnwi4ppyv3n8p3u9y9o"
     }
   },
-  "volkswagen": {
-    "logo": {
-      "url": "https://1000logos.net/wp-content/uploads/2019/12/Volkswagen-Logo-1948.png"
-    }
-  },
   "uniper": {
     "logo": {
       "url": "https://quartr.com/_next/image?url=https%3A%2F%2Ffiles.quartr.com%2Fcompany-icons%2FSquare%25201x%2FUniper%2520SE%2520-%2520Square.png&w=256&q=100",
@@ -927,11 +2083,6 @@
   "toyota motor": {
     "logo": {
       "url": "https://logos-world.net/wp-content/uploads/2020/05/Toyota-Logo-2020-present.png"
-    }
-  },
-  "totalenergies": {
-    "logo": {
-      "url": "https://www.mm.be/userfiles/media/1622383159apture-d-ecran-2021-05-30-a-15.58.06.jpg"
     }
   },
   "glencore": {
@@ -982,11 +2133,6 @@
   "microsoft": {
     "logo": {
       "url": "https://cdn.icon-icons.com/icons2/2845/PNG/512/microsoft_logo_icon_181372.png"
-    }
-  },
-  "stellantis": {
-    "logo": {
-      "url": "https://1000logos.net/wp-content/uploads/2024/04/Stellantis-Emblem.png"
     }
   },
   "agricultural bank of china": {
@@ -1114,31 +2260,15 @@
       "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjiLIKAKJIXQjYlIOFOP1-CdmMECNAweqGtjlN-WphTNuGLpc6mIa85S3ZRWqo8h1fSCk&usqp=CAU"
     }
   },
-  "bmw": {
-    "logo": {
-      "url": "https://www.destroyordie.com/cdn/shop/collections/Black_Square_1200x1200.jpg?v=1626184768",
-      "whiteOnBlack": "TRUE"
-    }
-  },
   "kroger": {
     "logo": {
       "url": "https://www.thekrogerco.com/wp-content/uploads/2019/11/kroger-logo-white-small.png",
       "whiteOnBlack": "TRUE"
     }
   },
-  "enel": {
-    "logo": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Enel_Group_logo.svg/400px-Enel_Group_logo.svg.png"
-    }
-  },
   "centene": {
     "logo": {
       "url": "https://1000logos.net/wp-content/uploads/2021/07/Centene-Logo.jpg"
-    }
-  },
-  "eni": {
-    "logo": {
-      "url": "https://thumbs.dreamstime.com/b/eni-logo-eni-logo-station-vector-format-available-ai-petrol-pump-gas-station-petrol-station-134361242.jpg"
     }
   },
   "china mobile communications": {
@@ -1164,11 +2294,6 @@
   "walgreens boots alliance": {
     "logo": {
       "url": "https://www.boots-uk.com/media/5681/wba-logo.png"
-    }
-  },
-  "allianz": {
-    "logo": {
-      "url": "https://thecitylifer.com/blog/wp-content/uploads/sites/4/2022/11/Allianz-Logo-Black-Small.png"
     }
   },
   "alibaba group holding": {
@@ -1197,11 +2322,6 @@
       "url": "https://images.crunchbase.com/image/upload/c_pad,f_auto,q_auto:eco,dpr_1/876c31aff750068fafa4"
     }
   },
-  "e.on": {
-    "logo": {
-      "url": "https://felipe-design.de/wp-content/uploads/2019/05/felipe_design_customers_logo_eon.jpg"
-    }
-  },
   "china resources": {
     "logo": {
       "url": "https://chinaconnect.be/wp-content/uploads/china-connect-logo-huarun.png"
@@ -1220,11 +2340,6 @@
   "at&t": {
     "logo": {
       "url": "https://generatoricon.com/_next/image/?url=https%3A%2F%2Fstorage.googleapis.com%2Ficon_svgs%2Fphotos%2Ftech-brand-logos-mo%2Fat-and-t_341622.png&w=1080&q=75"
-    }
-  },
-  "deutsche telekom": {
-    "logo": {
-      "url": "https://cdn.worldvectorlogo.com/logos/telekom.svg"
     }
   },
   "pemex": {
@@ -1273,19 +2388,9 @@
       "url": "https://www.iconarchive.com/download/i150767/simpleicons-team/simple/relianceindustrieslimited.1024.png"
     }
   },
-  "engie": {
-    "logo": {
-      "url": "https://www.moon-event.fr/wp-content/uploads/2021/01/engie-noir.png"
-    }
-  },
   "target": {
     "logo": {
       "url": "https://corporate.target.com/getmedia/42c10f72-913d-4198-a8c2-8c4f01721928/Target_Bullseye-Logo_Black_transparent.png"
-    }
-  },
-  "axa": {
-    "logo": {
-      "url": "https://1000logos.net/wp-content/uploads/2017/12/Axa-Logo-1985.png"
     }
   },
   "sk": {
@@ -1402,11 +2507,6 @@
       "url": "https://cdn-icons-png.freepik.com/512/5968/5968270.png"
     }
   },
-  "sinopharm": {
-    "logo": {
-      "url": "https://www.drugdiscoverytrends.com/wp-content/uploads/2021/05/Sinopharm-300x210.png"
-    }
-  },
   "fedex": {
     "logo": {
       "url": "https://cdn.freebiesupply.com/logos/large/2x/fedex-logo-black-and-white.png"
@@ -1431,11 +2531,6 @@
   "bosch": {
     "logo": {
       "url": "https://static-00.iconduck.com/assets.00/bosch-icon-2048x2048-se8sykum.png"
-    }
-  },
-  "basf": {
-    "logo": {
-      "url": "https://logos-world.net/wp-content/uploads/2022/06/BASF-Logo.png"
     }
   },
   "people’s insurance co. of china": {
@@ -1473,11 +2568,6 @@
       "url": "https://companieslogo.com/img/orig/ET-fc8e1346.png?t=1720244491"
     }
   },
-  "bnp paribas": {
-    "logo": {
-      "url": "https://play-lh.googleusercontent.com/98HprxE8ZNgB_TAJtw3CiacyPDUtDcUCaWziAKsN4zl-NPAV6IAycF8W8kqFDB-aGCg=w240-h480-rw"
-    }
-  },
   "state farm insurance": {
     "logo": {
       "url": "https://www.svgrepo.com/show/519453/state-farm.svg"
@@ -1506,11 +2596,6 @@
   "freddie mac": {
     "logo": {
       "url": "https://o.quizlet.com/x-atT.0zg0VM.NHtrSKg0A.png"
-    }
-  },
-  "crédit agricole": {
-    "logo": {
-      "url": "https://cdn.prod.website-files.com/56cf02e3183bcaa02f35e349/64ad34ea2ca618712b5b5539_Credit_Agricole_Logo.png"
     }
   },
   "zhejiang rongsheng holding group": {
@@ -1643,11 +2728,6 @@
   "bank of communications": {
     "logo": {
       "url": "https://cdn.iconscout.com/icon/free/png-256/free-bank-of-communications-2270651-1891178.png"
-    }
-  },
-  "siemens": {
-    "logo": {
-      "url": "https://cdn.freebiesupply.com/logos/large/2x/siemens-3-logo-black-and-white.png"
     }
   },
   "jinneng holding group": {
@@ -1851,12 +2931,6 @@
       "whiteOnBlack": "TRUE"
     }
   },
-  "vinci": {
-    "logo": {
-      "url": "https://companieslogo.com/img/orig/DG.PA_BIG.D-8db617a1.png?t=1720244491",
-      "whiteOnBlack": "TRUE"
-    }
-  },
   "omv group": {
     "logo": {
       "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQl5CNnUhw5EF6GvqMeL3YiqiN-M9awHL7y-A&s"
@@ -1936,16 +3010,6 @@
   "panasonic holdings": {
     "logo": {
       "url": "https://logolook.net/wp-content/uploads/2022/08/Panasonic-Logo.png"
-    }
-  },
-  "airbus": {
-    "logo": {
-      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8T9bTuG2GYXchLJK6aXxv-fHqyzQ3XB-ZRj-_TDjT3WMWiu4_"
-    }
-  },
-  "accenture": {
-    "logo": {
-      "url": "https://cdn.freebiesupply.com/images/large/2x/accenture-logo-black-and-white.png"
     }
   },
   "idemitsu kosan": {
@@ -2050,12 +3114,6 @@
       "url": "https://seekvectorlogo.com/wp-content/uploads/2018/01/abbvie-vector-logo.png"
     }
   },
-  "anheuser-busch inbev": {
-    "logo": {
-      "url": "https://www.tvisioninsights.com/hubfs/2022%20Assets%20TMK/Logo-Jun_02-Anheuser-Busch_InBev.png",
-      "whiteOnBlack": "TRUE"
-    }
-  },
   "tokyo electric power": {
     "logo": {
       "url": "https://brandslogos.com/wp-content/uploads/images/large/tepco-logo-black-and-white.png"
@@ -2074,12 +3132,6 @@
   "dow": {
     "logo": {
       "url": "https://cdn.freebiesupply.com/logos/large/2x/dow-3-logo-png-transparent.png"
-    }
-  },
-  "iberdrola": {
-    "logo": {
-      "url": "https://www.bmcsoftware.cn/content/dam/bmc/logos/third-party/logo-Iberdrola-white.png",
-      "whiteOnBlack": "TRUE"
     }
   },
   "china national building material group": {
@@ -2170,11 +3222,6 @@
   "daimler truck holding": {
     "logo": {
       "url": "https://banner2.cleanpng.com/20180811/hbo/a43a647c81f7e575375ff74b1940270a.webp"
-    }
-  },
-  "bayer": {
-    "logo": {
-      "url": "https://atlantic-technologies.com/wp-content/uploads/2021/01/Logo-bayer-Black-300x300.png"
     }
   },
   "tyson foods": {
@@ -2349,11 +3396,6 @@
       "url": "https://banner2.cleanpng.com/20180913/pwt/kisspng-chs-inc-clip-art-minnesota-logo-agriculture-5b9a891025cab4.6665229815368542881548.jpg"
     }
   },
-  "sanofi": {
-    "logo": {
-      "url": "https://qtxasset.com/cdn-cgi/image/w=384,h=216,f=auto,fit=crop,g=0.5x0.5/https://qtxasset.com/quartz/qcloud5/media/image/fiercepharma/1643911445/211125_SANOFI_LOGO_RGB.png?VersionId=OMpFG4JDGfUAqlOFOmgnVsWJ9p8X8X.v"
-    }
-  },
   "groupe bpce": {
     "logo": {
       "url": "https://www.paytutor.com/img/BPCE-logo.png"
@@ -2445,16 +3487,6 @@
   "exor group": {
     "logo": {
       "url": "https://www.exor.com/sites/default/files/styles/medium/public/companies_logos/LOGO%20BLACK.png?itok=8_WZvqS8"
-    }
-  },
-  "banco bilbao vizcaya argentaria": {
-    "logo": {
-      "url": "https://querohoje.com/wp-content/uploads/2024/03/Tarjeta-BBVA-Mastercard-Black.png"
-    }
-  },
-  "orange": {
-    "logo": {
-      "url": "https://www.kaliop.com/app/uploads/2019/01/orange_black.png"
     }
   },
   "jingye group": {
@@ -2633,11 +3665,6 @@
       "url": "https://evaluateresearch.com/wp-content/plugins/images-thumbnail-sliderv1/imagestoscroll/image002.jpg"
     }
   },
-  "deutsche bank": {
-    "logo": {
-      "url": "https://cdn.icon-icons.com/icons2/3914/PNG/512/deutschebank_logo_icon_249040.png"
-    }
-  },
   "telefónica": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/TEF.D-e2e5cef6.png?t=1720244494",
@@ -2784,11 +3811,6 @@
   "jfe holdings": {
     "logo": {
       "url": "https://seeklogo.com/images/J/jfe-holdings-logo-0A2AF17448-seeklogo.com.png"
-    }
-  },
-  "intesa sanpaolo": {
-    "logo": {
-      "url": "https://static-00.iconduck.com/assets.00/intesa-icon-256x254-990iscwx.png"
     }
   },
   "ms&ad insurance group holdings": {
@@ -2957,11 +3979,6 @@
       "url": "https://play-lh.googleusercontent.com/sRGJ2__K9zvzIoYrc9C792ap8J8h5LEtzrxeU2NBERHru8UTvICZ9ZKMQ_gFR61EL1Q"
     }
   },
-  "hapag-lloyd": {
-    "logo": {
-      "url": "https://cdn.freebiesupply.com/logos/thumbs/2x/hapag-lloyd-1-logo.png"
-    }
-  },
   "usaa": {
     "logo": {
       "url": "https://www.tramatm.com/_next/image?url=https%3A%2F%2Ftrama-static.s3.eu-central-1.amazonaws.com%2Fimages%2Fhall-of-fame%2Flogos%2F166-logo.png&w=3840&q=75"
@@ -2980,12 +3997,6 @@
   "compal electronics": {
     "logo": {
       "url": "https://ifdalivestorage.blob.core.windows.net/user-uploads/profile/2079/00000000-0000-0000-0000-000000000000/logo_1167_pt_logo.jpg"
-    }
-  },
-  "schneider electric": {
-    "logo": {
-      "url": "https://companieslogo.com/img/orig/SU.PA.D-d8bd8523.png?t=1720244494",
-      "whiteOnBlack": "TRUE"
     }
   },
   "finatis": {
@@ -3102,11 +4113,6 @@
       "url": "https://logowik.com/content/uploads/images/3m-black-old4018.logowik.com.webp"
     }
   },
-  "inditex": {
-    "logo": {
-      "url": "https://imgraftmaroc.es/wp-content/uploads/2023/11/WhatsApp-Image-2023-11-19-at-21.16.39_9fbe9fd0.jpg"
-    }
-  },
   "british american tobacco": {
     "logo": {
       "url": "https://companieslogo.com/img/orig/BTI.D-e6d688b1.png?t=1720244491",
@@ -3195,12 +4201,6 @@
       "url": "https://cdn.freebiesupply.com/logos/large/2x/linde-logo-black-and-white.png"
     }
   },
-  "dsv": {
-    "logo": {
-      "url": "https://dashboards.dsv.com/img/dsv-logo.png",
-      "whiteOnBlack": "TRUE"
-    }
-  },
   "broadcom": {
     "logo": {
       "url": "https://static-00.iconduck.com/assets.00/broadcom-icon-512x512-e36zj9t6.png"
@@ -3253,11 +4253,6 @@
       "url": "https://i.pinimg.com/736x/d1/68/16/d168164e078bfe1a875a068dbf9146d0.jpg"
     }
   },
-  "sap": {
-    "logo": {
-      "url": "https://theartian.com/wp-content/uploads/2021/05/SAP-LOGO-BLACK.png"
-    }
-  },
   "starbucks": {
     "logo": {
       "url": "https://cdn.iconscout.com/icon/free/png-256/free-starbucks-3215495-2673913.png?f=webp&w=256"
@@ -3304,12 +4299,6 @@
       "url": "https://media.licdn.com/dms/image/C560BAQHRH_JqjRph_g/company-logo_200_200/0/1647330068534/cj_corporation_logo?e=2147483647&v=beta&t=s5ZcWIT5cwK_oOecDfYPkdnBCfyg0SSzcSIJwtUO1qQ"
     }
   },
-  "medtronic": {
-    "logo": {
-      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjgc1gNM036s4mkTqBnwgfpOGgv92zr-pnzw&s",
-      "whiteOnBlack": "TRUE"
-    }
-  },
   "china national aviation fuel group": {
     "logo": {
       "url": "https://img.imsilkroad.com//a/10005/201907/5efb49e7a7e0204209f133f7cc1f04a8.jpeg"
@@ -3333,11 +4322,6 @@
   "mondelēz international": {
     "logo": {
       "url": "https://1000logos.net/wp-content/uploads/2020/09/Mondelez-Logo.jpg"
-    }
-  },
-  "air liquide": {
-    "logo": {
-      "url": "https://www.elneo.com/sites/default/files/customer-logo/logo.png"
     }
   },
   "danaher": {
