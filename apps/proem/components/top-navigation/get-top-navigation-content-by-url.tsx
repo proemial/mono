@@ -51,7 +51,6 @@ export function getTopNavigationContentByUrl(
 
 		// "For you" feed for logged in users
 		if (url.includes("/user_")) {
-			// Saved bookmarks
 			if (url.includes("/saved")) {
 				return {
 					action: (
@@ -77,7 +76,7 @@ export function getTopNavigationContentByUrl(
 			return {
 				action: (
 					<ActionMenu>
-						<Link href={`${url}/search`}>Search</Link>
+						<Link href={`${url.replace("/saved", "")}/search`}>Search</Link>
 					</ActionMenu>
 				),
 			};
