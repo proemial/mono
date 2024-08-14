@@ -5,6 +5,7 @@ import {
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
 import { useClerk, useOrganization, useUser } from "@clerk/nextjs";
+import { DrawerClose } from "@proemial/shadcn-ui";
 import {
 	Building05,
 	LogOut01,
@@ -32,16 +33,18 @@ export const About = () => {
 			<div className="space-y-4 mt-4">
 				{membership && (
 					<div className="space-y-4 mt-4">
-						<Link
-							href={`/org/${membership.organization.id}`}
-							onClick={trackHandler(analyticsKeys.ui.menu.click.org)}
-							prefetch={false}
-						>
-							<div className="flex gap-2 items-center">
-								<Building05 className="size-4 opacity-85" />
-								<div className="text-sm">{membership.organization.name}</div>
-							</div>
-						</Link>
+						<DrawerClose asChild>
+							<Link
+								href={`/org/${membership.organization.id}`}
+								onClick={trackHandler(analyticsKeys.ui.menu.click.org)}
+								prefetch={false}
+							>
+								<div className="flex gap-2 items-center">
+									<Building05 className="size-4 opacity-85" />
+									<div className="text-sm">{membership.organization.name}</div>
+								</div>
+							</Link>
+						</DrawerClose>
 					</div>
 				)}
 				<div className="flex gap-2 items-center justify-between">
