@@ -52,14 +52,10 @@ export const AssistantContent = ({
 	const [footerRef, { height: footerHeight }] = useMeasure();
 	const [suggestionsRef, { height: suggestionsHeight }] = useMeasure();
 
-	const initialMessages = useMemo(() => {
-		const isDefaultSpace = spaceId && spaceId === user?.id && !paperId;
-		if (isDefaultSpace) {
-			// Do not include the chat history in "For You"
-			return [];
-		}
-		return toInitialMessages(data?.posts ?? []);
-	}, [spaceId, user?.id, paperId, data?.posts]);
+	const initialMessages = useMemo(
+		() => toInitialMessages(data?.posts ?? []),
+		[data?.posts],
+	);
 
 	const {
 		messages,
