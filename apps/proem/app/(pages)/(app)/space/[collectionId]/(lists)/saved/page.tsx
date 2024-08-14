@@ -50,7 +50,7 @@ export default async function SavedPage({
 	const isDefaultSpace = collectionId === userId;
 	const showThemeColors = isDefaultSpace;
 	return (
-		<div className="mb-8 space-y-8">
+		<div className="mb-8 space-y-3">
 			{papers.map((paper) => {
 				if (!paper) return null;
 				const isBookmarked = paperIds?.includes(paper.id) ?? false;
@@ -72,13 +72,13 @@ export default async function SavedPage({
 
 				if (showThemeColors && field?.theme) {
 					return (
-						<ThemeColoredCard className="mb-3" theme={field.theme}>
+						<ThemeColoredCard theme={field.theme} key={paper.id}>
 							{item}
 						</ThemeColoredCard>
 					);
 				}
 				return (
-					<div key={paper.id} className="py-5">
+					<div className="py-2" key={paper.id}>
 						{item}
 					</div>
 				);

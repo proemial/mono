@@ -116,21 +116,15 @@ export function Feed({
 
 					if (!theme && field?.theme) {
 						return (
-							<ThemeColoredCard className="mb-3" theme={field?.theme}>
-								{item}
-							</ThemeColoredCard>
+							<ThemeColoredCard theme={field?.theme}>{item}</ThemeColoredCard>
 						);
 					}
 
 					if (theme && i % 2 === 0) {
-						return (
-							<ThemeColoredCard className="mb-3" theme={theme}>
-								{item}
-							</ThemeColoredCard>
-						);
+						return <ThemeColoredCard theme={theme}>{item}</ThemeColoredCard>;
 					}
 
-					return <div className="mb-3">{item}</div>;
+					return <div className="my-3">{item}</div>;
 				}}
 			/>
 		</div>
