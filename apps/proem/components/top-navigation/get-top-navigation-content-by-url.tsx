@@ -45,7 +45,7 @@ export function getTopNavigationContentByUrl(
 
 		if (url.includes("/search")) {
 			return {
-				action: <CloseAction target={url.replace("/search", "")} />,
+				action: <CloseAction />,
 			};
 		}
 

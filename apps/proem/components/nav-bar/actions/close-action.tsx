@@ -9,7 +9,11 @@ import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
 
 type Props = {
-	target: string;
+	/**
+	 * The target URL to navigate to when closing.
+	 * If not provided or empty, will use router.back() instead.
+	 */
+	target?: string;
 	iconOverride?: ReactNode;
 };
 
@@ -18,7 +22,11 @@ export const CloseAction = ({ target, iconOverride }: Props) => {
 
 	const handleAction = () => {
 		trackHandler(analyticsKeys.ui.header.click.close);
-		router.push(target);
+		if (target) {
+			router.push(target);
+		} else {
+			router.back();
+		}
 	};
 
 	return (
