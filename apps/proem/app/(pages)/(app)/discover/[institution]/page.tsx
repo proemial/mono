@@ -7,8 +7,8 @@ import {
 	Branding,
 	brandingForInstitution,
 } from "@/app/theme/institution-branding";
-import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
 import { fetchInstitutions } from "@proemial/repositories/oa/institutions/fetch-institutions";
+import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
 
 export default async function DiscoverPage({
 	params,
@@ -18,64 +18,64 @@ export default async function DiscoverPage({
 	};
 }) {
 	const { userId } = auth();
-	const { institution } = params;
+	const { institution: searchString } = params;
 
 	const bookmarks = (await userId)
 		? getBookmarksByCollectionId(userId as string)
 		: {};
 
-	const institutions = await fetchInstitutions(institution);
-
-	const name = institutions?.at(0)?.display_name ?? institution;
+	const institutions = await fetchInstitutions(searchString);
+	const institution = institutions?.at(0);
+	const institutionName = institution?.display_name ?? searchString;
 
 	const header = (
 		<div className="mt-2 flex flex-row justify-between items-center">
-			{institutions?.at(0)?.works_count} papers published
-			<FollowButton id={institutions?.at(0)?.id as string} />
+			{institution?.works_count?.toLocaleString()} papers published
+			<FollowButton id={institution?.id as string} />
 		</div>
 	);
 
-	const branding = brandingForInstitution(institution);
+	const branding = brandingForInstitution(searchString);
 
 	return (
 		<>
-			<Logo branding={branding} />
+			<Logo name={institutionName} branding={branding} />
 
 			{institutions?.length > 0 && (
 				<Feed
-					filter={{ institution: institutions.at(0)?.id }}
+					filter={{ institution: institution?.id }}
 					bookmarks={bookmarks}
 					theme={branding.theme}
 					header={header}
 				>
-					<OrgSelector institutions={institutions} selected={name} />
+					<OrgSelector institutions={institutions} selected={institutionName} />
 				</Feed>
 			)}
 		</>
 	);
 }
 
-function Logo({ branding }: { branding: Branding }) {
-	if (!branding.logo) return null;
+function Logo({ name, branding }: { name: string, branding: Branding }) {
+	if (!branding.logo) return <div className="mb-12 flex justify-center text-xl">{name}</div>;
 
 	// mix-blend-mode works but not on our background https://codepen.io/summercodes/pen/eYaYoVO
-	// return (
-	// 	<div className="mb-8 flex justify-center">
-	// 		<img
-	// 			src={branding.logo.url}
-	// 			alt=""
-	// 			className={`max-h-24 ${
-	// 				branding.logo.whiteOnBlack ? "mix-blend-multiply" : ""
-	// 			}`}
-	// 		/>
-	// 	</div>
-	// );
 	return (
-		<div
-			className="h-24 mb-8 bg-contain bg-no-repeat bg-center"
-			style={{
-				backgroundImage: `url("${branding.logo.url}")`,
-			}}
-		/>
+		<div className="mb-8 flex justify-center">
+			<img
+				src={branding.logo.url}
+				alt=""
+				className={`max-h-24 max-w-[60%] ${
+					branding.logo.whiteOnBlack ? "mix-blend-multiply" : ""
+				}`}
+			/>
+		</div>
 	);
+	// return (
+	// 	<div
+	// 		className="h-24 mb-8 bg-contain bg-no-repeat bg-center"
+	// 		style={{
+	// 			backgroundImage: `url("${branding.logo.url}")`,
+	// 		}}
+	// 	/>
+	// );
 }
