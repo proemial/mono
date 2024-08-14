@@ -1,11 +1,11 @@
-import { neonDb } from "..";
 import { prettySlug } from "@proemial/utils/pretty-slug";
+import { desc, eq } from "drizzle-orm";
+import { neonDb } from "..";
 import {
 	type Answer,
 	type NewAnswer,
 	answers as answersTable,
 } from "../neon/schema/answers";
-import { desc, eq } from "drizzle-orm";
 
 export const answers = {
 	async create(answer: NewAnswer) {
@@ -42,6 +42,15 @@ export const answers = {
 			.from(answersTable)
 			.where(eq(answersTable.ownerId, userId))
 			.orderBy(desc(answersTable.createdAt));
+	},
+
+	get10LatestByUserId(userId: NonNullable<Answer["ownerId"]>) {
+		return neonDb
+			.select()
+			.from(answersTable)
+			.where(eq(answersTable.ownerId, userId))
+			.orderBy(desc(answersTable.createdAt))
+			.limit(10);
 	},
 
 	getStarters() {

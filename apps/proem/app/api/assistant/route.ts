@@ -2,7 +2,8 @@ import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { CollectionService } from "@/services/collection-service";
 import { PaperPost, PostService } from "@/services/post-service";
 import { auth } from "@clerk/nextjs/server";
-import { Collection } from "@proemial/data/neon/schema";
+import { Answer, Collection } from "@proemial/data/neon/schema";
+import { answers } from "@proemial/data/repository/answer";
 import { findCollectionById } from "@proemial/data/repository/collection";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { NextRequest, NextResponse } from "next/server";
@@ -12,6 +13,7 @@ export type AssistantData = {
 	space?: Collection;
 	paper?: OpenAlexPaper;
 	posts: PaperPost[];
+	answers: Answer[];
 };
 
 const schema = z.object({
@@ -26,16 +28,18 @@ export async function POST(request: NextRequest) {
 	const { spaceId, paperId } = schema.parse(params);
 
 	const { userId, orgId } = auth();
-	const [space, paper, posts] = await Promise.all([
+	const [space, paper, posts, answers] = await Promise.all([
 		getSpacePromise(spaceId, userId, orgId),
 		getPaperPromise(paperId),
 		getPosts(paperId, spaceId),
+		getUserAnswers(userId, paperId),
 	]);
 
 	return NextResponse.json({
 		space,
 		paper,
 		posts,
+		answers,
 	} satisfies AssistantData);
 }
 
@@ -70,4 +74,12 @@ const getPosts = async (
 		}
 	}
 	return [];
+};
+
+const getUserAnswers = async (
+	userId: string | null,
+	paperId: string | undefined,
+) => {
+	if (!userId || paperId) return []; // Don't fetch user answers if on a paper
+	return await answers.get10LatestByUserId(userId);
 };

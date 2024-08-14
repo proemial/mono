@@ -6,7 +6,7 @@ import {
 import { PAPER_BOT_USER_ID } from "@/app/constants";
 import { PaperPost, UserData } from "@/services/post-service";
 import { useUser } from "@clerk/nextjs";
-import { Post } from "@proemial/data/neon/schema";
+import { Answer, Post } from "@proemial/data/neon/schema";
 import { DrawerContent } from "@proemial/shadcn-ui";
 import { DialogTitle } from "@proemial/shadcn-ui/components/ui/dialog";
 import { useQueryClient } from "@tanstack/react-query";
@@ -21,6 +21,8 @@ import { Header } from "./assistant-header";
 import { PreviousQuestions } from "./previous-questions";
 import { SuggestedQuestions } from "./suggested-questions";
 import { TuplePost } from "./tuple";
+
+type User = ReturnType<typeof useUser>["user"];
 
 export type MessageWithAuthorUserData = Message & {
 	createdAt: Date;
@@ -53,8 +55,8 @@ export const AssistantContent = ({
 	const [suggestionsRef, { height: suggestionsHeight }] = useMeasure();
 
 	const initialMessages = useMemo(
-		() => toInitialMessages(data?.posts ?? []),
-		[data?.posts],
+		() => toInitialMessages(data?.posts ?? [], data?.answers ?? [], user),
+		[data?.posts, data?.answers, user],
 	);
 
 	const {
@@ -159,7 +161,13 @@ export const AssistantContent = ({
 /**
  * Convert posts and comments from DB to Vercel AI messages w/ author data.
  */
-const toInitialMessages = (posts: PaperPost[]) => {
+const toInitialMessages = (
+	posts: PaperPost[],
+	answers: Answer[],
+	user: User | undefined,
+) => [...toInitialPosts(posts), ...toInitialAnswers(answers, user)];
+
+const toInitialPosts = (posts: PaperPost[]) => {
 	const messages: MessageWithAuthorUserData[] = [];
 	for (const post of posts) {
 		messages.push({
@@ -188,13 +196,38 @@ const toInitialMessages = (posts: PaperPost[]) => {
 	return messages;
 };
 
+const toInitialAnswers = (answers: Answer[], user: User | undefined) => {
+	if (!user) return [];
+	const messages: MessageWithAuthorUserData[] = [];
+	for (const answer of answers) {
+		messages.push({
+			id: nanoid(),
+			role: "user",
+			content: answer.question,
+			createdAt: new Date(answer.createdAt),
+			authorUserData: user?.id
+				? {
+						userId: user?.id,
+						firstName: user?.firstName ?? null,
+						lastName: user?.lastName ?? null,
+						imageUrl: user?.imageUrl,
+					}
+				: undefined,
+		});
+		messages.push({
+			id: nanoid(),
+			role: "assistant",
+			content: answer.answer,
+			createdAt: new Date(answer.createdAt),
+		});
+	}
+	return messages;
+};
+
 /**
  * Convert Vercel AI messages to tuple posts
  */
-const toTuplePosts = (
-	messages: MessageWithAuthorUserData[],
-	user: ReturnType<typeof useUser>["user"],
-) => {
+const toTuplePosts = (messages: MessageWithAuthorUserData[], user: User) => {
 	const tuplePosts: TuplePost[] = [];
 	for (let i = 0; i < messages.length; i++) {
 		const message = messages[i];
