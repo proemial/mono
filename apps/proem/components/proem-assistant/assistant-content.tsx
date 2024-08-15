@@ -4,7 +4,6 @@ import {
 	findLatestByEventType,
 } from "@/app/api/bot/answer-engine/events";
 import { PAPER_BOT_USER_ID } from "@/app/constants";
-import { useInternalUser } from "@/app/hooks/use-user";
 import { PaperPost, UserData } from "@/services/post-service";
 import { useUser } from "@clerk/nextjs";
 import { Answer, Post } from "@proemial/data/neon/schema";
@@ -54,7 +53,6 @@ export const AssistantContent = ({
 	setExpanded,
 }: Props) => {
 	const { user } = useUser();
-	const { isInternal } = useInternalUser();
 
 	const [inputFocused, setInputFocused] = useState(false);
 	const queryClient = useQueryClient();
@@ -85,7 +83,7 @@ export const AssistantContent = ({
 			spaceId,
 			userId: user?.id,
 		},
-		api: !paperId ? "/api/bot/ask2" : isInternal ? "/api/ai" : "/api/bot/chat",
+		api: !paperId ? "/api/bot/ask2" : "/api/ai",
 		initialMessages,
 	});
 
