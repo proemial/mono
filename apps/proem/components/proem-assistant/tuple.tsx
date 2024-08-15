@@ -1,5 +1,9 @@
+import { useThrobberStatus } from "@/app/(pages)/(app)/ask/answer/[slug]/use-throbber-status";
 import { PaperPost } from "@/services/post-service";
-import { Answer } from "@proemial/data/neon/schema";
+import {
+	Answer,
+	collectionsToPapersRelations,
+} from "@proemial/data/neon/schema";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { AuthorAvatar, getFullName } from "../author-avatar";
@@ -40,6 +44,7 @@ type Props = {
 export const Tuple = ({ post, onSubmit }: Props) => {
 	const { author } = post;
 	const formattedPostDate = dayjs(post.createdAt).fromNow();
+	const throbberStatus = useThrobberStatus();
 
 	return (
 		<div className="flex flex-col rounded-lg gap-2 p-2 pr-3 bg-theme-700">
@@ -59,14 +64,14 @@ export const Tuple = ({ post, onSubmit }: Props) => {
 					<div className="opacity-50 italic">{post.content}</div>
 				</div>
 			</div>
-			{post.reply && (
-				<div className="flex gap-2">
-					<div>
-						<ProemLogo
-							size="xs"
-							className="size-6 py-1.5 rounded-full bg-white"
-						/>
-					</div>
+			<div className="flex gap-2">
+				<div>
+					<ProemLogo
+						size="xs"
+						className="size-6 py-1.5 rounded-full bg-white"
+					/>
+				</div>
+				{post.reply ? (
 					<div className="flex flex-col gap-1">
 						<div className="text-white">
 							{applyExplainLinks(
@@ -82,8 +87,10 @@ export const Tuple = ({ post, onSubmit }: Props) => {
 							</div>
 						)}
 					</div>
-				</div>
-			)}
+				) : (
+					<div className="text-white text-sm">{throbberStatus}</div>
+				)}
+			</div>
 		</div>
 	);
 };
