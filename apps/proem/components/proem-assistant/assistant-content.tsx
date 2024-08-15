@@ -28,7 +28,13 @@ export type MessageWithAuthorUserData = Message & {
 	createdAt: Date;
 	authorUserData?: UserData;
 	shared?: Post["shared"];
-	answerSlug?: Answer["slug"];
+	answerMetadata?: {
+		slug: Answer["slug"];
+		shareId: Answer["shareId"];
+		ownerId: Answer["ownerId"];
+		followUpQuestions: Answer["followUpQuestions"];
+		papers: Answer["papers"];
+	};
 };
 
 type Props = {
@@ -220,7 +226,13 @@ const toInitialAnswers = (answers: Answer[], user: User | undefined) => {
 			role: "assistant",
 			content: answer.answer,
 			createdAt: new Date(answer.createdAt),
-			answerSlug: answer.slug,
+			answerMetadata: {
+				slug: answer.slug,
+				shareId: answer.shareId,
+				ownerId: answer.ownerId,
+				followUpQuestions: answer.followUpQuestions,
+				papers: answer.papers,
+			},
 		});
 	}
 	return messages;
@@ -235,11 +247,11 @@ const toTuplePosts = (messages: MessageWithAuthorUserData[], user: User) => {
 		const message = messages[i];
 		if (message?.role === "user") {
 			const nextMessage = messages[i + 1];
-			const reply =
+			const reply: TuplePost["reply"] =
 				nextMessage?.role === "assistant"
 					? {
 							content: nextMessage.content,
-							answerSlug: nextMessage.answerSlug,
+							answerMetadata: nextMessage.answerMetadata,
 						}
 					: undefined;
 			tuplePosts.push({

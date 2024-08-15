@@ -1,5 +1,5 @@
 import { PaperPost } from "@/services/post-service";
-import { cn } from "@proemial/shadcn-ui";
+import { Answer } from "@proemial/data/neon/schema";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { AuthorAvatar, getFullName } from "../author-avatar";
@@ -21,7 +21,13 @@ export type TuplePost = {
 	reply:
 		| {
 				content: PaperPost["comments"][number]["content"];
-				answerSlug: string | undefined;
+				answerMetadata?: {
+					slug: Answer["slug"];
+					shareId: Answer["shareId"];
+					ownerId: Answer["ownerId"];
+					followUpQuestions: Answer["followUpQuestions"];
+					papers: Answer["papers"];
+				};
 		  }
 		| undefined;
 };
