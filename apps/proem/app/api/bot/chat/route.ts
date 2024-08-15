@@ -61,9 +61,24 @@ export async function POST(req: NextRequest) {
 	// Convert the response into a friendly text-stream
 	const stream = OpenAIStream(response, {
 		onFinal: async (completion) => {
+			// Generate follow-ups
+			const followUps = await followUpQuestionChain().invoke({
+				question: postContent,
+				answer: completion,
+			});
+			streamData.append({
+				type: "follow-up-questions-generated",
+				transactionId: "foo",
+				data: followUps
+					.split("?")
+					.filter(Boolean)
+					.map((question) => ({ question: `${question.trim()}?` })),
+			});
+			streamData.close();
+
 			const { userId } = auth();
+			// Save the post and the AI reply, if the user is signed in
 			if (userId) {
-				// Save the post and the AI reply, if the user is signed in
 				const space =
 					spaceId === userId
 						? getPersonalDefaultCollection(userId)
@@ -81,24 +96,13 @@ export async function POST(req: NextRequest) {
 					{
 						content: completion,
 						authorId: PAPER_BOT_USER_ID,
+						followUps: followUps
+							.split("?")
+							.filter((f) => typeof f !== "undefined" && f.length > 0)
+							.map((f) => `${f.trim()}?`),
 					},
 				);
 			}
-
-			// Generate follow-ups
-			const followUps = await followUpQuestionChain().invoke({
-				question: postContent,
-				answer: completion,
-			});
-			streamData.append({
-				type: "follow-up-questions-generated",
-				transactionId: "foo",
-				data: followUps
-					.split("?")
-					.filter(Boolean)
-					.map((question) => ({ question: `${question.trim()}?` })),
-			});
-			streamData.close();
 		},
 	});
 	// Respond with the stream

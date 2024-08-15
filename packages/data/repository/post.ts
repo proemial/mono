@@ -35,9 +35,11 @@ export async function savePostWithComment(
 	if (insertedPost[0]) {
 		// Save paper bot reply
 		await neonDb.insert(comments).values({
+			postId: insertedPost[0].id,
 			content: comment.content,
 			authorId: comment.authorId,
-			postId: insertedPost[0].id,
+			followUps: comment.followUps,
+			papers: comment.papers,
 		});
 	}
 }

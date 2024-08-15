@@ -17,7 +17,12 @@ export async function POST(req: NextRequest) {
 	}
 
 	try {
-		const { slug, userId: userIdFromHeader, messages } = await req.json();
+		const {
+			slug,
+			userId: userIdFromHeader,
+			messages,
+			spaceId,
+		} = await req.json();
 		const { name, userId } = nameAndIdFromCookie(userIdFromHeader);
 		const { input, chatHistory } = parseMessages(messages);
 
@@ -35,6 +40,7 @@ export async function POST(req: NextRequest) {
 			userInput: input?.content,
 			existingSlug: slug || undefined,
 			tags: name ? [name] : undefined,
+			spaceId,
 		});
 
 		return stream;

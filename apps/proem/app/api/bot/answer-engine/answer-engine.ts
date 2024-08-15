@@ -1,16 +1,16 @@
-import { answers } from "@proemial/data/repository/answer";
 import {
 	type AnswerEngineEvents,
 	handleAnswerEngineEvents,
 	stepStartedEvents,
 } from "@/app/api/bot/answer-engine/events";
-import { prettySlug } from "@proemial/utils/pretty-slug";
 import { saveAnswer } from "@/app/api/bot/answer-engine/save-answer";
 import { answerEngineChain } from "@/app/llm/chains/answer-engine-chain";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { findRun } from "@/app/llm/helpers/find-run";
 import { toLangChainChatHistory } from "@/app/llm/utils";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
+import { answers } from "@proemial/data/repository/answer";
+import { prettySlug } from "@proemial/utils/pretty-slug";
 import {
 	StreamData,
 	StreamingTextResponse,
@@ -84,6 +84,7 @@ export async function askAnswerEngine({
 					slug,
 					userId,
 					run,
+					spaceId: undefined,
 				}).then((insertedAnswer) => {
 					if (insertedAnswer) {
 						data.append({

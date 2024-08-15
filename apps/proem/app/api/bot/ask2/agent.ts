@@ -1,5 +1,4 @@
 import { AnswerEngineStreamData } from "@/app/api/bot/answer-engine/answer-engine";
-import { answers } from "@proemial/data/repository/answer";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
 import { askAgentPrompt } from "@/app/prompts/ask_agent";
@@ -8,6 +7,7 @@ import {
 	MessagesPlaceholder,
 } from "@langchain/core/prompts";
 import { DynamicTool } from "@langchain/core/tools";
+import { answers } from "@proemial/data/repository/answer";
 import { createOpenAIFunctionsAgent } from "langchain/agents";
 import { Run } from "langsmith";
 import { saveAnswerFromAgent } from "../answer-engine/save-answer";
@@ -20,6 +20,7 @@ export const buildAgent = async (
 		tags?: string[];
 		transactionId: string;
 		userId?: string;
+		spaceId: string | undefined;
 	},
 	tools: DynamicTool[],
 	data: AnswerEngineStreamData,
@@ -35,8 +36,15 @@ export const buildAgent = async (
 		temperature: 0.0,
 		streaming: true,
 	});
-	const { isFollowUpQuestion, slug, userInput, tags, transactionId, userId } =
-		params;
+	const {
+		isFollowUpQuestion,
+		slug,
+		userInput,
+		tags,
+		transactionId,
+		userId,
+		spaceId,
+	} = params;
 
 	return (await createOpenAIFunctionsAgent({ llm, tools, prompt }))
 		.withConfig({
@@ -67,6 +75,7 @@ export const buildAgent = async (
 						slug,
 						userId,
 						run,
+						spaceId,
 					}).then((insertedAnswer) => {
 						if (insertedAnswer) {
 							data.append({

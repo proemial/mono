@@ -1,17 +1,17 @@
 import { AnswerEngineStreamData } from "@/app/api/bot/answer-engine/answer-engine";
 import { LangChainChatHistoryMessage } from "@/app/llm/utils";
+import { answers } from "@proemial/data/repository/answer";
+import { prettySlug } from "@proemial/utils/pretty-slug";
 import {
 	StreamData,
 	StreamingTextResponse,
 	createStreamDataTransformer,
 } from "ai";
 import { AgentExecutor } from "langchain/agents";
-import { answers } from "@proemial/data/repository/answer";
 import {
 	handleAnswerEngineEvents,
 	stepStartedEvents,
 } from "../answer-engine/events";
-import { prettySlug } from "@proemial/utils/pretty-slug";
 import { buildAgent } from "./agent";
 import { getTools } from "./tools";
 
@@ -22,6 +22,7 @@ type AnswerEngineParams = {
 	tags?: string[];
 	transactionId: string;
 	userId?: string;
+	spaceId: string | undefined;
 };
 
 export const answerEngine = async ({
@@ -31,6 +32,7 @@ export const answerEngine = async ({
 	tags,
 	transactionId,
 	userId,
+	spaceId,
 }: AnswerEngineParams) => {
 	const data = new StreamData() as AnswerEngineStreamData;
 	const isFollowUpQuestion = Boolean(existingSlug);
@@ -55,6 +57,7 @@ export const answerEngine = async ({
 			tags,
 			transactionId,
 			userId,
+			spaceId,
 		},
 		tools,
 		data,

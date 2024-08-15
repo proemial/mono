@@ -1,5 +1,13 @@
-import { answers } from "@proemial/data/repository/answer";
+import {
+	ANONYMOUS_USER_ID,
+	PAPER_BOT_USER_ID,
+	getPersonalDefaultCollection,
+} from "@/app/constants";
+import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { findRun } from "@/app/llm/helpers/find-run";
+import { answers } from "@proemial/data/repository/answer";
+import { findCollection } from "@proemial/data/repository/collection";
+import { savePostWithComment } from "@proemial/data/repository/post";
 import type { Run } from "langsmith";
 
 type SaveAnswerParams = {
@@ -8,14 +16,19 @@ type SaveAnswerParams = {
 	slug: string;
 	userId?: string;
 	run: Run;
+	spaceId: string | undefined;
 };
 
+/**
+ * @deprecated Use `saveAnswerFromAgent` (below) instead
+ */
 export async function saveAnswer({
 	question,
 	isFollowUpQuestion,
 	slug,
 	userId,
 	run,
+	spaceId,
 }: SaveAnswerParams) {
 	const answer = findRun(run, (run) => run.name === "AnswerEngine")?.outputs
 		?.output;
@@ -56,6 +69,7 @@ export async function saveAnswerFromAgent({
 	slug,
 	userId,
 	run,
+	spaceId,
 }: SaveAnswerParams) {
 	const answer = run.outputs?.returnValues?.output;
 	const tool = run.inputs?.steps?.find(
@@ -73,6 +87,39 @@ export async function saveAnswerFromAgent({
 					},
 				}
 			: {};
+
+		// Generate follow-ups
+		const followUps = await followUpQuestionChain().invoke({
+			question,
+			answer,
+		});
+
+		// Save the post and the AI reply, if the user is signed in
+		if (userId && spaceId) {
+			const space =
+				spaceId === userId
+					? getPersonalDefaultCollection(userId)
+					: await findCollection(spaceId);
+			await savePostWithComment(
+				{
+					content: question,
+					authorId: userId ?? ANONYMOUS_USER_ID, // TODO: Do this for all posts
+					// Inherit the space's sharing setting, or `public` if no space
+					shared: space?.shared ?? "public",
+					spaceId: space?.id,
+					slug,
+				},
+				{
+					content: answer,
+					authorId: PAPER_BOT_USER_ID,
+					followUps: followUps
+						.split("?")
+						.filter((f) => typeof f !== "undefined" && f.length > 0)
+						.map((f) => `${f.trim()}?`),
+					papers: papers.papers?.papers,
+				},
+			);
+		}
 
 		return answers.create({
 			slug,

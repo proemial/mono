@@ -17,6 +17,9 @@ const answerEngineRouteParams = z.object({
 	messages: z.array(AIMessage),
 });
 
+/**
+ * @deprecated This endpoint has not been kept up-to-date - use "/api/bot/ask2" instead!
+ */
 export async function POST(req: NextRequest) {
 	const { success } = await ratelimitByIpAddress(req.ip);
 	if (!success) {
