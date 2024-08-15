@@ -12,6 +12,7 @@ import {
 } from "../analytics/tracking/tracking-keys";
 import { AssistantButton } from "./assistant-button";
 import { AssistantContent } from "./assistant-content";
+import { useAssistant } from "./use-assistant";
 
 export const PROEM_ASSISTANT_QUERY_KEY = "proem-assistant";
 
@@ -31,7 +32,7 @@ type Params = {
 };
 
 export const ProemAssistant = () => {
-	const [drawerOpen, setDrawerOpen] = useState(false);
+	const { isOpen, answerSlug, open, close } = useAssistant();
 	const { userId } = useAuth();
 	const pathname = usePathname();
 	const [expanded, setExpanded] = useState(false);
@@ -68,17 +69,17 @@ export const ProemAssistant = () => {
 
 	const handleOpen = () => {
 		trackHandler(analyticsKeys.assistant.open);
-		setDrawerOpen(true);
+		open();
 		setExpanded(false);
 	};
 
-	const handleOpenChange = (open: boolean) => {
+	const handleOpenChange = (isOpen: boolean) => {
 		// This gets triggered multiple times during transitions
-		if (!open) {
+		if (!isOpen) {
 			trackHandler(analyticsKeys.assistant.close);
-			setDrawerOpen(false);
+			close();
 		} else {
-			setDrawerOpen(open);
+			open();
 		}
 	};
 
@@ -88,7 +89,7 @@ export const ProemAssistant = () => {
 			<Drawer
 				shouldScaleBackground={false}
 				setBackgroundColorOnScale={false} // For some reason, this is not working
-				open={drawerOpen}
+				open={isOpen}
 				onOpenChange={handleOpenChange}
 				// snapPoints={[0.2, 0.3]} // 1) Background color not changed until last snap point. 2) Breaks exit animation
 			>
