@@ -42,7 +42,7 @@ export const Tuple = ({ post, onSubmit }: Props) => {
 	const formattedPostDate = dayjs(post.createdAt).fromNow();
 
 	return (
-		<div className="flex flex-col rounded-lg gap-2 p-2 bg-theme-700">
+		<div className="flex flex-col rounded-lg gap-2 p-2 pr-3 bg-theme-700">
 			<div className="flex gap-2">
 				<AuthorAvatar
 					imageUrl={author.imageUrl}
@@ -67,11 +67,19 @@ export const Tuple = ({ post, onSubmit }: Props) => {
 							className="size-6 py-1.5 rounded-full bg-white"
 						/>
 					</div>
-					<div className="text-white">
-						{applyExplainLinks(
-							post.reply.content,
-							(input: string) => onSubmit(`What is ${input}?`),
-							"bg-transparent opacity-50 font-semibold cursor-default",
+					<div className="flex flex-col gap-1">
+						<div className="text-white">
+							{applyExplainLinks(
+								post.reply.content,
+								(input: string) => onSubmit(`What is ${input}?`),
+								"bg-transparent opacity-50 font-semibold cursor-default",
+							)}
+						</div>
+						{post.reply.answerMetadata?.papers && (
+							<div className="text-right text-white text-opacity-50 text-xs">
+								Based on {post.reply.answerMetadata.papers.papers.length}{" "}
+								research papers.
+							</div>
 						)}
 					</div>
 				</div>
