@@ -42,7 +42,7 @@ export const Tuple = ({ post, onSubmit }: Props) => {
 	const formattedPostDate = dayjs(post.createdAt).fromNow();
 
 	return (
-		<div className="flex flex-col rounded-lg gap-2 p-2 bg-theme-900">
+		<div className="flex flex-col rounded-lg gap-2 p-2 bg-theme-700">
 			<div className="flex gap-2">
 				<AuthorAvatar
 					imageUrl={author.imageUrl}
