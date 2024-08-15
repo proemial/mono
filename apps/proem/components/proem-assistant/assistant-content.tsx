@@ -5,6 +5,7 @@ import {
 } from "@/app/api/bot/answer-engine/events";
 import { PAPER_BOT_USER_ID } from "@/app/constants";
 import { PaperPost, UserData } from "@/services/post-service";
+import { featureToggles } from "@/utils/feature-toggles";
 import { useUser } from "@clerk/nextjs";
 import { Answer, Post } from "@proemial/data/neon/schema";
 import { DrawerContent } from "@proemial/shadcn-ui";
@@ -82,7 +83,11 @@ export const AssistantContent = ({
 			spaceId,
 			userId: user?.id,
 		},
-		api: paperId ? "/api/bot/chat" : "/api/bot/ask2",
+		api: !paperId
+			? "/api/bot/ask2"
+			: featureToggles.ai_assistant_beta
+				? "/api/ai"
+				: "/api/bot/chat",
 		initialMessages,
 	});
 
