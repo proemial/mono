@@ -7,7 +7,7 @@ import {
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
 
-export function FollowButton({ id }: { id: string }) {
+export function FollowButton({ id, name }: { id: string, name: string }) {
 	const [following, setFollowing] = useState(!!getCookie(`following-${id}`));
 
 	// onClick={trackHandler(analyticsKeys.feed.click.tag)}
@@ -17,7 +17,7 @@ export function FollowButton({ id }: { id: string }) {
 			deleteCookie(`following-${id}`);
 		} else {
 			setCookie(`following-${id}`, "true");
-			trackHandler(analyticsKeys.institutions.follow.click, {institution: id})();
+			trackHandler(analyticsKeys.institutions.follow.click, {institution: name})();
 		}
 		setFollowing(!following);
 	};
