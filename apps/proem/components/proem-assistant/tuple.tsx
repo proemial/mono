@@ -1,4 +1,5 @@
 import { PaperPost } from "@/services/post-service";
+import { cn } from "@proemial/shadcn-ui";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { AuthorAvatar, getFullName } from "../author-avatar";
@@ -17,8 +18,12 @@ export type TuplePost = {
 		imageUrl: string | undefined;
 	};
 	createdAt: Date;
-	// This is good enough for now, as we only need the assistant's reply
-	reply: PaperPost["comments"][number]["content"] | undefined;
+	reply:
+		| {
+				content: PaperPost["comments"][number]["content"];
+				answerSlug: string | undefined;
+		  }
+		| undefined;
 };
 
 type Props = {
@@ -58,7 +63,7 @@ export const Tuple = ({ post, onSubmit }: Props) => {
 					</div>
 					<div className="text-white">
 						{applyExplainLinks(
-							post.reply,
+							post.reply.content,
 							(input: string) => onSubmit(`What is ${input}?`),
 							"bg-transparent opacity-50 font-semibold cursor-default",
 						)}
