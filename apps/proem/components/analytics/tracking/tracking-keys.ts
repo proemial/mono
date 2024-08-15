@@ -195,8 +195,8 @@ function getViewName(path: string) {
 	if (path === "/") return "ask";
 	if (path.startsWith("/oa")) return "read";
 	if (path === "/profile") return "you";
-	if (path.includes("andrej-karpathy-llm-reading-list")) return "karpathy";
-	if (path.includes("/discover/")) return "institutions"; // will also match `fingerprints` and `hugs`
+	if (path.includes("andrej-karpathy-llm-reading-list")) return "karpathy/";
+	if (path.startsWith("/discover")) return "institutions/"; // will also match `fingerprints` and `hugs`
 	return path.slice(1);
 }
 
