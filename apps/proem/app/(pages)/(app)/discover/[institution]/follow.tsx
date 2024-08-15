@@ -2,16 +2,22 @@
 import { Button } from "@proemial/shadcn-ui";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import { useState } from "react";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/components/analytics/tracking/tracking-keys";
 
 export function FollowButton({ id }: { id: string }) {
 	const [following, setFollowing] = useState(!!getCookie(`following-${id}`));
-	// const following = getCookie(`following-${id}`);
+
+	// onClick={trackHandler(analyticsKeys.feed.click.tag)}
 
 	const handleToggle = () => {
 		if (getCookie(`following-${id}`)) {
 			deleteCookie(`following-${id}`);
 		} else {
 			setCookie(`following-${id}`, "true");
+			trackHandler(analyticsKeys.institutions.follow.click, {institution: id})();
 		}
 		setFollowing(!following);
 	};
