@@ -1,8 +1,13 @@
 import { z } from "zod";
 
 export const envVariables = z.object({
+	ANTHROPIC_API_KEY: z.string(),
 	CLERK_SECRET_KEY: z.string(),
 	DATABASE_URL: z.string(),
+	GOOGLE_VERTEX_CLIENT_EMAIL: z.string(),
+	GOOGLE_VERTEX_LOCATION: z.string(),
+	GOOGLE_VERTEX_PRIVATE_KEY: z.string(),
+	GOOGLE_VERTEX_PROJECT: z.string(),
 	INNGEST_EVENT_KEY: z.string(),
 	INNGEST_SIGNING_KEY: z.string(),
 	LANGCHAIN_API_KEY: z.string(),
@@ -20,16 +25,15 @@ export const envVariables = z.object({
 	NEXT_PUBLIC_POSTHOG_KEY: z.string(),
 	NEXT_PUBLIC_SENTRY_DSN: z.string(),
 	NEXT_PUBLIC_VERCEL_URL: z.string(),
-	/** TODO: This is only used for evaluation but the code is build and running in production  */
-	OPENAI_API_KEY_TEST: z.string().optional(),
+	OPENAI_API_KEY_TEST: z.string().optional(), // This is only used for evaluation but the code is build and running in production
 	OPENAI_API_KEY: z.string(),
 	OPENALEX_API_KEY: z.string(),
-	SENTRY_ORG: z.string(),
 	RATE_LIMITER_ENDPOINT: z.string(),
 	RATE_LIMITER_PASSWORD: z.string(),
 	REDIS_PAPERS_TOKEN: z.string(),
 	REDIS_PAPERS_URL: z.string(),
 	SENTRY_AUTH_TOKEN: z.string(),
+	SENTRY_ORG: z.string(),
 });
 
 envVariables.parse(process.env);
