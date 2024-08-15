@@ -19,6 +19,7 @@ export const posts = pgTable("posts", {
 	spaceId: text("space_id"),
 	shared: collectionSharedType("shared").notNull(),
 	paperId: text("paper_id"),
+	slug: text("slug"), // TODO: Add non-null constraint once migrated
 });
 
 export type Post = typeof posts.$inferSelect;

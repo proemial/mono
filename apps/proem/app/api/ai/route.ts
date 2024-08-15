@@ -6,6 +6,7 @@ import {
 import { auth } from "@clerk/nextjs/server";
 import { findCollection } from "@proemial/data/repository/collection";
 import { savePostWithComment } from "@proemial/data/repository/post";
+import { prettySlug } from "@proemial/utils/pretty-slug";
 import { convertToCoreMessages, streamText } from "ai";
 
 // Allow streaming responses up to 30 seconds
@@ -43,6 +44,7 @@ export async function POST(req: Request) {
 							// Inherit the space's sharing setting, or `public` if no space
 							shared: space?.shared ?? "public",
 							spaceId: space?.id,
+							slug: prettySlug(messages.at(-1)?.content),
 						},
 						{
 							content: text,

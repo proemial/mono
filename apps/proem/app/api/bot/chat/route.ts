@@ -10,6 +10,7 @@ import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { auth } from "@clerk/nextjs/server";
 import { findCollection } from "@proemial/data/repository/collection";
 import { savePostWithComment } from "@proemial/data/repository/post";
+import { prettySlug } from "@proemial/utils/pretty-slug";
 import { OpenAIStream, StreamData, StreamingTextResponse } from "ai";
 import { type NextRequest, NextResponse } from "next/server";
 import { Configuration, OpenAIApi } from "openai-edge";
@@ -75,6 +76,7 @@ export async function POST(req: NextRequest) {
 						// Inherit the space's sharing setting, or `public` if no space
 						shared: space?.shared ?? "public",
 						spaceId: space?.id,
+						slug: prettySlug(postContent),
 					},
 					{
 						content: completion,
