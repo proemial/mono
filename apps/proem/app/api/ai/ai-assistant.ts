@@ -2,6 +2,9 @@ import { searchPapersTool } from "@/app/api/ai/tools/search-papers-tool";
 import { anthropic } from "@ai-sdk/anthropic";
 import { CoreTool, LanguageModel } from "ai";
 
+const appContexts = ["paper", "global", "space"] as const;
+export type UserContext = (typeof appContexts)[number];
+
 const prompt = ({
 	question,
 	paperTitle,
@@ -32,36 +35,57 @@ To answer questions about a specific paper:
 4. If necessary, refer to related papers to provide additional context or supporting information.
 `;
 
-const systemPrompt = `
+const systemPrompt = (
+	context: UserContext,
+	title: string,
+	abstract: string,
+) => `
 You are an AI Assistant for the AI Startup Proem.AI, specializing in helping users understand scientific papers. You have access to a vast database of scientific literature and can provide information and answers based on this knowledge.
 
+${
+	context === "paper"
+		? `
+	<paper>
+		<title>${title}</title>
+		<abstract>${abstract}</abstract>
+	</paper>
+	`
+		: ""
+}
+
 Your capabilities include:
-1. Answering questions by searching for and synthesizing information from the most relevant papers on a given topic.
-2. Answering questions about specific papers when provided with a paper title.
+${context === "paper" ? "- Answering questions about general topics." : ""}
+${context === "global" ? "- Answering questions about general topics." : ""}
+${context === "global" ? "- Answering questions by searching for and synthesizing information from the most relevant papers on a given topic." : ""}
+${context === "space" ? "- Answering questions about space." : ""}
+
+When responding to a user's question:
+${context === "paper" ? "- Answer in a single sentence." : ""}
+${context === "paper" ? "- Enclose all technical concepts relevant to the title and abstract with double parenthesis." : ""}
 `;
 
-type Assistant = {
+type Assistant = (
+	context: UserContext,
+	title: string,
+	abstract: string,
+) => {
 	model: LanguageModel;
 	system: string;
-	tools: Record<string, CoreTool>;
+	tools?: Record<string, CoreTool>;
 };
-export const assistant: Assistant = {
-	// experimental_toolCallStreaming: true,
+
+export const assistant: Assistant = (context, title, abstract) => ({
 	model: anthropic("claude-3-5-sonnet-20240620"), //openai("gpt-4o-2024-08-06"),
-	// prompt,
+	system: systemPrompt(context, title, abstract),
+	// experimental_toolCallStreaming: true,
 	// maxTokens: 512,
 	// temperature: 0.3,
 	// maxRetries: 5,
-	system: systemPrompt,
 	// toolChoice: "required",
-	tools: {
-		searchPapersTool,
-		// client-side tool that starts user interaction:
-		// askForConsent: {
-		// 	description: "Ask the user for consent.",
-		// 	parameters: z.object({
-		// 		message: z.string().describe("The message to ask for consent."),
-		// 	}),
-		// },
-	},
-};
+	// tools:
+	// 	context === "paper"
+	// 		? {}
+	// 		: {
+	// 				searchPapersTool,
+	// 			},
+});
