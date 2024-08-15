@@ -17,7 +17,14 @@ export async function savePostWithComment(
 ) {
 	// Create paper and user if not already exists
 	await Promise.all([
-		neonDb.insert(papers).values({ id: post.paperId }).onConflictDoNothing(),
+		...(post.paperId
+			? [
+					neonDb
+						.insert(papers)
+						.values({ id: post.paperId })
+						.onConflictDoNothing(),
+				]
+			: []),
 		neonDb.insert(users).values({ id: post.authorId }).onConflictDoNothing(),
 	]);
 	// Save post

@@ -16,9 +16,9 @@ export const posts = pgTable("posts", {
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	content: text("content").notNull(),
 	authorId: text("author_id").notNull(),
-	paperId: text("paper_id").notNull(),
+	spaceId: text("space_id"),
 	shared: collectionSharedType("shared").notNull(),
-	spaceId: text("space_id"), // TODO: Add `not null` clause if/when we know the space of all existing posts, or decide on a default
+	paperId: text("paper_id"),
 });
 
 export type Post = typeof posts.$inferSelect;
@@ -29,13 +29,13 @@ export const postsRelations = relations(posts, ({ one, many }) => ({
 		fields: [posts.authorId],
 		references: [users.id],
 	}),
+	space: one(collections, {
+		fields: [posts.spaceId],
+		references: [collections.id],
+	}),
 	paper: one(papers, {
 		fields: [posts.paperId],
 		references: [papers.id],
 	}),
 	comments: many(comments),
-	space: one(collections, {
-		fields: [posts.spaceId],
-		references: [collections.id],
-	}),
 }));
