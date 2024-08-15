@@ -31,7 +31,7 @@ export default async function DiscoverPage({
 	const header = (
 		<div className="mt-2 flex flex-row justify-between items-center">
 			<WorksCount institution={institution} />
-			<FollowButton id={institution?.id as string} name={institution?.display_name} />
+			<FollowButton id={institution?.id as string} name={institution?.display_name ?? searchString} />
 		</div>
 	);
 
