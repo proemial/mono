@@ -42,7 +42,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 		const history = await getBookmarksAndHistory();
 		if (history?.length) {
 			redirect(
-				`/discover/fingerprints?ids=${history.flatMap((i) => i).join(",")}`,
+				`/experimental/fingerprints?ids=${history.flatMap((i) => i).join(",")}`,
 			);
 		}
 	}
