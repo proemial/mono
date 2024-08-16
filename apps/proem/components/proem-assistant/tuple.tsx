@@ -1,9 +1,5 @@
 import { useThrobberStatus } from "@/app/(pages)/(app)/ask/answer/[slug]/use-throbber-status";
-import { PaperPost } from "@/services/post-service";
-import {
-	Answer,
-	collectionsToPapersRelations,
-} from "@proemial/data/neon/schema";
+import { Comment, Post } from "@proemial/data/neon/schema";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { AuthorAvatar, getFullName } from "../author-avatar";
@@ -14,23 +10,23 @@ dayjs.extend(relativeTime);
 
 export type TuplePost = {
 	id: string;
-	content: PaperPost["content"];
+	createdAt: Date;
+	content: string;
 	author: {
 		id: string;
 		firstName: string | null;
 		lastName: string | null;
 		imageUrl: string | undefined;
 	};
-	createdAt: Date;
+	slug: Post["slug"];
 	reply:
 		| {
-				content: PaperPost["comments"][number]["content"];
-				answerMetadata?: {
-					slug: Answer["slug"];
-					shareId: Answer["shareId"];
-					ownerId: Answer["ownerId"];
-					followUpQuestions: Answer["followUpQuestions"];
-					papers: Answer["papers"];
+				content: string;
+				metadata?: {
+					// Note: For now, we don't need full author details, as author will always be the assistant
+					authorId: Comment["authorId"];
+					followUps: Comment["followUps"];
+					papers: Comment["papers"];
 				};
 		  }
 		| undefined;
@@ -80,10 +76,9 @@ export const Tuple = ({ post, onSubmit }: Props) => {
 								"bg-transparent opacity-50 font-semibold cursor-default",
 							)}
 						</div>
-						{post.reply.answerMetadata?.papers && (
+						{post.reply.metadata?.papers && (
 							<div className="text-right text-white text-opacity-50 text-xs">
-								Based on {post.reply.answerMetadata.papers.papers.length}{" "}
-								research papers.
+								Based on {post.reply.metadata.papers.length} research papers.
 							</div>
 						)}
 					</div>

@@ -4,6 +4,7 @@ import {
 	findPapersWithPosts,
 	findSinglePaperWithPosts,
 } from "@proemial/data/repository/post";
+import { PostRepository } from "@proemial/data/repository/post";
 
 export type UserData = {
 	userId: string;
@@ -16,7 +17,43 @@ export type PaperPost = NonNullable<
 	Awaited<ReturnType<typeof PostService.getSinglePaperIdWithPosts>>
 >["posts"][number];
 
+export type PostWithCommentsAndAuthor = Awaited<
+	ReturnType<typeof PostService.getPostsWithCommentsAndAuthors>
+>[number];
+
 export const PostService = {
+	getPostsWithCommentsAndAuthors: async (
+		spaceId: string | undefined,
+		paperId: string | undefined,
+	) => {
+		const { userId } = auth();
+		const orgMembersUserData = await getOrgMembersUserData();
+		const orgMemberIds = orgMembersUserData.map((m) => m.userId);
+		const posts = await PostRepository.getPosts(
+			spaceId,
+			paperId,
+			userId,
+			orgMemberIds,
+		);
+		const authorIds = posts.map((post) => post.authorId);
+		const authors = await getUsers(authorIds);
+		return posts.map((post) => {
+			const author = authors.find((user) => user.id === post.authorId);
+			return {
+				...post,
+				author: author && {
+					id: post.authorId,
+					firstName: author?.firstName ?? undefined,
+					lastName: author?.lastName ?? undefined,
+					imageUrl: author?.hasImage ? author.imageUrl : undefined,
+				},
+			};
+		});
+	},
+
+	/**
+	 * @deprecated Use `getPostsWithCommentsAndAuthors` (above) instead
+	 */
 	getSinglePaperIdWithPosts: async (
 		paperId: string,
 		spaceId: string | undefined,
@@ -37,6 +74,9 @@ export const PostService = {
 		return withAuthorDetails(paperWithPosts, authors);
 	},
 
+	/**
+	 * @deprecated Use `getPostsWithCommentsAndAuthors` (above) instead
+	 */
 	getPaperIdsWithPosts: async (
 		paperIds: string[],
 		spaceId: string | undefined,

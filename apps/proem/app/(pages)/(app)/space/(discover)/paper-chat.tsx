@@ -12,7 +12,7 @@ import {
 	ChatSuggestedFollowups,
 	ChatSuggestedFollowupsProps,
 } from "@/components/chat-suggested-followups";
-import { MessageWithAuthorUserData } from "@/components/proem-assistant/assistant-content";
+import { MessageWithMetadata } from "@/components/proem-assistant/assistant-content";
 import { QAMessage } from "@/components/qa-message";
 import { QAMessageContainer } from "@/components/qa-message-container";
 import { Header4 } from "@proemial/shadcn-ui";
@@ -23,7 +23,7 @@ type PaperChatProps = Pick<ChatSuggestedFollowupsProps, "suggestions"> & {
 	title: string;
 	paperId: string;
 	spaceId: string | undefined;
-	initialMessages: MessageWithAuthorUserData[];
+	initialMessages: MessageWithMetadata[];
 	abstract?: string;
 };
 

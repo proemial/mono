@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, inArray, or } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, isNull, or } from "drizzle-orm";
 import { neonDb } from "../neon/db";
 import {
 	Collection,
@@ -10,6 +10,56 @@ import {
 	posts,
 	users,
 } from "../neon/schema";
+
+export const PostRepository = {
+	getPosts: async (
+		spaceId: string | undefined,
+		paperId: string | undefined,
+		userId: string | null | undefined,
+		orgMemberIds: string[] = [],
+	) => {
+		if (paperId) {
+			return await neonDb.query.posts.findMany({
+				where: and(
+					eq(posts.paperId, paperId),
+					byShared(userId ?? "", orgMemberIds),
+				),
+				with: { comments: { orderBy: [asc(comments.createdAt)] } },
+				orderBy: [desc(posts.createdAt)],
+			});
+		}
+		if (spaceId) {
+			const space = await neonDb.query.collections.findFirst({
+				where: and(
+					eq(collections.id, spaceId ?? ""),
+					isNull(collections.deletedAt),
+				),
+			});
+			if (!space) {
+				return [];
+			}
+			return await neonDb.query.posts.findMany({
+				where: and(eq(posts.spaceId, spaceId), byShared(userId, orgMemberIds)),
+				with: { comments: { orderBy: [asc(comments.createdAt)] } },
+				orderBy: [desc(posts.createdAt)],
+			});
+		}
+		return [];
+	},
+};
+
+const byShared = (userId: string | null | undefined, orgMemberIds: string[]) =>
+	or(
+		// Public posts
+		and(eq(posts.shared, "public")),
+		// Posts by org members
+		and(
+			eq(posts.shared, "organization"),
+			inArray(posts.authorId, orgMemberIds.length > 0 ? orgMemberIds : [""]),
+		),
+		// Own posts
+		and(eq(posts.shared, "private"), eq(posts.authorId, userId ?? "")),
+	);
 
 export async function savePostWithComment(
 	post: NewPost,
@@ -44,6 +94,9 @@ export async function savePostWithComment(
 	}
 }
 
+/**
+ * @deprecated Use `getPostsWithCommentsAndAuthors` (above) instead
+ */
 export const findSinglePaperWithPosts = async (
 	paperId: string,
 	userId: string | null,
@@ -51,7 +104,10 @@ export const findSinglePaperWithPosts = async (
 	spaceId: string | undefined,
 ) => {
 	const space = await neonDb.query.collections.findFirst({
-		where: eq(collections.id, spaceId ?? ""),
+		where: and(
+			eq(collections.id, spaceId ?? ""),
+			isNull(collections.deletedAt),
+		),
 	});
 	return await neonDb.query.papers.findFirst({
 		where: eq(papers.id, paperId),
@@ -65,6 +121,9 @@ export const findSinglePaperWithPosts = async (
 	});
 };
 
+/**
+ * @deprecated Use `getPostsWithCommentsAndAuthors` (above) instead
+ */
 export const findPapersWithPosts = async (
 	paperIds: string[],
 	userId: string | null,
@@ -75,7 +134,10 @@ export const findPapersWithPosts = async (
 		return [];
 	}
 	const space = await neonDb.query.collections.findFirst({
-		where: eq(collections.id, spaceId ?? ""),
+		where: and(
+			eq(collections.id, spaceId ?? ""),
+			isNull(collections.deletedAt),
+		),
 	});
 	return await neonDb.query.papers.findMany({
 		where: inArray(papers.id, paperIds),

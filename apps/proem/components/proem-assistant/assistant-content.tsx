@@ -3,10 +3,10 @@ import {
 	AnswerEngineEvents,
 	findLatestByEventType,
 } from "@/app/api/bot/answer-engine/events";
-import { PAPER_BOT_USER_ID } from "@/app/constants";
-import { PaperPost, UserData } from "@/services/post-service";
+import { ANONYMOUS_USER_ID, PAPER_BOT_USER_ID } from "@/app/constants";
+import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { useUser } from "@clerk/nextjs";
-import { Answer, Post } from "@proemial/data/neon/schema";
+import { Comment, Post } from "@proemial/data/neon/schema";
 import { DrawerContent } from "@proemial/shadcn-ui";
 import { DialogTitle } from "@proemial/shadcn-ui/components/ui/dialog";
 import { useQueryClient } from "@tanstack/react-query";
@@ -24,16 +24,19 @@ import { TuplePost } from "./tuple";
 
 type User = ReturnType<typeof useUser>["user"];
 
-export type MessageWithAuthorUserData = Message & {
+export type MessageWithMetadata = Message & {
 	createdAt: Date;
-	authorUserData?: UserData;
-	shared?: Post["shared"];
-	answerMetadata?: {
-		slug: Answer["slug"];
-		shareId: Answer["shareId"];
-		ownerId: Answer["ownerId"];
-		followUpQuestions: Answer["followUpQuestions"];
-		papers: Answer["papers"];
+	metadata?: {
+		slug?: Post["slug"];
+		followUps?: Comment["followUps"];
+		papers?: Comment["papers"];
+		author?: {
+			id: string;
+			firstName: string | undefined;
+			lastName: string | undefined;
+			imageUrl: string | undefined;
+		};
+		shared?: Post["shared"];
 	};
 };
 
@@ -63,8 +66,8 @@ export const AssistantContent = ({
 	const [suggestionsRef, { height: suggestionsHeight }] = useMeasure();
 
 	const initialMessages = useMemo(
-		() => toInitialMessages(data?.posts ?? [], data?.answers ?? [], user),
-		[data?.posts, data?.answers, user],
+		() => toInitialMessages(data?.posts ?? []),
+		[data?.posts],
 	);
 
 	const {
@@ -93,7 +96,7 @@ export const AssistantContent = ({
 	};
 
 	const tuplePosts = useMemo(
-		() => toTuplePosts(messages as MessageWithAuthorUserData[], user),
+		() => toTuplePosts(messages as MessageWithMetadata[], user),
 		[messages, user],
 	);
 
@@ -167,106 +170,77 @@ export const AssistantContent = ({
 };
 
 /**
- * Convert posts and comments from DB to Vercel AI messages w/ author data.
+ * Convert posts and comments from DB to Vercel AI messages w/ metadata; such as
+ * author, source papers, follow-ups, etc.
  */
-const toInitialMessages = (
-	posts: PaperPost[],
-	answers: Answer[],
-	user: User | undefined,
-) => [...toInitialPosts(posts), ...toInitialAnswers(answers, user)];
-
-const toInitialPosts = (posts: PaperPost[]) => {
-	const messages: MessageWithAuthorUserData[] = [];
+const toInitialMessages = (posts: PostWithCommentsAndAuthor[]) => {
+	const messages: MessageWithMetadata[] = [];
 	for (const post of posts) {
 		messages.push({
 			id: nanoid(),
 			role: "user",
 			content: post.content,
 			createdAt: new Date(post.createdAt),
-			authorUserData: {
-				userId: post.authorId,
-				firstName: post.author.firstName,
-				lastName: post.author.lastName,
-				imageUrl: post.author.imageUrl,
+			metadata: {
+				slug: post.slug,
+				shared: post.shared,
+				author: post.author && {
+					id: post.authorId,
+					firstName: post.author.firstName,
+					lastName: post.author.lastName,
+					imageUrl: post.author.imageUrl,
+				},
 			},
-			shared: post.shared,
-		});
+		} satisfies MessageWithMetadata);
 		for (const comment of post.comments) {
 			messages.push({
 				id: nanoid(),
 				role: comment.authorId === PAPER_BOT_USER_ID ? "assistant" : "user",
 				content: comment.content,
 				createdAt: new Date(comment.createdAt),
-				shared: post.shared,
+				metadata: {
+					shared: post.shared,
+					followUps: comment.followUps,
+					papers: comment.papers,
+				},
 			});
 		}
 	}
 	return messages;
 };
 
-const toInitialAnswers = (answers: Answer[], user: User | undefined) => {
-	if (!user) return [];
-	const messages: MessageWithAuthorUserData[] = [];
-	for (const answer of answers) {
-		messages.push({
-			id: nanoid(),
-			role: "user",
-			content: answer.question,
-			createdAt: new Date(answer.createdAt),
-			authorUserData: user?.id
-				? {
-						userId: user?.id,
-						firstName: user?.firstName ?? null,
-						lastName: user?.lastName ?? null,
-						imageUrl: user?.imageUrl,
-					}
-				: undefined,
-		});
-		messages.push({
-			id: nanoid(),
-			role: "assistant",
-			content: answer.answer,
-			createdAt: new Date(answer.createdAt),
-			answerMetadata: {
-				slug: answer.slug,
-				shareId: answer.shareId,
-				ownerId: answer.ownerId,
-				followUpQuestions: answer.followUpQuestions,
-				papers: answer.papers,
-			},
-		});
-	}
-	return messages;
-};
-
 /**
- * Convert Vercel AI messages to tuple posts
+ * Convert Vercel AI messages to tuple posts.
  */
-const toTuplePosts = (messages: MessageWithAuthorUserData[], user: User) => {
+const toTuplePosts = (messages: MessageWithMetadata[], user: User) => {
 	const tuplePosts: TuplePost[] = [];
 	for (let i = 0; i < messages.length; i++) {
 		const message = messages[i];
 		if (message?.role === "user") {
 			const nextMessage = messages[i + 1];
-			const reply: TuplePost["reply"] =
-				nextMessage?.role === "assistant"
-					? {
-							content: nextMessage.content,
-							answerMetadata: nextMessage.answerMetadata,
-						}
-					: undefined;
 			tuplePosts.push({
 				id: message.id,
+				createdAt: message.createdAt,
 				content: message.content,
 				author: {
-					id: message.authorUserData?.userId ?? user?.id ?? "anonymous",
+					id: message.metadata?.author?.id ?? user?.id ?? ANONYMOUS_USER_ID,
 					firstName:
-						message.authorUserData?.firstName ?? user?.firstName ?? "Me",
-					lastName: message.authorUserData?.lastName ?? user?.lastName ?? null,
-					imageUrl: message.authorUserData?.imageUrl ?? user?.imageUrl,
+						message.metadata?.author?.firstName ?? user?.firstName ?? "Me",
+					lastName:
+						message.metadata?.author?.lastName ?? user?.lastName ?? null,
+					imageUrl: message.metadata?.author?.imageUrl ?? user?.imageUrl,
 				},
-				createdAt: message.createdAt,
-				reply,
+				slug: message.metadata?.slug ?? null,
+				reply: nextMessage
+					? {
+							content: nextMessage.content,
+							metadata: {
+								authorId: nextMessage.metadata?.author?.id ?? PAPER_BOT_USER_ID,
+								followUps: nextMessage.metadata?.followUps ?? null,
+								papers: nextMessage.metadata?.papers ?? null,
+							},
+						}
+					: undefined,
 			} satisfies TuplePost);
 		}
 	}

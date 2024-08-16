@@ -76,6 +76,7 @@ export const PreviousQuestions = ({
 		return () => {
 			scrollElement.current?.removeEventListener("scroll", handleScroll);
 		};
+		// biome-ignore lint/correctness/useExhaustiveDependencies: Handle if performance becomes an issue
 	}, [handleScroll]);
 
 	if (posts.length === 0) {

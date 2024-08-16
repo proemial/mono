@@ -12,8 +12,7 @@ export const useAssistant = () => {
 	const pathname = usePathname();
 
 	const isOpen = searchParams.get(ASSISTANT_SEARCH_PARAMS.ASSISTANT) === "true";
-	const answerSlug =
-		searchParams.get(ASSISTANT_SEARCH_PARAMS.TUPLE) ?? undefined;
+	const slug = searchParams.get(ASSISTANT_SEARCH_PARAMS.TUPLE) ?? undefined;
 
 	const updateQueryString = useCallback(
 		(params: { name: string; value: string | undefined }[]) => {
@@ -32,10 +31,10 @@ export const useAssistant = () => {
 		[searchParams],
 	);
 
-	const open = (answerSlug?: string) => {
+	const open = (slug?: string) => {
 		const params = [{ name: ASSISTANT_SEARCH_PARAMS.ASSISTANT, value: "true" }];
-		if (answerSlug) {
-			params.push({ name: ASSISTANT_SEARCH_PARAMS.TUPLE, value: answerSlug });
+		if (slug) {
+			params.push({ name: ASSISTANT_SEARCH_PARAMS.TUPLE, value: slug });
 		}
 		const queryString = updateQueryString(params);
 		router.push(`${pathname}?${queryString}`);
@@ -53,7 +52,7 @@ export const useAssistant = () => {
 
 	return {
 		isOpen,
-		answerSlug,
+		slug,
 		open,
 		close,
 	};

@@ -32,7 +32,7 @@ type Params = {
 };
 
 export const ProemAssistant = () => {
-	const { isOpen, answerSlug, open, close } = useAssistant();
+	const { isOpen, slug, open, close } = useAssistant();
 	const { userId } = useAuth();
 	const pathname = usePathname();
 	const [expanded, setExpanded] = useState(false);
