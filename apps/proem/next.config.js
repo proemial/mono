@@ -3,7 +3,14 @@
 const { withSentryConfig } = require("@sentry/nextjs");
 
 const nextConfig = {
-	transpilePackages: ["@repo/utils"],
+	transpilePackages: [
+		"@proemial/data",
+		"@proemial/models",
+		"@proemial/redis",
+		"@proemial/repositories",
+		"@proemial/shadcn-ui",
+		"@proemial/utils",
+	],
 	experimental: {
 		instrumentationHook: true,
 	},
