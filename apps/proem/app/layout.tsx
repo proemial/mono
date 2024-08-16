@@ -91,7 +91,7 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 					<Analytics.PostHog tracking={trackingInput}>
 						<ReactQueryProvider>
 							<SetActiveOrganization />
-							<div className="bg-background">
+							<div className="bg-background group">
 								<div
 									style={{
 										boxShadow: "0 0 120px rgba(0, 0, 0, .15)",
@@ -102,7 +102,9 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 									)}
 								>
 									<TopNavigation />
-									<Main>{children}</Main>
+									<Main className="group-has-[[data-pending]]:opacity-0 group-has-[[data-pending]]:translate-y-10 transition opacity-100 ease-in-out duration-300">
+										{children}
+									</Main>
 									{modal}
 								</div>
 							</div>
