@@ -47,7 +47,6 @@ export function Feed({
 	theme,
 }: FeedProps) {
 	const { topic, features, days, institution } = filter;
-	console.log("Feed", filter);
 
 	return (
 		<div className="space-y-5 pb-10">

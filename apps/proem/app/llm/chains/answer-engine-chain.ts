@@ -66,6 +66,21 @@ const answerChain = RunnableLambda.from(async () => {
 	]);
 });
 
+export const findPapersChain = RunnableLambda.from(async () => {
+	return RunnableSequence.from<Input, any>([
+		RunnablePassthrough.assign({
+			// Note: This overwrites the original question
+			question: rephraseQuestionChain(),
+		}),
+		RunnablePassthrough.assign({
+			papers: fetchPapersChain,
+		}),
+		reRankAndLimit
+	]);
+}).withConfig({
+	runName: "PaperFinder",
+});
+
 export const answerEngineChain = answerChain.withConfig({
 	runName: "AnswerEngine",
 });

@@ -12,15 +12,17 @@ type CloudProps = {
 		irrelevant?: boolean;
 	}[];
 	sum?: number;
+	limit?: number;
 };
 
-export function FeatureCloud({ features, sum }: CloudProps) {
+export function FeatureCloud({ features, sum, limit }: CloudProps) {
 	const filtered = features?.filter((f) => !f.irrelevant);
+	const limited = limit ? filtered?.slice(0, limit -1) : filtered;
 	return (
 		<div className="my-4 flex flex-wrap">
 			{!!sum && <FeatureBadge>{sum.toFixed(3)}</FeatureBadge>}
 
-			{filtered?.map((item, i) => (
+			{limited?.map((item, i) => (
 				<FeatureBadge
 					key={i}
 					score={item.coOccurrenceScore ?? item.featureMatchScore}
@@ -29,6 +31,11 @@ export function FeatureCloud({ features, sum }: CloudProps) {
 					{item.label}
 				</FeatureBadge>
 			))}
+			{limit && 
+				<FeatureBadge variant="disabled">
+					{`+ ${filtered?.length ?? 0 - limit + 1} more ...`}
+				</FeatureBadge>
+			}
 		</div>
 	);
 }
