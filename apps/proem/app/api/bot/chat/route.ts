@@ -22,6 +22,9 @@ const openai = new OpenAIApi(config);
 
 export const runtime = "edge";
 
+/**
+ * @deprecated This route is deprecated. Please use the AI Assistant route instead.
+ */
 export async function POST(req: NextRequest) {
 	const { success } = await ratelimitByIpAddress(req.ip);
 	if (!success) {
