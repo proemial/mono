@@ -41,7 +41,7 @@ const answerIfPapersAvailable = RunnableBranch.from<
 ]);
 
 type ReRankInput = { question: string; papers: string };
-const reRankAndLimit = RunnableLambda.from<ReRankInput, ReRankInput>(
+export const reRankAndLimit = RunnableLambda.from<ReRankInput, ReRankInput>(
 	async (input) => {
 		const reRanked = await vectorisePapers(
 			input.question,
@@ -64,21 +64,6 @@ const answerChain = RunnableLambda.from(async () => {
 		reRankAndLimit,
 		answerIfPapersAvailable,
 	]);
-});
-
-export const findPapersChain = RunnableLambda.from(async () => {
-	return RunnableSequence.from<Input, any>([
-		RunnablePassthrough.assign({
-			// Note: This overwrites the original question
-			question: rephraseQuestionChain(),
-		}),
-		RunnablePassthrough.assign({
-			papers: fetchPapersChain,
-		}),
-		reRankAndLimit
-	]);
-}).withConfig({
-	runName: "PaperFinder",
 });
 
 export const answerEngineChain = answerChain.withConfig({

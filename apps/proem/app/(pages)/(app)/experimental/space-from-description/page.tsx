@@ -5,7 +5,9 @@ import { Metadata } from "next";
 import { Feed } from "../../space/(discover)/feed";
 import { redirect } from 'next/navigation'
 import { Button, Input, Textarea } from "@proemial/shadcn-ui";
-import { findPapersChain } from "@/app/llm/chains/answer-engine-chain";
+import { findPapersForSpaceChain } from "@/app/llm/chains/question-from-space-chain";
+
+const defaultPrompt = "You are tasked with rephrasing a title and description as a question, so that it becomes unambiguous and makes sense standing on its own. Use the chat history to understand the context of the question. Your rephrased question should be clear and concise. If you find it necessary, you may expand the question so it includes enough information to make it unambiguous.";
 
 export const metadata: Metadata = {
 	title: "Create space from description",
@@ -24,11 +26,11 @@ export default async function FingerprintsPage({ searchParams }: Props) {
     async function findPapers(formData: FormData) {
 		"use server";
 
-        const title = formData.get("title");
-        const description = formData.get("description");
-        const question = `title:${title} decription:${description}`;
+        const title = formData.get("title") as string;
+        const description = formData.get("description") as string;
+        const prompt = formData.get("prompt") as string;
 
-        const result = await findPapersChain.invoke({ question, chatHistory: [], papers: [] });
+        const result = await findPapersForSpaceChain.invoke({ title, description, prompt });
         const parsed = {...result, papers: JSON.parse(result.papers)};
 
         const baseUrl = `/experimental/space-from-description?question=${result.question}&title=${title}&description=${description}`;
@@ -63,12 +65,23 @@ export default async function FingerprintsPage({ searchParams }: Props) {
                         placeholder="Title"
                         className="grow bg-white"
                         defaultValue={title}
+                        required
                     />
                     <Textarea
                         name="description"
                         placeholder="Description"
                         className="grow bg-white"
                         defaultValue={description}
+                        rows={2}
+                        required
+                    />
+                    <Textarea
+                        name="prompt"
+                        placeholder="Prompt"
+                        className="grow bg-white"
+                        defaultValue={defaultPrompt}
+                        rows={5}
+                        required
                     />
                     <Button type="submit" className="text-xs tracking-wider">
                         Validate space input
