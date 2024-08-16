@@ -1,12 +1,11 @@
 "use client";
 import { fetchPapersTitles } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
+import { Button, Input, Textarea } from "@proemial/shadcn-ui";
 import MultipleSelector, {
 	Option,
 } from "@proemial/shadcn-ui/components/ui/multiple-selector";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-
-export const AUTOCOMPLETE_QUERY_STRING = "ids";
 
 type PapersSearchResult = {
 	results: { id: string; display_name: string; cited_by_count: number }[];
@@ -30,49 +29,49 @@ export function AutocompleteInput() {
 	const router = useRouter();
 
 	const searchParams = useSearchParams();
-	const ids = searchParams.get(AUTOCOMPLETE_QUERY_STRING);
-	const [options, setOptions] = useState<Option[]>([]);
-
-	useEffect(() => {
-		if (ids) {
-			const fetchData = async () => {
-				const papers = (await fetchPapersTitles(ids?.split(",") ?? [])).flatMap(
-					(f) => f,
-				);
-				if (papers) {
-					setOptions(papers.map((p) => ({ value: p.id, label: p.title })));
-				}
-			};
-			fetchData().catch(console.error);
-		}
-	}, [ids]);
-
-	const handleChange = (value: Option[]) => {
-		const filter = value.map((v) => v.value.split("/").at(-1)).join(",");
-		router.replace(
-			`/experimental/fingerprints?${AUTOCOMPLETE_QUERY_STRING}=${filter}`,
-		);
-	};
+    const {ids, question, title, description} = searchParams ?? {};
 
 	return (
-		<div className="flex w-full flex-col gap-5">
-			<MultipleSelector
-				onSearch={async (value) => await handleSearch(value)}
-				placeholder="Type to search papers..."
-				hidePlaceholderWhenSelected
-				loadingIndicator={
-					<p className="py-2 text-center text-lg leading-10 text-muted-foreground">
-						loading...
-					</p>
-				}
-				emptyIndicator={
-					<p className="w-full text-center text-lg leading-10 text-muted-foreground">
-						no results found.
-					</p>
-				}
-				value={options}
-				onChange={handleChange}
-			/>
-		</div>
-	);
+		<form onSubmit={async (value) => await handleSearch(value)}>
+			<div className="flex flex-col gap-1">
+				<Input
+					name="title"
+					placeholder="Title"
+					className="grow bg-white"
+					defaultValue={title}
+				/>
+				<Textarea
+					name="description"
+					placeholder="Description"
+					className="grow bg-white"
+					defaultValue={description}
+				/>
+				<Button type="submit" className="text-xs tracking-wider">
+					Validate space input
+				</Button>
+			</div>
+		</form >
+	)
+
+	// return (
+	// 	<div className="flex w-full flex-col gap-5">
+	// 		<MultipleSelector
+	// 			onSearch={async (value) => await handleSearch(value)}
+	// 			placeholder="Type to search papers..."
+	// 			hidePlaceholderWhenSelected
+	// 			loadingIndicator={
+	// 				<p className="py-2 text-center text-lg leading-10 text-muted-foreground">
+	// 					loading...
+	// 				</p>
+	// 			}
+	// 			emptyIndicator={
+	// 				<p className="w-full text-center text-lg leading-10 text-muted-foreground">
+	// 					no results found.
+	// 				</p>
+	// 			}
+	// 			value={options}
+	// 			onChange={handleChange}
+	// 		/>
+	// 	</div>
+	// );
 }
