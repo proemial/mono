@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 
+
+const withVercelToolbar = require('@vercel/toolbar/plugins/next')();
 const { withSentryConfig } = require("@sentry/nextjs");
 
 const nextConfig = {
@@ -39,11 +41,11 @@ const nextConfig = {
 	},
 };
 
-module.exports = withSentryConfig(nextConfig, {
+module.exports = withVercelToolbar(withSentryConfig((nextConfig), {
 	org: "proemial",
 	project: "proem",
 	authToken: process.env.SENTRY_AUTH_TOKEN,
 	// https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration
 	hideSourceMaps: true,
 	widenClientFileUpload: true,
-});
+}));

@@ -8,6 +8,7 @@ import { SetActiveOrganization } from "@/components/set-active-organization";
 import { TopNavigation } from "@/components/top-navigation/top-navigation";
 import "@/env";
 import { cn } from "@proemial/shadcn-ui";
+import { VercelToolbar } from "@vercel/toolbar/next";
 import { Metadata, Viewport } from "next";
 import { Lato as FontSans } from "next/font/google";
 import { headers } from "next/headers";
@@ -74,6 +75,7 @@ type Props = {
 
 export default function RootLayout({ children, modal }: Readonly<Props>) {
 	const trackingInput = getTrackingInput();
+	const shouldInjectToolbar = process.env.NODE_ENV === "development";
 	return (
 		<html lang="en" className="overscroll-none" suppressHydrationWarning>
 			<head>
@@ -116,6 +118,7 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 						</ReactQueryProvider>
 					</Analytics.PostHog>
 				</AuthProvider>
+				{shouldInjectToolbar && <VercelToolbar />}
 			</body>
 		</html>
 	);
