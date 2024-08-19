@@ -96,11 +96,16 @@ export const AssistantContent = ({
 	};
 
 	const tuplePosts = useMemo(
-		() => toTuplePosts(messages as MessageWithMetadata[], user),
-		[messages, user],
+		() =>
+			toTuplePosts(
+				data?.posts ?? [],
+				messages as MessageWithMetadata[],
+				isLoading,
+				user,
+			),
+		[data?.posts, messages, isLoading, user],
 	);
 
-	// TODO: Get from assistant data instead?
 	const followUps = useMemo(
 		() => getFollowUps(streamData as AnswerEngineEvents[]),
 		[streamData],
@@ -210,10 +215,39 @@ const toInitialMessages = (posts: PostWithCommentsAndAuthor[]) => {
 	return messages;
 };
 
-/**
- * Convert Vercel AI messages to tuple posts.
- */
-const toTuplePosts = (messages: MessageWithMetadata[], user: User) => {
+const toTuplePosts = (
+	posts: AssistantData["posts"],
+	messages: MessageWithMetadata[],
+	isLoading: boolean,
+	user: User,
+) => {
+	// Use posts from assistant data (includes slug, papers, etc.)
+	if (!isLoading && messages.length === posts.length * 2) {
+		return posts
+			.map((post) => ({
+				id: nanoid(),
+				createdAt: new Date(post.createdAt),
+				content: post.content,
+				author: {
+					id: post.authorId,
+					firstName: post.author?.firstName ?? null,
+					lastName: post.author?.lastName ?? null,
+					imageUrl: post.author?.imageUrl,
+				},
+				slug: post.slug,
+				reply: post.comments[0] && {
+					content: post.comments[0].content,
+					metadata: {
+						authorId: post.comments[0].authorId,
+						followUps: post.comments[0].followUps,
+						papers: post.comments[0].papers,
+					},
+				},
+			}))
+			.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+	}
+
+	// Use messages from chat stream, if streaming
 	const tuplePosts: TuplePost[] = [];
 	for (let i = 0; i < messages.length; i++) {
 		const message = messages[i];
