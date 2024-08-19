@@ -6,6 +6,7 @@ import { ReactQueryProvider } from "@/components/providers/react-query";
 import { SetActiveOrganization } from "@/components/set-active-organization";
 import { TopNavigation } from "@/components/top-navigation/top-navigation";
 import "@/env";
+import { Throbber } from "@/components/throbber";
 import { cn } from "@proemial/shadcn-ui";
 import { Metadata, Viewport } from "next";
 import { Lato as FontSans } from "next/font/google";
@@ -91,7 +92,7 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 					<Analytics.PostHog tracking={trackingInput}>
 						<ReactQueryProvider>
 							<SetActiveOrganization />
-							<div className="bg-background group">
+							<div className="bg-background group relative">
 								<div
 									style={{
 										boxShadow: "0 0 120px rgba(0, 0, 0, .15)",
@@ -102,7 +103,10 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 									)}
 								>
 									<TopNavigation />
-									<Main className="group-has-[[data-pending]]:opacity-0 group-has-[[data-pending]]:translate-y-10 transition opacity-100 ease-in-out duration-300">
+									<div className="group-has-[[data-page-transition]]:opacity-50 group-has-[[data-page-transition]]:translate-y-10 opacity-0 transition-all ease-in-out duration-300 absolute left-1/2 -translate-x-1/2 top-10">
+										<Throbber />
+									</div>
+									<Main className="group-has-[[data-page-transition]]:opacity-0 group-has-[[data-page-transition]]:translate-y-10 transition-all ease-in-out duration-300">
 										{children}
 									</Main>
 									{modal}

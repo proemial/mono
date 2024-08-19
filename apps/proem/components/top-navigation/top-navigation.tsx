@@ -48,7 +48,7 @@ export function TopNavigation() {
 		queryFn: async () => getAvailableCollections(collectionId),
 	});
 
-	const [_pending, startTransition] = useTransition();
+	const [isPending, startTransition] = useTransition();
 
 	const { action, title, menu, theme } =
 		getTopNavigationContentByUrl(optimisticUrl);
@@ -67,7 +67,7 @@ export function TopNavigation() {
 
 			<NavigationMenu className="z-20 bg-transparent">
 				<div
-					data-pending={_pending ? "" : undefined}
+					data-page-transition={isPending ? "" : undefined}
 					className={cn(
 						"absolute top-0 left-0 w-full h-full overflow-hidden bg-theme-300",
 						// {
