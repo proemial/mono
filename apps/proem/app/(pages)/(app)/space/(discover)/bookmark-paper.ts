@@ -95,14 +95,13 @@ export async function togglePaperInCollection(
 
 	await toggleCollectionPaper(collectionId, paperId, isEnabled);
 
-	if (revalidateCache !== false) {
+	revalidateTag(getBookmarkedPapersCacheTag(collectionId));
+	revalidateTag(getBookmarkCacheTag(collectionId));
+	if (userId) {
 		const spaceType: "user" | "space" = collectionId.startsWith("user_")
 			? "user"
 			: "space";
-
-		revalidateTag(getBookmarkedPapersCacheTag(collectionId));
-		revalidateTag(getBookmarkCacheTag(collectionId));
-		if (userId) waitUntil(streamCacheUpdate.run(userId, spaceType));
+		waitUntil(streamCacheUpdate.run(userId, spaceType));
 	}
 
 	return {};
