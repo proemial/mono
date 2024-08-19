@@ -29,7 +29,7 @@ export const PostService = {
 		const { userId } = auth();
 		const orgMembersUserData = await getOrgMembersUserData();
 		const orgMemberIds = orgMembersUserData.map((m) => m.userId);
-		const posts = await PostRepository.getPosts(
+		const posts = await PostRepository.getPostsWithCommentsAndAuthors(
 			spaceId,
 			paperId,
 			userId,

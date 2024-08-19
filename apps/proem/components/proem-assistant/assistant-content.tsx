@@ -100,6 +100,7 @@ export const AssistantContent = ({
 		[messages, user],
 	);
 
+	// TODO: Get from assistant data instead?
 	const followUps = useMemo(
 		() => getFollowUps(streamData as AnswerEngineEvents[]),
 		[streamData],

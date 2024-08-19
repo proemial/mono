@@ -12,7 +12,7 @@ import {
 } from "../neon/schema";
 
 export const PostRepository = {
-	getPosts: async (
+	getPostsWithCommentsAndAuthors: async (
 		spaceId: string | undefined,
 		paperId: string | undefined,
 		userId: string | null | undefined,
@@ -38,11 +38,13 @@ export const PostRepository = {
 			if (!space) {
 				return [];
 			}
-			return await neonDb.query.posts.findMany({
+			const spacePosts = await neonDb.query.posts.findMany({
 				where: and(eq(posts.spaceId, spaceId), byShared(userId, orgMemberIds)),
-				with: { comments: { orderBy: [asc(comments.createdAt)] } },
+				with: { comments: { orderBy: [asc(comments.createdAt)] }, space: true },
 				orderBy: [desc(posts.createdAt)],
 			});
+			// Filter out posts from deleted spaces
+			return spacePosts.filter((post) => post.space?.deletedAt === null);
 		}
 		return [];
 	},
