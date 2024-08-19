@@ -30,7 +30,7 @@ export default async function ({ params: { collectionId }, children }: Props) {
 	const isDefaultCollection = collection.id === userId;
 
 	return (
-		<div className="flex flex-col gap-5 grow group">
+		<div className="flex flex-col gap-2.5 grow group">
 			{!isDefaultCollection && (
 				<div className="flex flex-col gap-2 pt-10">
 					<div className="flex flex-col gap-3">

@@ -15,7 +15,7 @@ export function LoadingTransition({
 }: LoadingTransitionProps) {
 	const Component = as;
 	return (
-		<Component>
+		<>
 			<div className="relative">
 				<div
 					className={cn(
@@ -31,7 +31,7 @@ export function LoadingTransition({
 					<Throbber />
 				</div>
 			</div>
-			<div
+			<Component
 				className={cn("transition-all ease-in-out duration-300 origin-top", {
 					"group-has-[[data-page-transition]]:opacity-0 group-has-[[data-page-transition]]:translate-y-10 group-has-[[data-page-transition]]:blur-sm group-has-[[data-page-transition]]:scale-95":
 						type === "page",
@@ -40,7 +40,7 @@ export function LoadingTransition({
 				})}
 			>
 				{children}
-			</div>
-		</Component>
+			</Component>
+		</>
 	);
 }
