@@ -1,12 +1,12 @@
 import "@/app/globals.css";
 import { Analytics } from "@/components/analytics";
+import { LoadingTransition } from "@/components/loading-transition";
 import { Main } from "@/components/main";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ReactQueryProvider } from "@/components/providers/react-query";
 import { SetActiveOrganization } from "@/components/set-active-organization";
 import { TopNavigation } from "@/components/top-navigation/top-navigation";
 import "@/env";
-import { Throbber } from "@/components/throbber";
 import { cn } from "@proemial/shadcn-ui";
 import { Metadata, Viewport } from "next";
 import { Lato as FontSans } from "next/font/google";
@@ -103,12 +103,11 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 									)}
 								>
 									<TopNavigation />
-									<div className="group-has-[[data-page-transition]]:opacity-50 group-has-[[data-page-transition]]:translate-y-10 opacity-0 transition-all ease-in-out duration-300 absolute left-1/2 -translate-x-1/2 top-10">
-										<Throbber />
-									</div>
-									<Main className="group-has-[[data-page-transition]]:opacity-0 group-has-[[data-page-transition]]:translate-y-10 transition-all ease-in-out duration-300">
+
+									<LoadingTransition type="page" as={Main}>
 										{children}
-									</Main>
+									</LoadingTransition>
+
 									{modal}
 								</div>
 							</div>

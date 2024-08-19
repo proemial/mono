@@ -19,7 +19,7 @@ export const TabBar = ({ tabs }: TabBarProps) => {
 	const router = useRouter();
 
 	return (
-		<div data-subpage-transition={isPending ? "" : undefined}>
+		<div data-section-transition={isPending ? "" : undefined}>
 			<Tabs
 				className="flex justify-center"
 				value={optimisticPathname}
@@ -35,7 +35,7 @@ export const TabBar = ({ tabs }: TabBarProps) => {
 						<TabsTrigger
 							key={tab.title}
 							value={tab.href}
-							className="text-base px-5 py-1.5 bg-theme-200/30 rounded-full [&[data-state=active]]:bg-theme-900 [&[data-state=active]]:text-white"
+							className="text-base px-5 py-1.5 bg-theme-200/30 rounded-full [&[data-state=active]]:bg-theme-900 [&[data-state=active]]:text-white text-foreground transition-all"
 						>
 							{tab.title}
 						</TabsTrigger>

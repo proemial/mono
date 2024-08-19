@@ -1,8 +1,10 @@
-import { NavItem } from "@/app/(pages)/(app)/space/[collectionId]/nav-item";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
+import { TabBar } from "@/app/(pages)/(app)/space/[collectionId]/tab-bar";
+import { LoadingTransition } from "@/components/loading-transition";
 import Markdown from "@/components/markdown";
 import { SpaceContributorsIndicator } from "@/components/space-contributors-indicator";
 import { SpaceShareIndicator } from "@/components/space-share-indicator";
+import { Throbber } from "@/components/throbber";
 import { routes } from "@/routes";
 import { CollectionService } from "@/services/collection-service";
 import { auth } from "@clerk/nextjs/server";
@@ -28,7 +30,7 @@ export default async function ({ params: { collectionId }, children }: Props) {
 	const isDefaultCollection = collection.id === userId;
 
 	return (
-		<div className="flex flex-col gap-5 grow">
+		<div className="flex flex-col gap-5 grow group">
 			{!isDefaultCollection && (
 				<div className="flex flex-col gap-2 pt-10">
 					<div className="flex flex-col gap-3">
@@ -42,18 +44,19 @@ export default async function ({ params: { collectionId }, children }: Props) {
 						</div>
 					</div>
 
-					{/* TODO! left align if navItem contains over 2 */}
-					<div className="flex items-center justify-center gap-2">
-						<NavItem href={`${routes.space}/${collection.id}`} title="Latest" />
-						<NavItem
-							href={`${routes.space}/${collection.id}/saved`}
-							title="Saved"
-						/>
-					</div>
+					<TabBar
+						tabs={[
+							{ href: `${routes.space}/${collection.id}`, title: "Latest" },
+							{
+								href: `${routes.space}/${collection.id}/saved`,
+								title: "Saved",
+							},
+						]}
+					/>
 				</div>
 			)}
 
-			{children}
+			<LoadingTransition type="section">{children}</LoadingTransition>
 		</div>
 	);
 }
