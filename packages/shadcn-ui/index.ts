@@ -22,6 +22,7 @@ export * from "./components/ui/table";
 export * from "./components/ui/textarea";
 export * from "./components/ui/typography";
 export * from "./components/ui/popover";
+export * from "./components/ui/tabs";
 export * from "./lib/utils";
 
 export { toast } from "sonner";
