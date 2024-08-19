@@ -1,10 +1,12 @@
 import { useThrobberStatus } from "@/app/(pages)/(app)/ask/answer/[slug]/use-throbber-status";
 import { Comment, Post } from "@proemial/data/neon/schema";
+import { cn } from "@proemial/shadcn-ui";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { AuthorAvatar, getFullName } from "../author-avatar";
 import { applyExplainLinks } from "../chat-apply-links";
 import { ProemLogo } from "../icons/brand/logo";
+import { useAssistant } from "./use-assistant";
 
 dayjs.extend(relativeTime);
 
@@ -41,9 +43,23 @@ export const Tuple = ({ post, onSubmit }: Props) => {
 	const { author } = post;
 	const formattedPostDate = dayjs(post.createdAt).fromNow();
 	const throbberStatus = useThrobberStatus();
+	const hasPaperSources = post.slug && post.reply?.metadata?.papers;
+	const { open } = useAssistant();
+
+	const handleClick = () => {
+		if (hasPaperSources) {
+			// biome-ignore lint/style/noNonNullAssertion: `hasPaperSources` true entails `post.slug` is defined
+			open(post.slug!);
+		}
+	};
 
 	return (
-		<div className="flex flex-col rounded-lg gap-2 p-2 pr-3 bg-theme-700">
+		<div
+			className={cn("flex flex-col rounded-lg gap-2 p-2 pr-3 bg-theme-700", {
+				"cursor-pointer hover:bg-theme-800 duration-300": hasPaperSources,
+			})}
+			onClick={handleClick}
+		>
 			<div className="flex gap-2">
 				<AuthorAvatar
 					imageUrl={author.imageUrl}
