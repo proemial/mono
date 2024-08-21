@@ -86,7 +86,7 @@ export const AssistantContent = ({
 			spaceId,
 			userId: user?.id,
 		},
-		api: !paperId ? "/api/bot/ask2" : "/api/ai",
+		api: paperId ? "/api/ai" : "/api/bot/ask2",
 		initialMessages,
 	});
 
@@ -224,26 +224,29 @@ const toTuplePosts = (
 	// Use posts from assistant data (includes slug, papers, etc.)
 	if (!isLoading && messages.length === posts.length * 2) {
 		return posts
-			.map((post) => ({
-				id: nanoid(),
-				createdAt: new Date(post.createdAt),
-				content: post.content,
-				author: {
-					id: post.authorId,
-					firstName: post.author?.firstName ?? null,
-					lastName: post.author?.lastName ?? null,
-					imageUrl: post.author?.imageUrl,
-				},
-				slug: post.slug,
-				reply: post.comments[0] && {
-					content: post.comments[0].content,
-					metadata: {
-						authorId: post.comments[0].authorId,
-						followUps: post.comments[0].followUps,
-						papers: post.comments[0].papers,
-					},
-				},
-			}))
+			.map(
+				(post) =>
+					({
+						id: nanoid(),
+						createdAt: new Date(post.createdAt),
+						content: post.content,
+						author: {
+							id: post.authorId,
+							firstName: post.author?.firstName ?? null,
+							lastName: post.author?.lastName ?? null,
+							imageUrl: post.author?.imageUrl,
+						},
+						slug: post.slug,
+						reply: post.comments[0] && {
+							content: post.comments[0].content,
+							metadata: {
+								authorId: post.comments[0].authorId,
+								followUps: post.comments[0].followUps,
+								papers: post.comments[0].papers,
+							},
+						},
+					}) satisfies TuplePost,
+			)
 			.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 	}
 

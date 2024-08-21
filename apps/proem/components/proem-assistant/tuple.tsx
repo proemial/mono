@@ -1,12 +1,14 @@
 import { useThrobberStatus } from "@/app/(pages)/(app)/ask/answer/[slug]/use-throbber-status";
+import { routes } from "@/routes";
 import { Comment, Post } from "@proemial/data/neon/schema";
-import { cn } from "@proemial/shadcn-ui";
+import { CardBullet } from "@proemial/shadcn-ui";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { AuthorAvatar, getFullName } from "../author-avatar";
 import { applyExplainLinks } from "../chat-apply-links";
 import { ProemLogo } from "../icons/brand/logo";
-import { useAssistant } from "./use-assistant";
 
 dayjs.extend(relativeTime);
 
@@ -43,23 +45,16 @@ export const Tuple = ({ post, onSubmit }: Props) => {
 	const { author } = post;
 	const formattedPostDate = dayjs(post.createdAt).fromNow();
 	const throbberStatus = useThrobberStatus();
-	const hasPaperSources = post.slug && post.reply?.metadata?.papers;
-	const { open } = useAssistant();
-
-	const handleClick = () => {
-		if (hasPaperSources) {
-			// biome-ignore lint/style/noNonNullAssertion: `hasPaperSources` true entails `post.slug` is defined
-			open(post.slug!);
-		}
-	};
+	const { collectionId: spaceId } = useParams<{ collectionId?: string }>();
+	const papers =
+		(post.reply?.metadata?.papers as {
+			title: string;
+			abstract: string;
+			link: string;
+		}[]) ?? [];
 
 	return (
-		<div
-			className={cn("flex flex-col rounded-lg gap-2 p-2 pr-3 bg-theme-700", {
-				"cursor-pointer hover:bg-theme-800 duration-300": hasPaperSources,
-			})}
-			onClick={handleClick}
-		>
+		<div className="flex flex-col rounded-lg gap-2 p-2 pr-3 bg-theme-700">
 			<div className="flex gap-2">
 				<AuthorAvatar
 					imageUrl={author.imageUrl}
@@ -84,19 +79,32 @@ export const Tuple = ({ post, onSubmit }: Props) => {
 					/>
 				</div>
 				{post.reply ? (
-					<div className="flex flex-col gap-1">
-						<div className="text-white">
+					<div className="flex flex-col gap-1 text-white">
+						<div>
 							{applyExplainLinks(
 								post.reply.content,
 								(input: string) => onSubmit(`What is ${input}?`),
 								"bg-transparent opacity-50 font-semibold cursor-default",
 							)}
+							{papers.length > 0 &&
+								papers.map((paper, index) => (
+									<Link
+										key={index}
+										href={
+											spaceId
+												? `${routes.space}/${spaceId}/paper${paper.link}`
+												: `/paper${paper.link}`
+										}
+									>
+										<CardBullet
+											variant="numbered"
+											className="inline-block ml-1 border-white pt-0"
+										>
+											{index + 1}
+										</CardBullet>
+									</Link>
+								))}
 						</div>
-						{post.reply.metadata?.papers && (
-							<div className="text-right text-white text-opacity-50 text-xs">
-								Based on {post.reply.metadata.papers.length} research papers.
-							</div>
-						)}
 					</div>
 				) : (
 					<div className="text-white text-sm">{throbberStatus}</div>
