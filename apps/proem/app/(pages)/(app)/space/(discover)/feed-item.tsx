@@ -1,7 +1,7 @@
 "use client";
 import { AuthorAvatar } from "@/components/author-avatar";
 import Markdown from "@/components/markdown";
-import { PaperPost } from "@/services/post-service";
+import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { trimForQuotes } from "@/utils/string-utils";
 import { Prefix } from "@proemial/redis/adapters/papers";
 import { FeatureType } from "@proemial/repositories/oa/fingerprinting/features";
@@ -20,7 +20,7 @@ export type FeedItemProps = Pick<
 	FeedItemCardProps,
 	"isBookmarked" | "customCollectionId" | "onBookmarkToggleClick"
 > & {
-	paper: OpenAlexPaper & { posts: PaperPost[] };
+	paper: OpenAlexPaper & { posts: PostWithCommentsAndAuthor[] };
 	fingerprint?: RankedPaperFeature[];
 	provider?: Prefix;
 	children?: ReactNode;
@@ -42,8 +42,8 @@ export default function FeedItem({
 		.filter(Boolean) as string[];
 
 	const distinctAuthors = paper.posts.reduce(
-		(authors: PaperPost["author"][], post) => {
-			if (!authors.find((author) => author.id === post.author.id)) {
+		(authors: PostWithCommentsAndAuthor["author"][], post) => {
+			if (!authors.find((author) => author && author.id === post.author?.id)) {
 				authors.push(post.author);
 			}
 			return authors;
@@ -95,9 +95,9 @@ export default function FeedItem({
 						{distinctAuthors.map((author, index) => (
 							<AuthorAvatar
 								key={index}
-								firstName={author.firstName}
-								lastName={author.lastName}
-								imageUrl={author.imageUrl}
+								firstName={author?.firstName ?? null}
+								lastName={author?.lastName ?? null}
+								imageUrl={author?.imageUrl}
 							/>
 						))}
 					</div>

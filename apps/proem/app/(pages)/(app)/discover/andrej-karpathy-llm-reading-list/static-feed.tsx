@@ -1,13 +1,13 @@
 "use client";
 import { Bookmarks } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
 import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
-import { PaperPost } from "@/services/post-service";
+import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode } from "react";
 
 type StaticFeedProps = {
-	feed: (OpenAlexPaper & { posts: PaperPost[] })[];
+	feed: (OpenAlexPaper & { posts: PostWithCommentsAndAuthor[] })[];
 	children: ReactNode;
 	bookmarks: Bookmarks;
 };

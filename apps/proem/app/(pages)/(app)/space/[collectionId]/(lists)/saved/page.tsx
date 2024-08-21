@@ -3,6 +3,7 @@ import { getBookmarkedPapersByCollectionId } from "@/app/(pages)/(app)/space/(di
 import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
 import { FeedItemWithDisabledOverlay } from "@/app/(pages)/(app)/space/[collectionId]/(lists)/saved/feed-item-with-disabled-overlay";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
+import { fetchPaperWithPosts } from "@/app/data/fetch-feed";
 import { ThemeColoredCard } from "@/components/theme-colored-card";
 import { CollectionService } from "@/services/collection-service";
 import { PostService } from "@/services/post-service";
@@ -29,9 +30,9 @@ export default async function SavedPage({
 	const bookmarkedPapers =
 		await getBookmarkedPapersByCollectionId(collectionId);
 
-	const paperIds = bookmarkedPapers?.map(({ paperId }) => paperId);
+	const paperIds = bookmarkedPapers?.map(({ paperId }) => paperId) ?? [];
 
-	if (paperIds?.length === 0) {
+	if (paperIds.length === 0) {
 		return (
 			<div className="flex flex-col items-center justify-center gap-4">
 				<div className="text-sm">You have yet to save a paper…</div>
@@ -42,9 +43,9 @@ export default async function SavedPage({
 	const papers = paperIds
 		? await Promise.all(paperIds.map((paperId) => fetchPaper(paperId)))
 		: [];
-	const paperIdsWithPosts = await PostService.getPaperIdsWithPosts(
-		papers.filter((p) => typeof p !== "undefined").map((p) => p.id),
-		collectionId,
+
+	const papersWithPosts = await Promise.all(
+		paperIds.map((paperId) => fetchPaperWithPosts(paperId, collection.id)),
 	);
 
 	const isDefaultSpace = collectionId === userId;
@@ -62,7 +63,8 @@ export default async function SavedPage({
 						paper={{
 							...paper,
 							posts:
-								paperIdsWithPosts.find((p) => p.id === paper.id)?.posts ?? [],
+								papersWithPosts.find((p) => p.paperId === paper.id)?.posts ??
+								[],
 						}}
 						isBookmarked={isBookmarked}
 						customCollectionId={collectionId}

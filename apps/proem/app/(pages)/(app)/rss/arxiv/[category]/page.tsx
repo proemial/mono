@@ -95,16 +95,16 @@ async function Paper({ id, isBookmarked }: PaperProps) {
 		return null;
 	}
 
-	const paperWithPosts = await PostService.getSinglePaperIdWithPosts(
-		paper.id,
+	const posts = await PostService.getPostsWithCommentsAndAuthors(
 		undefined,
+		paper.id,
 	);
 
 	return (
 		<FeedItem
 			paper={{
 				...paper,
-				posts: paperWithPosts?.posts ?? [],
+				posts,
 			}}
 			provider="arxiv"
 			isBookmarked={isBookmarked}

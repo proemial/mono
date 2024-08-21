@@ -15,7 +15,7 @@ import {
 import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
 import { InfinityScrollList } from "@/components/infinity-scroll-list";
 import { ThemeColoredCard } from "@/components/theme-colored-card";
-import { PaperPost } from "@/services/post-service";
+import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
 import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
 import { ReactNode } from "react";
@@ -92,7 +92,9 @@ export function Feed({
 				renderHeadline={debug ? (count) => <DebugInfo count={count} /> : null}
 				renderRow={(row, i) => {
 					const paper = row as RankedPaper & {
-						paper: RankedPaper["paper"] & { posts: PaperPost[] };
+						paper: RankedPaper["paper"] & {
+							posts: PostWithCommentsAndAuthor[];
+						};
 					};
 					const isBookmarked = Boolean(bookmarks[paper.paper.id]);
 					const topics = row.paper.data.topics;

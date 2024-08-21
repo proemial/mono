@@ -105,9 +105,8 @@ export const fetchFeedByFeaturesWithPosts = async (
 ) => {
 	const feedByFeatures = await fetchFeedByFeatures(params, options, nocache);
 	const paperIds = feedByFeatures.rows.map(({ paper }) => paper.id);
-	const papersWithPosts = await PostService.getPaperIdsWithPosts(
-		paperIds,
-		spaceId,
+	const papersWithPosts = await Promise.all(
+		paperIds.map((paperId) => fetchPaperWithPosts(paperId, spaceId)),
 	);
 	return {
 		...feedByFeatures,
@@ -116,9 +115,23 @@ export const fetchFeedByFeaturesWithPosts = async (
 			paper: {
 				...row.paper,
 				posts:
-					papersWithPosts.find((paper) => paper.id === row.paper.id)?.posts ??
-					[],
+					papersWithPosts.find((paper) => paper.paperId === row.paper.id)
+						?.posts ?? [],
 			},
 		})),
+	};
+};
+
+export const fetchPaperWithPosts = async (
+	paperId: string,
+	spaceId: string | undefined,
+) => {
+	const posts = await PostService.getPostsWithCommentsAndAuthors(
+		spaceId,
+		paperId,
+	);
+	return {
+		paperId,
+		posts,
 	};
 };
