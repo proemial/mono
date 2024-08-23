@@ -30,13 +30,12 @@ export const env = createEnv({
 	},
 	extends: [vercel()],
 	isServer: typeof window === "undefined",
-
-	runtimeEnv: {
+	experimental__runtimeEnv: {
+		...process.env,
 		ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
 		GOOGLE_VERTEX_CLIENT_EMAIL: process.env.GOOGLE_VERTEX_CLIENT_EMAIL,
 		GOOGLE_VERTEX_LOCATION: process.env.GOOGLE_VERTEX_LOCATION,
 		GOOGLE_VERTEX_PRIVATE_KEY: process.env.GOOGLE_VERTEX_PRIVATE_KEY,
 		GOOGLE_VERTEX_PROJECT: process.env.GOOGLE_VERTEX_PROJECT,
 	},
-	experimental__runtimeEnv: process.env,
 });
