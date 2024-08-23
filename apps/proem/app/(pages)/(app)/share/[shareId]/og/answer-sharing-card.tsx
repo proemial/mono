@@ -1,3 +1,5 @@
+import { env } from "@/env/client";
+
 type AnswerSharingCardProps = {
 	content: string;
 	/**
@@ -42,7 +44,7 @@ export function AnswerSharingCard({
 				</div>
 				<img
 					{...twcl("w-[50px]")}
-					src={`${process.env.NEXT_PUBLIC_VERCEL_URL}/open-graph/corner.png`}
+					src={`${env.NEXT_PUBLIC_VERCEL_URL}/open-graph/corner.png`}
 					alt=""
 				/>
 			</div>
@@ -50,7 +52,7 @@ export function AnswerSharingCard({
 			<div {...twcl("flex items-center")}>
 				<img
 					{...twcl("w-[42px] mr-12")}
-					src={`${process.env.NEXT_PUBLIC_VERCEL_URL}/open-graph/logo.svg`}
+					src={`${env.NEXT_PUBLIC_VERCEL_URL}/open-graph/logo.svg`}
 					alt=""
 				/>
 				<div
