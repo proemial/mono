@@ -1,13 +1,13 @@
 import { z } from "zod";
 
 export const envVariables = z.object({
-	ANTHROPIC_API_KEY: z.string().optional(), //TODO!
+	ANTHROPIC_API_KEY: z.string(),
 	CLERK_SECRET_KEY: z.string(),
 	DATABASE_URL: z.string(),
-	GOOGLE_VERTEX_CLIENT_EMAIL: z.string().optional(), //TODO!
-	GOOGLE_VERTEX_LOCATION: z.string().optional(), //TODO!
-	GOOGLE_VERTEX_PRIVATE_KEY: z.string().optional(), //TODO!
-	GOOGLE_VERTEX_PROJECT: z.string().optional(), //TODO!
+	GOOGLE_VERTEX_CLIENT_EMAIL: z.string(),
+	GOOGLE_VERTEX_LOCATION: z.string(),
+	GOOGLE_VERTEX_PRIVATE_KEY: z.string(),
+	GOOGLE_VERTEX_PROJECT: z.string(),
 	INNGEST_EVENT_KEY: z.string(),
 	INNGEST_SIGNING_KEY: z.string(),
 	LANGCHAIN_API_KEY: z.string(),
