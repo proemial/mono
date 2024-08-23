@@ -13,6 +13,7 @@ import {
 import { AssistantButton } from "./assistant-button";
 import { AssistantContent } from "./assistant-content";
 import { useAssistant } from "./use-assistant";
+import { useSnapPointStore } from "./use-snap-point-store";
 
 export const PROEM_ASSISTANT_QUERY_KEY = "proem-assistant";
 
@@ -32,10 +33,11 @@ type Params = {
 };
 
 export const ProemAssistant = () => {
-	const { isOpen, slug, open, close } = useAssistant();
+	const { isOpen, open, close } = useAssistant();
 	const { userId } = useAuth();
 	const pathname = usePathname();
 	const [expanded, setExpanded] = useState(false);
+	const { snapPoint, setSnapPoint } = useSnapPointStore();
 
 	const params = useParams<Params>();
 	const spaceId = params.collectionId;
@@ -88,10 +90,12 @@ export const ProemAssistant = () => {
 			<AssistantButton onClick={handleOpen} />
 			<Drawer
 				shouldScaleBackground={false}
-				setBackgroundColorOnScale={false} // For some reason, this is not working
+				setBackgroundColorOnScale={false}
 				open={isOpen}
 				onOpenChange={handleOpenChange}
-				// snapPoints={[0.2, 0.3]} // 1) Background color not changed until last snap point. 2) Breaks exit animation
+				snapPoints={[snapPoint]}
+				activeSnapPoint={snapPoint}
+				setActiveSnapPoint={setSnapPoint}
 			>
 				<AssistantContent
 					spaceId={spaceId}

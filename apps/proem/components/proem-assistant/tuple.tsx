@@ -1,7 +1,7 @@
 import { useThrobberStatus } from "@/app/(pages)/(app)/ask/answer/[slug]/use-throbber-status";
 import { routes } from "@/routes";
 import { Comment, Post } from "@proemial/data/neon/schema";
-import { CardBullet } from "@proemial/shadcn-ui";
+import { CardBullet, cn } from "@proemial/shadcn-ui";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 import { AuthorAvatar, getFullName } from "../author-avatar";
 import { applyExplainLinks } from "../chat-apply-links";
 import { ProemLogo } from "../icons/brand/logo";
+import { useAssistant } from "./use-assistant";
 
 dayjs.extend(relativeTime);
 
@@ -52,9 +53,24 @@ export const Tuple = ({ post, onSubmit }: Props) => {
 			abstract: string;
 			link: string;
 		}[]) ?? [];
+	const hasPaperSources = post.slug && post.reply?.metadata?.papers;
+	const { open, slug } = useAssistant();
+
+	const handleClick = () => {
+		if (hasPaperSources && !slug) {
+			// biome-ignore lint/style/noNonNullAssertion: `hasPaperSources` true entails `post.slug` is defined
+			open(post.slug!);
+		}
+	};
 
 	return (
-		<div className="flex flex-col rounded-lg gap-2 p-2 pr-3 bg-theme-700">
+		<div
+			className={cn("flex flex-col rounded-2xl gap-2 p-2 pr-3 bg-theme-700", {
+				"cursor-pointer hover:bg-theme-800 duration-200":
+					!!post.reply?.metadata?.papers && !slug,
+			})}
+			onClick={handleClick}
+		>
 			<div className="flex gap-2">
 				<AuthorAvatar
 					imageUrl={author.imageUrl}
@@ -95,6 +111,9 @@ export const Tuple = ({ post, onSubmit }: Props) => {
 												? `${routes.space}/${spaceId}/paper${paper.link}`
 												: `/paper${paper.link}`
 										}
+										onClick={(e) => {
+											e.stopPropagation();
+										}}
 									>
 										<CardBullet
 											variant="numbered"

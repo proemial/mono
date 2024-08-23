@@ -26,6 +26,7 @@ const DrawerOverlay = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <DrawerPrimitive.Overlay
+    id="drawer-overlay"
     ref={ref}
     className={cn("fixed inset-0 z-50 bg-black/80", className)}
     {...props}

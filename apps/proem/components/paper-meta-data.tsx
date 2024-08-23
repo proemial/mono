@@ -9,6 +9,7 @@ import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Trackable } from "@/components/trackable";
 import { formatDate } from "@/utils/date";
 import { OpenAlexTopic } from "@proemial/repositories/oa/models/oa-paper";
+import { CardBullet } from "@proemial/shadcn-ui";
 
 export type PaperMetaDataProps = Pick<
 	AddToCollectionButtonProps,
@@ -19,6 +20,7 @@ export type PaperMetaDataProps = Pick<
 	onBookmarkToggleClick?: AddToCollectionButtonProps["onClick"];
 	readonly?: boolean;
 	topics?: OpenAlexTopic[];
+	index?: number;
 };
 
 export const PaperMetaData = ({
@@ -29,22 +31,23 @@ export const PaperMetaData = ({
 	id,
 	customCollectionId,
 	onBookmarkToggleClick,
+	index,
 }: PaperMetaDataProps) => {
 	return (
 		<div className="flex items-center justify-between gap-2">
 			<FeedItemField topics={topics} />
-			<div className="flex items-center">
+			<div className="flex items-center gap-2 min-h-10">
 				<div className="uppercase text-2xs text-nowrap">
 					{formatDate(date, "relative")}
 				</div>
-				<div
-					className="-mr-2 min-h-10 min-w-10"
-					onClick={(event) => {
-						// Prevent triggering the parent a tag when clicking the button
-						event.preventDefault();
-					}}
-				>
-					{!readonly && (
+				{!readonly && (
+					<div
+						className="-mr-2 min-h-10 min-w-10"
+						onClick={(event) => {
+							// Prevent triggering the parent a tag when clicking the button
+							event.preventDefault();
+						}}
+					>
 						<Trackable trackingKey={analyticsKeys.collection.addPaper.fromAsk}>
 							<AddToCollectionButton
 								onClick={onBookmarkToggleClick}
@@ -54,8 +57,13 @@ export const PaperMetaData = ({
 								customCollectionId={customCollectionId}
 							/>
 						</Trackable>
-					)}
-				</div>
+					</div>
+				)}
+				{readonly && index && (
+					<CardBullet variant="numbered" className="inline-block pt-0">
+						{index}
+					</CardBullet>
+				)}
 			</div>
 		</div>
 	);

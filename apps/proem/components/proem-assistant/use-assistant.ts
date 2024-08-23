@@ -1,5 +1,5 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 const ASSISTANT_SEARCH_PARAMS = {
 	ASSISTANT: "assistant",
@@ -11,8 +11,14 @@ export const useAssistant = () => {
 	const router = useRouter();
 	const pathname = usePathname();
 
-	const isOpen = searchParams.get(ASSISTANT_SEARCH_PARAMS.ASSISTANT) === "true";
-	const slug = searchParams.get(ASSISTANT_SEARCH_PARAMS.TUPLE) ?? undefined;
+	const isOpen = useMemo(
+		() => searchParams.get(ASSISTANT_SEARCH_PARAMS.ASSISTANT) === "true",
+		[searchParams],
+	);
+	const slug = useMemo(
+		() => searchParams.get(ASSISTANT_SEARCH_PARAMS.TUPLE) ?? undefined,
+		[searchParams],
+	);
 
 	const updateQueryString = useCallback(
 		(params: { name: string; value: string | undefined }[]) => {
@@ -31,29 +37,44 @@ export const useAssistant = () => {
 		[searchParams],
 	);
 
-	const open = (slug?: string) => {
-		const params = [{ name: ASSISTANT_SEARCH_PARAMS.ASSISTANT, value: "true" }];
-		if (slug) {
-			params.push({ name: ASSISTANT_SEARCH_PARAMS.TUPLE, value: slug });
-		}
+	const open = useCallback(
+		(slug?: string) => {
+			const params = [
+				{ name: ASSISTANT_SEARCH_PARAMS.ASSISTANT, value: "true" },
+			];
+			if (slug) {
+				params.push({ name: ASSISTANT_SEARCH_PARAMS.TUPLE, value: slug });
+			}
+			const queryString = updateQueryString(params);
+			if (slug && !pathname.includes("inspect")) {
+				router.push(`${pathname}/inspect?${queryString}`);
+			} else {
+				router.push(`${pathname}?${queryString}`);
+			}
+		},
+		[pathname, router, updateQueryString],
+	);
+
+	const deselectTuple = useCallback(() => {
+		const params = [{ name: ASSISTANT_SEARCH_PARAMS.TUPLE, value: undefined }];
 		const queryString = updateQueryString(params);
 		router.push(`${pathname}?${queryString}`);
-	};
+	}, [pathname, router, updateQueryString]);
 
-	const close = () => {
+	const close = useCallback(() => {
 		// Clear the assistant query params
 		const params = [
 			{ name: ASSISTANT_SEARCH_PARAMS.ASSISTANT, value: undefined },
-			{ name: ASSISTANT_SEARCH_PARAMS.TUPLE, value: undefined },
 		];
 		const queryString = updateQueryString(params);
 		router.push(`${pathname}?${queryString}`);
-	};
+	}, [pathname, router, updateQueryString]);
 
 	return {
 		isOpen,
 		slug,
 		open,
 		close,
+		deselectTuple,
 	};
 };

@@ -7,6 +7,7 @@ import {
 } from "../analytics/tracking/tracking-keys";
 import { AssistantButton } from "./assistant-button";
 import { Tuple, TuplePost } from "./tuple";
+import { useSnapPointStore } from "./use-snap-point-store";
 
 type Gradients = {
 	top: boolean;
@@ -39,6 +40,13 @@ export const PreviousQuestions = ({
 		top: false,
 		bottom: true,
 	});
+	const { snapPoint, setSnapPoint } = useSnapPointStore();
+
+	useEffect(() => {
+		if (snapPoint !== 1.0) {
+			setSnapPoint(1.0);
+		}
+	}, [snapPoint, setSnapPoint]);
 
 	function handleSubmit(input: string) {
 		onSubmit(input);

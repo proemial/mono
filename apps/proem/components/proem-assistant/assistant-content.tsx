@@ -18,9 +18,11 @@ import useMeasure from "react-use-measure";
 import { AskScienceForm } from "./ask-science-form";
 import { PROEM_ASSISTANT_QUERY_KEY } from "./assistant";
 import { Header } from "./assistant-header";
+import { InspectAnswer } from "./inspect-answer";
 import { PreviousQuestions } from "./previous-questions";
 import { SuggestedQuestions } from "./suggested-questions";
 import { TuplePost } from "./tuple";
+import { useAssistant } from "./use-assistant";
 
 type User = ReturnType<typeof useUser>["user"];
 
@@ -59,6 +61,7 @@ export const AssistantContent = ({
 
 	const [inputFocused, setInputFocused] = useState(false);
 	const queryClient = useQueryClient();
+	const { slug } = useAssistant();
 
 	const [contentRef, { height: contentHeight }] = useMeasure();
 	const [headerRef, { height: headerHeight }] = useMeasure();
@@ -121,6 +124,8 @@ export const AssistantContent = ({
 		return data?.paper?.generated?.starters ?? [];
 	}, [followUps, data?.paper?.generated?.starters]);
 
+	const selectedTuple = tuplePosts.find((tp) => tp.slug === slug);
+
 	useEffect(() => {
 		if (!isLoading) {
 			queryClient.invalidateQueries({
@@ -136,21 +141,28 @@ export const AssistantContent = ({
 				className="flex flex-col justify-between h-[calc(100%-24px)]"
 				ref={contentRef}
 			>
-				<Header
-					spaceName={data?.space?.name ?? "For You"}
-					spaceId={data?.space?.id}
-					paperTitle={data?.paper?.generated?.title ?? data?.paper?.data.title}
-					ref={headerRef}
-				/>
-				<PreviousQuestions
-					posts={tuplePosts}
-					userId={user?.id}
-					spaceId={spaceId}
-					height={contentHeight - headerHeight - footerHeight}
-					expanded={expanded}
-					setExpanded={setExpanded}
-					onSubmit={handleSubmit}
-				/>
+				{selectedTuple && <InspectAnswer tuple={selectedTuple} />}
+				{!slug && (
+					<Header
+						spaceName={data?.space?.name ?? "For You"}
+						spaceId={data?.space?.id}
+						paperTitle={
+							data?.paper?.generated?.title ?? data?.paper?.data.title
+						}
+						ref={headerRef}
+					/>
+				)}
+				{!slug && (
+					<PreviousQuestions
+						posts={tuplePosts}
+						userId={user?.id}
+						spaceId={spaceId}
+						height={contentHeight - headerHeight - footerHeight}
+						expanded={expanded}
+						setExpanded={setExpanded}
+						onSubmit={handleSubmit}
+					/>
+				)}
 				<motion.div
 					className="flex flex-col gap-1 px-3 pb-3"
 					ref={footerRef}

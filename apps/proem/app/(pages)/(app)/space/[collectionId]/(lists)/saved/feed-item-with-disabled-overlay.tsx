@@ -13,6 +13,7 @@ export function FeedItemWithDisabledOverlay({
 	isBookmarked,
 	customCollectionId,
 	readonly,
+	index,
 }: FeedItemWithDisabledOverlayProps) {
 	const [isDisabled, setIsDisabled] = useState(false);
 	const onBookmarkToggleClick = (isDisabled: boolean) =>
@@ -55,6 +56,7 @@ export function FeedItemWithDisabledOverlay({
 					customCollectionId={customCollectionId}
 					onBookmarkToggleClick={onBookmarkToggleClick}
 					readonly={readonly}
+					index={index}
 				/>
 			</div>
 		</div>

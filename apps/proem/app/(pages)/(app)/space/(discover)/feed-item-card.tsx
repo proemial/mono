@@ -33,6 +33,7 @@ export const FeedItemCard = ({
 	hasAbstract,
 	onBookmarkToggleClick,
 	readonly,
+	index,
 }: FeedItemCardProps) => {
 	const pathname = usePathname();
 	const field = useMemo(
@@ -66,6 +67,7 @@ export const FeedItemCard = ({
 							id={id}
 							customCollectionId={customCollectionId}
 							onBookmarkToggleClick={onBookmarkToggleClick}
+							index={index}
 						/>
 						{children}
 					</div>
