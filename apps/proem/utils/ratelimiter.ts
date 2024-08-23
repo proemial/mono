@@ -1,3 +1,4 @@
+import { env } from "@/env/server";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
@@ -6,9 +7,9 @@ const isDev = process.env.NODE_ENV === "development";
 function buildRatelimiter(...args: Parameters<typeof Ratelimit.slidingWindow>) {
 	const redis = new Redis({
 		// biome-ignore lint/style/noNonNullAssertion: Redis causes a TS error when reading from process.env
-		url: process.env.RATE_LIMITER_ENDPOINT!,
+		url: env.RATE_LIMITER_ENDPOINT!,
 		// biome-ignore lint/style/noNonNullAssertion: Redis causes a TS error when reading from process.env
-		token: process.env.RATE_LIMITER_PASSWORD!,
+		token: env.RATE_LIMITER_PASSWORD!,
 	});
 
 	const ratelimit = new Ratelimit({

@@ -1,5 +1,6 @@
+import { env } from "@/env/client";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
-import { File02, Calendar } from "@untitled-ui/icons-react";
+import { Calendar, File02 } from "@untitled-ui/icons-react";
 
 type AnswerSharingCardProps = {
 	paper: OpenAlexPaper;
@@ -97,7 +98,7 @@ export function ReadOpenGraphCard({
 				</div>
 				<img
 					{...twcl("w-[42px]")}
-					src={`${process.env.NEXT_PUBLIC_VERCEL_URL}/open-graph/logo.svg`}
+					src={`${env.NEXT_PUBLIC_VERCEL_URL}/open-graph/logo.svg`}
 					alt=""
 				/>
 			</div>

@@ -1,10 +1,11 @@
-import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
+import { openaiOrganizations } from "@/app/prompts/openai-keys";
+import { env } from "@/env/server";
 import OpenAI from "openai";
 
 const model = "gpt-3.5-turbo-0125";
 
 const openai = new OpenAI({
-	apiKey: openAIApiKey,
+	apiKey: env.OPENAI_API_KEY,
 	organization: openaiOrganizations.summarization,
 });
 

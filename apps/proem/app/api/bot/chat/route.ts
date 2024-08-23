@@ -5,7 +5,8 @@ import {
 } from "@/app/constants";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { context, model, question } from "@/app/prompts/chat";
-import { openAIApiKey, openaiOrganizations } from "@/app/prompts/openai-keys";
+import { openaiOrganizations } from "@/app/prompts/openai-keys";
+import { env } from "@/env/server";
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { auth } from "@clerk/nextjs/server";
 import { findCollection } from "@proemial/data/repository/collection";
@@ -16,7 +17,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { Configuration, OpenAIApi } from "openai-edge";
 
 const config = new Configuration({
-	apiKey: openAIApiKey,
+	apiKey: env.OPENAI_API_KEY,
 	organization: openaiOrganizations.read,
 });
 const openai = new OpenAIApi(config);

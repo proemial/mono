@@ -1,9 +1,12 @@
-/** @type {import('next').NextConfig} */
-
+const { fileURLToPath } = require("node:url");
+const jiti = require("jiti")(__filename);
+jiti("./env/server");
+jiti("./env/client");
 
 const withVercelToolbar = require('@vercel/toolbar/plugins/next')();
 const { withSentryConfig } = require("@sentry/nextjs");
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
 	transpilePackages: [
 		"@proemial/data",

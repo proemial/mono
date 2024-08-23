@@ -3,6 +3,7 @@ import {
 	analyticsTrace,
 	usePathNames,
 } from "@/components/analytics/tracking/tracking-profile";
+import { env } from "@/env/client";
 import { useEffect, useState } from "react";
 import ReactGA from "react-ga4";
 import TagManager from "react-gtm-module";
@@ -31,7 +32,7 @@ function useInit() {
 		if (!initialized) {
 			analyticsTrace("[GaClient] GA initializing");
 			// const email = user?.primaryEmailAddress?.emailAddress as string;
-			ReactGA.initialize(process.env.NEXT_PUBLIC_GA_ID);
+			ReactGA.initialize(env.NEXT_PUBLIC_GA_ID);
 
 			analyticsTrace("[GaClient] GTM initializing");
 			TagManager.initialize({

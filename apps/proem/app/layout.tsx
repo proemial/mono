@@ -6,7 +6,6 @@ import { AuthProvider } from "@/components/providers/auth-provider";
 import { ReactQueryProvider } from "@/components/providers/react-query";
 import { SetActiveOrganization } from "@/components/set-active-organization";
 import { TopNavigation } from "@/components/top-navigation/top-navigation";
-import "@/env";
 import { cn } from "@proemial/shadcn-ui";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import { Metadata, Viewport } from "next";

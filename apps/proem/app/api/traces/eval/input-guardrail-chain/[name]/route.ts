@@ -2,6 +2,7 @@ import { inputGuardrailChain } from "@/app/llm/chains/input-guardrail-chain";
 import { ExpectedGuardrailOutputEvaluator } from "@/app/llm/evaluators/expected-guardrail-output-evaluator";
 import { summariseRunResults } from "@/app/llm/helpers/summarise-result";
 import { buildOpenAIChatModel } from "@/app/llm/models/openai-model";
+import { env } from "@/env/server";
 import { runOnDataset } from "langchain/smith";
 import { NextRequest } from "next/server";
 
@@ -15,7 +16,7 @@ export async function GET(
 ) {
 	console.log("params", params);
 	const model = buildOpenAIChatModel("gpt-3.5-turbo-0125", "none", {
-		openAIApiKey: process.env.OPENAI_API_KEY_TEST,
+		openAIApiKey: env.OPENAI_API_KEY_TEST,
 	});
 	const results = await runOnDataset(inputGuardrailChain(model), params.name, {
 		evaluationConfig: {

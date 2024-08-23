@@ -1,4 +1,5 @@
 "use client";
+import { env } from "@/env/client";
 import { useSignIn, useSignUp } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -71,7 +72,7 @@ export function SignInForm({
 			setSignInState("awaiting-user");
 			const su = await startEmailLinkFlow({
 				emailAddressId: emailAddressId,
-				redirectUrl: `${process.env.NEXT_PUBLIC_VERCEL_URL}/verification`,
+				redirectUrl: `${env.NEXT_PUBLIC_VERCEL_URL}/verification`,
 			});
 			// TODO: add expired and verified states
 			// const verification = su.firstFactorVerification;
@@ -107,7 +108,7 @@ export function SignInForm({
 
 			setSignInState("awaiting-user");
 			const su = await startEmailLinkFlow({
-				redirectUrl: `${process.env.NEXT_PUBLIC_VERCEL_URL}/verification`,
+				redirectUrl: `${env.NEXT_PUBLIC_VERCEL_URL}/verification`,
 			});
 
 			if (su.status === "complete") {

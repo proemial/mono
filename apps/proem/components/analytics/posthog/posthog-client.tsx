@@ -5,6 +5,7 @@ import {
 	usePathNames,
 	useTrackingProfile,
 } from "@/components/analytics/tracking/tracking-profile";
+import { env } from "@/env/client";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { ReactNode, useEffect, useState } from "react";
@@ -38,8 +39,8 @@ function useInit(trackingInput?: TrackingInput) {
 		// false: do not capture events for internal users
 		const disableTracking = user?.isInternal;
 
-		const token = process.env.NEXT_PUBLIC_POSTHOG_KEY;
-		const api_host = process.env.NEXT_PUBLIC_POSTHOG_HOST;
+		const token = env.NEXT_PUBLIC_POSTHOG_KEY;
+		const api_host = env.NEXT_PUBLIC_POSTHOG_HOST;
 
 		analyticsTrace(
 			"[PosthogClient] initializing",
