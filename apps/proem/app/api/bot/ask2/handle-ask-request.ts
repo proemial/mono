@@ -6,6 +6,10 @@ import { Message as VercelChatMessage } from "ai";
 import { cookies } from "next/headers";
 import { answerEngine } from "./answer-engine";
 
+/**
+ * @deprecated Use the new /api/ai endpoint instead.
+ * This old endpoint will be removed in a future update.
+ */
 export async function handleAskRequest(requestData: {
 	slug?: string;
 	userId?: string;

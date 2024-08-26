@@ -1,9 +1,11 @@
 import { UserContext, assistant } from "@/app/api/ai/ai-assistant";
+import { handleAskRequest } from "@/app/api/bot/ask2/handle-ask-request";
 import {
 	PAPER_BOT_USER_ID,
 	getPersonalDefaultCollection,
 } from "@/app/constants";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
+import { showAIAssistant } from "@/feature-flags/ai-assistant-flag";
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { auth } from "@clerk/nextjs/server";
 import { findCollection } from "@proemial/data/repository/collection";
@@ -20,7 +22,15 @@ export async function POST(req: NextRequest) {
 		return NextResponse.json({ error: "Rate limited" }, { status: 429 });
 	}
 	const { userId } = auth();
-	const { messages, title, paperId, spaceId, abstract } = await req.json();
+	const requestData = await req.json();
+	const { messages, title, paperId, spaceId, abstract } = requestData;
+	const showAIAssistantFeatureFlag = await showAIAssistant();
+
+	const useDeprecatedAskAgent = !paperId && !showAIAssistantFeatureFlag;
+
+	if (useDeprecatedAskAgent) {
+		return await handleAskRequest(requestData);
+	}
 
 	const userContext: UserContext = paperId
 		? "paper"

@@ -86,7 +86,7 @@ export const AssistantContent = ({
 			spaceId,
 			userId: user?.id,
 		},
-		api: paperId ? "/api/ai" : "/api/bot/ask2",
+		api: "/api/ai",
 		initialMessages,
 	});
 
