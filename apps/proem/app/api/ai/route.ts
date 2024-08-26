@@ -4,16 +4,21 @@ import {
 	getPersonalDefaultCollection,
 } from "@/app/constants";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
+import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { auth } from "@clerk/nextjs/server";
 import { findCollection } from "@proemial/data/repository/collection";
 import { savePostWithComment } from "@proemial/data/repository/post";
 import { prettySlug } from "@proemial/utils/pretty-slug";
 import { convertToCoreMessages, streamText } from "ai";
+import { NextRequest, NextResponse } from "next/server";
 
-// Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+	const { success } = await ratelimitByIpAddress(req.ip);
+	if (!success) {
+		return NextResponse.json({ error: "Rate limited" }, { status: 429 });
+	}
 	const { userId } = auth();
 	const { messages, title, paperId, spaceId, abstract } = await req.json();
 
