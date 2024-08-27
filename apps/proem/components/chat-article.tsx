@@ -2,7 +2,6 @@ import { AddToCollectionButtonProps } from "@/app/(pages)/(app)/space/(discover)
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { MicroAbstract } from "@/components/chat-abstract";
 import { AIGeneratedIcon } from "@/components/icons/AIGeneratedIcon";
-import { AlignLeft } from "@/components/icons/AlignLeft";
 import { ModelSelector, ModelSelectorProps } from "@/components/model-selector";
 import { PaperMetaData } from "@/components/paper-meta-data";
 import { Trackable } from "@/components/trackable";
@@ -121,10 +120,7 @@ export function ChatArticle({
 
 			{paper && (
 				<>
-					<div className="flex items-center gap-2.5 gap pt-4">
-						<AlignLeft />
-						<Header4>Abstract</Header4>
-					</div>
+					<Header4 className="pt-4">Abstract</Header4>
 					<a
 						href={paper.data.primary_location?.landing_page_url}
 						target="_blank"
