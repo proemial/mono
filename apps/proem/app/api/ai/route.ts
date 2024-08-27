@@ -11,7 +11,7 @@ import { auth } from "@clerk/nextjs/server";
 import { findCollection } from "@proemial/data/repository/collection";
 import { savePostWithComment } from "@proemial/data/repository/post";
 import { prettySlug } from "@proemial/utils/pretty-slug";
-import { convertToCoreMessages, streamText } from "ai";
+import { Message, convertToCoreMessages, streamText } from "ai";
 import { NextRequest, NextResponse } from "next/server";
 
 export const maxDuration = 30;
@@ -40,8 +40,9 @@ export async function POST(req: NextRequest) {
 
 	const convertedMessages = convertToCoreMessages(messages);
 	const currentAssistant = assistant(userContext, title, abstract);
-
-	const question = messages.at(-1)?.content;
+	const question = messages.findLast(
+		(message: Message) => message.role === "user",
+	)?.content;
 
 	const result = await streamText({
 		...currentAssistant,
