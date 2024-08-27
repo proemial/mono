@@ -89,6 +89,9 @@ export const AssistantContent = ({
 		api: "/api/ai",
 		initialMessages,
 	});
+	const messagesWithoutToolCalls = messages.filter(
+		(message) => !message.toolInvocations,
+	);
 
 	const handleSubmit = (input: string) => {
 		append({ role: "user", content: input, createdAt: new Date() });
@@ -99,11 +102,11 @@ export const AssistantContent = ({
 		() =>
 			toTuplePosts(
 				data?.posts ?? [],
-				messages as MessageWithMetadata[],
+				messagesWithoutToolCalls as MessageWithMetadata[],
 				isLoading,
 				user,
 			),
-		[data?.posts, messages, isLoading, user],
+		[data?.posts, messagesWithoutToolCalls, isLoading, user],
 	);
 
 	const followUps = useMemo(
