@@ -125,10 +125,15 @@ export function ChatArticle({
 						<AlignLeft />
 						<Header4>Abstract</Header4>
 					</div>
-					<div className="flex items-center gap-2.5 gap pt-2 opacity-50 text-2xs">
+					<a
+						href={paper.data.primary_location?.landing_page_url}
+						target="_blank"
+						rel="noreferrer"
+						className="flex items-center gap-2.5 gap pt-2 opacity-50 text-2xs hover:opacity-75 transition-opacity"
+					>
 						<BookOpen01 className="size-2.5" />
 						<Header5>{paper.data.title}</Header5>
-					</div>
+					</a>
 					<div>{paper.data.abstract}</div>
 				</>
 			)}
