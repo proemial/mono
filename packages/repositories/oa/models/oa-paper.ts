@@ -39,7 +39,7 @@ export function getIdFromOpenAlexPaper(paper: OpenAlexPaper) {
 
 // Fields to request from OpenAlex (the ones from OpenAlexWorkMetadata)
 export const openAlexFields = {
-	all: "id,doi,title,display_name,updated_date,publication_date,created_date,ids,language,primary_location,best_oa_location,locations,open_access,authorships,corresponding_author_ids,corresponding_institution_ids,has_fulltext,fulltext_origin,cited_by_count,cited_by_percentile_year,keywords,concepts,referenced_works,related_works,ngrams_url,cited_by_api_url,counts_by_year,abstract_inverted_index,topics,type",
+	all: "id,doi,title,display_name,updated_date,publication_date,created_date,ids,language,primary_location,best_oa_location,locations,open_access,authorships,corresponding_author_ids,corresponding_institution_ids,has_fulltext,fulltext_origin,cited_by_count,cited_by_percentile_year,keywords,concepts,referenced_works,related_works,cited_by_api_url,counts_by_year,abstract_inverted_index,topics,type",
 	search:
 		"relevance_score,id,ids,title,language,has_fulltext,open_access,primary_location,authorships,related_works,abstract_inverted_index",
 };
@@ -91,7 +91,6 @@ export type OpenAlexWorkMetadata = OpenAlexWorkCoreMetadata & {
 	keywords?: OpenAlexKeyword[];
 	concepts?: OpenAlexConcept[];
 	referenced_works?: string[];
-	ngrams_url?: string;
 	cited_by_api_url?: string;
 	counts_by_year?: OpenAlexCitationCount[];
 	topics?: OpenAlexTopic[];
