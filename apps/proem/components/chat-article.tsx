@@ -8,7 +8,7 @@ import { PaperMetaData } from "@/components/paper-meta-data";
 import { Trackable } from "@/components/trackable";
 import { trimForQuotes } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
-import { Header2, Header4, Icons } from "@proemial/shadcn-ui";
+import { Header2, Header4, Header5, Icons } from "@proemial/shadcn-ui";
 import { BookOpen01, ChevronRight, Users01 } from "@untitled-ui/icons-react";
 import { Suspense } from "react";
 import Markdown from "./markdown";
@@ -124,6 +124,10 @@ export function ChatArticle({
 					<div className="flex items-center gap-2.5 gap pt-4">
 						<AlignLeft />
 						<Header4>Abstract</Header4>
+					</div>
+					<div className="flex items-center gap-2.5 gap pt-2 opacity-50 text-2xs">
+						<BookOpen01 className="size-2.5" />
+						<Header5>{paper.data.title}</Header5>
 					</div>
 					<div>{paper.data.abstract}</div>
 				</>
