@@ -128,10 +128,7 @@ export function ChatArticle({
 						className="flex items-center gap-2.5 gap pt-2 opacity-50 text-2xs hover:opacity-75 transition-opacity"
 					>
 						<BookOpen01 className="size-2.5" />
-						<Header5 className="truncate pr-6">
-							{paper.data.title} {paper.data.title} {paper.data.title}{" "}
-							{paper.data.title}
-						</Header5>
+						<Header5 className="truncate pr-6">{paper.data.title}</Header5>
 					</a>
 					<div>{paper.data.abstract}</div>
 				</>
