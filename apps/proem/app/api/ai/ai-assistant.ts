@@ -1,3 +1,4 @@
+import { vertex } from "@/app/api/ai/models/vertex";
 import { searchPapersTool } from "@/app/api/ai/tools/search-papers-tool";
 import { anthropic } from "@ai-sdk/anthropic";
 import { CoreTool, LanguageModel } from "ai";
@@ -9,7 +10,8 @@ const prompt = ({
 	question,
 	paperTitle,
 }: { question: string; paperTitle: string }) => `
-You are an AI Assistant for the AI Startup Proem.AI, specializing in helping users understand scientific papers. You have access to a vast database of scientific literature and can provide information and answers based on this knowledge.
+You are an AI Assistant for the AI Startup Proem.AI, specializing in helping users understand scientific papers.
+You have access to a vast database of scientific literature and can provide information and answers based on this knowledge.
 
 Your capabilities include:
 1. Answering questions by searching for and synthesizing information from the most relevant papers on a given topic.
@@ -54,14 +56,35 @@ ${
 }
 
 Your capabilities include:
-${context === "paper" ? "- Answering questions about general topics." : ""}
-${context === "global" ? "- Answering questions about general topics." : ""}
-${context === "global" ? "- Answering questions by searching for and synthesizing information from the most relevant papers on a given topic." : ""}
-${context === "space" ? "- Answering questions about space." : ""}
+${
+	context === "paper"
+		? `
+- Answering questions about general topics.
+	`
+		: `
+- Answering questions by searching for and synthesizing information from the most relevant papers on a given topic.
+- Base your answer on the two most relevant research papers retrieved.
+- If you find it necessary, include an introduction to the topic of the user's question, using a single sentence.
+
+
+	`
+}
 
 When responding to a user's question:
-${context === "paper" ? "- Answer in a single sentence." : ""}
-${context === "paper" ? "- Enclose all technical concepts relevant to the title and abstract with double parenthesis." : ""}
+${
+	context === "paper"
+		? `
+- Answer in a single sentence.
+- Enclose all technical concepts relevant to the title and abstract with double parenthesis.
+	`
+		: `
+- Keep your answer under 40 words.
+- Prefer using research papers to answer the question when possible.
+- Use layman's terminology instead of scientific jargon.
+- Act as if you found the research yourself.
+- Never reveal your identity as an AI or mention the tools you're using.
+	`
+}
 `;
 
 type Assistant = (
@@ -76,16 +99,16 @@ type Assistant = (
 
 export const assistant: Assistant = (context, title, abstract) => ({
 	model: anthropic("claude-3-5-sonnet-20240620"), //openai("gpt-4o-2024-08-06"),
+	// model: vertex("gemini-1.5-pro"),
 	system: systemPrompt(context, title, abstract),
 	// experimental_toolCallStreaming: true,
 	// maxTokens: 512,
 	// temperature: 0.3,
 	// maxRetries: 5,
 	// toolChoice: "required",
-	// tools:
-	// 	context === "paper"
-	// 		? {}
-	// 		: {
-	// 				searchPapersTool,
-	// 			},
+	...(context !== "paper"
+		? {
+				tools: { searchPapersTool },
+			}
+		: {}),
 });
