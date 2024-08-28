@@ -1,4 +1,5 @@
 import { UserContext, assistant } from "@/app/api/ai/ai-assistant";
+import { AnswerEngineStreamData } from "@/app/api/bot/answer-engine/answer-engine";
 import { handleAskRequest } from "@/app/api/bot/ask2/handle-ask-request";
 import {
 	PAPER_BOT_USER_ID,
@@ -11,7 +12,7 @@ import { auth } from "@clerk/nextjs/server";
 import { findCollection } from "@proemial/data/repository/collection";
 import { savePostWithComment } from "@proemial/data/repository/post";
 import { prettySlug } from "@proemial/utils/pretty-slug";
-import { Message, convertToCoreMessages, streamText } from "ai";
+import { Message, StreamData, convertToCoreMessages, streamText } from "ai";
 import { NextRequest, NextResponse } from "next/server";
 
 export const maxDuration = 30;
@@ -44,16 +45,32 @@ export async function POST(req: NextRequest) {
 		(message: Message) => message.role === "user",
 	)?.content;
 
+	const streamData = new StreamData() as AnswerEngineStreamData;
 	const result = await streamText({
 		...currentAssistant,
 		messages: convertedMessages,
 		onFinish: async ({ finishReason, text }) => {
 			if (finishReason === "stop") {
 				// Generate follow-ups
-				const followUps = await followUpQuestionChain().invoke({
-					question,
-					answer: text,
+				const followUps = await followUpQuestionChain()
+					.invoke({
+						question,
+						answer: text,
+					})
+					.then((followUpsAsString) =>
+						followUpsAsString
+							.split("?")
+							.filter((f) => typeof f !== "undefined" && f.length > 0)
+							.map((f) => `${f.trim()}?`),
+					);
+				streamData.append({
+					type: "follow-up-questions-generated",
+					transactionId: "foo",
+					data: followUps.map((question) => ({
+						question,
+					})),
 				});
+				streamData.close();
 
 				// Save the post and the AI reply, if the user is signed in
 				if (userId) {
@@ -74,10 +91,7 @@ export async function POST(req: NextRequest) {
 						{
 							content: text,
 							authorId: PAPER_BOT_USER_ID,
-							followUps: followUps
-								.split("?")
-								.filter((f) => typeof f !== "undefined" && f.length > 0)
-								.map((f) => `${f.trim()}?`),
+							followUps,
 						},
 					);
 				}
