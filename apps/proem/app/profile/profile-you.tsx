@@ -86,7 +86,7 @@ export function ProfileYou() {
 					</div>
 				)}
 			</div>
-			<div className="flex gap-6 justify-center py-1 opacity-60 text-sm">
+			<div className="flex gap-6 justify-center py-2 opacity-60 text-sm">
 				<Link
 					href="/terms"
 					onClick={trackHandler(analyticsKeys.ui.menu.click.terms)}
