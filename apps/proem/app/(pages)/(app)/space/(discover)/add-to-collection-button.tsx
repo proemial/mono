@@ -46,6 +46,12 @@ export function AddToCollectionButton({
 	}
 	const collectionId = customCollectionId ?? user.id;
 
+	// Filter out Arxiv papers as we can't fetch those from Open Alex.
+	// Naive check that all Open Alex Paper IDs start with "W"
+	if (!paperId.toLowerCase().startsWith("w")) {
+		return null;
+	}
+
 	return (
 		<AddButton
 			isChecked={optimisticBookmark}

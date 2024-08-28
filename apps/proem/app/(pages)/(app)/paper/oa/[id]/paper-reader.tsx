@@ -1,6 +1,7 @@
 import { PaperReaderHeadlineProps } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-headline";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { ChatArticle } from "@/components/chat-article";
+import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { Collection } from "@proemial/data/neon/schema";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { use } from "react";
@@ -9,6 +10,7 @@ import { addPaperActivity } from "./paper-activity";
 type PaperReaderProps = Pick<PaperReaderHeadlineProps, "isBookmarked"> & {
 	fetchedPaperPromise: Promise<Omit<OpenAlexPaper, "generated">>;
 	generatedPaperPromise: Promise<OpenAlexPaper>;
+	paperPostsPromise: Promise<PostWithCommentsAndAuthor[]>;
 	type: "oa" | "arxiv";
 	collectionId?: Collection["id"];
 };
@@ -16,12 +18,14 @@ type PaperReaderProps = Pick<PaperReaderHeadlineProps, "isBookmarked"> & {
 export function PaperReader({
 	fetchedPaperPromise,
 	generatedPaperPromise,
+	paperPostsPromise,
 	type,
 	collectionId,
 	isBookmarked,
 }: PaperReaderProps) {
 	const fetchedPaper = use(fetchedPaperPromise);
 	const generatedPaper = use(generatedPaperPromise);
+	const paperPosts = use(paperPostsPromise);
 
 	if (type === "oa") {
 		// Only register paper read activity on OpenAlex papers
@@ -36,6 +40,7 @@ export function PaperReader({
 				paper={generatedPaper}
 				customCollectionId={collectionId}
 				isBookmarked={isBookmarked}
+				paperPosts={paperPosts}
 			/>
 		</div>
 	);

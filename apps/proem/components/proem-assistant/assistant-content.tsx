@@ -90,10 +90,21 @@ export const AssistantContent = ({
 			userId: user?.id,
 		},
 		api: "/api/ai",
-		initialMessages,
+		maxToolRoundtrips: 2,
+		// initialMessages,
 	});
-	const messagesWithoutToolCalls = messages.filter(
-		(message) => !message.toolInvocations,
+
+	const messagesWithoutToolCalls = [...initialMessages, ...messages].reduce(
+		(acc, obj) => {
+			// Filter out tool calls
+			if (obj.toolInvocations) return acc;
+			// Filter out duplicates when overwriting useChat messages with initialMessages on a ongoing bases
+			if (acc.some((m) => m.content === obj.content)) return acc;
+
+			acc.push(obj);
+			return acc;
+		},
+		[] as Message[],
 	);
 
 	const handleSubmit = (input: string) => {
@@ -271,6 +282,7 @@ const toTuplePosts = (
 		const message = messages[i];
 		if (message?.role === "user") {
 			const nextMessage = messages[i + 1];
+			// const  nextMessage = user (i ) => assisten uden tool calls
 			tuplePosts.push({
 				id: message.id,
 				createdAt: message.createdAt,

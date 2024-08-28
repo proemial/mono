@@ -41,7 +41,7 @@ export const ProemAssistant = () => {
 
 	const params = useParams<Params>();
 	const spaceId = params.collectionId;
-	const paperId = params.id;
+	const paperId = isArXivPaper(pathname) ? undefined : params.id;
 	const { data, refetch } = useQuery({
 		queryKey: [PROEM_ASSISTANT_QUERY_KEY, spaceId, paperId, userId],
 		queryFn: () => getAssistantData(spaceId, paperId),
@@ -122,3 +122,5 @@ const getAssistantData = async (
 	});
 	return response.json() as Promise<AssistantData>;
 };
+
+const isArXivPaper = (pathname: string) => pathname.includes("/arxiv/");

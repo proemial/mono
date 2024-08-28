@@ -1,4 +1,10 @@
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { routes } from "@/routes";
+import {
+	useParams,
+	usePathname,
+	useRouter,
+	useSearchParams,
+} from "next/navigation";
 import { useCallback, useMemo } from "react";
 
 const ASSISTANT_SEARCH_PARAMS = {
@@ -10,6 +16,7 @@ export const useAssistant = () => {
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const pathname = usePathname();
+	const { collectionId: spaceId } = useParams<{ collectionId?: string }>();
 
 	const isOpen = useMemo(
 		() => searchParams.get(ASSISTANT_SEARCH_PARAMS.ASSISTANT) === "true",
@@ -46,13 +53,13 @@ export const useAssistant = () => {
 				params.push({ name: ASSISTANT_SEARCH_PARAMS.TUPLE, value: slug });
 			}
 			const queryString = updateQueryString(params);
-			if (slug && !pathname.includes("inspect")) {
-				router.push(`${pathname}/inspect?${queryString}`);
+			if (slug && spaceId && !pathname.includes("inspect")) {
+				router.push(`${routes.space}/${spaceId}/inspect?${queryString}`);
 			} else {
 				router.push(`${pathname}?${queryString}`);
 			}
 		},
-		[pathname, router, updateQueryString],
+		[pathname, router, updateQueryString, spaceId],
 	);
 
 	const deselectTuple = useCallback(() => {

@@ -127,6 +127,7 @@ export const QaPair = ({
 							type="Answer"
 							text={answer.content}
 							trackingKeys={analyticsKeys.ask}
+							paperPosts={[]}
 						/>
 						{savedAnswer?.shareId && (
 							<ChatActionBarAsk

@@ -1,5 +1,5 @@
 "use client";
-import { AuthorAvatar } from "@/components/author-avatar";
+import { EngagementIndicator } from "@/components/engagement-indicator";
 import Markdown from "@/components/markdown";
 import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { trimForQuotes } from "@/utils/string-utils";
@@ -43,16 +43,6 @@ export default function FeedItem({
 		?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
 		.filter(Boolean) as string[];
 
-	const distinctAuthors = paper.posts.reduce(
-		(authors: PostWithCommentsAndAuthor["author"][], post) => {
-			if (!authors.find((author) => author && author.id === post.author?.id)) {
-				authors.push(post.author);
-			}
-			return authors;
-		},
-		[],
-	);
-
 	return (
 		<div className="space-y-3">
 			<FeedItemCard
@@ -92,29 +82,10 @@ export default function FeedItem({
 				{fingerprint && <FeatureTags features={fingerprint} />}
 			</div>
 
-			{paper.posts.length > 0 && (
-				<div className="flex gap-2">
-					<div className="flex gap-2">
-						{distinctAuthors.map((author, index) => (
-							<AuthorAvatar
-								key={index}
-								firstName={author?.firstName ?? null}
-								lastName={author?.lastName ?? null}
-								imageUrl={author?.imageUrl}
-							/>
-						))}
-					</div>
-					<div className="text-sm opacity-90">
-						{formatQuestionsAskedLabel(paper.posts.length)}
-					</div>
-				</div>
-			)}
+			<EngagementIndicator posts={paper.posts} />
 		</div>
 	);
 }
-
-const formatQuestionsAskedLabel = (count: number) =>
-	count === 1 ? "1 question asked" : `${count} questions asked`;
 
 function FeatureTags({ features }: { features: RankedPaperFeature[] }) {
 	const sorted = [...features]

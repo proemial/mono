@@ -5,11 +5,13 @@ import { AIGeneratedIcon } from "@/components/icons/AIGeneratedIcon";
 import { ModelSelector, ModelSelectorProps } from "@/components/model-selector";
 import { PaperMetaData } from "@/components/paper-meta-data";
 import { Trackable } from "@/components/trackable";
+import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { trimForQuotes } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Header2, Header4, Header5, Icons } from "@proemial/shadcn-ui";
 import { BookOpen01, ChevronRight, Users01 } from "@untitled-ui/icons-react";
 import { Suspense } from "react";
+import { EngagementIndicator } from "./engagement-indicator";
 import Markdown from "./markdown";
 
 type ChatArticleProps = Pick<
@@ -20,6 +22,7 @@ type ChatArticleProps = Pick<
 	trackingKeys: ModelSelectorProps["trackingKeys"];
 	text?: string;
 	paper?: OpenAlexPaper;
+	paperPosts: PostWithCommentsAndAuthor[];
 };
 
 export function ChatArticle({
@@ -29,6 +32,7 @@ export function ChatArticle({
 	paper,
 	isBookmarked,
 	customCollectionId,
+	paperPosts,
 }: ChatArticleProps) {
 	const title = paper?.generated?.title;
 	const authors = paper?.data.authorships;
@@ -57,6 +61,8 @@ export function ChatArticle({
 					</Header2>
 				</div>
 			) : null}
+
+			<EngagementIndicator posts={paperPosts} className="py-1" />
 
 			{authors ? (
 				<Trackable trackingKey={analyticsKeys.read.click.fullPaper}>

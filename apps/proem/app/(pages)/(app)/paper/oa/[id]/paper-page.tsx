@@ -3,6 +3,7 @@ import { generate } from "@/app/(pages)/(app)/paper/oa/[id]/llm-generate";
 import { PaperReader } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader";
 import { PaperReaderSkeleton } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-skeleton";
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
+import { PostService } from "@/services/post-service";
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -30,6 +31,10 @@ export default async function PaperPage({
 	const generatedPaperPromise = fetchedPaperPromise.then((paper) => {
 		return generate(paper, type === "oa" ? "oa" : "arxiv");
 	});
+	const paperPostsPromise = PostService.getPostsWithCommentsAndAuthors(
+		collectionId,
+		paperId,
+	);
 
 	const { userId } = auth();
 	const bookmarks = userId
@@ -43,6 +48,7 @@ export default async function PaperPage({
 				isBookmarked={isBookmarked}
 				fetchedPaperPromise={fetchedPaperPromise}
 				generatedPaperPromise={generatedPaperPromise}
+				paperPostsPromise={paperPostsPromise}
 				type={type}
 				collectionId={collectionId}
 			/>
