@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
 		(message: Message) => message.role === "user",
 	)?.content;
 
-	const streamData = new StreamData() as AnswerEngineStreamData;
+	const data = new StreamData() as AnswerEngineStreamData;
 	const result = await streamText({
 		...currentAssistant,
 		messages: convertedMessages,
@@ -63,14 +63,13 @@ export async function POST(req: NextRequest) {
 							.filter((f) => typeof f !== "undefined" && f.length > 0)
 							.map((f) => `${f.trim()}?`),
 					);
-				streamData.append({
+				data.append({
 					type: "follow-up-questions-generated",
 					transactionId: "foo",
 					data: followUps.map((question) => ({
 						question,
 					})),
 				});
-				streamData.close();
 
 				// Save the post and the AI reply, if the user is signed in
 				if (userId) {
@@ -96,8 +95,9 @@ export async function POST(req: NextRequest) {
 					);
 				}
 			}
+			data.close();
 		},
 	});
 
-	return result.toDataStreamResponse();
+	return result.toDataStreamResponse({ data });
 }
