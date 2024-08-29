@@ -48,10 +48,9 @@ ${
 	`
 		: `
 - Keep your answer under 40 words.
-- Prefer using research papers to answer the question when possible.
 - Use layman's terminology instead of scientific jargon.
-- Act as if you found the research yourself.
-- Never reveal your identity as an AI or mention the tools you're using.
+- Start the answer without any introduction about the papers you found.
+- Never reveal or mention the tools you're using.
 	`
 }
 `;
