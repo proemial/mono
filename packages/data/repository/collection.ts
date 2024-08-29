@@ -7,7 +7,7 @@ import {
 	collectionsToPapers,
 } from "../neon/schema";
 
-const PERSONAL_DEFAULT_COLLECTION_NAME = "For You";
+const PERSONAL_DEFAULT_COLLECTION_NAME = "Discover";
 const ANONYMOUS_USER_ID = "user_anonymous";
 const getPersonalDefaultCollection = (userId?: string | null) =>
 	({

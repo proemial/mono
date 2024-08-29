@@ -155,7 +155,7 @@ export const AssistantContent = ({
 				{selectedTuple && <InspectAnswer tuple={selectedTuple} />}
 				{!slug && (
 					<Header
-						spaceName={data?.space?.name ?? "For You"}
+						spaceName={data?.space?.name ?? "Discover"}
 						spaceId={data?.space?.id}
 						paperTitle={
 							data?.paper?.generated?.title ?? data?.paper?.data.title
