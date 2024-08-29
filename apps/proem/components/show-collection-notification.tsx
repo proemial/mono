@@ -107,9 +107,9 @@ export function CollectionManager({
 		queryKey: ["collections", user?.id],
 		queryFn: async () => getAvailableCollections(),
 	});
-	const currentCollection = collections?.find(
-		({ id }) => id === newBookmarksCollectionId,
-	);
+	const currentCollectionName = newBookmarksCollectionId.includes("user_")
+		? PERSONAL_DEFAULT_COLLECTION_NAME
+		: collections?.find(({ id }) => id === newBookmarksCollectionId)?.name;
 
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
@@ -135,7 +135,7 @@ export function CollectionManager({
 					<div className="flex items-center space-x-2">
 						<Checkbox checked className="cursor-default" />
 						<span className="text-sm">
-							Added to <strong>{currentCollection?.name}</strong>
+							Added to <strong>{currentCollectionName}</strong>
 						</span>
 					</div>
 
