@@ -7,6 +7,7 @@ import {
 } from "@/components/analytics/tracking/tracking-keys";
 import { CollectionSelectorProps } from "@/components/show-collection-notification";
 import { SignInDrawer } from "@/components/sign-in-drawer";
+import { isArxivPaperId } from "@/utils/is-arxiv-paper-id";
 import { useUser } from "@clerk/nextjs";
 import { useOptimistic } from "react";
 
@@ -46,9 +47,7 @@ export function AddToCollectionButton({
 	}
 	const collectionId = customCollectionId ?? user.id;
 
-	// Filter out Arxiv papers as we can't fetch those from Open Alex.
-	// Naive check that all Open Alex Paper IDs start with "W"
-	if (!paperId.toLowerCase().startsWith("w")) {
+	if (isArxivPaperId(paperId)) {
 		return null;
 	}
 

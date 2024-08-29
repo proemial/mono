@@ -1,6 +1,7 @@
 "use client";
 
 import { AssistantData } from "@/app/api/assistant/route";
+import { isArxivPaperId } from "@/utils/is-arxiv-paper-id";
 import { useAuth } from "@clerk/nextjs";
 import { Drawer } from "@proemial/shadcn-ui";
 import { useQuery } from "@tanstack/react-query";
@@ -41,7 +42,9 @@ export const ProemAssistant = () => {
 
 	const params = useParams<Params>();
 	const spaceId = params.collectionId;
-	const paperId = isArXivPaper(pathname) ? undefined : params.id;
+	const paperId =
+		params.id && isArxivPaperId(params.id) ? undefined : params.id;
+
 	const { data, refetch } = useQuery({
 		queryKey: [PROEM_ASSISTANT_QUERY_KEY, spaceId, paperId, userId],
 		queryFn: () => getAssistantData(spaceId, paperId),
@@ -122,5 +125,3 @@ const getAssistantData = async (
 	});
 	return response.json() as Promise<AssistantData>;
 };
-
-const isArXivPaper = (pathname: string) => pathname.includes("/arxiv/");
