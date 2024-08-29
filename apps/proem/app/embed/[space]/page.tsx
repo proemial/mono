@@ -5,7 +5,6 @@ import { CollectionService } from "@/services/collection-service";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import React from "react";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
-import { Fingerprint } from "@proemial/repositories/oa/fingerprinting/fingerprints";
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -27,14 +26,8 @@ export default async function EmbedPage({
 	}
 
 	const bookmarkedPapers = await getBookmarkedPapersByCollectionId(space);
-	const paperIds = bookmarkedPapers?.map(({ paperId }) => paperId);
-
-	const fingerprints: Fingerprint[][] = [];
-	const fingerprintsBasedOnPapers = paperIds
-		? await fetchFingerprints(paperIds)
-		: [];
-	fingerprints.push(...fingerprintsBasedOnPapers);
-
+	const paperIds = bookmarkedPapers?.map(({ paperId }) => paperId) ?? [];
+	const fingerprints = await fetchFingerprints(paperIds);
 	const { filter: features } = getFeatureFilter(fingerprints);
 
 	return (
