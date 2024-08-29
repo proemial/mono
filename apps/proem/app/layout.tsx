@@ -2,6 +2,7 @@ import "@/app/globals.css";
 import { Analytics } from "@/components/analytics";
 import { LoadingTransition } from "@/components/loading-transition";
 import { Main } from "@/components/main";
+import { NotificationsToaster } from "@/components/notifications-toaster";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ReactQueryProvider } from "@/components/providers/react-query";
 import { SetActiveOrganization } from "@/components/set-active-organization";
@@ -120,6 +121,7 @@ function MainLayout({ children, modal }: Readonly<Props>) {
 							{modal}
 						</div>
 					</div>
+					<NotificationsToaster />
 				</ContextWrapper>
 				{shouldInjectToolbar && <VercelToolbar />}
 			</body>
