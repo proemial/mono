@@ -49,7 +49,7 @@ export const FeedItemCard = ({
 		<div className="flex flex-col gap-3">
 			<Link
 				href={`${spaceSpecificPrefix}/paper/${provider ?? "oa"}/${id}${
-					field
+					!spaceSpecificPrefix && field
 						? `?color=${field.theme.color}${
 								field.theme.image ? `&image=${field.theme.image}` : ""
 							}`
