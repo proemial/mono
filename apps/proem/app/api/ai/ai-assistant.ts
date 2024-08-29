@@ -40,6 +40,8 @@ ${
 }
 
 When responding to a user's question:
+- Always keep your answer concise and to the point.
+- Keep your answers short and preferably in a single sentence.
 ${
 	context === "paper"
 		? `
@@ -47,7 +49,6 @@ ${
 - Enclose all technical concepts relevant to the title and abstract with double parenthesis.
 	`
 		: `
-- Keep your answer under 40 words.
 - Use layman's terminology instead of scientific jargon.
 - Start the answer without any introduction about the papers you found.
 - Never reveal or mention the tools you're using.
