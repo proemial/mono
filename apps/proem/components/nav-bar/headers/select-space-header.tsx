@@ -14,7 +14,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@proemial/shadcn-ui";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export type SelectSpaceHeaderProps = {
 	collections: Collection[];
@@ -27,19 +27,12 @@ export const SelectSpaceHeader = ({
 	onRouteChange,
 	selectedSpace,
 }: SelectSpaceHeaderProps) => {
-	const pathname = usePathname();
-	const searchParams = useSearchParams();
 	const router = useRouter();
 
 	const handleValueChange = (id: string) => {
 		trackHandler(analyticsKeys.ui.header.click.changeSpace);
 		const selectedCollection = collections.find((c) => c.id === id);
-		const searchPapersQuery = searchParams.get("query");
-		const route = searchPapersQuery
-			? // Persist URL query params when changing spaces (i.e. for search)
-				`${changeSpaceId(pathname, id)}?query=${searchPapersQuery}`
-			: changeSpaceId(pathname, id);
-
+		const route = `/space/${id}`;
 		onRouteChange?.({ url: route, name: selectedCollection?.name });
 		router.push(route);
 	};
@@ -76,18 +69,4 @@ export const SelectSpaceHeader = ({
 			</Select>
 		</div>
 	);
-};
-
-const changeSpaceId = (pathname: string, spaceId: string) => {
-	if (spaceId === "user_anonymous") {
-		const [_, _space, _spaceId, ...pathToKeep] = pathname.split("/");
-		return `/${pathToKeep.join("/")}`;
-	}
-
-	const path = pathname.includes("/space/")
-		? pathname.replace(/(?<=\/space\/|^\/space\/)(\w*)(?=\/|$)/, spaceId)
-		: `/space/${spaceId}/${pathname}`;
-
-	const subpaths = path.split("/");
-	return subpaths.filter((path) => path !== "saved").join("/");
 };
