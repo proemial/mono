@@ -1,12 +1,11 @@
 import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
+import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
 import { getBookmarkedPapersByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarked-papers-by-collection-id";
 import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
-import { FeedItemWithDisabledOverlay } from "@/app/(pages)/(app)/space/[collectionId]/(lists)/saved/feed-item-with-disabled-overlay";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { fetchPaperWithPosts } from "@/app/data/fetch-feed";
 import { ThemeColoredCard } from "@/components/theme-colored-card";
 import { CollectionService } from "@/services/collection-service";
-import { PostService } from "@/services/post-service";
 import { PermissionUtils } from "@/utils/permission-utils";
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
@@ -58,8 +57,7 @@ export default async function SavedPage({
 				const topics = paper.data.topics;
 				const field = topics && getFieldFromOpenAlexTopics(topics);
 				const item = (
-					<FeedItemWithDisabledOverlay
-						key={paper.id}
+					<FeedItem
 						paper={{
 							...paper,
 							posts:
