@@ -247,7 +247,7 @@ const toTuplePosts = (
 	user: User,
 ) => {
 	// Use posts from assistant data (includes slug, papers, etc.)
-	if (!isLoading && messages.length === posts.length * 2) {
+	if (!isLoading) {
 		return posts
 			.map(
 				(post) =>

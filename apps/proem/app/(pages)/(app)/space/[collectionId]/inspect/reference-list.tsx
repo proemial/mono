@@ -5,11 +5,11 @@ import { fetchPaper } from "../../../paper/oa/[id]/fetch-paper";
 import { generate } from "../../../paper/oa/[id]/llm-generate";
 
 type Props = {
-	spaceId: string;
 	tuple: string;
+	spaceId?: string;
 };
 
-export const ReferenceList = async ({ spaceId, tuple }: Props) => {
+export const ReferenceList = async ({ tuple, spaceId }: Props) => {
 	const post = await getPostBySlug(tuple);
 	const shallowPapers = (post?.comments[0]?.papers as { link: string }[]) ?? [];
 	const paperIds = shallowPapers

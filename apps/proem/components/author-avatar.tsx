@@ -27,7 +27,7 @@ export const getFullName = (
 	if (firstName && lastName) return `${firstName} ${lastName}`;
 	if (firstName) return firstName;
 	if (lastName) return lastName;
-	return undefined;
+	return "Anonymous";
 };
 
 export const getInitials = (
@@ -37,5 +37,5 @@ export const getInitials = (
 	if (firstName && lastName) return `${firstName[0]}${lastName[0]}`;
 	if (firstName) return firstName[0];
 	if (lastName) return lastName[0];
-	return "?";
+	return "A";
 };

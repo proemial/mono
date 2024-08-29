@@ -3,28 +3,22 @@ import { routes } from "@/routes";
 import { Header4 } from "@proemial/shadcn-ui";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { DisableOverlayBackground } from "./disable-overlay-background";
-import { ReferenceList } from "./reference-list";
+import { DisableOverlayBackground } from "../space/[collectionId]/inspect/disable-overlay-background";
+import { ReferenceList } from "../space/[collectionId]/inspect/reference-list";
 
 type Props = {
-	params: {
-		collectionId: string;
-	};
 	searchParams: {
 		assistant?: string;
 		tuple?: string;
 	};
 };
 
-const InspectPage = async ({
-	params: { collectionId },
-	searchParams: { assistant, tuple },
-}: Props) => {
+const InspectPage = async ({ searchParams: { assistant, tuple } }: Props) => {
 	if (!tuple) {
 		if (assistant === "true") {
-			redirect(`${routes.space}/${collectionId}?assistant=true`);
+			redirect(`${routes.home}?assistant=true`);
 		} else {
-			redirect(`${routes.space}/${collectionId}`);
+			redirect(`${routes.home}`);
 		}
 	}
 
@@ -39,7 +33,7 @@ const InspectPage = async ({
 					</div>
 				}
 			>
-				<ReferenceList spaceId={collectionId} tuple={tuple} />
+				<ReferenceList tuple={tuple} />
 			</Suspense>
 		</div>
 	);

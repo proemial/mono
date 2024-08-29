@@ -27,7 +27,7 @@ export const InspectAnswer = ({ tuple }: Props) => {
 
 	return (
 		<div ref={ref} className="flex flex-col p-3">
-			<Header4 className="text-white">Inspect answer</Header4>
+			<Header4 className="text-white">Review references</Header4>
 			<Tuple post={tuple} onSubmit={() => undefined} />
 			<div className="pt-3 pb-1 text-center">
 				<AssistantButton onClick={() => deselectTuple()} variant="light" />

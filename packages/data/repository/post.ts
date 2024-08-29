@@ -27,6 +27,7 @@ export const PostRepository = {
 				),
 				with: { comments: { orderBy: [asc(comments.createdAt)] } },
 				orderBy: [desc(posts.createdAt)],
+				limit: 99, // TODO: Pagination
 			});
 		}
 		if (spaceId) {
@@ -46,6 +47,7 @@ export const PostRepository = {
 				),
 				with: { comments: { orderBy: [asc(comments.createdAt)] }, space: true },
 				orderBy: [desc(posts.createdAt)],
+				limit: 99, // TODO: Pagination
 			});
 			// Filter out posts from deleted spaces
 			return spacePosts.filter((post) => post.space?.deletedAt === null);
@@ -55,6 +57,7 @@ export const PostRepository = {
 			where: postPermissions(ANONYMOUS_USER_ID, []),
 			with: { comments: { orderBy: [asc(comments.createdAt)] }, space: true },
 			orderBy: [desc(posts.createdAt)],
+			limit: 15, // TODO: Pagination
 		});
 		return publicPosts.filter((post) => {
 			// Filter out posts from deleted spaces

@@ -55,6 +55,8 @@ export const useAssistant = () => {
 			const queryString = updateQueryString(params);
 			if (slug && spaceId && !pathname.includes("inspect")) {
 				router.push(`${routes.space}/${spaceId}/inspect?${queryString}`);
+			} else if (slug && !pathname.includes("inspect")) {
+				router.push(`/inspect?${queryString}`);
 			} else {
 				router.push(`${pathname}?${queryString}`);
 			}
