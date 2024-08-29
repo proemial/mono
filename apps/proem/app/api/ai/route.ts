@@ -1,11 +1,13 @@
 import { UserContext, assistant } from "@/app/api/ai/ai-assistant";
 import { AnswerEngineStreamData } from "@/app/api/bot/answer-engine/answer-engine";
+import { openAlexChain } from "@/app/api/bot/ask2/fetch-papers";
 import { handleAskRequest } from "@/app/api/bot/ask2/handle-ask-request";
 import {
 	PAPER_BOT_USER_ID,
 	getPersonalDefaultCollection,
 } from "@/app/constants";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
+import { searchToolConfig } from "@/app/prompts/ask_agent";
 import { showAIAssistant } from "@/feature-flags/ai-assistant-flag";
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { auth } from "@clerk/nextjs/server";
@@ -14,6 +16,7 @@ import { savePostWithComment } from "@proemial/data/repository/post";
 import { prettySlug } from "@proemial/utils/pretty-slug";
 import { Message, StreamData, convertToCoreMessages, streamText } from "ai";
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 
 export const maxDuration = 30;
 
@@ -54,10 +57,29 @@ export async function POST(req: NextRequest) {
 	)?.content!;
 
 	const data = new StreamData() as AnswerEngineStreamData;
-	const toolCalls: string[] = [];
 	const result = await streamText({
 		...currentAssistant,
 		messages: convertedMessages,
+		tools:
+			userContext !== "paper"
+				? {
+						searchPapersTool: {
+							description: searchToolConfig.description,
+							parameters: z.object({
+								searchQuery: z
+									.string()
+									.describe("The original question asked by the user."),
+							}),
+							execute: async ({ searchQuery }: { searchQuery: string }) => {
+								const result = await openAlexChain.invoke({
+									question,
+								});
+								const output = JSON.parse(result.papers);
+								return output;
+							},
+						},
+					}
+				: undefined,
 		onFinish: async ({ finishReason, text }) => {
 			if (finishReason === "stop") {
 				const papers = messages

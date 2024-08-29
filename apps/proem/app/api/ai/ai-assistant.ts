@@ -1,4 +1,3 @@
-import { searchPapersTool } from "@/app/api/ai/tools/search-papers-tool";
 import { anthropic } from "@ai-sdk/anthropic";
 import { CoreTool, LanguageModel } from "ai";
 import { wrapAISDKModel } from "langsmith/wrappers/vercel";
@@ -74,9 +73,4 @@ export const assistant: Assistant = (context, title, abstract) => ({
 	// temperature: 0.3,
 	// maxRetries: 5,
 	// toolChoice: "required",
-	...(context !== "paper"
-		? {
-				tools: { searchPapersTool },
-			}
-		: {}),
 });
