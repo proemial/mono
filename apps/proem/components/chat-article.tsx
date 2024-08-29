@@ -84,6 +84,13 @@ export function ChatArticle({
 
 							<div className="flex items-center gap-2.5">
 								<div>
+									<BookOpen01 className="size-2.5" />
+								</div>
+								<Header5 className="truncate pr-6">{paper.data.title}</Header5>
+							</div>
+
+							<div className="flex items-center gap-2.5">
+								<div>
 									<Users01 className="size-2.5" />
 								</div>
 								<span className="truncate flex-grow">
@@ -127,15 +134,6 @@ export function ChatArticle({
 			{paper && (
 				<>
 					<Header4 className="pt-4">Abstract</Header4>
-					<a
-						href={paper.data.primary_location?.landing_page_url}
-						target="_blank"
-						rel="noreferrer"
-						className="flex items-center gap-2.5 gap pt-2 opacity-50 text-2xs hover:opacity-75 transition-opacity"
-					>
-						<BookOpen01 className="size-2.5" />
-						<Header5 className="truncate pr-6">{paper.data.title}</Header5>
-					</a>
 					<div>{paper.data.abstract}</div>
 				</>
 			)}
