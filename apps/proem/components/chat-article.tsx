@@ -12,7 +12,7 @@ import { Header2, Header4, Header5, Icons } from "@proemial/shadcn-ui";
 import { BookOpen01, ChevronRight, Users01 } from "@untitled-ui/icons-react";
 import { Suspense } from "react";
 import { EngagementIndicator } from "./engagement-indicator";
-import Markdown from "./markdown";
+import Markdown from "@/components/markdown";
 
 type ChatArticleProps = Pick<
 	AddToCollectionButtonProps,
@@ -134,7 +134,9 @@ export function ChatArticle({
 			{paper && (
 				<>
 					<Header4 className="pt-4">Abstract</Header4>
-					<div>{paper.data.abstract}</div>
+					<div>
+						<Markdown>{paper.data.abstract as string}</Markdown>
+					</div>
 				</>
 			)}
 		</div>
