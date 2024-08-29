@@ -133,9 +133,7 @@ function EmbeddedLayout({ children }: { children: ReactNode }) {
 		<html lang="en" className="overscroll-none" suppressHydrationWarning>
 			<body>
 				<ContextWrapper>
-					<LoadingTransition type="page" as={Main}>
-						{children}
-					</LoadingTransition>
+					<LoadingTransition type="page">{children}</LoadingTransition>
 				</ContextWrapper>
 			</body>
 		</html>
