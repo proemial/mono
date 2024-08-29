@@ -6,7 +6,6 @@ import {
 import { cache } from "react";
 
 const getMemberByOrganisationId = cache((organizationId: string) => {
-	console.log("tick");
 	// todo: handle pagination
 	return clerkClient().organizations.getOrganizationMembershipList({
 		organizationId,
@@ -14,13 +13,11 @@ const getMemberByOrganisationId = cache((organizationId: string) => {
 });
 
 const getUserById = cache(async (userId: string) => {
-	console.log("tick");
 	return await clerkClient().users.getUser(userId);
 });
 
 // spread out to have primitives as parameters for the cache to memorize
 const getUsersByIds = cache(async (...userIds: string[]) => {
-	console.log("tick");
 	// todo: handle pagination
 	return await clerkClient().users.getUserList({
 		userId: userIds,
