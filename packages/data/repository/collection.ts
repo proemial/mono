@@ -62,6 +62,15 @@ export async function findAvailableCollections({
 				isNull(collections.deletedAt),
 			),
 		),
+		with: {
+			collectionsToPapers: {
+				where: eq(collectionsToPapers.isEnabled, true),
+				columns: {
+					paperId: true,
+					isEnabled: true,
+				},
+			},
+		},
 		orderBy: asc(collections.name),
 	});
 

@@ -1,11 +1,18 @@
 "use client";
-import { togglePaperInCollection } from "@/app/(pages)/(app)/space/(discover)/bookmark-paper";
+import {
+	addPaperToNewCollection,
+	togglePaperInCollection,
+} from "@/app/(pages)/(app)/space/(discover)/bookmark-paper";
 import { AddButton, AddButtonSkeleton } from "@/components/add-button";
 import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { CollectionSelectorProps } from "@/components/show-collection-notification";
+import {
+	CollectionSelectorProps,
+	showCollectionNotification,
+	showCollectionSelector,
+} from "@/components/show-collection-notification";
 import { SignInDrawer } from "@/components/sign-in-drawer";
 import { isArxivPaperId } from "@/utils/is-arxiv-paper-id";
 import { useUser } from "@clerk/nextjs";
@@ -57,10 +64,39 @@ export function AddToCollectionButton({
 			onClick={async () => {
 				onClick?.(optimisticBookmark);
 				const isEnabled = !optimisticBookmark;
+				trackHandler(
+					isEnabled
+						? analyticsKeys.collection.addPaper[fromTrackingKey]
+						: analyticsKeys.collection.removePaper[fromTrackingKey],
+				)();
 
-				if (revalidateCache) {
-					addOptimisticBookmark(isEnabled);
+				const bookmark = {
+					paperId,
+					fromTrackingKey,
+					bookmarks: [collectionId],
+				};
+
+				if (!isEnabled) {
+					showCollectionSelector({
+						...bookmark,
+						onValueToggle: (toggledBookmark) => {
+							if (
+								toggledBookmark.collectionId === collectionId &&
+								toggledBookmark.paperId === paperId
+							) {
+								addOptimisticBookmark(toggledBookmark.isEnabled);
+							}
+						},
+					});
+					return;
 				}
+
+				addOptimisticBookmark(isEnabled);
+
+				showCollectionNotification({
+					...bookmark,
+					newBookmarksCollectionId: collectionId,
+				});
 
 				await togglePaperInCollection({
 					paperId,
@@ -68,12 +104,6 @@ export function AddToCollectionButton({
 					isEnabled,
 					revalidateCache,
 				});
-
-				trackHandler(
-					isEnabled
-						? analyticsKeys.collection.addPaper[fromTrackingKey]
-						: analyticsKeys.collection.removePaper[fromTrackingKey],
-				)();
 			}}
 		/>
 	);
