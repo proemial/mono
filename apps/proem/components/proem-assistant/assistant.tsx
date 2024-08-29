@@ -48,7 +48,6 @@ export const ProemAssistant = () => {
 	const { data, refetch } = useQuery({
 		queryKey: [PROEM_ASSISTANT_QUERY_KEY, spaceId, paperId, userId],
 		queryFn: () => getAssistantData(spaceId, paperId),
-		enabled: !!spaceId || !!paperId,
 	});
 
 	// Poll for paper starters until they are generated (for in-context starters)

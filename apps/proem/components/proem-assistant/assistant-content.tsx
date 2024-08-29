@@ -87,7 +87,6 @@ export const AssistantContent = ({
 			abstract: data?.paper?.data.abstract,
 			paperId: data?.paper?.id,
 			spaceId,
-			userId: user?.id,
 		},
 		api: "/api/ai",
 		maxToolRoundtrips: 2,
@@ -290,7 +289,9 @@ const toTuplePosts = (
 				author: {
 					id: message.metadata?.author?.id ?? user?.id ?? ANONYMOUS_USER_ID,
 					firstName:
-						message.metadata?.author?.firstName ?? user?.firstName ?? "Me",
+						message.metadata?.author?.firstName ??
+						user?.firstName ??
+						"Anonymous",
 					lastName:
 						message.metadata?.author?.lastName ?? user?.lastName ?? null,
 					imageUrl: message.metadata?.author?.imageUrl ?? user?.imageUrl,

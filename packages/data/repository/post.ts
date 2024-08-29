@@ -10,6 +10,8 @@ import {
 	users,
 } from "../neon/schema";
 
+const ANONYMOUS_USER_ID = "anonymous"; // TODO: Share between projects
+
 export const PostRepository = {
 	getPostsWithCommentsAndAuthors: async (
 		spaceId: string | undefined,
@@ -21,7 +23,7 @@ export const PostRepository = {
 			return await neonDb.query.posts.findMany({
 				where: and(
 					eq(posts.paperId, paperId),
-					byShared(userId ?? "", orgMemberIds),
+					postPermissions(userId, orgMemberIds),
 				),
 				with: { comments: { orderBy: [asc(comments.createdAt)] } },
 				orderBy: [desc(posts.createdAt)],
@@ -38,18 +40,36 @@ export const PostRepository = {
 				return [];
 			}
 			const spacePosts = await neonDb.query.posts.findMany({
-				where: and(eq(posts.spaceId, spaceId), byShared(userId, orgMemberIds)),
+				where: and(
+					eq(posts.spaceId, spaceId),
+					postPermissions(userId, orgMemberIds),
+				),
 				with: { comments: { orderBy: [asc(comments.createdAt)] }, space: true },
 				orderBy: [desc(posts.createdAt)],
 			});
 			// Filter out posts from deleted spaces
 			return spacePosts.filter((post) => post.space?.deletedAt === null);
 		}
-		return [];
+		// For anonymous users
+		const publicPosts = await neonDb.query.posts.findMany({
+			where: postPermissions(ANONYMOUS_USER_ID, []),
+			with: { comments: { orderBy: [asc(comments.createdAt)] }, space: true },
+			orderBy: [desc(posts.createdAt)],
+		});
+		return publicPosts.filter((post) => {
+			// Filter out posts from deleted spaces
+			if (post.space?.deletedAt) {
+				return false;
+			}
+			return true;
+		});
 	},
 };
 
-const byShared = (userId: string | null | undefined, orgMemberIds: string[]) =>
+const postPermissions = (
+	userId: string | null | undefined,
+	orgMemberIds: string[],
+) =>
 	or(
 		// Public posts
 		and(eq(posts.shared, "public")),

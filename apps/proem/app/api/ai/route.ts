@@ -3,6 +3,7 @@ import { AnswerEngineStreamData } from "@/app/api/bot/answer-engine/answer-engin
 import { openAlexChain } from "@/app/api/bot/ask2/fetch-papers";
 import { handleAskRequest } from "@/app/api/bot/ask2/handle-ask-request";
 import {
+	ANONYMOUS_USER_ID,
 	PAPER_BOT_USER_ID,
 	getPersonalDefaultCollection,
 } from "@/app/constants";
@@ -109,30 +110,28 @@ export async function POST(req: NextRequest) {
 					})),
 				});
 
-				// Save the post and the AI reply, if the user is signed in
-				if (userId) {
-					const space =
-						spaceId === userId
-							? getPersonalDefaultCollection(userId)
-							: await findCollection(spaceId);
-					await savePostWithComment(
-						{
-							content: question,
-							authorId: userId,
-							paperId,
-							// Inherit the space's sharing setting, or `public` if no space
-							shared: space?.shared ?? "public",
-							spaceId: space?.id,
-							slug: prettySlug(question),
-						},
-						{
-							content: text,
-							authorId: PAPER_BOT_USER_ID,
-							followUps,
-							papers,
-						},
-					);
-				}
+				// Save the post and the AI reply
+				const space =
+					spaceId === userId
+						? getPersonalDefaultCollection(userId)
+						: await findCollection(spaceId);
+				await savePostWithComment(
+					{
+						content: question,
+						authorId: userId ?? ANONYMOUS_USER_ID,
+						// Inherit the space's sharing setting, or `public` if no space
+						shared: space?.shared ?? "public",
+						spaceId: space?.id,
+						paperId,
+						slug: prettySlug(question),
+					},
+					{
+						content: text,
+						authorId: PAPER_BOT_USER_ID,
+						followUps,
+						papers,
+					},
+				);
 			}
 			data.close();
 		},

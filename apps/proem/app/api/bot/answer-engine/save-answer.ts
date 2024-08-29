@@ -94,32 +94,32 @@ export async function saveAnswerFromAgent({
 			answer,
 		});
 
-		// Save the post and the AI reply, if the user is signed in
-		if (userId && spaceId) {
-			const space =
-				spaceId === userId
-					? getPersonalDefaultCollection(userId)
-					: await findCollection(spaceId);
-			await savePostWithComment(
-				{
-					content: question,
-					authorId: userId ?? ANONYMOUS_USER_ID, // TODO: Do this for all posts
-					// Inherit the space's sharing setting, or `public` if no space
-					shared: space?.shared ?? "public",
-					spaceId: space?.id,
-					slug,
-				},
-				{
-					content: answer,
-					authorId: PAPER_BOT_USER_ID,
-					followUps: followUps
-						.split("?")
-						.filter((f) => typeof f !== "undefined" && f.length > 0)
-						.map((f) => `${f.trim()}?`),
-					papers: papers.papers?.papers,
-				},
-			);
-		}
+		// Save the post and the AI reply
+		const space =
+			spaceId && spaceId === userId
+				? getPersonalDefaultCollection(userId)
+				: spaceId
+					? await findCollection(spaceId)
+					: undefined;
+		await savePostWithComment(
+			{
+				content: question,
+				authorId: userId ?? ANONYMOUS_USER_ID,
+				// Inherit the space's sharing setting, or `public` if no space
+				shared: space?.shared ?? "public",
+				spaceId: space?.id,
+				slug,
+			},
+			{
+				content: answer,
+				authorId: PAPER_BOT_USER_ID,
+				followUps: followUps
+					.split("?")
+					.filter((f) => typeof f !== "undefined" && f.length > 0)
+					.map((f) => `${f.trim()}?`),
+				papers: papers.papers?.papers,
+			},
+		);
 
 		return answers.create({
 			slug,
