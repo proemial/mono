@@ -1,5 +1,6 @@
 "use client";
 import { togglePaperInCollection } from "@/app/(pages)/(app)/space/(discover)/bookmark-paper";
+import { PERSONAL_DEFAULT_COLLECTION_NAME } from "@/app/constants";
 import { useUser } from "@/app/hooks/use-user";
 import { getAvailableCollections } from "@/app/profile/actions";
 import {
@@ -44,13 +45,13 @@ function CollectionSelector({
 		<Notification closeOnBlur>
 			<div className="divide-y pb-3">
 				<p className="font-semibold text-center py-4">Added to Collection</p>
-				{collections?.map(({ id, name }) => (
-					<div key={id} className="px-4 py-2 text-base">
+				{collections?.map((collection) => (
+					<div key={collection.id} className="px-4 py-2 text-base">
 						<Checkbox
-							id={id}
+							id={collection.id}
 							defaultChecked={bookmarks?.some(
 								(collectionIdFromExistingBookmarks) =>
-									collectionIdFromExistingBookmarks === id,
+									collectionIdFromExistingBookmarks === collection.id,
 							)}
 							onCheckedChange={async (newCheckedValue) => {
 								const isEnabled = Boolean(newCheckedValue);
@@ -62,12 +63,16 @@ function CollectionSelector({
 
 								await togglePaperInCollection({
 									paperId,
-									collectionId: id,
+									collectionId: collection.id,
 									isEnabled,
 								});
 							}}
 						>
-							<span className="font-normal">{name}</span>
+							<span className="font-normal">
+								{collection.id.includes("user_")
+									? PERSONAL_DEFAULT_COLLECTION_NAME
+									: collection.name}
+							</span>
 						</Checkbox>
 					</div>
 				))}
