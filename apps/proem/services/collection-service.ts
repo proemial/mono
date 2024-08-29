@@ -5,8 +5,8 @@ import { findCollectionById } from "@proemial/data/repository/collection";
 export const CollectionService = {
 	getCollection: async (
 		collectionId: string,
-		userId: string | null | undefined,
-		orgId: string | null | undefined,
+		userId?: string | null | undefined,
+		orgId?: string | null | undefined,
 	) => {
 		const collection = await findCollectionById(collectionId);
 		if (
