@@ -23,7 +23,14 @@ export async function POST(req: NextRequest) {
 		return NextResponse.json({ error: "Rate limited" }, { status: 429 });
 	}
 	const { userId } = auth();
-	const requestData = await req.json();
+	const requestData = (await req.json()) as {
+		messages: Message[];
+		title: string;
+		paperId: string;
+		spaceId: string;
+		abstract: string;
+	};
+
 	const { messages, title, paperId, spaceId, abstract } = requestData;
 	const showAIAssistantFeatureFlag = await showAIAssistant();
 
@@ -39,18 +46,27 @@ export async function POST(req: NextRequest) {
 			? "space"
 			: "global";
 
-	const convertedMessages = convertToCoreMessages(messages);
+	const convertedMessages = convertToCoreMessages(messages as any);
 	const currentAssistant = assistant(userContext, title, abstract);
+	console.log({ currentAssistant });
 	const question = messages.findLast(
 		(message: Message) => message.role === "user",
-	)?.content;
+	)?.content!;
 
 	const data = new StreamData() as AnswerEngineStreamData;
+	const toolCalls: string[] = [];
 	const result = await streamText({
 		...currentAssistant,
 		messages: convertedMessages,
 		onFinish: async ({ finishReason, text }) => {
 			if (finishReason === "stop") {
+				const papers = messages
+					.findLast(({ toolInvocations }) => Boolean(toolInvocations))
+					?.toolInvocations?.find(
+						({ toolName }) => toolName === "searchPapersTool",
+						// @ts-expect-error
+					)?.result;
+
 				// Generate follow-ups
 				const followUps = await followUpQuestionChain()
 					.invoke({
@@ -91,6 +107,7 @@ export async function POST(req: NextRequest) {
 							content: text,
 							authorId: PAPER_BOT_USER_ID,
 							followUps,
+							papers,
 						},
 					);
 				}
