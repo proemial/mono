@@ -10,7 +10,7 @@ import { cn } from "@proemial/shadcn-ui";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import { Metadata, Viewport } from "next";
 import { Lato as FontSans } from "next/font/google";
-import { headers } from "next/headers";
+import { headers as nextHeaders } from "next/headers";
 import { ReactNode } from "react";
 import { screenMaxWidth } from "./constants";
 
@@ -73,8 +73,18 @@ type Props = {
 };
 
 export default function RootLayout({ children, modal }: Readonly<Props>) {
-	const trackingInput = getTrackingInput();
+	const headers = getHeaders();
+
+	if (headers.embeded) {
+		return <EmbeddedLayout>{children}</EmbeddedLayout>;
+	}
+
+	return <MainLayout modal={modal}>{children}</MainLayout>;
+}
+
+function MainLayout({ children, modal }: Readonly<Props>) {
 	const shouldInjectToolbar = process.env.NODE_ENV === "development";
+
 	return (
 		<html lang="en" className="overscroll-none" suppressHydrationWarning>
 			<head>
@@ -89,45 +99,69 @@ export default function RootLayout({ children, modal }: Readonly<Props>) {
 					fontSans.variable,
 				)}
 			>
-				<AuthProvider>
-					<Analytics.PostHog tracking={trackingInput}>
-						<ReactQueryProvider>
-							<SetActiveOrganization />
-							<div className="bg-background group relative">
-								<div
-									style={{
-										boxShadow: "0 0 120px rgba(0, 0, 0, .15)",
-									}}
-									className={cn(
-										"mx-auto min-h-[100dvh] flex flex-col",
-										screenMaxWidth,
-									)}
-								>
-									<TopNavigation />
+				<ContextWrapper>
+					<SetActiveOrganization />
+					<div className="bg-background group relative">
+						<div
+							style={{
+								boxShadow: "0 0 120px rgba(0, 0, 0, .15)",
+							}}
+							className={cn(
+								"mx-auto min-h-[100dvh] flex flex-col",
+								screenMaxWidth,
+							)}
+						>
+							<TopNavigation />
 
-									<LoadingTransition type="page" as={Main}>
-										{children}
-									</LoadingTransition>
+							<LoadingTransition type="page" as={Main}>
+								{children}
+							</LoadingTransition>
 
-									{modal}
-								</div>
-							</div>
-
-							<Analytics.Clients tracking={trackingInput} />
-						</ReactQueryProvider>
-					</Analytics.PostHog>
-				</AuthProvider>
+							{modal}
+						</div>
+					</div>
+				</ContextWrapper>
 				{shouldInjectToolbar && <VercelToolbar />}
 			</body>
 		</html>
 	);
 }
+function EmbeddedLayout({ children }: { children: ReactNode }) {
+	return (
+		<html lang="en" className="overscroll-none" suppressHydrationWarning>
+			<body>
+				<ContextWrapper>
+					<LoadingTransition type="page" as={Main}>
+						{children}
+					</LoadingTransition>
+				</ContextWrapper>
+			</body>
+		</html>
+	);
+}
 
-function getTrackingInput() {
-	const headersList = headers();
+function ContextWrapper({ children }: { children: ReactNode }) {
+	const trackingInput = getHeaders();
+
+	return (
+		<AuthProvider>
+			<Analytics.PostHog tracking={trackingInput}>
+				<ReactQueryProvider>
+					{children}
+					<Analytics.Clients tracking={trackingInput} />
+				</ReactQueryProvider>
+			</Analytics.PostHog>
+		</AuthProvider>
+	);
+}
+
+function getHeaders() {
+	const headersList = nextHeaders();
 	const country = headersList.get("x-country") ?? undefined;
 	const region = headersList.get("x-region") ?? undefined;
-	const userAgent = headers().get("user-agent") ?? undefined;
+	const userAgent = headersList.get("user-agent") ?? undefined;
+	const embeded =
+		headersList.get("x-pathname")?.startsWith("/embed") ?? undefined;
 
-	return { country, region, userAgent };
+	return { country, region, userAgent, embeded };
 }
