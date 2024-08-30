@@ -34,7 +34,7 @@ export const EngagementIndicator = ({ posts, className }: Props) => {
 					/>
 				))}
 			</div>
-			<div className="text-sm opacity-90">
+			<div className="text-sm opacity-90 items-center flex">
 				{formatQuestionsAskedLabel(posts.length)}
 			</div>
 		</div>
