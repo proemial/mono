@@ -217,7 +217,7 @@ const toInitialMessages = (posts: PostWithCommentsAndAuthor[]) => {
 			metadata: {
 				slug: post.slug,
 				shared: post.shared,
-				author: post.author && {
+				author: {
 					id: post.authorId,
 					firstName: post.author.firstName,
 					lastName: post.author.lastName,
@@ -288,16 +288,25 @@ const toTuplePosts = (
 				id: message.id,
 				createdAt: message.createdAt,
 				content: message.content,
-				author: {
-					id: message.metadata?.author?.id ?? user?.id ?? ANONYMOUS_USER_ID,
-					firstName:
-						message.metadata?.author?.firstName ??
-						user?.firstName ??
-						"Anonymous",
-					lastName:
-						message.metadata?.author?.lastName ?? user?.lastName ?? null,
-					imageUrl: message.metadata?.author?.imageUrl ?? user?.imageUrl,
-				},
+				author:
+					message.metadata?.author?.id === ANONYMOUS_USER_ID
+						? {
+								id: message.metadata?.author?.id ?? ANONYMOUS_USER_ID,
+								firstName: message.metadata?.author?.firstName ?? null,
+								lastName: message.metadata?.author?.lastName ?? null,
+								imageUrl: message.metadata?.author?.imageUrl,
+							}
+						: {
+								id:
+									message.metadata?.author?.id ?? user?.id ?? ANONYMOUS_USER_ID,
+								firstName:
+									message.metadata?.author?.firstName ??
+									user?.firstName ??
+									null,
+								lastName:
+									message.metadata?.author?.lastName ?? user?.lastName ?? null,
+								imageUrl: message.metadata?.author?.imageUrl ?? user?.imageUrl,
+							},
 				slug: message.metadata?.slug ?? null,
 				reply: nextMessage
 					? {

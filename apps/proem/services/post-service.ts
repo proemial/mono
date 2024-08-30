@@ -33,7 +33,7 @@ export const PostService = {
 			const author = authors.find((user) => user.id === post.authorId);
 			return {
 				...post,
-				author: author && {
+				author: {
 					id: post.authorId,
 					firstName: author?.firstName ?? undefined,
 					lastName: author?.lastName ?? undefined,
