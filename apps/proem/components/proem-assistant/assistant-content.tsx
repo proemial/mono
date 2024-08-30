@@ -93,18 +93,19 @@ export const AssistantContent = ({
 		// initialMessages,
 	});
 
-	const messagesWithoutToolCalls = [...initialMessages, ...messages].reduce(
-		(acc, obj) => {
-			// Filter out tool calls
-			if (obj.toolInvocations) return acc;
-			// Filter out duplicates when overwriting useChat messages with initialMessages on a ongoing bases
-			if (acc.some((m) => m.content.length > 0 && m.content === obj.content))
-				return acc;
+	const messagesWithoutToolCalls = useMemo(
+		() =>
+			[...initialMessages, ...messages].reduce((acc, obj) => {
+				// Filter out tool calls
+				if (obj.toolInvocations) return acc;
+				// Filter out duplicates when overwriting useChat messages with initialMessages on a ongoing bases
+				if (acc.some((m) => m.content.length > 0 && m.content === obj.content))
+					return acc;
 
-			acc.push(obj);
-			return acc;
-		},
-		[] as Message[],
+				acc.push(obj);
+				return acc;
+			}, [] as Message[]),
+		[initialMessages, messages],
 	);
 
 	const handleSubmit = (input: string) => {
