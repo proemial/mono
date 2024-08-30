@@ -81,47 +81,64 @@ export function InfinityScrollList<MyTQueryKey extends string[], TRow>({
 			) : status === "error" && error instanceof Error ? (
 				<span>Error: {error?.message}</span>
 			) : (
-				<div
-					className="w-full relative"
-					style={{
-						height: rowVirtualizer.getTotalSize(),
-					}}
+				<ScrollItem
+					count={rowVirtualizer.getTotalSize()}
+					index={items[0]?.start ?? 0}
 				>
-					<div
-						className="space-y-3"
-						style={{
-							position: "absolute",
-							top: 0,
-							left: 0,
-							width: "100%",
-							transform: `translateY(${items[0]?.start ?? 0}px)`,
-						}}
-					>
-						{items.map((virtualRow, i) => {
-							const isLoaderRow = virtualRow.index > allRows.length - 1;
-							const row = allRows[virtualRow.index];
+					{items.map((virtualRow, i) => {
+						const isLoaderRow = virtualRow.index > allRows.length - 1;
+						const row = allRows[virtualRow.index];
 
-							return (
-								<div
-									ref={rowVirtualizer.measureElement}
-									key={virtualRow.key}
-									data-index={virtualRow.index}
-								>
-									{isLoaderRow ? (
-										hasNextPage ? (
-											<Throbber />
-										) : null
-									) : row ? (
-										renderRow(row, i)
-									) : (
+						return (
+							<div
+								ref={rowVirtualizer.measureElement}
+								key={virtualRow.key}
+								data-index={virtualRow.index}
+							>
+								{isLoaderRow ? (
+									hasNextPage ? (
 										<Throbber />
-									)}
-								</div>
-							);
-						})}
-					</div>
-				</div>
+									) : null
+								) : row ? (
+									renderRow(row, i)
+								) : (
+									<Throbber />
+								)}
+							</div>
+						);
+					})}
+				</ScrollItem>
 			)}
 		</>
+	);
+}
+
+type ScrollItemProps = {
+	children: ReactNode;
+	count: number;
+	index: number;
+};
+
+function ScrollItem({ children, count, index }: ScrollItemProps) {
+	return (
+		<div
+			className="w-full relative"
+			style={{
+				height: count,
+			}}
+		>
+			<div
+				className="space-y-3"
+				style={{
+					position: "absolute",
+					top: 0,
+					left: 0,
+					width: "100%",
+					transform: `translateY(${index}px)`,
+				}}
+			>
+				{children}
+			</div>
+		</div>
 	);
 }
