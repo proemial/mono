@@ -16,6 +16,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode, useMemo } from "react";
 import { isEmbedded } from "@/utils/url";
+import { Field } from "@/app/data/oa-fields";
 
 export type FeedItemCardProps = PaperMetaDataProps & {
 	children: ReactNode;
@@ -36,34 +37,17 @@ export const FeedItemCard = ({
 	readonly,
 	index,
 }: FeedItemCardProps) => {
-	const pathname = usePathname();
 	const field = useMemo(
 		() => topics && getFieldFromOpenAlexTopics(topics),
 		[topics],
 	);
 
-	const embedded = isEmbedded(pathname);
-	const spaceSpecificPrefix =
-		embedded || (pathname.includes(routes.space) && customCollectionId)
-			? `${routes.space}/${pathname.split("/")[2]}`
-			: "";
-
-	const embedPrefix = embedded
-		? `${window.location.protocol}//${window.location.hostname}:${window.location.port}`
-		: "";
-
 	return (
 		<div className="flex flex-col gap-3">
-			<Link
-				href={`${embedPrefix}${spaceSpecificPrefix}/paper/${provider ?? "oa"}/${id}${
-					!spaceSpecificPrefix && field
-						? `?color=${field.theme.color}${
-								field.theme.image ? `&image=${field.theme.image}` : ""
-							}`
-						: ""
-				}`}
-				onClick={trackHandler(analyticsKeys.feed.click.card)}
-				target={embedded ? "_blank" : undefined}
+			<EmbedableLink
+				path={`/paper/${provider ?? "oa"}/${id}`}
+				customCollectionId={customCollectionId}
+				field={field}
 			>
 				{hasAbstract ? (
 					<div>
@@ -88,7 +72,46 @@ export const FeedItemCard = ({
 						<div className="text-muted-foreground">{children}</div>
 					</>
 				)}
-			</Link>
+			</EmbedableLink>
 		</div>
 	);
 };
+
+function EmbedableLink({
+	children,
+	customCollectionId,
+	path,
+	field,
+}: {
+	children: ReactNode;
+	path: string;
+	customCollectionId?: string;
+	field?: Field | null;
+}) {
+	const pathname = usePathname();
+	const embedded = isEmbedded(pathname);
+
+	const baseurl = embedded ? window.location.origin : "";
+
+	const space =
+		embedded || (pathname.includes(routes.space) && customCollectionId)
+			? `${routes.space}/${pathname.split("/")[2]}`
+			: "";
+
+	const theme =
+		!space && field
+			? `?color=${field.theme.color}${
+					field.theme.image ? `&image=${field.theme.image}` : ""
+				}`
+			: "";
+
+	return (
+		<Link
+			href={`${baseurl}${space}${path}${theme}`}
+			onClick={trackHandler(analyticsKeys.feed.click.card)}
+			target={embedded ? "_blank" : undefined}
+		>
+			{children}
+		</Link>
+	);
+}
