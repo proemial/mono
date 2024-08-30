@@ -40,15 +40,21 @@ export const FeedItemCard = ({
 		() => topics && getFieldFromOpenAlexTopics(topics),
 		[topics],
 	);
+
+	const isEmbedded = pathname.startsWith("/embed");
 	const spaceSpecificPrefix =
-		pathname.includes(routes.space) && customCollectionId
+		isEmbedded || (pathname.includes(routes.space) && customCollectionId)
 			? `${routes.space}/${pathname.split("/")[2]}`
 			: "";
+
+	const embedPrefix = isEmbedded
+		? `${window.location.protocol}//${window.location.hostname}:${window.location.port}`
+		: "";
 
 	return (
 		<div className="flex flex-col gap-3">
 			<Link
-				href={`${spaceSpecificPrefix}/paper/${provider ?? "oa"}/${id}${
+				href={`${embedPrefix}${spaceSpecificPrefix}/paper/${provider ?? "oa"}/${id}${
 					!spaceSpecificPrefix && field
 						? `?color=${field.theme.color}${
 								field.theme.image ? `&image=${field.theme.image}` : ""
@@ -56,6 +62,7 @@ export const FeedItemCard = ({
 						: ""
 				}`}
 				onClick={trackHandler(analyticsKeys.feed.click.card)}
+				target={isEmbedded ? "_blank" : undefined}
 			>
 				{hasAbstract ? (
 					<div>
