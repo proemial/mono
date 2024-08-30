@@ -1,3 +1,4 @@
+import { isArxivPaperId } from "@/utils/is-arxiv-paper-id";
 import { Redis } from "@proemial/redis/redis";
 import {
 	OpenAlexMeta,
@@ -15,6 +16,11 @@ import { cache } from "react";
 
 export const fetchPaper = cache(
 	async (id: string): Promise<OpenAlexPaper | undefined> => {
+		// Filter out arxiv papers
+		if (isArxivPaperId(id)) {
+			return undefined;
+		}
+
 		const paper = await Redis.papers.get(id);
 
 		if (
