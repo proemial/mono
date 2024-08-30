@@ -14,6 +14,7 @@ import { Lato as FontSans } from "next/font/google";
 import { headers as nextHeaders } from "next/headers";
 import { ReactNode } from "react";
 import { screenMaxWidth } from "./constants";
+import { isEmbedded } from "@/utils/url";
 
 export const viewport: Viewport = {
 	width: "device-width",
@@ -76,7 +77,7 @@ type Props = {
 export default function RootLayout({ children, modal }: Readonly<Props>) {
 	const headers = getHeaders();
 
-	if (headers.embeded) {
+	if (headers.embedded) {
 		return <EmbeddedLayout>{children}</EmbeddedLayout>;
 	}
 
@@ -160,8 +161,7 @@ function getHeaders() {
 	const country = headersList.get("x-country") ?? undefined;
 	const region = headersList.get("x-region") ?? undefined;
 	const userAgent = headersList.get("user-agent") ?? undefined;
-	const embeded =
-		headersList.get("x-pathname")?.startsWith("/embed") ?? undefined;
+	const embedded = isEmbedded(headersList.get("x-pathname"));
 
-	return { country, region, userAgent, embeded };
+	return { country, region, userAgent, embedded };
 }

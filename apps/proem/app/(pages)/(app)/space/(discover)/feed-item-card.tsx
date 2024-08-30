@@ -15,6 +15,7 @@ import { AlertTriangle } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode, useMemo } from "react";
+import { isEmbedded } from "@/utils/url";
 
 export type FeedItemCardProps = PaperMetaDataProps & {
 	children: ReactNode;
@@ -41,13 +42,13 @@ export const FeedItemCard = ({
 		[topics],
 	);
 
-	const isEmbedded = pathname.startsWith("/embed");
+	const embedded = isEmbedded(pathname);
 	const spaceSpecificPrefix =
-		isEmbedded || (pathname.includes(routes.space) && customCollectionId)
+		embedded || (pathname.includes(routes.space) && customCollectionId)
 			? `${routes.space}/${pathname.split("/")[2]}`
 			: "";
 
-	const embedPrefix = isEmbedded
+	const embedPrefix = embedded
 		? `${window.location.protocol}//${window.location.hostname}:${window.location.port}`
 		: "";
 
@@ -62,7 +63,7 @@ export const FeedItemCard = ({
 						: ""
 				}`}
 				onClick={trackHandler(analyticsKeys.feed.click.card)}
-				target={isEmbedded ? "_blank" : undefined}
+				target={embedded ? "_blank" : undefined}
 			>
 				{hasAbstract ? (
 					<div>
