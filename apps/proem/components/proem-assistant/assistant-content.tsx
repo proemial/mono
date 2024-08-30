@@ -98,7 +98,8 @@ export const AssistantContent = ({
 			// Filter out tool calls
 			if (obj.toolInvocations) return acc;
 			// Filter out duplicates when overwriting useChat messages with initialMessages on a ongoing bases
-			if (acc.some((m) => m.content === obj.content)) return acc;
+			if (acc.some((m) => m.content.length > 0 && m.content === obj.content))
+				return acc;
 
 			acc.push(obj);
 			return acc;
@@ -247,7 +248,7 @@ const toTuplePosts = (
 	user: User,
 ) => {
 	// Use posts from assistant data (includes slug, papers, etc.)
-	if (!isLoading) {
+	if (!isLoading && posts.length * 2 === messages.length) {
 		return posts
 			.map(
 				(post) =>
