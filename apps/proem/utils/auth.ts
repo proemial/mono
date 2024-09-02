@@ -3,26 +3,39 @@ import {
 	auth,
 	clerkClient,
 } from "@clerk/nextjs/server";
-import { cache } from "react";
+import { unstable_cache } from "next/cache";
 
-const getMemberByOrganisationId = cache((organizationId: string) => {
-	// todo: handle pagination
-	return clerkClient().organizations.getOrganizationMembershipList({
-		organizationId,
-	});
-});
+const CLERK_CACHE_TTL = 60; // In seconds
 
-const getUserById = cache(async (userId: string) => {
-	return await clerkClient().users.getUser(userId);
-});
+const getMemberByOrganisationId = async (organizationId: string) =>
+	unstable_cache(
+		async () =>
+			// todo: handle pagination
+			clerkClient().organizations.getOrganizationMembershipList({
+				organizationId,
+			}),
+		[organizationId],
+		{ revalidate: CLERK_CACHE_TTL },
+	)();
+
+const getUserById = async (userId: string) =>
+	unstable_cache(
+		async () => await clerkClient().users.getUser(userId),
+		[userId],
+		{ revalidate: CLERK_CACHE_TTL },
+	)();
 
 // spread out to have primitives as parameters for the cache to memorize
-const getUsersByIds = cache(async (...userIds: string[]) => {
-	// todo: handle pagination
-	return await clerkClient().users.getUserList({
-		userId: userIds,
-	});
-});
+const getUsersByIds = async (...userIds: string[]) =>
+	unstable_cache(
+		async () =>
+			// todo: handle pagination
+			await clerkClient().users.getUserList({
+				userId: userIds,
+			}),
+		userIds,
+		{ revalidate: CLERK_CACHE_TTL },
+	)();
 
 export const getUser = async (userId: string) => {
 	if (!userId) return undefined;
