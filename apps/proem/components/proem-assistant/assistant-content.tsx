@@ -93,17 +93,19 @@ export const AssistantContent = ({
 		// initialMessages,
 	});
 
-	const messagesWithoutToolCalls = [...initialMessages, ...messages].reduce(
-		(acc, obj) => {
-			// Filter out tool calls
-			if (obj.toolInvocations) return acc;
-			// Filter out duplicates when overwriting useChat messages with initialMessages on a ongoing bases
-			if (acc.some((m) => m.content === obj.content)) return acc;
+	const messagesWithoutToolCalls = useMemo(
+		() =>
+			[...initialMessages, ...messages].reduce((acc, obj) => {
+				// Filter out tool calls
+				if (obj.toolInvocations) return acc;
+				// Filter out duplicates when overwriting useChat messages with initialMessages on a ongoing bases
+				if (acc.some((m) => m.content.length > 0 && m.content === obj.content))
+					return acc;
 
-			acc.push(obj);
-			return acc;
-		},
-		[] as Message[],
+				acc.push(obj);
+				return acc;
+			}, [] as Message[]),
+		[initialMessages, messages],
 	);
 
 	const handleSubmit = (input: string) => {
@@ -215,7 +217,7 @@ const toInitialMessages = (posts: PostWithCommentsAndAuthor[]) => {
 			metadata: {
 				slug: post.slug,
 				shared: post.shared,
-				author: post.author && {
+				author: {
 					id: post.authorId,
 					firstName: post.author.firstName,
 					lastName: post.author.lastName,
@@ -247,7 +249,7 @@ const toTuplePosts = (
 	user: User,
 ) => {
 	// Use posts from assistant data (includes slug, papers, etc.)
-	if (!isLoading) {
+	if (!isLoading && posts.length * 2 === messages.length) {
 		return posts
 			.map(
 				(post) =>
@@ -286,16 +288,25 @@ const toTuplePosts = (
 				id: message.id,
 				createdAt: message.createdAt,
 				content: message.content,
-				author: {
-					id: message.metadata?.author?.id ?? user?.id ?? ANONYMOUS_USER_ID,
-					firstName:
-						message.metadata?.author?.firstName ??
-						user?.firstName ??
-						"Anonymous",
-					lastName:
-						message.metadata?.author?.lastName ?? user?.lastName ?? null,
-					imageUrl: message.metadata?.author?.imageUrl ?? user?.imageUrl,
-				},
+				author:
+					message.metadata?.author?.id === ANONYMOUS_USER_ID
+						? {
+								id: message.metadata?.author?.id ?? ANONYMOUS_USER_ID,
+								firstName: message.metadata?.author?.firstName ?? null,
+								lastName: message.metadata?.author?.lastName ?? null,
+								imageUrl: message.metadata?.author?.imageUrl,
+							}
+						: {
+								id:
+									message.metadata?.author?.id ?? user?.id ?? ANONYMOUS_USER_ID,
+								firstName:
+									message.metadata?.author?.firstName ??
+									user?.firstName ??
+									null,
+								lastName:
+									message.metadata?.author?.lastName ?? user?.lastName ?? null,
+								imageUrl: message.metadata?.author?.imageUrl ?? user?.imageUrl,
+							},
 				slug: message.metadata?.slug ?? null,
 				reply: nextMessage
 					? {

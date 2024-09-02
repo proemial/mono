@@ -57,11 +57,15 @@ export const PostRepository = {
 			where: postPermissions(ANONYMOUS_USER_ID, []),
 			with: { comments: { orderBy: [asc(comments.createdAt)] }, space: true },
 			orderBy: [desc(posts.createdAt)],
-			limit: 15, // TODO: Pagination
+			limit: 25, // TODO: Pagination
 		});
 		return publicPosts.filter((post) => {
 			// Filter out posts from deleted spaces
 			if (post.space?.deletedAt) {
+				return false;
+			}
+			// Filter out posts w/ comments w/o paper references
+			if (!post.comments[0]?.papers) {
 				return false;
 			}
 			return true;

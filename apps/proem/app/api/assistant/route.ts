@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
 
 	const params = await request.json();
 	const { spaceId, paperId } = schema.parse(params);
+	console.log(spaceId, paperId);
 
 	const { userId, orgId } = auth();
 	const [space, paper, posts] = await Promise.all([
