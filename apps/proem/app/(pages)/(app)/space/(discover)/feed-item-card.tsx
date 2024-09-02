@@ -88,15 +88,18 @@ function EmbedableLink({
 	customCollectionId?: string;
 	field?: Field | null;
 }) {
+	const baseurl = useBaseUrl();
+	console.log("baseurl", baseurl);
+
 	const pathname = usePathname();
 	const embedded = isEmbedded(pathname);
-
-	const baseurl = embedded ? window.location.origin : "";
+	console.log("embedded", embedded);
 
 	const space =
 		embedded || (pathname.includes(routes.space) && customCollectionId)
 			? `${routes.space}/${pathname.split("/")[2]}`
 			: "";
+	console.log("space", space);
 
 	const theme =
 		!space && field
@@ -104,6 +107,8 @@ function EmbedableLink({
 					field.theme.image ? `&image=${field.theme.image}` : ""
 				}`
 			: "";
+
+	console.log(`${baseurl}${space}${path}${theme}`);
 
 	return (
 		<Link
@@ -114,4 +119,10 @@ function EmbedableLink({
 			{children}
 		</Link>
 	);
+}
+
+function useBaseUrl() {
+	return typeof window !== "undefined" && window.location.origin
+		? window.location.origin
+		: "";
 }

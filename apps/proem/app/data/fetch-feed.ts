@@ -11,7 +11,7 @@ type FetchFeedParams = Required<Parameters<typeof fetchAndRerankPaperIds>>;
 
 export async function fetchFeedByFeatures(
 	params: FetchFeedParams[0],
-	options: Omit<FetchFeedParams[1], "limit">,
+	options: FetchFeedParams[1],
 	nocache?: boolean,
 ) {
 	const nextOffset = (options?.offset ?? 1) + 1;
@@ -19,7 +19,7 @@ export async function fetchFeedByFeatures(
 		params,
 		{
 			...options,
-			limit: 5,
+			limit: options?.limit ?? 5,
 		},
 		nocache,
 	);
@@ -99,7 +99,7 @@ export async function fetchFeedByFeatures(
 
 export const fetchFeedByFeaturesWithPosts = async (
 	params: FetchFeedParams[0],
-	options: Omit<FetchFeedParams[1], "limit">,
+	options: FetchFeedParams[1],
 	nocache: boolean | undefined,
 	spaceId: string | undefined,
 ) => {

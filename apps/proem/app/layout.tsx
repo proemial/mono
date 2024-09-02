@@ -132,7 +132,7 @@ function MainLayout({ children, modal }: Readonly<Props>) {
 function EmbeddedLayout({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en" className="overscroll-none" suppressHydrationWarning>
-			<body>
+			<body className="bg-white">
 				<ContextWrapper>
 					<LoadingTransition type="page">{children}</LoadingTransition>
 				</ContextWrapper>
