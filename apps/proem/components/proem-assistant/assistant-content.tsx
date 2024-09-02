@@ -98,6 +98,7 @@ export const AssistantContent = ({
 			[...initialMessages, ...messages].reduce((acc, obj) => {
 				// Filter out tool calls
 				if (obj.toolInvocations) return acc;
+				// TODO: This is too crude e.g. as it filters out questions, but not their related answer
 				// Filter out duplicates when overwriting useChat messages with initialMessages on a ongoing bases
 				if (acc.some((m) => m.content.length > 0 && m.content === obj.content))
 					return acc;
