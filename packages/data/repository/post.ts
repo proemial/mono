@@ -42,15 +42,25 @@ export const PostRepository = {
 			}
 			const spacePosts = await neonDb.query.posts.findMany({
 				where: and(
-					eq(posts.spaceId, spaceId),
+					// Show posts from various spaces in default "discover" space
+					space.id === userId ? undefined : eq(posts.spaceId, spaceId),
 					postPermissions(userId, orgMemberIds),
 				),
 				with: { comments: { orderBy: [asc(comments.createdAt)] }, space: true },
 				orderBy: [desc(posts.createdAt)],
 				limit: 99, // TODO: Pagination
 			});
-			// Filter out posts from deleted spaces
-			return spacePosts.filter((post) => post.space?.deletedAt === null);
+			return spacePosts.filter((post) => {
+				// Filter out posts from deleted spaces
+				if (post.space?.deletedAt) {
+					return false;
+				}
+				// Filter out posts w/ comments w/o paper references
+				if (!post.comments[0]?.papers) {
+					return false;
+				}
+				return true;
+			});
 		}
 		// For anonymous users
 		const publicPosts = await neonDb.query.posts.findMany({
