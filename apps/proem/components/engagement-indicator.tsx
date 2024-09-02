@@ -1,6 +1,10 @@
+"use client";
+
 import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { cn } from "@proemial/shadcn-ui";
+import { useParams } from "next/navigation";
 import { AuthorAvatar } from "./author-avatar";
+import { useAssistant } from "./proem-assistant/use-assistant";
 
 type Props = {
 	posts: PostWithCommentsAndAuthor[];
@@ -22,8 +26,20 @@ export const EngagementIndicator = ({ posts, className }: Props) => {
 		[],
 	);
 
+	const { id: paperId } = useParams<{ id?: string }>();
+	const { open } = useAssistant();
+
+	const handleClick = () => {
+		if (paperId) {
+			open();
+		}
+	};
+
 	return (
-		<div className={cn("flex gap-2", className)}>
+		<div
+			className={cn("flex gap-2", className, { "cursor-pointer": !!paperId })}
+			onClick={handleClick}
+		>
 			<div className="flex gap-2">
 				{distinctAuthors.map((author, index) => (
 					<AuthorAvatar
