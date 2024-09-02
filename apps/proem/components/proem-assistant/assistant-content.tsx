@@ -23,6 +23,7 @@ import { PreviousQuestions } from "./previous-questions";
 import { SuggestedQuestions } from "./suggested-questions";
 import { TuplePost } from "./tuple";
 import { useAssistant } from "./use-assistant";
+import { useLatestSubmitId } from "./use-latest-submit-id";
 
 type User = ReturnType<typeof useUser>["user"];
 
@@ -62,6 +63,7 @@ export const AssistantContent = ({
 	const [inputFocused, setInputFocused] = useState(false);
 	const queryClient = useQueryClient();
 	const { slug } = useAssistant();
+	const { setId } = useLatestSubmitId();
 
 	const [contentRef, { height: contentHeight }] = useMeasure();
 	const [headerRef, { height: headerHeight }] = useMeasure();
@@ -110,6 +112,7 @@ export const AssistantContent = ({
 	);
 
 	const handleSubmit = (input: string) => {
+		setId(paperId ?? spaceId);
 		append({ role: "user", content: input, createdAt: new Date() });
 		setExpanded(true);
 	};
@@ -170,6 +173,7 @@ export const AssistantContent = ({
 						posts={tuplePosts}
 						userId={user?.id}
 						spaceId={spaceId}
+						paperId={paperId}
 						height={contentHeight - headerHeight - footerHeight}
 						expanded={expanded}
 						setExpanded={setExpanded}

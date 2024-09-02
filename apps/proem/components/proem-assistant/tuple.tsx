@@ -40,9 +40,10 @@ export type TuplePost = {
 type Props = {
 	post: TuplePost;
 	onSubmit: (input: string) => void;
+	highlight?: boolean;
 };
 
-export const Tuple = ({ post, onSubmit }: Props) => {
+export const Tuple = ({ post, onSubmit, highlight }: Props) => {
 	const { author } = post;
 	const formattedPostDate = dayjs(post.createdAt).fromNow();
 	const throbberStatus = useThrobberStatus();

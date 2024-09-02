@@ -7,6 +7,7 @@ import {
 } from "../analytics/tracking/tracking-keys";
 import { AssistantButton } from "./assistant-button";
 import { Tuple, TuplePost } from "./tuple";
+import { useLatestSubmitId } from "./use-latest-submit-id";
 import { useSnapPointStore } from "./use-snap-point-store";
 
 type Gradients = {
@@ -18,6 +19,7 @@ type Props = {
 	posts: TuplePost[];
 	userId: string | null | undefined;
 	spaceId: string | undefined;
+	paperId: string | undefined;
 	height: number;
 	expanded: boolean;
 	setExpanded: (expanded: boolean) => void;
@@ -28,6 +30,7 @@ export const PreviousQuestions = ({
 	posts,
 	userId,
 	spaceId,
+	paperId,
 	height,
 	expanded,
 	setExpanded,
@@ -41,6 +44,7 @@ export const PreviousQuestions = ({
 		bottom: true,
 	});
 	const { snapPoint, setSnapPoint } = useSnapPointStore();
+	const { id: submitId } = useLatestSubmitId();
 
 	useEffect(() => {
 		if (snapPoint !== 1.0) {
@@ -104,8 +108,17 @@ export const PreviousQuestions = ({
 					animate={{ opacity: gradients.bottom ? 1 : 0 }}
 				/>
 				<div className="space-y-2">
-					{posts.map((post) => (
-						<Tuple key={post.id} post={post} onSubmit={handleSubmit} />
+					{posts.map((post, index) => (
+						<Tuple
+							key={post.id}
+							post={post}
+							onSubmit={handleSubmit}
+							highlight={
+								typeof submitId !== "undefined" &&
+								[spaceId, paperId].includes(submitId) &&
+								index === 0
+							}
+						/>
 					))}
 				</div>
 			</ScrollArea>
