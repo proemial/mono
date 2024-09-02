@@ -14,7 +14,7 @@ export function FeedItemField({ topics = [] }: { topics?: OpenAlexTopic[] }) {
 	const style = highlight
 		? {
 				backgroundColor: `#${highlight}`,
-				color: highlight ? "white" : "black",
+				color: "white",
 				padding: "6px 16px",
 				borderRadius: "16px",
 				display: "flex",

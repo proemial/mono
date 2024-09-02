@@ -48,12 +48,12 @@ export default async function EmbedPage({
 
 	return (
 		<div
-			className={`${padding} flex flex-col sm:flex-row sm:flex-wrap items-start gap-6`}
+			className={`${padding} flex flex-col sm:flex-row sm:flex-wrap items-start gap-3`}
 		>
 			{feed.rows.map((row) => (
 				<div
 					key={row.paper.id}
-					className="w-full sm:w-auto sm:flex-1 min-w-[250px]"
+					className="w-full h-full sm:w-auto sm:flex-1 min-w-[270px] p-3 border border-[#cccccc]"
 				>
 					<FeedItem
 						paper={row.paper}
