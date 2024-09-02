@@ -64,6 +64,10 @@ export const PostRepository = {
 			if (post.space?.deletedAt) {
 				return false;
 			}
+			// Filter out posts w/ comments w/o paper references
+			if (!post.comments[0]?.papers) {
+				return false;
+			}
 			return true;
 		});
 	},
