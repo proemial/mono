@@ -8,13 +8,15 @@ import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { useUser } from "@clerk/nextjs";
 import { Comment, Post } from "@proemial/data/neon/schema";
 import { DrawerContent } from "@proemial/shadcn-ui";
-import { DialogTitle } from "@proemial/shadcn-ui/components/ui/dialog";
+import { Dialog, DialogTitle } from "@proemial/shadcn-ui/components/ui/dialog";
 import { useQueryClient } from "@tanstack/react-query";
 import { nanoid } from "ai";
 import { Message, useChat } from "ai/react";
 import { motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import useMeasure from "react-use-measure";
+import { ConsentDialogContent } from "../consent-dialog/consent-dialog-content";
+import { usePostConsent } from "../consent-dialog/use-post-consent";
 import { AskScienceForm } from "./ask-science-form";
 import { PROEM_ASSISTANT_QUERY_KEY } from "./assistant";
 import { Header } from "./assistant-header";
@@ -63,6 +65,8 @@ export const AssistantContent = ({
 	const [inputFocused, setInputFocused] = useState(false);
 	const queryClient = useQueryClient();
 	const { slug } = useAssistant();
+	const { consent } = usePostConsent();
+	const [showConsentDialog, setShowConsentDialog] = useState(false);
 	const { setId } = useLatestSubmitId();
 
 	const [contentRef, { height: contentHeight }] = useMeasure();
@@ -112,6 +116,10 @@ export const AssistantContent = ({
 	);
 
 	const handleSubmit = (input: string) => {
+		if (!consent) {
+			setShowConsentDialog(true);
+			return;
+		}
 		setId(paperId ?? spaceId);
 		append({ role: "user", content: input, createdAt: new Date() });
 		setExpanded(true);
@@ -153,6 +161,9 @@ export const AssistantContent = ({
 	return (
 		<DrawerContent className="max-w-xl mx-auto flex border-none bg-theme-900 h-full">
 			<DialogTitle className="hidden" />
+			<Dialog open={showConsentDialog}>
+				<ConsentDialogContent onClose={() => setShowConsentDialog(false)} />
+			</Dialog>
 			<div
 				className="flex flex-col justify-between h-[calc(100%-24px)]"
 				ref={contentRef}
