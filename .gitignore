@@ -41,3 +41,6 @@ yarn-error.log*
 !.vscode/extensions.json
 next-env.d.ts
 .env*.local
+
+# AI
+.cursorrules
