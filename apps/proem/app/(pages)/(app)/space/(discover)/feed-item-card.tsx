@@ -1,6 +1,7 @@
 "use client";
 
 import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
+import { Field } from "@/app/data/oa-fields";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -10,13 +11,12 @@ import {
 	PaperMetaDataProps,
 } from "@/components/paper-meta-data"; // Updated import
 import { routes } from "@/routes";
+import { isEmbedded } from "@/utils/url";
 import { Prefix } from "@proemial/redis/adapters/papers";
 import { AlertTriangle } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode, useMemo } from "react";
-import { isEmbedded } from "@/utils/url";
-import { Field } from "@/app/data/oa-fields";
 
 export type FeedItemCardProps = PaperMetaDataProps & {
 	children: ReactNode;
@@ -102,7 +102,8 @@ function EmbedableLink({
 	console.log("space", space);
 
 	const theme =
-		!space && field
+		// Only add the theme manually if the space is a personal collection
+		!space.includes("col_") && field
 			? `?color=${field.theme.color}${
 					field.theme.image ? `&image=${field.theme.image}` : ""
 				}`
