@@ -7,7 +7,10 @@ import {
 	Branding,
 	brandingForInstitution,
 } from "@/app/theme/institution-branding";
-import { fetchInstitutions, Institution } from "@proemial/repositories/oa/institutions/fetch-institutions";
+import {
+	Institution,
+	fetchInstitutions,
+} from "@proemial/repositories/oa/institutions/fetch-institutions";
 import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
 
 export default async function DiscoverPage({
@@ -20,9 +23,7 @@ export default async function DiscoverPage({
 	const { userId } = auth();
 	const { institution: searchString } = params;
 
-	const bookmarks = (await userId)
-		? getBookmarksByCollectionId(userId as string)
-		: {};
+	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
 
 	const institutions = await fetchInstitutions(searchString);
 	const institution = institutions?.at(0);
@@ -31,7 +32,10 @@ export default async function DiscoverPage({
 	const header = (
 		<div className="mt-2 flex flex-row justify-between items-center">
 			<WorksCount institution={institution} />
-			<FollowButton id={institution?.id as string} name={institution?.display_name ?? searchString} />
+			<FollowButton
+				id={institution?.id as string}
+				name={institution?.display_name ?? searchString}
+			/>
 		</div>
 	);
 
@@ -55,16 +59,19 @@ export default async function DiscoverPage({
 	);
 }
 
-function WorksCount({institution}: {institution?: Institution}) {
-	const thisYear = institution?.counts_by_year.find(works => works.year === 2024)?.works_count;
-	if(thisYear) {
+function WorksCount({ institution }: { institution?: Institution }) {
+	const thisYear = institution?.counts_by_year.find(
+		(works) => works.year === 2024,
+	)?.works_count;
+	if (thisYear) {
 		return <>{thisYear.toLocaleString()} papers published this year</>;
 	}
-	return <>{institution?.works_count?.toLocaleString()} papers published</>
+	return <>{institution?.works_count?.toLocaleString()} papers published</>;
 }
 
-function Logo({ name, branding }: { name: string, branding: Branding }) {
-	if (!branding.logo) return <div className="mb-12 flex justify-center text-xl">{name}</div>;
+function Logo({ name, branding }: { name: string; branding: Branding }) {
+	if (!branding.logo)
+		return <div className="mb-12 flex justify-center text-xl">{name}</div>;
 
 	// mix-blend-mode works but not on our background https://codepen.io/summercodes/pen/eYaYoVO
 	return (
