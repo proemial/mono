@@ -1,5 +1,5 @@
 import { chatInputMaxLength } from "@/app/api/bot/input-limit";
-import { Button, Header4, Textarea } from "@proemial/shadcn-ui";
+import { Button, Header4, Input } from "@proemial/shadcn-ui";
 import { ChevronRight } from "@untitled-ui/icons-react";
 import { KeyboardEvent, SyntheticEvent, useState } from "react";
 import {
@@ -24,7 +24,7 @@ export const AskScienceForm = ({ paper, setInputFocused, onSubmit }: Props) => {
 		setInput("");
 	};
 
-	const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter") {
 			e.preventDefault();
 			handleSubmit(e);
@@ -34,9 +34,10 @@ export const AskScienceForm = ({ paper, setInputFocused, onSubmit }: Props) => {
 	return (
 		<form onSubmit={handleSubmit} className="flex flex-col gap-1">
 			<Header4 className="text-white">{title}</Header4>
-			<div className="flex items-center w-full border text-foreground bg-card border-background rounded-3xl">
-				<Textarea
-					className="rounded-full h-11 pl-5 resize-none flex items-center text-lg bg-card"
+			<div className="flex items-center w-full border text-foreground bg-card border-background rounded-full">
+				<Input
+					className={`rounded-full h-11 pl-5 resize-none flex items-center text-lg bg-card
+						border-none ring-offset-0 focus-visible:ring-offset-0 focus-visible:ring-0`}
 					value={input}
 					onChange={(e) => setInput(e.target.value)}
 					onKeyDown={handleKeyDown}
