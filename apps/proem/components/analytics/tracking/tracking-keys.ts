@@ -170,6 +170,7 @@ export const analyticsKeys = {
 				generated: "assistant:ask:suggestion:generated",
 				followUp: "assistant:ask:suggestion:follow_up",
 			},
+			abort: "assistant:ask:abort",
 		},
 		regenSuggestions: "assistant:regen_suggestions",
 	},

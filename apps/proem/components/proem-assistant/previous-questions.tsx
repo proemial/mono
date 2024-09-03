@@ -24,6 +24,8 @@ type Props = {
 	expanded: boolean;
 	setExpanded: (expanded: boolean) => void;
 	onSubmit: (input: string) => void;
+	onAbort: () => void;
+	isLoading: boolean;
 };
 
 export const PreviousQuestions = ({
@@ -35,6 +37,8 @@ export const PreviousQuestions = ({
 	expanded,
 	setExpanded,
 	onSubmit,
+	onAbort,
+	isLoading,
 }: Props) => {
 	const headerTitle =
 		userId === spaceId ? "Your previous questions" : "Previous questions";
@@ -113,11 +117,13 @@ export const PreviousQuestions = ({
 							key={post.id}
 							post={post}
 							onSubmit={handleSubmit}
+							onAbort={onAbort}
 							highlight={
 								typeof submitId !== "undefined" &&
 								[spaceId, paperId].includes(submitId) &&
 								index === 0
 							}
+							streaming={isLoading}
 						/>
 					))}
 				</div>

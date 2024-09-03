@@ -42,9 +42,17 @@ type Props = {
 	post: TuplePost;
 	onSubmit: (input: string) => void;
 	highlight?: boolean;
+	streaming?: boolean;
+	onAbort?: () => void;
 };
 
-export const Tuple = ({ post, onSubmit, highlight }: Props) => {
+export const Tuple = ({
+	post,
+	onSubmit,
+	highlight,
+	streaming,
+	onAbort,
+}: Props) => {
 	const { author } = post;
 	const formattedPostDate = dayjs(post.createdAt).fromNow();
 	const throbberStatus = useThrobberStatus();
@@ -140,6 +148,15 @@ export const Tuple = ({ post, onSubmit, highlight }: Props) => {
 					<div className="text-white text-sm">{throbberStatus}</div>
 				)}
 			</div>
+			{/* {highlight && streaming && (
+				<button
+					type="button"
+					onClick={onAbort}
+					className="mt-2.5 mb-1 rounded-full bg-theme-400 hover:bg-theme-500 active:bg-theme-600 text-white px-3 py-1.5 duration-200"
+				>
+					Stop
+				</button>
+			)} */}
 		</div>
 	);
 };

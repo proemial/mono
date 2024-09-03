@@ -15,6 +15,10 @@ import { Message, useChat } from "ai/react";
 import { motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import useMeasure from "react-use-measure";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "../analytics/tracking/tracking-keys";
 import { AskScienceForm } from "./ask-science-form";
 import { PROEM_ASSISTANT_QUERY_KEY } from "./assistant";
 import { Header } from "./assistant-header";
@@ -78,6 +82,7 @@ export const AssistantContent = ({
 	const {
 		messages,
 		append,
+		stop,
 		data: streamData,
 		isLoading,
 	} = useChat({
@@ -115,6 +120,12 @@ export const AssistantContent = ({
 		setId(paperId ?? spaceId);
 		append({ role: "user", content: input, createdAt: new Date() });
 		setExpanded(true);
+	};
+
+	const handleAbort = () => {
+		setId(undefined);
+		stop();
+		trackHandler(analyticsKeys.assistant.ask.abort)();
 	};
 
 	const tuplePosts = useMemo(
@@ -178,6 +189,8 @@ export const AssistantContent = ({
 						expanded={expanded}
 						setExpanded={setExpanded}
 						onSubmit={handleSubmit}
+						onAbort={handleAbort}
+						isLoading={isLoading}
 					/>
 				)}
 				<motion.div
