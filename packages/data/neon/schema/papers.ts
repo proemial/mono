@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 import { pgTable, text } from "drizzle-orm/pg-core";
 import { bookmarks } from "./bookmarks";
 import { collectionsToPapers } from "./collections-to-papers";
+import { paperReads } from "./paper-reads";
 import { posts } from "./posts";
 
 export const papers = pgTable("papers", {
@@ -15,4 +16,5 @@ export const papersRelations = relations(papers, ({ many }) => ({
 	bookmarks: many(bookmarks),
 	posts: many(posts),
 	collectionsToPapers: many(collectionsToPapers),
+	paperReads: many(paperReads),
 }));
