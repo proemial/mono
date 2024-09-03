@@ -40,8 +40,6 @@ export const PreviousQuestions = ({
 	onAbort,
 	isLoading,
 }: Props) => {
-	const headerTitle =
-		userId === spaceId ? "Your previous questions" : "Previous questions";
 	const scrollElement = useRef<HTMLDivElement>(null);
 	const [gradients, setGradients] = useState<Gradients>({
 		top: false,
@@ -101,7 +99,7 @@ export const PreviousQuestions = ({
 
 	return (
 		<motion.div className="flex flex-col grow px-3 pb-3" animate={{ height }}>
-			<Header4 className="text-white">{headerTitle}</Header4>
+			<Header4 className="text-white pb-2">Previous questions</Header4>
 			<ScrollArea ref={scrollElement} className="grow">
 				<motion.div
 					className="pointer-events-none absolute left-0 right-0 top-0 h-20 bg-gradient-to-b from-theme-900 to-transparent z-10"

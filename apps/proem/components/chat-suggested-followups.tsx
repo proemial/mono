@@ -27,7 +27,7 @@ export function ChatSuggestedFollowups({
 			<div className="flex items-center place-content-between">
 				<div className="flex items-center gap-3.5">
 					<GanttChart />
-					<Header4>Suggested questions</Header4>
+					<Header4 className="pb-2">Suggested questions</Header4>
 				</div>
 				<div className="-mr-2">
 					<MoodSelector trackingPrefix={trackingPrefix} />

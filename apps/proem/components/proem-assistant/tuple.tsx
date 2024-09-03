@@ -103,7 +103,7 @@ export const Tuple = ({
 						</div>
 						<div className="opacity-30">{formattedPostDate}</div>
 					</div>
-					<div className="opacity-50 italic">{post.content}</div>
+					<div className="font">{post.content}</div>
 				</div>
 			</div>
 			<div className="flex gap-2">
@@ -119,7 +119,7 @@ export const Tuple = ({
 							{applyExplainLinks(
 								post.reply.content,
 								(input: string) => onSubmit(`What is ${input}?`),
-								"bg-transparent opacity-50 font-semibold cursor-default",
+								"bg-transparent font-semibold text-theme-300 cursor-default",
 							)}
 							{papers.length > 0 &&
 								papers.map((paper, index) => (

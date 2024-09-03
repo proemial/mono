@@ -45,7 +45,7 @@ export const SuggestedQuestions = forwardRef(
 				ref={ref}
 			>
 				<div className="flex justify-between items-center -mr-2">
-					<Header4 className="text-white">Suggested questions</Header4>
+					<Header4 className="text-white pb-2">Suggested questions</Header4>
 					<MoodSelector trackingPrefix="ask" className="text-white" />
 				</div>
 				<div className="flex flex-col gap-2 items-center">

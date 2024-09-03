@@ -33,7 +33,7 @@ export const AskScienceForm = ({ paper, setInputFocused, onSubmit }: Props) => {
 
 	return (
 		<form onSubmit={handleSubmit} className="flex flex-col gap-1">
-			<Header4 className="text-white">{title}</Header4>
+			<Header4 className="text-white pb-2">{title}</Header4>
 			<div className="flex items-center w-full border text-foreground bg-card border-background rounded-full">
 				<Input
 					className={`rounded-full h-11 pl-5 resize-none flex items-center text-lg bg-card
