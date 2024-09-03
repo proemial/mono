@@ -1,6 +1,10 @@
-import { NewPaperRead, PaperRead, paperReads } from "@/neon/schema/paper-reads";
-import { and, eq, or } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { neonDb } from "..";
+import {
+	NewPaperRead,
+	PaperRead,
+	paperReads,
+} from "../neon/schema/paper-reads";
 
 export const PaperReadsRepository = {
 	create: async (paperRead: NewPaperRead) => {
@@ -14,13 +18,11 @@ export const PaperReadsRepository = {
 		return result;
 	},
 
-	findById: async (
-		userIdOrPaperId: PaperRead["userId"] | PaperRead["paperId"],
-	) => {
+	read: async (userId: PaperRead["userId"], paperId: PaperRead["paperId"]) => {
 		return await neonDb.query.paperReads.findFirst({
-			where: or(
-				eq(paperReads.userId, userIdOrPaperId),
-				eq(paperReads.paperId, userIdOrPaperId),
+			where: and(
+				eq(paperReads.userId, userId),
+				eq(paperReads.paperId, paperId),
 			),
 			with: {
 				user: true,
