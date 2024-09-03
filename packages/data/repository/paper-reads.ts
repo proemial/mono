@@ -1,6 +1,6 @@
-import { neonDb } from "@/neon/db";
 import { NewPaperRead, PaperRead, paperReads } from "@/neon/schema/paper-reads";
 import { and, eq, or } from "drizzle-orm";
+import { neonDb } from "..";
 
 export const PaperReadsRepository = {
 	create: async (paperRead: NewPaperRead) => {
