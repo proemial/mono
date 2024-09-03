@@ -56,7 +56,7 @@ export const PostRepository = {
 					return false;
 				}
 				// Filter out posts w/ comments w/o paper references
-				if (!post.comments[0]?.papers) {
+				if (!post.comments[0]?.papers || post.comments[0].papers.length === 0) {
 					return false;
 				}
 				return true;
@@ -75,7 +75,7 @@ export const PostRepository = {
 				return false;
 			}
 			// Filter out posts w/ comments w/o paper references
-			if (!post.comments[0]?.papers) {
+			if (!post.comments[0]?.papers || post.comments[0].papers.length === 0) {
 				return false;
 			}
 			return true;
