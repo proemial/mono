@@ -1,15 +1,26 @@
-import { create } from "zustand";
+import { useEffect, useState } from "react";
 
-interface StoreState {
-	consent: boolean;
-	setConsent: (consent: boolean) => void;
-}
+const LOCAL_STORAGE_KEY = "proem_post_consent";
 
-export const usePostConsent = create<StoreState>()((set) => ({
-	consent: false,
-	setConsent: (consent) => {
-		set((state) => ({
-			consent,
-		}));
-	},
-}));
+type Consent = "accepted" | "denied";
+
+export const usePostConsent = () => {
+	const [consent, setConsent] = useState<Consent>("denied");
+
+	const existingConsent = localStorage.getItem(
+		LOCAL_STORAGE_KEY,
+	) as Consent | null;
+	if (existingConsent === "accepted" && consent === "denied") {
+		setConsent("accepted");
+	}
+
+	const accept = () => {
+		localStorage.setItem(LOCAL_STORAGE_KEY, "accepted" satisfies Consent);
+		setConsent("accepted");
+	};
+
+	return {
+		consent,
+		accept,
+	};
+};

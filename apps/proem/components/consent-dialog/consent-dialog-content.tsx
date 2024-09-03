@@ -13,10 +13,10 @@ type Props = {
 };
 
 export const ConsentDialogContent = ({ onClose }: Props) => {
-	const { setConsent } = usePostConsent();
+	const { accept } = usePostConsent();
 
 	const handleAccept = () => {
-		setConsent(true);
+		accept();
 		onClose();
 	};
 	const handleDeny = () => {

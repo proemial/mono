@@ -116,7 +116,7 @@ export const AssistantContent = ({
 	);
 
 	const handleSubmit = (input: string) => {
-		if (!consent) {
+		if (consent === "denied") {
 			setShowConsentDialog(true);
 			return;
 		}
