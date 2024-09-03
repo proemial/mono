@@ -4,12 +4,14 @@ import {
 	screenMaxWidth,
 } from "@/app/constants";
 import { getAvailableCollections } from "@/app/profile/actions";
+import { MenuButton } from "@/app/profile/menu-button";
 import { Profile } from "@/app/profile/profile";
 import { asTheme, fromSeed } from "@/app/theme/color-theme";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { SelectSpaceHeader } from "@/components/nav-bar/headers/select-space-header";
 import { SimpleHeader } from "@/components/nav-bar/headers/simple-header";
 import { SetThemeColor } from "@/components/set-theme-color";
+import { SignInDrawer } from "@/components/sign-in-drawer";
 import { ThemeBackgroundImage } from "@/components/theme-background-image";
 import { getTopNavigationContentByUrl } from "@/components/top-navigation/get-top-navigation-content-by-url";
 import { routes } from "@/routes";
@@ -92,7 +94,18 @@ export function TopNavigation() {
 
 				<NavigationMenuList className="justify-between flex-nowrap">
 					<NavigationMenuItem className="min-w-7">
-						{menu ?? <Profile />}
+						{menu ?? userId ? (
+							<Profile />
+						) : (
+							<SignInDrawer
+								trigger={
+									// extra div to make the trigger a ref
+									<div>
+										<MenuButton />
+									</div>
+								}
+							/>
+						)}
 					</NavigationMenuItem>
 					<NavigationMenuItem className="truncate">
 						{isLoading ? (

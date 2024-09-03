@@ -86,16 +86,6 @@ export function getTopNavigationContentByUrl(
 		// app/space SignInDrawer + SignInDrawer
 		// app/space/new <CloseAction target={routes.space} />
 		return {
-			menu: (
-				<SignInDrawer
-					trigger={
-						// extra div to make the trigger a ref
-						<div>
-							<MenuButton />
-						</div>
-					}
-				/>
-			),
 			title: PERSONAL_DEFAULT_COLLECTION_NAME,
 			action: (
 				<ActionMenu>
