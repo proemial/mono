@@ -1,6 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { neonDb } from "..";
 import {
+	FindPaperRead,
 	NewPaperRead,
 	PaperRead,
 	paperReads,
@@ -18,7 +19,7 @@ export const PaperReadsRepository = {
 		return result;
 	},
 
-	read: async (userId: PaperRead["userId"], paperId: PaperRead["paperId"]) => {
+	read: async ({ userId, paperId }: FindPaperRead) => {
 		return await neonDb.query.paperReads.findFirst({
 			where: and(
 				eq(paperReads.userId, userId),
@@ -51,10 +52,7 @@ export const PaperReadsRepository = {
 		return result;
 	},
 
-	delete: async (
-		userId: PaperRead["userId"],
-		paperId: PaperRead["paperId"],
-	) => {
+	delete: async ({ userId, paperId }: FindPaperRead) => {
 		await neonDb
 			.delete(paperReads)
 			.where(

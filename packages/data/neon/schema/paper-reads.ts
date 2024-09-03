@@ -11,6 +11,7 @@ import { users } from "./users";
 
 export type PaperRead = typeof paperReads.$inferSelect;
 export type NewPaperRead = typeof paperReads.$inferInsert;
+export type FindPaperRead = Pick<PaperRead, "userId" | "paperId">;
 
 export const paperReads = pgTable(
 	"paper_reads",

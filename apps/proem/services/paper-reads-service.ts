@@ -1,12 +1,12 @@
-import { PaperRead } from "@proemial/data/neon/schema";
+import { FindPaperRead } from "@proemial/data/neon/schema";
 import { PaperReadsRepository } from "@proemial/data/repository/paper-reads";
 
 export const PaperReadsService = {
-	registerPaperRead: async (
-		userId: PaperRead["userId"],
-		paperId: PaperRead["paperId"],
-	) => {
-		const existingPaperRead = await PaperReadsRepository.read(userId, paperId);
+	registerPaperRead: async ({ userId, paperId }: FindPaperRead) => {
+		const existingPaperRead = await PaperReadsRepository.read({
+			userId,
+			paperId,
+		});
 		if (existingPaperRead) {
 			return await PaperReadsRepository.update({
 				...existingPaperRead,
