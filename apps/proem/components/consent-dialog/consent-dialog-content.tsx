@@ -6,6 +6,10 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@proemial/shadcn-ui/components/ui/dialog";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "../analytics/tracking/tracking-keys";
 import { usePostConsent } from "./use-post-consent";
 
 type Props = {
@@ -17,9 +21,11 @@ export const ConsentDialogContent = ({ onClose }: Props) => {
 
 	const handleAccept = () => {
 		accept();
+		trackHandler(analyticsKeys.assistant.consent.accepted)();
 		onClose();
 	};
 	const handleDeny = () => {
+		trackHandler(analyticsKeys.assistant.consent.denied)();
 		onClose();
 	};
 

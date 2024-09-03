@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const LOCAL_STORAGE_KEY = "proem_post_consent";
 

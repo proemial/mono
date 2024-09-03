@@ -172,6 +172,10 @@ export const analyticsKeys = {
 			},
 		},
 		regenSuggestions: "assistant:regen_suggestions",
+		consent: {
+			accepted: "assistant:consent:accepted",
+			denied: "assistant:consent:denied",
+		},
 	},
 	search: {
 		click: {
