@@ -63,7 +63,6 @@ export default async function DiscoverPage({ searchParams }: Props) {
 
 			<Feed
 				filter={filter}
-				debug={params.debug}
 				bookmarks={bookmarks}
 				nocache={searchParams?.nocache}
 			>

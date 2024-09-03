@@ -18,13 +18,13 @@ import { ThemeColoredCard } from "@/components/theme-colored-card";
 import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
 import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
+import { useSearchParams } from "next/navigation";
 import { ReactNode } from "react";
 
 // 1-4 is fetched without scrolling
 const initialPageSize = 4;
 type FeedProps = {
 	children: ReactNode;
-	debug?: boolean;
 	filter: {
 		topic?: number;
 		features?: RankedFeature[];
@@ -32,7 +32,7 @@ type FeedProps = {
 		institution?: string;
 	};
 	nocache?: boolean;
-	bookmarks: Bookmarks;
+	bookmarks?: Bookmarks | null;
 	header?: ReactNode;
 	theme?: Theme;
 };
@@ -40,12 +40,12 @@ type FeedProps = {
 export function Feed({
 	children,
 	filter,
-	debug,
 	nocache,
 	bookmarks,
 	header,
 	theme,
 }: FeedProps) {
+	const debug = useSearchParams().get("debug");
 	const { topic, features, days, institution } = filter;
 
 	return (
@@ -96,7 +96,7 @@ export function Feed({
 							posts: PostWithCommentsAndAuthor[];
 						};
 					};
-					const isBookmarked = Boolean(bookmarks[paper.paper.id]);
+					const isBookmarked = Boolean(bookmarks?.[paper.paper.id]);
 					const topics = row.paper.data.topics;
 					const field = topics && getFieldFromOpenAlexTopics(topics);
 

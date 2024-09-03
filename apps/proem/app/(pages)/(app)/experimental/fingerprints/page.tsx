@@ -33,7 +33,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 			: FEED_DEFAULT_DAYS,
 	};
 
-	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
+	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : null;
 	const ids = params.ids?.split(",") ?? [];
 
 	// Only use history when `ids` param is missing (accept clearing the list of papers)
@@ -41,9 +41,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	if (noIds && !ids.length) {
 		const history = await getBookmarksAndHistory();
 		if (history?.length) {
-			redirect(
-				`/experimental/fingerprints?ids=${history.flatMap((i) => i).join(",")}`,
-			);
+			redirect(`/experimental/fingerprints?ids=${history.flat().join(",")}`);
 		}
 	}
 
@@ -57,7 +55,6 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 		<div className="pt-8 space-y-6">
 			<Feed
 				filter={{ features: filter, days: params.days }}
-				debug={!searchParams?.clean}
 				nocache={searchParams?.nocache}
 				bookmarks={bookmarks}
 			>
