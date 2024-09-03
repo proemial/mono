@@ -27,8 +27,10 @@ export function ActionMenu({ children }: { children: React.ReactNode }) {
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent
-				side="left"
-				align="start"
+				side="bottom"
+				align="end"
+				alignOffset={-6}
+				sideOffset={0}
 				className="border-none shadow-2xl rounded-xl p-0 w-auto divide-y *:py-2 *:px-4 text-base *:cursor-pointer *:block min-w-44"
 			>
 				{React.Children.map(children, (child) => (
