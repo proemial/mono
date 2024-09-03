@@ -32,23 +32,29 @@ export const ConsentDialogContent = ({ onClose }: Props) => {
 	return (
 		<DialogContent className="sm:max-w-[425px]">
 			<DialogHeader>
-				<DialogTitle>Ready to post your first question?</DialogTitle>
-				<DialogDescription>
-					We're excited too! Please be aware of the following:
-				</DialogDescription>
+				<DialogTitle>Ready to share your first question?</DialogTitle>
 			</DialogHeader>
 			<div className="py-4">
-				Unless you're a member of a registered organization, your questions and
-				their associated answer, your name and profile image may be visible to
-				other users of Proem.
+				<p className="pb-2">
+					All questions are <strong>public</strong> and will be attributed with
+					your name and image.
+				</p>
+				<p className="text-sm text-gray-600">
+					Don't want to share your questions with everyone else? Create a{" "}
+					<a href="#" className="underline text-gray-800">
+						private space
+					</a>
+					.
+				</p>
 			</div>
+
 			<DialogFooter>
 				<div className="flex flex-col sm:flex-row gap-2">
-					<Button type="button" onClick={handleDeny}>
-						Disagree
-					</Button>
 					<Button type="button" onClick={handleAccept}>
-						Accept
+						Ask question now
+					</Button>
+					<Button variant="ghost" type="button" onClick={handleDeny}>
+						Cancel
 					</Button>
 				</div>
 			</DialogFooter>
