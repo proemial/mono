@@ -14,13 +14,6 @@ export async function GET(request: NextRequest) {
 					{ value: true, label: "Single AI Assistant on all pages" },
 				],
 			},
-			summariseModel: {
-				description: "Which summarisation model to use",
-				options: [
-					{ value: "gpt-3.5-turbo", label: "gpt-3.5-turbo" },
-					{ value: "claude-3-haiku", label: "claude-3-haiku" },
-				],
-			},
 		},
 	});
 }
