@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useEffect, useRef } from "react";
 import { AuthorAvatar, getFullName } from "../author-avatar";
 import { applyExplainLinks } from "../chat-apply-links";
 import { ProemLogo } from "../icons/brand/logo";
@@ -56,6 +57,7 @@ export const Tuple = ({ post, onSubmit, highlight }: Props) => {
 		}[]) ?? [];
 	const hasPaperSources = post.slug && post.reply?.metadata?.papers;
 	const { open, slug } = useAssistant();
+	const ref = useRef<HTMLDivElement>(null);
 
 	const handleClick = () => {
 		if (hasPaperSources && !slug) {
@@ -64,13 +66,21 @@ export const Tuple = ({ post, onSubmit, highlight }: Props) => {
 		}
 	};
 
+	useEffect(() => {
+		if (ref.current && highlight) {
+			ref.current.scrollIntoView({ behavior: "smooth" });
+		}
+	}, [highlight]);
+
 	return (
 		<div
 			className={cn("flex flex-col rounded-2xl gap-2 p-2 pr-3 bg-theme-700", {
 				"cursor-pointer hover:bg-theme-800 duration-200":
 					!!post.reply?.metadata?.papers && !slug,
+				"border-2 border-theme-200": highlight,
 			})}
 			onClick={handleClick}
+			ref={ref}
 		>
 			<div className="flex gap-2">
 				<AuthorAvatar
