@@ -42,7 +42,7 @@ export const PaperMetaData = ({
 				</div>
 				{!readonly && (
 					<div
-						className="-mr-2 min-h-10 min-w-10"
+						className="-m-2 min-h-10 min-w-10"
 						onClick={(event) => {
 							// Prevent triggering the parent a tag when clicking the button
 							event.preventDefault();
