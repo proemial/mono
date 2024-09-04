@@ -27,5 +27,5 @@ export const usersRelations = relations(users, ({ many }) => ({
 	bookmarks: many(bookmarks),
 	posts: many(posts),
 	comments: many(comments),
-	paperReads: many(paperReads),
+	paper_reads: many(paperReads),
 }));
