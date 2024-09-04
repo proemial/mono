@@ -64,6 +64,7 @@ export function Feed({
 
 	const isDefaultSpace =
 		"collectionId" in filter && filter.collectionId?.startsWith("user_");
+
 	return (
 		<div className="space-y-5 pb-10">
 			{children ? <div>{children}</div> : null}
@@ -142,7 +143,7 @@ export function Feed({
 						);
 					}
 
-					return <div className="my-3">{item}</div>;
+					return <div className="py-3">{item}</div>;
 				}}
 			/>
 		</div>

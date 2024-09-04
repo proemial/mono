@@ -11,10 +11,6 @@ type QueryReturnType<TRow> = {
 	rows: TRow[];
 };
 
-type UseInfinityQuery = Pick<
-	Parameters<typeof useInfiniteQuery>[0],
-	"queryKey" | "queryFn"
->;
 export type InfinityScollListProps<MyTQueryKey extends string[], TRow> = {
 	renderHeadline?: ((count?: number) => ReactNode) | null;
 	renderRow: (row: TRow, index: number) => ReactNode;
@@ -30,7 +26,6 @@ export function InfinityScrollList<MyTQueryKey extends string[], TRow>({
 }: InfinityScollListProps<MyTQueryKey, TRow>) {
 	const {
 		status,
-		isLoading,
 		data,
 		isFetchingNextPage,
 		fetchNextPage,
