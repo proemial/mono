@@ -48,11 +48,12 @@ export const getUser = async (userId: string) => {
 };
 
 export const getUsers = async (userIds: string[]) => {
+	if (userIds.length === 0) return [];
 	try {
 		const { data: users } = await getUsersByIds(...userIds);
 		return users;
 	} catch (error) {
-		console.error("Error fetching users from auth provieder", error);
+		console.error("Error fetching users from auth provider", error);
 		return [];
 	}
 };

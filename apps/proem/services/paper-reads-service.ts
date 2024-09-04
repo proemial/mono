@@ -1,5 +1,6 @@
 import { ANONYMOUS_USER_ID } from "@/app/constants";
 import { streamCacheUpdate } from "@/inngest/populator.task";
+import { getUsers } from "@/utils/auth";
 import { auth } from "@clerk/nextjs/server";
 import { PaperRead } from "@proemial/data/neon/schema";
 import { ensurePaperExistsInDb } from "@proemial/data/repository/paper";
@@ -12,8 +13,16 @@ export type PaperReadWithUserAndPaper = Awaited<
 	ReturnType<typeof PaperReadsService.getAllByPaperId>
 >[number];
 
+export type BasicReaderUserData = {
+	firstName: string | null;
+	lastName: string | null;
+	imageUrl: string | undefined;
+};
+
 export const PaperReadsService = {
 	increment: async (paperId: PaperRead["paperId"]) => {
+		// TODO: Revalidate cache
+
 		const { userId: authenticatedUserId } = auth();
 		const userId = authenticatedUserId ?? ANONYMOUS_USER_ID;
 
@@ -32,7 +41,7 @@ export const PaperReadsService = {
 			// Dirty hack to prevent multiple renders causing multiple reads
 			// from being recorded in quick succession
 			if (diffInMsFromNow > 5000) {
-				// TODO: Update stream cache
+				// TODO: Update stream cache (once it has been changed to use the `paper_reads` table)
 				// waitUntil(streamCacheUpdate.run(userId, "user"));
 				return await PaperReadsRepository.update({
 					...existingPaperRead,
@@ -47,7 +56,7 @@ export const PaperReadsService = {
 			getOrCreateUser(userId),
 			ensurePaperExistsInDb(paperId),
 		]);
-		// TODO: Update stream cache
+		// TODO: Update stream cache (once it has been changed to use the `paper_reads` table)
 		// waitUntil(streamCacheUpdate.run(userId, "user"));
 		return await PaperReadsRepository.create({ userId, paperId });
 	},
@@ -57,4 +66,28 @@ export const PaperReadsService = {
 
 	getDistinctUserCount: async (paperId: PaperRead["paperId"]) =>
 		await PaperReadsRepository.countDistinctUsers(paperId),
+
+	getReaders: async (paperId: PaperRead["paperId"]) => {
+		const paperReads = await PaperReadsService.getAllByPaperId(paperId);
+		const readerIds = paperReads.map((paperRead) => paperRead.userId);
+		const readers = (await getUsers(readerIds)).map(
+			({ firstName, lastName, imageUrl }) => ({
+				firstName,
+				lastName,
+				imageUrl,
+			}),
+		);
+		return [
+			...(readerIds.includes(ANONYMOUS_USER_ID)
+				? [
+						{
+							firstName: "Anonymous",
+							lastName: null,
+							imageUrl: undefined,
+						} satisfies BasicReaderUserData,
+					]
+				: []),
+			...readers,
+		];
+	},
 };

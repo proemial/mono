@@ -6,6 +6,7 @@ import Markdown from "@/components/markdown";
 import { ModelSelector, ModelSelectorProps } from "@/components/model-selector";
 import { PaperMetaData } from "@/components/paper-meta-data";
 import { Trackable } from "@/components/trackable";
+import { BasicReaderUserData } from "@/services/paper-reads-service";
 import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { trimForQuotes } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
@@ -23,7 +24,7 @@ type ChatArticleProps = Pick<
 	text?: string;
 	paper?: OpenAlexPaper;
 	paperPosts: PostWithCommentsAndAuthor[];
-	distinctReadCount: number;
+	readers: BasicReaderUserData[];
 };
 
 export function ChatArticle({
@@ -34,7 +35,7 @@ export function ChatArticle({
 	isBookmarked,
 	customCollectionId,
 	paperPosts,
-	distinctReadCount,
+	readers,
 }: ChatArticleProps) {
 	const title = paper?.generated?.title;
 	const authors = paper?.data.authorships;
@@ -66,7 +67,7 @@ export function ChatArticle({
 
 			<EngagementIndicator
 				posts={paperPosts}
-				distinctReadCount={distinctReadCount}
+				readers={readers}
 				className="py-1"
 			/>
 

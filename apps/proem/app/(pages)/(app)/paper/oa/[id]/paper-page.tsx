@@ -43,8 +43,7 @@ export default async function PaperPage({
 		: {};
 	const isBookmarked = Boolean(bookmarks[paperId]);
 
-	const noOfReadsByDistinctUsers =
-		await PaperReadsService.getDistinctUserCount(paperId);
+	const readers = await PaperReadsService.getReaders(paperId);
 
 	return (
 		<Suspense fallback={<PaperReaderSkeleton />}>
@@ -55,7 +54,7 @@ export default async function PaperPage({
 				paperPostsPromise={paperPostsPromise}
 				type={type}
 				collectionId={collectionId}
-				distinctReadCount={noOfReadsByDistinctUsers}
+				readers={readers}
 			/>
 		</Suspense>
 	);

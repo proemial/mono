@@ -1,5 +1,6 @@
 "use client";
 
+import { BasicReaderUserData } from "@/services/paper-reads-service";
 import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { cn } from "@proemial/shadcn-ui";
 import { useParams } from "next/navigation";
@@ -8,33 +9,18 @@ import { useAssistant } from "./proem-assistant/use-assistant";
 
 type Props = {
 	posts: PostWithCommentsAndAuthor[];
-	distinctReadCount: number | undefined;
+	readers: BasicReaderUserData[];
 	className?: string;
 };
 
-export const EngagementIndicator = ({
-	posts,
-	distinctReadCount,
-	className,
-}: Props) => {
+export const EngagementIndicator = ({ posts, readers, className }: Props) => {
 	const { id: paperId } = useParams<{ id?: string }>();
 	const { open } = useAssistant();
 	const clickable = paperId && posts.length > 0;
 
-	const readCount = distinctReadCount
-		? `${distinctReadCount} people read this`
-		: undefined;
+	const readCount =
+		readers.length > 0 ? `${readers.length} people read this` : undefined;
 	const questions = formatQuestionsAskedLabel(posts.length);
-
-	const distinctAuthors = posts.reduce(
-		(authors: PostWithCommentsAndAuthor["author"][], post) => {
-			if (!authors.find((author) => author && author.id === post.author?.id)) {
-				authors.push(post.author);
-			}
-			return authors;
-		},
-		[],
-	);
 
 	const handleClick = () => {
 		if (clickable) {
@@ -47,14 +33,14 @@ export const EngagementIndicator = ({
 			className={cn("flex gap-2", className, { "cursor-pointer": clickable })}
 			onClick={handleClick}
 		>
-			{distinctAuthors.length > 0 && (
+			{readers.length > 0 && (
 				<div className="flex gap-2">
-					{distinctAuthors.map((author, index) => (
+					{readers.map((reader, index) => (
 						<AuthorAvatar
 							key={index}
-							firstName={author?.firstName ?? null}
-							lastName={author?.lastName ?? null}
-							imageUrl={author?.imageUrl}
+							firstName={reader.firstName}
+							lastName={reader.lastName}
+							imageUrl={reader.imageUrl}
 						/>
 					))}
 				</div>

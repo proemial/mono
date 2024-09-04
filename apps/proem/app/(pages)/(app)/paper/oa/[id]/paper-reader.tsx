@@ -1,6 +1,7 @@
 import { PaperReaderHeadlineProps } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-headline";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { ChatArticle } from "@/components/chat-article";
+import { BasicReaderUserData } from "@/services/paper-reads-service";
 import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { Collection } from "@proemial/data/neon/schema";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
@@ -13,7 +14,7 @@ type PaperReaderProps = Pick<PaperReaderHeadlineProps, "isBookmarked"> & {
 	paperPostsPromise: Promise<PostWithCommentsAndAuthor[]>;
 	type: "oa" | "arxiv";
 	collectionId?: Collection["id"];
-	distinctReadCount: number;
+	readers: BasicReaderUserData[];
 };
 
 export function PaperReader({
@@ -23,7 +24,7 @@ export function PaperReader({
 	type,
 	collectionId,
 	isBookmarked,
-	distinctReadCount,
+	readers,
 }: PaperReaderProps) {
 	const fetchedPaper = use(fetchedPaperPromise);
 	const generatedPaper = use(generatedPaperPromise);
@@ -43,7 +44,7 @@ export function PaperReader({
 				customCollectionId={collectionId}
 				isBookmarked={isBookmarked}
 				paperPosts={paperPosts}
-				distinctReadCount={distinctReadCount}
+				readers={readers}
 			/>
 		</div>
 	);
