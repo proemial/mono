@@ -11,27 +11,15 @@ export const PaperReadsRepository = {
 		const [result] = await neonDb
 			.insert(paperReads)
 			.values(paperRead)
+			.onConflictDoUpdate({
+				target: [paperReads.userId, paperReads.paperId],
+				set: { userId: paperRead.userId, paperId: paperRead.paperId },
+			})
 			.returning();
 		if (!result) {
 			throw new Error("Failed to create paper read");
 		}
 		return result;
-	},
-
-	read: async ({
-		userId,
-		paperId,
-	}: { userId: PaperRead["userId"]; paperId: PaperRead["paperId"] }) => {
-		return await neonDb.query.paperReads.findFirst({
-			where: and(
-				eq(paperReads.userId, userId),
-				eq(paperReads.paperId, paperId),
-			),
-			with: {
-				user: true,
-				paper: true,
-			},
-		});
 	},
 
 	update: async (paperRead: PaperRead) => {
@@ -63,5 +51,41 @@ export const PaperReadsRepository = {
 			.where(
 				and(eq(paperReads.userId, userId), eq(paperReads.paperId, paperId)),
 			);
+	},
+
+	findByUserIdAndPaperId: async ({
+		userId,
+		paperId,
+	}: { userId: PaperRead["userId"]; paperId: PaperRead["paperId"] }) => {
+		return await neonDb.query.paperReads.findFirst({
+			where: and(
+				eq(paperReads.userId, userId),
+				eq(paperReads.paperId, paperId),
+			),
+			with: {
+				user: true,
+				paper: true,
+			},
+		});
+	},
+
+	findAllByUserId: async (userId: PaperRead["userId"]) => {
+		return await neonDb.query.paperReads.findMany({
+			where: eq(paperReads.userId, userId),
+			with: {
+				user: true,
+				paper: true,
+			},
+		});
+	},
+
+	findAllByPaperId: async (paperId: PaperRead["paperId"]) => {
+		return await neonDb.query.paperReads.findMany({
+			where: eq(paperReads.paperId, paperId),
+			with: {
+				user: true,
+				paper: true,
+			},
+		});
 	},
 };

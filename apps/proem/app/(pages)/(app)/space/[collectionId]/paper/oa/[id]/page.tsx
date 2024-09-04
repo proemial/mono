@@ -25,6 +25,6 @@ export default async function OAPaperPage({
 		redirect(`${routes.paper}/oa/${paperId}`);
 	}
 
-	void PaperReadsService.registerPaperRead(paperId);
+	void PaperReadsService.add(paperId);
 	return <PaperPage paperId={paperId} type="oa" collectionId={collectionId} />;
 }

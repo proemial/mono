@@ -6,6 +6,6 @@ type Props = {
 };
 
 export default async function OAPaperPage({ params }: Props) {
-	void PaperReadsService.registerPaperRead(params.id);
+	void PaperReadsService.add(params.id);
 	return <PaperPage paperId={params.id} type="oa" />;
 }
