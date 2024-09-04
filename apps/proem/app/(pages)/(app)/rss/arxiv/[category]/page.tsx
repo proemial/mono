@@ -1,4 +1,5 @@
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
+import { PaperReadsService } from "@/services/paper-reads-service";
 import { PostService } from "@/services/post-service";
 import { auth } from "@clerk/nextjs/server";
 import { Redis } from "@proemial/redis/redis";
@@ -95,16 +96,17 @@ async function Paper({ id, isBookmarked }: PaperProps) {
 		return null;
 	}
 
-	const posts = await PostService.getPostsWithCommentsAndAuthors(
-		undefined,
-		paper.id,
-	);
+	const [posts, readers] = await Promise.all([
+		PostService.getPostsWithCommentsAndAuthors(undefined, paper.id),
+		PaperReadsService.getReaders(paper.id),
+	]);
 
 	return (
 		<FeedItem
 			paper={{
 				...paper,
 				posts,
+				readers,
 			}}
 			provider="arxiv"
 			isBookmarked={isBookmarked}

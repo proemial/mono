@@ -4,20 +4,20 @@ import {
 	fetchPapersByField,
 	fetchPapersByInstitution,
 } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
-import { fetchPaperWithPosts } from "@/app/data/fetch-feed";
+import { fetchPaperWithPostsAndReaders } from "@/app/data/fetch-feed";
 import { summarise } from "@/app/prompts/summarise-title";
 import { Redis } from "@proemial/redis/redis";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 
-export const fetchFeedByTopicWithPosts = async (
+export const fetchFeedByTopicWithPostsAndReaders = async (
 	params: FetchFeedParams[0],
 	options: Omit<FetchFeedParams[1], "limit">,
 	spaceId: string | undefined,
 ) => {
 	const feedByTopic = await fetchFeedByTopic(params, options);
 	const paperIds = feedByTopic.rows.map(({ paper }) => paper.id);
-	const papersWithPosts = await Promise.all(
-		paperIds.map((paperId) => fetchPaperWithPosts(paperId, spaceId)),
+	const papersWithPostsAndReaders = await Promise.all(
+		paperIds.map((paperId) => fetchPaperWithPostsAndReaders(paperId, spaceId)),
 	);
 	return {
 		...feedByTopic,
@@ -26,22 +26,27 @@ export const fetchFeedByTopicWithPosts = async (
 			paper: {
 				...row.paper,
 				posts:
-					papersWithPosts.find((paper) => paper.paperId === row.paper.id)
-						?.posts ?? [],
+					papersWithPostsAndReaders.find(
+						(paper) => paper.paperId === row.paper.id,
+					)?.posts ?? [],
+				readers:
+					papersWithPostsAndReaders.find(
+						(paper) => paper.paperId === row.paper.id,
+					)?.readers ?? [],
 			},
 		})),
 	};
 };
 
-export const fetchFeedByInstitutionWithPosts = async (
+export const fetchFeedByInstitutionWithPostsAndReaders = async (
 	params: { id: string },
 	options: Omit<FetchFeedParams[1], "limit">,
 	spaceId: string | undefined,
 ) => {
 	const feedByInstitution = await fetchFeedByInstitution(params, options);
 	const paperIds = feedByInstitution.rows.map(({ paper }) => paper.id);
-	const papersWithPosts = await Promise.all(
-		paperIds.map((paperId) => fetchPaperWithPosts(paperId, spaceId)),
+	const papersWithPostsAndReaders = await Promise.all(
+		paperIds.map((paperId) => fetchPaperWithPostsAndReaders(paperId, spaceId)),
 	);
 	return {
 		...feedByInstitution,
@@ -50,8 +55,13 @@ export const fetchFeedByInstitutionWithPosts = async (
 			paper: {
 				...row.paper,
 				posts:
-					papersWithPosts.find((paper) => paper.paperId === row.paper.id)
-						?.posts ?? [],
+					papersWithPostsAndReaders.find(
+						(paper) => paper.paperId === row.paper.id,
+					)?.posts ?? [],
+				readers:
+					papersWithPostsAndReaders.find(
+						(paper) => paper.paperId === row.paper.id,
+					)?.readers ?? [],
 			},
 		})),
 	};

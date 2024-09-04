@@ -1,7 +1,7 @@
 import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
 import { getBookmarkedPapersByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarked-papers-by-collection-id";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
-import { fetchFeedByFeaturesWithPosts } from "@/app/data/fetch-feed";
+import { fetchFeedByFeaturesWithPostsAndReaders } from "@/app/data/fetch-feed";
 import { CollectionService } from "@/services/collection-service";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
@@ -37,7 +37,7 @@ export default async function EmbedPage({
 
 	const limit = count && count < 30 ? count : 10;
 
-	const feed = await fetchFeedByFeaturesWithPosts(
+	const feed = await fetchFeedByFeaturesWithPostsAndReaders(
 		{ features, days: FEED_DEFAULT_DAYS },
 		{ limit }, // { offset: ctx.pageParam },
 		false,

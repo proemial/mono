@@ -3,7 +3,7 @@ import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
 import { getBookmarkedPapersByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarked-papers-by-collection-id";
 import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
-import { fetchPaperWithPosts } from "@/app/data/fetch-feed";
+import { fetchPaperWithPostsAndReaders } from "@/app/data/fetch-feed";
 import { ThemeColoredCard } from "@/components/theme-colored-card";
 import { CollectionService } from "@/services/collection-service";
 import { PermissionUtils } from "@/utils/permission-utils";
@@ -49,9 +49,9 @@ export default async function SavedPage({
 			)
 		: [];
 
-	const papersWithPosts = await Promise.all(
+	const papersWithPostsAndReaders = await Promise.all(
 		bookmarkedPapersInCurrentSpace.map((paperId) =>
-			fetchPaperWithPosts(paperId, collection.id),
+			fetchPaperWithPostsAndReaders(paperId, collection.id),
 		),
 	);
 
@@ -70,8 +70,11 @@ export default async function SavedPage({
 						paper={{
 							...paper,
 							posts:
-								papersWithPosts.find((p) => p.paperId === paper.id)?.posts ??
-								[],
+								papersWithPostsAndReaders.find((p) => p.paperId === paper.id)
+									?.posts ?? [],
+							readers:
+								papersWithPostsAndReaders.find((p) => p.paperId === paper.id)
+									?.readers ?? [],
 						}}
 						isBookmarked={isBookmarked}
 						customCollectionId={collectionId}

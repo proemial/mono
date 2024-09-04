@@ -84,10 +84,10 @@ export const PaperReadsService = {
 							firstName: "Anonymous",
 							lastName: null,
 							imageUrl: undefined,
-						} satisfies BasicReaderUserData,
+						},
 					]
 				: []),
 			...readers,
-		];
+		] as BasicReaderUserData[];
 	},
 };

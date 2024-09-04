@@ -1,6 +1,7 @@
 "use client";
 import { EngagementIndicator } from "@/components/engagement-indicator";
 import Markdown from "@/components/markdown";
+import { BasicReaderUserData } from "@/services/paper-reads-service";
 import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { trimForQuotes } from "@/utils/string-utils";
 import { Prefix } from "@proemial/redis/adapters/papers";
@@ -20,7 +21,10 @@ export type FeedItemProps = Pick<
 	FeedItemCardProps,
 	"isBookmarked" | "customCollectionId" | "onBookmarkToggleClick"
 > & {
-	paper: OpenAlexPaper & { posts: PostWithCommentsAndAuthor[] };
+	paper: OpenAlexPaper & {
+		posts: PostWithCommentsAndAuthor[];
+		readers: BasicReaderUserData[];
+	};
 	fingerprint?: RankedPaperFeature[];
 	provider?: Prefix;
 	children?: ReactNode;
@@ -82,7 +86,7 @@ export default function FeedItem({
 				{fingerprint && <FeatureTags features={fingerprint} />}
 			</div>
 
-			<EngagementIndicator posts={paper.posts} readers={[]} />
+			<EngagementIndicator posts={paper.posts} readers={paper.readers} />
 		</div>
 	);
 }

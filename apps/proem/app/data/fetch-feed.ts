@@ -1,5 +1,6 @@
 "use server";
 import { summarise } from "@/app/prompts/summarise-title";
+import { PaperReadsService } from "@/services/paper-reads-service";
 import { PostService } from "@/services/post-service";
 import { Redis } from "@proemial/redis/redis";
 import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
@@ -97,7 +98,7 @@ export async function fetchFeedByFeatures(
 	};
 }
 
-export const fetchFeedByFeaturesWithPosts = async (
+export const fetchFeedByFeaturesWithPostsAndReaders = async (
 	params: FetchFeedParams[0],
 	options: FetchFeedParams[1],
 	nocache: boolean | undefined,
@@ -105,8 +106,8 @@ export const fetchFeedByFeaturesWithPosts = async (
 ) => {
 	const feedByFeatures = await fetchFeedByFeatures(params, options, nocache);
 	const paperIds = feedByFeatures.rows.map(({ paper }) => paper.id);
-	const papersWithPosts = await Promise.all(
-		paperIds.map((paperId) => fetchPaperWithPosts(paperId, spaceId)),
+	const papersWithPostsAndReaders = await Promise.all(
+		paperIds.map((paperId) => fetchPaperWithPostsAndReaders(paperId, spaceId)),
 	);
 	return {
 		...feedByFeatures,
@@ -115,23 +116,29 @@ export const fetchFeedByFeaturesWithPosts = async (
 			paper: {
 				...row.paper,
 				posts:
-					papersWithPosts.find((paper) => paper.paperId === row.paper.id)
-						?.posts ?? [],
+					papersWithPostsAndReaders.find(
+						(paper) => paper.paperId === row.paper.id,
+					)?.posts ?? [],
+				readers:
+					papersWithPostsAndReaders.find(
+						(paper) => paper.paperId === row.paper.id,
+					)?.readers ?? [],
 			},
 		})),
 	};
 };
 
-export const fetchPaperWithPosts = async (
+export const fetchPaperWithPostsAndReaders = async (
 	paperId: string,
 	spaceId: string | undefined,
 ) => {
-	const posts = await PostService.getPostsWithCommentsAndAuthors(
-		spaceId,
-		paperId,
-	);
+	const [posts, readers] = await Promise.all([
+		PostService.getPostsWithCommentsAndAuthors(spaceId, paperId),
+		PaperReadsService.getReaders(paperId),
+	]);
 	return {
 		paperId,
 		posts,
+		readers,
 	};
 };

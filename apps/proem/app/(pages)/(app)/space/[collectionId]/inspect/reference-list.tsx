@@ -1,4 +1,4 @@
-import { fetchPaperWithPosts } from "@/app/data/fetch-feed";
+import { fetchPaperWithPostsAndReaders } from "@/app/data/fetch-feed";
 import { getPostBySlug } from "@proemial/data/repository/post";
 import { FeedItemWithDisabledOverlay } from "../(lists)/saved/feed-item-with-disabled-overlay";
 import { fetchPaper } from "../../../paper/oa/[id]/fetch-paper";
@@ -18,8 +18,8 @@ export const ReferenceList = async ({ tuple, spaceId }: Props) => {
 	const papers = await Promise.all(
 		paperIds.map((id) => fetchAndGeneratePaper(id)),
 	);
-	const papersWithPosts = await Promise.all(
-		paperIds.map((paperId) => fetchPaperWithPosts(paperId, spaceId)),
+	const papersWithPostsAndReaders = await Promise.all(
+		paperIds.map((paperId) => fetchPaperWithPostsAndReaders(paperId, spaceId)),
 	);
 	return (
 		<div className="flex flex-col gap-6">
@@ -31,8 +31,11 @@ export const ReferenceList = async ({ tuple, spaceId }: Props) => {
 						paper={{
 							...paper,
 							posts:
-								papersWithPosts.find((p) => p.paperId === paper.id)?.posts ??
-								[],
+								papersWithPostsAndReaders.find((p) => p.paperId === paper.id)
+									?.posts ?? [],
+							readers:
+								papersWithPostsAndReaders.find((p) => p.paperId === paper.id)
+									?.readers ?? [],
 						}}
 						customCollectionId={spaceId}
 						isBookmarked={false}

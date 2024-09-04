@@ -2,11 +2,11 @@
 import { Bookmarks } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
 import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
 import {
-	fetchFeedByInstitutionWithPosts,
-	fetchFeedByTopicWithPosts,
+	fetchFeedByInstitutionWithPostsAndReaders,
+	fetchFeedByTopicWithPostsAndReaders,
 } from "@/app/(pages)/(app)/space/(discover)/fetch-feed";
 import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
-import { fetchFeedByFeaturesWithPosts } from "@/app/data/fetch-feed";
+import { fetchFeedByFeaturesWithPostsAndReaders } from "@/app/data/fetch-feed";
 import { Theme } from "@/app/theme/color-theme";
 import {
 	analyticsKeys,
@@ -15,6 +15,7 @@ import {
 import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
 import { InfinityScrollList } from "@/components/infinity-scroll-list";
 import { ThemeColoredCard } from "@/components/theme-colored-card";
+import { BasicReaderUserData } from "@/services/paper-reads-service";
 import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
 import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
@@ -81,7 +82,7 @@ export function Feed({
 					}
 
 					if ("features" in filter && filter.features?.length) {
-						return fetchFeedByFeaturesWithPosts(
+						return fetchFeedByFeaturesWithPostsAndReaders(
 							{ features: filter.features, days: filter.days },
 							{ offset: ctx.pageParam },
 							nocache,
@@ -90,14 +91,14 @@ export function Feed({
 					}
 
 					if ("institution" in filter) {
-						return fetchFeedByInstitutionWithPosts(
+						return fetchFeedByInstitutionWithPostsAndReaders(
 							{ id: filter.institution },
 							{ offset: ctx.pageParam },
 							undefined,
 						);
 					}
 
-					return fetchFeedByTopicWithPosts(
+					return fetchFeedByTopicWithPostsAndReaders(
 						{},
 						{ offset: ctx.pageParam },
 						undefined,
@@ -108,6 +109,7 @@ export function Feed({
 					const paper = row as RankedPaper & {
 						paper: RankedPaper["paper"] & {
 							posts: PostWithCommentsAndAuthor[];
+							readers: BasicReaderUserData[];
 						};
 					};
 					const isBookmarked = Boolean(bookmarks?.[paper.paper.id]);

@@ -1,7 +1,7 @@
 import { fetchReadingList } from "@/app/(pages)/(app)/discover/andrej-karpathy-llm-reading-list/fetch-list";
 import { StaticFeed } from "@/app/(pages)/(app)/discover/andrej-karpathy-llm-reading-list/static-feed";
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
-import { fetchPaperWithPosts } from "@/app/data/fetch-feed";
+import { fetchPaperWithPostsAndReaders } from "@/app/data/fetch-feed";
 import { auth } from "@clerk/nextjs/server";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Metadata } from "next";
@@ -26,8 +26,10 @@ export default async function AndrejKarpathyLLMReadingList() {
 	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
 	const feed = readingList.rows.filter(Boolean) as OpenAlexPaper[];
 	const paperIds = feed.map((paper) => paper.id);
-	const papersWithPosts = await Promise.all(
-		paperIds.map((paperId) => fetchPaperWithPosts(paperId, undefined)),
+	const papersWithPostsAndReaders = await Promise.all(
+		paperIds.map((paperId) =>
+			fetchPaperWithPostsAndReaders(paperId, undefined),
+		),
 	);
 
 	return (
@@ -36,7 +38,11 @@ export default async function AndrejKarpathyLLMReadingList() {
 				feed={feed.map((paper) => ({
 					...paper,
 					posts:
-						papersWithPosts.find((p) => p.paperId === paper.id)?.posts ?? [],
+						papersWithPostsAndReaders.find((p) => p.paperId === paper.id)
+							?.posts ?? [],
+					readers:
+						papersWithPostsAndReaders.find((p) => p.paperId === paper.id)
+							?.readers ?? [],
 				}))}
 				bookmarks={bookmarks}
 			>
