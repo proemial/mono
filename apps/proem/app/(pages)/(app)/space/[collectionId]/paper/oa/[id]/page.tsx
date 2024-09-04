@@ -1,6 +1,7 @@
 import PaperPage from "@/app/(pages)/(app)/paper/oa/[id]/paper-page";
 import { routes } from "@/routes";
 import { CollectionService } from "@/services/collection-service";
+import { PaperReadsService } from "@/services/paper-reads-service";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { CollectionIdParams } from "../../../params";
@@ -24,5 +25,6 @@ export default async function OAPaperPage({
 		redirect(`${routes.paper}/oa/${paperId}`);
 	}
 
+	void PaperReadsService.registerPaperRead(paperId);
 	return <PaperPage paperId={paperId} type="oa" collectionId={collectionId} />;
 }

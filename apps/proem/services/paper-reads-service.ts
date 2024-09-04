@@ -4,6 +4,7 @@ import { PaperRead } from "@proemial/data/neon/schema";
 import { ensurePaperExistsInDb } from "@proemial/data/repository/paper";
 import { PaperReadsRepository } from "@proemial/data/repository/paper-reads";
 import { getOrCreateUser } from "@proemial/data/repository/user";
+import dayjs from "dayjs";
 
 export const PaperReadsService = {
 	registerPaperRead: async (paperId: PaperRead["paperId"]) => {
@@ -16,11 +17,19 @@ export const PaperReadsService = {
 		});
 
 		if (existingPaperRead) {
-			return await PaperReadsRepository.update({
-				...existingPaperRead,
-				lastReadAt: new Date(),
-				readCount: existingPaperRead.readCount + 1,
-			});
+			const diffInMsFromNow = dayjs(new Date()).diff(
+				existingPaperRead.lastReadAt,
+				"milliseconds",
+			);
+			// Dirty hack to prevent multiple renders causing multiple reads
+			// from being recorded in quick succession
+			if (diffInMsFromNow > 5000) {
+				return await PaperReadsRepository.update({
+					...existingPaperRead,
+					lastReadAt: new Date(),
+					readCount: existingPaperRead.readCount + 1,
+				});
+			}
 		}
 
 		// Ensure user and paper exist in the database
