@@ -3,6 +3,7 @@ import { generate } from "@/app/(pages)/(app)/paper/oa/[id]/llm-generate";
 import { PaperReader } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader";
 import { PaperReaderSkeleton } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-skeleton";
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
+import { PaperReadsService } from "@/services/paper-reads-service";
 import { PostService } from "@/services/post-service";
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
@@ -42,6 +43,9 @@ export default async function PaperPage({
 		: {};
 	const isBookmarked = Boolean(bookmarks[paperId]);
 
+	const noOfReadsByDistinctUsers =
+		await PaperReadsService.getDistinctUserCount(paperId);
+
 	return (
 		<Suspense fallback={<PaperReaderSkeleton />}>
 			<PaperReader
@@ -51,6 +55,7 @@ export default async function PaperPage({
 				paperPostsPromise={paperPostsPromise}
 				type={type}
 				collectionId={collectionId}
+				distinctReadCount={noOfReadsByDistinctUsers}
 			/>
 		</Suspense>
 	);

@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 import { neonDb } from "..";
 import {
 	NewPaperRead,
@@ -87,5 +87,13 @@ export const PaperReadsRepository = {
 				paper: true,
 			},
 		});
+	},
+
+	countDistinctUsers: async (paperId: PaperRead["paperId"]) => {
+		const result = await neonDb
+			.select({ count: count() })
+			.from(paperReads)
+			.where(eq(paperReads.paperId, paperId));
+		return result[0]?.count ?? 0;
 	},
 };

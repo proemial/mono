@@ -13,6 +13,7 @@ type PaperReaderProps = Pick<PaperReaderHeadlineProps, "isBookmarked"> & {
 	paperPostsPromise: Promise<PostWithCommentsAndAuthor[]>;
 	type: "oa" | "arxiv";
 	collectionId?: Collection["id"];
+	distinctReadCount: number;
 };
 
 export function PaperReader({
@@ -22,6 +23,7 @@ export function PaperReader({
 	type,
 	collectionId,
 	isBookmarked,
+	distinctReadCount,
 }: PaperReaderProps) {
 	const fetchedPaper = use(fetchedPaperPromise);
 	const generatedPaper = use(generatedPaperPromise);
@@ -41,6 +43,7 @@ export function PaperReader({
 				customCollectionId={collectionId}
 				isBookmarked={isBookmarked}
 				paperPosts={paperPosts}
+				distinctReadCount={distinctReadCount}
 			/>
 		</div>
 	);

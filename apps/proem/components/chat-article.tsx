@@ -2,6 +2,7 @@ import { AddToCollectionButtonProps } from "@/app/(pages)/(app)/space/(discover)
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { MicroAbstract } from "@/components/chat-abstract";
 import { AIGeneratedIcon } from "@/components/icons/AIGeneratedIcon";
+import Markdown from "@/components/markdown";
 import { ModelSelector, ModelSelectorProps } from "@/components/model-selector";
 import { PaperMetaData } from "@/components/paper-meta-data";
 import { Trackable } from "@/components/trackable";
@@ -12,7 +13,6 @@ import { Header2, Header4, Header5, Icons } from "@proemial/shadcn-ui";
 import { BookOpen01, ChevronRight, Users01 } from "@untitled-ui/icons-react";
 import { Suspense } from "react";
 import { EngagementIndicator } from "./engagement-indicator";
-import Markdown from "@/components/markdown";
 
 type ChatArticleProps = Pick<
 	AddToCollectionButtonProps,
@@ -23,6 +23,7 @@ type ChatArticleProps = Pick<
 	text?: string;
 	paper?: OpenAlexPaper;
 	paperPosts: PostWithCommentsAndAuthor[];
+	distinctReadCount: number;
 };
 
 export function ChatArticle({
@@ -33,6 +34,7 @@ export function ChatArticle({
 	isBookmarked,
 	customCollectionId,
 	paperPosts,
+	distinctReadCount,
 }: ChatArticleProps) {
 	const title = paper?.generated?.title;
 	const authors = paper?.data.authorships;
@@ -62,7 +64,11 @@ export function ChatArticle({
 				</div>
 			) : null}
 
-			<EngagementIndicator posts={paperPosts} className="py-1" />
+			<EngagementIndicator
+				posts={paperPosts}
+				distinctReadCount={distinctReadCount}
+				className="py-1"
+			/>
 
 			{authors ? (
 				<Trackable trackingKey={analyticsKeys.read.click.fullPaper}>

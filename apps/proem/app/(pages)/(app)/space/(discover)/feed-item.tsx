@@ -82,7 +82,7 @@ export default function FeedItem({
 				{fingerprint && <FeatureTags features={fingerprint} />}
 			</div>
 
-			<EngagementIndicator posts={paper.posts} />
+			<EngagementIndicator posts={paper.posts} distinctReadCount={undefined} />
 		</div>
 	);
 }

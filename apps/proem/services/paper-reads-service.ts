@@ -8,8 +8,12 @@ import { getOrCreateUser } from "@proemial/data/repository/user";
 import { waitUntil } from "@vercel/functions";
 import dayjs from "dayjs";
 
+export type PaperReadWithUserAndPaper = Awaited<
+	ReturnType<typeof PaperReadsService.getAllByPaperId>
+>[number];
+
 export const PaperReadsService = {
-	add: async (paperId: PaperRead["paperId"]) => {
+	increment: async (paperId: PaperRead["paperId"]) => {
 		const { userId: authenticatedUserId } = auth();
 		const userId = authenticatedUserId ?? ANONYMOUS_USER_ID;
 
@@ -48,9 +52,9 @@ export const PaperReadsService = {
 		return await PaperReadsRepository.create({ userId, paperId });
 	},
 
-	getAllByUserId: async (userId: PaperRead["userId"]) =>
-		await PaperReadsRepository.findAllByUserId(userId),
-
 	getAllByPaperId: async (paperId: PaperRead["paperId"]) =>
 		await PaperReadsRepository.findAllByPaperId(paperId),
+
+	getDistinctUserCount: async (paperId: PaperRead["paperId"]) =>
+		await PaperReadsRepository.countDistinctUsers(paperId),
 };
