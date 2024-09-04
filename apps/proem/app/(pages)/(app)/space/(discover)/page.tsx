@@ -17,5 +17,5 @@ export default async function DiscoverPage() {
 		titles: undefined,
 	};
 
-	return <Feed filter={filter} />;
+	return <Feed filter={filter} showThemeColors />;
 }

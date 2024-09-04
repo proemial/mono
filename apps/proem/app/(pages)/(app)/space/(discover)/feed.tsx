@@ -39,6 +39,7 @@ type FeedProps = {
 	header?: ReactNode;
 	theme?: Theme;
 	readonly?: boolean;
+	showThemeColors?: boolean;
 };
 
 export function Feed({
@@ -49,6 +50,7 @@ export function Feed({
 	header,
 	theme,
 	readonly,
+	showThemeColors = false,
 }: FeedProps) {
 	const debug = useSearchParams().get("debug");
 	const queryKey =
@@ -134,7 +136,7 @@ export function Feed({
 						return <ThemeColoredCard theme={theme}>{item}</ThemeColoredCard>;
 					}
 
-					if (isDefaultSpace && field?.theme) {
+					if ((showThemeColors || isDefaultSpace) && field?.theme) {
 						return (
 							<ThemeColoredCard theme={field?.theme}>{item}</ThemeColoredCard>
 						);
