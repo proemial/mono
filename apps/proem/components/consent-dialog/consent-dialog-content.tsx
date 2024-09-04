@@ -50,11 +50,16 @@ export const ConsentDialogContent = ({ onClose }: Props) => {
 
 			<DialogFooter>
 				<div className="flex flex-col sm:flex-row gap-2">
+					<Button
+						variant="ghost"
+						className="text-gray-600"
+						type="button"
+						onClick={handleDeny}
+					>
+						Cancel
+					</Button>
 					<Button type="button" onClick={handleAccept}>
 						Ask question now
-					</Button>
-					<Button variant="ghost" type="button" onClick={handleDeny}>
-						Cancel
 					</Button>
 				</div>
 			</DialogFooter>
