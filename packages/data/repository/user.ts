@@ -12,10 +12,7 @@ export async function getOrCreateUser(userId: string) {
 	return await neonDb
 		.insert(users)
 		.values({ id: userId })
-		.onConflictDoUpdate({
-			target: [users.id],
-			set: { id: userId },
-		})
+		.onConflictDoNothing()
 		.returning();
 }
 
