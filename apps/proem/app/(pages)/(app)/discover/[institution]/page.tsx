@@ -26,7 +26,7 @@ export default async function DiscoverPage({
 	const bookmarks = userId ? await getBookmarksByCollectionId(userId) : {};
 
 	const institutions = await fetchInstitutions(searchString);
-	const institution = institutions?.at(0);
+	const institution = institutions?.at(0)!;
 	const institutionName = institution?.display_name ?? searchString;
 
 	const header = (

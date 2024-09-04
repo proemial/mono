@@ -24,13 +24,15 @@ import { ReactNode } from "react";
 // 1-4 is fetched without scrolling
 const initialPageSize = 4;
 type FeedProps = {
-	children: ReactNode;
-	filter: {
-		topic?: number;
-		features?: RankedFeature[];
-		days?: number;
-		institution?: string;
-	};
+	children?: ReactNode;
+	filter:
+		| {
+				features: RankedFeature[];
+				days?: number;
+		  }
+		| {
+				institution: string;
+		  };
 	nocache?: boolean;
 	bookmarks?: Bookmarks | null;
 	header?: ReactNode;
@@ -46,7 +48,6 @@ export function Feed({
 	theme,
 }: FeedProps) {
 	const debug = useSearchParams().get("debug");
-	const { topic, features, days, institution } = filter;
 
 	return (
 		<div className="space-y-5 pb-10">
@@ -54,37 +55,40 @@ export function Feed({
 			{header}
 			<InfinityScrollList
 				queryKey={[
-					filter.topic
-						? `feed_${filter.topic}`
+					"institution" in filter
+						? `feed_${filter.institution}`
 						: `filter_${filter.days}:${filter.features
 								?.map((f) => f.id)
 								.join("|")}`,
 				]}
 				queryFn={(ctx) => {
 					const nextOffset = ctx.pageParam;
+
 					if (nextOffset > initialPageSize) {
 						trackHandler(analyticsKeys.feed.scroll.fetch, {
 							offset: `${nextOffset - initialPageSize}`,
 						})();
 					}
 
-					if (features?.length) {
+					if ("features" in filter && filter.features?.length) {
 						return fetchFeedByFeaturesWithPosts(
-							{ features, days },
+							{ features: filter.features, days: filter.days },
 							{ offset: ctx.pageParam },
 							nocache,
 							undefined,
 						);
 					}
-					if (institution) {
+
+					if ("institution" in filter) {
 						return fetchFeedByInstitutionWithPosts(
-							{ id: institution },
+							{ id: filter.institution },
 							{ offset: ctx.pageParam },
 							undefined,
 						);
 					}
+
 					return fetchFeedByTopicWithPosts(
-						{ field: topic },
+						{},
 						{ offset: ctx.pageParam },
 						undefined,
 					);
