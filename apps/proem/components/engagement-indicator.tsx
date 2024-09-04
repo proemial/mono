@@ -18,9 +18,8 @@ export const EngagementIndicator = ({ posts, readers, className }: Props) => {
 	const { open } = useAssistant();
 	const clickable = paperId && posts.length > 0;
 
-	const readCount =
-		readers.length > 0 ? `${readers.length} people read this` : undefined;
-	const questions = formatQuestionsAskedLabel(posts.length);
+	const readCount = formatReadCount(readers.length);
+	const questions = formatQuestionsAsked(posts.length);
 
 	const handleClick = () => {
 		if (clickable) {
@@ -54,9 +53,16 @@ export const EngagementIndicator = ({ posts, readers, className }: Props) => {
 	);
 };
 
-const formatQuestionsAskedLabel = (count: number) => {
+const formatQuestionsAsked = (count: number) => {
 	if (count === 0) {
 		return;
 	}
 	return count === 1 ? "1 question" : `${count} questions`;
+};
+
+const formatReadCount = (count: number) => {
+	if (count === 0) {
+		return;
+	}
+	return count === 1 ? "1 person read this" : `${count} people read this`;
 };
