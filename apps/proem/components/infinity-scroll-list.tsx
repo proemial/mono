@@ -1,4 +1,5 @@
 "use client";
+import { cn } from "@proemial/shadcn-ui";
 import { QueryFunction, useInfiniteQuery } from "@tanstack/react-query";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode, useEffect } from "react";
@@ -82,6 +83,7 @@ export function InfinityScrollList<MyTQueryKey extends string[], TRow>({
 				<span>Error: {error?.message}</span>
 			) : (
 				<ScrollItem
+					className="space-y-3"
 					count={rowVirtualizer.getTotalSize()}
 					index={items[0]?.start ?? 0}
 				>
@@ -115,11 +117,12 @@ export function InfinityScrollList<MyTQueryKey extends string[], TRow>({
 
 type ScrollItemProps = {
 	children: ReactNode;
+	className?: string;
 	count: number;
 	index: number;
 };
 
-function ScrollItem({ children, count, index }: ScrollItemProps) {
+function ScrollItem({ children, count, index, className }: ScrollItemProps) {
 	return (
 		<div
 			className="w-full relative"
@@ -128,12 +131,8 @@ function ScrollItem({ children, count, index }: ScrollItemProps) {
 			}}
 		>
 			<div
-				className="space-y-3"
+				className={cn("absolute, top-0 left-0 w-full", className)}
 				style={{
-					position: "absolute",
-					top: 0,
-					left: 0,
-					width: "100%",
 					transform: `translateY(${index}px)`,
 				}}
 			>
