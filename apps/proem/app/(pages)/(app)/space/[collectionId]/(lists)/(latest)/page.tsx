@@ -1,9 +1,6 @@
-import { getBookmarkedPapersByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarked-papers-by-collection-id";
-import { StreamList } from "@/app/(pages)/(app)/space/[collectionId]/(lists)/(latest)/stream-list";
-import {
-	CollectionIdParams,
-	StreamDebugParams,
-} from "@/app/(pages)/(app)/space/[collectionId]/params";
+import { Feed } from "@/app/(pages)/(app)/space/(discover)/feed";
+import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
+import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { CollectionService } from "@/services/collection-service";
@@ -14,14 +11,9 @@ import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetc
 import { Fingerprint } from "@proemial/repositories/oa/fingerprinting/fingerprints";
 import { notFound } from "next/navigation";
 
-type Props = CollectionIdParams & {
-	searchParams?: StreamDebugParams;
-};
+type Props = CollectionIdParams;
 
-export default async function LatestPage({
-	params: { collectionId },
-	searchParams,
-}: Props) {
+export default async function LatestPage({ params: { collectionId } }: Props) {
 	const { userId, orgId } = auth();
 	const collection = await CollectionService.getCollection(
 		collectionId,
@@ -33,10 +25,10 @@ export default async function LatestPage({
 	}
 	const canEdit = PermissionUtils.canEditCollection(collection, userId, orgId);
 
-	const bookmarkedPapers =
-		await getBookmarkedPapersByCollectionId(collectionId);
-
-	const paperIds = bookmarkedPapers?.map(({ paperId }) => paperId);
+	const bookmarks = await getBookmarksByCollectionId(collectionId);
+	const bookmarkedPapersInCurrentSpace = Object.keys(bookmarks).filter(
+		(paperId) => bookmarks[paperId]?.includes(collectionId),
+	);
 
 	const isDefaultSpace = collectionId === userId;
 	const fingerprints: Fingerprint[][] = [];
@@ -49,22 +41,19 @@ export default async function LatestPage({
 		}
 	} else {
 		// Custom spaces use the papers in the space to generate the feed
-		const fingerprintsBasedOnPapers = paperIds
-			? await fetchFingerprints(paperIds)
+		const fingerprintsBasedOnPapers = bookmarkedPapersInCurrentSpace
+			? await fetchFingerprints(bookmarkedPapersInCurrentSpace)
 			: [];
 		fingerprints.push(...fingerprintsBasedOnPapers);
 	}
 
 	const { filter: features } = getFeatureFilter(fingerprints);
-	return (
-		<StreamList
-			showThemeColors={isDefaultSpace}
-			collectionId={collectionId}
-			debugParams={searchParams}
-			features={features}
-			days={FEED_DEFAULT_DAYS}
-			bookmarks={paperIds}
-			readonly={!canEdit}
-		/>
-	);
+
+	const filter = {
+		features,
+		collectionId,
+		days: FEED_DEFAULT_DAYS,
+	};
+
+	return <Feed filter={filter} readonly={!canEdit} bookmarks={bookmarks} />;
 }

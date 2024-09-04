@@ -28,10 +28,14 @@ export default async function SavedPage({
 
 	const bookmarkedPapers =
 		await getBookmarkedPapersByCollectionId(collectionId);
+	const bookmarkedPapersInCurrentSpace = bookmarkedPapers?.map(
+		(paper) => paper.paperId,
+	);
 
-	const paperIds = bookmarkedPapers?.map(({ paperId }) => paperId) ?? [];
-
-	if (paperIds.length === 0) {
+	if (
+		!bookmarkedPapersInCurrentSpace ||
+		bookmarkedPapersInCurrentSpace?.length === 0
+	) {
 		return (
 			<div className="flex flex-col items-center justify-center gap-4">
 				<div className="text-sm">You have yet to save a paper…</div>
@@ -39,12 +43,16 @@ export default async function SavedPage({
 		);
 	}
 
-	const papers = paperIds
-		? await Promise.all(paperIds.map((paperId) => fetchPaper(paperId)))
+	const papers = bookmarkedPapersInCurrentSpace
+		? await Promise.all(
+				bookmarkedPapersInCurrentSpace.map((paperId) => fetchPaper(paperId)),
+			)
 		: [];
 
 	const papersWithPosts = await Promise.all(
-		paperIds.map((paperId) => fetchPaperWithPosts(paperId, collection.id)),
+		bookmarkedPapersInCurrentSpace.map((paperId) =>
+			fetchPaperWithPosts(paperId, collection.id),
+		),
 	);
 
 	const isDefaultSpace = collectionId === userId;
@@ -53,7 +61,8 @@ export default async function SavedPage({
 		<div className="mb-8 space-y-3">
 			{papers.map((paper) => {
 				if (!paper) return null;
-				const isBookmarked = paperIds?.includes(paper.id) ?? false;
+				const isBookmarked =
+					bookmarkedPapersInCurrentSpace?.includes(paper.id) ?? false;
 				const topics = paper.data.topics;
 				const field = topics && getFieldFromOpenAlexTopics(topics);
 				const item = (

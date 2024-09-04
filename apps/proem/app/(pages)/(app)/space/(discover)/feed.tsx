@@ -29,6 +29,7 @@ type FeedProps = {
 		| {
 				features: RankedFeature[];
 				days?: number;
+				collectionId?: string;
 		  }
 		| {
 				institution: string;
@@ -37,6 +38,7 @@ type FeedProps = {
 	bookmarks?: Bookmarks | null;
 	header?: ReactNode;
 	theme?: Theme;
+	readonly?: boolean;
 };
 
 export function Feed({
@@ -46,21 +48,26 @@ export function Feed({
 	bookmarks,
 	header,
 	theme,
+	readonly,
 }: FeedProps) {
 	const debug = useSearchParams().get("debug");
+	const queryKey =
+		"institution" in filter
+			? `feed_${filter.institution}`
+			: "collectionId" in filter
+				? `space_stream_${filter.collectionId}`
+				: `filter_${filter.days}:${filter.features
+						?.map((f) => f.id)
+						.join("|")}`;
 
+	const isDefaultSpace =
+		"collectionId" in filter && filter.collectionId?.startsWith("user_");
 	return (
 		<div className="space-y-5 pb-10">
 			{children ? <div>{children}</div> : null}
 			{header}
 			<InfinityScrollList
-				queryKey={[
-					"institution" in filter
-						? `feed_${filter.institution}`
-						: `filter_${filter.days}:${filter.features
-								?.map((f) => f.id)
-								.join("|")}`,
-				]}
+				queryKey={[queryKey]}
 				queryFn={(ctx) => {
 					const nextOffset = ctx.pageParam;
 
@@ -75,7 +82,7 @@ export function Feed({
 							{ features: filter.features, days: filter.days },
 							{ offset: ctx.pageParam },
 							nocache,
-							undefined,
+							filter.collectionId,
 						);
 					}
 
@@ -108,7 +115,11 @@ export function Feed({
 						<FeedItem
 							paper={paper.paper}
 							fingerprint={paper.features}
+							customCollectionId={
+								"collectionId" in filter ? filter.collectionId : undefined
+							}
 							isBookmarked={isBookmarked}
+							readonly={readonly}
 						>
 							{debug && (
 								<FeatureCloud
@@ -119,14 +130,14 @@ export function Feed({
 						</FeedItem>
 					);
 
-					if (!theme && field?.theme) {
+					if (theme && i % 2 === 0) {
+						return <ThemeColoredCard theme={theme}>{item}</ThemeColoredCard>;
+					}
+
+					if (isDefaultSpace && field?.theme) {
 						return (
 							<ThemeColoredCard theme={field?.theme}>{item}</ThemeColoredCard>
 						);
-					}
-
-					if (theme && i % 2 === 0) {
-						return <ThemeColoredCard theme={theme}>{item}</ThemeColoredCard>;
 					}
 
 					return <div className="my-3">{item}</div>;

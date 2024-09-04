@@ -1,17 +1,16 @@
 import { Feed } from "@/app/(pages)/(app)/space/(discover)/feed";
-import { auth } from "@clerk/nextjs/server";
-import { FollowButton } from "./follow";
-import { OrgSelector } from "./org-selector";
-
 import {
 	Branding,
 	brandingForInstitution,
 } from "@/app/theme/institution-branding";
+import { auth } from "@clerk/nextjs/server";
 import {
 	Institution,
 	fetchInstitutions,
 } from "@proemial/repositories/oa/institutions/fetch-institutions";
 import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
+import { FollowButton } from "./follow";
+import { OrgSelector } from "./org-selector";
 
 export default async function DiscoverPage({
 	params,
