@@ -27,7 +27,6 @@ type CarouselContextProps = {
 	api: ReturnType<typeof useEmblaCarousel>[1];
 	scrollPrev: () => void;
 	scrollNext: () => void;
-	scrollTo: (index: number) => void;
 	canScrollPrev: boolean;
 	canScrollNext: boolean;
 } & CarouselProps;
@@ -201,7 +200,7 @@ const CarouselPrevious = React.forwardRef<
 	React.ComponentProps<typeof Button>
 >(
 	(
-		{ className, variant = "outline", size = "icon", children, ...props },
+		{ className, variant = "ghost", size = "icon", children, ...props },
 		ref,
 	) => {
 		const { orientation, scrollPrev, canScrollPrev } = useCarousel();
@@ -236,7 +235,7 @@ const CarouselNext = React.forwardRef<
 	React.ComponentProps<typeof Button>
 >(
 	(
-		{ className, variant = "outline", size = "icon", children, ...props },
+		{ className, variant = "ghost", size = "icon", children, ...props },
 		ref,
 	) => {
 		const { orientation, scrollNext, canScrollNext, api } = useCarousel();
