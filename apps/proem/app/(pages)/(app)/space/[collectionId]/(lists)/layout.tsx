@@ -2,6 +2,7 @@ import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/par
 import { TabBar } from "@/app/(pages)/(app)/space/[collectionId]/tab-bar";
 import { LoadingTransition } from "@/components/loading-transition";
 import Markdown from "@/components/markdown";
+import { OnboardingCarousel } from "@/components/onboarding";
 import { SpaceContributorsIndicator } from "@/components/space-contributors-indicator";
 import { SpaceShareIndicator } from "@/components/space-share-indicator";
 import { Throbber } from "@/components/throbber";
@@ -56,6 +57,7 @@ export default async function ({ params: { collectionId }, children }: Props) {
 				</div>
 			)}
 
+			<OnboardingCarousel />
 			<LoadingTransition type="section">{children}</LoadingTransition>
 		</div>
 	);
