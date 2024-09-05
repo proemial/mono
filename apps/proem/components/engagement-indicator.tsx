@@ -7,6 +7,8 @@ import { useParams } from "next/navigation";
 import { AuthorAvatar } from "./author-avatar";
 import { useAssistant } from "./proem-assistant/use-assistant";
 
+const MAX_AVATARS = 10;
+
 type Props = {
 	posts: PostWithCommentsAndAuthor[];
 	readers: BasicReaderUserData[];
@@ -33,6 +35,7 @@ export const EngagementIndicator = ({ posts, readers, className }: Props) => {
 	);
 
 	const userAvatars = readers.length > 0 ? readers : postAuthors;
+	const first10UserAvatars = userAvatars.slice(0, MAX_AVATARS);
 
 	const handleClick = () => {
 		if (clickable) {
@@ -45,9 +48,9 @@ export const EngagementIndicator = ({ posts, readers, className }: Props) => {
 			className={cn("flex gap-2", className, { "cursor-pointer": clickable })}
 			onClick={handleClick}
 		>
-			{userAvatars.length > 0 && (
+			{first10UserAvatars.length > 0 && (
 				<div className="flex gap-2">
-					{userAvatars.map((reader, index) => (
+					{first10UserAvatars.map((reader, index) => (
 						<AuthorAvatar
 							key={index}
 							firstName={reader.firstName ?? null}
