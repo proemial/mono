@@ -4,7 +4,7 @@ import {
 	screenMaxWidth,
 } from "@/app/constants";
 import { getAvailableCollections } from "@/app/profile/actions";
-import { MenuButton } from "@/app/profile/menu-button";
+import { MenuButton as Menu, MenuButton } from "@/app/profile/menu-button";
 import { Profile } from "@/app/profile/profile";
 import { asTheme, fromSeed } from "@/app/theme/color-theme";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
@@ -27,6 +27,21 @@ import { useQuery } from "@tanstack/react-query";
 import { ChevronRight } from "@untitled-ui/icons-react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useOptimistic, useTransition } from "react";
+
+function TopNavigationMenu({ isLoggedIn }: { isLoggedIn: boolean }) {
+	return isLoggedIn ? (
+		<Profile />
+	) : (
+		<SignInDrawer
+			trigger={
+				// extra div to make the trigger a ref
+				<div>
+					<MenuButton />
+				</div>
+			}
+		/>
+	);
+}
 
 export function TopNavigation() {
 	const pathname = usePathname();
@@ -54,6 +69,7 @@ export function TopNavigation() {
 
 	const { action, title, menu, theme } =
 		getTopNavigationContentByUrl(optimisticUrl);
+
 
 	const selectedSpace = collectionId ?? collections?.at(0)?.id;
 
@@ -94,18 +110,7 @@ export function TopNavigation() {
 
 				<NavigationMenuList className="justify-between flex-nowrap">
 					<NavigationMenuItem className="min-w-7">
-						{menu ?? userId ? (
-							<Profile />
-						) : (
-							<SignInDrawer
-								trigger={
-									// extra div to make the trigger a ref
-									<div>
-										<MenuButton />
-									</div>
-								}
-							/>
-						)}
+						{menu ?? <TopNavigationMenu isLoggedIn={!!userId} />}
 					</NavigationMenuItem>
 					<NavigationMenuItem className="truncate">
 						{isLoading ? (
