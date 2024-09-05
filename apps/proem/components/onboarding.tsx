@@ -9,13 +9,12 @@ import {
 	CarouselDots,
 } from "@proemial/shadcn-ui";
 import { ArrowRight, X } from "@untitled-ui/icons-react";
-import { onLast } from "@proemial/utils/array";
 import { setCookie, getCookie } from "cookies-next";
 
 const items = [
 	{
 		header: "Who are we?",
-		description: "We bake science into readable bitesized snacks",
+		description: "We bake science into digestable snacks",
 	},
 	{
 		header: "Dive deeper",
@@ -26,8 +25,8 @@ const items = [
 		description: "Make a knowledge space and invite collaborators",
 	},
 	{
-		header: "Stay updated",
-		description: "Read freshly baked science based on your interests",
+		header: "Get started",
+		description: "Try read a paper below that you find interesting",
 	},
 ];
 
@@ -49,35 +48,33 @@ export function OnboardingCarousel() {
 	return (
 		<div className="bg-black text-white mx-[-16px]">
 			<Carousel>
-				<div className="absolute top-6 md:top-12 -right-[-16px] md:-right-[-32px] z-10">
+				<div className="absolute top-4 md:top-4 -right-[-16px] md:-right-[-32px] z-10">
 					<Button
 						variant="ghost"
 						className="p-0 h-auto"
 						onClick={handleOnboardingComplete}
 					>
-						<X className="text-white" />
+						<X className="text-gray-600" />
 					</Button>
 				</div>
 				<CarouselContent>
 					{items.map((item, index) => (
 						<CarouselItem key={index}>
-							<div className="aspect-video md:text-xl px-4 py-6 md:px-8 md:py-12">
+							<div className="px-4 py-6 md:px-8 md:py-12 cursor-grab">
 								<div className="h-full flex flex-col justify-between">
-									<div className="flex flex-col justify-center rounded-md">
-										<div className="text-[#666666] mb-6">{item.header}</div>
-										<div
-											className={`text-xl md:text-2xl ${onLast(index, items, "pr-8")}`}
-										>
+									<div className="flex flex-col justify-center rounded-md select-none">
+										<div className="text-gray-400 mb-6">{item.header}</div>
+										<div className="font-light text-2xl md:text-3xl pr-16 pb-4 md:pb-6">
 											{item.description}
 										</div>
 									</div>
 									{index === items.length - 1 && (
 										<Button
 											variant="black"
-											className="md:text-xl"
+											className="md:text-xl md:w-fit md:px-8 md:py-6"
 											onClick={handleOnboardingComplete}
 										>
-											Get started
+											Got it
 										</Button>
 									)}
 								</div>
@@ -86,7 +83,7 @@ export function OnboardingCarousel() {
 					))}
 				</CarouselContent>
 				<CarouselNext className="-right-[-16px] md:-right-[-32px]">
-					<ArrowRight className="h-16 w-16" />
+					<ArrowRight stroke="2px" className="h-16 w-16" />
 				</CarouselNext>
 				<CarouselDots />
 			</Carousel>
