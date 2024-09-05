@@ -8,7 +8,7 @@ import { GoToSpaceAction } from "@/components/nav-bar/actions/go-to-space-action
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
 import { SignInDrawer } from "@/components/sign-in-drawer";
 import { routes } from "@/routes";
-import { Edit05 } from "@untitled-ui/icons-react";
+import { ChevronLeft, Edit05 } from "@untitled-ui/icons-react";
 import Link from "next/link";
 
 type TopNavigationContent = {
@@ -98,7 +98,7 @@ export function getTopNavigationContentByUrl(
 	// Papers outside of a space
 	if (url.includes("/paper")) {
 		return {
-			menu: <GoToSpaceAction />,
+			menu: <CloseAction iconOverride={<ChevronLeft className="size-6" />} />,
 			action: null,
 		};
 	}
