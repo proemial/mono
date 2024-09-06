@@ -33,7 +33,7 @@ export const fetchAndRerankPaperIds = async (
 	{ features, days }: { features?: RankedFeature[]; days?: number },
 	{ limit, offset }: { limit?: number; offset?: number } = {},
 	nocache?: boolean,
-): Promise<{ meta: OpenAlexMeta; rankedIds: RankedPaperId[] }> => {
+) => {
 	const pageLimit = limit ?? 25;
 	const pageOffset = offset ?? 1;
 
