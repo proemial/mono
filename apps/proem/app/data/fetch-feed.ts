@@ -26,7 +26,6 @@ export const fetchFeedByFeaturesWithPostsAndReaders = async (
 	const papersWithPostsAndReaders = await Promise.all(
 		paperIds.map((paperId) => fetchPaperWithPostsAndReaders(paperId, spaceId)),
 	);
-	console.log({ papersWithPostsAndReaders });
 	const feedWithPostsAndReaders = {
 		...feed,
 		rows: feed.rows.map((row) => ({

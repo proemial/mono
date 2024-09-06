@@ -1,10 +1,7 @@
 "use client";
 import { Bookmarks } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
 import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
-import {
-	fetchFeedByInstitutionWithPostsAndReaders,
-	fetchFeedByTopicWithPostsAndReaders,
-} from "@/app/(pages)/(app)/space/(discover)/fetch-feed";
+import { fetchFeedByInstitutionWithPostsAndReaders } from "@/app/(pages)/(app)/space/(discover)/fetch-feed";
 import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
 import { fetchFeedByFeaturesWithPostsAndReaders } from "@/app/data/fetch-feed";
 import { Theme } from "@/app/theme/color-theme";
@@ -81,15 +78,6 @@ export function Feed({
 						})();
 					}
 
-					if ("features" in filter && filter.features?.length) {
-						return fetchFeedByFeaturesWithPostsAndReaders(
-							{ features: filter.features, days: filter.days },
-							{ offset: ctx.pageParam },
-							nocache,
-							filter.collectionId,
-						);
-					}
-
 					if ("institution" in filter) {
 						return fetchFeedByInstitutionWithPostsAndReaders(
 							{ id: filter.institution },
@@ -98,10 +86,11 @@ export function Feed({
 						);
 					}
 
-					return fetchFeedByTopicWithPostsAndReaders(
-						{},
+					return fetchFeedByFeaturesWithPostsAndReaders(
+						{ features: filter.features, days: filter.days },
 						{ offset: ctx.pageParam },
-						undefined,
+						nocache,
+						filter.collectionId,
 					);
 				}}
 				renderHeadline={debug ? (count) => <DebugInfo count={count} /> : null}
