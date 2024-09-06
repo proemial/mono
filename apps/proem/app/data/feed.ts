@@ -6,7 +6,7 @@ import { Paper } from "@proemial/data/paper";
 import { Redis } from "@proemial/redis/redis";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 
-const DEFAULT_LIMIT = 10;
+const DEFAULT_LIMIT = 5;
 const POPULAR_PAPERS_PERCENTAGE:
 	| 0.1
 	| 0.2
@@ -17,7 +17,7 @@ const POPULAR_PAPERS_PERCENTAGE:
 	| 0.7
 	| 0.8
 	| 0.9
-	| 1 = 0.3;
+	| 1 = 0.4;
 
 // TODO! move to data when all dependencies are moved out of apps/proem
 export namespace Feed {
