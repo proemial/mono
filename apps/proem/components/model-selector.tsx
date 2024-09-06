@@ -32,6 +32,7 @@ const MODELS = {
 	"mistral-large": "Mistral Large",
 	"mixtral-8x22b": "Mixtral 8x22B",
 	"llama-3": "Llama 3",
+	"gpt-4-turbo": "GPT-4 Turbo",
 } as const;
 
 const formSchema = z.object({
