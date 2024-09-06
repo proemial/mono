@@ -12,12 +12,13 @@
 		"rules": {
 			"recommended": true,
 			"suspicious": {
-				"noArrayIndexKey": "off"
+				"noArrayIndexKey": "off",
+				"useNamespaceKeyword": "off"
 			},
 			"a11y": {
 				"useKeyWithClickEvents": "off",
 				"useValidAriaRole": "off",
-				"noSvgWithoutTitle":"off"
+				"noSvgWithoutTitle": "off"
 			},
 			"style": {
 				"useImportType": "off"
