@@ -5,7 +5,6 @@ import Markdown from "@/components/markdown";
 import { OnboardingCarousel } from "@/components/onboarding";
 import { SpaceContributorsIndicator } from "@/components/space-contributors-indicator";
 import { SpaceShareIndicator } from "@/components/space-share-indicator";
-import { Throbber } from "@/components/throbber";
 import { routes } from "@/routes";
 import { CollectionService } from "@/services/collection-service";
 import { auth } from "@clerk/nextjs/server";
@@ -57,7 +56,7 @@ export default async function ({ params: { collectionId }, children }: Props) {
 				</div>
 			)}
 
-			<OnboardingCarousel />
+			{isDefaultCollection && <OnboardingCarousel />}
 			<LoadingTransition type="section">{children}</LoadingTransition>
 		</div>
 	);
