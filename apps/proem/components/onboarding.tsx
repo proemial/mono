@@ -47,10 +47,12 @@ export function OnboardingCarousel() {
 	const handleClose = () => {
 		setClosed(true);
 		setCookie("onboardingClosed", true);
+		console.log("analyticsKeys.onboarding.close");
 		trackHandler(analyticsKeys.onboarding.close);
 	};
 
 	const handleCardChange = () => {
+		console.log("analyticsKeys.onboarding.jump");
 		trackHandler(analyticsKeys.onboarding.jump);
 	};
 
