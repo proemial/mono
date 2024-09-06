@@ -45,7 +45,8 @@ function useCarousel() {
 
 const Carousel = React.forwardRef<
 	HTMLDivElement,
-	React.HTMLAttributes<HTMLDivElement> & CarouselProps
+	React.HTMLAttributes<HTMLDivElement> &
+		CarouselProps & { onCardChange?: () => void }
 >(
 	(
 		{
@@ -55,6 +56,7 @@ const Carousel = React.forwardRef<
 			plugins,
 			className,
 			children,
+			onCardChange,
 			...props
 		},
 		ref,
@@ -66,6 +68,13 @@ const Carousel = React.forwardRef<
 			},
 			plugins,
 		);
+
+		React.useEffect(() => {
+			if (api) {
+				api.on("select", () => onCardChange?.());
+			}
+		}, [api, onCardChange]);
+
 		const [canScrollPrev, setCanScrollPrev] = React.useState(false);
 		const [canScrollNext, setCanScrollNext] = React.useState(false);
 

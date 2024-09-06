@@ -190,6 +190,10 @@ export const analyticsKeys = {
 			click: "institutions:follow:click",
 		},
 	},
+	onboarding: {
+		close: "onboarding:close",
+		jump: "onboarding:jump",
+	},
 } as const;
 
 function getViewName(path: string) {

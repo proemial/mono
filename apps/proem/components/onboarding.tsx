@@ -10,6 +10,10 @@ import {
 } from "@proemial/shadcn-ui";
 import { ArrowRight, X } from "@untitled-ui/icons-react";
 import { setCookie, getCookie } from "cookies-next";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "./analytics/tracking/tracking-keys";
 
 const items = [
 	{
@@ -40,20 +44,21 @@ export function OnboardingCarousel() {
 
 	if (closed) return undefined;
 
-	const handleOnboardingComplete = () => {
+	const handleClose = () => {
 		setClosed(true);
 		setCookie("onboardingClosed", true);
+		trackHandler(analyticsKeys.onboarding.close);
+	};
+
+	const handleCardChange = () => {
+		trackHandler(analyticsKeys.onboarding.jump);
 	};
 
 	return (
 		<div className="bg-black text-white mx-[-16px]">
-			<Carousel>
+			<Carousel onCardChange={handleCardChange}>
 				<div className="absolute top-4 md:top-8 -right-[-16px] md:-right-[-32px] z-10">
-					<Button
-						variant="ghost"
-						className="p-0 h-auto"
-						onClick={handleOnboardingComplete}
-					>
+					<Button variant="ghost" className="p-0 h-auto" onClick={handleClose}>
 						<X className="text-gray-600" />
 					</Button>
 				</div>
@@ -72,7 +77,7 @@ export function OnboardingCarousel() {
 										<Button
 											variant="black"
 											className="md:w-fit md:px-6 md:py-3"
-											onClick={handleOnboardingComplete}
+											onClick={handleClose}
 										>
 											Got it
 										</Button>
