@@ -13,8 +13,8 @@ import { setCookie, getCookie } from "cookies-next";
 
 const items = [
 	{
-		header: "Who are we?",
-		description: "We bake science into digestable snacks",
+		header: "What is proem?",
+		description: "Your daily dose of science, curated and bite-sized.",
 	},
 	{
 		header: "Dive deeper",
@@ -26,7 +26,7 @@ const items = [
 	},
 	{
 		header: "Get started",
-		description: "Try read a paper below that you find interesting",
+		description: "Read a paper below that you find interesting",
 	},
 ];
 
