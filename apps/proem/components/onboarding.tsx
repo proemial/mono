@@ -57,7 +57,7 @@ export function OnboardingCarousel() {
 	return (
 		<div className="bg-black text-white mx-[-16px]">
 			<Carousel onCardChange={handleCardChange}>
-				<div className="absolute top-4 md:top-8 -right-[-16px] md:-right-[-32px] z-10">
+				<div className="absolute top-6 md:top-8 -right-[-16px] md:-right-[-32px] z-10">
 					<Button variant="ghost" className="p-0 h-auto" onClick={handleClose}>
 						<X className="text-gray-600" />
 					</Button>
