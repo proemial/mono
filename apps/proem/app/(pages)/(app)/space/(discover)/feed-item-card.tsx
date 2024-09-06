@@ -89,17 +89,13 @@ function EmbedableLink({
 	field?: Field | null;
 }) {
 	const baseurl = useBaseUrl();
-	console.log("baseurl", baseurl);
-
 	const pathname = usePathname();
 	const embedded = isEmbedded(pathname);
-	console.log("embedded", embedded);
 
 	const space =
 		embedded || (pathname.includes(routes.space) && customCollectionId)
 			? `${routes.space}/${pathname.split("/")[2]}`
 			: "";
-	console.log("space", space);
 
 	const theme =
 		// Only add the theme manually if the space is a personal collection
@@ -108,8 +104,6 @@ function EmbedableLink({
 					field.theme.image ? `&image=${field.theme.image}` : ""
 				}`
 			: "";
-
-	console.log(`${baseurl}${space}${path}${theme}`);
 
 	return (
 		<Link
