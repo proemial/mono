@@ -46,6 +46,7 @@ export default function FeedItem({
 	const tags = paper.data.topics
 		?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
 		.filter(Boolean) as string[];
+	const hasEngagement = paper.posts.length > 0 || paper.readers.length > 0;
 
 	return (
 		<div className="space-y-3">
@@ -86,7 +87,9 @@ export default function FeedItem({
 				{fingerprint && <FeatureTags features={fingerprint} />}
 			</div>
 
-			<EngagementIndicator posts={paper.posts} readers={paper.readers} />
+			{hasEngagement && (
+				<EngagementIndicator posts={paper.posts} readers={paper.readers} />
+			)}
 		</div>
 	);
 }
