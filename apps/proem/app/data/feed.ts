@@ -53,7 +53,6 @@ export namespace Feed {
 			: 0;
 		const popularPaperOffset = offset * popularPaperLimit - popularPaperLimit;
 		const rankedPaperLimit = limit - popularPaperLimit;
-		const rankedPaperOffset = offset;
 
 		const mostPopularPapers = await Paper.getByPopularity({
 			limit: popularPaperLimit,
@@ -64,7 +63,7 @@ export namespace Feed {
 			params,
 			{
 				limit: rankedPaperLimit,
-				offset: 1,
+				offset: offset,
 			},
 			nocache,
 		);
