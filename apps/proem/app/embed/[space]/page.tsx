@@ -57,7 +57,6 @@ export default async function EmbedPage({
 				>
 					<FeedItem
 						paper={row.paper}
-						fingerprint={row.features}
 						customCollectionId={space}
 						readonly={true}
 					/>
