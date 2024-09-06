@@ -3,7 +3,7 @@ import { neonDb } from "../neon/db";
 import { paperReads, papers, posts } from "../neon/schema";
 
 export namespace Paper {
-	export const getMostPopular = ({
+	export const getByPopularity = ({
 		limit = 5,
 		offset = 0,
 	}: {

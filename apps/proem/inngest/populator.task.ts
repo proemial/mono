@@ -1,5 +1,5 @@
 import { getPaperIdsForCollection } from "@/app/(pages)/(app)/space/[collectionId]/collection-utils";
-import { fetchFeedByFeatures } from "@/app/data/fetch-feed";
+import { Feed } from "@/app/data/feed";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import {
 	RankedFeature,
@@ -113,7 +113,7 @@ async function getFilter(history?: string[][] | null) {
 async function getFeed(features: RankedFeature[]) {
 	const begin = Time.now();
 	try {
-		return await fetchFeedByFeatures({ features }, {});
+		return await Feed.fromFeatures({ features }, {});
 	} finally {
 		Time.log(begin, "getFeed");
 	}
