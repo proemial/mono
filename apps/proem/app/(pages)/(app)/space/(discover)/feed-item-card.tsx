@@ -77,7 +77,7 @@ export const FeedItemCard = ({
 	);
 };
 
-function EmbedableLink({
+export function EmbedableLink({
 	children,
 	customCollectionId,
 	path,

@@ -11,9 +11,15 @@ import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-topics-compact";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { ReactNode } from "react";
-import { FeedItemCard, FeedItemCardProps } from "./feed-item-card";
+import Link from "next/link";
+import { ReactNode, useMemo } from "react";
+import {
+	EmbedableLink,
+	FeedItemCard,
+	FeedItemCardProps,
+} from "./feed-item-card";
 import { FeedItemTag } from "./feed-item-tag";
+import { getFieldFromOpenAlexTopics } from "./get-field-from-open-alex-topics";
 
 dayjs.extend(relativeTime);
 
@@ -46,6 +52,10 @@ export default function FeedItem({
 	const tags = paper.data.topics
 		?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
 		.filter(Boolean) as string[];
+	const field = useMemo(
+		() => paper.data.topics && getFieldFromOpenAlexTopics(paper.data.topics),
+		[paper.data.topics],
+	);
 	const hasEngagement = paper.posts.length > 0 || paper.readers.length > 0;
 
 	return (
@@ -88,7 +98,15 @@ export default function FeedItem({
 			</div>
 
 			{hasEngagement && (
-				<EngagementIndicator posts={paper.posts} readers={paper.readers} />
+				<div>
+					<EmbedableLink
+						path={`/paper/${provider ?? "oa"}/${paper.id}${paper.posts.length > 0 ? "?assistant=true" : ""}`}
+						customCollectionId={customCollectionId}
+						field={field}
+					>
+						<EngagementIndicator posts={paper.posts} readers={paper.readers} />
+					</EmbedableLink>
+				</div>
 			)}
 		</div>
 	);
