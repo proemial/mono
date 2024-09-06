@@ -72,7 +72,7 @@ export const ProemAssistant = () => {
 	}
 
 	const handleOpen = () => {
-		trackHandler(analyticsKeys.assistant.open);
+		trackHandler(analyticsKeys.assistant.open)();
 		open();
 		setExpanded(false);
 	};
@@ -80,7 +80,7 @@ export const ProemAssistant = () => {
 	const handleOpenChange = (isOpen: boolean) => {
 		// This gets triggered multiple times during transitions
 		if (!isOpen) {
-			trackHandler(analyticsKeys.assistant.close);
+			trackHandler(analyticsKeys.assistant.close)();
 			close();
 		} else {
 			open();
