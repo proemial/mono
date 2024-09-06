@@ -26,7 +26,7 @@ const PER_PAGE = 50;
 // Max number of pages to fetch
 const MAX_PAGES = 10;
 
-// Cache feed papers for 1 hour
+// Cache feed papers for 8 hour
 const CACHE_FOR = 8 * 60 * 60; // 8 hours
 
 export const fetchAndRerankPaperIds = async (
