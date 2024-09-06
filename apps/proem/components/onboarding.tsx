@@ -14,7 +14,7 @@ import { setCookie, getCookie } from "cookies-next";
 const items = [
 	{
 		header: "What is proem?",
-		description: "Your daily dose of science, curated and bite-sized.",
+		description: "Your daily dose of science, curated and bite-sized",
 	},
 	{
 		header: "Dive deeper",
