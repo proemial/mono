@@ -15,6 +15,8 @@ const buttonVariants = cva(
 					"text-left justify-start items-start text-foreground bg-card text-base leading-snug text-wrap whitespace-normal rounded-xl border-0",
 				chat: "text-left justify-start text-foreground bg-primary",
 				ghost: "hover:bg-inherit hover:text-inherit",
+				black:
+					"bg-black active:bg-slate-900 text-white border border-gray-400 normal-case rounded-xl",
 			},
 			size: {
 				default: "h-10 px-4 py-2",

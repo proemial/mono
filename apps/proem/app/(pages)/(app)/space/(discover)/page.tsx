@@ -1,5 +1,6 @@
 import { Feed } from "@/app/(pages)/(app)/space/(discover)/feed";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
+import { OnboardingCarousel } from "@/components/onboarding";
 import { routes } from "@/routes";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -17,5 +18,12 @@ export default async function DiscoverPage() {
 		titles: undefined,
 	};
 
-	return <Feed filter={filter} showThemeColors />;
+	return (
+		<>
+			<OnboardingCarousel />
+			<div className="mt-4">
+				<Feed filter={filter} showThemeColors />
+			</div>
+		</>
+	);
 }

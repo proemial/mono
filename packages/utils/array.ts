@@ -11,3 +11,11 @@ export function limit<T>(array: T[], n: number, reverse = false): T[] {
 export function shuffle<T>(array: T[]): T[] {
 	return array.sort(() => Math.random() - 0.5);
 }
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+export function onLast(index: number, items: any[], styling: string) {
+	if (index < items.length - 1) {
+		return styling;
+	}
+	return "";
+}
