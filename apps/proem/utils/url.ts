@@ -1,3 +1,5 @@
+import { routes } from "@/routes";
+
 export function isEmbedded(pathname: string | undefined | null) {
-	return pathname?.startsWith("/embed");
+	return pathname?.startsWith(routes.embed);
 }

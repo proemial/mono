@@ -5,4 +5,5 @@ export const routes = {
 	paper: "/paper",
 	search: "/search",
 	space: "/space",
+	embed: "/embed",
 };

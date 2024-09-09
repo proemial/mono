@@ -17,19 +17,28 @@ type Props = {
 	openAssistant?: boolean;
 };
 
-export const EmbedableLink = ({
-	children,
-	spaceId,
-	path,
-	field,
-	openAssistant,
-}: Props) => {
-	const baseurl = getBaseUrl();
+function useUrls(
+	path: string,
+	spaceId?: string,
+	field?: Field | null,
+	openAssistant?: boolean,
+) {
+	const embedUrl = useEmbedUrl();
+	const pageUrl = usePageUrl(path, spaceId, field, openAssistant);
+
+	return { embedUrl, pageUrl };
+}
+
+function usePageUrl(
+	path: string,
+	spaceId?: string,
+	field?: Field | null,
+	openAssistant?: boolean,
+) {
 	const pathname = usePathname();
-	const embedded = isEmbedded(pathname);
 
 	const space =
-		embedded || (pathname.includes(routes.space) && spaceId)
+		pathname.includes(routes.space) && spaceId
 			? `${routes.space}/${pathname.split("/")[2]}`
 			: "";
 
@@ -43,11 +52,39 @@ export const EmbedableLink = ({
 
 	const assistant = openAssistant ? "&assistant=true" : "";
 
+	return `${space}${path}${theme}${assistant}`;
+}
+
+function useEmbedUrl() {
+	const pathname = usePathname();
+	const embedded = isEmbedded(pathname);
+	const baseurl = getBaseUrl();
+
+	if (!embedded) {
+		return undefined;
+	}
+	// TODO: Get from the parent page path
+	const source = "femtechinsider";
+
+	return `${baseurl}${routes.space}/${pathname.split("/")[2]}?utm_source=${source}&utm_medium=embed`;
+}
+
+export const EmbedableLink = ({
+	children,
+	spaceId,
+	path,
+	field,
+	openAssistant,
+}: Props) => {
+	const urls = useUrls(path, spaceId, field, openAssistant);
+
+	console.log("urls", urls);
+
 	return (
 		<Link
-			href={`${baseurl}${space}${path}${theme}${assistant}`}
+			href={urls.embedUrl ?? urls.pageUrl}
 			onClick={trackHandler(analyticsKeys.feed.click.card)}
-			target={embedded ? "_blank" : undefined}
+			target={urls.embedUrl ? "_blank" : undefined}
 		>
 			{children}
 		</Link>
