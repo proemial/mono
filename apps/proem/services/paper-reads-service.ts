@@ -14,9 +14,11 @@ export type PaperReadWithUserAndPaper = Awaited<
 >[number];
 
 export type BasicReaderUserData = {
+	id: string;
 	firstName: string | null;
 	lastName: string | null;
 	imageUrl: string | undefined;
+	readCount: number;
 };
 
 export const PaperReadsService = {
@@ -71,7 +73,8 @@ export const PaperReadsService = {
 		const paperReads = await PaperReadsService.getAllByPaperId(paperId);
 		const readerIds = paperReads.map((paperRead) => paperRead.userId);
 		const readers = (await getUsers(readerIds)).map(
-			({ firstName, lastName, imageUrl }) => ({
+			({ id, firstName, lastName, imageUrl }) => ({
+				id,
 				firstName,
 				lastName,
 				imageUrl,
@@ -81,13 +84,22 @@ export const PaperReadsService = {
 			...(readerIds.includes(ANONYMOUS_USER_ID)
 				? [
 						{
+							id: ANONYMOUS_USER_ID,
 							firstName: "Anonymous",
 							lastName: null,
 							imageUrl: undefined,
+							readCount:
+								paperReads.find((pr) => pr.userId === ANONYMOUS_USER_ID)
+									?.readCount ?? 0,
 						},
 					]
 				: []),
-			...readers,
-		] as BasicReaderUserData[];
+			...readers.map((reader) => ({
+				...reader,
+				readCount:
+					paperReads.find((paperRead) => paperRead.userId === reader.id)
+						?.readCount ?? 0,
+			})),
+		] satisfies BasicReaderUserData[];
 	},
 };

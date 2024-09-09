@@ -1,5 +1,6 @@
 "use client";
 
+import { ANONYMOUS_USER_ID } from "@/app/constants";
 import { BasicReaderUserData } from "@/services/paper-reads-service";
 import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { cn } from "@proemial/shadcn-ui";
@@ -21,7 +22,7 @@ export const EngagementIndicator = ({ posts, readers, className }: Props) => {
 	const { open } = useAssistant();
 	const clickable = paperId && posts.length > 0;
 
-	const readCount = formatReadCount(readers.length);
+	const readCount = formatReadCount(readers);
 	const questions = formatQuestionsAsked(posts.length);
 
 	const userAvatars = useMemo(() => {
@@ -29,12 +30,16 @@ export const EngagementIndicator = ({ posts, readers, className }: Props) => {
 		const combinedAvatars = [...readers, ...postAuthors];
 		const uniqueUserAvatars = combinedAvatars.filter(
 			(avatar, index, avatars) => {
-				const duplicateIndex = avatars.findIndex(
-					(a) =>
+				const duplicateIndex = avatars.findIndex((a) => {
+					if (!a.lastName || !avatar.lastName) {
+						return false;
+					}
+					return (
 						a.firstName === avatar.firstName &&
 						a.lastName === avatar.lastName &&
-						a.imageUrl === avatar.imageUrl,
-				);
+						a.imageUrl === avatar.imageUrl
+					);
+				});
 				return index === duplicateIndex;
 			},
 		);
@@ -82,7 +87,12 @@ const formatQuestionsAsked = (count: number) => {
 	return count === 1 ? "1 question" : `${count} questions`;
 };
 
-const formatReadCount = (count: number) => {
+const formatReadCount = (readers: BasicReaderUserData[]) => {
+	// For anonymous readers, we use the read count (so 1 anonymous read = 1 unique reader)
+	const anonymousReads =
+		readers.find((r) => r.id === ANONYMOUS_USER_ID)?.readCount ?? 0;
+	const count =
+		anonymousReads > 0 ? anonymousReads - 1 + readers.length : readers.length;
 	if (count === 0) {
 		return;
 	}
