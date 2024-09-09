@@ -1,21 +1,13 @@
 "use client";
 
 import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
-import { Field } from "@/app/data/oa-fields";
-import {
-	analyticsKeys,
-	trackHandler,
-} from "@/components/analytics/tracking/tracking-keys";
+import { EmbedableLink } from "@/components/embedable-link";
 import {
 	PaperMetaData,
 	PaperMetaDataProps,
 } from "@/components/paper-meta-data"; // Updated import
-import { routes } from "@/routes";
-import { isEmbedded } from "@/utils/url";
 import { Prefix } from "@proemial/redis/adapters/papers";
 import { AlertTriangle } from "@untitled-ui/icons-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { ReactNode, useMemo } from "react";
 
 export type FeedItemCardProps = PaperMetaDataProps & {
@@ -46,7 +38,7 @@ export const FeedItemCard = ({
 		<div className="flex flex-col gap-3">
 			<EmbedableLink
 				path={`/paper/${provider ?? "oa"}/${id}`}
-				customCollectionId={customCollectionId}
+				spaceId={customCollectionId}
 				field={field}
 			>
 				{hasAbstract ? (
@@ -76,48 +68,3 @@ export const FeedItemCard = ({
 		</div>
 	);
 };
-
-export function EmbedableLink({
-	children,
-	customCollectionId,
-	path,
-	field,
-}: {
-	children: ReactNode;
-	path: string;
-	customCollectionId?: string;
-	field?: Field | null;
-}) {
-	const baseurl = useBaseUrl();
-	const pathname = usePathname();
-	const embedded = isEmbedded(pathname);
-
-	const space =
-		embedded || (pathname.includes(routes.space) && customCollectionId)
-			? `${routes.space}/${pathname.split("/")[2]}`
-			: "";
-
-	const theme =
-		// Only add the theme manually if the space is a personal collection
-		!space.includes("col_") && field
-			? `?color=${field.theme.color}${
-					field.theme.image ? `&image=${field.theme.image}` : ""
-				}`
-			: "";
-
-	return (
-		<Link
-			href={`${baseurl}${space}${path}${theme}`}
-			onClick={trackHandler(analyticsKeys.feed.click.card)}
-			target={embedded ? "_blank" : undefined}
-		>
-			{children}
-		</Link>
-	);
-}
-
-function useBaseUrl() {
-	return typeof window !== "undefined" && window.location.origin
-		? window.location.origin
-		: "";
-}

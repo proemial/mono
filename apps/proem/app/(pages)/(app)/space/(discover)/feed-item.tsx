@@ -1,4 +1,5 @@
 "use client";
+import { EmbedableLink } from "@/components/embedable-link";
 import { EngagementIndicator } from "@/components/engagement-indicator";
 import Markdown from "@/components/markdown";
 import { BasicReaderUserData } from "@/services/paper-reads-service";
@@ -11,13 +12,8 @@ import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-topics-compact";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import Link from "next/link";
 import { ReactNode, useMemo } from "react";
-import {
-	EmbedableLink,
-	FeedItemCard,
-	FeedItemCardProps,
-} from "./feed-item-card";
+import { FeedItemCard, FeedItemCardProps } from "./feed-item-card";
 import { FeedItemTag } from "./feed-item-tag";
 import { getFieldFromOpenAlexTopics } from "./get-field-from-open-alex-topics";
 
@@ -101,7 +97,7 @@ export default function FeedItem({
 				<div>
 					<EmbedableLink
 						path={`/paper/${provider ?? "oa"}/${paper.id}${paper.posts.length > 0 ? "?assistant=true" : ""}`}
-						customCollectionId={customCollectionId}
+						spaceId={customCollectionId}
 						field={field}
 					>
 						<EngagementIndicator posts={paper.posts} readers={paper.readers} />
