@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { ReactNode, useMemo } from "react";
 import { FeedItemCard, FeedItemCardProps } from "./feed-item-card";
-import { FeedItemTag } from "./feed-item-tag";
+import { FeedItemTag, FeedItemTagLink } from "./feed-item-tag";
 import { getFieldFromOpenAlexTopics } from "./get-field-from-open-alex-topics";
 
 dayjs.extend(relativeTime);
@@ -54,6 +54,13 @@ export default function FeedItem({
 	);
 	const hasEngagement = paper.posts.length > 0 || paper.readers.length > 0;
 
+	const linkConfig = {
+		path: `/paper/${provider ?? "oa"}/${paper.id}`,
+		spaceId: customCollectionId,
+		field: field,
+		openAssistant: paper.posts.length > 0,
+	};
+
 	return (
 		<div className="space-y-3">
 			<FeedItemCard
@@ -88,19 +95,18 @@ export default function FeedItem({
 				}}
 			>
 				{!fingerprint &&
-					tags?.map((tag) => <FeedItemTag key={tag} tag={tag} />)}
+					tags?.map((tag) => (
+						<FeedItemTag key={tag} tag={tag} linkTo={linkConfig} />
+					))}
 
-				{fingerprint && <FeatureTags features={fingerprint} />}
+				{fingerprint && (
+					<FeatureTags features={fingerprint} linkTo={linkConfig} />
+				)}
 			</div>
 
 			{hasEngagement && (
 				<div>
-					<EmbedableLink
-						path={`/paper/${provider ?? "oa"}/${paper.id}`}
-						spaceId={customCollectionId}
-						field={field}
-						openAssistant={paper.posts.length > 0}
-					>
+					<EmbedableLink {...linkConfig}>
 						<EngagementIndicator posts={paper.posts} readers={paper.readers} />
 					</EmbedableLink>
 				</div>
@@ -109,7 +115,10 @@ export default function FeedItem({
 	);
 }
 
-function FeatureTags({ features }: { features: RankedPaperFeature[] }) {
+function FeatureTags({
+	features,
+	linkTo,
+}: { features: RankedPaperFeature[]; linkTo: FeedItemTagLink }) {
 	const sorted = [...features]
 		.filter((f) => !f.irrelevant)
 		.sort((a, b) => typeScore(b.type) - typeScore(a.type));
@@ -129,7 +138,7 @@ function FeatureTags({ features }: { features: RankedPaperFeature[] }) {
 	return (
 		<>
 			{deduped.slice(0, 3).map((feature) => (
-				<FeedItemTag key={feature.id} tag={feature.label} />
+				<FeedItemTag key={feature.id} tag={feature.label} linkTo={linkTo} />
 			))}
 		</>
 	);
