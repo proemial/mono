@@ -6,7 +6,7 @@ import { useAuth } from "@clerk/nextjs";
 import { Drawer } from "@proemial/shadcn-ui";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useOptimistic, useState } from "react";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -34,7 +34,14 @@ type Params = {
 };
 
 export const ProemAssistant = () => {
-	const { isOpen, open, close } = useAssistant();
+	const {
+		isOpen: isOpenAssistant,
+		open: openAssistant,
+		close: closeAssistant,
+	} = useAssistant();
+	const [isOpen, open] = useOptimistic(isOpenAssistant, () => true);
+	const [isClose, close] = useOptimistic(isOpenAssistant, () => false);
+
 	const { userId } = useAuth();
 	const pathname = usePathname();
 	const [expanded, setExpanded] = useState(false);
@@ -72,8 +79,10 @@ export const ProemAssistant = () => {
 	}
 
 	const handleOpen = () => {
+		console.time("assistant.open");
 		trackHandler(analyticsKeys.assistant.open)();
-		open();
+		startTransition(() => open({}));
+		openAssistant();
 		setExpanded(false);
 	};
 
@@ -81,9 +90,11 @@ export const ProemAssistant = () => {
 		// This gets triggered multiple times during transitions
 		if (!isOpen) {
 			trackHandler(analyticsKeys.assistant.close)();
-			close();
+			startTransition(() => close({}));
+			closeAssistant();
 		} else {
-			open();
+			startTransition(() => open({}));
+			openAssistant();
 		}
 	};
 
