@@ -99,7 +99,7 @@ export default function FeedItem({
 						path={`/paper/${provider ?? "oa"}/${paper.id}`}
 						spaceId={customCollectionId}
 						field={field}
-						openAssistant
+						openAssistant={paper.posts.length > 0}
 					>
 						<EngagementIndicator posts={paper.posts} readers={paper.readers} />
 					</EmbedableLink>
