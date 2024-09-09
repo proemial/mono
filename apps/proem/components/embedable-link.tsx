@@ -17,6 +17,26 @@ type Props = {
 	openAssistant?: boolean;
 };
 
+export const EmbedableLink = ({
+	children,
+	spaceId,
+	path,
+	field,
+	openAssistant,
+}: Props) => {
+	const urls = useUrls(path, spaceId, field, openAssistant);
+
+	return (
+		<Link
+			href={urls.embedUrl ?? urls.pageUrl}
+			onClick={trackHandler(analyticsKeys.feed.click.card)}
+			target={urls.embedUrl ? "_blank" : undefined}
+		>
+			{children}
+		</Link>
+	);
+};
+
 function useUrls(
 	path: string,
 	spaceId?: string,
@@ -68,28 +88,6 @@ function useEmbedUrl() {
 
 	return `${baseurl}${routes.space}/${pathname.split("/")[2]}?utm_source=${source}&utm_medium=embed`;
 }
-
-export const EmbedableLink = ({
-	children,
-	spaceId,
-	path,
-	field,
-	openAssistant,
-}: Props) => {
-	const urls = useUrls(path, spaceId, field, openAssistant);
-
-	console.log("urls", urls);
-
-	return (
-		<Link
-			href={urls.embedUrl ?? urls.pageUrl}
-			onClick={trackHandler(analyticsKeys.feed.click.card)}
-			target={urls.embedUrl ? "_blank" : undefined}
-		>
-			{children}
-		</Link>
-	);
-};
 
 const getBaseUrl = () =>
 	typeof window !== "undefined" && window.location.origin
