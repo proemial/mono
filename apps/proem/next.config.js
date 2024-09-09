@@ -44,7 +44,7 @@ const nextConfig = {
 	},
 };
 
-module.exports = withSentryConfig(withVercelToolbar((nextConfig), {
+module.exports = withSentryConfig(withVercelToolbar(nextConfig), {
 	authToken: process.env.SENTRY_AUTH_TOKEN,
 	// For all available options, see:
 	// https://github.com/getsentry/sentry-webpack-plugin#options
@@ -83,5 +83,5 @@ module.exports = withSentryConfig(withVercelToolbar((nextConfig), {
 	// https://docs.sentry.io/product/crons/
 	// https://vercel.com/docs/cron-jobs
 	automaticVercelMonitors: true,
-}));
+});
 
