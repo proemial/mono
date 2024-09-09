@@ -29,9 +29,8 @@ const InspectPage = async ({
 	}
 
 	return (
-		<div className="flex flex-col gap-3 mb-28">
+		<div className="flex flex-col gap-3 mt-6 mb-28">
 			<DisableOverlayBackground />
-			<Header4>Papers referenced in answer</Header4>
 			<Suspense
 				fallback={
 					<div className="flex justify-center">
