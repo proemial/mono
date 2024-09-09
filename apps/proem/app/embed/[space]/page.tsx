@@ -45,7 +45,7 @@ export default async function EmbedPage({
 	);
 
 	const padding = nopadding ? "" : "p-4";
-	const backgroundColor = background ? `bg-[#${background}]` : "#F8F8F8";
+	const backgroundColor = background ? `bg-[#${background}]` : "";
 
 	return (
 		<div
