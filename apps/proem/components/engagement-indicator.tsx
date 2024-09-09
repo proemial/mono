@@ -4,6 +4,7 @@ import { BasicReaderUserData } from "@/services/paper-reads-service";
 import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { cn } from "@proemial/shadcn-ui";
 import { useParams } from "next/navigation";
+import { useMemo } from "react";
 import { AuthorAvatar } from "./author-avatar";
 import { useAssistant } from "./proem-assistant/use-assistant";
 
@@ -23,19 +24,24 @@ export const EngagementIndicator = ({ posts, readers, className }: Props) => {
 	const readCount = formatReadCount(readers.length);
 	const questions = formatQuestionsAsked(posts.length);
 
-	// Remove post author duplicates
-	const postAuthors = posts.reduce(
-		(authors: PostWithCommentsAndAuthor["author"][], post) => {
-			if (!authors.find((author) => author && author.id === post.author?.id)) {
-				authors.push(post.author);
-			}
-			return authors;
-		},
-		[],
-	);
-
-	const userAvatars = readers.length > 0 ? readers : postAuthors;
-	const first10UserAvatars = userAvatars.slice(0, MAX_AVATARS);
+	const userAvatars = useMemo(() => {
+		const postAuthors = posts.map((p) => p.author);
+		const combinedAvatars = [...readers, ...postAuthors];
+		const uniqueUserAvatars = combinedAvatars.filter(
+			(avatar, index, avatars) => {
+				const duplicateIndex = avatars.findIndex(
+					(a) =>
+						a.firstName === avatar.firstName &&
+						a.lastName === avatar.lastName &&
+						a.imageUrl === avatar.imageUrl,
+				);
+				return index === duplicateIndex;
+			},
+		);
+		return uniqueUserAvatars
+			.sort((a, b) => a.firstName?.localeCompare(b.firstName ?? "") ?? 0)
+			.slice(0, MAX_AVATARS);
+	}, [readers, posts]);
 
 	const handleClick = () => {
 		if (clickable) {
@@ -48,9 +54,9 @@ export const EngagementIndicator = ({ posts, readers, className }: Props) => {
 			className={cn("flex gap-2", className, { "cursor-pointer": clickable })}
 			onClick={handleClick}
 		>
-			{first10UserAvatars.length > 0 && (
+			{userAvatars.length > 0 && (
 				<div className="flex gap-2">
-					{first10UserAvatars.map((reader, index) => (
+					{userAvatars.map((reader, index) => (
 						<AuthorAvatar
 							key={index}
 							firstName={reader.firstName ?? null}
