@@ -96,9 +96,10 @@ export default function FeedItem({
 			{hasEngagement && (
 				<div>
 					<EmbedableLink
-						path={`/paper/${provider ?? "oa"}/${paper.id}${paper.posts.length > 0 ? "?assistant=true" : ""}`}
+						path={`/paper/${provider ?? "oa"}/${paper.id}`}
 						spaceId={customCollectionId}
 						field={field}
+						openAssistant
 					>
 						<EngagementIndicator posts={paper.posts} readers={paper.readers} />
 					</EmbedableLink>

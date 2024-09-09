@@ -14,9 +14,16 @@ type Props = {
 	path: string;
 	spaceId?: string;
 	field?: Field | null;
+	openAssistant?: boolean;
 };
 
-export const EmbedableLink = ({ children, spaceId, path, field }: Props) => {
+export const EmbedableLink = ({
+	children,
+	spaceId,
+	path,
+	field,
+	openAssistant,
+}: Props) => {
 	const baseurl = getBaseUrl();
 	const pathname = usePathname();
 	const embedded = isEmbedded(pathname);
@@ -34,9 +41,11 @@ export const EmbedableLink = ({ children, spaceId, path, field }: Props) => {
 				}`
 			: "";
 
+	const assistant = openAssistant ? "&assistant=true" : "";
+
 	return (
 		<Link
-			href={`${baseurl}${space}${path}${theme}`}
+			href={`${baseurl}${space}${path}${theme}${assistant}`}
 			onClick={trackHandler(analyticsKeys.feed.click.card)}
 			target={embedded ? "_blank" : undefined}
 		>
