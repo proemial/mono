@@ -9,7 +9,7 @@ export function FeedItemField({ topics = [] }: { topics?: OpenAlexTopic[] }) {
 	const field = useMemo(() => getFieldFromOpenAlexTopics(topics), [topics]);
 	const searchParams = useSearchParams();
 
-	const highlight = searchParams.get("foreground");
+	const highlight = searchParams.get("foreground") ?? searchParams.get("c1");
 
 	const style = highlight
 		? {
