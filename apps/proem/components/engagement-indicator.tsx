@@ -96,5 +96,5 @@ const formatReadCount = (readers: BasicReaderUserData[]) => {
 	if (count === 0) {
 		return;
 	}
-	return count === 1 ? "1 person read this" : `${count} people read this`;
+	return count === 1 ? "1 view" : `${count} views`;
 };
