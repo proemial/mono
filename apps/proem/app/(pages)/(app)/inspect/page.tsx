@@ -1,9 +1,7 @@
 import { Throbber } from "@/components/throbber";
 import { routes } from "@/routes";
-import { Header4 } from "@proemial/shadcn-ui";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { DisableOverlayBackground } from "../space/[collectionId]/inspect/disable-overlay-background";
 import { ReferenceList } from "../space/[collectionId]/inspect/reference-list";
 
 type Props = {
@@ -24,7 +22,6 @@ const InspectPage = async ({ searchParams: { assistant, tuple } }: Props) => {
 
 	return (
 		<div className="flex flex-col gap-3 mt-6 mb-28">
-			<DisableOverlayBackground />
 			<Suspense
 				fallback={
 					<div className="flex justify-center">

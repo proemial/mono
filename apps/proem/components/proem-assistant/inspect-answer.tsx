@@ -1,3 +1,4 @@
+import { useDisableOverlayBackground } from "@/app/(pages)/(app)/space/[collectionId]/inspect/use-disable-overlay-background";
 import { Header4 } from "@proemial/shadcn-ui";
 import { ChevronLeft, X } from "@untitled-ui/icons-react";
 import { useEffect } from "react";
@@ -15,6 +16,7 @@ export const InspectAnswer = ({ tuple }: Props) => {
 	const { isOpen, close, deselectTuple } = useAssistant();
 	const [ref, { height }] = useMeasure();
 	const { snapPoint, setSnapPoint } = useSnapPointStore();
+	useDisableOverlayBackground();
 
 	useEffect(() => {
 		const windowHeight = window.innerHeight;
@@ -31,21 +33,21 @@ export const InspectAnswer = ({ tuple }: Props) => {
 			<div className="flex justify-between -mt-4 -mx-2 text-white">
 				<div
 					className="p-2 rounded-full hover:opacity-75 duration-200 cursor-pointer"
-					onClick={() => deselectTuple()}
+					onClick={deselectTuple}
 				>
 					<ChevronLeft className="size-6" />
 				</div>
 				<div
 					className="p-2 rounded-full hover:opacity-75 duration-200 cursor-pointer"
-					onClick={() => close()}
+					onClick={close}
 				>
 					<X className="size-6" />
 				</div>
 			</div>
-			<Header4 className="text-white">Review references</Header4>
+			<Header4 className="text-white mb-1">Review references</Header4>
 			<Tuple post={tuple} onSubmit={() => undefined} />
 			<div className="pt-3 pb-1 text-center">
-				<AssistantButton onClick={() => deselectTuple()} variant="light" />
+				<AssistantButton onClick={deselectTuple} variant="light" />
 			</div>
 		</div>
 	);

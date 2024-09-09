@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-export const DisableOverlayBackground = () => {
+export const useDisableOverlayBackground = () => {
 	useEffect(() => {
 		const overlay = document.getElementById("drawer-overlay");
 		if (overlay) {
@@ -13,6 +13,5 @@ export const DisableOverlayBackground = () => {
 			);
 			overlay.className = existingClassesNoBackground;
 		}
-	});
-	return undefined;
+	}, []);
 };
