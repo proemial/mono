@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const InspectAnswer = ({ tuple }: Props) => {
-	const { deselectTuple, close } = useAssistant();
+	const { isOpen, close, deselectTuple } = useAssistant();
 	const [ref, { height }] = useMeasure();
 	const { snapPoint, setSnapPoint } = useSnapPointStore();
 
@@ -20,7 +20,7 @@ export const InspectAnswer = ({ tuple }: Props) => {
 		const windowHeight = window.innerHeight;
 		if (height && windowHeight) {
 			const assistantHeight = (height + 24 + 18) / windowHeight;
-			if (snapPoint !== assistantHeight) {
+			if (snapPoint !== assistantHeight && isOpen) {
 				setSnapPoint(assistantHeight);
 			}
 		}

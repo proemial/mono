@@ -53,11 +53,15 @@ export const useAssistant = () => {
 				params.push({ name: ASSISTANT_SEARCH_PARAMS.TUPLE, value: slug });
 			}
 			const queryString = updateQueryString(params);
-			if (slug && spaceId && !pathname.includes("inspect")) {
-				router.push(`${routes.space}/${spaceId}/inspect?${queryString}`);
-			} else if (slug && !pathname.includes("inspect")) {
-				router.push(`/inspect?${queryString}`);
+			if (slug && !pathname.includes("inspect")) {
+				// Open inspect
+				if (spaceId) {
+					router.replace(`${routes.space}/${spaceId}/inspect?${queryString}`);
+				} else {
+					router.replace(`/inspect?${queryString}`);
+				}
 			} else {
+				// Open assistant
 				router.push(`${pathname}?${queryString}`);
 			}
 		},
@@ -67,7 +71,7 @@ export const useAssistant = () => {
 	const deselectTuple = useCallback(() => {
 		const params = [{ name: ASSISTANT_SEARCH_PARAMS.TUPLE, value: undefined }];
 		const queryString = updateQueryString(params);
-		router.push(`${pathname}?${queryString}`);
+		router.replace(`${pathname}?${queryString}`);
 	}, [pathname, router, updateQueryString]);
 
 	const close = useCallback(() => {
@@ -76,7 +80,7 @@ export const useAssistant = () => {
 			{ name: ASSISTANT_SEARCH_PARAMS.ASSISTANT, value: undefined },
 		];
 		const queryString = updateQueryString(params);
-		router.push(`${pathname}?${queryString}`);
+		router.replace(`${pathname}?${queryString}`);
 	}, [pathname, router, updateQueryString]);
 
 	return {

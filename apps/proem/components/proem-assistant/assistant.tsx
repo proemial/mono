@@ -38,7 +38,7 @@ export const ProemAssistant = () => {
 	const { userId } = useAuth();
 	const pathname = usePathname();
 	const [expanded, setExpanded] = useState(false);
-	const { snapPoint, setSnapPoint } = useSnapPointStore();
+	const { snapPoint } = useSnapPointStore();
 
 	const params = useParams<Params>();
 	const spaceId = params.collectionId;
@@ -97,7 +97,6 @@ export const ProemAssistant = () => {
 				onOpenChange={handleOpenChange}
 				snapPoints={[snapPoint]}
 				activeSnapPoint={snapPoint}
-				setActiveSnapPoint={setSnapPoint}
 			>
 				<AssistantContent
 					spaceId={spaceId}

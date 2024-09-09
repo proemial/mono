@@ -182,7 +182,6 @@ export const AssistantContent = ({
 				{!slug && (
 					<PreviousQuestions
 						posts={tuplePosts}
-						userId={user?.id}
 						spaceId={spaceId}
 						paperId={paperId}
 						height={contentHeight - headerHeight - footerHeight}

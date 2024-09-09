@@ -7,6 +7,7 @@ import {
 } from "../analytics/tracking/tracking-keys";
 import { AssistantButton } from "./assistant-button";
 import { Tuple, TuplePost } from "./tuple";
+import { useAssistant } from "./use-assistant";
 import { useLatestSubmitId } from "./use-latest-submit-id";
 import { useSnapPointStore } from "./use-snap-point-store";
 
@@ -17,7 +18,6 @@ type Gradients = {
 
 type Props = {
 	posts: TuplePost[];
-	userId: string | null | undefined;
 	spaceId: string | undefined;
 	paperId: string | undefined;
 	height: number;
@@ -30,7 +30,6 @@ type Props = {
 
 export const PreviousQuestions = ({
 	posts,
-	userId,
 	spaceId,
 	paperId,
 	height,
@@ -47,12 +46,13 @@ export const PreviousQuestions = ({
 	});
 	const { snapPoint, setSnapPoint } = useSnapPointStore();
 	const { id: submitId } = useLatestSubmitId();
+	const { isOpen } = useAssistant();
 
 	useEffect(() => {
-		if (snapPoint !== 1.0) {
+		if (snapPoint !== 1.0 && isOpen) {
 			setSnapPoint(1.0);
 		}
-	}, [snapPoint, setSnapPoint]);
+	}, [snapPoint, setSnapPoint, isOpen]);
 
 	function handleSubmit(input: string) {
 		onSubmit(input);
