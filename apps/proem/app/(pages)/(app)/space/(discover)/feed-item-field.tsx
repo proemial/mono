@@ -19,6 +19,7 @@ export function FeedItemField({ topics = [] }: { topics?: OpenAlexTopic[] }) {
 				borderRadius: "16px",
 				display: "flex",
 				alignItems: "center",
+				marginBottom: "16px",
 			}
 		: {};
 
