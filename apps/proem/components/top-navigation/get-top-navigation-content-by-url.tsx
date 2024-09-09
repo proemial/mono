@@ -38,7 +38,14 @@ export function getTopNavigationContentByUrl(
 		// All papers inside space
 		if (url.includes("/paper")) {
 			return {
-				menu: <GoToSpaceAction />,
+				menu: <CloseAction iconOverride={<ChevronLeft className="size-6" />} />,
+				action: null,
+			};
+		}
+
+		if (url.includes("/inspect")) {
+			return {
+				menu: <CloseAction iconOverride={<ChevronLeft className="size-6" />} />,
 				action: null,
 			};
 		}
@@ -98,15 +105,18 @@ export function getTopNavigationContentByUrl(
 	// Papers outside of a space
 	if (url.includes("/paper")) {
 		return {
-			menu: (
-				<CloseAction
-					target={routes.space}
-					iconOverride={<ChevronLeft className="size-6" />}
-				/>
-			),
+			menu: <CloseAction iconOverride={<ChevronLeft className="size-6" />} />,
 			action: null,
 		};
 	}
+
+	if (url.includes("/inspect")) {
+		return {
+			menu: <CloseAction iconOverride={<ChevronLeft className="size-6" />} />,
+			action: null,
+		};
+	}
+
 	if (url.includes("/org")) {
 		// start with?
 		return { title: "Organization Management" };
