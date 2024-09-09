@@ -23,6 +23,7 @@ export const fetchFeedByFeaturesWithPostsAndReaders = async (
 		injectPopularPapersInFeed,
 	);
 	const paperIds = feed.rows.map(({ paper }) => paper?.id);
+
 	const papersWithPostsAndReaders = await Promise.all(
 		paperIds.map((paperId) => fetchPaperWithPostsAndReaders(paperId, spaceId)),
 	);
@@ -30,6 +31,7 @@ export const fetchFeedByFeaturesWithPostsAndReaders = async (
 		...feed,
 		rows: feed.rows.map((row) => ({
 			...row,
+			type: "organic",
 			paper: {
 				...row.paper,
 				posts:

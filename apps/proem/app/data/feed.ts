@@ -5,6 +5,7 @@ import { summarise } from "@/app/prompts/summarise-title";
 import { Paper } from "@proemial/data/paper";
 import { Redis } from "@proemial/redis/redis";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
+import { z } from "zod";
 
 const DEFAULT_LIMIT = 5;
 const POPULAR_PAPERS_PERCENTAGE:
@@ -21,6 +22,13 @@ const POPULAR_PAPERS_PERCENTAGE:
 
 // TODO! move to data when all dependencies are moved out of apps/proem
 export namespace Feed {
+	export const Row = z.object({
+		type: z.enum(["organic", "popularity-boost"]),
+	});
+
+	// TODO! remove hardcoded reference to OpenAlexPaper
+	export type Row = z.infer<typeof Row> & { paper: OpenAlexPaper };
+
 	const injectItems = <
 		TRankedItems extends any[],
 		TInjectedItems extends any[],
@@ -59,7 +67,11 @@ export namespace Feed {
 			offset: popularPaperOffset,
 		});
 
-		const { meta, rankedIds } = await fetchAndRerankPaperIds(
+		const {
+			meta,
+			rankedIds,
+			papers: rankedPapers,
+		} = await fetchAndRerankPaperIds(
 			params,
 			{
 				limit: rankedPaperLimit,
@@ -68,15 +80,22 @@ export namespace Feed {
 			nocache,
 		);
 		const feedIds = injectItems({
-			rankedItems: rankedIds.map((rankedId) => rankedId?.id).filter(Boolean),
-			injectedItems: mostPopularPapers.map((paper) => paper.paperId),
+			rankedItems: rankedIds
+				.map((rankedId) => ({ id: rankedId?.id, type: "organic" }))
+				.filter((paper) => !!paper.id),
+			injectedItems: mostPopularPapers.map((paper) => ({
+				id: paper.paperId,
+				type: "popularity-boost",
+			})),
 		});
 
 		if (!feedIds.length) {
 			throw new Error("No papers found.");
 		}
 
-		const cachedPapers = await Redis.papers.getAll(feedIds);
+		const cachedPapers = await Redis.papers.getAll(
+			feedIds.map((paper) => paper.id),
+		);
 
 		const cachedPapersIds = cachedPapers
 			.map((cachedPaper) =>
@@ -85,21 +104,28 @@ export namespace Feed {
 			)
 			.filter(Boolean);
 
-		const cacheMisses = feedIds.filter((id) => !cachedPapersIds.includes(id));
+		const cacheMisses = feedIds.filter(
+			(paper) => !cachedPapersIds.includes(paper.id),
+		);
 
 		if (cacheMisses.length === 0) {
 			return {
 				count: meta.count,
 				rows: feedIds
-					.map((id) => {
+					.map(({ id, type }) => {
 						const paper = cachedPapers.find(
 							(cachedPaper) => cachedPaper?.id === id,
 						);
 						if (!paper) {
 							return;
 						}
+						const asRankedPaper = rankedPapers.find(
+							(rankedPaper) => rankedPaper.id === id,
+						);
 
 						return {
+							...asRankedPaper,
+							type,
 							paper,
 						};
 					})
@@ -110,12 +136,15 @@ export namespace Feed {
 
 		const enhanced = [] as OpenAlexPaper[];
 		const feedItems = await Promise.all(
-			feedIds.map(async (feedId) => {
-				const currentPaper = await fetchPaper(feedId);
+			feedIds.map(async ({ id, type }) => {
+				const currentPaper = await fetchPaper(id);
 				if (!currentPaper) {
-					console.log("Paper not found", feedId);
+					console.log("Paper not found", id);
 					return;
 				}
+				const asRankedPaper = rankedPapers.find(
+					(rankedPaper) => rankedPaper.id === id,
+				);
 				const paperTitle = currentPaper?.data?.title;
 				const abstract = currentPaper?.data?.abstract;
 				const generatedTitle = currentPaper?.generated?.title;
@@ -130,13 +159,17 @@ export namespace Feed {
 					enhanced.push({ ...currentPaper, generated });
 
 					return {
-						id: feedId,
+						...asRankedPaper,
+						id,
 						paper: { ...currentPaper, generated },
+						type,
 					};
 				}
 				return {
-					id: feedId,
+					...asRankedPaper,
+					id,
 					paper: currentPaper,
+					type,
 				};
 			}),
 		);

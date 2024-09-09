@@ -95,20 +95,14 @@ export function Feed({
 				}}
 				renderHeadline={debug ? (count) => <DebugInfo count={count} /> : null}
 				renderRow={(row, i) => {
-					const paper = row as RankedPaper & {
-						paper: RankedPaper["paper"] & {
-							posts: PostWithCommentsAndAuthor[];
-							readers: BasicReaderUserData[];
-						};
-					};
-					const isBookmarked = Boolean(bookmarks?.[paper.paper.id]);
+					const isBookmarked = Boolean(bookmarks?.[row.paper.id]);
 					const topics = row.paper.data.topics;
 					const field = topics && getFieldFromOpenAlexTopics(topics);
 
 					const item = (
 						<FeedItem
-							paper={paper.paper}
-							fingerprint={paper.features}
+							paper={row.paper}
+							fingerprint={row.features}
 							customCollectionId={
 								"collectionId" in filter ? filter.collectionId : undefined
 							}
@@ -117,8 +111,8 @@ export function Feed({
 						>
 							{debug && (
 								<FeatureCloud
-									features={paper.features}
-									sum={paper.filterMatchScore}
+									features={row.features}
+									sum={row.filterMatchScore}
 								/>
 							)}
 						</FeedItem>
