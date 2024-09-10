@@ -45,7 +45,7 @@ export function getTopNavigationContentByUrl(
 
 		if (url.includes("/inspect")) {
 			return {
-				menu: <CloseAction iconOverride={<ChevronLeft className="size-6" />} />,
+				menu: <GoToSpaceAction />,
 				title: "Papers referenced",
 				action: null,
 			};
@@ -113,7 +113,7 @@ export function getTopNavigationContentByUrl(
 
 	if (url.includes("/inspect")) {
 		return {
-			menu: <CloseAction iconOverride={<ChevronLeft className="size-6" />} />,
+			menu: <GoToSpaceAction />,
 			title: "Papers referenced",
 			action: null,
 		};
