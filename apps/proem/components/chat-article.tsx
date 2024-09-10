@@ -10,11 +10,12 @@ import { BasicReaderUserData } from "@/services/paper-reads-service";
 import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { trimForQuotes } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
-import { Header2, Header4, Header5, Icons } from "@proemial/shadcn-ui";
+import { Button, Header2, Header4, Header5, Icons } from "@proemial/shadcn-ui";
 import {
 	BookOpen01,
 	ChevronRight,
 	Heading01,
+	LinkExternal02,
 	Users01,
 } from "@untitled-ui/icons-react";
 import { Suspense } from "react";
@@ -82,16 +83,9 @@ export function ChatArticle({
 						href={paper.data.primary_location?.landing_page_url}
 						target="_blank"
 						rel="noreferrer"
-						className="opacity-50 flex items-center justify-between gap-1 uppercase text-2xs hover:opacity-75 transition-opacity"
+						className="text-gray-600 flex items-center justify-between gap-1 text-xs hover:text-gray-700 transition-opacity"
 					>
 						<div className="flex-grow w-1/2">
-							<div className="flex items-center gap-2.5">
-								<div>
-									<Heading01 className="size-2.5" />
-								</div>
-								<Header5 className="truncate pr-6">{paper.data.title}</Header5>
-							</div>
-
 							{publisher && (
 								<div className="flex items-center gap-2.5">
 									<div>
@@ -100,6 +94,13 @@ export function ChatArticle({
 									<div className="truncate">{publisher}</div>
 								</div>
 							)}
+
+							<div className="flex items-center gap-2.5">
+								<div>
+									<Heading01 className="size-2.5" />
+								</div>
+								<Header5 className="truncate pr-6">{paper.data.title}</Header5>
+							</div>
 
 							<div className="flex items-center gap-2.5">
 								<div>
@@ -149,6 +150,20 @@ export function ChatArticle({
 					<div>
 						<Markdown>{paper.data.abstract as string}</Markdown>
 					</div>
+				</>
+			)}
+
+			{paper && (
+				<>
+					<Trackable trackingKey={analyticsKeys.read.click.fullPaper}>
+						<div className="flex items-center justify-center w-full">
+							{/* href={paper.data.primary_location?.landing_page_url} */}
+							<Button className="mx-auto my-4 gap-2">
+								<span>View full article</span>{" "}
+								<LinkExternal02 className="size-4" />
+							</Button>
+						</div>
+					</Trackable>
 				</>
 			)}
 		</div>

@@ -9,8 +9,7 @@ const buttonVariants = cva(
 	{
 		variants: {
 			variant: {
-				default:
-					"bg-primary text-primary-foreground uppercase text-2xs hover:bg-primary/90",
+				default: "bg-primary text-primary-foreground hover:bg-primary",
 				suggestion:
 					"text-left justify-start items-start text-foreground bg-card text-base leading-snug text-wrap whitespace-normal rounded-xl border-0",
 				chat: "text-left justify-start text-foreground bg-primary",
