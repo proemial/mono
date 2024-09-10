@@ -23,7 +23,7 @@ type Props = {
 
 export default async function EmbedPage({
 	params: { space },
-	searchParams: { count, nopadding, background },
+	searchParams: { count, background },
 }: Props) {
 	const collection = await CollectionService.getCollection(space);
 	if (!collection) {
@@ -44,13 +44,10 @@ export default async function EmbedPage({
 		space,
 	);
 
-	const padding = nopadding ? "" : "p-4";
 	const style = background ? { background: `#${background}` } : {};
 
 	return (
-		<div
-			className={`${padding} grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3`}
-		>
+		<div className={"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"}>
 			{feed.rows.map((row) => (
 				<div
 					key={row.paper.id}
