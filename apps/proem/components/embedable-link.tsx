@@ -43,7 +43,7 @@ function useUrls(
 	field?: Field | null,
 	openAssistant?: boolean,
 ) {
-	const embedUrl = useEmbedUrl();
+	const embedUrl = useEmbedUrl(path);
 	const pageUrl = usePageUrl(path, spaceId, field, openAssistant);
 
 	return { embedUrl, pageUrl };
@@ -75,7 +75,7 @@ function usePageUrl(
 	return `${space}${path}${theme}${assistant}`;
 }
 
-function useEmbedUrl() {
+function useEmbedUrl(path: string) {
 	const pathname = usePathname();
 	const embedded = isEmbedded(pathname);
 	const baseurl = getBaseUrl();
@@ -86,7 +86,7 @@ function useEmbedUrl() {
 	// TODO: Get from the parent page path
 	const source = "femtechinsider";
 
-	return `${baseurl}${routes.space}/${pathname.split("/")[2]}?utm_source=${source}&utm_medium=embed`;
+	return `${baseurl}${routes.space}/${pathname.split("/")[2]}${path}?utm_source=${source}&utm_medium=embed`;
 }
 
 const getBaseUrl = () =>
