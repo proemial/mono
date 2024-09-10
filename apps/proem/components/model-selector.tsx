@@ -153,7 +153,6 @@ export const ModelSelector = ({
 						/>
 						<Button
 							type="submit"
-							className="text-xs tracking-wider"
 							disabled={["loading", "success"].includes(subscribeResponse)}
 						>
 							Subscribe
