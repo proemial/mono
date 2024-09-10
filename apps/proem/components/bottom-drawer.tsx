@@ -29,6 +29,7 @@ export const BottomDrawer = ({
 			<DrawerTrigger asChild>{trigger}</DrawerTrigger>
 			<DrawerContent
 				className={cn(screenMaxWidth, "w-full mx-auto rounded-none")}
+				aria-describedby="Bottom drawer"
 			>
 				<div className="flex flex-col h-full">
 					<DrawerHeader className="pt-0 grow-0">

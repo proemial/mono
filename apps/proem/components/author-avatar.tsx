@@ -6,7 +6,7 @@ import {
 	cn,
 } from "@proemial/shadcn-ui";
 import { numberFrom } from "@proemial/utils/string";
-import { useId, useMemo } from "react";
+import { useId } from "react";
 
 type Props = {
 	firstName: string | null;

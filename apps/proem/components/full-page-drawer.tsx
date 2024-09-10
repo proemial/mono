@@ -33,6 +33,7 @@ export function FullSizeDrawer({
 			{trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
 			<DrawerContent
 				className={cn(screenMaxWidth, "w-full h-full mx-auto rounded-none")}
+				aria-describedby="Full page drawer"
 			>
 				<div className="flex flex-col h-full select-text">
 					<DrawerHeader className="pt-0 grow-0">

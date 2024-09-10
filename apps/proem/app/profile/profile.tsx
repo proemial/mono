@@ -27,7 +27,10 @@ export function Profile() {
 			<DrawerTrigger>
 				<MenuButton asChild />
 			</DrawerTrigger>
-			<DrawerContent className={`${screenMaxWidth} h-dvh rounded-none mx-auto`}>
+			<DrawerContent
+				className={`${screenMaxWidth} h-dvh rounded-none mx-auto`}
+				aria-describedby="Manage your account and settings"
+			>
 				<div className="flex flex-col h-full overflow-y-auto gap-6">
 					<DrawerHeader className="pt-0">
 						<DrawerTitle className="flex justify-end text-2xl font-normal">
