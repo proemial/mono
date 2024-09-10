@@ -33,7 +33,7 @@ export type FeedItemProps = Pick<
 	children?: ReactNode;
 	readonly?: boolean;
 	index?: number;
-	fullscreen?: boolean;
+	embedded?: boolean;
 	feedType?: string;
 };
 
@@ -48,7 +48,7 @@ export default function FeedItem({
 	readonly,
 	feedType,
 	index,
-	fullscreen,
+	embedded,
 }: FeedItemProps) {
 	const tags = paper.data.topics
 		?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
@@ -112,12 +112,13 @@ export default function FeedItem({
 					)}
 				</div>
 
-				<div className={`mt-2 ${fullscreen && "sm:min-h-6"}`}>
+				<div className={`mt-2 ${embedded && "sm:min-h-6"}`}>
 					{hasEngagement && (
 						<EmbedableLink {...linkConfig}>
 							<EngagementIndicator
 								posts={paper.posts}
 								readers={paper.readers}
+								maxAvatars={embedded ? 3 : undefined}
 							/>
 						</EmbedableLink>
 					)}

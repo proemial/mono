@@ -60,7 +60,7 @@ export default async function EmbedPage({
 						paper={row.paper}
 						customCollectionId={space}
 						readonly={true}
-						fullscreen={true}
+						embedded={true}
 					/>
 				</div>
 			))}
