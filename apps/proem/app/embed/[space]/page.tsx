@@ -45,7 +45,7 @@ export default async function EmbedPage({
 	);
 
 	const padding = nopadding ? "" : "p-4";
-	const backgroundColor = background ? `bg-[#${background}]` : "";
+	const style = background ? { background: `#${background}` } : {};
 
 	return (
 		<div
@@ -54,7 +54,8 @@ export default async function EmbedPage({
 			{feed.rows.map((row) => (
 				<div
 					key={row.paper.id}
-					className={`p-3 border border-[#cccccc] ${backgroundColor}`}
+					className={"p-3 border border-[#cccccc]"}
+					style={style}
 				>
 					<FeedItem
 						paper={row.paper}
