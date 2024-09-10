@@ -83,7 +83,12 @@ const config = {
 			},
 		},
 	},
-	plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar-hide")],
+	plugins: [require("tailwindcss-animate"),
+        require("tailwind-scrollbar-hide"),
+        (plugin: { addVariant: (name: string, value: string) => void }) => {
+            plugin.addVariant('not-last-child', '&:not(:last-child)');
+			plugin.addVariant('not-first-child', '&:not(:first-child)');
+        }],
 } satisfies Config;
 
 export default config;

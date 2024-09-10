@@ -20,7 +20,7 @@ export const AuthorAvatar = ({ firstName, lastName, imageUrl }: Props) => {
 
 	return (
 		<Avatar
-			className="-ml-[18px] first:ml-0 size-6 hover:brightness-110 duration-200"
+			className="-ml-[18px] first:ml-0 size-6 not-first-child:shadow-[-2px_0px_2px_rgba(0,0,0,0.25)]"
 			title={getFullName(firstName, lastName)}
 		>
 			<AvatarImage src={imageUrl} />
