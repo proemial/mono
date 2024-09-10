@@ -15,6 +15,7 @@ type Props = {
 	spaceId?: string;
 	field?: Field | null;
 	openAssistant?: boolean;
+	feedType?: string;
 };
 
 export const EmbedableLink = ({
@@ -23,13 +24,18 @@ export const EmbedableLink = ({
 	path,
 	field,
 	openAssistant,
+	feedType = "organic",
 }: Props) => {
 	const urls = useUrls(path, spaceId, field, openAssistant);
 
 	return (
 		<Link
 			href={urls.embedUrl ?? urls.pageUrl}
-			onClick={trackHandler(analyticsKeys.feed.click.card)}
+			onClick={() => {
+				trackHandler(analyticsKeys.feed.click.card, {
+					feedType,
+				});
+			}}
 			target={urls.embedUrl ? "_blank" : undefined}
 		>
 			{children}

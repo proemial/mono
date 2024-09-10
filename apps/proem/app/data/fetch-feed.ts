@@ -31,7 +31,6 @@ export const fetchFeedByFeaturesWithPostsAndReaders = async (
 		...feed,
 		rows: feed.rows.map((row) => ({
 			...row,
-			type: "organic",
 			paper: {
 				...row.paper,
 				posts:

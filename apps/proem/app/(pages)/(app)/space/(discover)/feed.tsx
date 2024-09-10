@@ -12,10 +12,7 @@ import {
 import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
 import { InfinityScrollList } from "@/components/infinity-scroll-list";
 import { ThemeColoredCard } from "@/components/theme-colored-card";
-import { BasicReaderUserData } from "@/services/paper-reads-service";
-import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
-import { RankedPaper } from "@proemial/repositories/oa/fingerprinting/rerank";
 import { useSearchParams } from "next/navigation";
 import { ReactNode } from "react";
 
@@ -102,6 +99,7 @@ export function Feed({
 					const item = (
 						<FeedItem
 							paper={row.paper}
+							feedType={row.type}
 							fingerprint={row.features}
 							customCollectionId={
 								"collectionId" in filter ? filter.collectionId : undefined

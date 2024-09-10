@@ -14,6 +14,7 @@ export type FeedItemCardProps = PaperMetaDataProps & {
 	children: ReactNode;
 	hasAbstract: boolean;
 	provider?: Prefix;
+	feedType?: string;
 };
 
 export const FeedItemCard = ({
@@ -27,6 +28,7 @@ export const FeedItemCard = ({
 	hasAbstract,
 	onBookmarkToggleClick,
 	readonly,
+	feedType,
 	index,
 }: FeedItemCardProps) => {
 	const field = useMemo(
@@ -40,6 +42,7 @@ export const FeedItemCard = ({
 				path={`/paper/${provider ?? "oa"}/${id}`}
 				spaceId={customCollectionId}
 				field={field}
+				feedType={feedType}
 			>
 				{hasAbstract ? (
 					<div>

@@ -12,11 +12,11 @@ import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-topics-compact";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { Fullscreen } from "lucide-react";
 import { ReactNode, useMemo } from "react";
 import { FeedItemCard, FeedItemCardProps } from "./feed-item-card";
 import { FeedItemTag, FeedItemTagLink } from "./feed-item-tag";
 import { getFieldFromOpenAlexTopics } from "./get-field-from-open-alex-topics";
-import { Fullscreen } from "lucide-react";
 
 dayjs.extend(relativeTime);
 
@@ -34,6 +34,7 @@ export type FeedItemProps = Pick<
 	readonly?: boolean;
 	index?: number;
 	fullscreen?: boolean;
+	feedType?: string;
 };
 
 export default function FeedItem({
@@ -45,6 +46,7 @@ export default function FeedItem({
 	customCollectionId,
 	onBookmarkToggleClick,
 	readonly,
+	feedType,
 	index,
 	fullscreen,
 }: FeedItemProps) {
@@ -62,11 +64,13 @@ export default function FeedItem({
 		spaceId: customCollectionId,
 		field: field,
 		openAssistant: paper.posts.length > 0,
+		feedType,
 	};
 
 	return (
 		<div className="h-full flex flex-col gap-2 justify-between">
 			<FeedItemCard
+				feedType={feedType}
 				isBookmarked={isBookmarked}
 				id={paper.id}
 				onBookmarkToggleClick={onBookmarkToggleClick}
