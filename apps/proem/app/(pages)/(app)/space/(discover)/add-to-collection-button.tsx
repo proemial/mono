@@ -50,7 +50,16 @@ export function AddToCollectionButton({
 	>(isBookmarked, (_, isEnabled) => isEnabled);
 
 	if (!user) {
-		return <SignInDrawer trigger={<AddButtonSkeleton />} />;
+		return (
+			<SignInDrawer
+				trigger={
+					// extra div to make the trigger a ref
+					<div>
+						<AddButtonSkeleton />
+					</div>
+				}
+			/>
+		);
 	}
 	const collectionId = customCollectionId ?? user.id;
 

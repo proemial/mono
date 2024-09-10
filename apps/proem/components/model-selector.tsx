@@ -102,16 +102,19 @@ export const ModelSelector = ({
 		<BottomDrawer
 			open={drawerOpen}
 			trigger={
-				<SelectContentSelector
-					className={className}
-					selector={Object.entries(MODELS).map(([value, label]) => ({
-						value,
-						label,
-					}))}
-					staticValue={DEFAULT_MODEL_ID}
-					onValueChange={handleValueChange}
-					trackingKey={trackingKeys.click.model}
-				/>
+				// extra div to make the trigger a ref
+				<div>
+					<SelectContentSelector
+						className={className}
+						selector={Object.entries(MODELS).map(([value, label]) => ({
+							value,
+							label,
+						}))}
+						staticValue={DEFAULT_MODEL_ID}
+						onValueChange={handleValueChange}
+						trackingKey={trackingKeys.click.model}
+					/>
+				</div>
 			}
 			onDrawerClose={handleDrawerClose}
 		>
