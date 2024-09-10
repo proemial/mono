@@ -7,7 +7,6 @@ import {
 } from "@/components/analytics/tracking/tracking-keys";
 import { EmbedableLink } from "@/components/embedable-link";
 import { isEmbedded } from "@/utils/url";
-import { Button } from "@proemial/shadcn-ui";
 import { usePathname } from "next/navigation";
 
 export type FeedItemTagLink = {

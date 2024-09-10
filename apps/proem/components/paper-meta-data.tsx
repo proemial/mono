@@ -34,7 +34,7 @@ export const PaperMetaData = ({
 	index,
 }: PaperMetaDataProps) => {
 	return (
-		<div className="flex items-center justify-between gap-2">
+		<div className="flex items-center justify-between gap-2 mb-1">
 			<FeedItemField topics={topics} />
 			<div className="flex items-center gap-2 ">
 				<div className="uppercase text-2xs text-nowrap">
