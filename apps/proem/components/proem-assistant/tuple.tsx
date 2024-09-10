@@ -5,12 +5,16 @@ import { CardBullet, cn } from "@proemial/shadcn-ui";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useRef } from "react";
 import { AuthorAvatar, getFullName } from "../author-avatar";
 import { applyExplainLinks } from "../chat-apply-links";
 import { ProemLogo } from "../icons/brand/logo";
-import { useAssistant } from "./use-assistant";
+import {
+	ASSISTANT_OPEN_QUERY_KEY,
+	ASSISTANT_SELECTED_QUERY_KEY,
+	useAssistant,
+} from "./use-assistant";
 
 dayjs.extend(relativeTime);
 
@@ -64,13 +68,20 @@ export const Tuple = ({
 			link: string;
 		}[]) ?? [];
 	const hasPaperSources = post.slug && post.reply?.metadata?.papers;
-	const { open, slug } = useAssistant();
+	const [{ assistant, selected }] = useAssistant();
 	const ref = useRef<HTMLDivElement>(null);
+	const router = useRouter();
 
 	const handleClick = () => {
-		if (hasPaperSources && !slug) {
-			// biome-ignore lint/style/noNonNullAssertion: `hasPaperSources` true entails `post.slug` is defined
-			open(post.slug!);
+		if (hasPaperSources && !selected) {
+			const assistantQueryParams = `?${ASSISTANT_OPEN_QUERY_KEY}=${assistant}&${ASSISTANT_SELECTED_QUERY_KEY}=${post.slug}`;
+			if (spaceId) {
+				router.push(
+					`${routes.space}/${spaceId}/${routes.inspect}${assistantQueryParams}`,
+				);
+			} else {
+				router.push(`${routes.inspect}${assistantQueryParams}`);
+			}
 		}
 	};
 
@@ -84,7 +95,7 @@ export const Tuple = ({
 		<div
 			className={cn("flex flex-col rounded-2xl gap-2 p-2 pr-3 bg-theme-700", {
 				"cursor-pointer hover:bg-theme-800 duration-200":
-					!!post.reply?.metadata?.papers && !slug,
+					!!post.reply?.metadata?.papers && !selected,
 				"border-2 border-theme-200": highlight,
 			})}
 			onClick={handleClick}

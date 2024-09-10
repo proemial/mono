@@ -9,21 +9,16 @@ type Props = {
 		collectionId: string;
 	};
 	searchParams: {
-		assistant?: string;
-		tuple?: string;
+		selected?: string;
 	};
 };
 
 const InspectPage = async ({
 	params: { collectionId },
-	searchParams: { assistant, tuple },
+	searchParams: { selected },
 }: Props) => {
-	if (!tuple) {
-		if (assistant === "true") {
-			redirect(`${routes.space}/${collectionId}?assistant=true`);
-		} else {
-			redirect(`${routes.space}/${collectionId}`);
-		}
+	if (!selected) {
+		redirect(routes.home);
 	}
 
 	return (
@@ -35,7 +30,7 @@ const InspectPage = async ({
 					</div>
 				}
 			>
-				<ReferenceList spaceId={collectionId} tuple={tuple} />
+				<ReferenceList spaceId={collectionId} tuple={selected} />
 			</Suspense>
 		</div>
 	);

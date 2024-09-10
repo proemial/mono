@@ -34,7 +34,7 @@ type Params = {
 };
 
 export const ProemAssistant = () => {
-	const { isOpen, open, close } = useAssistant();
+	const [{ assistant }, setAssistant] = useAssistant();
 	const { userId } = useAuth();
 	const pathname = usePathname();
 	const [expanded, setExpanded] = useState(false);
@@ -73,7 +73,7 @@ export const ProemAssistant = () => {
 
 	const handleOpen = () => {
 		trackHandler(analyticsKeys.assistant.open)();
-		open();
+		setAssistant({ assistant: true });
 		setExpanded(false);
 	};
 
@@ -81,9 +81,9 @@ export const ProemAssistant = () => {
 		// This gets triggered multiple times during transitions
 		if (!isOpen) {
 			trackHandler(analyticsKeys.assistant.close)();
-			close();
+			setAssistant({ assistant: false });
 		} else {
-			open();
+			setAssistant({ assistant: true });
 		}
 	};
 
@@ -93,7 +93,7 @@ export const ProemAssistant = () => {
 			<Drawer
 				shouldScaleBackground={false}
 				setBackgroundColorOnScale={false}
-				open={isOpen}
+				open={assistant}
 				onOpenChange={handleOpenChange}
 				snapPoints={[snapPoint]}
 				activeSnapPoint={snapPoint}

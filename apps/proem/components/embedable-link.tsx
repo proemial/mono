@@ -8,6 +8,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "./analytics/tracking/tracking-keys";
+import { ASSISTANT_OPEN_QUERY_KEY } from "./proem-assistant/use-assistant";
 
 type Props = {
 	children: ReactNode;
@@ -76,7 +77,7 @@ function usePageUrl(
 				}`
 			: "";
 
-	const assistant = openAssistant ? "&assistant=true" : "";
+	const assistant = openAssistant ? `&${ASSISTANT_OPEN_QUERY_KEY}=true` : "";
 
 	return `${space}${path}${theme}${assistant}`;
 }

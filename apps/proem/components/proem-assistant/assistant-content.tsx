@@ -66,7 +66,7 @@ export const AssistantContent = ({
 
 	const [inputFocused, setInputFocused] = useState(false);
 	const queryClient = useQueryClient();
-	const { slug } = useAssistant();
+	const [{ selected }] = useAssistant();
 	const { setId } = useLatestSubmitId();
 
 	const [contentRef, { height: contentHeight }] = useMeasure();
@@ -151,7 +151,7 @@ export const AssistantContent = ({
 		return data?.paper?.generated?.starters ?? [];
 	}, [followUps, data?.paper?.generated?.starters]);
 
-	const selectedTuple = tuplePosts.find((tp) => tp.slug === slug);
+	const selectedTuple = tuplePosts.find((tp) => tp.slug === selected);
 
 	useEffect(() => {
 		if (!isLoading) {
@@ -169,7 +169,7 @@ export const AssistantContent = ({
 				ref={contentRef}
 			>
 				{selectedTuple && <InspectAnswer tuple={selectedTuple} />}
-				{!slug && (
+				{!selected && (
 					<Header
 						spaceName={data?.space?.name ?? "Discover"}
 						spaceId={data?.space?.id}
@@ -179,7 +179,7 @@ export const AssistantContent = ({
 						ref={headerRef}
 					/>
 				)}
-				{!slug && (
+				{!selected && (
 					<PreviousQuestions
 						posts={tuplePosts}
 						spaceId={spaceId}

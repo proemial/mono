@@ -6,18 +6,13 @@ import { ReferenceList } from "../space/[collectionId]/inspect/reference-list";
 
 type Props = {
 	searchParams: {
-		assistant?: string;
-		tuple?: string;
+		selected?: string;
 	};
 };
 
-const InspectPage = async ({ searchParams: { assistant, tuple } }: Props) => {
-	if (!tuple) {
-		if (assistant === "true") {
-			redirect(`${routes.home}?assistant=true`);
-		} else {
-			redirect(`${routes.home}`);
-		}
+const InspectPage = async ({ searchParams: { selected } }: Props) => {
+	if (!selected) {
+		redirect(routes.home);
 	}
 
 	return (
@@ -29,7 +24,7 @@ const InspectPage = async ({ searchParams: { assistant, tuple } }: Props) => {
 					</div>
 				}
 			>
-				<ReferenceList tuple={tuple} />
+				<ReferenceList tuple={selected} />
 			</Suspense>
 		</div>
 	);

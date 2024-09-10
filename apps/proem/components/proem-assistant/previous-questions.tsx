@@ -46,13 +46,13 @@ export const PreviousQuestions = ({
 	});
 	const { snapPoint, setSnapPoint } = useSnapPointStore();
 	const { id: submitId } = useLatestSubmitId();
-	const { isOpen } = useAssistant();
+	const [{ assistant }] = useAssistant();
 
 	useEffect(() => {
-		if (snapPoint !== 1.0 && isOpen) {
+		if (snapPoint !== 1.0 && assistant) {
 			setSnapPoint(1.0);
 		}
-	}, [snapPoint, setSnapPoint, isOpen]);
+	}, [snapPoint, setSnapPoint, assistant]);
 
 	function handleSubmit(input: string) {
 		onSubmit(input);

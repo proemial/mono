@@ -25,7 +25,7 @@ export const EngagementIndicator = ({
 	className,
 }: Props) => {
 	const { id: paperId } = useParams<{ id?: string }>();
-	const { open } = useAssistant();
+	const [_, setAssistant] = useAssistant();
 	const clickable = paperId && posts.length > 0;
 
 	const readCount = formatReadCount(readers);
@@ -38,7 +38,7 @@ export const EngagementIndicator = ({
 
 	const handleClick = () => {
 		if (clickable) {
-			open();
+			setAssistant({ assistant: true });
 		}
 	};
 

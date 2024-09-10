@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const InspectAnswer = ({ tuple }: Props) => {
-	const { isOpen, close, deselectTuple } = useAssistant();
+	const [{ assistant }, setAssistant] = useAssistant();
 	const [ref, { height }] = useMeasure();
 	const { snapPoint, setSnapPoint } = useSnapPointStore();
 	useDisableOverlayBackground();
@@ -22,7 +22,7 @@ export const InspectAnswer = ({ tuple }: Props) => {
 		const windowHeight = window.innerHeight;
 		if (height && windowHeight) {
 			const assistantHeight = (height + 24 + 18) / windowHeight;
-			if (snapPoint !== assistantHeight && isOpen) {
+			if (snapPoint !== assistantHeight && assistant) {
 				setSnapPoint(assistantHeight);
 			}
 		}
@@ -33,13 +33,13 @@ export const InspectAnswer = ({ tuple }: Props) => {
 			<div className="flex justify-between -mt-4 -mx-2 text-white">
 				<div
 					className="p-2 rounded-full hover:opacity-75 duration-200 cursor-pointer"
-					onClick={deselectTuple}
+					onClick={() => setAssistant({ selected: "" })}
 				>
 					<ChevronLeft className="size-6" />
 				</div>
 				<div
 					className="p-2 rounded-full hover:opacity-75 duration-200 cursor-pointer"
-					onClick={close}
+					onClick={() => setAssistant({ assistant: false })}
 				>
 					<X className="size-6" />
 				</div>
@@ -47,7 +47,10 @@ export const InspectAnswer = ({ tuple }: Props) => {
 			<Header4 className="text-white mb-1">Review references</Header4>
 			<Tuple post={tuple} onSubmit={() => undefined} />
 			<div className="pt-3 pb-1 text-center">
-				<AssistantButton onClick={deselectTuple} variant="light" />
+				<AssistantButton
+					onClick={() => setAssistant({ selected: "" })}
+					variant="light"
+				/>
 			</div>
 		</div>
 	);
