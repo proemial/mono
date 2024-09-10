@@ -5,7 +5,8 @@ import {
 	Icons,
 	cn,
 } from "@proemial/shadcn-ui";
-import { useMemo } from "react";
+import { numberFrom } from "@proemial/utils/string";
+import { useId, useMemo } from "react";
 
 type Props = {
 	firstName: string | null;
@@ -14,10 +15,8 @@ type Props = {
 };
 
 export const AuthorAvatar = ({ firstName, lastName, imageUrl }: Props) => {
-	const background = useMemo(
-		() => AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)],
-		[],
-	);
+	const id = useId();
+	const background = AVATAR_COLORS[numberFrom(id, AVATAR_COLORS.length)];
 
 	return (
 		<Avatar
