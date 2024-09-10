@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import { AuthorAvatar, getFullName } from "../author-avatar";
 import { applyExplainLinks } from "../chat-apply-links";
 import { ProemLogo } from "../icons/brand/logo";
@@ -103,7 +103,7 @@ export const Tuple = ({
 						</div>
 						<div className="opacity-30">{formattedPostDate}</div>
 					</div>
-					<div className="font">{post.content}</div>
+					<SelectableContent>{post.content}</SelectableContent>
 				</div>
 			</div>
 			<div className="flex gap-2">
@@ -115,7 +115,7 @@ export const Tuple = ({
 				</div>
 				{post.reply ? (
 					<div className="flex flex-col gap-1 text-white">
-						<div>
+						<SelectableContent>
 							{applyExplainLinks(
 								post.reply.content,
 								(input: string) => onSubmit(`What is ${input}?`),
@@ -136,13 +136,13 @@ export const Tuple = ({
 									>
 										<CardBullet
 											variant="numbered"
-											className="inline-block ml-1 border-white pt-0"
+											className="inline-block ml-1 border-white pt-0 select-none"
 										>
 											{index + 1}
 										</CardBullet>
 									</Link>
 								))}
-						</div>
+						</SelectableContent>
 					</div>
 				) : (
 					<div className="text-white text-sm">{throbberStatus}</div>
@@ -160,3 +160,9 @@ export const Tuple = ({
 		</div>
 	);
 };
+
+const SelectableContent = ({ children }: { children: ReactNode }) => (
+	<div data-vaul-no-drag className="select-text">
+		{children}
+	</div>
+);
