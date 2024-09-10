@@ -42,7 +42,7 @@ export const PaperReadsService = {
 			);
 			// Dirty hack to prevent multiple renders causing multiple reads
 			// from being recorded in quick succession
-			if (diffInMsFromNow > 5000) {
+			if (diffInMsFromNow > 1000) {
 				// TODO: Update stream cache (once it has been changed to use the `paper_reads` table)
 				// waitUntil(streamCacheUpdate.run(userId, "user"));
 				return await PaperReadsRepository.update({
