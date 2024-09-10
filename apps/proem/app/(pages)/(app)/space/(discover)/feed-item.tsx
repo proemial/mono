@@ -16,6 +16,7 @@ import { ReactNode, useMemo } from "react";
 import { FeedItemCard, FeedItemCardProps } from "./feed-item-card";
 import { FeedItemTag, FeedItemTagLink } from "./feed-item-tag";
 import { getFieldFromOpenAlexTopics } from "./get-field-from-open-alex-topics";
+import { Fullscreen } from "lucide-react";
 
 dayjs.extend(relativeTime);
 
@@ -32,6 +33,7 @@ export type FeedItemProps = Pick<
 	children?: ReactNode;
 	readonly?: boolean;
 	index?: number;
+	fullscreen?: boolean;
 };
 
 export default function FeedItem({
@@ -44,6 +46,7 @@ export default function FeedItem({
 	onBookmarkToggleClick,
 	readonly,
 	index,
+	fullscreen,
 }: FeedItemProps) {
 	const tags = paper.data.topics
 		?.map((topic) => oaTopicsTranslationMap[topic.id]?.["short-name"])
@@ -62,7 +65,7 @@ export default function FeedItem({
 	};
 
 	return (
-		<div className="space-y-3">
+		<div className="h-full flex flex-col gap-2 justify-between">
 			<FeedItemCard
 				isBookmarked={isBookmarked}
 				id={paper.id}
@@ -87,30 +90,35 @@ export default function FeedItem({
 
 			{children}
 
-			<div
-				className="flex gap-2 scrollbar-hide overflow-x-auto w-[calc(100%+12px)] -mx-[12px] pl-[12px]"
-				style={{
-					maskImage:
-						"linear-gradient(to right, transparent 0px, black 12px, black calc(100% - 12px), transparent 100%)",
-				}}
-			>
-				{!fingerprint &&
-					tags?.map((tag) => (
-						<FeedItemTag key={tag} tag={tag} linkTo={linkConfig} />
-					))}
+			<div>
+				<div
+					className="flex gap-2 scrollbar-hide overflow-x-auto w-[calc(100%+12px)] -mx-[12px] pl-[12px]"
+					style={{
+						maskImage:
+							"linear-gradient(to right, transparent 0px, black 12px, black calc(100% - 12px), transparent 100%)",
+					}}
+				>
+					{!fingerprint &&
+						tags?.map((tag) => (
+							<FeedItemTag key={tag} tag={tag} linkTo={linkConfig} />
+						))}
 
-				{fingerprint && (
-					<FeatureTags features={fingerprint} linkTo={linkConfig} />
-				)}
-			</div>
-
-			{hasEngagement && (
-				<div>
-					<EmbedableLink {...linkConfig}>
-						<EngagementIndicator posts={paper.posts} readers={paper.readers} />
-					</EmbedableLink>
+					{fingerprint && (
+						<FeatureTags features={fingerprint} linkTo={linkConfig} />
+					)}
 				</div>
-			)}
+
+				<div className={`mt-2 ${fullscreen && "sm:min-h-6"}`}>
+					{hasEngagement && (
+						<EmbedableLink {...linkConfig}>
+							<EngagementIndicator
+								posts={paper.posts}
+								readers={paper.readers}
+							/>
+						</EmbedableLink>
+					)}
+				</div>
+			</div>
 		</div>
 	);
 }
