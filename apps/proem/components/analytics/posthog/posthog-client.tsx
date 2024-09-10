@@ -32,6 +32,8 @@ function useInit(trackingInput?: TrackingInput) {
 	useEffect(() => {
 		// wait for clerk to load
 		if (!trackingProfile) return;
+		// Don't initialize twice
+		if (initialized) return;
 
 		// memory: do not persist in cookies/local storage for anonymous eu citizens
 		const persistence = trackingProfile !== "tracked" ? "memory" : undefined;
@@ -57,7 +59,7 @@ function useInit(trackingInput?: TrackingInput) {
 			// },
 		});
 		setInitialized(true);
-	}, [user, trackingProfile]);
+	}, [user, trackingProfile, initialized]);
 
 	useEffect(() => {
 		// we may need to stop overwriting the default distinctID, if we want to keep trafic after initial login
