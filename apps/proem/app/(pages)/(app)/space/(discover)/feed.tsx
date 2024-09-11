@@ -47,6 +47,7 @@ export function Feed({
 }: FeedProps) {
 	const debug = useSearchParams().get("debug");
 	const nocache = useSearchParams().get("nocache");
+	const days = Number(useSearchParams().get("days")) || undefined;
 
 	const queryKey =
 		"institution" in filter
@@ -84,7 +85,7 @@ export function Feed({
 					}
 
 					return fetchFeedByFeaturesWithPostsAndReaders(
-						{ features: filter.features, days: filter.days },
+						{ features: filter.features, days: days ?? filter.days },
 						{ offset: ctx.pageParam },
 						!!nocache,
 						filter.collectionId,
