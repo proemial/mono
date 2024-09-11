@@ -3,12 +3,14 @@ import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
+import { getQueryClient } from "@/components/providers/get-query-client";
 import { CollectionService } from "@/services/collection-service";
 import { PermissionUtils } from "@/utils/permission-utils";
 import { auth } from "@clerk/nextjs/server";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { Fingerprint } from "@proemial/repositories/oa/fingerprinting/fingerprints";
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 
 type Props = CollectionIdParams;
@@ -55,5 +57,11 @@ export default async function LatestPage({ params: { collectionId } }: Props) {
 		days: FEED_DEFAULT_DAYS,
 	};
 
-	return <Feed filter={filter} readonly={!canEdit} bookmarks={bookmarks} />;
+	const queryClient = getQueryClient();
+
+	return (
+		<HydrationBoundary state={dehydrate(queryClient)}>
+			<Feed filter={filter} readonly={!canEdit} bookmarks={bookmarks} />
+		</HydrationBoundary>
+	);
 }
