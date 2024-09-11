@@ -8,10 +8,8 @@ import { FeedItemField } from "@/app/(pages)/(app)/space/(discover)/feed-item-fi
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Trackable } from "@/components/trackable";
 import { formatDate } from "@/utils/date";
-import { isEmbedded } from "@/utils/url";
 import { OpenAlexTopic } from "@proemial/repositories/oa/models/oa-paper";
 import { CardBullet } from "@proemial/shadcn-ui";
-import { usePathname } from "next/navigation";
 
 export type PaperMetaDataProps = Pick<
 	AddToCollectionButtonProps,
@@ -35,15 +33,12 @@ export const PaperMetaData = ({
 	onBookmarkToggleClick,
 	index,
 }: PaperMetaDataProps) => {
-	const pathname = usePathname();
-	const embedded = isEmbedded(pathname);
-
 	return (
 		<div className="flex items-center justify-between gap-2 mb-1">
 			<FeedItemField topics={topics} />
 			<div className="flex items-center gap-2 ">
 				<div className="uppercase text-2xs text-nowrap">
-					{!embedded && formatDate(date, "relative")}
+					{formatDate(date, "relative")}
 				</div>
 				{!readonly && (
 					<div
