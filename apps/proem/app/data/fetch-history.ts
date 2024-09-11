@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import { PaperActivity, User } from "@proemial/data/neon/schema";
 import { getUser } from "@proemial/data/repository/user";
 import dayjs from "dayjs";
@@ -17,17 +16,6 @@ function sortAndFilter(readHistory: PaperActivity[]) {
 		.sort((a, b) => b.noOfReads - a.noOfReads);
 
 	return sortedHistory?.slice(0, maxCount);
-}
-
-async function fetchUser(user?: string) {
-	const { userId } = auth();
-	const uid = user ?? userId;
-
-	if (!uid) {
-		return;
-	}
-
-	return await getUser(uid);
 }
 
 async function getBookmarksByUser<TUserId extends Pick<User, "id">>(
@@ -49,9 +37,9 @@ function getHistoryByUser<TUserId extends Pick<User, "paperActivities">>(
 
 type PaperId = string;
 export async function getBookmarksAndHistory(
-	userId?: Parameters<typeof fetchUser>[0],
+	userId: string,
 ): Promise<[PaperId[], PaperId[]] | null> {
-	return fetchUser(userId).then(async (user) => {
+	return getUser(userId).then(async (user) => {
 		if (!user) {
 			return null;
 		}

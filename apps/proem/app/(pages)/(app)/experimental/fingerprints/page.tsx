@@ -42,7 +42,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	// Only use history when `ids` param is missing (accept clearing the list of papers)
 	const noIds = searchParams?.ids === undefined;
 	if (noIds && !ids.length) {
-		const history = await getBookmarksAndHistory();
+		const history = userId ? await getBookmarksAndHistory(userId) : [];
 		if (history?.length) {
 			redirect(`/experimental/fingerprints?ids=${history.flat().join(",")}`);
 		}
