@@ -77,7 +77,9 @@ export const fetchAndRerankPaperIds = async (
 		const pdate = formatDate(p.publishedAt, "relative");
 		publishedAt[pdate] = (publishedAt[pdate] ?? 0) + 1;
 	});
-	console.log(JSON.stringify({ collectionId, createdAt, publishedAt }));
+	console.log(
+		JSON.stringify({ collectionId, fetchWindow: days, createdAt, publishedAt }),
+	);
 
 	// console.log(
 	// 	collectionId,
