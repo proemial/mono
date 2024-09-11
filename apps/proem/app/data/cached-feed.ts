@@ -9,11 +9,16 @@ export module CachedFeed {
 			async () => {
 				const feed = await Feed.fromCollection(...args);
 				console.log("feed", feed);
+				console.log([
+					args[0],
+					String(args[1].offset),
+					args[2] ?? "anonymous",
+					args[3] ?? "-",
+				]);
 				return feed;
 			},
 			[args[0], String(args[1].offset), args[2] ?? "anonymous", args[3] ?? "-"],
 			{
-				tags: ["users"],
 				revalidate: false,
 			},
 		)();

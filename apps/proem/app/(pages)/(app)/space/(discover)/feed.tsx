@@ -1,10 +1,8 @@
 "use client";
 import { Bookmarks } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
 import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
-import { fetchFeedByInstitutionWithPostsAndReaders } from "@/app/(pages)/(app)/space/(discover)/fetch-feed";
 import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
 import { FeedResponse } from "@/app/api/feed/route";
-import { fetchFeedByFeaturesWithPostsAndReaders } from "@/app/data/fetch-feed";
 import { Theme } from "@/app/theme/color-theme";
 import {
 	analyticsKeys,
@@ -84,6 +82,7 @@ export function Feed({
 									: ""
 						}&offset=${ctx.pageParam}`,
 					);
+					// TODO! error handling
 					const data = (await feed.json()) as FeedResponse;
 					console.log({ data });
 
