@@ -1,4 +1,5 @@
 import { fetchWithAbstract } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
+import { formatDate } from "@/utils/date";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
 import {
 	RankedPaperId,
@@ -33,6 +34,7 @@ export const fetchAndRerankPaperIds = async (
 	{ features, days }: { features?: RankedFeature[]; days?: number },
 	{ limit, offset }: { limit?: number; offset?: number } = {},
 	nocache?: boolean,
+	collectionId?: string,
 ) => {
 	const pageLimit = limit ?? 25;
 	const pageOffset = offset ?? 1;
@@ -64,6 +66,17 @@ export const fetchAndRerankPaperIds = async (
 	const cached = nocache
 		? await cacheWorker(features ?? [], days ?? FEED_DEFAULT_DAYS)
 		: await getCachedPapers(features ?? [], days ?? FEED_DEFAULT_DAYS);
+
+	console.log(
+		collectionId,
+		JSON.stringify(
+			cached.papers.map((p) => ({
+				createdAt: p.createdAt,
+				publishedAt: p.publishedAt,
+				score: p.filterMatchScore,
+			})),
+		),
+	);
 
 	// Subtract 1 from pageOffset to match the zero index in an array. First page should start at 0
 	const nextOffset = (pageOffset - 1) * pageLimit;

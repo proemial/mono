@@ -19,6 +19,8 @@ export type RankedPaper = {
 
 export type RankedPaperId = {
 	id: string;
+	createdAt: string;
+	publishedAt: string;
 	features: RankedPaperFeature[];
 	filterMatchScore: number;
 };
@@ -38,6 +40,8 @@ export function rerankAndLimit(
 				filterMatchScore: p.filterMatchScore,
 				features: p.features,
 				id: p.paper.id,
+				createdAt: p.paper.data.created_date,
+				publishedAt: p.paper.data.publication_date,
 			}) as RankedPaperId,
 	);
 }

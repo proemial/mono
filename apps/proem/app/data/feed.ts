@@ -52,6 +52,7 @@ export namespace Feed {
 		options: FetchFeedParams[1],
 		nocache?: boolean,
 		injectPopularPapers?: boolean,
+		collectionId?: string,
 	) => {
 		const limit = options.limit ?? DEFAULT_LIMIT;
 		const offset = options.offset ?? 1;
@@ -78,6 +79,7 @@ export namespace Feed {
 				offset: offset,
 			},
 			nocache,
+			collectionId,
 		);
 		const feedIds = injectItems({
 			rankedItems: rankedIds

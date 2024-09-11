@@ -22,6 +22,7 @@ export const fetchFeedByFeaturesWithPostsAndReaders = async (
 		options,
 		nocache,
 		injectPopularPapersInFeed,
+		spaceId,
 	);
 	const paperIds = feed.rows.map(({ paper }) => paper?.id);
 
