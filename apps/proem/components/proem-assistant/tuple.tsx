@@ -94,8 +94,7 @@ export const Tuple = ({
 	return (
 		<div
 			className={cn("flex flex-col rounded-2xl gap-2 p-2 pr-3 bg-theme-700", {
-				"cursor-pointer hover:bg-theme-800 duration-200":
-					!!post.reply?.metadata?.papers && !selected,
+				"cursor-pointer": hasPaperSources && !selected,
 				"border-2 border-theme-200": highlight,
 			})}
 			onClick={handleClick}
