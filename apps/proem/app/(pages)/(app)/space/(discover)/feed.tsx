@@ -12,13 +12,14 @@ import {
 import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
 import { InfinityScrollList } from "@/components/infinity-scroll-list";
 import { ThemeColoredCard } from "@/components/theme-colored-card";
+import { getFeedQueryKey } from "@/utils/get-feed-query-key";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
 import { useSearchParams } from "next/navigation";
 import { ReactNode } from "react";
 
 // 1-4 is fetched without scrolling
 const initialPageSize = 4;
-type FeedProps = {
+export type FeedProps = {
 	children?: ReactNode;
 	filter:
 		| {
@@ -48,15 +49,7 @@ export function Feed({
 	const debug = useSearchParams().get("debug");
 	const nocache = useSearchParams().get("nocache");
 	const days = Number(useSearchParams().get("days")) || undefined;
-
-	const queryKey =
-		"institution" in filter
-			? `feed_${filter.institution}`
-			: "collectionId" in filter
-				? `space_stream_${filter.collectionId}`
-				: `filter_${filter.days}:${filter.features
-						?.map((f) => f.id)
-						.join("|")}`;
+	const queryKey = getFeedQueryKey(filter);
 
 	const isDefaultSpace =
 		"collectionId" in filter && filter.collectionId?.startsWith("user_");
@@ -66,7 +59,7 @@ export function Feed({
 			{children ? <div>{children}</div> : null}
 			{header}
 			<InfinityScrollList
-				queryKey={[queryKey]}
+				queryKey={queryKey}
 				queryFn={(ctx) => {
 					const nextOffset = ctx.pageParam;
 
