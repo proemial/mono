@@ -16,7 +16,7 @@ import dayjs from "dayjs";
 import { unstable_cache } from "next/cache";
 
 // Default number of days to fetch papers for
-export const FEED_DEFAULT_DAYS = 14;
+export const FEED_DEFAULT_DAYS = 7;
 
 // OpenAlex has a limit of 100 features in a query
 const MAX_FEATURES_IN_QUERY = 100;
@@ -67,16 +67,29 @@ export const fetchAndRerankPaperIds = async (
 		? await cacheWorker(features ?? [], days ?? FEED_DEFAULT_DAYS)
 		: await getCachedPapers(features ?? [], days ?? FEED_DEFAULT_DAYS);
 
-	console.log(
-		collectionId,
-		JSON.stringify(
-			cached.papers.map((p) => ({
-				createdAt: p.createdAt,
-				publishedAt: p.publishedAt,
-				score: p.filterMatchScore,
-			})),
-		),
-	);
+	const createdAt = {} as { [date: string]: number };
+	const publishedAt = {} as { [date: string]: number };
+	// biome-ignore lint/complexity/noForEach: <explanation>
+	cached.papers.forEach((p) => {
+		const cdate = formatDate(p.createdAt, "relative");
+		createdAt[cdate] = (createdAt[cdate] ?? 0) + 1;
+
+		const pdate = formatDate(p.publishedAt, "relative");
+		publishedAt[pdate] = (publishedAt[pdate] ?? 0) + 1;
+	});
+	console.log(JSON.stringify({ collectionId, createdAt, publishedAt }));
+
+	// console.log(
+	// 	collectionId,
+	// 	JSON.stringify(
+	// 		cached.papers.map((p) => ({
+	// 			createdAt: p.createdAt,
+	// 			publishedAt: p.publishedAt,
+	// 			score: p.filterMatchScore,
+	// 			id: p.id,
+	// 		})),
+	// 	),
+	// );
 
 	// Subtract 1 from pageOffset to match the zero index in an array. First page should start at 0
 	const nextOffset = (pageOffset - 1) * pageLimit;
