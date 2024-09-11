@@ -104,7 +104,7 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 			{!hasPapers && (title || description) && <h2>No papers found</h2>}
 
 			{hasPapers && (
-				<Feed filter={{ features: filter }} nocache>
+				<Feed filter={{ features: filter }}>
 					<div>
 						<h2>Space would be created based on theses papers and features:</h2>
 						{papers.map((p) => (

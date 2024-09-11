@@ -55,7 +55,6 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 		<div className="pt-8 space-y-6">
 			<Feed
 				filter={{ features: filter, days: params.days }}
-				nocache={searchParams?.nocache}
 				bookmarks={bookmarks}
 			>
 				<AutocompleteInput />

@@ -29,7 +29,6 @@ type FeedProps = {
 		| {
 				institution: string;
 		  };
-	nocache?: boolean;
 	bookmarks?: Bookmarks | null;
 	header?: ReactNode;
 	theme?: Theme;
@@ -40,7 +39,6 @@ type FeedProps = {
 export function Feed({
 	children,
 	filter,
-	nocache,
 	bookmarks,
 	header,
 	theme,
@@ -48,6 +46,8 @@ export function Feed({
 	showThemeColors = false,
 }: FeedProps) {
 	const debug = useSearchParams().get("debug");
+	const nocache = useSearchParams().get("nocache");
+
 	const queryKey =
 		"institution" in filter
 			? `feed_${filter.institution}`
@@ -86,7 +86,7 @@ export function Feed({
 					return fetchFeedByFeaturesWithPostsAndReaders(
 						{ features: filter.features, days: filter.days },
 						{ offset: ctx.pageParam },
-						nocache,
+						!!nocache,
 						filter.collectionId,
 					);
 				}}
