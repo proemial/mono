@@ -38,7 +38,7 @@ export function getTopNavigationContentByUrl(
 		// All papers inside space
 		if (url.includes("/paper")) {
 			return {
-				menu: <CloseAction iconOverride={<ChevronLeft className="size-6" />} />,
+				menu: <GoToSpaceAction />,
 				action: null,
 			};
 		}
