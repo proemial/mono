@@ -38,7 +38,7 @@ export function InfinityScrollList<MyTQueryKey extends string[], TRow>({
 	} = useSuspenseInfiniteQuery({
 		queryKey,
 		queryFn,
-		initialPageParam: 1,
+		initialPageParam: 1, // TODO: change to 0
 		getNextPageParam: (lastGroup) => {
 			return lastGroup?.nextOffset;
 		},
@@ -76,9 +76,7 @@ export function InfinityScrollList<MyTQueryKey extends string[], TRow>({
 		<>
 			{renderSection?.(count)}
 
-			{status === "pending" ? (
-				<Throbber />
-			) : status === "error" && error instanceof Error ? (
+			{status === "error" && error instanceof Error ? (
 				<span>Error: {error?.message}</span>
 			) : (
 				<ScrollItem

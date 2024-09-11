@@ -3,6 +3,7 @@ import { Bookmarks } from "@/app/(pages)/(app)/space/(discover)/add-to-collectio
 import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
 import { fetchFeedByInstitutionWithPostsAndReaders } from "@/app/(pages)/(app)/space/(discover)/fetch-feed";
 import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
+import { FeedResponse } from "@/app/api/feed/route";
 import { fetchFeedByFeaturesWithPostsAndReaders } from "@/app/data/fetch-feed";
 import { Theme } from "@/app/theme/color-theme";
 import {
@@ -23,12 +24,17 @@ export type FeedProps = {
 	children?: ReactNode;
 	filter:
 		| {
+				// @deprecated
 				features: RankedFeature[];
+				// @deprecated
 				days?: number;
 				collectionId?: string;
 		  }
 		| {
 				institution: string;
+		  }
+		| {
+				collectionId: string;
 		  };
 	bookmarks?: Bookmarks | null;
 	header?: ReactNode;
@@ -60,7 +66,7 @@ export function Feed({
 			{header}
 			<InfinityScrollList
 				queryKey={queryKey}
-				queryFn={(ctx) => {
+				queryFn={async (ctx) => {
 					const nextOffset = ctx.pageParam;
 
 					if (nextOffset > initialPageSize) {
@@ -69,20 +75,19 @@ export function Feed({
 						})();
 					}
 
-					if ("institution" in filter) {
-						return fetchFeedByInstitutionWithPostsAndReaders(
-							{ id: filter.institution },
-							{ offset: ctx.pageParam },
-							undefined,
-						);
-					}
-
-					return fetchFeedByFeaturesWithPostsAndReaders(
-						{ features: filter.features, days: days ?? filter.days },
-						{ offset: ctx.pageParam },
-						!!nocache,
-						filter.collectionId,
+					const feed = await fetch(
+						`http://localhost:4242/api/feed?${
+							"collectionId" in filter
+								? `collection_id=${filter.collectionId}`
+								: "institution" in filter
+									? `institution_id=${filter.institution}`
+									: ""
+						}&offset=${ctx.pageParam}`,
 					);
+					const data = (await feed.json()) as FeedResponse;
+					console.log({ data });
+
+					return data;
 				}}
 				renderHeadline={debug ? (count) => <DebugInfo count={count} /> : null}
 				renderRow={(row, i) => {
