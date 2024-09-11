@@ -1,14 +1,16 @@
+import { AutocompleteInput } from "@/app/(pages)/(app)/experimental/fingerprints/autocomplete-input";
+import { Feed } from "@/app/(pages)/(app)/space/(discover)/feed";
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { getBookmarksAndHistory } from "@/app/data/fetch-history";
 import { FeatureCloud } from "@/components/feature-badges";
+import { getQueryClient } from "@/components/providers/get-query-client";
 import { auth } from "@clerk/nextjs/server";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Feed } from "../../space/(discover)/feed";
-import { AutocompleteInput } from "./autocomplete-input";
 
 export const metadata: Metadata = {
 	title: "Fingerprints",
@@ -26,6 +28,7 @@ type Props = {
 
 export default async function FingerprintsPage({ searchParams }: Props) {
 	const { userId } = auth();
+	const queryClient = getQueryClient();
 	const params = {
 		ids: searchParams?.ids?.length ? searchParams.ids : undefined,
 		days: searchParams?.days
@@ -52,14 +55,16 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	);
 
 	return (
-		<div className="pt-8 space-y-6">
-			<Feed
-				filter={{ features: filter, days: params.days }}
-				bookmarks={bookmarks}
-			>
-				<AutocompleteInput />
-				{!searchParams?.clean && <FeatureCloud features={allFeatures} />}
-			</Feed>
-		</div>
+		<HydrationBoundary state={dehydrate(queryClient)}>
+			<div className="pt-8 space-y-6">
+				<Feed
+					filter={{ features: filter, days: params.days }}
+					bookmarks={bookmarks}
+				>
+					<AutocompleteInput />
+					{!searchParams?.clean && <FeatureCloud features={allFeatures} />}
+				</Feed>
+			</div>
+		</HydrationBoundary>
 	);
 }

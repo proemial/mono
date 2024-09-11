@@ -1,11 +1,13 @@
 import { findPapersForSpaceChain } from "@/app/llm/chains/question-from-space-chain";
 import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
+import { getQueryClient } from "@/components/providers/get-query-client";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import {
 	fetchFingerprints,
 	fetchPapersTitles,
 } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
 import { Button, Input, Textarea } from "@proemial/shadcn-ui";
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Feed } from "../../space/(discover)/feed";
@@ -27,6 +29,7 @@ type Props = {
 };
 
 export default async function FingerprintsPage({ searchParams }: Props) {
+	const queryClient = getQueryClient();
 	async function findPapers(formData: FormData) {
 		"use server";
 
@@ -63,59 +66,71 @@ export default async function FingerprintsPage({ searchParams }: Props) {
 	const papers = hasPapers ? (await fetchPapersTitles(idsList)).flat() : [];
 
 	return (
-		<div className="pt-8 space-y-6">
-			<form action={findPapers}>
-				<div className="flex flex-col gap-1">
-					<Input
-						name="title"
-						placeholder="Title"
-						className="grow bg-white"
-						defaultValue={title}
-						required
-					/>
-					<Textarea
-						name="description"
-						placeholder="Description"
-						className="grow bg-white"
-						defaultValue={description}
-						rows={2}
-						required
-					/>
-					<Textarea
-						name="prompt"
-						placeholder="Prompt"
-						className="grow bg-white"
-						defaultValue={defaultPrompt}
-						rows={5}
-						required
-					/>
-					<Button type="submit" className="text-xs tracking-wider">
-						Validate space input
-					</Button>
-				</div>
-			</form>
-
-			{question && (
-				<div className="italics">
-					<b>Generated paper search string:</b> {question}
-				</div>
-			)}
-
-			{!hasPapers && (title || description) && <h2>No papers found</h2>}
-
-			{hasPapers && (
-				<Feed filter={{ features: filter }}>
-					<div>
-						<h2>Space would be created based on theses papers and features:</h2>
-						{papers.map((p) => (
-							<FeatureBadge key={p.id}>{p.title}</FeatureBadge>
-						))}
+		<HydrationBoundary state={dehydrate(queryClient)}>
+			<div className="pt-8 space-y-6">
+				<form action={findPapers}>
+					<div className="flex flex-col gap-1">
+						<Input
+							name="title"
+							placeholder="Title"
+							className="grow bg-white"
+							defaultValue={title}
+							required
+						/>
+						<Textarea
+							name="description"
+							placeholder="Description"
+							className="grow bg-white"
+							defaultValue={description}
+							rows={2}
+							required
+						/>
+						<Textarea
+							name="prompt"
+							placeholder="Prompt"
+							className="grow bg-white"
+							defaultValue={defaultPrompt}
+							rows={5}
+							required
+						/>
+						<Button type="submit" className="text-xs tracking-wider">
+							Validate space input
+						</Button>
 					</div>
-					<FeatureCloud features={allFeatures} limit={20} />
+				</form>
 
-					<h2>Example feed:</h2>
-				</Feed>
-			)}
-		</div>
+				{question && (
+					<div className="italics">
+						<b>Generated paper search string:</b> {question}
+					</div>
+				)}
+
+				{!hasPapers && (title || description) && <h2>No papers found</h2>}
+
+				{hasPapers && (
+					<Feed filter={{ features: filter }}>
+						<div>
+							<h2>
+								Space would be created based on theses papers and features:
+							</h2>
+							{papers.map((p) => (
+								<FeatureBadge key={p.id}>{p.title}</FeatureBadge>
+							))}
+							<div>
+								<h2>
+									Space would be created based on theses papers and features:
+								</h2>
+								{papers.map((p) => (
+									<FeatureBadge key={p.id}>{p.title}</FeatureBadge>
+								))}
+							</div>
+							<FeatureCloud features={allFeatures} limit={20} />
+
+							<h2>Example feed:</h2>
+						</div>
+					</Feed>
+				)}
+			</div>
+		</HydrationBoundary>
 	);
 }
