@@ -1,6 +1,10 @@
 "use client";
 import { cn } from "@proemial/shadcn-ui";
-import { QueryFunction, useInfiniteQuery } from "@tanstack/react-query";
+import {
+	QueryFunction,
+	useInfiniteQuery,
+	useSuspenseInfiniteQuery,
+} from "@tanstack/react-query";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode, useEffect } from "react";
 import { Throbber } from "./throbber";
@@ -31,7 +35,7 @@ export function InfinityScrollList<MyTQueryKey extends string[], TRow>({
 		fetchNextPage,
 		hasNextPage,
 		error,
-	} = useInfiniteQuery({
+	} = useSuspenseInfiniteQuery({
 		queryKey,
 		queryFn,
 		initialPageParam: 1,
