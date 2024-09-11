@@ -145,11 +145,3 @@ export const fetchPapersByInstitution = async (
 		}));
 	return { meta, papers: [...oaPapers] };
 };
-
-// We now sort by the database field `created_date` instead of the metadata field `publication_date`.
-// This filter removes very old papers that were somehow added recently.
-export function preHistoricPaperFilter(p: OpenAlexPaper) {
-	return (
-		dayjs(p.data.created_date).diff(dayjs(p.data.publication_date), "year") < 1
-	);
-}

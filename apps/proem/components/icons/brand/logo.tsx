@@ -33,7 +33,7 @@ export function ProemLogo({ size = "lg", includeName, className = "" }: Props) {
 	);
 }
 
-export function ProemLogoText() {
+function ProemLogoText() {
 	return (
 		<svg
 			width="128"

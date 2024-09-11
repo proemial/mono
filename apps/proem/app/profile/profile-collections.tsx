@@ -100,9 +100,7 @@ type CreateCollectionDrawerProps = {
 	trigger: React.ReactNode;
 };
 
-export function CreateCollectionDrawer({
-	trigger,
-}: CreateCollectionDrawerProps) {
+function CreateCollectionDrawer({ trigger }: CreateCollectionDrawerProps) {
 	const { userId, orgId } = useAuth();
 	const queryClient = useQueryClient();
 

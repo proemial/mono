@@ -8,11 +8,6 @@ import { ChatForm, ChatFormProps } from "@/components/chat-form";
 import { Button, cn } from "@proemial/shadcn-ui";
 import { Stop } from "@untitled-ui/icons-react";
 import { useChat } from "ai/react";
-import { z } from "zod";
-
-export const QuerySchema = z.object({
-	query: z.string(),
-});
 
 type ButtonProps = {
 	stop?: ReturnType<typeof useChat>["stop"];

@@ -11,7 +11,7 @@ export type Theme = {
 	color: ThemeColor;
 };
 
-export const DEFUALT_THEME_KEY = "theme" as const;
+const DEFUALT_THEME_KEY = "theme" as const;
 type DefaultThemeKey = typeof DEFUALT_THEME_KEY;
 
 export const generateColorTheme = (

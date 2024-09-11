@@ -1,4 +1,4 @@
-import { PaperReaderHeadlineProps } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-headline";
+import { AddToCollectionButtonProps } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { ChatArticle } from "@/components/chat-article";
 import { BasicReaderUserData } from "@/services/paper-reads-service";
@@ -8,7 +8,7 @@ import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { use } from "react";
 import { addPaperActivity } from "./paper-activity";
 
-type PaperReaderProps = Pick<PaperReaderHeadlineProps, "isBookmarked"> & {
+type PaperReaderProps = Pick<AddToCollectionButtonProps, "isBookmarked"> & {
 	fetchedPaperPromise: Promise<Omit<OpenAlexPaper, "generated">>;
 	generatedPaperPromise: Promise<OpenAlexPaper>;
 	paperPostsPromise: Promise<PostWithCommentsAndAuthor[]>;

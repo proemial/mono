@@ -1,8 +1,5 @@
 "use client";
-import {
-	addPaperToNewCollection,
-	togglePaperInCollection,
-} from "@/app/(pages)/(app)/space/(discover)/bookmark-paper";
+import { togglePaperInCollection } from "@/app/(pages)/(app)/space/(discover)/bookmark-paper";
 import { AddButton, AddButtonSkeleton } from "@/components/add-button";
 import {
 	analyticsKeys,
@@ -18,8 +15,8 @@ import { isArxivPaperId } from "@/utils/is-arxiv-paper-id";
 import { useUser } from "@clerk/nextjs";
 import { useOptimistic } from "react";
 
-export type PaperId = string;
-export type CollectionId = string;
+type PaperId = string;
+type CollectionId = string;
 export type Bookmarks = Record<PaperId, CollectionId[]>;
 export type AddToCollectionButtonProps = Pick<
 	CollectionSelectorProps,

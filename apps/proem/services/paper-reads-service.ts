@@ -1,17 +1,11 @@
 import { ANONYMOUS_USER_ID } from "@/app/constants";
-import { streamCacheUpdate } from "@/inngest/populator.task";
 import { getUsers } from "@/utils/auth";
 import { auth } from "@clerk/nextjs/server";
 import { PaperRead } from "@proemial/data/neon/schema";
 import { ensurePaperExistsInDb } from "@proemial/data/repository/paper";
 import { PaperReadsRepository } from "@proemial/data/repository/paper-reads";
 import { getOrCreateUser } from "@proemial/data/repository/user";
-import { waitUntil } from "@vercel/functions";
 import dayjs from "dayjs";
-
-export type PaperReadWithUserAndPaper = Awaited<
-	ReturnType<typeof PaperReadsService.getAllByPaperId>
->[number];
 
 export type BasicReaderUserData = {
 	id: string;

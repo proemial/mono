@@ -6,7 +6,7 @@ import MultipleSelector, {
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-export const AUTOCOMPLETE_QUERY_STRING = "ids";
+const AUTOCOMPLETE_QUERY_STRING = "ids";
 
 type PapersSearchResult = {
 	results: { id: string; display_name: string; cited_by_count: number }[];
@@ -36,9 +36,7 @@ export function AutocompleteInput() {
 	useEffect(() => {
 		if (ids) {
 			const fetchData = async () => {
-				const papers = (await fetchPapersTitles(ids?.split(",") ?? [])).flatMap(
-					(f) => f,
-				);
+				const papers = (await fetchPapersTitles(ids?.split(",") ?? [])).flat();
 				if (papers) {
 					setOptions(papers.map((p) => ({ value: p.id, label: p.title })));
 				}

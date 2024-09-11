@@ -12,9 +12,10 @@ export function findRunPaperLinks(run: Run): string[] {
 	return papers.map((paper) => paper.link);
 }
 
-export function findRunWithPapersInput(run: Run): Run | undefined {
+function findRunWithPapersInput(run: Run): Run | undefined {
 	return findRun(run, (run) => run.inputs.papers);
 }
+
 export function findRun(
 	within: Run,
 	predicate: (run: Run) => boolean,

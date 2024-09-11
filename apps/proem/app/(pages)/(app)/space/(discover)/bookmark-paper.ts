@@ -8,9 +8,7 @@ import {
 import { streamCacheUpdate } from "@/inngest/populator.task";
 import { PermissionUtils } from "@/utils/permission-utils";
 import { auth } from "@clerk/nextjs/server";
-import { NewCollection } from "@proemial/data/neon/schema";
 import {
-	addPaperToCollection,
 	ensureCollectionExistsInDb,
 	findCollection,
 	toggleCollectionPaper,
@@ -21,35 +19,6 @@ import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { fetchPaper } from "../../paper/oa/[id]/fetch-paper";
 import { generate } from "../../paper/oa/[id]/llm-generate";
-
-type Params = {
-	paperId: string;
-	collection: NewCollection;
-};
-
-export async function addPaperToNewCollection(params: Params) {
-	const { userId } = auth();
-	if (!userId) {
-		return;
-	}
-
-	const { paperId, collection } = params;
-
-	await ensurePaperIsSummarized(paperId);
-	await ensurePaperExistsInDb(paperId);
-	// Create new collection
-	const existingCollection =
-		collection.id === userId
-			? await ensureDefaultCollectionExistsInDb(userId)
-			: await ensureCollectionExistsInDb(collection);
-
-	await addPaperToCollection(existingCollection.id, paperId);
-
-	revalidateTag(getBookmarkCacheTag(existingCollection.id));
-	revalidateTag(getBookmarkedPapersCacheTag(existingCollection.id));
-	waitUntil(streamCacheUpdate.run(userId, "user"));
-	return {};
-}
 
 const ensureDefaultCollectionExistsInDb = (userId: string) =>
 	ensureCollectionExistsInDb(getPersonalDefaultCollection(userId));

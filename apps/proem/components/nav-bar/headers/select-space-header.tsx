@@ -16,7 +16,7 @@ import {
 } from "@proemial/shadcn-ui";
 import { useRouter } from "next/navigation";
 
-export type SelectSpaceHeaderProps = {
+type SelectSpaceHeaderProps = {
 	collections: Collection[];
 	onRouteChange?: ({ url, name }: { url: string; name?: string }) => void;
 	selectedSpace?: string;

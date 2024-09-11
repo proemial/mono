@@ -1,8 +1,8 @@
 import { auth } from "@clerk/nextjs/server";
 import { PaperActivity, User } from "@proemial/data/neon/schema";
+import { getUser } from "@proemial/data/repository/user";
 import dayjs from "dayjs";
 import { getBookmarksByCollectionId } from "../(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
-import { getUser } from "@proemial/data/repository/user";
 
 // Max no. of papers from read history to use in filter
 const MAX_COUNT = 30;
@@ -30,7 +30,7 @@ async function fetchUser(user?: string) {
 	return await getUser(uid);
 }
 
-export async function getBookmarksByUser<TUserId extends Pick<User, "id">>(
+async function getBookmarksByUser<TUserId extends Pick<User, "id">>(
 	user: TUserId,
 ) {
 	const bookmarks = await getBookmarksByCollectionId(user.id);
@@ -38,7 +38,7 @@ export async function getBookmarksByUser<TUserId extends Pick<User, "id">>(
 	return bookmarkIds;
 }
 
-export function getHistoryByUser<TUserId extends Pick<User, "paperActivities">>(
+function getHistoryByUser<TUserId extends Pick<User, "paperActivities">>(
 	user: TUserId,
 ) {
 	const readHistoryIds = sortAndFilter(user.paperActivities)?.map(
@@ -47,7 +47,7 @@ export function getHistoryByUser<TUserId extends Pick<User, "paperActivities">>(
 	return readHistoryIds;
 }
 
-export type PaperId = string;
+type PaperId = string;
 export async function getBookmarksAndHistory(
 	userId?: Parameters<typeof fetchUser>[0],
 ): Promise<[PaperId[], PaperId[]] | null> {

@@ -11,7 +11,7 @@ type QueryReturnType<TRow> = {
 	rows: TRow[];
 };
 
-export type InfinityScollListProps<MyTQueryKey extends string[], TRow> = {
+type InfinityScollListProps<MyTQueryKey extends string[], TRow> = {
 	renderHeadline?: ((count?: number) => ReactNode) | null;
 	renderRow: (row: TRow, index: number) => ReactNode;
 	queryKey: MyTQueryKey;

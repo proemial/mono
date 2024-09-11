@@ -123,7 +123,7 @@ type CollectionNotificationProps = CollectionSelectorProps & {
 	newBookmarksCollectionId: string;
 };
 
-export function CollectionManager({
+function CollectionManager({
 	onClose,
 	paperId,
 	bookmarks,

@@ -22,7 +22,7 @@ import { KeyboardEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export const QuerySchema = z.object({
+const QuerySchema = z.object({
 	question: z.string(),
 });
 

@@ -1,7 +1,7 @@
 import { PaperCard, PaperCardProps } from "@/components/paper-card";
 import { CardBullet } from "@proemial/shadcn-ui";
 
-export type PaperCardAskProps = Omit<PaperCardProps, "header"> & {
+type PaperCardAskProps = Omit<PaperCardProps, "header"> & {
 	index: string;
 };
 
