@@ -1,4 +1,4 @@
-import { fetchPaperWithPostsAndReaders } from "@/app/data/fetch-feed";
+import { fetchPaperWithPostsAndReaders } from "@/app/data/fetch-paper-with-posts-and-readers";
 import { getPostBySlug } from "@proemial/data/repository/post";
 import { FeedItemWithDisabledOverlay } from "../(lists)/saved/feed-item-with-disabled-overlay";
 import { fetchPaper } from "../../../paper/oa/[id]/fetch-paper";
