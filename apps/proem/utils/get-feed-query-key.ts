@@ -11,11 +11,15 @@ export const getFeedQueryKey = (
 		return ["feed", filter.collectionId];
 	}
 
-	if (filter.features && filter.days) {
+	if ("features" in filter && filter.features) {
 		return [
 			"feed",
 			`filter_${filter.days}:${filter.features.map((f) => f.id).join("|")}`,
 		];
+	}
+
+	if ("collectionId" in filter && filter.collectionId) {
+		return ["feed", filter.collectionId];
 	}
 
 	return ["feed", "anonymous"];

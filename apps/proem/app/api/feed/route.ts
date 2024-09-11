@@ -1,6 +1,7 @@
 import { CachedFeed } from "@/app/data/cached-feed";
 import { NextRequest, NextResponse } from "next/server";
 
+export type FeedResponse = ReturnType<typeof CachedFeed.fromCollection>;
 export async function GET(request: NextRequest) {
 	const { searchParams } = new URL(request.url);
 	const collectionId = searchParams.get("collection_id");
