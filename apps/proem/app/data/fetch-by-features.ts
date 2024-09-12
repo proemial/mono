@@ -49,17 +49,14 @@ export const fetchAndRerankPaperIds = async (
 		};
 	};
 
-	const cacheKey = await sha256(
-		`cachedPapers ${features?.map((f) => f.id).join("|")} ${days}`,
-	);
 	const getCachedPapers = unstable_cache(
-		async (f, d) => {
+		async (features, days) => {
 			console.log(
-				`Cache miss, fetching papers for ${cacheKey} (${f.length} features)`,
+				`Cache miss, fetching papers for ${collectionId} (${features.length} features)`,
 			);
-			return cacheWorker(f, d);
+			return cacheWorker(features, days);
 		},
-		[cacheKey],
+		["fingerprint"],
 		{ revalidate: CACHE_FOR },
 	);
 
