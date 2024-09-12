@@ -26,7 +26,7 @@ import { InspectAnswer } from "./inspect-answer";
 import { PreviousQuestions } from "./previous-questions";
 import { SuggestedQuestions } from "./suggested-questions";
 import { TuplePost } from "./tuple";
-import { useAssistant } from "./use-assistant";
+import { useAssistant } from "./use-assistant/use-assistant";
 import { useLatestSubmitId } from "./use-latest-submit-id";
 
 type User = ReturnType<typeof useUser>["user"];
@@ -51,22 +51,14 @@ type Props = {
 	spaceId: string | undefined;
 	paperId: string | undefined;
 	data: AssistantData | undefined;
-	expanded: boolean;
-	setExpanded: (expanded: boolean) => void;
 };
 
-export const AssistantContent = ({
-	spaceId,
-	paperId,
-	data,
-	expanded,
-	setExpanded,
-}: Props) => {
+export const AssistantContent = ({ spaceId, paperId, data }: Props) => {
 	const { user } = useUser();
 
-	const [inputFocused, setInputFocused] = useState(false);
 	const queryClient = useQueryClient();
-	const [{ selected }] = useAssistant();
+	const { selectedTupleId, isAssistantExpanded, expandAssistant } =
+		useAssistant();
 	const { setId } = useLatestSubmitId();
 
 	const [contentRef, { height: contentHeight }] = useMeasure();
@@ -119,7 +111,7 @@ export const AssistantContent = ({
 	const handleSubmit = (input: string) => {
 		setId(paperId ?? spaceId);
 		append({ role: "user", content: input, createdAt: new Date() });
-		setExpanded(true);
+		expandAssistant();
 	};
 
 	const handleAbort = () => {
@@ -151,7 +143,7 @@ export const AssistantContent = ({
 		return data?.paper?.generated?.starters ?? [];
 	}, [followUps, data?.paper?.generated?.starters]);
 
-	const selectedTuple = tuplePosts.find((tp) => tp.slug === selected);
+	const selectedTuple = tuplePosts.find((tp) => tp.slug === selectedTupleId);
 
 	useEffect(() => {
 		if (!isLoading) {
@@ -169,7 +161,7 @@ export const AssistantContent = ({
 				ref={contentRef}
 			>
 				{selectedTuple && <InspectAnswer tuple={selectedTuple} />}
-				{!selected && (
+				{!selectedTupleId && (
 					<Header
 						spaceName={data?.space?.name ?? "Discover"}
 						spaceId={data?.space?.id}
@@ -179,14 +171,12 @@ export const AssistantContent = ({
 						ref={headerRef}
 					/>
 				)}
-				{!selected && (
+				{!selectedTupleId && (
 					<PreviousQuestions
 						posts={tuplePosts}
 						spaceId={spaceId}
 						paperId={paperId}
 						height={contentHeight - headerHeight - footerHeight}
-						expanded={expanded}
-						setExpanded={setExpanded}
 						onSubmit={handleSubmit}
 						onAbort={handleAbort}
 						isLoading={isLoading}
@@ -196,17 +186,12 @@ export const AssistantContent = ({
 					className="flex flex-col gap-1 px-3 pb-3"
 					ref={footerRef}
 					animate={{
-						opacity: expanded ? 0 : 1,
-						marginBottom: expanded ? -footerHeight : 0,
+						opacity: isAssistantExpanded ? 0 : 1,
+						marginBottom: isAssistantExpanded ? -footerHeight : 0,
 					}}
 				>
-					<AskScienceForm
-						paper={!!paperId}
-						setInputFocused={setInputFocused}
-						onSubmit={handleSubmit}
-					/>
+					<AskScienceForm paper={!!paperId} onSubmit={handleSubmit} />
 					<SuggestedQuestions
-						hidden={inputFocused}
 						ref={suggestionsRef}
 						height={suggestionsHeight}
 						onSubmit={handleSubmit}

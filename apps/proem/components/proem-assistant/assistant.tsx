@@ -6,14 +6,14 @@ import { useAuth } from "@clerk/nextjs";
 import { Drawer } from "@proemial/shadcn-ui";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
 	analyticsKeys,
 	trackHandler,
 } from "../analytics/tracking/tracking-keys";
 import { AssistantButton } from "./assistant-button";
 import { AssistantContent } from "./assistant-content";
-import { useAssistant } from "./use-assistant";
+import { useAssistant } from "./use-assistant/use-assistant";
 import { useSnapPointStore } from "./use-snap-point-store";
 
 export const PROEM_ASSISTANT_QUERY_KEY = "proem-assistant";
@@ -34,16 +34,26 @@ type Params = {
 };
 
 export const ProemAssistant = () => {
-	const [{ assistant }, setAssistant] = useAssistant();
+	const {
+		isAssistantOpened,
+		openAssistant,
+		closeAssistant,
+		collapseAssistant,
+	} = useAssistant();
 	const { userId } = useAuth();
 	const pathname = usePathname();
-	const [expanded, setExpanded] = useState(false);
 	const { snapPoint } = useSnapPointStore();
 
 	const params = useParams<Params>();
 	const spaceId = params.collectionId;
 	const paperId =
 		params.id && isArxivPaperId(params.id) ? undefined : params.id;
+
+	if (
+		DISABLED_ROUTE_FRAGMENTS.some((fragment) => pathname.includes(fragment))
+	) {
+		return undefined;
+	}
 
 	const { data, refetch } = useQuery({
 		queryKey: [PROEM_ASSISTANT_QUERY_KEY, spaceId, paperId, userId],
@@ -65,25 +75,19 @@ export const ProemAssistant = () => {
 		};
 	}, [paperId, data, refetch]);
 
-	if (
-		DISABLED_ROUTE_FRAGMENTS.some((fragment) => pathname.includes(fragment))
-	) {
-		return undefined;
-	}
-
 	const handleOpen = () => {
 		trackHandler(analyticsKeys.assistant.open)();
-		setAssistant({ assistant: true });
-		setExpanded(false);
+		openAssistant();
+		collapseAssistant();
 	};
 
 	const handleOpenChange = (isOpen: boolean) => {
 		// This gets triggered multiple times during transitions
 		if (!isOpen) {
 			trackHandler(analyticsKeys.assistant.close)();
-			setAssistant({ assistant: false });
+			closeAssistant();
 		} else {
-			setAssistant({ assistant: true });
+			openAssistant();
 		}
 	};
 
@@ -93,18 +97,12 @@ export const ProemAssistant = () => {
 			<Drawer
 				shouldScaleBackground={false}
 				setBackgroundColorOnScale={false}
-				open={assistant}
+				open={isAssistantOpened}
 				onOpenChange={handleOpenChange}
 				snapPoints={[snapPoint]}
 				activeSnapPoint={snapPoint}
 			>
-				<AssistantContent
-					spaceId={spaceId}
-					paperId={paperId}
-					data={data}
-					expanded={expanded}
-					setExpanded={setExpanded}
-				/>
+				<AssistantContent spaceId={spaceId} paperId={paperId} data={data} />
 			</Drawer>
 		</div>
 	);

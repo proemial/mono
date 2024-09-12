@@ -15,6 +15,7 @@ import { headers as nextHeaders } from "next/headers";
 import { ReactNode } from "react";
 import { screenMaxWidth } from "./constants";
 import { isEmbedded } from "@/utils/url";
+import { AssistantStateProvider } from "@/components/proem-assistant/use-assistant/assistant-state";
 
 export const viewport: Viewport = {
 	width: "device-width",
@@ -147,10 +148,12 @@ function ContextWrapper({ children }: { children: ReactNode }) {
 	return (
 		<AuthProvider>
 			<Analytics.PostHog tracking={trackingInput}>
-				<ReactQueryProvider>
-					{children}
-					<Analytics.Clients tracking={trackingInput} />
-				</ReactQueryProvider>
+				<AssistantStateProvider>
+					<ReactQueryProvider>
+						{children}
+						<Analytics.Clients tracking={trackingInput} />
+					</ReactQueryProvider>
+				</AssistantStateProvider>
 			</Analytics.PostHog>
 		</AuthProvider>
 	);

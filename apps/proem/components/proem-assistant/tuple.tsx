@@ -14,7 +14,7 @@ import {
 	ASSISTANT_OPEN_QUERY_KEY,
 	ASSISTANT_SELECTED_QUERY_KEY,
 	useAssistant,
-} from "./use-assistant";
+} from "./use-assistant/use-assistant";
 
 dayjs.extend(relativeTime);
 
@@ -68,13 +68,13 @@ export const Tuple = ({
 			link: string;
 		}[]) ?? [];
 	const hasPaperSources = post.slug && post.reply?.metadata?.papers;
-	const [{ assistant, selected }] = useAssistant();
+	const { isAssistantOpened, selectedTupleId } = useAssistant();
 	const ref = useRef<HTMLDivElement>(null);
 	const router = useRouter();
 
 	const handleClick = () => {
-		if (hasPaperSources && !selected) {
-			const assistantQueryParams = `?${ASSISTANT_OPEN_QUERY_KEY}=${assistant}&${ASSISTANT_SELECTED_QUERY_KEY}=${post.slug}`;
+		if (hasPaperSources && !selectedTupleId) {
+			const assistantQueryParams = `?${ASSISTANT_OPEN_QUERY_KEY}=${isAssistantOpened}&${ASSISTANT_SELECTED_QUERY_KEY}=${post.slug}`;
 			if (spaceId) {
 				router.push(
 					`${routes.space}/${spaceId}/${routes.inspect}${assistantQueryParams}`,
@@ -94,7 +94,7 @@ export const Tuple = ({
 	return (
 		<div
 			className={cn("flex flex-col rounded-2xl gap-2 p-2 pr-3 bg-theme-700", {
-				"cursor-pointer": hasPaperSources && !selected,
+				"cursor-pointer": hasPaperSources && !selectedTupleId,
 				"border-2 border-theme-200": highlight,
 			})}
 			onClick={handleClick}

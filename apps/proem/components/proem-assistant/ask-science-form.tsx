@@ -6,15 +6,16 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "../analytics/tracking/tracking-keys";
+import { useAssistant } from "./use-assistant/use-assistant";
 
 type Props = {
 	paper: boolean;
-	setInputFocused: (focused: boolean) => void;
 	onSubmit: (input: string) => void;
 };
 
-export const AskScienceForm = ({ paper, setInputFocused, onSubmit }: Props) => {
+export const AskScienceForm = ({ paper, onSubmit }: Props) => {
 	const [input, setInput] = useState("");
+	const { focusAssistantInput, blurAssistantInput } = useAssistant();
 	const title = paper ? "Ask about this paper" : "Ask science";
 
 	const handleSubmit = (e: SyntheticEvent) => {
@@ -41,8 +42,8 @@ export const AskScienceForm = ({ paper, setInputFocused, onSubmit }: Props) => {
 					value={input}
 					onChange={(e) => setInput(e.target.value)}
 					onKeyDown={handleKeyDown}
-					onFocus={() => setInputFocused(true)}
-					onBlur={() => setInputFocused(false)}
+					onFocus={focusAssistantInput}
+					onBlur={blurAssistantInput}
 					maxLength={chatInputMaxLength}
 				/>
 				<Button

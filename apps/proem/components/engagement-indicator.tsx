@@ -7,7 +7,7 @@ import { cn } from "@proemial/shadcn-ui";
 import { useParams } from "next/navigation";
 import { useMemo } from "react";
 import { AuthorAvatar } from "./author-avatar";
-import { useAssistant } from "./proem-assistant/use-assistant";
+import { useAssistant } from "./proem-assistant/use-assistant/use-assistant";
 
 const MAX_ANONYMOUS_AVATARS = 10;
 
@@ -25,7 +25,7 @@ export const EngagementIndicator = ({
 	className,
 }: Props) => {
 	const { id: paperId } = useParams<{ id?: string }>();
-	const [_, setAssistant] = useAssistant();
+	const { openAssistant } = useAssistant();
 	const clickable = paperId && posts.length > 0;
 
 	const readCount = formatReadCount(readers);
@@ -38,7 +38,7 @@ export const EngagementIndicator = ({
 
 	const handleClick = () => {
 		if (clickable) {
-			setAssistant({ assistant: true });
+			openAssistant();
 		}
 	};
 

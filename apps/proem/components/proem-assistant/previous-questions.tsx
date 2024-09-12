@@ -7,7 +7,7 @@ import {
 } from "../analytics/tracking/tracking-keys";
 import { AssistantButton } from "./assistant-button";
 import { Tuple, TuplePost } from "./tuple";
-import { useAssistant } from "./use-assistant";
+import { useAssistant } from "./use-assistant/use-assistant";
 import { useLatestSubmitId } from "./use-latest-submit-id";
 import { useSnapPointStore } from "./use-snap-point-store";
 
@@ -21,8 +21,6 @@ type Props = {
 	spaceId: string | undefined;
 	paperId: string | undefined;
 	height: number;
-	expanded: boolean;
-	setExpanded: (expanded: boolean) => void;
 	onSubmit: (input: string) => void;
 	onAbort: () => void;
 	isLoading: boolean;
@@ -33,8 +31,6 @@ export const PreviousQuestions = ({
 	spaceId,
 	paperId,
 	height,
-	expanded,
-	setExpanded,
 	onSubmit,
 	onAbort,
 	isLoading,
@@ -46,13 +42,18 @@ export const PreviousQuestions = ({
 	});
 	const { snapPoint, setSnapPoint } = useSnapPointStore();
 	const { id: submitId } = useLatestSubmitId();
-	const [{ assistant }] = useAssistant();
+	const {
+		isAssistantOpened,
+		isAssistantExpanded,
+		expandAssistant,
+		collapseAssistant,
+	} = useAssistant();
 
 	useEffect(() => {
-		if (snapPoint !== 1.0 && assistant) {
+		if (snapPoint !== 1.0 && isAssistantOpened) {
 			setSnapPoint(1.0);
 		}
-	}, [snapPoint, setSnapPoint, assistant]);
+	}, [snapPoint, setSnapPoint, isAssistantOpened]);
 
 	function handleSubmit(input: string) {
 		onSubmit(input);
@@ -71,15 +72,15 @@ export const PreviousQuestions = ({
 		} else {
 			// Middle
 			setGradients({ top: true, bottom: true });
-			if (!expanded) {
-				setExpanded(true);
+			if (!isAssistantExpanded) {
+				expandAssistant();
 			}
 		}
 	}
 
 	function handleCollapse() {
 		trackHandler(analyticsKeys.assistant.reactivate)();
-		setExpanded(false);
+		collapseAssistant();
 		setGradients((prev) => ({ ...prev, bottom: true }));
 	}
 
@@ -130,8 +131,8 @@ export const PreviousQuestions = ({
 			<motion.div
 				className="fixed bottom-0 left-0 pt-5 h-[112px] w-full flex justify-center pointer-events-none z-20"
 				animate={{
-					opacity: expanded ? 1 : 0,
-					marginBottom: expanded ? 0 : -112,
+					opacity: isAssistantExpanded ? 1 : 0,
+					marginBottom: isAssistantExpanded ? 0 : -112,
 				}}
 			>
 				<AssistantButton onClick={handleCollapse} variant="light" />

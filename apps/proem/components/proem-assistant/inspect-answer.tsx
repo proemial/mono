@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import useMeasure from "react-use-measure";
 import { AssistantButton } from "./assistant-button";
 import { Tuple, TuplePost } from "./tuple";
-import { useAssistant } from "./use-assistant";
+import { useAssistant } from "./use-assistant/use-assistant";
 import { useSnapPointStore } from "./use-snap-point-store";
 
 type Props = {
@@ -15,7 +15,7 @@ type Props = {
 };
 
 export const InspectAnswer = ({ tuple }: Props) => {
-	const [{ assistant }, setAssistant] = useAssistant();
+	const { isAssistantOpened, closeAssistant } = useAssistant();
 	const [ref, { height }] = useMeasure();
 	const { snapPoint, setSnapPoint } = useSnapPointStore();
 	useDisableOverlayBackground();
@@ -26,7 +26,7 @@ export const InspectAnswer = ({ tuple }: Props) => {
 		const windowHeight = window.innerHeight;
 		if (height && windowHeight) {
 			const assistantHeight = (height + 24 + 18) / windowHeight;
-			if (snapPoint !== assistantHeight && assistant) {
+			if (snapPoint !== assistantHeight && isAssistantOpened) {
 				setSnapPoint(assistantHeight);
 			}
 		}
@@ -51,7 +51,7 @@ export const InspectAnswer = ({ tuple }: Props) => {
 				</div>
 				<div
 					className="p-2 rounded-full hover:opacity-75 duration-200 cursor-pointer"
-					onClick={() => setAssistant({ assistant: false })}
+					onClick={closeAssistant}
 				>
 					<X className="size-6" />
 				</div>
@@ -60,7 +60,7 @@ export const InspectAnswer = ({ tuple }: Props) => {
 			<Tuple post={tuple} onSubmit={() => undefined} />
 			<div className="pt-3 pb-1 text-center">
 				<AssistantButton
-					onClick={() => setAssistant({ selected: "" })}
+					onClick={() => undefined} // TODO: Show input and starters
 					variant="light"
 				/>
 			</div>

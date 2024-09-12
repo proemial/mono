@@ -9,9 +9,9 @@ import {
 } from "../analytics/tracking/tracking-keys";
 import { MoodSelector } from "../mood-selector";
 import { Suggestions } from "../suggestions";
+import { useAssistant } from "./use-assistant/use-assistant";
 
 type Props = {
-	hidden: boolean;
 	height: number;
 	onSubmit: (input: string) => void;
 	suggestions: string[];
@@ -20,10 +20,11 @@ type Props = {
 
 export const SuggestedQuestions = forwardRef(
 	(
-		{ hidden, height, onSubmit, suggestions, suggestionType }: Props,
+		{ height, onSubmit, suggestions, suggestionType }: Props,
 		ref: ForwardedRef<HTMLDivElement>,
 	) => {
 		const [regenStarters, setRegenStarters] = useState(false); // Flip this boolean to regenerate starters
+		const { isAssistantInputFocused } = useAssistant();
 		const randomStarters = useMemo(
 			() =>
 				regenStarters ? getThreeRandomStarters() : getThreeRandomStarters(),
@@ -39,8 +40,8 @@ export const SuggestedQuestions = forwardRef(
 		return (
 			<motion.div
 				animate={{
-					opacity: hidden ? 0 : 1,
-					marginBottom: hidden ? -height : 0,
+					opacity: isAssistantInputFocused ? 0 : 1,
+					marginBottom: isAssistantInputFocused ? -height : 0,
 				}}
 				ref={ref}
 			>

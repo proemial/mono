@@ -8,7 +8,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "./analytics/tracking/tracking-keys";
-import { ASSISTANT_OPEN_QUERY_KEY } from "./proem-assistant/use-assistant";
+import { ASSISTANT_OPEN_QUERY_KEY } from "./proem-assistant/use-assistant/use-assistant";
 
 type Props = {
 	children: ReactNode;
