@@ -20,7 +20,8 @@
 		"turbo": "^2.0.14",
 		"typescript": "^5.5.4",
 		"vite-tsconfig-paths": "^5.0.1",
-		"vitest": "^2.0.5"
+		"vitest": "^2.0.5",
+		"dotenv": "16.4.5"
 	},
 	"packageManager": "pnpm@8.9.0",
 	"engines": {
