@@ -17,14 +17,14 @@ const getFeed = async () => {
 	return asInfiniteQueryData(feed);
 };
 
-export const dynamic = "force-static";
+export const experimental_ppr = true;
 
 export default async function DiscoverPage() {
-	// const { userId } = auth();
+	const { userId } = auth();
 
-	// if (userId) {
-	// 	redirect(`${routes.space}/${userId}`);
-	// }
+	if (userId) {
+		redirect(`${routes.space}/${userId}`);
+	}
 	const queryClient = getQueryClient();
 
 	queryClient.prefetchQuery({

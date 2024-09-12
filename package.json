@@ -30,7 +30,7 @@
 	"pnpm": {
 		"overrides": {
 			"drizzle-orm": "0.33.0",
-			"react": "^18.3.1",
+			"react": "19.0.0-rc-d6cb4e77-20240911",
 			"@types/react": "^18.3.2",
 			"@types/react-dom": "^18.3.0"
 		}

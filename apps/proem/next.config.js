@@ -17,7 +17,7 @@ const nextConfig = {
 		"@proemial/utils",
 	],
 	experimental: {
-		instrumentationHook: true,
+    ppr: 'incremental',
 	},
 	async redirects() {
 		return [
