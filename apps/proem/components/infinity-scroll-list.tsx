@@ -1,10 +1,6 @@
 "use client";
 import { cn } from "@proemial/shadcn-ui";
-import {
-	QueryFunction,
-	useInfiniteQuery,
-	useSuspenseInfiniteQuery,
-} from "@tanstack/react-query";
+import { QueryFunction, useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode, useEffect } from "react";
 import { Throbber } from "./throbber";

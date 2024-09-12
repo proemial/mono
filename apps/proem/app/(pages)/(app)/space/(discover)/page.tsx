@@ -33,8 +33,8 @@ export default async function DiscoverPage() {
 
 	return (
 		<HydrationBoundary state={dehydrate(queryClient)}>
+			<OnboardingCarousel />
 			<Suspense fallback={<div>Loading...</div>}>
-				<OnboardingCarousel />
 				<div className="mt-4">
 					<FeedComponent filter={defaultFeedFilter} showThemeColors />
 				</div>
