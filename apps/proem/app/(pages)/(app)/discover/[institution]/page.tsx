@@ -1,5 +1,5 @@
-import { Feed } from "@/app/(pages)/(app)/space/(discover)/feed";
-import { fetchFeedByInstitutionWithPostsAndReaders } from "@/app/(pages)/(app)/space/(discover)/fetch-feed";
+import { Feed as FeedComponent } from "@/app/(pages)/(app)/space/(discover)/feed";
+import { Feed } from "@/app/data/feed";
 import {
 	Branding,
 	brandingForInstitution,
@@ -16,6 +16,13 @@ import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
 import { FollowButton } from "./follow";
 import { OrgSelector } from "./org-selector";
+
+const getFeed = async (institutionId: string) => {
+	const offset = 1;
+	const feed = await Feed.fromInstitution(institutionId, { offset });
+
+	return asInfiniteQueryData(feed);
+};
 
 export default async function DiscoverPage({
 	params,
@@ -35,15 +42,6 @@ export default async function DiscoverPage({
 
 	const filter = { institution: institution?.id };
 
-	const getFeed = async () => {
-		const feed = await fetchFeedByInstitutionWithPostsAndReaders(
-			{ id: filter.institution },
-			{ offset: 1 },
-			undefined,
-		);
-
-		return asInfiniteQueryData(feed);
-	};
 	const header = (
 		<div className="mt-2 flex flex-row justify-between items-center">
 			<WorksCount institution={institution} />
@@ -60,7 +58,7 @@ export default async function DiscoverPage({
 
 	queryClient.prefetchQuery({
 		queryKey: getFeedQueryKey(filter),
-		queryFn: getFeed,
+		queryFn: () => getFeed(institution.id),
 	});
 
 	return (
@@ -68,14 +66,14 @@ export default async function DiscoverPage({
 			<Logo name={institutionName} branding={branding} />
 
 			{institutions?.length > 0 && (
-				<Feed
+				<FeedComponent
 					filter={filter}
 					bookmarks={bookmarks}
 					theme={branding.theme}
 					header={header}
 				>
 					<OrgSelector institutions={institutions} selected={institutionName} />
-				</Feed>
+				</FeedComponent>
 			)}
 		</HydrationBoundary>
 	);

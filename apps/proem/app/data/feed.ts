@@ -1,4 +1,5 @@
 import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
+import { fetchFeedByInstitutionWithPostsAndReaders } from "@/app/(pages)/(app)/space/(discover)/fetch-feed";
 import {
 	FEED_DEFAULT_DAYS,
 	fetchAndRerankPaperIds,
@@ -106,11 +107,12 @@ export module Feed {
 		institutionId: string,
 		options: FetchFeedParams[1],
 	) => {
-		return {
-			count: 0,
-			rows: [],
-			nextOffset: 1,
-		};
+		// TODO!: refactor
+		return fetchFeedByInstitutionWithPostsAndReaders(
+			{ id: institutionId },
+			options,
+			undefined,
+		);
 	};
 
 	export const fromCollection = async (
