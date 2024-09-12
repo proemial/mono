@@ -11,7 +11,12 @@ import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { trimForQuotes } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Header2, Header4, Header5, Icons } from "@proemial/shadcn-ui";
-import { BookOpen01, ChevronRight, Users01 } from "@untitled-ui/icons-react";
+import {
+	BookOpen01,
+	ChevronRight,
+	Heading01,
+	Users01,
+} from "@untitled-ui/icons-react";
 import { Suspense } from "react";
 import { EngagementIndicator } from "./engagement-indicator";
 
@@ -80,6 +85,13 @@ export function ChatArticle({
 						className="opacity-50 flex items-center justify-between gap-1 uppercase text-2xs hover:opacity-75 transition-opacity"
 					>
 						<div className="flex-grow w-1/2">
+							<div className="flex items-center gap-2.5">
+								<div>
+									<Heading01 className="size-2.5" />
+								</div>
+								<Header5 className="truncate pr-6">{paper.data.title}</Header5>
+							</div>
+
 							{publisher && (
 								<div className="flex items-center gap-2.5">
 									<div>
@@ -88,13 +100,6 @@ export function ChatArticle({
 									<div className="truncate">{publisher}</div>
 								</div>
 							)}
-
-							<div className="flex items-center gap-2.5">
-								<div>
-									<BookOpen01 className="size-2.5" />
-								</div>
-								<Header5 className="truncate pr-6">{paper.data.title}</Header5>
-							</div>
 
 							<div className="flex items-center gap-2.5">
 								<div>
