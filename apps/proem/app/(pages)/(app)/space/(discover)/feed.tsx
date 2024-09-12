@@ -74,7 +74,7 @@ export function Feed({
 					}
 
 					const feed = await fetch(
-						`http://localhost:4242/api/feed?${
+						`/api/feed?${
 							"collectionId" in filter
 								? `collection_id=${filter.collectionId}`
 								: "institution" in filter
