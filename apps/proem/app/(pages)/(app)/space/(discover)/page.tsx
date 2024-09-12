@@ -8,6 +8,7 @@ import { getFeedQueryKey } from "@/utils/get-feed-query-key";
 import { auth } from "@clerk/nextjs/server";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 const getFeed = async () => {
 	const offset = 1;
@@ -32,10 +33,12 @@ export default async function DiscoverPage() {
 
 	return (
 		<HydrationBoundary state={dehydrate(queryClient)}>
-			<OnboardingCarousel />
-			<div className="mt-4">
-				<FeedComponent filter={defaultFeedFilter} showThemeColors />
-			</div>
+			<Suspense fallback={<div>Loading...</div>}>
+				<OnboardingCarousel />
+				<div className="mt-4">
+					<FeedComponent filter={defaultFeedFilter} showThemeColors />
+				</div>
+			</Suspense>
 		</HydrationBoundary>
 	);
 }
