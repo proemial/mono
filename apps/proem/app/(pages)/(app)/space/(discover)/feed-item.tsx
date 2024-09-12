@@ -10,6 +10,7 @@ import { FeatureType } from "@proemial/repositories/oa/fingerprinting/features";
 import { RankedPaperFeature } from "@proemial/repositories/oa/fingerprinting/rerank";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-topics-compact";
+import { cn } from "@proemial/shadcn-ui";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Fullscreen } from "lucide-react";
@@ -112,8 +113,8 @@ export default function FeedItem({
 					)}
 				</div>
 
-				<div className={`mt-2 ${embedded && "sm:min-h-6"}`}>
-					{hasEngagement && (
+				{hasEngagement && (
+					<div className={cn("mt-2", { "sm:min-h-6": embedded })}>
 						<EmbedableLink {...linkConfig}>
 							<EngagementIndicator
 								posts={paper.posts}
@@ -121,8 +122,8 @@ export default function FeedItem({
 								maxAvatars={embedded ? 3 : undefined}
 							/>
 						</EmbedableLink>
-					)}
-				</div>
+					</div>
+				)}
 			</div>
 		</div>
 	);
