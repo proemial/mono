@@ -1,9 +1,8 @@
 "use server";
-import { Feed } from "@/app/data/feed";
+import { Feed, fetchPaperWithPostsAndReaders } from "@/app/data/feed";
 import { PaperReadsService } from "@/services/paper-reads-service";
 import { PostService } from "@/services/post-service";
 import { fetchAndRerankPaperIds } from "./fetch-by-features";
-import { fetchPaperWithPostsAndReaders } from "./fetch-paper-with-posts-and-readers";
 
 export type FetchFeedParams = Required<
 	Parameters<typeof fetchAndRerankPaperIds>
@@ -27,7 +26,9 @@ export const fetchFeedByFeaturesWithPostsAndReaders = async (
 	const paperIds = feed.rows.map(({ paper }) => paper?.id);
 
 	const papersWithPostsAndReaders = await Promise.all(
-		paperIds.map((paperId) => fetchPaperWithPostsAndReaders(paperId, spaceId)),
+		paperIds.map((paperId) =>
+			fetchPaperWithPostsAndReaders({ paperId, spaceId }),
+		),
 	);
 	const feedWithPostsAndReaders = {
 		...feed,
