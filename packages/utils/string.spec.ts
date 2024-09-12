@@ -1,4 +1,5 @@
 import { numberFrom } from "./string";
+import { describe, it, expect } from "vitest";
 
 describe("numberFrom", () => {
 	it("should convert letters to 0-8", () => {

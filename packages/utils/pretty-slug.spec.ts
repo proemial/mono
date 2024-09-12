@@ -1,4 +1,5 @@
 import { prettySlug } from "./pretty-slug";
+import { describe, it, expect } from "vitest";
 
 describe("prettyslug", () => {
 	it("should convert a string to a pretty slug", () => {
