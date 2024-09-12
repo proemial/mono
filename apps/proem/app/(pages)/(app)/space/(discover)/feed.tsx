@@ -84,7 +84,6 @@ export function Feed({
 					);
 					// TODO! error handling
 					const data = (await feed.json()) as FeedResponse;
-					console.log({ data });
 
 					return data;
 				}}
