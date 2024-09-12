@@ -1,8 +1,8 @@
-import { CachedFeed } from "@/app/data/cached-feed";
-import { ChartNoAxesColumnDecreasing } from "lucide-react";
+import { Feed } from "@/app/data/feed";
 import { NextRequest, NextResponse } from "next/server";
 
-export type FeedResponse = ReturnType<typeof CachedFeed.fromCollection>;
+export type FeedResponse = ReturnType<typeof Feed.fromCollection>;
+
 export async function GET(request: NextRequest) {
 	const { searchParams } = new URL(request.url);
 	const collectionId = searchParams.get("collection_id");
@@ -16,10 +16,10 @@ export async function GET(request: NextRequest) {
 	}
 
 	if (collectionId) {
-		const feed = await CachedFeed.fromCollection(collectionId, { offset });
+		const feed = await Feed.fromCollection(collectionId, { offset });
 		return NextResponse.json(feed);
 	}
 
-	const feed = await CachedFeed.fromPublic(offset);
+	const feed = await Feed.fromPublic(offset);
 	return NextResponse.json(feed);
 }

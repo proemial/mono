@@ -1,7 +1,5 @@
-import { Feed } from "@/app/(pages)/(app)/space/(discover)/feed";
-import { CachedFeed, defaultFeedFilter } from "@/app/data/cached-feed";
-import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
-import { fetchFeedByFeaturesWithPostsAndReaders } from "@/app/data/fetch-feed";
+import { Feed as FeedComponent } from "@/app/(pages)/(app)/space/(discover)/feed";
+import { Feed, defaultFeedFilter } from "@/app/data/feed";
 import { OnboardingCarousel } from "@/components/onboarding";
 import { getQueryClient } from "@/components/providers/get-query-client";
 import { routes } from "@/routes";
@@ -9,12 +7,11 @@ import { asInfiniteQueryData } from "@/utils/as-infinite-query-data";
 import { getFeedQueryKey } from "@/utils/get-feed-query-key";
 import { auth } from "@clerk/nextjs/server";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
-import { unstable_cache } from "next/cache";
 import { redirect } from "next/navigation";
 
 const getFeed = async () => {
 	const offset = 1;
-	const feed = await CachedFeed.fromPublic(offset);
+	const feed = await Feed.fromPublic(offset);
 
 	return asInfiniteQueryData(feed);
 };
@@ -25,6 +22,7 @@ export default async function DiscoverPage() {
 	if (userId) {
 		redirect(`${routes.space}/${userId}`);
 	}
+	0;
 	const queryClient = getQueryClient();
 
 	queryClient.prefetchQuery({
@@ -36,7 +34,7 @@ export default async function DiscoverPage() {
 		<HydrationBoundary state={dehydrate(queryClient)}>
 			<OnboardingCarousel />
 			<div className="mt-4">
-				<Feed filter={defaultFeedFilter} showThemeColors />
+				<FeedComponent filter={defaultFeedFilter} showThemeColors />
 			</div>
 		</HydrationBoundary>
 	);

@@ -3,7 +3,10 @@ import {
 	FEED_DEFAULT_DAYS,
 	fetchAndRerankPaperIds,
 } from "@/app/data/fetch-by-features";
-import { FetchFeedParams } from "@/app/data/fetch-feed";
+import {
+	FetchFeedParams,
+	fetchFeedByFeaturesWithPostsAndReaders,
+} from "@/app/data/fetch-feed";
 import { Fingerprint } from "@/app/data/fingerprint";
 import { Post } from "@/app/data/post";
 import { summarise } from "@/app/prompts/summarise-title";
@@ -27,6 +30,12 @@ const POPULAR_PAPERS_PERCENTAGE:
 	| 0.8
 	| 0.9
 	| 1 = 0.4;
+
+export const defaultFeedFilter = {
+	features: [],
+	days: FEED_DEFAULT_DAYS,
+	titles: undefined,
+};
 
 export const fetchPaperWithPostsAndReaders = async ({
 	paperId,
@@ -79,6 +88,18 @@ export module Feed {
 		}
 
 		return items;
+	};
+
+	export const fromPublic = (offset: number) => {
+		return fetchFeedByFeaturesWithPostsAndReaders(
+			{
+				features: defaultFeedFilter.features,
+				days: defaultFeedFilter.days,
+			},
+			{ offset },
+			false,
+			undefined,
+		);
 	};
 
 	export const fromInstitution = async (

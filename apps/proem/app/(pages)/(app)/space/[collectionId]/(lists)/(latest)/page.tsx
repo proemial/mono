@@ -1,7 +1,7 @@
 import { Feed as FeedComponent } from "@/app/(pages)/(app)/space/(discover)/feed";
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
-import { CachedFeed } from "@/app/data/cached-feed";
+import { Feed } from "@/app/data/feed";
 import { getQueryClient } from "@/components/providers/get-query-client";
 import { CollectionService } from "@/services/collection-service";
 import { asInfiniteQueryData } from "@/utils/as-infinite-query-data";
@@ -14,7 +14,7 @@ import { notFound } from "next/navigation";
 type Props = CollectionIdParams;
 
 const getFeed = async (collectionId: string, offset = 1) => {
-	const feed = await CachedFeed.fromCollection(collectionId, { offset });
+	const feed = await Feed.fromCollection(collectionId, { offset });
 
 	return asInfiniteQueryData(feed);
 };
