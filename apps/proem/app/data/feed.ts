@@ -28,7 +28,7 @@ const POPULAR_PAPERS_PERCENTAGE:
 	| 0.9
 	| 1 = 0.4;
 
-const fetchPaperWithPostsAndReaders = async ({
+export const fetchPaperWithPostsAndReaders = async ({
 	paperId,
 	spaceId,
 	organisationId,
