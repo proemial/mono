@@ -1,28 +1,27 @@
-import { getOrgMembersUserData, getUsers } from "@/utils/auth";
-import { auth } from "@clerk/nextjs/server";
 import { PostRepository } from "@proemial/data/repository/post";
+import { Organisation } from "./organisation";
 
 export type UserData = {
 	userId: string;
 	firstName: string | null;
 	lastName: string | null;
-	imageUrl: string | undefined;
+	imageUrl?: string;
 };
 
-export type PostWithCommentsAndAuthor = Awaited<
-	ReturnType<typeof PostService.getPostsWithCommentsAndAuthors>
->[number];
-
-/**
- * @deprecated use {@link: Post.getPostsWithCommentsAndAuthors} instead
- */
-export const PostService = {
-	getPostsWithCommentsAndAuthors: async (
-		spaceId: string | undefined,
-		paperId: string | undefined,
-	) => {
-		const { userId } = auth();
-		const orgMembersUserData = await getOrgMembersUserData();
+export module Post {
+	export const getPostsWithCommentsAndAuthors = async ({
+		spaceId,
+		paperId,
+		userId,
+		organisationId,
+	}: {
+		spaceId?: string;
+		paperId?: string;
+		userId?: string;
+		organisationId?: string;
+	}) => {
+		const orgMembersUserData =
+			await Organisation.getOrgMembersUserData(organisationId);
 		const orgMemberIds = orgMembersUserData.map((m) => m.userId);
 		const posts = await PostRepository.getPostsWithCommentsAndAuthors(
 			spaceId,
@@ -31,7 +30,7 @@ export const PostService = {
 			orgMemberIds,
 		);
 		const authorIds = posts.map((post) => post.authorId);
-		const authors = await getUsers(authorIds);
+		const authors = await Organisation.getUsers(authorIds);
 		return posts.map((post) => {
 			const author = authors.find((user) => user.id === post.authorId);
 			return {
@@ -44,5 +43,5 @@ export const PostService = {
 				},
 			};
 		});
-	},
-};
+	};
+}

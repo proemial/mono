@@ -1,29 +1,15 @@
-import { Feed } from "@/app/(pages)/(app)/space/(discover)/feed";
-import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
+import DiscoverFeed from "@/app/(pages)/(app)/space/(discover)/discover-feed";
 import { OnboardingCarousel } from "@/components/onboarding";
-import { routes } from "@/routes";
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import { Throbber } from "@/components/throbber";
+import { Suspense } from "react";
 
 export default async function DiscoverPage() {
-	const { userId } = auth();
-
-	if (userId) {
-		redirect(`${routes.space}/${userId}`);
-	}
-
-	const filter = {
-		features: [],
-		days: FEED_DEFAULT_DAYS,
-		titles: undefined,
-	};
-
 	return (
-		<>
+		<div className="space-y-4">
 			<OnboardingCarousel />
-			<div className="mt-4">
-				<Feed filter={filter} showThemeColors />
-			</div>
-		</>
+			<Suspense fallback={<Throbber />}>
+				<DiscoverFeed />
+			</Suspense>
+		</div>
 	);
 }

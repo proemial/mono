@@ -30,6 +30,27 @@ const MAX_PAGES = 10;
 // Cache feed papers for 8 hour
 const CACHE_FOR = 8 * 60 * 60; // 8 hours
 
+const cacheWorker = async (f: RankedFeature[], d: number) => {
+	const allPapers = await fetchAllPapers(d, f);
+	const paperIds = rerankAndLimit(allPapers.papers, f);
+
+	return {
+		meta: allPapers.meta,
+		papers: paperIds,
+	};
+};
+
+const getCachedPapers = unstable_cache(
+	async (features, days) => {
+		console.log(
+			`Cache miss, fetching papers for (${features.length} features)`,
+		);
+		return await cacheWorker(features, days);
+	},
+	["fingerprint"],
+	{ revalidate: CACHE_FOR },
+);
+
 export const fetchAndRerankPaperIds = async (
 	{ features, days }: { features?: RankedFeature[]; days?: number },
 	{ limit, offset }: { limit?: number; offset?: number } = {},
@@ -39,29 +60,6 @@ export const fetchAndRerankPaperIds = async (
 	const pageLimit = limit ?? 25;
 	const pageOffset = offset ?? 1;
 
-	const cacheWorker = async (f: RankedFeature[], d: number) => {
-		const allPapers = await fetchAllPapers(d, f);
-		const paperIds = rerankAndLimit(allPapers.papers, f);
-
-		return {
-			meta: allPapers.meta,
-			papers: paperIds,
-		};
-	};
-
-	const cacheKey = await sha256(
-		`cachedPapers ${features?.map((f) => f.id).join("|")} ${days}`,
-	);
-	const getCachedPapers = unstable_cache(
-		async (f, d) => {
-			console.log(
-				`Cache miss, fetching papers for ${cacheKey} (${f.length} features)`,
-			);
-			return cacheWorker(f, d);
-		},
-		[cacheKey],
-		{ revalidate: CACHE_FOR },
-	);
 
 	const cached = nocache
 		? await cacheWorker(features ?? [], days ?? FEED_DEFAULT_DAYS)

@@ -1,10 +1,22 @@
 import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
-import { fetchAndRerankPaperIds } from "@/app/data/fetch-by-features";
-import { FetchFeedParams } from "@/app/data/fetch-feed";
+import { fetchFeedByInstitutionWithPostsAndReaders } from "@/app/(pages)/(app)/space/(discover)/fetch-feed";
+import {
+	FEED_DEFAULT_DAYS,
+	fetchAndRerankPaperIds,
+} from "@/app/data/fetch-by-features";
+import {
+	FetchFeedParams,
+	fetchFeedByFeaturesWithPostsAndReaders,
+} from "@/app/data/fetch-feed";
+import { Fingerprint } from "@/app/data/fingerprint";
+import { Post } from "@/app/data/post";
 import { summarise } from "@/app/prompts/summarise-title";
+import { PaperReadsService } from "@/services/paper-reads-service";
 import { Paper } from "@proemial/data/paper";
 import { Redis } from "@proemial/redis/redis";
+import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
+import { unstable_cache } from "next/cache";
 import { z } from "zod";
 
 const DEFAULT_LIMIT = 5;
@@ -20,8 +32,42 @@ const POPULAR_PAPERS_PERCENTAGE:
 	| 0.9
 	| 1 = 0.4;
 
+export const defaultFeedFilter = {
+	features: [],
+	days: FEED_DEFAULT_DAYS,
+	titles: undefined,
+};
+
+export const fetchPaperWithPostsAndReaders = async ({
+	paperId,
+	spaceId,
+	organisationId,
+	userId,
+}: {
+	paperId: string;
+	spaceId?: string;
+	organisationId?: string;
+	userId?: string;
+}) => {
+	const [posts, readers] = await Promise.all([
+		Post.getPostsWithCommentsAndAuthors({
+			spaceId,
+			paperId,
+			organisationId,
+			userId,
+		}),
+		// TODO! move to new module structure
+		PaperReadsService.getReaders(paperId),
+	]);
+	return {
+		paperId,
+		posts,
+		readers,
+	};
+};
+
 // TODO! move to data when all dependencies are moved out of apps/proem
-export namespace Feed {
+export module Feed {
 	export const Row = z.object({
 		type: z.enum(["organic", "popularity-boost"]),
 	});
@@ -43,6 +89,89 @@ export namespace Feed {
 		}
 
 		return items;
+	};
+
+	export const fromPublic = (offset: number) => {
+		return fetchFeedByFeaturesWithPostsAndReaders(
+			{
+				features: defaultFeedFilter.features,
+				days: defaultFeedFilter.days,
+			},
+			{ offset },
+			false,
+			undefined,
+		);
+	};
+
+	export const fromInstitution = async (
+		institutionId: string,
+		options: FetchFeedParams[1],
+	) => {
+		// TODO!: refactor
+		return fetchFeedByInstitutionWithPostsAndReaders(
+			{ id: institutionId },
+			options,
+			undefined,
+		);
+	};
+
+	export const fromCollection = async (
+		collectionId: string,
+		options: FetchFeedParams[1],
+		userId?: string,
+		organisationId?: string,
+	) => {
+		const isDefaultSpace = collectionId.startsWith("user_");
+		// We only inject popular papers in users default space
+		const injectPopularPapersInFeed = isDefaultSpace;
+
+		const fingerprints = await unstable_cache(
+			async () => await Fingerprint.fromCollection(collectionId),
+			["fingerprint", collectionId],
+			{
+				revalidate: false,
+			},
+		)();
+
+		const { filter: features } = getFeatureFilter(fingerprints);
+
+		const feed = await Feed.fromFeatures(
+			{ features, days: FEED_DEFAULT_DAYS },
+			options,
+			undefined,
+			injectPopularPapersInFeed,
+		);
+
+		const paperIds = feed.rows.map(({ paper }) => paper?.id);
+
+		const papersWithPostsAndReaders = await Promise.all(
+			paperIds.map((paperId) =>
+				fetchPaperWithPostsAndReaders({
+					paperId,
+					spaceId: collectionId,
+					organisationId,
+					userId,
+				}),
+			),
+		);
+		const feedWithPostsAndReaders = {
+			...feed,
+			rows: feed.rows.map((row) => ({
+				...row,
+				paper: {
+					...row.paper,
+					posts:
+						papersWithPostsAndReaders.find(
+							(paper) => paper.paperId === row.paper.id,
+						)?.posts ?? [],
+					readers:
+						papersWithPostsAndReaders.find(
+							(paper) => paper.paperId === row.paper.id,
+						)?.readers ?? [],
+				},
+			})),
+		};
+		return feedWithPostsAndReaders;
 	};
 
 	// TODO!: handle duplicates

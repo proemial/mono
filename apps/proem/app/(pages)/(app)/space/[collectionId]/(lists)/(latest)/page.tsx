@@ -1,17 +1,23 @@
-import { Feed } from "@/app/(pages)/(app)/space/(discover)/feed";
+import { Feed as FeedComponent } from "@/app/(pages)/(app)/space/(discover)/feed";
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
-import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
-import { getBookmarksAndHistory } from "@/app/data/fetch-history";
+import { Feed } from "@/app/data/feed";
+import { getQueryClient } from "@/components/providers/get-query-client";
 import { CollectionService } from "@/services/collection-service";
+import { asInfiniteQueryData } from "@/utils/as-infinite-query-data";
+import { getFeedQueryKey } from "@/utils/get-feed-query-key";
 import { PermissionUtils } from "@/utils/permission-utils";
 import { auth } from "@clerk/nextjs/server";
-import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
-import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
-import { Fingerprint } from "@proemial/repositories/oa/fingerprinting/fingerprints";
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 
 type Props = CollectionIdParams;
+
+const getFeed = async (collectionId: string, offset = 1) => {
+	const feed = await Feed.fromCollection(collectionId, { offset });
+
+	return asInfiniteQueryData(feed);
+};
 
 export default async function LatestPage({ params: { collectionId } }: Props) {
 	const { userId, orgId } = auth();
@@ -24,36 +30,23 @@ export default async function LatestPage({ params: { collectionId } }: Props) {
 		notFound();
 	}
 	const canEdit = PermissionUtils.canEditCollection(collection, userId, orgId);
-
 	const bookmarks = await getBookmarksByCollectionId(collectionId);
-	const bookmarkedPapersInCurrentSpace = Object.keys(bookmarks).filter(
-		(paperId) => bookmarks[paperId]?.includes(collectionId),
+
+	const queryClient = getQueryClient();
+	const filter = { collectionId };
+
+	queryClient.prefetchQuery({
+		queryKey: getFeedQueryKey(filter),
+		queryFn: () => getFeed(collectionId),
+	});
+
+	return (
+		<HydrationBoundary state={dehydrate(queryClient)}>
+			<FeedComponent
+				filter={filter}
+				readonly={!canEdit}
+				bookmarks={bookmarks}
+			/>
+		</HydrationBoundary>
 	);
-
-	const isDefaultSpace = collectionId === userId;
-	const fingerprints: Fingerprint[][] = [];
-	if (isDefaultSpace) {
-		// Default space uses the user's bookmarks and history to generate the feed
-		const history = await getBookmarksAndHistory(userId);
-		if (history?.length) {
-			const fingerprintsBasedOnHistory = await fetchFingerprints(...history);
-			fingerprints.push(...fingerprintsBasedOnHistory);
-		}
-	} else {
-		// Custom spaces use the papers in the space to generate the feed
-		const fingerprintsBasedOnPapers = bookmarkedPapersInCurrentSpace
-			? await fetchFingerprints(bookmarkedPapersInCurrentSpace)
-			: [];
-		fingerprints.push(...fingerprintsBasedOnPapers);
-	}
-
-	const { filter: features } = getFeatureFilter(fingerprints);
-
-	const filter = {
-		features,
-		collectionId,
-		days: FEED_DEFAULT_DAYS,
-	};
-
-	return <Feed filter={filter} readonly={!canEdit} bookmarks={bookmarks} />;
 }

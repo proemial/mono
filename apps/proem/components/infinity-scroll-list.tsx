@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@proemial/shadcn-ui";
-import { QueryFunction, useInfiniteQuery } from "@tanstack/react-query";
+import { QueryFunction, useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode, useEffect } from "react";
 import { Throbber } from "./throbber";
@@ -31,10 +31,10 @@ export function InfinityScrollList<MyTQueryKey extends string[], TRow>({
 		fetchNextPage,
 		hasNextPage,
 		error,
-	} = useInfiniteQuery({
+	} = useSuspenseInfiniteQuery({
 		queryKey,
 		queryFn,
-		initialPageParam: 1,
+		initialPageParam: 1, // TODO: change to 0
 		getNextPageParam: (lastGroup) => {
 			return lastGroup?.nextOffset;
 		},
@@ -72,9 +72,7 @@ export function InfinityScrollList<MyTQueryKey extends string[], TRow>({
 		<>
 			{renderSection?.(count)}
 
-			{status === "pending" ? (
-				<Throbber />
-			) : status === "error" && error instanceof Error ? (
+			{status === "error" && error instanceof Error ? (
 				<span>Error: {error?.message}</span>
 			) : (
 				<ScrollItem

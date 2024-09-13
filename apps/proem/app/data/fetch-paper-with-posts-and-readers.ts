@@ -1,6 +1,9 @@
 import { PaperReadsService } from "@/services/paper-reads-service";
 import { PostService } from "@/services/post-service";
 
+/**
+ * @deprecated use {@link: data/feed.ts} instead
+ */
 export const fetchPaperWithPostsAndReaders = async (
 	paperId: string,
 	spaceId: string | undefined,

@@ -45,6 +45,7 @@ export const CollectionListItem = ({
 	return (
 		<div className="flex justify-between gap-2">
 			<Link
+				prefetch={false}
 				href={`${routes.space}/${collection.id}`}
 				onClick={() => {
 					trackHandler(analyticsKeys.collection.openFromMenu);

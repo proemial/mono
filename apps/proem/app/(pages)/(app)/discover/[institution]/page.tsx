@@ -1,16 +1,28 @@
-import { Feed } from "@/app/(pages)/(app)/space/(discover)/feed";
+import { Feed as FeedComponent } from "@/app/(pages)/(app)/space/(discover)/feed";
+import { Feed } from "@/app/data/feed";
 import {
 	Branding,
 	brandingForInstitution,
 } from "@/app/theme/institution-branding";
+import { getQueryClient } from "@/components/providers/get-query-client";
+import { asInfiniteQueryData } from "@/utils/as-infinite-query-data";
+import { getFeedQueryKey } from "@/utils/get-feed-query-key";
 import { auth } from "@clerk/nextjs/server";
 import {
 	Institution,
 	fetchInstitutions,
 } from "@proemial/repositories/oa/institutions/fetch-institutions";
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { getBookmarksByCollectionId } from "../../space/(discover)/get-bookmarks-by-collection-id";
 import { FollowButton } from "./follow";
 import { OrgSelector } from "./org-selector";
+
+const getFeed = async (institutionId: string) => {
+	const offset = 1;
+	const feed = await Feed.fromInstitution(institutionId, { offset });
+
+	return asInfiniteQueryData(feed);
+};
 
 export default async function DiscoverPage({
 	params,
@@ -28,6 +40,8 @@ export default async function DiscoverPage({
 	const institution = institutions?.at(0)!;
 	const institutionName = institution?.display_name ?? searchString;
 
+	const filter = { institution: institution?.id };
+
 	const header = (
 		<div className="mt-2 flex flex-row justify-between items-center">
 			<WorksCount institution={institution} />
@@ -40,21 +54,28 @@ export default async function DiscoverPage({
 
 	const branding = brandingForInstitution(searchString);
 
+	const queryClient = getQueryClient();
+
+	queryClient.prefetchQuery({
+		queryKey: getFeedQueryKey(filter),
+		queryFn: () => getFeed(institution.id),
+	});
+
 	return (
-		<>
+		<HydrationBoundary state={dehydrate(queryClient)}>
 			<Logo name={institutionName} branding={branding} />
 
 			{institutions?.length > 0 && (
-				<Feed
-					filter={{ institution: institution?.id }}
+				<FeedComponent
+					filter={filter}
 					bookmarks={bookmarks}
 					theme={branding.theme}
 					header={header}
 				>
 					<OrgSelector institutions={institutions} selected={institutionName} />
-				</Feed>
+				</FeedComponent>
 			)}
-		</>
+		</HydrationBoundary>
 	);
 }
 

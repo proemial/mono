@@ -7,11 +7,7 @@ import {
 import { fetchPaperWithPostsAndReaders } from "@/app/data/fetch-paper-with-posts-and-readers";
 import { summarise } from "@/app/prompts/summarise-title";
 import { Redis } from "@proemial/redis/redis";
-import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
-import {
-	RankedPaperFeature,
-	RankedPaperId,
-} from "@proemial/repositories/oa/fingerprinting/rerank";
+import { RankedPaperId } from "@proemial/repositories/oa/fingerprinting/rerank";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 
 export const fetchFeedByInstitutionWithPostsAndReaders = async (
