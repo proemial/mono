@@ -1,5 +1,4 @@
 import { Button, cn } from "@proemial/shadcn-ui";
-import { ProemLogo } from "../icons/brand/logo";
 
 type Props = {
 	onClick: () => void;
@@ -10,18 +9,18 @@ export const AssistantButton = ({ onClick, variant = "dark" }: Props) => {
 	return (
 		<Button
 			type="button"
-			variant="default"
-			size="icon"
+			variant="suggestion"
+			size="suggestion"
 			className={cn(
-				"drop-shadow-xl hover:drop-shadow-lg pointer-events-auto w-16 h-16 rounded-full",
+				"drop-shadow-xl hover:drop-shadow-lg pointer-events-auto mx-8 justify-center rounded-full p-3 max-w-[480px]",
 				{
-					"bg-theme-900 hover:bg-theme-950": variant === "dark",
+					"bg-theme-900 hover:bg-theme-950 text-white": variant === "dark",
 					"hover:bg-theme-200": variant === "light",
 				},
 			)}
 			onClick={onClick}
 		>
-			<ProemLogo size="sm" className={cn(variant === "dark" && "text-white")} />
+			Ask a question
 		</Button>
 	);
 };
