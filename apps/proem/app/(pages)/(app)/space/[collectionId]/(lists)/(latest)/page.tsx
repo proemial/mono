@@ -13,8 +13,11 @@ import { notFound } from "next/navigation";
 
 type Props = CollectionIdParams;
 
-const getFeed = async (collectionId: string, offset = 1) => {
-	const feed = await Feed.fromCollection(collectionId, { offset });
+const getFeed = async (collectionId: string) => {
+	const feed = await Feed.fromCollection(collectionId, {
+		offset: 1,
+		limit: 10,
+	});
 
 	return asInfiniteQueryData(feed);
 };

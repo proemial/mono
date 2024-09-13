@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
 	}
 
 	if (collectionId) {
-		const feed = await Feed.fromCollection(collectionId, { offset });
+		const feed = await Feed.fromCollection(collectionId, { offset, limit: 10 });
 		return NextResponse.json(feed);
 	}
 
