@@ -113,15 +113,17 @@ export default function FeedItem({
 					)}
 				</div>
 
-				<div className={cn("mt-2", { "min-h-6": embedded })}>
+				<div className={cn({ "min-h-6": embedded })}>
 					{hasEngagement && (
-						<EmbedableLink {...linkConfig}>
-							<EngagementIndicator
-								posts={paper.posts}
-								readers={paper.readers}
-								maxAvatars={embedded ? 3 : undefined}
-							/>
-						</EmbedableLink>
+						<div className="mt-2">
+							<EmbedableLink {...linkConfig}>
+								<EngagementIndicator
+									posts={paper.posts}
+									readers={paper.readers}
+									maxAvatars={embedded ? 3 : undefined}
+								/>
+							</EmbedableLink>
+						</div>
 					)}
 				</div>
 			</div>
