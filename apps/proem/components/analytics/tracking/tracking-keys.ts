@@ -6,8 +6,6 @@ export function trackHandler(
 	properties?: Record<string, string>,
 ) {
 	return () => {
-		console.log("Tracking", key, properties);
-
 		Tracker.track(key, properties);
 	};
 }
@@ -191,6 +189,7 @@ export const analyticsKeys = {
 		},
 	},
 	onboarding: {
+		view: "onboarding:view",
 		close: "onboarding:close",
 		jump: "onboarding:jump",
 	},

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Button,
 	Carousel,
@@ -14,6 +14,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "./analytics/tracking/tracking-keys";
+import posthog from "posthog-js";
 
 const items = [
 	{
@@ -37,23 +38,28 @@ const items = [
 export function OnboardingCarousel() {
 	// Default true to avoid showing onboarding before the cookie is read
 	const [closed, setClosed] = useState<boolean>(true);
-
-	React.useEffect(() => {
+	useEffect(() => {
 		setClosed(!!getCookie("onboardingClosed"));
 	}, []);
 
+	const loaded = usePostHogLoaded();
+	useEffect(() => {
+		if (loaded && !closed) {
+			trackHandler(analyticsKeys.onboarding.view)();
+		}
+	}, [loaded, closed]);
+
 	if (closed) return undefined;
 
+	// 2147483647
 	const handleClose = () => {
 		setClosed(true);
-		setCookie("onboardingClosed", true);
-		console.log("analyticsKeys.onboarding.close");
-		trackHandler(analyticsKeys.onboarding.close);
+		setCookie("onboardingClosed", true, { maxAge: 365 * 24 * 60 * 60 });
+		trackHandler(analyticsKeys.onboarding.close)();
 	};
 
 	const handleCardChange = () => {
-		console.log("analyticsKeys.onboarding.jump");
-		trackHandler(analyticsKeys.onboarding.jump);
+		trackHandler(analyticsKeys.onboarding.jump)();
 	};
 
 	return (
@@ -96,4 +102,16 @@ export function OnboardingCarousel() {
 			</Carousel>
 		</div>
 	);
+}
+
+function usePostHogLoaded() {
+	const [loaded, setLoaded] = useState<boolean>(false);
+
+	posthog.on("eventCaptured", (event) => {
+		if (!loaded && event.event === "proem:view:") {
+			setLoaded(true);
+		}
+	});
+
+	return loaded;
 }
