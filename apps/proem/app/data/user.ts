@@ -1,4 +1,5 @@
 import { clerkClient } from "@clerk/nextjs/server";
+import { getCollectionsByCollectionId } from "@proemial/data/repository/collection";
 import { unstable_cache } from "next/cache";
 
 const CLERK_CACHE_TTL = 60; // In seconds
@@ -33,9 +34,11 @@ export module User {
 	};
 
 	export const getUsers = async (userIds: string[]) => {
-		if (userIds.length === 0) return [];
+		const validUserIds = userIds.filter((id) => id.startsWith("user_"));
+
+		if (validUserIds.length === 0) return [];
 		try {
-			const { data: users } = await getUsersByIds(...userIds);
+			const { data: users } = await getUsersByIds(...validUserIds);
 			return users;
 		} catch (error) {
 			console.error("Error fetching users from auth provider", error);
