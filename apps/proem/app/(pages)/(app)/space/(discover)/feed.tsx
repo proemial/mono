@@ -13,7 +13,6 @@ import { InfinityScrollList } from "@/components/infinity-scroll-list";
 import { ThemeColoredCard } from "@/components/theme-colored-card";
 import { getFeedQueryKey } from "@/utils/get-feed-query-key";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
-import { useSearchParams } from "next/navigation";
 import { ReactNode } from "react";
 
 // 1-4 is fetched without scrolling
@@ -39,6 +38,7 @@ export type FeedProps = {
 	theme?: Theme;
 	readonly?: boolean;
 	showThemeColors?: boolean;
+	debug?: boolean;
 };
 
 export function Feed({
@@ -49,10 +49,8 @@ export function Feed({
 	theme,
 	readonly,
 	showThemeColors = false,
+	debug,
 }: FeedProps) {
-	const debug = useSearchParams().get("debug");
-	const nocache = useSearchParams().get("nocache");
-	const days = Number(useSearchParams().get("days")) || undefined;
 	const queryKey = getFeedQueryKey(filter);
 
 	const isDefaultSpace =
