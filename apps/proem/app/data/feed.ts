@@ -11,6 +11,7 @@ import {
 import { Fingerprint } from "@/app/data/fingerprint";
 import { Post } from "@/app/data/post";
 import { summarise } from "@/app/prompts/summarise-title";
+import { getDebugFlags } from "@/feature-flags/debug-flag";
 import { PaperReadsService } from "@/services/paper-reads-service";
 import { Paper } from "@proemial/data/paper";
 import { Redis } from "@proemial/redis/redis";
@@ -179,7 +180,6 @@ export module Feed {
 	export const fromFeatures = async (
 		params: FetchFeedParams[0],
 		options: FetchFeedParams[1],
-		nocache?: boolean,
 		injectPopularPapers?: boolean,
 		collectionId?: string,
 	) => {
@@ -207,7 +207,6 @@ export module Feed {
 				limit: rankedPaperLimit,
 				offset: offset,
 			},
-			nocache,
 			collectionId,
 		);
 		const feedIds = injectItems({

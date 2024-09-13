@@ -1,7 +1,9 @@
 import { fetchWithAbstract } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
+import { getDebugFlags } from "@/feature-flags/debug-flag";
 import { formatDate } from "@/utils/date";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
 import {
+	RankedPaper,
 	RankedPaperId,
 	rerankAndLimit,
 } from "@proemial/repositories/oa/fingerprinting/rerank";
@@ -54,29 +56,21 @@ const getCachedPapers = unstable_cache(
 export const fetchAndRerankPaperIds = async (
 	{ features, days }: { features?: RankedFeature[]; days?: number },
 	{ limit, offset }: { limit?: number; offset?: number } = {},
-	nocache?: boolean,
 	collectionId?: string,
 ) => {
 	const pageLimit = limit ?? 25;
 	const pageOffset = offset ?? 1;
 
+	const [debug, nocache] = await getDebugFlags();
+	console.log("Cache disabled: ", nocache);
+
 	const cached = nocache
 		? await cacheWorker(features ?? [], days ?? FEED_DEFAULT_DAYS)
 		: await getCachedPapers(features ?? [], days ?? FEED_DEFAULT_DAYS);
 
-	const createdAt = {} as { [date: string]: number };
-	const publishedAt = {} as { [date: string]: number };
-	// biome-ignore lint/complexity/noForEach: <explanation>
-	cached.papers.forEach((p) => {
-		const cdate = formatDate(p.createdAt, "relative");
-		createdAt[cdate] = (createdAt[cdate] ?? 0) + 1;
-
-		const pdate = formatDate(p.publishedAt, "relative");
-		publishedAt[pdate] = (publishedAt[pdate] ?? 0) + 1;
-	});
-	console.log(
-		JSON.stringify({ space: collectionId, fetchWindow: days, createdAt }),
-	);
+	if (debug) {
+		logPaperDistribution(cached.papers, collectionId, days);
+	}
 
 	// Subtract 1 from pageOffset to match the zero index in an array. First page should start at 0
 	const nextOffset = (pageOffset - 1) * pageLimit;
@@ -86,6 +80,22 @@ export const fetchAndRerankPaperIds = async (
 		rankedIds,
 	};
 };
+
+function logPaperDistribution(
+	papers: RankedPaperId[],
+	collectionId?: string,
+	days?: number,
+) {
+	const createdAt = {} as { [date: string]: number };
+
+	papers.forEach((p) => {
+		const cdate = formatDate(p.createdAt, "relative");
+		createdAt[cdate] = (createdAt[cdate] ?? 0) + 1;
+	});
+	console.log(
+		JSON.stringify({ space: collectionId, fetchWindow: days, createdAt }),
+	);
+}
 
 async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 	const constrainedFilter = getOpenAlexFilter(rankedFeatures, true);
