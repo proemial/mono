@@ -103,14 +103,7 @@ export default function FeedItem({
 							"linear-gradient(to right, transparent 0px, black 12px, black calc(100% - 12px), transparent 100%)",
 					}}
 				>
-					{!fingerprint &&
-						tags?.map((tag) => (
-							<FeedItemTag key={tag} tag={tag} linkTo={linkConfig} />
-						))}
-
-					{fingerprint && (
-						<FeatureTags features={fingerprint} linkTo={linkConfig} />
-					)}
+					<FeatureTags features={fingerprint} linkTo={linkConfig} tags={tags} />
 				</div>
 
 				<div className={cn({ "min-h-6": embedded })}>
@@ -134,10 +127,17 @@ export default function FeedItem({
 function FeatureTags({
 	features,
 	linkTo,
-}: { features: RankedPaperFeature[]; linkTo: FeedItemTagLink }) {
-	const sorted = [...features]
-		.filter((f) => !f.irrelevant)
-		.sort((a, b) => typeScore(b.type) - typeScore(a.type));
+	tags,
+}: {
+	features?: RankedPaperFeature[];
+	linkTo: FeedItemTagLink;
+	tags?: string[];
+}) {
+	const sorted = features?.length
+		? [...features]
+				.filter((f) => !f.irrelevant)
+				.sort((a, b) => typeScore(b.type) - typeScore(a.type))
+		: [];
 
 	const deduped = [] as RankedPaperFeature[];
 	for (const feature of sorted) {
@@ -148,7 +148,13 @@ function FeatureTags({
 	}
 
 	if (deduped.length === 0) {
-		return null;
+		return (
+			<>
+				{tags?.slice(0, 3).map((tag) => (
+					<FeedItemTag key={tag} tag={tag} linkTo={linkTo} />
+				))}
+			</>
+		);
 	}
 
 	return (
