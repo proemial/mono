@@ -49,12 +49,6 @@ export const ProemAssistant = () => {
 	const paperId =
 		params.id && isArxivPaperId(params.id) ? undefined : params.id;
 
-	if (
-		DISABLED_ROUTE_FRAGMENTS.some((fragment) => pathname.includes(fragment))
-	) {
-		return undefined;
-	}
-
 	const { data, refetch } = useQuery({
 		queryKey: [PROEM_ASSISTANT_QUERY_KEY, spaceId, paperId, userId],
 		queryFn: () => getAssistantData(spaceId, paperId),
@@ -74,6 +68,12 @@ export const ProemAssistant = () => {
 			clearInterval(interval);
 		};
 	}, [paperId, data, refetch]);
+
+	if (
+		DISABLED_ROUTE_FRAGMENTS.some((fragment) => pathname.includes(fragment))
+	) {
+		return null;
+	}
 
 	const handleOpen = () => {
 		trackHandler(analyticsKeys.assistant.open)();
