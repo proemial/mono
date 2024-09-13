@@ -141,6 +141,7 @@ export module Feed {
 			undefined,
 			injectPopularPapersInFeed,
 		);
+		console.log("features", collectionId, feed.rows.at(0)?.features);
 
 		const paperIds = feed.rows.map(({ paper }) => paper?.id);
 
