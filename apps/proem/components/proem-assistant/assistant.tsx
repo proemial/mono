@@ -92,7 +92,7 @@ export const ProemAssistant = () => {
 	};
 
 	return (
-		<div className="fixed bottom-0 left-0 bg-gradient-to-b pt-5 from-transparent to-background h-[112px] w-full flex justify-center pointer-events-none z-20">
+		<div className="fixed bottom-0 left-0 bg-gradient-to-b pt-5 from-transparent to-background h-[90px] w-full flex justify-center pointer-events-none z-20">
 			<AssistantButton onClick={handleOpen} />
 			<Drawer
 				shouldScaleBackground={false}
