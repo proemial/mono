@@ -17,14 +17,12 @@ const getFeed = async () => {
 	return asInfiniteQueryData(feed);
 };
 
-export const experimental_ppr = true;
-
 export default async function DiscoverPage() {
-	const { userId } = auth();
+	// const { userId } = auth();
 
-	if (userId) {
-		redirect(`${routes.space}/${userId}`);
-	}
+	// if (userId) {
+	// 	redirect(`${routes.space}/${userId}`);
+	// }
 	const queryClient = getQueryClient();
 
 	queryClient.prefetchQuery({
@@ -33,13 +31,15 @@ export default async function DiscoverPage() {
 	});
 
 	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
+		<div>
 			<OnboardingCarousel />
 			<Suspense fallback={<div>Loading...</div>}>
 				<div className="mt-4">
-					<FeedComponent filter={defaultFeedFilter} showThemeColors />
+					<HydrationBoundary state={dehydrate(queryClient)}>
+						<FeedComponent filter={defaultFeedFilter} showThemeColors />
+					</HydrationBoundary>
 				</div>
 			</Suspense>
-		</HydrationBoundary>
+		</div>
 	);
 }

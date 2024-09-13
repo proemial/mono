@@ -17,7 +17,7 @@ const nextConfig = {
 		"@proemial/utils",
 	],
 	experimental: {
-    ppr: 'incremental',
+    ppr: true,
 	},
 	async redirects() {
 		return [

@@ -31,6 +31,7 @@ export const EmbedableLink = ({
 
 	return (
 		<Link
+			prefetch={false}
 			href={urls.embedUrl ?? urls.pageUrl}
 			onClick={() => {
 				trackHandler(analyticsKeys.feed.click.card, {
