@@ -10,7 +10,10 @@ export async function GET(request: NextRequest) {
 	const offset = Number(searchParams.get("offset")) || 1;
 
 	if (institutionId) {
-		const feed = await Feed.fromInstitution(institutionId, { offset });
+		const feed = await Feed.fromInstitution(institutionId, {
+			offset,
+			limit: 10,
+		});
 		return NextResponse.json(feed);
 	}
 

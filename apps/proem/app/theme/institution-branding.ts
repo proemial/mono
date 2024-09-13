@@ -1,6 +1,5 @@
 import * as brands from "@proemial/repositories/oa/institutions/branding.json";
-import { getRandomTheme, Theme } from "./color-theme";
-import { get } from "http";
+import { Theme, getRandomTheme } from "./color-theme";
 
 export type Branding = {
 	logo?: {

@@ -12,7 +12,7 @@ import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 
 export const fetchFeedByInstitutionWithPostsAndReaders = async (
 	params: { id: string },
-	options: Omit<FetchFeedParams[1], "limit">,
+	options: FetchFeedParams[1],
 	spaceId: string | undefined,
 ) => {
 	const feedByInstitution = await fetchFeedByInstitution(params, options);
@@ -50,12 +50,11 @@ type FetchFeedParams = Required<Parameters<typeof fetchPapersByField>>;
 
 async function fetchFeedByInstitution(
 	params: { id: string },
-	options: Omit<FetchFeedParams[1], "limit">,
+	options: FetchFeedParams[1],
 ) {
 	const nextOffset = (options?.offset ?? 1) + 1;
 	const { meta, papers } = await fetchPapersByInstitution(params, {
 		...options,
-		limit: 5,
 	});
 
 	if (!papers.length) {

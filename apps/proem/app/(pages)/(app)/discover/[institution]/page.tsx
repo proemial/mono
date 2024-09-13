@@ -18,8 +18,10 @@ import { FollowButton } from "./follow";
 import { OrgSelector } from "./org-selector";
 
 const getFeed = async (institutionId: string) => {
-	const offset = 1;
-	const feed = await Feed.fromInstitution(institutionId, { offset });
+	const feed = await Feed.fromInstitution(institutionId, {
+		offset: 1,
+		limit: 10,
+	});
 
 	return asInfiniteQueryData(feed);
 };
