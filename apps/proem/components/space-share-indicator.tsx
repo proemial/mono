@@ -1,14 +1,20 @@
-import { getOrgMemberships } from "@/utils/auth";
+import { Organisation } from "@/app/data/organisation";
 import { Collection } from "@proemial/data/neon/schema";
 import { Lock01, LockUnlocked01 } from "@untitled-ui/icons-react";
 
 type Props = {
 	shared: Collection["shared"];
+	organisationId?: string | null;
 };
 
-export const SpaceShareIndicator = async ({ shared }: Props) => {
-	const orgMemberships = await getOrgMemberships();
-	const org = orgMemberships[0]?.organization;
+export const SpaceShareIndicator = async ({
+	shared,
+	organisationId,
+}: Props) => {
+	const orgMemberships = organisationId
+		? await Organisation.getOrgMemberships(organisationId)
+		: [];
+	const organisation = orgMemberships[0]?.organization;
 
 	switch (shared) {
 		case "private":
@@ -21,7 +27,7 @@ export const SpaceShareIndicator = async ({ shared }: Props) => {
 		case "organization":
 			return (
 				<div className="flex gap-1 items-center">
-					<div className="text-sm">{org?.name ?? "Organization"}</div>
+					<div className="text-sm">{organisation?.name ?? "Organization"}</div>
 					<Lock01 className="size-4 opacity-75" />
 				</div>
 			);

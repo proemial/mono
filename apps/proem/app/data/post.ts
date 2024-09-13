@@ -1,3 +1,4 @@
+import { User } from "@/app/data/user";
 import { PostRepository } from "@proemial/data/repository/post";
 import { Organisation } from "./organisation";
 
@@ -30,7 +31,7 @@ export module Post {
 			orgMemberIds,
 		);
 		const authorIds = posts.map((post) => post.authorId);
-		const authors = await Organisation.getUsers(authorIds);
+		const authors = await User.getUsers(authorIds);
 		return posts.map((post) => {
 			const author = authors.find((user) => user.id === post.authorId);
 			return {

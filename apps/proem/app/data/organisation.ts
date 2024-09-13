@@ -2,43 +2,21 @@ import {
 	OrganizationMembershipPublicUserData,
 	clerkClient,
 } from "@clerk/nextjs/server";
+import { unstable_cache } from "next/cache";
+
+const CLERK_CACHE_TTL = 60; // In seconds
 
 export module Organisation {
 	const getMemberByOrganisationId = async (organizationId: string) => {
-		// todo: handle pagination
-		return clerkClient().organizations.getOrganizationMembershipList({
-			organizationId,
-		});
-	};
-
-	const getUserById = async (userId: string) => {
-		return clerkClient().users.getUser(userId);
-	};
-
-	const getUsersByIds = async (...userIds: string[]) => {
-		return clerkClient().users.getUserList({
-			userId: userIds,
-		});
-	};
-
-	export const getUser = async (userId: string) => {
-		if (!userId) return undefined;
-		try {
-			return await getUserById(userId);
-		} catch (error) {
-			console.error("Error fetching user from auth provieder", error);
-		}
-	};
-
-	export const getUsers = async (userIds: string[]) => {
-		if (userIds.length === 0) return [];
-		try {
-			const { data: users } = await getUsersByIds(...userIds);
-			return users;
-		} catch (error) {
-			console.error("Error fetching users from auth provider", error);
-			return [];
-		}
+		return unstable_cache(
+			async () =>
+				// todo: handle pagination
+				clerkClient().organizations.getOrganizationMembershipList({
+					organizationId,
+				}),
+			[organizationId],
+			{ revalidate: CLERK_CACHE_TTL },
+		)();
 	};
 
 	export const getOrgMembersUserData = async (organisationId?: string) => {

@@ -1,4 +1,5 @@
-import { getOrgMembersUserData, getUser } from "@/utils/auth";
+import { Organisation } from "@/app/data/organisation";
+import { User } from "@/app/data/user";
 import { Collection } from "@proemial/data/neon/schema";
 import { Avatar, AvatarFallback, AvatarImage } from "@proemial/shadcn-ui";
 import { Plus } from "@untitled-ui/icons-react";
@@ -10,7 +11,7 @@ type Props = {
 
 export const SpaceContributorsIndicator = async ({ collection }: Props) => {
 	const { ownerId, shared } = collection;
-	const ownerUser = await getUser(ownerId);
+	const ownerUser = await User.getUser(ownerId);
 	if (!ownerUser) return <div />;
 
 	switch (shared) {
@@ -31,7 +32,7 @@ export const SpaceContributorsIndicator = async ({ collection }: Props) => {
 			);
 		}
 		case "organization": {
-			const orgMembersUserData = await getOrgMembersUserData();
+			const orgMembersUserData = await Organisation.getOrgMembersUserData();
 			return (
 				<div className="flex items-center gap-2">
 					<div className="flex items-center gap-1">

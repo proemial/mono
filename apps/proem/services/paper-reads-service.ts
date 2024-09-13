@@ -1,5 +1,5 @@
 import { ANONYMOUS_USER_ID } from "@/app/constants";
-import { getUsers } from "@/utils/auth";
+import { User } from "@/app/data/user";
 import { auth } from "@clerk/nextjs/server";
 import { PaperRead } from "@proemial/data/neon/schema";
 import { ensurePaperExistsInDb } from "@proemial/data/repository/paper";
@@ -66,7 +66,7 @@ export const PaperReadsService = {
 	getReaders: async (paperId: PaperRead["paperId"]) => {
 		const paperReads = await PaperReadsService.getAllByPaperId(paperId);
 		const readerIds = paperReads.map((paperRead) => paperRead.userId);
-		const readers = (await getUsers(readerIds)).map(
+		const readers = (await User.getUsers(readerIds)).map(
 			({ id, firstName, lastName, imageUrl }) => ({
 				id,
 				firstName,
