@@ -1,4 +1,3 @@
-import { ProemAssistant } from "@/components/proem-assistant/assistant";
 import { ReactNode } from "react";
 
 type Props = {
@@ -6,10 +5,5 @@ type Props = {
 };
 
 export default function Layout({ children }: Props) {
-	return (
-		<>
-			{children}
-			<ProemAssistant />
-		</>
-	);
+	return <>{children}</>;
 }
