@@ -60,7 +60,6 @@ export const fetchAndRerankPaperIds = async (
 	const pageLimit = limit ?? 25;
 	const pageOffset = offset ?? 1;
 
-
 	const cached = nocache
 		? await cacheWorker(features ?? [], days ?? FEED_DEFAULT_DAYS)
 		: await getCachedPapers(features ?? [], days ?? FEED_DEFAULT_DAYS);
@@ -76,20 +75,8 @@ export const fetchAndRerankPaperIds = async (
 		publishedAt[pdate] = (publishedAt[pdate] ?? 0) + 1;
 	});
 	console.log(
-		JSON.stringify({ collectionId, fetchWindow: days, createdAt, publishedAt }),
+		JSON.stringify({ space: collectionId, fetchWindow: days, createdAt }),
 	);
-
-	// console.log(
-	// 	collectionId,
-	// 	JSON.stringify(
-	// 		cached.papers.map((p) => ({
-	// 			createdAt: p.createdAt,
-	// 			publishedAt: p.publishedAt,
-	// 			score: p.filterMatchScore,
-	// 			id: p.id,
-	// 		})),
-	// 	),
-	// );
 
 	// Subtract 1 from pageOffset to match the zero index in an array. First page should start at 0
 	const nextOffset = (pageOffset - 1) * pageLimit;
