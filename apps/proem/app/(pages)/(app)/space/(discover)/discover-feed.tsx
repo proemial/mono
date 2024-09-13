@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
 
 const getFeed = async () => {
 	const offset = 1;
-	const feed = await Feed.fromPublic(offset);
+	const feed = await Feed.fromPublic({ offset, limit: 10 });
 
 	return asInfiniteQueryData(feed);
 };

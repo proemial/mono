@@ -19,6 +19,6 @@ export async function GET(request: NextRequest) {
 		return NextResponse.json(feed);
 	}
 
-	const feed = await Feed.fromPublic(offset);
+	const feed = await Feed.fromPublic({ offset, limit: 10 });
 	return NextResponse.json(feed);
 }

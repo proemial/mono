@@ -91,13 +91,13 @@ export module Feed {
 		return items;
 	};
 
-	export const fromPublic = (offset: number) => {
+	export const fromPublic = (options: FetchFeedParams[1]) => {
 		return fetchFeedByFeaturesWithPostsAndReaders(
 			{
 				features: defaultFeedFilter.features,
 				days: defaultFeedFilter.days,
 			},
-			{ offset },
+			options,
 			false,
 			undefined,
 		);
