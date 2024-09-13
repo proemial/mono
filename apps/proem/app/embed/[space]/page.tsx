@@ -2,6 +2,7 @@ import FeedItem from "@/app/(pages)/(app)/space/(discover)/feed-item";
 import { getBookmarkedPapersByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarked-papers-by-collection-id";
 import { FEED_DEFAULT_DAYS } from "@/app/data/fetch-by-features";
 import { fetchFeedByFeaturesWithPostsAndReaders } from "@/app/data/fetch-feed";
+import { ProemLogo } from "@/components/icons/brand/logo";
 import { CollectionService } from "@/services/collection-service";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { fetchFingerprints } from "@proemial/repositories/oa/fingerprinting/fetch-fingerprints";
@@ -60,6 +61,9 @@ export default async function EmbedPage({
 						readonly={true}
 						embedded={true}
 					/>
+					<div className="relative bottom-4 flex justify-end">
+						<ProemLogo className="w-4 h-4" />
+					</div>
 				</div>
 			))}
 		</div>
