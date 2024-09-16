@@ -32,8 +32,8 @@ export const EngagementIndicator = ({
 	const questions = formatQuestionsAsked(posts.length);
 
 	const userAvatars = useMemo(
-		() => getUserAvatars(posts, readers, maxAvatars),
-		[readers, posts, maxAvatars],
+		() => getUserAvatars(readers, maxAvatars),
+		[readers, maxAvatars],
 	);
 
 	const handleClick = () => {
@@ -87,35 +87,23 @@ const formatReadCount = (readers: BasicReaderUserData[]) => {
 	return count === 1 ? "1 view" : `${count} views`;
 };
 
-const getUserAvatars = (
-	posts: PostWithCommentsAndAuthor[],
-	readers: BasicReaderUserData[],
-	maxAvatars: number,
-) => {
-	const nonAnonPostAuthors = posts
-		.filter((p) => p.authorId !== ANONYMOUS_USER_ID)
-		.map((p) => p.author);
+const getUserAvatars = (readers: BasicReaderUserData[], maxAvatars: number) => {
 	const nonAnonReaders = readers.filter((r) => r.id !== ANONYMOUS_USER_ID);
-	const noOfAnonPostAuthors = posts.filter(
-		(p) => p.authorId === ANONYMOUS_USER_ID,
-	).length;
 	const noOfAnonReads =
 		readers.find((r) => r.id === ANONYMOUS_USER_ID)?.readCount ?? 0;
 
-	const uniqueRealUsers = [...nonAnonPostAuthors, ...nonAnonReaders]
-		.filter((user, index, users) => {
-			const duplicateIndex = users.findIndex((a) => a.id === user.id);
+	const distinctRealReaders = nonAnonReaders
+		.filter((reader, index, readers) => {
+			const duplicateIndex = readers.findIndex((a) => a.id === reader.id);
 			return index === duplicateIndex;
 		})
 		.sort((a, b) => a.firstName?.localeCompare(b.firstName ?? "") ?? 0);
 
 	const minArrayLength =
-		MAX_ANONYMOUS_AVATARS - uniqueRealUsers.length < 0
+		MAX_ANONYMOUS_AVATARS - distinctRealReaders.length < 0
 			? 0
-			: MAX_ANONYMOUS_AVATARS - uniqueRealUsers.length;
-	const distinctAnonymousUsers = Array(
-		Math.min(minArrayLength, noOfAnonPostAuthors + noOfAnonReads),
-	)
+			: MAX_ANONYMOUS_AVATARS - distinctRealReaders.length;
+	const distinctAnonymousUsers = Array(Math.min(minArrayLength, noOfAnonReads))
 		.fill(null)
 		.map(() => ({
 			id: ANONYMOUS_USER_ID,
@@ -124,6 +112,6 @@ const getUserAvatars = (
 			imageUrl: undefined,
 		}));
 
-	const combined = [...distinctAnonymousUsers, ...uniqueRealUsers];
+	const combined = [...distinctAnonymousUsers, ...distinctRealReaders];
 	return combined.slice(combined.length - maxAvatars, combined.length);
 };
