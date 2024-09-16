@@ -123,7 +123,11 @@ export function Feed({
 						);
 					}
 
-					return <div className="py-3">{item}</div>;
+					return (
+						<div className="border border-gray-200 hover:shadow-sm p-3.5 rounded-2xl">
+							{item}
+						</div>
+					);
 				}}
 			/>
 		</div>
