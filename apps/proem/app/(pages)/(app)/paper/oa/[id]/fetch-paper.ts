@@ -126,7 +126,15 @@ export const fetchPapersByInstitution = async (
 	const pageLimit = limit ?? 25;
 	const pageOffset = offset ?? 1;
 	const select = openAlexFields.all;
-	const oaFilter = `authorships.institutions.id:${id}`;
+	const oaFilter = [
+		"type:types/preprint|types/article",
+		"has_abstract:true",
+		`authorships.institutions.id:${id}`,
+		"language:en",
+		"open_access.is_oa:true",
+	]
+		.filter((f) => !!f)
+		.join(",");
 
 	const sort = "from_created_date:desc";
 	const url = `${oaBaseUrl}?${oaBaseArgs}&select=${select}&filter=${oaFilter}&sort=${sort}&per_page=${pageLimit}&page=${pageOffset}`;
