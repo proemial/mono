@@ -26,7 +26,7 @@ export const EngagementIndicator = ({
 }: Props) => {
 	const { id: paperId } = useParams<{ id?: string }>();
 	const { openAssistant } = useAssistant();
-	const clickable = paperId && posts.length > 0;
+	const clickable = Boolean(paperId);
 
 	const readCount = formatReadCount(readers);
 	const questions = formatQuestionsAsked(posts.length);
