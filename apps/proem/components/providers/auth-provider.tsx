@@ -8,5 +8,12 @@ type Props = {
 };
 
 export const AuthProvider = ({ children }: Props) => {
-	return <ClerkProvider>{children}</ClerkProvider>;
+	return (
+		<ClerkProvider
+			signInForceRedirectUrl="/sso-callback"
+			signUpForceRedirectUrl="/sso-callback"
+		>
+			{children}
+		</ClerkProvider>
+	);
 };
