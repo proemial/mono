@@ -8,7 +8,12 @@ type MainProps = {
 
 export const Main = ({ children, className }: MainProps) => {
 	return (
-		<main className={cn("w-full px-4 flex flex-col flex-grow z-10", className)}>
+		<main
+			className={cn(
+				"w-full px-4 flex flex-col flex-grow z-10 pb-16",
+				className,
+			)}
+		>
 			{children}
 		</main>
 	);
