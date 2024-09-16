@@ -99,7 +99,7 @@ export function ChatArticle({
 								<div>
 									<Heading01 className="size-2.5" />
 								</div>
-								<Header5 className="truncate pr-6">{paper.data.title}</Header5>
+								<div className="truncate pr-6">{paper.data.title}</div>
 							</div>
 
 							<div className="flex items-center gap-2.5">
@@ -156,12 +156,17 @@ export function ChatArticle({
 			{paper && (
 				<>
 					<Trackable trackingKey={analyticsKeys.read.click.fullPaper}>
-						<div className="flex items-center justify-center w-full">
-							{/* href={paper.data.primary_location?.landing_page_url} */}
-							<Button className="mx-auto my-4 gap-2">
-								<span>View full article</span>{" "}
-								<LinkExternal02 className="size-4" />
-							</Button>
+						<div className="flex items-center justify-center w-full my-8">
+							<a
+								href={paper.data.primary_location?.landing_page_url}
+								target="_blank"
+								rel="noreferrer"
+							>
+								<Button className="gap-2">
+									<span>View full article</span>{" "}
+									<LinkExternal02 className="size-4" />
+								</Button>
+							</a>
 						</div>
 					</Trackable>
 				</>
