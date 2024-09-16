@@ -101,6 +101,7 @@ export const ProemAssistant = () => {
 				onOpenChange={handleOpenChange}
 				snapPoints={[snapPoint]}
 				activeSnapPoint={snapPoint}
+				closeThreshold={0.1}
 			>
 				<AssistantContent spaceId={spaceId} paperId={paperId} data={data} />
 			</Drawer>
