@@ -38,7 +38,7 @@ export const CollectionListItem = ({
 }: Props) => {
 	const handleCollectionDelete = () => {
 		if (!editable) return;
-		trackHandler(analyticsKeys.collection.deleteFromMenuConfirmation);
+		trackHandler(analyticsKeys.collection.deleteFromMenuConfirmation)();
 		editable.onDelete(collection.id);
 	};
 
@@ -47,9 +47,7 @@ export const CollectionListItem = ({
 			<Link
 				prefetch={false}
 				href={`${routes.space}/${collection.id}`}
-				onClick={() => {
-					trackHandler(analyticsKeys.collection.openFromMenu);
-				}}
+				onClick={trackHandler(analyticsKeys.collection.openFromMenu)}
 			>
 				<DrawerClose className="flex gap-2 items-center hover:opacity-85 active:opacity-75 duration-200">
 					<Folder className="size-4 opacity-85" />
@@ -69,9 +67,9 @@ export const CollectionListItem = ({
 						trigger={
 							<IconButton
 								title="Edit"
-								onClick={() => {
-									trackHandler(analyticsKeys.collection.openEditFormFromMenu);
-								}}
+								onClick={trackHandler(
+									analyticsKeys.collection.openEditFormFromMenu,
+								)}
 							>
 								<Edit03 className="size-4" />
 							</IconButton>
@@ -92,9 +90,9 @@ export const CollectionListItem = ({
 						<DialogTrigger>
 							<IconButton
 								title="Delete"
-								onClick={() => {
-									trackHandler(analyticsKeys.collection.openDeleteFormFromMenu);
-								}}
+								onClick={trackHandler(
+									analyticsKeys.collection.openDeleteFormFromMenu,
+								)}
 							>
 								<Trash01 className="size-4" />
 							</IconButton>
@@ -115,11 +113,9 @@ export const CollectionListItem = ({
 								<DialogClose asChild>
 									<Button
 										className="w-[80px] gap-1"
-										onClick={() =>
-											trackHandler(
-												analyticsKeys.collection.deleteFromMenuCancelation,
-											)
-										}
+										onClick={trackHandler(
+											analyticsKeys.collection.deleteFromMenuCancelation,
+										)}
 									>
 										<X className="size-4 opacity-75" />
 										No

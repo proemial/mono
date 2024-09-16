@@ -47,7 +47,7 @@ export const EditCollection = ({ collection, onSubmit, orgName }: Props) => {
 	const showOrgSharingOption = orgName || collection.shared === "organization";
 
 	const handleSubmit = (collection: Collection) => {
-		trackHandler(analyticsKeys.collection.editFormSubmit);
+		trackHandler(analyticsKeys.collection.editFormSubmit)();
 		onSubmit(collection);
 	};
 

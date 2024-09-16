@@ -21,7 +21,7 @@ export const CloseAction = ({ target, iconOverride }: Props) => {
 	const router = useRouter();
 
 	const handleAction = () => {
-		trackHandler(analyticsKeys.ui.header.click.close);
+		trackHandler(analyticsKeys.ui.header.click.close)();
 		if (target) {
 			router.push(target);
 		} else {

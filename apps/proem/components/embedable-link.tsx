@@ -32,11 +32,9 @@ export const EmbedableLink = ({
 	return (
 		<Link
 			href={urls.embedUrl ?? urls.pageUrl}
-			onClick={() => {
-				trackHandler(analyticsKeys.feed.click.card, {
-					feedType,
-				});
-			}}
+			onClick={trackHandler(analyticsKeys.feed.click.card, {
+				feedType,
+			})}
 			target={urls.embedUrl ? "_blank" : undefined}
 		>
 			{children}

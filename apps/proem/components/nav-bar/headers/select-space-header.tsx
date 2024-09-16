@@ -30,7 +30,7 @@ export const SelectSpaceHeader = ({
 	const router = useRouter();
 
 	const handleValueChange = (id: string) => {
-		trackHandler(analyticsKeys.ui.header.click.changeSpace);
+		trackHandler(analyticsKeys.ui.header.click.changeSpace)();
 		const selectedCollection = collections.find((c) => c.id === id);
 		const route = `/space/${id}`;
 		onRouteChange?.({ url: route, name: selectedCollection?.name });

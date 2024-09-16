@@ -17,7 +17,7 @@ export const GoToSpaceAction = () => {
 	const { collectionId } = useParams<{ collectionId?: string }>();
 
 	const handleAction = () => {
-		trackHandler(analyticsKeys.ui.header.click.back);
+		trackHandler(analyticsKeys.ui.header.click.back)();
 		if (collectionId) {
 			router.push(`${routes.space}/${collectionId}`);
 		} else {

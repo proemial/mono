@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { NewCollection, CollectionSchema } from "@proemial/data/neon/schema";
+import { CollectionSchema, NewCollection } from "@proemial/data/neon/schema";
 import {
 	Button,
 	Form,
@@ -41,7 +41,7 @@ export const CreateCollection = ({ collection, onSubmit, noDialog }: Props) => {
 		: "";
 
 	const handleSubmit = (collection: NewCollection) => {
-		trackHandler(analyticsKeys.collection.createFormSubmit);
+		trackHandler(analyticsKeys.collection.createFormSubmit)();
 		onSubmit(collection);
 	};
 

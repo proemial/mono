@@ -66,7 +66,7 @@ export const ModelSelector = ({
 			"https://script.google.com/macros/s/AKfycbwY0a6mYqNvcOxtgseR2mzLswCdZcmJCx-3cGbepbZjDu4X2aSXp43VFZYegMKeDRuh/exec";
 		try {
 			setSubscribeResponse("loading");
-			trackHandler(trackingKeys.submit.modelEmail);
+			trackHandler(trackingKeys.submit.modelEmail)();
 			const result = await fetch(url, {
 				method: "POST",
 				headers: { "Content-Type": "text/plain" },

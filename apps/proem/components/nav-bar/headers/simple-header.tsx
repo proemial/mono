@@ -13,9 +13,7 @@ export const SimpleHeader = ({ title }: Props) => {
 	return (
 		<div
 			className="text-lg capitalize"
-			onClick={() => {
-				trackHandler(analyticsKeys.ui.header.click.simple);
-			}}
+			onClick={trackHandler(analyticsKeys.ui.header.click.simple)}
 		>
 			{title}
 		</div>
