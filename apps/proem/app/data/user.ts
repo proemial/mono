@@ -1,8 +1,7 @@
 import { clerkClient } from "@clerk/nextjs/server";
-import { getCollectionsByCollectionId } from "@proemial/data/repository/collection";
 import { unstable_cache } from "next/cache";
 
-const CLERK_CACHE_TTL = 60; // In seconds
+const CLERK_CACHE_TTL = 60 * 60 * 24; // 1 day
 
 export module User {
 	const getUserById = async (userId: string) =>
