@@ -35,7 +35,7 @@ export default async function ({ params: { collectionId }, children }: Props) {
 				<div className="flex flex-col gap-4">
 					<div className="flex flex-col">
 						<Header2>{collection.name}</Header2>
-						<div className="break-words markdown text-lg">
+						<div className="break-words markdown">
 							<Markdown>{collection.description ?? ""}</Markdown>
 						</div>
 					</div>
