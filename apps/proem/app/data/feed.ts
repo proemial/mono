@@ -75,20 +75,16 @@ export module Feed {
 	// TODO! remove hardcoded reference to OpenAlexPaper
 	export type Row = z.infer<typeof Row> & { paper: OpenAlexPaper };
 
-	const injectItems = <
-		TRankedItems extends any[],
-		TInjectedItems extends any[],
+	export const injectItems = <
+		TRankedItems extends { id: string }[],
+		TInjectedItems extends { id: string }[],
 	>({
 		rankedItems,
 		injectedItems,
 	}: { rankedItems: TRankedItems; injectedItems: TInjectedItems }) => {
-		const items = [...rankedItems];
-
-		for (const item of injectedItems) {
-			items.splice(Math.floor(Math.random() * items.length), 0, item);
-		}
-
-		return items;
+		return [...rankedItems, ...injectedItems].sort((a, b) =>
+			a.id.localeCompare(b.id),
+		);
 	};
 
 	export const fromPublic = (options: FetchFeedParams[1]) => {
