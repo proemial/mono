@@ -65,17 +65,17 @@ export const fetchAndRerankPaperIds = async (
 		: await getCachedPapers(features ?? [], days ?? FEED_DEFAULT_DAYS);
 
 	const createdAt = {} as { [date: string]: number };
-	const publishedAt = {} as { [date: string]: number };
-	// biome-ignore lint/complexity/noForEach: <explanation>
 	cached.papers.forEach((p) => {
 		const cdate = formatDate(p.createdAt, "relative");
 		createdAt[cdate] = (createdAt[cdate] ?? 0) + 1;
-
-		const pdate = formatDate(p.publishedAt, "relative");
-		publishedAt[pdate] = (publishedAt[pdate] ?? 0) + 1;
 	});
 	console.log(
-		JSON.stringify({ space: collectionId, fetchWindow: days, createdAt }),
+		JSON.stringify({
+			space: collectionId,
+			fetchWindow: days,
+			fetchedAt: cached.meta.fetchedAt,
+			createdAt,
+		}),
 	);
 
 	// Subtract 1 from pageOffset to match the zero index in an array. First page should start at 0
@@ -90,6 +90,7 @@ export const fetchAndRerankPaperIds = async (
 async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 	const constrainedFilter = getOpenAlexFilter(rankedFeatures, true);
 	const { papers, meta } = await getAllFor(constrainedFilter, days, MAX_PAGES);
+	const fetchedAt = dayjs().format("YYYY-MM-DD HH:mm");
 
 	const pageCount = Math.ceil(meta.count / PER_PAGE);
 	if (pageCount < MAX_PAGES) {
@@ -114,13 +115,17 @@ async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 				count,
 				page: 1,
 				per_page: PER_PAGE * MAX_PAGES,
+				fetchedAt,
 			},
 			papers: merge(papers, morePapers),
 		};
 	}
 	console.log("Identified", meta.count, "constrained matching papers");
 
-	return { meta, papers };
+	return {
+		meta: { ...meta, fetchedAt },
+		papers: papers,
+	};
 }
 
 function merge(papers: OpenAlexPaper[], morePapers: OpenAlexPaper[]) {
