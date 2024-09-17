@@ -2,13 +2,6 @@ import { User } from "@/app/data/user";
 import { PostRepository } from "@proemial/data/repository/post";
 import { Organisation } from "./organisation";
 
-export type UserData = {
-	userId: string;
-	firstName: string | null;
-	lastName: string | null;
-	imageUrl?: string;
-};
-
 export module Post {
 	export const getPostsWithCommentsAndAuthors = async ({
 		spaceId,

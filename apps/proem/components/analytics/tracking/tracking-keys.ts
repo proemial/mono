@@ -10,7 +10,7 @@ export function trackHandler(
 	};
 }
 
-export const COLLECTION_FROM_OPTIONS = {
+const COLLECTION_FROM_OPTIONS = {
 	fromFeed: "from_feed",
 	fromAsk: "from_ask",
 	fromRead: "from_read",
@@ -226,9 +226,3 @@ export const vercelRegions: Record<string, string> = {
 };
 
 export type TrackingKey = ObjectValues<typeof analyticsKeys> | string;
-export type AddPaperToCollectionTrackingKey = ObjectValues<
-	typeof analyticsKeys.collection.addPaper
->;
-export type RemovePaperToCollectionTrackingKey = ObjectValues<
-	typeof analyticsKeys.collection.removePaper
->;

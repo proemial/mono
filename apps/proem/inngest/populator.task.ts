@@ -59,7 +59,7 @@ export const streamCacheUpdate = {
 	},
 };
 
-export async function populateCache(
+async function populateCache(
 	{ id, type }: { id: string; type: "user" | "space" },
 	event?: { name?: string },
 ) {
