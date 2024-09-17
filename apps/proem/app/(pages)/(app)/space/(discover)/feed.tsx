@@ -124,7 +124,7 @@ export function Feed({
 					}
 
 					return (
-						<div className="border border-gray-200 hover:shadow-sm p-3.5 rounded-2xl">
+						<div className="bg-white hover:shadow p-3.5 rounded-2xl">
 							{item}
 						</div>
 					);
