@@ -34,7 +34,6 @@ export default async function ({ params: { collectionId }, children }: Props) {
 			{!isDefaultCollection && (
 				<div className="flex flex-col gap-4">
 					<div className="flex flex-col">
-						<Header2>{collection.name}</Header2>
 						<div className="break-words markdown">
 							<Markdown>{collection.description ?? ""}</Markdown>
 						</div>

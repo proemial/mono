@@ -42,7 +42,7 @@ export const SelectSpaceHeader = ({
 			<Select onValueChange={handleValueChange} value={selectedSpace}>
 				<SelectTrigger
 					data-placeholder="data placeholder"
-					className="flex gap-2 text-lg border-none bg-transparent focus:ring-0 focus:ring-offset-0"
+					className="flex gap-2 text-2xl border-none bg-transparent focus:ring-0 focus:ring-offset-0"
 				>
 					<SelectValue
 						placeholder={collections.find((c) => c.id === selectedSpace)?.name}
