@@ -1,22 +1,18 @@
 import { fetchWithAbstract } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { formatDate } from "@/utils/date";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
-import {
-	RankedPaperId,
-	rerankAndLimit,
-} from "@proemial/repositories/oa/fingerprinting/rerank";
+import { rerankAndLimit } from "@proemial/repositories/oa/fingerprinting/rerank";
 import {
 	OpenAlexMeta,
 	OpenAlexPaper,
 	oaBaseArgs,
 	oaBaseUrl,
 } from "@proemial/repositories/oa/models/oa-paper";
-import { sha256 } from "@proemial/utils/string";
 import dayjs from "dayjs";
 import { unstable_cache } from "next/cache";
 
 // Default number of days to fetch papers for
-export const FEED_DEFAULT_DAYS = 5;
+export const FEED_DEFAULT_DAYS = 7;
 
 // OpenAlex has a limit of 100 features in a query
 const MAX_FEATURES_IN_QUERY = 100;
@@ -138,7 +134,7 @@ function merge(papers: OpenAlexPaper[], morePapers: OpenAlexPaper[]) {
 async function getAllFor(filter: string, days: number, maxPages: number) {
 	const today = dayjs().format("YYYY-MM-DD");
 	const from = dayjs(today)
-		.subtract(days + 1, "day")
+		.subtract(days - 1, "day")
 		.format("YYYY-MM-DD");
 
 	const oaFilter = [
