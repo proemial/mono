@@ -123,8 +123,8 @@ export function TopNavigation() {
 							<SimpleHeader title={PERSONAL_DEFAULT_COLLECTION_NAME} />
 						) : (
 							<SelectSpaceHeader
-								collections={collections}
-								selectedSpace={selectedSpace}
+								spaces={collections}
+								selectedSpaceId={selectedSpace}
 								onRouteChange={(url) =>
 									startTransition(() => setOptimisticUrl(url))
 								}
