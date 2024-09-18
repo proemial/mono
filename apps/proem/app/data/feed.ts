@@ -133,6 +133,7 @@ export module Feed {
 			{ features, days: FEED_DEFAULT_DAYS },
 			options,
 			injectPopularPapersInFeed,
+			collectionId,
 		);
 
 		const paperIds = feed.rows.map(({ paper }) => paper?.id);
