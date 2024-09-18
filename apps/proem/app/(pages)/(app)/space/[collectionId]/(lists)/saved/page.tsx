@@ -90,7 +90,10 @@ export default async function SavedPage({
 					);
 				}
 				return (
-					<div className="py-2" key={paper.id}>
+					<div
+						className="bg-white hover:shadow p-3.5 rounded-2xl"
+						key={paper.id}
+					>
 						{item}
 					</div>
 				);

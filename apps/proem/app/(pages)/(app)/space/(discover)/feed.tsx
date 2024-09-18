@@ -121,7 +121,11 @@ export function Feed({
 						);
 					}
 
-					return <div className="py-3">{item}</div>;
+					return (
+						<div className="bg-white hover:shadow p-3.5 rounded-2xl">
+							{item}
+						</div>
+					);
 				}}
 			/>
 		</div>

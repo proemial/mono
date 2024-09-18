@@ -32,19 +32,18 @@ export default async function ({ params: { collectionId }, children }: Props) {
 	return (
 		<div className="flex flex-col gap-2.5 grow group">
 			{!isDefaultCollection && (
-				<div className="flex flex-col gap-2 pt-10">
-					<div className="flex flex-col gap-3">
-						<Header2 className="break-words markdown">
+				<div className="flex flex-col gap-4">
+					<div className="flex flex-col">
+						<div className="break-words markdown">
 							<Markdown>{collection.description ?? ""}</Markdown>
-						</Header2>
-
-						<div className="flex items-center justify-between gap-2">
-							<SpaceContributorsIndicator collection={collection} />
-							<SpaceShareIndicator
-								shared={collection.shared}
-								organisationId={orgId}
-							/>
 						</div>
+					</div>
+					<div className="flex items-center justify-between gap-2 mb-2">
+						<SpaceContributorsIndicator collection={collection} />
+						<SpaceShareIndicator
+							shared={collection.shared}
+							organisationId={orgId}
+						/>
 					</div>
 
 					<TabBar
