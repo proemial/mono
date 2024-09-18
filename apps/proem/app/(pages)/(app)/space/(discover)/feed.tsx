@@ -51,8 +51,6 @@ export function Feed({
 	showThemeColors = false,
 }: FeedProps) {
 	const debug = useSearchParams().get("debug");
-	const nocache = useSearchParams().get("nocache");
-	const days = Number(useSearchParams().get("days")) || undefined;
 	const queryKey = getFeedQueryKey(filter);
 
 	const isDefaultSpace =
