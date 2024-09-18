@@ -94,8 +94,6 @@ export module Feed {
 				days: defaultFeedFilter.days,
 			},
 			options,
-			false,
-			undefined,
 		);
 	};
 
@@ -134,7 +132,6 @@ export module Feed {
 		const feed = await Feed.fromFeatures(
 			{ features, days: FEED_DEFAULT_DAYS },
 			options,
-			undefined,
 			injectPopularPapersInFeed,
 		);
 
@@ -175,7 +172,6 @@ export module Feed {
 	export const fromFeatures = async (
 		params: FetchFeedParams[0],
 		options: FetchFeedParams[1],
-		nocache?: boolean,
 		injectPopularPapers?: boolean,
 		collectionId?: string,
 	) => {
@@ -203,7 +199,6 @@ export module Feed {
 				limit: rankedPaperLimit,
 				offset: offset,
 			},
-			nocache,
 			collectionId,
 		);
 		const feedIds = injectItems({

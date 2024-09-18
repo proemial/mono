@@ -3,6 +3,7 @@ import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { Feed } from "@/app/data/feed";
 import { getQueryClient } from "@/components/providers/get-query-client";
+import { getDebugFlags } from "@/feature-flags/debug-flag";
 import { CollectionService } from "@/services/collection-service";
 import { asInfiniteQueryData } from "@/utils/as-infinite-query-data";
 import { getFeedQueryKey } from "@/utils/get-feed-query-key";
@@ -43,12 +44,15 @@ export default async function LatestPage({ params: { collectionId } }: Props) {
 		queryFn: () => getFeed(collectionId),
 	});
 
+	const [debug] = await getDebugFlags();
+
 	return (
 		<HydrationBoundary state={dehydrate(queryClient)}>
 			<FeedComponent
 				filter={filter}
 				readonly={!canEdit}
 				bookmarks={bookmarks}
+				debug={debug}
 			/>
 		</HydrationBoundary>
 	);

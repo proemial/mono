@@ -41,7 +41,6 @@ export default async function EmbedPage({
 	const feed = await fetchFeedByFeaturesWithPostsAndReaders(
 		{ features, days: FEED_DEFAULT_DAYS },
 		{ limit }, // { offset: ctx.pageParam },
-		false,
 		space,
 	);
 

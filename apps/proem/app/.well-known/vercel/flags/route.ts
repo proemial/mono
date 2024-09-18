@@ -14,6 +14,16 @@ export async function GET(request: NextRequest) {
 					{ value: true, label: "Single AI Assistant on all pages" },
 				],
 			},
+			debug: {
+				description: "Enables debugging features",
+				options: [
+					{ value: [true, false], label: "Enable debugging" },
+					{
+						value: [true, true],
+						label: "Enable debugging and disable feed cache (CAREFULL!)",
+					},
+				],
+			},
 		},
 	});
 }

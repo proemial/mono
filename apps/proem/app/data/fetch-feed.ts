@@ -9,15 +9,13 @@ export type FetchFeedParams = Required<
 export const fetchFeedByFeaturesWithPostsAndReaders = async (
 	params: FetchFeedParams[0],
 	options: FetchFeedParams[1],
-	nocache: boolean | undefined,
-	spaceId: string | undefined,
+	spaceId?: string,
 ) => {
 	// We only inject popular papers in users default space
 	const injectPopularPapersInFeed = !spaceId?.includes("col_");
 	const feed = await Feed.fromFeatures(
 		params,
 		options,
-		nocache,
 		injectPopularPapersInFeed,
 		spaceId,
 	);
