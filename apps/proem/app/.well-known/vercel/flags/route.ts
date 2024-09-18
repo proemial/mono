@@ -17,9 +17,9 @@ export async function GET(request: NextRequest) {
 			debug: {
 				description: "Enables debugging features",
 				options: [
-					{ value: ["debug"], label: "Enable debugging" },
+					{ value: [true, false], label: "Enable debugging" },
 					{
-						value: ["debug", "nocache"],
+						value: [true, true],
 						label: "Enable debugging and disable feed cache",
 					},
 				],
