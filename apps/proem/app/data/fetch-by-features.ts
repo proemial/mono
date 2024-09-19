@@ -106,7 +106,9 @@ async function fetchAllPapers(days: number, rankedFeatures?: RankedFeature[]) {
 	const fetchedAt = dayjs().format("YYYY-MM-DD HH:mm");
 
 	const pageCount = Math.ceil(meta.count / PER_PAGE);
-	if (pageCount < MAX_PAGES) {
+	// We probably don't need to fetch more than half, if there's enough papers returned
+	// from the constrainedFilter
+	if (pageCount < MAX_PAGES / 2) {
 		const lessConstrainedFilter = getOpenAlexFilter(rankedFeatures, false);
 		const { papers: morePapers, meta: moreMeta } = await getAllFor(
 			lessConstrainedFilter,
