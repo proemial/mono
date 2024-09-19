@@ -162,9 +162,8 @@ function ContextWrapper({ children }: { children: ReactNode }) {
 function getHeaders() {
 	const headersList = nextHeaders();
 	const country = headersList.get("x-country") ?? undefined;
-	const region = headersList.get("x-region") ?? undefined;
 	const userAgent = headersList.get("user-agent") ?? undefined;
 	const embedded = isEmbedded(headersList.get("x-pathname"));
 
-	return { country, region, userAgent, embedded };
+	return { country, userAgent, embedded };
 }

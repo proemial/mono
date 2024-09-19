@@ -1,21 +1,12 @@
-import { vercelRegions } from "@/components/analytics/tracking/tracking-keys";
 import { clerkMiddleware } from "@clerk/nextjs/server";
-import { geolocation } from "@vercel/functions";
 import { NextResponse } from "next/server";
 
 // geolocation only works on the edge
 export const runtime = "experimental-edge";
 
 export default clerkMiddleware((auth, req) => {
-	const geo = geolocation(req);
 	const requestHeaders = new Headers(req.headers);
 	const pathname = req.nextUrl.pathname;
-
-	requestHeaders.set(
-		"x-region",
-		geo?.region ? vercelRegions[geo.region] ?? "eu" : "eu",
-	);
-	requestHeaders.set("x-country", geo?.country ?? "");
 	requestHeaders.set("x-pathname", pathname ?? "");
 
 	return NextResponse.next({

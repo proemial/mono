@@ -42,10 +42,9 @@ export function getTrackingProfile(
 	const isBot =
 		trackingInput?.userAgent && isChecklyBot(trackingInput?.userAgent);
 	const internal = user?.isInternal;
-	const region = trackingInput?.region;
 	const registered = !!user;
 
-	const props = `registered: ${registered}, region: ${region}, bot: ${isBot}, internal: ${internal}`;
+	const props = `registered: ${registered}, bot: ${isBot}, internal: ${internal}`;
 	const trace = (profile: string) =>
 		traceEnabled && analyticsTrace(`[tracking][${profile}] ${props}`);
 
@@ -58,11 +57,6 @@ export function getTrackingProfile(
 		updateCookieIfNeeded(user);
 		trace("disabled");
 		return "disabled";
-	}
-
-	if (!user && trackingInput?.region?.startsWith("eu")) {
-		trace("anonymous");
-		return "anonymous";
 	}
 
 	trace("tracked");
