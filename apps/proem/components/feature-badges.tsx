@@ -1,6 +1,7 @@
 import { cva } from "class-variance-authority";
 import { Badge } from "@proemial/shadcn-ui/components/ui/badge";
 import { FeatureType } from "@proemial/repositories/oa/fingerprinting/features";
+import { CollapsibleSection } from "@/components/collapsible-section";
 
 type CloudProps = {
 	features?: {
@@ -14,13 +15,21 @@ type CloudProps = {
 	}[];
 	sum?: number;
 	limit?: number;
+	collapsible?: boolean;
+	title?: string;
 };
 
-export function FeatureCloud({ features, sum, limit }: CloudProps) {
+export function FeatureCloud({
+	features,
+	sum,
+	limit,
+	collapsible,
+	title,
+}: CloudProps) {
 	const filtered = features?.filter((f) => !f.irrelevant);
 	const limited = limit ? filtered?.slice(0, limit - 1) : filtered;
 
-	return (
+	const Features = () => (
 		<div className="my-4 flex flex-wrap">
 			{!!sum && <FeatureBadge>{sum.toFixed(3)}</FeatureBadge>}
 
@@ -39,6 +48,19 @@ export function FeatureCloud({ features, sum, limit }: CloudProps) {
 				</FeatureBadge>
 			)}
 		</div>
+	);
+
+	if (!collapsible) {
+		return <Features />;
+	}
+
+	const trigger = (
+		<div className="text-xl bold">{`${features?.length} ${title ?? "Features"}`}</div>
+	);
+	return (
+		<CollapsibleSection trigger={trigger} collapsed={true}>
+			<Features />
+		</CollapsibleSection>
 	);
 }
 
