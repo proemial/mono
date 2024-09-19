@@ -4,10 +4,15 @@ import { getBookmarkedPapersByCollectionId } from "@/app/(pages)/(app)/space/(di
 import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
 import { CollectionIdParams } from "@/app/(pages)/(app)/space/[collectionId]/params";
 import { fetchPaperWithPostsAndReaders } from "@/app/data/fetch-paper-with-posts-and-readers";
+import { FeatureCloud } from "@/components/feature-badges";
+import { DebugInfo } from "@/components/features/legend";
 import { ThemeColoredCard } from "@/components/theme-colored-card";
+import { getDebugFlags } from "@/feature-flags/debug-flag";
 import { CollectionService } from "@/services/collection-service";
 import { PermissionUtils } from "@/utils/permission-utils";
 import { auth } from "@clerk/nextjs/server";
+import { getFeatures } from "@proemial/repositories/oa/fingerprinting/features";
+import { getFingerprint } from "@proemial/repositories/oa/fingerprinting/fingerprints";
 import { notFound } from "next/navigation";
 
 type SavedPageProps = CollectionIdParams;
@@ -55,49 +60,61 @@ export default async function SavedPage({
 		),
 	);
 
+	const [debug] = await getDebugFlags();
+
 	const isDefaultSpace = collectionId === userId;
 	const showThemeColors = isDefaultSpace;
 	return (
-		<div className="mb-8 space-y-3">
-			{papers.map((paper) => {
-				if (!paper) return null;
-				const isBookmarked =
-					bookmarkedPapersInCurrentSpace?.includes(paper.id) ?? false;
-				const topics = paper.data.topics;
-				const field = topics && getFieldFromOpenAlexTopics(topics);
-				const item = (
-					<FeedItem
-						paper={{
-							...paper,
-							posts:
-								papersWithPostsAndReaders.find((p) => p.paperId === paper.id)
-									?.posts ?? [],
-							readers:
-								papersWithPostsAndReaders.find((p) => p.paperId === paper.id)
-									?.readers ?? [],
-						}}
-						isBookmarked={isBookmarked}
-						customCollectionId={collectionId}
-						readonly={!canEdit}
-					/>
-				);
-
-				if (showThemeColors && field?.theme) {
-					return (
-						<ThemeColoredCard theme={field.theme} key={paper.id}>
-							{item}
-						</ThemeColoredCard>
+		<>
+			{debug && <DebugInfo className="mb-4" count={papers.length} />}
+			<div className="mb-8 space-y-3">
+				{papers.map((paper) => {
+					if (!paper) return null;
+					const isBookmarked =
+						bookmarkedPapersInCurrentSpace?.includes(paper.id) ?? false;
+					const topics = paper.data.topics;
+					const field = topics && getFieldFromOpenAlexTopics(topics);
+					const item = (
+						<FeedItem
+							paper={{
+								...paper,
+								posts:
+									papersWithPostsAndReaders.find((p) => p.paperId === paper.id)
+										?.posts ?? [],
+								readers:
+									papersWithPostsAndReaders.find((p) => p.paperId === paper.id)
+										?.readers ?? [],
+							}}
+							isBookmarked={isBookmarked}
+							customCollectionId={collectionId}
+							readonly={!canEdit}
+						>
+							{debug && (
+								<FeatureCloud
+									features={getFeatures(getFingerprint(paper))}
+									// sum={row.filterMatchScore}
+								/>
+							)}
+						</FeedItem>
 					);
-				}
-				return (
-					<div
-						className="bg-white hover:shadow p-3.5 rounded-2xl"
-						key={paper.id}
-					>
-						{item}
-					</div>
-				);
-			})}
-		</div>
+
+					if (showThemeColors && field?.theme) {
+						return (
+							<ThemeColoredCard theme={field.theme} key={paper.id}>
+								{item}
+							</ThemeColoredCard>
+						);
+					}
+					return (
+						<div
+							className="bg-white hover:shadow p-3.5 rounded-2xl"
+							key={paper.id}
+						>
+							{item}
+						</div>
+					);
+				})}
+			</div>
+		</>
 	);
 }

@@ -9,6 +9,7 @@ import {
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
 import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
+import { DebugInfo } from "@/components/features/legend";
 import { InfinityScrollList } from "@/components/infinity-scroll-list";
 import { ThemeColoredCard } from "@/components/theme-colored-card";
 import { getFeedQueryKey } from "@/utils/get-feed-query-key";
@@ -128,35 +129,6 @@ export function Feed({
 					);
 				}}
 			/>
-		</div>
-	);
-}
-
-function DebugInfo({ count }: { count?: number }) {
-	return (
-		<div className="flex justify-between italic text-xs text-gray-400">
-			<div className="flex">
-				<div>
-					<FeatureBadge>sum</FeatureBadge>
-				</div>
-				<div>
-					<FeatureBadge variant="topic">topic</FeatureBadge>
-				</div>
-				<div>
-					<FeatureBadge variant="keyword">keyword</FeatureBadge>
-				</div>
-				<div>
-					<FeatureBadge variant="concept">concept</FeatureBadge>
-				</div>
-				<div>
-					<FeatureBadge variant="disabled">skipped</FeatureBadge>
-				</div>
-			</div>
-			<div>
-				{Boolean(count) && (
-					<div className="mt-1 text-right">{count} matching papers</div>
-				)}
-			</div>
 		</div>
 	);
 }

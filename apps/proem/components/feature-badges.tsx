@@ -7,6 +7,7 @@ type CloudProps = {
 		id: string;
 		label: string;
 		type: FeatureType;
+		score?: number;
 		coOccurrenceScore?: number;
 		featureMatchScore?: number;
 		irrelevant?: boolean;
@@ -17,7 +18,8 @@ type CloudProps = {
 
 export function FeatureCloud({ features, sum, limit }: CloudProps) {
 	const filtered = features?.filter((f) => !f.irrelevant);
-	const limited = limit ? filtered?.slice(0, limit -1) : filtered;
+	const limited = limit ? filtered?.slice(0, limit - 1) : filtered;
+
 	return (
 		<div className="my-4 flex flex-wrap">
 			{!!sum && <FeatureBadge>{sum.toFixed(3)}</FeatureBadge>}
@@ -25,17 +27,17 @@ export function FeatureCloud({ features, sum, limit }: CloudProps) {
 			{limited?.map((item, i) => (
 				<FeatureBadge
 					key={i}
-					score={item.coOccurrenceScore ?? item.featureMatchScore}
+					score={item.coOccurrenceScore ?? item.featureMatchScore ?? item.score}
 					variant={item.irrelevant ? "disabled" : item.type}
 				>
 					{item.label}
 				</FeatureBadge>
 			))}
-			{limit && 
+			{limit && (
 				<FeatureBadge variant="disabled">
 					{`+ ${filtered?.length ?? 0 - limit + 1} more ...`}
 				</FeatureBadge>
-			}
+			)}
 		</div>
 	);
 }
