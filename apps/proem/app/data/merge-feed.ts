@@ -1,6 +1,6 @@
 export type PaginationOptions = {
-	offset: number;
-	limit: number;
+	offset?: number;
+	limit?: number;
 };
 
 export type PaginationResult<T extends { id: string }> = {
@@ -35,8 +35,10 @@ export const mergeFeed = async <TRow extends { id: string }>(
 		}>;
 		percentage: FEED_PERCENTAGES;
 	}[],
-	{ offset, limit }: PaginationOptions,
+	{ offset = 0, limit = 10 }: PaginationOptions,
 ) => {
+	// TODO! handle overfetching if percentage is not 1
+	// TODO! handle overfetching if 1 or more feeds return null
 	const fetchedFeeds = await Promise.all(
 		feeds.map((feed) => {
 			const feedLimit = Math.ceil(limit * feed.percentage);

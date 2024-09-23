@@ -18,6 +18,8 @@ import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/featu
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { unstable_cache } from "next/cache";
 import { z } from "zod";
+import { iterateStaticFeed } from "./iterate-static-feed";
+import { PaginationOptions, mergeFeed } from "./merge-feed";
 
 const DEFAULT_LIMIT = 5;
 const POPULAR_PAPERS_PERCENTAGE:
@@ -107,6 +109,57 @@ export module Feed {
 			options,
 			undefined,
 		);
+	};
+
+	export const byFeatures = async (options: PaginationOptions) => {
+		// const {
+		// 	meta,
+		// 	rankedIds,
+		// 	papers: rankedPapers,
+		// } = await fetchAndRerankPaperIds(
+		// 	params,
+		// 	{
+		// 		limit: rankedPaperLimit,
+		// 		offset: offset,
+		// 	},
+		// 	collectionId,
+		// );
+		return {
+			count: 0,
+			rows: [],
+			nextOffset: 1,
+		};
+	};
+
+	export const byPopularity = async (options: PaginationOptions) => {
+		const mostPopularPapers = await Paper.getByPopularity({
+			limit: 3,
+			offset: 2, // offset in items
+		});
+
+		console.log(mostPopularPapers);
+
+		return {
+			count: 0,
+			rows: [],
+			nextOffset: 1,
+		};
+	};
+
+	export const byStatic = async (options: PaginationOptions) => {
+		const staticItems = [
+			{
+				id: "1",
+			},
+			{
+				id: "2",
+			},
+			{
+				id: "3",
+			},
+		];
+
+		return iterateStaticFeed(staticItems)(options);
 	};
 
 	export const fromCollection = async (
