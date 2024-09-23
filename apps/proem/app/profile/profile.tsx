@@ -1,5 +1,4 @@
 import { screenMaxWidth } from "@/app/constants";
-import { MenuButton } from "@/app/profile/menu-button";
 import {
 	analyticsKeys,
 	trackHandler,
@@ -12,21 +11,26 @@ import {
 	DrawerHeader,
 	DrawerTitle,
 	DrawerTrigger,
+	cn,
 } from "@proemial/shadcn-ui";
 import { XClose } from "@untitled-ui/icons-react";
 import dynamic from "next/dynamic";
+import { ReactNode } from "react";
 const ProfileContent = dynamic(
 	() =>
 		import("@/app/profile/profile-content").then((mod) => mod.ProfileContent),
 	{ ssr: false },
 );
 
-export function Profile() {
+type Props = {
+	trigger: ReactNode;
+	className?: string;
+};
+
+export function Profile({ trigger, className }: Props) {
 	return (
 		<Drawer>
-			<DrawerTrigger>
-				<MenuButton asChild />
-			</DrawerTrigger>
+			<DrawerTrigger className={cn(className)}>{trigger}</DrawerTrigger>
 			<DrawerContent
 				className={`${screenMaxWidth} h-dvh rounded-none mx-auto`}
 				aria-describedby="Manage your account and settings"

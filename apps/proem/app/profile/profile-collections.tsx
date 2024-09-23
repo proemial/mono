@@ -84,24 +84,33 @@ export const ProfileCollections = () => {
 					/>
 				))}
 			</div>
-			<CreateCollectionDrawer
-				trigger={
-					<div className="flex gap-2 items-center hover:opacity-85 active:opacity-75 duration-200 cursor-pointer">
-						<Plus className="size-4 opacity-85" />
-						<div className="text-sm">Create New Space</div>
-					</div>
-				}
-			/>
+			{userId && (
+				<CreateCollectionDrawer
+					trigger={
+						<div className="flex gap-2 items-center hover:opacity-85 active:opacity-75 duration-200 cursor-pointer">
+							<Plus className="size-4 opacity-85" />
+							<div className="text-sm">Create New Space</div>
+						</div>
+					}
+					userId={userId}
+					orgId={orgId}
+				/>
+			)}
 		</CollapsibleSection>
 	);
 };
 
 type CreateCollectionDrawerProps = {
 	trigger: React.ReactNode;
+	userId: string;
+	orgId: string | null | undefined;
 };
 
-function CreateCollectionDrawer({ trigger }: CreateCollectionDrawerProps) {
-	const { userId, orgId } = useAuth();
+export function CreateCollectionDrawer({
+	trigger,
+	userId,
+	orgId,
+}: CreateCollectionDrawerProps) {
 	const queryClient = useQueryClient();
 
 	const { mutate: add } = useMutation({
@@ -112,10 +121,6 @@ function CreateCollectionDrawer({ trigger }: CreateCollectionDrawerProps) {
 			});
 		},
 	});
-
-	if (!userId) {
-		return null;
-	}
 
 	return (
 		<FullSizeDrawer trigger={trigger}>

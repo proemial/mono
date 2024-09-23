@@ -30,7 +30,7 @@ import { useOptimistic, useTransition } from "react";
 
 function TopNavigationMenu({ isLoggedIn }: { isLoggedIn: boolean }) {
 	return isLoggedIn ? (
-		<Profile />
+		<Profile trigger={<MenuButton asChild />} />
 	) : (
 		<SignInDrawer
 			trigger={
