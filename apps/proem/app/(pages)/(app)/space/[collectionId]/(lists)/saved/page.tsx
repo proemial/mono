@@ -8,11 +8,15 @@ import { FeatureCloud } from "@/components/feature-badges";
 import { DebugInfo } from "@/components/features/legend";
 import { ThemeColoredCard } from "@/components/theme-colored-card";
 import { getDebugFlags } from "@/feature-flags/debug-flag";
+import { routes } from "@/routes";
 import { CollectionService } from "@/services/collection-service";
 import { PermissionUtils } from "@/utils/permission-utils";
 import { auth } from "@clerk/nextjs/server";
 import { getFeatures } from "@proemial/repositories/oa/fingerprinting/features";
 import { getFingerprint } from "@proemial/repositories/oa/fingerprinting/fingerprints";
+import { Button } from "@proemial/shadcn-ui";
+import { SearchMd } from "@untitled-ui/icons-react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 type SavedPageProps = CollectionIdParams;
@@ -42,8 +46,13 @@ export default async function SavedPage({
 		bookmarkedPapersInCurrentSpace?.length === 0
 	) {
 		return (
-			<div className="flex flex-col items-center justify-center gap-4">
-				<div className="text-sm">You have yet to save a paper…</div>
+			<div className="flex flex-col items-center justify-center gap-12">
+				<div className="text-sm">You have yet to add a paper.</div>
+				<Link href={`${routes.space}/${collectionId}/search`}>
+					<Button variant="suggestion" className="flex items-center gap-2">
+						<SearchMd className="size-4" /> Add a paper…
+					</Button>
+				</Link>
 			</div>
 		);
 	}
@@ -68,6 +77,13 @@ export default async function SavedPage({
 		<>
 			{debug && <DebugInfo className="mb-4" count={papers.length} />}
 			<div className="mb-8 space-y-3">
+				<div className="flex justify-center my-6">
+					<Link href={`${routes.space}/${collectionId}/search`}>
+						<Button variant="suggestion" className="flex items-center gap-2">
+							<SearchMd className="size-4" /> Add more papers…
+						</Button>
+					</Link>
+				</div>
 				{papers.map((paper) => {
 					if (!paper) return null;
 					const isBookmarked =
