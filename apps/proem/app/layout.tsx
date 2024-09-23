@@ -3,10 +3,12 @@ import { Analytics } from "@/components/analytics";
 import { LoadingTransition } from "@/components/loading-transition";
 import { Main } from "@/components/main";
 import { NotificationsToaster } from "@/components/notifications-toaster";
+import { AssistantStateProvider } from "@/components/proem-assistant/use-assistant/assistant-state";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ReactQueryProvider } from "@/components/providers/react-query";
 import { SetActiveOrganization } from "@/components/set-active-organization";
 import { TopNavigation } from "@/components/top-navigation/top-navigation";
+import { isEmbedded } from "@/utils/url";
 import { cn } from "@proemial/shadcn-ui";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import { Metadata, Viewport } from "next";
@@ -14,8 +16,6 @@ import { Lato as FontSans } from "next/font/google";
 import { headers as nextHeaders } from "next/headers";
 import { ReactNode } from "react";
 import { screenMaxWidth } from "./constants";
-import { isEmbedded } from "@/utils/url";
-import { AssistantStateProvider } from "@/components/proem-assistant/use-assistant/assistant-state";
 
 export const viewport: Viewport = {
 	width: "device-width",
@@ -161,9 +161,8 @@ function ContextWrapper({ children }: { children: ReactNode }) {
 
 function getHeaders() {
 	const headersList = nextHeaders();
-	const country = headersList.get("x-country") ?? undefined;
 	const userAgent = headersList.get("user-agent") ?? undefined;
 	const embedded = isEmbedded(headersList.get("x-pathname"));
 
-	return { country, userAgent, embedded };
+	return { userAgent, embedded };
 }
