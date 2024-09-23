@@ -1,7 +1,14 @@
-type PaginationOptions = {
+export type PaginationOptions = {
 	offset: number;
 	limit: number;
 };
+
+export type PaginationResult<T extends { id: string }> = {
+	count: number;
+	rows: T[];
+	nextOffset: number;
+};
+
 type FEED_PERCENTAGES = 0.1 | 0.2 | 0.3 | 0.4 | 0.5 | 0.6 | 0.7 | 0.8 | 0.9 | 1;
 
 /**
@@ -42,6 +49,7 @@ export const mergeFeed = async <TRow extends { id: string }>(
 	if (fetchedFeeds.every((feed) => feed?.rows.length === 0)) {
 		return null;
 	}
+
 	const mergedFeed = shuffleFeed(
 		fetchedFeeds.reduce(
 			(acc, feed) => {
@@ -56,7 +64,6 @@ export const mergeFeed = async <TRow extends { id: string }>(
 			{ count: 0, rows: [], nextOffset: offset + 1 },
 		),
 	);
-
 
 	return mergedFeed;
 };
