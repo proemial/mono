@@ -39,7 +39,7 @@ export const mergeFeed = async <TRow extends { id: string }>(
 ) => {
 	const fetchedFeeds = await Promise.all(
 		feeds.map((feed) => {
-			const feedLimit = Math.floor(limit * feed.percentage);
+			const feedLimit = Math.ceil(limit * feed.percentage);
 			const feedOffset = offset * feedLimit;
 
 			return feed.feed({ offset: feedOffset, limit: feedLimit });
