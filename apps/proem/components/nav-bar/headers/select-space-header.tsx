@@ -105,39 +105,35 @@ export const SelectSpaceHeader = ({
 						</Link>
 					)}
 					<SelectGroup className="p-0">
-						{recentSpaces.length > 0 && (
-							<>
-								<SelectSeparator />
-								<SelectLabel className="cursor-default select-none">
-									Recently visited
-								</SelectLabel>
-								{recentSpaces
-									.map((spaceId) => spaces.find((s) => s.id === spaceId))
-									.filter((space) => typeof space !== "undefined")
-									.toReversed()
-									.map((space) => (
-										<SelectItem
-											key={space.id}
-											value={space.id}
-											className="py-2 text-base cursor-pointer"
-										>
-											{space.id.includes("user_")
-												? PERSONAL_DEFAULT_COLLECTION_NAME
-												: space.name}
-										</SelectItem>
-									))}
-								<RequireAuthenticationItem
+						<SelectSeparator />
+						<SelectLabel className="cursor-default select-none">
+							Recently visited
+						</SelectLabel>
+						{recentSpaces
+							.map((spaceId) => spaces.find((s) => s.id === spaceId))
+							.filter((space) => typeof space !== "undefined")
+							.toReversed()
+							.map((space) => (
+								<SelectItem
+									key={space.id}
+									value={space.id}
+									className="py-2 text-base cursor-pointer"
+								>
+									{space.id.includes("user_")
+										? PERSONAL_DEFAULT_COLLECTION_NAME
+										: space.name}
+								</SelectItem>
+							))}
+						<RequireAuthenticationItem
+							trigger={<NonSelectItem label="More…" />}
+							restricted={
+								<Profile
 									trigger={<NonSelectItem label="More…" />}
-									restricted={
-										<Profile
-											trigger={<NonSelectItem label="More…" />}
-											className="flex w-full"
-										/>
-									}
+									className="flex w-full"
 								/>
-								<SelectSeparator />
-							</>
-						)}
+							}
+						/>
+						<SelectSeparator />
 						<RequireAuthenticationItem
 							trigger={<NonSelectItem label="Create new space" />}
 							restricted={
