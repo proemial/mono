@@ -1,5 +1,5 @@
 const MAX_SPACES_TO_STORE = 5;
-const LOCAL_STORAGE_KEY = "recent-spaces";
+const LOCAL_STORAGE_KEY = "recent-spaces-list";
 
 /**
  * Store the ID's of (up to) the 5 recently-visited spaces in local storage.
