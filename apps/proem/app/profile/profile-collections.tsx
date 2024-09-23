@@ -5,11 +5,13 @@ import { CollapsibleSection } from "@/components/collapsible-section";
 import { CollectionListItem } from "@/components/collections/collection-list-item";
 import { CreateCollection } from "@/components/collections/create-collection";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
+import { routes } from "@/routes";
 import { PermissionUtils } from "@/utils/permission-utils";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 import { Collection, NewCollection } from "@proemial/data/neon/schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus } from "@untitled-ui/icons-react";
+import { useRouter } from "next/navigation";
 import { getPersonalDefaultCollection } from "../constants";
 import {
 	addCollection,
@@ -112,13 +114,16 @@ export function CreateCollectionDrawer({
 	orgId,
 }: CreateCollectionDrawerProps) {
 	const queryClient = useQueryClient();
+	const router = useRouter();
 
 	const { mutate: add } = useMutation({
 		mutationFn: (newCollection: NewCollection) => addCollection(newCollection),
-		onSuccess: () => {
+		onSuccess: (data) => {
 			queryClient.invalidateQueries({
 				queryKey: ["collections", userId],
 			});
+			const spaceId = data?.id;
+			router.push(`${routes.space}/${spaceId}/saved`);
 		},
 	});
 
