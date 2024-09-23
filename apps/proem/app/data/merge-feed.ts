@@ -39,6 +39,9 @@ export const mergeFeed = async <TRow extends { id: string }>(
 		}),
 	);
 
+	if (fetchedFeeds.every((feed) => feed?.rows.length === 0)) {
+		return null;
+	}
 	const mergedFeed = shuffleFeed(
 		fetchedFeeds.reduce(
 			(acc, feed) => {

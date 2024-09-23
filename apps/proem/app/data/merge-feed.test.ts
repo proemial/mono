@@ -57,4 +57,32 @@ describe("mergeFeed", () => {
 			{ id: "W9", title: "Paper 9" },
 		]);
 	});
+	it("can handle empty feeds", async () => {
+		const feed1 = {
+			count: 5,
+			rows: [],
+			nextOffset: 1,
+		};
+
+		const feed2 = {
+			count: 5,
+			rows: [],
+			nextOffset: 1,
+		};
+
+		const feed3 = {
+			count: 10,
+			rows: [],
+			nextOffset: 1,
+		};
+
+		const feeds = [
+			{ feed: () => Promise.resolve(feed1), percentage: 0.2 as const },
+			{ feed: () => Promise.resolve(feed2), percentage: 0.2 as const },
+			{ feed: () => Promise.resolve(feed3), percentage: 0.6 as const },
+		];
+
+		const feed = await mergeFeed(feeds, { offset: 0, limit: 4 });
+		expect(feed).toBeNull();
+	});
 });
