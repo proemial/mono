@@ -135,6 +135,7 @@ export module Feed {
 			injectPopularPapersInFeed,
 			collectionId,
 		);
+
 		if (!feed) {
 			return null;
 		}

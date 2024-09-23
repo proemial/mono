@@ -8,7 +8,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { FeatureBadge, FeatureCloud } from "@/components/feature-badges";
+import { FeatureCloud } from "@/components/feature-badges";
 import { DebugInfo } from "@/components/features/legend";
 import { InfinityScrollList } from "@/components/infinity-scroll-list";
 import { ThemeColoredCard } from "@/components/theme-colored-card";

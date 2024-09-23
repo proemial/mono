@@ -9,7 +9,7 @@ type QueryReturnType<TRow> = {
 	count: number;
 	nextOffset: number;
 	rows: TRow[];
-};
+} | null;
 
 type InfinityScollListProps<MyTQueryKey extends string[], TRow> = {
 	renderHeadline?: ((count?: number) => ReactNode) | null;

@@ -16,6 +16,10 @@ export const fetchFeedByInstitutionWithPostsAndReaders = async (
 	spaceId: string | undefined,
 ) => {
 	const feedByInstitution = await fetchFeedByInstitution(params, options);
+	if (!feedByInstitution) {
+		return null;
+	}
+
 	const paperIds = feedByInstitution.rows.map(({ paper }) => paper.id);
 	const papersWithPostsAndReaders = await Promise.all(
 		paperIds.map((paperId) => fetchPaperWithPostsAndReaders(paperId, spaceId)),
@@ -58,7 +62,7 @@ async function fetchFeedByInstitution(
 	});
 
 	if (!papers.length) {
-		throw new Error("No papers found.");
+		return null;
 	}
 
 	const cachedPapers = await Redis.papers.getAll(

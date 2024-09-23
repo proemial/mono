@@ -80,7 +80,7 @@ async function populateCache(
 		return {
 			event,
 			body: {
-				papers: papers.count,
+				papers: papers?.count ?? 0,
 				elapsed: Time.elapsed(begin),
 			},
 		};

@@ -44,6 +44,10 @@ export default async function EmbedPage({
 		space,
 	);
 
+	if (!feed) {
+		return null;
+	}
+
 	const style = background ? { background: `#${background}` } : {};
 
 	return (
