@@ -135,6 +135,9 @@ export module Feed {
 			injectPopularPapersInFeed,
 			collectionId,
 		);
+		if (!feed) {
+			return null;
+		}
 
 		const paperIds = feed.rows.map(({ paper }) => paper?.id);
 
@@ -213,7 +216,7 @@ export module Feed {
 		});
 
 		if (!feedIds.length) {
-			throw new Error("No papers found.");
+			return null;
 		}
 
 		const cachedPapers = await Redis.papers.getAll(

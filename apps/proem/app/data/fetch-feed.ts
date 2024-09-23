@@ -19,6 +19,11 @@ export const fetchFeedByFeaturesWithPostsAndReaders = async (
 		injectPopularPapersInFeed,
 		spaceId,
 	);
+
+	if (!feed) {
+		return null;
+	}
+
 	const paperIds = feed.rows.map(({ paper }) => paper?.id);
 
 	const papersWithPostsAndReaders = await Promise.all(
