@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { iterateStaticFeed } from "./iterate-static-feed";
-import { mergeFeed, shuffleFeed } from "./merge-feed";
+import { PaginationOptions, mergeFeed, shuffleFeed } from "./merge-feed";
 
 describe("mergeFeed", () => {
 	it("should merge feeds correctly", async () => {
@@ -27,70 +27,65 @@ describe("mergeFeed", () => {
 			{ id: "c6" },
 		];
 
-		const results1 = await mergeFeed(
-			[
-				{
-					feed: (options) => Promise.resolve(iterateStaticFeed(feedA)(options)),
-					percentage: 0.2 as const,
-				},
-				{
-					feed: (options) => Promise.resolve(iterateStaticFeed(feedB)(options)),
-					percentage: 0.2 as const,
-				},
-				{
-					feed: (options) => Promise.resolve(iterateStaticFeed(feedC)(options)),
-					percentage: 0.6 as const,
-				},
-			],
-			{ offset: 0, limit: 10 },
-		);
+		const fetchFeed = (options: PaginationOptions) =>
+			mergeFeed(
+				[
+					{
+						feed: (options) =>
+							Promise.resolve(iterateStaticFeed(feedA)(options)),
+						percentage: 0.2 as const,
+					},
+					{
+						feed: (options) =>
+							Promise.resolve(iterateStaticFeed(feedB)(options)),
+						percentage: 0.2 as const,
+					},
+					{
+						feed: (options) =>
+							Promise.resolve(iterateStaticFeed(feedC)(options)),
+						percentage: 0.6 as const,
+					},
+				],
+				options,
+			);
+		const results1 = await fetchFeed({ offset: 0, limit: 5 });
+
 		expect(results1?.count).toBe(18);
 		expect(results1?.nextOffset).toBe(1);
-		expect(results1?.rows).toHaveLength(10);
+		expect(results1?.rows).toHaveLength(5);
 		expect(results1?.rows).toEqual([
 			{ id: "a1" },
-			{ id: "a2" },
 			{ id: "b1" },
-			{ id: "b2" },
 			{ id: "c1" },
 			{ id: "c2" },
 			{ id: "c3" },
+		]);
+
+		const results2 = await fetchFeed({
+			offset: results1?.nextOffset,
+			limit: 5,
+		});
+
+		expect(results2?.count).toBe(18);
+		expect(results2?.nextOffset).toBe(2);
+		expect(results2?.rows).toHaveLength(5);
+		expect(results2?.rows).toEqual([
+			{ id: "a2" },
+			{ id: "b2" },
 			{ id: "c4" },
 			{ id: "c5" },
 			{ id: "c6" },
 		]);
 
-		const results2 = await mergeFeed(
-			[
-				{
-					feed: (options) => Promise.resolve(iterateStaticFeed(feedA)(options)),
-					percentage: 0.2 as const,
-				},
-				{
-					feed: (options) => Promise.resolve(iterateStaticFeed(feedB)(options)),
-					percentage: 0.2 as const,
-				},
-				{
-					feed: (options) => Promise.resolve(iterateStaticFeed(feedC)(options)),
-					percentage: 0.6 as const,
-				},
-			],
-			{ offset: 1, limit: 10 },
-		);
-		expect(results2?.count).toBe(18);
-		expect(results2?.nextOffset).toBe(2);
-		expect(results2?.rows).toHaveLength(3); // 8
-		expect(results2?.rows).toEqual([
-			{ id: "a3" },
-			{ id: "a4" },
-			// TODO! fill up with the rest
-			// { id: "a5" },
-			// { id: "a6" },
-			// { id: "a7" },
-			// { id: "a8" },
-			// { id: "a9" },
-			{ id: "b3" },
-		]);
+		const results3 = await fetchFeed({
+			offset: results2?.nextOffset,
+			limit: 5,
+		});
+
+		expect(results3?.count).toBe(18);
+		expect(results3?.nextOffset).toBe(3);
+		// TODO Handle pagination of multiple feeds
+		expect(results3?.rows).toHaveLength(2);
 	});
 
 	it("can handle empty feeds", async () => {

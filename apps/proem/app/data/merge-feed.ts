@@ -28,11 +28,10 @@ export const shuffleFeed = <TFeed extends { rows: { id: string }[] }>(
  */
 export const mergeFeed = async <TRow extends { id: string }>(
 	feeds: {
-		feed: ({ offset, limit }: PaginationOptions) => Promise<{
-			count: number;
-			rows: TRow[];
-			nextOffset: number;
-		}>;
+		feed: ({
+			offset,
+			limit,
+		}: PaginationOptions) => Promise<PaginationResult<TRow>>;
 		percentage: FEED_PERCENTAGES;
 	}[],
 	{ offset = 0, limit = 10 }: PaginationOptions,
@@ -40,17 +39,21 @@ export const mergeFeed = async <TRow extends { id: string }>(
 	// TODO! handle overfetching if percentage is not 1
 	// TODO! handle overfetching if 1 or more feeds return null
 	const fetchedFeeds = await Promise.all(
-		feeds.map((feed) => {
+		feeds.map(async (feed) => {
 			const feedLimit = Math.ceil(limit * feed.percentage);
 			const feedOffset = offset * feedLimit;
 
-			return feed.feed({ offset: feedOffset, limit: feedLimit });
+			return feed.feed({
+				offset: feedOffset,
+				limit: feedLimit,
+			});
 		}),
 	);
 
 	if (fetchedFeeds.every((feed) => feed?.rows.length === 0)) {
 		return null;
 	}
+	// const rowCount = fetchedFeeds.flatMap((feed) => feed?.rows ?? []).length;
 
 	const mergedFeed = shuffleFeed(
 		fetchedFeeds.reduce(
