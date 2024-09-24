@@ -1,11 +1,15 @@
 const MAX_SPACES_TO_STORE = 5;
 const LOCAL_STORAGE_KEY = "recent-spaces-list";
+const LOCAL_STORAGE_KEY_OLD = "recent-spaces";
 
 /**
  * Store the ID's of (up to) the 5 recently-visited spaces in local storage.
  */
 export const RecentSpaces = {
 	get: () => {
+		// TODO: Remove this after a few weeks
+		localStorage.removeItem(LOCAL_STORAGE_KEY_OLD);
+
 		const local = localStorage.getItem(LOCAL_STORAGE_KEY);
 		return local ? (JSON.parse(local) as string[]) : [];
 	},
@@ -24,5 +28,9 @@ export const RecentSpaces = {
 			return cappedNewSpaces;
 		}
 		return currentSpaces;
+	},
+
+	clear: () => {
+		localStorage.removeItem(LOCAL_STORAGE_KEY);
 	},
 };

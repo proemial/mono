@@ -4,6 +4,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
+import { RecentSpaces } from "@/components/nav-bar/headers/recent-spaces";
 import { useClerk, useOrganization, useUser } from "@clerk/nextjs";
 import { DrawerClose } from "@proemial/shadcn-ui";
 import {
@@ -25,6 +26,7 @@ export const About = () => {
 
 	const handleSignOut = () => {
 		trackHandler(analyticsKeys.ui.menu.click.signout)();
+		RecentSpaces.clear();
 		signOut();
 	};
 
