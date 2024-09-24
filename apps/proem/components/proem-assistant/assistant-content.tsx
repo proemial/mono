@@ -7,13 +7,14 @@ import { ANONYMOUS_USER_ID, PAPER_BOT_USER_ID } from "@/app/constants";
 import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { useUser } from "@clerk/nextjs";
 import { Comment, Post } from "@proemial/data/neon/schema";
-import { DrawerContent } from "@proemial/shadcn-ui";
+import { Button, DrawerClose, DrawerContent } from "@proemial/shadcn-ui";
 import { DialogTitle } from "@proemial/shadcn-ui/components/ui/dialog";
 import { useQueryClient } from "@tanstack/react-query";
+import { X } from "@untitled-ui/icons-react";
 import { nanoid } from "ai";
 import { Message, useChat } from "ai/react";
 import { motion } from "framer-motion";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import useMeasure from "react-use-measure";
 import {
 	analyticsKeys,
@@ -155,6 +156,16 @@ export const AssistantContent = ({ spaceId, paperId, data }: Props) => {
 
 	return (
 		<DrawerContent className="max-w-xl mx-auto flex border-none bg-theme-900 h-full">
+			<div className="hidden sm:block absolute top-0 right-0 m-1">
+				<DrawerClose>
+					<Button
+						size="icon"
+						className="text-neutral-50 hover:text-neutral-200 duration-200 bg-transparent hover:bg-transparent"
+					>
+						<X className="size-6" />
+					</Button>
+				</DrawerClose>
+			</div>
 			<DialogTitle className="hidden" />
 			<div
 				className="flex flex-col justify-between h-[calc(100%-24px)]"
