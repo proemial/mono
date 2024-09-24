@@ -14,6 +14,7 @@ import {
 } from "@proemial/shadcn-ui";
 import { DialogClose } from "@proemial/shadcn-ui/components/ui/dialog";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import {
 	analyticsKeys,
@@ -35,6 +36,14 @@ export const CreateCollection = ({ collection, onSubmit, noDialog }: Props) => {
 		},
 	});
 	const router = useRouter();
+	const ref = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			ref.current?.focus();
+		}, 100);
+		return () => clearTimeout(timeout);
+	}, []);
 
 	const errorStyles = form.getFieldState("name").invalid
 		? "border border-red-300 border"
@@ -63,6 +72,7 @@ export const CreateCollection = ({ collection, onSubmit, noDialog }: Props) => {
 										<FormControl>
 											<Input
 												{...field}
+												ref={ref}
 												className={`w-full h-10 text bg-card rounded-full border-transparent px-4 outline-none focus-visible:ring-transparent ${errorStyles}`}
 											/>
 										</FormControl>
@@ -75,13 +85,12 @@ export const CreateCollection = ({ collection, onSubmit, noDialog }: Props) => {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="opacity-50">
-											<Header5>Description</Header5>
+											<Header5>Description (optional)</Header5>
 										</FormLabel>
 										<FormControl>
 											<Textarea
 												{...field}
 												className="w-full text bg-card rounded-xl px-4 resize-none min-h-32 placeholder:opacity-50"
-												placeholder="Add a description of the space here…"
 											/>
 										</FormControl>
 									</FormItem>
