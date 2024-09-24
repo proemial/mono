@@ -50,7 +50,7 @@ export default async function SavedPage({
 				<div className="text-sm">You have yet to add a paper.</div>
 				<Link href={`${routes.space}/${collectionId}/search`}>
 					<Button variant="suggestion" className="flex items-center gap-2">
-						<SearchMd className="size-4" /> Add a paper…
+						<SearchMd className="size-4" /> Add a source…
 					</Button>
 				</Link>
 			</div>
@@ -80,7 +80,7 @@ export default async function SavedPage({
 				<div className="flex justify-center my-6">
 					<Link href={`${routes.space}/${collectionId}/search`}>
 						<Button variant="suggestion" className="flex items-center gap-2">
-							<SearchMd className="size-4" /> Add more papers…
+							<SearchMd className="size-4" /> Add more sources…
 						</Button>
 					</Link>
 				</div>
