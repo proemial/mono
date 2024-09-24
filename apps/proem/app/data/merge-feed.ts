@@ -28,7 +28,7 @@ export const shuffleFeed = <TFeed extends { rows: { id: string }[] }>(
  */
 export const mergeFeed = async <TRow extends { id: string }>(
 	feeds: {
-		feed: ({
+		fetch: ({
 			offset,
 			limit,
 		}: PaginationOptions) => Promise<PaginationResult<TRow>>;
@@ -43,7 +43,7 @@ export const mergeFeed = async <TRow extends { id: string }>(
 			const feedLimit = Math.ceil(limit * feed.percentage);
 			const feedOffset = offset * feedLimit;
 
-			return feed.feed({
+			return feed.fetch({
 				offset: feedOffset,
 				limit: feedLimit,
 			});

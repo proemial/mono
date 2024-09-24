@@ -31,17 +31,17 @@ describe("mergeFeed", () => {
 			mergeFeed(
 				[
 					{
-						feed: (options) =>
+						fetch: (options) =>
 							Promise.resolve(iterateStaticFeed(feedA)(options)),
 						percentage: 0.2 as const,
 					},
 					{
-						feed: (options) =>
+						fetch: (options) =>
 							Promise.resolve(iterateStaticFeed(feedB)(options)),
 						percentage: 0.2 as const,
 					},
 					{
-						feed: (options) =>
+						fetch: (options) =>
 							Promise.resolve(iterateStaticFeed(feedC)(options)),
 						percentage: 0.6 as const,
 					},
@@ -90,27 +90,27 @@ describe("mergeFeed", () => {
 
 	it("can handle empty feeds", async () => {
 		const feed1 = {
-			count: 5,
+			count: 0,
 			rows: [],
 			nextOffset: 1,
 		};
 
 		const feed2 = {
-			count: 5,
+			count: 0,
 			rows: [],
 			nextOffset: 1,
 		};
 
 		const feed3 = {
-			count: 10,
+			count: 0,
 			rows: [],
 			nextOffset: 1,
 		};
 
 		const feeds = [
-			{ feed: () => Promise.resolve(feed1), percentage: 0.2 as const },
-			{ feed: () => Promise.resolve(feed2), percentage: 0.2 as const },
-			{ feed: () => Promise.resolve(feed3), percentage: 0.6 as const },
+			{ fetch: () => Promise.resolve(feed1), percentage: 0.2 as const },
+			{ fetch: () => Promise.resolve(feed2), percentage: 0.2 as const },
+			{ fetch: () => Promise.resolve(feed3), percentage: 0.6 as const },
 		];
 
 		const feed = await mergeFeed(feeds, { offset: 0, limit: 4 });
