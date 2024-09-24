@@ -11,11 +11,7 @@ import { asInfiniteQueryData } from "@/utils/as-infinite-query-data";
 import { getFeedQueryKey } from "@/utils/get-feed-query-key";
 import { PermissionUtils } from "@/utils/permission-utils";
 import { auth } from "@clerk/nextjs/server";
-import {
-	Feature,
-	getFeatureFilter,
-	RankedFeature,
-} from "@proemial/repositories/oa/fingerprinting/features";
+import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { unstable_cache } from "next/cache";
 import { notFound } from "next/navigation";
