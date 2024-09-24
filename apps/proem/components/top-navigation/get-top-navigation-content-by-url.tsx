@@ -82,11 +82,7 @@ export function getTopNavigationContentByUrl(
 		if (url.includes("/col_")) {
 			// Discover/latest feed
 			return {
-				action: (
-					<ActionMenu>
-						<Link href={`${url.replace("/saved", "")}/search`}>Search</Link>
-					</ActionMenu>
-				),
+				action: null,
 			};
 		}
 
