@@ -8,7 +8,7 @@ import {
 	FormItem,
 	FormLabel,
 	Header2,
-	Header5,
+	Header4,
 	Input,
 	Textarea,
 } from "@proemial/shadcn-ui";
@@ -66,8 +66,8 @@ export const CreateCollection = ({ collection, onSubmit, noDialog }: Props) => {
 								name="name"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel className="opacity-50">
-											<Header5>Name</Header5>
+										<FormLabel>
+											<Header4>Name</Header4>
 										</FormLabel>
 										<FormControl>
 											<Input
@@ -84,11 +84,12 @@ export const CreateCollection = ({ collection, onSubmit, noDialog }: Props) => {
 								name="description"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel className="opacity-50">
-											<Header5>Description (optional)</Header5>
+										<FormLabel>
+											<Header4>Description</Header4>
 										</FormLabel>
 										<FormControl>
 											<Textarea
+												placeholder="Optional"
 												{...field}
 												className="w-full text bg-card rounded-xl px-4 resize-none min-h-32 placeholder:opacity-50"
 											/>
@@ -101,17 +102,14 @@ export const CreateCollection = ({ collection, onSubmit, noDialog }: Props) => {
 							{noDialog ? (
 								<Button
 									type="submit"
-									className="bg-[#00AA0C]/5 text-[12px] text-[#00AA0C] rounded-full w-[114px] h-10 mb-3 hover:bg-[#00AA0C]/10 duration-200"
+									className="w-[114px]"
 									onClick={() => router.back()}
 								>
 									Create
 								</Button>
 							) : (
 								<DialogClose asChild>
-									<Button
-										type="submit"
-										className="bg-[#00AA0C]/5 text-[12px] text-[#00AA0C] rounded-full w-[114px] h-10 mb-3 hover:bg-[#00AA0C]/10 duration-200"
-									>
+									<Button type="submit" className="w-[114px]">
 										Create
 									</Button>
 								</DialogClose>
