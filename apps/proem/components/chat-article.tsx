@@ -5,6 +5,7 @@ import { MicroAbstract } from "@/components/chat-abstract";
 import { AIGeneratedIcon } from "@/components/icons/AIGeneratedIcon";
 import Markdown from "@/components/markdown";
 import { ModelSelector, ModelSelectorProps } from "@/components/model-selector";
+import { PaperList } from "@/components/paper-list";
 import { PaperMetaData } from "@/components/paper-meta-data";
 import { Trackable } from "@/components/trackable";
 import { BasicReaderUserData } from "@/services/paper-reads-service";
@@ -21,7 +22,7 @@ import {
 } from "@untitled-ui/icons-react";
 import { Suspense } from "react";
 import { EngagementIndicator } from "./engagement-indicator";
-import { SpaceName, GotoSpaceButton } from "./space-name-button";
+import { GotoSpaceButton, SpaceName } from "./space-name-button";
 
 type ChatArticleProps = Pick<
 	AddToCollectionButtonProps,
@@ -182,6 +183,13 @@ export function ChatArticle({
 					<div className="text-center pt-4">
 						<GotoSpaceButton collectionId={customCollectionId} />
 					</div>
+				</>
+			)}
+
+			{paper && !customCollectionId && (
+				<>
+					<Header4>Related papers</Header4>
+					<PaperList ids={paper.data.related_works} limit={3} />
 				</>
 			)}
 		</div>
