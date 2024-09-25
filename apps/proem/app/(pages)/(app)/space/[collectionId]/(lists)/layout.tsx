@@ -59,6 +59,8 @@ export default async function ({ params: { collectionId }, children }: Props) {
 			)}
 
 			{isDefaultCollection && <OnboardingCarousel />}
+
+			{/* {isDefaultCollection && <div>Show stuff on discover for logged in user</div>} */}
 			<LoadingTransition type="section">{children}</LoadingTransition>
 		</div>
 	);
