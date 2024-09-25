@@ -38,12 +38,12 @@ export const mergeFeed = async <
 	// TODO! handle overfetching if percentage is not 1
 	// TODO! handle overfetching if 1 or more feeds return null
 	const fetchedFeeds = await Promise.all(
-		feeds.map(async (feed) => {
-			const feedLimit = Math.ceil(limit * feed.percentage);
-			const feedOffset = offset * feedLimit;
+		feeds.map((feed) => {
+			const feedLimit = limit * feed.percentage;
+			const feedOffset = offset;
 
 			return feed.fetch({
-				offset: feedOffset,
+				offset,
 				limit: feedLimit,
 			});
 		}),
