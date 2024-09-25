@@ -117,7 +117,7 @@ const ShareIcon = ({
 			case "private":
 				return {
 					icon: <Lock01 className="size-3.5 opacity-85 cursor-help" />,
-					title: "Private space, only available to you",
+					title: "Private space only available to you",
 				};
 		}
 	};
