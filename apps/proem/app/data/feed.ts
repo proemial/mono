@@ -20,7 +20,7 @@ import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { unstable_cache } from "next/cache";
 import { z } from "zod";
 import { iterateStaticFeed } from "./iterate-static-feed";
-import { PaginationOptions, mergeFeed } from "./merge-feed";
+import { PaginationOptions, PaginationResult, mergeFeed } from "./merge-feed";
 
 const DEFAULT_LIMIT = 5; // TODO! up to 10
 const POPULAR_PAPERS_PERCENTAGE:
@@ -74,6 +74,7 @@ export module Feed {
 	export const Row = z.object({
 		// Recommendation reason
 		type: z.enum(["organic", "popularity-boost"]),
+		id: z.string(),
 	});
 
 	export type Row =
@@ -101,46 +102,11 @@ export module Feed {
 		);
 	};
 
-	export const fromPublic = (options: FetchFeedParams[1]) => {
-		return fetchFeedByFeaturesWithPostsAndReaders(
-			{
-				features: defaultFeedFilter.features,
-				days: defaultFeedFilter.days,
-			},
-			options,
-		);
-	};
-
-	export const fromInstitution = async (
-		institutionId: string,
-		options: FetchFeedParams[1],
+	export const byFeatures = async (
+		params: FetchFeedParams[0],
+		options: PaginationOptions,
 	) => {
-		// TODO!: refactor
-		return fetchFeedByInstitutionWithPostsAndReaders(
-			{ id: institutionId },
-			options,
-			undefined,
-		);
-	};
-
-	export const byFeatures = async (options: PaginationOptions) => {
-		// const {
-		// 	meta,
-		// 	rankedIds,
-		// 	papers: rankedPapers,
-		// } = await fetchAndRerankPaperIds(
-		// 	params,
-		// 	{
-		// 		limit: rankedPaperLimit,
-		// 		offset: offset,
-		// 	},
-		// 	collectionId,
-		// );
-		return {
-			count: 0,
-			rows: [],
-			nextOffset: 1,
-		};
+		return Feed.fromFeatures(params, options);
 	};
 
 	export const byPopularity = async (options: PaginationOptions) => {
@@ -181,60 +147,28 @@ export module Feed {
 		});
 	};
 
-	export const fromCollection = async (
-		collectionId: string,
-		options: FetchFeedParams[1],
-		userId?: string,
-		organisationId?: string,
-	) => {
-		const isDefaultSpace = collectionId.startsWith("user_");
-		// We only inject popular papers in users default space
-		const injectPopularPapersInFeed = isDefaultSpace;
-
-		const fingerprints = await unstable_cache(
-			async () => await Fingerprint.fromCollection(collectionId),
-			["fingerprint", collectionId],
-			{
-				revalidate: false,
-			},
-		)();
-
-		const { filter: features } = getFeatureFilter(fingerprints);
-
-		const settings = await feedSettings();
-		const feed = settings.showInstitutions
-			? await mergeFeed(
-					[
-						// {
-						// 	fetch: Feed.byFeatures,
-						// 	percentage: 0.6,
-						// },
-						// {
-						// 	fetch: Feed.byPopularity,
-						// 	percentage: 0.3,
-						// },
-						{
-							fetch: Feed.byStatic,
-							percentage: 1,
-						},
-					],
-					options,
-				)
-			: await Feed.fromFeatures(
-					{ features, days: FEED_DEFAULT_DAYS },
-					options,
-					injectPopularPapersInFeed,
-					collectionId,
-				);
-
+	const prepareFeed = async <
+		TFeed extends PaginationResult<{ id: string; paper?: { id: string } }>,
+	>({
+		feed,
+		collectionId,
+		userId,
+		organisationId,
+	}: {
+		feed: TFeed;
+		collectionId?: string;
+		userId?: string;
+		organisationId?: string;
+	}) => {
 		if (!feed) {
 			return null;
 		}
 
 		const paperIds = feed.rows
-			.map((row) => ("paper" in row ? row.paper.id : null))
-			.filter((id) => id !== null);
+			.map((row) => ("paper" in row ? row?.paper?.id : null))
+			.filter((id) => id !== null && id !== undefined);
 
+		// TODO! move down?
 		const papersWithPostsAndReaders = await Promise.all(
 			paperIds.map((paperId) =>
 				fetchPaperWithPostsAndReaders({
@@ -258,6 +192,171 @@ export module Feed {
 						...row.paper,
 						posts:
 							papersWithPostsAndReaders.find(
+								(paper) => paper.paperId === row.paper?.id,
+							)?.posts ?? [],
+						readers:
+							papersWithPostsAndReaders.find(
+								(paper) => paper.paperId === row.paper?.id,
+							)?.readers ?? [],
+					},
+				};
+			}),
+		};
+		return feedWithPostsAndReaders;
+	};
+
+	export const fromPublic = async (options: FetchFeedParams[1]) => {
+		return fetchFeedByFeaturesWithPostsAndReaders(
+			{
+				features: defaultFeedFilter.features,
+				days: defaultFeedFilter.days,
+			},
+			options,
+		);
+		// const settings = await feedSettings();
+		// if (!settings.showInstitutions) {
+		// 	return fetchFeedByFeaturesWithPostsAndReaders(
+		// 		{
+		// 			features: defaultFeedFilter.features,
+		// 			days: defaultFeedFilter.days,
+		// 		},
+		// 		options,
+		// 	);
+		// }
+		// const feed = await mergeFeed(
+		// 	[
+		// 		{
+		// 			fetch: (options) =>
+		// 				Feed.byFeatures(
+		// 					{
+		// 						features: defaultFeedFilter.features,
+		// 						days: defaultFeedFilter.days,
+		// 					},
+		// 					options,
+		// 				),
+		// 			percentage: 0.9,
+		// 		},
+		// 		{
+		// 			fetch: (options) => Feed.byStatic(options),
+		// 			percentage: 0.1,
+		// 		},
+		// 		// {
+		// 		// 	fetch: Feed.byPopularity,
+		// 		// 	percentage: 0.3,
+		// 		// },
+		// 	],
+		// 	options,
+		// );
+		// console.log({ feed });
+		// if (!feed) {
+		// 	return null;
+		// }
+
+		// return prepareFeed({
+		// 	feed,
+		// 	collectionId: undefined,
+		// 	userId: undefined,
+		// 	organisationId: undefined,
+		// });
+	};
+
+	export const fromInstitution = async (
+		institutionId: string,
+		options: FetchFeedParams[1],
+	) => {
+		// TODO!: refactor
+		return fetchFeedByInstitutionWithPostsAndReaders(
+			{ id: institutionId },
+			options,
+			undefined,
+		);
+	};
+
+	export const fromCollection = async (
+		collectionId: string,
+		options: FetchFeedParams[1],
+		userId?: string,
+		organisationId?: string,
+	) => {
+		const isDefaultSpace = collectionId.startsWith("user_");
+		// We only inject popular papers in users default space
+		const injectPopularPapersInFeed = isDefaultSpace;
+
+		const fingerprints = await unstable_cache(
+			async () => await Fingerprint.fromCollection(collectionId),
+			["fingerprint", collectionId],
+			{
+				revalidate: false,
+			},
+		)();
+
+		const { filter: features } = getFeatureFilter(fingerprints);
+
+		const settings = await feedSettings();
+		// const feed = settings.showInstitutions
+		// 	? await mergeFeed(
+		// 			[
+		// 				{
+		// 					fetch: Feed.byStatic,
+		// 					percentage: 0.1,
+		// 				},
+		// 				{
+		// 					fetch: (options) =>
+		// 						Feed.byFeatures({ features, days: FEED_DEFAULT_DAYS }, options),
+		// 					percentage: 0.9,
+		// 				},
+		// 				// {
+		// 				// 	fetch: Feed.byPopularity,
+		// 				// 	percentage: 0.3,
+		// 				// },
+		// 			],
+		// 			options,
+		// 		)
+		// 	: await Feed.fromFeatures(
+		// 			{ features, days: FEED_DEFAULT_DAYS },
+		// 			options,
+		// 			injectPopularPapersInFeed,
+		// 			collectionId,
+		// 		);
+
+		const feed = await Feed.fromFeatures(
+			{ features, days: FEED_DEFAULT_DAYS },
+			options,
+			injectPopularPapersInFeed,
+			collectionId,
+		);
+
+		if (!feed) {
+			return null;
+		}
+
+		const paperIds = feed.rows
+			.map((row) => ("paper" in row ? row.paper.id : null))
+			.filter((id) => id !== null);
+
+		const papersWithPostsAndReaders = await Promise.all(
+			paperIds.map((paperId) =>
+				fetchPaperWithPostsAndReaders({
+					paperId,
+					spaceId: collectionId,
+					organisationId,
+					userId,
+				}),
+			),
+		);
+		const feedWithPostsAndReaders = {
+			...feed,
+			rows: feed.rows.map((row) => {
+				// if ("contentType" in row && row.contentType === "institution") {
+				// 	return row;
+				// }
+
+				return {
+					...row,
+					paper: {
+						...row.paper,
+						posts:
+							papersWithPostsAndReaders.find(
 								(paper) =>
 									paper.paperId === ("paper" in row ? row.paper.id : null),
 							)?.posts ?? [],
@@ -273,8 +372,9 @@ export module Feed {
 		return feedWithPostsAndReaders;
 	};
 
-	// TODO!: handle duplicates
-	// TODO!: add hardcoded set of items to include
+	/**
+	 *  TODO: split up in Feed.byPopularity and Feed.byFeatures instead
+	 */
 	export const fromFeatures = async (
 		params: FetchFeedParams[0],
 		options: FetchFeedParams[1],
@@ -353,6 +453,7 @@ export module Feed {
 
 						return {
 							...asRankedPaper,
+							id: id,
 							contentType: "paper" as const,
 							type,
 							paper,
