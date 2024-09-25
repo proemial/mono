@@ -5,16 +5,18 @@ import FeedItem, {
 import { getFieldFromOpenAlexTopics } from "@/app/(pages)/(app)/space/(discover)/get-field-from-open-alex-topics";
 import { fetchPaperWithPostsAndReaders } from "@/app/data/feed";
 import { fromIds } from "@/app/data/papers-by-ids";
-import React from "react";
+import React, { ReactNode } from "react";
 import { ThemeColoredCard } from "./theme-colored-card";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
+import { Header4 } from "@proemial/shadcn-ui";
 
 type Props = {
 	ids: string[];
 	limit?: number;
+	children: string | ReactNode;
 };
 
-export async function PaperList({ ids: urls, limit }: Props) {
+export async function PaperList({ ids: urls, limit, children }: Props) {
 	const ids = urls.map((url) => url.split("/").at(-1) as string);
 	const papers = await fromIds(ids);
 
@@ -44,8 +46,13 @@ export async function PaperList({ ids: urls, limit }: Props) {
 			}) as FeedPaper,
 	);
 
+	if (!feedWithPostsAndReaders?.length) {
+		return undefined;
+	}
+
 	return (
 		<>
+			<Header4>{children}</Header4>
 			{feedWithPostsAndReaders.map((paper, i) => (
 				<RelatedPaper key={i} paper={paper} />
 			))}

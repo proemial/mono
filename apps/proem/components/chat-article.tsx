@@ -50,6 +50,10 @@ export function ChatArticle({
 	const authors = paper?.data.authorships;
 	const publisher = paper?.data.primary_location.source?.display_name;
 
+	const spaceId = customCollectionId?.startsWith("col_")
+		? customCollectionId
+		: undefined;
+
 	return (
 		<div className="space-y-3 text-pretty">
 			{title ? (
@@ -165,32 +169,23 @@ export function ChatArticle({
 				</>
 			)}
 
-			{paper && customCollectionId && (
-				<>
-					<Header4>
-						<SpaceName collectionId={customCollectionId}>
-							More papers from
-						</SpaceName>
-					</Header4>
-					<Suspense fallback={<Spinner />}>
-						<SpacePapers
-							space={customCollectionId}
-							count={3}
-							background="lightgrey"
-							filter={(p) => p.id !== paper.id}
-						/>
-					</Suspense>
-					<div className="text-center pt-4">
-						<GotoSpaceButton collectionId={customCollectionId} />
-					</div>
-				</>
+			{paper && spaceId && (
+				<Suspense fallback={<Spinner />}>
+					<SpacePapers
+						space={spaceId}
+						count={3}
+						background="lightgrey"
+						filter={(p) => p.id !== paper.id}
+					/>
+				</Suspense>
 			)}
 
-			{paper && !customCollectionId && (
-				<>
-					<Header4>Related papers</Header4>
-					<PaperList ids={paper.data.related_works} limit={3} />
-				</>
+			{paper && !spaceId && (
+				<Suspense fallback={<Spinner />}>
+					<PaperList ids={paper.data.related_works} limit={3}>
+						Related papers
+					</PaperList>
+				</Suspense>
 			)}
 		</div>
 	);
