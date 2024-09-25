@@ -19,6 +19,7 @@ import { ThemeColoredCard } from "@/components/theme-colored-card";
 import { getFeedQueryKey } from "@/utils/get-feed-query-key";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
 import { Button } from "@proemial/shadcn-ui";
+import Link from "next/link";
 import { ReactNode } from "react";
 
 // 1-4 is fetched without scrolling
@@ -93,42 +94,44 @@ export function Feed({
 				}}
 				renderHeadline={debug ? (count) => <DebugInfo count={count} /> : null}
 				renderRow={(row, i) => {
-					if ("contentType" in row && row.contentType === "institution") {
-						const branding =
-							brandingForInstitution(row.institution) ??
-							({
-								theme: { color: "gold", image: "fingerprint" },
-							} satisfies Branding);
+					// if ("contentType" in row && row.contentType === "institution") {
+					// 	const branding =
+					// 		brandingForInstitution(row.institution) ??
+					// 		({
+					// 			theme: { color: "gold", image: "fingerprint" },
+					// 		} satisfies Branding);
 
-						return (
-							<ThemeColoredCard theme={branding.theme}>
-								<div className="flex flex-col xs:flex-row gap-4 items-center justify-end p-1">
-									{"logo" in branding && branding.logo?.url && (
-										<div className="flex-1">
-											<img
-												src={branding.logo.url}
-												alt={row.institution}
-												className="w-20 h-auto m-auto"
-											/>
-										</div>
-									)}
-									<div className="space-y-6 text-center xs:text-right">
-										<p className="max-w-xs">
-											Are you curious about what research {row.institution} is
-											currently publishing?
-										</p>
-										<Button
-											size="pillLg"
-											//For some reason the padding is not even as with pullLg
-											className="px-5"
-										>
-											Visit the {row.institution} space
-										</Button>
-									</div>
-								</div>
-							</ThemeColoredCard>
-						);
-					}
+					// 	return (
+					// 		<Link href={`/discover/${row.institution}`}>
+					// 			<ThemeColoredCard theme={branding.theme}>
+					// 				<div className="flex flex-col xs:flex-row gap-4 items-center justify-end p-1">
+					// 					{"logo" in branding && branding.logo?.url && (
+					// 						<div className="flex-1">
+					// 							<img
+					// 								src={branding.logo.url}
+					// 								alt={row.institution}
+					// 								className="w-20 h-auto m-auto"
+					// 							/>
+					// 						</div>
+					// 					)}
+					// 					<div className="space-y-6 text-center xs:text-right">
+					// 						<p className="max-w-xs">
+					// 							Are you curious about what research {row.institution} is
+					// 							currently publishing?
+					// 						</p>
+					// 						<Button
+					// 							size="pillLg"
+					// 							//For some reason the padding is not even as with pullLg
+					// 							className="px-5"
+					// 						>
+					// 							Visit the {row.institution} Space
+					// 						</Button>
+					// 					</div>
+					// 				</div>
+					// 			</ThemeColoredCard>
+					// 		</Link>
+					// 	);
+					// }
 
 					const isBookmarked = Boolean(bookmarks?.[row.paper.id]);
 					const topics = row.paper.data.topics;
@@ -154,8 +157,9 @@ export function Feed({
 						</FeedItem>
 					);
 
-					if (theme && i % 2 === 0) {
-						return <ThemeColoredCard theme={theme}>{item}</ThemeColoredCard>;
+//					if (theme && i % 2 === 0) {
+					if (theme) {
+							return <ThemeColoredCard theme={theme}>{item}</ThemeColoredCard>;
 					}
 
 					if ((showThemeColors || isDefaultSpace) && field?.theme) {

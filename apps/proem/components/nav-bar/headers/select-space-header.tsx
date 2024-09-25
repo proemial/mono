@@ -89,26 +89,22 @@ export const SelectSpaceHeader = ({
 					align="center"
 					className="border-none shadow-2xl min-w-64 max-w-80 rounded-xl"
 				>
-					{userId ? (
-						<SelectItem
-							value={userId}
-							className="py-2 text-base cursor-pointer"
-						>
-							{PERSONAL_DEFAULT_COLLECTION_NAME}
-						</SelectItem>
-					) : (
-						<Link
-							href={routes.space}
-							className="hover:bg-neutral-200 relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 pl-8 pr-8 text-base outline-none focus:bg-muted focus:text-foreground"
-						>
-							{PERSONAL_DEFAULT_COLLECTION_NAME}
-						</Link>
-					)}
 					<SelectGroup className="p-0">
-						<SelectSeparator />
-						<SelectLabel className="cursor-default select-none">
-							Recently visited
-						</SelectLabel>
+						{userId ? (
+							<SelectItem
+								value={userId}
+								className="py-2 text-base cursor-pointer font-normal tracking-wide"
+							>
+								{PERSONAL_DEFAULT_COLLECTION_NAME}
+							</SelectItem>
+						) : (
+							<Link
+								href={routes.space}
+								className="hover:bg-neutral-200 relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 pl-8 pr-8 text-base outline-none focus:bg-muted focus:text-foreground"
+							>
+								{PERSONAL_DEFAULT_COLLECTION_NAME}
+							</Link>
+						)}
 						{recentSpaces
 							.map((spaceId) => spaces.find((s) => s.id === spaceId))
 							.filter((space) => typeof space !== "undefined")
@@ -124,11 +120,12 @@ export const SelectSpaceHeader = ({
 										: space.name}
 								</SelectItem>
 							))}
+
 						<RequireAuthenticationItem
-							trigger={<NonSelectItem label="More…" />}
+							trigger={<NonSelectItem label="View all your spaces" />}
 							restricted={
 								<Profile
-									trigger={<NonSelectItem label="More…" />}
+									trigger={<NonSelectItem label="View all your spaces" />}
 									className="flex w-full"
 								/>
 							}
@@ -170,7 +167,7 @@ const NonSelectItem = forwardRef(
 			<div
 				ref={ref}
 				{...props}
-				className="hover:bg-neutral-200 relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 pl-8 pr-8 text-base outline-none focus:bg-muted focus:text-foreground"
+				className="hover:bg-neutral-200 relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 pl-8 pr-8 text-base outline-none focus:bg-muted focus:text-foreground text-gray-600"
 			>
 				{props.label}
 			</div>
