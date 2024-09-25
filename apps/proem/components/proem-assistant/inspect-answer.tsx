@@ -7,7 +7,10 @@ import { useEffect } from "react";
 import useMeasure from "react-use-measure";
 import { AssistantButton } from "./assistant-button";
 import { Tuple, TuplePost } from "./tuple";
-import { ASSISTANT_OPEN_QUERY_KEY, useAssistant } from "./use-assistant/use-assistant";
+import {
+	ASSISTANT_OPEN_QUERY_KEY,
+	useAssistant,
+} from "./use-assistant/use-assistant";
 import { useSnapPointStore } from "./use-snap-point-store";
 
 type Props = {
@@ -34,7 +37,9 @@ export const InspectAnswer = ({ tuple }: Props) => {
 
 	const handleBack = () => {
 		if (spaceId) {
-			router.push(`${routes.space}/${spaceId}?${ASSISTANT_OPEN_QUERY_KEY}=true`);
+			router.push(
+				`${routes.space}/${spaceId}?${ASSISTANT_OPEN_QUERY_KEY}=true`,
+			);
 		} else {
 			router.push(`${routes.space}?${ASSISTANT_OPEN_QUERY_KEY}=true`);
 		}
@@ -42,18 +47,12 @@ export const InspectAnswer = ({ tuple }: Props) => {
 
 	return (
 		<div ref={ref} className="flex flex-col px-3 mb-4">
-			<div className="flex justify-between -mt-4 -mx-2 text-white">
+			<div className="flex justify-between -mt-5 -mx-3 text-white">
 				<div
 					className="p-2 rounded-full hover:opacity-75 duration-200 cursor-pointer"
 					onClick={handleBack}
 				>
 					<ChevronLeft className="size-6" />
-				</div>
-				<div
-					className="p-2 rounded-full hover:opacity-75 duration-200 cursor-pointer"
-					onClick={closeAssistant}
-				>
-					<X className="size-6" />
 				</div>
 			</div>
 			<Header4 className="text-white mb-1">Review references</Header4>
