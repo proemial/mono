@@ -1,3 +1,4 @@
+"use server";
 import FeedItem, {
 	FeedPaper,
 } from "@/app/(pages)/(app)/space/(discover)/feed-item";
