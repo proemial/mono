@@ -56,18 +56,19 @@ export const CollectionListItem = ({
 }: Props) => {
 	return (
 		<div className="flex justify-between gap-2 items-center hover:bg-[#e8e8e8] -mx-2 px-2 py-1 rounded-md group">
-			<DrawerClose className="text-sm select-none truncate pr-2">
-				<Link
-					prefetch={false}
-					href={`${routes.space}/${collection.id}`}
-					onClick={trackHandler(analyticsKeys.collection.openFromMenu)}
-				>
-					{collection.name}
-				</Link>
-			</DrawerClose>
+			<Link
+				prefetch={false}
+				href={`${routes.space}/${collection.id}`}
+				onClick={trackHandler(analyticsKeys.collection.openFromMenu)}
+				className="text-sm select-none truncate"
+			>
+				<DrawerClose className="flex">
+					<div className="truncate">{collection.name}</div>
+				</DrawerClose>
+			</Link>
 			<div className="flex gap-1 items-center justify-end">
 				{editable && (
-					<div className="flex">
+					<div className="flex pl-4">
 						<Edit
 							space={collection}
 							editFn={editable.onEdit}
