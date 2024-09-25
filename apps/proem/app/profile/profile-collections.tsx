@@ -1,14 +1,15 @@
 "use client";
 
-import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
-import { CollapsibleSection } from "@/components/collapsible-section";
 import { CollectionListItem } from "@/components/collections/collection-list-item";
 import { CreateCollection } from "@/components/collections/create-collection";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
+import { PromptForSignIn } from "@/components/prompt-for-sign-in";
 import { routes } from "@/routes";
 import { PermissionUtils } from "@/utils/permission-utils";
 import { useAuth, useOrganization } from "@clerk/nextjs";
+import { OrganizationMembershipPublicUserData } from "@clerk/nextjs/server";
 import { Collection, NewCollection } from "@proemial/data/neon/schema";
+import { Button, Header5 } from "@proemial/shadcn-ui";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus } from "@untitled-ui/icons-react";
 import { useRouter } from "next/navigation";
@@ -23,7 +24,9 @@ import {
 export const ProfileCollections = () => {
 	const { userId, orgId } = useAuth();
 	const queryClient = useQueryClient();
-	const { membership } = useOrganization();
+	const { membership, memberships } = useOrganization({ memberships: true });
+	const members =
+		memberships?.data?.map((member) => member.publicUserData) ?? [];
 
 	const { data: collections } = useQuery({
 		queryKey: ["collections", userId],
@@ -60,15 +63,42 @@ export const ProfileCollections = () => {
 	const noOfCollections = collections.length > 0 ? collections.length : 1;
 
 	return (
-		<CollapsibleSection
-			extra={<div>{noOfCollections}</div>}
-			trigger={<div>Spaces</div>}
-			trackingKey={analyticsKeys.ui.menu.click.collapse.collections}
-		>
-			<div className="space-y-3">
+		<div className="space-y-3">
+			<div className="flex justify-center">
+				<PromptForSignIn
+					trigger={
+						<Button variant="black" className="w-full flex gap-2 items-center">
+							<Plus className="size-4" />
+							Create a space…
+						</Button>
+					}
+					restricted={
+						<CreateCollectionDrawer
+							trigger={
+								<Button variant="black" className="flex gap-2 items-center">
+									<Plus className="size-4" />
+									Create a space…
+								</Button>
+							}
+							userId={userId}
+							orgId={orgId}
+						/>
+					}
+				/>
+			</div>
+			<div className="flex gap-2 justify-between">
+				<Header5 className="opacity-50 select-none">Spaces</Header5>
+				<Header5 className="opacity-50 select-none">{noOfCollections}</Header5>
+			</div>
+			<div className="flex flex-col">
 				<CollectionListItem
 					collection={getPersonalDefaultCollection(userId)}
 					editable={false}
+					author={
+						members.find((member) => member.userId === userId) as
+							| OrganizationMembershipPublicUserData
+							| undefined
+					}
 				/>
 				{nonDefaultCollections.map((collection) => (
 					<CollectionListItem
@@ -83,22 +113,15 @@ export const ProfileCollections = () => {
 								: false
 						}
 						orgName={membership?.organization.name}
+						author={
+							members.find((member) => member.userId === collection.ownerId) as
+								| OrganizationMembershipPublicUserData
+								| undefined
+						}
 					/>
 				))}
-			</div>
-			{userId && (
-				<CreateCollectionDrawer
-					trigger={
-						<div className="flex gap-2 items-center hover:opacity-85 active:opacity-75 duration-200 cursor-pointer">
-							<Plus className="size-4 opacity-85" />
-							<div className="text-sm">Create New Space</div>
-						</div>
-					}
-					userId={userId}
-					orgId={orgId}
-				/>
-			)}
-		</CollapsibleSection>
+			</div>{" "}
+		</div>
 	);
 };
 

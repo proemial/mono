@@ -43,7 +43,6 @@ export function CollapsibleSection({
 					className={`flex items-center justify-between space-x-4 cursor-pointer ${className}`}
 				>
 					{trigger}
-
 					<div className="flex items-center">
 						{extra}
 						<Button variant="ghost" size="sm" className="p-0 -my-1 -mr-2 w-9">

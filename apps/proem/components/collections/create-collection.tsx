@@ -56,7 +56,7 @@ export const CreateCollection = ({ collection, onSubmit, noDialog }: Props) => {
 
 	return (
 		<div className="flex flex-col gap-8">
-			{!noDialog && <Header2>Create New Space</Header2>}
+			{!noDialog && <Header2>Create a Space</Header2>}
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(handleSubmit)} className="h-full">
 					<div className="flex flex-col h-full gap-8 justify-between">
@@ -102,6 +102,7 @@ export const CreateCollection = ({ collection, onSubmit, noDialog }: Props) => {
 							{noDialog ? (
 								<Button
 									type="submit"
+									variant="black"
 									className="w-[114px]"
 									onClick={() => router.back()}
 								>
@@ -109,7 +110,7 @@ export const CreateCollection = ({ collection, onSubmit, noDialog }: Props) => {
 								</Button>
 							) : (
 								<DialogClose asChild>
-									<Button type="submit" className="w-[114px]">
+									<Button type="submit" variant="black" className="w-[114px]">
 										Create
 									</Button>
 								</DialogClose>

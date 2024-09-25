@@ -9,7 +9,7 @@ import { ReactQueryProvider } from "@/components/providers/react-query";
 import { SetActiveOrganization } from "@/components/set-active-organization";
 import { TopNavigation } from "@/components/top-navigation/top-navigation";
 import { isEmbedded } from "@/utils/url";
-import { cn } from "@proemial/shadcn-ui";
+import { TooltipProvider, cn } from "@proemial/shadcn-ui";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import { Metadata, Viewport } from "next";
 import { Lato as FontSans } from "next/font/google";
@@ -149,10 +149,12 @@ function ContextWrapper({ children }: { children: ReactNode }) {
 		<AuthProvider>
 			<Analytics.PostHog tracking={trackingInput}>
 				<AssistantStateProvider>
-					<ReactQueryProvider>
-						{children}
-						<Analytics.Clients tracking={trackingInput} />
-					</ReactQueryProvider>
+					<TooltipProvider>
+						<ReactQueryProvider>
+							{children}
+							<Analytics.Clients tracking={trackingInput} />
+						</ReactQueryProvider>
+					</TooltipProvider>
 				</AssistantStateProvider>
 			</Analytics.PostHog>
 		</AuthProvider>

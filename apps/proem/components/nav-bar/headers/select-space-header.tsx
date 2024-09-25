@@ -7,7 +7,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { SignInDrawer } from "@/components/sign-in-drawer";
+import { PromptForSignIn } from "@/components/prompt-for-sign-in";
 import { routes } from "@/routes";
 import { useAuth } from "@clerk/nextjs";
 import { Collection } from "@proemial/data/neon/schema";
@@ -23,13 +23,7 @@ import {
 } from "@proemial/shadcn-ui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-	ForwardedRef,
-	ReactNode,
-	forwardRef,
-	useEffect,
-	useState,
-} from "react";
+import { ForwardedRef, forwardRef, useEffect, useState } from "react";
 import { RecentSpaces } from "./recent-spaces";
 
 type SelectSpaceHeaderProps = {
@@ -121,7 +115,7 @@ export const SelectSpaceHeader = ({
 								</SelectItem>
 							))}
 
-						<RequireAuthenticationItem
+						<PromptForSignIn
 							trigger={<NonSelectItem label="View all your spaces" />}
 							restricted={
 								<Profile
@@ -131,7 +125,7 @@ export const SelectSpaceHeader = ({
 							}
 						/>
 						<SelectSeparator />
-						<RequireAuthenticationItem
+						<PromptForSignIn
 							trigger={<NonSelectItem label="Create new space" />}
 							restricted={
 								userId && (
@@ -148,17 +142,6 @@ export const SelectSpaceHeader = ({
 			</Select>
 		</div>
 	);
-};
-
-const RequireAuthenticationItem = ({
-	trigger,
-	restricted,
-}: { trigger: ReactNode; restricted: ReactNode }) => {
-	const { isSignedIn } = useAuth();
-	if (isSignedIn) {
-		return restricted;
-	}
-	return <SignInDrawer trigger={trigger} />;
 };
 
 const NonSelectItem = forwardRef(
