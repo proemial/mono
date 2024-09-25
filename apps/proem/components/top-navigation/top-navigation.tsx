@@ -3,8 +3,8 @@ import {
 	PERSONAL_DEFAULT_COLLECTION_NAME,
 	screenMaxWidth,
 } from "@/app/constants";
-import { getAvailableCollections } from "@/app/profile/actions";
-import { MenuButton as Menu, MenuButton } from "@/app/profile/menu-button";
+import { useSpaces } from "@/app/data/spaces";
+import { MenuButton } from "@/app/profile/menu-button";
 import { Profile } from "@/app/profile/profile";
 import { asTheme, fromSeed } from "@/app/theme/color-theme";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
@@ -23,7 +23,6 @@ import {
 	NavigationMenuList,
 	cn,
 } from "@proemial/shadcn-ui";
-import { useQuery } from "@tanstack/react-query";
 import { ChevronRight } from "@untitled-ui/icons-react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useOptimistic, useTransition } from "react";
@@ -60,10 +59,7 @@ export function TopNavigation() {
 		? optimisticUrl.split("/")[2]
 		: "";
 
-	const { data: collections, isLoading } = useQuery({
-		queryKey: ["collections-with-public", collectionId, userId],
-		queryFn: async () => getAvailableCollections(collectionId),
-	});
+	const { data: collections, isLoading } = useSpaces(collectionId, userId);
 
 	const [isPending, startTransition] = useTransition();
 

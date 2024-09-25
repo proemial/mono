@@ -20,7 +20,8 @@ import {
 } from "@untitled-ui/icons-react";
 import { Suspense } from "react";
 import { EngagementIndicator } from "./engagement-indicator";
-
+import { SpacePapers } from "@/app/embed/[space]/space-papers";
+import { SpaceNameButton } from "./space-name-button";
 type ChatArticleProps = Pick<
 	AddToCollectionButtonProps,
 	"isBookmarked" | "customCollectionId"
@@ -143,16 +144,6 @@ export function ChatArticle({
 					<MicroAbstract paper={paper} />
 				</Suspense>
 			)}
-
-			{paper && (
-				<>
-					<Header4 className="pt-4">Abstract</Header4>
-					<div>
-						<Markdown>{paper.data.abstract as string}</Markdown>
-					</div>
-				</>
-			)}
-
 			{paper && (
 				<>
 					<Trackable trackingKey={analyticsKeys.read.click.fullPaper}>
@@ -169,6 +160,21 @@ export function ChatArticle({
 							</a>
 						</div>
 					</Trackable>
+				</>
+			)}
+
+			{paper && customCollectionId && (
+				<>
+					<Header4>More papers</Header4>
+					<SpacePapers
+						space={customCollectionId}
+						count={3}
+						background="lightgrey"
+						filter={(p) => p.id !== paper.id}
+					/>
+					<div className="text-center pt-4">
+						<SpaceNameButton collectionId={customCollectionId} />
+					</div>
 				</>
 			)}
 		</div>
