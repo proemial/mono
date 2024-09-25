@@ -157,8 +157,9 @@ export function Feed({
 						</FeedItem>
 					);
 
-					if (theme && i % 2 === 0) {
-						return <ThemeColoredCard theme={theme}>{item}</ThemeColoredCard>;
+//					if (theme && i % 2 === 0) {
+					if (theme) {
+							return <ThemeColoredCard theme={theme}>{item}</ThemeColoredCard>;
 					}
 
 					if ((showThemeColors || isDefaultSpace) && field?.theme) {
