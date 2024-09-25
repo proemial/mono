@@ -1,4 +1,5 @@
 import { AddToCollectionButtonProps } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
+import { SpacePapers } from "@/app/embed/[space]/space-papers";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { MicroAbstract } from "@/components/chat-abstract";
 import { AIGeneratedIcon } from "@/components/icons/AIGeneratedIcon";
@@ -10,7 +11,7 @@ import { BasicReaderUserData } from "@/services/paper-reads-service";
 import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { trimForQuotes } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
-import { Button, Header2, Header4, Header5, Icons } from "@proemial/shadcn-ui";
+import { Button, Header2, Header4, Icons } from "@proemial/shadcn-ui";
 import {
 	BookOpen01,
 	ChevronRight,
@@ -20,8 +21,8 @@ import {
 } from "@untitled-ui/icons-react";
 import { Suspense } from "react";
 import { EngagementIndicator } from "./engagement-indicator";
-import { SpacePapers } from "@/app/embed/[space]/space-papers";
 import { SpaceNameButton } from "./space-name-button";
+
 type ChatArticleProps = Pick<
 	AddToCollectionButtonProps,
 	"isBookmarked" | "customCollectionId"
@@ -166,12 +167,14 @@ export function ChatArticle({
 			{paper && customCollectionId && (
 				<>
 					<Header4>More papers</Header4>
-					<SpacePapers
-						space={customCollectionId}
-						count={3}
-						background="lightgrey"
-						filter={(p) => p.id !== paper.id}
-					/>
+					<Suspense fallback={<Spinner />}>
+						<SpacePapers
+							space={customCollectionId}
+							count={3}
+							background="lightgrey"
+							filter={(p) => p.id !== paper.id}
+						/>
+					</Suspense>
 					<div className="text-center pt-4">
 						<SpaceNameButton collectionId={customCollectionId} />
 					</div>
