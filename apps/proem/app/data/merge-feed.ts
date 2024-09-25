@@ -26,12 +26,11 @@ export const shuffleFeed = <TFeed extends { rows: { id: string }[] }>(
 /**
  * Merges multiple feeds into one
  */
-export const mergeFeed = async <TRow extends { id: string }>(
+export const mergeFeed = async <
+	T extends Promise<PaginationResult<{ id: string }> | null>,
+>(
 	feeds: {
-		fetch: ({
-			offset,
-			limit,
-		}: PaginationOptions) => Promise<PaginationResult<TRow>>;
+		fetch: ({ offset, limit }: PaginationOptions) => NoInfer<T>;
 		percentage: FEED_PERCENTAGES;
 	}[],
 	{ offset = 0, limit = 10 }: PaginationOptions,
@@ -56,18 +55,24 @@ export const mergeFeed = async <TRow extends { id: string }>(
 	// const rowCount = fetchedFeeds.flatMap((feed) => feed?.rows ?? []).length;
 
 	const mergedFeed = shuffleFeed(
-		fetchedFeeds.reduce(
-			(acc, feed) => {
-				if (!feed) return acc;
+		fetchedFeeds
+			.filter((feed) => feed !== null)
+			.reduce(
+				(acc, feed) => {
+					if (!feed) return acc;
 
-				return {
-					count: acc.count + feed.count,
-					rows: [...acc.rows, ...feed.rows],
-					nextOffset: acc.nextOffset,
-				};
-			},
-			{ count: 0, rows: [], nextOffset: offset + 1 },
-		),
+					return {
+						count: acc.count + feed.count,
+						rows: [...acc.rows, ...feed.rows],
+						nextOffset: acc.nextOffset,
+					};
+				},
+				{
+					count: 0,
+					rows: [] as { id: string }[],
+					nextOffset: offset + 1,
+				},
+			),
 	);
 
 	return mergedFeed;
