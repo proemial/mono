@@ -11,6 +11,7 @@ import {
 import { Fingerprint } from "@/app/data/fingerprint";
 import { Post } from "@/app/data/post";
 import { summarise } from "@/app/prompts/summarise-title";
+import { feedSettings } from "@/feature-flags/feed-settings";
 import { PaperReadsService } from "@/services/paper-reads-service";
 import { Paper } from "@proemial/data/paper";
 import { Redis } from "@proemial/redis/redis";
@@ -21,7 +22,7 @@ import { z } from "zod";
 import { iterateStaticFeed } from "./iterate-static-feed";
 import { PaginationOptions, mergeFeed } from "./merge-feed";
 
-const DEFAULT_LIMIT = 5;
+const DEFAULT_LIMIT = 5; // TODO! up to 10
 const POPULAR_PAPERS_PERCENTAGE:
 	| 0.1
 	| 0.2
@@ -71,11 +72,22 @@ export const fetchPaperWithPostsAndReaders = async ({
 // TODO! move to data when all dependencies are moved out of apps/proem
 export module Feed {
 	export const Row = z.object({
+		// Recommendation reason
 		type: z.enum(["organic", "popularity-boost"]),
 	});
 
-	// TODO! remove hardcoded reference to OpenAlexPaper
-	export type Row = z.infer<typeof Row> & { paper: OpenAlexPaper };
+	export type Row =
+		| (z.infer<typeof Row> & {
+				contentType: "paper";
+				// TODO! remove hardcoded reference to OpenAlexPaper
+				paper: OpenAlexPaper;
+		  })
+		| {
+				contentType: "institution";
+				institution: {
+					id: string;
+				};
+		  };
 
 	export const injectItems = <
 		TRankedItems extends { id: string }[],
@@ -150,12 +162,18 @@ export module Feed {
 		const staticItems = [
 			{
 				id: "1",
+				contentType: "institution" as const,
+				institution: "apple",
 			},
 			{
 				id: "2",
+				contentType: "institution" as const,
+				institution: "apple",
 			},
 			{
 				id: "3",
+				contentType: "institution" as const,
+				institution: "apple",
 			},
 		];
 
@@ -182,18 +200,39 @@ export module Feed {
 
 		const { filter: features } = getFeatureFilter(fingerprints);
 
-		const feed = await Feed.fromFeatures(
-			{ features, days: FEED_DEFAULT_DAYS },
-			options,
-			injectPopularPapersInFeed,
-			collectionId,
-		);
+		const settings = await feedSettings();
+		const feed = settings.showInstitutions
+			? await mergeFeed(
+					[
+						// {
+						// 	fetch: Feed.byFeatures,
+						// 	percentage: 0.6,
+						// },
+						// {
+						// 	fetch: Feed.byPopularity,
+						// 	percentage: 0.3,
+						// },
+						{
+							fetch: Feed.byStatic,
+							percentage: 1,
+						},
+					],
+					options,
+				)
+			: await Feed.fromFeatures(
+					{ features, days: FEED_DEFAULT_DAYS },
+					options,
+					injectPopularPapersInFeed,
+					collectionId,
+				);
 
 		if (!feed) {
 			return null;
 		}
 
-		const paperIds = feed.rows.map(({ paper }) => paper?.id);
+		const paperIds = feed.rows
+			.map((row) => ("paper" in row ? row.paper.id : null))
+			.filter((id) => id !== null);
 
 		const papersWithPostsAndReaders = await Promise.all(
 			paperIds.map((paperId) =>
@@ -207,20 +246,28 @@ export module Feed {
 		);
 		const feedWithPostsAndReaders = {
 			...feed,
-			rows: feed.rows.map((row) => ({
-				...row,
-				paper: {
-					...row.paper,
-					posts:
-						papersWithPostsAndReaders.find(
-							(paper) => paper.paperId === row.paper.id,
-						)?.posts ?? [],
-					readers:
-						papersWithPostsAndReaders.find(
-							(paper) => paper.paperId === row.paper.id,
-						)?.readers ?? [],
-				},
-			})),
+			rows: feed.rows.map((row) => {
+				if ("contentType" in row && row.contentType === "institution") {
+					return row;
+				}
+
+				return {
+					...row,
+					paper: {
+						...row.paper,
+						posts:
+							papersWithPostsAndReaders.find(
+								(paper) =>
+									paper.paperId === ("paper" in row ? row.paper.id : null),
+							)?.posts ?? [],
+						readers:
+							papersWithPostsAndReaders.find(
+								(paper) =>
+									paper.paperId === ("paper" in row ? row.paper.id : null),
+							)?.readers ?? [],
+					},
+				};
+			}),
 		};
 		return feedWithPostsAndReaders;
 	};
@@ -305,6 +352,7 @@ export module Feed {
 
 						return {
 							...asRankedPaper,
+							contentType: "paper" as const,
 							type,
 							paper,
 						};
@@ -342,6 +390,7 @@ export module Feed {
 						...asRankedPaper,
 						id,
 						paper: { ...currentPaper, generated },
+						contentType: "paper" as const,
 						type,
 					};
 				}
@@ -349,6 +398,7 @@ export module Feed {
 					...asRankedPaper,
 					id,
 					paper: currentPaper,
+					contentType: "paper" as const,
 					type,
 				};
 			}),
