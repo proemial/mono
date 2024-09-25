@@ -7,7 +7,7 @@ import {
 import { useVisualViewport } from "@/utils/useVisualViewport";
 import { Collection } from "@proemial/data/neon/schema";
 import { Button } from "@proemial/shadcn-ui";
-import { ChevronRight } from "@untitled-ui/icons-react";
+import { Lightbulb03, SearchMd } from "@untitled-ui/icons-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
@@ -113,9 +113,21 @@ function FormInputs({
 						type="submit"
 						onClick={trackHandler(analyticsKeys.search.click.submit)}
 					>
-						<ChevronRight className="size-5" />
+						<SearchMd className="size-5" />
 					</Button>
 				</div>
+			</div>
+			<div className="text-sm text-gray-700 py-2 px-6">
+				<Lightbulb03 className="size-4 inline-block " /> You can also use{" "}
+				<a
+					className="font-bold"
+					href="https://scholar.google.com/"
+					target="_blank"
+					rel="noreferrer"
+				>
+					Google Scholar
+				</a>{" "}
+				to find relevant articles for your space.
 			</div>
 
 			<div className="mt-2">

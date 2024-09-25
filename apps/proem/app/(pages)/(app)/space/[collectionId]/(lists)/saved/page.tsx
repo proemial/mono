@@ -15,7 +15,7 @@ import { auth } from "@clerk/nextjs/server";
 import { getFeatures } from "@proemial/repositories/oa/fingerprinting/features";
 import { getFingerprint } from "@proemial/repositories/oa/fingerprinting/fingerprints";
 import { Button } from "@proemial/shadcn-ui";
-import { SearchMd } from "@untitled-ui/icons-react";
+import { FilePlus03 } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -47,10 +47,16 @@ export default async function SavedPage({
 	) {
 		return (
 			<div className="flex flex-col items-center justify-center gap-12">
-				<div className="text-sm">You have yet to add a paper.</div>
+				<div className="text-gray-600 text-center">
+					Get a news feed of the latest published science based on papers of
+					your choice.
+					<br />
+					<br />
+					Let's save the first paper to this space.
+				</div>
 				<Link href={`${routes.space}/${collectionId}/search`}>
-					<Button variant="suggestion" className="flex items-center gap-2">
-						<SearchMd className="size-4" /> Add a source…
+					<Button className="flex items-center gap-2">
+						<FilePlus03 className="size-4" /> Add paper
 					</Button>
 				</Link>
 			</div>
@@ -80,7 +86,7 @@ export default async function SavedPage({
 				<div className="flex justify-center my-6">
 					<Link href={`${routes.space}/${collectionId}/search`}>
 						<Button variant="suggestion" className="flex items-center gap-2">
-							<SearchMd className="size-4" /> Add more sources…
+							<FilePlus03 className="size-4" /> Add another paper
 						</Button>
 					</Link>
 				</div>
