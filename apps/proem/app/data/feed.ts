@@ -174,7 +174,11 @@ export module Feed {
 			institution: institution,
 		}));
 
-		return iterateStaticFeed(staticItems)(options);
+		return iterateStaticFeed(staticItems)({
+			limit: options.limit,
+			// TODO! shame: as we haven't aligned offset
+			offset: (options.offset ?? 1) - 1,
+		});
 	};
 
 	export const fromCollection = async (
