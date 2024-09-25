@@ -7,6 +7,19 @@ export async function GET(request: NextRequest) {
 
 	return NextResponse.json<ApiData>({
 		definitions: {
+			feedSettings: {
+				description: "Controls the feed settings for Discover",
+				options: [
+					{
+						value: { showInstitutions: true },
+						label: "Show institutions in feed",
+					},
+					{
+						value: { showInstitutions: false },
+						label: "Hide institutions in feed",
+					},
+				],
+			},
 			debug: {
 				description: "Enables debugging features",
 				options: [
