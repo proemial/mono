@@ -88,6 +88,10 @@ export function Feed({
 				}}
 				renderHeadline={debug ? (count) => <DebugInfo count={count} /> : null}
 				renderRow={(row, i) => {
+					if ("contentType" in row && row.contentType === "institution") {
+						return <div>Institution</div>;
+					}
+
 					const isBookmarked = Boolean(bookmarks?.[row.paper.id]);
 					const topics = row.paper.data.topics;
 					const field = topics && getFieldFromOpenAlexTopics(topics);
