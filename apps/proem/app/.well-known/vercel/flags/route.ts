@@ -7,13 +7,6 @@ export async function GET(request: NextRequest) {
 
 	return NextResponse.json<ApiData>({
 		definitions: {
-			showAIAssistant: {
-				description: "Controls whether the AI assistant is visible",
-				options: [
-					{ value: false, label: "Old ASK endpoint" },
-					{ value: true, label: "Single AI Assistant on all pages" },
-				],
-			},
 			debug: {
 				description: "Enables debugging features",
 				options: [

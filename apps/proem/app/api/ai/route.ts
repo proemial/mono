@@ -1,7 +1,6 @@
 import { UserContext, assistant } from "@/app/api/ai/ai-assistant";
 import { AnswerEngineStreamData } from "@/app/api/bot/answer-engine/answer-engine";
 import { openAlexChain } from "@/app/api/bot/ask2/fetch-papers";
-import { handleAskRequest } from "@/app/api/bot/ask2/handle-ask-request";
 import {
 	ANONYMOUS_USER_ID,
 	PAPER_BOT_USER_ID,
@@ -9,7 +8,6 @@ import {
 } from "@/app/constants";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { searchToolConfig } from "@/app/prompts/ask_agent";
-import { showAIAssistant } from "@/feature-flags/ai-assistant-flag";
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { auth } from "@clerk/nextjs/server";
 import { findCollection } from "@proemial/data/repository/collection";
@@ -36,13 +34,6 @@ export async function POST(req: NextRequest) {
 	};
 
 	const { messages, title, paperId, spaceId, abstract } = requestData;
-	const showAIAssistantFeatureFlag = await showAIAssistant();
-
-	const useDeprecatedAskAgent = !paperId && !showAIAssistantFeatureFlag;
-
-	if (useDeprecatedAskAgent) {
-		return await handleAskRequest(requestData);
-	}
 
 	const userContext: UserContext = paperId
 		? "paper"
