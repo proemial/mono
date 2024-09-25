@@ -163,7 +163,7 @@ export module Feed {
 			{
 				id: "1",
 				contentType: "institution" as const,
-				institution: "apple",
+				institution: "microsoft",
 			},
 			{
 				id: "2",
@@ -173,7 +173,7 @@ export module Feed {
 			{
 				id: "3",
 				contentType: "institution" as const,
-				institution: "apple",
+				institution: "amazon",
 			},
 		];
 
