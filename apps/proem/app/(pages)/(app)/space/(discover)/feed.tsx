@@ -19,6 +19,7 @@ import { ThemeColoredCard } from "@/components/theme-colored-card";
 import { getFeedQueryKey } from "@/utils/get-feed-query-key";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
 import { Button } from "@proemial/shadcn-ui";
+import Link from "next/link";
 import { ReactNode } from "react";
 
 // 1-4 is fetched without scrolling
@@ -101,32 +102,34 @@ export function Feed({
 							} satisfies Branding);
 
 						return (
-							<ThemeColoredCard theme={branding.theme}>
-								<div className="flex flex-col xs:flex-row gap-4 items-center justify-end p-1">
-									{"logo" in branding && branding.logo?.url && (
-										<div className="flex-1">
-											<img
-												src={branding.logo.url}
-												alt={row.institution}
-												className="w-20 h-auto m-auto"
-											/>
+							<Link href={`/discover/${row.institution}`}>
+								<ThemeColoredCard theme={branding.theme}>
+									<div className="flex flex-col xs:flex-row gap-4 items-center justify-end p-1">
+										{"logo" in branding && branding.logo?.url && (
+											<div className="flex-1">
+												<img
+													src={branding.logo.url}
+													alt={row.institution}
+													className="w-20 h-auto m-auto"
+												/>
+											</div>
+										)}
+										<div className="space-y-6 text-center xs:text-right">
+											<p className="max-w-xs">
+												Are you curious about what research {row.institution} is
+												currently publishing?
+											</p>
+											<Button
+												size="pillLg"
+												//For some reason the padding is not even as with pullLg
+												className="px-5"
+											>
+												Visit the {row.institution} Space
+											</Button>
 										</div>
-									)}
-									<div className="space-y-6 text-center xs:text-right">
-										<p className="max-w-xs">
-											Are you curious about what research {row.institution} is
-											currently publishing?
-										</p>
-										<Button
-											size="pillLg"
-											//For some reason the padding is not even as with pullLg
-											className="px-5"
-										>
-											Visit the {row.institution} space
-										</Button>
 									</div>
-								</div>
-							</ThemeColoredCard>
+								</ThemeColoredCard>
+							</Link>
 						);
 					}
 
