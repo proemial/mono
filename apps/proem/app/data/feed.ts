@@ -160,22 +160,19 @@ export module Feed {
 
 	export const byStatic = async (options: PaginationOptions) => {
 		const staticItems = [
-			{
-				id: "1",
-				contentType: "institution" as const,
-				institution: "microsoft",
-			},
-			{
-				id: "2",
-				contentType: "institution" as const,
-				institution: "apple",
-			},
-			{
-				id: "3",
-				contentType: "institution" as const,
-				institution: "amazon",
-			},
-		];
+			"Microsoft",
+			"Apple",
+			"Amazon",
+			"Nike",
+			"Tesla",
+			"Walt Disney",
+			"Zeiss",
+			"Nvidia",
+		].map((institution, index) => ({
+			id: `${index + 1}`,
+			contentType: "institution" as const,
+			institution: institution,
+		}));
 
 		return iterateStaticFeed(staticItems)(options);
 	};
