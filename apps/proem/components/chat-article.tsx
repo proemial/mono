@@ -21,7 +21,7 @@ import {
 } from "@untitled-ui/icons-react";
 import { Suspense } from "react";
 import { EngagementIndicator } from "./engagement-indicator";
-import { SpaceNameButton } from "./space-name-button";
+import { SpaceName, GotoSpaceButton } from "./space-name-button";
 
 type ChatArticleProps = Pick<
 	AddToCollectionButtonProps,
@@ -166,7 +166,11 @@ export function ChatArticle({
 
 			{paper && customCollectionId && (
 				<>
-					<Header4>More papers</Header4>
+					<Header4>
+						<SpaceName collectionId={customCollectionId}>
+							More papers from
+						</SpaceName>
+					</Header4>
 					<Suspense fallback={<Spinner />}>
 						<SpacePapers
 							space={customCollectionId}
@@ -176,7 +180,7 @@ export function ChatArticle({
 						/>
 					</Suspense>
 					<div className="text-center pt-4">
-						<SpaceNameButton collectionId={customCollectionId} />
+						<GotoSpaceButton collectionId={customCollectionId} />
 					</div>
 				</>
 			)}

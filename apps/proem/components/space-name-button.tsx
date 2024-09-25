@@ -1,14 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { useSpaces } from "../app/data/spaces";
 import { Button } from "@proemial/shadcn-ui/components/ui/button";
 import { useRouter } from "next/navigation";
 
-export function SpaceNameButton({
-	collectionId,
-	userId,
-}: { collectionId: string; userId?: string | null }) {
+type Props = {
+	collectionId: string;
+	userId?: string | null;
+	children?: ReactNode | string;
+};
+
+export function GotoSpaceButton({ collectionId, userId, children }: Props) {
 	const { data: collections, isLoading } = useSpaces(collectionId, userId);
 	const router = useRouter();
 
@@ -28,9 +31,23 @@ export function SpaceNameButton({
 		<>
 			{!isLoading && collections && (
 				<Button onClick={handleClick}>
-					{`More papers from ${collections?.find((c) => c.id === collectionId)?.name}`}
+					{children ? children : "View all"}
 				</Button>
 			)}
+		</>
+	);
+}
+
+export function SpaceName({ collectionId, userId, children }: Props) {
+	const { data: collections, isLoading } = useSpaces(collectionId, userId);
+
+	if (isLoading || !collections) {
+		return undefined;
+	}
+
+	return (
+		<>
+			{`${children} "${collections?.find((c) => c.id === collectionId)?.name}"`}
 		</>
 	);
 }
