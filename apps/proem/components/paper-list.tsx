@@ -9,9 +9,9 @@ import React from "react";
 import { ThemeColoredCard } from "./theme-colored-card";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 
-type Props { 
-    ids: string[]; 
-    limit?: number 
+type Props = {
+	ids: string[];
+	limit?: number;
 };
 
 export async function PaperList({ ids: urls, limit }: Props) {
