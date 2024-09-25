@@ -1,5 +1,5 @@
 import { fetchWithAbstract } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
-// import { getDebugFlags } from "@/feature-flags/debug-flag";
+import { getDebugFlags } from "@/feature-flags/debug-flag";
 import { formatDate } from "@/utils/date";
 import { RankedFeature } from "@proemial/repositories/oa/fingerprinting/features";
 import { rerankAndLimit } from "@proemial/repositories/oa/fingerprinting/rerank";
@@ -56,9 +56,8 @@ export const fetchAndRerankPaperIds = async (
 	const pageLimit = limit ?? 25;
 	const pageOffset = offset ?? 1;
 
-	const [debug, nocache] = [false, false];
-	// const [debug, nocache] = await getDebugFlags();
-	// console.log("Cache disabled: ", nocache);
+	const [debug, nocache] = await getDebugFlags();
+	console.log("Cache disabled: ", nocache);
 
 	const cached = nocache
 		? await cacheWorker(features ?? [], days ?? FEED_DEFAULT_DAYS)
