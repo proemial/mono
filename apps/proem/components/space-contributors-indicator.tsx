@@ -27,7 +27,9 @@ export const SpaceContributorsIndicator = async ({ collection }: Props) => {
 							{getInitials(ownerUser.firstName, ownerUser.lastName)}
 						</AvatarFallback>
 					</Avatar>
-					<div className="text-sm">Only You</div>
+					<div className="text-sm">
+						{getFullName(ownerUser.firstName, ownerUser.lastName)}
+					</div>
 				</div>
 			);
 		}
@@ -63,7 +65,9 @@ export const SpaceContributorsIndicator = async ({ collection }: Props) => {
 							</>
 						)}
 					</div>
-					<div className="text-sm">{orgMembersUserData.length} People</div>
+					<div className="text-sm">
+						{getFullName(ownerUser.firstName, ownerUser.lastName)}
+					</div>
 				</div>
 			);
 		}
