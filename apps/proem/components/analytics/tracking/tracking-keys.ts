@@ -131,6 +131,10 @@ export const analyticsKeys = {
 			starter: "read:starter:click",
 			answers: "read:tab-answers:click",
 			metadata: "read:tab-metadata:click",
+
+			relatedCard: "read:related:card:click",
+			spaceCard: "read:space:card:click",
+			spaceGoto: "read:space:goto:click",
 		},
 		submit: {
 			// TODO: cleanup

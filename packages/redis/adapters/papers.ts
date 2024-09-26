@@ -20,6 +20,9 @@ export const OpenAlexPapers = {
 	},
 
 	getAll: async (ids: string[], prefix: Prefix = "oa") => {
+		if (ids.length < 1) {
+			return [];
+		}
 		try {
 			return (await UpStash.papers().mget(
 				ids.map((id) => `${prefix}:${id}`),

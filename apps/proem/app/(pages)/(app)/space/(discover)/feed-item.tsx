@@ -21,14 +21,16 @@ import { getFieldFromOpenAlexTopics } from "./get-field-from-open-alex-topics";
 
 dayjs.extend(relativeTime);
 
+export type FeedPaper = OpenAlexPaper & {
+	posts: PostWithCommentsAndAuthor[];
+	readers: BasicReaderUserData[];
+};
+
 export type FeedItemProps = Pick<
 	FeedItemCardProps,
 	"isBookmarked" | "customCollectionId" | "onBookmarkToggleClick"
 > & {
-	paper: OpenAlexPaper & {
-		posts: PostWithCommentsAndAuthor[];
-		readers: BasicReaderUserData[];
-	};
+	paper: FeedPaper;
 	fingerprint?: RankedPaperFeature[];
 	provider?: Prefix;
 	children?: ReactNode;
