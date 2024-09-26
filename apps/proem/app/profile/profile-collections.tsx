@@ -1,5 +1,9 @@
 "use client";
 
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/components/analytics/tracking/tracking-keys";
 import { CollectionListItem } from "@/components/collections/collection-list-item";
 import { CreateCollection } from "@/components/collections/create-collection";
 import { FullSizeDrawer } from "@/components/full-page-drawer";
@@ -67,17 +71,27 @@ export const ProfileCollections = () => {
 			<div className="flex justify-center">
 				<PromptForSignIn
 					trigger={
-						<Button variant="black" className="w-full flex gap-2 items-center">
+						<Button
+							variant="black"
+							className="w-full flex gap-2 items-center"
+							onClick={trackHandler(analyticsKeys.ui.menu.click.createSpace)}
+						>
 							<Plus className="size-4" />
-							Create a space…
+							Create a space
 						</Button>
 					}
 					restricted={
 						<CreateCollectionDrawer
 							trigger={
-								<Button variant="black" className="flex gap-2 items-center">
+								<Button
+									variant="black"
+									className="flex gap-2 items-center"
+									onClick={trackHandler(
+										analyticsKeys.ui.menu.click.createSpace,
+									)}
+								>
 									<Plus className="size-4" />
-									Create a space…
+									Create a space
 								</Button>
 							}
 							userId={userId}

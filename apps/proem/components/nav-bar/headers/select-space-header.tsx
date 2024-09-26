@@ -116,21 +116,49 @@ export const SelectSpaceHeader = ({
 							))}
 
 						<PromptForSignIn
-							trigger={<NonSelectItem label="View all your spaces" />}
+							trigger={
+								<NonSelectItem
+									label="View all your spaces"
+									onClick={trackHandler(
+										analyticsKeys.ui.header.click.viewAllSpaces,
+									)}
+								/>
+							}
 							restricted={
 								<Profile
-									trigger={<NonSelectItem label="View all your spaces" />}
+									trigger={
+										<NonSelectItem
+											label="View all your spaces"
+											onClick={trackHandler(
+												analyticsKeys.ui.header.click.viewAllSpaces,
+											)}
+										/>
+									}
 									className="flex w-full"
 								/>
 							}
 						/>
 						<SelectSeparator />
 						<PromptForSignIn
-							trigger={<NonSelectItem label="Create new space" />}
+							trigger={
+								<NonSelectItem
+									label="Create a space"
+									onClick={trackHandler(
+										analyticsKeys.ui.header.click.createSpace,
+									)}
+								/>
+							}
 							restricted={
 								userId && (
 									<CreateCollectionDrawer
-										trigger={<NonSelectItem label="Create new space" />}
+										trigger={
+											<NonSelectItem
+												label="Create a space"
+												onClick={trackHandler(
+													analyticsKeys.ui.header.click.createSpace,
+												)}
+											/>
+										}
 										userId={userId}
 										orgId={orgId}
 									/>
@@ -145,7 +173,10 @@ export const SelectSpaceHeader = ({
 };
 
 const NonSelectItem = forwardRef(
-	(props: { label: string }, ref: ForwardedRef<HTMLDivElement>) => {
+	(
+		props: { label: string; onClick?: () => void },
+		ref: ForwardedRef<HTMLDivElement>,
+	) => {
 		return (
 			<div
 				ref={ref}

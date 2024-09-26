@@ -53,6 +53,8 @@ export const analyticsKeys = {
 					organizations: "menu:organizations:collapse:click",
 					collections: "menu:collections:collapse:click",
 				},
+
+				createSpace: "menu:create_space:click",
 			},
 		},
 		header: {
@@ -66,6 +68,8 @@ export const analyticsKeys = {
 				simple: "header:simple:click",
 				changeSpace: "header:change-space:click",
 				back: "header:back:click",
+				viewAllSpaces: "header:view-all-spaces:click",
+				createSpace: "header:create-space:click",
 			},
 		},
 	},
