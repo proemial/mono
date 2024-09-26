@@ -1,16 +1,18 @@
 import { AddToCollectionButtonProps } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
+import { SpacePapers } from "@/app/embed/[space]/space-papers";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { MicroAbstract } from "@/components/chat-abstract";
 import { AIGeneratedIcon } from "@/components/icons/AIGeneratedIcon";
 import Markdown from "@/components/markdown";
 import { ModelSelector, ModelSelectorProps } from "@/components/model-selector";
+import { PaperList } from "@/components/paper-list";
 import { PaperMetaData } from "@/components/paper-meta-data";
 import { Trackable } from "@/components/trackable";
 import { BasicReaderUserData } from "@/services/paper-reads-service";
 import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { trimForQuotes } from "@/utils/string-utils";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
-import { Button, Header2, Header4, Header5, Icons } from "@proemial/shadcn-ui";
+import { Button, Header2, Header4, Icons } from "@proemial/shadcn-ui";
 import {
 	BookOpen01,
 	ChevronRight,
@@ -45,7 +47,11 @@ export function ChatArticle({
 }: ChatArticleProps) {
 	const title = paper?.generated?.title;
 	const authors = paper?.data.authorships;
-	const publisher = paper?.data.primary_location.source?.display_name;
+	const publisher = paper?.data.primary_location?.source?.display_name;
+
+	const spaceId = customCollectionId?.startsWith("col_")
+		? customCollectionId
+		: undefined;
 
 	return (
 		<div className="space-y-3 text-pretty">
@@ -143,16 +149,6 @@ export function ChatArticle({
 					<MicroAbstract paper={paper} />
 				</Suspense>
 			)}
-
-			{paper && (
-				<>
-					<Header4 className="pt-4">Abstract</Header4>
-					<div>
-						<Markdown>{paper.data.abstract as string}</Markdown>
-					</div>
-				</>
-			)}
-
 			{paper && (
 				<>
 					<Trackable trackingKey={analyticsKeys.read.click.fullPaper}>
@@ -170,6 +166,25 @@ export function ChatArticle({
 						</div>
 					</Trackable>
 				</>
+			)}
+
+			{paper && spaceId && (
+				<Suspense fallback={<Spinner />}>
+					<SpacePapers
+						space={spaceId}
+						count={3}
+						background="lightgrey"
+						filter={(p) => p.id !== paper.id}
+					/>
+				</Suspense>
+			)}
+
+			{paper && !spaceId && (
+				<Suspense fallback={<Spinner />}>
+					<PaperList ids={paper.data.related_works} limit={3}>
+						Related papers
+					</PaperList>
+				</Suspense>
 			)}
 		</div>
 	);

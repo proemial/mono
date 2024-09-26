@@ -10,7 +10,6 @@ import {
 	AvatarFallback,
 	AvatarImage,
 	Header2,
-	Header5,
 } from "@proemial/shadcn-ui";
 import { LogIn01 } from "@untitled-ui/icons-react";
 import Link from "next/link";
@@ -47,38 +46,30 @@ export function ProfileYou() {
 						<div className="select-none">
 							<Header2>Your profile</Header2>
 						</div>
-						<div className="space-y-2">
-							<Header5>
-								<div className="opacity-50 select-none">Profile</div>
-							</Header5>
-							<CollapsibleSection
-								className="space-x-0"
-								collapsed={true}
-								trigger={
-									<div className="flex w-full gap-4 justify-between items-center">
-										<Avatar className="size-9">
-											<AvatarImage src={user.imageUrl} />
-											<AvatarFallback>
-												{getUserInitials(user.fullName ?? "")}
-											</AvatarFallback>
-										</Avatar>
-										<div>
-											{user.fullName ?? user.primaryEmailAddress?.emailAddress}
-										</div>
+						<CollapsibleSection
+							className="space-x-0"
+							collapsed={true}
+							trigger={
+								<div className="flex w-full gap-4 justify-between items-center">
+									<Avatar className="size-9">
+										<AvatarImage src={user.imageUrl} />
+										<AvatarFallback>
+											{getUserInitials(user.fullName ?? "")}
+										</AvatarFallback>
+									</Avatar>
+									<div>
+										{user.fullName ?? user.primaryEmailAddress?.emailAddress}
 									</div>
-								}
-								trackingKey={analyticsKeys.ui.menu.click.collapse.profile}
-							>
-								<About />
-							</CollapsibleSection>
-						</div>
+								</div>
+							}
+							trackingKey={analyticsKeys.ui.menu.click.collapse.profile}
+						>
+							<About />
+						</CollapsibleSection>
 					</>
 				)}
 				{isSignedIn && (
 					<div>
-						<Header5>
-							<div className="opacity-50 select-none mb-2">Social</div>
-						</Header5>
 						<div className="flex flex-col gap-4">
 							<ProfileCollections />
 							<ProfileQuestions />

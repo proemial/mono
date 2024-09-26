@@ -7,7 +7,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { SignInDrawer } from "@/components/sign-in-drawer";
+import { PromptForSignIn } from "@/components/prompt-for-sign-in";
 import { routes } from "@/routes";
 import { useAuth } from "@clerk/nextjs";
 import { Collection } from "@proemial/data/neon/schema";
@@ -23,13 +23,7 @@ import {
 } from "@proemial/shadcn-ui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-	ForwardedRef,
-	ReactNode,
-	forwardRef,
-	useEffect,
-	useState,
-} from "react";
+import { ForwardedRef, forwardRef, useEffect, useState } from "react";
 import { RecentSpaces } from "./recent-spaces";
 
 type SelectSpaceHeaderProps = {
@@ -89,26 +83,22 @@ export const SelectSpaceHeader = ({
 					align="center"
 					className="border-none shadow-2xl min-w-64 max-w-80 rounded-xl"
 				>
-					{userId ? (
-						<SelectItem
-							value={userId}
-							className="py-2 text-base cursor-pointer"
-						>
-							{PERSONAL_DEFAULT_COLLECTION_NAME}
-						</SelectItem>
-					) : (
-						<Link
-							href={routes.space}
-							className="hover:bg-neutral-200 relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 pl-8 pr-8 text-base outline-none focus:bg-muted focus:text-foreground"
-						>
-							{PERSONAL_DEFAULT_COLLECTION_NAME}
-						</Link>
-					)}
 					<SelectGroup className="p-0">
-						<SelectSeparator />
-						<SelectLabel className="cursor-default select-none">
-							Recently visited
-						</SelectLabel>
+						{userId ? (
+							<SelectItem
+								value={userId}
+								className="py-2 text-base cursor-pointer font-normal tracking-wide"
+							>
+								{PERSONAL_DEFAULT_COLLECTION_NAME}
+							</SelectItem>
+						) : (
+							<Link
+								href={routes.space}
+								className="hover:bg-neutral-200 relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 pl-8 pr-8 text-base outline-none focus:bg-muted focus:text-foreground"
+							>
+								{PERSONAL_DEFAULT_COLLECTION_NAME}
+							</Link>
+						)}
 						{recentSpaces
 							.map((spaceId) => spaces.find((s) => s.id === spaceId))
 							.filter((space) => typeof space !== "undefined")
@@ -124,22 +114,51 @@ export const SelectSpaceHeader = ({
 										: space.name}
 								</SelectItem>
 							))}
-						<RequireAuthenticationItem
-							trigger={<NonSelectItem label="More…" />}
+
+						<PromptForSignIn
+							trigger={
+								<NonSelectItem
+									label="View all your spaces"
+									onClick={trackHandler(
+										analyticsKeys.ui.header.click.viewAllSpaces,
+									)}
+								/>
+							}
 							restricted={
 								<Profile
-									trigger={<NonSelectItem label="More…" />}
+									trigger={
+										<NonSelectItem
+											label="View all your spaces"
+											onClick={trackHandler(
+												analyticsKeys.ui.header.click.viewAllSpaces,
+											)}
+										/>
+									}
 									className="flex w-full"
 								/>
 							}
 						/>
 						<SelectSeparator />
-						<RequireAuthenticationItem
-							trigger={<NonSelectItem label="Create new space" />}
+						<PromptForSignIn
+							trigger={
+								<NonSelectItem
+									label="Create a space"
+									onClick={trackHandler(
+										analyticsKeys.ui.header.click.createSpace,
+									)}
+								/>
+							}
 							restricted={
 								userId && (
 									<CreateCollectionDrawer
-										trigger={<NonSelectItem label="Create new space" />}
+										trigger={
+											<NonSelectItem
+												label="Create a space"
+												onClick={trackHandler(
+													analyticsKeys.ui.header.click.createSpace,
+												)}
+											/>
+										}
 										userId={userId}
 										orgId={orgId}
 									/>
@@ -153,24 +172,16 @@ export const SelectSpaceHeader = ({
 	);
 };
 
-const RequireAuthenticationItem = ({
-	trigger,
-	restricted,
-}: { trigger: ReactNode; restricted: ReactNode }) => {
-	const { isSignedIn } = useAuth();
-	if (isSignedIn) {
-		return restricted;
-	}
-	return <SignInDrawer trigger={trigger} />;
-};
-
 const NonSelectItem = forwardRef(
-	(props: { label: string }, ref: ForwardedRef<HTMLDivElement>) => {
+	(
+		props: { label: string; onClick?: () => void },
+		ref: ForwardedRef<HTMLDivElement>,
+	) => {
 		return (
 			<div
 				ref={ref}
 				{...props}
-				className="hover:bg-neutral-200 relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 pl-8 pr-8 text-base outline-none focus:bg-muted focus:text-foreground"
+				className="hover:bg-neutral-200 relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 pl-8 pr-8 text-base outline-none focus:bg-muted focus:text-foreground text-gray-600"
 			>
 				{props.label}
 			</div>

@@ -6,10 +6,12 @@ import { ActionMenu } from "@/components/nav-bar/actions/action-menu";
 import { CloseAction } from "@/components/nav-bar/actions/close-action";
 import { GoToSpaceAction } from "@/components/nav-bar/actions/go-to-space-action";
 import { OpenSearchAction } from "@/components/nav-bar/actions/open-search-action";
+import { ShowOnboarding } from "@/components/top-navigation/top-nav-showOnboarding";
 import { SignInDrawer } from "@/components/sign-in-drawer";
 import { routes } from "@/routes";
 import { ChevronLeft, Edit05 } from "@untitled-ui/icons-react";
 import Link from "next/link";
+import { setCookie, getCookie } from "cookies-next";
 
 type TopNavigationContent = {
 	/**
@@ -64,6 +66,7 @@ export function getTopNavigationContentByUrl(
 					action: (
 						<ActionMenu>
 							<Link href={url.replace("/saved", "")}>View Latest Items</Link>
+							<ShowOnboarding />
 						</ActionMenu>
 					),
 				};
@@ -73,6 +76,7 @@ export function getTopNavigationContentByUrl(
 				action: (
 					<ActionMenu>
 						<Link href={`${url}/saved`}>View Saved Items</Link>
+						<ShowOnboarding />
 					</ActionMenu>
 				),
 			};
@@ -94,6 +98,7 @@ export function getTopNavigationContentByUrl(
 			action: (
 				<ActionMenu>
 					<SignInDrawer trigger={<div>View saved items</div>} />
+					<ShowOnboarding />
 				</ActionMenu>
 			),
 		};

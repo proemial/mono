@@ -1,6 +1,6 @@
 import { Field } from "@/app/data/oa-fields";
 import { routes } from "@/routes";
-import { isEmbedded } from "@/utils/url";
+import { isEmbedded, isPaperPage } from "@/utils/url";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
@@ -28,13 +28,13 @@ export const EmbedableLink = ({
 	feedType = "organic",
 }: Props) => {
 	const urls = useUrls(path, spaceId, field, openAssistant);
+	const trackingKey = useTrackingKey(spaceId);
+	const isFeed = trackingKey === analyticsKeys.feed.click.card;
 
 	return (
 		<Link
 			href={urls.embedUrl ?? urls.pageUrl}
-			onClick={trackHandler(analyticsKeys.feed.click.card, {
-				feedType,
-			})}
+			onClick={trackHandler(trackingKey, isFeed ? { feedType } : undefined)}
 			target={urls.embedUrl ? "_blank" : undefined}
 		>
 			{children}
@@ -62,14 +62,9 @@ function usePageUrl(
 ) {
 	const pathname = usePathname();
 
-	const space =
-		pathname.includes(routes.space) && spaceId
-			? `${routes.space}/${pathname.split("/")[2]}`
-			: "";
-
 	const theme =
 		// Only add the theme manually if the space is a personal collection
-		!space.includes("col_") && field
+		!spaceId?.includes("col_") && field
 			? `?color=${field.theme.color}${
 					field.theme.image ? `&image=${field.theme.image}` : ""
 				}`
@@ -77,7 +72,7 @@ function usePageUrl(
 
 	const assistant = openAssistant ? `&${ASSISTANT_OPEN_QUERY_KEY}=true` : "";
 
-	return `${space}${path}${theme}${assistant}`;
+	return `${pathname.split("/paper").at(0)}${path}${theme}${assistant}`;
 }
 
 function useEmbedUrl(path: string) {
@@ -92,6 +87,17 @@ function useEmbedUrl(path: string) {
 	const source = "femtechinsider";
 
 	return `${baseurl}${routes.space}/${pathname.split("/")[2]}${path}?utm_source=${source}&utm_medium=embed`;
+}
+
+function useTrackingKey(spaceId?: string) {
+	const pathname = usePathname();
+	if (isPaperPage(pathname)) {
+		if (spaceId) {
+			return analyticsKeys.read.click.spaceCard;
+		}
+		return analyticsKeys.read.click.relatedCard;
+	}
+	return analyticsKeys.feed.click.card;
 }
 
 const getBaseUrl = () =>

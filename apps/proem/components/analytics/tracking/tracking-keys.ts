@@ -53,6 +53,8 @@ export const analyticsKeys = {
 					organizations: "menu:organizations:collapse:click",
 					collections: "menu:collections:collapse:click",
 				},
+
+				createSpace: "menu:create_space:click",
 			},
 		},
 		header: {
@@ -66,6 +68,8 @@ export const analyticsKeys = {
 				simple: "header:simple:click",
 				changeSpace: "header:change-space:click",
 				back: "header:back:click",
+				viewAllSpaces: "header:view-all-spaces:click",
+				createSpace: "header:create-space:click",
 			},
 		},
 	},
@@ -127,6 +131,10 @@ export const analyticsKeys = {
 			starter: "read:starter:click",
 			answers: "read:tab-answers:click",
 			metadata: "read:tab-metadata:click",
+
+			relatedCard: "read:related:card:click",
+			spaceCard: "read:space:card:click",
+			spaceGoto: "read:space:goto:click",
 		},
 		submit: {
 			// TODO: cleanup

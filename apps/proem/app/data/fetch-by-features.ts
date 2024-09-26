@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 import { unstable_cache } from "next/cache";
 
 // Default number of days to fetch papers for
-export const FEED_DEFAULT_DAYS = 7;
+export const FEED_DEFAULT_DAYS = 10;
 
 // OpenAlex has a limit of 100 features in a query
 const MAX_FEATURES_IN_QUERY = 100;
