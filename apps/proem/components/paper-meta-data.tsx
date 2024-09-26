@@ -21,6 +21,7 @@ export type PaperMetaDataProps = Pick<
 	readonly?: boolean;
 	topics?: OpenAlexTopic[];
 	index?: number;
+	embedded?: boolean;
 };
 
 export const PaperMetaData = ({
@@ -32,14 +33,17 @@ export const PaperMetaData = ({
 	customCollectionId,
 	onBookmarkToggleClick,
 	index,
+	embedded,
 }: PaperMetaDataProps) => {
 	return (
 		<div className="flex items-center justify-between gap-2 mb-1">
 			<FeedItemField topics={topics} />
 			<div className="flex items-center gap-2 ">
-				<div className="uppercase text-2xs text-nowrap">
-					{formatDate(date, "relative")}
-				</div>
+				{!embedded && (
+					<div className="uppercase text-2xs text-nowrap">
+						{formatDate(date, "relative")}
+					</div>
+				)}
 				{!readonly && (
 					<div
 						className="-m-2 min-h-10 min-w-10"

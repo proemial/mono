@@ -85,6 +85,7 @@ export default function FeedItem({
 				hasAbstract={!!paper.data.abstract}
 				readonly={readonly}
 				index={index}
+				embedded={embedded}
 			>
 				<Markdown>
 					{paper.generated?.title

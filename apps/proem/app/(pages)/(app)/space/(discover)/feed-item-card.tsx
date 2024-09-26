@@ -15,6 +15,7 @@ export type FeedItemCardProps = PaperMetaDataProps & {
 	hasAbstract: boolean;
 	provider?: Prefix;
 	feedType?: string;
+	embedded?: boolean;
 };
 
 export const FeedItemCard = ({
@@ -30,6 +31,7 @@ export const FeedItemCard = ({
 	readonly,
 	feedType,
 	index,
+	embedded,
 }: FeedItemCardProps) => {
 	const field = useMemo(
 		() => topics && getFieldFromOpenAlexTopics(topics),
@@ -55,6 +57,7 @@ export const FeedItemCard = ({
 							customCollectionId={customCollectionId}
 							onBookmarkToggleClick={onBookmarkToggleClick}
 							index={index}
+							embedded={embedded}
 						/>
 						{children}
 					</div>
