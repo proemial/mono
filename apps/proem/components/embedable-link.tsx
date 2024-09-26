@@ -1,6 +1,6 @@
 import { Field } from "@/app/data/oa-fields";
 import { routes } from "@/routes";
-import { isEmbedded } from "@/utils/url";
+import { isEmbedded, isPaperPage } from "@/utils/url";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
@@ -29,12 +29,13 @@ export const EmbedableLink = ({
 }: Props) => {
 	const urls = useUrls(path, spaceId, field, openAssistant);
 
+	const trackingKey = useTrackingKey(spaceId);
+	const isFeed = trackingKey === analyticsKeys.feed.click.card;
+
 	return (
 		<Link
 			href={urls.embedUrl ?? urls.pageUrl}
-			onClick={trackHandler(analyticsKeys.feed.click.card, {
-				feedType,
-			})}
+			onClick={trackHandler(trackingKey, isFeed ? { feedType } : undefined)}
 			target={urls.embedUrl ? "_blank" : undefined}
 		>
 			{children}
@@ -92,6 +93,17 @@ function useEmbedUrl(path: string) {
 	const source = "femtechinsider";
 
 	return `${baseurl}${routes.space}/${pathname.split("/")[2]}${path}?utm_source=${source}&utm_medium=embed`;
+}
+
+function useTrackingKey(spaceId?: string) {
+	const pathname = usePathname();
+	if (isPaperPage(pathname)) {
+		if (spaceId) {
+			return analyticsKeys.read.click.spaceCard;
+		}
+		return analyticsKeys.read.click.relatedCard;
+	}
+	return analyticsKeys.feed.click.card;
 }
 
 const getBaseUrl = () =>

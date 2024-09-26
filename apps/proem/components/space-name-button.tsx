@@ -4,6 +4,10 @@ import React, { ReactNode } from "react";
 import { useSpaces } from "../app/data/spaces";
 import { Button } from "@proemial/shadcn-ui/components/ui/button";
 import { useRouter } from "next/navigation";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "./analytics/tracking/tracking-keys";
 
 type Props = {
 	collectionId: string;
@@ -16,6 +20,7 @@ export function GotoSpaceButton({ collectionId, userId, children }: Props) {
 	const router = useRouter();
 
 	const handleClick = () => {
+		trackHandler(analyticsKeys.read.click.spaceGoto);
 		router.push(`/space/${collectionId}`);
 		setTimeout(
 			() =>
