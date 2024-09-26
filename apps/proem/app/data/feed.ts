@@ -1,6 +1,10 @@
 import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { fetchFeedByInstitutionWithPostsAndReaders } from "@/app/(pages)/(app)/space/(discover)/fetch-feed";
 import {
+	fingerprintCacheTag,
+	getBookmarkedPapersCacheTag,
+} from "@/app/constants";
+import {
 	FEED_DEFAULT_DAYS,
 	fetchAndRerankPaperIds,
 } from "@/app/data/fetch-by-features";
@@ -287,6 +291,7 @@ export module Feed {
 			["fingerprint", collectionId],
 			{
 				revalidate: false,
+				tags: [fingerprintCacheTag(collectionId)],
 			},
 		)();
 

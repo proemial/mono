@@ -1,6 +1,7 @@
 "use server";
 
 import {
+	fingerprintCacheTag,
 	getBookmarkCacheTag,
 	getBookmarkedPapersCacheTag,
 	getPersonalDefaultCollection,
@@ -66,6 +67,7 @@ export async function togglePaperInCollection(
 
 	revalidateTag(getBookmarkedPapersCacheTag(collectionId));
 	revalidateTag(getBookmarkCacheTag(collectionId));
+	revalidateTag(fingerprintCacheTag(collectionId));
 	if (userId) {
 		const spaceType: "user" | "space" = collectionId.startsWith("user_")
 			? "user"
