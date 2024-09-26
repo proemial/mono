@@ -20,7 +20,6 @@ export function GotoSpaceButton({ collectionId, userId, children }: Props) {
 	const router = useRouter();
 
 	const handleClick = () => {
-		trackHandler(analyticsKeys.read.click.spaceGoto)();
 		router.push(`/space/${collectionId}`);
 		setTimeout(
 			() =>
@@ -30,6 +29,7 @@ export function GotoSpaceButton({ collectionId, userId, children }: Props) {
 				}),
 			200,
 		);
+		trackHandler(analyticsKeys.read.click.spaceGoto)();
 	};
 
 	return (
