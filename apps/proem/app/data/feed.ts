@@ -105,22 +105,36 @@ export module Feed {
 	export const byFeatures = async (
 		params: FetchFeedParams[0],
 		options: PaginationOptions,
+		collectionId?: string,
 	) => {
-		return Feed.fromFeatures(params, options);
+		return Feed.fromFeatures(params, options, false, collectionId);
 	};
 
 	export const byPopularity = async (options: PaginationOptions) => {
+		const limit = options.limit ?? 3;
+		const offset = (options.offset ?? 1) * limit;
 		const mostPopularPapers = await Paper.getByPopularity({
-			limit: 3,
-			offset: 2, // offset in items
+			limit,
+			offset,
 		});
 
-		console.log(mostPopularPapers);
+		const cachedPapers = await Redis.papers.getAll(
+			mostPopularPapers.map((paper) => paper.paperId),
+		);
+		console.log({ cachedPapers });
+		console.log({ mostPopularPapers });
 
 		return {
-			count: 0,
-			rows: [],
-			nextOffset: 1,
+			count: 10,
+			rows: cachedPapers
+				.filter((paper) => !!paper)
+				.map((paper) => ({
+					id: paper.id,
+					contentType: "paper" as const,
+					type: "popularity-boost",
+					paper,
+				})),
+			nextOffset: options.offset ? options.offset + 1 : 2,
 		};
 	};
 
@@ -136,6 +150,7 @@ export module Feed {
 			"Nvidia",
 		].map((institution, index) => ({
 			id: `${index + 1}`,
+			type: "organic" as const,
 			contentType: "institution" as const,
 			institution: institution,
 		}));
@@ -147,7 +162,7 @@ export module Feed {
 		});
 	};
 
-	const prepareFeed = async <
+	const addPostsAndReaders = async <
 		TFeed extends PaginationResult<{ id: string; paper?: { id: string } }>,
 	>({
 		feed,
@@ -206,58 +221,47 @@ export module Feed {
 	};
 
 	export const fromPublic = async (options: FetchFeedParams[1]) => {
-		return fetchFeedByFeaturesWithPostsAndReaders(
-			{
-				features: defaultFeedFilter.features,
-				days: defaultFeedFilter.days,
-			},
+		const settings = await feedSettings();
+		if (!settings.showInstitutions) {
+			return fetchFeedByFeaturesWithPostsAndReaders(
+				{
+					features: defaultFeedFilter.features,
+					days: defaultFeedFilter.days,
+				},
+				options,
+			);
+		}
+		const feed = await mergeFeed(
+			[
+				{
+					fetch: (options) =>
+						Feed.byFeatures(
+							{
+								features: defaultFeedFilter.features,
+								days: defaultFeedFilter.days,
+							},
+							options,
+						),
+					percentage: 0.7,
+				},
+				{
+					fetch: (options) => Feed.byStatic(options),
+					percentage: 0.1,
+				},
+				{
+					fetch: Feed.byPopularity,
+					percentage: 0.2,
+				},
+			],
 			options,
 		);
-		// const settings = await feedSettings();
-		// if (!settings.showInstitutions) {
-		// 	return fetchFeedByFeaturesWithPostsAndReaders(
-		// 		{
-		// 			features: defaultFeedFilter.features,
-		// 			days: defaultFeedFilter.days,
-		// 		},
-		// 		options,
-		// 	);
-		// }
-		// const feed = await mergeFeed(
-		// 	[
-		// 		{
-		// 			fetch: (options) =>
-		// 				Feed.byFeatures(
-		// 					{
-		// 						features: defaultFeedFilter.features,
-		// 						days: defaultFeedFilter.days,
-		// 					},
-		// 					options,
-		// 				),
-		// 			percentage: 0.9,
-		// 		},
-		// 		{
-		// 			fetch: (options) => Feed.byStatic(options),
-		// 			percentage: 0.1,
-		// 		},
-		// 		// {
-		// 		// 	fetch: Feed.byPopularity,
-		// 		// 	percentage: 0.3,
-		// 		// },
-		// 	],
-		// 	options,
-		// );
-		// console.log({ feed });
-		// if (!feed) {
-		// 	return null;
-		// }
-
-		// return prepareFeed({
-		// 	feed,
-		// 	collectionId: undefined,
-		// 	userId: undefined,
-		// 	organisationId: undefined,
-		// });
+		console.log({ feed: feed?.rows[0] });
+		if (!feed) {
+			return null;
+		}
+		return addPostsAndReaders({
+			feed,
+		});
 	};
 
 	export const fromInstitution = async (
@@ -293,83 +297,43 @@ export module Feed {
 		const { filter: features } = getFeatureFilter(fingerprints);
 
 		const settings = await feedSettings();
-		// const feed = settings.showInstitutions
-		// 	? await mergeFeed(
-		// 			[
-		// 				{
-		// 					fetch: Feed.byStatic,
-		// 					percentage: 0.1,
-		// 				},
-		// 				{
-		// 					fetch: (options) =>
-		// 						Feed.byFeatures({ features, days: FEED_DEFAULT_DAYS }, options),
-		// 					percentage: 0.9,
-		// 				},
-		// 				// {
-		// 				// 	fetch: Feed.byPopularity,
-		// 				// 	percentage: 0.3,
-		// 				// },
-		// 			],
-		// 			options,
-		// 		)
-		// 	: await Feed.fromFeatures(
-		// 			{ features, days: FEED_DEFAULT_DAYS },
-		// 			options,
-		// 			injectPopularPapersInFeed,
-		// 			collectionId,
-		// 		);
-
-		const feed = await Feed.fromFeatures(
-			{ features, days: FEED_DEFAULT_DAYS },
-			options,
-			injectPopularPapersInFeed,
-			collectionId,
-		);
+		const feed = settings.showInstitutions
+			? await mergeFeed(
+					[
+						{
+							fetch: Feed.byStatic,
+							percentage: 0.1,
+						},
+						{
+							fetch: (options) =>
+								Feed.byFeatures(
+									{ features, days: FEED_DEFAULT_DAYS },
+									options,
+									collectionId,
+								),
+							percentage: 0.7,
+						},
+						{
+							fetch: Feed.byPopularity,
+							percentage: 0.2,
+						},
+					],
+					options,
+				)
+			: await Feed.fromFeatures(
+					{ features, days: FEED_DEFAULT_DAYS },
+					options,
+					injectPopularPapersInFeed,
+					collectionId,
+				);
 
 		if (!feed) {
 			return null;
 		}
 
-		const paperIds = feed.rows
-			.map((row) => ("paper" in row ? row.paper.id : null))
-			.filter((id) => id !== null);
-
-		const papersWithPostsAndReaders = await Promise.all(
-			paperIds.map((paperId) =>
-				fetchPaperWithPostsAndReaders({
-					paperId,
-					spaceId: collectionId,
-					organisationId,
-					userId,
-				}),
-			),
-		);
-		const feedWithPostsAndReaders = {
-			...feed,
-			rows: feed.rows.map((row) => {
-				// if ("contentType" in row && row.contentType === "institution") {
-				// 	return row;
-				// }
-
-				return {
-					...row,
-					paper: {
-						...row.paper,
-						posts:
-							papersWithPostsAndReaders.find(
-								(paper) =>
-									paper.paperId === ("paper" in row ? row.paper.id : null),
-							)?.posts ?? [],
-						readers:
-							papersWithPostsAndReaders.find(
-								(paper) =>
-									paper.paperId === ("paper" in row ? row.paper.id : null),
-							)?.readers ?? [],
-					},
-				};
-			}),
-		};
-		return feedWithPostsAndReaders;
+		return addPostsAndReaders({
+			feed,
+		});
 	};
 
 	/**

@@ -1,7 +1,22 @@
 import { Feed } from "@/app/data/feed";
+import { PaginationResult } from "@/app/data/merge-feed";
+import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { NextRequest, NextResponse } from "next/server";
 
-export type FeedResponse = ReturnType<typeof Feed.fromCollection>;
+type PaperFeedItem = NonNullable<
+	Awaited<ReturnType<typeof Feed.fromFeatures>>
+>["rows"][number];
+
+type InstitutionFeedItem = {
+	id: string;
+	contentType: "institution";
+	type: "featured";
+	institution: string;
+};
+
+export type FeedResponse = Promise<
+	PaginationResult<InstitutionFeedItem | PaperFeedItem>
+>;
 
 export async function GET(request: NextRequest) {
 	const { searchParams } = new URL(request.url);

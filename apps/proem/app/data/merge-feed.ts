@@ -19,6 +19,7 @@ export const shuffleFeed = <TFeed extends { rows: { id: string }[] }>(
 ) => {
 	return {
 		...feed,
+		// TODO! this doesn't work as most popular papers often is older and therefore always shuffled to the top
 		rows: feed.rows.sort((a, b) => a.id.localeCompare(b.id)),
 	};
 };
@@ -27,12 +28,15 @@ export const shuffleFeed = <TFeed extends { rows: { id: string }[] }>(
  * Merges multiple feeds into one
  */
 export const mergeFeed = async <
-	T extends Promise<PaginationResult<{ id: string }> | null>,
->(
-	feeds: {
-		fetch: ({ offset, limit }: PaginationOptions) => NoInfer<T>;
+	TFeeds extends {
+		fetch: ({
+			offset,
+			limit,
+		}: PaginationOptions) => Promise<PaginationResult<{ id: string }> | null>;
 		percentage: FEED_PERCENTAGES;
 	}[],
+>(
+	feeds: TFeeds,
 	{ offset = 0, limit = 10 }: PaginationOptions,
 ) => {
 	// TODO! handle overfetching if percentage is not 1
@@ -40,7 +44,6 @@ export const mergeFeed = async <
 	const fetchedFeeds = await Promise.all(
 		feeds.map((feed) => {
 			const feedLimit = limit * feed.percentage;
-			const feedOffset = offset;
 
 			return feed.fetch({
 				offset,
@@ -52,28 +55,28 @@ export const mergeFeed = async <
 	if (fetchedFeeds.every((feed) => feed?.rows.length === 0)) {
 		return null;
 	}
-	// const rowCount = fetchedFeeds.flatMap((feed) => feed?.rows ?? []).length;
 
 	const mergedFeed = shuffleFeed(
 		fetchedFeeds
 			.filter((feed) => feed !== null)
-			.reduce(
-				(acc, feed) => {
-					if (!feed) return acc;
-
+			.reduce((acc, feed) => {
+				if (!acc)
 					return {
-						count: acc.count + feed.count,
-						rows: [...acc.rows, ...feed.rows],
-						nextOffset: acc.nextOffset,
+						count: 0,
+						rows: [],
+						nextOffset: offset + 1,
 					};
-				},
-				{
-					count: 0,
-					rows: [] as { id: string }[],
-					nextOffset: offset + 1,
-				},
-			),
+				if (!feed) return acc;
+
+				return {
+					count: acc.count + feed.count,
+					rows: [...acc.rows, ...feed.rows],
+					nextOffset: acc.nextOffset,
+				};
+			}),
 	);
 
-	return mergedFeed;
+	// Not the prettiest typing but works for now.
+	// We need an intersection of all fetch functions return type
+	return mergedFeed as Awaited<ReturnType<TFeeds[number]["fetch"]>>;
 };
