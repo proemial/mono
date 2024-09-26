@@ -22,7 +22,6 @@ import {
 } from "@untitled-ui/icons-react";
 import { Suspense } from "react";
 import { EngagementIndicator } from "./engagement-indicator";
-import { GotoSpaceButton, SpaceName } from "./space-name-button";
 
 type ChatArticleProps = Pick<
 	AddToCollectionButtonProps,
@@ -48,7 +47,7 @@ export function ChatArticle({
 }: ChatArticleProps) {
 	const title = paper?.generated?.title;
 	const authors = paper?.data.authorships;
-	const publisher = paper?.data.primary_location.source?.display_name;
+	const publisher = paper?.data.primary_location?.source?.display_name;
 
 	const spaceId = customCollectionId?.startsWith("col_")
 		? customCollectionId
