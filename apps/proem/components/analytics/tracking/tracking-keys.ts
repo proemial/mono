@@ -107,6 +107,10 @@ export const analyticsKeys = {
 	},
 	feed: {
 		// TODO: cleanup
+		cardFeatured: {
+			view: "feed:cardFeatured:view",
+			click: "feed:cardFeatured:click",
+		},
 		click: {
 			card: "feed:card:click",
 			tag: "feed:tag:click",

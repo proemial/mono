@@ -1,4 +1,4 @@
-import { Star01 } from "@untitled-ui/icons-react";
+import FeaturedLink from "./featured-link";
 
 interface Item {
 	title: string;
@@ -61,37 +61,7 @@ const RandomStaticItem = async () => {
 	// Fetch the random item on the server
 	const randomItem = await getRandomItem();
 
-	return (
-		<div className="bg-[#9CC4C7] hover:shadow rounded-2xl">
-			<a href={randomItem.url}>
-				<img
-					src={randomItem.image}
-					alt={randomItem.title}
-					className="rounded-2xl p-2"
-				/>
-				<div className="p-3.5 h-full flex flex-col gap-2 justify-between">
-					<div className="flex flex-col gap-3">
-						<div>
-							<div className="flex items-center justify-between gap-2 mb-1">
-								<div className="flex items-center gap-2">
-									<Star01 className="size-3.5" />
-									<div className="text-2xs uppercase line-clamp-1">
-										Featured paper
-									</div>
-								</div>
-								<div className="flex items-center gap-2 ">
-									<div className="uppercase text-2xs text-nowrap">
-										{randomItem.date}
-									</div>
-								</div>
-							</div>
-							<p className="text-lg">{randomItem.title}</p>
-						</div>
-					</div>
-				</div>
-			</a>
-		</div>
-	);
+	return <FeaturedLink item={randomItem} />;
 };
 
 export default RandomStaticItem;
