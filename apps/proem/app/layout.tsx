@@ -78,7 +78,7 @@ type Props = {
 
 export default function RootLayout({ children, modal }: Readonly<Props>) {
 	const headers = getHeaders();
-	const showToolbar = true; //process.env.NODE_ENV === "development";
+	const showToolbar = process.env.NODE_ENV === "development";
 
 	if (headers.embedded) {
 		return (
