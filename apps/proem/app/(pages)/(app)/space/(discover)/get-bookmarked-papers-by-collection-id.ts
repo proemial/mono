@@ -8,6 +8,7 @@ export async function getBookmarkedPapersByCollectionId(
 ) {
 	return cache(
 		async () => {
+			console.log("REBUILDING CACHE FOR", collectionId);
 			const collection = await getCollectionByCollectionId(collectionId);
 
 			return collection?.collectionsToPapers;
