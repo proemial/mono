@@ -49,15 +49,22 @@ const getCachedPapers = unstable_cache(
 );
 
 export const fetchAndRerankPaperIds = async (
-	{ features, days }: { features?: RankedFeature[]; days?: number },
+	{
+		features: featureFilter,
+		days,
+	}: { features?: RankedFeature[]; days?: number },
 	{ limit, offset }: { limit?: number; offset?: number } = {},
 	collectionId?: string,
 ) => {
 	const pageLimit = limit ?? 25;
 	const pageOffset = offset ?? 1;
 
-	const [debug, nocache] = await getDebugFlags();
+	const [debug, nocache, blacklist] = await getDebugFlags();
 	console.log("Cache disabled: ", nocache);
+
+	const features = blacklist
+		? removeBlacklisted(featureFilter, collectionId)
+		: featureFilter;
 
 	const cached = nocache
 		? await cacheWorker(features ?? [], days ?? FEED_DEFAULT_DAYS)
@@ -75,6 +82,26 @@ export const fetchAndRerankPaperIds = async (
 		rankedIds,
 	};
 };
+
+const FEMTECH_SPACES = [
+	"col_kkm3c75heomrob12f3ues4f0",
+	"col_oxwgodr9xgln1cizq73hei50",
+];
+
+function removeBlacklisted(features?: RankedFeature[], space?: string) {
+	if (!space || !features || !FEMTECH_SPACES.includes(space)) {
+		return features;
+	}
+
+	const blacklist = require("./femtech-blacklist.json") as Array<{
+		id: string;
+	}>;
+	const blacklistIds = blacklist.map(({ id }) => id);
+
+	return features.filter(
+		(feature) => !blacklistIds.includes(feature.id.split("/").at(-1) as string),
+	);
+}
 
 function logPaperDistribution(
 	cached: {
