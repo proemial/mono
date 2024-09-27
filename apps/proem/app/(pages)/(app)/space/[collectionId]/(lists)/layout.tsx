@@ -11,6 +11,7 @@ import { auth } from "@clerk/nextjs/server";
 import { Header2 } from "@proemial/shadcn-ui";
 import { notFound } from "next/navigation";
 import { ReactNode } from "react";
+import RandomStaticItem from "../../(discover)/random-static-item";
 
 type Props = CollectionIdParams & {
 	children: ReactNode;
@@ -59,6 +60,7 @@ export default async function ({ params: { collectionId }, children }: Props) {
 			)}
 
 			{isDefaultCollection && <OnboardingCarousel />}
+			{isDefaultCollection && <RandomStaticItem />}
 
 			{/* {isDefaultCollection && <div>Show stuff on discover for logged in user</div>} */}
 			<LoadingTransition type="section">{children}</LoadingTransition>
