@@ -23,6 +23,11 @@ export const OpenAlexPapers = {
 		if (ids.length < 1) {
 			return [];
 		}
+		console.log(
+			"MGET",
+			ids.map((id) => `${prefix}:${id}`),
+		);
+
 		try {
 			return (await UpStash.papers().mget(
 				// ERR max request size exceeded. Limit: 1048576 bytes, Actual: 1331243 bytes. See https://upstash.com/docs/redis/troubleshooting/max_request_size_exceeded for details
