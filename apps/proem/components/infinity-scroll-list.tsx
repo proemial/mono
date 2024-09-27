@@ -124,7 +124,7 @@ function ScrollItem({ children, count, index, className }: ScrollItemProps) {
 			}}
 		>
 			<div
-				className={cn("absolute, top-0 left-0 w-full", className)}
+				className={cn("absolute top-0 left-0 w-full", className)}
 				style={{
 					transform: `translateY(${index}px)`,
 				}}
