@@ -45,7 +45,6 @@ export async function SpacePapers({
 
 	const bookmarkedPapers = await getBookmarkedPapersByCollectionId(space);
 	const paperIds = bookmarkedPapers?.map(({ paperId }) => paperId) ?? [];
-	console.log("paperIds", paperIds.length);
 
 	const fingerprints = await fetchFingerprints(paperIds);
 	const { filter: features } = getFeatureFilter(fingerprints);
@@ -57,7 +56,6 @@ export async function SpacePapers({
 		{ limit: limit + 1 }, // +1 in case the filter below removes one
 		space,
 	);
-	console.log("feed", feed?.rows.length);
 
 	if (!feed) {
 		return null;
