@@ -59,12 +59,10 @@ export const fetchAndRerankPaperIds = async (
 	const pageLimit = limit ?? 25;
 	const pageOffset = offset ?? 1;
 
-	const [debug, nocache, blacklist] = await getDebugFlags();
+	const [debug, nocache] = await getDebugFlags();
 	console.log("Cache disabled: ", nocache);
 
-	const features = blacklist
-		? removeBlacklisted(featureFilter, collectionId)
-		: featureFilter;
+	const features = removeBlacklisted(featureFilter, collectionId);
 
 	const cached = nocache
 		? await cacheWorker(features ?? [], days ?? FEED_DEFAULT_DAYS)
