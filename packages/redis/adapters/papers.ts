@@ -25,7 +25,7 @@ export const OpenAlexPapers = {
 		}
 		try {
 			return (await UpStash.papers().mget(
-				ids.map((id) => `${prefix}:${id}`),
+				ids.slice(0, 20).map((id) => `${prefix}:${id}`),
 			)) as (OpenAlexPaper | null)[];
 		} catch (error) {
 			console.error(error);
