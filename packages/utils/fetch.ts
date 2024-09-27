@@ -26,6 +26,6 @@ export async function fetchJson<T>(url: string) {
 
 		return json as T;
 	} finally {
-		Time.log(begin, "fetchJson");
+		Time.log(begin, `[fetchJson] ${url}`);
 	}
 }
