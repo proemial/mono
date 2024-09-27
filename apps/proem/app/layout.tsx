@@ -73,21 +73,27 @@ const fontSans = FontSans({
 type Props = {
 	children: ReactNode;
 	modal: ReactNode;
+	showToolbar: boolean;
 };
 
 export default function RootLayout({ children, modal }: Readonly<Props>) {
 	const headers = getHeaders();
+	const showToolbar = true; //process.env.NODE_ENV === "development";
 
 	if (headers.embedded) {
-		return <EmbeddedLayout>{children}</EmbeddedLayout>;
+		return (
+			<EmbeddedLayout showToolbar={showToolbar}>{children}</EmbeddedLayout>
+		);
 	}
 
-	return <MainLayout modal={modal}>{children}</MainLayout>;
+	return (
+		<MainLayout modal={modal} showToolbar={showToolbar}>
+			{children}
+		</MainLayout>
+	);
 }
 
-function MainLayout({ children, modal }: Readonly<Props>) {
-	const shouldInjectToolbar = process.env.NODE_ENV === "development";
-
+function MainLayout({ children, modal, showToolbar }: Readonly<Props>) {
 	return (
 		<html lang="en" className="overscroll-none" suppressHydrationWarning>
 			<head>
@@ -125,18 +131,22 @@ function MainLayout({ children, modal }: Readonly<Props>) {
 					</div>
 					<NotificationsToaster />
 				</ContextWrapper>
-				{shouldInjectToolbar && <VercelToolbar />}
+				{showToolbar && <VercelToolbar />}
 			</body>
 		</html>
 	);
 }
-function EmbeddedLayout({ children }: { children: ReactNode }) {
+function EmbeddedLayout({
+	children,
+	showToolbar,
+}: { children: ReactNode; showToolbar: boolean }) {
 	return (
 		<html lang="en" className="overscroll-none" suppressHydrationWarning>
 			<body className={cn("bg-white font-sans antialiased", fontSans.variable)}>
 				<ContextWrapper>
 					<LoadingTransition type="page">{children}</LoadingTransition>
 				</ContextWrapper>
+				{showToolbar && <VercelToolbar />}
 			</body>
 		</html>
 	);
