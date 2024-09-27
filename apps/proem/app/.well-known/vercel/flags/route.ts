@@ -23,17 +23,11 @@ export async function GET(request: NextRequest) {
 			debug: {
 				description: "Enables debugging features",
 				options: [
-					{ value: [true, false, false], label: "Enable debugging" },
+					{ value: [true, false], label: "Enable debugging" },
 					{
-						value: [true, true, false],
+						value: [true, true],
 						label: "Enable debugging and disable feed cache (CAREFULL!)",
 					},
-
-					{
-						value: [true, false, true],
-						label: "Enable debugging and femtech blacklist",
-					},
-					{ value: [false, false, true], label: "Enable femtech blacklist" },
 				],
 			},
 		},
