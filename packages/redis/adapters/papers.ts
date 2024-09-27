@@ -23,10 +23,7 @@ export const OpenAlexPapers = {
 		if (ids.length < 1) {
 			return [];
 		}
-		console.log(
-			"MGET",
-			ids.map((id) => `${prefix}:${id}`),
-		);
+		console.log("MGET", JSON.stringify(ids.map((id) => `${prefix}:${id}`)));
 
 		try {
 			return (await UpStash.papers().mget(
