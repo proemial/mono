@@ -7,6 +7,7 @@ import {
 	trackHandler,
 	analyticsKeys,
 } from "@/components/analytics/tracking/tracking-keys";
+import { useParams } from "next/navigation";
 
 interface Item {
 	title: string;
@@ -16,10 +17,12 @@ interface Item {
 }
 
 const FeaturedLink: FC<{ item: Item }> = ({ item }) => {
+	const { collectionId: spaceId } = useParams<{ collectionId?: string }>();
+
 	return (
 		<div className="bg-[#9CC4C7] hover:shadow rounded-2xl">
 			<Link
-				href={item.url}
+				href={spaceId ? `/space/${spaceId}${item.url}` : item.url}
 				onClick={trackHandler(analyticsKeys.feed.cardFeatured.click)}
 				prefetch={false}
 			>
