@@ -20,22 +20,31 @@ export function SearchResult({ item }: { item: Item }) {
 				{isLoading ? (
 					<div>summarising...</div>
 				) : summary ? (
-					<div className="text-xl">{summary}</div>
+					<div className="text-xl">
+						<a
+							target="_blank"
+							rel="noreferrer"
+							href={`http://proem.ai/paper/oa/${item.id.split("/").at(-1)}`}
+						>
+							{summary}
+						</a>
+					</div>
 				) : null}
-				<div>
-					{item.features.map((f, i) => (
-						<FeatureBagde key={i} feature={f} />
-					))}
-				</div>
 				<div className="text-sm text-gray-500">
 					<a
-						className="underline"
 						target="_blank"
 						rel="noreferrer"
 						href={`http://proem.ai/paper/oa/${item.id.split("/").at(-1)}`}
 					>
 						{item.title}
 					</a>
+				</div>
+				<div>
+					{item.features
+						.filter((f) => f.score > 0.5)
+						.map((f, i) => (
+							<FeatureBagde key={i} feature={f} />
+						))}
 				</div>
 			</div>
 		</>
@@ -44,8 +53,8 @@ export function SearchResult({ item }: { item: Item }) {
 
 export function FeatureBagde({ feature }: { feature: Feature }) {
 	return (
-		<span className="m-1 px-2 py-0.5 text-xs cursor-default text-gray-500 border bg-gray-100 rounded-full">
-			{feature.label}
+		<span className="my-1 mr-1 px-2 py-0.5 text-xs cursor-default text-gray-500 border bg-gray-100 rounded-full">
+			{feature.score.toFixed(2)} {feature.label}
 		</span>
 	);
 }
