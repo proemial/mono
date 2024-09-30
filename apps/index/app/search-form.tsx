@@ -25,7 +25,7 @@ export function SearchForm() {
 						name="from"
 						className="w-full p-2 border rounded"
 						disabled={pending}
-						defaultValue="2024-01-01"
+						defaultValue="2024-09-01"
 					/>
 				</div>
 				<div className="w-1/2">
@@ -47,7 +47,7 @@ export function SearchForm() {
 			</div>
 			<textarea
 				name="query"
-				rows={3}
+				rows={8}
 				className="w-full p-2 border rounded disabled:bg-slate-100"
 				placeholder="Enter your text here..."
 				defaultValue={query}
