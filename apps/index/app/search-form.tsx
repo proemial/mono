@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 
 export function SearchForm() {
 	const [query, setQuery] = useState(
-		"'Maternal Health', 'Cesarean Outcomes', 'Maternal Nutrition', 'Contraception', 'Gynecology', 'Breast Cancer Screening', 'Breast cancer', 'Pregnancy', 'Breastfeeding Support', 'Breastfeeding Promotion', 'Urinary Infections', 'Cancer Patterns', 'Breastfeeding', 'Gender Bias', 'Menstrual Health', 'Fertility Preservation', 'Family medicine', 'Breastfeeding', 'Gerontology', 'Mammography', 'Estrogen', 'Breast cancer screening', 'Vaginal atrophy', 'Family planning', 'Quality of life (healthcare)', 'Pregnancy and Mental Health', 'Maternal and Child Undernutrition', 'Hormonal contraception', 'Lactation', 'Vaginal Microbiome', 'Polycystic Ovary Syndrome', 'Breastfeeding', 'Breast Cancer', 'Migraine', 'Breastfeeding Duration', 'Sex steroid', 'Obstetric nursing', 'Menopause', 'Anemia', 'Maternal Mental Health', 'Sleep Quality', 'Prenatal Stress', 'Migraine Prevention', 'Uterine Fibroids', 'Sleep', 'Hormone Therapy', 'Urinary Tract Infections', 'Vaginal flora', 'Gender Norms', 'Contraceptive Use', 'Sleep Studies', 'Polycystic Ovary', 'Migraine', 'Vaginal Microbiome', 'Uterine Conditions', 'Vesicovaginal Fistula', 'Menopausal Health', 'Maternal Mental Health', 'Pelvic Disorders', 'Testosterone Effects', 'Maternal Health', 'Estrogen Signaling', 'Endometriosis', 'Feeding Disorders', 'Gender Bias', 'Soy Isoflavones', 'Human Milk', 'Birth Cohort Study', 'Puberty Regulation', 'Breast Cancer Research', 'Iron Regulation', 'Oxytocin', 'Cardiovascular Pregnancy', 'Sexual Health', 'Polycystic ovary', 'Gender Imbalance', 'BRCA Research', 'Cord lining', 'Gender Diversity', 'Fetal Programming', 'Reproductive Health', 'Pregnancy Intention', 'Obstetrical nursing', 'Umbilical cord', 'Gardnerella vaginalis', 'Pediatrics', 'Unintended pregnancy', 'Lactation', 'Vaginal atrophy', 'Menopause', 'Bacterial vaginosis', 'Genitourinary system', 'Reproductive health', 'Empowerment', 'Reproductive rights', 'Anemia', 'Migraine', 'Hormonal contraception', 'Term (time)', 'Hysterectomy', 'Sex steroid', 'Obstetric nursing', 'Obstetrics', 'Vaginal flora', 'Menstrual cycle', 'Lactobacillus', 'Cord lining', 'Obstetrical nursing', 'Gardnerella vaginalis', 'Gestation', 'Sex hormone-binding globulin', 'Vagina', 'Unintended pregnancy', 'Gender studies'",
+		"More than four years ago, former President Donald Trump’s administration accelerated the development and rollout of the covid-19 vaccine. The project, dubbed Operation Warp Speed, likely saved millions of lives. But a substantial number of Republican voters now identify as vaccine skeptics — and Trump rarely mentions what’s considered one of the great public health accomplishments in recent memory.",
 	);
 	const { pending } = useFormStatus();
 
@@ -25,10 +25,7 @@ export function SearchForm() {
 						name="from"
 						className="w-full p-2 border rounded"
 						disabled={pending}
-						defaultValue={(() => {
-							const date = dayjs().subtract(7, "day");
-							return date.format("YYYY-MM-DD");
-						})()}
+						defaultValue="2024-01-01"
 					/>
 				</div>
 				<div className="w-1/2">
@@ -50,7 +47,7 @@ export function SearchForm() {
 			</div>
 			<textarea
 				name="query"
-				rows={6}
+				rows={3}
 				className="w-full p-2 border rounded disabled:bg-slate-100"
 				placeholder="Enter your text here..."
 				defaultValue={query}
