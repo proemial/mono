@@ -50,7 +50,7 @@ export function SearchForm() {
 			</div>
 			<textarea
 				name="query"
-				rows={15}
+				rows={6}
 				className="w-full p-2 border rounded disabled:bg-slate-100"
 				placeholder="Enter your text here..."
 				defaultValue={query}

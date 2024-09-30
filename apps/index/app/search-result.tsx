@@ -22,7 +22,16 @@ export function SearchResult({ item }: { item: Item }) {
 				) : summary ? (
 					<div className="text-xl">{summary}</div>
 				) : null}
-				<div className="text-sm text-gray-500">{item.title}</div>
+				<div className="text-sm text-gray-500">
+					<a
+						className="underline"
+						target="_blank"
+						rel="noreferrer"
+						href={`http://proem.ai/paper/oa/${item.id.split("/").at(-1)}`}
+					>
+						{item.title}
+					</a>
+				</div>
 			</div>
 		</>
 	);

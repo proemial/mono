@@ -7,6 +7,7 @@ export type SearchResult = {
 	title: string;
 	created: string;
 	abstract: string;
+	id: string;
 };
 
 export const searchAction = async (
@@ -32,7 +33,7 @@ export const searchAction = async (
 		limit: Number.parseInt(count),
 		filter: {
 			must: {
-				key: "publication_date",
+				key: "created_date",
 				range: {
 					gte: from,
 				},
@@ -49,6 +50,7 @@ export const searchAction = async (
 		(p) =>
 			({
 				score: p.score,
+				id: p.payload?.id as string,
 				title: p.payload?.title as string,
 				created: p.payload?.created_date as string,
 				abstract: p.payload?.abstract as string,
