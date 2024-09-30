@@ -46,11 +46,16 @@ export const fetchPaper = cache(
 
 			console.log("[fetchPaper] Upsert", id);
 			return await Redis.papers.upsert(id, (existingPaper) => {
-				return {
+				const updatedPaper = {
 					...existingPaper,
 					data,
 					id,
 				};
+				updatedPaper.data.referenced_works =
+					updatedPaper.data.referenced_works?.slice(0, 20);
+				updatedPaper.data.related_works =
+					updatedPaper.data.related_works?.slice(0, 20);
+				return updatedPaper;
 			});
 		}
 		return paper ?? undefined;
