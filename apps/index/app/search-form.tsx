@@ -46,7 +46,7 @@ export function SearchForm() {
 						disabled={pending}
 						defaultValue={10}
 						min={1}
-						max={100}
+						max={30}
 					/>
 				</div>
 			</div>
