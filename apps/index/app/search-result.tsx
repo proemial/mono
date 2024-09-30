@@ -7,7 +7,6 @@ export function SearchResult({ item }: { item: Item }) {
 	const { data: summary, isLoading } = useQuery({
 		queryKey: ["summary", item.title, item.abstract],
 		queryFn: async () => {
-			console.log("summarising");
 			return await summariseAction(item.title, item.abstract);
 		},
 		enabled: !!item,
@@ -19,7 +18,7 @@ export function SearchResult({ item }: { item: Item }) {
 			<div>{item.created}</div>
 			<div>
 				{isLoading ? (
-					<div>Loading summary...</div>
+					<div>summarising...</div>
 				) : summary ? (
 					<div className="text-xl">{summary}</div>
 				) : null}
