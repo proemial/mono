@@ -8,6 +8,7 @@ export type OpenAlexMeta = {
 	count: number;
 	page: number;
 	per_page: number;
+	next_cursor?: string;
 };
 
 export type OpenAlexWorksHit = OpenAlexWorkCoreMetadata & {
