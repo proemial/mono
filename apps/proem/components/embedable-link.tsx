@@ -9,6 +9,7 @@ import {
 	trackHandler,
 } from "./analytics/tracking/tracking-keys";
 import { ASSISTANT_OPEN_QUERY_KEY } from "./proem-assistant/use-assistant/use-assistant";
+import { useAuth } from "@clerk/nextjs";
 
 type Props = {
 	children: ReactNode;
@@ -62,15 +63,12 @@ function usePageUrl(
 	openAssistant?: boolean,
 ) {
 	const pathname = usePathname();
-
-	const space =
-		pathname.includes(routes.space) && spaceId
-			? `${routes.space}/${pathname.split("/")[2]}`
-			: "";
+	const { userId } = useAuth();
+	const spacePath = getSpacePath(pathname, spaceId, userId);
 
 	const theme =
 		// Only add the theme manually if the space is a personal collection
-		!space.includes("col_") && field
+		!spacePath.includes("col_") && field
 			? `?color=${field.theme.color}${
 					field.theme.image ? `&image=${field.theme.image}` : ""
 				}`
@@ -78,7 +76,7 @@ function usePageUrl(
 
 	const assistant = openAssistant ? `&${ASSISTANT_OPEN_QUERY_KEY}=true` : "";
 
-	return `${space}${path}${theme}${assistant}`;
+	return `${spacePath}${path}${theme}${assistant}`;
 }
 
 function useEmbedUrl(path: string) {
@@ -110,3 +108,17 @@ const getBaseUrl = () =>
 	typeof window !== "undefined" && window.location.origin
 		? window.location.origin
 		: "";
+
+const getSpacePath = (
+	pathname: string,
+	spaceId: string | undefined,
+	userId: string | null | undefined,
+) => {
+	if (pathname.includes(routes.space) && spaceId) {
+		return `${routes.space}/${pathname.split("/")[2]}`;
+	}
+	if (pathname.includes(routes.space) && userId) {
+		return `${routes.space}/${userId}`;
+	}
+	return "";
+};
