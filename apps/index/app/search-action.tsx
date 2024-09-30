@@ -1,6 +1,8 @@
 "use server";
 import { QdrantClient } from "@qdrant/js-client-rest";
 import { generateEmbedding } from "@/inngest/helpers/embeddings";
+import { OpenAlexPaperWithAbstract } from "@proemial/repositories/oa/models/oa-paper";
+import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-topics-compact";
 
 export type SearchResult = {
 	score: number;
@@ -8,6 +10,14 @@ export type SearchResult = {
 	created: string;
 	abstract: string;
 	id: string;
+	features: Feature[];
+};
+
+export type Feature = {
+	id: string;
+	label: string;
+	score: number;
+	type: "topic" | "keyword" | "concept";
 };
 
 export const searchAction = async (
@@ -54,6 +64,35 @@ export const searchAction = async (
 				title: p.payload?.title as string,
 				created: p.payload?.created_date as string,
 				abstract: p.payload?.abstract as string,
+				features: features(p.payload as OpenAlexPaperWithAbstract),
 			}) as SearchResult,
 	);
 };
+
+function features(payload: OpenAlexPaperWithAbstract) {
+	const topics =
+		payload.topics?.map((t) => ({
+			id: t.id,
+			label: oaTopicsTranslationMap[t.id]?.["short-name"] ?? t.display_name,
+			type: "topic",
+			score: t.score,
+		})) ?? [];
+	const keywords =
+		payload.keywords?.map((t) => ({
+			id: t.id,
+			label: t.display_name,
+			type: "keyword",
+			score: t.score,
+		})) ?? [];
+	const concepts =
+		payload.concepts?.map((t) => ({
+			id: t.id,
+			label: t.display_name,
+			type: "concept",
+			score: t.score,
+		})) ?? [];
+
+	return [...topics, ...keywords, ...concepts].sort(
+		(a, b) => b.score - a.score,
+	);
+}

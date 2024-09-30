@@ -1,6 +1,6 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
-import { SearchResult as Item } from "./search-action";
+import { Feature, SearchResult as Item } from "./search-action";
 import { summariseAction } from "./summarise-action";
 
 export function SearchResult({ item }: { item: Item }) {
@@ -22,6 +22,11 @@ export function SearchResult({ item }: { item: Item }) {
 				) : summary ? (
 					<div className="text-xl">{summary}</div>
 				) : null}
+				<div>
+					{item.features.map((f, i) => (
+						<FeatureBagde key={i} feature={f} />
+					))}
+				</div>
 				<div className="text-sm text-gray-500">
 					<a
 						className="underline"
@@ -34,5 +39,13 @@ export function SearchResult({ item }: { item: Item }) {
 				</div>
 			</div>
 		</>
+	);
+}
+
+export function FeatureBagde({ feature }: { feature: Feature }) {
+	return (
+		<span className="m-1 px-2 py-0.5 text-xs cursor-default text-gray-500 border bg-gray-100 rounded-full">
+			{feature.label}
+		</span>
 	);
 }
