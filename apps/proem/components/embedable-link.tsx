@@ -28,6 +28,7 @@ export const EmbedableLink = ({
 	feedType = "organic",
 }: Props) => {
 	const urls = useUrls(path, spaceId, field, openAssistant);
+
 	const trackingKey = useTrackingKey(spaceId);
 	const isFeed = trackingKey === analyticsKeys.feed.click.card;
 
@@ -62,9 +63,14 @@ function usePageUrl(
 ) {
 	const pathname = usePathname();
 
+	const space =
+		pathname.includes(routes.space) && spaceId
+			? `${routes.space}/${pathname.split("/")[2]}`
+			: "";
+
 	const theme =
 		// Only add the theme manually if the space is a personal collection
-		!spaceId?.includes("col_") && field
+		!space.includes("col_") && field
 			? `?color=${field.theme.color}${
 					field.theme.image ? `&image=${field.theme.image}` : ""
 				}`
@@ -72,7 +78,7 @@ function usePageUrl(
 
 	const assistant = openAssistant ? `&${ASSISTANT_OPEN_QUERY_KEY}=true` : "";
 
-	return `${pathname.split("/paper").at(0)}${path}${theme}${assistant}`;
+	return `${space}${path}${theme}${assistant}`;
 }
 
 function useEmbedUrl(path: string) {
