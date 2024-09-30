@@ -25,7 +25,10 @@ export function SearchForm() {
 						name="from"
 						className="w-full p-2 border rounded"
 						disabled={pending}
-						defaultValue="2024-09-01"
+						defaultValue={(() => {
+							const date = dayjs().subtract(7, "day");
+							return date.format("YYYY-MM-DD");
+						})()}
 					/>
 				</div>
 				<div className="w-1/2">
