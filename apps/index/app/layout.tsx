@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { QueryClient } from "./query-client";
+import { Analytics } from "@vercel/analytics/react";
 
 const geistSans = localFont({
 	src: "./fonts/GeistVF.woff",
@@ -30,6 +31,7 @@ export default function RootLayout({
 				className={`${geistSans.variable} ${geistMono.variable} antialiased p-4`}
 			>
 				<QueryClient>{children}</QueryClient>
+				<Analytics />
 			</body>
 		</html>
 	);
