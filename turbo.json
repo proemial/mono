@@ -29,7 +29,9 @@
 		"RATE_LIMITER_PASSWORD",
 		"REDIS_PAPERS_TOKEN",
 		"REDIS_PAPERS_URL",
-		"SENTRY_AUTH_TOKEN"
+		"SENTRY_AUTH_TOKEN",
+		"QDRANT_API_KEY",
+		"QDRANT_URL"
 	],
 	"tasks": {
 		"checkly": {},
