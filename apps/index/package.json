@@ -11,6 +11,8 @@
 		"@proemial/models": "workspace:*",
 		"@proemial/repositories": "workspace:*",
 		"@proemial/utils": "workspace:*",
+		"ai": "^3.4.7",
+		"@ai-sdk/anthropic": "^0.0.51",
 		"react": "^18",
 		"react-dom": "^18",
 		"next": "14.2.13",
@@ -18,7 +20,8 @@
 		"dayjs": "^1.11.12",
 		"openai": "^4.65.0",
 		"@qdrant/js-client-rest": "^1.11.0",
-		"uuid": "^10.0.0"
+		"uuid": "^10.0.0",
+		"@tanstack/react-query": "^5.56.2"
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",

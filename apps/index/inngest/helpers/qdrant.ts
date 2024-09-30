@@ -1,6 +1,6 @@
 import { Time } from "@proemial/utils/time";
 import { QdrantClient } from "@qdrant/js-client-rest";
-import { IndexedPaper, Provider } from "./fetch";
+import { IndexedPaper } from "./fetch";
 import { v5 as uuid } from "uuid";
 
 const collection = "gamma";
