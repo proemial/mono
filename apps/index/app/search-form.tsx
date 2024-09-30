@@ -45,6 +45,8 @@ export function SearchForm() {
 						className="w-full p-2 border rounded"
 						disabled={pending}
 						defaultValue={10}
+						min={1}
+						max={100}
 					/>
 				</div>
 			</div>
