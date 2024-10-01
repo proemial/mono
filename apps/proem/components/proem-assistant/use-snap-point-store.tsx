@@ -1,17 +1,25 @@
 import { create } from "zustand";
 
 interface SnapPointState {
-	snapPoint: number;
-	setSnapPoint: (snapPoint: number | string | null) => void;
+	activeSnapPoint: number;
+	setActiveSnapPoint: (point: number | string | null) => void;
+	snapPoints: number[];
+	setSnapPoints: (points: number[]) => void;
 }
 
 export const useSnapPointStore = create<SnapPointState>()((set) => ({
-	snapPoint: 1.0,
-	setSnapPoint: (snapPoint) => {
-		if (snapPoint && typeof snapPoint === "number") {
+	activeSnapPoint: 1.0,
+	setActiveSnapPoint: (point) => {
+		if (point && typeof point === "number") {
 			set((state) => ({
-				snapPoint,
+				activeSnapPoint: point,
 			}));
 		}
+	},
+	snapPoints: [0.0, 1.0],
+	setSnapPoints: (points) => {
+		set((state) => ({
+			snapPoints: points,
+		}));
 	},
 }));

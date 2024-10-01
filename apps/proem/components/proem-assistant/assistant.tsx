@@ -3,7 +3,7 @@
 import { AssistantData } from "@/app/api/assistant/route";
 import { isArxivPaperId } from "@/utils/is-arxiv-paper-id";
 import { useAuth } from "@clerk/nextjs";
-import { Drawer } from "@proemial/shadcn-ui";
+import { Drawer, DrawerTrigger } from "@proemial/shadcn-ui";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -42,7 +42,8 @@ export const ProemAssistant = () => {
 	} = useAssistant();
 	const { userId } = useAuth();
 	const pathname = usePathname();
-	const { snapPoint } = useSnapPointStore();
+	const { activeSnapPoint, setActiveSnapPoint, snapPoints, setSnapPoints } =
+		useSnapPointStore();
 
 	const params = useParams<Params>();
 	const spaceId = params.collectionId;
@@ -88,21 +89,35 @@ export const ProemAssistant = () => {
 			closeAssistant();
 		} else {
 			openAssistant();
+			setSnapPoints([0.0, 1.0]);
+			setActiveSnapPoint(1.0);
+		}
+	};
+
+	const handleSetSnapPoint = (point: number | string | null) => {
+		if (point === 0.0) {
+			closeAssistant();
+			setActiveSnapPoint(0.0);
+			setSnapPoints([0.0]);
+		} else {
+			setActiveSnapPoint(point);
 		}
 	};
 
 	return (
 		<div className="fixed bottom-0 left-0 bg-gradient-to-b pt-5 from-transparent to-background h-[90px] w-full flex justify-center pointer-events-none z-20">
-			<AssistantButton onClick={handleOpen} />
 			<Drawer
 				shouldScaleBackground={false}
 				setBackgroundColorOnScale={false}
 				open={isAssistantOpened}
 				onOpenChange={handleOpenChange}
-				snapPoints={[snapPoint]}
-				activeSnapPoint={snapPoint}
-				closeThreshold={0.1}
+				snapPoints={snapPoints}
+				activeSnapPoint={activeSnapPoint}
+				setActiveSnapPoint={handleSetSnapPoint}
 			>
+				<DrawerTrigger asChild>
+					<AssistantButton onClick={handleOpen} />
+				</DrawerTrigger>
 				<AssistantContent spaceId={spaceId} paperId={paperId} data={data} />
 			</Drawer>
 		</div>

@@ -18,9 +18,10 @@ type Props = {
 };
 
 export const InspectAnswer = ({ tuple }: Props) => {
-	const { isAssistantOpened, closeAssistant } = useAssistant();
+	const { isAssistantOpened } = useAssistant();
 	const [ref, { height }] = useMeasure();
-	const { snapPoint, setSnapPoint } = useSnapPointStore();
+	const { activeSnapPoint, setActiveSnapPoint, setSnapPoints } =
+		useSnapPointStore();
 	useDisableOverlayBackground();
 	const { collectionId: spaceId } = useParams<{ collectionId?: string }>();
 	const router = useRouter();
@@ -29,11 +30,18 @@ export const InspectAnswer = ({ tuple }: Props) => {
 		const windowHeight = window.innerHeight;
 		if (height && windowHeight) {
 			const calculatedSnapPoint = (height + 24 + 18) / windowHeight;
-			if (snapPoint !== calculatedSnapPoint && isAssistantOpened) {
-				setSnapPoint(calculatedSnapPoint);
+			if (activeSnapPoint !== calculatedSnapPoint && isAssistantOpened) {
+				setSnapPoints([0.0, calculatedSnapPoint]);
+				setActiveSnapPoint(calculatedSnapPoint);
 			}
 		}
-	}, [height, isAssistantOpened, snapPoint, setSnapPoint]);
+	}, [
+		height,
+		isAssistantOpened,
+		activeSnapPoint,
+		setActiveSnapPoint,
+		setSnapPoints,
+	]);
 
 	const handleBack = () => {
 		if (spaceId) {
