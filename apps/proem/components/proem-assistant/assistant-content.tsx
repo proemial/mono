@@ -8,7 +8,10 @@ import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { useUser } from "@clerk/nextjs";
 import { Comment, Post } from "@proemial/data/neon/schema";
 import { Button, DrawerClose, DrawerContent } from "@proemial/shadcn-ui";
-import { DialogTitle } from "@proemial/shadcn-ui/components/ui/dialog";
+import {
+	DialogDescription,
+	DialogTitle,
+} from "@proemial/shadcn-ui/components/ui/dialog";
 import { useQueryClient } from "@tanstack/react-query";
 import { X } from "@untitled-ui/icons-react";
 import { nanoid } from "ai";
@@ -157,7 +160,7 @@ export const AssistantContent = ({ spaceId, paperId, data }: Props) => {
 	return (
 		<DrawerContent className="max-w-xl mx-auto flex border-none bg-theme-900 h-full">
 			<div className="absolute top-0 right-0 m-1">
-				<DrawerClose>
+				<DrawerClose asChild>
 					<Button
 						size="icon"
 						className="text-neutral-50 hover:text-neutral-200 duration-200 bg-transparent hover:bg-transparent"
@@ -167,6 +170,7 @@ export const AssistantContent = ({ spaceId, paperId, data }: Props) => {
 				</DrawerClose>
 			</div>
 			<DialogTitle className="hidden" />
+			<DialogDescription className="hidden" />
 			<div
 				className="flex flex-col justify-between h-[calc(100%-24px)]"
 				ref={contentRef}
