@@ -11,8 +11,40 @@ import {
 } from "@proemial/repositories/oa/models/oa-paper";
 import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
+import { Time } from "@proemial/utils/time";
 import dayjs from "dayjs";
 import { cache } from "react";
+
+export async function fetchPapers(ids: string[]) {
+	const begin = Time.now();
+
+	try {
+		const limit = ids.length > 20 ? 20 : ids.length;
+		const response = await fetch(
+			`${oaBaseUrl}?${oaBaseArgs}&select=${openAlexFields.all}&per_page=${limit}&filter=ids.openalex:${ids.map((id) => id.split("/").pop()).join("|")}`,
+		);
+		if (!response.ok) {
+			console.error(
+				`Failed to fetch papers ${ids} from OpenAlex (${response.status}: ${response.statusText})`,
+			);
+			return undefined;
+		}
+		const searchResult = (await response.json()) as OpenAlexWorksSearchResult;
+		return searchResult.results.map((paper) => {
+			// Remove the abstract_inverted_index and relevance_score from the response
+			const { abstract_inverted_index, relevance_score, ...rest } = paper;
+			return {
+				id: paper.id,
+				data: {
+					...rest,
+					abstract: fromInvertedIndex(paper.abstract_inverted_index, 350),
+				},
+			} as OpenAlexPaper;
+		});
+	} finally {
+		Time.log(begin, `[fetchPapers] ${ids}`);
+	}
+}
 
 export const fetchPaper = cache(
 	async (id: string): Promise<OpenAlexPaper | undefined> => {

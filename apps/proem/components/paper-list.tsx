@@ -20,12 +20,13 @@ export async function PaperList({ ids: urls, limit, children }: Props) {
 	const ids = urls.map((url) => url.split("/").at(-1) as string);
 	const papers = await fromIds(ids);
 
+	// TODO: Fix deduplication
 	const dedupedPapersWithAbstracts = papers
 		.filter(
 			(paper, index, self) =>
 				index === self.findIndex((p) => p?.data?.title === paper?.data?.title),
 		)
-		.filter((p) => p?.data?.abstract_inverted_index)
+		.filter((p) => p?.data?.abstract)
 		.slice(0, limit);
 
 	const papersWithPostsAndReaders = await Promise.all(

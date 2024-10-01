@@ -1,4 +1,7 @@
-import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
+import {
+	fetchPaper,
+	fetchPapers,
+} from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { summarise } from "@/app/prompts/summarise-title";
 import { Redis } from "@proemial/redis/redis";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
@@ -20,34 +23,30 @@ export const fromIds = async (ids: string[]) => {
 	}
 
 	const enhanced = [] as OpenAlexPaper[];
-	await Promise.all(
-		cacheMisses.map(async (id) => {
-			const currentPaper = await fetchPaper(id);
-			if (!currentPaper) {
-				console.log("Paper not found", id);
-				return;
-			}
-			if (!currentPaper.data.abstract_inverted_index) {
-				console.log("Paper has no abstract", id);
-				return;
-			}
-			const paperTitle = currentPaper?.data?.title;
-			const abstract = currentPaper?.data?.abstract;
-			const generatedTitle = currentPaper?.generated?.title;
-
-			if (!generatedTitle && paperTitle && abstract) {
-				console.log("Enhancing paper", currentPaper.id);
-				const title = (await summarise(paperTitle, abstract)) as string;
-				const generated = currentPaper.generated
-					? { ...currentPaper.generated, title }
-					: { title };
-
-				enhanced.push({ ...currentPaper, generated });
-			}
-		}),
+	const missedPapers = (await fetchPapers(cacheMisses))?.filter(
+		(p) => !!p.data.abstract,
 	);
 
-	await Redis.papers.upsertAll(enhanced);
+	if (missedPapers) {
+		await Promise.all(
+			missedPapers.map(async (currentPaper) => {
+				const paperTitle = currentPaper?.data.title;
+				const abstract = currentPaper?.data.abstract as string;
+
+				console.log("Enhancing paper", currentPaper.id);
+				const title = (await summarise(paperTitle, abstract)) as string;
+				const generated = { title };
+
+				enhanced.push({
+					...currentPaper,
+					generated,
+				});
+			}),
+		);
+		if (enhanced.length > 0) {
+			await Redis.papers.upsertAll(enhanced);
+		}
+	}
 
 	return [...cachedPapers, ...enhanced];
 };
