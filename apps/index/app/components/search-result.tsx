@@ -1,7 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
-import { Feature, SearchResult as Item } from "./search-action";
-import { summariseAction } from "./summarise-action";
+import { Feature, SearchResult as Item } from "../actions/search-action";
+import { summariseAction } from "../actions/summarise-action";
 
 export function SearchResult({ item }: { item: Item }) {
 	const { data: summary, isLoading } = useQuery({

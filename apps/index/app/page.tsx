@@ -1,8 +1,8 @@
 "use client";
-import { searchAction, SearchResult } from "./search-action";
+import { searchAction, SearchResult } from "./actions/search-action";
 import { useFormState } from "react-dom";
-import { SearchForm } from "./search-form";
-import { SearchResult as PaperCard } from "./search-result";
+import { SearchForm } from "./components/search-form";
+import { SearchResult as PaperCard } from "./components/search-result";
 
 export default function Home() {
 	const [formState, action] = useFormState(searchAction, [] as SearchResult[]);
