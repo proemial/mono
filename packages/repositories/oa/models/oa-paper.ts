@@ -67,8 +67,10 @@ export type OpenAlexWorkCoreMetadata = {
 	};
 
 	primary_location: OpenAlexLocation;
+	locations: OpenAlexLocation[];
 	authorships: OpenAlexAuthorship[];
 	related_works: string[];
+	referenced_works: string[];
 
 	abstract_inverted_index?: { [key: string]: number[] };
 };

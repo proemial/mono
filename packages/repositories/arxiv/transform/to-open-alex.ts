@@ -26,6 +26,7 @@ export function toOpenAlexPapers(xml: string): OpenAlexPaperWithAbstract[] {
 		language: "en",
 		has_fulltext: true,
 		related_works: [],
+		referenced_works: [],
 		open_access: {
 			is_oa: true,
 			oa_status: "unknown",
