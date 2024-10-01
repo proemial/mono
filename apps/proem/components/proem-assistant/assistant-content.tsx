@@ -156,7 +156,7 @@ export const AssistantContent = ({ spaceId, paperId, data }: Props) => {
 
 	return (
 		<DrawerContent className="max-w-xl mx-auto flex border-none bg-theme-900 h-full">
-			<div className="hidden sm:block absolute top-0 right-0 m-1">
+			<div className="absolute top-0 right-0 m-1">
 				<DrawerClose>
 					<Button
 						size="icon"
