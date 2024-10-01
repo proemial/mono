@@ -30,7 +30,7 @@ export default function RootLayout({
 		<>
 			<HighlightInit
 				projectId={"odzr874e"}
-				serviceName="my-nextjs-frontend"
+				serviceName="index"
 				tracingOrigins
 				networkRecording={{
 					enabled: true,
