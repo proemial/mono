@@ -2,7 +2,7 @@ import { Time } from "@proemial/utils/time";
 import { inngest } from "../../client";
 import { EventPayload } from "inngest/types";
 import { generateEmbeddings } from "../../helpers/embeddings";
-import { fetchWithAbstract } from "../../helpers/fetch";
+import { fetchFromOpenAlex } from "../../helpers/openalex";
 import { upsertPapers } from "../../helpers/qdrant";
 import dayjs from "dayjs";
 
@@ -98,7 +98,7 @@ async function fetchPapers(payload: Payload) {
 		.join(",");
 
 	const params = `filter=${filter}&per_page=${limit}&cursor=${cursor}`;
-	const response = await fetchWithAbstract(params);
+	const response = await fetchFromOpenAlex(params);
 
 	console.log(
 		"next_cursor: ",

@@ -1,7 +1,7 @@
 import { Time } from "@proemial/utils/time";
 import { QdrantClient } from "@qdrant/js-client-rest";
-import { IndexedPaper } from "./fetch";
 import { v5 as uuid } from "uuid";
+import { IndexedPaper } from "./paper.model";
 
 const collection = "gamma";
 
@@ -13,6 +13,9 @@ export async function upsertPapers(
 ) {
 	if (!papers.length) {
 		return [];
+	}
+	if (papers.length !== embeddings.length) {
+		throw new Error("Papers and embeddings must be the same length");
 	}
 
 	const begin = Time.now();

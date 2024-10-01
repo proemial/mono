@@ -1,26 +1,25 @@
 import {
 	oaBaseArgs,
 	oaBaseUrl,
-	OpenAlexPaper,
 	OpenAlexWorksHit,
 	OpenAlexWorksSearchResult,
 } from "@proemial/repositories/oa/models/oa-paper";
 import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
+import { IndexedPaper, Provider } from "./paper.model";
 
-export type Provider = "openalex" | "arxiv";
-export type IndexedPaper = OpenAlexPaper & { data: { provider: Provider } };
-
-export async function fetchWithAbstract(
+export async function fetchFromOpenAlex(
 	params: string,
 	provider: Provider = "openalex",
 ) {
 	const { meta, results } = await fetchJson<OpenAlexWorksSearchResult>(
 		`${oaBaseUrl}?${oaBaseArgs}&${params}`,
+		{ cache: "no-store" },
 	);
 
+	// Filter out papers that don't have a title and abstract
 	const withTitleAndAbstract = (paper: OpenAlexWorksHit) =>
-		!!paper.abstract_inverted_index && paper.title;
+		!!paper.abstract_inverted_index && !!paper.title;
 
 	const papers = results.filter(withTitleAndAbstract).map((paper) => {
 		// Remove the abstract_inverted_index and relevance_score from the response
