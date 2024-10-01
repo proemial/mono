@@ -114,6 +114,7 @@ export const ProemAssistant = () => {
 				snapPoints={snapPoints}
 				activeSnapPoint={activeSnapPoint}
 				setActiveSnapPoint={handleSetSnapPoint}
+				modal={false}
 			>
 				<DrawerTrigger asChild>
 					<AssistantButton onClick={handleOpen} />
