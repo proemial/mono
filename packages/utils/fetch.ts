@@ -11,12 +11,13 @@ export async function fetchSomeResults<T>(
 	return !selector ? some : some.map(selector);
 }
 
-export async function fetchJson<T>(url: string) {
+export async function fetchJson<T>(url: string, options: RequestInit = {}) {
 	const begin = Time.now();
 
 	try {
 		const response = await fetch(url, {
 			headers: { "Content-Type": "application/json" },
+			...options,
 		});
 		const json = await response.json();
 
