@@ -22,7 +22,8 @@
 		"openai": "^4.65.0",
 		"@qdrant/js-client-rest": "^1.11.0",
 		"uuid": "^10.0.0",
-		"@tanstack/react-query": "^5.56.2"
+		"@tanstack/react-query": "^5.56.2",
+		"@highlight-run/next": "^7.5.29"
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",

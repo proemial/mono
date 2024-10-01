@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { TanstackWrapper } from "./components/tanstack-wrapper";
 import { Analytics } from "@vercel/analytics/react";
+import { HighlightInit } from "@highlight-run/next/client";
 
 const geistSans = localFont({
 	src: "./fonts/GeistVF.woff",
@@ -26,13 +27,25 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
-			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased p-4`}
-			>
-				<TanstackWrapper>{children}</TanstackWrapper>
-				<Analytics />
-			</body>
-		</html>
+		<>
+			<HighlightInit
+				projectId={"odzr874e"}
+				serviceName="my-nextjs-frontend"
+				tracingOrigins
+				networkRecording={{
+					enabled: true,
+					recordHeadersAndBody: true,
+					urlBlocklist: [],
+				}}
+			/>
+			<html lang="en">
+				<body
+					className={`${geistSans.variable} ${geistMono.variable} antialiased p-4`}
+				>
+					<TanstackWrapper>{children}</TanstackWrapper>
+					<Analytics />
+				</body>
+			</html>
+		</>
 	);
 }
