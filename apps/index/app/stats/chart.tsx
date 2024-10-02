@@ -14,30 +14,7 @@ export default function IngestionChart({ stats }: Props) {
 
 	return (
 		<>
-			<div className="flex justify-center mb-4">
-				<div className="flex items-center space-x-4">
-					<label>
-						<input
-							type="radio"
-							value="all"
-							checked={showAll}
-							onChange={() => setShowAll(true)}
-							className="mr-1"
-						/>
-						All
-					</label>
-					<label>
-						<input
-							type="radio"
-							value="latest"
-							checked={!showAll}
-							onChange={() => setShowAll(false)}
-							className="mr-1"
-						/>
-						Latest
-					</label>
-				</div>
-			</div>
+			<ChartToggle showAll={showAll} setShowAll={setShowAll} />
 			<Charts.ResponsiveContainer width="100%" height={600}>
 				<Charts.ComposedChart
 					data={chartData}
@@ -92,5 +69,37 @@ export default function IngestionChart({ stats }: Props) {
 				</Charts.ComposedChart>
 			</Charts.ResponsiveContainer>
 		</>
+	);
+}
+
+function ChartToggle({
+	showAll,
+	setShowAll,
+}: { showAll: boolean; setShowAll: (showAll: boolean) => void }) {
+	return (
+		<div className="flex justify-center mb-4">
+			<div className="flex items-center space-x-4">
+				<label>
+					<input
+						type="radio"
+						value="all"
+						checked={showAll}
+						onChange={() => setShowAll(true)}
+						className="mr-1"
+					/>
+					All
+				</label>
+				<label>
+					<input
+						type="radio"
+						value="latest"
+						checked={!showAll}
+						onChange={() => setShowAll(false)}
+						className="mr-1"
+					/>
+					Latest
+				</label>
+			</div>
+		</div>
 	);
 }
