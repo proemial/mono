@@ -22,9 +22,14 @@ export default function IngestionChart({ stats }: Props) {
 				>
 					<Charts.XAxis dataKey="date" strokeWidth={2} />
 					<Charts.YAxis
-						label={{ value: "total", position: "insideLeft", angle: 270 }}
-						strokeWidth={2}
-						domain={["auto", "auto"]}
+						label={{
+							value: "total",
+							position: "insideLeft",
+							angle: 270,
+							dy: 40,
+							style: { fontWeight: "bold" },
+						}}
+						domain={[0, "dataMax"]}
 						padding={{ top: 20 }}
 					/>
 					<Charts.YAxis
@@ -36,10 +41,12 @@ export default function IngestionChart({ stats }: Props) {
 							position: "insideRight",
 							angle: 270,
 							fill: "#ea0413",
+							style: { fontWeight: "bold" },
 						}}
 						stroke="#ea0413"
-						domain={["auto", "auto"]}
+						domain={[0, 100]}
 						padding={{ top: 20 }}
+						strokeWidth={2}
 					/>
 					<Charts.Tooltip />
 					<Charts.Legend
@@ -65,6 +72,7 @@ export default function IngestionChart({ stats }: Props) {
 							fill: "#ea0413",
 							fontSize: 12,
 						}}
+						strokeWidth={2}
 					/>
 				</Charts.ComposedChart>
 			</Charts.ResponsiveContainer>
