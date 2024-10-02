@@ -47,6 +47,8 @@ export default function IngestionChart({ stats }: Props) {
 					<Charts.YAxis
 						label={{ value: "total", position: "insideLeft", angle: 270 }}
 						strokeWidth={2}
+						domain={["auto", "auto"]}
+						padding={{ top: 20 }}
 					/>
 					<Charts.YAxis
 						yAxisId="right"
@@ -59,6 +61,8 @@ export default function IngestionChart({ stats }: Props) {
 							fill: "#ea0413",
 						}}
 						stroke="#ea0413"
+						domain={["auto", "auto"]}
+						padding={{ top: 20 }}
 					/>
 					<Charts.Tooltip />
 					<Charts.Legend
