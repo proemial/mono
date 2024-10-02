@@ -48,7 +48,6 @@ export function getTopNavigationContentByUrl(
 		if (url.includes("/inspect")) {
 			return {
 				menu: <GoToSpaceAction />,
-				title: "Papers referenced",
 				action: null,
 			};
 		}
@@ -115,7 +114,6 @@ export function getTopNavigationContentByUrl(
 	if (url.includes("/inspect")) {
 		return {
 			menu: <GoToSpaceAction />,
-			title: "Papers referenced",
 			action: null,
 		};
 	}

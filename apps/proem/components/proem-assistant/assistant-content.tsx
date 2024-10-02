@@ -26,7 +26,6 @@ import {
 import { AskScienceForm } from "./ask-science-form";
 import { PROEM_ASSISTANT_QUERY_KEY } from "./assistant";
 import { Header } from "./assistant-header";
-import { InspectAnswer } from "./inspect-answer";
 import { PreviousQuestions } from "./previous-questions";
 import { SuggestedQuestions } from "./suggested-questions";
 import { TuplePost } from "./tuple";
@@ -175,7 +174,6 @@ export const AssistantContent = ({ spaceId, paperId, data }: Props) => {
 				className="flex flex-col justify-between h-[calc(100%-24px)]"
 				ref={contentRef}
 			>
-				{selectedTuple && <InspectAnswer tuple={selectedTuple} />}
 				{!selectedTupleId && (
 					<Header
 						spaceName={data?.space?.name ?? "Discover"}

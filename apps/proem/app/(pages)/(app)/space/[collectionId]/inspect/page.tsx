@@ -22,17 +22,15 @@ const InspectPage = async ({
 	}
 
 	return (
-		<div className="flex flex-col gap-3 mt-6 mb-28">
-			<Suspense
-				fallback={
-					<div className="flex justify-center">
-						<Throbber />
-					</div>
-				}
-			>
-				<ReferenceList spaceId={collectionId} tuple={selected} />
-			</Suspense>
-		</div>
+		<Suspense
+			fallback={
+				<div className="flex justify-center">
+					<Throbber />
+				</div>
+			}
+		>
+			<ReferenceList spaceId={collectionId} tuple={selected} />
+		</Suspense>
 	);
 };
 

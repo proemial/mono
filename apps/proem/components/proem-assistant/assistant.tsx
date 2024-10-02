@@ -22,6 +22,7 @@ export const PROEM_ASSISTANT_QUERY_KEY = "proem-assistant";
 const DISABLED_ROUTE_FRAGMENTS = [
 	"/ask",
 	"/blocked",
+	"/inspect",
 	"/new",
 	"/rss",
 	"/search",

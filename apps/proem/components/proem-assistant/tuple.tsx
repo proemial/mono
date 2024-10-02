@@ -1,3 +1,5 @@
+"use client";
+
 import { useThrobberStatus } from "@/app/(pages)/(app)/ask/answer/[slug]/use-throbber-status";
 import { routes } from "@/routes";
 import { Comment, Post } from "@proemial/data/neon/schema";
@@ -44,7 +46,7 @@ export type TuplePost = {
 
 type Props = {
 	post: TuplePost;
-	onSubmit: (input: string) => void;
+	onSubmit?: (input: string) => void;
 	highlight?: boolean;
 	streaming?: boolean;
 	onAbort?: () => void;
@@ -97,7 +99,6 @@ export const Tuple = ({
 				"cursor-pointer": hasPaperSources && !selectedTupleId,
 				"border-2 border-theme-200 min-h-[200px]": highlight,
 			})}
-			onClick={handleClick}
 			ref={ref}
 		>
 			<div className="flex gap-2">
@@ -128,29 +129,18 @@ export const Tuple = ({
 						<SelectableContent>
 							{applyExplainLinks(
 								post.reply.content,
-								(input: string) => onSubmit(`What is ${input}?`),
+								(input: string) => onSubmit?.(`What is ${input}?`),
 								"bg-transparent font-semibold text-theme-300 cursor-default",
 							)}
 							{papers.length > 0 &&
 								papers.map((paper, index) => (
-									<Link
+									<CardBullet
 										key={index}
-										href={
-											spaceId
-												? `${routes.space}/${spaceId}/paper${paper.link}`
-												: `/paper${paper.link}`
-										}
-										onClick={(e) => {
-											e.stopPropagation();
-										}}
+										variant="numbered"
+										className="inline-block ml-1 border-white pt-0 select-none"
 									>
-										<CardBullet
-											variant="numbered"
-											className="inline-block ml-1 border-white pt-0 select-none"
-										>
-											{index + 1}
-										</CardBullet>
-									</Link>
+										{index + 1}
+									</CardBullet>
 								))}
 						</SelectableContent>
 					</div>

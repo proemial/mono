@@ -7,9 +7,14 @@ import {
 } from "../analytics/tracking/tracking-keys";
 import { AssistantButton } from "./assistant-button";
 import { Tuple, TuplePost } from "./tuple";
-import { useAssistant } from "./use-assistant/use-assistant";
+import {
+	ASSISTANT_SELECTED_QUERY_KEY,
+	useAssistant,
+} from "./use-assistant/use-assistant";
 import { useLatestSubmitId } from "./use-latest-submit-id";
 import { useSnapPointStore } from "./use-snap-point-store";
+import Link from "next/link";
+import { routes } from "@/routes";
 
 type Gradients = {
 	top: boolean;
@@ -113,20 +118,43 @@ export const PreviousQuestions = ({
 					animate={{ opacity: gradients.bottom ? 1 : 0 }}
 				/>
 				<div className="flex flex-col gap-2 pb-32">
-					{posts.map((post, index) => (
-						<Tuple
-							key={post.id}
-							post={post}
-							onSubmit={handleSubmit}
-							onAbort={onAbort}
-							highlight={
-								typeof submitId !== "undefined" &&
-								[spaceId, paperId].includes(submitId) &&
-								index === 0
-							}
-							streaming={isLoading}
-						/>
-					))}
+					{posts.map((post, index) =>
+						post.reply?.metadata?.papers ? (
+							<Link
+								key={post.id}
+								href={
+									spaceId
+										? `${routes.space}/${spaceId}${routes.inspect}?${ASSISTANT_SELECTED_QUERY_KEY}=${post.slug}`
+										: `${routes.inspect}?${ASSISTANT_SELECTED_QUERY_KEY}=${post.slug}`
+								}
+							>
+								<Tuple
+									post={post}
+									onSubmit={handleSubmit}
+									onAbort={onAbort}
+									highlight={
+										typeof submitId !== "undefined" &&
+										[spaceId, paperId].includes(submitId) &&
+										index === 0
+									}
+									streaming={isLoading}
+								/>
+							</Link>
+						) : (
+							<Tuple
+								key={post.id}
+								post={post}
+								onSubmit={handleSubmit}
+								onAbort={onAbort}
+								highlight={
+									typeof submitId !== "undefined" &&
+									[spaceId, paperId].includes(submitId) &&
+									index === 0
+								}
+								streaming={isLoading}
+							/>
+						),
+					)}
 				</div>
 			</ScrollArea>
 
