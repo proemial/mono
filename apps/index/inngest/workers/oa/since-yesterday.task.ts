@@ -10,7 +10,7 @@ import { logEvent as logMetrics } from "@/inngest/helpers/tinybird";
 const eventName = "ingest/oa/yesterday";
 const eventId = "ingest/oa/yesterday/fn";
 
-export const oaBySinceYesterday = {
+export const oaSinceYesterday = {
 	name: eventName,
 	worker: inngest.createFunction(
 		{ id: eventId, concurrency: 1 },

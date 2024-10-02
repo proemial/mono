@@ -1,11 +1,11 @@
 import { oaByDateStream } from "./workers/oa/by-date.task";
-import { embedStream } from "./workers/embed.task";
 import { oaByRangeStream } from "./workers/oa/by-range";
-import { oaBySinceYesterday } from "./workers/oa/since-yesterday.task";
+import { oaSinceYesterday } from "./workers/oa/since-yesterday.task";
+import { ingestionScheduler } from "./scheduler/scheduler.task";
 
 export const streams = [
 	oaByDateStream.worker,
-	embedStream.worker,
 	oaByRangeStream.worker,
-	oaBySinceYesterday.worker,
+	oaSinceYesterday.worker,
+	ingestionScheduler,
 ];
