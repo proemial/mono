@@ -112,7 +112,7 @@ export const PreviousQuestions = ({
 					className="pointer-events-none absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-theme-900 to-transparent z-10"
 					animate={{ opacity: gradients.bottom ? 1 : 0 }}
 				/>
-				<div className="space-y-2">
+				<div className="flex flex-col gap-2 pb-32">
 					{posts.map((post, index) => (
 						<Tuple
 							key={post.id}
