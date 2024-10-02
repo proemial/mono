@@ -18,13 +18,14 @@ export async function generateEmbeddings(
 
 	const begin = Time.now();
 	try {
-		const embeddings = await Promise.all(
-			papers.map(async (paper) => {
-				return await generateEmbedding(
-					`${paper.data.title} ${paper.data.abstract}`,
-				);
-			}),
-		);
+		const response = await openai.embeddings.create({
+			input: papers.map((p) => `${p.data.title} ${p.data.abstract}`),
+			model: "text-embedding-3-small",
+			dimensions: 512, // default: 1536
+		});
+
+		const embeddings = response.data.map((d) => d.embedding);
+
 		console.log("Embeddings", embeddings.length);
 		await callback(embeddings.length, Time.elapsed(begin));
 
@@ -32,14 +33,4 @@ export async function generateEmbeddings(
 	} finally {
 		Time.log(begin, `generateEmbeddings(${papers.length})`);
 	}
-}
-
-export async function generateEmbedding(text: string) {
-	return (
-		await openai.embeddings.create({
-			input: text,
-			model: "text-embedding-3-small",
-			dimensions: 512, // default: 1536
-		})
-	).data.flatMap((d) => d.embedding);
 }
