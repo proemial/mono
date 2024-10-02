@@ -47,12 +47,14 @@ export const PreviousQuestions = ({
 	});
 	const { activeSnapPoint, setActiveSnapPoint, setSnapPoints } =
 		useSnapPointStore();
-	const { id: submitId } = useLatestSubmitId();
+	const { submitId, submitIndex, setSubmitId } = useLatestSubmitId();
 	const {
 		isAssistantOpened,
 		isAssistantExpanded,
 		expandAssistant,
 		collapseAssistant,
+		selectedTupleId,
+		setSelectedTupleId,
 	} = useAssistant();
 
 	useEffect(() => {
@@ -67,6 +69,17 @@ export const PreviousQuestions = ({
 		scrollElement.current?.scrollTo({ top: 0, behavior: "instant" });
 		setGradients((prev) => ({ ...prev, top: false }));
 	}
+
+	const handleSelectTuple = (index: number, postSlug: string | null) => {
+		if (postSlug) {
+			setSelectedTupleId(postSlug);
+		}
+		if (paperId) {
+			setSubmitId(paperId, index);
+		} else if (spaceId) {
+			setSubmitId(spaceId, index);
+		}
+	};
 
 	function handleScroll(this: HTMLDivElement, e: Event) {
 		const target = e.target as HTMLDivElement;
@@ -118,43 +131,25 @@ export const PreviousQuestions = ({
 					animate={{ opacity: gradients.bottom ? 1 : 0 }}
 				/>
 				<div className="flex flex-col gap-2 pb-32">
-					{posts.map((post, index) =>
-						post.reply?.metadata?.papers ? (
-							<Link
-								key={post.id}
-								href={
-									spaceId
-										? `${routes.space}/${spaceId}${routes.inspect}?${ASSISTANT_SELECTED_QUERY_KEY}=${post.slug}`
-										: `${routes.inspect}?${ASSISTANT_SELECTED_QUERY_KEY}=${post.slug}`
-								}
-							>
-								<Tuple
-									post={post}
-									onSubmit={handleSubmit}
-									onAbort={onAbort}
-									highlight={
-										typeof submitId !== "undefined" &&
-										[spaceId, paperId].includes(submitId) &&
-										index === 0
-									}
-									streaming={isLoading}
-								/>
-							</Link>
-						) : (
+					{posts.map((post, index) => (
+						<div
+							key={post.id}
+							onClick={() => handleSelectTuple(index, post.slug)}
+						>
 							<Tuple
-								key={post.id}
 								post={post}
 								onSubmit={handleSubmit}
 								onAbort={onAbort}
 								highlight={
-									typeof submitId !== "undefined" &&
-									[spaceId, paperId].includes(submitId) &&
-									index === 0
+									(typeof submitId !== "undefined" &&
+										[spaceId, paperId].includes(submitId) &&
+										index === submitIndex) ||
+									selectedTupleId === post.slug
 								}
 								streaming={isLoading}
 							/>
-						),
-					)}
+						</div>
+					))}
 				</div>
 			</ScrollArea>
 

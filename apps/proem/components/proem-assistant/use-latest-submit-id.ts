@@ -1,8 +1,10 @@
 import { create } from "zustand";
 
 interface State {
-	id: string | undefined;
-	setId: (id: string | undefined) => void;
+	submitId: string | undefined;
+	submitIndex: number;
+	setSubmitId: (id: string, index?: number) => void;
+	clearSubmitId: () => void;
 }
 
 /**
@@ -10,10 +12,17 @@ interface State {
  * Highlight if id matches and index of tuple is 0.
  */
 export const useLatestSubmitId = create<State>()((set) => ({
-	id: undefined,
-	setId: (id) => {
+	submitId: undefined,
+	submitIndex: 0,
+	setSubmitId: (id, index = 0) => {
 		set((state) => ({
-			id,
+			submitId: id,
+			submitIndex: index,
+		}));
+	},
+	clearSubmitId: () => {
+		set((state) => ({
+			submitId: undefined,
 		}));
 	},
 }));

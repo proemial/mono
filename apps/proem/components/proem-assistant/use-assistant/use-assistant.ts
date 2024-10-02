@@ -34,6 +34,7 @@ export const useAssistant = () => {
 		openAssistant,
 		closeAssistant,
 		selectedTupleId,
+		setSelectedTupleId,
 		isAssistantExpanded,
 		expandAssistant,
 		collapseAssistant,

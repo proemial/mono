@@ -62,7 +62,7 @@ export const AssistantContent = ({ spaceId, paperId, data }: Props) => {
 	const queryClient = useQueryClient();
 	const { selectedTupleId, isAssistantExpanded, expandAssistant } =
 		useAssistant();
-	const { setId } = useLatestSubmitId();
+	const { setSubmitId, clearSubmitId } = useLatestSubmitId();
 
 	const [contentRef, { height: contentHeight }] = useMeasure();
 	const [headerRef, { height: headerHeight }] = useMeasure();
@@ -112,13 +112,17 @@ export const AssistantContent = ({ spaceId, paperId, data }: Props) => {
 	);
 
 	const handleSubmit = (input: string) => {
-		setId(paperId ?? spaceId);
+		if (paperId) {
+			setSubmitId(paperId);
+		} else if (spaceId) {
+			setSubmitId(spaceId);
+		}
 		append({ role: "user", content: input, createdAt: new Date() });
 		expandAssistant();
 	};
 
 	const handleAbort = () => {
-		setId(undefined);
+		clearSubmitId();
 		stop();
 		trackHandler(analyticsKeys.assistant.ask.abort)();
 	};
@@ -174,27 +178,21 @@ export const AssistantContent = ({ spaceId, paperId, data }: Props) => {
 				className="flex flex-col justify-between h-[calc(100%-24px)]"
 				ref={contentRef}
 			>
-				{!selectedTupleId && (
-					<Header
-						spaceName={data?.space?.name ?? "Discover"}
-						spaceId={data?.space?.id}
-						paperTitle={
-							data?.paper?.generated?.title ?? data?.paper?.data.title
-						}
-						ref={headerRef}
-					/>
-				)}
-				{!selectedTupleId && (
-					<PreviousQuestions
-						posts={tuplePosts}
-						spaceId={spaceId}
-						paperId={paperId}
-						height={contentHeight - headerHeight - footerHeight}
-						onSubmit={handleSubmit}
-						onAbort={handleAbort}
-						isLoading={isLoading}
-					/>
-				)}
+				<Header
+					spaceName={data?.space?.name ?? "Discover"}
+					spaceId={data?.space?.id}
+					paperTitle={data?.paper?.generated?.title ?? data?.paper?.data.title}
+					ref={headerRef}
+				/>
+				<PreviousQuestions
+					posts={tuplePosts}
+					spaceId={spaceId}
+					paperId={paperId}
+					height={contentHeight - headerHeight - footerHeight}
+					onSubmit={handleSubmit}
+					onAbort={handleAbort}
+					isLoading={isLoading}
+				/>
 				<motion.div
 					className="flex flex-col gap-1 px-3 pb-3"
 					ref={footerRef}

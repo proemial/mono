@@ -62,7 +62,6 @@ export const Tuple = ({
 	const { author } = post;
 	const formattedPostDate = dayjs(post.createdAt).fromNow();
 	const throbberStatus = useThrobberStatus();
-	const { collectionId: spaceId } = useParams<{ collectionId?: string }>();
 	const papers =
 		(post.reply?.metadata?.papers as {
 			title: string;
@@ -70,35 +69,24 @@ export const Tuple = ({
 			link: string;
 		}[]) ?? [];
 	const hasPaperSources = post.slug && post.reply?.metadata?.papers;
-	const { isAssistantOpened, selectedTupleId } = useAssistant();
 	const ref = useRef<HTMLDivElement>(null);
-	const router = useRouter();
 
-	const handleClick = () => {
-		if (hasPaperSources && !selectedTupleId) {
-			const assistantQueryParams = `?${ASSISTANT_OPEN_QUERY_KEY}=${isAssistantOpened}&${ASSISTANT_SELECTED_QUERY_KEY}=${post.slug}`;
-			if (spaceId) {
-				router.push(
-					`${routes.space}/${spaceId}/${routes.inspect}${assistantQueryParams}`,
-				);
-			} else {
-				router.push(`${routes.inspect}${assistantQueryParams}`);
-			}
-		}
+	const handleSubmit = (input: string) => {
+		onSubmit?.(`What is ${input}?`);
+		ref.current?.scrollIntoView({ behavior: "smooth" });
 	};
-
-	useEffect(() => {
-		if (ref.current && highlight) {
-			ref.current.scrollIntoView({ behavior: "smooth" });
-		}
-	}, [highlight]);
 
 	return (
 		<div
-			className={cn("flex flex-col rounded-2xl gap-2 p-2 pr-3 bg-theme-700", {
-				"cursor-pointer": hasPaperSources && !selectedTupleId,
-				"border-2 border-theme-200 min-h-[200px]": highlight,
-			})}
+			className={cn(
+				"flex flex-col rounded-2xl gap-2 p-2 pr-3 bg-theme-700 border-2 duration-100",
+				{
+					"cursor-pointer": hasPaperSources && !highlight,
+					"border-theme-200": highlight,
+					"border-transparent": !highlight,
+					"min-h-[200px]": streaming,
+				},
+			)}
 			ref={ref}
 		>
 			<div className="flex gap-2">
@@ -129,7 +117,7 @@ export const Tuple = ({
 						<SelectableContent>
 							{applyExplainLinks(
 								post.reply.content,
-								(input: string) => onSubmit?.(`What is ${input}?`),
+								handleSubmit,
 								"bg-transparent font-semibold text-theme-300 cursor-default",
 							)}
 							{papers.length > 0 &&
