@@ -23,7 +23,8 @@
 		"@qdrant/js-client-rest": "^1.11.0",
 		"uuid": "^10.0.0",
 		"@tanstack/react-query": "^5.56.2",
-		"@highlight-run/next": "^7.5.29"
+		"@highlight-run/next": "^7.5.29",
+		"recharts": "^2.12.7"
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",
