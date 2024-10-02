@@ -70,7 +70,12 @@ export const PreviousQuestions = ({
 		setGradients((prev) => ({ ...prev, top: false }));
 	}
 
-	const handleSelectTuple = (index: number, postSlug: string | null) => {
+	const handleSelectTuple = (
+		index: number,
+		postSlug: string | null,
+		hasPapers: boolean,
+	) => {
+		if (!hasPapers) return;
 		if (postSlug) {
 			setSelectedTupleId(postSlug);
 		}
@@ -134,17 +139,22 @@ export const PreviousQuestions = ({
 					{posts.map((post, index) => (
 						<div
 							key={post.id}
-							onClick={() => handleSelectTuple(index, post.slug)}
+							onClick={() =>
+								handleSelectTuple(
+									index,
+									post.slug,
+									!!post.reply?.metadata?.papers,
+								)
+							}
 						>
 							<Tuple
 								post={post}
 								onSubmit={handleSubmit}
 								onAbort={onAbort}
 								highlight={
-									(typeof submitId !== "undefined" &&
-										[spaceId, paperId].includes(submitId) &&
-										index === submitIndex) ||
-									selectedTupleId === post.slug
+									typeof submitId !== "undefined" &&
+									[spaceId, paperId].includes(submitId) &&
+									index === submitIndex
 								}
 								streaming={isLoading}
 							/>
