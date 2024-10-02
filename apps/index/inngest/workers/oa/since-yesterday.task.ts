@@ -7,10 +7,10 @@ import { collection, upsertPapers } from "../../helpers/qdrant";
 import dayjs from "dayjs";
 import { logEvent as logMetrics } from "@/inngest/helpers/tinybird";
 
-const eventName = "ingest/oa/date";
-const eventId = "ingest/oa/date/fn";
+const eventName = "ingest/oa/yesterday";
+const eventId = "ingest/oa/yesterday/fn";
 
-export const oaByDateStream = {
+export const oaBySinceYesterday = {
 	name: eventName,
 	worker: inngest.createFunction(
 		{ id: eventId, concurrency: 1 },
@@ -94,20 +94,21 @@ async function fetchPapers(payload: Payload) {
 	const begin = Time.now();
 
 	try {
-		const { date, nextCursor } = payload;
+		const { date: yesterday, nextCursor } = payload;
 
 		const limit = 200;
-		const toCreatedDate = dayjs(date).add(1, "day").format("YYYY-MM-DD");
+		const since = dayjs(yesterday).subtract(1, "month").format("YYYY-MM-DD");
 		const cursor = nextCursor ?? "*";
 
+		// type:types/preprint|types/article,has_abstract:true,language:en,open_access.is_oa:true
 		const filter = [
 			"type:types/preprint|types/article",
 			"has_abstract:true",
-			`from_publication_date:${date}`,
-			`from_created_date:${date}`,
-			`to_created_date:${toCreatedDate}`,
 			"language:en",
 			"open_access.is_oa:true",
+			`from_publication_date:${since}`,
+			`from_created_date:${since}`,
+			`from_updated_date:${yesterday}`,
 		]
 			.filter((f) => !!f)
 			.join(",");

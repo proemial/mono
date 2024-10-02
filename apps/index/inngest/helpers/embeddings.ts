@@ -6,7 +6,12 @@ const openai = new OpenAI({
 	apiKey: process.env.OPENAI_API_KEY,
 });
 
-export async function generateEmbeddings(papers: OpenAlexPaper[]) {
+type Callback = (count: number, elapsed: number) => Promise<void>;
+
+export async function generateEmbeddings(
+	papers: OpenAlexPaper[],
+	callback: Callback,
+) {
 	if (!papers.length) {
 		return [];
 	}
@@ -21,6 +26,7 @@ export async function generateEmbeddings(papers: OpenAlexPaper[]) {
 			}),
 		);
 		console.log("Embeddings", embeddings.length);
+		await callback(embeddings.length, Time.elapsed(begin));
 
 		return embeddings;
 	} finally {
