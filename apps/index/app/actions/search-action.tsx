@@ -51,7 +51,7 @@ export const searchAction = async (
 		},
 	};
 
-	const response = await client.search("gamma", {
+	const response = await client.search("o3s512alpha", {
 		...filter,
 		vector: embedding,
 	});
