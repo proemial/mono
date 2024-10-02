@@ -2,6 +2,11 @@ import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Time } from "@proemial/utils/time";
 import OpenAI from "openai";
 
+const config = {
+	dimensions: 512, // default: 1536
+	model: "text-embedding-3-small",
+};
+
 const openai = new OpenAI({
 	apiKey: process.env.OPENAI_API_KEY,
 });
@@ -19,9 +24,8 @@ export async function generateEmbeddings(
 	const begin = Time.now();
 	try {
 		const response = await openai.embeddings.create({
+			...config,
 			input: papers.map((p) => `${p.data.title} ${p.data.abstract}`),
-			model: "text-embedding-3-small",
-			dimensions: 512, // default: 1536
 		});
 
 		const embeddings = response.data.map((d) => d.embedding);
@@ -33,4 +37,13 @@ export async function generateEmbeddings(
 	} finally {
 		Time.log(begin, `generateEmbeddings(${papers.length})`);
 	}
+}
+
+export async function generateEmbedding(text: string) {
+	return (
+		await openai.embeddings.create({
+			...config,
+			input: text,
+		})
+	).data.flatMap((d) => d.embedding);
 }
