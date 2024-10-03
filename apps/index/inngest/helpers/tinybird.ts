@@ -22,10 +22,7 @@ export async function logEvent(
 			}),
 			headers: { Authorization: `Bearer ${token}` },
 		});
-		console.log("response", response.status);
-
 		const result = await response.text();
-		console.log("result", result);
 	} finally {
 		Time.log(begin, `[logEvent][${name}] ${payload.name}`);
 	}

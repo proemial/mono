@@ -3,7 +3,7 @@ import { oaSinceYesterday as ingest } from "../workers/oa/since-yesterday.task";
 
 export const ingestionScheduler = inngest.createFunction(
 	{ id: `schedule/${ingest.name}` },
-	{ cron: "0 6,20 * * *" },
+	{ cron: "0 4 * * *" },
 	async ({ event }) => {
 		const result = await inngest.send({
 			name: ingest.name,
