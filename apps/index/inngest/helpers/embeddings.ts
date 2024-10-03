@@ -3,7 +3,7 @@ import { Time } from "@proemial/utils/time";
 import OpenAI from "openai";
 
 const config = {
-	dimensions: 512, // default: 1536
+	dimensions: 1536, // default: 1536
 	model: "text-embedding-3-small",
 };
 
