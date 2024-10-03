@@ -69,17 +69,46 @@ export function SearchForm() {
 					</select>
 				</div>
 			</div>
-			<textarea
-				name="query"
-				rows={8}
-				className="w-full p-2 border rounded disabled:bg-slate-100"
-				placeholder="Enter your text here..."
-				defaultValue={query}
-				disabled={pending}
-				onChange={(e) => {
-					setQuery(e.target.value);
-				}}
-			/>
+			<div>
+				<label
+					htmlFor="query"
+					className="block mb-1 text-sm font-medium text-gray-700"
+				>
+					Similar to:
+				</label>
+				<textarea
+					id="query"
+					name="query"
+					rows={6}
+					className="w-full p-2 border rounded disabled:bg-slate-100"
+					placeholder="Enter your text here..."
+					defaultValue={query}
+					disabled={pending}
+					onChange={(e) => {
+						setQuery(e.target.value);
+					}}
+				/>
+			</div>
+			<div>
+				<label
+					htmlFor="negatedQuery"
+					className="block mb-1 text-sm font-medium text-gray-700"
+				>
+					Not similar to:
+				</label>
+				<textarea
+					id="negatedQuery"
+					name="negatedQuery"
+					rows={2}
+					className="w-full p-2 border rounded disabled:bg-slate-100"
+					placeholder="Enter terms to exclude..."
+					disabled={pending}
+					onChange={(e) => {
+						// You might want to add state for negatedQuery if needed
+						// setNegatedQuery(e.target.value);
+					}}
+				/>
+			</div>
 			<div>
 				<button
 					type="submit"
