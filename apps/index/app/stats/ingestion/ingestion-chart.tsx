@@ -1,7 +1,7 @@
 "use client";
 import * as Charts from "recharts";
-import { IngestionStats } from "./stats.models";
-import { transformData } from "./transform-data";
+import { IngestionStats } from "../stats.models";
+import { transformData } from "../transform-data";
 import { useState } from "react";
 
 type Props = {

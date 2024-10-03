@@ -64,11 +64,13 @@ export function SearchForm() {
 						disabled={pending}
 						defaultValue="o3s1536alpha"
 					>
-						{Object.keys(vectorSpaces).map((key, i) => (
-							<option key={i} value={key}>
-								{vectorSpaces[key]?.collection}
-							</option>
-						))}
+						{Object.keys(vectorSpaces)
+							.reverse()
+							.map((key, i) => (
+								<option key={i} value={key}>
+									{vectorSpaces[key]?.collection}
+								</option>
+							))}
 					</select>
 				</div>
 			</div>
