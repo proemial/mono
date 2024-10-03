@@ -14,7 +14,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "./analytics/tracking/tracking-keys";
-import posthog from "posthog-js";
+import { usePostHog } from "posthog-js/react";
 
 const items = [
 	{
@@ -38,16 +38,17 @@ const items = [
 export function OnboardingCarousel() {
 	// Default true to avoid showing onboarding before the cookie is read
 	const [closed, setClosed] = useState<boolean>(true);
+	const posthog = usePostHog();
+
 	useEffect(() => {
 		setClosed(!!getCookie("onboardingClosed"));
 	}, []);
 
-	const loaded = usePostHogLoaded();
 	useEffect(() => {
-		if (loaded && !closed) {
+		if (posthog.__loaded && !closed) {
 			trackHandler(analyticsKeys.onboarding.view)();
 		}
-	}, [loaded, closed]);
+	}, [posthog.__loaded, closed]);
 
 	if (closed) return undefined;
 
@@ -102,16 +103,4 @@ export function OnboardingCarousel() {
 			</Carousel>
 		</div>
 	);
-}
-
-function usePostHogLoaded() {
-	const [loaded, setLoaded] = useState<boolean>(false);
-
-	posthog.on("eventCaptured", (event) => {
-		if (!loaded && event.event === "proem:view:") {
-			setLoaded(true);
-		}
-	});
-
-	return loaded;
 }
