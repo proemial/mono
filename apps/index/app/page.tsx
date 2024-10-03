@@ -9,7 +9,7 @@ export default function Home() {
 
 	return (
 		<div>
-			<form action={action} className="flex flex-col gap-1">
+			<form action={action} className="flex flex-col gap-1 mx-2">
 				<SearchForm />
 				<SearchResults results={formState} />
 			</form>
