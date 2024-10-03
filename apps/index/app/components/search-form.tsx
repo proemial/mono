@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useFormStatus } from "react-dom";
 import dayjs from "dayjs";
+import { vectorSpaces } from "@/data/db/vector-spaces";
 
 export function SearchForm() {
 	const [query, setQuery] = useState(
@@ -63,9 +64,11 @@ export function SearchForm() {
 						disabled={pending}
 						defaultValue="o3s1536alpha"
 					>
-						<option value="o3s512alpha">o3s512alpha</option>
-						<option value="o3s1536alpha">o3s1536alpha</option>
-						{/* Add more options here if needed */}
+						{Object.keys(vectorSpaces).map((key, i) => (
+							<option key={i} value={key}>
+								{vectorSpaces[key]?.collection}
+							</option>
+						))}
 					</select>
 				</div>
 			</div>

@@ -1,9 +1,9 @@
 import { Time } from "@proemial/utils/time";
 import { inngest } from "../../client";
 import { EventPayload } from "inngest/types";
-import { generateEmbeddings } from "../../helpers/embeddings";
+import { generateEmbeddings } from "../../../data/db/embeddings";
 import { fetchFromOpenAlex } from "../../helpers/openalex";
-import { collection, upsertPapers } from "../../helpers/qdrant";
+import { collection, upsertPapers } from "../../../data/db/qdrant";
 import dayjs from "dayjs";
 import { logEvent as logMetrics } from "@/inngest/helpers/tinybird";
 

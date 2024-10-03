@@ -1,7 +1,7 @@
 import { Time } from "@proemial/utils/time";
 import { QdrantClient } from "@qdrant/js-client-rest";
 import { v5 as uuid } from "uuid";
-import { IndexedPaper } from "./paper.model";
+import { IndexedPaper } from "../../inngest/helpers/paper.model";
 
 export const collection = "o3s1536alpha";
 

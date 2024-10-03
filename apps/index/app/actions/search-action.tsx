@@ -1,8 +1,9 @@
 "use server";
 import { QdrantClient } from "@qdrant/js-client-rest";
-import { generateEmbedding } from "@/inngest/helpers/embeddings";
 import { OpenAlexPaperWithAbstract } from "@proemial/repositories/oa/models/oa-paper";
 import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-topics-compact";
+import { VectorSpace, vectorSpaces } from "@/data/db/vector-spaces";
+import { generateEmbedding } from "@/data/db/embeddings";
 
 export type SearchResult = {
 	score: number;
@@ -40,7 +41,7 @@ export const searchAction = async (
 		apiKey: process.env.QDRANT_API_KEY,
 	});
 
-	const dimensions = index === "o3s512alpha" ? 512 : 1536;
+	const { dimensions, collection } = vectorSpaces[index] as VectorSpace;
 	const embedding = await generateEmbedding(query, dimensions);
 	const filter = createFilter(count, from);
 
@@ -48,8 +49,8 @@ export const searchAction = async (
 		const negatedEmbedding =
 			negatedQuery && (await generateEmbedding(negatedQuery, dimensions));
 
-		console.log("recommend", index, filter, embedding.length);
-		const response = await client.recommend(index, {
+		console.log("recommend", collection, filter, embedding.length);
+		const response = await client.recommend(collection, {
 			...filter,
 			positive: [embedding],
 			negative: [negatedEmbedding],
@@ -60,8 +61,8 @@ export const searchAction = async (
 		);
 	}
 
-	console.log("search", index, filter, embedding.length);
-	const response = await client.search(index, {
+	console.log("search", collection, filter, embedding.length);
+	const response = await client.search(collection, {
 		...filter,
 		vector: embedding,
 	});
