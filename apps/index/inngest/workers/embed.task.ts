@@ -16,11 +16,14 @@ export const embedStream = {
 
 			console.log("event", event);
 
-			if (!event.data?.text) {
-				throw new Error("No text provided");
+			if (!event.data?.text || !event.data?.dimensions) {
+				throw new Error("No text or dimensions provided");
 			}
 
-			const embedding = await generateEmbedding(event.data?.text);
+			const embedding = await generateEmbedding(
+				event.data?.text,
+				Number.parseInt(event.data?.dimensions),
+			);
 			console.log("embedding", embedding, uuid(event.data?.text));
 
 			return {
