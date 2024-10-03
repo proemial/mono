@@ -99,7 +99,7 @@ export function SearchForm() {
 					htmlFor="negatedQuery"
 					className="block mb-1 text-sm font-medium text-gray-700"
 				>
-					Not similar to:
+					Different from:
 				</label>
 				<textarea
 					id="negatedQuery"
