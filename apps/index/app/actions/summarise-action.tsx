@@ -1,7 +1,7 @@
 "use server";
-import { summarise } from "@/inngest/helpers/summarise";
+import { summariseTitle } from "@/inngest/helpers/summarise";
 
 export const summariseAction = async (title: string, abstract: string) => {
 	"use server";
-	return await summarise(title, abstract);
+	return await summariseTitle(title, abstract);
 };

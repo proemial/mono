@@ -24,7 +24,8 @@
 		"uuid": "^10.0.0",
 		"@tanstack/react-query": "^5.56.2",
 		"@highlight-run/next": "^7.5.29",
-		"recharts": "^2.12.7"
+		"recharts": "^2.12.7",
+		"feed": "^4.2.2"
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",
