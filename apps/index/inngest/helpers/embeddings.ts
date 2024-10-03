@@ -29,8 +29,6 @@ export async function generateEmbeddings(
 		});
 
 		const embeddings = response.data.map((d) => d.embedding);
-
-		console.log("Embeddings", embeddings.length);
 		await callback(embeddings.length, Time.elapsed(begin));
 
 		return embeddings;
@@ -39,10 +37,11 @@ export async function generateEmbeddings(
 	}
 }
 
-export async function generateEmbedding(text: string) {
+export async function generateEmbedding(text: string, dimensions: number) {
 	return (
 		await openai.embeddings.create({
 			...config,
+			dimensions,
 			input: text,
 		})
 	).data.flatMap((d) => d.embedding);

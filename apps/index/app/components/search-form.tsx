@@ -12,7 +12,7 @@ export function SearchForm() {
 	return (
 		<>
 			<div className="flex mb-4">
-				<div className="w-1/2 mr-2">
+				<div className="w-1/3 mr-2">
 					<label
 						htmlFor="date"
 						className="block mb-1 text-sm font-medium text-gray-700"
@@ -31,7 +31,7 @@ export function SearchForm() {
 						})()}
 					/>
 				</div>
-				<div className="w-1/2">
+				<div className="w-1/3 mr-2">
 					<label
 						htmlFor="count"
 						className="block mb-1 text-sm font-medium text-gray-700"
@@ -48,6 +48,25 @@ export function SearchForm() {
 						min={1}
 						max={30}
 					/>
+				</div>
+				<div className="w-1/3">
+					<label
+						htmlFor="index"
+						className="block mb-1 text-sm font-medium text-gray-700"
+					>
+						Index
+					</label>
+					<select
+						id="index"
+						name="index"
+						className="w-full p-2 border rounded"
+						disabled={pending}
+						defaultValue="o3s1536alpha"
+					>
+						<option value="o3s512alpha">o3s512alpha</option>
+						<option value="o3s1536alpha">o3s1536alpha</option>
+						{/* Add more options here if needed */}
+					</select>
 				</div>
 			</div>
 			<textarea

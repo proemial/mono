@@ -28,6 +28,7 @@ export const searchAction = async (
 	const query = formData.get("query") as string;
 	const from = formData.get("from") as string;
 	const count = formData.get("count") as string;
+	const index = formData.get("index") as string;
 
 	if (!query?.length) {
 		return [];
@@ -38,7 +39,8 @@ export const searchAction = async (
 		apiKey: process.env.QDRANT_API_KEY,
 	});
 
-	const embedding = await generateEmbedding(query);
+	const dimensions = index === "o3s512alpha" ? 512 : 1536;
+	const embedding = await generateEmbedding(query, dimensions);
 	const filter = {
 		limit: Number.parseInt(count),
 		filter: {
@@ -51,7 +53,9 @@ export const searchAction = async (
 		},
 	};
 
-	const response = await client.search("o3s512alpha", {
+	console.log("search", index, filter, embedding.length);
+
+	const response = await client.search(index, {
 		...filter,
 		vector: embedding,
 	});
