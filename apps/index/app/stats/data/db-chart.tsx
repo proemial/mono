@@ -1,7 +1,7 @@
 "use client";
 import * as Charts from "recharts";
 
-export default function DbChart({
+export function PaperCountInIndicesChart({
 	data,
 }: { data?: { key: string; value: number }[] }) {
 	if (!data) {
@@ -9,7 +9,7 @@ export default function DbChart({
 	}
 
 	return (
-		<Charts.ResponsiveContainer height={600}>
+		<Charts.ResponsiveContainer height={300}>
 			<Charts.PieChart>
 				<Charts.Pie
 					data={data}
@@ -45,6 +45,30 @@ export default function DbChart({
 					formatter={(value, entry) => (entry.payload as any)?.key}
 				/>
 			</Charts.PieChart>
+		</Charts.ResponsiveContainer>
+	);
+}
+
+export function PaperCountInLatestIndexChart({
+	data,
+}: { data?: { key: string; value: number }[] }) {
+	if (!data) {
+		return undefined;
+	}
+
+	return (
+		<Charts.ResponsiveContainer width="100%" height={300} className="mt-4">
+			<Charts.BarChart data={data}>
+				<Charts.CartesianGrid strokeDasharray="3 3" />
+				<Charts.XAxis dataKey="key" />
+				<Charts.YAxis />
+				<Charts.Tooltip />
+				<Charts.Bar dataKey="value" fill="#8884d8">
+					{data.map((entry, index) => (
+						<Charts.Cell key={`cell-${index}`} fill="#4ECDC4" />
+					))}
+				</Charts.Bar>
+			</Charts.BarChart>
 		</Charts.ResponsiveContainer>
 	);
 }
