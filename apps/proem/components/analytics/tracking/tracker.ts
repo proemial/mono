@@ -56,5 +56,8 @@ function format(key: string) {
 }
 
 function sanitize(path: string) {
+	if (path.includes("inspect")) return "inspect";
+	if (path.includes("paper")) return "paper";
+	if (path.includes("search")) return "search";
 	return path.substring(0, path.indexOf("/"));
 }
