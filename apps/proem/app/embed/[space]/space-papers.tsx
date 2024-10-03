@@ -111,9 +111,11 @@ export async function SpacePapers({
 	const fingerprints = await getCachedFingerprints(paperIds);
 	const { filter: features } = getFeatureFilter(fingerprints);
 
-	const limit = count && count < 30 ? count : 10;
+	const limit = count && count <= 18 ? count : 18;
 
-	const feed = await getFeed(space, features, limit);
+	const begin = Time.now();
+	const feed = await getFeed(space, features, 18);
+	Time.log(begin, `[embed][feed] ${limit}`);
 
 	if (!feed) {
 		return null;
