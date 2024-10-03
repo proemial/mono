@@ -45,7 +45,14 @@ export const Tracker = {
 };
 
 function format(key: string) {
-	return `proem:view:${sanitize(key)}`;
+	const sanitized = sanitize(key);
+	const formatted = sanitized
+		? `proem:view:${sanitized}`
+		: // analyticsKeys.viewName always adds ":view", but we don't want e.g.
+			// ":proem:view:space:view", so we remove the trailing ":view", when
+			// sanitized is ""
+			`proem:view:${key.replace(":view", "")}`;
+	return formatted;
 }
 
 function sanitize(path: string) {
