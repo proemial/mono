@@ -4,6 +4,7 @@ import { OpenAlexPaperWithAbstract } from "@proemial/repositories/oa/models/oa-p
 import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-topics-compact";
 import { VectorSpace, vectorSpaces } from "@/data/db/vector-spaces";
 import { generateEmbedding } from "@/data/db/embeddings";
+import { cookies } from "next/headers";
 
 export type SearchResult = {
 	score: number;
@@ -31,6 +32,14 @@ export const searchAction = async (
 	const count = formData.get("count") as string;
 	const index = formData.get("index") as string;
 	const negatedQuery = formData.get("negatedQuery") as string;
+
+	writeCookie({
+		query,
+		from,
+		count,
+		index,
+		negatedQuery,
+	});
 
 	if (!query?.length) {
 		return [];
@@ -71,6 +80,14 @@ export const searchAction = async (
 		mapToResult(p.score, p.payload as OpenAlexPaperWithAbstract),
 	);
 };
+
+function writeCookie(formData: Record<string, string>) {
+	const cookieStore = cookies();
+	cookieStore.set("search-input", JSON.stringify(formData), {
+		maxAge: 60 * 60 * 24 * 365, // 1 year
+		path: "/",
+	});
+}
 
 function mapToResult(
 	score: number,

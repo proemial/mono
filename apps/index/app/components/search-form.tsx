@@ -1,13 +1,64 @@
 "use client";
 import { useState } from "react";
-import { useFormStatus } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import dayjs from "dayjs";
 import { vectorSpaces } from "@/data/db/vector-spaces";
+import { searchAction, SearchResult } from "../actions/search-action";
+import { SearchResult as PaperCard } from "../components/search-result";
 
-export function SearchForm() {
-	const [query, setQuery] = useState(
-		"Women's health encompasses a broad spectrum of topics, including maternal health, contraception, gynecology, and breastfeeding support. Key areas include cesarean outcomes, maternal nutrition, and breast cancer screening, focusing on conditions like urinary infections, cancer patterns, polycystic ovary syndrome, uterine fibroids, and vaginal microbiomes. Hormonal aspects such as estrogen, testosterone effects, menopause, and hormone therapy play a significant role, alongside topics like menstrual health, fertility preservation, family planning, and reproductive rights. Maternal mental health, pregnancy-related issues like prenatal stress and cardiovascular risks, along with lactation and breastfeeding promotion, are also essential areas of focus. Gender bias, norms, and diversity are recurring themes, as well as conditions like endometriosis, vaginal atrophy, vesicovaginal fistulas, and anemia. Other key areas include sexual health, reproductive health, menopause, unintended pregnancy, sleep quality, and gender studies, alongside research on oxytocin, BRCA, fetal programming, and pediatrics.",
+export function SearchForm({
+	searchInput,
+}: { searchInput?: Record<string, string> }) {
+	const [formState, action] = useFormState(searchAction, [] as SearchResult[]);
+
+	return (
+		<form action={action} className="flex flex-col gap-1 mx-2">
+			<FormFields searchInput={searchInput} />
+			<SearchResults results={formState} />
+		</form>
 	);
+}
+
+function SearchResults({
+	results,
+}: {
+	results: SearchResult[];
+}) {
+	return (
+		<div className="grid grid-cols-[auto_auto_1fr] gap-4">
+			{!!results.length && (
+				<>
+					<div className="font-bold">Score</div>
+					<div className="font-bold">Created Date</div>
+					<div className="font-bold">Title</div>
+					{results.map((result, i) => (
+						<PaperCard key={i} item={result} />
+					))}
+				</>
+			)}
+		</div>
+	);
+}
+
+export function FormFields({
+	searchInput,
+}: { searchInput?: Record<string, string> }) {
+	const [query, setQuery] = useState(
+		searchInput?.query !== undefined
+			? searchInput?.query
+			: "Women's health encompasses a broad spectrum of topics, including maternal health, contraception, gynecology, and breastfeeding support. Key areas include cesarean outcomes, maternal nutrition, and breast cancer screening, focusing on conditions like urinary infections, cancer patterns, polycystic ovary syndrome, uterine fibroids, and vaginal microbiomes. Hormonal aspects such as estrogen, testosterone effects, menopause, and hormone therapy play a significant role, alongside topics like menstrual health, fertility preservation, family planning, and reproductive rights. Maternal mental health, pregnancy-related issues like prenatal stress and cardiovascular risks, along with lactation and breastfeeding promotion, are also essential areas of focus. Gender bias, norms, and diversity are recurring themes, as well as conditions like endometriosis, vaginal atrophy, vesicovaginal fistulas, and anemia. Other key areas include sexual health, reproductive health, menopause, unintended pregnancy, sleep quality, and gender studies, alongside research on oxytocin, BRCA, fetal programming, and pediatrics.",
+	);
+	const [negatedQuery, setNegatedQuery] = useState(
+		searchInput?.negatedQuery !== undefined
+			? searchInput?.negatedQuery
+			: "Challenges and opportunities in developing countries, often referred to as the third world, focusing on economic growth, infrastructure development, education, and healthcare improvements.",
+	);
+	const [from, setFrom] = useState(
+		searchInput?.from || dayjs().subtract(7, "day").format("YYYY-MM-DD"),
+	);
+	const [count, setCount] = useState(searchInput?.count || 10);
+	const [index, setIndex] = useState(searchInput?.index || "o3s1536alpha");
+
 	const { pending } = useFormStatus();
 
 	return (
@@ -26,10 +77,10 @@ export function SearchForm() {
 						name="from"
 						className="w-full p-2 border rounded"
 						disabled={pending}
-						defaultValue={(() => {
-							const date = dayjs().subtract(7, "day");
-							return date.format("YYYY-MM-DD");
-						})()}
+						defaultValue={from}
+						onChange={(e) => {
+							setFrom(e.target.value);
+						}}
 					/>
 				</div>
 				<div className="w-1/3 mr-2">
@@ -44,10 +95,13 @@ export function SearchForm() {
 						type="number"
 						name="count"
 						className="w-full p-2 border rounded"
-						disabled={pending}
-						defaultValue={10}
 						min={1}
 						max={30}
+						disabled={pending}
+						defaultValue={count}
+						onChange={(e) => {
+							setCount(e.target.value);
+						}}
 					/>
 				</div>
 				<div className="w-1/3">
@@ -62,7 +116,10 @@ export function SearchForm() {
 						name="index"
 						className="w-full p-2 border rounded"
 						disabled={pending}
-						defaultValue="o3s1536alpha"
+						defaultValue={index}
+						onChange={(e) => {
+							setIndex(e.target.value);
+						}}
 					>
 						{Object.keys(vectorSpaces)
 							.reverse()
@@ -87,8 +144,8 @@ export function SearchForm() {
 					rows={6}
 					className="w-full p-2 border rounded disabled:bg-slate-100"
 					placeholder="Enter your text here..."
-					defaultValue={query}
 					disabled={pending}
+					defaultValue={query}
 					onChange={(e) => {
 						setQuery(e.target.value);
 					}}
@@ -107,11 +164,10 @@ export function SearchForm() {
 					rows={2}
 					className="w-full p-2 border rounded disabled:bg-slate-100"
 					placeholder="Enter terms to exclude..."
-					defaultValue="Challenges and opportunities in developing countries, often referred to as the third world, focusing on economic growth, infrastructure development, education, and healthcare improvements."
 					disabled={pending}
+					defaultValue={negatedQuery}
 					onChange={(e) => {
-						// You might want to add state for negatedQuery if needed
-						// setNegatedQuery(e.target.value);
+						setNegatedQuery(e.target.value);
 					}}
 				/>
 			</div>

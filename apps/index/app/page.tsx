@@ -1,35 +1,15 @@
-"use client";
-import { searchAction, SearchResult } from "./actions/search-action";
-import { useFormState } from "react-dom";
 import { SearchForm } from "./components/search-form";
-import { SearchResult as PaperCard } from "./components/search-result";
+import { cookies } from "next/headers";
 
 export default function Home() {
-	const [formState, action] = useFormState(searchAction, [] as SearchResult[]);
+	const cookieStore = cookies();
+	const cookie = cookieStore.get("search-input");
+	const searchInput =
+		cookie && (JSON.parse(cookie.value) as Record<string, string>);
 
 	return (
 		<div>
-			<form action={action} className="flex flex-col gap-1 mx-2">
-				<SearchForm />
-				<SearchResults results={formState} />
-			</form>
-		</div>
-	);
-}
-
-function SearchResults({ results }: { results: SearchResult[] }) {
-	return (
-		<div className="grid grid-cols-[auto_auto_1fr] gap-4">
-			{!!results.length && (
-				<>
-					<div className="font-bold">Score</div>
-					<div className="font-bold">Created Date</div>
-					<div className="font-bold">Title</div>
-					{results.map((result, i) => (
-						<PaperCard key={i} item={result} />
-					))}
-				</>
-			)}
+			<SearchForm searchInput={searchInput} />
 		</div>
 	);
 }
