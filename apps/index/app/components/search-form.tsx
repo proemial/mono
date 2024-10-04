@@ -107,6 +107,7 @@ export function SearchForm() {
 					rows={2}
 					className="w-full p-2 border rounded disabled:bg-slate-100"
 					placeholder="Enter terms to exclude..."
+					defaultValue="Challenges and opportunities in developing countries, often referred to as the third world, focusing on economic growth, infrastructure development, education, and healthcare improvements."
 					disabled={pending}
 					onChange={(e) => {
 						// You might want to add state for negatedQuery if needed
