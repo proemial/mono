@@ -48,9 +48,15 @@ export namespace Paper {
 			.leftJoin(paperReads, eq(papers.id, paperReads.paperId))
 			.leftJoin(posts, eq(papers.id, posts.paperId))
 			.groupBy(papers.id)
-			.having(sql`${count(paperReads.readCount)} + ${count(posts.id)} > 0`)
+			.having(sql`(${count(posts.id)} > 0)`)
+			.having(sql`(
+                SELECT MIN(${paperReads.lastReadAt})
+                FROM ${paperReads}
+                WHERE ${paperReads.paperId} = ${papers.id}
+            ) >= NOW() - INTERVAL '4 days'`)
 			.orderBy(
-				desc(sql<number>`${count(paperReads.readCount)} + ${count(posts.id)}`),
+//				desc(sql<number>`${count(paperReads.readCount)} + ${count(posts.id)}`),
+				desc(sql<number>`${count(paperReads.readCount)}`),
 			)
 			.limit(limit)
 			.offset(offset);
