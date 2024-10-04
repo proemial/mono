@@ -95,7 +95,7 @@ export const Tuple = ({
 		<div
 			className={cn("flex flex-col rounded-2xl gap-2 p-2 pr-3 bg-theme-700", {
 				"cursor-pointer": hasPaperSources && !selectedTupleId,
-				"border-2 border-theme-200": highlight,
+				"border-2 border-theme-200 min-h-[200px]": highlight,
 			})}
 			onClick={handleClick}
 			ref={ref}
