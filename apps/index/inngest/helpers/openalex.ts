@@ -7,6 +7,7 @@ import {
 import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
 import { IndexedPaper, Provider } from "./paper.model";
+import dayjs from "dayjs";
 
 export async function fetchFromOpenAlex(
 	params: string,
@@ -35,4 +36,26 @@ export async function fetchFromOpenAlex(
 	});
 
 	return { meta, papers };
+}
+
+export function sinceQuery(date: string) {
+	const sinceDate = dayjs(date).format("YYYY-MM-DD");
+
+	const limit = 200;
+	const since = dayjs(sinceDate).subtract(1, "month").format("YYYY-MM-DD");
+
+	// type:types/preprint|types/article,has_abstract:true,language:en,open_access.is_oa:true
+	const filter = [
+		"type:types/preprint|types/article",
+		"has_abstract:true",
+		"language:en",
+		"open_access.is_oa:true",
+		`from_publication_date:${since}`,
+		`from_created_date:${since}`,
+		`from_updated_date:${sinceDate}`,
+	]
+		.filter((f) => !!f)
+		.join(",");
+
+	return `filter=${filter}&per_page=${limit}`;
 }

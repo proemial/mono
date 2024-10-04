@@ -2,7 +2,7 @@ import { Time } from "@proemial/utils/time";
 import { inngest } from "../../client";
 import { EventPayload } from "inngest/types";
 import { generateEmbeddings } from "../../../data/db/embeddings";
-import { fetchFromOpenAlex } from "../../helpers/openalex";
+import { fetchFromOpenAlex, sinceQuery } from "../../helpers/openalex";
 import { collection, upsertPapers } from "../../../data/db/qdrant";
 import dayjs from "dayjs";
 import { logEvent as logMetrics } from "@/inngest/helpers/tinybird";
@@ -95,25 +95,9 @@ async function fetchPapers(payload: Payload) {
 
 	try {
 		const { date: yesterday, nextCursor } = payload;
-
-		const limit = 200;
-		const since = dayjs(yesterday).subtract(1, "month").format("YYYY-MM-DD");
 		const cursor = nextCursor ?? "*";
 
-		// type:types/preprint|types/article,has_abstract:true,language:en,open_access.is_oa:true
-		const filter = [
-			"type:types/preprint|types/article",
-			"has_abstract:true",
-			"language:en",
-			"open_access.is_oa:true",
-			`from_publication_date:${since}`,
-			`from_created_date:${since}`,
-			`from_updated_date:${yesterday}`,
-		]
-			.filter((f) => !!f)
-			.join(",");
-
-		const params = `filter=${filter}&per_page=${limit}&cursor=${cursor}`;
+		const params = `${sinceQuery(yesterday)}&cursor=${cursor}`;
 		const response = await fetchFromOpenAlex(params);
 
 		if (!payload.nextCursor) {
