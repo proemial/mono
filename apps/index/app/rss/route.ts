@@ -1,10 +1,10 @@
 import { NextRequest } from "next/server";
-import { generateEmbedding } from "../../../data/db/embeddings";
-import { VectorSpace, vectorSpaces } from "../../../data/db/vector-spaces";
+import { generateEmbedding } from "../../data/db/embeddings";
+import { VectorSpace, vectorSpaces } from "../../data/db/vector-spaces";
 import {
 	summariseAbstract,
 	summariseTitle,
-} from "../../../inngest/helpers/summarise";
+} from "../../inngest/helpers/summarise";
 import { OpenAlexPaperWithAbstract } from "@proemial/repositories/oa/models/oa-paper";
 import { QdrantClient } from "@qdrant/js-client-rest";
 import dayjs from "dayjs";
