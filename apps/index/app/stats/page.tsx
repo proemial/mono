@@ -2,13 +2,13 @@
 import dayjs from "dayjs";
 import DbGraph from "./data";
 import IngestionGraph from "./ingestion";
-import { sinceQuery } from "@/inngest/helpers/openalex";
+import { updatedSinceQuery } from "@/inngest/helpers/openalex";
 
 export default async function StatsPage() {
 	const yesterday = dayjs().subtract(1, "day").format("YYYY-MM-DD");
 
 	// https://api.openalex.org/works?mailto=lab@proemial.ai&api_key=AuEVGBBSG9SBwo6LV8hhxh&
-	const query = sinceQuery(yesterday);
+	const query = updatedSinceQuery(yesterday);
 
 	return (
 		<>

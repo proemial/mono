@@ -2,7 +2,7 @@ import { Time } from "@proemial/utils/time";
 import { inngest } from "../../client";
 import { EventPayload } from "inngest/types";
 import { generateEmbeddings } from "../../../data/db/embeddings";
-import { fetchFromOpenAlex, sinceQuery } from "../../helpers/openalex";
+import { fetchFromOpenAlex, updatedSinceQuery } from "../../helpers/openalex";
 import { collection, upsertPapers } from "../../../data/db/qdrant";
 import dayjs from "dayjs";
 import { logEvent as logMetrics } from "@/inngest/helpers/tinybird";
@@ -19,7 +19,7 @@ export const oaSinceYesterday = {
 			const payload = { ...event.data };
 
 			if (!payload.date) {
-				payload.date = dayjs().subtract(1, "day").format("YYYY-MM-DD");
+				payload.date = dayjs().subtract(3, "month").format("YYYY-MM-DD");
 			}
 			if (!payload.count) {
 				payload.count = 0;
@@ -97,7 +97,7 @@ async function fetchPapers(payload: Payload) {
 		const { date: yesterday, nextCursor } = payload;
 		const cursor = nextCursor ?? "*";
 
-		const params = `${sinceQuery(yesterday)}&cursor=${cursor}`;
+		const params = `${updatedSinceQuery(yesterday)}&cursor=${cursor}`;
 		const response = await fetchFromOpenAlex(params);
 
 		if (!payload.nextCursor) {

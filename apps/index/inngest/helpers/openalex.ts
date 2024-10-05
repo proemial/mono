@@ -38,11 +38,13 @@ export async function fetchFromOpenAlex(
 	return { meta, papers };
 }
 
-export function sinceQuery(date: string) {
-	const sinceDate = dayjs(date).format("YYYY-MM-DD");
+export function updatedSinceQuery(date: string) {
+	const updatedSince = dayjs(date).format("YYYY-MM-DD");
 
 	const limit = 200;
-	const since = dayjs(sinceDate).subtract(1, "month").format("YYYY-MM-DD");
+	const timeWindowBegin = dayjs(updatedSince)
+		.subtract(3, "month")
+		.format("YYYY-MM-DD");
 
 	// type:types/preprint|types/article,has_abstract:true,language:en,open_access.is_oa:true
 	const filter = [
@@ -50,9 +52,9 @@ export function sinceQuery(date: string) {
 		"has_abstract:true",
 		"language:en",
 		"open_access.is_oa:true",
-		`from_publication_date:${since}`,
-		`from_created_date:${since}`,
-		`from_updated_date:${sinceDate}`,
+		`from_publication_date:${timeWindowBegin}`,
+		`from_created_date:${timeWindowBegin}`,
+		`from_updated_date:${updatedSince}`,
 	]
 		.filter((f) => !!f)
 		.join(",");
