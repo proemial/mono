@@ -20,7 +20,7 @@ const FeaturedLink: FC<{ item: Item }> = ({ item }) => {
 	const { collectionId: spaceId } = useParams<{ collectionId?: string }>();
 
 	return (
-		<div className="bg-[#9CC4C7] hover:shadow rounded-2xl">
+		<div className="bg-[#9CC4C7] hover:shadow rounded-2xl h-full">
 			<Link
 				href={spaceId ? `/space/${spaceId}${item.url}` : item.url}
 				onClick={trackHandler(analyticsKeys.feed.cardFeatured.click)}

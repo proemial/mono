@@ -113,6 +113,7 @@ export const ProfileCollections = () => {
 							| OrganizationMembershipPublicUserData
 							| undefined
 					}
+					isDiscover
 				/>
 				{nonDefaultCollections.map((collection) => (
 					<CollectionListItem

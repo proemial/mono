@@ -46,6 +46,7 @@ type Props = {
 		| false;
 	orgName?: string;
 	author?: OrganizationMembershipPublicUserData;
+	isDiscover?: boolean;
 };
 
 export const CollectionListItem = ({
@@ -53,12 +54,13 @@ export const CollectionListItem = ({
 	editable,
 	orgName,
 	author,
+	isDiscover,
 }: Props) => {
 	return (
 		<div className="flex justify-between gap-2 items-center hover:bg-[#e8e8e8] -mx-2 px-2 py-1 rounded-md group">
 			<Link
 				prefetch={false}
-				href={`${routes.space}/${collection.id}`}
+				href={isDiscover ? routes.space : `${routes.space}/${collection.id}`}
 				onClick={trackHandler(analyticsKeys.collection.openFromMenu)}
 				className="text-sm select-none truncate"
 			>

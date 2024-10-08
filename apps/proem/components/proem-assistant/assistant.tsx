@@ -15,6 +15,7 @@ import { AssistantButton } from "./assistant-button";
 import { AssistantContent } from "./assistant-content";
 import { useAssistant } from "./use-assistant/use-assistant";
 import { useSnapPointStore } from "./use-snap-point-store";
+import { routes } from "@/routes";
 
 export const PROEM_ASSISTANT_QUERY_KEY = "proem-assistant";
 
@@ -71,7 +72,8 @@ export const ProemAssistant = () => {
 	}, [paperId, data, refetch]);
 
 	if (
-		DISABLED_ROUTE_FRAGMENTS.some((fragment) => pathname.includes(fragment))
+		DISABLED_ROUTE_FRAGMENTS.some((fragment) => pathname.includes(fragment)) ||
+		pathname === routes.space
 	) {
 		return null;
 	}

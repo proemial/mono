@@ -16,7 +16,6 @@ import {
 	SelectContent,
 	SelectGroup,
 	SelectItem,
-	SelectLabel,
 	SelectSeparator,
 	SelectTrigger,
 	SelectValue,
@@ -84,21 +83,12 @@ export const SelectSpaceHeader = ({
 					className="border-none shadow-2xl min-w-64 max-w-80 rounded-xl"
 				>
 					<SelectGroup className="p-0">
-						{userId ? (
-							<SelectItem
-								value={userId}
-								className="py-2 text-base cursor-pointer font-normal tracking-wide"
-							>
-								{PERSONAL_DEFAULT_COLLECTION_NAME}
-							</SelectItem>
-						) : (
-							<Link
-								href={routes.space}
-								className="hover:bg-neutral-200 relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 pl-8 pr-8 text-base outline-none focus:bg-muted focus:text-foreground"
-							>
-								{PERSONAL_DEFAULT_COLLECTION_NAME}
-							</Link>
-						)}
+						<Link
+							href={routes.space}
+							className="hover:bg-neutral-200 relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 pl-8 pr-8 text-base outline-none focus:bg-muted focus:text-foreground"
+						>
+							{PERSONAL_DEFAULT_COLLECTION_NAME}
+						</Link>
 						{recentSpaces
 							.map((spaceId) => spaces.find((s) => s.id === spaceId))
 							.filter((space) => typeof space !== "undefined")
