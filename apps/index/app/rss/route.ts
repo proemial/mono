@@ -55,21 +55,27 @@ export async function GET(request: NextRequest) {
 	});
 
 	const { dimensions, collection } = vectorSpaces["1.5k"] as VectorSpace;
-	const embedding = await generateEmbedding(like, dimensions);
+	const embeddings = await generateEmbedding(
+		[like, unlike as string],
+		dimensions,
+	);
 	const filter = createFilter(
 		10,
 		dayjs().subtract(1, "week").format("YYYY-MM-DD"),
 	);
 
 	if (unlike) {
-		const negatedEmbedding =
-			unlike && (await generateEmbedding(unlike, dimensions));
-
-		console.log("recommend", collection, filter, embedding.length);
+		console.log(
+			"recommend",
+			collection,
+			filter,
+			embeddings.at(0)?.length,
+			embeddings.at(1)?.length,
+		);
 		const response = await client.recommend(collection, {
 			...filter,
-			positive: [embedding],
-			negative: [negatedEmbedding],
+			positive: [embeddings.at(0) as number[]],
+			negative: [embeddings.at(1) as number[]],
 		});
 		console.log("response", response.length);
 
@@ -96,10 +102,10 @@ export async function GET(request: NextRequest) {
 		});
 	}
 
-	console.log("search", collection, filter, embedding.length);
+	console.log("search", collection, filter, embeddings.at(0)?.length);
 	const response = await client.search(collection, {
 		...filter,
-		vector: embedding,
+		vector: embeddings.at(0) as number[],
 	});
 	console.log("response", response.length);
 
