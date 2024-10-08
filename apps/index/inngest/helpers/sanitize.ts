@@ -1,6 +1,6 @@
-import { IndexedPaper } from "./paper.model";
+import { QdrantPaper } from "./qdrant.model";
 
-export function sanitizePaper(paper: IndexedPaper) {
+export function sanitizePaper(paper: QdrantPaper) {
 	const removed = {} as { [key: string]: number | undefined };
 
 	const [authorships, addAuth] = slice(paper.data.authorships, 20);
@@ -43,7 +43,7 @@ export function sanitizePaper(paper: IndexedPaper) {
 	return sanitizedPaper;
 }
 
-function getArXivid(paper: IndexedPaper) {
+function getArXivid(paper: QdrantPaper) {
 	const arxivLocation = paper.data.locations.find((location) =>
 		location.landing_page_url.toLocaleLowerCase().includes("arxiv.org"),
 	);

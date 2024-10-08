@@ -1,7 +1,7 @@
-import { oaByDateStream } from "./workers/oa/by-date.task";
-import { oaByRangeStream } from "./workers/oa/by-range";
-import { oaSinceYesterday } from "./workers/oa/since-yesterday.task";
-import { ingestionScheduler } from "./scheduler/scheduler.task";
+import { oaByDateStream } from "./workers/oa/oa-by-date.task";
+import { oaByRangeStream } from "./workers/oa/oa-by-range";
+import { oaSinceYesterday } from "./workers/oa/oa-yesterday.task";
+import { oaScheduler } from "./scheduler/oa-scheduler.task";
 
 export const workers = [
 	oaByDateStream.worker,
@@ -10,4 +10,4 @@ export const workers = [
 ];
 
 export const schedulers =
-	process.env.NODE_ENV !== "development" ? [ingestionScheduler] : [];
+	process.env.NODE_ENV !== "development" ? [oaScheduler] : [];

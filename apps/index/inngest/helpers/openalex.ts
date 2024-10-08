@@ -6,7 +6,7 @@ import {
 } from "@proemial/repositories/oa/models/oa-paper";
 import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
-import { IndexedPaper, Provider } from "./paper.model";
+import { QdrantPaper, Provider } from "./qdrant.model";
 import dayjs from "dayjs";
 
 export async function fetchFromOpenAlex(
@@ -32,7 +32,7 @@ export async function fetchFromOpenAlex(
 				abstract: fromInvertedIndex(abstract_inverted_index, 350),
 				provider,
 			},
-		} as IndexedPaper;
+		} as QdrantPaper;
 	});
 
 	return { meta, papers };
