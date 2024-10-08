@@ -1,9 +1,9 @@
 import { inngest } from "@/inngest/client";
-import { streams } from "../../../inngest/streams";
+import { workers, schedulers } from "../../../inngest/streams";
 import { serve } from "inngest/next";
 
 // Create an API that serves zero functions
 export const { GET, POST, PUT } = serve({
 	client: inngest,
-	functions: streams,
+	functions: [...workers, ...schedulers],
 });

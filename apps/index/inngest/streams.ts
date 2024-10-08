@@ -3,9 +3,11 @@ import { oaByRangeStream } from "./workers/oa/by-range";
 import { oaSinceYesterday } from "./workers/oa/since-yesterday.task";
 import { ingestionScheduler } from "./scheduler/scheduler.task";
 
-export const streams = [
+export const workers = [
 	oaByDateStream.worker,
 	oaByRangeStream.worker,
 	oaSinceYesterday.worker,
-	ingestionScheduler,
 ];
+
+export const schedulers =
+	process.env.NODE_ENV !== "development" ? [ingestionScheduler] : [];
