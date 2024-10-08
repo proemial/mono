@@ -69,7 +69,7 @@ export function FormFields({
 	return (
 		<>
 			<div className="flex mb-4">
-				<div className="w-1/3 mr-2">
+				<div className="w-1/4 mr-2">
 					<label
 						htmlFor="date"
 						className="block mb-1 text-sm font-medium text-gray-700"
@@ -88,7 +88,7 @@ export function FormFields({
 						}}
 					/>
 				</div>
-				<div className="w-1/3 mr-2">
+				<div className="w-1/4 mr-2">
 					<label
 						htmlFor="count"
 						className="block mb-1 text-sm font-medium text-gray-700"
@@ -109,7 +109,7 @@ export function FormFields({
 						}}
 					/>
 				</div>
-				<div className="w-1/3">
+				<div className="w-1/4 mr-2">
 					<label
 						htmlFor="index"
 						className="block mb-1 text-sm font-medium text-gray-700"
@@ -133,6 +133,23 @@ export function FormFields({
 									{vectorSpaces[key]?.collection}
 								</option>
 							))}
+					</select>
+				</div>
+				<div className="w-1/4">
+					<label
+						htmlFor="fullVectorSearch"
+						className="block mb-1 text-sm font-medium text-gray-700"
+					>
+						Type
+					</label>
+					<select
+						id="fullVectorSearch"
+						name="fullVectorSearch"
+						className="w-full p-2 border rounded"
+						disabled={pending}
+					>
+						<option value="false">Binary quantization</option>
+						<option value="true">Full vector search</option>
 					</select>
 				</div>
 			</div>

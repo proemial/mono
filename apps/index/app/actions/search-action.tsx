@@ -43,6 +43,7 @@ export const searchAction = async (
 	const count = formData.get("count") as string;
 	const index = formData.get("index") as string;
 	const negatedQuery = formData.get("negatedQuery") as string;
+	const fullVectorSearch = formData.get("fullVectorSearch") === "true";
 
 	writeCookie({
 		query,
@@ -70,7 +71,7 @@ export const searchAction = async (
 	let begin = Time.now();
 	const embeddings = await generateEmbedding([query, negatedQuery], dimensions);
 	metrics.embeddings = Time.elapsed(begin);
-	const filter = createFilter(count, from);
+	const filter = createFilter(count, from, fullVectorSearch);
 
 	if (negatedQuery) {
 		console.log(
@@ -134,7 +135,19 @@ function mapToResult(
 	};
 }
 
-function createFilter(count: string, from: string) {
+function createFilter(count: string, from: string, fullVectorSearch: boolean) {
+	const params = fullVectorSearch
+		? {
+				params: {
+					quantization: {
+						ignore: false,
+						rescore: true,
+						oversampling: 2.0,
+					},
+				},
+			}
+		: {};
+
 	return {
 		limit: Number.parseInt(count),
 		filter: {
@@ -145,6 +158,7 @@ function createFilter(count: string, from: string) {
 				},
 			},
 		},
+		...params,
 	};
 }
 
