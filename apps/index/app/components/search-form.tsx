@@ -3,17 +3,21 @@ import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import dayjs from "dayjs";
 import { vectorSpaces } from "@/data/db/vector-spaces";
-import { searchAction, SearchResult } from "../actions/search-action";
+import {
+	searchAction,
+	SearchMetrics,
+	SearchResult,
+} from "../actions/search-action";
 import { SearchResult as PaperCard } from "../components/search-result";
 
 export function SearchForm({
 	searchInput,
 }: { searchInput?: Record<string, string> }) {
-	const [formState, action] = useFormState(searchAction, [] as SearchResult[]);
+	const [formState, action] = useFormState(searchAction, {} as SearchResult);
 
 	return (
 		<form action={action} className="flex flex-col gap-1 mx-2">
-			<FormFields searchInput={searchInput} />
+			<FormFields searchInput={searchInput} metrics={formState.metrics} />
 			<SearchResults results={formState} />
 		</form>
 	);
@@ -22,16 +26,16 @@ export function SearchForm({
 function SearchResults({
 	results,
 }: {
-	results: SearchResult[];
+	results: SearchResult;
 }) {
 	return (
 		<div className="grid grid-cols-[auto_auto_1fr] gap-4">
-			{!!results.length && (
+			{!!results?.papers?.length && (
 				<>
 					<div className="font-bold">Score</div>
 					<div className="font-bold">Created Date</div>
 					<div className="font-bold">Title</div>
-					{results.map((result, i) => (
+					{results?.papers?.map((result, i) => (
 						<PaperCard key={i} item={result} />
 					))}
 				</>
@@ -42,7 +46,8 @@ function SearchResults({
 
 export function FormFields({
 	searchInput,
-}: { searchInput?: Record<string, string> }) {
+	metrics,
+}: { searchInput?: Record<string, string>; metrics?: SearchMetrics }) {
 	const [query, setQuery] = useState(
 		searchInput?.query !== undefined
 			? searchInput?.query
@@ -171,7 +176,7 @@ export function FormFields({
 					}}
 				/>
 			</div>
-			<div>
+			<div className="flex justify-begin items-center gap-4">
 				<button
 					type="submit"
 					disabled={pending}
@@ -179,6 +184,12 @@ export function FormFields({
 				>
 					Search
 				</button>
+				{metrics?.search && (
+					<div className="text-sm text-slate-400 italic">
+						Elapsed: (Embeddings: {metrics.embeddings}ms , Vector Search:{" "}
+						{metrics.search}ms)
+					</div>
+				)}
 			</div>
 		</>
 	);

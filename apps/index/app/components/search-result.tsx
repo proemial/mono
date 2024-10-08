@@ -1,9 +1,9 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
-import { Feature, SearchResult as Item } from "../actions/search-action";
+import { Feature, QdrantPaper } from "../actions/search-action";
 import { summariseAction } from "../actions/summarise-action";
 
-export function SearchResult({ item }: { item: Item }) {
+export function SearchResult({ item }: { item: QdrantPaper }) {
 	const { data: summary, isLoading } = useQuery({
 		queryKey: ["summary", item.title, item.abstract],
 		queryFn: async () => {

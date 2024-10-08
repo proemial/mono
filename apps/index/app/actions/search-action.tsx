@@ -5,8 +5,19 @@ import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-to
 import { VectorSpace, vectorSpaces } from "@/data/db/vector-spaces";
 import { generateEmbedding } from "@/data/db/embeddings";
 import { cookies } from "next/headers";
+import { Time } from "@proemial/utils/time";
 
 export type SearchResult = {
+	papers?: QdrantPaper[] | undefined | null;
+	metrics?: SearchMetrics;
+};
+
+export type SearchMetrics = {
+	embeddings?: number;
+	search?: number;
+};
+
+export type QdrantPaper = {
 	score: number;
 	title: string;
 	created: string;
@@ -23,7 +34,7 @@ export type Feature = {
 };
 
 export const searchAction = async (
-	_: SearchResult[] | undefined | null,
+	_: SearchResult | undefined | null,
 	formData: FormData,
 ) => {
 	"use server";
@@ -42,7 +53,7 @@ export const searchAction = async (
 	});
 
 	if (!query?.length) {
-		return [];
+		return {} as SearchResult;
 	}
 
 	const client = new QdrantClient({
@@ -50,35 +61,55 @@ export const searchAction = async (
 		apiKey: process.env.QDRANT_API_KEY,
 	});
 
+	const metrics = {
+		embeddings: -1,
+		search: -1,
+	};
+
 	const { dimensions, collection } = vectorSpaces[index] as VectorSpace;
-	const embedding = await generateEmbedding(query, dimensions);
+	let begin = Time.now();
+	const embeddings = await generateEmbedding([query, negatedQuery], dimensions);
+	metrics.embeddings = Time.elapsed(begin);
 	const filter = createFilter(count, from);
 
 	if (negatedQuery) {
-		const negatedEmbedding =
-			negatedQuery && (await generateEmbedding(negatedQuery, dimensions));
-
-		console.log("recommend", collection, filter, embedding.length);
+		console.log(
+			"recommend",
+			collection,
+			filter,
+			embeddings.at(0)?.length,
+			embeddings.at(1)?.length,
+		);
+		begin = Time.now();
 		const response = await client.recommend(collection, {
 			...filter,
-			positive: [embedding],
-			negative: [negatedEmbedding],
+			positive: [embeddings.at(0) as number[]],
+			negative: [embeddings.at(1) as number[]],
 		});
+		metrics.search = Time.elapsed(begin);
 
-		return response.map((p) =>
-			mapToResult(p.score, p.payload as OpenAlexPaperWithAbstract),
-		);
+		return {
+			papers: response.map((p) =>
+				mapToResult(p.score, p.payload as OpenAlexPaperWithAbstract),
+			),
+			metrics,
+		} as SearchResult;
 	}
 
-	console.log("search", collection, filter, embedding.length);
+	console.log("search", collection, filter, embeddings[0]?.length);
+	begin = Time.now();
 	const response = await client.search(collection, {
 		...filter,
-		vector: embedding,
+		vector: embeddings.at(0) as number[],
 	});
+	metrics.search = Time.elapsed(begin);
 
-	return response.map((p) =>
-		mapToResult(p.score, p.payload as OpenAlexPaperWithAbstract),
-	);
+	return {
+		papers: response.map((p) =>
+			mapToResult(p.score, p.payload as OpenAlexPaperWithAbstract),
+		),
+		metrics,
+	} as SearchResult;
 };
 
 function writeCookie(formData: Record<string, string>) {
@@ -92,7 +123,7 @@ function writeCookie(formData: Record<string, string>) {
 function mapToResult(
 	score: number,
 	payload: OpenAlexPaperWithAbstract,
-): SearchResult {
+): QdrantPaper {
 	return {
 		score: score,
 		id: payload.id,

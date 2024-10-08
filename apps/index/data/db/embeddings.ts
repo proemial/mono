@@ -37,12 +37,17 @@ export async function generateEmbeddings(
 	}
 }
 
-export async function generateEmbedding(text: string, dimensions: number) {
-	return (
-		await openai.embeddings.create({
-			...config,
-			dimensions,
-			input: text,
-		})
-	).data.flatMap((d) => d.embedding);
+export async function generateEmbedding(text: string[], dimensions: number) {
+	const begin = Time.now();
+	try {
+		return (
+			await openai.embeddings.create({
+				...config,
+				dimensions,
+				input: text.filter((t) => t?.length),
+			})
+		).data.map((d) => d.embedding);
+	} finally {
+		Time.log(begin, `generateEmbedding(${text?.length})`);
+	}
 }
