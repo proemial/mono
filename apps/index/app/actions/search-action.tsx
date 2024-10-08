@@ -140,9 +140,7 @@ function createFilter(count: string, from: string, fullVectorSearch: boolean) {
 		? {
 				params: {
 					quantization: {
-						ignore: false,
-						rescore: true,
-						oversampling: 2.0,
+						ignore: true,
 					},
 				},
 			}

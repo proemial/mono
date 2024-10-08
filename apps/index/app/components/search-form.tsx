@@ -140,7 +140,7 @@ export function FormFields({
 						htmlFor="fullVectorSearch"
 						className="block mb-1 text-sm font-medium text-gray-700"
 					>
-						Type
+						Quantization
 					</label>
 					<select
 						id="fullVectorSearch"
@@ -148,8 +148,8 @@ export function FormFields({
 						className="w-full p-2 border rounded"
 						disabled={pending}
 					>
-						<option value="false">Binary quantization</option>
-						<option value="true">Full vector search</option>
+						<option value="false">Binary</option>
+						<option value="true">Unquantized (Slower, higher accuracy)</option>
 					</select>
 				</div>
 			</div>
