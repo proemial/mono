@@ -19,7 +19,7 @@ export const oaSinceYesterday = {
 			const payload = { ...event.data };
 
 			if (!payload.date) {
-				payload.date = dayjs().subtract(3, "month").format("YYYY-MM-DD");
+				payload.date = dayjs().format("YYYY-MM-DD");
 			}
 			if (!payload.count) {
 				payload.count = 0;
