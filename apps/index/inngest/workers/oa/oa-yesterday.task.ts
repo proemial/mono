@@ -19,7 +19,8 @@ export const oaSinceYesterday = {
 			const payload = { ...event.data };
 
 			if (!payload.date) {
-				payload.date = dayjs().format("YYYY-MM-DD");
+				// Ingest touched since yesterday
+				payload.date = dayjs().subtract(1, "day").format("YYYY-MM-DD");
 			}
 			if (!payload.count) {
 				payload.count = 0;
