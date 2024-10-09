@@ -14,6 +14,20 @@ export default async function DiscoverPage() {
 				className="sm:hidden flex flex-col"
 			>
 				<CarouselContent className="-mt-1 h-[calc(100dvh-72px)]">
+					<CarouselItem className="py-1 basis-full hover:shadow overflow-hidden">
+						{/* biome-ignore lint/a11y/useMediaCaption: don't care */}
+						<video
+							autoPlay
+							// loop
+							// muted
+							playsInline
+							id="video1"
+							// src="/proem-vertical01.mp4"
+							// src="/proem-horizontal01.mp4"
+							src="/personalized01.mp4"
+							className="pointer-events-none rounded-xl w-full h-full object-cover"
+						/>
+					</CarouselItem>
 					{staticItems.map((item, index) => (
 						<CarouselItem key={index} className="py-1 basis-full">
 							<FeaturedLink item={item} />
