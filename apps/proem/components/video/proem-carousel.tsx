@@ -14,16 +14,13 @@ import { VideoCard } from "./video-card";
 export const ProemCarousel = () => {
 	const [api, setApi] = useState<CarouselApi>();
 	const [current, setCurrent] = useState(0);
-	const [count, setCount] = useState(0);
 
 	useEffect(() => {
 		if (!api) {
 			return;
 		}
 
-		setCount(api.scrollSnapList().length);
-		setCurrent(api.selectedScrollSnap() + 1);
-
+		// TODO: Figure out why this is needed to get autoplay working
 		api.on("settle", () => {
 			setCurrent(api.selectedScrollSnap() + 1);
 		});
@@ -49,7 +46,7 @@ export const ProemCarousel = () => {
 				<CarouselItem className="py-1 basis-full overflow-hidden rounded-2xl">
 					<VideoCard url="/chubby01.mp4" api={api} snap={2} />
 				</CarouselItem>
-				{staticItems.slice(1).map((item, index) => (
+				{staticItems.slice(2).map((item, index) => (
 					<CarouselItem key={index} className="py-1 basis-full">
 						<FeaturedLink item={item} />
 					</CarouselItem>

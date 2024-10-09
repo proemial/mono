@@ -1,7 +1,8 @@
 "use client";
 
 import { CarouselApi } from "@proemial/shadcn-ui";
-import { useEffect, useState } from "react";
+import { VolumeMax, VolumeX } from "@untitled-ui/icons-react";
+import { useState } from "react";
 import ReactPlayer from "react-player";
 
 type Props = {
@@ -11,26 +12,17 @@ type Props = {
 };
 
 export const VideoCard = ({ url, api, snap }: Props) => {
-	// const [muted, setMuted] = useState(true);
-
-	// useEffect(() => {
-	// 	if (api) {
-	// 		if (api.selectedScrollSnap() === snap) {
-	// 			setTimeout(() => {
-	// 				setMuted(false);
-	// 			}, 500);
-	// 		} else {
-	// 			setMuted(true);
-	// 		}
-	// 	}
-	// });
+	const [muted, setMuted] = useState(true);
 
 	if (!api) {
 		return undefined;
 	}
 
 	return (
-		<div className="rounded-2xl overflow-hidden">
+		<div
+			className="relative rounded-2xl overflow-hidden cursor-pointer"
+			onClick={() => setMuted(!muted)}
+		>
 			<ReactPlayer
 				url={url}
 				playing={api.selectedScrollSnap() === snap}
@@ -39,9 +31,16 @@ export const VideoCard = ({ url, api, snap }: Props) => {
 				pip={false}
 				controls={false}
 				playsinline={true}
-				muted={true}
+				muted={muted}
 				volume={1}
 			/>
+			<div className="absolute top-0 right-0 p-3 text-white">
+				{muted ? (
+					<VolumeX className="size-5" />
+				) : (
+					<VolumeMax className="size-5" />
+				)}
+			</div>
 		</div>
 	);
 };
