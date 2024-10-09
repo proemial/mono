@@ -68,14 +68,14 @@ async function fetchDateWorker(payload: Payload, event?: EventPayload) {
 				);
 			}
 
-			await inngest.send({
-				name: eventName,
-				data: {
-					...payload,
-					count: (payload.count ?? 0) + papers.length,
-					nextCursor: meta.next_cursor,
-				},
-			});
+			// await inngest.send({
+			// 	name: eventName,
+			// 	data: {
+			// 		...payload,
+			// 		count: (payload.count ?? 0) + papers.length,
+			// 		nextCursor: meta.next_cursor,
+			// 	},
+			// });
 		}
 	} finally {
 		Time.log(begin, eventId);
