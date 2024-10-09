@@ -47,6 +47,13 @@ async function fetchDateWorker(payload: Payload, event?: EventPayload) {
 		const embeddings = await generateEmbeddings(
 			papers,
 			async (count, elapsed) => {
+				console.log(
+					"[SinceYesterday][embedded] generated ",
+					count,
+					"embeddings in",
+					elapsed,
+					"ms",
+				);
 				await logEvent(payload.date, "embedded", count, elapsed);
 			},
 		);
@@ -56,6 +63,13 @@ async function fetchDateWorker(payload: Payload, event?: EventPayload) {
 			papers,
 			embeddings,
 			async (count, elapsed) => {
+				console.log(
+					"[SinceYesterday][upserted] upserted ",
+					count,
+					"papers in",
+					elapsed,
+					"ms",
+				);
 				await logEvent(payload.date, "upserted", count, elapsed);
 			},
 		);
@@ -101,6 +115,8 @@ async function fetchPapers(payload: Payload) {
 		const response = await fetchFromOpenAlex(params);
 
 		if (!payload.nextCursor) {
+			console.log("[SinceYesterday][fetch] ingestion started");
+
 			await logEvent(
 				payload.date,
 				"expected",
@@ -108,6 +124,18 @@ async function fetchPapers(payload: Payload) {
 				Time.elapsed(begin),
 			);
 		}
+		const papersReturned = response.papers.length;
+		const totalPapersReturned = (payload?.count ?? 0) + papersReturned;
+
+		console.log(
+			"[SinceYesterday][fetch]",
+			papersReturned,
+			"papers returned. Total: ",
+			totalPapersReturned,
+			"/",
+			response.meta.count,
+			"papers",
+		);
 		await logEvent(
 			payload.date,
 			"fetched",
