@@ -35,22 +35,29 @@ export const FeedCarousel = () => {
 			setApi={setApi}
 		>
 			<CarouselContent className="-mt-1 h-[calc(100dvh-72px)]">
-				<VideoCarouselItem url="/personalized01.mp4" api={api} index={0} />
-				<CarouselItem className="py-1">
-					{/* biome-ignore lint/style/noNonNullAssertion: <explanation> */}
-					<FeaturedLink item={staticItems[0]!} />
-				</CarouselItem>
-				<VideoCarouselItem url="/short01.mp4" api={api} index={2} />
-				<CarouselItem className="py-1">
-					{/* biome-ignore lint/style/noNonNullAssertion: <explanation> */}
-					<FeaturedLink item={staticItems[1]!} />
-				</CarouselItem>
-				<VideoCarouselItem url="/chubby01.mp4" api={api} index={4} />
-				{staticItems.slice(2).map((item, index) => (
+				<VideoCarouselItem
+					src="/videos/american-friendship.mp4"
+					paperLink="https://proem.ai/paper/oa/W4401124912"
+					api={api}
+					index={0}
+				/>
+				<VideoCarouselItem
+					src="/videos/chubby-cheek-babies.mp4"
+					paperLink="https://proem.ai/paper/oa/W4400380733"
+					api={api}
+					index={1}
+				/>
+				<VideoCarouselItem
+					src="/videos/covid-lockdowns.mp4"
+					paperLink="https://proem.ai/paper/oa/W4402349677"
+					api={api}
+					index={2}
+				/>
+				{/* {staticItems.map((item, index) => (
 					<CarouselItem key={index} className="py-1">
 						<FeaturedLink item={item} />
 					</CarouselItem>
-				))}
+				))} */}
 			</CarouselContent>
 		</Carousel>
 	);
