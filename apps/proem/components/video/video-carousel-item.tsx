@@ -17,6 +17,8 @@ type Props = {
 	paperLink: string;
 	api: CarouselApi;
 	isCurrent: boolean;
+	muted: boolean;
+	setMuted: (muted: boolean) => void;
 };
 
 export const VideoCarouselItem = ({
@@ -24,9 +26,10 @@ export const VideoCarouselItem = ({
 	paperLink,
 	api,
 	isCurrent,
+	muted,
+	setMuted,
 }: Props) => {
 	const [playing, setPlaying] = useState(false);
-	const [muted, setMuted] = useState(true);
 	const router = useRouter();
 	const paperId = paperLink.split("/").pop() ?? "";
 
