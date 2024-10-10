@@ -20,9 +20,8 @@ export const FeedCarousel = () => {
 			return;
 		}
 
-		// TODO: Figure out why this is needed to get autoplay working
 		api.on("settle", () => {
-			setCurrent(api.selectedScrollSnap() + 1);
+			setCurrent(api.selectedScrollSnap());
 		});
 	}, [api]);
 
@@ -37,21 +36,21 @@ export const FeedCarousel = () => {
 			<CarouselContent className="-mt-1 h-[calc(100dvh-72px)]">
 				<VideoCarouselItem
 					src="/videos/american-friendship.mp4"
-					paperLink="https://proem.ai/paper/oa/W4401124912"
+					paperLink="/oa/W4401124912"
 					api={api}
-					index={0}
+					isCurrent={current === 0}
 				/>
 				<VideoCarouselItem
 					src="/videos/chubby-cheek-babies.mp4"
-					paperLink="https://proem.ai/paper/oa/W4400380733"
+					paperLink="/oa/W4400380733"
 					api={api}
-					index={1}
+					isCurrent={current === 1}
 				/>
 				<VideoCarouselItem
 					src="/videos/covid-lockdowns.mp4"
-					paperLink="https://proem.ai/paper/oa/W4402349677"
+					paperLink="/oa/W4402349677"
 					api={api}
-					index={2}
+					isCurrent={current === 2}
 				/>
 				{/* {staticItems.map((item, index) => (
 					<CarouselItem key={index} className="py-1">

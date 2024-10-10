@@ -2,24 +2,42 @@
 
 import { CarouselApi, CarouselItem } from "@proemial/shadcn-ui";
 import { VolumeMax, VolumeX } from "@untitled-ui/icons-react";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { Throbber } from "../throbber";
 import { useRouter } from "next/navigation";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "../analytics/tracking/tracking-keys";
+import { routes } from "@/routes";
 
 type Props = {
 	src: string;
 	paperLink: string;
 	api: CarouselApi;
-	/**
-	 * The index of the item in the feed. Used for autoplay.
-	 */
-	index: number;
+	isCurrent: boolean;
 };
 
-export const VideoCarouselItem = ({ src, paperLink, api, index }: Props) => {
+export const VideoCarouselItem = ({
+	src,
+	paperLink,
+	api,
+	isCurrent,
+}: Props) => {
+	const [playing, setPlaying] = useState(false);
 	const [muted, setMuted] = useState(true);
 	const router = useRouter();
+	const paperId = paperLink.split("/").pop() ?? "";
+
+	useEffect(() => {
+		if (api && isCurrent) {
+			setPlaying(true);
+			trackHandler(analyticsKeys.feed.videoCard.play, { paperId })();
+		} else {
+			setPlaying(false);
+		}
+	}, [api, isCurrent, paperId]);
 
 	if (!api) {
 		return undefined;
@@ -27,11 +45,17 @@ export const VideoCarouselItem = ({ src, paperLink, api, index }: Props) => {
 
 	const handleMuteClick = (event: MouseEvent<HTMLDivElement>) => {
 		event.stopPropagation();
+		if (muted) {
+			trackHandler(analyticsKeys.feed.videoCard.unmute, { paperId })();
+		} else {
+			trackHandler(analyticsKeys.feed.videoCard.mute, { paperId })();
+		}
 		setMuted(!muted);
 	};
 
 	const handleVideoClick = () => {
-		router.push(paperLink);
+		trackHandler(analyticsKeys.feed.videoCard.click, { paperId })();
+		router.push(`${routes.paper}/${paperLink}`);
 	};
 
 	return (
@@ -42,7 +66,7 @@ export const VideoCarouselItem = ({ src, paperLink, api, index }: Props) => {
 			>
 				<ReactPlayer
 					url={src}
-					playing={api.selectedScrollSnap() === index}
+					playing={playing}
 					width="100%"
 					height="100%"
 					pip={false}

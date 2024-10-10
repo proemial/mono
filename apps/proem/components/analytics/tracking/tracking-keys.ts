@@ -106,6 +106,12 @@ export const analyticsKeys = {
 		},
 	},
 	feed: {
+		videoCard: {
+			play: "feed:videoCard:play",
+			click: "feed:videoCard:click",
+			unmute: "feed:videoCard:unmute:click",
+			mute: "feed:videoCard:mute:click",
+		},
 		// TODO: cleanup
 		cardFeatured: {
 			view: "feed:cardFeatured:view",

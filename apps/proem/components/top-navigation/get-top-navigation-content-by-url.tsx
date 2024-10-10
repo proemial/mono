@@ -99,6 +99,7 @@ export function getTopNavigationContentByUrl(
 	// Papers outside of a space
 	if (url.includes("/paper")) {
 		return {
+			title: "Discover",
 			menu: <CloseAction iconOverride={<ChevronLeft className="size-6" />} />,
 			action: null,
 		};
