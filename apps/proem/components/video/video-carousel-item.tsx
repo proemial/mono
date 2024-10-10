@@ -89,10 +89,11 @@ export const VideoCarouselItem = ({
 				/>
 				<div className="absolute flex justify-between gap-2 top-0 left-0 w-full">
 					<div
-						className="text-white hover:bg-white/10 rounded-full m-1 p-4 cursor-pointer"
+						className="flex items-center gap-2 text-white hover:bg-white/10 rounded-full m-1 p-4 cursor-pointer"
 						onClick={handleVideoClick}
 					>
 						<File06 className="size-5" />
+						<span className="text-sm">View paper</span>
 					</div>
 					<div
 						className="text-white hover:bg-white/10 rounded-full m-1 p-4 cursor-pointer"
