@@ -90,17 +90,9 @@ export function getTopNavigationContentByUrl(
 			};
 		}
 
-		// "For you" feed for anonymous users
-		// app/space SignInDrawer + SignInDrawer
-		// app/space/new <CloseAction target={routes.space} />
 		return {
 			title: PERSONAL_DEFAULT_COLLECTION_NAME,
-			action: (
-				<ActionMenu>
-					<SignInDrawer trigger={<div>View saved items</div>} />
-					<ShowOnboarding />
-				</ActionMenu>
-			),
+			action: null,
 		};
 	}
 
