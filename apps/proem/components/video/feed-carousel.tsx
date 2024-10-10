@@ -35,22 +35,28 @@ export const FeedCarousel = () => {
 		>
 			<CarouselContent className="-mt-1 h-[calc(100dvh-72px)]">
 				<VideoCarouselItem
-					src="/videos/american-friendship.mp4"
+					src="/videos/american-friendship-w4401124912.mp4"
 					paperLink="/oa/W4401124912"
 					api={api}
 					isCurrent={current === 0}
 				/>
 				<VideoCarouselItem
-					src="/videos/chubby-cheek-babies.mp4"
+					src="/videos/chubby-cheek-babies-w4400380733.mp4"
 					paperLink="/oa/W4400380733"
 					api={api}
 					isCurrent={current === 1}
 				/>
 				<VideoCarouselItem
-					src="/videos/covid-lockdowns.mp4"
+					src="/videos/covid-lockdowns-w4402349677.mp4"
 					paperLink="/oa/W4402349677"
 					api={api}
 					isCurrent={current === 2}
+				/>
+				<VideoCarouselItem
+					src="/videos/quitting-smoking-w4400000163.mp4"
+					paperLink="/oa/W4400000163"
+					api={api}
+					isCurrent={current === 3}
 				/>
 				{/* {staticItems.map((item, index) => (
 					<CarouselItem key={index} className="py-1">
