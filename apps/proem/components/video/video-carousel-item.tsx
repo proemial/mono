@@ -1,7 +1,7 @@
 "use client";
 
 import { CarouselApi, CarouselItem } from "@proemial/shadcn-ui";
-import { VolumeMax, VolumeX } from "@untitled-ui/icons-react";
+import { File06, VolumeMax, VolumeX } from "@untitled-ui/icons-react";
 import { MouseEvent, useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { Throbber } from "../throbber";
@@ -63,10 +63,7 @@ export const VideoCarouselItem = ({
 
 	return (
 		<CarouselItem className="py-1 rounded-2xl overflow-hidden">
-			<div
-				className="relative hover:shadow h-full w-full cursor-pointer rounded-2xl overflow-hidden"
-				onClick={handleVideoClick}
-			>
+			<div className="relative hover:shadow h-full w-full rounded-2xl overflow-hidden">
 				<ReactPlayer
 					url={src}
 					playing={playing}
@@ -90,15 +87,23 @@ export const VideoCarouselItem = ({
 						},
 					}}
 				/>
-				<div
-					className="absolute top-0 right-0 m-1 p-4 text-white hover:bg-white/10 rounded-full"
-					onClick={handleMuteClick}
-				>
-					{muted ? (
-						<VolumeX className="size-5" />
-					) : (
-						<VolumeMax className="size-5" />
-					)}
+				<div className="absolute flex justify-between gap-2 top-0 left-0 w-full">
+					<div
+						className="text-white hover:bg-white/10 rounded-full m-1 p-4 cursor-pointer"
+						onClick={handleVideoClick}
+					>
+						<File06 className="size-5" />
+					</div>
+					<div
+						className="text-white hover:bg-white/10 rounded-full m-1 p-4 cursor-pointer"
+						onClick={handleMuteClick}
+					>
+						{muted ? (
+							<VolumeX className="size-5" />
+						) : (
+							<VolumeMax className="size-5" />
+						)}
+					</div>
 				</div>
 			</div>
 		</CarouselItem>
