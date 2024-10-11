@@ -26,6 +26,9 @@ export const oaSinceYesterday = {
 			if (!payload.space) {
 				payload.space = defaultVectorSpaceName;
 			}
+			if (!vectorSpaces[payload.space]) {
+				throw new Error(`Unknown vector space: ${payload.space}`);
+			}
 			if (!payload.date) {
 				// Ingest touched since yesterday
 				payload.date = dayjs().subtract(1, "day").format("YYYY-MM-DD");

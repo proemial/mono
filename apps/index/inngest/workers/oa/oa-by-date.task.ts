@@ -26,6 +26,9 @@ export const oaByDateStream = {
 			if (!payload.space) {
 				payload.space = defaultVectorSpaceName;
 			}
+			if (!vectorSpaces[payload.space]) {
+				throw new Error(`Unknown vector space: ${payload.space}`);
+			}
 			if (!payload.date) {
 				payload.date = dayjs().subtract(1, "day").format("YYYY-MM-DD");
 			}
@@ -50,53 +53,58 @@ async function fetchDateWorker(payload: Payload, event?: EventPayload) {
 
 	const begin = Time.now();
 	try {
-		// const space = vectorSpaces[payload.space] as VectorSpace;
-		// const { meta, papers } = await fetchPapers(payload);
-		// result.papers = papers.length;
-		// const embeddings = await generateEmbeddings(
-		// 	papers,
-		// 	space,
-		// 	async (count, elapsed) => {
-		// 		await logEvent(
-		// 			space.collection,
-		// 			payload.date,
-		// 			"embedded",
-		// 			count,
-		// 			elapsed,
-		// 		);
-		// 	},
-		// );
-		// result.embeddings = embeddings.length;
-		// const upserted = await upsertPapers(
-		// 	papers,
-		// 	embeddings,
-		// 	space,
-		// 	async (count, elapsed) => {
-		// 		await logEvent(
-		// 			space.collection,
-		// 			payload.date,
-		// 			"upserted",
-		// 			count,
-		// 			elapsed,
-		// 		);
-		// 	},
-		// );
-		// result.upserted = upserted ? papers.length : 0;
-		// if (meta.next_cursor) {
-		// 	if (payload?.count && payload?.count >= meta.count) {
-		// 		throw new Error(
-		// 			`${payload.count} papers was fetched, but there should only be a total of ${meta.count}`,
-		// 		);
-		// 	}
-		// 	await inngest.send({
-		// 		name: eventName,
-		// 		data: {
-		// 			...payload,
-		// 			count: (payload.count ?? 0) + papers.length,
-		// 			nextCursor: meta.next_cursor,
-		// 		},
-		// 	});
-		// }
+		const space = vectorSpaces[payload.space] as VectorSpace;
+
+		const { meta, papers } = await fetchPapers(payload);
+		result.papers = papers.length;
+
+		const embeddings = await generateEmbeddings(
+			papers,
+			space,
+			async (count, elapsed) => {
+				await logEvent(
+					space.collection,
+					payload.date,
+					"embedded",
+					count,
+					elapsed,
+				);
+			},
+		);
+		result.embeddings = embeddings.length;
+
+		const upserted = await upsertPapers(
+			papers,
+			embeddings,
+			space,
+			async (count, elapsed) => {
+				await logEvent(
+					space.collection,
+					payload.date,
+					"upserted",
+					count,
+					elapsed,
+				);
+			},
+		);
+		result.upserted = upserted ? papers.length : 0;
+
+		if (meta.next_cursor) {
+			if (payload?.count && payload?.count >= meta.count) {
+				throw new Error(
+					`${payload.count} papers was fetched, but there should only be a total of ${meta.count}`,
+				);
+			}
+
+			await inngest.send({
+				name: eventName,
+				data: {
+					...payload,
+					count: (payload.count ?? 0) + papers.length,
+					nextCursor: meta.next_cursor,
+				},
+			});
+		}
 	} finally {
 		Time.log(begin, eventId);
 	}
