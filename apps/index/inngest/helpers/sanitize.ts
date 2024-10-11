@@ -22,22 +22,19 @@ export function sanitizePaper(paper: QdrantPaperPayload): QdrantPaperPayload {
 
 	const sanitizedPaper = {
 		...paper,
-		data: {
-			...paper,
-			locations,
-			authorships,
-			referenced_works,
-			related_works,
-		},
+		locations,
+		authorships,
+		referenced_works,
+		related_works,
 	};
 
 	if (Object.keys(removed).length) {
-		sanitizedPaper.data.removed = removed;
+		sanitizedPaper.removed = removed;
 	}
 
 	const arxivId = getArXivid(paper);
 	if (arxivId) {
-		sanitizedPaper.data.ids.arxiv = arxivId;
+		sanitizedPaper.ids.arxiv = arxivId;
 	}
 
 	return sanitizedPaper;
