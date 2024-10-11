@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { generateEmbedding } from "../../data/db/embeddings";
-import { VectorSpace, vectorSpaces } from "../../data/db/vector-spaces";
+import { defaultVectorSpace } from "../../data/db/vector-spaces";
 import {
 	summariseAbstract,
 	summariseTitle,
@@ -54,10 +54,10 @@ export async function GET(request: NextRequest) {
 		apiKey: process.env.QDRANT_API_KEY,
 	});
 
-	const { dimensions, collection } = vectorSpaces["1.5k"] as VectorSpace;
+	const vectorSpace = defaultVectorSpace;
 	const embeddings = await generateEmbedding(
 		[like, unlike as string],
-		dimensions,
+		vectorSpace,
 	);
 	const filter = createFilter(
 		10,
@@ -67,12 +67,12 @@ export async function GET(request: NextRequest) {
 	if (unlike) {
 		console.log(
 			"recommend",
-			collection,
+			vectorSpace.collection,
 			filter,
 			embeddings.at(0)?.length,
 			embeddings.at(1)?.length,
 		);
-		const response = await client.recommend(collection, {
+		const response = await client.recommend(vectorSpace.collection, {
 			...filter,
 			positive: [embeddings.at(0) as number[]],
 			negative: [embeddings.at(1) as number[]],
@@ -102,8 +102,13 @@ export async function GET(request: NextRequest) {
 		});
 	}
 
-	console.log("search", collection, filter, embeddings.at(0)?.length);
-	const response = await client.search(collection, {
+	console.log(
+		"search",
+		vectorSpace.collection,
+		filter,
+		embeddings.at(0)?.length,
+	);
+	const response = await client.search(vectorSpace.collection, {
 		...filter,
 		vector: embeddings.at(0) as number[],
 	});

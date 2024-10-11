@@ -3,9 +3,14 @@ import { inngest } from "../../client";
 import { EventPayload } from "inngest/types";
 import { generateEmbeddings } from "../../../data/db/embeddings";
 import { fetchFromOpenAlex, updatedSinceQuery } from "../../helpers/openalex";
-import { collection, upsertPapers } from "../../../data/db/qdrant";
+import { upsertPapers } from "../../../data/db/qdrant";
 import dayjs from "dayjs";
 import { logEvent as logMetrics } from "@/inngest/helpers/tinybird";
+import {
+	defaultVectorSpaceName,
+	VectorSpace,
+	vectorSpaces,
+} from "@/data/db/vector-spaces";
 
 const eventName = "ingest/oa/yesterday";
 const eventId = "ingest/oa/yesterday/fn";
@@ -18,6 +23,9 @@ export const oaSinceYesterday = {
 		async ({ event }) => {
 			const payload = { ...event.data };
 
+			if (!payload.space) {
+				payload.space = defaultVectorSpaceName;
+			}
 			if (!payload.date) {
 				// Ingest touched since yesterday
 				payload.date = dayjs().subtract(1, "day").format("YYYY-MM-DD");
@@ -35,6 +43,7 @@ type Payload = {
 	date: string;
 	count?: number;
 	nextCursor?: string;
+	space: string;
 };
 
 async function fetchDateWorker(payload: Payload, event?: EventPayload) {
@@ -42,11 +51,14 @@ async function fetchDateWorker(payload: Payload, event?: EventPayload) {
 
 	const begin = Time.now();
 	try {
+		const space = vectorSpaces[payload.space] as VectorSpace;
+
 		const { meta, papers } = await fetchPapers(payload);
 		result.papers = papers.length;
 
 		const embeddings = await generateEmbeddings(
 			papers,
+			space,
 			async (count, elapsed) => {
 				console.log(
 					"[SinceYesterday][embedded] generated ",
@@ -55,7 +67,13 @@ async function fetchDateWorker(payload: Payload, event?: EventPayload) {
 					elapsed,
 					"ms",
 				);
-				await logEvent(payload.date, "embedded", count, elapsed);
+				await logEvent(
+					space.collection,
+					payload.date,
+					"embedded",
+					count,
+					elapsed,
+				);
 			},
 		);
 		result.embeddings = embeddings.length;
@@ -63,6 +81,7 @@ async function fetchDateWorker(payload: Payload, event?: EventPayload) {
 		const upserted = await upsertPapers(
 			papers,
 			embeddings,
+			space,
 			async (count, elapsed) => {
 				console.log(
 					"[SinceYesterday][upserted] upserted ",
@@ -71,7 +90,13 @@ async function fetchDateWorker(payload: Payload, event?: EventPayload) {
 					elapsed,
 					"ms",
 				);
-				await logEvent(payload.date, "upserted", count, elapsed);
+				await logEvent(
+					space.collection,
+					payload.date,
+					"upserted",
+					count,
+					elapsed,
+				);
 			},
 		);
 		result.upserted = upserted ? papers.length : 0;
@@ -109,6 +134,8 @@ async function fetchPapers(payload: Payload) {
 	const begin = Time.now();
 
 	try {
+		const space = vectorSpaces[payload.space] as VectorSpace;
+
 		const { date: yesterday, nextCursor } = payload;
 		const cursor = nextCursor ?? "*";
 
@@ -119,6 +146,7 @@ async function fetchPapers(payload: Payload) {
 			console.log("[SinceYesterday][fetch] ingestion started");
 
 			await logEvent(
+				space.collection,
 				payload.date,
 				"expected",
 				response.meta.count,
@@ -138,6 +166,7 @@ async function fetchPapers(payload: Payload) {
 			"papers",
 		);
 		await logEvent(
+			space.collection,
 			payload.date,
 			"fetched",
 			response.papers.length,
@@ -151,6 +180,7 @@ async function fetchPapers(payload: Payload) {
 }
 
 async function logEvent(
+	collection: string,
 	date: string,
 	name: string,
 	value: number,

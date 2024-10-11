@@ -1,22 +1,49 @@
-import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
+import { QdrantPaper } from "@/inngest/helpers/qdrant.model";
+import { Mistral } from "@mistralai/mistralai";
 import { Time } from "@proemial/utils/time";
 import OpenAI from "openai";
+import { VectorSpace } from "./vector-spaces";
 
-const config = {
-	dimensions: 1536, // default: 1536
-	model: "text-embedding-3-small",
-};
+type Callback = (count: number, elapsed: number) => Promise<void>;
+
+export async function generateEmbeddings(
+	papers: QdrantPaper[],
+	vectorSpace: VectorSpace,
+	callback: Callback,
+): Promise<number[][]> {
+	switch (vectorSpace.model) {
+		case "text-embedding-3-small":
+			return generateOpenAIEmbeddings(papers, vectorSpace, callback);
+		case "mistral-embed":
+			return generateMistralEmbeddings(papers, vectorSpace, callback);
+		default:
+			throw new Error(`Unsupported model: ${vectorSpace.model}`);
+	}
+}
+
+export async function generateEmbedding(
+	text: string[],
+	vectorSpace: VectorSpace,
+): Promise<number[][]> {
+	switch (vectorSpace.model) {
+		case "text-embedding-3-small":
+			return generateOpenAiEmbedding(text, vectorSpace);
+		case "mistral-embed":
+			return generateMistralEmbedding(text, vectorSpace);
+		default:
+			throw new Error(`Unsupported model: ${vectorSpace.model}`);
+	}
+}
 
 const openai = new OpenAI({
 	apiKey: process.env.OPENAI_API_KEY,
 });
 
-type Callback = (count: number, elapsed: number) => Promise<void>;
-
-export async function generateEmbeddings(
-	papers: OpenAlexPaper[],
+async function generateOpenAIEmbeddings(
+	papers: QdrantPaper[],
+	vectorSpace: VectorSpace,
 	callback: Callback,
-) {
+): Promise<number[][]> {
 	if (!papers.length) {
 		return [];
 	}
@@ -24,8 +51,9 @@ export async function generateEmbeddings(
 	const begin = Time.now();
 	try {
 		const response = await openai.embeddings.create({
-			...config,
-			input: papers.map((p) => `${p.data.title} ${p.data.abstract}`),
+			model: vectorSpace.model,
+			dimensions: vectorSpace.dimensions,
+			input: papers.map((p) => `${p.payload.title} ${p.payload.abstract}`),
 		});
 
 		const embeddings = response.data.map((d) => d.embedding);
@@ -33,21 +61,83 @@ export async function generateEmbeddings(
 
 		return embeddings;
 	} finally {
-		Time.log(begin, `generateEmbeddings(${papers.length})`);
+		Time.log(begin, `generateOpenAIEmbeddings(${papers.length})`);
 	}
 }
 
-export async function generateEmbedding(text: string[], dimensions: number) {
+async function generateOpenAiEmbedding(
+	text: string[],
+	vectorSpace: VectorSpace,
+): Promise<number[][]> {
 	const begin = Time.now();
 	try {
 		return (
 			await openai.embeddings.create({
-				...config,
-				dimensions,
+				model: vectorSpace.model,
+				dimensions: vectorSpace.dimensions,
 				input: text.filter((t) => t?.length),
 			})
 		).data.map((d) => d.embedding);
 	} finally {
-		Time.log(begin, `generateEmbedding(${text?.length})`);
+		Time.log(begin, `generateOpenAiEmbedding(${text?.length})`);
+	}
+}
+
+const mistral = new Mistral({
+	apiKey: process.env.MISTRAL_API_KEY,
+});
+
+async function generateMistralEmbeddings(
+	papers: QdrantPaper[],
+	vectorSpace: VectorSpace,
+	callback: Callback,
+): Promise<number[][]> {
+	if (!papers.length) {
+		return [];
+	}
+
+	const begin = Time.now();
+	try {
+		const batchSize = 25;
+		let embeddings: number[][] = [];
+
+		for (let i = 0; i < papers.length; i += batchSize) {
+			const batch = papers.slice(i, i + batchSize);
+			const response = await mistral.embeddings.create({
+				model: vectorSpace.model,
+				inputs: batch.map((p) => `${p.payload.title} ${p.payload.abstract}`),
+			});
+
+			const batchEmbeddings = response.data
+				.filter((d): d is { embedding: number[] } => d.embedding !== undefined)
+				.map((d) => d.embedding);
+
+			embeddings = embeddings.concat(batchEmbeddings);
+		}
+		await callback(embeddings.length, Time.elapsed(begin));
+
+		return embeddings;
+	} finally {
+		Time.log(begin, `generateMistralEmbeddings(${papers.length})`);
+	}
+}
+
+async function generateMistralEmbedding(
+	text: string[],
+	vectorSpace: VectorSpace,
+): Promise<number[][]> {
+	const begin = Time.now();
+
+	try {
+		const response = await mistral.embeddings.create({
+			model: vectorSpace.model,
+			inputs: text.filter((t) => t?.length),
+		});
+
+		return response.data
+			.filter((d): d is { embedding: number[] } => d.embedding !== undefined)
+			.map((d) => d.embedding);
+	} finally {
+		Time.log(begin, `generateMistralEmbedding(${text.length})`);
 	}
 }

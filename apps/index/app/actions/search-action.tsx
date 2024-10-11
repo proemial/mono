@@ -67,22 +67,24 @@ export const searchAction = async (
 		search: -1,
 	};
 
-	const { dimensions, collection } = vectorSpaces[index] as VectorSpace;
+	const vectorSpace = vectorSpaces[index] as VectorSpace;
 	let begin = Time.now();
-	const embeddings = await generateEmbedding([query, negatedQuery], dimensions);
+	const embeddings = await generateEmbedding(
+		[query, negatedQuery],
+		vectorSpace,
+	);
 	metrics.embeddings = Time.elapsed(begin);
 	const filter = createFilter(count, from, fullVectorSearch);
 
 	if (negatedQuery) {
 		console.log(
 			"recommend",
-			collection,
 			filter,
 			embeddings.at(0)?.length,
 			embeddings.at(1)?.length,
 		);
 		begin = Time.now();
-		const response = await client.recommend(collection, {
+		const response = await client.recommend(vectorSpace.collection, {
 			...filter,
 			positive: [embeddings.at(0) as number[]],
 			negative: [embeddings.at(1) as number[]],
@@ -97,9 +99,9 @@ export const searchAction = async (
 		} as SearchResult;
 	}
 
-	console.log("search", collection, filter, embeddings[0]?.length);
+	console.log("search", vectorSpace.collection, filter, embeddings[0]?.length);
 	begin = Time.now();
-	const response = await client.search(collection, {
+	const response = await client.search(vectorSpace.collection, {
 		...filter,
 		vector: embeddings.at(0) as number[],
 	});

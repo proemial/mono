@@ -1,13 +1,16 @@
 import {
 	oaBaseArgs,
 	oaBaseUrl,
+	OpenAlexPaperWithAbstract,
 	OpenAlexWorksHit,
 	OpenAlexWorksSearchResult,
 } from "@proemial/repositories/oa/models/oa-paper";
 import { fetchJson } from "@proemial/utils/fetch";
 import { fromInvertedIndex } from "@proemial/utils/string";
-import { QdrantPaper, Provider } from "./qdrant.model";
+import { Provider, QdrantPaper, QdrantPaperPayload } from "./qdrant.model";
 import dayjs from "dayjs";
+import { getArXivid, sanitizePaper } from "./sanitize";
+import { qdrantId } from "@/data/db/qdrant";
 
 export async function fetchFromOpenAlex(
 	params: string,
@@ -19,19 +22,23 @@ export async function fetchFromOpenAlex(
 	);
 
 	// Filter out papers that don't have a title and abstract
-	const withTitleAndAbstract = (paper: OpenAlexWorksHit) =>
+	const hasTitleAndAbstract = (paper: OpenAlexWorksHit) =>
 		!!paper.abstract_inverted_index && !!paper.title;
 
-	const papers = results.filter(withTitleAndAbstract).map((paper) => {
+	const papers = results.filter(hasTitleAndAbstract).map((paper) => {
 		// Remove the abstract_inverted_index and relevance_score from the response
 		const { abstract_inverted_index, relevance_score, ...rest } = paper;
 
+		const sanitizedPaper = sanitizePaper({
+			...rest,
+			abstract: fromInvertedIndex(abstract_inverted_index, 350),
+			provider: "openalex",
+		} as QdrantPaperPayload);
+
+		const arxivId = getArXivid(sanitizedPaper);
 		return {
-			data: {
-				...rest,
-				abstract: fromInvertedIndex(abstract_inverted_index, 350),
-				provider,
-			},
+			id: qdrantId(arxivId ?? paper.id),
+			payload: sanitizedPaper,
 		} as QdrantPaper;
 	});
 

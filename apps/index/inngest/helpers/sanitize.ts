@@ -1,21 +1,21 @@
-import { QdrantPaper } from "./qdrant.model";
+import { QdrantPaperPayload } from "./qdrant.model";
 
-export function sanitizePaper(paper: QdrantPaper) {
+export function sanitizePaper(paper: QdrantPaperPayload): QdrantPaperPayload {
 	const removed = {} as { [key: string]: number | undefined };
 
-	const [authorships, addAuth] = slice(paper.data.authorships, 20);
+	const [authorships, addAuth] = slice(paper.authorships, 20);
 	if (addAuth) {
 		removed.authorships = addAuth;
 	}
-	const [locations, addLoc] = slice(paper.data.locations, 20);
+	const [locations, addLoc] = slice(paper.locations, 20);
 	if (addLoc) {
 		removed.locations = addLoc;
 	}
-	const [referenced_works, addRef] = slice(paper.data.referenced_works, 20);
+	const [referenced_works, addRef] = slice(paper.referenced_works, 20);
 	if (addRef) {
 		removed.referenced_works = addRef;
 	}
-	const [related_works, addRel] = slice(paper.data.related_works, 20);
+	const [related_works, addRel] = slice(paper.related_works, 20);
 	if (addRel) {
 		removed.related_works = addRel;
 	}
@@ -23,7 +23,7 @@ export function sanitizePaper(paper: QdrantPaper) {
 	const sanitizedPaper = {
 		...paper,
 		data: {
-			...paper.data,
+			...paper,
 			locations,
 			authorships,
 			referenced_works,
@@ -43,9 +43,9 @@ export function sanitizePaper(paper: QdrantPaper) {
 	return sanitizedPaper;
 }
 
-function getArXivid(paper: QdrantPaper) {
-	const arxivLocation = paper.data.locations.find((location) =>
-		location.landing_page_url.toLocaleLowerCase().includes("arxiv.org"),
+export function getArXivid(paper: QdrantPaperPayload) {
+	const arxivLocation = paper.locations.find((location) =>
+		location.landing_page_url?.toLocaleLowerCase().includes("arxiv.org"),
 	);
 
 	if (arxivLocation) {

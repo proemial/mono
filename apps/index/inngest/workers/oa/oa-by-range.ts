@@ -1,3 +1,4 @@
+import { defaultVectorSpaceName } from "@/data/db/vector-spaces";
 import { inngest } from "../../client";
 import { Time } from "@proemial/utils/time";
 import dayjs from "dayjs";
@@ -12,8 +13,11 @@ export const oaByRangeStream = {
 		{ event: eventName },
 		async ({ event }) => {
 			const begin = Time.now();
-			console.log("event", event);
+			const payload = { ...event.data };
 
+			if (!payload.space) {
+				payload.space = defaultVectorSpaceName;
+			}
 			if (!event.data?.from || !event.data?.to) {
 				throw new Error("No from or to date provided");
 			}
@@ -23,7 +27,10 @@ export const oaByRangeStream = {
 			while (date.isBefore(dayjs(event.data.to).add(1, "day"))) {
 				await inngest.send({
 					name: "ingest/oa/date",
-					data: {date: date.format("YYYY-MM-DD")},
+					data: {
+						date: date.format("YYYY-MM-DD"),
+						space: payload.space,
+					},
 				});
 				date = date.add(1, "day");
 				count++;
