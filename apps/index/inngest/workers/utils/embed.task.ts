@@ -3,12 +3,12 @@ import {
 	defaultVectorSpaceName,
 	VectorSpace,
 	vectorSpaces,
-} from "../../data/db/vector-spaces";
-import { inngest } from "../client";
-import { generateEmbedding } from "../../data/db/embeddings";
+} from "../../../data/db/vector-spaces";
+import { inngest } from "../../client";
+import { generateEmbedding } from "../../../data/db/embeddings";
 
-const eventName = "ingest/embed";
-const eventId = "ingest/embed/fn";
+const eventName = "utils/embed";
+const eventId = "utils/embed/fn";
 
 export const embedTask = {
 	name: eventName,
