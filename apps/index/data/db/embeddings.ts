@@ -98,7 +98,7 @@ async function generateMistralEmbeddings(
 
 	const begin = Time.now();
 	try {
-		const batchSize = 25;
+		const batchSize = 10;
 		let embeddings: number[][] = [];
 
 		for (let i = 0; i < papers.length; i += batchSize) {
