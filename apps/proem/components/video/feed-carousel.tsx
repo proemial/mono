@@ -36,7 +36,7 @@ export const FeedCarousel = () => {
 		>
 			<CarouselContent className="-mt-1 h-[calc(100dvh-72px)]">
 				<VideoCarouselItem
-					src="/magic-mice-125x-compressed.mp4"
+					src="/videos/magic-mice-125x-compressed.mp4"
 					paperLink="/oa/W4402975017"
 					api={api}
 					isCurrent={current === 0}
@@ -71,7 +71,7 @@ export const FeedCarousel = () => {
 					src="/videos/quitting-smoking-w4400000163.mp4"
 					paperLink="/oa/W4400000163"
 					api={api}
-					isCurrent={current === 5}
+					isCurrent={current === 4}
 					muted={muted}
 					setMuted={setMuted}
 				/>
