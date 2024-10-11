@@ -3,6 +3,9 @@ type Video = {
 	paperLink: string;
 };
 
+/**
+ * Note: Remember to add the video to `apps/proem/public/videos`.
+ */
 export const staticVideos = [
 	{
 		src: "/videos/magic-mice-125x-compressed.mp4",
