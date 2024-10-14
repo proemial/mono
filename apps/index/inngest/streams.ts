@@ -4,6 +4,7 @@ import { oaSinceYesterday } from "./workers/oa/oa-yesterday.task";
 import { oaScheduler } from "./scheduler/oa-scheduler.task";
 import { embedTask } from "./workers/utils/embed.task";
 import { uuidTask } from "./workers/utils/uuid.task";
+import { syncIndicesStream } from "./workers/utils/sync-indices";
 
 export const workers = [
 	oaByDateStream.worker,
@@ -11,6 +12,7 @@ export const workers = [
 	oaSinceYesterday.worker,
 	embedTask.worker,
 	uuidTask.worker,
+	syncIndicesStream.worker,
 ];
 
 export const schedulers =

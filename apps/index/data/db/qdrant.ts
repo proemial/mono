@@ -12,6 +12,12 @@ export function qdrantId(id: string) {
 
 type Callback = (count: number, elapsed: number) => Promise<void>;
 
+export const QdrantPapers = {
+	upsert: upsertPapers,
+	all: getAll,
+	byIds: getByIds,
+};
+
 export async function upsertPapers(
 	papers: QdrantPaper[],
 	embeddings: number[][],
@@ -46,4 +52,41 @@ export async function upsertPapers(
 	} finally {
 		Time.log(begin, `upsertPapers(${papers.length})`);
 	}
+}
+
+async function getAll(vectorSpace: VectorSpace, offset?: string, limit = 200) {
+	const client = new QdrantClient({
+		url: process.env.QDRANT_URL,
+		apiKey: process.env.QDRANT_API_KEY,
+	});
+
+	return client.scroll(vectorSpace.collection, {
+		with_payload: false,
+		offset,
+		limit,
+	});
+}
+
+async function getByIds(
+	vectorSpace: VectorSpace,
+	ids: string[],
+	limit = 200,
+	withPayload = true,
+	offset?: string,
+) {
+	const client = new QdrantClient({
+		url: process.env.QDRANT_URL,
+		apiKey: process.env.QDRANT_API_KEY,
+	});
+
+	return client.scroll(vectorSpace.collection, {
+		filter: {
+			must: {
+				has_id: ids,
+			},
+		},
+		with_payload: withPayload,
+		offset,
+		limit,
+	});
 }
