@@ -1,19 +1,25 @@
-import { OnboardingCarousel } from "@/components/onboarding";
-import FeaturedLink from "./featured-link";
-import { staticItems } from "./random-static-item";
-import { FeedCarousel } from "@/components/video/feed-carousel";
+import dynamic from "next/dynamic";
 
-export default async function DiscoverPage() {
+const VideoCarousel = dynamic(
+	() =>
+		import("@/components/video/video-carousel").then(
+			(mod) => mod.VideoCarousel,
+		),
+	{ ssr: false },
+);
+const VideoList = dynamic(
+	() => import("@/components/video/video-list").then((mod) => mod.VideoList),
+	{ ssr: false },
+);
+
+export default function DiscoverPage() {
 	return (
 		<>
-			<div className="sm:hidden flex flex-col">
-				<FeedCarousel />
+			<div className="sm:hidden block">
+				<VideoCarousel />
 			</div>
-			<div className="hidden sm:flex flex-col gap-2">
-				<OnboardingCarousel />
-				{staticItems.map((item, index) => (
-					<FeaturedLink key={index} item={item} />
-				))}
+			<div className="hidden sm:block">
+				<VideoList />
 			</div>
 		</>
 	);

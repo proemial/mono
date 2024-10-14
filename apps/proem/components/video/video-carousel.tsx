@@ -1,18 +1,11 @@
 "use client";
 
-import {
-	Carousel,
-	CarouselApi,
-	CarouselContent,
-	CarouselItem,
-} from "@proemial/shadcn-ui";
+import { Carousel, CarouselApi, CarouselContent } from "@proemial/shadcn-ui";
 import { useEffect, useState } from "react";
 import { VideoCarouselItem } from "./video-carousel-item";
-import FeaturedLink from "@/app/(pages)/(app)/space/(discover)/featured-link";
-import { staticItems } from "@/app/(pages)/(app)/space/(discover)/random-static-item";
 import { staticVideos } from "./static-videos";
 
-export const FeedCarousel = () => {
+export const VideoCarousel = () => {
 	const [api, setApi] = useState<CarouselApi>();
 	const [muted, setMuted] = useState(true);
 	const [current, setCurrent] = useState(0);
@@ -43,15 +36,10 @@ export const FeedCarousel = () => {
 						paperLink={video.paperLink}
 						api={api}
 						isCurrent={current === index}
-						muted={muted}
-						setMuted={setMuted}
+						isMuted={muted}
+						toggleMuted={() => setMuted(!muted)}
 					/>
 				))}
-				{/* {staticItems.map((item, index) => (
-					<CarouselItem key={index} className="py-1">
-						<FeaturedLink item={item} />
-					</CarouselItem>
-				))} */}
 			</CarouselContent>
 		</Carousel>
 	);
