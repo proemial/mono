@@ -13,7 +13,7 @@ const eventName = "ingest/sync";
 const eventId = "ingest/sync/fn";
 
 const windowSize = 200;
-const maxUpsert = 400; //250000;
+const maxUpsert = 300000;
 
 export const syncIndicesStream = {
 	name: eventName,
