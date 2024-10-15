@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser as useClerkUser } from "@clerk/nextjs";
-import { getProfileFromClerkUser } from "@proemial/models/clerk-user";
+import { getProfileFromClerkUser } from "@proemial/adapters/clerk/clerk-user";
 import { getCookie } from "cookies-next";
 
 export const INTERNAL_COOKIE_NAME = "internalUser";

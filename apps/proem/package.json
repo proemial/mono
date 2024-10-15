@@ -25,7 +25,6 @@
 		"@langchain/openai": "^0.2.6",
 		"@proemial/adapters": "workspace:*",
 		"@proemial/data": "workspace:*",
-		"@proemial/models": "workspace:*",
 		"@proemial/repositories": "workspace:*",
 		"@proemial/shadcn-ui": "workspace:*",
 		"@proemial/utils": "workspace:*",
