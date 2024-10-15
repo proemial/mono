@@ -2,7 +2,7 @@ import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)
 import { PaperReadsService } from "@/services/paper-reads-service";
 import { PostService } from "@/services/post-service";
 import { auth } from "@clerk/nextjs/server";
-import { Redis } from "@proemial/redis/redis";
+import { Redis } from "@proemial/adapters/redis";
 import { Metadata } from "next";
 import { Suspense } from "react";
 import { generate } from "../../../paper/oa/[id]/llm-generate";

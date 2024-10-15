@@ -1,8 +1,8 @@
 import { generateStarters } from "@/app/prompts/starters";
 import { summarise } from "@/app/prompts/summarise-title";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
-import { Prefix } from "@proemial/redis/adapters/papers";
-import { Redis } from "@proemial/redis/redis";
+import { Prefix } from "@proemial/adapters/redis/papers";
+import { Redis } from "@proemial/adapters/redis";
 
 export async function generate(paper: OpenAlexPaper, prefix = "oa") {
 	const paperTitle = paper?.data?.title;

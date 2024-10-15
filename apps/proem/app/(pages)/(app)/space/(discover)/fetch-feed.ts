@@ -6,7 +6,7 @@ import {
 } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { fetchPaperWithPostsAndReaders } from "@/app/data/fetch-paper-with-posts-and-readers";
 import { summarise } from "@/app/prompts/summarise-title";
-import { Redis } from "@proemial/redis/redis";
+import { Redis } from "@proemial/adapters/redis";
 import { RankedPaperId } from "@proemial/repositories/oa/fingerprinting/rerank";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 

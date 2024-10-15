@@ -1,5 +1,5 @@
 import { isArxivPaperId } from "@/utils/is-arxiv-paper-id";
-import { Redis } from "@proemial/redis/redis";
+import { Redis } from "@proemial/adapters/redis";
 import {
 	OpenAlexMeta,
 	OpenAlexPaper,

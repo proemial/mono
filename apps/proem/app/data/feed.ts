@@ -14,7 +14,7 @@ import { summarise } from "@/app/prompts/summarise-title";
 import { feedSettings } from "@/feature-flags/feed-settings";
 import { PaperReadsService } from "@/services/paper-reads-service";
 import { Paper } from "@proemial/data/paper";
-import { Redis } from "@proemial/redis/redis";
+import { Redis } from "@proemial/adapters/redis";
 import { getFeatureFilter } from "@proemial/repositories/oa/fingerprinting/features";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { unstable_cache } from "next/cache";

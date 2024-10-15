@@ -5,7 +5,7 @@ import Markdown from "@/components/markdown";
 import { BasicReaderUserData } from "@/services/paper-reads-service";
 import { PostWithCommentsAndAuthor } from "@/services/post-service";
 import { trimForQuotes } from "@/utils/string-utils";
-import { Prefix } from "@proemial/redis/adapters/papers";
+import { Prefix } from "@proemial/adapters/redis/papers";
 import { FeatureType } from "@proemial/repositories/oa/fingerprinting/features";
 import { RankedPaperFeature } from "@proemial/repositories/oa/fingerprinting/rerank";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";

@@ -1,6 +1,6 @@
 import { fetchFromArxiv } from "@proemial/repositories/arxiv/fetch/papers";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
-import { Redis } from "@proemial/redis/redis";
+import { Redis } from "@proemial/adapters/redis";
 import { cache } from "react";
 
 export const fetchArxivPaper = cache(

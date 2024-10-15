@@ -7,7 +7,7 @@ import { UpStash } from "./upstash-client";
 
 export type Prefix = "oa" | "arxiv";
 
-export const OpenAlexPapers = {
+export const RedisPapers = {
 	get: async (id: string, prefix: Prefix = "oa") => {
 		try {
 			return (await UpStash.papers().get(
@@ -27,7 +27,7 @@ export const OpenAlexPapers = {
 
 		try {
 			const chunkSize = 30;
-			const chunks = [];
+			const chunks: string[][] = [];
 			for (let i = 0; i < ids.length; i += chunkSize) {
 				chunks.push(ids.slice(i, i + chunkSize));
 			}
@@ -140,7 +140,7 @@ export const OpenAlexPapers = {
 			);
 
 			if (missingPapers.length > 0) {
-				await OpenAlexPapers.pushAll(missingPapers);
+				await RedisPapers.pushAll(missingPapers);
 			}
 		} catch (error) {
 			console.error(error);

@@ -6,7 +6,7 @@ import {
 	PaperMetaData,
 	PaperMetaDataProps,
 } from "@/components/paper-meta-data"; // Updated import
-import { Prefix } from "@proemial/redis/adapters/papers";
+import { Prefix } from "@proemial/adapters/redis/papers";
 import { AlertTriangle } from "@untitled-ui/icons-react";
 import { ReactNode, useMemo } from "react";
 

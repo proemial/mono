@@ -3,7 +3,7 @@
 import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { generate } from "@/app/(pages)/(app)/paper/oa/[id]/llm-generate";
 import { waitFor } from "@/utils/sleep";
-import { Redis } from "@proemial/redis/redis";
+import { Redis } from "@proemial/adapters/redis";
 
 type DailyPaper = {
 	paper: {

@@ -1,6 +1,6 @@
 "use server";
 
-import { Redis } from "@proemial/redis/redis";
+import { Redis } from "@proemial/adapters/redis";
 
 // https://www.oxen.ai/blog/reading-list-for-andrej-karpathys-intro-to-large-language-models-video
 const ANDREJ_KARPATHY_LLM_READING_LIST = [

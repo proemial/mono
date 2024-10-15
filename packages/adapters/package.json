@@ -1,5 +1,5 @@
 {
-	"name": "@proemial/redis",
+	"name": "@proemial/adapters",
 	"version": "0.0.0",
 	"main": "./index.ts",
 	"types": "./index.ts",

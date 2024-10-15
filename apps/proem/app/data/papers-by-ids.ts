@@ -3,7 +3,7 @@ import {
 	fetchPapers,
 } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { summarise } from "@/app/prompts/summarise-title";
-import { Redis } from "@proemial/redis/redis";
+import { Redis } from "@proemial/adapters/redis";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 
 export const fromIds = async (ids: string[]) => {
