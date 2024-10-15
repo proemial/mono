@@ -81,7 +81,8 @@
 		"sharp": "^0.33.3",
 		"tailwind-scrollbar-hide": "1.1.7",
 		"zod-to-json-schema": "3.23.2",
-		"zustand": "^4.5.5"
+		"zustand": "^4.5.5",
+		"feed": "^4.2.2"
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",

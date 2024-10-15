@@ -22,7 +22,7 @@ export default async function EmbedVectorSpacePage({
 		<div>
 			<div>
 				{response.papers?.map((p) => (
-					<div key={p.id}>{p.title}</div>
+					<div key={p.paper.id}>{p.paper.title}</div>
 				))}
 			</div>
 			<div>

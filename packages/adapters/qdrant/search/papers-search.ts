@@ -133,11 +133,7 @@ export type SearchMetrics = {
 
 export type QdrantSearchHit = {
 	score: number;
-	title: string;
-	created: string;
-	abstract: string;
-	id: string;
-	features: SearchHitFeature[];
+	paper: OpenAlexPaperWithAbstract;
 };
 
 export type SearchHitFeature = {
@@ -153,11 +149,7 @@ function asSearchHit(
 ): QdrantSearchHit {
 	return {
 		score: score,
-		id: payload.id,
-		title: payload.title,
-		created: payload.created_date,
-		abstract: payload.abstract as string,
-		features: asFeatures(payload),
+		paper: payload,
 	};
 }
 
