@@ -6,4 +6,9 @@ export const UpStash = {
 			url: process.env.REDIS_PAPERS_URL,
 			token: process.env.REDIS_PAPERS_TOKEN,
 		}),
+	spaces: () =>
+		new Redis({
+			url: process.env.REDIS_SPACES_URL,
+			token: process.env.REDIS_SPACES_TOKEN,
+		}),
 };
