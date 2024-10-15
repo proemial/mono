@@ -51,9 +51,6 @@ importers:
       '@mistralai/mistralai':
         specifier: ^1.1.0
         version: 1.1.0(zod@3.23.8)
-      '@proemial/models':
-        specifier: workspace:*
-        version: link:../../packages/models
       '@proemial/repositories':
         specifier: workspace:*
         version: link:../../packages/repositories
@@ -166,9 +163,6 @@ importers:
       '@proemial/data':
         specifier: workspace:*
         version: link:../../packages/data
-      '@proemial/models':
-        specifier: workspace:*
-        version: link:../../packages/models
       '@proemial/repositories':
         specifier: workspace:*
         version: link:../../packages/repositories
@@ -458,15 +452,6 @@ importers:
       pg:
         specifier: ^8.11.5
         version: 8.12.0
-
-  packages/models:
-    devDependencies:
-      '@proemial/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      fast-xml-parser:
-        specifier: ^4.4.1
-        version: 4.4.1
 
   packages/repositories:
     dependencies:
@@ -8938,6 +8923,7 @@ packages:
     hasBin: true
     dependencies:
       strnum: 1.0.5
+    dev: false
 
   /fastest-levenshtein@1.0.16:
     resolution: {integrity: sha512-eRnCtTTtGZFpQCwhJiUOuxPQWRXVKYDn0b2PeHfXL6/Zi53SLAzAHfVhVWK2AryC/WH05kGfxhFIPvTF0SXQzg==}
@@ -13908,6 +13894,7 @@ packages:
 
   /strnum@1.0.5:
     resolution: {integrity: sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==}
+    dev: false
 
   /style-to-object@1.0.6:
     resolution: {integrity: sha512-khxq+Qm3xEyZfKd/y9L3oIWQimxuc4STrQKtQn8aSDRHb8mFgpukgX1hdzfrMEW6JCjyJ8p89x+IUMVnCBI1PA==}
