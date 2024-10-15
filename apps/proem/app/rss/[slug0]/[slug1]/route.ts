@@ -30,8 +30,8 @@ export async function GET(
 	);
 
 	const feed = new Feed({
-		title: space?.metadata.title,
-		description: space?.metadata.description,
+		title: space?.metadata.title ?? "Proem",
+		description: space?.metadata.description ?? "Proem",
 		id: req.url,
 		link: req.url,
 		image: "https://proem.ai/proem.png",
