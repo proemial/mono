@@ -4,6 +4,7 @@ import { OpenAlexPaper } from "../repositories/oa/models/oa-paper";
 import { RedisPapers } from "./redis/papers";
 
 import { z } from "zod";
+import { RedisSpaces } from "./redis/spaces";
 
 export const envVariables = z.object({
 	REDIS_PAPERS_TOKEN: z.string(),
@@ -20,4 +21,5 @@ declare global {
 
 export const Redis = {
 	papers: RedisPapers,
+	spaces: RedisSpaces,
 };

@@ -1,5 +1,5 @@
 import { AddToCollectionButtonProps } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
-import { SpacePapers } from "@/app/embed/[space]/space-papers";
+import { SpacePapers } from "@/app/embed/[slug0]/space-papers";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { MicroAbstract } from "@/components/chat-abstract";
 import { AIGeneratedIcon } from "@/components/icons/AIGeneratedIcon";

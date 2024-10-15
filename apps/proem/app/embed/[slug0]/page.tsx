@@ -1,11 +1,12 @@
-import { CollectionService } from "@/services/collection-service";
+import { CollectionService } from "../../../services/collection-service";
 import { notFound } from "next/navigation";
 import { SpacePapers } from "./space-papers";
+import React from "react";
 
 // c1:AFD4145,c2:F8F8F8
 type Props = {
 	params: {
-		space: string;
+		slug0: string;
 	};
 	searchParams: {
 		count?: number;
@@ -16,7 +17,7 @@ type Props = {
 };
 
 export default async function EmbedPage({
-	params: { space },
+	params: { slug0: space },
 	searchParams: { count, background },
 }: Props) {
 	const collection = await CollectionService.getCollection(space);

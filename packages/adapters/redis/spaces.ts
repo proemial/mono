@@ -3,9 +3,9 @@ import { UpStash } from "./upstash-client";
 import { VectorSpaceName } from "../qdrant/vector-spaces";
 
 export const RedisSpaces = {
-	get: async (slugs: SpaceSlugs) => {
+	get: async (slugs: string[]) => {
 		const begin = Time.now();
-		const identifier = `${slugs.owner}/${slugs.space}`;
+		const identifier = `${slugs.at(0)}/${slugs.at(1)}`;
 
 		try {
 			return (await UpStash.spaces().get(`${identifier}`)) as RedisSpace | null;
