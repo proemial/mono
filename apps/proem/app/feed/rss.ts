@@ -6,16 +6,9 @@ import { defaultVectorSpace } from "@proemial/adapters/qdrant/vector-spaces";
 import { Redis } from "@proemial/adapters/redis";
 import dayjs from "dayjs";
 import { Feed } from "feed";
-import { NextRequest } from "next/server";
 
-export async function GET(
-	req: NextRequest,
-	{ params }: { params: { slug0: string; slug1: string } },
-) {
-	const { searchParams } = new URL(req.url);
-	const format = searchParams.get("format") || "rss";
-
-	const space = await Redis.spaces.get([params.slug0, params.slug1]);
+export async function rssFeed(url: string, slug0: string, slug1: string) {
+	const space = await Redis.spaces.get([slug0, slug1]);
 	const response = await QdrantPapers.search(
 		defaultVectorSpace.collection,
 		[space?.vectors.like, space?.vectors.unlike].filter(
@@ -30,17 +23,17 @@ export async function GET(
 	);
 
 	const feed = new Feed({
-		title: space?.metadata.title ?? "Proem",
-		description: space?.metadata.description ?? "Proem",
-		id: req.url,
-		link: req.url,
+		title: space?.metadata.title ?? "",
+		description: space?.metadata.description ?? "",
+		id: url,
+		link: url,
 		image: "https://proem.ai/proem.png",
 		favicon: "https://proem.ai/favicon.ico",
 		copyright: "All rights reserved 2024, proem.ai",
 		generator: "proem.ai",
 		feedLinks: {
-			json: req.url,
-			atom: `${req.url}?format=atom`,
+			rss: `https://proem.ai/feed/rss/${slug0}/${slug1}`,
+			atom: `https://proem.ai/feed/atom/${slug0}/${slug1}`,
 		},
 		author: {
 			name: space?.metadata.author?.name,
@@ -60,9 +53,7 @@ export async function GET(
 		});
 	});
 
-	return new Response(format === "rss" ? feed.rss2() : feed.atom1(), {
-		headers: { "Content-Type": "text/xml" },
-	});
+	return feed;
 }
 
 async function mapToResult(hit: QdrantSearchHit) {
@@ -75,8 +66,8 @@ async function mapToResult(hit: QdrantSearchHit) {
 		hit.paper.abstract as string,
 	);
 	return {
-		title,
-		description,
+		title: hit.paper.title ?? "",
+		description: hit.paper.abstract ?? "",
 		url: `https://proem.ai/paper/oa/${hit.paper.id.split("/").pop()}`,
 		date: dayjs(hit.paper.created_date).toDate(),
 		author: hit.paper.authorships.map((a) => ({
