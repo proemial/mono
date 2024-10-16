@@ -1,8 +1,8 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { generateText } from "ai";
 
-const model = "claude-3-haiku-20240307";
-const prompt = (title: string, abstract: string) =>
+export const model = "claude-3-haiku-20240307";
+export const prompt = (title: string, abstract: string) =>
 	`
 You will be summarizing research papers into captivating headlines. The goal is to capture the societal impact of the main finding of the paper in a concise, news worthy, tweet-like, and attention-grabbing sentence.
 

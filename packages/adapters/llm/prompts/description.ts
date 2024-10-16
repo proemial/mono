@@ -2,8 +2,8 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
 import { openaiOrganizations } from "./openai-keys";
 
-const model = "gpt-3.5-turbo-0125";
-const prompt = (title: string, abstract: string) =>
+export const model = "gpt-3.5-turbo-0125";
+export const prompt = (title: string, abstract: string) =>
 	`
 You are a skilled assistant adept at distilling complex scientific information into concise, clear summaries that 
 can be understood by people from various backgrounds, not just experts in the field.
