@@ -10,7 +10,7 @@ import {
 } from "@/app/data/fetch-feed";
 import { Fingerprint } from "@/app/data/fingerprint";
 import { Post } from "@/app/data/post";
-import { summarise } from "@/app/prompts/summarise-title";
+import { summariseTitle } from "@proemial/adapters/llm/prompts/microtitle";
 import { feedSettings } from "@/feature-flags/feed-settings";
 import { PaperReadsService } from "@/services/paper-reads-service";
 import { Paper } from "@proemial/data/paper";
@@ -481,7 +481,7 @@ export module Feed {
 
 				if (!generatedTitle && paperTitle && abstract) {
 					console.log("Enhancing paper", currentPaper.id);
-					const title = (await summarise(paperTitle, abstract)) as string;
+					const title = (await summariseTitle(paperTitle, abstract)) as string;
 					const generated = currentPaper.generated
 						? { ...currentPaper.generated, title }
 						: { title };

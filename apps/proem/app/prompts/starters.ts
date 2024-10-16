@@ -1,4 +1,4 @@
-import { openaiOrganizations } from "@/app/prompts/openai-keys";
+import { openaiOrganizations } from "@proemial/adapters/llm/prompts/openai-keys";
 import { env } from "@/env/server";
 import OpenAI from "openai";
 

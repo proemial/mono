@@ -1,8 +1,9 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { generateText } from "ai";
 
-export async function summarise(title: string, abstract: string) {
-	const prompt = `
+const model = "claude-3-haiku-20240307";
+const prompt = (title: string, abstract: string) =>
+	`
 You will be summarizing research papers into captivating headlines. The goal is to capture the societal impact of the main finding of the paper in a concise, news worthy, tweet-like, and attention-grabbing sentence.
 
 Here is the text of the research paper:
@@ -23,11 +24,12 @@ Then, create a captivating news headline for the paper by following these guidel
 - Keep the headline around 12 words.
 
 Now, output the headline. Nothing else:
-	`.trim();
+`.trim();
 
+export async function summariseTitle(title: string, abstract: string) {
 	const res = await generateText({
-		model: anthropic("claude-3-haiku-20240307"),
-		prompt,
+		model: anthropic(model),
+		prompt: prompt(title, abstract),
 	});
 
 	return res.text;

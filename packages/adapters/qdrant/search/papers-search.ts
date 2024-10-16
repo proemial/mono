@@ -1,7 +1,8 @@
 import { OpenAlexPaperWithAbstract } from "@proemial/repositories/oa/models/oa-paper";
 import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-topics-compact";
 import { Time } from "@proemial/utils/time";
-import { generateEmbedding } from "./embeddings";
+import { generateEmbedding } from "../../llm/embeddings";
+
 import {
 	VectorSpace,
 	VectorSpaceName,

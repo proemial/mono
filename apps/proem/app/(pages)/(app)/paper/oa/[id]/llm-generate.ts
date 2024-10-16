@@ -1,5 +1,5 @@
 import { generateStarters } from "@/app/prompts/starters";
-import { summarise } from "@/app/prompts/summarise-title";
+import { summariseTitle } from "@proemial/adapters/llm/prompts/microtitle";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Prefix } from "@proemial/adapters/redis/papers";
 import { Redis } from "@proemial/adapters/redis";
@@ -13,7 +13,7 @@ export async function generate(paper: OpenAlexPaper, prefix = "oa") {
 			? await generateStarters(paperTitle, abstract)
 			: paper.generated.starters;
 		const title = !paper.generated?.title
-			? ((await summarise(paperTitle, abstract)) as string)
+			? ((await summariseTitle(paperTitle, abstract)) as string)
 			: paper.generated.title;
 
 		const updatedPaper = await Redis.papers.upsert(

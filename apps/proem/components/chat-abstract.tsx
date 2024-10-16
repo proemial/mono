@@ -1,5 +1,5 @@
 "use server";
-import { summariseAbstract } from "@/app/prompts/summarise-abstract";
+import { summariseDescription } from "@proemial/adapters/llm/prompts/description";
 import { Redis } from "@proemial/adapters/redis";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import Markdown from "./markdown";
@@ -15,7 +15,7 @@ export async function MicroAbstract({ paper }: { paper: OpenAlexPaper }) {
 		);
 	}
 
-	const microAbstract = await summariseAbstract(
+	const microAbstract = await summariseDescription(
 		paper.data.title,
 		paper.data.abstract,
 	);

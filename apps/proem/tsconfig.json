@@ -22,7 +22,8 @@
 		"../../packages/data/**/*.ts",
 		"../../packages/models/**/*.ts",
 		"../../packages/repositories/**/*.ts",
-		"../../packages/utils/**/*.ts"
+		"../../packages/utils/**/*.ts", 
+		"../../packages/adapters/**/*.ts",	
 	],
 	"exclude": ["node_modules"]
 }

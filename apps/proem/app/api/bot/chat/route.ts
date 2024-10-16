@@ -5,7 +5,7 @@ import {
 } from "@/app/constants";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { context, model, question } from "@/app/prompts/chat";
-import { openaiOrganizations } from "@/app/prompts/openai-keys";
+import { openaiOrganizations } from "@proemial/adapters/llm/prompts/openai-keys";
 import { env } from "@/env/server";
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { auth } from "@clerk/nextjs/server";

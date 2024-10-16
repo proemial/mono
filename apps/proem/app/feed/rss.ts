@@ -1,5 +1,5 @@
-import { summariseAbstract } from "@/app/prompts/summarise-abstract";
-import { summarise as summariseTitle } from "@/app/prompts/summarise-title";
+import { summariseDescription } from "@proemial/adapters/llm/prompts/description";
+import { summariseTitle } from "@proemial/adapters/llm/prompts/microtitle";
 import { QdrantPapers } from "@proemial/adapters/qdrant/papers";
 import { QdrantSearchHit } from "@proemial/adapters/qdrant/search/papers-search";
 import { defaultVectorSpace } from "@proemial/adapters/qdrant/vector-spaces";
@@ -57,17 +57,19 @@ export async function rssFeed(url: string, slug0: string, slug1: string) {
 }
 
 async function mapToResult(hit: QdrantSearchHit) {
+	// TODO: Use LLM adapter
 	const title = await summariseTitle(
 		hit.paper.title as string,
 		hit.paper.abstract as string,
 	);
-	const description = await summariseAbstract(
+	const description = await summariseDescription(
 		hit.paper.title as string,
 		hit.paper.abstract as string,
 	);
+
 	return {
-		title: hit.paper.title ?? "",
-		description: hit.paper.abstract ?? "",
+		title: title ?? "",
+		description: description ?? "",
 		url: `https://proem.ai/paper/oa/${hit.paper.id.split("/").pop()}`,
 		date: dayjs(hit.paper.created_date).toDate(),
 		author: hit.paper.authorships.map((a) => ({

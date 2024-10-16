@@ -1,4 +1,4 @@
-import { openaiOrganizations } from "@/app/prompts/openai-keys";
+import { openaiOrganizations } from "@proemial/adapters/llm/prompts/openai-keys";
 import { BaseChatModelParams } from "@langchain/core/language_models/chat_models";
 import {
 	AzureOpenAIInput,

@@ -1,8 +1,8 @@
-import { QdrantPaper } from "../papers";
+import { QdrantPaper } from "../qdrant/papers";
 import { Mistral } from "@mistralai/mistralai";
 import { Time } from "@proemial/utils/time";
 import OpenAI from "openai";
-import { VectorSpace } from "../vector-spaces";
+import { VectorSpace } from "../qdrant/vector-spaces";
 
 type Callback = (count: number, elapsed: number) => Promise<void>;
 

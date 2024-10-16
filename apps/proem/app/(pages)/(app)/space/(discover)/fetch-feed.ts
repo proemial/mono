@@ -5,7 +5,7 @@ import {
 	fetchPapersByInstitution,
 } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { fetchPaperWithPostsAndReaders } from "@/app/data/fetch-paper-with-posts-and-readers";
-import { summarise } from "@/app/prompts/summarise-title";
+import { summariseTitle } from "@proemial/adapters/llm/prompts/microtitle";
 import { Redis } from "@proemial/adapters/redis";
 import { RankedPaperId } from "@proemial/repositories/oa/fingerprinting/rerank";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
@@ -97,7 +97,7 @@ async function fetchFeedByInstitution(
 			const generatedTitle = paper?.generated?.title;
 
 			if (!generatedTitle && paperTitle && abstract) {
-				const title = (await summarise(paperTitle, abstract)) as string;
+				const title = (await summariseTitle(paperTitle, abstract)) as string;
 				const generated = paper.generated
 					? { ...paper.generated, title }
 					: { title };

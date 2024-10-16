@@ -2,7 +2,7 @@ import {
 	fetchPaper,
 	fetchPapers,
 } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
-import { summarise } from "@/app/prompts/summarise-title";
+import { summariseTitle } from "@proemial/adapters/llm/prompts/microtitle";
 import { Redis } from "@proemial/adapters/redis";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 
@@ -34,7 +34,7 @@ export const fromIds = async (ids: string[]) => {
 				const abstract = currentPaper?.data.abstract as string;
 
 				console.log("Enhancing paper", currentPaper.id);
-				const title = (await summarise(paperTitle, abstract)) as string;
+				const title = (await summariseTitle(paperTitle, abstract)) as string;
 				const generated = { title };
 
 				enhanced.push({
