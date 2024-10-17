@@ -17,6 +17,7 @@ export async function rssFeed(url: string, slug0: string, slug1: string) {
 			(v) => !!v,
 		) as number[][],
 		space?.query.period,
+		space?.runtime.quantization,
 	);
 	const results = await Promise.all(
 		(response.papers ?? []).map(
