@@ -1,7 +1,8 @@
-import { anthropic } from "@ai-sdk/anthropic";
+import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
+import { openaiOrganizations } from "./openai-keys";
 
-export const model = "claude-3-haiku-20240307";
+export const model = "gpt-3.5-turbo-0125";
 export const prompt = (title: string, abstract: string) =>
 	`
 You will be summarizing research papers into captivating headlines. The goal is to capture the societal impact of the main finding of the paper in a concise, news worthy, tweet-like, and attention-grabbing sentence.
@@ -26,9 +27,14 @@ Then, create a captivating news headline for the paper by following these guidel
 Now, output the headline. Nothing else:
 `.trim();
 
+const openai = createOpenAI({
+	apiKey: process.env.OPENAI_API_KEY,
+	organization: openaiOrganizations.summarization,
+});
+
 export async function summariseTitle(title: string, abstract: string) {
 	const res = await generateText({
-		model: anthropic(model),
+		model: openai(model),
 		prompt: prompt(title, abstract),
 	});
 
