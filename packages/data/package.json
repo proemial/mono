@@ -17,6 +17,7 @@
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",
+		"@proemial/utils": "workspace:*",
 		"dotenv": "^16.4.5",
 		"drizzle-kit": "^0.24.0",
 		"pg": "^8.11.5"

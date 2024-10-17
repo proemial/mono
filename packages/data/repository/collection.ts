@@ -6,7 +6,7 @@ import {
 	collections,
 	collectionsToPapers,
 } from "../neon/schema";
-
+import { Time } from "@proemial/utils/time";
 const PERSONAL_DEFAULT_COLLECTION_NAME = "Discover";
 const ANONYMOUS_USER_ID = "user_anonymous";
 const getPersonalDefaultCollection = (userId?: string | null) =>
@@ -20,6 +20,8 @@ const getPersonalDefaultCollection = (userId?: string | null) =>
 		createdAt: new Date(),
 		deletedAt: null,
 		shared: "private",
+		slug0: null,
+		slug1: null,
 	}) satisfies Collection;
 
 const ensureDefaultCollection = (
@@ -95,6 +97,24 @@ export async function findCollectionById(id: Collection["id"]) {
 			},
 		},
 	});
+}
+
+export async function findCollectionBySlugs(
+	slug0: Collection["slug0"],
+	slug1: Collection["slug1"],
+) {
+	const begin = Time.now();
+
+	try {
+		return await neonDb.query.collections.findFirst({
+			where: and(
+				eq(collections.slug0, slug0 as string),
+				eq(collections.slug1, slug1 as string),
+			),
+		});
+	} finally {
+		Time.log(begin, "findCollectionBySlugs");
+	}
 }
 
 export async function findCollection(collectionId: string) {
