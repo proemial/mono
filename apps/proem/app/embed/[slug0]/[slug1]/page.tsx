@@ -1,5 +1,4 @@
-import FeedItem, { FeedPaper } from "./components/feed-item";
-import { fetchPaperWithPostsAndReaders } from "@/app/data/feed";
+import PaperCard, { FeedPaper } from "./components/card";
 import { getSummaries as getCacheSummaries } from "@proemial/adapters/llm/cache/summaries";
 import { QdrantPapers } from "@proemial/adapters/qdrant/papers";
 import { defaultVectorSpace } from "@proemial/adapters/qdrant/vector-spaces";
@@ -30,17 +29,12 @@ export default async function EmbedVectorSpacePage({
 
 	const papers = await findPapers(params.slug0, params.slug1, limit);
 	const redisSummaries = await getSummaries(papers);
-	const postsAndReaders = await getPostsAndReaders(papers);
 	const collectionId = (await findCollectionBySlugs(params.slug0, params.slug1))
 		?.id;
 
 	const items = papers.map((paper) => {
 		const summaries =
 			redisSummaries.find((s) => s.paperId === paper.id)?.summaries ?? {};
-		const posts =
-			postsAndReaders.find((p) => p.paperId === paper.id)?.posts ?? [];
-		const readers =
-			postsAndReaders.find((p) => p.paperId === paper.id)?.readers ?? [];
 		const path = getLink(paper, collectionId, params.slug0, params.slug1);
 
 		return {
@@ -50,8 +44,6 @@ export default async function EmbedVectorSpacePage({
 				title: summaries.title?.summary,
 				abstract: summaries.description?.summary,
 			},
-			posts,
-			readers,
 			path,
 		} as FeedPaper;
 	});
@@ -59,7 +51,7 @@ export default async function EmbedVectorSpacePage({
 	return (
 		<div className={"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"}>
 			{items.map((item) => (
-				<Item
+				<EmbedItem
 					key={item.id}
 					paper={item}
 					space={collectionId ?? ""}
@@ -70,7 +62,7 @@ export default async function EmbedVectorSpacePage({
 	);
 }
 
-function Item({
+function EmbedItem({
 	paper,
 	space,
 	background,
@@ -83,7 +75,7 @@ function Item({
 
 	return (
 		<div key={paper.id} className={"p-3 border border-[#cccccc]"} style={style}>
-			<FeedItem paper={paper} customCollectionId={space} />
+			<PaperCard paper={paper} customCollectionId={space} />
 
 			<div className="relative bottom-4 flex justify-end">
 				<ProemLogo className="w-4 h-4" />
@@ -113,12 +105,6 @@ async function getSummaries(papers: OpenAlexPaperWithAbstract[]) {
 			paperId: p.id,
 			summaries: await getCacheSummaries(p.id, p.title, p.abstract ?? ""),
 		})) ?? [],
-	);
-}
-
-async function getPostsAndReaders(papers: OpenAlexPaperWithAbstract[]) {
-	return await Promise.all(
-		papers.map(async (p) => fetchPaperWithPostsAndReaders({ paperId: p.id })),
 	);
 }
 

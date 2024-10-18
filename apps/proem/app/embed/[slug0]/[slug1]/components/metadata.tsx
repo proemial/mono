@@ -1,13 +1,11 @@
 "use client";
 
-import { EmbedableLink } from "./embedable-link";
-import { Prefix } from "@proemial/adapters/redis/papers";
+import { EmbedableLink } from "./link";
 import { AlertTriangle } from "@untitled-ui/icons-react";
 import { ReactNode } from "react";
 import { FeedItemField } from "@/app/(pages)/(app)/space/(discover)/feed-item-field";
 import { formatDate } from "@/utils/date";
-import { OpenAlexTopic } from "@proemial/repositories/oa/models/oa-paper";
-import { FeedPaper } from "./feed-item";
+import { FeedPaper } from "./card";
 
 export type FeedItemCardProps = {
 	paper: FeedPaper;
@@ -15,7 +13,7 @@ export type FeedItemCardProps = {
 	customCollectionId: string;
 };
 
-export const FeedItemCard = ({
+export const PaperMetadata = ({
 	paper,
 	children,
 	customCollectionId,
