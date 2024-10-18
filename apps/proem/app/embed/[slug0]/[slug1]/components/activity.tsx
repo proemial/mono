@@ -3,15 +3,8 @@ import { EngagementIndicator } from "@/components/engagement-indicator";
 import { EmbedableLink } from "./link";
 import { FeedPaper } from "./card";
 import React from "react";
-import { PostWithCommentsAndAuthor } from "@/services/post-service";
-import { BasicReaderUserData } from "@/services/paper-reads-service";
 import { useQuery } from "@tanstack/react-query";
 import { activityAction } from "./activity-action";
-
-type Activity = {
-	posts?: PostWithCommentsAndAuthor[];
-	readers?: BasicReaderUserData[];
-};
 
 export function PaperActivity({
 	paper,
