@@ -3,7 +3,7 @@
 import { routes } from "@/routes";
 import { File06, VolumeMax, VolumeX } from "@untitled-ui/icons-react";
 import { useRouter } from "next/navigation";
-import { MouseEvent, useRef } from "react";
+import { MouseEvent, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import {
 	analyticsKeys,
@@ -31,6 +31,7 @@ export const VideoItem = ({
 	const paperId = paperLink.split("/").pop() ?? "";
 	const router = useRouter();
 	const ref = useRef<ReactPlayer>(null);
+	const [isReady, setIsReady] = useState(false);
 
 	const handleMuteClick = (event: MouseEvent<HTMLDivElement>) => {
 		if (isMuted) {
@@ -49,6 +50,12 @@ export const VideoItem = ({
 		router.push(`${routes.paper}/${paperLink}`);
 	};
 
+	const handleReady = (player: ReactPlayer) => {
+		if (!isReady) {
+			setIsReady(true);
+		}
+	};
+
 	return (
 		<div className="relative shadow h-full w-full rounded-2xl overflow-hidden">
 			<ReactPlayer
@@ -63,7 +70,11 @@ export const VideoItem = ({
 				loop={true}
 				muted={isMuted}
 				volume={1}
-				fallback={<Throbber />}
+				fallback={
+					<div className="min-h-[calc(100dvh-72px)]">
+						<Throbber />
+					</div>
+				}
 				config={{
 					file: {
 						attributes: {
@@ -75,26 +86,29 @@ export const VideoItem = ({
 						},
 					},
 				}}
+				onReady={handleReady}
 			/>
-			<div className="absolute flex justify-between gap-2 top-0 left-0 w-full">
-				<div
-					className="flex items-center gap-2 text-white hover:bg-white/10 rounded-full m-1 p-4 cursor-pointer"
-					onClick={handleVideoClick}
-				>
-					<File06 className="size-5" />
-					<span className="text-sm">View paper</span>
+			{isReady && (
+				<div className="absolute flex justify-between gap-2 top-0 left-0 w-full">
+					<div
+						className="flex items-center gap-2 text-white hover:bg-white/10 rounded-full m-1 p-4 cursor-pointer"
+						onClick={handleVideoClick}
+					>
+						<File06 className="size-5" />
+						<span className="text-sm">View paper</span>
+					</div>
+					<div
+						className="text-white hover:bg-white/10 rounded-full m-1 p-4 cursor-pointer"
+						onClick={handleMuteClick}
+					>
+						{isMuted ? (
+							<VolumeX className="size-5" />
+						) : (
+							<VolumeMax className="size-5" />
+						)}
+					</div>
 				</div>
-				<div
-					className="text-white hover:bg-white/10 rounded-full m-1 p-4 cursor-pointer"
-					onClick={handleMuteClick}
-				>
-					{isMuted ? (
-						<VolumeX className="size-5" />
-					) : (
-						<VolumeMax className="size-5" />
-					)}
-				</div>
-			</div>
+			)}
 		</div>
 	);
 };
