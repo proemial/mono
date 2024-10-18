@@ -13,7 +13,7 @@ export const RedisSpaces = {
 			console.error(error);
 			throw error;
 		} finally {
-			Time.log(begin, `[redis][spaces][get] ${identifier}`);
+			Time.debug(begin, `[redis][spaces][get] ${identifier}`);
 		}
 	},
 };

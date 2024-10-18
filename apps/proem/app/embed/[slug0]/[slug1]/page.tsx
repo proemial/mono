@@ -6,6 +6,7 @@ import { Redis } from "@proemial/adapters/redis";
 import { OpenAlexPaperWithAbstract } from "@proemial/repositories/oa/models/oa-paper";
 import { findCollectionBySlugs } from "@proemial/data/repository/collection";
 import { ProemLogo } from "@/components/icons/brand/logo";
+import { Time } from "@proemial/utils/time";
 
 type Props = {
 	params: {
@@ -27,10 +28,18 @@ export default async function EmbedVectorSpacePage({
 	const count = searchParams.count ? Number.parseInt(searchParams.count) : 18;
 	const limit = Math.min(count, 18);
 
+	let begin = Time.now();
 	const papers = await findPapers(params.slug0, params.slug1, limit);
+	Time.log(begin, "[embed][find]");
+
+	begin = Time.now();
 	const redisSummaries = await getSummaries(papers);
+	Time.log(begin, "[embed][summarise]");
+
+	begin = Time.now();
 	const collectionId = (await findCollectionBySlugs(params.slug0, params.slug1))
 		?.id;
+	Time.log(begin, "[embed][collection]");
 
 	const items = papers.map((paper) => {
 		const summaries =

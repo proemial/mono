@@ -13,7 +13,7 @@ export const RedisSummaries = {
 			console.error(error);
 			throw error;
 		} finally {
-			Time.log(begin, `[redis][summaries][get] ${identifier}`);
+			Time.debug(begin, `[redis][summaries][get] ${identifier}`);
 		}
 	},
 
@@ -24,7 +24,7 @@ export const RedisSummaries = {
 			await UpStash.summaries().set(identifier, summaries);
 			return summaries;
 		} finally {
-			Time.log(begin, `[redis][summaries][insert] ${identifier}`);
+			Time.debug(begin, `[redis][summaries][insert] ${identifier}`);
 		}
 	},
 };

@@ -47,7 +47,7 @@ export const RedisPapers = {
 			);
 			throw error;
 		} finally {
-			Time.log(begin, `[redis][getAll] ${ids.length} papers`);
+			Time.debug(begin, `[redis][getAll] ${ids.length} papers`);
 		}
 	},
 
@@ -74,7 +74,7 @@ export const RedisPapers = {
 			console.error(error);
 			throw error;
 		} finally {
-			Time.log(begin, `[pushAll] ${papersArray.length} papers`);
+			Time.debug(begin, `[pushAll] ${papersArray.length} papers`);
 		}
 	},
 
