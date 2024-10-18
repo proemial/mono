@@ -12,6 +12,7 @@ import { routes } from "@/routes";
 import { ChevronLeft, Edit05 } from "@untitled-ui/icons-react";
 import Link from "next/link";
 import { setCookie, getCookie } from "cookies-next";
+import { AskAction } from "../nav-bar/actions/ask-action";
 
 type TopNavigationContent = {
 	/**
@@ -92,7 +93,7 @@ export function getTopNavigationContentByUrl(
 
 		return {
 			title: PERSONAL_DEFAULT_COLLECTION_NAME,
-			action: null,
+			action: <AskAction />,
 		};
 	}
 

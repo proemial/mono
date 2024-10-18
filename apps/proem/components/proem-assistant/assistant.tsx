@@ -3,7 +3,7 @@
 import { AssistantData } from "@/app/api/assistant/route";
 import { isArxivPaperId } from "@/utils/is-arxiv-paper-id";
 import { useAuth } from "@clerk/nextjs";
-import { Drawer, DrawerTrigger } from "@proemial/shadcn-ui";
+import { cn, Drawer, DrawerTrigger } from "@proemial/shadcn-ui";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -50,6 +50,7 @@ export const ProemAssistant = () => {
 	const spaceId = params.collectionId;
 	const paperId =
 		params.id && isArxivPaperId(params.id) ? undefined : params.id;
+	const hideAssistant = pathname === routes.space;
 
 	const { data, refetch } = useQuery({
 		queryKey: [PROEM_ASSISTANT_QUERY_KEY, spaceId, paperId, userId],
@@ -72,8 +73,7 @@ export const ProemAssistant = () => {
 	}, [paperId, data, refetch]);
 
 	if (
-		DISABLED_ROUTE_FRAGMENTS.some((fragment) => pathname.includes(fragment)) ||
-		pathname === routes.space
+		DISABLED_ROUTE_FRAGMENTS.some((fragment) => pathname.includes(fragment))
 	) {
 		return null;
 	}
@@ -107,7 +107,14 @@ export const ProemAssistant = () => {
 	};
 
 	return (
-		<div className="fixed bottom-0 left-0 bg-gradient-to-b pt-5 from-transparent to-background h-[90px] w-full flex justify-center pointer-events-none z-20">
+		<div
+			className={cn(
+				"fixed bottom-0 left-0 bg-gradient-to-b pt-5 from-transparent to-background h-[90px] w-full flex justify-center pointer-events-none z-20",
+				{
+					hidden: hideAssistant,
+				},
+			)}
+		>
 			<Drawer
 				shouldScaleBackground={false}
 				setBackgroundColorOnScale={false}
