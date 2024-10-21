@@ -88,6 +88,7 @@ const config = {
 	},
 	plugins: [require("tailwindcss-animate"),
         require("tailwind-scrollbar-hide"),
+				require('@tailwindcss/typography'),
         (plugin: { addVariant: (name: string, value: string) => void }) => {
             plugin.addVariant('not-last-child', '&:not(:last-child)');
 			plugin.addVariant('not-first-child', '&:not(:first-child)');
