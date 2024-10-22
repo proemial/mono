@@ -1,13 +1,11 @@
 import "@/app/globals.css";
 import { Analytics } from "@/components/analytics";
 import { LoadingTransition } from "@/components/loading-transition";
-import { Main } from "@/components/main";
 import { NotificationsToaster } from "@/components/notifications-toaster";
 import { AssistantStateProvider } from "@/components/proem-assistant/use-assistant/assistant-state";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ReactQueryProvider } from "@/components/providers/react-query";
 import { SetActiveOrganization } from "@/components/set-active-organization";
-import { TopNavigation } from "@/components/top-navigation/top-navigation";
 import { isEmbedded } from "@/utils/url";
 import { TooltipProvider, cn } from "@proemial/shadcn-ui";
 import { VercelToolbar } from "@vercel/toolbar/next";
@@ -15,7 +13,6 @@ import { Metadata, Viewport } from "next";
 import { Lato as FontSans } from "next/font/google";
 import { headers as nextHeaders } from "next/headers";
 import { ReactNode } from "react";
-import { screenMaxWidth } from "./constants";
 
 export const viewport: Viewport = {
 	width: "device-width",
@@ -110,25 +107,8 @@ function MainLayout({ children, modal, showToolbar }: Readonly<Props>) {
 			>
 				<ContextWrapper>
 					<SetActiveOrganization />
-					<div className="bg-background group relative">
-						<div
-							style={{
-								boxShadow: "0 0 120px rgba(0, 0, 0, .15)",
-							}}
-							className={cn(
-								"mx-auto min-h-[100dvh] flex flex-col",
-								screenMaxWidth,
-							)}
-						>
-							<TopNavigation />
-
-							<LoadingTransition type="page" as={Main}>
-								{children}
-							</LoadingTransition>
-
-							{modal}
-						</div>
-					</div>
+					{children}
+					{modal}
 					<NotificationsToaster />
 				</ContextWrapper>
 				{showToolbar && <VercelToolbar />}
