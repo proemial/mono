@@ -1,6 +1,16 @@
 import { routes } from "@/routes";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
+
+const rootDomain = ["www", "proem", "127", "localhost:4242"];
 
 export default async function RootPage() {
+	const host = headers().get("host") || "";
+	const subdomain = host.split(".")[0];
+
+	if (subdomain && !rootDomain.includes(subdomain)) {
+		redirect(`/${subdomain}`);
+	}
+
 	redirect(routes.space);
 }
