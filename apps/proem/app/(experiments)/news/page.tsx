@@ -19,7 +19,7 @@ export default async function NewsPage() {
 				))}
 			</div>
 			<div className="flex justify-center">
-				<Link href="/news/generate">
+				<Link href="/news/generate" target="_blank">
 					<Button
 						variant="black"
 						className="min-w-[300px] bg-theme-800 hover:bg-theme-900"
