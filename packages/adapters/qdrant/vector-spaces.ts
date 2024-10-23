@@ -4,18 +4,13 @@ export type VectorSpace = {
 	dimensions: number;
 };
 
-export type VectorSpaceName = "o3s1536alpha" | "mist1024alpha";
+export type VectorSpaceName = "o3s1536alpha"; // | "mist1024alpha";
 
 export const vectorSpaces: Array<VectorSpace> = [
 	{
 		collection: "o3s1536alpha",
 		model: "text-embedding-3-small",
 		dimensions: 1536,
-	},
-	{
-		collection: "mist1024alpha",
-		model: "mistral-embed",
-		dimensions: 1024,
 	},
 ];
 
