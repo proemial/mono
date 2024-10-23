@@ -32,13 +32,13 @@ export const FactsAndQuestions = () => {
 				<div className="flex flex-col gap-2">
 					<div className="flex flex-col">
 						<h3>Facts</h3>
-						<div className="prose text-sm max-w-full">
+						<div className="prose text-base max-w-full">
 							<ReactMarkdown>{factsAndQuestions.facts}</ReactMarkdown>
 						</div>
 					</div>
 					<div className="flex flex-col">
 						<h3>Q&A</h3>
-						<div className="prose text-sm max-w-full">
+						<div className="prose text-base max-w-full">
 							<ReactMarkdown>{factsAndQuestions.questions}</ReactMarkdown>
 						</div>
 					</div>
@@ -51,9 +51,9 @@ export const FactsAndQuestions = () => {
 									href={`/paper/oa/${paper.id.replace("https://openalex.org/", "")}`}
 									target="_blank"
 								>
-									<div className="flex items-center gap-2 text-sm pl-2 hover:bg-theme-600 py-0.5 rounded-md">
+									<div className="flex items-center gap-2 text-base pl-2 hover:bg-theme-600 py-0.5 rounded-md">
 										<div className="text-[#6c7381] min-w-6">{index + 1}.</div>
-										<div className="flex flex-col gap-0.5">
+										<div className="flex flex-col gap-1">
 											<div>{toTitleCaseIfAllCaps(paper.title)}</div>
 											<div className="flex gap-1 items-center text-xs text-[#6c7381]">
 												<span>{dayjs(paper.created).format("ll")}</span>|

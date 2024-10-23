@@ -47,7 +47,7 @@ export const TextareaForm = ({ onSubmit }: Props) => {
 							<h3>News Article</h3>
 							<FormControl>
 								<Textarea
-									className="min-h-[300px] rounded-md"
+									className="min-h-[300px] rounded-md text-base"
 									{...field}
 									disabled={isLoading}
 								/>
@@ -56,20 +56,22 @@ export const TextareaForm = ({ onSubmit }: Props) => {
 						</FormItem>
 					)}
 				/>
-				<Button
-					type="submit"
-					disabled={isLoading}
-					className="hover:bg-theme-500 active:bg-theme-600"
-				>
-					{isLoading ? (
-						<Throbber />
-					) : (
-						<div className="flex gap-2 items-center">
-							<MagicWand02 className="size-4" />
-							Generate
-						</div>
-					)}
-				</Button>
+				<div className="flex justify-center">
+					<Button
+						type="submit"
+						disabled={isLoading}
+						className="hover:bg-theme-500 active:bg-theme-600 min-w-[150px]"
+					>
+						{isLoading ? (
+							<Throbber />
+						) : (
+							<div className="flex gap-2 items-center">
+								<MagicWand02 className="size-4" />
+								Generate
+							</div>
+						)}
+					</Button>
+				</div>
 			</form>
 		</Form>
 	);
