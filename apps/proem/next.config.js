@@ -40,6 +40,18 @@ const nextConfig = {
 				protocol: "https",
 				hostname: "img.clerk.com",
 			},
+			{
+				protocol: "https",
+				hostname: "www.gravatar.com",
+			},
+			{
+				protocol: "https",
+				hostname: "asset.dr.dk",
+			},
+			{
+				protocol: "https",
+				hostname: "i.guim.co.uk",
+			},
 		],
 	},
 };

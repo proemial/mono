@@ -25,6 +25,9 @@ export const FactsAndQuestions = () => {
 		setFactsAndQuestions(result);
 	};
 
+	// For generating sources of static news articles
+	console.log(JSON.stringify(factsAndQuestions?.papers));
+
 	return (
 		<div className="flex flex-col gap-6">
 			<TextareaForm onSubmit={handleSubmit} />

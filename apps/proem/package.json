@@ -50,9 +50,11 @@
 		"clsx": "^2.1.1",
 		"cookies-next": "^4.1.1",
 		"dayjs": "^1.11.12",
+		"feed": "^4.2.2",
 		"framer-motion": "11.3.28",
 		"inngest": "^3.22.3",
 		"jiti": "^1.21.6",
+		"js-sha256": "0.11.0",
 		"katex": "^0.16.10",
 		"langchain": "0.2.15",
 		"langsmith": "0.1.41",
@@ -81,8 +83,7 @@
 		"sharp": "^0.33.3",
 		"tailwind-scrollbar-hide": "1.1.7",
 		"zod-to-json-schema": "3.23.2",
-		"zustand": "^4.5.5",
-		"feed": "^4.2.2"
+		"zustand": "^4.5.5"
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",

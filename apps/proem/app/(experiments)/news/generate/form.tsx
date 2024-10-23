@@ -33,6 +33,9 @@ export const TextareaForm = ({ onSubmit }: Props) => {
 		setIsLoading(false);
 	};
 
+	// For generating text of static news articles
+	console.log(JSON.stringify(form.getValues().newsArticle));
+
 	return (
 		<Form {...form}>
 			<form
