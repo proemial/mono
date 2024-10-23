@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 export async function qdrantPapersSearch(
 	name: VectorSpaceName,
 	queries: string[] | number[][],
-	period?: string,
+	period?: number,
 	quantization?: "binary" | undefined,
 	limit = 10,
 	// offset?: string,
@@ -61,11 +61,11 @@ async function search(
 	collection: string,
 	embeddings: number[][],
 	limit: number,
-	period?: string,
+	period?: number,
 	quantization?: "binary",
 	// offset?: string,
 ) {
-	const filter = createFilter(limit, period ?? "", quantization);
+	const filter = createFilter(limit, period ?? 5, quantization);
 
 	switch (embeddings.length) {
 		case 1:
@@ -88,14 +88,8 @@ async function search(
 	}
 }
 
-function createFilter(limit: number, from: string, quantization?: string) {
-	const gte = /^\d{4}-\d{2}-\d{2}$/.test(from)
-		? from
-		: /^\d+d$/.test(from)
-			? dayjs()
-					.subtract(Number.parseInt(from.slice(0, -1)), "day")
-					.format("YYYY-MM-DD")
-			: dayjs(from).subtract(5, "day").format("YYYY-MM-DD");
+function createFilter(limit: number, period: number, quantization?: string) {
+	const gte = dayjs().subtract(period, "day").format("YYYY-MM-DD");
 
 	const params =
 		quantization === "binary"

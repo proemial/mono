@@ -38,7 +38,7 @@ export type SpaceMetadata = {
 export type SpaceQuery = {
 	like: string;
 	unlike?: string;
-	period: string;
+	period: number;
 };
 
 export type SpaceConfig = {
