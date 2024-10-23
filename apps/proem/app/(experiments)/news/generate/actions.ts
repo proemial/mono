@@ -74,7 +74,7 @@ const searchIndex = async (
 	query: string,
 	from: string,
 ): Promise<SearchResult> => {
-	const result = await fetch("http://localhost:3232/api/search", {
+	const result = await fetch("https://index.proem.ai/api/search", {
 		method: "POST",
 		body: JSON.stringify({ query, from }),
 	});
