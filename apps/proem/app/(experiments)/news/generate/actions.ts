@@ -29,7 +29,7 @@ type Feature = {
 
 export async function anchorInScienceAction(data: z.infer<typeof FormSchema>) {
 	// Generate search query from news article
-	const indexQuery = await generateIndexQuery(data.newsArticle);
+	const indexQuery = await generateIndexQuery(data.content);
 	const parsedQuery = indexQuery
 		.split("<search_query>")[1]
 		?.split("</search_query>")[0];
@@ -47,7 +47,7 @@ export async function anchorInScienceAction(data: z.infer<typeof FormSchema>) {
 
 	// Generate facts and questions from news article and papers
 	const factsAndQuestions = await generateFactsAndQuestions(
-		data.newsArticle,
+		data.content,
 		papers,
 	);
 
