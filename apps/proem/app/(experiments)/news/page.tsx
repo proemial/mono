@@ -22,9 +22,9 @@ export default async function NewsPage() {
 				<Link href="/news/generate" target="_blank">
 					<Button
 						variant="black"
-						className="min-w-[300px] bg-theme-800 hover:bg-theme-900"
+						className="min-w-[260px] bg-theme-800 hover:bg-theme-900"
 					>
-						Annotate your own news articles!
+						Annotate your own content!
 					</Button>
 				</Link>
 			</div>

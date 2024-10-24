@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 export const FormSchema = z.object({
-	newsArticle: z
+	content: z
 		.string()
-		.min(1, {
-			message: "News article must be at least 1 character.",
+		.min(100, {
+			message: "Must be at least 100 characters.",
 		})
 		.max(9999, {
-			message: "News article must not be longer than 9999 characters.",
+			message: "Must not be longer than 9999 characters.",
 		}),
 });

@@ -6,6 +6,7 @@ import {
 	Button,
 	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormMessage,
@@ -34,7 +35,7 @@ export const TextareaForm = ({ onSubmit }: Props) => {
 	};
 
 	// For generating text of static news articles
-	console.log(JSON.stringify(form.getValues().newsArticle));
+	console.log(JSON.stringify(form.getValues().content));
 
 	return (
 		<Form {...form}>
@@ -44,10 +45,10 @@ export const TextareaForm = ({ onSubmit }: Props) => {
 			>
 				<FormField
 					control={form.control}
-					name="newsArticle"
+					name="content"
 					render={({ field }) => (
 						<FormItem>
-							<h3>News Article</h3>
+							<h3>Content</h3>
 							<FormControl>
 								<Textarea
 									className="min-h-[300px] rounded-md text-base"
@@ -55,6 +56,9 @@ export const TextareaForm = ({ onSubmit }: Props) => {
 									disabled={isLoading}
 								/>
 							</FormControl>
+							<FormDescription className="text-theme-700">
+								Enter the content you want to annotate.
+							</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
