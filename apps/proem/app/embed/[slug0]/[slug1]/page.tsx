@@ -17,6 +17,7 @@ type Props = {
 		count?: string;
 		foreground?: string;
 		background?: string;
+		period?: number;
 	};
 };
 
@@ -29,7 +30,12 @@ export default async function EmbedVectorSpacePage({
 	const limit = Math.min(count, 18);
 
 	let begin = Time.now();
-	const papers = await findPapers(params.slug0, params.slug1, limit);
+	const papers = await findPapers(
+		params.slug0,
+		params.slug1,
+		limit,
+		searchParams.period,
+	);
 	Time.log(begin, "[embed][find]");
 
 	begin = Time.now();
@@ -93,14 +99,19 @@ function EmbedItem({
 	);
 }
 
-async function findPapers(slug0: string, slug1: string, limit: number) {
+async function findPapers(
+	slug0: string,
+	slug1: string,
+	limit: number,
+	period?: number,
+) {
 	const space = await Redis.spaces.get([slug0, slug1]);
 	const result = await QdrantPapers.search(
 		defaultVectorSpace.collection,
 		[space?.vectors.like, space?.vectors.unlike].filter(
 			(v) => !!v,
 		) as number[][],
-		space?.query.period,
+		period ?? space?.query.period,
 		space?.runtime.quantization,
 		limit,
 	);
