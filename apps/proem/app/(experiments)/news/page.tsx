@@ -3,6 +3,8 @@ import { NewsItem } from "./news-item";
 import { QAItem } from "./qa-item";
 import staticNewsItems from "./static-news-items.json";
 import Link from "next/link";
+import { Trackable } from "@/components/trackable";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 
 export default async function NewsPage() {
 	const items = staticNewsItems.sort((a, b) =>
@@ -19,14 +21,18 @@ export default async function NewsPage() {
 				))}
 			</div>
 			<div className="flex justify-center">
-				<Link href="/news/generate" target="_blank">
-					<Button
-						variant="black"
-						className="min-w-[260px] bg-theme-800 hover:bg-theme-900"
-					>
-						Annotate your own content!
-					</Button>
-				</Link>
+				<Trackable
+					trackingKey={analyticsKeys.experiments.news.clickAnnotateOwnContent}
+				>
+					<Link href="/news/generate" target="_blank">
+						<Button
+							variant="black"
+							className="min-w-[260px] bg-theme-800 hover:bg-theme-900"
+						>
+							Annotate your own content!
+						</Button>
+					</Link>
+				</Trackable>
 			</div>
 		</div>
 	);

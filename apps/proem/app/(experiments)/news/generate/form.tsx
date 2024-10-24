@@ -17,6 +17,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormSchema } from "./types";
+import { Trackable } from "@/components/trackable";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 
 type Props = {
 	onSubmit: (data: z.infer<typeof FormSchema>) => Promise<void>;
@@ -64,20 +66,25 @@ export const TextareaForm = ({ onSubmit }: Props) => {
 					)}
 				/>
 				<div className="flex justify-center">
-					<Button
-						type="submit"
-						disabled={isLoading}
-						className="hover:bg-theme-500 active:bg-theme-600 min-w-[150px]"
+					<Trackable
+						trackingKey={analyticsKeys.experiments.news.clickGenerate}
+						properties={{ content: form.getValues().content }}
 					>
-						{isLoading ? (
-							<Throbber />
-						) : (
-							<div className="flex gap-2 items-center">
-								<MagicWand02 className="size-4" />
-								Generate
-							</div>
-						)}
-					</Button>
+						<Button
+							type="submit"
+							disabled={isLoading}
+							className="hover:bg-theme-500 active:bg-theme-600 min-w-[150px]"
+						>
+							{isLoading ? (
+								<Throbber />
+							) : (
+								<div className="flex gap-2 items-center">
+									<MagicWand02 className="size-4" />
+									Generate
+								</div>
+							)}
+						</Button>
+					</Trackable>
 				</div>
 			</form>
 		</Form>

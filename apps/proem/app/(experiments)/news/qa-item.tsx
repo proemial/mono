@@ -2,6 +2,8 @@ import Image from "next/image";
 import staticNewsItems from "./static-news-items.json";
 import { Gravatar } from "./gravatar";
 import Link from "next/link";
+import { Trackable } from "@/components/trackable";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 
 type Props = {
 	item: (typeof staticNewsItems)[number] | undefined;
@@ -22,14 +24,23 @@ export const QAItem = ({ item }: Props) => {
 				{item.annotations.qa[qaIndex]?.question}
 			</div>
 			<div className="flex flex-col gap-2">
-				<Link
-					href={`/paper/oa/${item.annotations.sources[sourceIndex]?.id.replace("https://openalex.org/", "")}`}
-					target="_blank"
+				<Trackable
+					trackingKey={analyticsKeys.experiments.news.clickAnswer}
+					properties={
+						item.annotations.qa[qaIndex]?.answer
+							? { answer: item.annotations.qa[qaIndex].answer }
+							: undefined
+					}
 				>
-					<div className="border-l-2 border-theme-500 pl-3 py-1 hover:bg-theme-500 hover:rounded-lg duration-100">
-						{item.annotations.qa[qaIndex]?.answer}
-					</div>
-				</Link>
+					<Link
+						href={`/paper/oa/${item.annotations.sources[sourceIndex]?.id.replace("https://openalex.org/", "")}`}
+						target="_blank"
+					>
+						<div className="border-l-2 border-theme-500 pl-3 py-1 hover:bg-theme-500 hover:rounded-lg duration-100">
+							{item.annotations.qa[qaIndex]?.answer}
+						</div>
+					</Link>
+				</Trackable>
 				<div className="flex gap-2 items-center pl-3.5">
 					<Image
 						src={

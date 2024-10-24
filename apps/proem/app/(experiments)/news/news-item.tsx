@@ -8,6 +8,8 @@ import { ReactNode, useMemo } from "react";
 import { Gravatar } from "./gravatar";
 import staticNewsItems from "./static-news-items.json";
 import Link from "next/link";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
+import { Trackable } from "@/components/trackable";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
@@ -48,40 +50,63 @@ export const NewsItem = ({ item, children }: Props) => {
 			<div className="px-3">{children}</div>
 			{/* News source */}
 			<div className="px-3">
-				<Link href={item.article.url} target="_blank">
-					<div className="flex rounded-lg overflow-hidden hover:drop-shadow-lg duration-100">
-						<Image
-							src={item.article.ogImage}
-							alt="Article image"
-							width={150}
-							height={150}
-							className="aspect-square object-cover"
-						/>
-						<div className="flex flex-col gap-2 justify-between p-3 bg-theme-800 text-white">
-							<div className="text-lg font-semibold leading-tight">
-								{item.article.title}
-							</div>
-							<div className="flex flex-col gap-0.5 text-sm opacity-75">
-								<div>Article on {item.article.source}</div>
-								<div className="flex gap-1.5">
-									<span>{item.article.author.name}</span>
-									<span>·</span>
-									<span>{dayjs(item.article.timestamp).format("LL")}</span>
+				<Trackable
+					trackingKey={analyticsKeys.experiments.news.clickArticle}
+					properties={{ title: item.article.title }}
+				>
+					<Link href={item.article.url} target="_blank">
+						<div className="flex rounded-lg overflow-hidden hover:drop-shadow-lg duration-100">
+							<Image
+								src={item.article.ogImage}
+								alt="Article image"
+								width={150}
+								height={150}
+								className="aspect-square object-cover"
+							/>
+							<div className="flex flex-col gap-2 justify-between p-3 bg-theme-800 text-white">
+								<div className="text-lg font-semibold leading-tight">
+									{item.article.title}
+								</div>
+								<div className="flex flex-col gap-0.5 text-sm opacity-75">
+									<div>Article on {item.article.source}</div>
+									<div className="flex gap-1.5">
+										<span>{item.article.author.name}</span>
+										<span>·</span>
+										<span>{dayjs(item.article.timestamp).format("LL")}</span>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</Link>
+					</Link>
+				</Trackable>
 			</div>
 			{/* Buttons */}
 			<div className="flex gap-2 px-3">
-				<Button className="flex gap-2 items-center hover:bg-theme-500 active:bg-theme-600">
-					<ArrowUp className="size-4" />
-					<span className="font-semibold">{upvotes}</span>
-				</Button>
-				<Button className="font-semibold hover:bg-theme-500 active:bg-theme-600">
-					Share
-				</Button>
+				<Trackable
+					trackingKey={analyticsKeys.experiments.news.clickUpvote}
+					properties={
+						item.annotations.qa[0]?.question
+							? { question: item.annotations.qa[0].question }
+							: undefined
+					}
+				>
+					<Button className="flex gap-2 items-center hover:bg-theme-500 active:bg-theme-600">
+						<ArrowUp className="size-4" />
+						<span className="font-semibold">{upvotes}</span>
+					</Button>
+				</Trackable>
+				<Trackable
+					trackingKey={analyticsKeys.experiments.news.clickShare}
+					properties={
+						item.annotations.qa[0]?.question
+							? { question: item.annotations.qa[0].question }
+							: undefined
+					}
+				>
+					<Button className="font-semibold hover:bg-theme-500 active:bg-theme-600">
+						Share
+					</Button>
+				</Trackable>
 			</div>
 		</div>
 	);

@@ -7,9 +7,14 @@ import {
 export function Trackable({
 	children,
 	trackingKey,
-}: { children: React.ReactNode; trackingKey?: TrackingKey }) {
+	properties,
+}: {
+	children: React.ReactNode;
+	trackingKey?: TrackingKey;
+	properties?: Record<string, string>;
+}) {
 	if (!trackingKey) {
 		return <>{children}</>;
 	}
-	return <div onClick={trackHandler(trackingKey)}>{children}</div>;
+	return <div onClick={trackHandler(trackingKey, properties)}>{children}</div>;
 }

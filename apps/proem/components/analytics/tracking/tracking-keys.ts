@@ -211,6 +211,16 @@ export const analyticsKeys = {
 		close: "onboarding:close",
 		jump: "onboarding:jump",
 	},
+	experiments: {
+		news: {
+			clickAnswer: "experiments:news:click_answer",
+			clickArticle: "experiments:news:click_article",
+			clickUpvote: "experiments:news:click_upvote",
+			clickShare: "experiments:news:click_share",
+			clickAnnotateOwnContent: "experiments:news:click_annotate_own_content",
+			clickGenerate: "experiments:news:click_generate",
+		},
+	},
 } as const;
 
 function getViewName(path: string) {
