@@ -6,7 +6,7 @@ export const FormSchema = z.object({
 		.min(100, {
 			message: "Must be at least 100 characters.",
 		})
-		.max(9999, {
-			message: "Must not be longer than 9999 characters.",
+		.max(20000, {
+			message: "Must not be longer than 20.000 characters.",
 		}),
 });
