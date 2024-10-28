@@ -81,7 +81,7 @@ const trimNewlines = (text: string): string => {
 
 type ParserResult = {
 	transcript: string;
-	artworkUrl: string;
+	artworkUrl: string | undefined;
 };
 
 const parseVideo = async (url: string): Promise<ParserResult> => {
@@ -109,9 +109,6 @@ const parseArticle = async (url: string): Promise<ParserResult> => {
 	const artworkUrl = rawTranscript.objects[0]?.html.match(
 		/<img[^>]*src="([^"]+)"/,
 	)?.[1];
-	if (!artworkUrl) {
-		throw new Error("No artwork URL found");
-	}
 
 	return {
 		transcript,
