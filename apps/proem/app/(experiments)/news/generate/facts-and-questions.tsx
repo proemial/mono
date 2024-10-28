@@ -5,7 +5,6 @@ import { toTitleCaseIfAllCaps } from "@/utils/string-utils";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
@@ -40,7 +39,11 @@ export const FactsAndQuestions = ({ url }: { url?: string }) => {
 	}, [url]);
 
 	// For generating sources of static news articles
-	console.log(JSON.stringify(factsAndQuestions?.papers));
+	console.log(
+		"factsAndQuestions?.papers",
+		JSON.stringify(factsAndQuestions?.papers),
+	);
+	console.log("factsAndQuestions?.artwork", factsAndQuestions?.artwork);
 
 	return (
 		<div className="flex flex-col gap-6">
@@ -57,7 +60,7 @@ export const FactsAndQuestions = ({ url }: { url?: string }) => {
 			{factsAndQuestions && (
 				<div className="flex flex-col gap-2">
 					{factsAndQuestions.artwork && (
-						<Image
+						<img
 							src={factsAndQuestions.artwork}
 							alt="Artwork"
 							width={714}
