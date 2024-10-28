@@ -30,8 +30,12 @@ type Feature = {
 export async function annotateWithScienceAction(
 	item: z.infer<typeof PrimaryItemSchema>,
 ) {
+	const itemType =
+		item.url.includes("youtube.com") || item.url.includes("youtu.be")
+			? "youtube"
+			: "article";
 	const { transcript, artworkUrl } =
-		item.type === "youtube"
+		itemType === "youtube"
 			? await parseVideo(item.url)
 			: await parseArticle(item.url);
 

@@ -14,11 +14,8 @@ import {
 	FormLabel,
 	FormMessage,
 	Input,
-	ToggleGroup,
-	ToggleGroupItem,
 } from "@proemial/shadcn-ui";
-import { BookOpen01, MagicWand02 } from "@untitled-ui/icons-react";
-import Image from "next/image";
+import { MagicWand02 } from "@untitled-ui/icons-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -46,43 +43,6 @@ export const InputForm = ({ onSubmit }: Props) => {
 				onSubmit={form.handleSubmit(handleSubmit)}
 				className="flex flex-col gap-4"
 			>
-				<FormField
-					control={form.control}
-					name="type"
-					render={({ field }) => (
-						<FormItem className="space-y-3">
-							<FormControl>
-								<ToggleGroup
-									type="single"
-									value={field.value}
-									onValueChange={field.onChange}
-									className="flex gap-4"
-								>
-									<ToggleGroupItem
-										value="article"
-										className="flex gap-2 items-center data-[state=on]:bg-theme-500 data-[state=on]:font-semibold hover:text-black min-w-[120px]"
-									>
-										<BookOpen01 className="size-4" />
-										News article
-									</ToggleGroupItem>
-									<ToggleGroupItem
-										value="youtube"
-										className="flex gap-2 items-center data-[state=on]:bg-theme-500 data-[state=on]:font-semibold hover:text-black min-w-[120px]"
-									>
-										<Image
-											src="/news/images/youtube-2017.png"
-											alt="YouTube"
-											width={70}
-											height={16}
-											className="object-contain"
-										/>
-									</ToggleGroupItem>
-								</ToggleGroup>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
 				<FormField
 					control={form.control}
 					name="url"
