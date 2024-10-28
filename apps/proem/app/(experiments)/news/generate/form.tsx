@@ -1,6 +1,8 @@
 "use client";
 
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Throbber } from "@/components/throbber";
+import { Trackable } from "@/components/trackable";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Button,
@@ -9,35 +11,34 @@ import {
 	FormDescription,
 	FormField,
 	FormItem,
+	FormLabel,
 	FormMessage,
-	Textarea,
+	Input,
+	ToggleGroup,
+	ToggleGroupItem,
 } from "@proemial/shadcn-ui";
-import { MagicWand02 } from "@untitled-ui/icons-react";
+import { BookOpen01, MagicWand02 } from "@untitled-ui/icons-react";
+import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { FormSchema } from "./types";
-import { Trackable } from "@/components/trackable";
-import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
+import { PrimaryItemSchema } from "./types";
 
 type Props = {
-	onSubmit: (data: z.infer<typeof FormSchema>) => Promise<void>;
+	onSubmit: (data: z.infer<typeof PrimaryItemSchema>) => Promise<void>;
 };
 
-export const TextareaForm = ({ onSubmit }: Props) => {
-	const form = useForm<z.infer<typeof FormSchema>>({
-		resolver: zodResolver(FormSchema),
+export const InputForm = ({ onSubmit }: Props) => {
+	const form = useForm<z.infer<typeof PrimaryItemSchema>>({
+		resolver: zodResolver(PrimaryItemSchema),
 	});
 	const [isLoading, setIsLoading] = useState(false);
 
-	const handleSubmit = async (data: z.infer<typeof FormSchema>) => {
+	const handleSubmit = async (data: z.infer<typeof PrimaryItemSchema>) => {
 		setIsLoading(true);
 		await onSubmit(data);
 		setIsLoading(false);
 	};
-
-	// For generating text of static news articles
-	console.log(JSON.stringify(form.getValues().content));
 
 	return (
 		<Form {...form}>
@@ -47,19 +48,56 @@ export const TextareaForm = ({ onSubmit }: Props) => {
 			>
 				<FormField
 					control={form.control}
-					name="content"
+					name="type"
+					render={({ field }) => (
+						<FormItem className="space-y-3">
+							<FormControl>
+								<ToggleGroup
+									type="single"
+									value={field.value}
+									onValueChange={field.onChange}
+									className="flex gap-4"
+								>
+									<ToggleGroupItem
+										value="article"
+										className="flex gap-2 items-center data-[state=on]:bg-theme-500 data-[state=on]:font-semibold hover:text-black min-w-[120px]"
+									>
+										<BookOpen01 className="size-4" />
+										News article
+									</ToggleGroupItem>
+									<ToggleGroupItem
+										value="youtube"
+										className="flex gap-2 items-center data-[state=on]:bg-theme-500 data-[state=on]:font-semibold hover:text-black min-w-[120px]"
+									>
+										<Image
+											src="/news/images/youtube-2017.png"
+											alt="YouTube"
+											width={70}
+											height={16}
+											className="object-contain"
+										/>
+									</ToggleGroupItem>
+								</ToggleGroup>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="url"
 					render={({ field }) => (
 						<FormItem>
-							<h3>Content</h3>
+							<FormLabel>URL</FormLabel>
 							<FormControl>
-								<Textarea
-									className="min-h-[300px] rounded-md text-base"
+								<Input
+									className="rounded-md bg-white"
 									{...field}
 									disabled={isLoading}
 								/>
 							</FormControl>
 							<FormDescription className="text-theme-700">
-								Enter the content you want to annotate.
+								Enter the URL of the content you want to annotate.
 							</FormDescription>
 							<FormMessage />
 						</FormItem>
@@ -68,7 +106,10 @@ export const TextareaForm = ({ onSubmit }: Props) => {
 				<div className="flex justify-center">
 					<Trackable
 						trackingKey={analyticsKeys.experiments.news.clickGenerate}
-						properties={{ content: form.getValues().content }}
+						properties={{
+							type: form.getValues().type,
+							url: form.getValues().url,
+						}}
 					>
 						<Button
 							type="submit"
