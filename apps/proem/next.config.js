@@ -52,6 +52,10 @@ const nextConfig = {
 				protocol: "https",
 				hostname: "i.guim.co.uk",
 			},
+			{
+				protocol: "https",
+				hostname: "i.ytimg.com",
+			},
 		],
 	},
 };

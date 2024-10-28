@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { FormSchema } from "./types";
+import { PrimaryItemSchema } from "./types";
 import { SearchMetrics } from "@proemial/adapters/qdrant/search/papers-search";
 import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
@@ -27,9 +27,28 @@ type Feature = {
 	type: "topic" | "keyword" | "concept";
 };
 
-export async function anchorInScienceAction(data: z.infer<typeof FormSchema>) {
-	// Generate search query from news article
-	const indexQuery = await generateIndexQuery(data.content);
+export async function annotateWithScienceAction(
+	item: z.infer<typeof PrimaryItemSchema>,
+) {
+	const videoId = item.url.split("v=")[1];
+	if (!videoId) {
+		throw new Error("No video ID found");
+	}
+	const rawTranscript = await fetchYoutubeTranscript(videoId);
+	const formattedTranscript = rawTranscript.results[0]?.content
+		.filter((c) => typeof c.transcriptSegmentRenderer !== "undefined")
+		.map((c) => c.transcriptSegmentRenderer?.snippet.runs[0]?.text)
+		.join(", ");
+	if (!formattedTranscript) {
+		throw new Error("No transcript found");
+	}
+
+	console.log(formattedTranscript);
+
+	const content = formattedTranscript; // TODO: Support article content
+
+	// Generate search query from primary item
+	const indexQuery = await generateIndexQuery(content);
 	const parsedQuery = indexQuery
 		.split("<search_query>")[1]
 		?.split("</search_query>")[0];
@@ -43,13 +62,9 @@ export async function anchorInScienceAction(data: z.infer<typeof FormSchema>) {
 	if (!papers) {
 		throw new Error("No papers found");
 	}
-	console.log({ papers });
 
 	// Generate facts and questions from news article and papers
-	const factsAndQuestions = await generateFactsAndQuestions(
-		data.content,
-		papers,
-	);
+	const factsAndQuestions = await generateFactsAndQuestions(content, papers);
 
 	const facts = factsAndQuestions.split("<task_1>")[1]?.split("</task_1>")[0];
 	const questions = factsAndQuestions
@@ -67,20 +82,9 @@ export async function anchorInScienceAction(data: z.infer<typeof FormSchema>) {
 		facts: trimNewlines(facts),
 		questions: trimNewlines(questions),
 		papers,
+		artwork: `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`,
 	};
 }
-
-const searchIndex = async (
-	query: string,
-	from: string,
-): Promise<SearchResult> => {
-	const result = await fetch("https://index.proem.ai/api/search", {
-		method: "POST",
-		body: JSON.stringify({ query, from }),
-	});
-
-	return await result.json();
-};
 
 const generateIndexQuery = async (newsArticle: string): Promise<string> => {
 	const { text } = await generateText({
@@ -163,4 +167,41 @@ Answer each question in a short and intriguing way, using layman's terminology, 
 // Trims newlines from the beginning and end of a string
 const trimNewlines = (text: string): string => {
 	return text.replace(/^\n+|\n+$/g, "");
+};
+
+const searchIndex = async (
+	query: string,
+	from: string,
+): Promise<SearchResult> => {
+	const result = await fetch("https://index.proem.ai/api/search", {
+		method: "POST",
+		body: JSON.stringify({ query, from }),
+	});
+
+	return await result.json();
+};
+
+type RawTranscripts = {
+	results: {
+		content: {
+			transcriptSegmentRenderer: { snippet: { runs: { text: string }[] } };
+		}[];
+	}[];
+};
+
+const fetchYoutubeTranscript = async (
+	videoId: string,
+): Promise<RawTranscripts> => {
+	const result = await fetch("https://realtime.oxylabs.io/v1/queries", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Basic ${Buffer.from(
+				`${process.env.OXYLABS_USERNAME}:${process.env.OXYLABS_PASSWORD}`,
+			).toString("base64")}`,
+		},
+		body: JSON.stringify({ source: "youtube_transcript", query: videoId }),
+	});
+
+	return await result.json();
 };

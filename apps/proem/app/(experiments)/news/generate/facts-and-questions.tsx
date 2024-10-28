@@ -8,20 +8,21 @@ import Link from "next/link";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { z } from "zod";
-import { anchorInScienceAction } from "./actions";
-import { TextareaForm } from "./form";
-import { FormSchema } from "./types";
+import { annotateWithScienceAction } from "./actions";
+import { InputForm } from "./form";
+import { PrimaryItemSchema } from "./types";
+import Image from "next/image";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
 
 export const FactsAndQuestions = () => {
 	const [factsAndQuestions, setFactsAndQuestions] = useState<
-		Awaited<ReturnType<typeof anchorInScienceAction>> | undefined
+		Awaited<ReturnType<typeof annotateWithScienceAction>> | undefined
 	>();
 
-	const handleSubmit = async (data: z.infer<typeof FormSchema>) => {
-		const result = await anchorInScienceAction(data);
+	const handleSubmit = async (data: z.infer<typeof PrimaryItemSchema>) => {
+		const result = await annotateWithScienceAction(data);
 		setFactsAndQuestions(result);
 	};
 
@@ -30,9 +31,18 @@ export const FactsAndQuestions = () => {
 
 	return (
 		<div className="flex flex-col gap-6">
-			<TextareaForm onSubmit={handleSubmit} />
+			<InputForm onSubmit={handleSubmit} />
 			{factsAndQuestions && (
 				<div className="flex flex-col gap-2">
+					{factsAndQuestions.artwork && (
+						<Image
+							src={factsAndQuestions.artwork}
+							alt="Artwork"
+							width={714}
+							height={400}
+							className="rounded-lg object-cover drop-shadow-md max-w-[600px] self-center"
+						/>
+					)}
 					<div className="flex flex-col">
 						<h3>Facts</h3>
 						<div className="prose text-base max-w-full">
