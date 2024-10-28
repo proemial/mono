@@ -19,6 +19,7 @@ export const PostRepository = {
 		userId: string | null | undefined,
 		orgMemberIds: string[] = [],
 	) => {
+		console.log("space id", spaceId);
 		if (paperId) {
 			return await neonDb.query.posts.findMany({
 				where: and(
@@ -42,8 +43,7 @@ export const PostRepository = {
 			}
 			const spacePosts = await neonDb.query.posts.findMany({
 				where: and(
-					// Show posts from various spaces in default "discover" space
-					space.id === userId ? undefined : eq(posts.spaceId, spaceId),
+					eq(posts.spaceId, spaceId),
 					postPermissions(userId, orgMemberIds),
 				),
 				with: { comments: { orderBy: [asc(comments.createdAt)] }, space: true },
@@ -62,9 +62,12 @@ export const PostRepository = {
 				return true;
 			});
 		}
-		// For anonymous users
+		// For "Discover" space
 		const publicPosts = await neonDb.query.posts.findMany({
-			where: postPermissions(ANONYMOUS_USER_ID, []),
+			where: postPermissionsNoPublic(
+				userId ?? ANONYMOUS_USER_ID,
+				orgMemberIds ?? [],
+			),
 			with: { comments: { orderBy: [asc(comments.createdAt)] }, space: true },
 			orderBy: [desc(posts.createdAt)],
 			limit: 25, // TODO: Pagination
@@ -83,6 +86,27 @@ export const PostRepository = {
 	},
 };
 
+/**
+ * Allows org members to view posts by other members of the org, and your own
+ * posts. No public posts.
+ */
+const postPermissionsNoPublic = (
+	userId: string | null | undefined,
+	orgMemberIds: string[],
+) =>
+	or(
+		// Posts by org members
+		and(
+			eq(posts.shared, "organization"),
+			inArray(posts.authorId, orgMemberIds.length > 0 ? orgMemberIds : [""]),
+		),
+		// Own posts
+		eq(posts.authorId, userId ?? ""),
+	);
+
+/**
+ * Allows anyone to view public posts, posts by org members, and your own posts.
+ */
 const postPermissions = (
 	userId: string | null | undefined,
 	orgMemberIds: string[],
