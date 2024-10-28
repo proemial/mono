@@ -67,7 +67,6 @@ export const InputForm = ({ onSubmit }: Props) => {
 					<Trackable
 						trackingKey={analyticsKeys.experiments.news.clickGenerate}
 						properties={{
-							type: form.getValues().type,
 							url: form.getValues().url,
 						}}
 					>
