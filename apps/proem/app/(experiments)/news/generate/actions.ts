@@ -35,6 +35,8 @@ export async function annotateWithScienceAction(
 			? await parseVideo(item.url)
 			: await parseArticle(item.url);
 
+	console.log({ transcript, artworkUrl });
+
 	// Generate search query for index from primary item transcript
 	const indexQuery = await generateIndexSearchQuery(transcript);
 	const parsedQuery = indexQuery
