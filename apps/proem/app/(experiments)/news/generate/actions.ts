@@ -27,6 +27,7 @@ type Feature = {
 export type AnnotateWithScienceResponse = {
 	output?: {
 		facts: string;
+		commentary: string;
 		questions: string;
 		papers: QdrantPaper[];
 		artwork?: string;
@@ -45,18 +46,20 @@ export async function annotateWithScienceAction(
 		const query = await buildQuery(transcript);
 
 		// Search index for papers that match the query
-		const { papers } = await fetchPapersFromIndex(query, "2024-10-01"); // TODO: Make date adjustable
+		const { papers } = await fetchPapersFromIndex(query, "2024-01-01"); // TODO: Make date adjustable
 
 		// Generate facts and questions from papers, for the primary item transcript
 		const factsAndQuestions = await generateFactsAndQuestions(
 			transcript,
+			query,
 			papers,
 		);
 
-		const { facts, questions } = parseOutput(factsAndQuestions);
+		const { facts, commentary, questions } = parseOutput(factsAndQuestions);
 		return {
 			output: {
 				facts,
+				commentary,
 				questions,
 				papers,
 				artwork: artworkUrl,
@@ -106,23 +109,28 @@ function parseOutput(factsAndQuestions: string) {
 	const rawFacts = factsAndQuestions
 		.split("<task_1>")[1]
 		?.split("</task_1>")[0];
-	const rawQuestions = factsAndQuestions
+	const rawCommentary = factsAndQuestions
 		.split("<task_2>")[1]
 		?.split("</task_2>")[0];
+	const rawQuestions = factsAndQuestions
+		.split("<task_3>")[1]
+		?.split("</task_3>")[0];
 
-	if (!rawFacts || !rawQuestions) {
+	if (!rawFacts || !rawCommentary || !rawQuestions) {
 		throw new Error("Failed to generate valid facts and questions");
 	}
 
 	const facts = trimNewlines(rawFacts);
+	const commentary = trimNewlines(rawCommentary);
 	const questions = trimNewlines(rawQuestions);
 
 	console.log("[output]", {
 		facts: `[${facts.length}] ${facts.slice(0, 50)} ...`,
+		commentary: `[${commentary.length}] ${commentary.slice(0, 50)} ...`,
 		questions: `[${questions.length}] ${questions.slice(0, 50)} ...`,
 	});
 
-	return { facts, questions };
+	return { facts, commentary, questions };
 }
 
 // Trims newlines from the beginning and end of a string

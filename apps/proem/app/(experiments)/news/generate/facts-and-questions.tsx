@@ -73,6 +73,12 @@ export const FactsAndQuestions = ({ url }: { url?: string }) => {
 						</div>
 					</div>
 					<div className="flex flex-col">
+						<h3>Background</h3>
+						<div className="prose text-base max-w-full">
+							<ReactMarkdown>{factsAndQuestions.output.commentary}</ReactMarkdown>
+						</div>
+					</div>
+					<div className="flex flex-col">
 						<h3>Q&A</h3>
 						<div className="prose text-base max-w-full">
 							<ReactMarkdown>
