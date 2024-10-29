@@ -55,11 +55,11 @@ export const FactsAndQuestions = ({ url }: { url?: string }) => {
 					<div className="text-red-500">{factsAndQuestions.error}</div>
 				</div>
 			)}
-			{factsAndQuestions && !factsAndQuestions.error && (
+			{factsAndQuestions?.output && (
 				<div className="flex flex-col gap-2">
-					{factsAndQuestions.artwork && (
+					{factsAndQuestions.output.artwork && (
 						<img
-							src={factsAndQuestions.artwork}
+							src={factsAndQuestions.output.artwork}
 							alt="Artwork"
 							width={714}
 							height={400}
@@ -69,19 +69,21 @@ export const FactsAndQuestions = ({ url }: { url?: string }) => {
 					<div className="flex flex-col">
 						<h3>Facts</h3>
 						<div className="prose text-base max-w-full">
-							<ReactMarkdown>{factsAndQuestions.facts}</ReactMarkdown>
+							<ReactMarkdown>{factsAndQuestions.output.facts}</ReactMarkdown>
 						</div>
 					</div>
 					<div className="flex flex-col">
 						<h3>Q&A</h3>
 						<div className="prose text-base max-w-full">
-							<ReactMarkdown>{factsAndQuestions.questions}</ReactMarkdown>
+							<ReactMarkdown>
+								{factsAndQuestions.output.questions}
+							</ReactMarkdown>
 						</div>
 					</div>
 					<div className="flex flex-col bg-theme-500 mt-4 p-4 pt-2 rounded-md">
 						<h3>Sources</h3>
 						<div className="flex flex-col gap-2">
-							{factsAndQuestions.papers.map((paper, index) => (
+							{factsAndQuestions.output.papers.map((paper, index) => (
 								<Link
 									key={paper.id}
 									href={`/paper/oa/${paper.id.replace("https://openalex.org/", "")}`}

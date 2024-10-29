@@ -3,13 +3,34 @@ import { z } from "zod";
 import { generateFactsAndQuestions } from "./prompts/generate-facts-and-questions";
 import { generateIndexSearchQuery } from "./prompts/generate-index-search-query";
 import { PrimaryItemSchema } from "./types";
-import { QdrantPaper } from "@proemial/adapters/qdrant/papers";
+
+type SearchResult = {
+	papers: QdrantPaper[];
+};
+
+export type QdrantPaper = {
+	score: number;
+	title: string;
+	created: string;
+	abstract: string;
+	id: string;
+	features: Feature[];
+};
+
+type Feature = {
+	id: string;
+	label: string;
+	score: number;
+	type: "topic" | "keyword" | "concept";
+};
 
 export type AnnotateWithScienceResponse = {
-	facts: string;
-	questions: string;
-	papers: QdrantPaper[];
-	artwork?: string;
+	output?: {
+		facts: string;
+		questions: string;
+		papers: QdrantPaper[];
+		artwork?: string;
+	};
 	error?: string;
 };
 
@@ -24,7 +45,7 @@ export async function annotateWithScienceAction(
 		const query = await buildQuery(transcript);
 
 		// Search index for papers that match the query
-		const papers = await fetchPapersFromIndex(query, "2024-10-01"); // TODO: Make date adjustable
+		const { papers } = await fetchPapersFromIndex(query, "2024-10-01"); // TODO: Make date adjustable
 
 		// Generate facts and questions from papers, for the primary item transcript
 		const factsAndQuestions = await generateFactsAndQuestions(
@@ -34,16 +55,15 @@ export async function annotateWithScienceAction(
 
 		const { facts, questions } = parseOutput(factsAndQuestions);
 		return {
-			facts: trimNewlines(facts),
-			questions: trimNewlines(questions),
-			papers,
-			artwork: artworkUrl,
+			output: {
+				facts,
+				questions,
+				papers,
+				artwork: artworkUrl,
+			},
 		};
 	} catch (error) {
 		return {
-			facts: "",
-			questions: "",
-			papers: [],
 			error:
 				error instanceof Error ? error.message : "An unknown error occurred",
 		};
@@ -59,7 +79,12 @@ async function scrape(url: string) {
 	const output =
 		itemType === "youtube" ? await parseVideo(url) : await parseArticle(url);
 
-	console.log("URL scraped", JSON.stringify(output));
+	const transcript = output.transcript.replaceAll("\n", " ");
+	console.log(
+		"[scrape]",
+		`[${transcript.length}]: ${transcript.slice(0, 50)} ...`,
+		!!output.artworkUrl,
+	);
 
 	return output;
 }
@@ -72,24 +97,29 @@ async function buildQuery(transcript: string) {
 	if (!parsedQuery) {
 		throw new Error("Failed to parse search query");
 	}
-	console.log("query", trimNewlines(parsedQuery));
+	console.log("[query]", trimNewlines(parsedQuery));
 
 	return parsedQuery;
 }
 
 function parseOutput(factsAndQuestions: string) {
-	const facts = factsAndQuestions.split("<task_1>")[1]?.split("</task_1>")[0];
-	const questions = factsAndQuestions
+	const rawFacts = factsAndQuestions
+		.split("<task_1>")[1]
+		?.split("</task_1>")[0];
+	const rawQuestions = factsAndQuestions
 		.split("<task_2>")[1]
 		?.split("</task_2>")[0];
 
-	if (!facts || !questions) {
+	if (!rawFacts || !rawQuestions) {
 		throw new Error("Failed to generate valid facts and questions");
 	}
 
-	console.log({
-		facts: trimNewlines(facts),
-		questions: trimNewlines(questions),
+	const facts = trimNewlines(rawFacts);
+	const questions = trimNewlines(rawQuestions);
+
+	console.log("[output]", {
+		facts: `[${facts.length}] ${facts.slice(0, 50)} ...`,
+		questions: `[${questions.length}] ${questions.slice(0, 50)} ...`,
 	});
 
 	return { facts, questions };
@@ -143,18 +173,19 @@ const parseArticle = async (url: string): Promise<ParserResult> => {
 const fetchPapersFromIndex = async (
 	query: string,
 	from: string,
-): Promise<QdrantPaper[]> => {
+): Promise<SearchResult> => {
 	const result = await fetch("https://index.proem.ai/api/search", {
 		method: "POST",
 		body: JSON.stringify({ query, from }),
 	});
 
-	const { papers } = await result.json();
+	const papers = (await result.json()) as SearchResult;
+
 	if (!papers) {
 		throw new Error("No papers found");
 	}
-	console.log("papers", papers.length);
 
+	console.log("[papers]", papers.papers.length);
 	return papers;
 };
 
