@@ -1,13 +1,26 @@
 import Link from "next/link";
 
 const experiments = [
-	{ name: "spaces", path: "/space" },
 	{ name: "index", path: "https://index.proem.ai" },
-	{ name: "reels", path: "/reels" },
-	{ name: "news", path: "/news" },
+	{ name: "reels", path: "https://reels.proem.ai" },
+	{ name: "news", path: "https://news.proem.ai" },
+	{ name: "ask", path: "https://ask.proem.ai" },
+	{ name: "organisations", path: "https://proem.ai/discover/ibm" },
+	{
+		name: "spaces",
+		path: "https://proem.ai/space/col_ictqflngkeeyvpkauaqns6hz",
+	},
+	{
+		name: "rss",
+		path: "https://index.proem.ai/rss?like=Graph%20mining%20uses%20features%20to%20analyze%20how%20a%20set%20of%20observations%20are%20related%20based%20on%20user-facing%20similarity%20signals1.%20It%20involves%20processing,%20analyzing,%20and%20extracting%20valuable%20insights%20from%20large%20amounts%20of%20graph%20data,%20where%20nodes%20represent%20entities%20and%20edges%20represent%20relationships%20between%20those%20entities",
+	},
+	{
+		name: "embed",
+		path: "https://proem.ai/embed/col_kkm3c75heomrob12f3ues4f0?foreground=FD4145&background=F8F8F8",
+	},
 	// ...
 ];
-const links = [...experiments, ...experiments];
+const links = [...experiments];
 
 export default function BetaPage() {
 	return (
