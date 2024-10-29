@@ -38,13 +38,6 @@ export const FactsAndQuestions = ({ url }: { url?: string }) => {
 		}
 	}, [url]);
 
-	// For generating sources of static news articles
-	console.log(
-		"factsAndQuestions?.papers",
-		JSON.stringify(factsAndQuestions?.papers),
-	);
-	console.log("factsAndQuestions?.artwork", factsAndQuestions?.artwork);
-
 	return (
 		<div className="flex flex-col gap-6">
 			{!url && <InputForm onSubmit={handleSubmit} />}
@@ -55,6 +48,11 @@ export const FactsAndQuestions = ({ url }: { url?: string }) => {
 						Annotating <span className="font-bold underline">{url}</span> with
 						science...
 					</div>
+				</div>
+			)}
+			{factsAndQuestions?.error && (
+				<div className="flex flex-col justify-center items-center gap-2">
+					<div className="text-red-500">{factsAndQuestions.error}</div>
 				</div>
 			)}
 			{factsAndQuestions && (

@@ -1,47 +1,70 @@
 "use server";
-
-import { SearchMetrics } from "@proemial/adapters/qdrant/search/papers-search";
 import { z } from "zod";
 import { generateFactsAndQuestions } from "./prompts/generate-facts-and-questions";
 import { generateIndexSearchQuery } from "./prompts/generate-index-search-query";
 import { PrimaryItemSchema } from "./types";
+import { QdrantPaper } from "@proemial/adapters/qdrant/papers";
 
-type SearchResult = {
-	papers?: QdrantPaper[] | undefined | null;
-	metrics?: SearchMetrics;
-};
-
-export type QdrantPaper = {
-	score: number;
-	title: string;
-	created: string;
-	abstract: string;
-	id: string;
-	features: Feature[];
-};
-
-type Feature = {
-	id: string;
-	label: string;
-	score: number;
-	type: "topic" | "keyword" | "concept";
+export type AnnotateWithScienceResponse = {
+	facts: string;
+	questions: string;
+	papers: QdrantPaper[];
+	artwork?: string;
+	error?: string;
 };
 
 export async function annotateWithScienceAction(
 	item: z.infer<typeof PrimaryItemSchema>,
-) {
+): Promise<AnnotateWithScienceResponse> {
+	try {
+		// Scrape the primary URL to get the transcript and artwork URL
+		const { transcript, artworkUrl } = await scrape(item.url);
+
+		// Generate search query for index from primary item transcript
+		const query = await buildQuery(transcript);
+
+		// Search index for papers that match the query
+		const papers = await fetchPapersFromIndex(query, "2024-10-01"); // TODO: Make date adjustable
+
+		// Generate facts and questions from papers, for the primary item transcript
+		const factsAndQuestions = await generateFactsAndQuestions(
+			transcript,
+			papers,
+		);
+
+		const { facts, questions } = parseOutput(factsAndQuestions);
+		return {
+			facts: trimNewlines(facts),
+			questions: trimNewlines(questions),
+			papers,
+			artwork: artworkUrl,
+		};
+	} catch (error) {
+		return {
+			facts: "",
+			questions: "",
+			papers: [],
+			error:
+				error instanceof Error ? error.message : "An unknown error occurred",
+		};
+	}
+}
+
+async function scrape(url: string) {
 	const itemType =
-		item.url.includes("youtube.com") || item.url.includes("youtu.be")
+		url.includes("youtube.com") || url.includes("youtu.be")
 			? "youtube"
 			: "article";
-	const { transcript, artworkUrl } =
-		itemType === "youtube"
-			? await parseVideo(item.url)
-			: await parseArticle(item.url);
 
-	console.log({ transcript, artworkUrl });
+	const output =
+		itemType === "youtube" ? await parseVideo(url) : await parseArticle(url);
 
-	// Generate search query for index from primary item transcript
+	console.log("URL scraped", JSON.stringify(output));
+
+	return output;
+}
+
+async function buildQuery(transcript: string) {
 	const indexQuery = await generateIndexSearchQuery(transcript);
 	const parsedQuery = indexQuery
 		.split("<search_query>")[1]
@@ -49,35 +72,27 @@ export async function annotateWithScienceAction(
 	if (!parsedQuery) {
 		throw new Error("Failed to parse search query");
 	}
-	console.log({ parsedQuery: trimNewlines(parsedQuery) });
+	console.log("query", trimNewlines(parsedQuery));
 
-	// Search index for papers that match the query
-	const { papers } = await fetchPapersFromIndex(parsedQuery, "2024-10-01"); // TODO: Make date adjustable
-	if (!papers) {
-		throw new Error("No papers found");
-	}
+	return parsedQuery;
+}
 
-	// Generate facts and questions from papers, for the primary item transcript
-	const factsAndQuestions = await generateFactsAndQuestions(transcript, papers);
-
+function parseOutput(factsAndQuestions: string) {
 	const facts = factsAndQuestions.split("<task_1>")[1]?.split("</task_1>")[0];
 	const questions = factsAndQuestions
 		.split("<task_2>")[1]
 		?.split("</task_2>")[0];
+
 	if (!facts || !questions) {
 		throw new Error("Failed to generate valid facts and questions");
 	}
+
 	console.log({
 		facts: trimNewlines(facts),
 		questions: trimNewlines(questions),
 	});
 
-	return {
-		facts: trimNewlines(facts),
-		questions: trimNewlines(questions),
-		papers,
-		artwork: artworkUrl,
-	};
+	return { facts, questions };
 }
 
 // Trims newlines from the beginning and end of a string
@@ -96,6 +111,9 @@ const parseVideo = async (url: string): Promise<ParserResult> => {
 		throw new Error("No video ID found");
 	}
 	const rawTranscript = await fetchYoutubeTranscript(videoId);
+	if (!rawTranscript.results?.at(0)?.content) {
+		throw new Error("No youtube content found");
+	}
 	const formattedTranscript = rawTranscript.results[0]?.content
 		.filter((c) => typeof c.transcriptSegmentRenderer !== "undefined")
 		.map((c) => c.transcriptSegmentRenderer?.snippet.runs[0]?.text)
@@ -125,13 +143,19 @@ const parseArticle = async (url: string): Promise<ParserResult> => {
 const fetchPapersFromIndex = async (
 	query: string,
 	from: string,
-): Promise<SearchResult> => {
+): Promise<QdrantPaper[]> => {
 	const result = await fetch("https://index.proem.ai/api/search", {
 		method: "POST",
 		body: JSON.stringify({ query, from }),
 	});
 
-	return await result.json();
+	const { papers } = await result.json();
+	if (!papers) {
+		throw new Error("No papers found");
+	}
+	console.log("papers", papers.length);
+
+	return papers;
 };
 
 type YouTubeTranscriptPayload = {
