@@ -16,4 +16,9 @@ export const UpStash = {
 			url: process.env.REDIS_SUMMARIES_URL,
 			token: process.env.REDIS_SUMMARIES_TOKEN,
 		}),
+	news: () =>
+		new Redis({
+			url: process.env.REDIS_NEWS_URL,
+			token: process.env.REDIS_NEWS_TOKEN,
+		}),
 };
