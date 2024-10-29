@@ -55,7 +55,7 @@ export const FactsAndQuestions = ({ url }: { url?: string }) => {
 					<div className="text-red-500">{factsAndQuestions.error}</div>
 				</div>
 			)}
-			{factsAndQuestions && (
+			{factsAndQuestions && !factsAndQuestions.error && (
 				<div className="flex flex-col gap-2">
 					{factsAndQuestions.artwork && (
 						<img
