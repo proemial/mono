@@ -10,7 +10,7 @@ export const generateIndexSearchQuery = async (
 			{
 				role: "user",
 				content: `
-Given the following transcript, generate a summary that will be used as a search query to find scientific research articles relevant to the topic of the transcript.
+Given the following transcript:
 
 <transcript>${transcript}</transcript>
 

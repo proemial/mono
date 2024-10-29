@@ -42,7 +42,9 @@ Create a 60 word commentary reflecting on the main issue of the original transcr
 <task_3>
 Create six questions of a universal nature on the topic of the transcript that can be answered using discoveries in the abstracts. Make the questions easy to understand, in a voice of an engaging news journalist, using a maximum of 10 words.
 
-Answer each question in a short and intriguing way, using layman's terminology, that makes the reader curious to learn more. It's imperative that you include references to the abstracts when quoting text or sources, using [brackets].
+For each question, write a short and intriguing answer, using layman's terminology, that makes the reader curious to learn more. It's imperative that you include references to the abstracts when quoting text or sources, using [brackets].
+
+Output a list of questions with each answer on a separate indented line item below each question.
 </task_3>
 			`,
 			},
