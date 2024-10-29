@@ -133,15 +133,15 @@ function mapToResult(
 		? {
 				authorships: payload.authorships.map((a) => ({
 					id: a.author.id,
-					display_name: a.author.display_name,
+					display_name: a.author?.display_name,
 				})),
 				location: {
 					source: {
-						display_name: payload.primary_location.source.display_name,
+						display_name: payload.primary_location?.source?.display_name,
 						host_organization_name:
-							payload.primary_location.source.host_organization_name,
+							payload.primary_location?.source?.host_organization_name,
 					},
-					landing_page_url: payload.primary_location.landing_page_url,
+					landing_page_url: payload.primary_location?.landing_page_url,
 				},
 				published: payload.publication_date,
 			}
