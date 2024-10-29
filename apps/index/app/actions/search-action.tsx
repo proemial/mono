@@ -44,6 +44,7 @@ export const searchAction = async (
 	const index = formData.get("index") as string;
 	const negatedQuery = formData.get("negatedQuery") as string;
 	const fullVectorSearch = formData.get("fullVectorSearch") === "true";
+	const extended = formData.get("extended") === "true";
 
 	writeCookie({
 		query,
@@ -93,7 +94,7 @@ export const searchAction = async (
 
 		return {
 			papers: response.map((p) =>
-				mapToResult(p.score, p.payload as OpenAlexPaperWithAbstract),
+				mapToResult(p.score, p.payload as OpenAlexPaperWithAbstract, extended),
 			),
 			metrics,
 		} as SearchResult;
@@ -109,7 +110,7 @@ export const searchAction = async (
 
 	return {
 		papers: response.map((p) =>
-			mapToResult(p.score, p.payload as OpenAlexPaperWithAbstract),
+			mapToResult(p.score, p.payload as OpenAlexPaperWithAbstract, extended),
 		),
 		metrics,
 	} as SearchResult;
@@ -126,7 +127,26 @@ function writeCookie(formData: Record<string, string>) {
 function mapToResult(
 	score: number,
 	payload: OpenAlexPaperWithAbstract,
+	extended?: boolean,
 ): QdrantPaper {
+	const extra = extended
+		? {
+				authorships: payload.authorships.map((a) => ({
+					id: a.author.id,
+					display_name: a.author.display_name,
+				})),
+				location: {
+					source: {
+						display_name: payload.primary_location.source.display_name,
+						host_organization_name:
+							payload.primary_location.source.host_organization_name,
+					},
+					landing_page_url: payload.primary_location.landing_page_url,
+				},
+				published: payload.publication_date,
+			}
+		: {};
+
 	return {
 		score: score,
 		id: payload.id,
@@ -134,6 +154,7 @@ function mapToResult(
 		created: payload.created_date,
 		abstract: payload.abstract as string,
 		features: features(payload),
+		...extra,
 	};
 }
 
