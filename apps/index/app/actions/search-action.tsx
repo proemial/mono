@@ -132,10 +132,12 @@ function mapToResult(
 	const extra = extended
 		? {
 				authorships: payload.authorships.map((a) => ({
-					id: a.author.id,
-					display_name: a.author?.display_name,
+					author: {
+						id: a.author.id,
+						display_name: a.author?.display_name,
+					},
 				})),
-				location: {
+				primary_location: {
 					source: {
 						display_name: payload.primary_location?.source?.display_name,
 						host_organization_name:
