@@ -1,4 +1,5 @@
 import arrow from "./arrow.svg";
+import Image from "next/image";
 
 export function BotSuggestion({
 	qa,
@@ -11,7 +12,7 @@ export function BotSuggestion({
 				{qa.at(0)}
 			</p>
 
-			<img
+			<Image
 				className="relative w-[13px] h-[13px] mr-[-0.50px]"
 				alt="Vector"
 				src={arrow}
