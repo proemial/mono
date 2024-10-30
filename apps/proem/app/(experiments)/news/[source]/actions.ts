@@ -64,9 +64,7 @@ export async function annotateWithScienceAction(
 				background: commentary,
 				questions: qaFromString(questions),
 			},
-			_: {
-				public: false,
-			},
+			_: {},
 		};
 
 		await Redis.news.set(item.url, content);

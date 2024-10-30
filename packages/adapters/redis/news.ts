@@ -50,7 +50,6 @@ export type NewsItem = {
 	references?: Array<ReferencedPaper>;
 	generated?: NewsEnrichments;
 	_?: {
-		public: boolean;
 		background?: string;
 	};
 };
