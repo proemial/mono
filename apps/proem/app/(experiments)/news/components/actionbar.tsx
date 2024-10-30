@@ -79,7 +79,12 @@ export function ActionBar({
 					</div>
 				</div>
 				<div
-					className="inline-flex h-8 items-center gap-1 px-3 py-2 relative flex-[0_0_auto] rounded-[19px] border border-solid"
+					className="inline-flex h-8 items-center gap-1 px-3 py-2 relative flex-[0_0_auto] rounded-[19px] border border-solid active:bg-theme-600"
+					onClick={() =>
+						document
+							.getElementById("askform")
+							?.scrollIntoView({ block: "center", behavior: "smooth" })
+					}
 					style={{ borderColor: textColor }}
 				>
 					<div
@@ -100,7 +105,7 @@ export function ActionBar({
 
 			<div
 				onClick={handleShare}
-				className="inline-flex h-8 items-center gap-1 px-3 py-2 relative flex-[0_0_auto] rounded-[19px] border border-solid hover:cursor-pointer"
+				className="inline-flex h-8 items-center gap-1 px-3 py-2 relative flex-[0_0_auto] rounded-[19px] border border-solid hover:cursor-pointer active:bg-theme-600"
 				style={{ borderColor: textColor }}
 			>
 				<div className="inline-flex items-start gap-1.5 relative flex-[0_0_auto]">

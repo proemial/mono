@@ -16,7 +16,7 @@ export default async function NewsPage() {
 						<a
 							key={i}
 							href={`/news/${encodeURIComponent(item.source?.url as string)}`}
-							className="block mb-3"
+							className="block mb-5"
 						>
 							<NewsCard data={item} />
 						</a>
