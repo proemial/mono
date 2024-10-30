@@ -5,7 +5,7 @@ import { Footer } from "./components/footer";
 
 export default async function NewsPage() {
 	console.log("Fetching news");
-	const items = (await Redis.news.list()).filter((item) => !!item._?.public);
+	const items = await Redis.news.list();
 
 	return (
 		<>

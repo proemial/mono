@@ -29,7 +29,7 @@ export const RedisNews = {
 		try {
 			keys = (
 				await UpStash.newsFeed().scan(0, {
-					count: 10,
+					count: 200,
 				})
 			)[1];
 		} finally {
@@ -38,7 +38,12 @@ export const RedisNews = {
 
 		begin = Time.now();
 		try {
-			return (await UpStash.news().mget(keys)) as NewsItem[];
+			const pipeline = UpStash.news().pipeline();
+			for (const key of keys) {
+				pipeline.get(key);
+			}
+			const results = await pipeline.exec();
+			return results as NewsItem[];
 		} finally {
 			Time.debug(begin, "[redis][news][mget]");
 		}
