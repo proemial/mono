@@ -152,7 +152,7 @@ export function Bot({ data }: { data?: NewsItem }) {
 		append,
 		isLoading,
 	} = useChat({
-		api: "/api/news",
+		api: "/api/news/bot",
 		initialMessages,
 		keepLastMessageOnError: true,
 		body: {
