@@ -1,39 +1,24 @@
-import { Button } from "@proemial/shadcn-ui";
-import { NewsItem } from "./news-item";
-import { QAItem } from "./qa-item";
-import staticNewsItems from "./static-news-items.json";
-import Link from "next/link";
-import { Trackable } from "@/components/trackable";
-import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
+import { Redis } from "@proemial/adapters/redis";
+import { Header } from "./components/header";
+import { NewsCard } from "./news-card";
+import { Footer } from "./components/footer";
 
 export default async function NewsPage() {
-	const items = staticNewsItems.sort((a, b) =>
-		b.timestamp.localeCompare(a.timestamp),
-	);
+	const items = (await Redis.news.list()).filter((item) => !!item._?.public);
 
 	return (
-		<div className="h-full bg-theme-500 space-y-6 py-6">
-			<div className="flex flex-col gap-4 max-w-xl mx-auto">
-				{items.map((item) => (
-					<NewsItem key={item.article.url} item={item}>
-						<QAItem item={item} />
-					</NewsItem>
-				))}
+		<div className="flex flex-col items-center gap-5 relative">
+			<div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
+				<Header />
+
+				<div className="flex flex-col gap-4 m-4">
+					{items.map((item, i) => (
+						<NewsCard key={i} data={item} />
+					))}
+				</div>
 			</div>
-			<div className="flex justify-center">
-				<Trackable
-					trackingKey={analyticsKeys.experiments.news.clickAnnotateOwnContent}
-				>
-					<Link href="/news/generate" target="_blank">
-						<Button
-							variant="black"
-							className="min-w-[260px] bg-theme-800 hover:bg-theme-900"
-						>
-							Annotate your own content!
-						</Button>
-					</Link>
-				</Trackable>
-			</div>
+
+			<Footer />
 		</div>
 	);
 }
