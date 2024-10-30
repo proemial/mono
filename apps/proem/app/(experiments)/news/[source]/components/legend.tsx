@@ -4,7 +4,7 @@ export function Legend({ data }: { data?: NewsItem }) {
 	return (
 		<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto]">
 			<img
-				className="relative self-stretch w-full h-[200px] object-cover"
+				className="relative self-stretch w-full h-[220px] object-cover object-top"
 				alt=""
 				src={data?.source?.image}
 			/>
@@ -15,7 +15,7 @@ export function Legend({ data }: { data?: NewsItem }) {
 				</p>
 			</div>
 
-			<div className="inline-flex items-start gap-1 px-3 py-1 absolute top-[156px] right-[16px] bg-[#ffffffe6] rounded-[26px]">
+			<div className="inline-flex items-start gap-1 px-3 py-1 absolute top-[176px] left-[12px] bg-[#ffffffe6] rounded-[26px]">
 				<a href={data?.source?.url} target="_blank" rel="noopener noreferrer">
 					{data?.source?.name}
 				</a>

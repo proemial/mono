@@ -14,7 +14,7 @@ export function Scaffold({ data }: { data: NewsItem }) {
 	return (
 		<div className="flex flex-col items-center gap-5 relative bg-white">
 			<img
-				className="absolute w-8 h-8 top-[95px] left-[27px] object-cover"
+				className="absolute w-8 h-8 top-[95px] left-[27px] object-cover object-top"
 				alt=""
 				src={data.source?.image}
 			/>
