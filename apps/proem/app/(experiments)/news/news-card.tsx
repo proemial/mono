@@ -86,11 +86,13 @@ function QA({ data }: { data: NewsItem }) {
 
 			<div className="flex flex-col items-start gap-2 pl-[58px] pr-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
 				<div className="flex items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
-					<Image
-						className="relative flex-[0_0_auto] w-8 h-8 rounded-full bg-black"
-						alt="Frame"
-						src={logo}
-					/>
+					<div className="relative flex-[0_0_auto] w-8 h-8 rounded-full bg-black flex items-center justify-center">
+						<Image
+							className="w-4 h-4"
+							alt="Frame"
+							src={logo}
+						/>
+					</div>
 
 					<div className="flex flex-col items-start gap-1 relative flex-1 grow">
 						<div className="flex flex-col items-center justify-center gap-1 p-3 relative self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] rounded-xl">
