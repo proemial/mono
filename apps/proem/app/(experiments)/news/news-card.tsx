@@ -121,7 +121,7 @@ export function NewsCard({ data }: { data: NewsItem }) {
 				style={{ background }}
 			>
 				<img
-					className="relative self-stretch w-full h-[200px] object-cover"
+					className="relative self-stretch w-full h-[220px] object-cover object-top"
 					alt=""
 					src={data?.source?.image}
 				/>
