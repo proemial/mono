@@ -11,11 +11,12 @@ export default async function NewsPage() {
 			<div className="flex flex-col items-start relative self-stretch w-full">
 				<Header />
 
-				<div className="flex flex-col gap-4">
+				<div className="flex flex-col">
 					{items.map((item, i) => (
 						<a
 							key={i}
 							href={`/news/${encodeURIComponent(item.source?.url as string)}`}
+							className="block mb-3"
 						>
 							<NewsCard data={item} />
 						</a>

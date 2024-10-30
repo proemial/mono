@@ -22,6 +22,10 @@ const users = [
 	},
 ];
 
+function getRandomUser() {
+	return Math.floor(Math.random() * 3);
+}
+
 export function NewsCard({ data }: { data: NewsItem }) {
 	const background = data._?.background ?? "#000000";
 
@@ -71,6 +75,8 @@ function QA({ data }: { data: NewsItem }) {
 		});
 	};
 	
+	const randomQuestion = getRandomUser();
+
 	return (
 		<div className="flex flex-col items-start gap-2 mt-4 pt-2 pb-3 px-0 relative self-stretch w-full flex-[0_0_auto]">
 			<div className="flex items-start gap-1.5 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
@@ -84,12 +90,12 @@ function QA({ data }: { data: NewsItem }) {
 					<div className="flex flex-col items-center justify-center gap-1 px-3 py-2 relative self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] rounded-xl">
 						<div className="flex items-start gap-1 relative self-stretch w-full flex-[0_0_auto]">
 							<div className="relative flex-1 mt-[-1.00px] font-bold text-[#08080a] text-sm tracking-[0] leading-[14px]">
-								Mads Rydahl
+								{users[randomQuestion]?.name ?? 'Anonymous'}
 							</div>
 						</div>
 
 						<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
-							{data.generated?.questions.at(0)?.[0]}
+							{data.generated?.questions.at(randomQuestion)?.[0]}
 						</p>
 					</div>
 				</div>
@@ -122,7 +128,7 @@ function QA({ data }: { data: NewsItem }) {
 							</div>
 
 							<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5 overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]">
-								{formatAnswerText(data.generated?.questions.at(0)?.[1])}
+								{formatAnswerText(data.generated?.questions.at(randomQuestion)?.[1])}
 							</p>
 						</div>
 					</div>
