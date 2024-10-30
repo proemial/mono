@@ -40,7 +40,7 @@ export function Bot({ data }: { data?: NewsItem }) {
 					</div>
 
 					<div className="flex-col h-10 gap-1 px-3 py-2 flex-1 grow bg-white border border-solid border-[#728087] flex items-center justify-center relative rounded-xl">
-						<div className="relative self-stretch [font-family:'Lato-Regular',Helvetica] font-normal text-[#738187] text-[15px] tracking-[0] leading-5">
+						<div className="relative self-stretch font-normal text-[#738187] text-[15px] tracking-[0] leading-5">
 							Ask as Michael Lajlev
 						</div>
 					</div>

@@ -11,8 +11,8 @@ export function Header() {
 					src={logo}
 				/>
 
-				<div className="relative flex-1 mt-[-1.00px] [font-family:'Lato-SemiBold',Helvetica] font-semibold text-[#f6f5e8] text-base tracking-[0] leading-4">
-					proem news
+				<div className="relative flex-1 mt-[-1.00px] font-semibold text-[#f6f5e8] text-base tracking-[0] leading-4">
+					proem&nbsp;&nbsp;·&nbsp;&nbsp;trustworthy perspectives
 				</div>
 			</div>
 		</div>

@@ -5,10 +5,16 @@ import { ReactNode } from "react";
 type Props = {
 	children: ReactNode;
 };
+import { Lato } from 'next/font/google'
+
+const lato = Lato({
+  weight: '400',
+  subsets: ['latin'],
+})
 
 export default function Layout({ children }: Props) {
 	return (
-		<div className="bg-[#0a161c] group relative">
+		<div className={cn("bg-background group relative", lato.className)}>
 			<div
 				style={{
 					boxShadow: "0 0 120px rgba(0, 0, 0, .15)",

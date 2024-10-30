@@ -40,7 +40,7 @@ export function Scaffold({ data }: { data: NewsItem }) {
 
 			<div className="flex items-center justify-end gap-2 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
 				<div className="items-center gap-2 flex-1 grow flex relative">
-					<div className="relative w-fit mt-[-1.00px] [font-family:'Lato-SemiBold',Helvetica] font-semibold text-[#08080a] text-lg tracking-[0] leading-4 whitespace-nowrap">
+					<div className="relative w-fit mt-[-1.00px] font-semibold text-[#08080a] text-lg tracking-[0] leading-4 whitespace-nowrap">
 						Top questions
 					</div>
 

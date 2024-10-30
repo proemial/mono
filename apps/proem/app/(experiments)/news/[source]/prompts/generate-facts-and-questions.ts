@@ -32,17 +32,17 @@ Now, complete these three tasks, one after the other:
 <task_1>
 Exclusively using topics and discoveries from the ${papers.length} abstracts, list 5 scientific facts that relate to the main topic discussed in the transcript.
 
-The facts must be short, fascinating and presented using layman's terminology, in a way that makes the reader curious to learn more. It's imperative that you include references to the abstracts when quoting text or sources, using [brackets].
+The facts must be short, fascinating and presented using layman's terminology, in a way that makes the reader curious to learn more. It's imperative that you include references to the abstracts when quoting text or sources, using markdown links '[/abstract/1/](1)'.
 </task_1>
 
 <task_2>
-Create a 60 word commentary reflecting on the main issue of the original transcript, using the scientific facts, rephrased to relate directly to the original transcript. Use layman's language and retain the numbered references to the abstracts in the commentary.
+Create a 60 word commentary reflecting on the main issue of the original transcript, using the scientific facts, rephrased to relate directly to the original transcript. Use layman's language and retain the markdown links to the abstracts in the commentary.
 </task_2>
 
 <task_3>
 Create six questions of a universal nature on the topic of the transcript that can be answered using discoveries in the abstracts. Make the questions easy to understand, in a voice of an engaging news journalist, using a maximum of 10 words.
 
-For each question, write a short and intriguing answer, using layman's terminology, that makes the reader curious to learn more. It's imperative that you include references to the abstracts when quoting text or sources, using [brackets].
+For each question, write a short and intriguing answer, using layman's terminology, that makes the reader curious to learn more. It's imperative that you include references to the abstracts when quoting text or sources, using markdown links '[/abstract/1/](1)'.
 
 Output a list of questions with each answer on a separate indented line item below each question.
 </task_3>

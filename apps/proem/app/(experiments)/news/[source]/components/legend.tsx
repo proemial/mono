@@ -10,21 +10,14 @@ export function Legend({ data }: { data?: NewsItem }) {
 			/>
 
 			<div className="flex flex-col items-center justify-center gap-2 p-3 relative self-stretch w-full flex-[0_0_auto]">
-				<p className="relative self-stretch mt-[-1.00px] [font-family:'Lato-SemiBold',Helvetica] font-semibold text-white text-xl tracking-[0] leading-[normal]">
+				<p className="relative self-stretch mt-[-1.00px] font-semibold text-white text-xl tracking-[0] leading-[normal]">
 					{data?.generated?.title}
 				</p>
 			</div>
 
-			<a href={data?.source?.url} target="_blank" rel="noreferrer">
-				<div className="inline-flex items-start gap-1 px-3 py-1 absolute top-[152px] left-[286px] bg-[#ffffffe6] rounded-[26px]">
-					<img
-						className="relative w-6 h-6 object-cover"
-						alt=""
-						src={data?.source?.logo}
-					/>
-					{data?.source?.name}
-				</div>
-			</a>
+			<div className="inline-flex items-start gap-1 px-3 py-1 absolute top-[152px] left-[12px] bg-[#ffffffe6] rounded-[26px]">
+				{data?.source?.name}
+			</div>
 		</div>
 	);
 }
