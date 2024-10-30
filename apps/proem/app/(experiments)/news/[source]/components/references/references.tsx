@@ -12,7 +12,8 @@ export function References({ data }: { data?: NewsItem }) {
 
 			<div className="flex flex-col items-start gap-2 px-3 py-2 relative self-stretch w-full flex-[0_0_auto]">
 				{data?.references?.map((paper, index) => (
-					<div
+					<a
+						href={`/paper/oa/${paper.id.split("/").at(-1)}`}
 						key={index}
 						className="flex items-center justify-center gap-2 p-3 relative self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] rounded-xl"
 					>
@@ -23,7 +24,7 @@ export function References({ data }: { data?: NewsItem }) {
 						</div>
 
 						<Paper paper={paper} />
-					</div>
+					</a>
 				))}
 			</div>
 		</div>
