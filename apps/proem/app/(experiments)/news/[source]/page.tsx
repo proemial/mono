@@ -15,7 +15,7 @@ type Props = {
 
 export default async function UrlPage({ params, searchParams }: Props) {
 	const decodedUrl =
-		params.source !== "new"
+		params.source !== "annotate"
 			? decodeURIComponent(params.source)
 			: searchParams?.url
 				? decodeURIComponent(searchParams.url)
