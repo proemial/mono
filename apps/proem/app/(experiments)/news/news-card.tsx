@@ -43,7 +43,7 @@ export function NewsCard({ data }: { data: NewsItem }) {
 					</p>
 				</div>
 
-				<ActionBar />
+				<ActionBar textColor="white" />
 
 				<QA data={data} />
 			</div>
