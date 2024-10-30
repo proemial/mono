@@ -12,7 +12,7 @@ type Props = {
 export default async function ReadPageOpenGraphImage({
 	params: { source },
 }: Props) {
-	console.log("SOURCE", source);
+	console.log("SOURCE", decodeURIComponent(source));
 
-	return createReadPageOpenGraphImage(source, size);
+	return createReadPageOpenGraphImage(decodeURIComponent(source), size);
 }
