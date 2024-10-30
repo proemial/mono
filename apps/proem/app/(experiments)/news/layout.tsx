@@ -14,7 +14,7 @@ const lato = Lato({
 
 export default function Layout({ children }: Props) {
 	return (
-		<div className={cn("bg-background group relative", lato.className)}>
+		<div className={cn("bg-[#000000] group relative", lato.className)}>
 			<div
 				style={{
 					boxShadow: "0 0 120px rgba(0, 0, 0, .15)",

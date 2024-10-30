@@ -10,13 +10,13 @@ export function ActionBar() {
 					<div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
 						<Image className="relative w-6 h-6" alt="Frame" src={eye} />
 
-						<div className="relative w-fit font-normal text-[#08080a] text-[13px] tracking-[0] leading-[normal]">
+						<div className="relative w-fit font-normal text-[13px] tracking-[0] leading-[normal]">
 							101
 						</div>
 					</div>
 
 					<div className="inline-flex items-center gap-1 px-3 py-2 relative flex-[0_0_auto] rounded-[19px] border border-solid border-[#d0d2da]">
-						<div className="relative w-fit mt-[-1.00px] font-normal text-[#08080a] text-[13px] tracking-[0] leading-[normal]">
+						<div className="relative w-fit mt-[-1.00px] font-normal text-[13px] tracking-[0] leading-[normal]">
 							Ask question
 						</div>
 					</div>
@@ -30,7 +30,7 @@ export function ActionBar() {
 							src={share}
 						/>
 
-						<div className="relative w-fit mt-[-1.00px] font-normal text-[#08080a] text-[13px] tracking-[0] leading-[normal]">
+						<div className="relative w-fit mt-[-1.00px] font-normal text-[13px] tracking-[0] leading-[normal]">
 							Share
 						</div>
 					</div>
