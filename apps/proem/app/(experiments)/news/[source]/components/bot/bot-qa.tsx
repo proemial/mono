@@ -13,7 +13,7 @@ export function BotQa({
 			<div className="flex items-start gap-1.5 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
 				<div className="flex w-10 h-10 items-center gap-1 relative">
 					<img
-						className="relative w-10 h-10 object-cover"
+						className="relative w-10 h-10 object-cover w-8 h-8 rounded-full"
 						alt=""
 						src={user?.image}
 					/>
@@ -36,12 +36,6 @@ export function BotQa({
 						</p>
 					</div>
 				</div>
-
-				{/* <img
-                className="absolute w-0.5 h-[60px] top-[59px] left-[-28964px]"
-                alt="Rectangle"
-                src={data?.source?.image}
-            /> */}
 			</div>
 
 			<div className="flex-col items-start gap-2 pl-[58px] pr-3 py-0 self-stretch w-full flex-[0_0_auto] flex relative">

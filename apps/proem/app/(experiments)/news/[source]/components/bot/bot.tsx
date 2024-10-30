@@ -33,7 +33,7 @@ export function Bot({ data }: { data?: NewsItem }) {
 				<div className="items-center gap-1.5 px-3 py-0 flex relative self-stretch w-full flex-[0_0_auto]">
 					<div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
 						<img
-							className="relative w-10 h-10 object-cover"
+							className="relative w-10 h-10 object-cover w-8 h-8 rounded-full"
 							alt=""
 							src="https://randomuser.me/api/portraits/med/men/4.jpg"
 						/>

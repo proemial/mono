@@ -57,7 +57,7 @@ function QA({ data }: { data: NewsItem }) {
 			<div className="flex items-start gap-1.5 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
 				<div className="flex w-10 h-10 items-center gap-1 relative">
 					<img
-						className="relative w-10 h-10 object-cover"
+						className="relative w-10 h-10 object-cover w-8 h-8 rounded-full"
 						alt=""
 						src="https://randomuser.me/api/portraits/med/men/4.jpg"
 					/>
