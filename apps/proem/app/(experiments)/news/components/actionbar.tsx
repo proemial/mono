@@ -87,15 +87,7 @@ export function ActionBar({
 					}
 					style={{ borderColor: textColor }}
 				>
-					<div
-						onClick={() => {
-							const input = document.querySelector(
-								'input[id="bot-input"]',
-							) as HTMLInputElement;
-							input?.focus();
-						}}
-						className="inline-flex items-start gap-1.5 relative flex-[0_0_auto] hover:cursor-pointer"
-					>
+					<div className="inline-flex items-start gap-1.5 relative flex-[0_0_auto] hover:cursor-pointer">
 						<div className="relative w-fit mt-[-1.00px] font-normal text-[13px] tracking-[0] leading-[normal]">
 							Ask a Question
 						</div>
