@@ -64,7 +64,8 @@ export async function annotateWithScienceAction(
 					title: "",
 					questions: qaFromString(questions),
 				},
-				layout: {
+				_: {
+					public: true,
 					background: "#000000",
 				},
 			},
