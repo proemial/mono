@@ -19,7 +19,7 @@ export function Scaffold({ data }: { data: NewsItem }) {
 				src={data.source?.image}
 			/>
 
-			<div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
+			<div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto] text-[#08080a]">
 				<div
 					className={
 						"fle≥x flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]"

@@ -7,14 +7,17 @@ export function NewsCard({ data }: { data: NewsItem }) {
 
 	return (
 		<div className="flex flex-col items-start gap-1 relative">
-			<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto] bg-[#b33939] rounded-[20px] overflow-hidden shadow-[0px_2px_8px_2px_#00000033]">
+			<div
+				className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto] rounded-[20px] overflow-hidden shadow-[0px_2px_8px_2px_#00000033] text-white"
+				style={{ background }}
+			>
 				<img
 					className="relative self-stretch w-full h-[200px] object-cover"
 					alt=""
 					src={data?.source?.image}
 				/>
 
-				<div className="flex flex-col items-center justify-center gap-2 p-3 relative self-stretch w-full flex-[0_0_auto] text-white">
+				<div className="flex flex-col items-center justify-center gap-2 p-3 relative self-stretch w-full flex-[0_0_auto] ">
 					<p className="relative self-stretch mt-[-1.00px] [font-family:'Lato-SemiBold',Helvetica] font-semibold text-xl tracking-[0] leading-[normal]">
 						Elon Musk&#39;s $1 million election giveaway tests limits of
 						election law
@@ -30,7 +33,7 @@ export function NewsCard({ data }: { data: NewsItem }) {
 }
 
 function QA() {
-	return <div>qa</div>;
+	return <div className="my-2" />;
 	// return (
 	//     <div className="flex flex-col items-start gap-2 pt-2 pb-3 px-0 relative self-stretch w-full flex-[0_0_auto]">
 	//     <div className="flex items-start gap-1.5 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
