@@ -2,9 +2,10 @@ import { NewsItem } from "@proemial/adapters/redis/news";
 import { BotQa } from "./bot-qa";
 import { Message, nanoid } from "ai";
 import { useChat } from "ai/react";
-import { Button, cn, Input } from "@proemial/shadcn-ui";
+import { cn } from "@proemial/shadcn-ui";
 import { ArrowRight } from "@untitled-ui/icons-react";
 import { useCallback } from "react";
+import { Avatar } from "../../../components/avatars";
 
 const users = [
 	{
@@ -94,13 +95,7 @@ export function Bot({ data }: { data?: NewsItem }) {
 		<>
 			<div className="flex-col pb-2 items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative overflow-hidden">
 				<div className="items-center gap-1.5 px-3 py-0 flex w-full">
-					<div className="flex items-center gap-1">
-						<img
-							className="relative object-cover w-8 h-8 rounded-full"
-							alt=""
-							src="https://randomuser.me/api/portraits/med/men/4.jpg"
-						/>
-					</div>
+					<Avatar seed="brian" />
 
 					<form onSubmit={handleSubmit} className="flex w-full">
 						<input
