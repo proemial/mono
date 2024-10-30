@@ -1,8 +1,6 @@
 import { NewsItem } from "@proemial/adapters/redis/news";
-import { useState } from "react";
 
 export function Background({ data }: { data?: NewsItem }) {
-	const [expanded, setExpanded] = useState(false);
 	const getLinkCount = (text?: string) => {
 		if (!text) return 0;
 		const matches = text.match(/\[(.*?)\]/g) || [];
@@ -53,19 +51,17 @@ export function Background({ data }: { data?: NewsItem }) {
 				{formatBackground(data?.generated?.background)}
 			</div>
 
-			{expanded && (
-				<div
-					className="w-full font-medium text-[#757989] text-xs leading-5 cursor-pointer"
-					onClick={() =>
-						document
-							.getElementById("sources")
-							?.scrollIntoView({ behavior: "smooth" })
-					}
-				>
-					Based on {linkCount} scientific papers ·{" "}
-					<span className="underline">View sources</span>
-				</div>
-			)}
+			<div
+				className="w-full font-medium text-[#757989] text-xs leading-5 cursor-pointer"
+				onClick={() =>
+					document
+						.getElementById("sources")
+						?.scrollIntoView({ behavior: "smooth" })
+				}
+			>
+				Based on {linkCount} scientific papers ·{" "}
+				<span className="underline">View sources</span>
+			</div>
 		</div>
 	);
 }
