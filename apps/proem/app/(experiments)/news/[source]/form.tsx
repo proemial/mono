@@ -41,7 +41,7 @@ export const InputForm = ({ onSubmit }: Props) => {
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(handleSubmit)}
-				className="flex flex-col gap-4"
+				className="flex flex-col gap-4 text-white"
 			>
 				<FormField
 					control={form.control}
@@ -51,12 +51,12 @@ export const InputForm = ({ onSubmit }: Props) => {
 							<FormLabel>URL:</FormLabel>
 							<FormControl>
 								<Input
-									className="rounded-md bg-white"
+									className="rounded-md bg-white text-black"
 									{...field}
 									disabled={isLoading}
 								/>
 							</FormControl>
-							<FormDescription className="text-theme-700">
+							<FormDescription className="text-white">
 								Enter the URL of the content you want to annotate.
 							</FormDescription>
 							<FormMessage />

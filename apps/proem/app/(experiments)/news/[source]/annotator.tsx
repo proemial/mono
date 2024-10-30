@@ -36,7 +36,7 @@ export default function NewsAnnotator({ url }: { url?: string }) {
 	}, [url]);
 
 	return (
-		<div className="flex flex-col gap-6">
+		<div className="flex flex-col gap-6 text-white">
 			{(!factsAndQuestions?.output || factsAndQuestions?.error) && (
 				<div className="m-4">
 					{!url && <InputForm onSubmit={handleSubmit} />}
