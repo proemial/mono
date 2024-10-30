@@ -1,5 +1,5 @@
 "use client";
-import { Header } from "./header";
+import { Header } from "../../components/header";
 import { Legend } from "./legend";
 import { NewsItem } from "@proemial/adapters/redis/news";
 import { ActionBar } from "./actionbar";
@@ -32,7 +32,7 @@ export function Scaffold({ data }: { data: NewsItem }) {
 					</div>
 				</div>
 
-				<ActionBar data={data} />
+				<ActionBar />
 			</div>
 
 			<Background data={data} />

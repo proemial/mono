@@ -13,7 +13,10 @@ export default function Layout({ children }: Props) {
 				style={{
 					boxShadow: "0 0 120px rgba(0, 0, 0, .15)",
 				}}
-				className={cn("mx-auto min-h-[100dvh] flex flex-col", screenMaxWidth)}
+				className={cn(
+					"mx-auto min-h-[100dvh] flex flex-col bg-[#0a161c]",
+					screenMaxWidth,
+				)}
 			>
 				{children}
 			</div>

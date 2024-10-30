@@ -1,7 +1,6 @@
 import { Scaffold } from "./components/scaffold";
 import NewsAnnotator from "./annotator";
 import { Redis } from "@proemial/adapters/redis";
-import { notFound } from "next/navigation";
 
 type Props = {
 	params: {

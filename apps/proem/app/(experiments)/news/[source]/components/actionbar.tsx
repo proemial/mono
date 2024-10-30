@@ -3,7 +3,7 @@ import eye from "../../components/images/eye.svg";
 import share from "../../components/images/share.svg";
 import Image from "next/image";
 
-export function ActionBar({ data }: { data: NewsItem }) {
+export function ActionBar() {
 	return (
 		<div className="flex items-center gap-2 pt-1 pb-0 px-3 relative self-stretch w-full flex-[0_0_auto]">
 			<div className="flex items-center gap-2 pt-1 pb-0 px-3 relative self-stretch w-full flex-[0_0_auto]">
