@@ -8,7 +8,7 @@ export default async function NewsPage() {
 
 	return (
 		<>
-			<div className="flex flex-col items-start gap-3 relative self-stretch w-full">
+			<div className="flex flex-col items-start relative self-stretch w-full">
 				<Header />
 
 				<div className="flex flex-col gap-4">

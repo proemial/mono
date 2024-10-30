@@ -8,7 +8,7 @@ export async function createReadPageOpenGraphImage(
 ) {
 	const paper = await Redis.news.get(url);
 	if (!paper) {
-		throw new Error("no item found for url");
+		throw new Error(`no item found for url: ${url}`);
 	}
 
 	const latoBold = await fetch(

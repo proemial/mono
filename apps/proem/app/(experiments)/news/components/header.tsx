@@ -1,5 +1,6 @@
 import logo from "./images/logo.svg";
 import Image from "next/image";
+import { PlusCircle } from "@untitled-ui/icons-react";
 
 export function Header() {
 	return (
@@ -21,7 +22,7 @@ export function Header() {
 					href="/news/annotate"
 					className=" text-[#f6f5e8] text-sm font-semibold hover:underline"
 				>
-					add {'>'}
+					<PlusCircle className="size-6" />
 				</a>
 			</div>
 		</div>
