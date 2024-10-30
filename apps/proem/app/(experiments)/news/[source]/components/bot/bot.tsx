@@ -187,7 +187,7 @@ export function Bot({ data }: { data?: NewsItem }) {
 							placeholder="Ask a question"
 							value={input}
 							onChange={handleInputChange}
-							className="w-full bg-gray-200 h-10 px-3 rounded-xl mt-0.5 text-[15px] focus:bg-white"
+							className="w-full bg-gray-200 h-10 px-3 rounded-xl mt-0.5 text-[#999999] text-[15px] focus:bg-white"
 						/>
 					</form>
 				</div>
