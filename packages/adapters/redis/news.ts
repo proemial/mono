@@ -8,7 +8,7 @@ export const RedisNews = {
 		try {
 			return (await UpStash.news().get(identifier)) as NewsItem | null;
 		} finally {
-			Time.debug(begin, `[redis][news][get] ${identifier}`);
+			Time.log(begin, `[redis][news][get] ${identifier}`);
 		}
 	},
 
@@ -18,7 +18,7 @@ export const RedisNews = {
 		try {
 			return await UpStash.news().set(identifier, item);
 		} finally {
-			Time.debug(begin, `[redis][news][set] ${identifier}`);
+			Time.log(begin, `[redis][news][set] ${identifier}`);
 		}
 	},
 
@@ -33,7 +33,7 @@ export const RedisNews = {
 				})
 			)[1];
 		} finally {
-			Time.debug(begin, "[redis][news][scan]");
+			Time.log(begin, "[redis][news][scan]");
 		}
 
 		begin = Time.now();
@@ -45,10 +45,14 @@ export const RedisNews = {
 			const results = await pipeline.exec();
 			return results as NewsItem[];
 		} finally {
-			Time.debug(begin, "[redis][news][mget]");
+			Time.log(begin, "[redis][news][mget]");
 		}
 	},
 };
+
+export function backgroundColor(item: NewsItem) {
+	return item._?.background ?? "#000000";
+}
 
 export type NewsItem = {
 	source?: NewsSource;
