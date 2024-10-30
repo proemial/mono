@@ -23,6 +23,7 @@ const users = [
 ];
 
 function getRandomUser() {
+	// remember that we only have three precanculated questions to cycle through, regardless of the user list
 	return Math.floor(Math.random() * 3);
 }
 
