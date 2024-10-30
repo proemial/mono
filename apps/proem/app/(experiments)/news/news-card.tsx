@@ -19,8 +19,7 @@ export function NewsCard({ data }: { data: NewsItem }) {
 
 				<div className="flex flex-col items-center justify-center gap-2 p-3 relative self-stretch w-full flex-[0_0_auto] ">
 					<p className="relative self-stretch mt-[-1.00px] [font-family:'Lato-SemiBold',Helvetica] font-semibold text-xl tracking-[0] leading-[normal]">
-						Elon Musk&#39;s $1 million election giveaway tests limits of
-						election law
+						{data.generated?.title}
 					</p>
 				</div>
 
