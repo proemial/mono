@@ -6,12 +6,12 @@ import Image from "next/image";
 
 const users = [
 	{
-		image: "https://randomuser.me/api/portraits/med/men/1.jpg",
+		image: "https://2.gravatar.com/avatar/1b71ebb39f67bb39f33f588a20b7360ff815208089dc35e85bab38321654339d?size=256",
 		name: "Michael Lajlev",
 		time: "6h",
 	},
 	{
-		image: "https://randomuser.me/api/portraits/med/men/2.jpg",
+		image: "https://0.gravatar.com/avatar/e8e8ab7b6985e308725f05d247803c1ccd3bd4decaf1a798fb3c4285adc8251f?size=256",
 		name: "Mads Rydahl",
 		time: "2d",
 	},
@@ -93,7 +93,7 @@ function QA({ data }: { data: NewsItem }) {
 				<img
 					className="relative w-10 h-10 object-cover rounded-full"
 					alt=""
-					src="https://randomuser.me/api/portraits/med/men/4.jpg"
+					src={users[randomQuestion]?.image ?? '/news/images/profile.png'}
 				/>
 
 				<div className="flex flex-col items-start gap-1 relative flex-1 grow">
