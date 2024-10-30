@@ -1,4 +1,4 @@
-import logotypeGreenLogoLarge from "./logotype-green-logo-large.svg";
+import logo from "./images/logo.svg";
 import Image from "next/image";
 
 export function Header() {
@@ -8,7 +8,7 @@ export function Header() {
 				<Image
 					className="relative w-[10.51px] h-4"
 					alt="Logotype green logo"
-					src={logotypeGreenLogoLarge}
+					src={logo}
 				/>
 
 				<div className="relative flex-1 mt-[-1.00px] [font-family:'Lato-SemiBold',Helvetica] font-semibold text-[#f6f5e8] text-base tracking-[0] leading-4">
