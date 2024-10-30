@@ -15,14 +15,16 @@ export function Legend({ data }: { data?: NewsItem }) {
 				</p>
 			</div>
 
-			<div className="inline-flex items-start gap-1 px-3 py-1 absolute top-[152px] left-[286px] bg-[#ffffffe6] rounded-[26px]">
-				<img
-					className="relative w-6 h-6 object-cover"
-					alt=""
-					src={data?.source?.logo}
-				/>
-				{data?.source?.name}
-			</div>
+			<a href={data?.source?.url} target="_blank" rel="noreferrer">
+				<div className="inline-flex items-start gap-1 px-3 py-1 absolute top-[152px] left-[286px] bg-[#ffffffe6] rounded-[26px]">
+					<img
+						className="relative w-6 h-6 object-cover"
+						alt=""
+						src={data?.source?.logo}
+					/>
+					{data?.source?.name}
+				</div>
+			</a>
 		</div>
 	);
 }
