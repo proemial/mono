@@ -9,12 +9,14 @@ import { Avatar } from "../../../components/avatars";
 
 const users = [
 	{
-		image: "https://2.gravatar.com/avatar/1b71ebb39f67bb39f33f588a20b7360ff815208089dc35e85bab38321654339d?size=256",
+		image:
+			"https://2.gravatar.com/avatar/1b71ebb39f67bb39f33f588a20b7360ff815208089dc35e85bab38321654339d?size=256",
 		name: "Michael Lajlev",
 		time: "6h",
 	},
 	{
-		image: "https://0.gravatar.com/avatar/e8e8ab7b6985e308725f05d247803c1ccd3bd4decaf1a798fb3c4285adc8251f?size=256",
+		image:
+			"https://0.gravatar.com/avatar/e8e8ab7b6985e308725f05d247803c1ccd3bd4decaf1a798fb3c4285adc8251f?size=256",
 		name: "Mads Rydahl",
 		time: "2d",
 	},
@@ -67,7 +69,7 @@ export function Bot({ data }: { data?: NewsItem }) {
 		append,
 		isLoading,
 	} = useChat({
-		api: "/api/news",
+		api: "/api/news/bot",
 		initialMessages,
 		keepLastMessageOnError: true,
 		body: {
