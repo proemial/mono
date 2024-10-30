@@ -11,8 +11,11 @@ export function Header() {
 					src={logo}
 				/>
 
-				<div className="relative flex-1 mt-[-1.00px] font-semibold text-[#f6f5e8] text-base tracking-[0] leading-4">
-					proem&nbsp;&nbsp;·&nbsp;&nbsp;trustworthy perspectives
+				<div className="relative flex-1 font-semibold text-[#f6f5e8] text-base tracking-[0] leading-4">
+					proem
+					<span className="text-[#93938f] pl-3 font-normal">
+						trustworthy perspectives
+					</span>
 				</div>
 			</div>
 		</div>
