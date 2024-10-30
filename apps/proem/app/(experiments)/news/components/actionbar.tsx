@@ -2,7 +2,21 @@ import eye from "./images/eye.svg";
 import share from "./images/share.svg";
 import Image from "next/image";
 
-export function ActionBar({ textColor = "#ffffff" }: { textColor?: string }) {
+export function ActionBar({ title = "", textColor = "#ffffff" }: { title?: string, textColor?: string }) {
+	const getRandomViews = (title: string) => {
+		// Create a consistent hash from the title
+		let hash = 0;
+		for (let i = 0; i < title.length; i++) {
+			hash = ((hash << 5) - hash) + title.charCodeAt(i);
+			hash = hash & hash; // Convert to 32-bit integer
+		}
+		// Generate a random-looking but consistent number between 50 and 500
+		return Math.abs(hash % 450) + 50;
+	};
+
+	// For now using a placeholder title since we don't have access to it
+	const viewCount = getRandomViews(title);
+
 	return (
 		<div className="flex w-full justify-between px-3">
 			<div className="flex items-center gap-4">
@@ -13,7 +27,7 @@ export function ActionBar({ textColor = "#ffffff" }: { textColor?: string }) {
 							<path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke={textColor} stroke-linecap="round" stroke-linejoin="round"/>
 						</svg>
 						<div className="relative w-fit font-normal text-[13px] tracking-[0] leading-[normal]">
-							101
+							{viewCount}
 						</div>
 					</div>
 				</div>
