@@ -69,7 +69,7 @@ export function BotQa({
 
 			<div className="flex-col items-start gap-2 pl-[50px] pr-3 py-0 self-stretch w-full flex-[0_0_auto] flex relative">
 				<div className="items-start gap-2 flex relative self-stretch w-full flex-[0_0_auto]">
-					<div className="relative flex-[0_0_auto] w-6 h-6 rounded-full bg-black flex items-center justify-center">
+					<div className="mt-1.5 relative flex-[0_0_auto] w-6 h-6 rounded-full bg-black flex items-center justify-center">
 						<Image className="w-3 h-3" alt="Frame" src={logo} />
 					</div>
 

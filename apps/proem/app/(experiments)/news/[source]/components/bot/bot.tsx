@@ -102,7 +102,7 @@ export function Bot({ data }: { data?: NewsItem }) {
 							placeholder="Ask a question"
 							value={input}
 							onChange={handleInputChange}
-							className="w-full bg-gray-200 h-10 px-2 rounded-xl mt-0.5 text-[15px]"
+							className="w-full bg-gray-200 h-10 px-2 rounded-xl mt-0.5 text-[15px] focus:bg-white"
 						/>
 					</form>
 				</div>
@@ -121,9 +121,9 @@ export function Bot({ data }: { data?: NewsItem }) {
 							type="button"
 							onClick={() => handleSuggestionClick(qa.at(0))}
 							className={cn(
-								"bg-gray-200 rounded-xl py-2 px-3 flex justify-between items-center text-left text-[15px] w-full",
+								"bg-[#e9eaee] rounded-xl py-2 px-3 flex justify-between items-center text-left text-[15px] w-full",
 								{
-									"hover:bg-gray-300  cursor-pointer":
+									"hover:bg-[#e9eaee]  cursor-pointer":
 										!isLoading && !isAlreadyAsked(qa.at(0)),
 									"text-gray-400 cursor-not-allowed":
 										isLoading || isAlreadyAsked(qa.at(0)),
