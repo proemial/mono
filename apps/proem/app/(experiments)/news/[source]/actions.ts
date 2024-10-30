@@ -4,6 +4,7 @@ import { generateFactsAndQuestions } from "./prompts/generate-facts-and-question
 import { generateIndexSearchQuery } from "./prompts/generate-index-search-query";
 import { PrimaryItemSchema } from "./types";
 import { NewsItem, ReferencedPaper } from "@proemial/adapters/redis/news";
+import { Redis } from "@proemial/adapters/redis";
 
 type SearchResult = {
 	papers: QdrantPaper[];
@@ -48,26 +49,29 @@ export async function annotateWithScienceAction(
 
 		const { commentary, questions } = parseOutput(factsAndQuestions);
 		const { hostname } = new URL(item.url);
+		const content = {
+			source: {
+				url: item.url,
+				text: transcript,
+				image: artworkUrl as string,
+				name: hostname.replace(/^[^.]+\./, ""), // remove subdomain
+				logo: `https://${hostname}.com/favicon.ico`,
+			},
+			references: papers,
+			generated: {
+				title,
+				background: commentary,
+				questions: qaFromString(questions),
+			},
+			_: {
+				public: false,
+			},
+		};
+
+		await Redis.news.set(item.url, content);
 
 		return {
-			output: {
-				source: {
-					url: item.url,
-					text: transcript,
-					image: artworkUrl as string,
-					name: hostname.replace(/^[^.]+\./, ""), // remove subdomain
-					logo: `https://${hostname}.com/favicon.ico`,
-				},
-				references: papers,
-				generated: {
-					title,
-					background: commentary,
-					questions: qaFromString(questions),
-				},
-				_: {
-					public: true,
-				},
-			},
+			output: content,
 		};
 	} catch (error) {
 		return {
@@ -198,9 +202,12 @@ const parseVideo = async (url: string): Promise<ParserResult> => {
 const parseArticle = async (url: string): Promise<ParserResult> => {
 	const rawTranscript = await fetchUniversalArticleTranscript(url);
 	const transcript = rawTranscript.objects.map((o) => o.text).join("\n");
-	const artworkUrl = rawTranscript.objects[0]?.html.match(
-		/<img[^>]*src="([^"]+)"/,
-	)?.[1];
+	// TODO: Fix video placeholders
+	const artworkUrl =
+		rawTranscript.objects[0]?.html.match(/<video[^>]*poster="([^"]+)"/)?.[1] ??
+		rawTranscript.objects[0]?.html.match(/<img[^>]*src="([^"]+)"/)?.[1];
+	console.log("[artworkUrl]", artworkUrl);
+
 	const title = rawTranscript.objects[0]?.title ?? "";
 
 	return {
