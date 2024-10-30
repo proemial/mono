@@ -184,6 +184,7 @@ export function Bot({ data }: { data?: NewsItem }) {
 
 					<form onSubmit={handleSubmit} className="flex w-full">
 						<input
+							id="bot-input"
 							placeholder="Ask a question"
 							value={input}
 							onChange={handleInputChange}

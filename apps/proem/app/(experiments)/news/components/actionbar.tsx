@@ -85,7 +85,7 @@ export function ActionBar({
 					<div
 						onClick={() => {
 							const input = document.querySelector(
-								'input[placeholder="Ask a question"]',
+								'input[id="bot-input"]',
 							) as HTMLInputElement;
 							input?.focus();
 						}}
