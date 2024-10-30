@@ -19,6 +19,7 @@ export const PostRepository = {
 		userId: string | null | undefined,
 		orgMemberIds: string[] = [],
 	) => {
+		console.log("space id", spaceId);
 		if (paperId) {
 			return await neonDb.query.posts.findMany({
 				where: and(

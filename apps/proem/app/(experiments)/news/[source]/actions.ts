@@ -1,5 +1,4 @@
 "use server";
-
 import { z } from "zod";
 import { generateFactsAndQuestions } from "./prompts/generate-facts-and-questions";
 import { generateIndexSearchQuery } from "./prompts/generate-index-search-query";

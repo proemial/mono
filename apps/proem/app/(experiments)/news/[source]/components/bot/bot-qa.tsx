@@ -10,33 +10,23 @@ export function BotQa({
 }) {
 	const formatAnswerText = (text?: string) => {
 		if (!text) return "";
-		return text
-			.replace(/^\s*-\s*/gm, "")
-			.split(/(\[.*?\])/)
-			.map((segment, i) => {
-				const match = segment.match(/\[(.*?)\]/);
-				if (match) {
-					const numbers = match[1]?.split(",").map((n) => n.trim());
-					return numbers?.map((num, j) => (
-						<span className="relative inline-block" key={`${i}-${j}`}>
-							<a
-								href={`#${num}`}
-								key={`${i}-${j}`}
-								onClick={() =>
-									document
-										.getElementById("sources")
-										?.scrollIntoView({ behavior: "smooth" })
-								}
-								className="relative -top-[2px] inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-pointer hover:bg-gray-800"
-							>
-								{num}
-							</a>
-						</span>
-					));
-				}
-				// Return regular text for non-link segments
-				return segment;
-			});
+		return text.replace(/^\s*-\s*/gm, '').split(/(\[.*?\])/).map((segment, i) => {
+			const match = segment.match(/\[(.*?)\]/);
+			if (match) {
+				const numbers = match[1]?.split(",").map((n) => n.trim());
+				return numbers?.map((num, j) => (
+					<span className="relative inline-block" key={`${i}-${j}`} >
+						<a href={`#${num}`} key={`${i}-${j}`} 
+							onClick={() => document.getElementById("sources")?.scrollIntoView({ behavior: "smooth" })}
+							className="relative -top-[2px] inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-pointer hover:bg-gray-800">
+							{num}
+						</a>
+					</span>
+				));
+			}
+			// Return regular text for non-link segments
+			return segment;
+		});
 	};
 
 	return (
@@ -87,24 +77,20 @@ export function BotQa({
 								</div>
 							</div>
 
-							{qa.at(1) && (
-								<>
-									<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
-										{formatAnswerText(qa[1])}
-									</p>
-									<div
-										className="w-full font-medium text-[#757989] text-xs leading-5 cursor-pointer"
-										onClick={() =>
-											document
-												.getElementById("sources")
-												?.scrollIntoView({ behavior: "smooth" })
-										}
-									>
-										Based on scientific papers ·{" "}
-										<span className="underline">View sources</span>
-									</div>
-								</>
-							)}
+							<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
+								{formatAnswerText(qa[1])}
+							</p>
+							<div
+								className="w-full font-medium text-[#757989] text-xs leading-5 cursor-pointer"
+								onClick={() =>
+									document
+										.getElementById("sources")
+										?.scrollIntoView({ behavior: "smooth" })
+								}
+							>
+								Based on scientific papers ·{" "}
+								<span className="underline">View sources</span>
+							</div>
 						</div>
 					</div>
 				</div>

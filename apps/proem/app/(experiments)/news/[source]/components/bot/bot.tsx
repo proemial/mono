@@ -1,8 +1,6 @@
 import { NewsItem } from "@proemial/adapters/redis/news";
 import { BotQa } from "./bot-qa";
-import { Message, nanoid } from "ai";
-import { useChat } from "ai/react";
-import { Button, Input } from "@proemial/shadcn-ui";
+import { BotSuggestion } from "./bot-suggestion";
 
 const users = [
 	{
@@ -23,69 +21,11 @@ const users = [
 ];
 
 export function Bot({ data }: { data?: NewsItem }) {
-	const initialMessages: Message[] = [
-		{
-			role: "user",
-			content: data?.generated?.questions.at(0)?.at(0) ?? "",
-			id: nanoid(),
-		},
-		{
-			role: "assistant",
-			content: data?.generated?.questions.at(0)?.at(1) ?? "",
-			id: nanoid(),
-		},
-		{
-			role: "user",
-			content: data?.generated?.questions.at(1)?.at(0) ?? "",
-			id: nanoid(),
-		},
-		{
-			role: "assistant",
-			content: data?.generated?.questions.at(1)?.at(1) ?? "",
-			id: nanoid(),
-		},
-		{
-			role: "user",
-			content: data?.generated?.questions.at(2)?.at(0) ?? "",
-			id: nanoid(),
-		},
-		{
-			role: "assistant",
-			content: data?.generated?.questions.at(2)?.at(1) ?? "",
-			id: nanoid(),
-		},
-	];
-
-	const {
-		messages,
-		input,
-		handleInputChange,
-		handleSubmit,
-		append,
-		isLoading,
-	} = useChat({
-		api: "/api/news",
-		initialMessages,
-		keepLastMessageOnError: true,
-		body: {
-			item: data,
-		},
-	});
-
-	const handleSuggestionClick = (suggestion: string | undefined) => {
-		if (suggestion) {
-			append({
-				role: "user",
-				content: suggestion,
-			});
-		}
-	};
-
 	return (
 		<>
-			<div className="flex-col pb-2 items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative overflow-hidden">
-				<div className="items-center gap-1.5 px-3 py-0 flex w-full">
-					<div className="flex items-center gap-1">
+			<div className="flex-col pb-2 items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative">
+				<div className="items-center gap-1.5 px-3 py-0 flex relative self-stretch w-full flex-[0_0_auto]">
+					<div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
 						<img
 							className="relative object-cover w-8 h-8 rounded-full"
 							alt=""
@@ -93,13 +33,11 @@ export function Bot({ data }: { data?: NewsItem }) {
 						/>
 					</div>
 
-					<form onSubmit={handleSubmit} className="flex w-full">
-						<input
-							value={input}
-							onChange={handleInputChange}
-							className="w-full bg-gray-200 h-10 px-2 rounded-md mt-0.5"
-						/>
-					</form>
+					<div className="flex-col h-10 gap-1 px-3 py-2 flex-1 grow border border-solid bg-[#E9EAEE] flex items-center justify-center relative rounded-xl">
+						<div className="relative self-stretch font-normal text-[#738187] text-[15px] tracking-[0] leading-5">
+							Ask a Question
+						</div>
+					</div>
 				</div>
 
 				<div className="flex items-center gap-1.5 relative pl-[62px]">
@@ -108,15 +46,9 @@ export function Bot({ data }: { data?: NewsItem }) {
 					</p>
 				</div>
 
-				<div className="flex-col items-start gap-2 pl-[50px] pr-3 py-0 w-full flex">
+				<div className="flex-col items-start gap-2 pl-[50px] pr-3 py-0 self-stretch w-full flex-[0_0_auto] flex relative">
 					{data?.generated?.questions.slice(3).map((qa, index) => (
-						<Button
-							key={index}
-							onClick={() => handleSuggestionClick(qa.at(0))}
-							className="bg-gray-200 hover:bg-gray-300"
-						>
-							{qa.at(0)}
-						</Button>
+						<BotSuggestion key={index} qa={qa} />
 					))}
 				</div>
 			</div>
@@ -128,22 +60,9 @@ export function Bot({ data }: { data?: NewsItem }) {
 				</div>
 			</div>
 			<div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
-				{messages.map((message, index) => {
-					if (message.role === "assistant") return null;
-					return (
-						<BotQa
-							key={index}
-							user={
-								users.at(Math.floor(index / 2)) ?? {
-									image: "https://randomuser.me/api/portraits/med/men/4.jpg",
-									name: "You",
-									time: "now",
-								}
-							}
-							qa={[message.content, messages.at(index + 1)?.content ?? ""]}
-						/>
-					);
-				})}
+				{data?.generated?.questions.slice(0, 3).map((qa, index) => (
+					<BotQa key={index} user={users.at(index)} qa={qa} />
+				))}
 			</div>
 		</>
 	);

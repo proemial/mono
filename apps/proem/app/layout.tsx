@@ -101,7 +101,7 @@ function MainLayout({ children, modal, showToolbar }: Readonly<Props>) {
 			</head>
 			<body
 				className={cn(
-					"bg-black min-h-[100dvh] flex flex-col font-sans antialiased",
+					"bg-black min-h-[100dvh] h-full font-sans antialiased max-w-full",
 					fontSans.variable,
 				)}
 			>
