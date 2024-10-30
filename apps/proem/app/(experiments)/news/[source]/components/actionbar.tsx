@@ -1,6 +1,6 @@
 import { NewsItem } from "@proemial/adapters/redis/news";
-import eye from "./images/eye.svg";
-import share from "./images/share.svg";
+import eye from "../../components/images/eye.svg";
+import share from "../../components/images/share.svg";
 import Image from "next/image";
 
 export function ActionBar({ data }: { data: NewsItem }) {

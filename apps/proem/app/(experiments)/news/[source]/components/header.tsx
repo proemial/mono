@@ -1,4 +1,4 @@
-import logo from "./images/logo.svg";
+import logo from "../../components/images/logo.svg";
 import Image from "next/image";
 
 export function Header() {
