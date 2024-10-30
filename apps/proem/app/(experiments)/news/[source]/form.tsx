@@ -48,7 +48,7 @@ export const InputForm = ({ onSubmit }: Props) => {
 					name="url"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>URL</FormLabel>
+							<FormLabel>URL:</FormLabel>
 							<FormControl>
 								<Input
 									className="rounded-md bg-white"

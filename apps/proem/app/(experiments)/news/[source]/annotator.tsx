@@ -35,25 +35,25 @@ export default function NewsAnnotator({ url }: { url?: string }) {
 		}
 	}, [url]);
 
-	console.log("factsAndQuestions", factsAndQuestions);
-
 	return (
 		<div className="flex flex-col gap-6">
-			{!url && !factsAndQuestions?.output && (
-				<InputForm onSubmit={handleSubmit} />
-			)}
-			{isLoading && (
-				<div className="flex flex-col justify-center items-center gap-2">
-					<Throbber />
-					<div>
-						Annotating <span className="font-bold underline">{url}</span> with
-						science...
-					</div>
-				</div>
-			)}
-			{factsAndQuestions?.error && (
-				<div className="flex flex-col justify-center items-center gap-2">
-					<div className="text-red-500">{factsAndQuestions.error}</div>
+			{(!factsAndQuestions?.output || factsAndQuestions?.error) && (
+				<div className="m-4">
+					{!url && <InputForm onSubmit={handleSubmit} />}
+					{isLoading && (
+						<div className="flex flex-col justify-center items-center gap-2">
+							<Throbber />
+							<div>
+								Annotating <span className="font-bold underline">{url}</span>{" "}
+								with science...
+							</div>
+						</div>
+					)}
+					{factsAndQuestions?.error && (
+						<div className="flex flex-col justify-center items-center gap-2">
+							<div className="text-red-500">{factsAndQuestions.error}</div>
+						</div>
+					)}
 				</div>
 			)}
 			{factsAndQuestions?.output && (
