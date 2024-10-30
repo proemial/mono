@@ -23,16 +23,24 @@ export const RedisNews = {
 	},
 
 	list: async () => {
-		const begin = Time.now();
-		try {
-			const keys = await UpStash.news().scan(0, {
-				count: 10,
-			});
-			console.log("Fetching 10 keys", keys[1].length, keys);
+		let keys = [] as string[];
 
-			return (await UpStash.news().mget(keys[1])) as NewsItem[];
+		let begin = Time.now();
+		try {
+			keys = (
+				await UpStash.newsFeed().scan(0, {
+					count: 10,
+				})
+			)[1];
 		} finally {
 			Time.debug(begin, "[redis][news][scan]");
+		}
+
+		begin = Time.now();
+		try {
+			return (await UpStash.news().mget(keys)) as NewsItem[];
+		} finally {
+			Time.debug(begin, "[redis][news][mget]");
 		}
 	},
 };
