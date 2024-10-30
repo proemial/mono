@@ -48,7 +48,11 @@ export function NewsCard({ data }: { data: NewsItem }) {
 					</p>
 				</div>
 
-				<ActionBar textColor="white" title={data.generated?.title}/>
+				<ActionBar
+					data={data}
+					textColor="white"
+					title={data.generated?.title}
+				/>
 
 				<QA data={data} />
 			</div>
@@ -59,23 +63,28 @@ export function NewsCard({ data }: { data: NewsItem }) {
 function QA({ data }: { data: NewsItem }) {
 	const formatAnswerText = (text?: string) => {
 		if (!text) return "";
-		return text.replace(/^\s*-\s*/gm, '').split(/(\[.*?\])/).map((segment, i) => {
-			const match = segment.match(/\[(.*?)\]/);
-			if (match) {
-				const numbers = match[1]?.split(",").map((n) => n.trim());
-				return numbers?.map((num, j) => (
-					<span className="relative inline-block" key={`${i}-${j}`} >
-						<span key={`${i}-${j}`} 
-							className="relative -top-[2px] inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-pointer hover:bg-gray-800">
-							{num}
+		return text
+			.replace(/^\s*-\s*/gm, "")
+			.split(/(\[.*?\])/)
+			.map((segment, i) => {
+				const match = segment.match(/\[(.*?)\]/);
+				if (match) {
+					const numbers = match[1]?.split(",").map((n) => n.trim());
+					return numbers?.map((num, j) => (
+						<span className="relative inline-block" key={`${i}-${j}`}>
+							<span
+								key={`${i}-${j}`}
+								className="relative -top-[2px] inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-pointer hover:bg-gray-800"
+							>
+								{num}
+							</span>
 						</span>
-					</span>
-				));
-			}
-			return segment;
-		});
+					));
+				}
+				return segment;
+			});
 	};
-	
+
 	const randomQuestion = getRandomUser();
 
 	return (
@@ -91,7 +100,7 @@ function QA({ data }: { data: NewsItem }) {
 					<div className="flex flex-col items-center justify-center gap-1 px-3 py-2 relative self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] rounded-xl">
 						<div className="flex items-start gap-1 relative self-stretch w-full flex-[0_0_auto]">
 							<div className="relative flex-1 mt-[-1.00px] font-bold text-[#08080a] text-sm tracking-[0] leading-[14px]">
-								{users[randomQuestion]?.name ?? 'Anonymous'}
+								{users[randomQuestion]?.name ?? "Anonymous"}
 							</div>
 						</div>
 
@@ -129,7 +138,9 @@ function QA({ data }: { data: NewsItem }) {
 							</div>
 
 							<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5 overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]">
-								{formatAnswerText(data.generated?.questions.at(randomQuestion)?.[1])}
+								{formatAnswerText(
+									data.generated?.questions.at(randomQuestion)?.[1],
+								)}
 							</p>
 						</div>
 					</div>

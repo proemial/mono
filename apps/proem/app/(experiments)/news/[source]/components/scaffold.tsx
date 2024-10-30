@@ -33,7 +33,11 @@ export function Scaffold({ data }: { data: NewsItem }) {
 					</div>
 				</div>
 
-				<ActionBar textColor="#303030" title={data.generated?.title}/>
+				<ActionBar
+					data={data}
+					textColor="#303030"
+					title={data.generated?.title}
+				/>
 			</div>
 
 			<Background data={data} />
