@@ -15,8 +15,10 @@ export function Legend({ data }: { data?: NewsItem }) {
 				</p>
 			</div>
 
-			<div className="inline-flex items-start gap-1 px-3 py-1 absolute top-[152px] left-[12px] bg-[#ffffffe6] rounded-[26px]">
-				{data?.source?.name}
+			<div className="inline-flex items-start gap-1 px-3 py-1 absolute top-[156px] right-[16px] bg-[#ffffffe6] rounded-[26px]">
+				<a href={data?.source?.url} target="_blank" rel="noopener noreferrer">
+					{data?.source?.name}
+				</a>
 			</div>
 		</div>
 	);
