@@ -1,11 +1,14 @@
 "use client";
-import { NewsItem } from "@proemial/adapters/redis/news";
+import { NewsItem, backgroundColor } from "@proemial/adapters/redis/news";
+import { toast } from "@proemial/shadcn-ui";
 
 export function ActionBar({
 	data,
 	title = "",
 	textColor = "#ffffff",
 }: { data: NewsItem; title?: string; textColor?: string }) {
+	const background = backgroundColor(data);
+
 	const getRandomViews = (title: string) => {
 		// Create a consistent hash from the title
 		let hash = 0;
@@ -38,6 +41,11 @@ export function ActionBar({
 		navigator.clipboard.writeText(
 			`${window.location.origin}/news/${encodeURIComponent(data.source?.url as string)}`,
 		);
+		toast("Link copied", {
+			style: {
+				backgroundColor: background,
+			},
+		});
 	};
 
 	return (

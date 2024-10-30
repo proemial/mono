@@ -1,7 +1,7 @@
 "use client";
 import { Header } from "../../components/header";
 import { Legend } from "./legend";
-import { NewsItem } from "@proemial/adapters/redis/news";
+import { NewsItem, backgroundColor } from "@proemial/adapters/redis/news";
 import { ActionBar } from "../../components/actionbar";
 import { Background } from "./background";
 import { Bot } from "./bot/bot";
@@ -9,7 +9,7 @@ import { References } from "./references/references";
 import { Footer } from "../../components/footer";
 
 export function Scaffold({ data }: { data: NewsItem }) {
-	const background = data._?.background ?? "#000000";
+	const background = backgroundColor(data);
 
 	return (
 		<div className="flex flex-col items-center gap-5 relative bg-white">

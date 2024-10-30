@@ -1,4 +1,4 @@
-import { NewsItem } from "@proemial/adapters/redis/news";
+import { backgroundColor, NewsItem } from "@proemial/adapters/redis/news";
 import React from "react";
 import { ActionBar } from "./components/actionbar";
 import logo from "./components/images/logo.svg";
@@ -28,7 +28,7 @@ function getRandomUser() {
 }
 
 export function NewsCard({ data }: { data: NewsItem }) {
-	const background = data._?.background ?? "#000000";
+	const background = backgroundColor(data);
 
 	return (
 		<div className="flex flex-col items-start gap-1 relative">
