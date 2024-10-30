@@ -1,4 +1,4 @@
-import { createReadPageOpenGraphImage } from "./create-read-page-open-graph-image";
+import { createReadPageOpenGraphImage } from "./news-og-image";
 
 export const runtime = "edge";
 

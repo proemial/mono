@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { ReadOpenGraphCard } from "./read-og-card";
+import { ReadOpenGraphCard } from "./news-og-card";
 import { Redis } from "@proemial/adapters/redis";
 
 export async function createReadPageOpenGraphImage(

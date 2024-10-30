@@ -1,4 +1,4 @@
-import { createReadPageOpenGraphImage } from "./og/create-read-page-open-graph-image";
+import { createReadPageOpenGraphImage } from "./og/news-og-image";
 
 export const runtime = "edge";
 export const alt = "proem - science answers";
