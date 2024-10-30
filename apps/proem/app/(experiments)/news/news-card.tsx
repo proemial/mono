@@ -38,7 +38,7 @@ export function NewsCard({ data }: { data: NewsItem }) {
 				/>
 
 				<div className="flex flex-col items-center justify-center gap-2 p-3 relative self-stretch w-full flex-[0_0_auto] ">
-					<p className="relative self-stretch mt-[-1.00px] [font-family:'Lato-SemiBold',Helvetica] font-semibold text-xl tracking-[0] leading-[normal]">
+					<p className="relative self-stretch mt-[-1.00px] font-semibold text-xl tracking-[0] leading-[normal]">
 						{data.generated?.title}
 					</p>
 				</div>
@@ -66,12 +66,12 @@ function QA({ data }: { data: NewsItem }) {
 				<div className="flex flex-col items-start gap-1 relative flex-1 grow">
 					<div className="flex flex-col items-center justify-center gap-1 px-3 py-2 relative self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] rounded-xl">
 						<div className="flex items-start gap-1 relative self-stretch w-full flex-[0_0_auto]">
-							<div className="relative flex-1 mt-[-1.00px] [font-family:'Lato-Bold',Helvetica] font-bold text-[#08080a] text-sm tracking-[0] leading-[14px]">
+							<div className="relative flex-1 mt-[-1.00px] font-bold text-[#08080a] text-sm tracking-[0] leading-[14px]">
 								Mads Rydahl
 							</div>
 						</div>
 
-						<p className="relative self-stretch [font-family:'Lato-Medium',Helvetica] font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
+						<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
 							{data.generated?.questions.at(0)?.[0]}
 						</p>
 					</div>
@@ -86,27 +86,29 @@ function QA({ data }: { data: NewsItem }) {
 
 			<div className="flex flex-col items-start gap-2 pl-[58px] pr-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
 				<div className="flex items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
-					<Image
-						className="relative flex-[0_0_auto] w-8 h-8 rounded-full bg-black"
-						alt="Frame"
-						src={logo}
-					/>
+					<div className="relative flex-[0_0_auto] w-8 h-8 rounded-full bg-black flex items-center justify-center">
+						<Image
+							className="w-4 h-4"
+							alt="Frame"
+							src={logo}
+						/>
+					</div>
 
 					<div className="flex flex-col items-start gap-1 relative flex-1 grow">
 						<div className="flex flex-col items-center justify-center gap-1 p-3 relative self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] rounded-xl">
 							<div className="flex items-start gap-1 relative self-stretch w-full flex-[0_0_auto]">
-								<div className="relative w-fit mt-[-1.00px] [font-family:'Lato-Bold',Helvetica] font-bold text-[#08080a] text-sm tracking-[0] leading-[14px] whitespace-nowrap">
+								<div className="relative w-fit mt-[-1.00px] font-bold text-[#08080a] text-sm tracking-[0] leading-[14px] whitespace-nowrap">
 									proem.ai
 								</div>
 
 								<div className="inline-flex items-center justify-center gap-2 px-1 py-0 relative flex-[0_0_auto] bg-[#ebf5ff] rounded-xl">
-									<div className="relative w-fit mt-[-1.00px] [font-family:'Lato-Medium',Helvetica] font-medium text-[#0164d0] text-[11px] tracking-[0] leading-[14px] whitespace-nowrap">
+									<div className="relative w-fit mt-[-1.00px] font-medium text-[#0164d0] text-[11px] tracking-[0] leading-[14px] whitespace-nowrap">
 										Research bot
 									</div>
 								</div>
 							</div>
 
-							<p className="relative self-stretch [font-family:'Lato-Medium',Helvetica] font-medium text-[#08080a] text-[15px] tracking-[0] leading-5 overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]">
+							<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5 overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]">
 								{data.generated?.questions.at(0)?.[1]}
 							</p>
 						</div>
