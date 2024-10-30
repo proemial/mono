@@ -1,3 +1,6 @@
+import logo from "../../../components/images/logo.svg";
+import Image from "next/image";
+
 export function BotQa({
 	user,
 	qa,
@@ -43,11 +46,11 @@ export function BotQa({
 
 			<div className="flex-col items-start gap-2 pl-[58px] pr-3 py-0 self-stretch w-full flex-[0_0_auto] flex relative">
 				<div className="items-start gap-2 flex relative self-stretch w-full flex-[0_0_auto]">
-					{/* <img
-                    className="relative flex-[0_0_auto]"
-                    alt="Frame"
-                    src={data?.source?.image}
-                /> */}
+					<Image
+						className="relative flex-[0_0_auto] w-8 h-8 rounded-full bg-black"
+						alt="Frame"
+						src={logo}
+					/>
 
 					<div className="flex flex-col items-start gap-1 relative flex-1 grow">
 						<div className="flex-col gap-1 p-3 self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] flex items-center justify-center relative rounded-xl">
