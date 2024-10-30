@@ -6,25 +6,109 @@ import Image from "next/image";
 
 const users = [
 	{
-		image: "https://2.gravatar.com/avatar/1b71ebb39f67bb39f33f588a20b7360ff815208089dc35e85bab38321654339d?size=256",
-		name: "Michael Lajlev",
-		time: "6h",
+		image: "https://randomuser.me/api/portraits/med/men/12.jpg",
+		name: "James Anderson",
+		time: "3h",
 	},
 	{
-		image: "https://0.gravatar.com/avatar/e8e8ab7b6985e308725f05d247803c1ccd3bd4decaf1a798fb3c4285adc8251f?size=256",
-		name: "Mads Rydahl",
+		image: "https://randomuser.me/api/portraits/med/women/5.jpg",
+		name: "Sarah Mitchell",
+		time: "5h",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/men/8.jpg",
+		name: "Robert Wilson",
+		time: "1d",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/women/15.jpg",
+		name: "Emily Parker",
 		time: "2d",
 	},
 	{
-		image: "https://randomuser.me/api/portraits/med/women/1.jpg",
-		name: "Lene Hansen",
+		image: "https://randomuser.me/api/portraits/med/men/3.jpg",
+		name: "David Thompson",
+		time: "3d",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/women/9.jpg",
+		name: "Jessica Brown",
+		time: "4d",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/men/17.jpg",
+		name: "William Davis",
+		time: "5d",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/women/2.jpg",
+		name: "Rachel Moore",
 		time: "1w",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/men/6.jpg",
+		name: "Thomas Martin",
+		time: "1w",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/women/18.jpg",
+		name: "Laura Wilson",
+		time: "2w",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/men/14.jpg",
+		name: "Christopher Lee",
+		time: "2w",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/women/11.jpg",
+		name: "Amanda White",
+		time: "3w",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/men/19.jpg",
+		name: "Daniel Clark",
+		time: "3w",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/women/7.jpg",
+		name: "Michelle Taylor",
+		time: "4w",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/men/4.jpg",
+		name: "Kevin Walker",
+		time: "1m",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/women/13.jpg",
+		name: "Jennifer Adams",
+		time: "1m",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/men/10.jpg",
+		name: "Brian Miller",
+		time: "2m",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/women/20.jpg",
+		name: "Lisa Johnson",
+		time: "2m",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/men/1.jpg",
+		name: "Mark Robinson",
+		time: "3m",
+	},
+	{
+		image: "https://randomuser.me/api/portraits/med/women/16.jpg",
+		name: "Katherine Hall",
+		time: "3m",
 	},
 ];
 
 function getRandomUser() {
-	// remember that we only have three precanculated questions to cycle through, regardless of the user list
-	return Math.floor(Math.random() * 3);
+	return Math.floor(Math.random() * users.length);
 }
 
 export function NewsCard({ data }: { data: NewsItem }) {
@@ -85,7 +169,7 @@ function QA({ data }: { data: NewsItem }) {
 			});
 	};
 
-	const randomQuestion = getRandomUser();
+	const randomUser = getRandomUser();
 
 	return (
 		<div className="flex flex-col items-start gap-2 mt-4 pt-2 pb-3 px-0 relative self-stretch w-full flex-[0_0_auto]">
@@ -93,19 +177,19 @@ function QA({ data }: { data: NewsItem }) {
 				<img
 					className="relative w-10 h-10 object-cover rounded-full"
 					alt=""
-					src={users[randomQuestion]?.image ?? '/news/images/profile.png'}
+					src={users[randomUser]?.image ?? '/news/images/profile.png'}
 				/>
 
 				<div className="flex flex-col items-start gap-1 relative flex-1 grow">
 					<div className="flex flex-col items-center justify-center gap-1 px-3 py-2 relative self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] rounded-xl">
 						<div className="flex items-start gap-1 relative self-stretch w-full flex-[0_0_auto]">
 							<div className="relative flex-1 mt-[-1.00px] font-bold text-[#08080a] text-sm tracking-[0] leading-[14px]">
-								{users[randomQuestion]?.name ?? "Anonymous"}
+								{users[randomUser]?.name ?? "Anonymous"}
 							</div>
 						</div>
 
 						<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
-							{data.generated?.questions.at(randomQuestion)?.[0]}
+							{data.generated?.questions.at(randomUser%3)?.[0]}
 						</p>
 					</div>
 				</div>
@@ -139,7 +223,7 @@ function QA({ data }: { data: NewsItem }) {
 
 							<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5 overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]">
 								{formatAnswerText(
-									data.generated?.questions.at(randomQuestion)?.[1],
+									data.generated?.questions.at(randomUser%3	)?.[1],
 								)}
 							</p>
 						</div>
