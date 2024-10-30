@@ -23,12 +23,6 @@ const users = [
 export function Bot({ data }: { data?: NewsItem }) {
 	return (
 		<>
-			<div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
-				{data?.generated?.questions.slice(0, 3).map((qa, index) => (
-					<BotQa key={index} user={users.at(index)} qa={qa} />
-				))}
-			</div>
-
 			<div className="flex-col items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative">
 				<div className="items-center gap-1.5 px-3 py-0 flex relative self-stretch w-full flex-[0_0_auto]">
 					<div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
@@ -51,6 +45,18 @@ export function Bot({ data }: { data?: NewsItem }) {
 						<BotSuggestion key={index} qa={qa} />
 					))}
 				</div>
+			</div>
+			<div className="flex items-center justify-end gap-2 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
+				<div className="items-center gap-2 flex-1 grow flex relative">
+					<div className="relative w-fit mt-[-1.00px] font-semibold text-[#0a161c] text-lg tracking-[0] leading-4 whitespace-nowrap">
+						Top questions
+					</div>
+				</div>
+			</div>
+			<div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
+				{data?.generated?.questions.slice(0, 3).map((qa, index) => (
+					<BotQa key={index} user={users.at(index)} qa={qa} />
+				))}
 			</div>
 		</>
 	);

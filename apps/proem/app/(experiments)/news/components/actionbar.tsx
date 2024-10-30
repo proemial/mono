@@ -4,8 +4,8 @@ import Image from "next/image";
 
 export function ActionBar() {
 	return (
-		<>
-			<div className="flex items-center gap-2 pb-0 px-3 relative self-stretch w-full flex-[0_0_auto]">
+		<div className="flex w-full justify-between px-3">
+			<div className="flex items-center gap-2">
 				<div className="flex items-center gap-3 relative flex-1 grow">
 					<div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
 						<Image className="relative w-6 h-6" alt="Frame" src={eye} />
@@ -30,6 +30,6 @@ export function ActionBar() {
 					</div>
 				</div>
 			</div>
-		</>
+		</div>
 	);
 }

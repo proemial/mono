@@ -38,20 +38,6 @@ export function Scaffold({ data }: { data: NewsItem }) {
 
 			<Background data={data} />
 
-			<div className="flex items-center justify-end gap-2 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
-				<div className="items-center gap-2 flex-1 grow flex relative">
-					<div className="relative w-fit mt-[-1.00px] font-semibold text-[#08080a] text-lg tracking-[0] leading-4 whitespace-nowrap">
-						Top questions
-					</div>
-
-					<img
-						className="relative w-[7px]"
-						alt="Frame"
-						src={data.source?.image}
-					/>
-				</div>
-			</div>
-
 			<Bot data={data} />
 
 			<References data={data} />
