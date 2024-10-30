@@ -54,21 +54,19 @@ export function NewsCard({ data }: { data: NewsItem }) {
 function QA({ data }: { data: NewsItem }) {
 	const formatAnswerText = (text?: string) => {
 		if (!text) return "";
-		// Split text into segments based on link pattern
-		return text.split(/(\[.*?\])/).map((segment, i) => {
+		return text.replace(/^\s*-\s*/gm, '').split(/(\[.*?\])/).map((segment, i) => {
 			const match = segment.match(/\[(.*?)\]/);
 			if (match) {
-				// Always split and iterate through numbers
 				const numbers = match[1]?.split(",").map((n) => n.trim());
 				return numbers?.map((num, j) => (
 					<span className="relative inline-block" key={`${i}-${j}`} >
-						<a href={`#${num}`} key={`${i}-${j}`} className="relative -top-[2px] inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-pointer hover:bg-gray-800">
+						<span key={`${i}-${j}`} 
+							className="relative -top-[2px] inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-pointer hover:bg-gray-800">
 							{num}
-						</a>
+						</span>
 					</span>
 				));
 			}
-			// Return regular text for non-link segments
 			return segment;
 		});
 	};
