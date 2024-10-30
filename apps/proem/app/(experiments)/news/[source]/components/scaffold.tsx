@@ -8,6 +8,8 @@ import { Bot } from "./bot/bot";
 import { References } from "./references/references";
 
 export function Scaffold({ data }: { data: NewsItem }) {
+	const background = data._?.background ?? "#000000";
+
 	return (
 		<div className="flex flex-col items-center gap-5 relative bg-white">
 			<img
@@ -17,7 +19,12 @@ export function Scaffold({ data }: { data: NewsItem }) {
 			/>
 
 			<div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
-				<div className="flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto] bg-[#b33939]">
+				<div
+					className={
+						"fle≥x flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]"
+					}
+					style={{ background }}
+				>
 					<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto]">
 						<Header />
 

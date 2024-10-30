@@ -45,7 +45,7 @@ export default function NewsAnnotator({ url }: { url?: string }) {
 							<Throbber />
 							<div>
 								Annotating <span className="font-bold underline">{url}</span>{" "}
-								with science...
+								...
 							</div>
 						</div>
 					)}

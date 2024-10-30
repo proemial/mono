@@ -31,7 +31,7 @@ export async function annotateWithScienceAction(
 ): Promise<AnnotateWithScienceResponse> {
 	try {
 		// Scrape the primary URL to get the transcript and artwork URL
-		const { transcript, artworkUrl } = await scrape(item.url);
+		const { transcript, artworkUrl, title } = await scrape(item.url);
 
 		// Generate search query for index from primary item transcript
 		const query = await buildQuery(transcript);
@@ -60,13 +60,12 @@ export async function annotateWithScienceAction(
 				},
 				references: papers,
 				generated: {
+					title,
 					background: commentary,
-					title: "",
 					questions: qaFromString(questions),
 				},
 				_: {
 					public: true,
-					background: "#000000",
 				},
 			},
 		};
@@ -166,6 +165,7 @@ const trimNewlines = (text: string): string => {
 };
 
 type ParserResult = {
+	title: string;
 	transcript: string;
 	artworkUrl: string | undefined;
 };
@@ -186,9 +186,12 @@ const parseVideo = async (url: string): Promise<ParserResult> => {
 	if (!formattedTranscript) {
 		throw new Error("No transcript available");
 	}
+	const title = "TODO: Get title from parsed output";
+
 	return {
 		transcript: formattedTranscript,
 		artworkUrl: `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`,
+		title,
 	};
 };
 
@@ -198,10 +201,12 @@ const parseArticle = async (url: string): Promise<ParserResult> => {
 	const artworkUrl = rawTranscript.objects[0]?.html.match(
 		/<img[^>]*src="([^"]+)"/,
 	)?.[1];
+	const title = rawTranscript.objects[0]?.title ?? "";
 
 	return {
 		transcript,
 		artworkUrl,
+		title,
 	};
 };
 

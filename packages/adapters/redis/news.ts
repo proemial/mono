@@ -43,7 +43,7 @@ export type NewsItem = {
 	generated?: NewsEnrichments;
 	_?: {
 		public: boolean;
-		background: string;
+		background?: string;
 	};
 };
 
