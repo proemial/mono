@@ -19,9 +19,9 @@ export function Header() {
 				</div>
 				<a
 					href="/news/annotate"
-					className=" text-[#f6f5e8] text-sm font-medium hover:underline"
+					className=" text-[#f6f5e8] text-sm font-semibold hover:underline"
 				>
-					+ Add Article
+					add {'>'}
 				</a>
 			</div>
 		</div>

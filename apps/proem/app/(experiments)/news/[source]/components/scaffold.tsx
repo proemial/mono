@@ -33,7 +33,7 @@ export function Scaffold({ data }: { data: NewsItem }) {
 					</div>
 				</div>
 
-				<ActionBar textColor="black" />
+				<ActionBar textColor="#303030" />
 			</div>
 
 			<Background data={data} />
