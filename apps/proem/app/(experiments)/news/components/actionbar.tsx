@@ -10,8 +10,19 @@ export function ActionBar({ title = "", textColor = "#ffffff" }: { title?: strin
 			hash = ((hash << 5) - hash) + title.charCodeAt(i);
 			hash = hash & hash; // Convert to 32-bit integer
 		}
-		// Generate a random-looking but consistent number between 50 and 500
-		return Math.abs(hash % 450) + 50;
+		// Generate base random-looking but consistent number between 50 and 500
+		const baseViews = Math.abs(hash % 450) + 50;
+
+		// Get minutes since this method was first written
+		const now = new Date();
+		const baseTime = new Date(1730306435639);
+		baseTime.setHours(0,0,0,0);
+		const minutesSinceBaseTime = Math.floor((now.getTime() - baseTime.getTime()) / (1000 * 60));
+		
+		// Add 1 view for every 10 minutes since the base timestamp
+		const additionalViews = Math.floor(minutesSinceBaseTime / 10);
+
+		return baseViews + additionalViews;
 	};
 
 	// For now using a placeholder title since we don't have access to it
