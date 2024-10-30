@@ -28,7 +28,7 @@ export const RedisNews = {
 			const keys = await UpStash.news().scan(0, {
 				count: 10,
 			});
-			console.log(keys);
+			console.log("Fetching 10 keys", keys[1].length, keys);
 
 			return (await UpStash.news().mget(keys[1])) as NewsItem[];
 		} finally {
