@@ -82,7 +82,15 @@ export function ActionBar({
 					className="inline-flex h-8 items-center gap-1 px-3 py-2 relative flex-[0_0_auto] rounded-[19px] border border-solid"
 					style={{ borderColor: textColor }}
 				>
-					<div className="inline-flex items-start gap-1.5 relative flex-[0_0_auto]">
+					<div
+						onClick={() => {
+							const input = document.querySelector(
+								'input[placeholder="Ask a question"]',
+							) as HTMLInputElement;
+							input?.focus();
+						}}
+						className="inline-flex items-start gap-1.5 relative flex-[0_0_auto] hover:cursor-pointer"
+					>
 						<div className="relative w-fit mt-[-1.00px] font-normal text-[13px] tracking-[0] leading-[normal]">
 							Ask a Question
 						</div>
