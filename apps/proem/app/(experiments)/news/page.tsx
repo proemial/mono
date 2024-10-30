@@ -13,7 +13,12 @@ export default async function NewsPage() {
 
 				<div className="flex flex-col gap-4">
 					{items.map((item, i) => (
-						<NewsCard key={i} data={item} />
+						<a
+							key={i}
+							href={`/news/${encodeURIComponent(item.source?.url as string)}`}
+						>
+							<NewsCard data={item} />
+						</a>
 					))}
 				</div>
 			</div>
