@@ -26,7 +26,7 @@ export const RedisNews = {
 		const begin = Time.now();
 		try {
 			const keys = await UpStash.news().scan(0, {
-				count: 20,
+				count: 10,
 			});
 			console.log(keys);
 
