@@ -9,21 +9,21 @@ export function BotQa({
 	qa: [string, string];
 }) {
 	const formatAnswerText = (text?: string) => {
-		if (!text) return '';
-		// Remove leading spaces and dashes
-		const cleanText = text.replace(/^[\s-]+/g, '');
+		if (!text) return "";
 		// Split text into segments based on link pattern
-		return cleanText.split(/(\[.*?\])/).map((segment, i) => {
+		return text.split(/(\[.*?\])/).map((segment, i) => {
 			const match = segment.match(/\[(.*?)\]/);
 			if (match) {
 				// Always split and iterate through numbers
-				const numbers = match[1].split(',').map(n => n.trim());
-				return numbers.map((num, j) => (
-					<div className="relative inline">
-						<a key={`${i}-${j}`} className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[10px] font-bold cursor-pointer hover:bg-gray-800 relative -top-[2px]">
-							{num}
-						</a>
-					</div>
+				const numbers = match[1]?.split(",").map((n) => n.trim());
+				return numbers?.map((num, j) => (
+					<a
+						href={`#${num}`}
+						key={`${i}-${j}`}
+						className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-pointer hover:bg-gray-800"
+					>
+						{num}
+					</a>
 				));
 			}
 			// Return regular text for non-link segments
