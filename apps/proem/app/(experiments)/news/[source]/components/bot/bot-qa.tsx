@@ -8,6 +8,29 @@ export function BotQa({
 	user?: { image: string; name: string; time: string };
 	qa: [string, string];
 }) {
+	const formatAnswerText = (text?: string) => {
+		if (!text) return "";
+		// Split text into segments based on link pattern
+		return text.split(/(\[.*?\])/).map((segment, i) => {
+			const match = segment.match(/\[(.*?)\]/);
+			if (match) {
+				// Always split and iterate through numbers
+				const numbers = match[1]?.split(",").map((n) => n.trim());
+				return numbers?.map((num, j) => (
+					<a
+						href={`#${num}`}
+						key={`${i}-${j}`}
+						className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-pointer hover:bg-gray-800"
+					>
+						{num}
+					</a>
+				));
+			}
+			// Return regular text for non-link segments
+			return segment;
+		});
+	};
+
 	return (
 		<div className="flex-col items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative">
 			<div className="flex items-start gap-1.5 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
@@ -57,7 +80,7 @@ export function BotQa({
 							</div>
 
 							<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
-								{qa.at(1)}
+								{formatAnswerText(qa[1])}
 							</p>
 							<div
 								className="w-full font-medium text-[#757989] text-xs leading-5 cursor-pointer"
