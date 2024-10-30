@@ -7,11 +7,11 @@ export default async function NewsPage() {
 	const items = (await Redis.news.list()).filter((item) => !!item._?.public);
 
 	return (
-		<div className="flex flex-col items-center gap-5 relative">
-			<div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
+		<>
+			<div className="flex flex-col items-start gap-3 relative self-stretch w-full">
 				<Header />
 
-				<div className="flex flex-col gap-4 m-4">
+				<div className="flex flex-col gap-4">
 					{items.map((item, i) => (
 						<NewsCard key={i} data={item} />
 					))}
@@ -19,6 +19,6 @@ export default async function NewsPage() {
 			</div>
 
 			<Footer />
-		</div>
+		</>
 	);
 }
