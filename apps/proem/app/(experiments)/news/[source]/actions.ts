@@ -3,17 +3,14 @@ import { z } from "zod";
 import { generateFactsAndQuestions } from "./prompts/generate-facts-and-questions";
 import { generateIndexSearchQuery } from "./prompts/generate-index-search-query";
 import { PrimaryItemSchema } from "./types";
+import { NewsItem, ReferencedPaper } from "@proemial/adapters/redis/news";
 
 type SearchResult = {
 	papers: QdrantPaper[];
 };
 
-export type QdrantPaper = {
+export type QdrantPaper = ReferencedPaper & {
 	score: number;
-	title: string;
-	created: string;
-	abstract: string;
-	id: string;
 	features: Feature[];
 };
 
@@ -25,13 +22,7 @@ type Feature = {
 };
 
 export type AnnotateWithScienceResponse = {
-	output?: {
-		facts: string;
-		commentary: string;
-		questions: string;
-		papers: QdrantPaper[];
-		artwork?: string;
-	};
+	output?: NewsItem;
 	error?: string;
 };
 
@@ -55,14 +46,27 @@ export async function annotateWithScienceAction(
 			papers,
 		);
 
-		const { facts, commentary, questions } = parseOutput(factsAndQuestions);
+		const { commentary, questions } = parseOutput(factsAndQuestions);
+		const { hostname } = new URL(item.url);
+
 		return {
 			output: {
-				facts,
-				commentary,
-				questions,
-				papers,
-				artwork: artworkUrl,
+				source: {
+					url: item.url,
+					text: transcript,
+					image: artworkUrl as string,
+					name: hostname.replace(/^[^.]+\./, ""), // remove subdomain
+					logo: `https://${hostname}.com/favicon.ico`,
+				},
+				references: papers,
+				generated: {
+					background: commentary,
+					title: "",
+					questions: qaFromString(questions),
+				},
+				layout: {
+					background: "#000000",
+				},
 			},
 		};
 	} catch (error) {
@@ -71,6 +75,28 @@ export async function annotateWithScienceAction(
 				error instanceof Error ? error.message : "An unknown error occurred",
 		};
 	}
+}
+
+function qaFromString(text: string): Array<[string, string]> {
+	// Split text into lines and filter out empty lines
+	const lines = text.split("\n").filter((line) => line.trim());
+	const pairs: Array<[string, string]> = [];
+
+	for (let i = 0; i < lines.length; i++) {
+		const line = lines[i]?.trim() as string;
+		// Check if line starts with a number and contains a question
+		if (/^\d+\./.test(line) && line.includes("?")) {
+			const question = line.replace(/^\d+\.\s*/, "").trim();
+			// Get the next line as the answer if it exists
+			const answer = (lines[i + 1] || "").trim();
+			if (answer && !answer.startsWith("d+.")) {
+				pairs.push([question, answer]);
+				i++; // Skip the answer line in next iteration
+			}
+		}
+	}
+
+	return pairs;
 }
 
 async function scrape(url: string) {
@@ -184,7 +210,7 @@ const fetchPapersFromIndex = async (
 ): Promise<SearchResult> => {
 	const result = await fetch("https://index.proem.ai/api/search", {
 		method: "POST",
-		body: JSON.stringify({ query, from }),
+		body: JSON.stringify({ query, from, extended: true }),
 	});
 
 	const papers = (await result.json()) as SearchResult;

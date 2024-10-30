@@ -1,6 +1,5 @@
 import { Time } from "@proemial/utils/time";
 import { UpStash } from "./upstash-client";
-import { VectorSpaceName } from "../qdrant/vector-spaces";
 
 export const RedisNews = {
 	get: async (identifier: string) => {
@@ -42,7 +41,8 @@ export type NewsItem = {
 	source?: NewsSource;
 	references?: Array<ReferencedPaper>;
 	generated?: NewsEnrichments;
-	layout?: {
+	_?: {
+		public: boolean;
 		background: string;
 	};
 };
@@ -57,15 +57,19 @@ export type NewsSource = {
 
 export type NewsEnrichments = {
 	title: string;
-	facts: string[];
+	background: string;
 	questions: Array<[string, string]>;
 };
 
 export type ReferencedPaper = {
 	id: string;
 	title: string;
+	abstract: string;
 	primary_location: {
-		display_name: string;
+		source: {
+			display_name: string;
+			host_organization_name: string;
+		};
 		landing_page_url: string;
 	};
 	authorships: Array<{
@@ -74,5 +78,6 @@ export type ReferencedPaper = {
 			display_name: string;
 		};
 	}>;
-	created_date: string;
+	created: string;
+	published: string;
 };
