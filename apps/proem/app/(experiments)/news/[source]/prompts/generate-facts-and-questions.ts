@@ -36,7 +36,7 @@ The facts must be short, fascinating and presented using layman's terminology, i
 </task_1>
 
 <task_2>
-Create a 60 word commentary reflecting on the main issue of the original transcript, using the scientific facts, rephrased to relate directly to the original transcript. Use layman's language and retain the numbered references to the abstracts in the commentary.
+Create a 60 word commentary reflecting on the main issue of the original transcript, using the scientific facts, rephrased to relate directly to the original transcript. Use layman's language intended for a high school audience and retain the numbered references to the abstracts in the commentary.
 </task_2>
 
 <task_3>

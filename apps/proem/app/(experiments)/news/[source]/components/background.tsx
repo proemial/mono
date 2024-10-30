@@ -50,18 +50,7 @@ export function Background({ data }: { data?: NewsItem }) {
 			</div>
 
 			<div className="relative self-stretch font-normal text-[#1a2930] tracking-[0] leading-6">
-				<p className={`${expanded ? "" : "line-clamp-3 cursor-pointer"}`}>
-					{formatBackground(data?.generated?.background)}
-				</p>
-				{!expanded && (
-					<button
-						type="button"
-						onClick={() => setExpanded(true)}
-						className="underline"
-					>
-						Read more
-					</button>
-				)}
+				{formatBackground(data?.generated?.background)}
 			</div>
 
 			{expanded && (
