@@ -55,13 +55,11 @@ function QA({ data }: { data: NewsItem }) {
 	return (
 		<div className="flex flex-col items-start gap-2 mt-4 pt-2 pb-3 px-0 relative self-stretch w-full flex-[0_0_auto]">
 			<div className="flex items-start gap-1.5 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
-				<div className="flex w-10 h-10 items-center gap-1 relative">
-					<img
-						className="relative w-10 h-10 object-cover w-8 h-8 rounded-full"
-						alt=""
-						src="https://randomuser.me/api/portraits/med/men/4.jpg"
-					/>
-				</div>
+				<img
+					className="relative w-10 h-10 object-cover rounded-full"
+					alt=""
+					src="https://randomuser.me/api/portraits/med/men/4.jpg"
+				/>
 
 				<div className="flex flex-col items-start gap-1 relative flex-1 grow">
 					<div className="flex flex-col items-center justify-center gap-1 px-3 py-2 relative self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] rounded-xl">
@@ -87,11 +85,7 @@ function QA({ data }: { data: NewsItem }) {
 			<div className="flex flex-col items-start gap-2 pl-[58px] pr-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
 				<div className="flex items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
 					<div className="relative flex-[0_0_auto] w-8 h-8 rounded-full bg-black flex items-center justify-center">
-						<Image
-							className="w-4 h-4"
-							alt="Frame"
-							src={logo}
-						/>
+						<Image className="w-4 h-4" alt="Frame" src={logo} />
 					</div>
 
 					<div className="flex flex-col items-start gap-1 relative flex-1 grow">

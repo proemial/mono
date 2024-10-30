@@ -23,24 +23,30 @@ const users = [
 export function Bot({ data }: { data?: NewsItem }) {
 	return (
 		<>
-			<div className="flex-col items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative">
+			<div className="flex-col pb-2 items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative">
 				<div className="items-center gap-1.5 px-3 py-0 flex relative self-stretch w-full flex-[0_0_auto]">
 					<div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
 						<img
-							className="relative w-10 h-10 object-cover w-8 h-8 rounded-full"
+							className="relative object-cover w-8 h-8 rounded-full"
 							alt=""
 							src="https://randomuser.me/api/portraits/med/men/4.jpg"
 						/>
 					</div>
 
-					<div className="flex-col h-10 gap-1 px-3 py-2 flex-1 grow bg-white border border-solid border-[#728087] flex items-center justify-center relative rounded-xl">
+					<div className="flex-col h-10 gap-1 px-3 py-2 flex-1 grow border border-solid bg-[#E9EAEE] flex items-center justify-center relative rounded-xl">
 						<div className="relative self-stretch font-normal text-[#738187] text-[15px] tracking-[0] leading-5">
-							Ask as Michael Lajlev
+							Ask a Question
 						</div>
 					</div>
 				</div>
 
-				<div className="flex-col items-start gap-2 pl-[58px] pr-3 py-0 self-stretch w-full flex-[0_0_auto] flex relative">
+				<div className="flex items-center gap-1.5 relative pl-[62px]">
+					<p className="relative w-fit mt-[-1.00px] font-medium text-[#757989] text-xs tracking-[0] leading-5 whitespace-nowrap">
+						Suggested questions
+					</p>
+				</div>
+
+				<div className="flex-col items-start gap-2 pl-[50px] pr-3 py-0 self-stretch w-full flex-[0_0_auto] flex relative">
 					{data?.generated?.questions.slice(3).map((qa, index) => (
 						<BotSuggestion key={index} qa={qa} />
 					))}

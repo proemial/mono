@@ -7,9 +7,21 @@ export function Background({ data }: { data?: NewsItem }) {
 				Factual Background
 			</div>
 
-			<p className="relative self-stretch font-normal text-[#0a161c] text-sm tracking-[0] leading-5">
+			<p className="relative self-stretch font-normal text-[#0a161c] hover:underline hover:cursor-pointer text-sm tracking-[0] leading-5">
 				{data?.generated?.background}
 			</p>
+
+			<div
+				className="w-full font-medium text-[#757989] text-xs leading-5 cursor-pointer"
+				onClick={() =>
+					document
+						.getElementById("sources")
+						?.scrollIntoView({ behavior: "smooth" })
+				}
+			>
+				Based on scientific papers ·{" "}
+				<span className="underline">View sources</span>
+			</div>
 		</div>
 	);
 }

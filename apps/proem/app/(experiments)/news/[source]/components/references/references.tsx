@@ -3,9 +3,12 @@ import { Paper } from "./paper";
 
 export function References({ data }: { data?: NewsItem }) {
 	return (
-		<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto]">
+		<div
+			id="sources"
+			className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto]"
+		>
 			<div className="flex flex-col items-start justify-center gap-2 p-3 relative self-stretch w-full flex-[0_0_auto]">
-				<div className="relative self-stretch mt-[-1.00px] font-semibold text-[#0a161c] text-base tracking-[0] leading-5">
+				<div className="relative self-stretch mt-[-1.00px] font-semibold text-[#0a161c] text-lg tracking-[0] leading-5">
 					Sources
 				</div>
 			</div>

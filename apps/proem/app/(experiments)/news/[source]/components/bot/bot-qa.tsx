@@ -11,13 +11,11 @@ export function BotQa({
 	return (
 		<div className="flex-col items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative">
 			<div className="flex items-start gap-1.5 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
-				<div className="flex w-10 h-10 items-center gap-1 relative">
-					<img
-						className="relative w-10 h-10 object-cover w-8 h-8 rounded-full"
-						alt=""
-						src={user?.image}
-					/>
-				</div>
+				<img
+					className="relative w-10 h-10 object-cover rounded-full"
+					alt=""
+					src={user?.image}
+				/>
 
 				<div className="flex flex-col items-start gap-1 relative flex-1 grow">
 					<div className="flex flex-col items-center justify-center gap-1 px-3 py-2 relative self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] rounded-xl">
@@ -38,14 +36,10 @@ export function BotQa({
 				</div>
 			</div>
 
-			<div className="flex-col items-start gap-2 pl-[58px] pr-3 py-0 self-stretch w-full flex-[0_0_auto] flex relative">
+			<div className="flex-col items-start gap-2 pl-[50px] pr-3 py-0 self-stretch w-full flex-[0_0_auto] flex relative">
 				<div className="items-start gap-2 flex relative self-stretch w-full flex-[0_0_auto]">
-					<div className="relative flex-[0_0_auto] w-8 h-8 rounded-full bg-black flex items-center justify-center">
-						<Image
-							className="w-4 h-4"
-							alt="Frame"
-							src={logo}
-						/>
+					<div className="relative flex-[0_0_auto] w-6 h-6 rounded-full bg-black flex items-center justify-center">
+						<Image className="w-3 h-3" alt="Frame" src={logo} />
 					</div>
 
 					<div className="flex flex-col items-start gap-1 relative flex-1 grow">
@@ -65,18 +59,28 @@ export function BotQa({
 							<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
 								{qa.at(1)}
 							</p>
+							<div
+								className="w-full font-medium text-[#757989] text-xs leading-5 cursor-pointer"
+								onClick={() =>
+									document
+										.getElementById("sources")
+										?.scrollIntoView({ behavior: "smooth" })
+								}
+							>
+								Based on scientific papers ·{" "}
+								<span className="underline">View sources</span>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div className="flex items-center justify-end gap-4 pl-0 pr-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
+			<div className="flex items-center justify-end gap-4 pr-6 py-0 relative self-stretch w-full flex-[0_0_auto]">
 				<p className="relative w-fit mt-[-1.00px] font-normal text-[#65686d] text-[13px] tracking-[0] leading-[normal]">
 					<span className="font-bold">Like</span>
 
 					<span className="font-medium">
-						{" "}
-						· 42
+						<span className="px-1">·</span> 42
 					</span>
 				</p>
 

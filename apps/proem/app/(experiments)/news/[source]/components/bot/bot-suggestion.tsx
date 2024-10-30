@@ -7,8 +7,8 @@ export function BotSuggestion({
 	qa: [string, string];
 }) {
 	return (
-		<div className="gap-3 px-3 py-2 self-stretch w-full flex-[0_0_auto] bg-white border border-solid border-[#b2babe] flex items-center justify-center relative rounded-xl">
-			<p className="relative flex-1 mt-[-1.00px] font-normal text-[#2d3d44] text-[15px] tracking-[0] leading-5">
+		<div className="gap-3 px-3 py-2 self-stretch w-full flex-[0_0_auto] border border-solid bg-[#E9EAEE]  flex items-center justify-center relative rounded-xl">
+			<p className="relative flex-1 mt-[-1.00px] font-normal text-[#08080a] text-[15px] tracking-[0] leading-5">
 				{qa.at(0)}
 			</p>
 
