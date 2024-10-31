@@ -4,7 +4,7 @@ import { Message, nanoid } from "ai";
 import { useChat } from "ai/react";
 import { cn } from "@proemial/shadcn-ui";
 import { ArrowRight } from "@untitled-ui/icons-react";
-import { useCallback } from "react";
+import { FormEvent, useCallback } from "react";
 import { Avatar } from "../../../components/avatars";
 
 const users = [
@@ -168,6 +168,14 @@ export function Bot({ data }: { data?: NewsItem }) {
 		[messages],
 	);
 
+	const handleSubmitWithInputCheck = (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		// Model fails if input is empty
+		if (input.trim().length > 0) {
+			handleSubmit();
+		}
+	};
+
 	const handleSuggestionClick = (suggestion: string | undefined) => {
 		if (suggestion) {
 			append({
@@ -186,7 +194,7 @@ export function Bot({ data }: { data?: NewsItem }) {
 				<div className="items-center gap-1.5 px-3 py-0 flex w-full">
 					<Avatar seed="6" />
 
-					<form onSubmit={handleSubmit} className="flex w-full">
+					<form onSubmit={handleSubmitWithInputCheck} className="flex w-full">
 						<div className="w-full bg-gray-200 h-10 px-3 rounded-xl mt-0.5 text-[15px] flex gap-2 items-center">
 							<input
 								id="bot-input"
