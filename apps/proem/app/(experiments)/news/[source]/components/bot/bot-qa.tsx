@@ -10,7 +10,12 @@ export function BotQa({
 	qa,
 	id,
 }: {
-	user?: { image: string; name: string; time: string };
+	user?: {
+		avatar: string;
+		name: string;
+		backgroundColor: string;
+		time: string;
+	};
 	qa: [string, string];
 	id: string;
 }) {
@@ -51,12 +56,15 @@ export function BotQa({
 			id={id}
 		>
 			<div className="flex items-start gap-1.5 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
-				{user?.image ? (
-					<img
-						className="relative w-10 h-10 object-cover rounded-full"
-						alt=""
-						src={user?.image}
-					/>
+				{user?.avatar ? (
+					<div
+						className="flex items-center justify-center w-8 h-8 rounded-full"
+						style={{
+							backgroundColor: user?.backgroundColor ?? "#FFD700",
+						}}
+					>
+						<div className="text-xl">{user?.avatar ?? "🦖"}</div>
+					</div>
 				) : (
 					<Avatar seed="6" />
 				)}
