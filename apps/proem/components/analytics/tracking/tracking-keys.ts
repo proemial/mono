@@ -222,6 +222,16 @@ export const analyticsKeys = {
 				clickAskScience: "experiments:news:item:click_ask_science",
 				clickShare: "experiments:news:item:click_share",
 				clickViewAllSources: "experiments:news:item:click_view_all_sources",
+				clickViewAllSourcesFactualBackground:
+					"experiments:news:item:click_view_all_sources_factual_background",
+				qa: {
+					clickAskInputField: "experiments:news:item:qa:click_ask_input_field",
+					submitAskInput: "experiments:news:item:qa:submit_ask_input",
+					clickSuggestedQuestion:
+						"experiments:news:item:qa:click_suggested_question",
+					clickViewAllSources:
+						"experiments:news:item:qa:click_view_all_sources",
+				},
 			},
 			clickGenerate: "experiments:news:click_generate",
 		},

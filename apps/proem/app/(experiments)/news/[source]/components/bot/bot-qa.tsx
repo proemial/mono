@@ -1,6 +1,8 @@
+import { Trackable } from "@/components/trackable";
 import { Avatar } from "../../../components/avatars";
 import logo from "../../../components/images/logo.svg";
 import Image from "next/image";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 
 export function BotQa({
 	user,
@@ -106,7 +108,15 @@ export function BotQa({
 										}
 									>
 										Based on scientific papers ·{" "}
-										<span className="underline">View sources</span>
+										<Trackable
+											trackingKey={
+												analyticsKeys.experiments.news.item.qa
+													.clickViewAllSources
+											}
+											properties={{ answer: qa.at(1) ?? "" }}
+										>
+											<span className="underline">View sources</span>
+										</Trackable>
 									</div>
 								</>
 							)}
