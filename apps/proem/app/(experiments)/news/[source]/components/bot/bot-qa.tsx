@@ -1,3 +1,4 @@
+import { Avatar } from "../../../components/avatars";
 import logo from "../../../components/images/logo.svg";
 import Image from "next/image";
 
@@ -42,17 +43,21 @@ export function BotQa({
 	return (
 		<div className="flex-col items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative">
 			<div className="flex items-start gap-1.5 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
-				<img
-					className="relative w-10 h-10 object-cover rounded-full"
-					alt=""
-					src={user?.image}
-				/>
+				{user?.image ? (
+					<img
+						className="relative w-10 h-10 object-cover rounded-full"
+						alt=""
+						src={user?.image}
+					/>
+				) : (
+					<Avatar seed="brian" />
+				)}
 
 				<div className="flex flex-col items-start gap-1 relative flex-1 grow">
 					<div className="flex flex-col items-center justify-center gap-1 px-3 py-2 relative self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] rounded-xl">
 						<div className="items-start gap-1 self-stretch w-full flex-[0_0_auto] flex relative">
 							<div className="relative flex-1 mt-[-1.00px] font-bold text-[#08080a] text-sm tracking-[0] leading-[14px]">
-								{user?.name}
+								{user?.name ?? "You"}
 							</div>
 
 							<div className="relative w-fit mt-[-1.00px] font-medium text-[#747888] text-xs tracking-[0.24px] leading-[14px] whitespace-nowrap">

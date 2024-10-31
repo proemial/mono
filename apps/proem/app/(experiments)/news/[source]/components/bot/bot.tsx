@@ -178,7 +178,10 @@ export function Bot({ data }: { data?: NewsItem }) {
 
 	return (
 		<>
-			<div id="askform" className="flex-col pb-2 items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative overflow-hidden">
+			<div
+				id="askform"
+				className="flex-col pb-2 items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative overflow-hidden"
+			>
 				<div className="items-center gap-1.5 px-3 py-0 flex w-full">
 					<Avatar seed="brian" />
 
@@ -237,13 +240,7 @@ export function Bot({ data }: { data?: NewsItem }) {
 					return (
 						<BotQa
 							key={index}
-							user={
-								users.at(Math.floor(index / 2)) ?? {
-									image: "https://randomuser.me/api/portraits/med/men/4.jpg",
-									name: "You",
-									time: "now",
-								}
-							}
+							user={index < 6 ? users.at(Math.floor(index / 2)) : undefined}
 							qa={[message.content, messages.at(index + 1)?.content ?? ""]}
 						/>
 					);
