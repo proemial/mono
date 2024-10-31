@@ -154,6 +154,7 @@ export function Bot({ data }: { data?: NewsItem }) {
 	} = useChat({
 		api: "/api/news/bot",
 		initialMessages,
+		id: data?.source?.url,
 		keepLastMessageOnError: true,
 		body: {
 			item: data,
