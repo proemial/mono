@@ -213,11 +213,15 @@ export const analyticsKeys = {
 	},
 	experiments: {
 		news: {
-			clickAnswer: "experiments:news:click_answer",
-			clickArticle: "experiments:news:click_article",
-			clickUpvote: "experiments:news:click_upvote",
-			clickShare: "experiments:news:click_share",
-			clickAnnotateOwnContent: "experiments:news:click_annotate_own_content",
+			feed: {
+				clickCard: "experiments:news:feed:click_card",
+			},
+			item: {
+				clickSource: "experiments:news:item:click_source",
+				clickViewCounter: "experiments:news:item:click_view_counter",
+				clickAskScience: "experiments:news:item:click_ask_science",
+				clickShare: "experiments:news:item:click_share",
+			},
 			clickGenerate: "experiments:news:click_generate",
 		},
 	},

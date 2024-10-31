@@ -2,6 +2,8 @@ import { Redis } from "@proemial/adapters/redis";
 import { Header } from "./components/header";
 import { NewsCard } from "./news-card";
 import { Footer } from "./components/footer";
+import { Trackable } from "@/components/trackable";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 
 export default async function NewsPage() {
 	const items = await Redis.news.list();
@@ -13,13 +15,18 @@ export default async function NewsPage() {
 
 				<div className="flex flex-col">
 					{items.map((item, i) => (
-						<a
+						<Trackable
 							key={i}
-							href={`/news/${encodeURIComponent(item.source?.url as string)}`}
-							className="block mb-5"
+							trackingKey={analyticsKeys.experiments.news.feed.clickCard}
+							properties={{ sourceUrl: item.source?.url ?? "" }}
 						>
-							<NewsCard data={item} />
-						</a>
+							<a
+								href={`/news/${encodeURIComponent(item.source?.url as string)}`}
+								className="block mb-5"
+							>
+								<NewsCard data={item} />
+							</a>
+						</Trackable>
 					))}
 				</div>
 			</div>
