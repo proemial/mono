@@ -3,13 +3,16 @@ import { Avatar } from "../../../components/avatars";
 import logo from "../../../components/images/logo.svg";
 import Image from "next/image";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
+import { Throbber } from "@/components/throbber";
 
 export function BotQa({
 	user,
 	qa,
+	id,
 }: {
 	user?: { image: string; name: string; time: string };
 	qa: [string, string];
+	id: string;
 }) {
 	const formatAnswerText = (text?: string) => {
 		if (!text) return "";
@@ -43,7 +46,10 @@ export function BotQa({
 	};
 
 	return (
-		<div className="flex-col items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative">
+		<div
+			className="flex-col items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative"
+			id={id}
+		>
 			<div className="flex items-start gap-1.5 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
 				{user?.image ? (
 					<img
@@ -94,7 +100,7 @@ export function BotQa({
 								</div>
 							</div>
 
-							{qa.at(1) && (
+							{qa.at(1) ? (
 								<>
 									<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
 										{formatAnswerText(qa[1])}
@@ -119,6 +125,8 @@ export function BotQa({
 										</Trackable>
 									</div>
 								</>
+							) : (
+								<Throbber className="h-10 pb-0 sm:pb-3" />
 							)}
 						</div>
 					</div>

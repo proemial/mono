@@ -173,23 +173,27 @@ export function Bot({ data }: { data?: NewsItem }) {
 		[messages],
 	);
 
-	const handleSubmitWithInputCheck = (event: FormEvent<HTMLFormElement>) => {
+	const handleSubmitWithInputCheck = async (
+		event: FormEvent<HTMLFormElement>,
+	) => {
 		event.preventDefault();
 		// Model fails if input is empty
 		if (input.trim().length > 0) {
 			handleSubmit();
+			await scrollToQa(messages.length.toString());
 			trackHandler(analyticsKeys.experiments.news.item.qa.submitAskInput, {
 				sourceUrl: data?.source?.url ?? "",
 			})();
 		}
 	};
 
-	const handleSuggestionClick = (suggestion: string | undefined) => {
+	const handleSuggestionClick = async (suggestion: string | undefined) => {
 		if (suggestion) {
 			append({
 				role: "user",
 				content: suggestion,
 			});
+			await scrollToQa(messages.length.toString());
 		}
 	};
 
@@ -278,6 +282,7 @@ export function Bot({ data }: { data?: NewsItem }) {
 							key={index}
 							user={index < 6 ? users.at(Math.floor(index / 2)) : undefined}
 							qa={[message.content, messages.at(index + 1)?.content ?? ""]}
+							id={`qa-${index}`}
 						/>
 					);
 				})}
@@ -285,3 +290,11 @@ export function Bot({ data }: { data?: NewsItem }) {
 		</>
 	);
 }
+
+const scrollToQa = async (index: string) => {
+	await new Promise((resolve) => setTimeout(resolve, 100));
+	document.getElementById(`qa-${index}`)?.scrollIntoView({
+		behavior: "smooth",
+		block: "center",
+	});
+};
