@@ -4,9 +4,13 @@ import { NewsCard } from "./news-card";
 import { Footer } from "./components/footer";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
+import { headers } from "next/headers";
 
 export default async function NewsPage() {
 	const items = await Redis.news.list();
+
+	const platform = headers().get("x-platform");
+	console.log("platform", platform);
 
 	return (
 		<>
