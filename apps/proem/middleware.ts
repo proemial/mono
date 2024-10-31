@@ -22,7 +22,7 @@ export default clerkMiddleware((auth, req) => {
 		const url = searchParams.get("url");
 		if (url) {
 			return NextResponse.redirect(
-				new URL(`https://proem.ai/news/${url}`, req.url),
+				new URL(`https://proem.ai/news/${encodeURIComponent(url)}`, req.url),
 				{
 					headers: {
 						"x-platform": "app",
@@ -33,7 +33,10 @@ export default clerkMiddleware((auth, req) => {
 		const text = searchParams.get("text");
 		if (text) {
 			return NextResponse.redirect(
-				new URL(`https://proem.ai/unsupported/news/text/${text}`, req.url),
+				new URL(
+					`https://proem.ai/unsupported/news/text/${encodeURIComponent(text)}`,
+					req.url,
+				),
 				{
 					headers: {
 						"x-platform": "app",
