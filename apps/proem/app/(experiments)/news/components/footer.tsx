@@ -6,8 +6,13 @@ export function Footer() {
 			</div>
 
 			<p className="relative self-stretch font-normal text-[#f6f5e8] text-sm tracking-[0] leading-5">
-				Our mission is to make science useful and inspiring for everyone. Proem
-				takes any piece of online content and enriches it with science.
+				Proem takes any piece of online content and enriches it with scientific insights from the latest research papers.
+			</p>
+			<p className="relative self-stretch font-normal text-[#f6f5e8] text-sm tracking-[0] leading-5">
+			We are a small European startup based in Aarhus, Denmark. Our mission is to make science useful and inspiring for everyone. 
+			</p>
+			<p className="relative self-stretch font-normal text-[#f6f5e8] text-sm tracking-[0] leading-5">
+				Learn more at <a href="https://about.proem.ai" className="text-[#62f835] ">about.proem.ai</a>
 			</p>
 		</div>
 	);
