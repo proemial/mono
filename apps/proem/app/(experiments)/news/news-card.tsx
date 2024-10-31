@@ -132,10 +132,6 @@ export function NewsCard({
 					src={data?.scrape?.artworkUrl}
 				/>
 
-				<div className=" absolute top-[8px] right-[4px] text-white pr-4 opacity-80">
-					Answers based on scientific research
-				</div>
-
 				<Trackable
 					trackingKey={analyticsKeys.experiments.news.item.clickSource}
 					properties={{ sourceUrl: url }}
