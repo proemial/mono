@@ -4,7 +4,7 @@ import { Time } from "@proemial/utils/time";
 import { NextRequest, NextResponse } from "next/server";
 import { generateFactsAndQuestions } from "../../prompts/generate-facts-and-questions";
 
-export const maxDuration = 10 * 60; // seconds
+export const maxDuration = 600; // seconds
 
 export async function POST(req: NextRequest) {
 	const { url } = (await req.json()) as { url: string };
