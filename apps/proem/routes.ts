@@ -7,4 +7,5 @@ export const routes = {
 	search: "/search",
 	space: "/space",
 	embed: "/embed",
+	news: "/news",
 };
