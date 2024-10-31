@@ -213,6 +213,10 @@ export const analyticsKeys = {
 	},
 	experiments: {
 		news: {
+			header: {
+				clickLogo: "experiments:news:header:click_logo",
+				clickAdd: "experiments:news:header:click_add",
+			},
 			feed: {
 				clickCard: "experiments:news:feed:click_card",
 			},
