@@ -24,7 +24,7 @@ export function Header() {
 						</a>
 					</Trackable>
 				</div>
-				<div className="relative flex-1 text-base tracking-[0] leading-4 text-[#93938f] pl-2 font-normal text-sm">
+				<div className="relative flex-1 tracking-[0] leading-4 text-[#93938f] pl-2 font-normal text-sm">
 					trustworthy perspectives
 				</div>
 			</div>
