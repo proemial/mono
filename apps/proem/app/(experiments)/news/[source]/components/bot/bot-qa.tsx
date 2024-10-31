@@ -119,9 +119,11 @@ export function BotQa({
 				<p className="relative w-fit mt-[-1.00px] font-normal text-[#65686d] text-[13px] tracking-[0] leading-[normal]">
 					<span className="font-bold">Like</span>
 
-					<span className="font-medium">
-						<span className="px-1">·</span> 42
-					</span>
+					{user && (
+						<span className="font-medium">
+							<span className="px-1">·</span> 42
+						</span>
+					)}
 				</p>
 
 				<div className="relative w-fit mt-[-1.00px] font-bold text-[#65686d] text-[13px] tracking-[0] leading-[normal]">
