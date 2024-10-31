@@ -1,4 +1,4 @@
-import { ReferencedPaper } from "@proemial/adapters/redis/news2";
+import { ReferencedPaper } from "@proemial/adapters/redis/news";
 
 export function Paper({ paper }: { paper?: ReferencedPaper }) {
 	const source =

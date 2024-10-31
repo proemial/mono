@@ -6,7 +6,7 @@ import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 
 export default async function NewsPage() {
-	const items = await Redis.news2.list();
+	const items = await Redis.news.list();
 
 	return (
 		<>

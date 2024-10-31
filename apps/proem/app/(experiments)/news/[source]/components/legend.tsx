@@ -1,5 +1,3 @@
-import { NewsItem } from "@proemial/adapters/redis/news";
-
 export function Legend({
 	title,
 	image,

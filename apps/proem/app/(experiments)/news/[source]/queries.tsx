@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
 	NewsAnnotatorSteps,
 	ReferencedPaper,
-} from "@proemial/adapters/redis/news2";
+} from "@proemial/adapters/redis/news";
 
 export function useScraper(url: string, done?: boolean) {
 	return useQuery<NewsAnnotatorSteps>({

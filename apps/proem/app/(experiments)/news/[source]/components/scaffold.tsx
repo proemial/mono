@@ -9,7 +9,7 @@ import {
 	useScraper,
 	useSummarisation,
 } from "../queries";
-import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news2";
+import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news";
 import { Background } from "./background";
 import { Bot } from "./bot/bot";
 import { Legend } from "./legend";
@@ -87,7 +87,7 @@ export function Scaffold({
 					</div>
 				</div>
 
-				<ActionBar url={url} textColor="#303030" />
+				<ActionBar url={url} textColor="#303030" background={background} />
 			</div>
 
 			{data?.summarise?.commentary && (

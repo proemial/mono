@@ -1,17 +1,17 @@
 import { Redis } from "@proemial/adapters/redis";
-import { NewsAnnotatorSummariseInputStep } from "@proemial/adapters/redis/news2";
+import { NewsAnnotatorSummariseInputStep } from "@proemial/adapters/redis/news";
 import { Time } from "@proemial/utils/time";
 import { NextRequest, NextResponse } from "next/server";
 import { generateFactsAndQuestions } from "../../prompts/generate-facts-and-questions";
 
-export const maxDuration = 600; // seconds
+export const maxDuration = 300; // seconds
 
 export async function POST(req: NextRequest) {
 	const { url } = (await req.json()) as { url: string };
 
 	const begin = Time.now();
 	try {
-		const item = await Redis.news2.get(url);
+		const item = await Redis.news.get(url);
 		if (
 			item?.summarise ||
 			!item?.papers ||
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
 		const { commentary, questions: qaString } = parseOutput(factsAndQuestions);
 		const questions = qaFromString(qaString);
 
-		const result = await Redis.news2.update(url, {
+		const result = await Redis.news.update(url, {
 			name: "summarise",
 			commentary,
 			questions,

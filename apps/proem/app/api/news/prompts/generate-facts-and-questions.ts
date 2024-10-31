@@ -1,6 +1,6 @@
 import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
-import { ReferencedPaper } from "@proemial/adapters/redis/news2";
+import { ReferencedPaper } from "@proemial/adapters/redis/news";
 export const generateFactsAndQuestions = async (
 	transcript: string,
 	query: string,

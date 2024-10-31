@@ -2,18 +2,18 @@ import { Redis } from "@proemial/adapters/redis";
 import {
 	NewsAnnotatorPapersInputStep,
 	ReferencedPaper,
-} from "@proemial/adapters/redis/news2";
+} from "@proemial/adapters/redis/news";
 import { Time } from "@proemial/utils/time";
 import { NextRequest, NextResponse } from "next/server";
 
-export const maxDuration = 600; // seconds
+export const maxDuration = 300; // seconds
 
 export async function POST(req: NextRequest) {
 	const { url } = (await req.json()) as { url: string };
 
 	const begin = Time.now();
 	try {
-		const item = await Redis.news2.get(url);
+		const item = await Redis.news.get(url);
 		if (item?.papers || !item?.query) {
 			return NextResponse.json(item);
 		}
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
 		console.log("[papers]", papers.papers.length);
 
-		const result = await Redis.news2.update(url, {
+		const result = await Redis.news.update(url, {
 			name: "papers",
 			value: papers.papers,
 		} as NewsAnnotatorPapersInputStep);

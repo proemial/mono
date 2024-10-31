@@ -1,24 +1,41 @@
 import { Time } from "@proemial/utils/time";
 import { UpStash } from "./upstash-client";
 
+// craping, querying, analyzing, building, asking, summoning magic, casting spells…
 export const RedisNews = {
 	get: async (identifier: string) => {
 		const begin = Time.now();
 
 		try {
-			return (await UpStash.news().get(identifier)) as NewsItem | null;
+			return (await UpStash.news().json.get(identifier)) as
+				| NewsAnnotatorSteps
+				| undefined;
 		} finally {
 			Time.log(begin, `[redis][news][get] ${identifier}`);
 		}
 	},
 
-	set: async (identifier: string, item: NewsItem) => {
+	set: async (identifier: string, item: NewsAnnotatorInputStep) => {
 		const begin = Time.now();
 
 		try {
-			return await UpStash.news().set(identifier, item);
+			const { name, ...rest } = item;
+			await UpStash.news().json.set(identifier, "$", { [name]: rest });
+			return await RedisNews.get(identifier);
 		} finally {
 			Time.log(begin, `[redis][news][set] ${identifier}`);
+		}
+	},
+
+	update: async (identifier: string, item: NewsAnnotatorInputStep) => {
+		const begin = Time.now();
+
+		try {
+			const { name, ...rest } = item;
+			await UpStash.news().json.set(identifier, `$.${name}`, rest);
+			return await RedisNews.get(identifier);
+		} finally {
+			Time.log(begin, `[redis][news][update] ${identifier}`);
 		}
 	},
 
@@ -40,40 +57,77 @@ export const RedisNews = {
 		try {
 			const pipeline = UpStash.news().pipeline();
 			for (const key of keys) {
-				pipeline.get(key);
+				pipeline.json.get(key);
 			}
 			const results = await pipeline.exec();
-			return results as NewsItem[];
+			return results as NewsAnnotatorSteps[];
 		} finally {
 			Time.log(begin, "[redis][news][mget]");
 		}
 	},
 };
 
-export function backgroundColor(color?: string) {
-	return color ?? "#000000";
+export function backgroundColor(background?: string) {
+	return background ?? "#000000";
 }
 
-export type NewsItem = {
-	source?: NewsSource;
-	references?: Array<ReferencedPaper>;
-	generated?: NewsEnrichments;
-	_?: {
-		background?: string;
-	};
+export type NewsAnnotatorStepItem =
+	| NewsAnnotatorInitStep
+	| NewsAnnotatorScrapeStep
+	| NewsAnnotatorQueryStep
+	| NewsAnnotatorPapersStep
+	| NewsAnnotatorSummariseStep;
+
+export type NewsAnnotatorSteps = {
+	init?: NewsAnnotatorInitStep;
+	scrape?: NewsAnnotatorScrapeStep;
+	query?: NewsAnnotatorQueryStep;
+	papers?: NewsAnnotatorPapersStep;
+	summarise?: NewsAnnotatorSummariseStep;
 };
 
-export type NewsSource = {
+export type NewsAnnotatorInputStep =
+	| NewsAnnotatorInitInputStep
+	| NewsAnnotatorScrapeInputStep
+	| NewsAnnotatorQueryInputStep
+	| NewsAnnotatorPapersInputStep
+	| NewsAnnotatorSummariseInputStep;
+
+export type NewsAnnotatorInitInputStep = NewsAnnotatorInitStep & {
+	name: "init";
+};
+export type NewsAnnotatorInitStep = {
 	url: string;
-	text: string;
-	image: string;
-	name: string;
+	host: string;
 	logo: string;
+	background?: string;
 };
 
-export type NewsEnrichments = {
-	title: string;
-	background: string;
+export type NewsAnnotatorScrapeInputStep = NewsAnnotatorScrapeStep & {
+	name: "scrape";
+};
+export type NewsAnnotatorScrapeStep = {
+	transcript: string;
+	title?: string;
+	artworkUrl?: string;
+};
+export type NewsAnnotatorQueryInputStep = NewsAnnotatorQueryStep & {
+	name: "query";
+};
+export type NewsAnnotatorQueryStep = {
+	value: string;
+};
+export type NewsAnnotatorPapersInputStep = NewsAnnotatorPapersStep & {
+	name: "papers";
+};
+export type NewsAnnotatorPapersStep = {
+	value: Array<ReferencedPaper>;
+};
+export type NewsAnnotatorSummariseInputStep = NewsAnnotatorSummariseStep & {
+	name: "summarise";
+};
+export type NewsAnnotatorSummariseStep = {
+	commentary: string;
 	questions: Array<[string, string]>;
 };
 

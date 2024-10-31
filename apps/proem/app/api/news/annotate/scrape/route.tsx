@@ -2,24 +2,24 @@ import { Redis } from "@proemial/adapters/redis";
 import {
 	NewsAnnotatorInitInputStep,
 	NewsAnnotatorScrapeInputStep,
-} from "@proemial/adapters/redis/news2";
+} from "@proemial/adapters/redis/news";
 import { Time } from "@proemial/utils/time";
 import { NextRequest, NextResponse } from "next/server";
 
-export const maxDuration = 600; // seconds
+export const maxDuration = 300; // seconds
 
 export async function POST(req: NextRequest) {
 	const { url } = (await req.json()) as { url: string };
 
 	const begin = Time.now();
 	try {
-		const item = await Redis.news2.get(url);
+		const item = await Redis.news.get(url);
 		if (item?.scrape) {
 			return NextResponse.json(item);
 		}
 
 		const { hostname } = new URL(url);
-		await Redis.news2.set(url, {
+		await Redis.news.set(url, {
 			url,
 			name: "init",
 			host: hostname.replace(/^[^.]+\./, ""), // remove subdomain
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
 		} as NewsAnnotatorInitInputStep);
 
 		const { transcript, artworkUrl, title } = await scrape(url);
-		const result = await Redis.news2.update(url, {
+		const result = await Redis.news.update(url, {
 			name: "scrape",
 			transcript,
 			artworkUrl,

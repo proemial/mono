@@ -1,14 +1,14 @@
 "use client";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Trackable } from "@/components/trackable";
+import { backgroundColor as bgColor } from "@proemial/adapters/redis/news";
 import { toast } from "@proemial/shadcn-ui";
 
 export function ActionBar({
 	url,
+	background,
 	textColor = "#ffffff",
-}: { url: string; textColor?: string }) {
-	const background = "#000000"; // backgroundColor(data);
-
+}: { url: string; background: string; textColor?: string }) {
 	const getRandomViews = (title: string) => {
 		// Create a consistent hash from the title
 		let hash = 0;

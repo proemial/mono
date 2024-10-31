@@ -20,6 +20,6 @@ export default async function UrlPage({ params, searchParams }: Props) {
 			? decodeURIComponent(searchParams.url)
 			: decodeURIComponent(params.source);
 
-	const item = await Redis.news2.get(decodedUrl);
+	const item = await Redis.news.get(decodedUrl);
 	return <Scaffold url={decodedUrl} data={item} />;
 }

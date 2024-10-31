@@ -1,4 +1,3 @@
-import { NewsItem } from "@proemial/adapters/redis/news";
 import { BotQa } from "./bot-qa";
 import { Message, nanoid } from "ai";
 import { useChat } from "ai/react";

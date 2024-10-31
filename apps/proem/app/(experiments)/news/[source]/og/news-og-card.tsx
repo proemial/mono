@@ -1,5 +1,5 @@
 import { env } from "@/env/client";
-import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news2";
+import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news";
 
 type AnswerSharingCardProps = {
 	item: NewsAnnotatorSteps;

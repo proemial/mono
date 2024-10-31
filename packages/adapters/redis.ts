@@ -7,7 +7,6 @@ import { z } from "zod";
 import { RedisSpaces } from "./redis/spaces";
 import { RedisSummaries } from "./redis/summaries";
 import { RedisNews } from "./redis/news";
-import { RedisNews2 } from "./redis/news2";
 
 export const envVariables = z.object({
 	REDIS_PAPERS_TOKEN: z.string(),
@@ -27,5 +26,4 @@ export const Redis = {
 	spaces: RedisSpaces,
 	summaries: RedisSummaries,
 	news: RedisNews,
-	news2: RedisNews2,
 };

@@ -15,7 +15,7 @@ export async function POST(req: Request) {
 		return new Response("Item not found", { status: 404 });
 	}
 
-	const item = await Redis.news2.get(url);
+	const item = await Redis.news.get(url);
 
 	const result = await streamText({
 		model: anthropic("claude-3-5-sonnet-20240620"),

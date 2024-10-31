@@ -1,4 +1,4 @@
-import { ReferencedPaper } from "@proemial/adapters/redis/news2";
+import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import { Paper } from "./paper";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";

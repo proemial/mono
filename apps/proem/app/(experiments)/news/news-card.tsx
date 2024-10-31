@@ -3,7 +3,7 @@ import React from "react";
 import { ActionBar } from "./components/actionbar";
 import logo from "./components/images/logo.svg";
 import Image from "next/image";
-import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news2";
+import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 
@@ -153,7 +153,7 @@ export function NewsCard({
 					</p>
 				</div>
 
-				<ActionBar url={url} textColor="white" />
+				<ActionBar url={url} textColor="white" background={background} />
 
 				<QA data={data} url={url} />
 			</div>
