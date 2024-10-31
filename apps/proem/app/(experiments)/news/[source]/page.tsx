@@ -12,6 +12,9 @@ type Props = {
 	};
 };
 
+// Max out the duration to allow for long running tasks
+export const maxDuration = 60;
+
 export default async function UrlPage({ params, searchParams }: Props) {
 	const decodedUrl =
 		params.source !== "annotate"

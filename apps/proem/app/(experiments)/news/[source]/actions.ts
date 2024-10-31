@@ -28,9 +28,6 @@ export type AnnotateWithScienceResponse = {
 	error?: string;
 };
 
-// Max out the duration to allow for long running tasks
-export const maxDuration = 60;
-
 export async function annotateWithScienceAction(
 	item: z.infer<typeof PrimaryItemSchema>,
 ): Promise<AnnotateWithScienceResponse> {
