@@ -1,4 +1,6 @@
 "use client";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
+import { Trackable } from "@/components/trackable";
 import { NewsItem, backgroundColor } from "@proemial/adapters/redis/news";
 import { toast } from "@proemial/shadcn-ui";
 
@@ -51,47 +53,57 @@ export function ActionBar({
 		<div className="flex w-full justify-between px-3">
 			<div className="flex items-center gap-4">
 				<div className="flex items-center gap-5 relative flex-1 grow">
-					<div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
-						<svg
-							width="24"
-							height="24"
-							viewBox="0 0 24 24"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<path
-								d="M2.42012 12.7132C2.28394 12.4975 2.21584 12.3897 2.17772 12.2234C2.14909 12.0985 2.14909 11.9015 2.17772 11.7766C2.21584 11.6103 2.28394 11.5025 2.42012 11.2868C3.54553 9.50484 6.8954 5 12.0004 5C17.1054 5 20.4553 9.50484 21.5807 11.2868C21.7169 11.5025 21.785 11.6103 21.8231 11.7766C21.8517 11.9015 21.8517 12.0985 21.8231 12.2234C21.785 12.3897 21.7169 12.4975 21.5807 12.7132C20.4553 14.4952 17.1054 19 12.0004 19C6.8954 19 3.54553 14.4952 2.42012 12.7132Z"
-								stroke={textColor}
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							/>
-							<path
-								d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
-								stroke={textColor}
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							/>
-						</svg>
-						<div className="relative w-fit font-normal text-[13px] tracking-[0] leading-[normal]">
-							{viewCount}
+					<Trackable
+						trackingKey={analyticsKeys.experiments.news.item.clickViewCounter}
+						properties={{ sourceUrl: data?.source?.url ?? "" }}
+					>
+						<div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
+							<svg
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M2.42012 12.7132C2.28394 12.4975 2.21584 12.3897 2.17772 12.2234C2.14909 12.0985 2.14909 11.9015 2.17772 11.7766C2.21584 11.6103 2.28394 11.5025 2.42012 11.2868C3.54553 9.50484 6.8954 5 12.0004 5C17.1054 5 20.4553 9.50484 21.5807 11.2868C21.7169 11.5025 21.785 11.6103 21.8231 11.7766C21.8517 11.9015 21.8517 12.0985 21.8231 12.2234C21.785 12.3897 21.7169 12.4975 21.5807 12.7132C20.4553 14.4952 17.1054 19 12.0004 19C6.8954 19 3.54553 14.4952 2.42012 12.7132Z"
+									stroke={textColor}
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								/>
+								<path
+									d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
+									stroke={textColor}
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								/>
+							</svg>
+							<div className="relative w-fit font-normal text-[13px] tracking-[0] leading-[normal]">
+								{viewCount}
+							</div>
 						</div>
-					</div>
+					</Trackable>
 				</div>
-				<div
-					className="inline-flex h-8 items-center gap-1 px-3 py-2 relative flex-[0_0_auto] rounded-[19px] border border-solid active:bg-theme-600"
-					onClick={() =>
-						document
-							.getElementById("askform")
-							?.scrollIntoView({ block: "center", behavior: "smooth" })
-					}
-					style={{ borderColor: textColor }}
+				<Trackable
+					trackingKey={analyticsKeys.experiments.news.item.clickAskScience}
+					properties={{ sourceUrl: data?.source?.url ?? "" }}
 				>
-					<div className="inline-flex items-start gap-1.5 relative flex-[0_0_auto] hover:cursor-pointer">
-						<div className="relative w-fit mt-[-1.00px] font-normal text-[13px] tracking-[0] leading-[normal]">
-							Ask science
+					<div
+						className="inline-flex h-8 items-center gap-1 px-3 py-2 relative flex-[0_0_auto] rounded-[19px] border border-solid active:bg-theme-600"
+						onClick={() =>
+							document
+								.getElementById("askform")
+								?.scrollIntoView({ block: "center", behavior: "smooth" })
+						}
+						style={{ borderColor: textColor }}
+					>
+						<div className="inline-flex items-start gap-1.5 relative flex-[0_0_auto] hover:cursor-pointer">
+							<div className="relative w-fit mt-[-1.00px] font-normal text-[13px] tracking-[0] leading-[normal]">
+								Ask science
+							</div>
 						</div>
 					</div>
-				</div>
+				</Trackable>
 			</div>
 
 			<div
@@ -114,9 +126,14 @@ export function ActionBar({
 							strokeLinejoin="round"
 						/>
 					</svg>
-					<div className="relative w-fit mt-[-1.00px] font-normal text-[13px] tracking-[0] leading-[normal]">
-						Share
-					</div>
+					<Trackable
+						trackingKey={analyticsKeys.experiments.news.item.clickShare}
+						properties={{ sourceUrl: data?.source?.url ?? "" }}
+					>
+						<div className="relative w-fit mt-[-1.00px] font-normal text-[13px] tracking-[0] leading-[normal]">
+							Share
+						</div>
+					</Trackable>
 				</div>
 			</div>
 		</div>

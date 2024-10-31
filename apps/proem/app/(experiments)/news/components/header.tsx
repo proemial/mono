@@ -3,6 +3,8 @@ import logo from "./images/logo.svg";
 import Image from "next/image";
 import { MagicWand02, PlusCircle } from "@untitled-ui/icons-react";
 import { useState } from "react";
+import { Trackable } from "@/components/trackable";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 
 export function Header() {
 	const [modalOpen, setModalOpen] = useState(false);
@@ -58,25 +60,31 @@ export function Header() {
 
 			<div className="items-center gap-2 flex-2 grow flex relative">
 				<div className="font-semibold text-[#f6f5e8] text-base tracking-[0] leading-4">
-					<a href="/news/" className="flex items-center gap-2">
-						<Image
-							className="relative w-[10.51px] h-4"
-							alt="Logotype green logo"
-							src={logo}
-						/>
-						<div className="font-semibold text-[#f6f5e8] text-base tracking-[0] leading-4">
-							proem
-						</div>
-					</a>
+					<Trackable
+						trackingKey={analyticsKeys.experiments.news.header.clickLogo}
+					>
+						<a href="/news/" className="flex items-center gap-2">
+							<Image
+								className="relative w-[10.51px] h-4"
+								alt="Logotype green logo"
+								src={logo}
+							/>
+							<div className="font-semibold text-[#f6f5e8] text-base tracking-[0] leading-4">
+								proem
+							</div>
+						</a>
+					</Trackable>
 				</div>
 				<div className="relative flex-1 tracking-[0] leading-4 text-[#93938f] pl-2 font-normal text-sm">
 					trustworthy perspectives
 				</div>
 			</div>
-			<PlusCircle
-				className="text-[#f6f5e8] hsize-6 block hover:animate-[spin_1s_ease-in-out] cursor-pointer"
-				onClick={() => setModalOpen(true)}
-			/>
+			<Trackable trackingKey={analyticsKeys.experiments.news.header.clickAdd}>
+				<PlusCircle
+					className="text-[#f6f5e8] hsize-6 block hover:animate-[spin_1s_ease-in-out] cursor-pointer"
+					onClick={() => setModalOpen(true)}
+				/>
+			</Trackable>
 		</div>
 	);
 }

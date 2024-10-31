@@ -4,6 +4,8 @@ import { ActionBar } from "./components/actionbar";
 import logo from "./components/images/logo.svg";
 import Image from "next/image";
 import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news2";
+import { Trackable } from "@/components/trackable";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 
 const users = [
 	{
@@ -131,11 +133,16 @@ export function NewsCard({ data }: { data: NewsAnnotatorSteps }) {
 					Answers based on scientific research
 				</div>
 
-				<div className="inline-flex items-start gap-1 px-3 py-1 absolute top-[176px] left-[12px] bg-[#ffffffe6] text-black rounded-[26px]">
-					<a href={data?.init?.url} target="_blank" rel="noopener noreferrer">
-						{data?.init?.host}
-					</a>
-				</div>
+				<Trackable
+					trackingKey={analyticsKeys.experiments.news.item.clickSource}
+					properties={{ sourceUrl: data?.init?.url ?? "" }}
+				>
+					<div className="inline-flex items-start gap-1 px-3 py-1 absolute top-[176px] left-[12px] bg-[#ffffffe6] text-black rounded-[26px]">
+						<a href={data?.init?.url} target="_blank" rel="noopener noreferrer">
+							{data?.init?.host}
+						</a>
+					</div>
+				</Trackable>
 
 				<div className="flex flex-col items-center justify-center gap-2 p-3 relative self-stretch w-full flex-[0_0_auto] ">
 					<p className="relative self-stretch mt-[-1.00px] font-semibold text-xl tracking-[0] leading-[normal]">
@@ -237,9 +244,14 @@ function QA({ data }: { data: NewsAnnotatorSteps }) {
 					</div>
 				</div>
 			</div>
-			<div className="w-full text-right text-white pr-4 opacity-50">
-				<span className="underline ml-2">View all sources</span>
-			</div>
+			<Trackable
+				trackingKey={analyticsKeys.experiments.news.item.clickViewAllSources}
+				properties={{ sourceUrl: data?.source?.url ?? "" }}
+			>
+				<div className="w-full text-right text-white pr-4 opacity-50">
+					<span className="underline ml-2">View all sources</span>
+				</div>
+			</Trackable>
 		</div>
 	);
 }
