@@ -3,6 +3,8 @@ import React from "react";
 import { ActionBar } from "./components/actionbar";
 import logo from "./components/images/logo.svg";
 import Image from "next/image";
+import { Trackable } from "@/components/trackable";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 
 const users = [
 	{
@@ -126,11 +128,24 @@ export function NewsCard({ data }: { data: NewsItem }) {
 					src={data?.source?.image}
 				/>
 
-				<div className="inline-flex items-start gap-1 px-3 py-1 absolute top-[176px] left-[12px] bg-[#ffffffe6] text-black rounded-[26px]">
-					<a href={data?.source?.url} target="_blank" rel="noopener noreferrer">
-						{data?.source?.name}
-					</a>
+				<div className=" absolute top-[8px] right-[4px] text-white pr-4 opacity-80">
+					Answers based on scientific research
 				</div>
+
+				<Trackable
+					trackingKey={analyticsKeys.experiments.news.item.clickSource}
+					properties={{ sourceUrl: data.source?.url ?? "" }}
+				>
+					<div className="inline-flex items-start gap-1 px-3 py-1 absolute top-[176px] left-[12px] bg-[#ffffffe6] text-black rounded-[26px]">
+						<a
+							href={data?.source?.url}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							{data?.source?.name}
+						</a>
+					</div>
+				</Trackable>
 
 				<div className="flex flex-col items-center justify-center gap-2 p-3 relative self-stretch w-full flex-[0_0_auto] ">
 					<p className="relative self-stretch mt-[-1.00px] font-semibold text-xl tracking-[0] leading-[normal]">
@@ -183,7 +198,7 @@ function QA({ data }: { data: NewsItem }) {
 				<img
 					className="relative w-10 h-10 object-cover rounded-full"
 					alt=""
-					src={users[randomUser]?.image ?? '/news/images/profile.png'}
+					src={users[randomUser]?.image ?? "/news/images/profile.png"}
 				/>
 
 				<div className="flex flex-col items-start gap-1 relative flex-1 grow">
@@ -195,7 +210,7 @@ function QA({ data }: { data: NewsItem }) {
 						</div>
 
 						<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
-							{data.generated?.questions.at(randomUser%3)?.[0]}
+							{data.generated?.questions.at(randomUser % 3)?.[0]}
 						</p>
 					</div>
 				</div>
@@ -229,13 +244,21 @@ function QA({ data }: { data: NewsItem }) {
 
 							<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5 overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]">
 								{formatAnswerText(
-									data.generated?.questions.at(randomUser%3	)?.[1],
+									data.generated?.questions.at(randomUser % 3)?.[1],
 								)}
 							</p>
 						</div>
 					</div>
 				</div>
 			</div>
+			<Trackable
+				trackingKey={analyticsKeys.experiments.news.item.clickViewAllSources}
+				properties={{ sourceUrl: data?.source?.url ?? "" }}
+			>
+				<div className="w-full text-right text-white pr-4 opacity-50">
+					<span className="underline ml-2">View all sources</span>
+				</div>
+			</Trackable>
 		</div>
 	);
 }

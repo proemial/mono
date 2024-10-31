@@ -213,11 +213,33 @@ export const analyticsKeys = {
 	},
 	experiments: {
 		news: {
-			clickAnswer: "experiments:news:click_answer",
-			clickArticle: "experiments:news:click_article",
-			clickUpvote: "experiments:news:click_upvote",
-			clickShare: "experiments:news:click_share",
-			clickAnnotateOwnContent: "experiments:news:click_annotate_own_content",
+			header: {
+				clickLogo: "experiments:news:header:click_logo",
+				clickAdd: "experiments:news:header:click_add",
+			},
+			feed: {
+				clickCard: "experiments:news:feed:click_card",
+			},
+			item: {
+				clickSource: "experiments:news:item:click_source",
+				clickViewCounter: "experiments:news:item:click_view_counter",
+				clickAskScience: "experiments:news:item:click_ask_science",
+				clickShare: "experiments:news:item:click_share",
+				clickViewAllSources: "experiments:news:item:click_view_all_sources",
+				clickViewAllSourcesFactualBackground:
+					"experiments:news:item:click_view_all_sources_factual_background",
+				qa: {
+					clickAskInputField: "experiments:news:item:qa:click_ask_input_field",
+					submitAskInput: "experiments:news:item:qa:submit_ask_input",
+					clickSuggestedQuestion:
+						"experiments:news:item:qa:click_suggested_question",
+					clickViewAllSources:
+						"experiments:news:item:qa:click_view_all_sources",
+				},
+				sources: {
+					clickPaperSource: "experiments:news:item:sources:click_paper_source",
+				},
+			},
 			clickGenerate: "experiments:news:click_generate",
 		},
 	},

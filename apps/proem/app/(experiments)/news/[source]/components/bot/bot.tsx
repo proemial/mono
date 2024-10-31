@@ -6,6 +6,11 @@ import { cn } from "@proemial/shadcn-ui";
 import { ArrowRight } from "@untitled-ui/icons-react";
 import { FormEvent, useCallback } from "react";
 import { Avatar } from "../../../components/avatars";
+import { Trackable } from "@/components/trackable";
+import {
+	analyticsKeys,
+	trackHandler,
+} from "@/components/analytics/tracking/tracking-keys";
 
 const users = [
 	{
@@ -168,20 +173,27 @@ export function Bot({ data }: { data?: NewsItem }) {
 		[messages],
 	);
 
-	const handleSubmitWithInputCheck = (event: FormEvent<HTMLFormElement>) => {
+	const handleSubmitWithInputCheck = async (
+		event: FormEvent<HTMLFormElement>,
+	) => {
 		event.preventDefault();
 		// Model fails if input is empty
 		if (input.trim().length > 0) {
 			handleSubmit();
+			await scrollToQa(messages.length.toString());
+			trackHandler(analyticsKeys.experiments.news.item.qa.submitAskInput, {
+				sourceUrl: data?.source?.url ?? "",
+			})();
 		}
 	};
 
-	const handleSuggestionClick = (suggestion: string | undefined) => {
+	const handleSuggestionClick = async (suggestion: string | undefined) => {
 		if (suggestion) {
 			append({
 				role: "user",
 				content: suggestion,
 			});
+			await scrollToQa(messages.length.toString());
 		}
 	};
 
@@ -196,13 +208,20 @@ export function Bot({ data }: { data?: NewsItem }) {
 
 					<form onSubmit={handleSubmitWithInputCheck} className="flex w-full">
 						<div className="w-full bg-gray-200 h-10 px-3 rounded-xl mt-0.5 text-[15px] flex gap-2 items-center">
-							<input
-								id="bot-input"
-								placeholder="Ask a question"
-								value={input}
-								onChange={handleInputChange}
-								className="w-full h-full bg-transparent outline-none placeholder:text-[#999999]"
-							/>
+							<Trackable
+								trackingKey={
+									analyticsKeys.experiments.news.item.qa.clickAskInputField
+								}
+								properties={{ sourceUrl: data?.source?.url ?? "" }}
+							>
+								<input
+									id="bot-input"
+									placeholder="Ask a question"
+									value={input}
+									onChange={handleInputChange}
+									className="w-full h-full bg-transparent outline-none placeholder:text-[#999999]"
+								/>
+							</Trackable>
 							<button type="submit" className="text-gray-400">
 								<ArrowRight className="size-5" />
 							</button>
@@ -218,26 +237,33 @@ export function Bot({ data }: { data?: NewsItem }) {
 
 				<div className="flex-col items-start gap-2 pl-[50px] pr-3 py-0 w-full flex">
 					{data?.generated?.questions.slice(3).map((qa, index) => (
-						<button
+						<Trackable
 							key={index}
-							disabled={isLoading || isAlreadyAsked(qa.at(0))}
-							type="button"
-							onClick={() => handleSuggestionClick(qa.at(0))}
-							className={cn(
-								"bg-[#e9eaee] text-[#08080a] rounded-xl gap-2 py-2 px-3 flex justify-between items-center text-left text-[15px] w-full",
-								{
-									"hover:bg-[#e9eaee]  cursor-pointer":
-										!isLoading && !isAlreadyAsked(qa.at(0)),
-									"text-gray-400 cursor-not-allowed":
-										isLoading || isAlreadyAsked(qa.at(0)),
-								},
-							)}
+							trackingKey={
+								analyticsKeys.experiments.news.item.qa.clickSuggestedQuestion
+							}
+							properties={{ question: qa.at(0) ?? "" }}
 						>
-							<div>{qa.at(0)}</div>
-							<div>
-								<ArrowRight className="size-5 opacity-25" />
-							</div>
-						</button>
+							<button
+								disabled={isLoading || isAlreadyAsked(qa.at(0))}
+								type="button"
+								onClick={() => handleSuggestionClick(qa.at(0))}
+								className={cn(
+									"bg-[#e9eaee] text-[#08080a] rounded-xl gap-2 py-2 px-3 flex justify-between items-center text-left text-[15px] w-full",
+									{
+										"hover:bg-[#e9eaee]  cursor-pointer":
+											!isLoading && !isAlreadyAsked(qa.at(0)),
+										"text-gray-400 cursor-not-allowed":
+											isLoading || isAlreadyAsked(qa.at(0)),
+									},
+								)}
+							>
+								<div>{qa.at(0)}</div>
+								<div>
+									<ArrowRight className="size-5 opacity-25" />
+								</div>
+							</button>
+						</Trackable>
 					))}
 				</div>
 			</div>
@@ -256,6 +282,7 @@ export function Bot({ data }: { data?: NewsItem }) {
 							key={index}
 							user={index < 6 ? users.at(Math.floor(index / 2)) : undefined}
 							qa={[message.content, messages.at(index + 1)?.content ?? ""]}
+							id={`qa-${index}`}
 						/>
 					);
 				})}
@@ -263,3 +290,11 @@ export function Bot({ data }: { data?: NewsItem }) {
 		</>
 	);
 }
+
+const scrollToQa = async (index: string) => {
+	await new Promise((resolve) => setTimeout(resolve, 100));
+	document.getElementById(`qa-${index}`)?.scrollIntoView({
+		behavior: "smooth",
+		block: "center",
+	});
+};

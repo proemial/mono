@@ -16,5 +16,9 @@ export function Trackable({
 	if (!trackingKey) {
 		return <>{children}</>;
 	}
-	return <div onClick={trackHandler(trackingKey, properties)}>{children}</div>;
+	return (
+		<div className="contents" onClick={trackHandler(trackingKey, properties)}>
+			{children}
+		</div>
+	);
 }

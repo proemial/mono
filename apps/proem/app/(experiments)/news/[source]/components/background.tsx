@@ -1,3 +1,5 @@
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
+import { Trackable } from "@/components/trackable";
 import { NewsItem } from "@proemial/adapters/redis/news";
 
 export function Background({ data }: { data?: NewsItem }) {
@@ -54,16 +56,24 @@ export function Background({ data }: { data?: NewsItem }) {
 			<div className="flex justify-start">
 				<div className="font-medium text-[#757989] text-xs leading-5">
 					Based on {linkCount} scientific papers ·{" "}
-					<span
-						className="underline cursor-pointer"
-						onClick={() =>
-							document
-								.getElementById("sources")
-								?.scrollIntoView({ behavior: "smooth" })
+					<Trackable
+						trackingKey={
+							analyticsKeys.experiments.news.item
+								.clickViewAllSourcesFactualBackground
 						}
+						properties={{ sourceUrl: data?.source?.url ?? "" }}
 					>
-						View all sources
-					</span>
+						<span
+							className="underline cursor-pointer"
+							onClick={() =>
+								document
+									.getElementById("sources")
+									?.scrollIntoView({ behavior: "smooth" })
+							}
+						>
+							View all sources
+						</span>
+					</Trackable>
 				</div>
 			</div>
 		</div>
