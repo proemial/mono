@@ -42,7 +42,7 @@ export function Background({ data }: { data?: NewsItem }) {
 	};
 
 	return (
-		<div className="flex flex-col items-center justify-center gap-2 px-3 pb-2 relative self-stretch w-full flex-[0_0_auto]">
+		<div className="flex flex-col gap-2 px-3 pb-2 w-full">
 			<div className="relative self-stretch mt-[-1.00px] font-semibold text-[#08080a] text-lg tracking-[0] leading-4">
 				Factual Background
 			</div>
@@ -51,16 +51,20 @@ export function Background({ data }: { data?: NewsItem }) {
 				{formatBackground(data?.generated?.background)}
 			</div>
 
-			<div
-				className="w-full font-medium text-[#757989] text-xs leading-5 cursor-pointer"
-				onClick={() =>
-					document
-						.getElementById("sources")
-						?.scrollIntoView({ behavior: "smooth" })
-				}
-			>
-				Based on {linkCount} scientific papers ·{" "}
-				<span className="underline">View sources</span>
+			<div className="flex justify-start">
+				<div className="font-medium text-[#757989] text-xs leading-5">
+					Based on {linkCount} scientific papers ·{" "}
+					<span
+						className="underline cursor-pointer"
+						onClick={() =>
+							document
+								.getElementById("sources")
+								?.scrollIntoView({ behavior: "smooth" })
+						}
+					>
+						View all sources
+					</span>
+				</div>
 			</div>
 		</div>
 	);
