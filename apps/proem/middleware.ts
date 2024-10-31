@@ -11,18 +11,34 @@ export default clerkMiddleware((auth, req) => {
 
 	const subdomain = req.nextUrl.hostname.split(".")[0];
 	if (subdomain === "app") {
-		return NextResponse.redirect(new URL("/news", req.url));
+		return NextResponse.redirect(new URL("https://proem.ai/news", req.url), {
+			headers: {
+				"x-platform": "app",
+			},
+		});
 	}
 	if (subdomain === "appshare") {
 		const searchParams = req.nextUrl.searchParams;
 		const url = searchParams.get("url");
 		if (url) {
-			return NextResponse.redirect(new URL(`/news/${url}`, req.url));
+			return NextResponse.redirect(
+				new URL(`https://proem.ai/news/${url}`, req.url),
+				{
+					headers: {
+						"x-platform": "app",
+					},
+				},
+			);
 		}
 		const text = searchParams.get("text");
 		if (text) {
 			return NextResponse.redirect(
-				new URL(`/unsupported/news/text/${text}`, req.url),
+				new URL(`https://proem.ai/unsupported/news/text/${text}`, req.url),
+				{
+					headers: {
+						"x-platform": "app",
+					},
+				},
 			);
 		}
 	}
