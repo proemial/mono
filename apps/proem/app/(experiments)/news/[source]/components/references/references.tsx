@@ -3,7 +3,10 @@ import { Paper } from "./paper";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 
-export function References({ papers }: { papers?: ReferencedPaper[] }) {
+export function References({
+	papers,
+	url,
+}: { papers?: ReferencedPaper[]; url: string }) {
 	return (
 		<div
 			id="sources"
@@ -23,7 +26,7 @@ export function References({ papers }: { papers?: ReferencedPaper[] }) {
 							analyticsKeys.experiments.news.item.sources.clickPaperSource
 						}
 						properties={{
-							// sourceUrl: data?.source?.url ?? "",
+							sourceUrl: url,
 							paperId: paper.id,
 						}}
 					>

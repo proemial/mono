@@ -63,7 +63,7 @@ export function Scaffold({
 						{isScraperLoading && <div>Fetching content ...</div>}
 						{isQueryLoading && <div>Analysing content ...</div>}
 						{isPapersLoading && <div>Looking up relevant research ...</div>}
-						{isSummariseLoading && <div>Swinging the magic wand ...</div>}
+						{isSummariseLoading && <div>Waving the magic wand ... 🧙‍♂️</div>}
 					</div>
 				</div>
 			)}
@@ -91,14 +91,16 @@ export function Scaffold({
 			</div>
 
 			{data?.summarise?.commentary && (
-				<Background text={data?.summarise?.commentary} />
+				<Background text={data?.summarise?.commentary} url={url} />
 			)}
 
 			{data?.summarise?.questions && (
 				<Bot questions={data?.summarise?.questions} url={url} />
 			)}
 
-			{data?.papers?.value && <References papers={data?.papers?.value} />}
+			{data?.papers?.value && (
+				<References papers={data?.papers?.value} url={url} />
+			)}
 
 			<Footer />
 		</div>

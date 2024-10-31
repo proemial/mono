@@ -1,13 +1,12 @@
 "use client";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Trackable } from "@/components/trackable";
-import { NewsItem, backgroundColor } from "@proemial/adapters/redis/news";
 import { toast } from "@proemial/shadcn-ui";
 
 export function ActionBar({
-	url = "",
+	url,
 	textColor = "#ffffff",
-}: { url?: string; textColor?: string }) {
+}: { url: string; textColor?: string }) {
 	const background = "#000000"; // backgroundColor(data);
 
 	const getRandomViews = (title: string) => {
@@ -55,7 +54,7 @@ export function ActionBar({
 				<div className="flex items-center gap-5 relative flex-1 grow">
 					<Trackable
 						trackingKey={analyticsKeys.experiments.news.item.clickViewCounter}
-						properties={{ sourceUrl: data?.source?.url ?? "" }}
+						properties={{ sourceUrl: url }}
 					>
 						<div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
 							<svg
@@ -86,7 +85,7 @@ export function ActionBar({
 				</div>
 				<Trackable
 					trackingKey={analyticsKeys.experiments.news.item.clickAskScience}
-					properties={{ sourceUrl: data?.source?.url ?? "" }}
+					properties={{ sourceUrl: url }}
 				>
 					<div
 						className="inline-flex h-8 items-center gap-1 px-3 py-2 relative flex-[0_0_auto] rounded-[19px] border border-solid active:bg-theme-600"
@@ -128,7 +127,7 @@ export function ActionBar({
 					</svg>
 					<Trackable
 						trackingKey={analyticsKeys.experiments.news.item.clickShare}
-						properties={{ sourceUrl: data?.source?.url ?? "" }}
+						properties={{ sourceUrl: url }}
 					>
 						<div className="relative w-fit mt-[-1.00px] font-normal text-[13px] tracking-[0] leading-[normal]">
 							Share

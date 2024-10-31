@@ -8,7 +8,7 @@ export function Legend({
 }: {
 	title?: string;
 	image?: string;
-	url?: string;
+	url: string;
 	host?: string;
 }) {
 	return (

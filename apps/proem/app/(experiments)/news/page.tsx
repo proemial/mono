@@ -18,13 +18,13 @@ export default async function NewsPage() {
 						<Trackable
 							key={i}
 							trackingKey={analyticsKeys.experiments.news.feed.clickCard}
-							properties={{ sourceUrl: item.init?.url ?? "" }}
+							properties={{ sourceUrl: item.init?.url as string }}
 						>
 							<a
 								href={`/news/${encodeURIComponent(item.init?.url as string)}`}
 								className="block mb-5"
 							>
-								<NewsCard data={item} />
+								<NewsCard url={item.init?.url as string} data={item} />
 							</a>
 						</Trackable>
 					))}

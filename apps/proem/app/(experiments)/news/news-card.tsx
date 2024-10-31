@@ -114,7 +114,10 @@ function getRandomUser() {
 	return Math.floor(Math.random() * users.length);
 }
 
-export function NewsCard({ data }: { data: NewsAnnotatorSteps }) {
+export function NewsCard({
+	data,
+	url,
+}: { data: NewsAnnotatorSteps; url: string }) {
 	const background = backgroundColor(data.init?.background);
 
 	return (
@@ -135,7 +138,7 @@ export function NewsCard({ data }: { data: NewsAnnotatorSteps }) {
 
 				<Trackable
 					trackingKey={analyticsKeys.experiments.news.item.clickSource}
-					properties={{ sourceUrl: data?.init?.url ?? "" }}
+					properties={{ sourceUrl: url }}
 				>
 					<div className="inline-flex items-start gap-1 px-3 py-1 absolute top-[176px] left-[12px] bg-[#ffffffe6] text-black rounded-[26px]">
 						<a href={data?.init?.url} target="_blank" rel="noopener noreferrer">
@@ -150,15 +153,15 @@ export function NewsCard({ data }: { data: NewsAnnotatorSteps }) {
 					</p>
 				</div>
 
-				<ActionBar url={data?.init?.url} textColor="white" />
+				<ActionBar url={url} textColor="white" />
 
-				<QA data={data} />
+				<QA data={data} url={url} />
 			</div>
 		</div>
 	);
 }
 
-function QA({ data }: { data: NewsAnnotatorSteps }) {
+function QA({ data, url }: { data: NewsAnnotatorSteps; url: string }) {
 	const formatAnswerText = (text?: string) => {
 		if (!text) return "";
 		return text
@@ -246,7 +249,7 @@ function QA({ data }: { data: NewsAnnotatorSteps }) {
 			</div>
 			<Trackable
 				trackingKey={analyticsKeys.experiments.news.item.clickViewAllSources}
-				properties={{ sourceUrl: data?.source?.url ?? "" }}
+				properties={{ sourceUrl: url }}
 			>
 				<div className="w-full text-right text-white pr-4 opacity-50">
 					<span className="underline ml-2">View all sources</span>

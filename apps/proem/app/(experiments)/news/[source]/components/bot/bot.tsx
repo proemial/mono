@@ -185,7 +185,7 @@ export function Bot({
 			handleSubmit();
 			await scrollToQa(messages.length.toString());
 			trackHandler(analyticsKeys.experiments.news.item.qa.submitAskInput, {
-				sourceUrl: url ?? "",
+				sourceUrl: url,
 			})();
 		}
 	};
@@ -215,7 +215,7 @@ export function Bot({
 								trackingKey={
 									analyticsKeys.experiments.news.item.qa.clickAskInputField
 								}
-								properties={{ sourceUrl: url ?? "" }}
+								properties={{ sourceUrl: url }}
 							>
 								<input
 									id="bot-input"

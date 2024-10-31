@@ -1,8 +1,7 @@
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Trackable } from "@/components/trackable";
-import { NewsItem } from "@proemial/adapters/redis/news";
 
-export function Background({ text }: { text?: string }) {
+export function Background({ text, url }: { text?: string; url: string }) {
 	const getLinkCount = (text?: string) => {
 		if (!text) return 0;
 		const matches = text.match(/\[(.*?)\]/g) || [];
@@ -61,7 +60,7 @@ export function Background({ text }: { text?: string }) {
 							analyticsKeys.experiments.news.item
 								.clickViewAllSourcesFactualBackground
 						}
-						properties={{ sourceUrl: data?.source?.url ?? "" }}
+						properties={{ sourceUrl: url }}
 					>
 						<span
 							className="underline cursor-pointer"
