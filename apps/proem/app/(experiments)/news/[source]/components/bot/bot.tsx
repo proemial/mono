@@ -183,7 +183,7 @@ export function Bot({ data }: { data?: NewsItem }) {
 				className="flex-col pb-2 items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative overflow-hidden"
 			>
 				<div className="items-center gap-1.5 px-3 py-0 flex w-full">
-					<Avatar seed="brian" />
+					<Avatar seed="6" />
 
 					<form onSubmit={handleSubmit} className="flex w-full">
 						<input

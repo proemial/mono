@@ -50,7 +50,7 @@ export function BotQa({
 						src={user?.image}
 					/>
 				) : (
-					<Avatar seed="brian" />
+					<Avatar seed="6" />
 				)}
 
 				<div className="flex flex-col items-start gap-1 relative flex-1 grow">
