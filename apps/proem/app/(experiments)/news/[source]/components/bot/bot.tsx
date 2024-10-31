@@ -187,13 +187,18 @@ export function Bot({ data }: { data?: NewsItem }) {
 					<Avatar seed="6" />
 
 					<form onSubmit={handleSubmit} className="flex w-full">
-						<input
-							id="bot-input"
-							placeholder="Ask a question"
-							value={input}
-							onChange={handleInputChange}
-							className="w-full bg-gray-200 h-10 px-3 rounded-xl mt-0.5 text-[#999999] text-[15px] focus:bg-white"
-						/>
+						<div className="w-full bg-gray-200 h-10 px-3 rounded-xl mt-0.5 text-[15px] flex gap-2 items-center">
+							<input
+								id="bot-input"
+								placeholder="Ask a question"
+								value={input}
+								onChange={handleInputChange}
+								className="w-full h-full bg-transparent outline-none placeholder:text-[#999999]"
+							/>
+							<button type="submit" className="text-gray-400">
+								<ArrowRight className="size-5" />
+							</button>
+						</div>
 					</form>
 				</div>
 
