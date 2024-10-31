@@ -110,36 +110,39 @@ const users = [
 	},
 ];
 
-export function Bot({ data }: { data?: NewsItem }) {
+export function Bot({
+	url,
+	questions,
+}: { url: string; questions?: Array<[string, string]> }) {
 	const initialMessages: Message[] = [
 		{
 			role: "user",
-			content: data?.generated?.questions.at(0)?.at(0) ?? "",
+			content: questions?.at(0)?.at(0) ?? "",
 			id: nanoid(),
 		},
 		{
 			role: "assistant",
-			content: data?.generated?.questions.at(0)?.at(1) ?? "",
+			content: questions?.at(0)?.at(1) ?? "",
 			id: nanoid(),
 		},
 		{
 			role: "user",
-			content: data?.generated?.questions.at(1)?.at(0) ?? "",
+			content: questions?.at(1)?.at(0) ?? "",
 			id: nanoid(),
 		},
 		{
 			role: "assistant",
-			content: data?.generated?.questions.at(1)?.at(1) ?? "",
+			content: questions?.at(1)?.at(1) ?? "",
 			id: nanoid(),
 		},
 		{
 			role: "user",
-			content: data?.generated?.questions.at(2)?.at(0) ?? "",
+			content: questions?.at(2)?.at(0) ?? "",
 			id: nanoid(),
 		},
 		{
 			role: "assistant",
-			content: data?.generated?.questions.at(2)?.at(1) ?? "",
+			content: questions?.at(2)?.at(1) ?? "",
 			id: nanoid(),
 		},
 	];
@@ -154,10 +157,10 @@ export function Bot({ data }: { data?: NewsItem }) {
 	} = useChat({
 		api: "/api/news/bot",
 		initialMessages,
-		id: data?.source?.url,
+		id: url,
 		keepLastMessageOnError: true,
 		body: {
-			item: data,
+			url,
 		},
 	});
 
@@ -217,7 +220,7 @@ export function Bot({ data }: { data?: NewsItem }) {
 				</div>
 
 				<div className="flex-col items-start gap-2 pl-[50px] pr-3 py-0 w-full flex">
-					{data?.generated?.questions.slice(3).map((qa, index) => (
+					{questions?.slice(3).map((qa, index) => (
 						<button
 							key={index}
 							disabled={isLoading || isAlreadyAsked(qa.at(0))}

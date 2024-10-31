@@ -1,5 +1,4 @@
 import { Scaffold } from "./components/scaffold";
-import NewsAnnotator from "./annotator";
 import { Redis } from "@proemial/adapters/redis";
 
 type Props = {
@@ -17,16 +16,10 @@ export const maxDuration = 60;
 
 export default async function UrlPage({ params, searchParams }: Props) {
 	const decodedUrl =
-		params.source !== "annotate"
-			? decodeURIComponent(params.source)
-			: searchParams?.url
-				? decodeURIComponent(searchParams.url)
-				: undefined;
-	const item = decodedUrl && (await Redis.news.get(decodedUrl));
+		params.source === "annotate" && searchParams?.url
+			? decodeURIComponent(searchParams.url)
+			: decodeURIComponent(params.source);
 
-	if (item) {
-		return <Scaffold data={item} />;
-	}
-
-	return <NewsAnnotator url={decodedUrl} />;
+	const item = await Redis.news2.get(decodedUrl);
+	return <Scaffold url={decodedUrl} data={item} />;
 }

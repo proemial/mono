@@ -1,8 +1,9 @@
-import { backgroundColor, NewsItem } from "@proemial/adapters/redis/news";
+import { backgroundColor } from "@proemial/adapters/redis/news";
 import React from "react";
 import { ActionBar } from "./components/actionbar";
 import logo from "./components/images/logo.svg";
 import Image from "next/image";
+import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news2";
 
 const users = [
 	{
@@ -111,8 +112,8 @@ function getRandomUser() {
 	return Math.floor(Math.random() * users.length);
 }
 
-export function NewsCard({ data }: { data: NewsItem }) {
-	const background = backgroundColor(data);
+export function NewsCard({ data }: { data: NewsAnnotatorSteps }) {
+	const background = backgroundColor(data.init?.background);
 
 	return (
 		<div className="flex flex-col items-start gap-1 relative">
@@ -123,7 +124,7 @@ export function NewsCard({ data }: { data: NewsItem }) {
 				<img
 					className="relative self-stretch w-full h-[220px] object-cover object-top"
 					alt=""
-					src={data?.source?.image}
+					src={data?.scrape?.artworkUrl}
 				/>
 
 				<div className=" absolute top-[8px] right-[4px] text-white pr-4 opacity-80">
@@ -131,22 +132,18 @@ export function NewsCard({ data }: { data: NewsItem }) {
 				</div>
 
 				<div className="inline-flex items-start gap-1 px-3 py-1 absolute top-[176px] left-[12px] bg-[#ffffffe6] text-black rounded-[26px]">
-					<a href={data?.source?.url} target="_blank" rel="noopener noreferrer">
-						{data?.source?.name}
+					<a href={data?.init?.url} target="_blank" rel="noopener noreferrer">
+						{data?.init?.host}
 					</a>
 				</div>
 
 				<div className="flex flex-col items-center justify-center gap-2 p-3 relative self-stretch w-full flex-[0_0_auto] ">
 					<p className="relative self-stretch mt-[-1.00px] font-semibold text-xl tracking-[0] leading-[normal]">
-						{data.generated?.title}
+						{data?.scrape?.title}
 					</p>
 				</div>
 
-				<ActionBar
-					data={data}
-					textColor="white"
-					title={data.generated?.title}
-				/>
+				<ActionBar url={data?.init?.url} textColor="white" />
 
 				<QA data={data} />
 			</div>
@@ -154,7 +151,7 @@ export function NewsCard({ data }: { data: NewsItem }) {
 	);
 }
 
-function QA({ data }: { data: NewsItem }) {
+function QA({ data }: { data: NewsAnnotatorSteps }) {
 	const formatAnswerText = (text?: string) => {
 		if (!text) return "";
 		return text
@@ -199,7 +196,7 @@ function QA({ data }: { data: NewsItem }) {
 						</div>
 
 						<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
-							{data.generated?.questions.at(randomUser % 3)?.[0]}
+							{data.summarise?.questions.at(randomUser % 3)?.[0]}
 						</p>
 					</div>
 				</div>
@@ -233,7 +230,7 @@ function QA({ data }: { data: NewsItem }) {
 
 							<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5 overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]">
 								{formatAnswerText(
-									data.generated?.questions.at(randomUser % 3)?.[1],
+									data.summarise?.questions.at(randomUser % 3)?.[1],
 								)}
 							</p>
 						</div>

@@ -1,19 +1,21 @@
 import { convertToCoreMessages, streamText } from "ai";
-import { NewsItem } from "@proemial/adapters/redis/news";
 import { anthropic } from "@ai-sdk/anthropic";
+import { Redis } from "@proemial/adapters/redis";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-	const { messages, item } = (await req.json()) as {
+	const { messages, url } = (await req.json()) as {
 		messages: { role: "user" | "assistant"; content: string }[];
-		item: NewsItem;
+		url: string;
 	};
 
-	if (!item) {
+	if (!url) {
 		return new Response("Item not found", { status: 404 });
 	}
+
+	const item = await Redis.news2.get(url);
 
 	const result = await streamText({
 		model: anthropic("claude-3-5-sonnet-20240620"),
@@ -22,15 +24,15 @@ You are a helpful assistant identifying as "proem.ai research bot". You are give
 
 <news_item>
 <title>
-${item.generated?.title}
+${item?.scrape?.title}
 </title>
 <content>
-${item.source?.text}
+${item?.scrape?.transcript}
 </content>
 </news_item>
 
 <abstracts>
-${item.references?.map((abstract, index) => `<abstract_${index + 1}>${abstract.abstract}</abstract_${index + 1}>`).join("\n")}
+${item?.papers?.value?.map((abstract, index) => `<abstract_${index + 1}>${abstract.abstract}</abstract_${index + 1}>`).join("\n")}
 </abstracts>
 
 You are also given a list of messages from a user, and your job is to answer the user's questions using the news item and the abstracts. Unless user asks for a more detailed answer, your answer should be short and concise and not exceed 20 words. When using information from the abstracts, you must cite them using superscript numbers.

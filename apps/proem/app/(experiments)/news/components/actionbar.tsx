@@ -3,10 +3,9 @@ import { NewsItem, backgroundColor } from "@proemial/adapters/redis/news";
 import { toast } from "@proemial/shadcn-ui";
 
 export function ActionBar({
-	data,
-	title = "",
+	url = "",
 	textColor = "#ffffff",
-}: { data?: NewsItem; title?: string; textColor?: string }) {
+}: { url?: string; textColor?: string }) {
 	const background = "#000000"; // backgroundColor(data);
 
 	const getRandomViews = (title: string) => {
@@ -34,12 +33,12 @@ export function ActionBar({
 	};
 
 	// For now using a placeholder title since we don't have access to it
-	const viewCount = getRandomViews(title);
+	const viewCount = getRandomViews(url);
 
 	const handleShare = (e: React.MouseEvent<HTMLDivElement>) => {
 		e.preventDefault();
 		navigator.clipboard.writeText(
-			`${window.location.origin}/news/${encodeURIComponent(data?.source?.url as string)}`,
+			`${window.location.origin}/news/${encodeURIComponent(url as string)}`,
 		);
 		toast("Link copied", {
 			style: {

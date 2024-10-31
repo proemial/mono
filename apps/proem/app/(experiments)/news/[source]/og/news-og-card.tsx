@@ -1,9 +1,8 @@
 import { env } from "@/env/client";
-import { NewsItem } from "@proemial/adapters/redis/news";
-import { Calendar, File02 } from "@untitled-ui/icons-react";
+import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news2";
 
 type AnswerSharingCardProps = {
-	item: NewsItem;
+	item: NewsAnnotatorSteps;
 	// Uses experimental tw to work both in app and with @vercel/og
 	classNameAttr?: "className" | "tw";
 };
@@ -16,10 +15,10 @@ export function ReadOpenGraphCard({
 		[classNameAttr]: tailwindClasses,
 	});
 
-	const question = item.generated?.questions.at(0)?.at(0) as string;
+	const question = item.summarise?.questions.at(0)?.at(0) as string;
 	const [truncatedQuestion, questionIsTruncated] = sanitizeQuestion(question);
 
-	const answer = item.generated?.questions.at(0)?.at(1) as string;
+	const answer = item.summarise?.questions.at(0)?.at(1) as string;
 	const [truncatedAnswer, answerIsTruncated] = sanitizeQuestion(answer);
 
 	return (
@@ -28,7 +27,7 @@ export function ReadOpenGraphCard({
 				"flex flex-col w-full h-full font-sans text-[48px] leading-[48px]",
 			)}
 			style={{
-				backgroundImage: `url(${item.source?.image})`,
+				backgroundImage: `url(${item.scrape?.artworkUrl})`,
 				backgroundSize: "cover",
 				backgroundPosition: "center",
 				backgroundColor: "#474747", // Fallback color

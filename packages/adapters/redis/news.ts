@@ -50,8 +50,8 @@ export const RedisNews = {
 	},
 };
 
-export function backgroundColor(item: NewsItem) {
-	return item._?.background ?? "#000000";
+export function backgroundColor(color?: string) {
+	return color ?? "#000000";
 }
 
 export type NewsItem = {

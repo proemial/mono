@@ -1,27 +1,82 @@
+"use client";
 import logo from "./images/logo.svg";
 import Image from "next/image";
-import { PlusCircle } from "@untitled-ui/icons-react";
+import { MagicWand02, PlusCircle } from "@untitled-ui/icons-react";
+import { useState } from "react";
 
 export function Header() {
+	const [modalOpen, setModalOpen] = useState(false);
+
 	return (
 		<div className="flex items-center gap-2 p-4 relative self-stretch w-full flex-[0_0_auto] bg-black">
+			{modalOpen && (
+				<div
+					className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50"
+					onClick={() => setModalOpen(false)}
+				>
+					<div
+						className="bg-white p-6 rounded-lg shadow-lg"
+						onClick={(e) => e.stopPropagation()}
+					>
+						Enter the URL of the content you want to annotate.
+						<form
+							onSubmit={(e) => {
+								e.preventDefault();
+								const url = (e.target as HTMLFormElement).url.value;
+								window.location.href = `/news/${encodeURIComponent(url)}`;
+							}}
+							className="flex flex-col gap-4"
+						>
+							<input
+								type="text"
+								name="url"
+								placeholder="URL"
+								className="border rounded p-2 text-black"
+							/>
+							<div className="flex gap-2 justify-end">
+								<button
+									type="button"
+									onClick={() => setModalOpen(false)}
+									className="px-4 py-2 rounded bg-gray-200 text-black hover:bg-gray-300"
+								>
+									Cancel
+								</button>
+								<button
+									type="submit"
+									className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600"
+								>
+									<div className="flex gap-2 items-center">
+										<MagicWand02 className="size-4" />
+										Generate
+									</div>
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			)}
+
 			<div className="items-center gap-2 flex-2 grow flex relative">
 				<div className="font-semibold text-[#f6f5e8] text-base tracking-[0] leading-4">
 					<a href="/news/" className="flex items-center gap-2">
-						<Image className="relative w-[10.51px] h-4" alt="Logotype green logo" src={logo} />
-						<div className="font-semibold text-[#f6f5e8] text-base tracking-[0] leading-4">proem</div>
+						<Image
+							className="relative w-[10.51px] h-4"
+							alt="Logotype green logo"
+							src={logo}
+						/>
+						<div className="font-semibold text-[#f6f5e8] text-base tracking-[0] leading-4">
+							proem
+						</div>
 					</a>
 				</div>
-				<div className="relative flex-1 text-base tracking-[0] leading-4 text-[#93938f] pl-2 font-normal text-sm">
+				<div className="relative flex-1 tracking-[0] leading-4 text-[#93938f] pl-2 font-normal text-sm">
 					trustworthy perspectives
 				</div>
 			</div>
-			<a
-				href="/news/annotate"
-				className="text-[#f6f5e8] text-sm font-semibold hover:underline"
-			>
-				<PlusCircle className="size-6 block hover:animate-[spin_1s_ease-in-out]" />
-			</a>
+			<PlusCircle
+				className="text-[#f6f5e8] hsize-6 block hover:animate-[spin_1s_ease-in-out] cursor-pointer"
+				onClick={() => setModalOpen(true)}
+			/>
 		</div>
 	);
 }

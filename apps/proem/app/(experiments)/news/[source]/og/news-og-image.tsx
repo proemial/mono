@@ -6,7 +6,7 @@ export async function createReadPageOpenGraphImage(
 	url: string,
 	size: { width: number; height: number },
 ) {
-	const paper = await Redis.news.get(url);
+	const paper = await Redis.news2.get(url);
 	if (!paper) {
 		throw new Error(`no item found for url: ${url}`);
 	}

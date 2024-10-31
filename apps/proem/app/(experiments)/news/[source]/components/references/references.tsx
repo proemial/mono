@@ -1,7 +1,7 @@
-import { NewsItem } from "@proemial/adapters/redis/news";
+import { ReferencedPaper } from "@proemial/adapters/redis/news2";
 import { Paper } from "./paper";
 
-export function References({ data }: { data?: NewsItem }) {
+export function References({ papers }: { papers?: ReferencedPaper[] }) {
 	return (
 		<div
 			id="sources"
@@ -14,7 +14,7 @@ export function References({ data }: { data?: NewsItem }) {
 			</div>
 
 			<div className="flex flex-col items-start gap-2 px-3 py-2 relative self-stretch w-full flex-[0_0_auto]">
-				{data?.references?.map((paper, index) => (
+				{papers?.map((paper, index) => (
 					<a
 						href={`/paper/oa/${paper.id.split("/").at(-1)}`}
 						key={index}

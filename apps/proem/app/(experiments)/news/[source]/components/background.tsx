@@ -1,6 +1,6 @@
 import { NewsItem } from "@proemial/adapters/redis/news";
 
-export function Background({ data }: { data?: NewsItem }) {
+export function Background({ text }: { text?: string }) {
 	const getLinkCount = (text?: string) => {
 		if (!text) return 0;
 		const matches = text.match(/\[(.*?)\]/g) || [];
@@ -8,7 +8,7 @@ export function Background({ data }: { data?: NewsItem }) {
 			return count + match.split(",").length;
 		}, 0);
 	};
-	const linkCount = getLinkCount(data?.generated?.background);
+	const linkCount = getLinkCount(text);
 
 	const formatBackground = (text?: string) => {
 		if (!text) return "";
@@ -48,7 +48,7 @@ export function Background({ data }: { data?: NewsItem }) {
 			</div>
 
 			<div className="relative self-stretch font-normal text-[#1a2930] tracking-[0] leading-6">
-				{formatBackground(data?.generated?.background)}
+				{formatBackground(text)}
 			</div>
 
 			<div className="flex justify-start">

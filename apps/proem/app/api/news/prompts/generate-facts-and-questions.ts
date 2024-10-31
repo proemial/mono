@@ -1,11 +1,10 @@
 import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
-import { QdrantPaper } from "../actions";
-
+import { ReferencedPaper } from "@proemial/adapters/redis/news2";
 export const generateFactsAndQuestions = async (
 	transcript: string,
 	query: string,
-	papers: QdrantPaper[],
+	papers: ReferencedPaper[],
 ): Promise<string> => {
 	const { text } = await generateText({
 		model: anthropic("claude-3-5-sonnet-20240620"),
