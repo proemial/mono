@@ -251,9 +251,14 @@ function QA({ data }: { data: NewsItem }) {
 					</div>
 				</div>
 			</div>
-			<div className="w-full text-right text-white pr-4 opacity-50">
-				<span className="underline ml-2">View all sources</span>
-			</div>
+			<Trackable
+				trackingKey={analyticsKeys.experiments.news.item.clickViewAllSources}
+				properties={{ sourceUrl: data?.source?.url ?? "" }}
+			>
+				<div className="w-full text-right text-white pr-4 opacity-50">
+					<span className="underline ml-2">View all sources</span>
+				</div>
+			</Trackable>
 		</div>
 	);
 }
