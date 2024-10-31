@@ -232,6 +232,9 @@ export const analyticsKeys = {
 					clickViewAllSources:
 						"experiments:news:item:qa:click_view_all_sources",
 				},
+				sources: {
+					clickPaperSource: "experiments:news:item:sources:click_paper_source",
+				},
 			},
 			clickGenerate: "experiments:news:click_generate",
 		},
