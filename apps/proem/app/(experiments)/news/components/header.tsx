@@ -93,9 +93,7 @@ export function Header() {
 			)}
 
 			<div className="w-full flex justify-between items-center">
-				{!isApp && pathname === "/news" ? (
-					<LogoAndName isApp={isApp} />
-				) : (
+				{isApp && pathname !== "/news" ? (
 					<Trackable
 						trackingKey={analyticsKeys.experiments.news.header.clickBack}
 					>
@@ -107,6 +105,8 @@ export function Header() {
 							<ArrowLeft className="size-6" />
 						</button>
 					</Trackable>
+				) : (
+					<LogoAndName isApp={isApp} />
 				)}
 				<Trackable trackingKey={analyticsKeys.experiments.news.header.clickAdd}>
 					<PlusCircle
