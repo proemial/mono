@@ -5,12 +5,14 @@ import { ReactNode } from "react";
 type Props = {
 	children: ReactNode;
 };
-import { Lato } from 'next/font/google'
+import { Lato } from "next/font/google";
+import { Footer } from "./components/footer";
+import { Header } from "./components/header";
 
 const lato = Lato({
-  weight: '400',
-  subsets: ['latin'],
-})
+	weight: "400",
+	subsets: ["latin"],
+});
 
 export default function Layout({ children }: Props) {
 	return (
@@ -21,7 +23,11 @@ export default function Layout({ children }: Props) {
 				}}
 				className={cn("mx-auto min-h-[100dvh] flex flex-col", screenMaxWidth)}
 			>
-				{children}
+				<div className="flex flex-col items-start relative self-stretch w-full">
+					<Header />
+					{children}
+					<Footer />
+				</div>
 			</div>
 		</div>
 	);

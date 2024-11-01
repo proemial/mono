@@ -33,30 +33,25 @@ export default async function NewsPage({
 
 	return (
 		<>
-			<div className="flex flex-col items-start relative self-stretch w-full">
-				{error && <ErrorModal error={error} />}
-				<Header />
-				<Welcome />
+			{error && <ErrorModal error={error} />}
+			<Welcome />
 
-				<div className="flex flex-col">
-					{sorted.map((item, i) => (
-						<Trackable
-							key={i}
-							trackingKey={analyticsKeys.experiments.news.feed.clickCard}
-							properties={{ sourceUrl: item.init?.url as string }}
+			<div className="flex flex-col">
+				{sorted.map((item, i) => (
+					<Trackable
+						key={i}
+						trackingKey={analyticsKeys.experiments.news.feed.clickCard}
+						properties={{ sourceUrl: item.init?.url as string }}
+					>
+						<a
+							href={`/news/${encodeURIComponent(item.init?.url as string)}?p=1`}
+							className="block mb-5"
 						>
-							<a
-								href={`/news/${encodeURIComponent(item.init?.url as string)}?p=1`}
-								className="block mb-5"
-							>
-								<NewsCard url={item.init?.url as string} data={item} />
-							</a>
-						</Trackable>
-					))}
-				</div>
+							<NewsCard url={item.init?.url as string} data={item} />
+						</a>
+					</Trackable>
+				))}
 			</div>
-
-			<Footer />
 		</>
 	);
 }
