@@ -14,6 +14,10 @@ import { Background } from "./background";
 import { Bot } from "./bot/bot";
 import { Legend } from "./legend";
 import { References } from "./references/references";
+import { Throbber } from "@/components/throbber";
+import { ReactNode, useEffect, useState } from "react";
+import logo from "../../components/images/logo.svg";
+import Image from "next/image";
 
 export function Scaffold({
 	url,
@@ -59,11 +63,37 @@ export function Scaffold({
 		<div className="flex flex-col items-center relative bg-white">
 			{isLoading && (
 				<div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
-					<div className="bg-white p-6 rounded-lg shadow-lg">
-						{isScraperLoading && <div>Fetching content ...</div>}
-						{isQueryLoading && <div>Analysing content ...</div>}
-						{isPapersLoading && <div>Looking up relevant research ...</div>}
-						{isSummariseLoading && <div>Waving the magic wand ... 🧙‍♂️</div>}
+					<div className="bg-white rounded-lg shadow-lg">
+						{isScraperLoading && (
+							<ScraperLoader>
+								{data?.init?.host ? (
+									<div className="flex gap-1">
+										<span className="opacity-75">Fetching content from</span>
+										<span className="font-semibold">{data.init.host}</span>
+									</div>
+								) : (
+									<div className="opacity-75">Fetching content</div>
+								)}
+							</ScraperLoader>
+						)}
+						{isQueryLoading && <ScraperLoader>Analyzing content</ScraperLoader>}
+						{isPapersLoading && (
+							<ScraperLoader>Looking up relevant research</ScraperLoader>
+						)}
+						{isSummariseLoading && (
+							<ScraperLoader
+								fallback={
+									<div className="flex gap-3 items-center">
+										<div className="w-8 h-8 rounded-full bg-black flex items-center justify-center animate-bounce">
+											<Image className="w-4 h-4" alt="Frame" src={logo} />
+										</div>
+										<div>Waving our magic wand</div>
+									</div>
+								}
+							>
+								Creating your page
+							</ScraperLoader>
+						)}
 					</div>
 				</div>
 			)}
@@ -107,3 +137,34 @@ export function Scaffold({
 		</div>
 	);
 }
+
+const ScraperLoader = ({
+	children,
+	fallback,
+}: {
+	children: ReactNode;
+	/** Show if loading for more than 5 seconds. */
+	fallback?: ReactNode;
+}) => {
+	const [showFallback, setShowFallback] = useState(false);
+
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			setShowFallback(true);
+		}, 5000);
+		return () => clearTimeout(timeout);
+	}, []);
+
+	return (
+		<div className="flex gap-4 items-center p-5 select-none">
+			{showFallback ? (
+				fallback
+			) : (
+				<>
+					<Throbber className="h-8 w-8" />
+					{children}
+				</>
+			)}
+		</div>
+	);
+};
