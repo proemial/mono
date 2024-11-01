@@ -2,12 +2,22 @@
 import logo from "./images/logo.svg";
 import Image from "next/image";
 import { MagicWand02, PlusCircle } from "@untitled-ui/icons-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 
 export function Header() {
 	const [modalOpen, setModalOpen] = useState(false);
+	const inputRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		if (modalOpen) {
+			// Small delay to ensure the modal is rendered
+			setTimeout(() => {
+				inputRef.current?.focus();
+			}, 0);
+		}
+	}, [modalOpen]);
 
 	return (
 		<div className="flex items-center gap-2 p-4 relative self-stretch w-full flex-[0_0_auto] bg-black">
@@ -30,6 +40,7 @@ export function Header() {
 							className="flex flex-col gap-4"
 						>
 							<input
+								ref={inputRef}
 								type="text"
 								name="url"
 								placeholder="URL"
@@ -45,7 +56,7 @@ export function Header() {
 								</button>
 								<button
 									type="submit"
-									className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600"
+									className="px-4 py-2 rounded bg-green-700 text-white hover:bg-green-800"
 								>
 									<div className="flex gap-2 items-center">
 										<MagicWand02 className="size-4" />
