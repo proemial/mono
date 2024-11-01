@@ -46,10 +46,10 @@ export function Background({ text, url }: { text?: string; url: string }) {
 		<div className="flex flex-col gap-2 px-3 pb-2 w-full">
 			<div className="items-start gap-1 self-stretch w-full flex-[0_0_auto] flex relative">
 				<div className="relative mt-[-1.00px] font-semibold text-[#08080a] text-lg tracking-[0] leading-4">
-				Factual Summary
+					Factual Summary
 				</div>
-				<div className="px-[8px] py-[2px] ml-[4.00px] mt-[-1.00px] relative bg-[hsl(106,100%,60%)] rounded-xl shadow-sm border border-[hsl(106,100%,45%)]">
-					<div className="relative w-fit mt-[-1.00px] font-semibold text-[hsl(106,100%,25%)] text-[11px] tracking-[0] leading-[14px] whitespace-nowrap">
+				<div className="px-1.5 py-0.5 ml-0.5 relative bg-black rounded-full  ">
+					<div className="relative w-fit font-semibold text-[#6aba6f] text-xs leading-3 whitespace-nowrap">
 						Science bot
 					</div>
 				</div>
@@ -67,7 +67,7 @@ export function Background({ text, url }: { text?: string; url: string }) {
 					}
 					properties={{ sourceUrl: url }}
 				>
-					<div 
+					<div
 						className="font-medium text-[#757989] text-xs leading-5"
 						onClick={() =>
 							document
@@ -76,11 +76,7 @@ export function Background({ text, url }: { text?: string; url: string }) {
 						}
 					>
 						Based on {linkCount} scientific papers ·{" "}
-						<span
-							className="underline cursor-pointer"
-						>
-							View all sources
-						</span>
+						<span className="underline cursor-pointer">View all sources</span>
 					</div>
 				</Trackable>
 			</div>
