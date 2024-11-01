@@ -1,6 +1,7 @@
 import { Redis } from "@proemial/adapters/redis";
 import { Header } from "./components/header";
 import { NewsCard } from "./news-card";
+import { Welcome } from "./components/welcome";
 import { Footer } from "./components/footer";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
@@ -35,6 +36,7 @@ export default async function NewsPage({
 			<div className="flex flex-col items-start relative self-stretch w-full">
 				{error && <ErrorModal error={error} />}
 				<Header />
+				{/* <Welcome /> */}
 
 				<div className="flex flex-col">
 					{sorted.map((item, i) => (
