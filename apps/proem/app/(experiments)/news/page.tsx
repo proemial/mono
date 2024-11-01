@@ -6,6 +6,12 @@ import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { ErrorModal } from "./components/error-modal";
 
+export const metadata = {
+	openGraph: {
+		images: ["/news/images/open-graph.png"],
+	},
+};
+
 export default async function NewsPage({
 	searchParams,
 }: {
