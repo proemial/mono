@@ -3,13 +3,14 @@ import { Message, nanoid } from "ai";
 import { useChat } from "ai/react";
 import { cn } from "@proemial/shadcn-ui";
 import { ArrowRight } from "@untitled-ui/icons-react";
-import { FormEvent, useCallback } from "react";
+import { FormEvent, useCallback, useMemo } from "react";
 import { Avatar } from "../../../components/avatars";
 import { Trackable } from "@/components/trackable";
 import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
+import { useSearchParams } from "next/navigation";
 
 const users = [
 	{ name: "Jolly Jaguar", avatar: "🐆", backgroundColor: "#000000" },
@@ -65,42 +66,53 @@ const users = [
 	{ name: "Gallant Goose", avatar: "🦆", backgroundColor: "#FFD700" },
 ];
 
-export function Bot({
-	url,
-	questions,
-}: { url: string; questions?: Array<[string, string]> }) {
-	const initialMessages: Message[] = [
-		{
-			role: "user",
-			content: questions?.at(0)?.at(0) ?? "",
-			id: nanoid(),
-		},
-		{
-			role: "assistant",
-			content: questions?.at(0)?.at(1) ?? "",
-			id: nanoid(),
-		},
-		{
-			role: "user",
-			content: questions?.at(1)?.at(0) ?? "",
-			id: nanoid(),
-		},
-		{
-			role: "assistant",
-			content: questions?.at(1)?.at(1) ?? "",
-			id: nanoid(),
-		},
-		{
-			role: "user",
-			content: questions?.at(2)?.at(0) ?? "",
-			id: nanoid(),
-		},
-		{
-			role: "assistant",
-			content: questions?.at(2)?.at(1) ?? "",
-			id: nanoid(),
-		},
-	];
+type Props = {
+	url: string;
+	questions?: Array<[string, string]>;
+};
+
+export function Bot({ url, questions }: Props) {
+	const searchParams = useSearchParams();
+	const published = searchParams.get("p") === "1";
+
+	const initialMessages: Message[] = useMemo(
+		() =>
+			published
+				? [
+						{
+							role: "user",
+							content: questions?.at(0)?.at(0) ?? "",
+							id: nanoid(),
+						},
+						{
+							role: "assistant",
+							content: questions?.at(0)?.at(1) ?? "",
+							id: nanoid(),
+						},
+						{
+							role: "user",
+							content: questions?.at(1)?.at(0) ?? "",
+							id: nanoid(),
+						},
+						{
+							role: "assistant",
+							content: questions?.at(1)?.at(1) ?? "",
+							id: nanoid(),
+						},
+						{
+							role: "user",
+							content: questions?.at(2)?.at(0) ?? "",
+							id: nanoid(),
+						},
+						{
+							role: "assistant",
+							content: questions?.at(2)?.at(1) ?? "",
+							id: nanoid(),
+						},
+					]
+				: [],
+		[published, questions],
+	);
 
 	const {
 		messages,
@@ -210,7 +222,7 @@ export function Bot({
 				</div>
 
 				<div className="flex-col items-start gap-2 pl-[58px] pr-3 py-0 w-full flex">
-					{questions?.slice(3).map((qa, index) => (
+					{questions?.slice(published ? 3 : 0).map((qa, index) => (
 						<Trackable
 							key={index}
 							trackingKey={
@@ -241,42 +253,50 @@ export function Bot({
 					))}
 				</div>
 			</div>
-			{messages.length <= 6 && (
-				<div className="font-semibold text-[#0a161c] text-lg tracking-[0] leading-4 whitespace-nowrap px-3">
-					Top questions
+			{messages.length > 0 && (
+				<div className="flex flex-col gap-3">
+					{messages.length <= 6 && published && (
+						<div className="font-semibold text-[#0a161c] text-lg tracking-[0] leading-4 whitespace-nowrap px-3 pb-2">
+							Top questions
+						</div>
+					)}
+					<div className="flex flex-col-reverse items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
+						{messages.map((message, index) => {
+							if (message.role === "assistant") return null;
+							return (
+								<BotQa
+									key={index}
+									user={
+										index < 6 && published
+											? users.at(Math.floor(rndUser + index / 2))
+											: undefined
+									}
+									qa={[message.content, messages.at(index + 1)?.content ?? ""]}
+									id={`qa-${index}`}
+								/>
+							);
+						})}
+					</div>
+					{published && (
+						<div className="flex text-center items-center w-full m-2 justify-center">
+							<Trackable
+								trackingKey={
+									analyticsKeys.experiments.news.item.qa.clickShowMore
+								}
+								properties={{ sourceUrl: url }}
+							>
+								<div className="inline-flex h-8 gap-1 px-3 py-2 rounded-[19px] border border-solid active:bg-theme-600 hover:cursor-pointer">
+									<div className="inline-flex gap-1.5 relative">
+										<div className="relative w-fit mt-[-1.00px] font-normal text-[13px] tracking-[0] leading-[normal] select-none">
+											Show more
+										</div>
+									</div>
+								</div>
+							</Trackable>
+						</div>
+					)}
 				</div>
 			)}
-			<div className="flex flex-col-reverse items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
-				{messages.map((message, index) => {
-					if (message.role === "assistant") return null;
-					return (
-						<BotQa
-							key={index}
-							user={
-								index < 6
-									? users.at(Math.floor(rndUser + index / 2))
-									: undefined
-							}
-							qa={[message.content, messages.at(index + 1)?.content ?? ""]}
-							id={`qa-${index}`}
-						/>
-					);
-				})}
-			</div>
-			<div className="flex text-center items-center w-full m-2 justify-center">
-				<Trackable
-					trackingKey={analyticsKeys.experiments.news.item.qa.clickShowMore}
-					properties={{ sourceUrl: url }}
-				>
-					<div className="inline-flex h-8 gap-1 px-3 py-2 rounded-[19px] border border-solid active:bg-theme-600 hover:cursor-pointer">
-						<div className="inline-flex gap-1.5 relative">
-							<div className="relative w-fit mt-[-1.00px] font-normal text-[13px] tracking-[0] leading-[normal]">
-								Show more
-							</div>
-						</div>
-					</div>
-				</Trackable>
-			</div>
 		</>
 	);
 }
