@@ -93,7 +93,7 @@ export function Header() {
 			)}
 
 			<div className="w-full flex justify-between items-center">
-				{isApp && pathname === "/news" ? (
+				{!isApp && pathname === "/news" ? (
 					<LogoAndName isApp={isApp} />
 				) : (
 					<Trackable
