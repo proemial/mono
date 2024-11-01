@@ -4,17 +4,20 @@ import { NewsCard } from "./news-card";
 import { Footer } from "./components/footer";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
-import { headers } from "next/headers";
+import { ErrorModal } from "./components/error-modal";
 
-export default async function NewsPage() {
+export default async function NewsPage({
+	searchParams,
+}: {
+	searchParams: { error?: string };
+}) {
 	const items = await Redis.news.list();
-
-	const platform = headers().get("x-platform");
-	console.log("platform", platform);
+	const error = searchParams.error;
 
 	return (
 		<>
 			<div className="flex flex-col items-start relative self-stretch w-full">
+				{error && <ErrorModal error={error} />}
 				<Header />
 
 				<div className="flex flex-col">

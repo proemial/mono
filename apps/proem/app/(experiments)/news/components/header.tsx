@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { useIsApp } from "@/utils/app";
+import { isBlockedUrl } from "../blocked";
 
 export function Header() {
 	const [modalOpen, setModalOpen] = useState(false);
@@ -40,14 +41,14 @@ export function Header() {
 								e.preventDefault();
 								const form = e.target as HTMLFormElement;
 								const url = form.url.value;
+								const isBlockedError = isBlockedUrl(url);
 
 								// Check if it's a Facebook URL
-								if (url.includes("facebook.com") || url.includes("fb.com")) {
+								if (isBlockedError) {
 									const errorDiv = form.querySelector(
 										".error-message",
 									) as HTMLDivElement;
-									errorDiv.textContent =
-										"We cannot make it past the Facebook login wall 😔";
+									errorDiv.textContent = isBlockedError;
 									return;
 								}
 

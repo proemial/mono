@@ -1,5 +1,6 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { isBlockedUrl } from "./app/(experiments)/news/blocked";
 
 // geolocation only works on the edge
 export const runtime = "experimental-edge";
@@ -13,23 +14,24 @@ export default clerkMiddleware((auth, req) => {
 
 	const subdomain = req.nextUrl.hostname.split(".")[0];
 	if (subdomain === "apphome") {
-		return NextResponse.redirect(new URL(`${baseUrl}/news`, req.url), {
-			headers: {
-				"x-platform": "app",
-			},
-		});
+		return NextResponse.redirect(new URL(`${baseUrl}/news`, req.url));
 	}
 	if (subdomain === "appshare") {
 		const searchParams = req.nextUrl.searchParams;
 		const url = searchParams.get("url");
+
+		const isBlockedError = isBlockedUrl(url as string);
+		if (isBlockedError) {
+			return NextResponse.redirect(
+				new URL(
+					`${baseUrl}/news?error=${encodeURIComponent(isBlockedError)}`,
+					req.url,
+				),
+			);
+		}
 		if (url) {
 			return NextResponse.redirect(
 				new URL(`${baseUrl}/news/${encodeURIComponent(url)}`, req.url),
-				{
-					headers: {
-						"x-platform": "app",
-					},
-				},
 			);
 		}
 		const text = searchParams.get("text");
@@ -39,11 +41,6 @@ export default clerkMiddleware((auth, req) => {
 					`${baseUrl}/unsupported/news/text/${encodeURIComponent(text)}`,
 					req.url,
 				),
-				{
-					headers: {
-						"x-platform": "app",
-					},
-				},
 			);
 		}
 	}
