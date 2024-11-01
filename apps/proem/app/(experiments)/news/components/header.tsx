@@ -5,10 +5,12 @@ import { MagicWand02, PlusCircle } from "@untitled-ui/icons-react";
 import { useState, useRef, useEffect } from "react";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
+import { useIsApp } from "@/utils/app";
 
 export function Header() {
 	const [modalOpen, setModalOpen] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
+	const isApp = useIsApp();
 
 	useEffect(() => {
 		if (modalOpen) {
@@ -20,7 +22,9 @@ export function Header() {
 	}, [modalOpen]);
 
 	return (
-		<div className="flex items-center gap-2 p-4 relative self-stretch w-full flex-[0_0_auto] bg-black">
+		<div
+			className={`flex items-center gap-2 p-4 relative self-stretch w-full flex-[0_0_auto] bg-black ${isApp ? "mt-2" : ""}`}
+		>
 			{modalOpen && (
 				<div
 					className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50"
@@ -86,9 +90,11 @@ export function Header() {
 						</a>
 					</Trackable>
 				</div>
-				<div className="relative flex-1 tracking-[0] leading-4 text-[#93938f] pl-2 font-normal text-sm">
-					trustworthy perspectives
-				</div>
+				{!isApp && (
+					<div className="relative flex-1 tracking-[0] leading-4 text-[#93938f] pl-2 font-normal text-sm">
+						trustworthy perspectives
+					</div>
+				)}
 			</div>
 			<Trackable trackingKey={analyticsKeys.experiments.news.header.clickAdd}>
 				<PlusCircle
