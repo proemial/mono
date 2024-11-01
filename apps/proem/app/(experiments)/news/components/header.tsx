@@ -14,10 +14,9 @@ export function Header() {
 	const [modalOpen, setModalOpen] = useState(false);
 	const isApp = useIsApp();
 
-	const iconSize = isApp ? 8 : 6;
 	return (
 		<div
-			className={`flex items-center gap-2 p-4 self-stretch w-full flex-[0_0_auto] bg-black sticky top-0 z-50 ${isApp ? "pt-8 px-6" : ""}`}
+			className={`flex items-center gap-2 p-4 self-stretch w-full flex-[0_0_auto] bg-black sticky top-0 z-50 ${isApp ? "pt-8" : ""}`}
 		>
 			{modalOpen && (
 				<AnnotateForm modalOpen={modalOpen} setModalOpen={setModalOpen} />
@@ -32,7 +31,7 @@ export function Header() {
 
 				<Trackable trackingKey={analyticsKeys.experiments.news.header.clickAdd}>
 					<PlusCircle
-						className={`text-[#f6f5e8] size-${iconSize} block hover:animate-[spin_1s_ease-in-out] cursor-pointer`}
+						className="text-[#f6f5e8] hsize-6 block hover:animate-[spin_1s_ease-in-out] cursor-pointer"
 						onClick={() => setModalOpen(true)}
 					/>
 				</Trackable>
@@ -138,14 +137,13 @@ function BackButton() {
 				onClick={() => history.back()}
 				className="text-[#f6f5e8] hover:text-[#d4d3c8]"
 			>
-				<ArrowLeft className="size-8" />
+				<ArrowLeft className="size-6" />
 			</button>
 		</Trackable>
 	);
 }
 
 function LogoAndName({ isApp }: { isApp: boolean }) {
-	const iconSize = isApp ? 18 : 16;
 	return (
 		<div className="items-center gap-2 flex-2 grow flex relative">
 			<div className="font-semibold text-[#f6f5e8] text-base tracking-[0] leading-4">
@@ -154,11 +152,9 @@ function LogoAndName({ isApp }: { isApp: boolean }) {
 				>
 					<a href="/news/" className="flex items-center gap-2">
 						<Image
+							className="w-[10.51px] h-4"
 							alt="Logotype green logo"
 							src={logo}
-							width={iconSize}
-							height={iconSize}
-							className={`w-[${iconSize}px] h-[${iconSize}px]`}
 						/>
 						<div className="font-semibold text-[#f6f5e8] text-base tracking-[0] leading-4">
 							proem
