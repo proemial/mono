@@ -149,11 +149,13 @@ const ScraperLoader = ({
 	const [showFallback, setShowFallback] = useState(false);
 
 	useEffect(() => {
-		const timeout = setTimeout(() => {
-			setShowFallback(true);
-		}, 5000);
+		const timeout = fallback
+			? setTimeout(() => {
+					setShowFallback(true);
+				}, 5000)
+			: undefined;
 		return () => clearTimeout(timeout);
-	}, []);
+	}, [fallback]);
 
 	return (
 		<div className="flex gap-4 items-center p-5 select-none">
