@@ -14,7 +14,7 @@ export module Gravatar {
 export function Avatar({ seed }: { seed: string }) {
 	return (
 		<div
-			className={`p-1 rounded-full ${AVATAR_COLORS[numberFrom(seed, AVATAR_COLORS.length)]}`}
+			className={`p-2 rounded-full ${AVATAR_COLORS[numberFrom(seed, AVATAR_COLORS.length)]}`}
 		>
 			<Icons.anonymous className="size-3" />
 		</div>

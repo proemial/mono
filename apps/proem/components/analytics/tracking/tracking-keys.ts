@@ -230,6 +230,7 @@ export const analyticsKeys = {
 					"experiments:news:item:click_view_all_sources_factual_background",
 				qa: {
 					clickAskInputField: "experiments:news:item:qa:click_ask_input_field",
+					clickShowMore: "experiments:news:item:qa:click_show_more_button",
 					submitAskInput: "experiments:news:item:qa:submit_ask_input",
 					clickSuggestedQuestion:
 						"experiments:news:item:qa:click_suggested_question",

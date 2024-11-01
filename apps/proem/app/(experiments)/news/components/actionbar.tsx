@@ -17,11 +17,11 @@ export function ActionBar({
 			hash = hash & hash; // Convert to 32-bit integer
 		}
 		// Generate base random-looking but consistent number between 50 and 500
-		const baseViews = Math.abs(hash % 450) + 50;
+		const baseViews = Math.abs(hash % 300) + 50;
 
 		// Get minutes since this method was first written
 		const now = new Date();
-		const baseTime = new Date(1730306435639);
+		const baseTime = new Date(1730416261598);
 		baseTime.setHours(0, 0, 0, 0);
 		const minutesSinceBaseTime = Math.floor(
 			(now.getTime() - baseTime.getTime()) / (1000 * 60),
@@ -98,7 +98,7 @@ export function ActionBar({
 					>
 						<div className="inline-flex items-start gap-1.5 relative flex-[0_0_auto] hover:cursor-pointer">
 							<div className="relative w-fit mt-[-1.00px] font-normal text-[13px] tracking-[0] leading-[normal]">
-								Ask science
+								Ask science about this topic
 							</div>
 						</div>
 					</div>
