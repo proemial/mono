@@ -24,7 +24,7 @@ export function Header() {
 
 	return (
 		<div
-			className={`flex items-center gap-2 p-4 relative self-stretch w-full flex-[0_0_auto] bg-black ${isApp ? "pt-6" : ""}`}
+			className={`flex items-center gap-2 p-4 self-stretch w-full flex-[0_0_auto] bg-black sticky top-0 z-50 ${isApp ? "pt-6" : ""}`}
 		>
 			{modalOpen && (
 				<div
@@ -97,7 +97,7 @@ export function Header() {
 					>
 						<a href="/news/" className="flex items-center gap-2">
 							<Image
-								className="relative w-[10.51px] h-4"
+								className="w-[10.51px] h-4"
 								alt="Logotype green logo"
 								src={logo}
 							/>

@@ -56,7 +56,7 @@ export function Scaffold({
 	const background = backgroundColor(data?.init?.background);
 
 	return (
-		<div className="flex flex-col items-center gap-5 relative bg-white">
+		<div className="flex flex-col items-center relative bg-white">
 			{isLoading && (
 				<div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
 					<div className="bg-white p-6 rounded-lg shadow-lg">
@@ -68,41 +68,42 @@ export function Scaffold({
 				</div>
 			)}
 
-			<div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto] text-[#08080a]">
-				<div
-					className={
-						"fle≥x flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]"
-					}
-					style={{ background }}
-				>
-					<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto]">
-						<Header />
-
-						<Legend
-							title={data?.scrape?.title}
-							image={data?.scrape?.artworkUrl}
-							url={url}
-							host={data?.init?.host}
-						/>
+			<Header />
+			<div className="flex flex-col gap-5">
+				<div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto] text-[#08080a]">
+					<div
+						className={
+							"fle≥x flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]"
+						}
+						style={{ background }}
+					>
+						<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto]">
+							<Legend
+								title={data?.scrape?.title}
+								image={data?.scrape?.artworkUrl}
+								url={url}
+								host={data?.init?.host}
+							/>
+						</div>
 					</div>
+
+					<ActionBar url={url} textColor="#303030" background={background} />
 				</div>
 
-				<ActionBar url={url} textColor="#303030" background={background} />
+				{data?.summarise?.commentary && (
+					<Background text={data?.summarise?.commentary} url={url} />
+				)}
+
+				{data?.summarise?.questions && (
+					<Bot questions={data?.summarise?.questions} url={url} />
+				)}
+
+				{data?.papers?.value && (
+					<References papers={data?.papers?.value} url={url} />
+				)}
+
+				<Footer />
 			</div>
-
-			{data?.summarise?.commentary && (
-				<Background text={data?.summarise?.commentary} url={url} />
-			)}
-
-			{data?.summarise?.questions && (
-				<Bot questions={data?.summarise?.questions} url={url} />
-			)}
-
-			{data?.papers?.value && (
-				<References papers={data?.papers?.value} url={url} />
-			)}
-
-			<Footer />
 		</div>
 	);
 }
