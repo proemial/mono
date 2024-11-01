@@ -1,8 +1,6 @@
 "use client";
 import { backgroundColor } from "@proemial/adapters/redis/news";
 import { ActionBar } from "../../components/actionbar";
-import { Footer } from "../../components/footer";
-import { Header } from "../../components/header";
 import {
 	usePapers,
 	useQueryBuilder,

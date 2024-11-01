@@ -1,8 +1,6 @@
 import { Redis } from "@proemial/adapters/redis";
-import { Header } from "./components/header";
 import { NewsCard } from "./news-card";
 import { Welcome } from "./components/welcome";
-import { Footer } from "./components/footer";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { ErrorModal } from "./components/error-modal";
