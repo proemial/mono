@@ -25,8 +25,8 @@ export default async function NewsPage({
 	const sorted = unsorted.sort(
 		// -2, -1, "", "", 1, 2
 		(a, b) =>
-			(a.init?.sort ? a.init?.sort * 100 : 50) -
-			(b.init?.sort ? b.init?.sort * 100 : 50),
+			(a.init?.sort ? a.init?.sort * 100 : 0) -
+			(b.init?.sort ? b.init?.sort * 100 : 0),
 	);
 	const error = searchParams.error;
 
