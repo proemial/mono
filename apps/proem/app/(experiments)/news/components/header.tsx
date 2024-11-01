@@ -12,6 +12,41 @@ import { usePathname } from "next/navigation";
 export function Header() {
 	const pathname = usePathname();
 	const [modalOpen, setModalOpen] = useState(false);
+	const isApp = useIsApp();
+
+	return (
+		<div
+			className={`flex items-center gap-2 p-4 self-stretch w-full flex-[0_0_auto] bg-black sticky top-0 z-50 ${isApp ? "pt-6" : ""}`}
+		>
+			{modalOpen && (
+				<AnnotateForm modalOpen={modalOpen} setModalOpen={setModalOpen} />
+			)}
+
+			<div className="w-full flex justify-between items-center">
+				{isApp && pathname !== "/news" ? (
+					<BackButton />
+				) : (
+					<LogoAndName isApp={isApp} />
+				)}
+
+				<Trackable trackingKey={analyticsKeys.experiments.news.header.clickAdd}>
+					<PlusCircle
+						className="text-[#f6f5e8] hsize-6 block hover:animate-[spin_1s_ease-in-out] cursor-pointer"
+						onClick={() => setModalOpen(true)}
+					/>
+				</Trackable>
+			</div>
+		</div>
+	);
+}
+
+function AnnotateForm({
+	modalOpen,
+	setModalOpen,
+}: {
+	modalOpen: boolean;
+	setModalOpen: (open: boolean) => void;
+}) {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const isApp = useIsApp();
 
@@ -26,101 +61,85 @@ export function Header() {
 
 	return (
 		<div
-			className={`flex items-center gap-2 p-4 self-stretch w-full flex-[0_0_auto] bg-black sticky top-0 z-50 ${isApp ? "pt-6" : ""}`}
+			className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50"
+			onClick={() => setModalOpen(false)}
 		>
-			{modalOpen && (
-				<div
-					className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50"
-					onClick={() => setModalOpen(false)}
+			<div
+				className="bg-white p-6 rounded-lg shadow-lg"
+				onClick={(e) => e.stopPropagation()}
+			>
+				Enter the URL of the content you want to annotate.
+				<form
+					onSubmit={(e) => {
+						e.preventDefault();
+						const form = e.target as HTMLFormElement;
+						const url = form.url.value;
+						const isBlockedError = isBlockedUrl(url);
+
+						// Check if it's a Facebook URL
+						if (isBlockedError) {
+							const errorDiv = form.querySelector(
+								".error-message",
+							) as HTMLDivElement;
+							errorDiv.textContent = isBlockedError;
+							return;
+						}
+
+						form.querySelectorAll("button, input").forEach((el) => {
+							(el as HTMLElement).setAttribute("disabled", "true");
+						});
+						window.location.href = `/news/${encodeURIComponent(url)}`;
+					}}
+					className="flex flex-col gap-4"
 				>
-					<div
-						className="bg-white p-6 rounded-lg shadow-lg"
-						onClick={(e) => e.stopPropagation()}
-					>
-						Enter the URL of the content you want to annotate.
-						<form
-							onSubmit={(e) => {
-								e.preventDefault();
-								const form = e.target as HTMLFormElement;
-								const url = form.url.value;
-								const isBlockedError = isBlockedUrl(url);
-
-								// Check if it's a Facebook URL
-								if (isBlockedError) {
-									const errorDiv = form.querySelector(
-										".error-message",
-									) as HTMLDivElement;
-									errorDiv.textContent = isBlockedError;
-									return;
-								}
-
-								form.querySelectorAll("button, input").forEach((el) => {
-									(el as HTMLElement).setAttribute("disabled", "true");
-								});
-								window.location.href = `/news/${encodeURIComponent(url)}`;
-							}}
-							className="flex flex-col gap-4"
-						>
-							<input
-								ref={inputRef}
-								type="text"
-								name="url"
-								placeholder="URL"
-								className="border rounded p-2 text-black disabled:bg-gray-100 disabled:cursor-not-allowed"
-							/>
-							{isApp && (
-								<div className="italic text-sm mt-[-16px] text-gray-500">
-									Pro tip: you you can share with proem from your browser.
-								</div>
-							)}
-							<div className="text-red-500 text-sm error-message" />
-							<div className="flex gap-2 justify-end">
-								<button
-									type="button"
-									onClick={() => setModalOpen(false)}
-									className="px-4 py-2 rounded bg-gray-200 text-black hover:bg-gray-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
-								>
-									Cancel
-								</button>
-								<button
-									type="submit"
-									className="px-4 py-2 rounded bg-green-700 text-white hover:bg-green-800 disabled:bg-green-600 disabled:cursor-not-allowed"
-								>
-									<div className="flex gap-2 items-center">
-										<MagicWand02 className="size-4" />
-										Generate
-									</div>
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			)}
-
-			<div className="w-full flex justify-between items-center">
-				{isApp && pathname !== "/news" ? (
-					<Trackable
-						trackingKey={analyticsKeys.experiments.news.header.clickBack}
-					>
+					<input
+						ref={inputRef}
+						type="text"
+						name="url"
+						placeholder="URL"
+						className="border rounded p-2 text-black disabled:bg-gray-100 disabled:cursor-not-allowed"
+					/>
+					{isApp && (
+						<div className="italic text-sm mt-[-16px] text-gray-500">
+							Pro tip: you you can share with proem from your browser.
+						</div>
+					)}
+					<div className="text-red-500 text-sm error-message" />
+					<div className="flex gap-2 justify-end">
 						<button
 							type="button"
-							onClick={() => history.back()}
-							className="text-[#f6f5e8] hover:text-[#d4d3c8]"
+							onClick={() => setModalOpen(false)}
+							className="px-4 py-2 rounded bg-gray-200 text-black hover:bg-gray-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
 						>
-							<ArrowLeft className="size-6" />
+							Cancel
 						</button>
-					</Trackable>
-				) : (
-					<LogoAndName isApp={isApp} />
-				)}
-				<Trackable trackingKey={analyticsKeys.experiments.news.header.clickAdd}>
-					<PlusCircle
-						className="text-[#f6f5e8] hsize-6 block hover:animate-[spin_1s_ease-in-out] cursor-pointer"
-						onClick={() => setModalOpen(true)}
-					/>
-				</Trackable>
+						<button
+							type="submit"
+							className="px-4 py-2 rounded bg-green-700 text-white hover:bg-green-800 disabled:bg-green-600 disabled:cursor-not-allowed"
+						>
+							<div className="flex gap-2 items-center">
+								<MagicWand02 className="size-4" />
+								Generate
+							</div>
+						</button>
+					</div>
+				</form>
 			</div>
 		</div>
+	);
+}
+
+function BackButton() {
+	return (
+		<Trackable trackingKey={analyticsKeys.experiments.news.header.clickBack}>
+			<button
+				type="button"
+				onClick={() => history.back()}
+				className="text-[#f6f5e8] hover:text-[#d4d3c8]"
+			>
+				<ArrowLeft className="size-6" />
+			</button>
+		</Trackable>
 	);
 }
 
