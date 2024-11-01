@@ -23,7 +23,10 @@ export default async function NewsPage({
 }) {
 	const unsorted = await Redis.news.list();
 	const sorted = unsorted.sort(
-		(a, b) => (b.init?.sort ?? 50) - (a.init?.sort ?? 50),
+		// -2, -1, "", "", 1, 2
+		(a, b) =>
+			(a.init?.sort ? a.init?.sort * 100 : 50) -
+			(b.init?.sort ? b.init?.sort * 100 : 50),
 	);
 	const error = searchParams.error;
 
