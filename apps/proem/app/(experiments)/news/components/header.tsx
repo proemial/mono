@@ -39,10 +39,21 @@ export function Header() {
 							onSubmit={(e) => {
 								e.preventDefault();
 								const form = e.target as HTMLFormElement;
+								const url = form.url.value;
+
+								// Check if it's a Facebook URL
+								if (url.includes("facebook.com") || url.includes("fb.com")) {
+									const errorDiv = form.querySelector(
+										".error-message",
+									) as HTMLDivElement;
+									errorDiv.textContent =
+										"We cannot make it past the Facebook login wall 😔";
+									return;
+								}
+
 								form.querySelectorAll("button, input").forEach((el) => {
 									(el as HTMLElement).setAttribute("disabled", "true");
 								});
-								const url = form.url.value;
 								window.location.href = `/news/${encodeURIComponent(url)}`;
 							}}
 							className="flex flex-col gap-4"
@@ -54,6 +65,7 @@ export function Header() {
 								placeholder="URL"
 								className="border rounded p-2 text-black disabled:bg-gray-100 disabled:cursor-not-allowed"
 							/>
+							<div className="text-red-500 text-sm error-message" />
 							<div className="flex gap-2 justify-end">
 								<button
 									type="button"
