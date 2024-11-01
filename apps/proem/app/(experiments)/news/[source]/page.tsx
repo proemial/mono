@@ -18,12 +18,20 @@ export const maxDuration = 60;
 export async function generateMetadata(props: Props) {
 	const { item } = await fetchItem(props);
 
+	const title = item?.scrape?.title
+		? `${item?.scrape?.title} | proem`
+		: "proem - trustworthy perspectives";
+	const description =
+		"Proem takes any piece of online content and enriches it with scientific insights from the latest research papers.";
+
 	return {
-		title: item?.scrape?.title
-			? `${item?.scrape?.title} | proem`
-			: "proem - trustworthy perspectives",
-		description:
-			"Proem takes any piece of online content and enriches it with scientific insights from the latest research papers.",
+		title,
+		description,
+		openGraph: {
+			title,
+			description,
+			siteName: title,
+		},
 	};
 }
 

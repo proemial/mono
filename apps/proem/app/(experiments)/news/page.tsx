@@ -7,12 +7,18 @@ import { ErrorModal } from "./components/error-modal";
 import { Metadata } from "next";
 import { Header } from "./components/header";
 
+const title = "proem - trustworthy perspectives";
+const description =
+	"Proem takes any piece of online content an`d enriches it with scientific insights from the latest research papers.";
+
 export const metadata: Metadata = {
-	title: "proem - trustworthy perspectives",
-	description:
-		"Proem takes any piece of online content and enriches it with scientific insights from the latest research papers.",
+	title,
+	description,
 	openGraph: {
 		images: ["/news/images/open-graph.png"],
+		title,
+		description,
+		siteName: title,
 	},
 };
 
