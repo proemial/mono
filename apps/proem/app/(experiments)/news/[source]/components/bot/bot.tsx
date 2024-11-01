@@ -254,7 +254,7 @@ export function Bot({
 					return (
 						<BotQa
 							key={index}
-							user={users.at(rndUser + index / 2)}
+							user={index < 6 ? users.at(Math.floor(index / 2)) : undefined}
 							qa={[message.content, messages.at(index + 1)?.content ?? ""]}
 							id={`qa-${index}`}
 						/>
