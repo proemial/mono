@@ -16,7 +16,7 @@ export function Header() {
 
 	return (
 		<div
-			className={`flex items-center gap-2 p-4 self-stretch w-full flex-[0_0_auto] bg-black sticky top-0 z-50 ${isApp ? "pt-6" : ""}`}
+			className={`flex items-center gap-2 p-4 self-stretch w-full flex-[0_0_auto] bg-black sticky top-0 z-50 ${isApp ? "pt-8" : ""}`}
 		>
 			{modalOpen && (
 				<AnnotateForm modalOpen={modalOpen} setModalOpen={setModalOpen} />
