@@ -29,6 +29,7 @@ export function ActionBar({
 		toast("Link copied", {
 			style: {
 				backgroundColor: background,
+				color: "#ffffff",
 			},
 		});
 	};

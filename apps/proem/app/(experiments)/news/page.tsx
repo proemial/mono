@@ -36,7 +36,7 @@ export default async function NewsPage({
 			<div className="flex flex-col items-start relative self-stretch w-full">
 				{error && <ErrorModal error={error} />}
 				<Header />
-				{/* <Welcome /> */}
+				<Welcome />
 
 				<div className="flex flex-col">
 					{sorted.map((item, i) => (
