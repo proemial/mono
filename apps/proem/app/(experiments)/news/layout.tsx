@@ -7,7 +7,6 @@ type Props = {
 };
 import { Lato } from "next/font/google";
 import { Footer } from "./components/footer";
-import { Header } from "./components/header";
 
 const lato = Lato({
 	weight: "400",
@@ -24,7 +23,6 @@ export default function Layout({ children }: Props) {
 				className={cn("mx-auto min-h-[100dvh] flex flex-col", screenMaxWidth)}
 			>
 				<div className="flex flex-col items-start relative self-stretch w-full">
-					<Header />
 					{children}
 					<Footer />
 				</div>

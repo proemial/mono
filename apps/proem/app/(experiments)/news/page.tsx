@@ -5,6 +5,7 @@ import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { ErrorModal } from "./components/error-modal";
 import { Metadata } from "next";
+import { Header } from "./components/header";
 
 export const metadata: Metadata = {
 	title: "proem - trustworthy perspectives",
@@ -31,6 +32,7 @@ export default async function NewsPage({
 
 	return (
 		<>
+			<Header />
 			{error && <ErrorModal error={error} />}
 			<Welcome />
 
