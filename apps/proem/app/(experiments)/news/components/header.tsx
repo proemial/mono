@@ -101,7 +101,7 @@ function AnnotateForm({
 					/>
 					{isApp && (
 						<div className="italic text-sm mt-[-16px] text-gray-500">
-							Pro tip: you you can share with proem from your browser.
+							Pro tip: you can share with proem from your browser.
 						</div>
 					)}
 					<div className="text-red-500 text-sm error-message" />
