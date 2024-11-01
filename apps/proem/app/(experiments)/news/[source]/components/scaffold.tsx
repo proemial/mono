@@ -99,7 +99,7 @@ export function Scaffold({
 			)}
 
 			<Header />
-			<div className="flex flex-col gap-5">
+			<div className="flex flex-col gap-4">
 				<div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto] text-[#08080a]">
 					<div
 						className={

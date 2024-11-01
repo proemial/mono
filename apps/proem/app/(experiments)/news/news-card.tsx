@@ -127,12 +127,13 @@ function QA({ data, url }: { data: NewsAnnotatorSteps; url: string }) {
 				if (match) {
 					const numbers = match[1]?.split(",").map((n) => n.trim());
 					return numbers?.map((num, j) => (
-						<span className="relative inline-block" key={`${i}-${j}`}>
+						<span className="" key={`${i}-${j}`}>
 							<span
 								key={`${i}-${j}`}
-								className="relative -top-[2px] inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-pointer hover:bg-gray-800"
+								className="items-center justify-center rounded-full bg-black text-white text-[10px] font-[1000] cursor-pointer hover:bg-gray-800"
+								style={{ padding: "3px", position: "relative", top: "-2px" }}
 							>
-								{num}
+								&nbsp;{num}&nbsp;
 							</span>
 						</span>
 					));
