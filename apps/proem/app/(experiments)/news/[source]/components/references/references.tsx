@@ -31,7 +31,7 @@ export function References({
 						}}
 					>
 						<a
-							href={`/paper/oa/${paper.id.split("/").at(-1)}`}
+							href={`/news/paper/oa/${paper.id.split("/").at(-1)}`}
 							className="flex items-center justify-center gap-2 p-3 relative self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] rounded-xl"
 						>
 							<div className="flex w-6 h-6 items-center justify-center gap-1 relative bg-[#08080a] rounded-3xl">

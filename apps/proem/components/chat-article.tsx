@@ -48,6 +48,8 @@ export function ChatArticle({
 	const title = paper?.generated?.title;
 	const authors = paper?.data.authorships;
 	const publisher = paper?.data.primary_location?.source?.display_name;
+	const isApp =
+		typeof window !== "undefined" && window.location.host.startsWith("app.");
 
 	const spaceId = customCollectionId?.startsWith("col_")
 		? customCollectionId
@@ -65,7 +67,7 @@ export function ChatArticle({
 								paper.data.created_date ||
 								(paper.data.publication_date as string)
 							}
-							readonly={false}
+							readonly={isApp}
 							isBookmarked={isBookmarked}
 							id={paper.id}
 							customCollectionId={customCollectionId}
