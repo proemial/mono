@@ -24,7 +24,7 @@ export function ActionBar({
 	const handleShare = (e: React.MouseEvent<HTMLDivElement>) => {
 		e.preventDefault();
 		navigator.clipboard.writeText(
-			`${window.location.origin}/news/${encodeURIComponent(url as string)}`,
+			`${window.location.origin.replace("app.", "news.")}/news/${encodeURIComponent(url as string)}`,
 		);
 		toast("Link copied", {
 			style: {
