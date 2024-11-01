@@ -162,7 +162,7 @@ function QA({ data, url }: { data: NewsAnnotatorSteps; url: string }) {
 						</div>
 
 						<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
-							{data.summarise?.questions.at(randomIndex)?.[0]}
+							{data.summarise?.questions.at(randomUser % 3)?.[0]}
 						</p>
 					</div>
 				</div>
