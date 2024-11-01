@@ -3,8 +3,8 @@ import { NextResponse } from "next/server";
 
 // geolocation only works on the edge
 export const runtime = "experimental-edge";
-// Todo: add app.proem.ai
-const baseUrl = "https://proem.ai";
+
+const baseUrl = "https://app.proem.ai";
 
 export default clerkMiddleware((auth, req) => {
 	const requestHeaders = new Headers(req.headers);
@@ -12,8 +12,7 @@ export default clerkMiddleware((auth, req) => {
 	requestHeaders.set("x-pathname", pathname ?? "");
 
 	const subdomain = req.nextUrl.hostname.split(".")[0];
-	// Todo: remove app
-	if (subdomain === "apphome" || subdomain === "app") {
+	if (subdomain === "apphome") {
 		return NextResponse.redirect(new URL(`${baseUrl}/news`, req.url), {
 			headers: {
 				"x-platform": "app",
