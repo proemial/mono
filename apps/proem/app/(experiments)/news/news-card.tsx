@@ -114,8 +114,8 @@ function QA({ data, url }: { data: NewsAnnotatorSteps; url: string }) {
 		return Math.abs(hash % (users.length - 3));
 	};
 	// For now using a placeholder title since we don't have access to it
-	const randomIndex = Math.floor(Math.random() * 3);
-	const randomUser = getRandomUser(url) + randomIndex;
+	const randomUser = getRandomUser(url) + Math.floor(Math.random() * 3);
+	const randomIndex = randomUser % 3;
 
 	const formatAnswerText = (text?: string) => {
 		if (!text) return "";
@@ -162,7 +162,7 @@ function QA({ data, url }: { data: NewsAnnotatorSteps; url: string }) {
 						</div>
 
 						<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
-							{data.summarise?.questions.at(randomUser % 3)?.[0]}
+							{data.summarise?.questions.at(randomIndex)?.[0]}
 						</p>
 					</div>
 				</div>
@@ -190,7 +190,7 @@ function QA({ data, url }: { data: NewsAnnotatorSteps; url: string }) {
 
 							<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5 overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]">
 								{formatAnswerText(
-									data.summarise?.questions.at(randomUser % 3)?.[1],
+									data.summarise?.questions.at(randomIndex)?.[1],
 								)}
 							</p>
 							<div className="w-full font-medium text-[#757989] text-xs leading-5 cursor-pointer">
