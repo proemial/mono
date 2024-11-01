@@ -67,7 +67,7 @@ export function Welcome() {
 								/>
 							</div>
 							{isApp && (
-								<div className="italic text-sm mt-[-16px] text-gray-500">
+								<div className="text-center italic text-xs mt-[-12px] text-gray-500">
 									Pro tip: you can share with proem from your browser.
 								</div>
 							)}
