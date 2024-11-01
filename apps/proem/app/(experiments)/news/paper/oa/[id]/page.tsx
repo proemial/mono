@@ -12,7 +12,7 @@ export default async function OAPaperPage({ params }: Props) {
 	return (
 		<div className="bg-[#F7F7F7]">
 			<Header />
-			<div className="p-4">
+			<div className="p-4 min-h-[100vh]">
 				<PaperPage paperId={params.id} type="oa" />
 			</div>
 			<Footer />
