@@ -38,7 +38,11 @@ export function Header() {
 						<form
 							onSubmit={(e) => {
 								e.preventDefault();
-								const url = (e.target as HTMLFormElement).url.value;
+								const form = e.target as HTMLFormElement;
+								form.querySelectorAll("button, input").forEach((el) => {
+									(el as HTMLElement).setAttribute("disabled", "true");
+								});
+								const url = form.url.value;
 								window.location.href = `/news/${encodeURIComponent(url)}`;
 							}}
 							className="flex flex-col gap-4"
@@ -48,19 +52,19 @@ export function Header() {
 								type="text"
 								name="url"
 								placeholder="URL"
-								className="border rounded p-2 text-black"
+								className="border rounded p-2 text-black disabled:bg-gray-100 disabled:cursor-not-allowed"
 							/>
 							<div className="flex gap-2 justify-end">
 								<button
 									type="button"
 									onClick={() => setModalOpen(false)}
-									className="px-4 py-2 rounded bg-gray-200 text-black hover:bg-gray-300"
+									className="px-4 py-2 rounded bg-gray-200 text-black hover:bg-gray-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
 								>
 									Cancel
 								</button>
 								<button
 									type="submit"
-									className="px-4 py-2 rounded bg-green-700 text-white hover:bg-green-800"
+									className="px-4 py-2 rounded bg-green-700 text-white hover:bg-green-800 disabled:bg-green-600 disabled:cursor-not-allowed"
 								>
 									<div className="flex gap-2 items-center">
 										<MagicWand02 className="size-4" />
