@@ -89,7 +89,12 @@ export function NewsCard({
 					{data?.scrape?.title}
 				</div>
 
-				<ActionBar url={url} textColor="white" background={background} />
+				<ActionBar
+					url={url}
+					textColor="white"
+					background={background}
+					published
+				/>
 
 				<QA data={data} url={url} />
 			</div>
@@ -160,12 +165,6 @@ function QA({ data, url }: { data: NewsAnnotatorSteps; url: string }) {
 						</p>
 					</div>
 				</div>
-
-				{/* <img
-	        className="absolute w-0.5 h-[60px] top-[269px] left-[-29391px]"
-	        alt="Rectangle"
-	        src={rectangle1084}
-	      /> */}
 			</div>
 
 			<div className="flex flex-col items-start gap-2 pl-[58px] pr-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
@@ -200,14 +199,6 @@ function QA({ data, url }: { data: NewsAnnotatorSteps; url: string }) {
 					</div>
 				</div>
 			</div>
-			{/* <Trackable
-				trackingKey={analyticsKeys.experiments.news.item.clickViewAllSources}
-				properties={{ sourceUrl: url }}
-			>
-				<div className="w-full text-right text-white pr-4 opacity-50">
-					<span className="underline ml-2">View all sources</span>
-				</div>
-			</Trackable> */}
 		</div>
 	);
 }

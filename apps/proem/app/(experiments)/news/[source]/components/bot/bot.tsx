@@ -1,16 +1,16 @@
-import { BotQa } from "./bot-qa";
-import { Message, nanoid } from "ai";
-import { useChat } from "ai/react";
-import { cn } from "@proemial/shadcn-ui";
-import { ArrowRight } from "@untitled-ui/icons-react";
-import { FormEvent, useCallback, useMemo } from "react";
-import { Avatar } from "../../../components/avatars";
-import { Trackable } from "@/components/trackable";
 import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { useSearchParams } from "next/navigation";
+import { Trackable } from "@/components/trackable";
+import { cn } from "@proemial/shadcn-ui";
+import { ArrowRight } from "@untitled-ui/icons-react";
+import { Message, nanoid } from "ai";
+import { useChat } from "ai/react";
+import { FormEvent, useCallback, useMemo } from "react";
+import { Avatar } from "../../../components/avatars";
+import { usePublishedSearchParam } from "../../../components/use-published";
+import { BotQa } from "./bot-qa";
 
 const users = [
 	{ name: "Jolly Jaguar", avatar: "🐆", backgroundColor: "#000000" },
@@ -72,12 +72,11 @@ type Props = {
 };
 
 export function Bot({ url, questions }: Props) {
-	const searchParams = useSearchParams();
-	const published = searchParams.get("p") === "1";
+	const { publishedParam: isPublished } = usePublishedSearchParam();
 
 	const initialMessages: Message[] = useMemo(
 		() =>
-			published
+			isPublished
 				? [
 						{
 							role: "user",
@@ -111,7 +110,7 @@ export function Bot({ url, questions }: Props) {
 						},
 					]
 				: [],
-		[published, questions],
+		[isPublished, questions],
 	);
 
 	const {
@@ -222,7 +221,7 @@ export function Bot({ url, questions }: Props) {
 				</div>
 
 				<div className="flex-col items-start gap-2 pl-[58px] pr-3 py-0 w-full flex">
-					{questions?.slice(published ? 3 : 0).map((qa, index) => (
+					{questions?.slice(isPublished ? 3 : 0).map((qa, index) => (
 						<Trackable
 							key={index}
 							trackingKey={
@@ -255,7 +254,7 @@ export function Bot({ url, questions }: Props) {
 			</div>
 			{messages.length > 0 && (
 				<div className="flex flex-col gap-3">
-					{messages.length <= 6 && published && (
+					{messages.length <= 6 && isPublished && (
 						<div className="font-semibold text-[#0a161c] text-lg tracking-[0] leading-4 whitespace-nowrap px-3 pb-2">
 							Top questions
 						</div>
@@ -267,7 +266,7 @@ export function Bot({ url, questions }: Props) {
 								<BotQa
 									key={index}
 									user={
-										index < 6 && published
+										index < 6 && isPublished
 											? users.at(Math.floor(rndUser + index / 2))
 											: undefined
 									}
@@ -277,7 +276,7 @@ export function Bot({ url, questions }: Props) {
 							);
 						})}
 					</div>
-					{published && (
+					{isPublished && (
 						<div className="flex text-center items-center w-full m-2 justify-center">
 							<Trackable
 								trackingKey={

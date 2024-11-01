@@ -226,7 +226,6 @@ export const analyticsKeys = {
 				clickViewCounter: "experiments:news:item:click_view_counter",
 				clickAskScience: "experiments:news:item:click_ask_science",
 				clickShare: "experiments:news:item:click_share",
-				clickViewAllSources: "experiments:news:item:click_view_all_sources",
 				clickViewAllSourcesFactualBackground:
 					"experiments:news:item:click_view_all_sources_factual_background",
 				qa: {
