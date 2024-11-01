@@ -23,7 +23,7 @@ export function Header() {
 
 	return (
 		<div
-			className={`flex items-center gap-2 p-4 relative self-stretch w-full flex-[0_0_auto] bg-black ${isApp ? "mt-2" : ""}`}
+			className={`flex items-center gap-2 p-4 relative self-stretch w-full flex-[0_0_auto] bg-black ${isApp ? "pt-6" : ""}`}
 		>
 			{modalOpen && (
 				<div
