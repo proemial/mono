@@ -65,9 +65,9 @@ export function BotQa({
 
 				<div className="flex flex-col items-start gap-1 relative flex-1 grow">
 					<div className="flex flex-col items-center justify-center gap-1 px-3 py-2 relative self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] rounded-xl">
-						<div className="items-start gap-1 self-stretch flex-[0_0_auto] flex relative">
-							<div className="relative flex-1 mt-[-1.00px] font-bold text-[#08080a] text-sm tracking-[0] leading-[14px] whitespace-nowrap">
-								{user?.name ?? "You"}
+					<div className="flex items-start gap-1 relative self-stretch w-full flex-[0_0_auto]">
+							<div className="relative w-fit mt-[-1.00px] font-bold text-[#08080a] text-sm tracking-[0] leading-[14px] whitespace-nowrap">
+							{user?.name ?? "You"}
 							</div>
 							<div className="px-[8px] py-[2px] ml-[2.00px] mt-[-2.00px] relative bg-[hsl(0,100%,100%)] rounded-xl shadow-sm border border-[hsl(0,0%,85%)]">
 								<div className="relative w-fit mt-[-1.00px] font-semibold text-[#606060] text-[11px] tracking-[0] leading-[14px] whitespace-nowrap">

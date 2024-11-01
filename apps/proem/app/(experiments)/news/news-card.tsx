@@ -85,7 +85,7 @@ export function NewsCard({
 						{data?.init?.host}
 					</div>
 				</Trackable>
-				<div className="inline-flex p-3 mt-[-1.00px] leading-[normal] font-semibold text-xl flex-[0_0_auto] ">
+				<div className="inline-flex p-3 mt-[-1.00px] leading-[normal] font-semibold text-xl flex-[0_0_auto] drop-shadow-md">
 					{data?.scrape?.title}
 				</div>
 
