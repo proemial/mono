@@ -12,57 +12,57 @@ import {
 } from "@/components/analytics/tracking/tracking-keys";
 
 const users = [
-	{"name": "Jolly Jaguar", "avatar": "🐆", "backgroundColor": "#000000"},
-	{"name": "Bouncy Beaver", "avatar": "🦫", "backgroundColor": "#FFDAB9"},
-	{"name": "Sneaky Squirrel", "avatar": "🐿️", "backgroundColor": "#87CEEB"},
-	{"name": "Dazzling Dolphin", "avatar": "🐬", "backgroundColor": "#FF4500"},
-	{"name": "Witty Walrus", "avatar": "🦭", "backgroundColor": "#FFFFFF"},
-	{"name": "Zany Zebra", "avatar": "🦓", "backgroundColor": "#1E90FF"},
-	{"name": "Mighty Moose", "avatar": "🦌", "backgroundColor": "#FFD700"},
-	{"name": "Curious Cheetah", "avatar": "🐆", "backgroundColor": "#000000"},
-	{"name": "Nifty Newt", "avatar": "🦎", "backgroundColor": "#FF4500"},
-	{"name": "Giggly Giraffe", "avatar": "🦒", "backgroundColor": "#00008B"},
-	{"name": "Charming Chimp", "avatar": "🐒", "backgroundColor": "#4682B4"},
-	{"name": "Eager Eagle", "avatar": "🦅", "backgroundColor": "#D3D3D3"},
-	{"name": "Brave Bear", "avatar": "🐻", "backgroundColor": "#FFE4E1"},
-	{"name": "Happy Hedgehog", "avatar": "🦔", "backgroundColor": "#87CEFA"},
-	{"name": "Speedy Sloth", "avatar": "🦥", "backgroundColor": "#FAFAD2"},
-	{"name": "Gentle Gazelle", "avatar": "🦌", "backgroundColor": "#00008B"},
-	{"name": "Silly Seahorse", "avatar": "🐡", "backgroundColor": "#FFA07A"},
-	{"name": "Bold Bison", "avatar": "🦬", "backgroundColor": "#FFFACD"},
-	{"name": "Fancy Flamingo", "avatar": "🦩", "backgroundColor": "#8A2BE2"},
-	{"name": "Lively Llama", "avatar": "🦙", "backgroundColor": "#2F4F4F"},
-	{"name": "Cool Crocodile", "avatar": "🐊", "backgroundColor": "#FFD700"},
-	{"name": "Wise Wolf", "avatar": "🐺", "backgroundColor": "#87CEEB"},
-	{"name": "Peppy Penguin", "avatar": "🐧", "backgroundColor": "#FFFFE0"},
-	{"name": "Rambunctious Raccoon", "avatar": "🦝", "backgroundColor": "#ADD8E6"},
-	{"name": "Playful Panda", "avatar": "🐼", "backgroundColor": "#ADD8E6"},
-	{"name": "Tiny Turtle", "avatar": "🐢", "backgroundColor": "#FF69B4"},
-	{"name": "Swift Sparrow", "avatar": "🐦", "backgroundColor": "#8B4513"},
-	{"name": "Gentle Giant", "avatar": "🐘", "backgroundColor": "#2F4F4F"},
-	{"name": "Jumping Jackal", "avatar": "🦊", "backgroundColor": "#00CED1"},
-	{"name": "Marvelous Manta", "avatar": "🐋", "backgroundColor": "#FFFF00"},
-	{"name": "Quiet Quokka", "avatar": "🦘", "backgroundColor": "#2E8B57"},
-	{"name": "Vivid Viper", "avatar": "🐍", "backgroundColor": "#FFD700"},
-	{"name": "Radiant Rabbit", "avatar": "🐰", "backgroundColor": "#FF1493"},
-	{"name": "Sly Skunk", "avatar": "🦨", "backgroundColor": "#FF4500"},
-	{"name": "Spritely Salmon", "avatar": "🐟", "backgroundColor": "#B22222"},
-	{"name": "Sparkly Starling", "avatar": "🐦", "backgroundColor": "#A0522D"},
-	{"name": "Feisty Fox", "avatar": "🦊", "backgroundColor": "#00CED1"},
-	{"name": "Cheery Chicken", "avatar": "🐔", "backgroundColor": "#00CED1"},
-	{"name": "Keen Koala", "avatar": "🐨", "backgroundColor": "#4B0082"},
-	{"name": "Sunny Swan", "avatar": "🦢", "backgroundColor": "#8B0000"},
-	{"name": "Whimsical Whale", "avatar": "🐋", "backgroundColor": "#FFD700"},
-	{"name": "Proud Peacock", "avatar": "🦚", "backgroundColor": "#D2691E"},
-	{"name": "Loyal Lion", "avatar": "🦁", "backgroundColor": "#4682B4"},
-	{"name": "Eager Emu", "avatar": "🦆", "backgroundColor": "#FFE4B5"},
-	{"name": "Friendly Ferret", "avatar": "🦡", "backgroundColor": "#F0E68C"},
-	{"name": "Joyful Jellyfish", "avatar": "🐙", "backgroundColor": "#00CED1"},
-	{"name": "Bright Bat", "avatar": "🦇", "backgroundColor": "#FFFFE0"},
-	{"name": "Merry Meerkat", "avatar": "🦒", "backgroundColor": "#4B0082"},
-	{"name": "Noble Narwhal", "avatar": "🐳", "backgroundColor": "#FFD700"},
-	{"name": "Chirpy Chipmunk", "avatar": "🐿️", "backgroundColor": "#FFB6C1"},
-	{"name": "Gallant Goose", "avatar": "🦆", "backgroundColor": "#FFD700"}
+	{ name: "Jolly Jaguar", avatar: "🐆", backgroundColor: "#000000" },
+	{ name: "Bouncy Beaver", avatar: "🦫", backgroundColor: "#FFDAB9" },
+	{ name: "Sneaky Squirrel", avatar: "🐿️", backgroundColor: "#87CEEB" },
+	{ name: "Dazzling Dolphin", avatar: "🐬", backgroundColor: "#FF4500" },
+	{ name: "Witty Walrus", avatar: "🦭", backgroundColor: "#FFFFFF" },
+	{ name: "Zany Zebra", avatar: "🦓", backgroundColor: "#1E90FF" },
+	{ name: "Mighty Moose", avatar: "🦌", backgroundColor: "#FFD700" },
+	{ name: "Curious Cheetah", avatar: "🐆", backgroundColor: "#000000" },
+	{ name: "Nifty Newt", avatar: "🦎", backgroundColor: "#FF4500" },
+	{ name: "Giggly Giraffe", avatar: "🦒", backgroundColor: "#00008B" },
+	{ name: "Charming Chimp", avatar: "🐒", backgroundColor: "#4682B4" },
+	{ name: "Eager Eagle", avatar: "🦅", backgroundColor: "#D3D3D3" },
+	{ name: "Brave Bear", avatar: "🐻", backgroundColor: "#FFE4E1" },
+	{ name: "Happy Hedgehog", avatar: "🦔", backgroundColor: "#87CEFA" },
+	{ name: "Speedy Sloth", avatar: "🦥", backgroundColor: "#FAFAD2" },
+	{ name: "Gentle Gazelle", avatar: "🦌", backgroundColor: "#00008B" },
+	{ name: "Silly Seahorse", avatar: "🐡", backgroundColor: "#FFA07A" },
+	{ name: "Bold Bison", avatar: "🦬", backgroundColor: "#FFFACD" },
+	{ name: "Fancy Flamingo", avatar: "🦩", backgroundColor: "#8A2BE2" },
+	{ name: "Lively Llama", avatar: "🦙", backgroundColor: "#2F4F4F" },
+	{ name: "Cool Crocodile", avatar: "🐊", backgroundColor: "#FFD700" },
+	{ name: "Wise Wolf", avatar: "🐺", backgroundColor: "#87CEEB" },
+	{ name: "Peppy Penguin", avatar: "🐧", backgroundColor: "#FFFFE0" },
+	{ name: "Rambunctious Raccoon", avatar: "🦝", backgroundColor: "#ADD8E6" },
+	{ name: "Playful Panda", avatar: "🐼", backgroundColor: "#ADD8E6" },
+	{ name: "Tiny Turtle", avatar: "🐢", backgroundColor: "#FF69B4" },
+	{ name: "Swift Sparrow", avatar: "🐦", backgroundColor: "#8B4513" },
+	{ name: "Gentle Giant", avatar: "🐘", backgroundColor: "#2F4F4F" },
+	{ name: "Jumping Jackal", avatar: "🦊", backgroundColor: "#00CED1" },
+	{ name: "Marvelous Manta", avatar: "🐋", backgroundColor: "#FFFF00" },
+	{ name: "Quiet Quokka", avatar: "🦘", backgroundColor: "#2E8B57" },
+	{ name: "Vivid Viper", avatar: "🐍", backgroundColor: "#FFD700" },
+	{ name: "Radiant Rabbit", avatar: "🐰", backgroundColor: "#FF1493" },
+	{ name: "Sly Skunk", avatar: "🦨", backgroundColor: "#FF4500" },
+	{ name: "Spritely Salmon", avatar: "🐟", backgroundColor: "#B22222" },
+	{ name: "Sparkly Starling", avatar: "🐦", backgroundColor: "#A0522D" },
+	{ name: "Feisty Fox", avatar: "🦊", backgroundColor: "#00CED1" },
+	{ name: "Cheery Chicken", avatar: "🐔", backgroundColor: "#00CED1" },
+	{ name: "Keen Koala", avatar: "🐨", backgroundColor: "#4B0082" },
+	{ name: "Sunny Swan", avatar: "🦢", backgroundColor: "#8B0000" },
+	{ name: "Whimsical Whale", avatar: "🐋", backgroundColor: "#FFD700" },
+	{ name: "Proud Peacock", avatar: "🦚", backgroundColor: "#D2691E" },
+	{ name: "Loyal Lion", avatar: "🦁", backgroundColor: "#4682B4" },
+	{ name: "Eager Emu", avatar: "🦆", backgroundColor: "#FFE4B5" },
+	{ name: "Friendly Ferret", avatar: "🦡", backgroundColor: "#F0E68C" },
+	{ name: "Joyful Jellyfish", avatar: "🐙", backgroundColor: "#00CED1" },
+	{ name: "Bright Bat", avatar: "🦇", backgroundColor: "#FFFFE0" },
+	{ name: "Merry Meerkat", avatar: "🦒", backgroundColor: "#4B0082" },
+	{ name: "Noble Narwhal", avatar: "🐳", backgroundColor: "#FFD700" },
+	{ name: "Chirpy Chipmunk", avatar: "🐿️", backgroundColor: "#FFB6C1" },
+	{ name: "Gallant Goose", avatar: "🦆", backgroundColor: "#FFD700" },
 ];
 
 export function Bot({
@@ -158,7 +158,7 @@ export function Bot({
 			hash = hash & hash; // Convert to 32-bit integer
 		}
 		// return random-looking but consistent user number
-		return Math.abs(hash % (users.length-3));
+		return Math.abs(hash % (users.length - 3));
 	};
 
 	// For now using a placeholder title since we don't have access to it
@@ -169,7 +169,7 @@ export function Bot({
 			<div className="flex items-center justify-end gap-2 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
 				<div className="items-center gap-2 flex-1 grow flex relative">
 					<div className="relative w-fit mt-[-1.00px] font-semibold text-[#0a161c] text-lg tracking-[0] leading-4 whitespace-nowrap">
-						Ask Science about this topic
+						Ask Science
 					</div>
 				</div>
 			</div>
@@ -254,7 +254,7 @@ export function Bot({
 					return (
 						<BotQa
 							key={index}
-							user={users.at(rndUser + index/2)}
+							user={users.at(rndUser + index / 2)}
 							qa={[message.content, messages.at(index + 1)?.content ?? ""]}
 							id={`qa-${index}`}
 						/>
@@ -262,12 +262,10 @@ export function Bot({
 				})}
 			</div>
 			<div className="flex text-center items-center w-full m-2 justify-center">
-			<Trackable
-								trackingKey={
-									analyticsKeys.experiments.news.item.qa.clickShowMore
-								}
-								properties={{ sourceUrl: url }}
-							>
+				<Trackable
+					trackingKey={analyticsKeys.experiments.news.item.qa.clickShowMore}
+					properties={{ sourceUrl: url }}
+				>
 					<div className="inline-flex h-8 gap-1 px-3 py-2 rounded-[19px] border border-solid active:bg-theme-600 hover:cursor-pointer">
 						<div className="inline-flex gap-1.5 relative">
 							<div className="relative w-fit mt-[-1.00px] font-normal text-[13px] tracking-[0] leading-[normal]">
@@ -275,7 +273,7 @@ export function Bot({
 							</div>
 						</div>
 					</div>
-			</Trackable>
+				</Trackable>
 			</div>
 		</>
 	);
