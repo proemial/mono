@@ -101,6 +101,7 @@ export type NewsAnnotatorInitStep = {
 	host: string;
 	logo: string;
 	background?: string;
+	sort?: number;
 };
 
 export type NewsAnnotatorScrapeInputStep = NewsAnnotatorScrapeStep & {

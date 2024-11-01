@@ -5,8 +5,12 @@ import { Footer } from "./components/footer";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { ErrorModal } from "./components/error-modal";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
+	title: "proem - trustworthy perspectives",
+	description:
+		"Proem takes any piece of online content and enriches it with scientific insights from the latest research papers.",
 	openGraph: {
 		images: ["/news/images/open-graph.png"],
 	},
@@ -17,7 +21,10 @@ export default async function NewsPage({
 }: {
 	searchParams: { error?: string };
 }) {
-	const items = await Redis.news.list();
+	const unsorted = await Redis.news.list();
+	const sorted = unsorted.sort(
+		(a, b) => (b.init?.sort ?? 50) - (a.init?.sort ?? 50),
+	);
 	const error = searchParams.error;
 
 	return (
@@ -27,7 +34,7 @@ export default async function NewsPage({
 				<Header />
 
 				<div className="flex flex-col">
-					{items.map((item, i) => (
+					{sorted.map((item, i) => (
 						<Trackable
 							key={i}
 							trackingKey={analyticsKeys.experiments.news.feed.clickCard}
