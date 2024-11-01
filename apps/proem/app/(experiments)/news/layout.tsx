@@ -6,7 +6,6 @@ type Props = {
 	children: ReactNode;
 };
 import { Lato } from "next/font/google";
-import { Footer } from "./components/footer";
 
 const lato = Lato({
 	weight: "400",
@@ -22,10 +21,7 @@ export default function Layout({ children }: Props) {
 				}}
 				className={cn("mx-auto min-h-[100dvh] flex flex-col", screenMaxWidth)}
 			>
-				<div className="flex flex-col items-start relative self-stretch w-full">
-					{children}
-					<Footer />
-				</div>
+				{children}
 			</div>
 		</div>
 	);
