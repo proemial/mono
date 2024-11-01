@@ -41,7 +41,7 @@ export default async function NewsPage({
 							properties={{ sourceUrl: item.init?.url as string }}
 						>
 							<a
-								href={`/news/${encodeURIComponent(item.init?.url as string)}`}
+								href={`/news/${encodeURIComponent(item.init?.url as string)}?p=1`}
 								className="block mb-5"
 							>
 								<NewsCard url={item.init?.url as string} data={item} />
