@@ -241,13 +241,11 @@ export function Bot({
 					))}
 				</div>
 			</div>
-			<div className="flex items-center justify-end gap-2 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
-				<div className="items-center gap-2 flex-1 grow flex relative">
-					<div className="relative w-fit mt-[-1.00px] font-semibold text-[#0a161c] text-lg tracking-[0] leading-4 whitespace-nowrap">
-						Top questions
-					</div>
+			{messages.length <= 6 && (
+				<div className="font-semibold text-[#0a161c] text-lg tracking-[0] leading-4 whitespace-nowrap px-3">
+					Top questions
 				</div>
-			</div>
+			)}
 			<div className="flex flex-col-reverse items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
 				{messages.map((message, index) => {
 					if (message.role === "assistant") return null;
