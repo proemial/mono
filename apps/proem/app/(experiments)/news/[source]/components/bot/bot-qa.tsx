@@ -14,7 +14,6 @@ export function BotQa({
 		avatar: string;
 		name: string;
 		backgroundColor: string;
-		time: string;
 	};
 	qa: [string, string];
 	id: string;
@@ -74,10 +73,6 @@ export function BotQa({
 								<div className="relative w-fit mt-[-1.00px] font-semibold text-[#606060] text-[11px] tracking-[0] leading-[14px] whitespace-nowrap">
 									Anonymous user
 								</div>
-							</div>
-
-							<div className="relative w-full mt-[-1.00px] font-medium text-[#747888] text-xs tracking-[0.24px] leading-[14px] whitespace-nowrap text-right">
-								{user?.time}
 							</div>
 						</div>
 
