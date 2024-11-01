@@ -37,21 +37,26 @@ export default async function DbGraph() {
 async function getDistribution() {
 	const latestSpace = Object.values(vectorSpaces).at(-1)?.collection as string;
 
-	const dates = Array.from({ length: 30 }, (_, i) => {
-		return dayjs().subtract(i, "day").format("YYYY-MM-DD");
-	}).reverse();
+	const startOfYear = dayjs().startOf("year");
+	const today = dayjs();
+	const weeksSinceNewYear = today.diff(startOfYear, "week");
+
+	const dates = Array.from({ length: weeksSinceNewYear }, (_, i) => {
+		const weekStart = startOfYear.add(i, "week").format("YYYY-MM-DD");
+		return weekStart;
+	});
 
 	const counts = await Promise.all(
 		dates.map(
-			async (date) =>
+			async (weekStart) =>
 				await client.count(latestSpace, {
 					filter: {
 						must: [
 							{
 								key: "publication_date",
 								range: {
-									gte: date,
-									lte: dayjs(date).add(1, "day").format("YYYY-MM-DD"),
+									gte: weekStart,
+									lte: dayjs(weekStart).add(1, "week").format("YYYY-MM-DD"),
 								},
 							},
 						],
@@ -61,7 +66,7 @@ async function getDistribution() {
 	);
 
 	return dates.map((date, i) => ({
-		key: dayjs(date).format("DD/MM"),
+		key: `w${i + 1}`,
 		value: counts[i]?.count as number,
 	}));
 }
