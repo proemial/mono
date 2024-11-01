@@ -68,6 +68,11 @@ export function Header() {
 								placeholder="URL"
 								className="border rounded p-2 text-black disabled:bg-gray-100 disabled:cursor-not-allowed"
 							/>
+							{isApp && (
+								<div className="italic text-sm mt-[-16px] text-gray-500">
+									Pro tip: you you can share with proem from your browser.
+								</div>
+							)}
 							<div className="text-red-500 text-sm error-message" />
 							<div className="flex gap-2 justify-end">
 								<button
