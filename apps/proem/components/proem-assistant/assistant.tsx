@@ -50,7 +50,8 @@ export const ProemAssistant = () => {
 	const spaceId = params.collectionId;
 	const paperId =
 		params.id && isArxivPaperId(params.id) ? undefined : params.id;
-	const hideAssistant = pathname === routes.space;
+	const hideAssistant =
+		pathname === routes.space && !pathname.includes("paper/oa");
 
 	const { data, refetch } = useQuery({
 		queryKey: [PROEM_ASSISTANT_QUERY_KEY, spaceId, paperId, userId],
@@ -73,6 +74,7 @@ export const ProemAssistant = () => {
 	}, [paperId, data, refetch]);
 
 	if (
+		!pathname.includes("paper/oa") &&
 		DISABLED_ROUTE_FRAGMENTS.some((fragment) => pathname.includes(fragment))
 	) {
 		return null;

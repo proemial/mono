@@ -2,6 +2,7 @@ import PaperPage from "@/app/(pages)/(app)/paper/oa/[id]/paper-page";
 import { PaperReadsService } from "@/services/paper-reads-service";
 import { Header } from "@/app/(experiments)/news/components/header";
 import { Footer } from "@/app/(experiments)/news/components/footer";
+import { ProemAssistant } from "@/components/proem-assistant/assistant";
 
 type Props = {
 	params: { id: string };
@@ -14,6 +15,7 @@ export default async function OAPaperPage({ params }: Props) {
 			<Header />
 			<div className="p-4 min-h-[100vh]">
 				<PaperPage paperId={params.id} type="oa" />
+				<ProemAssistant />
 			</div>
 			<Footer />
 		</div>
