@@ -1,4 +1,7 @@
-import { backgroundColor } from "@proemial/adapters/redis/news";
+import {
+	backgroundColor,
+	foregroundColor,
+} from "@proemial/adapters/redis/news";
 import React from "react";
 import { ActionBar } from "./components/actionbar";
 import logo from "./components/images/logo.svg";
@@ -68,12 +71,13 @@ export function NewsCard({
 	debug,
 }: { data: NewsAnnotatorSteps; url: string; debug?: boolean }) {
 	const background = backgroundColor(data.init?.background);
+	const color = foregroundColor(data.init?.foreground);
 
 	return (
 		<div className="inline-flex relative">
 			<div
-				className="rounded-[20px] overflow-hidden text-white"
-				style={{ background }}
+				className="rounded-[20px] overflow-hidden"
+				style={{ background, color }}
 			>
 				<div
 					className="relative self-stretch w-full h-[220px] bg-cover bg-top"

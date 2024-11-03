@@ -1,5 +1,8 @@
 "use client";
-import { backgroundColor } from "@proemial/adapters/redis/news";
+import {
+	backgroundColor,
+	foregroundColor,
+} from "@proemial/adapters/redis/news";
 import { ActionBar } from "../../components/actionbar";
 import {
 	usePapers,
@@ -74,6 +77,7 @@ export function Scaffold({
 		scraperError ?? queryError ?? papersError ?? summariseError ?? undefined;
 
 	const background = backgroundColor(data?.init?.background);
+	const color = foregroundColor(data?.init?.foreground);
 
 	return (
 		<div className="flex flex-col items-center relative bg-white">
@@ -96,7 +100,7 @@ export function Scaffold({
 						className={
 							"fle≥x flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]"
 						}
-						style={{ background }}
+						style={{ background, color }}
 					>
 						<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto]">
 							<Legend

@@ -70,6 +70,9 @@ export const RedisNews = {
 export function backgroundColor(background?: string) {
 	return background ?? "#000000";
 }
+export function foregroundColor(foreground?: string) {
+	return foreground ?? "#ffffff";
+}
 
 export type NewsAnnotatorStepItem =
 	| NewsAnnotatorInitStep
@@ -101,6 +104,7 @@ export type NewsAnnotatorInitStep = {
 	host: string;
 	logo: string;
 	background?: string;
+	foreground?: string;
 	sort?: number;
 };
 

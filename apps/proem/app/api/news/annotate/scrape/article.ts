@@ -5,7 +5,8 @@ export const parseArticle = async (
 ): Promise<NewsAnnotatorScrapeStep> => {
 	const rawTranscript = await fetchUniversalArticleTranscript(url);
 
-	if (rawTranscript.objects.length < 1) {
+	if (!rawTranscript?.objects?.length) {
+		console.error("[scrape] failed to fetch article transcript", rawTranscript);
 		throw new Error("Scraping failed");
 	}
 
@@ -40,8 +41,14 @@ type ArticleTranscriptObject = {
 const fetchUniversalArticleTranscript = async (
 	url: string,
 ): Promise<ArticleTranscriptPayload> => {
+	console.log(
+		"[scrape] fetching article transcript",
+		url,
+		encodeURIComponent(url),
+	);
+
 	const result = await fetch(
-		`https://api.diffbot.com/v3/article?url=${url}&token=${process.env.DIFFBOT_API_TOKEN}`,
+		`https://api.diffbot.com/v3/article?url=${encodeURIComponent(url)}&token=${process.env.DIFFBOT_API_TOKEN}`,
 		{
 			method: "GET",
 			headers: { accept: "application/json" },
