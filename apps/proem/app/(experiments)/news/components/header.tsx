@@ -134,7 +134,16 @@ function BackButton() {
 		<Trackable trackingKey={analyticsKeys.experiments.news.header.clickBack}>
 			<button
 				type="button"
-				onClick={() => history.back()}
+				onClick={() => {
+					if (
+						window.location.pathname.startsWith("/news") &&
+						window.location.pathname.length < 7
+					) {
+						window.location.href = "/news";
+					} else {
+						history.back();
+					}
+				}}
 				className="text-[#f6f5e8] hover:text-[#d4d3c8]"
 			>
 				<ArrowLeft className="size-6" />
