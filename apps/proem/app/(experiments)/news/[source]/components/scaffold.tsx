@@ -18,6 +18,7 @@ import logo from "../../components/images/logo.svg";
 import Image from "next/image";
 import { Header } from "../../components/header";
 import { Footer } from "../../components/footer";
+import { Button } from "@proemial/shadcn-ui/components/ui/button";
 
 export function Scaffold({
 	url,
@@ -26,26 +27,38 @@ export function Scaffold({
 	url: string;
 	data?: NewsAnnotatorSteps;
 }) {
-	const { data: scraperData, isLoading: isScraperLoading } = useScraper(
-		url,
-		!!preloadedData,
-	);
-	const { data: queryData, isLoading: isQueryLoading } = useQueryBuilder(
+	const {
+		data: scraperData,
+		isLoading: isScraperLoading,
+		error: scraperError,
+	} = useScraper(url, !!preloadedData);
+	const {
+		data: queryData,
+		isLoading: isQueryLoading,
+		error: queryError,
+	} = useQueryBuilder(
 		url,
 		!!scraperData?.scrape?.transcript,
 		!!scraperData?.summarise?.commentary,
 	);
-	const { data: papersData, isLoading: isPapersLoading } = usePapers(
+	const {
+		data: papersData,
+		isLoading: isPapersLoading,
+		error: papersError,
+	} = usePapers(
 		url,
 		!!queryData?.query?.value,
 		!!scraperData?.summarise?.commentary,
 	);
-	const { data: summariseData, isLoading: isSummariseLoading } =
-		useSummarisation(
-			url,
-			!!papersData?.papers?.value,
-			!!scraperData?.summarise?.commentary,
-		);
+	const {
+		data: summariseData,
+		isLoading: isSummariseLoading,
+		error: summariseError,
+	} = useSummarisation(
+		url,
+		!!papersData?.papers?.value,
+		!!scraperData?.summarise?.commentary,
+	);
 
 	const data = {
 		...preloadedData,
@@ -57,43 +70,76 @@ export function Scaffold({
 	const isLoading =
 		isScraperLoading || isQueryLoading || isPapersLoading || isSummariseLoading;
 
+	const error =
+		scraperError ?? queryError ?? papersError ?? summariseError ?? undefined;
+
 	const background = backgroundColor(data?.init?.background);
 
 	return (
 		<div className="flex flex-col items-center relative bg-white">
 			{isLoading && (
-				<div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
-					<div className="bg-white rounded-lg shadow-lg">
-						{isScraperLoading && (
-							<ScraperLoader>
-								{data?.init?.host ? (
-									<div className="flex gap-1">
-										<span className="opacity-75">Fetching content from</span>
-										<span className="font-semibold">{data.init.host}</span>
-									</div>
-								) : (
-									<div className="opacity-75">Fetching content</div>
-								)}
-							</ScraperLoader>
-						)}
-						{isQueryLoading && <ScraperLoader>Analyzing content</ScraperLoader>}
-						{isPapersLoading && (
-							<ScraperLoader>Looking up relevant research</ScraperLoader>
-						)}
-						{isSummariseLoading && (
-							<ScraperLoader
-								fallback={
-									<div className="flex gap-3 items-center">
-										<div className="w-8 h-8 rounded-full bg-black flex items-center justify-center animate-bounce">
-											<Image className="w-4 h-4" alt="Frame" src={logo} />
-										</div>
-										<div>Waving our magic wand</div>
-									</div>
-								}
+				<AnnotationLoader
+					isScraperLoading={isScraperLoading}
+					isQueryLoading={isQueryLoading}
+					isPapersLoading={isPapersLoading}
+					isSummariseLoading={isSummariseLoading}
+					data={data}
+				/>
+			)}
+
+			{error && (
+				<div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 font-mono">
+					<div className="bg-black/90 border border-green-500/30 rounded-lg shadow-lg p-8 max-w-lg w-full mx-4">
+						<div className="text-green-500 text-sm mb-6 overflow-hidden">
+							{error.message.split("").map((char, i) => (
+								<span
+									key={i}
+									className="inline-block animate-pulse"
+									style={{
+										animationDelay: `${i * 30}ms`,
+										textShadow: "0 0 8px rgba(34, 197, 94, 0.5)",
+									}}
+								>
+									{char}
+								</span>
+							))}
+						</div>
+
+						<div className="mb-6 text-center space-y-3">
+							<div className="text-green-500 text-xl font-bold tracking-wider animate-pulse">
+								SYSTEM OVERLOAD
+							</div>
+							<div className="text-green-400/80">
+								Connection throttled due to high traffic volume
+							</div>
+							<div className="text-green-400/60 text-sm">
+								reboot sequence initiated...
+							</div>
+						</div>
+
+						<div className="flex justify-center">
+							<button
+								type="button"
+								onClick={() => window.location.reload()}
+								className="bg-black border border-green-500 text-green-500 px-4 py-2 rounded hover:bg-green-500/10 transition-colors flex items-center gap-2 animate-pulse"
 							>
-								Creating your page
-							</ScraperLoader>
-						)}
+								<svg
+									className="w-4 h-4 animate-spin"
+									viewBox="0 0 24 24"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										d="M4 4V9H4.58152M19.9381 11C19.446 7.05369 16.0796 4 12 4C8.64262 4 5.76829 6.06817 4.58152 9M4.58152 9H9M20 20V15H19.4185M19.4185 15C18.2317 17.9318 15.3574 20 12 20C7.92038 20 4.55399 16.9463 4.06189 13M19.4185 15H15"
+										stroke="currentColor"
+										strokeWidth="2"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+									/>
+								</svg>
+								FORCE REBOOT
+							</button>
+						</div>
 					</div>
 				</div>
 			)}
@@ -138,7 +184,62 @@ export function Scaffold({
 	);
 }
 
-const ScraperLoader = ({
+function AnnotationLoader({
+	isScraperLoading,
+	isQueryLoading,
+	isPapersLoading,
+	isSummariseLoading,
+	data,
+}: {
+	isScraperLoading: boolean;
+	isQueryLoading: boolean;
+	isPapersLoading: boolean;
+	isSummariseLoading: boolean;
+	data: NewsAnnotatorSteps;
+}) {
+	return (
+		<div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+			<div className="bg-white rounded-lg shadow-lg">
+				{isScraperLoading && (
+					<ScheduledLoaderMessage>
+						{data?.init?.host ? (
+							<div className="flex gap-1">
+								<span className="opacity-75">Fetching content from</span>
+								<span className="font-semibold">{data.init.host}</span>
+							</div>
+						) : (
+							<div className="opacity-75">Fetching content</div>
+						)}
+					</ScheduledLoaderMessage>
+				)}
+				{isQueryLoading && (
+					<ScheduledLoaderMessage>Analyzing content</ScheduledLoaderMessage>
+				)}
+				{isPapersLoading && (
+					<ScheduledLoaderMessage>
+						Looking up relevant research
+					</ScheduledLoaderMessage>
+				)}
+				{isSummariseLoading && (
+					<ScheduledLoaderMessage
+						fallback={
+							<div className="flex gap-3 items-center">
+								<div className="w-8 h-8 rounded-full bg-black flex items-center justify-center animate-bounce">
+									<Image className="w-4 h-4" alt="Frame" src={logo} />
+								</div>
+								<div>Waving our magic wand</div>
+							</div>
+						}
+					>
+						Creating your page
+					</ScheduledLoaderMessage>
+				)}
+			</div>
+		</div>
+	);
+}
+
+const ScheduledLoaderMessage = ({
 	children,
 	fallback,
 }: {

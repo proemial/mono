@@ -61,7 +61,7 @@ async function fetchItem({ params, searchParams }: Props) {
 		[cacheKey],
 		{
 			revalidate: 300, // 5 minutes
-			tags: [cacheKey, url],
+			tags: ["news-item", cacheKey],
 		},
 	)();
 
