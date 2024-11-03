@@ -41,17 +41,16 @@ export default async function UrlPage(props: Props) {
 	return <Scaffold url={url} data={item} />;
 }
 
-const cacheKey = "news-item";
-
 async function fetchItem({ params, searchParams }: Props) {
 	const url =
 		params.source === "annotate" && searchParams?.url
 			? decodeURIComponent(searchParams.url)
 			: decodeURIComponent(params.source);
 
+	const cacheKey = `news:${url}`;
 	if (searchParams.flush) {
 		console.log("Revalidating news-item");
-		revalidateTag(cacheKey);
+		revalidateTag(url);
 	}
 
 	const item = await unstable_cache(
@@ -62,7 +61,7 @@ async function fetchItem({ params, searchParams }: Props) {
 		[cacheKey],
 		{
 			revalidate: 300, // 5 minutes
-			tags: [cacheKey],
+			tags: [cacheKey, url],
 		},
 	)();
 
