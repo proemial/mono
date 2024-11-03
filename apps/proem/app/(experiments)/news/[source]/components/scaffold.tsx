@@ -87,62 +87,7 @@ export function Scaffold({
 				/>
 			)}
 
-			{error && (
-				<div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 font-mono">
-					<div className="bg-black/90 border border-green-500/30 rounded-lg shadow-lg p-8 max-w-lg w-full mx-4">
-						<div className="text-green-500 text-sm mb-6 overflow-hidden">
-							{error.message.split("").map((char, i) => (
-								<span
-									key={i}
-									className="inline-block animate-pulse"
-									style={{
-										animationDelay: `${i * 30}ms`,
-										textShadow: "0 0 8px rgba(34, 197, 94, 0.5)",
-									}}
-								>
-									{char}
-								</span>
-							))}
-						</div>
-
-						<div className="mb-6 text-center space-y-3">
-							<div className="text-green-500 text-xl font-bold tracking-wider animate-pulse">
-								SYSTEM OVERLOAD
-							</div>
-							<div className="text-green-400/80">
-								Connection throttled due to high traffic volume
-							</div>
-							<div className="text-green-400/60 text-sm">
-								reboot sequence initiated...
-							</div>
-						</div>
-
-						<div className="flex justify-center">
-							<button
-								type="button"
-								onClick={() => window.location.reload()}
-								className="bg-black border border-green-500 text-green-500 px-4 py-2 rounded hover:bg-green-500/10 transition-colors flex items-center gap-2 animate-pulse"
-							>
-								<svg
-									className="w-4 h-4 animate-spin"
-									viewBox="0 0 24 24"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										d="M4 4V9H4.58152M19.9381 11C19.446 7.05369 16.0796 4 12 4C8.64262 4 5.76829 6.06817 4.58152 9M4.58152 9H9M20 20V15H19.4185M19.4185 15C18.2317 17.9318 15.3574 20 12 20C7.92038 20 4.55399 16.9463 4.06189 13M19.4185 15H15"
-										stroke="currentColor"
-										strokeWidth="2"
-										strokeLinecap="round"
-										strokeLinejoin="round"
-									/>
-								</svg>
-								FORCE REBOOT
-							</button>
-						</div>
-					</div>
-				</div>
-			)}
+			{error && <AnnotationError />}
 
 			<Header />
 			<div className="flex flex-col gap-4">
@@ -179,6 +124,75 @@ export function Scaffold({
 				)}
 
 				<Footer />
+			</div>
+		</div>
+	);
+}
+
+function AnnotationError() {
+	return (
+		<div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 font-mono">
+			<div className="bg-black/90 border border-green-500/30 rounded-lg shadow-lg p-8 max-w-lg w-full mx-4">
+				<div className="flex justify-between mb-6">
+					<div className="text-green-500 text-sm overflow-hidden" />
+					<button
+						type="button"
+						onClick={() => {
+							window.location.href = "/news";
+						}}
+						className="text-green-500 hover:text-green-400 cursor-pointer"
+					>
+						<svg
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="2"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+						>
+							<line x1="18" y1="6" x2="6" y2="18" />
+							<line x1="6" y1="6" x2="18" y2="18" />
+						</svg>
+					</button>
+				</div>
+
+				<div className="mb-6 text-center space-y-3">
+					<div className="text-green-500 text-xl font-bold tracking-wider animate-pulse">
+						SYSTEM OVERLOAD
+					</div>
+					<div className="text-green-400/80">
+						Connection throttled due to high traffic volume
+					</div>
+					<div className="text-green-400/60 text-sm">
+						reboot sequence initiated...
+					</div>
+				</div>
+
+				<div className="flex justify-center">
+					<button
+						type="button"
+						onClick={() => window.location.reload()}
+						className="bg-black border border-green-500 text-green-500 px-4 py-2 rounded hover:bg-green-500/10 transition-colors flex items-center gap-2 animate-pulse"
+					>
+						<svg
+							className="w-4 h-4 animate-spin"
+							viewBox="0 0 24 24"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								d="M4 4V9H4.58152M19.9381 11C19.446 7.05369 16.0796 4 12 4C8.64262 4 5.76829 6.06817 4.58152 9M4.58152 9H9M20 20V15H19.4185M19.4185 15C18.2317 17.9318 15.3574 20 12 20C7.92038 20 4.55399 16.9463 4.06189 13M19.4185 15H15"
+								stroke="currentColor"
+								strokeWidth="2"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							/>
+						</svg>
+						FORCE REBOOT
+					</button>
+				</div>
 			</div>
 		</div>
 	);
