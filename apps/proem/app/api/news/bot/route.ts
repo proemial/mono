@@ -39,5 +39,14 @@ You are also given a list of messages from a user, and your job is to answer the
 `,
 		messages: convertToCoreMessages(messages),
 	});
+
+	result.usage.then((usage) => {
+		console.log("[answerQuestion]", {
+			promptTokens: usage.promptTokens,
+			completionTokens: usage.completionTokens,
+			totalTokens: usage.totalTokens,
+		});
+	});
+
 	return result.toDataStreamResponse();
 }

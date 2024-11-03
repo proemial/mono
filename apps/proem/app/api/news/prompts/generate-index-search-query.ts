@@ -4,7 +4,7 @@ import { generateText } from "ai";
 export const generateIndexSearchQuery = async (
 	transcript: string,
 ): Promise<string> => {
-	const { text } = await generateText({
+	const { text, usage } = await generateText({
 		model: anthropic("claude-3-5-sonnet-20240620"),
 		messages: [
 			{
@@ -23,5 +23,6 @@ Create a 100 word summary that focuses on the key issue of the article, and form
 			},
 		],
 	});
+	console.log("[generateIndexSearchQuery]", usage);
 	return text;
 };

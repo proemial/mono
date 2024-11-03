@@ -41,31 +41,21 @@ export async function POST(req: NextRequest) {
 }
 
 function parseOutput(factsAndQuestions: string) {
-	const rawFacts = factsAndQuestions
+	const rawCommentary = factsAndQuestions
 		.split("<task_1>")[1]
 		?.split("</task_1>")[0];
-	const rawCommentary = factsAndQuestions
+	const rawQuestions = factsAndQuestions
 		.split("<task_2>")[1]
 		?.split("</task_2>")[0];
-	const rawQuestions = factsAndQuestions
-		.split("<task_3>")[1]
-		?.split("</task_3>")[0];
 
-	if (!rawFacts || !rawCommentary || !rawQuestions) {
+	if (!rawCommentary || !rawQuestions) {
 		throw new Error("Failed to generate valid facts and questions");
 	}
 
-	const facts = trimNewlines(rawFacts);
 	const commentary = trimNewlines(rawCommentary);
 	const questions = trimNewlines(rawQuestions);
 
-	console.log("[output]", {
-		facts: `[${facts.length}] ${facts.slice(0, 50)} ...`,
-		commentary: `[${commentary.length}] ${commentary.slice(0, 50)} ...`,
-		questions: `[${questions.length}] ${questions.slice(0, 50)} ...`,
-	});
-
-	return { facts, commentary, questions };
+	return { commentary, questions };
 }
 
 // Trims newlines from the beginning and end of a string
