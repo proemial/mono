@@ -108,7 +108,7 @@ export type NewsAnnotatorScrapeInputStep = NewsAnnotatorScrapeStep & {
 	name: "scrape";
 };
 export type NewsAnnotatorScrapeStep = {
-	transcript: string;
+	transcript?: string;
 	title?: string;
 	artworkUrl?: string;
 	date?: string;
@@ -129,8 +129,8 @@ export type NewsAnnotatorSummariseInputStep = NewsAnnotatorSummariseStep & {
 	name: "summarise";
 };
 export type NewsAnnotatorSummariseStep = {
-	commentary: string;
-	questions: Array<[string, string]>;
+	commentary?: string;
+	questions?: Array<[string, string]>;
 };
 
 export type ReferencedPaper = {

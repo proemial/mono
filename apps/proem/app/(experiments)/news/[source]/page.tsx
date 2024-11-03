@@ -1,14 +1,15 @@
 import { Metadata } from "next";
 import { Scaffold } from "./components/scaffold";
 import { Redis } from "@proemial/adapters/redis";
+import { revalidateTag, unstable_cache } from "next/cache";
 
 type Props = {
 	params: {
 		source: string;
 	};
 	searchParams: {
-		rebuild?: boolean;
 		url?: string;
+		flush?: boolean;
 	};
 };
 
@@ -40,13 +41,30 @@ export default async function UrlPage(props: Props) {
 	return <Scaffold url={url} data={item} />;
 }
 
+const cacheKey = "news-item";
+
 async function fetchItem({ params, searchParams }: Props) {
 	const url =
 		params.source === "annotate" && searchParams?.url
 			? decodeURIComponent(searchParams.url)
 			: decodeURIComponent(params.source);
 
-	const item = await Redis.news.get(url);
+	if (searchParams.flush) {
+		console.log("Revalidating news-item");
+		revalidateTag(cacheKey);
+	}
+
+	const item = await unstable_cache(
+		async () => {
+			console.log("Fetching item");
+			return await Redis.news.get(url);
+		},
+		[cacheKey],
+		{
+			revalidate: 300, // 5 minutes
+			tags: [cacheKey],
+		},
+	)();
 
 	return { url, item };
 }

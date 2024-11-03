@@ -53,10 +53,10 @@ async function scrape(url: string) {
 	const output =
 		itemType === "youtube" ? await parseVideo(url) : await parseArticle(url);
 
-	const transcript = output.transcript.replaceAll("\n", " ");
+	const transcript = output.transcript?.replaceAll("\n", " ");
 	console.log(
 		"[scrape]",
-		`[${transcript.length}]: ${transcript.slice(0, 50)} ...`,
+		`[${transcript?.length ?? 0}]: ${transcript?.slice(0, 50)} ...`,
 		!!output.artworkUrl,
 	);
 

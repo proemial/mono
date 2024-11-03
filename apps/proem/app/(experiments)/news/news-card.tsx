@@ -170,7 +170,7 @@ function QA({ data, url }: { data: NewsAnnotatorSteps; url: string }) {
 						</div>
 
 						<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
-							{data.summarise?.questions.at(randomIndex)?.[0]}
+							{data.summarise?.questions?.at(randomIndex)?.[0]}
 						</p>
 					</div>
 				</div>
@@ -198,7 +198,7 @@ function QA({ data, url }: { data: NewsAnnotatorSteps; url: string }) {
 
 							<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5 overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]">
 								{formatAnswerText(
-									data.summarise?.questions.at(randomIndex)?.[1],
+									data.summarise?.questions?.at(randomIndex)?.[1],
 								)}
 							</p>
 							<div className="w-full font-medium text-[#757989] text-xs leading-5 cursor-pointer">

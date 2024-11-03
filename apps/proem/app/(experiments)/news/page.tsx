@@ -7,6 +7,8 @@ import { ErrorModal } from "./components/error-modal";
 import { Metadata } from "next";
 import { Header } from "./components/header";
 import dayjs from "dayjs";
+import { revalidateTag } from "next/cache";
+import { unstable_cache } from "next/cache";
 
 const title = "proem - trustworthy perspectives";
 const description =
@@ -26,23 +28,9 @@ export const metadata: Metadata = {
 export default async function NewsPage({
 	searchParams,
 }: {
-	searchParams: { error?: string; debug?: boolean };
+	searchParams: { error?: string; debug?: boolean; flush?: boolean };
 }) {
-	const unsorted = await Redis.news.list();
-	console.log("[unsorted]", unsorted.length);
-
-	const sorted = unsorted
-		.map((item) => ({
-			...item,
-			date: dayjs(item.scrape?.date) ?? dayjs(),
-		}))
-		.sort((a, b) => b.date.diff(a.date))
-		.sort(
-			// -2, -1, "", "", 1, 2
-			(a, b) =>
-				(a.init?.sort ? a.init?.sort * 100 : 0) -
-				(b.init?.sort ? b.init?.sort * 100 : 0),
-		);
+	const sorted = await getItems(searchParams.flush);
 	const error = searchParams.error;
 
 	return (
@@ -75,4 +63,50 @@ export default async function NewsPage({
 			</div>
 		</>
 	);
+}
+
+const cacheKey = "news-feed";
+
+async function getItems(flush?: boolean) {
+	if (flush) {
+		console.log("Revalidating news-list");
+		revalidateTag(cacheKey);
+	}
+
+	const items = await unstable_cache(
+		async () => {
+			console.log("Fetching items");
+			const unsorted = (await Redis.news.list()).map((item) => ({
+				init: item.init,
+				scrape: {
+					title: item.scrape?.title,
+					date: item.scrape?.date,
+					artworkUrl: item.scrape?.artworkUrl,
+				},
+				summarise: {
+					questions: item.summarise?.questions,
+				},
+			}));
+
+			return unsorted
+				.map((item) => ({
+					...item,
+					date: dayjs(item.scrape?.date) ?? dayjs(),
+				}))
+				.sort((a, b) => b.date.diff(a.date))
+				.sort(
+					// -2, -1, "", "", 1, 2
+					(a, b) =>
+						(a.init?.sort ? a.init?.sort * 100 : 0) -
+						(b.init?.sort ? b.init?.sort * 100 : 0),
+				);
+		},
+		[cacheKey],
+		{
+			revalidate: 300, // 5 minutes
+			tags: [cacheKey],
+		},
+	)();
+
+	return items;
 }
