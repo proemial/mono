@@ -21,15 +21,18 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json(item);
 		}
 
+		const { transcript, artworkUrl, title, date } = await scrape(url);
+
+		const background = await getBackground(artworkUrl);
 		const { hostname } = new URL(url);
 		await Redis.news.set(url, {
 			url,
 			name: "init",
 			host: hostname.replace(/^[^.]+\./, ""), // remove subdomain
 			logo: `https://${hostname}.com/favicon.ico`,
+			background,
 		} as NewsAnnotatorInitInputStep);
 
-		const { transcript, artworkUrl, title, date } = await scrape(url);
 		const result = await Redis.news.update(url, {
 			name: "scrape",
 			transcript,
@@ -42,6 +45,52 @@ export async function POST(req: NextRequest) {
 	} finally {
 		Time.log(begin, `[annotator][scrape] ${url}`);
 	}
+}
+
+type ColorResponse = {
+	responses: {
+		imagePropertiesAnnotation: {
+			dominantColors: {
+				colors: { color: { red: number; green: number; blue: number } }[];
+			};
+		};
+	}[];
+};
+
+async function getBackground(artworkUrl?: string): Promise<string | undefined> {
+	if (artworkUrl) {
+		const colorResult = await fetch(
+			"https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCAUoYE05Mz6i52ooojtoD5oZk7P3YCK8w",
+			{
+				method: "POST",
+				body: JSON.stringify({
+					requests: [
+						{
+							features: [
+								{
+									maxResults: 10,
+									type: "IMAGE_PROPERTIES",
+								},
+							],
+							image: {
+								source: {
+									imageUri: artworkUrl,
+								},
+							},
+						},
+					],
+				}),
+			},
+		);
+		const json = (await colorResult.json()) as ColorResponse;
+		const color = json.responses
+			.at(0)
+			?.imagePropertiesAnnotation.dominantColors.colors.at(0)?.color;
+		if (color) {
+			return `#${color.red.toString(16).padStart(2, "0")}${color.green.toString(16).padStart(2, "0")}${color.blue.toString(16).padStart(2, "0")}`;
+		}
+	}
+	return undefined;
 }
 
 async function scrape(url: string) {
