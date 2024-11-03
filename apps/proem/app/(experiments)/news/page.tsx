@@ -6,6 +6,7 @@ import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { ErrorModal } from "./components/error-modal";
 import { Metadata } from "next";
 import { Header } from "./components/header";
+import dayjs from "dayjs";
 
 const title = "proem - trustworthy perspectives";
 const description =
@@ -25,15 +26,23 @@ export const metadata: Metadata = {
 export default async function NewsPage({
 	searchParams,
 }: {
-	searchParams: { error?: string };
+	searchParams: { error?: string; debug?: boolean };
 }) {
 	const unsorted = await Redis.news.list();
-	const sorted = unsorted.sort(
-		// -2, -1, "", "", 1, 2
-		(a, b) =>
-			(a.init?.sort ? a.init?.sort * 100 : 0) -
-			(b.init?.sort ? b.init?.sort * 100 : 0),
-	);
+	console.log("[unsorted]", unsorted.length);
+
+	const sorted = unsorted
+		.map((item) => ({
+			...item,
+			date: dayjs(item.scrape?.date) ?? dayjs(),
+		}))
+		.sort((a, b) => b.date.diff(a.date))
+		.sort(
+			// -2, -1, "", "", 1, 2
+			(a, b) =>
+				(a.init?.sort ? a.init?.sort * 100 : 0) -
+				(b.init?.sort ? b.init?.sort * 100 : 0),
+		);
 	const error = searchParams.error;
 
 	return (
@@ -54,7 +63,11 @@ export default async function NewsPage({
 								href={`/news/${encodeURIComponent(item.init?.url as string)}?p=1`}
 								className="block mb-5"
 							>
-								<NewsCard url={item.init?.url as string} data={item} />
+								<NewsCard
+									url={item.init?.url as string}
+									data={item}
+									debug={searchParams.debug}
+								/>
 							</a>
 						</Trackable>
 					))}

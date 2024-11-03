@@ -6,6 +6,7 @@ import Image from "next/image";
 import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
+import dayjs from "dayjs";
 
 const users = [
 	{ name: "Jolly Jaguar", avatar: "🐆", backgroundColor: "#000000" },
@@ -64,7 +65,8 @@ const users = [
 export function NewsCard({
 	data,
 	url,
-}: { data: NewsAnnotatorSteps; url: string }) {
+	debug,
+}: { data: NewsAnnotatorSteps; url: string; debug?: boolean }) {
 	const background = backgroundColor(data.init?.background);
 
 	return (
@@ -86,6 +88,12 @@ export function NewsCard({
 					</div>
 				</Trackable>
 				<div className="inline-flex p-3 mt-[-1.00px] leading-[normal] font-semibold text-xl flex-[0_0_auto] drop-shadow-md">
+					{debug &&
+						`[${data?.init?.sort ?? ""}][${
+							data?.scrape?.date
+								? dayjs(data?.scrape?.date).format("DD.MM.YYYY HH:mm")
+								: ""
+						}] `}
 					{data?.scrape?.title}
 				</div>
 
