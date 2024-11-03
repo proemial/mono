@@ -49,7 +49,7 @@ export default async function NewsPage({
 						>
 							<a
 								href={`/news/${encodeURIComponent(item.init?.url as string)}?p=1`}
-								className="block mb-5"
+								className="block mb-5 active:opacity-80"
 							>
 								<NewsCard
 									url={item.init?.url as string}
