@@ -111,6 +111,7 @@ export type NewsAnnotatorScrapeStep = {
 	transcript: string;
 	title?: string;
 	artworkUrl?: string;
+	date?: string;
 };
 export type NewsAnnotatorQueryInputStep = NewsAnnotatorQueryStep & {
 	name: "query";

@@ -1,0 +1,7 @@
+
+POST http://localhost:4242/api/news/annotate/scrape
+Content-Type: application/json
+
+{
+    "url": "https://edition.cnn.com/2024/11/01/china/satellite-imagery-china-aircraft-carrier-intl-hnk-ml/index.html"
+}
