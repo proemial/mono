@@ -27,7 +27,7 @@ export function NewsCard({
 				style={{ background, color }}
 			>
 				<div
-					className="relative self-stretch w-full h-[220px] bg-cover bg-top rounded-[14px] drop-shadow-md"
+					className="relative self-stretch w-full h-[220px] bg-cover bg-top rounded-[14px] shadow-[inset_0_0_40px_rgba(0,0,0,0.7)]"
 					style={{ backgroundImage: `url(${data?.scrape?.artworkUrl})` }}
 				/>
 				<Trackable
