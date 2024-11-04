@@ -1,6 +1,7 @@
 import { Redis } from "@proemial/adapters/redis";
 import { NewsCard } from "./news-card";
 import { Welcome } from "./components/welcome";
+import { SubscribeForm } from "./components/subscribe-form";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { ErrorModal } from "./components/error-modal";
@@ -35,11 +36,14 @@ export default async function NewsPage({
 
 	return (
 		<>
-			<div className="flex flex-col items-start relative self-stretch w-full">
+			<div className="flex relative flex-col items-start self-stretch w-full">
 				{error && <ErrorModal error={error} />}
 				<Header />
 				<Welcome />
-
+				{/*  @brian: Connect to our email list provider */}
+				{/*  @brian: Show after 6 cards */}
+				{/*  @brian: Don't show if already signed up */}
+				{/* <SubscribeForm /> */}
 				<div className="flex flex-col">
 					{sorted.map((item, i) => (
 						<Trackable
@@ -49,7 +53,7 @@ export default async function NewsPage({
 						>
 							<a
 								href={`/news/${encodeURIComponent(item.init?.url as string)}?p=1`}
-								className="block mb-5 active:opacity-80"
+								className="active:opacity-80 block mb-5"
 							>
 								<NewsCard
 									url={item.init?.url as string}
