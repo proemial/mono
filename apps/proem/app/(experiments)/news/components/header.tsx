@@ -113,6 +113,7 @@ function AnnotateForm({
 						>
 							Cancel
 						</button>
+						<Trackable trackingKey={analyticsKeys.experiments.news.clickGenerate}>
 						<button
 							type="submit"
 							className="px-4 py-2 rounded bg-green-700 text-white hover:bg-green-800 disabled:bg-green-600 disabled:cursor-not-allowed"
@@ -122,6 +123,7 @@ function AnnotateForm({
 								Generate
 							</div>
 						</button>
+						</Trackable>
 					</div>
 				</form>
 			</div>

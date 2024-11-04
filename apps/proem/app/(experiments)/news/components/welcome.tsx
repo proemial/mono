@@ -4,6 +4,8 @@ import { getCookie, setCookie } from "cookies-next";
 import { useState } from "react";
 import { isBlockedUrl } from "../blocked";
 import { useIsApp } from "@/utils/app";
+import { Trackable } from "@/components/trackable";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 
 export function Welcome() {
 	const isApp = useIsApp();
@@ -55,10 +57,11 @@ export function Welcome() {
 							className="flex flex-col gap-4"
 						>
 							<div className="flex w-80 items-center gap-2.5 p-4 rounded-full border border-white/80">
+								<Trackable trackingKey={analyticsKeys.experiments.news.clickGenerate}>
 								<button type="submit">
 									<PlusCircle className="text-[#f6f5e8] hsize-6 block hover:animate-[spin_1s_ease-in-out] cursor-pointer" />
 								</button>
-
+								</Trackable>
 								<input
 									type="url"
 									name="url"
@@ -82,7 +85,7 @@ export function Welcome() {
 							className="font-semibold text-white/60 text-sm text-center leading-[14px] underline hover:pointer"
 							onClick={dismiss}
 						>
-							Dismiss
+							(X)
 						</div>
 					</div>
 				</div>
