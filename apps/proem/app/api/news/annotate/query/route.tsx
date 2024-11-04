@@ -23,16 +23,25 @@ export async function POST(req: NextRequest) {
 			.split("<search_query>")[1]
 			?.split("</search_query>")[0];
 		if (!parsedQuery) {
-			throw new Error("Failed to parse search query");
+			throw new Error("[news][query] Failed to parse search query", {
+				cause: indexQuery,
+			});
 		}
 		console.log("[query]", trimNewlines(parsedQuery));
 
-		const result = await Redis.news.update(url, {
-			name: "query",
-			value: parsedQuery,
-		} as NewsAnnotatorQueryInputStep);
+		try {
+			const result = await Redis.news.update(url, {
+				name: "query",
+				value: parsedQuery,
+			} as NewsAnnotatorQueryInputStep);
 
-		return NextResponse.json(result);
+			return NextResponse.json(result);
+		} catch (e) {
+			console.error("[news][query] failed to update redis", e);
+			throw new Error("[news][query] failed to update redis", {
+				cause: e,
+			});
+		}
 	} finally {
 		Time.log(begin, `[annotator][query] ${url}`);
 	}

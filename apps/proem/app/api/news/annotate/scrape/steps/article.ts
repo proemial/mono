@@ -7,7 +7,7 @@ export const parseArticle = async (
 
 	if (!rawTranscript?.objects?.length) {
 		console.error("[scrape] failed to fetch article transcript", rawTranscript);
-		throw new Error("Scraping failed");
+		throw new Error("[news][scrape] Scraping failed", { cause: url });
 	}
 
 	const { title, text, date, images } = rawTranscript.objects.at(
@@ -41,19 +41,20 @@ type ArticleTranscriptObject = {
 const fetchUniversalArticleTranscript = async (
 	url: string,
 ): Promise<ArticleTranscriptPayload> => {
-	console.log(
-		"[scrape] fetching article transcript",
-		url,
-		encodeURIComponent(url),
-	);
+	console.log("[scrape] fetching article transcript", url);
 
-	const result = await fetch(
-		`https://api.diffbot.com/v3/article?url=${encodeURIComponent(url)}&token=${process.env.DIFFBOT_API_TOKEN}`,
-		{
-			method: "GET",
-			headers: { accept: "application/json" },
-		},
-	);
+	try {
+		const result = await fetch(
+			`https://api.diffbot.com/v3/article?url=${encodeURIComponent(url)}&token=${process.env.DIFFBOT_API_TOKEN}`,
+			{
+				method: "GET",
+				headers: { accept: "application/json" },
+			},
+		);
 
-	return await result.json();
+		return await result.json();
+	} catch (error) {
+		console.error("[scrape] failed to fetch article transcript", error);
+		throw new Error("[news][scrape] diffbot error", { cause: error });
+	}
 };
