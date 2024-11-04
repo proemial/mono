@@ -19,11 +19,8 @@ export const maxDuration = 60;
 export async function generateMetadata(props: Props) {
 	const { item } = await fetchItem(props);
 
-	const title = item?.scrape?.title
-		? `${item?.scrape?.title} | proem`
-		: "proem - trustworthy perspectives";
-	const description =
-		"Proem takes any piece of online content and enriches it with scientific insights from the latest research papers.";
+	const title = item?.scrape?.title;
+	const description = item?.summarise?.commentary;
 
 	return {
 		title,
