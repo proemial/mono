@@ -6,6 +6,7 @@ import {
 import { Redis } from "@proemial/adapters/redis";
 import { NewsAnnotatorInitInputStep } from "@proemial/adapters/redis/news";
 import { Colors } from "./color";
+import dayjs from "dayjs";
 
 export async function updateRedis(
 	url: string,
@@ -22,6 +23,7 @@ export async function updateRedis(
 			logo: `https://${hostname}.com/favicon.ico`,
 			background,
 			foreground,
+			createdAt: dayjs().format("YYYY-MM-DD HH:mm:ss"),
 		} as NewsAnnotatorInitInputStep);
 
 		const result = await Redis.news.update(url, {
