@@ -39,7 +39,7 @@ export function ActionBar({
 	};
 
 	return (
-		<div className="flex w-full justify-between px-3">
+		<div className="flex w-full justify-between p-3">
 			<div className="flex items-center gap-4">
 				{isFromFeed && (
 					<div className="flex items-center gap-5 relative flex-1 grow">
@@ -92,7 +92,7 @@ export function ActionBar({
 					>
 						<div className="inline-flex items-start gap-1.5 relative flex-[0_0_auto] hover:cursor-pointer">
 							<div className="relative w-fit mt-[-1.00px] font-normal text-[13px] tracking-[0] leading-[normal]">
-								Explore the Facts
+								View All Questions
 							</div>
 						</div>
 					</div>

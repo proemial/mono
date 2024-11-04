@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
 		const indexQuery = await generateQuery(
 			url,
 			item.scrape?.transcript as string,
+			item.scrape?.title as string,
 		);
 		const result = await updateRedis(url, indexQuery);
 

@@ -21,24 +21,24 @@ export function NewsCard({
 	const color = foregroundColor(data.init?.foreground);
 
 	return (
-		<div className="inline-flex relative">
+		<div className="ppItemHeader inline-flex relative">
 			<div
-				className="rounded-[20px] overflow-hidden"
+				className="rounded-[20px] px-3 pt-3 overflow-hidden"
 				style={{ background, color }}
 			>
 				<div
-					className="relative self-stretch w-full h-[220px] bg-cover bg-top"
+					className="relative self-stretch w-full h-[220px] bg-cover bg-top rounded-[14px] drop-shadow-md"
 					style={{ backgroundImage: `url(${data?.scrape?.artworkUrl})` }}
 				/>
 				<Trackable
 					trackingKey={analyticsKeys.experiments.news.item.clickSource}
 					properties={{ sourceUrl: url }}
 				>
-					<div className="inline-flex items-start px-3 py-1 absolute top-[176px] left-[12px] bg-[#ffffffe6] text-black rounded-[26px]">
+					<div className="inline-flex items-start px-3 py-1 absolute top-[188px] left-[26px] bg-[#ffffffe6] text-black rounded-[26px]">
 						{data?.init?.host}
 					</div>
 				</Trackable>
-				<div className="inline-flex p-3 mt-[-1.00px] leading-[normal] font-semibold text-xl flex-[0_0_auto] drop-shadow-md">
+				<div className="inline-flex pt-3 pb-3 mt-[-4.00px] leading-[normal] font-semibold text-xl flex-[0_0_auto] drop-shadow-md">
 					{debug &&
 						`[${data?.init?.sort ?? ""}][${
 							data?.scrape?.date
@@ -48,22 +48,26 @@ export function NewsCard({
 					{data?.scrape?.title}
 				</div>
 
-				<ActionBar
+				<QA data={data} url={url} />
+
+				{/* <ActionBar
 					url={url}
 					textColor="white"
 					background={background}
 					foreground={color}
 					fromFeed
 					date={data?.scrape?.date}
-				/>
+				/> */}
 
-				<QA data={data} url={url} />
 			</div>
 		</div>
 	);
 }
 
 function QA({ data, url }: { data: NewsAnnotatorSteps; url: string }) {
+	const background = backgroundColor(data.init?.background);
+	const color = foregroundColor(data.init?.foreground);
+
 	const getRandomUser = (title: string) => {
 		// Create a consistent hash from the title
 		let hash = 0;
@@ -104,8 +108,8 @@ function QA({ data, url }: { data: NewsAnnotatorSteps; url: string }) {
 	};
 
 	return (
-		<div className="flex flex-col items-start gap-2 mt-2 pt-2 pb-3 px-0 relative self-stretch w-full flex-[0_0_auto]">
-			<div className="flex items-start gap-1.5 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
+		<div className="ppNewsQAshowcase flex flex-col items-start gap-2 px-0 pb-3 relative self-stretch w-full flex-[0_0_auto]">
+			<div className="flex items-start gap-1.5 py-0 relative self-stretch w-full flex-[0_0_auto]">
 				<div className="relative w-10 h-10 object-cover rounded-full text-2xl flex items-center justify-center bg-[#000000]">
 					<span>{users[randomUser]?.avatar ?? "*"}</span>
 				</div>
@@ -129,7 +133,7 @@ function QA({ data, url }: { data: NewsAnnotatorSteps; url: string }) {
 				</div>
 			</div>
 
-			<div className="flex flex-col items-start gap-2 pl-[58px] pr-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
+			<div className="flex flex-col items-start gap-2 pl-[44px] py-0 relative self-stretch w-full flex-[0_0_auto]">
 				<div className="flex items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
 					<div className="relative flex-[0_0_auto] w-8 h-8 rounded-full bg-black flex items-center justify-center">
 						<Image className="w-4 h-4" alt="Frame" src={logo} />
@@ -154,12 +158,20 @@ function QA({ data, url }: { data: NewsAnnotatorSteps; url: string }) {
 									data.summarise?.questions?.at(randomIndex)?.[1],
 								)}
 							</p>
-							<div className="w-full font-medium text-[#757989] text-xs leading-5 cursor-pointer">
+							{/* <div className="w-full font-medium text-[#757989] text-xs leading-5 cursor-pointer">
 								Answer based on scientific papers
-							</div>
+							</div> */}
 						</div>
 					</div>
 				</div>
+			</div>
+			<div
+				className="ppGradientOverlay absolute top-[0] left-[0] w-full h-full"
+				style={{
+					background: `linear-gradient(to bottom, transparent, ${background})`,
+					color
+				}}
+			>
 			</div>
 		</div>
 	);

@@ -3,6 +3,7 @@ import { generateText } from "ai";
 
 export const generateIndexSearchQuery = async (
 	transcript: string,
+	title: string,
 ): Promise<string> => {
 	try {
 		const { text, usage } = await generateText({
@@ -13,13 +14,14 @@ export const generateIndexSearchQuery = async (
 					content: `
 Given the following transcript:
 
-<transcript>${transcript}</transcript>
+<article_title>${title}</article_title>
+<article_body>${transcript}</article_body>
 
-Create a 100 word summary that focuses on the key issue of the article, and format your response in the following way:
+Create a 100 word summary that focuses on the key issue of the article, including whatever is alluded to in the title, and format your response in the following way:
 
-<search_query>
-[summary goes here]
-</search_query>
+<summary>
+summary goes here
+</summary>
 			`,
 				},
 			],

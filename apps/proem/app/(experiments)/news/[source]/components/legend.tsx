@@ -18,7 +18,7 @@ export function Legend({
 			/>
 
 			<div className="flex flex-col items-center justify-center gap-2 p-3 relative self-stretch w-full flex-[0_0_auto]">
-				<p className="relative self-stretch mt-[-1.00px] font-semibold text-xl tracking-[0] leading-[normal] drop-shadow-md">
+				<p className="relative self-stretch mt-[-4.00px] font-semibold text-xl tracking-[0] leading-[normal] drop-shadow-md">
 					{title}
 				</p>
 			</div>

@@ -5,8 +5,8 @@ export async function generateQuery(url: string, transcript: string) {
 		const indexQuery = await generateIndexSearchQuery(transcript);
 
 		const parsedQuery = indexQuery
-			.split("<search_query>")[1]
-			?.split("</search_query>")[0];
+			.split("<summary>")[1]
+			?.split("</summary>")[0];
 
 		if (!parsedQuery) {
 			throw new Error("[news][query] Failed to parse search query", {
