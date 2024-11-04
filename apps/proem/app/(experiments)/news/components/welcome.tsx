@@ -22,13 +22,23 @@ export function Welcome() {
 	return (
 		<>
 			{isOpen && (
-				<div className="flex flex-col gap-8 items-center py-8 px-3 bg-gradient-to-b from-[#7DFA86] from-[-10%] via-[#5950EC21] via-[10%] to-transparent to-[10%] rounded-t-2xl animate-slide-down">
-					<div className="w-5/6 text-xl font-semibold leading-7 text-center text-white">
-						We take any news article and enrich it with scientific insights from
-						the latest research papers.
+				<div 
+					className="flex flex-col gap-8 items-center justify-center w-full px-3 mb-3 bg-gradient-to-b from-[#7DFA86] from-[-25%] via-[#3732916b] via-[70%] to-[#24215f6b] to-[100%] rounded-2xl"
+					style={{
+						animation: isOpen ? 'expand 0.6s ease-in-out forwards' : 'none'
+					}}
+				>
+					<style jsx>{`
+						@keyframes expand {
+							from { height: 0;  }
+							to { height: 250px;  }
+						}
+					`}</style>
+					<div className="w-5/6 text-xl font-semibold leading-7 text-center text-white drop-shadow-md">
+						Enrich articles with insights<br/>
+						from the latest research papers.
 					</div>
-
-					<div className="flex gap-2 justify-center items-center w-4/5">
+					<div className="flex gap-1 justify-center items-center w-4/5">
 						<form
 							onSubmit={(e) => {
 								console.log("submit");
@@ -76,7 +86,7 @@ export function Welcome() {
 							</div>
 							{isApp && (
 								<div className="text-center italic text-xs mt-[-12px] text-gray-500">
-									Pro tip: you can share with proem from your browser.
+									Pro tip: Share to proem directly from your browser.
 								</div>
 							)}
 							<div className="error-message text-sm text-red-500" />
