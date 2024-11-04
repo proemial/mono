@@ -6,12 +6,13 @@ export const generateFactsAndQuestions = async (
 	query: string,
 	papers: ReferencedPaper[],
 ): Promise<string> => {
-	const { text, usage } = await generateText({
-		model: anthropic("claude-3-5-sonnet-20240620"),
-		messages: [
-			{
-				role: "user",
-				content: `
+	try {
+		const { text, usage } = await generateText({
+			model: anthropic("claude-3-5-sonnet-20240620"),
+			messages: [
+				{
+					role: "user",
+					content: `
 You are given a transcript and the abstracts of ${papers.length} scientific research papers:
 
 <transcript>
@@ -40,9 +41,15 @@ For each question, write a short and intriguing answer in two sentences, using l
 Output a list of questions with each answer on a separate indented line item below each question.
 </task_2>
 			`,
-			},
-		],
-	});
-	console.log("[generateFactsAndQuestions]", usage);
-	return text;
+				},
+			],
+		});
+		console.log("[generateFactsAndQuestions]", usage);
+		return text;
+	} catch (e) {
+		console.error("[news][generateFactsAndQuestions] failed", e);
+		throw new Error("[news][generateFactsAndQuestions] failed", {
+			cause: { error: e },
+		});
+	}
 };

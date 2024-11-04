@@ -1,8 +1,7 @@
-import { Redis } from "@proemial/adapters/redis";
-import { NewsAnnotatorSummariseInputStep } from "@proemial/adapters/redis/news";
 import { Time } from "@proemial/utils/time";
 import { NextRequest, NextResponse } from "next/server";
-import { generateFactsAndQuestions } from "../../prompts/generate-facts-and-questions";
+import { getFromRedis, updateRedis } from "./steps/redis";
+import { summarise } from "./steps/summarise";
 
 export const maxDuration = 300; // seconds
 
@@ -11,7 +10,7 @@ export async function POST(req: NextRequest) {
 
 	const begin = Time.now();
 	try {
-		const item = await Redis.news.get(url);
+		const item = await getFromRedis(url);
 		if (
 			item?.summarise ||
 			!item?.papers ||
@@ -20,67 +19,18 @@ export async function POST(req: NextRequest) {
 		) {
 			return NextResponse.json(item);
 		}
-		const factsAndQuestions = await generateFactsAndQuestions(
-			item.scrape?.transcript,
-			item.query?.value,
+
+		const summary = await summarise(
+			url,
+			item.query.value,
+			item.scrape.transcript,
 			item.papers.value,
 		);
-		const { commentary, questions: qaString } = parseOutput(factsAndQuestions);
-		const questions = qaFromString(qaString);
 
-		const result = await Redis.news.update(url, {
-			name: "summarise",
-			commentary,
-			questions,
-		} as NewsAnnotatorSummariseInputStep);
+		const result = await updateRedis(url, summary);
 
 		return NextResponse.json(result);
 	} finally {
-		Time.log(begin, `[annotator][papers] ${url}`);
+		Time.log(begin, `[annotator][summarise] ${url}`);
 	}
-}
-
-function parseOutput(factsAndQuestions: string) {
-	const rawCommentary = factsAndQuestions
-		.split("<task_1>")[1]
-		?.split("</task_1>")[0];
-	const rawQuestions = factsAndQuestions
-		.split("<task_2>")[1]
-		?.split("</task_2>")[0];
-
-	if (!rawCommentary || !rawQuestions) {
-		throw new Error("Failed to generate valid facts and questions");
-	}
-
-	const commentary = trimNewlines(rawCommentary);
-	const questions = trimNewlines(rawQuestions);
-
-	return { commentary, questions };
-}
-
-// Trims newlines from the beginning and end of a string
-const trimNewlines = (text: string): string => {
-	return text.replace(/^\n+|\n+$/g, "");
-};
-
-function qaFromString(text: string): Array<[string, string]> {
-	// Split text into lines and filter out empty lines
-	const lines = text.split("\n").filter((line) => line.trim());
-	const pairs: Array<[string, string]> = [];
-
-	for (let i = 0; i < lines.length; i++) {
-		const line = lines[i]?.trim() as string;
-		// Check if line starts with a number and contains a question
-		if (/^\d+\./.test(line) && line.includes("?")) {
-			const question = line.replace(/^\d+\.\s*/, "").trim();
-			// Get the next line as the answer if it exists
-			const answer = (lines[i + 1] || "").trim();
-			if (answer && !answer.startsWith("d+.")) {
-				pairs.push([question, answer]);
-				i++; // Skip the answer line in next iteration
-			}
-		}
-	}
-
-	return pairs;
 }
