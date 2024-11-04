@@ -67,8 +67,9 @@ export default async function NewsPage({
 
 const cacheKey = "news-feed";
 
+const cacheDisabled = true;
 async function getItems(flush?: boolean) {
-	if (flush || process.env.NODE_ENV === "development") {
+	if (flush || cacheDisabled || process.env.NODE_ENV === "development") {
 		console.log("Revalidating news-list");
 		revalidateTag(cacheKey);
 	}
