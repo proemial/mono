@@ -28,7 +28,7 @@ export async function generateMetadata(props: Props) {
 		openGraph: {
 			title,
 			description,
-			siteName: title,
+			siteName: "proem - trustworthy perspectives",
 		},
 	};
 }
