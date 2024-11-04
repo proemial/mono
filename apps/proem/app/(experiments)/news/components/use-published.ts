@@ -1,6 +1,6 @@
 import { useSearchParams } from "next/navigation";
 
-export const usePublishedSearchParam = () => {
+export const useFromFeedSearchParam = () => {
 	const searchParams = useSearchParams();
-	return { publishedParam: searchParams.get("p") === "1" };
+	return { fromFeedParam: searchParams.get("f") === "1" };
 };

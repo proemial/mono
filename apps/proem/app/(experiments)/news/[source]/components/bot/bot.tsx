@@ -9,9 +9,9 @@ import { Message, nanoid } from "ai";
 import { useChat } from "ai/react";
 import { FormEvent, useCallback, useMemo } from "react";
 import { Avatar } from "../../../components/avatars";
-import { usePublishedSearchParam } from "../../../components/use-published";
+import { useFromFeedSearchParam } from "../../../components/use-published";
 import { BotQa } from "./bot-qa";
-import { users } from "./users";
+import { users } from "../../../components/users";
 
 type Props = {
 	url: string;
@@ -19,11 +19,11 @@ type Props = {
 };
 
 export function Bot({ url, questions }: Props) {
-	const { publishedParam: isPublished } = usePublishedSearchParam();
+	const { fromFeedParam: isFromFeed } = useFromFeedSearchParam();
 
 	const initialMessages: Message[] = useMemo(
 		() =>
-			isPublished
+			isFromFeed
 				? [
 						{
 							role: "user",
@@ -57,7 +57,7 @@ export function Bot({ url, questions }: Props) {
 						},
 					]
 				: [],
-		[isPublished, questions],
+		[isFromFeed, questions],
 	);
 
 	const {
@@ -168,7 +168,7 @@ export function Bot({ url, questions }: Props) {
 				</div>
 
 				<div className="flex-col items-start gap-2 pl-[58px] pr-3 py-0 w-full flex">
-					{questions?.slice(isPublished ? 3 : 0).map((qa, index) => (
+					{questions?.slice(isFromFeed ? 3 : 0).map((qa, index) => (
 						<Trackable
 							key={index}
 							trackingKey={
@@ -201,7 +201,7 @@ export function Bot({ url, questions }: Props) {
 			</div>
 			{messages.length > 0 && (
 				<div className="flex flex-col gap-3">
-					{messages.length <= 6 && isPublished && (
+					{messages.length <= 6 && isFromFeed && (
 						<div className="font-semibold text-[#0a161c] text-lg tracking-[0] leading-4 whitespace-nowrap px-3 pb-2">
 							Top questions
 						</div>
@@ -213,7 +213,7 @@ export function Bot({ url, questions }: Props) {
 								<BotQa
 									key={index}
 									user={
-										index < 6 && isPublished
+										index < 6 && isFromFeed
 											? users.at(Math.floor(rndUser + index / 2))
 											: undefined
 									}
@@ -223,7 +223,7 @@ export function Bot({ url, questions }: Props) {
 							);
 						})}
 					</div>
-					{isPublished && (
+					{isFromFeed && (
 						<div className="flex text-center items-center w-full m-2 justify-center">
 							<Trackable
 								trackingKey={

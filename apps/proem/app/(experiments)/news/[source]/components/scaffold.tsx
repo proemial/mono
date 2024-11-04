@@ -112,7 +112,12 @@ export function Scaffold({
 						</div>
 					</div>
 
-					<ActionBar url={url} textColor="#303030" background={background} />
+					<ActionBar
+						url={url}
+						textColor="#303030"
+						background={background}
+						foreground={color}
+					/>
 				</div>
 
 				{data?.summarise?.commentary && (

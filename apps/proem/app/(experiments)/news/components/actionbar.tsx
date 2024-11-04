@@ -2,21 +2,23 @@
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Trackable } from "@/components/trackable";
 import { toast } from "@proemial/shadcn-ui";
-import { usePublishedSearchParam } from "./use-published";
+import { useFromFeedSearchParam } from "./use-published";
 
 export function ActionBar({
 	url,
 	background,
+	foreground,
 	textColor = "#ffffff",
-	published = false,
+	fromFeed = false,
 }: {
 	url: string;
 	background: string;
+	foreground: string;
 	textColor?: string;
-	published?: boolean;
+	fromFeed?: boolean;
 }) {
-	const { publishedParam } = usePublishedSearchParam();
-	const isPublished = published || publishedParam;
+	const { fromFeedParam } = useFromFeedSearchParam();
+	const isFromFeed = fromFeed || fromFeedParam;
 
 	// For now using a placeholder title since we don't have access to it
 	const viewCount = getRandomViews(url);
@@ -29,7 +31,7 @@ export function ActionBar({
 		toast("Link copied", {
 			style: {
 				backgroundColor: background,
-				color: "#ffffff",
+				color: foreground,
 			},
 		});
 	};
@@ -37,7 +39,7 @@ export function ActionBar({
 	return (
 		<div className="flex w-full justify-between px-3">
 			<div className="flex items-center gap-4">
-				{isPublished && (
+				{isFromFeed && (
 					<div className="flex items-center gap-5 relative flex-1 grow">
 						<Trackable
 							trackingKey={analyticsKeys.experiments.news.item.clickViewCounter}
