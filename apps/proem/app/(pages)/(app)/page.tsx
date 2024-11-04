@@ -9,8 +9,11 @@ export default async function RootPage() {
 	const subdomain = host.split(".")[0];
 
 	if (subdomain && !rootDomain.includes(subdomain)) {
+		if (subdomain === "spaces") {
+			redirect(routes.space);
+		}
 		redirect(`/${subdomain}`);
 	}
 
-	redirect(routes.space);
+	redirect(routes.ask);
 }

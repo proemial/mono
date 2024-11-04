@@ -8,7 +8,7 @@ const experiments = [
 	{ name: "organisations", path: "https://proem.ai/discover/ibm" },
 	{
 		name: "spaces",
-		path: "https://proem.ai/space/col_ictqflngkeeyvpkauaqns6hz",
+		path: "https://spaces.proem.ai/space/col_ictqflngkeeyvpkauaqns6hz",
 	},
 	{
 		name: "rss",
