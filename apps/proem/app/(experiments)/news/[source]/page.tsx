@@ -45,7 +45,7 @@ async function fetchItem({ params, searchParams }: Props) {
 			: decodeURIComponent(params.source);
 
 	const cacheKey = `news:${url}`;
-	if (searchParams.flush) {
+	if (searchParams.flush || process.env.NODE_ENV === "development") {
 		console.log("Revalidating news-item");
 		revalidateTag(url);
 	}
