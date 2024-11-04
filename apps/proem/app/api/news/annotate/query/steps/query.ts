@@ -1,8 +1,12 @@
 import { generateIndexSearchQuery } from "../../../prompts/generate-index-search-query";
 
-export async function generateQuery(url: string, transcript: string) {
+export async function generateQuery(
+	url: string,
+	transcript: string,
+	title: string,
+) {
 	try {
-		const indexQuery = await generateIndexSearchQuery(transcript);
+		const indexQuery = await generateIndexSearchQuery(transcript, title);
 
 		const parsedQuery = indexQuery
 			.split("<summary>")[1]

@@ -5,12 +5,14 @@ export async function summarise(
 	url: string,
 	query: string,
 	transcript: string,
+	title: string,
 	papers: ReferencedPaper[],
 ) {
 	try {
 		const factsAndQuestions = await generateFactsAndQuestions(
 			transcript,
 			query,
+			title,
 			papers,
 		);
 		const { commentary, questions: qaString } = parseOutput(factsAndQuestions);

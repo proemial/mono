@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 			url,
 			item.query.value,
 			item.scrape.transcript,
-			item.scrape?.title,
+			item.scrape?.title as string,
 			item.papers.value,
 		);
 
