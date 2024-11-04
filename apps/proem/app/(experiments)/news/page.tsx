@@ -81,17 +81,26 @@ async function getItems(flush?: boolean) {
 	const items = await unstable_cache(
 		async () => {
 			console.log("Fetching items");
-			const unsorted = (await Redis.news.list()).map((item) => ({
-				init: item.init,
-				scrape: {
-					title: item.scrape?.title,
-					date: item.scrape?.date,
-					artworkUrl: item.scrape?.artworkUrl,
-				},
-				summarise: {
-					questions: item.summarise?.questions,
-				},
-			}));
+			const unsorted = (await Redis.news.list())
+				.map((item) => {
+					if (!item?.init) {
+						console.error("No init", item);
+
+						return undefined;
+					}
+					return {
+						init: item.init,
+						scrape: {
+							title: item.scrape?.title,
+							date: item.scrape?.date,
+							artworkUrl: item.scrape?.artworkUrl,
+						},
+						summarise: {
+							questions: item.summarise?.questions,
+						},
+					};
+				})
+				.filter((item): item is NonNullable<typeof item> => item !== undefined);
 
 			return unsorted
 				.map((item) => ({
