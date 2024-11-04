@@ -7,7 +7,10 @@ export async function getFromRedis(url: string) {
 	} catch (e) {
 		console.error("[news][query] failed to get from redis", e);
 		throw new Error("[news][query] failed to get from redis", {
-			cause: e,
+			cause: {
+				url,
+				error: e,
+			},
 		});
 	}
 }
@@ -23,7 +26,10 @@ export async function updateRedis(url: string, query: string) {
 	} catch (e) {
 		console.error("[news][scrape] failed to update redis", e);
 		throw new Error("[news][scrape] failed to update redis", {
-			cause: e,
+			cause: {
+				url,
+				error: e,
+			},
 		});
 	}
 }

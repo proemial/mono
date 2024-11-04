@@ -55,6 +55,11 @@ const fetchUniversalArticleTranscript = async (
 		return await result.json();
 	} catch (error) {
 		console.error("[scrape] failed to fetch article transcript", error);
-		throw new Error("[news][scrape] diffbot error", { cause: error });
+		throw new Error("[news][scrape] diffbot error", {
+			cause: {
+				url,
+				error,
+			},
+		});
 	}
 };

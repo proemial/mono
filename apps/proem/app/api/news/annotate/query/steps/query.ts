@@ -1,6 +1,6 @@
 import { generateIndexSearchQuery } from "../../../prompts/generate-index-search-query";
 
-export async function generateQuery(transcript: string) {
+export async function generateQuery(url: string, transcript: string) {
 	try {
 		const indexQuery = await generateIndexSearchQuery(transcript);
 
@@ -10,7 +10,10 @@ export async function generateQuery(transcript: string) {
 
 		if (!parsedQuery) {
 			throw new Error("[news][query] Failed to parse search query", {
-				cause: indexQuery,
+				cause: {
+					url,
+					indexQuery,
+				},
 			});
 		}
 		console.log("[query]", trimNewlines(parsedQuery));
@@ -19,7 +22,10 @@ export async function generateQuery(transcript: string) {
 	} catch (e) {
 		console.error("[news][query] failed to generate query", e);
 		throw new Error("[news][query] failed to generate query", {
-			cause: e,
+			cause: {
+				url,
+				error: e,
+			},
 		});
 	}
 }

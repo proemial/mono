@@ -36,7 +36,10 @@ export async function updateRedis(
 	} catch (e) {
 		console.error("[news][scrape] failed to update redis", e);
 		throw new Error("[news][scrape] failed to update redis", {
-			cause: e,
+			cause: {
+				url,
+				error: e,
+			},
 		});
 	}
 }
