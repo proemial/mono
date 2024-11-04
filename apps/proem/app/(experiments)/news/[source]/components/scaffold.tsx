@@ -117,6 +117,7 @@ export function Scaffold({
 						textColor="#303030"
 						background={background}
 						foreground={color}
+						date={data?.scrape?.date}
 					/>
 				</div>
 

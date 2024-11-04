@@ -54,6 +54,7 @@ export function NewsCard({
 					background={background}
 					foreground={color}
 					fromFeed
+					date={data?.scrape?.date}
 				/>
 
 				<QA data={data} url={url} />

@@ -10,18 +10,20 @@ export function ActionBar({
 	foreground,
 	textColor = "#ffffff",
 	fromFeed = false,
+	date,
 }: {
 	url: string;
 	background: string;
 	foreground: string;
 	textColor?: string;
 	fromFeed?: boolean;
+	date?: string;
 }) {
 	const { fromFeedParam } = useFromFeedSearchParam();
 	const isFromFeed = fromFeed || fromFeedParam;
 
 	// For now using a placeholder title since we don't have access to it
-	const viewCount = getRandomViews(url);
+	const viewCount = getRandomViews(url, date);
 
 	const handleShare = (e: React.MouseEvent<HTMLDivElement>) => {
 		e.preventDefault();
@@ -67,7 +69,9 @@ export function ActionBar({
 									/>
 								</svg>
 								<div className="relative w-fit font-normal text-[13px] tracking-[0] leading-[normal]">
-									{viewCount}
+									{viewCount >= 1000
+										? `${Math.floor(viewCount / 1000)}k`
+										: viewCount}
 								</div>
 							</div>
 						</Trackable>
@@ -129,7 +133,7 @@ export function ActionBar({
 	);
 }
 
-const getRandomViews = (title: string) => {
+const getRandomViews = (title: string, date?: string) => {
 	// Create a consistent hash from the title
 	let hash = 0;
 	for (let i = 0; i < title.length; i++) {
@@ -141,7 +145,7 @@ const getRandomViews = (title: string) => {
 
 	// Get minutes since this method was first written
 	const now = new Date();
-	const baseTime = new Date(1730416261598);
+	const baseTime = date ? new Date(date) : new Date(1730416261598);
 	baseTime.setHours(0, 0, 0, 0);
 	const minutesSinceBaseTime = Math.floor(
 		(now.getTime() - baseTime.getTime()) / (1000 * 60),
