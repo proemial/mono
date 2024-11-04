@@ -141,18 +141,17 @@ const getRandomViews = (title: string, date?: string) => {
 		hash = hash & hash; // Convert to 32-bit integer
 	}
 	// Generate base random-looking but consistent number between 50 and 500
-	const baseViews = Math.abs(hash % 300) + 50;
+	const baseViews = Math.abs(hash % 200) + 50;
 
 	// Get minutes since this method was first written
 	const now = new Date();
-	const baseTime = date ? new Date(date) : new Date(1730416261598);
-	baseTime.setHours(0, 0, 0, 0);
+	const baseTime = date ? new Date(date) : new Date(1730710432596);
 	const minutesSinceBaseTime = Math.floor(
-		(now.getTime() - baseTime.getTime()) / (1000 * 60),
+		(now.getTime() - baseTime.getTime()) / 1000 / 60,
 	);
 
-	// Add 1 view for every 10 minutes since the base timestamp
-	const additionalViews = Math.floor(minutesSinceBaseTime / 10);
+	// Add 1 view for every 15 minutes since the base timestamp
+	const additionalViews = Math.floor(minutesSinceBaseTime / 15);
 
 	return baseViews + additionalViews;
 };
