@@ -124,7 +124,7 @@ export function Bot({ url, questions }: Props) {
 
 	return (
 		<>
-			<div className="flex items-center justify-end gap-2 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
+			<div className="flex items-center justify-end gap-2 px-3 py-0 relative self-stretch w-full">
 				<div className="items-center gap-2 flex-1 grow flex relative">
 					<div className="relative w-fit mt-[-1.00px] font-semibold text-[#0a161c] text-lg tracking-[0] leading-4 whitespace-nowrap">
 						Find Answers in Research
@@ -224,7 +224,7 @@ export function Bot({ url, questions }: Props) {
 						})}
 					</div>
 					{isFromFeed && (
-						<div className="flex text-center items-center w-full m-2 justify-center">
+						<div className="flex text-center items-center w-full justify-center">
 							<Trackable
 								trackingKey={
 									analyticsKeys.experiments.news.item.qa.clickShowMore
