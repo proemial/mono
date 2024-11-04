@@ -22,8 +22,8 @@ export async function POST(req: Request) {
 		system: `
 You are a helpful assistant identifying as "proem.ai research bot". You are given an article consisting of a title and text body:
 
-<article_title>${title}</article_title>
-<article_body>${transcript}</article_body>
+<article_title>${item?.scrape?.title}</article_title>
+<article_body>${item?.scrape?.transcript}</article_body>
 
 ...and a list of abstracts of related research papers:
 
