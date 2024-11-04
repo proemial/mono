@@ -60,9 +60,11 @@ export function Welcome() {
 								</button>
 
 								<input
-									type="text"
+									type="url"
 									name="url"
 									placeholder="Enter url"
+									pattern="https?://.*"
+									title="Please enter a valid URL starting with http:// or https://"
 									className="font-normal text-white/50 text-sm leading-[14px] bg-transparent border-none outline-none w-full"
 								/>
 							</div>

@@ -94,7 +94,7 @@ function AnnotateForm({
 				>
 					<input
 						ref={inputRef}
-						type="text"
+						type="url"
 						name="url"
 						placeholder="URL"
 						className="border rounded p-2 text-black disabled:bg-gray-100 disabled:cursor-not-allowed"
