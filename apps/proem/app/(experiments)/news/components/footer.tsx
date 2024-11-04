@@ -1,7 +1,7 @@
 export function Footer() {
 	return (
-		<div className="flex flex-col items-start justify-center gap-2 p-4 py-6 relative self-stretch w-full flex-[0_0_auto] bg-[#000000] rounded-[18px_18px_0px_0px]">
-			<div className="relative w-fit mt-[-1.00px] font-semibold text-[#f6f5e8] text-base tracking-[0] leading-[normal] whitespace-nowrap">
+		<div className="flex flex-col items-start justify-center gap-2 p-4 pt-5 pb-[88px] relative self-stretch w-full flex-[0_0_auto] bg-[#000000] rounded-[18px_18px_0px_0px]">
+			<div className="relative w-fit mt-[-1.00px] font-semibold text-[#f6f5e8] text-lg tracking-[0] leading-4 whitespace-nowrap">
 				About
 			</div>
 
