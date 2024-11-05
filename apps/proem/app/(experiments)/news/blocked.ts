@@ -8,5 +8,8 @@ export function isBlockedUrl(url: string) {
 	if (url.includes("twitter.com") || url.includes("x.com")) {
 		return "We cannot make it past the Twitter/X login wall 😔";
 	}
+	if (url.includes("youtube.com") || url.includes("youtu.be")) {
+		return "We currently do not support YouTube videos 😔";
+	}
 	return undefined;
 }
