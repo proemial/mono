@@ -1,16 +1,9 @@
 import { Redis } from "@proemial/adapters/redis";
-import { NewsCard } from "./news-card";
-import { Welcome } from "./components/welcome";
-import { NewsFeed } from "./components/scaffold";
-import { SubscribeForm } from "./components/subscribe-form";
-import { Trackable } from "@/components/trackable";
-import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
-import { ErrorModal } from "./components/error-modal";
-import { Metadata } from "next";
-import { Header } from "./components/header";
+import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news";
 import dayjs from "dayjs";
-import { revalidateTag } from "next/cache";
-import { unstable_cache } from "next/cache";
+import { Metadata } from "next";
+import { revalidateTag, unstable_cache } from "next/cache";
+import { NewsFeed } from "./components/scaffold";
 
 const title = "proem - trustworthy perspectives";
 const description =
@@ -35,16 +28,13 @@ export default async function NewsPage({
 	const sorted = await getItems(searchParams.flush);
 	const error = searchParams.error;
 
-	<NewsFeed
-		sorted={sorted}
-		error={error}
-	/>
+	return <NewsFeed sorted={sorted} error={error} debug={searchParams.debug} />;
 }
 
 const cacheKey = "news-feed";
 
 const cacheDisabled = true;
-async function getItems(flush?: boolean) {
+async function getItems(flush?: boolean): Promise<NewsAnnotatorSteps[]> {
 	if (flush || cacheDisabled || process.env.NODE_ENV === "development") {
 		console.log("Revalidating news-list");
 		revalidateTag(cacheKey);
