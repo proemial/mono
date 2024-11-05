@@ -22,7 +22,7 @@ export function NewsFeed({
 				{/*  @brian: Show after 6 cards */}
 				{/*  @brian: Don't show if already signed up */}
 				{/* <SubscribeForm /> */}
-				<div className="columns-[300px] gap-5">
+				<div className="columns-[300px] gap-3 grid-flow-row">
 					{sorted.map((item, i) => (
 						<Trackable
 							key={i}
@@ -30,7 +30,7 @@ export function NewsFeed({
 							properties={{ sourceUrl: item.init?.url as string }}
 						>
 							<div
-								className="active:opacity-80 block mb-5 break-inside-avoid cursor-pointer"
+								className="active:opacity-80 block mb-3 break-inside-avoid cursor-pointer"
 								data-url={item.init?.url}
 								onClick={(e) => {
 									const target = e.currentTarget;
@@ -42,6 +42,7 @@ export function NewsFeed({
 									if (overlay && iframe && url) {
 										overlay.classList.remove("hidden");
 										iframe.src = url;
+										document.body.style.overflow = "hidden"; // Disable scrolling
 									}
 								}}
 							>
@@ -58,7 +59,7 @@ export function NewsFeed({
 				{/* Overlay and iframe - hidden by default */}
 				<div data-overlay className="hidden fixed inset-0 z-50">
 					<div
-						className="absolute inset-0 bg-black/50"
+						className="absolute inset-0 bg-black/65"
 						onClick={() => {
 							const overlay = document.querySelector("[data-overlay]");
 							const iframe = document.querySelector(
@@ -67,10 +68,11 @@ export function NewsFeed({
 							if (overlay && iframe) {
 								overlay.classList.add("hidden");
 								iframe.src = "about:blank";
+								document.body.style.overflow = "auto"; // Re-enable scrolling
 							}
 						}}
 					/>
-					<div className="absolute left-1/2 top-0 -translate-x-1/2 h-full w-[500px] bg-white">
+					<div className="rounded-[12px] absolute left-1/2 top-[40px] -translate-x-1/2 h-[90%] w-[500px] bg-white shadow-[0_0_100px_rgba(0,0,0,0.75)] border-white border-8">
 						<iframe
 							data-iframe
 							title="News content"

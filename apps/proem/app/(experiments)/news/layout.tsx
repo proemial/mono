@@ -32,10 +32,9 @@ export default function Layout({ children }: Props) {
 				style={{
 					boxShadow: "0 0 120px rgba(0, 0, 0, .15)",
 				}}
-				className={cn("mx-auto min-h-[100dvh] flex flex-col max-w-[1200px]", {
-					[screenMaxWidth]:
-						typeof window !== "undefined" && window.innerWidth < 1200,
-				})}
+				className={cn(
+					"mx-auto min-h-[100dvh] flex flex-col max-w-[550px] lg:max-w-none lg:border-x-[12px] border-black"
+				)}
 			>
 				{children}
 			</div>
