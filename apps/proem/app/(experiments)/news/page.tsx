@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 	title,
 	description,
 	openGraph: {
-		images: ["/news/images/open-graph.png"],
+		images: ["/news/images/open-graph.jpg"],
 		title,
 		description,
 		siteName: title,
