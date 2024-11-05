@@ -73,8 +73,7 @@ export function Scaffold({
 	const isLoading =
 		isScraperLoading || isQueryLoading || isPapersLoading || isSummariseLoading;
 
-	const error =
-		scraperError ?? queryError ?? papersError ?? summariseError ?? undefined;
+	const fatalError = queryError ?? papersError ?? summariseError ?? undefined;
 
 	const background = backgroundColor(data?.init?.background);
 	const color = foregroundColor(data?.init?.foreground);
@@ -91,7 +90,8 @@ export function Scaffold({
 				/>
 			)}
 
-			{error && <AnnotationError />}
+			{scraperError && <ScraperError />}
+			{fatalError && <AnnotationError />}
 
 			<Header />
 			<div className="flex flex-col gap-4">
@@ -134,6 +134,16 @@ export function Scaffold({
 				)}
 
 				<Footer />
+			</div>
+		</div>
+	);
+}
+
+function ScraperError() {
+	return (
+		<div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 font-mono">
+			<div className="bg-white border border-green-500 rounded-lg shadow-lg p-8 max-w-lg w-full mx-4">
+				Try another article.
 			</div>
 		</div>
 	);
