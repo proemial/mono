@@ -15,7 +15,7 @@ export const parseArticle = async (
 	) as ArticleTranscriptObject;
 
 	const transcript = text?.replaceAll("\n", " ");
-	const artworkUrl = images[0]?.url;
+	const artworkUrl = images.at(0)?.url;
 
 	return {
 		transcript,
