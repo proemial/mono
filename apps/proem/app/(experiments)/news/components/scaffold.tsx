@@ -39,7 +39,10 @@ export function NewsFeed({
 									const iframe = document.querySelector(
 										"[data-iframe]",
 									) as HTMLIFrameElement;
-									if (overlay && iframe && url) {
+									if (window.innerWidth<1024){
+										if (overlay) overlay.classList.add("hidden");
+										window.location.href = url;
+									} else if (overlay && iframe && url) {
 										overlay.classList.remove("hidden");
 										iframe.src = url;
 										document.body.style.overflow = "hidden"; // Disable scrolling
