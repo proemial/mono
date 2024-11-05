@@ -13,7 +13,7 @@ import { unstable_cache } from "next/cache";
 
 const title = "proem - trustworthy perspectives";
 const description =
-	"Proem takes any piece of online content an`d enriches it with scientific insights from the latest research papers.";
+	"Proem takes any piece of online content and enriches it with scientific insights from the latest research papers.";
 
 export const metadata: Metadata = {
 	title,
