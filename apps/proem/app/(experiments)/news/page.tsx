@@ -26,9 +26,15 @@ export default async function NewsPage({
 	searchParams: { error?: string; debug?: boolean; flush?: boolean };
 }) {
 	const sorted = await getItems(searchParams.flush);
-	const error = searchParams.error;
+	const serialized = JSON.parse(JSON.stringify(sorted)) as NewsAnnotatorSteps[];
 
-	return <NewsFeed sorted={sorted} error={error} debug={searchParams.debug} />;
+	return (
+		<NewsFeed
+			sorted={serialized}
+			error={searchParams.error}
+			debug={searchParams.debug}
+		/>
+	);
 }
 
 const cacheKey = "news-feed";
