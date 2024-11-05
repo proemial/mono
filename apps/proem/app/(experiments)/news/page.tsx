@@ -1,6 +1,7 @@
 import { Redis } from "@proemial/adapters/redis";
 import { NewsCard } from "./news-card";
 import { Welcome } from "./components/welcome";
+import { NewsFeed } from "./components/scaffold";
 import { SubscribeForm } from "./components/subscribe-form";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
@@ -34,39 +35,10 @@ export default async function NewsPage({
 	const sorted = await getItems(searchParams.flush);
 	const error = searchParams.error;
 
-	return (
-		<>
-			<div className="flex relative flex-col items-start self-stretch w-full">
-				{error && <ErrorModal error={error} />}
-				<Header />
-				<Welcome />
-				{/*  @brian: Connect to our email list provider */}
-				{/*  @brian: Show after 6 cards */}
-				{/*  @brian: Don't show if already signed up */}
-				{/* <SubscribeForm /> */}
-				<div className="flex flex-col">
-					{sorted.map((item, i) => (
-						<Trackable
-							key={i}
-							trackingKey={analyticsKeys.experiments.news.feed.clickCard}
-							properties={{ sourceUrl: item.init?.url as string }}
-						>
-							<a
-								href={`/news/${encodeURIComponent(item.init?.url as string)}?p=1`}
-								className="active:opacity-80 block mb-5"
-							>
-								<NewsCard
-									url={item.init?.url as string}
-									data={item}
-									debug={searchParams.debug}
-								/>
-							</a>
-						</Trackable>
-					))}
-				</div>
-			</div>
-		</>
-	);
+	<NewsFeed
+		sorted={sorted}
+		error={error}
+	/>
 }
 
 const cacheKey = "news-feed";
