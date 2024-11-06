@@ -2,19 +2,28 @@ import { searchToolConfig } from "@/app/prompts/ask_agent";
 import { DynamicTool } from "@langchain/core/tools";
 import { Paper } from "../../paper-search/search";
 import { AnswerEngineStreamData } from "../answer-engine/answer-engine";
+import { QdrantPaper } from "../../news/annotate/fetch/steps/fetch";
 import { openAlexChain } from "./fetch-papers";
+import { Time } from "@proemial/utils/time";
 
 export const getTools = (
 	data: AnswerEngineStreamData,
 	transactionId: string,
+	vectorIndex?: boolean,
 ) => {
-	const openAlexTool = buildOpenAlexTool(data, transactionId);
-	return [openAlexTool];
+	return [
+		buildSearchTool(
+			data,
+			transactionId,
+			vectorIndex ? qdrantQuery : openAlexQuery,
+		),
+	];
 };
 
-const buildOpenAlexTool = (
+const buildSearchTool = (
 	data: AnswerEngineStreamData,
 	transactionId: string,
+	func: (input: string) => Promise<string>,
 ) =>
 	new DynamicTool({
 		...searchToolConfig,
@@ -36,15 +45,48 @@ const buildOpenAlexTool = (
 				},
 			},
 		],
-		func: openAlexQuery,
+		func,
 	});
 
-const openAlexQuery = async (input: string) => {
-	console.log("Triggered SearchPapers,", `input: '${input}'`);
+const openAlexQuery = async (input: string): Promise<string> => {
+	const begin = Time.now();
 
-	const result = await openAlexChain.invoke({
-		question: input,
-	});
+	try {
+		const result = await openAlexChain.invoke({
+			question: input,
+		});
+		return result.papers;
+	} finally {
+		Time.log(begin, `[openAlexQuery] ${input}`);
+	}
+};
 
-	return result.papers;
+const qdrantQuery = async (input: string): Promise<string> => {
+	const begin = Time.now();
+
+	try {
+		const papersResult = await fetch("https://index.proem.ai/api/search", {
+			method: "POST",
+			body: JSON.stringify({
+				query: input,
+				from: "2024-01-01",
+				extended: true,
+			}),
+		});
+		const { papers } = (await papersResult.json()) as { papers: QdrantPaper[] };
+		console.log("Papers", papers.length);
+
+		const mapped = papers.map(
+			(paper) =>
+				({
+					link: `oa/${paper.id.split("/").at(-1)}`,
+					title: paper.title,
+					abstract: paper.abstract,
+					publicationDate: paper.published,
+				}) as Paper,
+		);
+		return JSON.stringify(mapped);
+	} finally {
+		Time.log(begin, `[qdrantQuery] ${input}`);
+	}
 };
