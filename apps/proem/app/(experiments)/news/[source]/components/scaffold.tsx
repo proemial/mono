@@ -21,7 +21,6 @@ import logo from "../../components/images/logo.svg";
 import Image from "next/image";
 import { Header } from "../../components/header";
 import { Footer } from "../../components/footer";
-import { Button } from "@proemial/shadcn-ui/components/ui/button";
 
 export function Scaffold({
 	url,
@@ -91,7 +90,7 @@ export function Scaffold({
 			)}
 
 			{scraperError && <ScraperError />}
-			{fatalError && <AnnotationError />}
+			{fatalError && <AnnotationError error={fatalError} />}
 
 			<Header />
 			<div className="flex flex-col gap-4">
@@ -149,7 +148,9 @@ function ScraperError() {
 	);
 }
 
-function AnnotationError() {
+function AnnotationError({ error }: { error: Error }) {
+	console.error("error", error);
+
 	return (
 		<div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 font-mono">
 			<div className="bg-black/90 border border-green-500/30 rounded-lg shadow-lg p-8 max-w-lg w-full mx-4">

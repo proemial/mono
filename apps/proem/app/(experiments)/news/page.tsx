@@ -40,28 +40,28 @@ export default async function NewsPage({
 				{error && <ErrorModal error={error} />}
 				<Header />
 				<Welcome />
-				{/*  @brian: Connect to our email list provider */}
-				{/*  @brian: Show after 6 cards */}
-				{/*  @brian: Don't show if already signed up */}
-				{/* <SubscribeForm /> */}
 				<div className="flex flex-col">
 					{sorted.map((item, i) => (
-						<Trackable
-							key={i}
-							trackingKey={analyticsKeys.experiments.news.feed.clickCard}
-							properties={{ sourceUrl: item.init?.url as string }}
-						>
-							<a
-								href={`/news/${encodeURIComponent(item.init?.url as string)}?p=1`}
-								className="active:opacity-80 block mb-5"
+						<div key={i}>
+							{/* TODO: Enable once mailchimp integration works */}
+							{/* {i === 2 && <SubscribeForm />} */}
+
+							<Trackable
+								trackingKey={analyticsKeys.experiments.news.feed.clickCard}
+								properties={{ sourceUrl: item.init?.url as string }}
 							>
-								<NewsCard
-									url={item.init?.url as string}
-									data={item}
-									debug={searchParams.debug}
-								/>
-							</a>
-						</Trackable>
+								<a
+									href={`/news/${encodeURIComponent(item.init?.url as string)}?p=1`}
+									className="active:opacity-80 block mb-5"
+								>
+									<NewsCard
+										url={item.init?.url as string}
+										data={item}
+										debug={searchParams.debug}
+									/>
+								</a>
+							</Trackable>
+						</div>
 					))}
 				</div>
 			</div>

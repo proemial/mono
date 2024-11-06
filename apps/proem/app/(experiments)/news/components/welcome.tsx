@@ -4,8 +4,10 @@ import { getCookie, setCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 import { isBlockedUrl } from "../blocked";
 import { useIsApp } from "@/utils/app";
-import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
+import { Tracker } from "@/components/analytics/tracking/tracker";
+
+const cookieName = "splash";
 
 export function Welcome() {
 	const isApp = useIsApp();
@@ -13,11 +15,11 @@ export function Welcome() {
 	const [url, setUrl] = useState("");
 
 	useEffect(() => {
-		setIsOpen(!getCookie("splash"));
+		setIsOpen(!getCookie(cookieName));
 	}, []);
 
 	const dismiss = () => {
-		setCookie("splash", "false", { maxAge: 31536000 });
+		setCookie(cookieName, "false", { maxAge: 31536000 });
 		setIsOpen(false);
 	};
 
@@ -45,6 +47,7 @@ export function Welcome() {
 						<form
 							onSubmit={(e) => {
 								console.log("submit");
+								Tracker.track(analyticsKeys.experiments.news.clickGenerate);
 
 								e.preventDefault();
 								const form = e.target as HTMLFormElement;
@@ -80,13 +83,9 @@ export function Welcome() {
 									value={url} // Add this line
 									required
 								/>
-								<Trackable
-									trackingKey={analyticsKeys.experiments.news.clickGenerate}
-								>
-									<button type="submit" disabled={!url.match(/^https?:\/\/.+/)}>
-										<PlusCircle className="text-[#f6f5e8] hsize-6 block hover:animate-[spin_1s_ease-in-out] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" />
-									</button>
-								</Trackable>
+								<button type="submit" disabled={!url.match(/^https?:\/\/.+/)}>
+									<PlusCircle className="text-[#f6f5e8] hsize-6 block hover:animate-[spin_1s_ease-in-out] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" />
+								</button>
 							</div>
 							{isApp && (
 								<div className="text-center italic text-xs mt-[-12px] text-gray-500">
