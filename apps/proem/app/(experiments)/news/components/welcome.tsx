@@ -1,7 +1,7 @@
 "use client";
 import { PlusCircle } from "@untitled-ui/icons-react";
 import { getCookie, setCookie } from "cookies-next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { isBlockedUrl } from "../blocked";
 import { useIsApp } from "@/utils/app";
 import { Trackable } from "@/components/trackable";
@@ -9,10 +9,12 @@ import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 
 export function Welcome() {
 	const isApp = useIsApp();
-	const [isOpen, setIsOpen] = useState(
-		typeof document !== "undefined" ? !getCookie("splash") : false,
-	);
+	const [isOpen, setIsOpen] = useState(false);
 	const [url, setUrl] = useState("");
+
+	useEffect(() => {
+		setIsOpen(!getCookie("splash"));
+	}, []);
 
 	const dismiss = () => {
 		setCookie("splash", "false", { maxAge: 31536000 });
