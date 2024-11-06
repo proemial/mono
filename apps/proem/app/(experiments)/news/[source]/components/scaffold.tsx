@@ -80,7 +80,7 @@ export function Scaffold({
 	const color = foregroundColor(data?.init?.foreground);
 
 	return (
-		<div className="flex flex-col items-start relative self-stretch w-full bg-white">
+		<div className="relative self-stretch w-full bg-white mx-auto max-w-[550px]">
 			{isLoading && (
 				<AnnotationLoader
 					isScraperLoading={isScraperLoading}
