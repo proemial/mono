@@ -76,7 +76,7 @@ function AnnotateForm({
 						const url = form.url.value;
 						const isBlockedError = isBlockedUrl(url);
 
-						// Check if it's a Facebook URL
+						// Check if it's a blocked URL
 						if (isBlockedError) {
 							const errorDiv = form.querySelector(
 								".error-message",
@@ -98,6 +98,7 @@ function AnnotateForm({
 						name="url"
 						placeholder="URL"
 						className="border rounded p-2 text-black disabled:bg-gray-100 disabled:cursor-not-allowed"
+						required
 					/>
 					{isApp && (
 						<div className="italic text-sm mt-[-16px] text-gray-500">
@@ -113,16 +114,18 @@ function AnnotateForm({
 						>
 							Cancel
 						</button>
-						<Trackable trackingKey={analyticsKeys.experiments.news.clickGenerate}>
-						<button
-							type="submit"
-							className="px-4 py-2 rounded bg-green-700 text-white hover:bg-green-800 disabled:bg-green-600 disabled:cursor-not-allowed"
+						<Trackable
+							trackingKey={analyticsKeys.experiments.news.clickGenerate}
 						>
-							<div className="flex gap-2 items-center">
-								<MagicWand02 className="size-4" />
-								Generate
-							</div>
-						</button>
+							<button
+								type="submit"
+								className="px-4 py-2 rounded bg-green-700 text-white hover:bg-green-800 disabled:bg-green-600 disabled:cursor-not-allowed"
+							>
+								<div className="flex gap-2 items-center">
+									<MagicWand02 className="size-4" />
+									Generate
+								</div>
+							</button>
 						</Trackable>
 					</div>
 				</form>

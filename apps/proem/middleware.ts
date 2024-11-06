@@ -18,9 +18,9 @@ export default clerkMiddleware((auth, req) => {
 	}
 	if (subdomain === "appshare") {
 		const searchParams = req.nextUrl.searchParams;
-		const url = searchParams.get("url");
+		const url = searchParams.get("url") ?? "";
 
-		const isBlockedError = isBlockedUrl(url as string);
+		const isBlockedError = isBlockedUrl(url);
 		if (isBlockedError) {
 			return NextResponse.redirect(
 				new URL(

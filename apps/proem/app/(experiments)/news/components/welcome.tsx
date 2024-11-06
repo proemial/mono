@@ -22,10 +22,10 @@ export function Welcome() {
 	return (
 		<>
 			{isOpen && (
-				<div 
+				<div
 					className="flex flex-col gap-8 items-center justify-center w-full px-3 mb-3 bg-gradient-to-b from-[#7DFA86] from-[-25%] via-[#3732916b] via-[70%] to-[#24215f6b] to-[100%] rounded-2xl"
 					style={{
-						animation: isOpen ? 'expand 0.6s ease-in-out forwards' : 'none'
+						animation: isOpen ? "expand 0.6s ease-in-out forwards" : "none",
 					}}
 				>
 					<style jsx>{`
@@ -35,7 +35,8 @@ export function Welcome() {
 						}
 					`}</style>
 					<div className="w-5/6 text-xl font-semibold leading-7 text-center text-white drop-shadow-md">
-						Enrich articles with insights<br/>
+						Enrich articles with insights
+						<br />
 						from the latest research papers.
 					</div>
 					<div className="flex gap-1 justify-center items-center w-4/5">
@@ -48,7 +49,7 @@ export function Welcome() {
 								const url = form.url.value;
 								const isBlockedError = isBlockedUrl(url);
 
-								// Check if it's a Facebook URL
+								// Check if it's a blocked URL
 								if (isBlockedError) {
 									const errorDiv = form.querySelector(
 										".error-message",
@@ -75,6 +76,7 @@ export function Welcome() {
 									className="font-normal text-white/50 text-sm leading-[14px] bg-transparent border-none outline-none w-full"
 									onChange={(e) => setUrl(e.target.value)} // Add this line
 									value={url} // Add this line
+									required
 								/>
 								<Trackable
 									trackingKey={analyticsKeys.experiments.news.clickGenerate}
