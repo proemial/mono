@@ -22,6 +22,8 @@ import Image from "next/image";
 import { Header } from "../../components/header";
 import { Footer } from "../../components/footer";
 
+import { Button } from "@proemial/shadcn-ui/components/ui/button";
+
 export function Scaffold({
 	url,
 	data: preloadedData,
@@ -140,9 +142,42 @@ export function Scaffold({
 
 function ScraperError() {
 	return (
-		<div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 font-mono">
-			<div className="bg-white border border-green-500 rounded-lg shadow-lg p-8 max-w-lg w-full mx-4">
-				Try another article.
+		<div className="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-50">
+			<div className="w-full max-w-lg mx-4 p-8 bg-white rounded-lg shadow-lg">
+				<div className="flex flex-col space-y-4">
+					<div className="space-y-2">
+						<h2 className="text-xl font-bold tracking-tight">
+							We can't access this article 🔎
+						</h2>
+						<p className="text-muted-foreground">
+							We had trouble reading the article you want annotated. This could
+							be because it's not an article, there's a paywall, or the website
+							is not very welcoming to our robots.
+						</p>
+					</div>
+					<div className="flex justify-end space-x-2">
+						<button
+							type="button"
+							className="flex items-center rounded-md text-sm font-medium h-9 px-4 disabled:opacity-80"
+							onClick={(e) => {
+								(e.target as HTMLButtonElement).disabled = true;
+								window.location.href = "/news";
+							}}
+						>
+							Dismiss
+						</button>
+						<button
+							type="button"
+							className="flex items-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 disabled:opacity-80"
+							onClick={(e) => {
+								(e.target as HTMLButtonElement).disabled = true;
+								window.location.reload();
+							}}
+						>
+							Try Again
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	);
@@ -233,42 +268,46 @@ function AnnotationLoader({
 	data: NewsAnnotatorSteps;
 }) {
 	return (
-		<div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
-			<div className="bg-white rounded-lg shadow-lg">
-				{isScraperLoading && (
-					<ScheduledLoaderMessage>
-						{data?.init?.host ? (
-							<div className="flex gap-1">
-								<span className="opacity-75">Fetching content from</span>
-								<span className="font-semibold">{data.init.host}</span>
-							</div>
-						) : (
-							<div className="opacity-75">Fetching content</div>
-						)}
-					</ScheduledLoaderMessage>
-				)}
-				{isQueryLoading && (
-					<ScheduledLoaderMessage>Analyzing content</ScheduledLoaderMessage>
-				)}
-				{isPapersLoading && (
-					<ScheduledLoaderMessage>
-						Looking up relevant research
-					</ScheduledLoaderMessage>
-				)}
-				{isSummariseLoading && (
-					<ScheduledLoaderMessage
-						fallback={
-							<div className="flex gap-3 items-center">
-								<div className="w-8 h-8 rounded-full bg-black flex items-center justify-center animate-bounce">
-									<Image className="w-4 h-4" alt="Frame" src={logo} />
+		<div className="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-50">
+			<div className="w-full max-w-lg mx-4 p-8 bg-white rounded-lg shadow-lg">
+				<div className="flex flex-col space-y-4">
+					{isScraperLoading && (
+						<ScheduledLoaderMessage>
+							{data?.init?.host ? (
+								<div className="flex gap-1">
+									<span className="text-muted-foreground">
+										Fetching content from
+									</span>
+									<span className="font-semibold">{data.init.host}</span>
 								</div>
-								<div>Waving our magic wand</div>
-							</div>
-						}
-					>
-						Creating your page
-					</ScheduledLoaderMessage>
-				)}
+							) : (
+								<div className="text-muted-foreground">Fetching content</div>
+							)}
+						</ScheduledLoaderMessage>
+					)}
+					{isQueryLoading && (
+						<ScheduledLoaderMessage>Analyzing content</ScheduledLoaderMessage>
+					)}
+					{isPapersLoading && (
+						<ScheduledLoaderMessage>
+							Looking up relevant research
+						</ScheduledLoaderMessage>
+					)}
+					{isSummariseLoading && (
+						<ScheduledLoaderMessage
+							fallback={
+								<div className="flex gap-3 items-center">
+									<div className="w-8 h-8 rounded-full bg-black flex items-center justify-center animate-bounce">
+										<Image className="w-4 h-4" alt="Frame" src={logo} />
+									</div>
+									<div>Waving our magic wand</div>
+								</div>
+							}
+						>
+							Creating your page
+						</ScheduledLoaderMessage>
+					)}
+				</div>
 			</div>
 		</div>
 	);
