@@ -1,9 +1,11 @@
 import { inngest } from "@/inngest/client";
+import { NewsFlushTask } from "@/inngest/news-flush.task";
 import {
 	streamCacheUpdate,
 	streamScheduledCacheUpdate,
 } from "@/inngest/populator.task";
 import {
+	newsFlushScheduler,
 	spacesStreamCacheUpdateScheduler,
 	streamCacheUpdateScheduler,
 } from "@/inngest/scheduler.task";
@@ -17,5 +19,7 @@ export const { GET, POST, PUT } = serve({
 		spacesStreamCacheUpdateScheduler,
 		streamScheduledCacheUpdate.worker,
 		streamCacheUpdate.worker,
+		NewsFlushTask.worker,
+		newsFlushScheduler,
 	],
 });
