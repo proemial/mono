@@ -120,7 +120,7 @@ function QA({ data, url }: { data: NewsAnnotatorSteps; url: string }) {
 								{users[randomUser]?.name ?? "Anonymous"}
 							</div>
 							<div className="px-1.5 py-0.5 ml-0.5 mt-[-2px] relative bg-white rounded-full border border-gray-300">
-								<div className="relative w-fit font-semibold text-gray-500 text-xs leading-3 whitespace-nowrap">
+								<div className="relative w-fit font-semibold text-gray-500 text-xs leading-3 whitespace-nowrap overflow-hidden text-ellipsis">
 									Anonymous user
 								</div>
 							</div>

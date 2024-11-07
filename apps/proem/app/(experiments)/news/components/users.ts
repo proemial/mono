@@ -22,7 +22,6 @@ export const users = [
 	{ name: "Cool Crocodile", avatar: "🐊", backgroundColor: "#FFD700" },
 	{ name: "Wise Wolf", avatar: "🐺", backgroundColor: "#87CEEB" },
 	{ name: "Peppy Penguin", avatar: "🐧", backgroundColor: "#FFFFE0" },
-	{ name: "Rambunctious Raccoon", avatar: "🦝", backgroundColor: "#ADD8E6" },
 	{ name: "Playful Panda", avatar: "🐼", backgroundColor: "#ADD8E6" },
 	{ name: "Tiny Turtle", avatar: "🐢", backgroundColor: "#FF69B4" },
 	{ name: "Swift Sparrow", avatar: "🐦", backgroundColor: "#8B4513" },

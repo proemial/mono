@@ -22,7 +22,7 @@ export function NewsFeed({
 				{/*  @brian: Show after 6 cards */}
 				{/*  @brian: Don't show if already signed up */}
 				{/* <SubscribeForm /> */}
-				<div className="columns-[300px] gap-3 grid-flow-row">
+				<div className="columns-[320px] gap-3 w-full">
 					{sorted.map((item, i) => (
 						<Trackable
 							key={i}
@@ -30,7 +30,7 @@ export function NewsFeed({
 							properties={{ sourceUrl: item.init?.url as string }}
 						>
 							<div
-								className="active:opacity-80 block mb-3 break-inside-avoid cursor-pointer"
+								className="active:opacity-80 inline-block w-full mb-3 break-inside-avoid-page cursor-pointer"
 								data-url={item.init?.url}
 								onClick={(e) => {
 									const target = e.currentTarget;

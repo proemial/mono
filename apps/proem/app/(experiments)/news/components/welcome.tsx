@@ -65,7 +65,7 @@ export function Welcome() {
 							}}
 							className="flex flex-col gap-4"
 						>
-							<div className="flex w-80 lg:w-[500px] items-center gap-2.5 p-4 rounded-full border border-white/80">
+							<div className="flex w-80 lg:w-[500px] items-center gap-2.5 p-4 rounded-full border border-white/80 bg-black/50">
 								<input
 									type="url"
 									name="url"
