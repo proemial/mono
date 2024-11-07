@@ -46,7 +46,7 @@ export const RedisNews = {
 		try {
 			keys = (
 				await UpStash.news().scan(0, {
-					count: 200,
+					count: 400,
 				})
 			)[1];
 		} finally {
@@ -80,7 +80,8 @@ export const RedisNews = {
 					return bTime - aTime;
 				});
 
-			return sorted;
+			// Shuffle array and take first 36 items
+			return sorted.slice(0, 36).sort(() => Math.random() - 0.5);
 		} finally {
 			Time.log(begin, "[redis][news][mget]");
 		}
