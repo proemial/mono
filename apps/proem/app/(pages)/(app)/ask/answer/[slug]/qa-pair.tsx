@@ -11,13 +11,13 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { ChatActionBarAsk } from "@/components/chat-action-bar-ask";
-import { ChatArticle } from "@/components/chat-article";
-import { ChatQuestion } from "@/components/chat-question";
+import { ChatActionBarAsk } from "../../components/chat-action-bar-ask";
+import { ChatArticle } from "../../components/chat-article";
+import { ChatQuestion } from "../../components/chat-question";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { Paper } from "@/components/icons/Paper";
-import { PaperCardAsk } from "@/components/paper-card-ask";
+import { PaperCardAsk } from "../../components/paper-card-ask";
 import { Header4, Icons, cn } from "@proemial/shadcn-ui";
 import { Message } from "ai/react";
 import Link from "next/link";
@@ -127,8 +127,6 @@ export const QaPair = ({
 							type="Answer"
 							text={answer.content}
 							trackingKeys={analyticsKeys.ask}
-							paperPosts={[]}
-							readers={[]}
 						/>
 						{savedAnswer?.shareId && (
 							<ChatActionBarAsk

@@ -6,13 +6,13 @@ import { NewsFeed } from "./components/scaffold";
 
 const title = "proem - trustworthy perspectives";
 const description =
-	"Proem takes any piece of online content an`d enriches it with scientific insights from the latest research papers.";
+	"Proem takes any piece of online content and enriches it with scientific insights from the latest research papers.";
 
 export const metadata: Metadata = {
 	title,
 	description,
 	openGraph: {
-		images: ["/news/images/open-graph.png"],
+		images: ["/news/images/open-graph.jpg"],
 		title,
 		description,
 		siteName: title,

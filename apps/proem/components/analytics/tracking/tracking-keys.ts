@@ -242,6 +242,7 @@ export const analyticsKeys = {
 				},
 			},
 			clickGenerate: "experiments:news:click_generate",
+			clickSubscribe: "experiments:news:click_subscribe",
 		},
 	},
 } as const;

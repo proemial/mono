@@ -48,7 +48,7 @@ export const answerEngine = async ({
 		data: { slug },
 	});
 
-	const tools = getTools(data, transactionId);
+	const tools = getTools(data, transactionId, true);
 	const agent = await buildAgent(
 		{
 			isFollowUpQuestion,

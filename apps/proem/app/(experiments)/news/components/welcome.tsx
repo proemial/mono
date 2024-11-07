@@ -1,21 +1,25 @@
 "use client";
 import { PlusCircle } from "@untitled-ui/icons-react";
 import { getCookie, setCookie } from "cookies-next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { isBlockedUrl } from "../blocked";
 import { useIsApp } from "@/utils/app";
-import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
+import { Tracker } from "@/components/analytics/tracking/tracker";
+
+const cookieName = "splash";
 
 export function Welcome() {
 	const isApp = useIsApp();
-	const [isOpen, setIsOpen] = useState(
-		typeof document !== "undefined" ? !getCookie("splash") : false,
-	);
+	const [isOpen, setIsOpen] = useState(false);
 	const [url, setUrl] = useState("");
 
+	useEffect(() => {
+		setIsOpen(!getCookie(cookieName));
+	}, []);
+
 	const dismiss = () => {
-		setCookie("splash", "false", { maxAge: 31536000 });
+		setCookie(cookieName, "false", { maxAge: 31536000 });
 		setIsOpen(false);
 	};
 
@@ -43,13 +47,14 @@ export function Welcome() {
 						<form
 							onSubmit={(e) => {
 								console.log("submit");
+								Tracker.track(analyticsKeys.experiments.news.clickGenerate);
 
 								e.preventDefault();
 								const form = e.target as HTMLFormElement;
 								const url = form.url.value;
 								const isBlockedError = isBlockedUrl(url);
 
-								// Check if it's a Facebook URL
+								// Check if it's a blocked URL
 								if (isBlockedError) {
 									const errorDiv = form.querySelector(
 										".error-message",
@@ -76,14 +81,11 @@ export function Welcome() {
 									className="font-normal text-white/50 text-sm leading-[14px] bg-transparent border-none outline-none w-full"
 									onChange={(e) => setUrl(e.target.value)} // Add this line
 									value={url} // Add this line
+									required
 								/>
-								<Trackable
-									trackingKey={analyticsKeys.experiments.news.clickGenerate}
-								>
-									<button type="submit" disabled={!url.match(/^https?:\/\/.+/)}>
-										<PlusCircle className="text-[#f6f5e8] hsize-6 block hover:animate-[spin_1s_ease-in-out] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" />
-									</button>
-								</Trackable>
+								<button type="submit" disabled={!url.match(/^https?:\/\/.+/)}>
+									<PlusCircle className="text-[#f6f5e8] hsize-6 block hover:animate-[spin_1s_ease-in-out] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" />
+								</button>
 							</div>
 							{isApp && (
 								<div className="text-center italic text-xs mt-[-12px] text-gray-500">

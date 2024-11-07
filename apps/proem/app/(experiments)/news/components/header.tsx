@@ -1,7 +1,7 @@
 "use client";
 import logo from "./images/logo.svg";
 import Image from "next/image";
-import { ArrowLeft, MagicWand02, PlusCircle } from "@untitled-ui/icons-react";
+import { ArrowLeft, Stars02, PlusCircle } from "@untitled-ui/icons-react";
 import { useState, useRef, useEffect } from "react";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
@@ -62,7 +62,29 @@ function AnnotateForm({
 	const inputRef = useRef<HTMLInputElement>(null);
 	const isApp = useIsApp();
 
+	const placeholders = [
+		"https://www.nytimes.com/health/covid-variants-symptoms",
+		"https://www.theguardian.com/science/climate-study-findings",
+		"https://www.scientificamerican.com/article/new-alzheimers-treatment",
+		"https://www.nature.com/articles/covid-variants-symptoms",
+		"https://www.sciencedaily.com/study-about-electric-cars",
+	];
+	const [currentPlaceholder, setCurrentPlaceholder] = useState(
+		placeholders[Math.floor(Math.random() * placeholders.length)],
+	);
+
 	useEffect(() => {
+		let interval: NodeJS.Timeout;
+
+		if (!inputRef.current?.matches(":focus")) {
+			interval = setInterval(() => {
+				setCurrentPlaceholder((current) => {
+					const currentIndex = placeholders.indexOf(current);
+					return placeholders[(currentIndex + 1) % placeholders.length];
+				});
+			}, 5000);
+		}
+
 		if (modalOpen) {
 			// Small delay to ensure the modal is rendered
 			setTimeout(() => {
@@ -78,14 +100,21 @@ function AnnotateForm({
 
 	return (
 		<div
-			className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50"
+			className="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-50"
 			onClick={() => setModalOpen(false)}
 		>
 			<div
-				className="bg-white p-6 rounded-lg shadow-lg"
+				className="w-full max-w-lg mx-4 p-8 bg-white rounded-lg shadow-lg flex flex-col gap-0"
 				onClick={(e) => e.stopPropagation()}
 			>
-				Enter the URL of the content you want to annotate.
+				<h2 className="text-xl font-bold tracking-tight">
+					Annotate with science
+				</h2>
+				<p className="text-muted-foreground">
+					Paste link to an article to ask questions and gain insights from
+					science.
+				</p>
+
 				<form
 					onSubmit={(e) => {
 						e.preventDefault();
@@ -93,7 +122,7 @@ function AnnotateForm({
 						const url = form.url.value;
 						const isBlockedError = isBlockedUrl(url);
 
-						// Check if it's a Facebook URL
+						// Check if it's a blocked URL
 						if (isBlockedError) {
 							const errorDiv = form.querySelector(
 								".error-message",
@@ -108,26 +137,24 @@ function AnnotateForm({
 						dismiss();
 						window.location.href = `/news/${encodeURIComponent(url)}`;
 					}}
-					className="flex flex-col gap-4"
+					className="flex flex-col gap-2 mt-4"
 				>
 					<input
 						ref={inputRef}
 						type="url"
 						name="url"
-						placeholder="URL"
-						className="border rounded p-2 text-black disabled:bg-gray-100 disabled:cursor-not-allowed"
-						autoFocus
+						placeholder={currentPlaceholder}
+						className="border border-gray-400 px-2 rounded-xl p-2 text-black disabled:bg-gray-100 disabled:cursor-not-allowed focus:outline-[#7DFA85]"
+						required
+						onFocus={() => setCurrentPlaceholder(currentPlaceholder)}
+						autofocus
 					/>
-					{isApp && (
-						<div className="italic text-sm mt-[-16px] text-gray-500">
-							Pro tip: you can share with proem from your browser.
-						</div>
-					)}
+
 					<div className="text-red-500 text-sm error-message" />
 					<div className="flex gap-2 justify-end">
 						<button
 							type="button"
-							onClick={dismiss}
+							onClick={() => setModalOpen(false)}
 							className="px-4 py-2 rounded bg-gray-200 text-black hover:bg-gray-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
 						>
 							Cancel
@@ -137,16 +164,28 @@ function AnnotateForm({
 						>
 							<button
 								type="submit"
-								className="px-4 py-2 rounded bg-green-700 text-white hover:bg-green-800 disabled:bg-green-600 disabled:cursor-not-allowed"
+								className="px-4 py-2 flex gap-2 rounded-full text-center w-full bg-[#0A161C] text-[#7DFA85] hover:bg-[#061015] disabled:bg-green-600 disabled:cursor-not-allowed"
 							>
-								<div className="flex gap-2 items-center">
-									<MagicWand02 className="size-4" />
-									Generate
+								<div className="flex gap-2 p-1 items-center justify-center w-full">
+									<Image className="w-4 h-4" alt="Frame" src={logo} />
+									Annotate
 								</div>
 							</button>
 						</Trackable>
 					</div>
 				</form>
+				<div className="text-sm italic text-muted-foreground mt-4">
+					{isApp ? (
+						<>Pro tip: Open articles in proem from any app or browser.</>
+					) : (
+						<>
+							Pro tip: iOS app and Chrome extension is now beta.{" "}
+							<a href="https://proem.app/beta" className="underline">
+								Try now
+							</a>
+						</>
+					)}
+				</div>
 			</div>
 		</div>
 	);
