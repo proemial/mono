@@ -50,54 +50,51 @@ export function BotQa({
 	};
 
 	return (
-		<div
-			className="flex-col items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative"
-			id={id}
-		>
-			<div className="flex items-start gap-1.5 px-3 py-0 relative self-stretch w-full flex-[0_0_auto]">
+		<div className="flex flex-col w-full gap-2" id={id}>
+			<div className="flex items-start gap-1.5 px-3 w-full">
 				{user?.avatar ? (
-					<div className="relative w-10 h-10 object-cover rounded-full text-2xl flex items-center justify-center bg-[#000000]">
+					<div className="w-10 h-10 rounded-full text-2xl flex items-center justify-center bg-black">
 						<span>{user?.avatar ?? "*"}</span>
 					</div>
 				) : (
 					<Avatar seed="6" />
 				)}
 
-				<div className="flex flex-col items-start gap-1 relative flex-1 grow">
-					<div className="flex flex-col items-center justify-center gap-1 px-3 py-2 relative self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] rounded-xl">
-						<div className="flex items-start gap-1 relative self-stretch w-full flex-[0_0_auto]">
-							<div className="relative w-fit mt-[-1.00px] font-bold text-[#08080a] text-sm tracking-[0] leading-[14px] whitespace-nowrap">
+				<div className="flex flex-col gap-1 flex-1">
+					<div className="flex flex-col gap-1 p-3 w-full bg-[#e9eaee] rounded-xl">
+						<div className="flex items-start gap-1 w-full">
+							<div className="font-bold text-[#08080a] text-sm leading-[14px]">
 								{user?.name ?? "You"}
 							</div>
-							<div className="px-1.5 py-0.5 ml-0.5 mt-[-2px] relative bg-white rounded-full border border-gray-300">
-								<div className="relative w-fit font-semibold text-gray-500 text-xs leading-3 whitespace-nowrap">
+							<div className="px-1.5 py-0.5 ml-0.5 -mt-0.5 bg-white rounded-full border border-gray-300">
+								<div className="font-semibold text-gray-500 text-xs leading-3">
 									Anonymous user
 								</div>
 							</div>
 						</div>
 
-						<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
+						<p className="font-medium text-[#08080a] text-[15px] leading-5">
 							{qa.at(0)}
 						</p>
 					</div>
 				</div>
 			</div>
 
-			<div className="flex-col items-start gap-2 pl-[58px] pr-3 py-0 self-stretch w-full flex-[0_0_auto] flex relative">
-				<div className="items-start gap-2 flex relative self-stretch w-full flex-[0_0_auto]">
-					<div className="mt-[4.00px] relative flex-[0_0_auto] w-6 h-6 rounded-full bg-black flex items-center justify-center">
+			<div className="flex flex-col gap-2 pl-[58px] pr-3 w-full">
+				<div className="flex gap-2 w-full">
+					<div className="mt-1 w-6 h-6 rounded-full bg-black flex items-center justify-center">
 						<Image className="w-3 h-3" alt="Frame" src={logo} />
 					</div>
 
-					<div className="flex flex-col items-start gap-1 relative flex-1 grow">
-						<div className="flex-col gap-1 px-3 py-2 self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] flex items-center justify-center relative rounded-xl">
-							<div className="items-start gap-1 self-stretch w-full flex-[0_0_auto] flex relative">
-								<div className="relative w-fit mt-[-1.00px] font-bold text-[#08080a] text-sm tracking-[0] leading-[14px] whitespace-nowrap">
+					<div className="flex flex-col gap-1 flex-1">
+						<div className="flex flex-col gap-1 p-3 w-full bg-[#e9eaee] rounded-xl">
+							<div className="flex items-start gap-1 w-full">
+								<div className="font-bold text-[#08080a] text-sm leading-[14px]">
 									proem.ai
 								</div>
 
-								<div className="px-1.5 py-0.5 ml-0.5 mt-[-2px] relative bg-black rounded-full  ">
-									<div className="relative w-fit font-semibold text-[#6aba6f] text-xs leading-3 whitespace-nowrap">
+								<div className="px-1.5 py-0.5 ml-0.5 -mt-0.5 bg-black rounded-full">
+									<div className="font-semibold text-[#6aba6f] text-xs leading-3">
 										Science bot
 									</div>
 								</div>
@@ -105,7 +102,7 @@ export function BotQa({
 
 							{qa.at(1) ? (
 								<>
-									<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
+									<p className="font-medium text-[#08080a] text-[15px] leading-5">
 										{formatAnswerText(qa[1])}
 									</p>
 									<Trackable
@@ -135,8 +132,8 @@ export function BotQa({
 				</div>
 			</div>
 
-			<div className="flex items-center justify-end gap-4 pr-6 py-0 relative self-stretch w-full flex-[0_0_auto]">
-				<p className="relative w-fit mt-[-1.00px] font-normal text-[#65686d] text-[13px] tracking-[0] leading-[normal]">
+			<div className="flex items-center justify-end gap-4 pr-6 w-full">
+				<p className="font-normal text-[#65686d] text-[13px]">
 					<span className="font-bold">Like</span>
 
 					{/* {user && (
@@ -146,9 +143,7 @@ export function BotQa({
 					)} */}
 				</p>
 
-				<div className="relative w-fit mt-[-1.00px] font-bold text-[#65686d] text-[13px] tracking-[0] leading-[normal]">
-					Share
-				</div>
+				<div className="font-bold text-[#65686d] text-[13px]">Share</div>
 			</div>
 		</div>
 	);
