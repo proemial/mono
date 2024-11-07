@@ -16,16 +16,6 @@ export function Header() {
 	const isApp = useIsApp();
 	const isOpen = typeof document !== "undefined" ? !getCookie("splash") : false;
 
-	useEffect(() => {
-		if (!isApp && isOpen) {
-			setTimeout(() => {
-				if (window.innerWidth > 1024) {
-					setModalOpen(true);
-				}
-			}, 500);
-		}
-	}, [isApp, isOpen]);
-
 	return (
 		<div
 			className={`flex items-center gap-2 p-4 self-stretch w-full flex-[0_0_auto] bg-black sticky top-0 z-50 ${isApp ? "pt-8" : ""}`}

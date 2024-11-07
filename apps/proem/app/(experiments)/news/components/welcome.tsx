@@ -27,7 +27,7 @@ export function Welcome() {
 		<>
 			{isOpen && (
 				<div
-					className="hidden max-[1024px]:flex flex-col gap-8 items-center justify-center w-full px-3 mb-3 bg-gradient-to-b from-[#7DFA86] from-[-25%] via-[#3732916b] via-[70%] to-[#24215f6b] to-[100%] rounded-2xl"
+					className="flex flex-col gap-8 items-center justify-center w-full px-3 mb-3 bg-gradient-to-b from-[#7DFA86] from-[-25%] via-[#3732916b] via-[70%] to-[#24215f6b] to-[100%] rounded-2xl"
 					style={{
 						animation: isOpen ? "expand 0.6s ease-in-out forwards" : "none",
 					}}
