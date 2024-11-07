@@ -22,10 +22,10 @@ export function Welcome() {
 	return (
 		<>
 			{isOpen && (
-				<div 
-					className="flex flex-col gap-8 items-center justify-center w-full px-3 mb-3 bg-gradient-to-b from-[#7DFA86] from-[-25%] via-[#3732916b] via-[70%] to-[#24215f6b] to-[100%] rounded-2xl"
+				<div
+					className="hidden max-[1024px]:flex flex-col gap-8 items-center justify-center w-full px-3 mb-3 bg-gradient-to-b from-[#7DFA86] from-[-25%] via-[#3732916b] via-[70%] to-[#24215f6b] to-[100%] rounded-2xl"
 					style={{
-						animation: isOpen ? 'expand 0.6s ease-in-out forwards' : 'none'
+						animation: isOpen ? "expand 0.6s ease-in-out forwards" : "none",
 					}}
 				>
 					<style jsx>{`
@@ -35,7 +35,8 @@ export function Welcome() {
 						}
 					`}</style>
 					<div className="w-5/6 text-xl font-semibold leading-7 text-center text-white drop-shadow-md">
-						Enrich articles with insights<br/>
+						Enrich articles with insights
+						<br />
 						from the latest research papers.
 					</div>
 					<div className="flex gap-1 justify-center items-center w-4/5">

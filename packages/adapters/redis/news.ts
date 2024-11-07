@@ -45,7 +45,7 @@ export const RedisNews = {
 		let begin = Time.now();
 		try {
 			keys = (
-				await UpStash.newsFeed().scan(0, {
+				await UpStash.news().scan(0, {
 					count: 200,
 				})
 			)[1];
@@ -60,7 +60,27 @@ export const RedisNews = {
 				pipeline.json.get(key);
 			}
 			const results = await pipeline.exec();
-			return results as NewsAnnotatorSteps[];
+
+			const sorted = (results as NewsAnnotatorSteps[])
+				.filter((item) => {
+					const { scrape, summarise } = item;
+					return scrape?.artworkUrl && summarise?.questions?.length;
+				})
+				.map((item) => ({
+					...item,
+					init: {
+						...item.init,
+						createdAt: item.init?.createdAt ?? "2024-01-01 00:00:00",
+					},
+				}))
+				.sort((a, b) => {
+					const aTime = new Date(a.init.createdAt).getTime();
+					const bTime = new Date(b.init.createdAt).getTime();
+
+					return bTime - aTime;
+				});
+
+			return sorted;
 		} finally {
 			Time.log(begin, "[redis][news][mget]");
 		}

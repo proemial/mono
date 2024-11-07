@@ -1,8 +1,7 @@
 import { Redis } from "@proemial/adapters/redis";
 import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news";
-import dayjs from "dayjs";
 import { Metadata } from "next";
-import { revalidateTag, unstable_cache } from "next/cache";
+// import { revalidateTag, unstable_cache } from "next/cache";
 import { NewsFeed } from "./components/scaffold";
 
 const title = "proem - trustworthy perspectives";
@@ -25,7 +24,7 @@ export default async function NewsPage({
 }: {
 	searchParams: { error?: string; debug?: boolean; flush?: boolean };
 }) {
-	const sorted = await getItems(searchParams.flush);
+	const sorted = await await Redis.news.list(); //getItems(searchParams.flush);
 	const serialized = JSON.parse(JSON.stringify(sorted)) as NewsAnnotatorSteps[];
 
 	return (
@@ -37,58 +36,46 @@ export default async function NewsPage({
 	);
 }
 
-const cacheKey = "news-feed";
+// const cacheKey = "news-feed";
+// const cacheDisabled = true;
+// async function getItems(flush?: boolean) {
+// 	if (flush || cacheDisabled || process.env.NODE_ENV === "development") {
+// 		console.log("Revalidating news-list");
+// 		revalidateTag(cacheKey);
+// 	}
 
-const cacheDisabled = true;
-async function getItems(flush?: boolean): Promise<NewsAnnotatorSteps[]> {
-	if (flush || cacheDisabled || process.env.NODE_ENV === "development") {
-		console.log("Revalidating news-list");
-		revalidateTag(cacheKey);
-	}
+// 	const items = await unstable_cache(
+// 		async () => {
+// 			console.log("Fetching items");
+// 			const unsorted = (await Redis.news.list())
+// 				.map((item) => {
+// 					if (!item?.init) {
+// 						console.error("No init", item);
 
-	const items = await unstable_cache(
-		async () => {
-			console.log("Fetching items");
-			const unsorted = (await Redis.news.list())
-				.map((item) => {
-					if (!item?.init) {
-						console.error("No init", item);
+// 						return undefined;
+// 					}
+// 					return {
+// 						init: item.init,
+// 						scrape: {
+// 							title: item.scrape?.title,
+// 							date: item.scrape?.date,
+// 							artworkUrl: item.scrape?.artworkUrl,
+// 						},
+// 						summarise: {
+// 							questions: item.summarise?.questions,
+// 						},
+// 					};
+// 				})
+// 				.filter((item): item is NonNullable<typeof item> => item !== undefined);
 
-						return undefined;
-					}
-					return {
-						init: item.init,
-						scrape: {
-							title: item.scrape?.title,
-							date: item.scrape?.date,
-							artworkUrl: item.scrape?.artworkUrl,
-						},
-						summarise: {
-							questions: item.summarise?.questions,
-						},
-					};
-				})
-				.filter((item): item is NonNullable<typeof item> => item !== undefined);
+// 			return unsorted;
+// 		},
+// 		[cacheKey],
+// 		{
+// 			revalidate: 30, // 30 seconds
+// 			tags: [cacheKey],
+// 		},
+// 	)();
 
-			return unsorted
-				.map((item) => ({
-					...item,
-					date: dayjs(item.scrape?.date) ?? dayjs(),
-				}))
-				.sort((a, b) => b.date.diff(a.date))
-				.sort(
-					// -2, -1, "", "", 1, 2
-					(a, b) =>
-						(a.init?.sort ? a.init?.sort * 100 : 0) -
-						(b.init?.sort ? b.init?.sort * 100 : 0),
-				);
-		},
-		[cacheKey],
-		{
-			revalidate: 300, // 5 minutes
-			tags: [cacheKey],
-		},
-	)();
-
-	return items;
-}
+// 	return items;
+// }

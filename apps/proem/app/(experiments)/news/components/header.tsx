@@ -8,11 +8,23 @@ import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { useIsApp } from "@/utils/app";
 import { isBlockedUrl } from "../blocked";
 import { usePathname } from "next/navigation";
+import { getCookie, setCookie } from "cookies-next";
 
 export function Header() {
 	const pathname = usePathname();
 	const [modalOpen, setModalOpen] = useState(false);
 	const isApp = useIsApp();
+	const isOpen = typeof document !== "undefined" ? !getCookie("splash") : false;
+
+	useEffect(() => {
+		if (!isApp && isOpen) {
+			setTimeout(() => {
+				if (window.innerWidth > 1024) {
+					setModalOpen(true);
+				}
+			}, 500);
+		}
+	}, [isApp, isOpen]);
 
 	return (
 		<div
@@ -59,6 +71,11 @@ function AnnotateForm({
 		}
 	}, [modalOpen]);
 
+	const dismiss = () => {
+		setCookie("splash", "false", { maxAge: 31536000 });
+		setModalOpen(false);
+	};
+
 	return (
 		<div
 			className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50"
@@ -88,6 +105,7 @@ function AnnotateForm({
 						form.querySelectorAll("button, input").forEach((el) => {
 							(el as HTMLElement).setAttribute("disabled", "true");
 						});
+						dismiss();
 						window.location.href = `/news/${encodeURIComponent(url)}`;
 					}}
 					className="flex flex-col gap-4"
@@ -98,6 +116,7 @@ function AnnotateForm({
 						name="url"
 						placeholder="URL"
 						className="border rounded p-2 text-black disabled:bg-gray-100 disabled:cursor-not-allowed"
+						autoFocus
 					/>
 					{isApp && (
 						<div className="italic text-sm mt-[-16px] text-gray-500">
@@ -108,21 +127,23 @@ function AnnotateForm({
 					<div className="flex gap-2 justify-end">
 						<button
 							type="button"
-							onClick={() => setModalOpen(false)}
+							onClick={dismiss}
 							className="px-4 py-2 rounded bg-gray-200 text-black hover:bg-gray-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
 						>
 							Cancel
 						</button>
-						<Trackable trackingKey={analyticsKeys.experiments.news.clickGenerate}>
-						<button
-							type="submit"
-							className="px-4 py-2 rounded bg-green-700 text-white hover:bg-green-800 disabled:bg-green-600 disabled:cursor-not-allowed"
+						<Trackable
+							trackingKey={analyticsKeys.experiments.news.clickGenerate}
 						>
-							<div className="flex gap-2 items-center">
-								<MagicWand02 className="size-4" />
-								Generate
-							</div>
-						</button>
+							<button
+								type="submit"
+								className="px-4 py-2 rounded bg-green-700 text-white hover:bg-green-800 disabled:bg-green-600 disabled:cursor-not-allowed"
+							>
+								<div className="flex gap-2 items-center">
+									<MagicWand02 className="size-4" />
+									Generate
+								</div>
+							</button>
 						</Trackable>
 					</div>
 				</form>

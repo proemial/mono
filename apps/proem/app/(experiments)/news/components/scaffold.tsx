@@ -18,10 +18,6 @@ export function NewsFeed({
 				{error && <ErrorModal error={error} />}
 				<Header />
 				<Welcome />
-				{/*  @brian: Connect to our email list provider */}
-				{/*  @brian: Show after 6 cards */}
-				{/*  @brian: Don't show if already signed up */}
-				{/* <SubscribeForm /> */}
 				<div className="columns-[320px] gap-3 w-full">
 					{sorted.map((item, i) => (
 						<Trackable
@@ -39,7 +35,7 @@ export function NewsFeed({
 									const iframe = document.querySelector(
 										"[data-iframe]",
 									) as HTMLIFrameElement;
-									if (window.innerWidth<1024){
+									if (window.innerWidth < 1024) {
 										if (overlay) overlay.classList.add("hidden");
 										window.location.href = url;
 									} else if (overlay && iframe && url) {

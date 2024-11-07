@@ -8,7 +8,6 @@ import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news";
 import dayjs from "dayjs";
 import Image from "next/image";
 import React from "react";
-import { ActionBar } from "./components/actionbar";
 import logo from "./components/images/logo.svg";
 import { users } from "./components/users";
 
@@ -40,25 +39,17 @@ export function NewsCard({
 				</Trackable>
 				<div className="inline-flex pt-3 pb-3 mt-[-4.00px] leading-[normal] font-semibold text-xl flex-[0_0_auto] drop-shadow-md">
 					{debug &&
-						`[${data?.init?.sort ?? ""}][${
-							data?.scrape?.date
-								? dayjs(data?.scrape?.date).format("DD.MM.YYYY HH:mm")
+						`[${
+							data?.scrape?.date ?? data.init?.createdAt
+								? dayjs(data?.scrape?.date ?? data.init?.createdAt).format(
+										"DD.MM.YYYY HH:mm",
+									)
 								: ""
 						}] `}
 					{data?.scrape?.title}
 				</div>
 
 				<QA data={data} url={url} />
-
-				{/* <ActionBar
-					url={url}
-					textColor="white"
-					background={background}
-					foreground={color}
-					fromFeed
-					date={data?.scrape?.date}
-				/> */}
-
 			</div>
 		</div>
 	);
@@ -169,10 +160,9 @@ function QA({ data, url }: { data: NewsAnnotatorSteps; url: string }) {
 				className="ppGradientOverlay absolute top-[0] left-[0] w-full h-full"
 				style={{
 					background: `linear-gradient(to bottom, transparent, ${background})`,
-					color
+					color,
 				}}
-			>
-			</div>
+			></div>
 		</div>
 	);
 }
