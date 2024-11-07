@@ -1,7 +1,7 @@
 "use client";
 import logo from "./images/logo.svg";
 import Image from "next/image";
-import { ArrowLeft, PlusCircle } from "@untitled-ui/icons-react";
+import { XClose, PlusCircle } from "@untitled-ui/icons-react";
 import { useState, useRef, useEffect } from "react";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
@@ -94,12 +94,22 @@ function AnnotateForm({
 			onClick={() => setModalOpen(false)}
 		>
 			<div
-				className="w-full max-w-lg mx-4 p-8 bg-white rounded-lg shadow-lg flex flex-col gap-0"
+				className="w-full max-w-2xl mx-4 p-8 bg-white rounded-lg shadow-lg flex flex-col gap-0"
 				onClick={(e) => e.stopPropagation()}
 			>
-				<h2 className="text-xl font-bold tracking-tight">
-					Annotate with science
-				</h2>
+				<div className="flex justify-between ">
+					<h2 className="text-xl font-bold tracking-tight">
+						Annotate with science
+					</h2>
+					<button
+						className="mt-[-20px]"
+						type="button"
+						onClick={() => dismiss()}
+					>
+						<XClose className="size-6" />
+					</button>
+				</div>
+
 				<p className="text-muted-foreground">
 					Paste link to an article to ask questions and gain insights from
 					science.
@@ -134,22 +144,14 @@ function AnnotateForm({
 						type="url"
 						name="url"
 						placeholder={currentPlaceholder}
-						className="border border-gray-400 px-2 rounded-xl p-2 text-black disabled:bg-gray-100 disabled:cursor-not-allowed focus:outline-[#7DFA85]"
+						className="border border-gray-400 rounded-full p-3 bg-[#7DFA85]/10 placeholder:text-[#687269] text-black disabled:bg-gray-100 disabled:cursor-not-allowed focus:outline-[#7DFA85]"
 						required
 						onFocus={() => setCurrentPlaceholder(currentPlaceholder)}
 						// @ts-ignore
 						autofocus
 					/>
 
-					<div className="text-red-500 text-sm error-message" />
-					<div className="flex gap-2 justify-end">
-						<button
-							type="button"
-							onClick={() => dismiss()}
-							className="px-4 py-2 rounded bg-gray-200 text-black hover:bg-gray-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
-						>
-							Cancel
-						</button>
+					<div className="flex justify-end">
 						<Trackable
 							trackingKey={analyticsKeys.experiments.news.clickGenerate}
 						>
@@ -164,6 +166,7 @@ function AnnotateForm({
 							</button>
 						</Trackable>
 					</div>
+					<div className="text-red-500 text-sm error-message" />
 				</form>
 				<div className="text-sm italic text-muted-foreground mt-4">
 					{isApp ? (
@@ -172,8 +175,9 @@ function AnnotateForm({
 						<>
 							Pro tip: iOS app and Chrome extension is now beta.{" "}
 							<a href="https://proem.app/beta" className="underline">
-								Try now
-							</a>
+								Write to Michael
+							</a>{" "}
+							if you want to become a beta tester.
 						</>
 					)}
 				</div>
@@ -199,7 +203,7 @@ function BackButton() {
 				}}
 				className="text-[#f6f5e8] hover:text-[#d4d3c8]"
 			>
-				<ArrowLeft className="size-6" />
+				<x-close className="size-6" />
 			</button>
 		</Trackable>
 	);
