@@ -7,20 +7,30 @@ import {
 import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news";
 import dayjs from "dayjs";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import logo from "./components/images/logo.svg";
 import { users } from "./components/users";
+
+function doStuff(cardRef: React.RefObject<HTMLDivElement>) {
+	// cardRef.current?.classList.add("ppItemHeader--hover");
+}
 
 export function NewsCard({
 	data,
 	url,
 	debug,
 }: { data: NewsAnnotatorSteps; url: string; debug?: boolean }) {
+	const cardRef = useRef<HTMLDivElement>(null);
 	const background = backgroundColor(data.init?.background);
 	const color = foregroundColor(data.init?.foreground);
 
 	return (
-		<div className="ppItemHeader inline-flex relative">
+		<div
+			ref={cardRef}
+			className="ppItemHeader inline-flex relative"
+			onMouseEnter={() => doStuff(cardRef)}
+			onMouseLeave={() => doStuff(cardRef)}
+		>
 			<div
 				className="rounded-[20px] px-3 pt-3 overflow-hidden"
 				style={{ background, color }}
