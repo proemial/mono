@@ -79,7 +79,7 @@ function AnnotateForm({
 		if (!inputRef.current?.matches(":focus")) {
 			interval = setInterval(() => {
 				setCurrentPlaceholder((current) => {
-					const currentIndex = placeholders.indexOf(current);
+					const currentIndex = placeholders.indexOf(current ?? "");
 					return placeholders[(currentIndex + 1) % placeholders.length];
 				});
 			}, 5000);
@@ -147,6 +147,7 @@ function AnnotateForm({
 						className="border border-gray-400 px-2 rounded-xl p-2 text-black disabled:bg-gray-100 disabled:cursor-not-allowed focus:outline-[#7DFA85]"
 						required
 						onFocus={() => setCurrentPlaceholder(currentPlaceholder)}
+						// @ts-ignore
 						autofocus
 					/>
 
