@@ -154,7 +154,7 @@ function AnnotateForm({
 					<div className="flex gap-2 justify-end">
 						<button
 							type="button"
-							onClick={() => setModalOpen(false)}
+							onClick={() => dismiss()}
 							className="px-4 py-2 rounded bg-gray-200 text-black hover:bg-gray-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
 						>
 							Cancel
