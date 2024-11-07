@@ -1,7 +1,7 @@
-import { ChatInput } from "@/components/chat-input";
+import { ChatInput } from "./components/chat-input";
 import { ProemLogo } from "@/components/icons/brand/logo";
-import { MoodSelector } from "@/components/mood-selector";
-import { Suggestions } from "@/components/suggestions";
+import { MoodSelector } from "./components/mood-selector";
+import { Suggestions } from "./components/suggestions";
 import { Metadata } from "next";
 import { getThreeRandomStarters } from "./starters";
 
