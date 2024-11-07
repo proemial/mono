@@ -1,7 +1,7 @@
 "use client";
 import logo from "./images/logo.svg";
 import Image from "next/image";
-import { ArrowLeft, Stars02, PlusCircle } from "@untitled-ui/icons-react";
+import { ArrowLeft, PlusCircle } from "@untitled-ui/icons-react";
 import { useState, useRef, useEffect } from "react";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";

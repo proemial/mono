@@ -25,9 +25,9 @@ export async function getColors(artworkUrl?: string): Promise<Colors> {
 				},
 			);
 			const json = (await colorResult.json()) as ColorResponse;
-			const color = json.responses
-				.at(0)
-				?.imagePropertiesAnnotation.dominantColors.colors.at(0)?.color;
+			const color = getNonBlackish(
+				json.responses.at(0)?.imagePropertiesAnnotation?.dominantColors?.colors,
+			);
 			if (color) {
 				const background = `#${color.red.toString(16).padStart(2, "0")}${color.green.toString(16).padStart(2, "0")}${color.blue.toString(16).padStart(2, "0")}`;
 				const foreground =
@@ -43,6 +43,37 @@ export async function getColors(artworkUrl?: string): Promise<Colors> {
 	return { background: undefined, foreground: undefined };
 }
 
+function getNonBlackish(colors?: { color: RGB }[]) {
+	if (!colors) {
+		console.log("NO COLORS FOUND");
+		return randomColor();
+	}
+
+	for (const color of colors) {
+		// Check if color is not too dark/black (using brightness threshold)
+		if (color.color.red + color.color.green + color.color.blue > 100) {
+			return color.color;
+		}
+	}
+
+	console.log("NO NON-BLACKISH COLORS FOUND");
+	return randomColor();
+}
+
+function randomColor() {
+	// Generate random RGB values ensuring total brightness is above blackish threshold
+	let red: number;
+	let green: number;
+	let blue: number;
+	do {
+		red = Math.floor(Math.random() * 256);
+		green = Math.floor(Math.random() * 256);
+		blue = Math.floor(Math.random() * 256);
+	} while (red + green + blue <= 100);
+
+	return { red, green, blue };
+}
+
 export type Colors = {
 	background?: string;
 	foreground?: string;
@@ -52,8 +83,14 @@ type ColorResponse = {
 	responses: {
 		imagePropertiesAnnotation: {
 			dominantColors: {
-				colors: { color: { red: number; green: number; blue: number } }[];
+				colors: { color: RGB }[];
 			};
 		};
 	}[];
+};
+
+type RGB = {
+	red: number;
+	green: number;
+	blue: number;
 };
