@@ -35,8 +35,13 @@ function parseOutput(factsAndQuestions: string) {
 		.split("<task_2>")[1]
 		?.split("</task_2>")[0];
 
-	if (!rawCommentary || !rawQuestions) {
-		throw new Error("Failed to generate valid facts and questions");
+	if (!rawCommentary) {
+		console.error("factsAndQuestions", factsAndQuestions);
+		throw new Error("Failed to generate valid facts");
+	}
+	if (!rawQuestions) {
+		console.error("factsAndQuestions", factsAndQuestions);
+		throw new Error("Failed to generate valid questions");
 	}
 
 	const commentary = trimNewlines(rawCommentary);

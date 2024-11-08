@@ -17,6 +17,10 @@ export const parseArticle = async (
 	const transcript = text?.replaceAll("\n", " ");
 	const artworkUrl = images.at(0)?.url;
 
+	if (!transcript?.trim().length) {
+		throw new Error("[news][scrape] Failed to parse article", { cause: url });
+	}
+
 	return {
 		transcript,
 		artworkUrl,
