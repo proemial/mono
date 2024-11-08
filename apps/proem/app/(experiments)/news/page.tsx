@@ -1,6 +1,6 @@
 import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news";
 import { Metadata } from "next";
-import { NewsFeed } from "./components/scaffold";
+import { NewsFeed } from "./components/news-feed";
 import { getItems } from "./cached-items";
 
 const title = "proem - trustworthy perspectives";

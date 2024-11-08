@@ -6,7 +6,7 @@ import { useIsApp } from "@/utils/app";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Tracker } from "@/components/analytics/tracking/tracker";
 
-export function Welcome() {
+export function AnnotateForm() {
 	const isApp = useIsApp();
 	const [isOpen, setIsOpen] = useState(false);
 	const [url, setUrl] = useState("");

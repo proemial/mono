@@ -4,7 +4,7 @@ import { Trackable } from "@/components/trackable";
 import { NewsCard } from "../news-card";
 import { ErrorModal } from "./error-modal";
 import { Header } from "./header";
-import { Welcome } from "./welcome";
+import { AnnotateForm } from "./annotate-form";
 import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news";
 
 export function NewsFeed({
@@ -17,7 +17,7 @@ export function NewsFeed({
 			<div className="ppNewsFeed flex relative flex-col items-start self-stretch w-full">
 				{error && <ErrorModal error={error} />}
 				<Header />
-				<Welcome />
+				<AnnotateForm />
 				<div className="columns-[320px] gap-8 w-full lg:px-8">
 					{sorted.map((item, i) => (
 						<Trackable
