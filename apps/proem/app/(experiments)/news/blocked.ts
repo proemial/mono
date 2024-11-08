@@ -11,5 +11,8 @@ export function isBlockedUrl(url: string) {
 	if (url.includes("youtube.com") || url.includes("youtu.be")) {
 		return "We currently do not support YouTube videos 😔";
 	}
+	if (url.includes("google.com")) {
+		return "We currently do not support Google content 😔";
+	}
 	return undefined;
 }
