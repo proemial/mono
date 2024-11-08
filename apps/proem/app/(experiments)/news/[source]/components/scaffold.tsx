@@ -46,7 +46,7 @@ export function Scaffold({
 		isLoading: isQueryLoading,
 		error: queryError,
 	} = useQueryBuilder(url, {
-		preReqs: !!scraperData?.scrape?.transcript,
+		preReqs: !!data?.scrape?.transcript,
 		done: !!data?.query?.value,
 	});
 	useEffect(() => {
@@ -58,7 +58,7 @@ export function Scaffold({
 		isLoading: isPapersLoading,
 		error: papersError,
 	} = usePapers(url, {
-		preReqs: !!queryData?.query?.value,
+		preReqs: !!data?.query?.value,
 		done: !!data?.papers?.value,
 	});
 	useEffect(() => {
@@ -70,7 +70,7 @@ export function Scaffold({
 		isLoading: isSummariseLoading,
 		error: summariseError,
 	} = useSummarisation(url, {
-		preReqs: !!papersData?.papers?.value,
+		preReqs: !!data?.papers?.value,
 		done: !!data?.summarise?.commentary,
 	});
 	useEffect(() => {
