@@ -59,7 +59,7 @@ async function fetchDateWorker(payload: Payload, event?: EventPayload) {
 		const { meta, papers } = await fetchPapers(payload);
 		result.papers = papers.length;
 
-		const embeddings = await generateEmbeddings(
+		const [embeddingsPapers, embeddings] = await generateEmbeddings(
 			papers,
 			space,
 			async (count, elapsed) => {
@@ -82,7 +82,7 @@ async function fetchDateWorker(payload: Payload, event?: EventPayload) {
 		result.embeddings = embeddings.length;
 
 		const upserted = await upsertPapers(
-			papers,
+			embeddingsPapers,
 			embeddings,
 			space,
 			async (count, elapsed) => {

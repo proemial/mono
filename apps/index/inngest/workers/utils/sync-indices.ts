@@ -94,7 +94,7 @@ export const syncIndicesStream = {
 					unmatchedPapers.length,
 					payload.to,
 				);
-				const embeddings = await generateEmbeddings(
+				const [embeddingsPapers, embeddings] = await generateEmbeddings(
 					unmatchedPapers,
 					vectorSpaces[payload.to] as VectorSpace,
 					async (count, elapsed) => {
@@ -116,7 +116,7 @@ export const syncIndicesStream = {
 					payload.to,
 				);
 				const upserted = await Qdrant.upsert(
-					unmatchedPapers,
+					embeddingsPapers,
 					embeddings,
 					vectorSpaces[payload.to] as VectorSpace,
 					async (count, elapsed) => {

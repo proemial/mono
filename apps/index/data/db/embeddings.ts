@@ -10,7 +10,7 @@ export async function generateEmbeddings(
 	papers: QdrantPaper[],
 	vectorSpace: VectorSpace,
 	callback: Callback,
-): Promise<number[][]> {
+): Promise<[QdrantPaper[], number[][]]> {
 	switch (vectorSpace.model) {
 		case "text-embedding-3-small":
 			return generateOpenAIEmbeddings(papers, vectorSpace, callback);
@@ -43,9 +43,9 @@ async function generateOpenAIEmbeddings(
 	papers: QdrantPaper[],
 	vectorSpace: VectorSpace,
 	callback: Callback,
-): Promise<number[][]> {
+): Promise<[QdrantPaper[], number[][]]> {
 	if (!papers.length) {
-		return [];
+		return [papers, []];
 	}
 
 	const begin = Time.now();
@@ -93,7 +93,7 @@ async function generateOpenAIEmbeddings(
 
 		await callback(embeddings.length, Time.elapsed(begin));
 
-		return embeddings;
+		return [papers, embeddings];
 	} finally {
 		Time.log(begin, `generateOpenAIEmbeddings(${papers.length})`);
 	}
@@ -125,9 +125,9 @@ async function generateMistralEmbeddings(
 	papers: QdrantPaper[],
 	vectorSpace: VectorSpace,
 	callback: Callback,
-): Promise<number[][]> {
+): Promise<[QdrantPaper[], number[][]]> {
 	if (!papers.length) {
-		return [];
+		return [papers, []];
 	}
 
 	const begin = Time.now();
@@ -150,7 +150,7 @@ async function generateMistralEmbeddings(
 		}
 		await callback(embeddings.length, Time.elapsed(begin));
 
-		return embeddings;
+		return [papers, embeddings];
 	} finally {
 		Time.log(begin, `generateMistralEmbeddings(${papers.length})`);
 	}
