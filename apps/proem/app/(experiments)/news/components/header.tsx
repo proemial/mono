@@ -174,7 +174,7 @@ function AnnotateForm({
 					) : (
 						<>
 							Pro tip: iOS app and Chrome extension is now beta.{" "}
-							<a href="https://proem.app/beta" className="underline">
+							<a href="mailto:hi@proem.ai" className="underline">
 								Write to Michael
 							</a>{" "}
 							if you want to become a beta tester.
