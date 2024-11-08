@@ -50,18 +50,47 @@ async function generateOpenAIEmbeddings(
 
 	const begin = Time.now();
 	try {
-		const response = await openai.embeddings.create({
-			model: vectorSpace.model,
-			dimensions: vectorSpace.dimensions,
-			input: papers.map((p) =>
-				trimToApproximateTokenLimit(
-					`${p.payload.title} ${p.payload.abstract}`,
-					8192,
-				),
-			),
-		});
+		const input = papers.map((p) => `${p.payload.title} ${p.payload.abstract}`);
+		let embeddings: number[][] | undefined = undefined;
+		let errorCount = 0;
 
-		const embeddings = response.data.map((d) => d.embedding);
+		do {
+			try {
+				const response = await openai.embeddings.create({
+					model: vectorSpace.model,
+					dimensions: vectorSpace.dimensions,
+					input,
+				});
+
+				embeddings = response.data.map((d) => d.embedding);
+			} catch (e) {
+				console.error(e);
+				if (errorCount >= 3) {
+					throw e;
+				}
+
+				let maxSize = 0;
+				let maxSizeIndex = 0;
+				for (let i = 0; i < input.length; i++) {
+					const item = input[i];
+					if (item && item.length > maxSize) {
+						maxSize = item.length;
+						maxSizeIndex = i;
+					}
+				}
+				console.log(
+					`Removing item at index ${maxSizeIndex} with size ${maxSize}`,
+				);
+				console.log(input[maxSizeIndex]);
+				input.splice(maxSizeIndex, 1);
+				errorCount++;
+			}
+		} while (!embeddings);
+
+		if (!embeddings) {
+			throw new Error("Failed to generate embeddings");
+		}
+
 		await callback(embeddings.length, Time.elapsed(begin));
 
 		return embeddings;
@@ -80,7 +109,7 @@ async function generateOpenAiEmbedding(
 			await openai.embeddings.create({
 				model: vectorSpace.model,
 				dimensions: vectorSpace.dimensions,
-				input: text.filter((t) => t?.length),
+				input: text.filter((t) => t?.length).join(" "),
 			})
 		).data.map((d) => d.embedding);
 	} finally {
@@ -145,12 +174,4 @@ async function generateMistralEmbedding(
 	} finally {
 		Time.log(begin, `generateMistralEmbedding(${text.length})`);
 	}
-}
-
-export function trimToApproximateTokenLimit(
-	text: string,
-	limit: number,
-): string {
-	const approximateCharLimit = limit * 4;
-	return text.slice(0, Math.min(text.length, approximateCharLimit));
 }
