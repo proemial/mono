@@ -50,7 +50,10 @@ async function generateOpenAIEmbeddings(
 
 	const begin = Time.now();
 	try {
-		const input = papers.map((p) => `${p.payload.title} ${p.payload.abstract}`);
+		const inputPapers = [...papers];
+		const input = inputPapers.map(
+			(p) => `${p.payload.title} ${p.payload.abstract}`,
+		);
 		let embeddings: number[][] | undefined = undefined;
 		let errorCount = 0;
 
@@ -83,6 +86,7 @@ async function generateOpenAIEmbeddings(
 				);
 				console.log(input[maxSizeIndex]);
 				input.splice(maxSizeIndex, 1);
+				inputPapers.splice(maxSizeIndex, 1);
 				errorCount++;
 			}
 		} while (!embeddings);
@@ -93,7 +97,7 @@ async function generateOpenAIEmbeddings(
 
 		await callback(embeddings.length, Time.elapsed(begin));
 
-		return [papers, embeddings];
+		return [inputPapers, embeddings];
 	} finally {
 		Time.log(begin, `generateOpenAIEmbeddings(${papers.length})`);
 	}
