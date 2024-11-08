@@ -53,7 +53,12 @@ async function generateOpenAIEmbeddings(
 		const response = await openai.embeddings.create({
 			model: vectorSpace.model,
 			dimensions: vectorSpace.dimensions,
-			input: papers.map((p) => `${p.payload.title} ${p.payload.abstract}`),
+			input: papers.map((p) =>
+				trimToApproximateTokenLimit(
+					`${p.payload.title} ${p.payload.abstract}`,
+					8192,
+				),
+			),
 		});
 
 		const embeddings = response.data.map((d) => d.embedding);
@@ -140,4 +145,12 @@ async function generateMistralEmbedding(
 	} finally {
 		Time.log(begin, `generateMistralEmbedding(${text.length})`);
 	}
+}
+
+export function trimToApproximateTokenLimit(
+	text: string,
+	limit: number,
+): string {
+	const approximateCharLimit = limit * 4;
+	return text.slice(0, Math.min(text.length, approximateCharLimit));
 }
