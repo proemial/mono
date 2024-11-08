@@ -18,7 +18,7 @@ export function Header() {
 
 	return (
 		<div
-			className={`flex items-center gap-2 p-4 self-stretch w-full flex-[0_0_auto] bg-black sticky top-0 z-50 ${isApp ? "pt-8" : ""}`}
+			className={`flex items-center gap-2 p-4 lg:mb-6 lg:px-8 self-stretch w-full flex-[0_0_auto] bg-black sticky top-0 z-50 ${isApp ? "pt-8" : ""}`}
 		>
 			{modalOpen && (
 				<AnnotateForm modalOpen={modalOpen} setModalOpen={setModalOpen} />
@@ -203,7 +203,7 @@ function BackButton() {
 				}}
 				className="text-[#f6f5e8] hover:text-[#d4d3c8]"
 			>
-				<x-close className="size-6" />
+				<XClose className="size-6" />
 			</button>
 		</Trackable>
 	);

@@ -18,7 +18,7 @@ export function NewsFeed({
 				{error && <ErrorModal error={error} />}
 				<Header />
 				<Welcome />
-				<div className="columns-[320px] gap-3 w-full">
+				<div className="columns-[320px] gap-8 w-full lg:px-8">
 					{sorted.map((item, i) => (
 						<Trackable
 							key={i}
@@ -26,7 +26,7 @@ export function NewsFeed({
 							properties={{ sourceUrl: item.init?.url as string }}
 						>
 							<div
-								className="active:opacity-80 inline-block w-full mb-3 break-inside-avoid-page cursor-pointer"
+								className="inline-block w-full mb-8 break-inside-avoid-page cursor-pointer"
 								data-url={item.init?.url}
 								onClick={(e) => {
 									const target = e.currentTarget;
