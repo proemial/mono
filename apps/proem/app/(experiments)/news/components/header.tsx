@@ -1,20 +1,18 @@
 "use client";
 import logo from "./images/logo.svg";
 import Image from "next/image";
-import { XClose, PlusCircle } from "@untitled-ui/icons-react";
+import { XClose } from "@untitled-ui/icons-react";
 import { useState, useRef, useEffect } from "react";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { useIsApp } from "@/utils/app";
 import { isBlockedUrl } from "../blocked";
 import { usePathname } from "next/navigation";
-import { getCookie, setCookie } from "cookies-next";
 
 export function Header() {
 	const pathname = usePathname();
 	const [modalOpen, setModalOpen] = useState(false);
 	const isApp = useIsApp();
-	const isOpen = typeof document !== "undefined" ? !getCookie("splash") : false;
 
 	return (
 		<div
@@ -30,13 +28,6 @@ export function Header() {
 				) : (
 					<LogoAndName isApp={isApp} />
 				)}
-
-				<Trackable trackingKey={analyticsKeys.experiments.news.header.clickAdd}>
-					<PlusCircle
-						className="text-[#f6f5e8] hsize-6 block hover:animate-[spin_1s_ease-in-out] cursor-pointer"
-						onClick={() => setModalOpen(true)}
-					/>
-				</Trackable>
 			</div>
 		</div>
 	);
@@ -84,7 +75,6 @@ function AnnotateForm({
 	}, [modalOpen]);
 
 	const dismiss = () => {
-		setCookie("splash", "false", { maxAge: 31536000 });
 		setModalOpen(false);
 	};
 

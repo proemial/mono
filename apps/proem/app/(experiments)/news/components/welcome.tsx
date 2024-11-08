@@ -1,13 +1,10 @@
 "use client";
 import { PlusCircle } from "@untitled-ui/icons-react";
-import { getCookie, setCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 import { isBlockedUrl } from "../blocked";
 import { useIsApp } from "@/utils/app";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Tracker } from "@/components/analytics/tracking/tracker";
-
-const cookieName = "splash";
 
 export function Welcome() {
 	const isApp = useIsApp();
@@ -15,13 +12,10 @@ export function Welcome() {
 	const [url, setUrl] = useState("");
 
 	useEffect(() => {
-		setIsOpen(!getCookie(cookieName));
+		setTimeout(() => {
+			setIsOpen(true);
+		}, 300);
 	}, []);
-
-	const dismiss = () => {
-		setCookie(cookieName, "false", { maxAge: 31536000 });
-		setIsOpen(false);
-	};
 
 	return (
 		<>
@@ -66,7 +60,6 @@ export function Welcome() {
 								form.querySelectorAll("button, input").forEach((el) => {
 									(el as HTMLElement).setAttribute("disabled", "true");
 								});
-								dismiss();
 								window.location.href = `/news/${encodeURIComponent(url)}`;
 							}}
 							className="flex flex-col gap-4"
