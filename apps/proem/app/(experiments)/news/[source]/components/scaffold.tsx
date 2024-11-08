@@ -29,16 +29,17 @@ export function Scaffold({
 	url: string;
 	data?: NewsAnnotatorSteps;
 }) {
-	let data = preloadedData;
-	console.log("d0", !!preloadedData, !!data);
+	const [data, setData] = useState(preloadedData);
 
 	const {
 		data: scraperData,
 		isLoading: isScraperLoading,
 		error: scraperError,
 	} = useScraper(url, { done: !!data?.scrape?.transcript });
-	if (scraperData) data = scraperData;
-	console.log("d1", !!scraperData, !!data);
+
+	useEffect(() => {
+		if (scraperData) setData(scraperData);
+	}, [scraperData]);
 
 	const {
 		data: queryData,
@@ -48,8 +49,9 @@ export function Scaffold({
 		preReqs: !!scraperData?.scrape?.transcript,
 		done: !!data?.query?.value,
 	});
-	if (queryData) data = queryData;
-	console.log("d2", !!queryData, !!data);
+	useEffect(() => {
+		if (queryData) setData(queryData);
+	}, [queryData]);
 
 	const {
 		data: papersData,
@@ -59,8 +61,9 @@ export function Scaffold({
 		preReqs: !!queryData?.query?.value,
 		done: !!data?.papers?.value,
 	});
-	if (papersData) data = papersData;
-	console.log("d3", !!papersData, !!data);
+	useEffect(() => {
+		if (papersData) setData(papersData);
+	}, [papersData]);
 
 	const {
 		data: summariseData,
@@ -70,8 +73,20 @@ export function Scaffold({
 		preReqs: !!papersData?.papers?.value,
 		done: !!data?.summarise?.commentary,
 	});
-	if (summariseData) data = summariseData;
-	console.log("d4", !!summariseData, !!data);
+	useEffect(() => {
+		if (summariseData) setData(summariseData);
+	}, [summariseData]);
+
+	console.log(
+		"scraper data",
+		!!data,
+		" (",
+		!!scraperData,
+		!!queryData,
+		!!papersData,
+		!!summariseData,
+		")",
+	);
 
 	const isLoading =
 		isScraperLoading || isQueryLoading || isPapersLoading || isSummariseLoading;
