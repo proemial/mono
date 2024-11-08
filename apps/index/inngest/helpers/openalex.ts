@@ -52,7 +52,9 @@ export function updatedSinceQuery(date: string) {
 	const timeWindowBegin = dayjs(updatedSince)
 		.subtract(3, "month")
 		.format("YYYY-MM-DD");
+	const timeWindowEnd = updatedSince;
 
+	// https://api.openalex.org/works?mailto=lab@proemial.ai&api_key=AuEVGBBSG9SBwo6LV8hhxh&select=created_date&filter=type:types/preprint|types/article,has_abstract:true,language:en,open_access.is_oa:true,from_publication_date:2024-10-01,to_publication_date:2024-10-08,from_updated_date:2024-10-08&per_page=200
 	// type:types/preprint|types/article,has_abstract:true,language:en,open_access.is_oa:true
 	const filter = [
 		"type:types/preprint|types/article",
@@ -60,7 +62,7 @@ export function updatedSinceQuery(date: string) {
 		"language:en",
 		"open_access.is_oa:true",
 		`from_publication_date:${timeWindowBegin}`,
-		`from_created_date:${timeWindowBegin}`,
+		`to_publication_date:${timeWindowEnd}`,
 		`from_updated_date:${updatedSince}`,
 	]
 		.filter((f) => !!f)

@@ -127,15 +127,13 @@ async function fetchPapers(payload: Payload) {
 		const { date, nextCursor } = payload;
 
 		const limit = 200;
-		const toCreatedDate = dayjs(date).add(1, "day").format("YYYY-MM-DD");
 		const cursor = nextCursor ?? "*";
 
 		const filter = [
 			"type:types/preprint|types/article",
 			"has_abstract:true",
 			`from_publication_date:${date}`,
-			`from_created_date:${date}`,
-			`to_created_date:${toCreatedDate}`,
+			`to_publication_date:${date}`,
 			"language:en",
 			"open_access.is_oa:true",
 		]
