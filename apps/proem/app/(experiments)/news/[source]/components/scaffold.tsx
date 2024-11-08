@@ -22,8 +22,6 @@ import Image from "next/image";
 import { Header } from "../../components/header";
 import { Footer } from "../../components/footer";
 
-import { Button } from "@proemial/shadcn-ui/components/ui/button";
-
 export function Scaffold({
 	url,
 	data: preloadedData,
@@ -31,46 +29,50 @@ export function Scaffold({
 	url: string;
 	data?: NewsAnnotatorSteps;
 }) {
+	let data = preloadedData;
+	console.log("d0", !!preloadedData, !!data);
+
 	const {
 		data: scraperData,
 		isLoading: isScraperLoading,
 		error: scraperError,
-	} = useScraper(url, !!preloadedData);
+	} = useScraper(url, { done: !!data?.scrape?.transcript });
+	if (scraperData) data = scraperData;
+	console.log("d1", !!scraperData, !!data);
+
 	const {
 		data: queryData,
 		isLoading: isQueryLoading,
 		error: queryError,
-	} = useQueryBuilder(
-		url,
-		!!scraperData?.scrape?.transcript,
-		!!scraperData?.summarise?.commentary,
-	);
+	} = useQueryBuilder(url, {
+		preReqs: !!scraperData?.scrape?.transcript,
+		done: !!data?.query?.value,
+	});
+	if (queryData) data = queryData;
+	console.log("d2", !!queryData, !!data);
+
 	const {
 		data: papersData,
 		isLoading: isPapersLoading,
 		error: papersError,
-	} = usePapers(
-		url,
-		!!queryData?.query?.value,
-		!!scraperData?.summarise?.commentary,
-	);
+	} = usePapers(url, {
+		preReqs: !!queryData?.query?.value,
+		done: !!data?.papers?.value,
+	});
+	if (papersData) data = papersData;
+	console.log("d3", !!papersData, !!data);
+
 	const {
 		data: summariseData,
 		isLoading: isSummariseLoading,
 		error: summariseError,
-	} = useSummarisation(
-		url,
-		!!papersData?.papers?.value,
-		!!scraperData?.summarise?.commentary,
-	);
+	} = useSummarisation(url, {
+		preReqs: !!papersData?.papers?.value,
+		done: !!data?.summarise?.commentary,
+	});
+	if (summariseData) data = summariseData;
+	console.log("d4", !!summariseData, !!data);
 
-	const data = {
-		...preloadedData,
-		...scraperData,
-		...queryData,
-		...papersData,
-		...summariseData,
-	};
 	const isLoading =
 		isScraperLoading || isQueryLoading || isPapersLoading || isSummariseLoading;
 
@@ -265,7 +267,7 @@ function AnnotationLoader({
 	isQueryLoading: boolean;
 	isPapersLoading: boolean;
 	isSummariseLoading: boolean;
-	data: NewsAnnotatorSteps;
+	data?: NewsAnnotatorSteps;
 }) {
 	return (
 		<div className="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-50">

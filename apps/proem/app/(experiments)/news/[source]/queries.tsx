@@ -1,10 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import {
-	NewsAnnotatorSteps,
-	ReferencedPaper,
-} from "@proemial/adapters/redis/news";
+import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news";
 
-export function useScraper(url: string, done?: boolean) {
+type Config = {
+	preReqs?: boolean;
+	done?: boolean;
+};
+
+export function useScraper(url: string, config: Config) {
 	return useQuery<NewsAnnotatorSteps>({
 		queryKey: ["annotator:scrape", url],
 		queryFn: async () => {
@@ -18,15 +20,11 @@ export function useScraper(url: string, done?: boolean) {
 
 			return response.json();
 		},
-		enabled: !!url && !done,
+		enabled: !!url && !config.done,
 	});
 }
 
-export function useQueryBuilder(
-	url: string,
-	transcript?: boolean,
-	done?: boolean,
-) {
+export function useQueryBuilder(url: string, config: Config) {
 	return useQuery<NewsAnnotatorSteps>({
 		queryKey: ["annotator:query", url],
 		queryFn: async () => {
@@ -40,11 +38,11 @@ export function useQueryBuilder(
 
 			return response.json();
 		},
-		enabled: !!url && !!transcript && !done,
+		enabled: !!url && !!config.preReqs && !config.done,
 	});
 }
 
-export function usePapers(url: string, query?: boolean, done?: boolean) {
+export function usePapers(url: string, config: Config) {
 	return useQuery<NewsAnnotatorSteps>({
 		queryKey: ["annotator:papers", url],
 		queryFn: async () => {
@@ -58,15 +56,11 @@ export function usePapers(url: string, query?: boolean, done?: boolean) {
 
 			return response.json();
 		},
-		enabled: !!url && !!query && !done,
+		enabled: !!url && !!config.preReqs && !config.done,
 	});
 }
 
-export function useSummarisation(
-	url: string,
-	papers?: boolean,
-	done?: boolean,
-) {
+export function useSummarisation(url: string, config: Config) {
 	return useQuery<NewsAnnotatorSteps>({
 		queryKey: ["annotator:summarise", url],
 		queryFn: async () => {
@@ -80,6 +74,6 @@ export function useSummarisation(
 
 			return response.json();
 		},
-		enabled: !!url && !!papers && !done,
+		enabled: !!url && !!config.preReqs && !config.done,
 	});
 }

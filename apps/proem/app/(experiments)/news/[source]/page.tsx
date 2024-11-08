@@ -52,7 +52,7 @@ async function fetchItem({ params, searchParams }: Props) {
 		process.env.NODE_ENV === "development"
 	) {
 		console.log("Revalidating news-item");
-		revalidateTag(url);
+		revalidateTag(cacheKey);
 	}
 
 	const item = await unstable_cache(
