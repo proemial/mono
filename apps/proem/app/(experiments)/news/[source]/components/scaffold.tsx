@@ -35,7 +35,7 @@ export function Scaffold({
 		data: scraperData,
 		isLoading: isScraperLoading,
 		error: scraperError,
-	} = useScraper(url, { done: !!data?.scrape?.transcript });
+	} = useScraper(url, { done: !!data?.scrape?.transcript?.length });
 
 	useEffect(() => {
 		if (scraperData) setData(scraperData);
@@ -46,8 +46,8 @@ export function Scaffold({
 		isLoading: isQueryLoading,
 		error: queryError,
 	} = useQueryBuilder(url, {
-		preReqs: !!data?.scrape?.transcript,
-		done: !!data?.query?.value,
+		preReqs: !!data?.scrape?.transcript?.length,
+		done: !!data?.query?.value?.length,
 	});
 	useEffect(() => {
 		if (queryData) setData(queryData);
@@ -58,8 +58,8 @@ export function Scaffold({
 		isLoading: isPapersLoading,
 		error: papersError,
 	} = usePapers(url, {
-		preReqs: !!data?.query?.value,
-		done: !!data?.papers?.value,
+		preReqs: !!data?.query?.value?.length,
+		done: !!data?.papers?.value?.length,
 	});
 	useEffect(() => {
 		if (papersData) setData(papersData);
@@ -70,8 +70,8 @@ export function Scaffold({
 		isLoading: isSummariseLoading,
 		error: summariseError,
 	} = useSummarisation(url, {
-		preReqs: !!data?.papers?.value,
-		done: !!data?.summarise?.commentary,
+		preReqs: !!data?.papers?.value?.length,
+		done: !!data?.summarise?.commentary?.length,
 	});
 	useEffect(() => {
 		if (summariseData) setData(summariseData);
