@@ -4,11 +4,16 @@ export type VectorSpace = {
 	dimensions: number;
 };
 
-export type VectorSpaceName = "o3s1536alpha"; // | "mist1024alpha";
+export type VectorSpaceName = "o3s1536alpha" | "o3s1536beta";
 
 export const vectorSpaces: Array<VectorSpace> = [
 	{
 		collection: "o3s1536alpha",
+		model: "text-embedding-3-small",
+		dimensions: 1536,
+	},
+	{
+		collection: "o3s1536beta",
 		model: "text-embedding-3-small",
 		dimensions: 1536,
 	},
