@@ -10,6 +10,11 @@ export const vectorSpaces: Record<string, VectorSpace> = {
 		model: "text-embedding-3-small",
 		dimensions: 1536,
 	},
+	o3s1536beta: {
+		collection: "o3s1536beta",
+		model: "text-embedding-3-small",
+		dimensions: 1536,
+	},
 };
 
 export const defaultVectorSpaceName = "1.5k";
