@@ -1,0 +1,8 @@
+POST http://127.0.0.1:3232/api/search
+Content-Type: application/json
+
+{
+  "query": "China's aircraft carrier",
+  "from": "2024-11-01",
+  "extended": true
+}

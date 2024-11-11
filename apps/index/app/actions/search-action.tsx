@@ -173,14 +173,16 @@ function createFilter(count: string, from: string, fullVectorSearch: boolean) {
 
 	return {
 		limit: Number.parseInt(count),
-		filter: {
-			must: {
-				key: "created_date",
-				range: {
-					gte: from,
-				},
-			},
-		},
+		filter: from
+			? {
+					must: {
+						key: "created_date",
+						range: {
+							gte: from,
+						},
+					},
+				}
+			: {},
 		...params,
 	};
 }
