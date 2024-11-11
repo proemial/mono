@@ -113,7 +113,7 @@ async function generateOpenAiEmbedding(
 			await openai.embeddings.create({
 				model: vectorSpace.model,
 				dimensions: vectorSpace.dimensions,
-				input: text.filter((t) => t?.length).join(" "),
+				input: text.filter((t) => t?.length),
 			})
 		).data.map((d) => d.embedding);
 	} finally {
