@@ -19,7 +19,7 @@ export const vectorSpaces: Array<VectorSpace> = [
 	},
 ];
 
-export const defaultVectorSpace = vectorSpaces.at(0) as VectorSpace;
+export const defaultVectorSpace = vectorSpaces.at(1) as VectorSpace;
 
 export function vectorSpace(name: VectorSpaceName): VectorSpace {
 	const space = vectorSpaces.find(

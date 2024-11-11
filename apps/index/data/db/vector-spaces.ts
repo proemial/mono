@@ -3,7 +3,6 @@ export type VectorSpace = {
 	model: string;
 	dimensions: number;
 };
-
 export const vectorSpaces: Record<string, VectorSpace> = {
 	"1.5k": {
 		collection: "o3s1536alpha",
@@ -17,7 +16,7 @@ export const vectorSpaces: Record<string, VectorSpace> = {
 	},
 };
 
-export const defaultVectorSpaceName = "1.5k";
+export const defaultVectorSpaceName = "o3s1536beta";
 export const defaultVectorSpace = vectorSpaces[
 	defaultVectorSpaceName
 ] as VectorSpace;
