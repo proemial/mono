@@ -1,4 +1,10 @@
-export const users = [
+export type User = {
+	name: string;
+	avatar: string;
+	backgroundColor: string;
+};
+
+export const users: User[] = [
 	{ name: "Jolly Jaguar", avatar: "🐆", backgroundColor: "#000000" },
 	{ name: "Bouncy Beaver", avatar: "🦫", backgroundColor: "#FFDAB9" },
 	{ name: "Sneaky Squirrel", avatar: "🐿️", backgroundColor: "#87CEEB" },

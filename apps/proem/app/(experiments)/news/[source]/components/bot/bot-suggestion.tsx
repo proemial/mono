@@ -1,22 +1,47 @@
-import arrow from "./arrow.svg";
-import Image from "next/image";
+import { Trackable } from "@/components/trackable";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
+import { ArrowRight } from "lucide-react";
+import { cn } from "@proemial/shadcn-ui";
 
 export function BotSuggestion({
 	qa,
+	isLoading,
+	isAsked,
+	handleSuggestionClick,
 }: {
 	qa: [string, string];
+	isLoading: boolean;
+	isAsked: boolean;
+	handleSuggestionClick: (question: string) => void;
 }) {
-	return (
-		<div className="gap-3 px-3 py-2 self-stretch w-full flex-[0_0_auto] border border-solid bg-[#E9EAEE]  flex items-center justify-center relative rounded-xl">
-			<p className="relative flex-1 mt-[-1.00px] font-normal text-[#08080a] text-[15px] tracking-[0] leading-5">
-				{qa.at(0)}
-			</p>
+	const [question] = qa;
 
-			<Image
-				className="relative w-[13px] h-[13px] mr-[-0.50px]"
-				alt="Vector"
-				src={arrow}
-			/>
-		</div>
+	return (
+		<Trackable
+			trackingKey={
+				analyticsKeys.experiments.news.item.qa.clickSuggestedQuestion
+			}
+			properties={{ question }}
+		>
+			<button
+				disabled={isLoading || isAsked}
+				type="button"
+				onClick={() => handleSuggestionClick(question)}
+				className={cn(
+					"bg-white text-[#08080a] rounded-xl gap-2 py-2 px-3 flex justify-between items-center text-left text-[15px] w-full border border-gray-400",
+					{
+						"hover:bg-[#e9eaee] hover:border-[#e9eaee]   cursor-pointer":
+							!isLoading && !isAsked,
+						"text-gray-400 border-gray-200 cursor-not-allowed":
+							isLoading || isAsked,
+					},
+				)}
+			>
+				<div>{question}</div>
+				<div>
+					<ArrowRight className="size-5 opacity-50" />
+				</div>
+			</button>
+		</Trackable>
 	);
 }

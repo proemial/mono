@@ -2,16 +2,16 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { Trackable } from "@/components/trackable";
-import { cn } from "@proemial/shadcn-ui";
-import { ArrowRight } from "@untitled-ui/icons-react";
-import { Message, nanoid } from "ai";
 import { useChat } from "ai/react";
 import { FormEvent, useCallback, useMemo } from "react";
-import { Avatar } from "../../../components/avatars";
 import { useFromFeedSearchParam } from "../../../components/use-published";
 import { BotQa } from "./bot-qa";
 import { users } from "../../../components/users";
+import { BotForm } from "./bot-form";
+import { BotSuggestion } from "./bot-suggestion";
+import { useInitialMessages } from "./initial-messages";
+import { DummyButton, getRandomUserSeed } from "./fake-it";
+import { BotHeader, FactualHeader } from "./headers";
 
 type Props = {
 	url: string;
@@ -20,45 +20,7 @@ type Props = {
 
 export function Bot({ url, questions }: Props) {
 	const { fromFeedParam: isFromFeed } = useFromFeedSearchParam();
-
-	const initialMessages: Message[] = useMemo(
-		() =>
-			isFromFeed
-				? [
-						{
-							role: "user",
-							content: questions?.at(0)?.at(0) ?? "",
-							id: nanoid(),
-						},
-						{
-							role: "assistant",
-							content: questions?.at(0)?.at(1) ?? "",
-							id: nanoid(),
-						},
-						{
-							role: "user",
-							content: questions?.at(1)?.at(0) ?? "",
-							id: nanoid(),
-						},
-						{
-							role: "assistant",
-							content: questions?.at(1)?.at(1) ?? "",
-							id: nanoid(),
-						},
-						{
-							role: "user",
-							content: questions?.at(2)?.at(0) ?? "",
-							id: nanoid(),
-						},
-						{
-							role: "assistant",
-							content: questions?.at(2)?.at(1) ?? "",
-							id: nanoid(),
-						},
-					]
-				: [],
-		[isFromFeed, questions],
-	);
+	const initialMessages = useInitialMessages(questions, isFromFeed);
 
 	const {
 		messages,
@@ -108,94 +70,34 @@ export function Bot({ url, questions }: Props) {
 		}
 	};
 
-	const getRandomUserSeed = (title: string) => {
-		// Create a consistent hash from the title
-		let hash = 0;
-		for (let i = 0; i < title.length; i++) {
-			hash = (hash << 5) - hash + title.charCodeAt(i);
-			hash = hash & hash; // Convert to 32-bit integer
-		}
-		// return random-looking but consistent user number
-		return Math.abs(hash % (users.length - 3));
-	};
-
 	// For now using a placeholder title since we don't have access to it
-	const rndUser = getRandomUserSeed(url);
+	const rndUser = getRandomUserSeed(url, users);
 
 	return (
 		<>
-			<div className="flex items-center justify-end gap-2 px-3 py-0 relative self-stretch w-full">
-				<div className="items-center gap-2 flex-1 grow flex relative">
-					<div className="relative w-fit mt-[-1.00px] font-semibold text-[#0a161c] text-lg tracking-[0] leading-4 whitespace-nowrap">
-						Find Answers in Research
-					</div>
-				</div>
-			</div>
+			<FactualHeader />
 			<div
 				id="askform"
 				className="flex-col pb-2 items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative overflow-hidden"
 			>
-				<div className="items-center gap-1.5 px-3 py-0 flex w-full">
-					<Avatar seed="6" />
+				<BotForm
+					handleSubmitWithInputCheck={(e) => handleSubmitWithInputCheck(e)}
+					handleInputChange={(e) => handleInputChange(e)}
+					input={input}
+					url={url}
+				/>
 
-					<form onSubmit={handleSubmitWithInputCheck} className="flex w-full">
-						<div className="w-full bg-white h-10 px-3 rounded-xl mt-0.5 text-[15px] flex gap-2 items-center border border-gray-400">
-							<Trackable
-								trackingKey={
-									analyticsKeys.experiments.news.item.qa.clickAskInputField
-								}
-								properties={{ sourceUrl: url }}
-							>
-								<input
-									id="bot-input"
-									placeholder="Ask a question"
-									value={input}
-									onChange={handleInputChange}
-									className="w-full h-full bg-transparent outline-none placeholder:text-[#999999]"
-								/>
-							</Trackable>
-							<button type="submit" className="text-gray-400">
-								<ArrowRight className="size-5" />
-							</button>
-						</div>
-					</form>
-				</div>
-
-				<div className="flex pl-[62px]">
-					<p className="relative w-fit  font-medium text-[#757989] text-xs tracking-[0] leading-5 whitespace-nowrap">
-						Suggested questions
-					</p>
-				</div>
+				<BotHeader />
 
 				<div className="flex-col items-start gap-2 pl-[58px] pr-3 py-0 w-full flex">
 					{questions?.slice(isFromFeed ? 3 : 0).map((qa, index) => (
-						<Trackable
+						<BotSuggestion
 							key={index}
-							trackingKey={
-								analyticsKeys.experiments.news.item.qa.clickSuggestedQuestion
-							}
-							properties={{ question: qa.at(0) ?? "" }}
-						>
-							<button
-								disabled={isLoading || isAlreadyAsked(qa.at(0))}
-								type="button"
-								onClick={() => handleSuggestionClick(qa.at(0))}
-								className={cn(
-									"bg-white text-[#08080a] rounded-xl gap-2 py-2 px-3 flex justify-between items-center text-left text-[15px] w-full border border-gray-400",
-									{
-										"hover:bg-[#e9eaee] hover:border-[#e9eaee]   cursor-pointer":
-											!isLoading && !isAlreadyAsked(qa.at(0)),
-										"text-gray-400 border-gray-200 cursor-not-allowed":
-											isLoading || isAlreadyAsked(qa.at(0)),
-									},
-								)}
-							>
-								<div>{qa.at(0)}</div>
-								<div>
-									<ArrowRight className="size-5 opacity-50" />
-								</div>
-							</button>
-						</Trackable>
+							qa={qa}
+							isLoading={isLoading}
+							isAsked={isAlreadyAsked(qa.at(0))}
+							handleSuggestionClick={handleSuggestionClick}
+						/>
 					))}
 				</div>
 			</div>
@@ -217,30 +119,15 @@ export function Bot({ url, questions }: Props) {
 											? users.at(Math.floor(rndUser + index / 2))
 											: undefined
 									}
-									qa={[message.content, messages.at(index + 1)?.content ?? ""]}
+									question={message.content}
+									answer={messages.at(index + 1)?.content}
 									id={`qa-${index}`}
 								/>
 							);
 						})}
 					</div>
-					{isFromFeed && (
-						<div className="flex text-center items-center w-full justify-center">
-							<Trackable
-								trackingKey={
-									analyticsKeys.experiments.news.item.qa.clickShowMore
-								}
-								properties={{ sourceUrl: url }}
-							>
-								<div className="inline-flex h-8 gap-1 px-3 py-2 rounded-[19px] border border-solid active:bg-theme-600 hover:cursor-pointer">
-									<div className="inline-flex gap-1.5 relative">
-										<div className="relative w-fit mt-[-1.00px] font-normal text-[13px] tracking-[0] leading-[normal] select-none">
-											Show more
-										</div>
-									</div>
-								</div>
-							</Trackable>
-						</div>
-					)}
+
+					<DummyButton isFromFeed={isFromFeed} url={url} />
 				</div>
 			)}
 		</>

@@ -6,17 +6,19 @@ import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Throbber } from "@/components/throbber";
 
 export function BotQa({
-	user,
-	qa,
 	id,
+	question,
+	answer,
+	user,
 }: {
+	id: string;
+	question: string;
+	answer?: string;
 	user?: {
 		avatar: string;
 		name: string;
 		backgroundColor: string;
 	};
-	qa: [string, string];
-	id: string;
 }) {
 	const formatAnswerText = (text?: string) => {
 		if (!text) return "";
@@ -74,7 +76,7 @@ export function BotQa({
 						</div>
 
 						<p className="font-medium text-[#08080a] text-[15px] leading-5">
-							{qa.at(0)}
+							{question}
 						</p>
 					</div>
 				</div>
@@ -100,16 +102,16 @@ export function BotQa({
 								</div>
 							</div>
 
-							{qa.at(1) ? (
+							{answer ? (
 								<>
 									<p className="font-medium text-[#08080a] text-[15px] leading-5">
-										{formatAnswerText(qa[1])}
+										{formatAnswerText(answer)}
 									</p>
 									<Trackable
 										trackingKey={
 											analyticsKeys.experiments.news.item.qa.clickViewAllSources
 										}
-										properties={{ answer: qa.at(1) ?? "" }}
+										properties={{ answer }}
 									>
 										<div
 											className="w-full font-medium text-[#757989] text-xs leading-5 cursor-pointer"
