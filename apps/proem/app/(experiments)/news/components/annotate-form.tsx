@@ -33,7 +33,7 @@ export function AnnotateForm() {
 						}
 					`}</style>
 					<div className="w-5/6 text-xl font-semibold leading-7 text-center text-white drop-shadow-md">
-						Enrich articles with insights
+						Enrich news articles with insights
 						<br />
 						from the latest research papers.
 					</div>
