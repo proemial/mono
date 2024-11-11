@@ -4,7 +4,11 @@ import DbGraph from "./data";
 import IngestionGraph from "./ingestion";
 import { updatedSinceQuery } from "@/inngest/helpers/openalex";
 
-export default async function StatsPage() {
+export default async function StatsPage({
+	searchParams,
+}: {
+	searchParams: { space?: string };
+}) {
 	const yesterday = dayjs().subtract(1, "day").format("YYYY-MM-DD");
 
 	// https://api.openalex.org/works?mailto=lab@proemial.ai&api_key=AuEVGBBSG9SBwo6LV8hhxh&
@@ -17,7 +21,7 @@ export default async function StatsPage() {
 					<IngestionGraph />
 				</div>
 				<div className="w-1/3">
-					<DbGraph />
+					<DbGraph space={searchParams.space} />
 				</div>
 			</div>
 			<div className="ml-16">

@@ -20,6 +20,11 @@ export function PaperCountInIndicesChart({
 					outerRadius={80}
 					fill="#8884d8"
 					label
+					onClick={(entry) => {
+						const searchParams = new URLSearchParams(window.location.search);
+						searchParams.set("space", entry.key);
+						window.location.search = searchParams.toString();
+					}}
 				>
 					{data.map((entry, index) => (
 						<Charts.Cell
@@ -43,6 +48,12 @@ export function PaperCountInIndicesChart({
 				<Charts.Legend
 					// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 					formatter={(value, entry) => (entry.payload as any)?.key}
+					onClick={(entry) => {
+						const searchParams = new URLSearchParams(window.location.search);
+						// @ts-ignore
+						searchParams.set("space", entry.payload?.key);
+						window.location.search = searchParams.toString();
+					}}
 				/>
 			</Charts.PieChart>
 		</Charts.ResponsiveContainer>

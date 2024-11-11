@@ -11,14 +11,14 @@ const client = new QdrantClient({
 	apiKey: process.env.QDRANT_API_KEY,
 });
 
-export default async function DbGraph() {
+export default async function DbGraph({ space }: { space?: string }) {
 	const spaces = Object.values(vectorSpaces);
 	const results = await Promise.all(
 		spaces.map(
 			async (collection) => await client.getCollection(collection.collection),
 		),
 	);
-	const distribution = await getDistribution();
+	const distribution = await getDistribution(space);
 
 	return (
 		<div className="w-full">
@@ -29,13 +29,15 @@ export default async function DbGraph() {
 					value: results[i]?.points_count as number,
 				}))}
 			/>
+
 			<PaperCountInLatestIndexChart data={distribution} />
 		</div>
 	);
 }
 
-async function getDistribution() {
-	const latestSpace = Object.values(vectorSpaces).at(-1)?.collection as string;
+async function getDistribution(space?: string) {
+	const latestSpace =
+		space ?? (Object.values(vectorSpaces).at(-1)?.collection as string);
 
 	const startOfYear = dayjs().startOf("year");
 	const today = dayjs();
