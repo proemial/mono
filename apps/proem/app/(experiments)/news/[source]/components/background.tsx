@@ -21,21 +21,28 @@ export function Background({ text, url }: { text?: string; url: string }) {
 				if (match) {
 					const numbers = match[1]?.split(",").map((n) => n.trim());
 					return numbers?.map((num, j) => (
-						<span className="" key={`${i}-${j}`}>
-							<a
-								href={`#${num}`}
-								key={`${i}-${j}`}
-								onClick={() =>
-									document
-										.getElementById("sources")
-										?.scrollIntoView({ behavior: "smooth" })
-								}
-								className="items-center justify-center rounded-full bg-black text-white text-[10px] font-[1000] cursor-pointer hover:bg-gray-800"
-								style={{ padding: "3px", position: "relative", top: "-2px" }}
-							>
-								&nbsp;{num}&nbsp;
-							</a>
-						</span>
+						<Trackable
+							key={`${i}-${j}`}
+							trackingKey={
+								analyticsKeys.experiments.news.item.clickInlineReference
+							}
+						>
+							<span className="">
+								<a
+									href={`#${num}`}
+									key={`${i}-${j}`}
+									onClick={() =>
+										document
+											.getElementById("sources")
+											?.scrollIntoView({ behavior: "smooth" })
+									}
+									className="items-center justify-center rounded-full bg-black text-white text-[10px] font-[1000] cursor-pointer hover:bg-gray-800"
+									style={{ padding: "3px", position: "relative", top: "-2px" }}
+								>
+									&nbsp;{num}&nbsp;
+								</a>
+							</span>
+						</Trackable>
 					));
 				}
 				// Return regular text for non-link segments
@@ -50,9 +57,15 @@ export function Background({ text, url }: { text?: string; url: string }) {
 					Factual Background
 				</div>
 				<div className="px-1.5 py-0.5 ml-0.5 relative bg-black rounded-full  ">
-					<div className="relative w-fit font-semibold text-[#6aba6f] text-xs leading-3 whitespace-nowrap">
-						Science bot
-					</div>
+					<Trackable
+						trackingKey={
+							analyticsKeys.experiments.news.item.clickScienceBotBadge
+						}
+					>
+						<div className="relative w-fit font-semibold text-[#6aba6f] text-xs leading-3 whitespace-nowrap">
+							Science bot
+						</div>
+					</Trackable>
 				</div>
 			</div>
 

@@ -30,20 +30,27 @@ export function BotQa({
 				if (match) {
 					const numbers = match[1]?.split(",").map((n) => n.trim());
 					return numbers?.map((num, j) => (
-						<span className="relative inline-block" key={`${i}-${j}`}>
-							<a
-								href={`#${num}`}
-								key={`${i}-${j}`}
-								onClick={() =>
-									document
-										.getElementById("sources")
-										?.scrollIntoView({ behavior: "smooth" })
-								}
-								className="relative -top-[2px] inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-pointer hover:bg-gray-800"
-							>
-								{num}
-							</a>
-						</span>
+						<Trackable
+							key={`${i}-${j}`}
+							trackingKey={
+								analyticsKeys.experiments.news.item.clickInlineReference
+							}
+						>
+							<span className="relative inline-block">
+								<a
+									href={`#${num}`}
+									key={`${i}-${j}`}
+									onClick={() =>
+										document
+											.getElementById("sources")
+											?.scrollIntoView({ behavior: "smooth" })
+									}
+									className="relative -top-[2px] inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-pointer hover:bg-gray-800"
+								>
+									{num}
+								</a>
+							</span>
+						</Trackable>
 					));
 				}
 				// Return regular text for non-link segments
@@ -136,7 +143,11 @@ export function BotQa({
 
 			<div className="flex items-center justify-end gap-4 pr-6 w-full">
 				<p className="font-normal text-[#65686d] text-[13px]">
-					<span className="font-bold">Like</span>
+					<Trackable
+						trackingKey={analyticsKeys.experiments.news.item.clickAnswerLike}
+					>
+						<span className="font-bold">Like</span>
+					</Trackable>
 
 					{/* {user && (
 						<span className="font-medium">
@@ -145,7 +156,11 @@ export function BotQa({
 					)} */}
 				</p>
 
-				<div className="font-bold text-[#65686d] text-[13px]">Share</div>
+				<Trackable
+					trackingKey={analyticsKeys.experiments.news.item.clickAnswerShare}
+				>
+					<div className="font-bold text-[#65686d] text-[13px]">Share</div>
+				</Trackable>
 			</div>
 		</div>
 	);

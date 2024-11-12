@@ -5,8 +5,6 @@ import { getCookie, setCookie } from "cookies-next";
 import { usePathname } from "next/navigation";
 import { useOrganization as useClerkOrganisation } from "@clerk/nextjs";
 
-const traceEnabled = false;
-
 export type TrackingInput = {
 	region?: string;
 	userAgent?: string;
@@ -46,7 +44,7 @@ export function getTrackingProfile(
 
 	const props = `registered: ${registered}, bot: ${isBot}, internal: ${internal}`;
 	const trace = (profile: string) =>
-		traceEnabled && analyticsTrace(`[tracking][${profile}] ${props}`);
+		analyticsTrace(`[tracking][${profile}] ${props}`);
 
 	if (isBot) {
 		trace("disabled");

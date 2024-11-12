@@ -240,6 +240,10 @@ export const analyticsKeys = {
 				sources: {
 					clickPaperSource: "experiments:news:item:sources:click_paper_source",
 				},
+				clickScienceBotBadge: "experiments:news:item:click_science_bot_badge",
+				clickInlineReference: "experiments:news:item:click_inline_reference",
+				clickAnswerLike: "experiments:news:item:click_answer_like",
+				clickAnswerShare: "experiments:news:item:click_answer_share",
 			},
 			clickGenerate: "experiments:news:click_generate",
 			clickSubscribe: "experiments:news:click_subscribe",

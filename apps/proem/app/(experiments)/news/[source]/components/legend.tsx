@@ -1,3 +1,6 @@
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
+import { Trackable } from "@/components/trackable";
+
 export function Legend({
 	title,
 	image,
@@ -24,9 +27,15 @@ export function Legend({
 			</div>
 
 			<div className="inline-flex items-start gap-1 px-3 py-1 absolute top-[176px] left-[12px] bg-[#ffffffe6] text-[#08080a] rounded-[26px]">
-				<a href={url} target="_blank" rel="noopener noreferrer">
-					{host}
-				</a>
+				<Trackable
+					trackingKey={
+						analyticsKeys.experiments.news.item.sources.clickPaperSource
+					}
+				>
+					<a href={url} target="_blank" rel="noopener noreferrer">
+						{host}
+					</a>
+				</Trackable>
 			</div>
 		</div>
 	);
