@@ -94,7 +94,7 @@ export function NewsCard({
 				ref={cardRef}
 				className="ppNewsCard inline-flex relative"
 				onMouseMove={(e) => ppMouseMove(cardRef, e)}
-				onMouseLeave={(e) => ppMouseLeave(cardRef, e)}
+				onMouseLeave={(e) => ppMouseLeave(cardRef)}
 				// onMouseEnter={(e) => ppMouseMove(cardRef, e)}
 			>
 				<div
