@@ -11,13 +11,14 @@ export default async function RootPage({
 }) {
 	const host = headers().get("host") || "";
 	const subdomain = host.split(".")[0];
+	const params = new URLSearchParams(searchParams).toString();
 
 	if (subdomain && !rootDomain.includes(subdomain)) {
 		if (subdomain === "spaces") {
-			redirect(routes.space);
+			redirect(`${routes.space}?${params}`);
 		}
-		redirect(`/${subdomain}?${new URLSearchParams(searchParams).toString()}`);
+		redirect(`/${subdomain}?${params}`);
 	}
 
-	redirect(routes.ask);
+	redirect(`${routes.ask}?${params}`);
 }
