@@ -23,12 +23,13 @@ export default clerkMiddleware((auth, req) => {
 	if (subdomain === "appshare") {
 		const searchParams = req.nextUrl.searchParams;
 		const url = searchParams.get("url") ?? "";
+		const params = searchParams.toString();
 
 		const isBlockedError = isBlockedUrl(url);
 		if (isBlockedError) {
 			return NextResponse.redirect(
 				new URL(
-					`${baseUrl}/news?error=${encodeURIComponent(isBlockedError)}&${searchParams.toString()}`,
+					`${baseUrl}/news?error=${encodeURIComponent(isBlockedError)}&${params}`,
 					req.url,
 				),
 			);
@@ -36,7 +37,7 @@ export default clerkMiddleware((auth, req) => {
 		if (url) {
 			return NextResponse.redirect(
 				new URL(
-					`${baseUrl}/news/${encodeURIComponent(url)}?${searchParams}`,
+					`${baseUrl}/news/${encodeURIComponent(url)}?${params}`,
 					req.url,
 				),
 			);
@@ -45,7 +46,7 @@ export default clerkMiddleware((auth, req) => {
 		if (text) {
 			return NextResponse.redirect(
 				new URL(
-					`${baseUrl}/unsupported/news/text/${encodeURIComponent(text)}?${searchParams}`,
+					`${baseUrl}/unsupported/news/text/${encodeURIComponent(text)}?${params}`,
 					req.url,
 				),
 			);

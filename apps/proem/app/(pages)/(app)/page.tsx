@@ -16,7 +16,7 @@ export default async function RootPage({
 		if (subdomain === "spaces") {
 			redirect(routes.space);
 		}
-		redirect(`/${subdomain}?${searchParams}`);
+		redirect(`/${subdomain}?${searchParams.toString()}`);
 	}
 
 	redirect(routes.ask);
