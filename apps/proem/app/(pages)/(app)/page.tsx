@@ -4,7 +4,11 @@ import { headers } from "next/headers";
 
 const rootDomain = ["www", "proem", "127", "192", "10", "localhost:4242"];
 
-export default async function RootPage() {
+export default async function RootPage({
+	searchParams,
+}: {
+	searchParams: URLSearchParams;
+}) {
 	const host = headers().get("host") || "";
 	const subdomain = host.split(".")[0];
 
@@ -12,7 +16,7 @@ export default async function RootPage() {
 		if (subdomain === "spaces") {
 			redirect(routes.space);
 		}
-		redirect(`/${subdomain}`);
+		redirect(`/${subdomain}?${searchParams}`);
 	}
 
 	redirect(routes.ask);

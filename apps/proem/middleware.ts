@@ -12,9 +12,13 @@ export default clerkMiddleware((auth, req) => {
 	const pathname = req.nextUrl.pathname;
 	requestHeaders.set("x-pathname", pathname ?? "");
 
+	const searchParams = req.nextUrl.searchParams;
 	const subdomain = req.nextUrl.hostname.split(".")[0];
+
 	if (subdomain === "apphome") {
-		return NextResponse.redirect(new URL(`${baseUrl}/news`, req.url));
+		return NextResponse.redirect(
+			new URL(`${baseUrl}/news?${searchParams}`, req.url),
+		);
 	}
 	if (subdomain === "appshare") {
 		const searchParams = req.nextUrl.searchParams;
@@ -24,21 +28,24 @@ export default clerkMiddleware((auth, req) => {
 		if (isBlockedError) {
 			return NextResponse.redirect(
 				new URL(
-					`${baseUrl}/news?error=${encodeURIComponent(isBlockedError)}`,
+					`${baseUrl}/news?error=${encodeURIComponent(isBlockedError)}&${searchParams.toString()}`,
 					req.url,
 				),
 			);
 		}
 		if (url) {
 			return NextResponse.redirect(
-				new URL(`${baseUrl}/news/${encodeURIComponent(url)}`, req.url),
+				new URL(
+					`${baseUrl}/news/${encodeURIComponent(url)}?${searchParams}`,
+					req.url,
+				),
 			);
 		}
 		const text = searchParams.get("text");
 		if (text) {
 			return NextResponse.redirect(
 				new URL(
-					`${baseUrl}/unsupported/news/text/${encodeURIComponent(text)}`,
+					`${baseUrl}/unsupported/news/text/${encodeURIComponent(text)}?${searchParams}`,
 					req.url,
 				),
 			);
