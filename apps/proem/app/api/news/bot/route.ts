@@ -35,32 +35,26 @@ export async function POST(req: Request) {
 		),
 		messages: convertToCoreMessages(messages),
 		async onFinish(event) {
-			if (!createFollowups) return;
-
 			const question = messages.at(-1)?.content;
 			const answer = event.steps.at(-1)?.text;
 
-			if (!question || !answer) return;
-
-			const { text } = await generateText({
-				model: anthropic("claude-3-5-haiku-latest"),
-				system: newsFollowupPrompt(question, answer, {
+			const followups = await generateFollowups(
+				question,
+				answer,
+				{
 					title: item?.scrape?.title,
 					transcript: item?.scrape?.transcript,
 					papers: item?.papers?.value,
-				}),
-				messages: convertToCoreMessages(messages),
-			});
+				},
+				messages,
+			);
 
-			const followups =
-				text
-					.match(/<[^>]*?>(.*?)<\/[^>]*?>/g)
-					?.map((match) => match.replace(/<\/?[^>]*?>/g, "")) || [];
-
-			streamingData.append({
-				type: "followups",
-				value: JSON.stringify({ question, answer, followups }),
-			});
+			if (followups) {
+				streamingData.append({
+					type: "followups",
+					value: JSON.stringify({ question, answer, followups }),
+				});
+			}
 
 			streamingData.close();
 		},
@@ -77,4 +71,29 @@ export async function POST(req: Request) {
 	return result.toDataStreamResponse({
 		data: streamingData,
 	});
+}
+
+async function generateFollowups(
+	question: string | undefined,
+	answer: string | undefined,
+	context: {
+		title?: string;
+		transcript?: string;
+		papers?: { abstract: string }[];
+	},
+	messages: { role: "user" | "assistant"; content: string }[],
+) {
+	if (!createFollowups || !question || !answer) return;
+
+	const { text } = await generateText({
+		model: anthropic("claude-3-5-haiku-latest"),
+		system: newsFollowupPrompt(question, answer, context),
+		messages: convertToCoreMessages(messages),
+	});
+
+	return (
+		text
+			.match(/<[^>]*?>(.*?)<\/[^>]*?>/g)
+			?.map((match) => match.replace(/<\/?[^>]*?>/g, "")) || undefined
+	);
 }
