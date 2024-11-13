@@ -82,9 +82,9 @@ export function BotQa({
 							</div>
 						</div>
 
-						<p className="font-medium text-[#08080a] text-[15px] leading-5">
+						<div className="font-medium text-[#08080a] text-[15px] leading-5">
 							{question}
-						</p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -111,9 +111,9 @@ export function BotQa({
 
 							{answer ? (
 								<>
-									<p className="font-medium text-[#08080a] text-[15px] leading-5">
+									<div className="font-medium text-[#08080a] text-[15px] leading-5">
 										{formatAnswerText(answer)}
-									</p>
+									</div>
 									<Trackable
 										trackingKey={
 											analyticsKeys.experiments.news.item.qa.clickViewAllSources
@@ -142,19 +142,13 @@ export function BotQa({
 			</div>
 
 			<div className="flex items-center justify-end gap-4 pr-6 w-full">
-				<p className="font-normal text-[#65686d] text-[13px]">
+				<div className="font-normal text-[#65686d] text-[13px]">
 					<Trackable
 						trackingKey={analyticsKeys.experiments.news.item.clickAnswerLike}
 					>
 						<span className="font-bold">Like</span>
 					</Trackable>
-
-					{/* {user && (
-						<span className="font-medium">
-							<span className="px-1">·</span> 42
-						</span>
-					)} */}
-				</p>
+				</div>
 
 				<Trackable
 					trackingKey={analyticsKeys.experiments.news.item.clickAnswerShare}
