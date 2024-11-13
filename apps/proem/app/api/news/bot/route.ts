@@ -1,9 +1,17 @@
-import { convertToCoreMessages, streamText } from "ai";
+import {
+	convertToCoreMessages,
+	StreamData,
+	generateText,
+	streamText,
+} from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { Redis } from "@proemial/adapters/redis";
+import { newsAnswerPrompt, newsFollowupPrompt } from "@/app/prompts/news";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
+
+const createFollowups = false;
 
 export async function POST(req: Request) {
 	const { messages, url } = (await req.json()) as {
@@ -16,24 +24,46 @@ export async function POST(req: Request) {
 	}
 
 	const item = await Redis.news.get(url);
+	const streamingData = new StreamData();
 
 	const result = await streamText({
 		model: anthropic("claude-3-5-sonnet-20240620"),
-		system: `
-You are a helpful assistant identifying as "proem.ai research bot". You are given an article consisting of a title and text body:
-
-<article_title>${item?.scrape?.title}</article_title>
-<article_body>${item?.scrape?.transcript}</article_body>
-
-...and a list of abstracts of related research papers:
-
-<abstracts>
-${item?.papers?.value?.map((abstract, index) => `<abstract_${index + 1}>${abstract.abstract}</abstract_${index + 1}>`).join("\n")}
-</abstracts>
-
-...You are also given a list of messages from a user, and your job is to answer the user's questions using the news item and fact and findings from the research papers. Write a short and concise answer in two or three sentences, referencing the facts and findings from the research papers. Use layman's terminology and include numerical references to the research papers using brackets: [#].
-`,
+		system: newsAnswerPrompt(
+			item?.scrape?.title,
+			item?.scrape?.transcript,
+			item?.papers?.value,
+		),
 		messages: convertToCoreMessages(messages),
+		async onFinish(event) {
+			if (!createFollowups) return;
+
+			const question = messages.at(-1)?.content;
+			const answer = event.steps.at(-1)?.text;
+
+			if (!question || !answer) return;
+
+			const { text } = await generateText({
+				model: anthropic("claude-3-5-haiku-latest"),
+				system: newsFollowupPrompt(question, answer, {
+					title: item?.scrape?.title,
+					transcript: item?.scrape?.transcript,
+					papers: item?.papers?.value,
+				}),
+				messages: convertToCoreMessages(messages),
+			});
+
+			const followups =
+				text
+					.match(/<[^>]*?>(.*?)<\/[^>]*?>/g)
+					?.map((match) => match.replace(/<\/?[^>]*?>/g, "")) || [];
+
+			streamingData.append({
+				type: "followups",
+				value: JSON.stringify({ question, answer, followups }),
+			});
+
+			streamingData.close();
+		},
 	});
 
 	result.usage.then((usage) => {
@@ -44,5 +74,7 @@ ${item?.papers?.value?.map((abstract, index) => `<abstract_${index + 1}>${abstra
 		});
 	});
 
-	return result.toDataStreamResponse();
+	return result.toDataStreamResponse({
+		data: streamingData,
+	});
 }

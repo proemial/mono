@@ -4,16 +4,21 @@ import logo from "../../../components/images/logo.svg";
 import Image from "next/image";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Throbber } from "@/components/throbber";
+import { BotSuggestion } from "./bot-suggestion";
+
+const showFollowups = false;
 
 export function BotQa({
 	id,
 	question,
 	answer,
+	followups,
 	user,
 }: {
 	id: string;
 	question: string;
 	answer?: string;
+	followups?: string[];
 	user?: {
 		avatar: string;
 		name: string;
@@ -156,6 +161,22 @@ export function BotQa({
 					<div className="font-bold text-[#65686d] text-[13px]">Share</div>
 				</Trackable>
 			</div>
+
+			{showFollowups && (
+				<div className="flex flex-col gap-2 pl-[58px] pr-3 w-full">
+					<div>Followups: {followups?.length}</div>
+
+					{followups?.map((followup, i) => (
+						<BotSuggestion
+							key={i}
+							qa={[followup, ""]}
+							isLoading={false}
+							isAsked={false}
+							handleSuggestionClick={() => {}}
+						/>
+					))}
+				</div>
+			)}
 		</div>
 	);
 }

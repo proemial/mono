@@ -3,7 +3,7 @@ import {
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
 import { useChat } from "ai/react";
-import { FormEvent, useCallback, useMemo } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useFromFeedSearchParam } from "../../../components/use-published";
 import { BotQa } from "./bot-qa";
 import { users } from "../../../components/users";
@@ -12,6 +12,7 @@ import { BotSuggestion } from "./bot-suggestion";
 import { useInitialMessages } from "./initial-messages";
 import { DummyButton, getRandomUserSeed } from "./fake-it";
 import { BotHeader, FactualHeader } from "./headers";
+import { JSONValue } from "ai";
 
 type Props = {
 	url: string;
@@ -29,6 +30,7 @@ export function Bot({ url, questions }: Props) {
 		handleSubmit,
 		append,
 		isLoading,
+		data,
 	} = useChat({
 		api: "/api/news/bot",
 		initialMessages,
@@ -38,6 +40,8 @@ export function Bot({ url, questions }: Props) {
 			url,
 		},
 	});
+
+	const followups = useFollowups(data);
 
 	const isAlreadyAsked = useCallback(
 		(suggestion: string | undefined) => {
@@ -111,6 +115,11 @@ export function Bot({ url, questions }: Props) {
 					<div className="flex flex-col-reverse items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
 						{messages.map((message, index) => {
 							if (message.role === "assistant") return null;
+
+							const followupMatches = followups?.find(
+								(f) => f.question === message.content,
+							);
+
 							return (
 								<BotQa
 									key={index}
@@ -121,6 +130,7 @@ export function Bot({ url, questions }: Props) {
 									}
 									question={message.content}
 									answer={messages.at(index + 1)?.content}
+									followups={followupMatches?.followups}
 									id={`qa-${index}`}
 								/>
 							);
@@ -141,3 +151,31 @@ const scrollToQa = async (index: string) => {
 		block: "center",
 	});
 };
+function useFollowups(data?: JSONValue[]) {
+	const [followups, setFollowups] =
+		useState<
+			{
+				question: string;
+				answer: string;
+				followups: string[];
+			}[]
+		>();
+
+	useEffect(() => {
+		type StreamingData = { type: string; value: string };
+		const followupsObject = (data as StreamingData[])
+			?.filter((d) => d.type === "followups")
+			?.reduce(
+				(acc, d) => {
+					const { question, answer, followups } = JSON.parse(d.value);
+					acc.push({ question, answer, followups });
+					return acc;
+				},
+				[] as { question: string; answer: string; followups: string[] }[],
+			);
+
+		setFollowups(followupsObject);
+	}, [data]);
+
+	return followups;
+}
