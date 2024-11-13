@@ -1,5 +1,4 @@
-import { Footer } from "@/app/(experiments)/news/components/footer";
-import { Header } from "@/app/(experiments)/news/components/header";
+import { Header } from "@/app/(pages)/news/components/header";
 
 export default function Page({ params }: { params: { text: string } }) {
 	return (

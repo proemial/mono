@@ -1,6 +1,6 @@
 import { Time } from "@proemial/utils/time";
 import { inngest } from "./client";
-import { getItems } from "@/app/(experiments)/news/cached-items";
+import { getItems } from "@/app/(pages)/news/cached-items";
 import { revalidateTag } from "next/dist/server/web/spec-extension/revalidate";
 
 const eventName = "news/flush";

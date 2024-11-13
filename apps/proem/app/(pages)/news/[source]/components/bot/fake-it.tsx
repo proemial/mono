@@ -1,6 +1,6 @@
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Trackable } from "@/components/trackable";
-import { User } from "@/app/(experiments)/news/components/users";
+import { User } from "@/app/(pages)/news/components/users";
 export function getRandomUserSeed(title: string, users: User[]) {
 	// Create a consistent hash from the title
 	let hash = 0;

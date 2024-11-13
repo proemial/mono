@@ -1,7 +1,7 @@
 import PaperPage from "@/app/(pages)/(app)/paper/oa/[id]/paper-page";
 import { PaperReadsService } from "@/services/paper-reads-service";
 import { ProemAssistant } from "@/components/proem-assistant/assistant";
-import { Header } from "@/app/(experiments)/news/components/header";
+import { Header } from "@/app/(pages)/news/components/header";
 import { Footer } from "../../../components/footer";
 
 type Props = {

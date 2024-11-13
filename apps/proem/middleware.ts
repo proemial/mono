@@ -1,6 +1,6 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { isBlockedUrl } from "./app/(experiments)/news/blocked";
+import { isBlockedUrl } from "./app/(pages)/news/blocked";
 
 // geolocation only works on the edge
 export const runtime = "experimental-edge";
