@@ -6,7 +6,6 @@ import {
 import { env } from "@/env/client";
 import { useEffect, useState } from "react";
 import ReactGA from "react-ga4";
-import TagManager from "react-gtm-module";
 import { Tracker } from "../tracking/tracker";
 
 // https://www.npmjs.com/package/react-ga4
@@ -31,13 +30,8 @@ function useInit() {
 	useEffect(() => {
 		if (!initialized) {
 			analyticsTrace("[GaClient] GA initializing");
-			// const email = user?.primaryEmailAddress?.emailAddress as string;
 			ReactGA.initialize(env.NEXT_PUBLIC_GA_ID);
 
-			analyticsTrace("[GaClient] GTM initializing");
-			TagManager.initialize({
-				gtmId: "GTM-TCS63KTV",
-			});
 			setInitialized(true);
 		}
 	});
