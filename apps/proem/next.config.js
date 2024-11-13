@@ -40,24 +40,26 @@ const nextConfig = {
 				protocol: "https",
 				hostname: "img.clerk.com",
 			},
-			{
-				protocol: "https",
-				hostname: "www.gravatar.com",
-			},
-			{
-				protocol: "https",
-				hostname: "asset.dr.dk",
-			},
-			{
-				protocol: "https",
-				hostname: "i.guim.co.uk",
-			},
-			{
-				protocol: "https",
-				hostname: "i.ytimg.com",
-			},
 		],
 	},
+	async rewrites() {
+		return [
+		  {
+			source: "/ingest/static/:path*",
+			destination: "https://eu-assets.i.posthog.com/static/:path*",
+		  },
+		  {
+			source: "/ingest/:path*",
+			destination: "https://eu.i.posthog.com/:path*",
+		  },
+		  {
+			source: "/ingest/decide",
+			destination: "https://eu.i.posthog.com/decide",
+		  },
+		];
+	  },
+	  // This is required to support PostHog trailing slash API requests
+	  skipTrailingSlashRedirect: true,
 };
 
 module.exports = withSentryConfig(withVercelToolbar(nextConfig), {

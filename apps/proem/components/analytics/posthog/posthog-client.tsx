@@ -42,7 +42,8 @@ function useInit(trackingInput?: TrackingInput) {
 		const disableTracking = user?.isInternal;
 
 		const token = env.NEXT_PUBLIC_POSTHOG_KEY;
-		const api_host = env.NEXT_PUBLIC_POSTHOG_HOST;
+		const ui_host = env.NEXT_PUBLIC_POSTHOG_HOST;
+		const api_host = "/ingest";
 
 		analyticsTrace(
 			"[PosthogClient] initializing",
@@ -50,6 +51,7 @@ function useInit(trackingInput?: TrackingInput) {
 		);
 		posthog.init(token, {
 			api_host,
+			ui_host,
 			persistence,
 			autocapture: !disableTracking,
 			capture_pageview: !disableTracking,
