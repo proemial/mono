@@ -140,7 +140,7 @@ export function getTopNavigationContentByUrl(
 			};
 		}
 
-		return { title: "Ask", action: <CloseAction target={routes.space} /> };
+		return { title: "Ask", action: null };
 	}
 
 	if (url.includes("/share")) {
