@@ -18,7 +18,7 @@ export function NewsFeed({
 				{error && <ErrorModal error={error} />}
 				<Header />
 				<AnnotateForm />
-				<div className="columns-[320px] gap-8 w-full lg:px-8">
+				<div className="columns-[300px] gap-[30px] w-full lg:px-8">
 					{sorted.map((item, i) => (
 						<Trackable
 							key={i}
