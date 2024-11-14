@@ -28,7 +28,7 @@ function ppMouseMove(cardRef: React.RefObject<HTMLDivElement>, event: MouseEvent
 		}
 		const image = cardRef.current.querySelector('.ppNewsCard__pic');
 		if (image instanceof HTMLElement) {
-			image.style.backgroundPosition = `${-degY/2}px ${degX/2}px`;
+			image.style.transform = `perspective(600px) translate3d(${-degY}px, ${degX}px,50px)`;
 		}
 	}
 }
@@ -41,6 +41,10 @@ function ppMouseLeave(cardRef: React.RefObject<HTMLDivElement>, event: MouseEven
 		const summary = cardRef.current.querySelector('.ppNewsCard__qa');
 		if (summary instanceof HTMLElement) {
 			summary.style.transform = '';
+		}
+		const image = cardRef.current.querySelector('.ppNewsCard__pic');
+		if (image instanceof HTMLElement) {
+			image.style.transform = '';
 		}
 	}
 }
@@ -97,9 +101,7 @@ export function NewsCard({
 		<style jsx>{`
 			.ppNewsCard {
 				position:relative;
-				display:flex;
 				overflow:hidden;
-				flex-direction:column;
 				cursor:pointer;
 				box-shadow:0 2px 40px rgba( 0,0,0,.9 );
 				transition: transform .5s cubic-bezier(.215, .61, .355, 1),
@@ -134,11 +136,7 @@ export function NewsCard({
 				position: relative;
 				z-index: 15;
 				padding: 0;
-				transition: transform .2s;
-			}
-			.ppNewsCard__pic img {
-				display: block;
-				transition: box-shadow 0.2s;
+				transition: transform .5s;
 			}
 			.ppNewsCard__host {
 				z-index: 20;
@@ -146,18 +144,18 @@ export function NewsCard({
 			}
 			.ppNewsCard__gradient {
 				z-index: 5;
-				transition: opacity 1s cubic-bezier(0.215, 0.61, 0.355, 1);
 				opacity: 0.5;
+				transition: opacity 1s cubic-bezier(0.215, 0.61, 0.355, 1);
 				background: linear-gradient(120deg, #000000 0%, #000000 100%);
 			}
 			.ppGradientOverlay {
 				z-index: 30;
-				transition: transform .5s;
+				transition: transform 0.5s;
 				transform: perspective(600px) translate3d(0, 0, 0);
 			}
 			.ppNewsCard__title {
 				z-index: 15;
-				transition: transform 1.0s;
+				transition: transform 0.5s;
 				transform: perspective(600px) translate3d(0, 0, 0);
 			}
 			.ppNewsCard__qa {
@@ -167,8 +165,7 @@ export function NewsCard({
 			.ppNewsCard__notice {
 				opacity: 0 !important;
 				z-index: 20;
-				transition-delay: 1.0s;
-				transition: transform 0.2s;
+				transition: transform 0.5s;
 				transform: perspective(600px) translate3d(0, 140px, 0px);
 			}
 			/** 
@@ -191,7 +188,7 @@ export function NewsCard({
 			}
 			@media (min-width: 1023px) {
 				.ppNewsCard:hover .ppNewsCard__title {
-					transition: transform 0.8s;
+					transition: transform 0.5s;
 					transform: perspective(600px) translate3d(0, 0, -15px);
 				}
 				.ppNewsCard:hover .ppNewsCard__qa {
@@ -199,8 +196,7 @@ export function NewsCard({
 				}
 				.ppNewsCard:hover .ppNewsCard__notice {
 					opacity: .8 !important;
-					transition-delay: 1.0s;
-					transition: transform .4s;
+					transition: transform .5s;
 					transform: perspective(600px) translate3d(0, 100px, 200px);
 				}
 				.ppNewsCard:hover .ppGradientOverlay {
@@ -210,7 +206,7 @@ export function NewsCard({
 			}
 			@media (max-width: 1024px) {
 				.ppNewsCard:hover .ppNewsCard__title {
-					transition: transform 0.8s;
+					transition: transform 0.5s;
 					transform: none;
 				}
 				.ppNewsCard:hover .ppNewsCard__qa {
@@ -218,9 +214,7 @@ export function NewsCard({
 				}
 				.ppNewsCard:hover .ppNewsCard__notice {
 					opacity: .8 !important;
-					transition-delay: 1.0s;
-					transition: transform .4s;
-					transform: none;
+					transition: transform .5s;
 					transform: translate3d(0, 140px, 0px);
 				}
 				.ppNewsCard:hover .ppGradientOverlay {
@@ -246,15 +240,23 @@ export function NewsCard({
 					</div>
 				</div>
 				<div className="ppNewsCard__gradient cover rounded-[20px]" />
-				<div
-					className="ppNewsCard__pic relative self-stretch w-full h-[220px] bg-cover bg-top rounded-[14px] shadow-[inset_0_0_40px_rgba(0,0,0,0.7)]"
-					style={{ backgroundImage: `url(${data?.scrape?.artworkUrl})` }}
-				/>
+				<div className="relative self-stretch w-full rounded-[14px] overflow-hidden shadow-[inset_0_0_40px_rgba(0,0,0,0.9)]">
+					<img 
+						src={data?.scrape?.artworkUrl}
+						alt=""
+						className="ppNewsCard__pic w-full"
+						style={{
+							objectFit: 'cover',
+							objectPosition: 'center',
+							transform: 'scale(1.1)'
+						}}
+					/>
+				</div>
 				<Trackable
 					trackingKey={analyticsKeys.experiments.news.item.clickSource}
 					properties={{ sourceUrl: url }}
 				>
-					<div className="ppNewsCard__host inline-flex items-start px-3 py-1 absolute top-[188px] left-[26px] bg-[#ffffffe6] text-black rounded-[26px]">
+					<div className="ppNewsCard__host inline-flex font-[10px] items-start px-3 py-1 absolute top-[26px] left-[26px] bg-[#ffffffe6] text-black rounded-[26px]">
 						{data?.init?.host}
 					</div>
 				</Trackable>
