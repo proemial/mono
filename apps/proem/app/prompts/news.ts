@@ -54,6 +54,8 @@ The third question should broaden the user's knowledge on the topic.
 Rules:
 - Each of the three follow-up questions must not exceed ten words.
 - Respond only with the three follow-up questions.
+- All follow-up questions must be unique.
+- All follow-up questions must be enclosed in <follow_up> tags.
 
 Example:
 
@@ -61,9 +63,9 @@ Example:
 Question: How does life work?
 Answer: Life works through complex processes, including the biological aging modeled by Gompertz and the developmental plasticity that allows organisms to adapt to their environment, influenced by genetics and early life events.
 Follow-ups: 
-<follow_up_1>What are the key components of the model?</follow_up_1>
-<follow_up_2>Are there any alternative theories to it?</follow_up_2>
-<follow_up_3>How do genetics interact in shaping an organism's development?</follow_up_3>
+<follow_up>What are the key components of the model?</follow_up>
+<follow_up>Are there any alternative theories to it?</follow_up>
+<follow_up>How do genetics interact in shaping an organism's development?</follow_up>
 ---
 `;
 }

@@ -5,17 +5,17 @@ import Image from "next/image";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Throbber } from "@/components/throbber";
 import { BotSuggestion } from "./bot-suggestion";
+import { useEffect, useRef } from "react";
 
 const showFollowups = false;
 
 export function BotQa({
-	id,
 	question,
 	answer,
 	followups,
 	user,
+	scrollTo,
 }: {
-	id: string;
 	question: string;
 	answer?: string;
 	followups?: string[];
@@ -24,47 +24,23 @@ export function BotQa({
 		name: string;
 		backgroundColor: string;
 	};
+	scrollTo?: boolean;
 }) {
-	const formatAnswerText = (text?: string) => {
-		if (!text) return "";
-		return text
-			.replace(/^\s*-\s*/gm, "")
-			.split(/(\[.*?\])/)
-			.map((segment, i) => {
-				const match = segment.match(/\[(.*?)\]/);
-				if (match) {
-					const numbers = match[1]?.split(",").map((n) => n.trim());
-					return numbers?.map((num, j) => (
-						<Trackable
-							key={`${i}-${j}`}
-							trackingKey={
-								analyticsKeys.experiments.news.item.clickInlineReference
-							}
-						>
-							<span className="relative inline-block">
-								<a
-									href={`#${num}`}
-									key={`${i}-${j}`}
-									onClick={() =>
-										document
-											.getElementById("sources")
-											?.scrollIntoView({ behavior: "smooth" })
-									}
-									className="relative -top-[2px] inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-pointer hover:bg-gray-800"
-								>
-									{num}
-								</a>
-							</span>
-						</Trackable>
-					));
-				}
-				// Return regular text for non-link segments
-				return segment;
-			});
-	};
+	const qaRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (typeof window !== "undefined" && scrollTo && qaRef.current) {
+			const yOffset = -64;
+			const y =
+				qaRef.current.getBoundingClientRect().top +
+				window.pageYOffset +
+				yOffset;
+			window.scrollTo({ top: y, behavior: "smooth" });
+		}
+	}, [scrollTo]);
 
 	return (
-		<div className="flex flex-col w-full gap-2" id={id}>
+		<div ref={qaRef} className="flex flex-col w-full gap-2">
 			<div className="flex items-start gap-1.5 px-3 w-full">
 				{user?.avatar ? (
 					<div className="w-10 h-10 rounded-full text-2xl flex items-center justify-center bg-black">
@@ -180,3 +156,41 @@ export function BotQa({
 		</div>
 	);
 }
+
+const formatAnswerText = (text?: string) => {
+	if (!text) return "";
+	return text
+		.replace(/^\s*-\s*/gm, "")
+		.split(/(\[.*?\])/)
+		.map((segment, i) => {
+			const match = segment.match(/\[(.*?)\]/);
+			if (match) {
+				const numbers = match[1]?.split(",").map((n) => n.trim());
+				return numbers?.map((num, j) => (
+					<Trackable
+						key={`${i}-${j}`}
+						trackingKey={
+							analyticsKeys.experiments.news.item.clickInlineReference
+						}
+					>
+						<span className="relative inline-block">
+							<a
+								href={`#${num}`}
+								key={`${i}-${j}`}
+								onClick={() =>
+									document
+										.getElementById("sources")
+										?.scrollIntoView({ behavior: "smooth" })
+								}
+								className="relative -top-[2px] inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-pointer hover:bg-gray-800"
+							>
+								{num}
+							</a>
+						</span>
+					</Trackable>
+				));
+			}
+			// Return regular text for non-link segments
+			return segment;
+		});
+};

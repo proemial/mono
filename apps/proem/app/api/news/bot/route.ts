@@ -11,8 +11,6 @@ import { newsAnswerPrompt, newsFollowupPrompt } from "@/app/prompts/news";
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
-const createFollowups = false;
-
 export async function POST(req: Request) {
 	const { messages, url } = (await req.json()) as {
 		messages: { role: "user" | "assistant"; content: string }[];
@@ -83,7 +81,7 @@ async function generateFollowups(
 	},
 	messages: { role: "user" | "assistant"; content: string }[],
 ) {
-	if (!createFollowups || !question || !answer) return;
+	if (!question || !answer) return;
 
 	const { text } = await generateText({
 		model: anthropic("claude-3-5-haiku-latest"),
@@ -91,9 +89,12 @@ async function generateFollowups(
 		messages: convertToCoreMessages(messages),
 	});
 
-	return (
+	const followups =
 		text
 			.match(/<[^>]*?>(.*?)<\/[^>]*?>/g)
-			?.map((match) => match.replace(/<\/?[^>]*?>/g, "")) || undefined
-	);
+			?.map((match) => match.replace(/<\/?[^>]*?>/g, "")) || undefined;
+
+	console.log("followups", question, answer, followups);
+
+	return followups;
 }

@@ -28,7 +28,7 @@ export function BotSuggestion({
 				type="button"
 				onClick={() => handleSuggestionClick(question)}
 				className={cn(
-					"bg-white text-[#08080a] rounded-xl gap-2 py-2 px-3 flex justify-between items-center text-left text-[15px] w-full border border-gray-400",
+					"bg-[#e9eaee] rounded-xl gap-2 py-2 px-3 flex justify-between items-center text-left text-[15px] w-full",
 					{
 						"hover:bg-[#e9eaee] hover:border-[#e9eaee]   cursor-pointer":
 							!isLoading && !isAsked,
