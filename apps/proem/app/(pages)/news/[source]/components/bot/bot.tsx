@@ -104,7 +104,7 @@ export function Bot({ url, questions }: Props) {
 					className="flex-col items-start gap-2 px-3 py-0 w-full flex"
 					style={{
 						maxHeight: hidden ? "0px" : "1000px",
-						transition: "all 0.6s ease-in-out",
+						transition: "all 0.9s ease-in-out",
 						overflow: "hidden",
 					}}
 				>
