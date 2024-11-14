@@ -33,7 +33,6 @@ export function CommunityQuestions({
 							}
 							question={question[0]}
 							answer={question[1]}
-							id={`qa-${index}`}
 						/>
 					);
 				})}
