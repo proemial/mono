@@ -2,16 +2,16 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { JSONValue } from "ai";
-import { Message, useChat } from "ai/react";
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { useChat } from "ai/react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useFromFeedSearchParam } from "../../../components/use-published";
 import { BotForm } from "./bot-form";
+import { BotQa } from "./bot-qa";
 import { BotSuggestion } from "./bot-suggestion";
 import { CommunityQuestions } from "./fake-it";
 import { BotHeader } from "./headers";
-import { BotQa } from "./bot-qa";
-import { Throbber } from "@/components/throbber";
+
+type StreamingData = { type: string; value: string };
 
 type Props = {
 	url: string;
@@ -38,7 +38,11 @@ export function Bot({ url, questions }: Props) {
 		},
 	});
 
-	const suggestions = useSuggestions(questions, data, isFromFeed);
+	const { suggestions, hidden } = useSuggestions(
+		questions,
+		data as StreamingData[],
+		isFromFeed,
+	);
 
 	const isAlreadyAsked = useCallback(
 		(suggestion: string | undefined) => {
@@ -99,7 +103,7 @@ export function Bot({ url, questions }: Props) {
 				<div
 					className="flex-col items-start gap-2 px-3 py-0 w-full flex"
 					style={{
-						maxHeight: !isLoading ? "1000px" : "0px",
+						maxHeight: hidden ? "0px" : "1000px",
 						transition: "all 0.6s ease-in-out",
 						overflow: "hidden",
 					}}
@@ -108,7 +112,7 @@ export function Bot({ url, questions }: Props) {
 						<BotSuggestion
 							key={index}
 							qa={[qa, ""]}
-							isLoading={isLoading}
+							isLoading={isLoading || hidden}
 							isAsked={isAlreadyAsked(qa.at(0))}
 							handleSuggestionClick={handleSuggestionClick}
 						/>
@@ -142,44 +146,26 @@ const scrollToQa = async (index: string) => {
 
 function useSuggestions(
 	questions: Array<[string, string]>,
-	// messages: Message[],
-	data?: JSONValue[],
+	data?: StreamingData[],
 	isFromFeed?: boolean,
 ) {
-	const [followups, setFollowups] = useState<
-		{
-			question: string;
-			answer: string;
-			followups: string[];
-		}[]
-	>(initialSuggestions(questions, isFromFeed) ?? []);
-
+	const memoizedData = useMemo(() => data?.at(-1) as StreamingData, [data]);
+	const [hidden, setHidden] = useState(false);
+	const [suggestions, setSuggestions] = useState(
+		initialSuggestions(questions, isFromFeed).followups,
+	);
 	useEffect(() => {
-		type StreamingData = { type: string; value: string };
-		const followupsObject = (data as StreamingData[])
-			?.filter((d) => d.type === "followups")
-			?.reduce(
-				(acc, d) => {
-					const { question, answer, followups } = JSON.parse(d.value);
-					acc.push({ question, answer, followups });
-					return acc;
-				},
-				[] as { question: string; answer: string; followups: string[] }[],
-			);
+		if (memoizedData) {
+			setHidden(memoizedData?.type === "followups");
 
-		if (followupsObject?.length) {
-			setFollowups(followupsObject);
+			setTimeout(() => {
+				setSuggestions(JSON.parse(memoizedData.value).followups);
+				setHidden(false);
+			}, 1000);
 		}
-	}, [data]);
+	}, [memoizedData]);
 
-	// const currentQuestion = messages
-	// 	.filter((m) => m.role === "user")
-	// 	.at(-1)?.content;
-
-	// return currentQuestion
-	// 	? followups.find((f) => f.question === currentQuestion)?.followups
-	// 	: followups.at(-1)?.followups;
-	return followups.at(-1)?.followups;
+	return { suggestions, hidden };
 }
 
 function initialSuggestions(
@@ -187,11 +173,9 @@ function initialSuggestions(
 	isFromFeed?: boolean,
 ) {
 	const tripple = isFromFeed ? questions?.slice(3) : questions?.slice(0, 3);
-	return [
-		{
-			question: "",
-			answer: "",
-			followups: tripple?.map((qa) => qa.at(0) ?? "") ?? [],
-		},
-	];
+	return {
+		question: "",
+		answer: "",
+		followups: tripple?.map((qa) => qa.at(0) ?? "") ?? [],
+	};
 }
