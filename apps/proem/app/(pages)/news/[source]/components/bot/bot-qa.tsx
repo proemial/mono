@@ -6,6 +6,7 @@ import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Throbber } from "@/components/throbber";
 import { BotSuggestion } from "./bot-suggestion";
 import { useEffect, useRef } from "react";
+import { useIsApp } from "@/utils/app";
 
 const showFollowups = false;
 
@@ -26,18 +27,19 @@ export function BotQa({
 	};
 	scrollTo?: boolean;
 }) {
+	const isApp = useIsApp();
 	const qaRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		if (typeof window !== "undefined" && scrollTo && qaRef.current) {
-			const yOffset = -64;
+			const yOffset = isApp ? -82 : -64;
 			const y =
 				qaRef.current.getBoundingClientRect().top +
 				window.pageYOffset +
 				yOffset;
 			window.scrollTo({ top: y, behavior: "smooth" });
 		}
-	}, [scrollTo]);
+	}, [scrollTo, isApp]);
 
 	return (
 		<div ref={qaRef} className="flex flex-col w-full gap-2">
