@@ -11,6 +11,7 @@ import Image from "next/image";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import logo from "./components/images/logo.svg";
 import { users } from "./components/users";
+import { extractHostName } from "@/utils/url";
 
 function ppMouseMove(
 	cardRef: React.RefObject<HTMLDivElement>,
@@ -119,7 +120,7 @@ export function NewsCard({
 						properties={{ sourceUrl: url }}
 					>
 						<div className="ppNewsCard__host inline-flex items-start px-3 py-1 absolute top-[188px] left-[26px] bg-[#ffffffe6] text-black rounded-[26px]">
-							{data?.init?.host}
+							{extractHostName(url)}
 						</div>
 					</Trackable>
 					<div className="ppNewsCard__title relative flex flex-col pt-3 pb-3 mt-[-4.00px] leading-[normal] font-semibold text-xl flex-[0_0_auto] drop-shadow-md">

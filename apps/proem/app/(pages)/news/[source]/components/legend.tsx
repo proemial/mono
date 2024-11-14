@@ -1,16 +1,15 @@
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Trackable } from "@/components/trackable";
+import { extractHostName } from "@/utils/url";
 
 export function Legend({
 	title,
 	image,
 	url,
-	host,
 }: {
 	title?: string;
 	image?: string;
 	url: string;
-	host?: string;
 }) {
 	return (
 		<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto]">
@@ -33,7 +32,7 @@ export function Legend({
 					}
 				>
 					<a href={url} target="_blank" rel="noopener noreferrer">
-						{host}
+						{extractHostName(url)}
 					</a>
 				</Trackable>
 			</div>
