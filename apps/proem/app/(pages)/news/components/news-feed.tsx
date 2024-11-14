@@ -26,7 +26,7 @@ export function NewsFeed({
 							properties={{ sourceUrl: item.init?.url as string }}
 						>
 							<div
-								className="inline-block w-full mb-8 break-inside-avoid-page cursor-pointer"
+								className="inline-flex w-full mb-8 break-inside-avoid-page cursor-pointer"
 								data-url={item.init?.url}
 								onClick={(e) => {
 									const target = e.currentTarget;

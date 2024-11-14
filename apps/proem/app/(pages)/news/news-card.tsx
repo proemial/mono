@@ -102,14 +102,6 @@ export function NewsCard({
 					className="rounded-[20px] px-3 pt-3 overflow-hidden"
 					style={{ background, color }}
 				>
-					<div
-						style={{ opacity: 0 }}
-						className="ppNewsCard__notice absolute left-[0px] top-[-40px] w-full"
-					>
-						<div className="mx-auto font-heavy text-[#08080a] text-[15px] tracking-[0] px-3 py-2 w-[150px] leading-5 text-center bg-[#e9eaee] rounded-xl shadow-[0_0px_20px_1px_rgba(0,0,0,0.4)]">
-							CLICK TO READ
-						</div>
-					</div>
 					<div className="ppNewsCard__gradient cover rounded-[20px]" />
 					<div
 						className="ppNewsCard__pic relative self-stretch w-full h-[220px] bg-cover bg-top rounded-[14px] shadow-[inset_0_0_40px_rgba(0,0,0,0.7)]"
