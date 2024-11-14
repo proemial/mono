@@ -21,15 +21,15 @@ export function AnnotateForm() {
 		<>
 			{(
 				<div
-					className="flex flex-col items-center justify-between self-stretch p-4 mb-4 lg:mx-8 bg-gradient-to-b from-[#7DFA86] from-[-25%] via-[#3732916b] via-[75%] to-[#312d7b6b] to-[100%] rounded-2xl h-[75vh]"
+					className="flex flex-col items-center justify-between self-stretch p-2 mb-4 lg:mx-8 bg-gradient-to-b from-[#7DFA86] from-[-25%] via-[#3732916b] via-[75%] to-[#312d7b6b] to-[100%] rounded-2xl h-[75vh]"
 				>
 					<div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
-						<div className="w-5/6 text-xl font-semibold leading-7 text-center text-white drop-shadow-md">
+						<div className="text-xl font-semibold leading-7 text-center text-white drop-shadow-md">
 							Enrich news articles with insights
 							<br />
 							from the latest research papers.
 						</div>
-						<div className="flex gap-1 justify-center items-center w-full px-4">
+						<div className="flex gap-1 justify-center items-center w-full px-6">
 							<form
 								onSubmit={(e) => {
 									console.log("submit");
@@ -82,7 +82,7 @@ export function AnnotateForm() {
 						</div>
 					</div>
 					<div className="w-5/6 text-base pb-4 font-semibold leading-7 text-center text-white/60 drop-shadow-md">
-						Or browse articles enriched by other users:
+						...latest articles enriched by other users:
 					</div>
 				</div>
 			)}
