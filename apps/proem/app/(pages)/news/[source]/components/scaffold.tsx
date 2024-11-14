@@ -21,6 +21,7 @@ import logo from "../../components/images/logo.svg";
 import Image from "next/image";
 import { Header } from "../../components/header";
 import { Footer } from "../../components/footer";
+import { extractHostName } from "@/utils/url";
 
 export function Scaffold({
 	url,
@@ -125,7 +126,6 @@ export function Scaffold({
 								title={data?.scrape?.title}
 								image={data?.scrape?.artworkUrl}
 								url={url}
-								host={data?.init?.host}
 							/>
 						</div>
 					</div>
