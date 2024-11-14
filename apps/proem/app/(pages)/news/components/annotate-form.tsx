@@ -81,7 +81,7 @@ export function AnnotateForm() {
 							</form>
 						</div>
 					</div>
-					<div className="w-5/6 text-base pb-4 font-semibold leading-7 text-center text-white/60 drop-shadow-md">
+					<div className="w-full text-base pb-4 font-semibold leading-7 text-center text-white/60 drop-shadow-md">
 						...latest articles enriched by other users:
 					</div>
 				</div>
