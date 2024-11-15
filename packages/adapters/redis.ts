@@ -9,8 +9,8 @@ import { RedisSummaries } from "./redis/summaries";
 import { RedisNews } from "./redis/news";
 
 export const envVariables = z.object({
-	REDIS_PAPERS_TOKEN: z.string(),
-	REDIS_PAPERS_URL: z.string(),
+	REDIS_PAPERS_NEW_TOKEN: z.string(),
+	REDIS_PAPERS_NEW_URL: z.string(),
 });
 
 envVariables.parse(process.env);
