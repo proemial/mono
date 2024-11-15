@@ -23,6 +23,7 @@ import { Message } from "ai/react";
 import Link from "next/link";
 import { ReactNode, useRef } from "react";
 import { useThrobberStatus } from "./use-throbber-status";
+import { Throbber } from "@/components/throbber";
 
 export type QaPairProps = {
 	question: Message;
@@ -128,6 +129,7 @@ export const QaPair = ({
 							text={answer.map((message) => message.content)}
 							trackingKeys={analyticsKeys.ask}
 						/>
+						{isLoadingAnswer && <Throbber />}
 						{savedAnswer?.shareId && (
 							<ChatActionBarAsk
 								shareId={savedAnswer.shareId}
