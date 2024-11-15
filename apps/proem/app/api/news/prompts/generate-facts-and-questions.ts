@@ -49,7 +49,7 @@ Output a list of all the questions with each answer on a separate indented line 
 </task_2>
 
 <task_3>
-Translate the original title to US English. if the location is important, and the article isnt about the US, find a way to include the country name in the translated title. 
+Translate the original title to US English, but keep it around 10 words. if the location is important, and the article isnt about the US, find a way to include the country name in the translated title. 
 
 If the title is already in US English, simply output the original title.
 </task_3>
