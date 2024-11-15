@@ -112,31 +112,34 @@ export function Scaffold({
 			{scraperError && <ScraperError />}
 			{fatalError && <AnnotationError error={fatalError} />}
 
-			<Header />
-			<div className="flex flex-col gap-4">
+			<div className="hidden md:hidden lg:hidden sm:block">
+				<Header />
+			</div>
+			<div className="flex flex-col gap-4 p-2 lg:p-0 md:p-0">
 				<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto] text-[#08080a]">
 					<div
 						className={
-							"fle≥x flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]"
+							"flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto] p-3 rounded-[20px] border border-black/50"
 						}
 						style={{ background, color }}
 					>
-						<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto]">
+						<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto rounded-[8px]">
 							<Legend
 								title={data?.scrape?.title}
 								image={data?.scrape?.artworkUrl}
 								url={url}
+								summary={data?.query?.value ?? ''} // Add nullish coalescing operator
 							/>
 						</div>
 					</div>
 
-					<ActionBar
+					{/* <ActionBar
 						url={url}
 						textColor="#303030"
 						background={background}
 						foreground={color}
 						date={data?.scrape?.date}
-					/>
+					/> */}
 				</div>
 
 				{data?.summarise?.commentary && (

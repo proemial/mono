@@ -27,6 +27,7 @@ summary goes here
 			],
 		});
 		console.log("[generateIndexSearchQuery]", usage);
+		console.log("[generateIndexSearchQuery]", text);
 		return text;
 	} catch (e) {
 		console.error("[news][query] generateIndexSearchQuery failed", e);
