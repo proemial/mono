@@ -41,7 +41,7 @@ export const FeedItemCard = ({
 	return (
 		<div className="flex flex-col gap-3">
 			<EmbedableLink
-				path={`/paper/${provider ?? "oa"}/${id}`}
+				path={`/paper/${provider ?? "oa"}/${id.split("/").pop()}`}
 				spaceId={customCollectionId}
 				field={field}
 				feedType={feedType}
