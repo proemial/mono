@@ -125,7 +125,7 @@ export function Scaffold({
 					>
 						<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto rounded-[8px]">
 							<Legend
-								title={data?.scrape?.title}
+								title={data?.summarise?.engTitle ?? data?.scrape?.title}
 								image={data?.scrape?.artworkUrl}
 								url={url}
 								summary={data?.query?.value ?? ''} // Add nullish coalescing operator

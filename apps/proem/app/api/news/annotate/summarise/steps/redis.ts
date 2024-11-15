@@ -20,13 +20,14 @@ export async function getFromRedis(url: string) {
 
 export async function updateRedis(
 	url: string,
-	{ commentary, questions }: NewsAnnotatorSummariseStep,
+	{ commentary, questions, engTitle }: NewsAnnotatorSummariseStep,
 ) {
 	try {
 		const result = await Redis.news.update(url, {
 			name: "summarise",
 			commentary,
 			questions,
+			engTitle,
 		} as NewsAnnotatorSummariseInputStep);
 
 		return result;

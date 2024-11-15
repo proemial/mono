@@ -15,10 +15,10 @@ export async function summarise(
 			title,
 			papers,
 		);
-		const { commentary, questions: qaString } = parseOutput(factsAndQuestions);
+		const { commentary, questions: qaString, engTitle } = parseOutput(factsAndQuestions);
 		const questions = qaFromString(qaString);
 
-		return { commentary, questions };
+		return { commentary, questions, engTitle };
 	} catch (e) {
 		console.error("[news][summarise] failed to summarise", e);
 		throw new Error("[news][summarise] failed to summarise", {
@@ -31,9 +31,12 @@ function parseOutput(factsAndQuestions: string) {
 	const rawCommentary = factsAndQuestions
 		.split("<task_1>")[1]
 		?.split("</task_1>")[0];
-	const rawQuestions = factsAndQuestions
+		const rawQuestions = factsAndQuestions
 		.split("<task_2>")[1]
 		?.split("</task_2>")[0];
+		const rawEnglishTitle = factsAndQuestions
+		.split("<task_3>")[1]
+		?.split("</task_3>")[0];
 
 	if (!rawCommentary) {
 		console.error("factsAndQuestions", factsAndQuestions);
@@ -43,11 +46,16 @@ function parseOutput(factsAndQuestions: string) {
 		console.error("factsAndQuestions", factsAndQuestions);
 		throw new Error("Failed to generate valid questions");
 	}
+	if (!rawEnglishTitle) {
+		console.error("factsAndQuestions", factsAndQuestions);
+		throw new Error("Failed to generate English title");
+	}
 
 	const commentary = trimNewlines(rawCommentary);
 	const questions = trimNewlines(rawQuestions);
+	const engTitle = trimNewlines(rawEnglishTitle);
 
-	return { commentary, questions };
+	return { commentary, questions, engTitle };
 }
 
 // Trims newlines from the beginning and end of a string

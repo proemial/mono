@@ -157,6 +157,7 @@ export type NewsAnnotatorSummariseInputStep = NewsAnnotatorSummariseStep & {
 export type NewsAnnotatorSummariseStep = {
 	commentary?: string;
 	questions?: Array<[string, string]>;
+	engTitle?: string;
 };
 
 export type ReferencedPaper = {
