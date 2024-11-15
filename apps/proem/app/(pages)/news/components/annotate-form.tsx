@@ -1,6 +1,6 @@
 "use client";
 import { PlusCircle } from "@untitled-ui/icons-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { isBlockedUrl } from "../blocked";
 import { useIsApp } from "@/utils/app";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
@@ -11,23 +11,43 @@ export function AnnotateForm() {
 	const [isOpen, setIsOpen] = useState(false);
 	const [url, setUrl] = useState("");
 
+	const urls = [
+		"https://bbc.com/news/world-europe-65563922",
+		"https://reuters.com/technology/ai-revolution-2023-05-15/",
+		"https://theguardian.com/science/2023/may/space-discovery",
+		"https://nytimes.com/2023/05/climate-change-report",
+		"https://wsj.com/articles/economy-outlook-2023",
+		"https://washingtonpost.com/health/medical-breakthrough",
+		"https://aljazeera.com/news/2023/5/global-summit",
+		"https://bloomberg.com/news/markets-update",
+		"https://apnews.com/technology-innovation",
+		"https://reuters.com/world/diplomatic-talks",
+	];
+	const [currentPlaceholder, setCurrentPlaceholder] = useState(urls[0]);
+
 	useEffect(() => {
 		setTimeout(() => {
 			setIsOpen(true);
 		}, 300);
 	}, []);
 
+	useEffect(() => {
+		const interval = setInterval(() => {
+			const randomUrl = urls[Math.floor(Math.random() * urls.length)];
+			setCurrentPlaceholder(randomUrl);
+		}, 5000);
+
+		return () => clearInterval(interval);
+	}, []);
+
 	return (
 		<>
-			{(
-				<div
-					className="flex flex-col items-center justify-between self-stretch p-2 mb-4 lg:mx-8 bg-gradient-to-b from-[#7DFA86] from-[-25%] via-[#3732916b] via-[75%] to-[#312d7b6b] to-[100%] rounded-2xl h-[75vh]"
-				>
+			{
+				<div className="flex flex-col items-center justify-between self-stretch p-2 mb-4 lg:mx-8 bg-gradient-to-b from-[#7DFA86] from-[-25%] via-[#3732916b] via-[75%] to-[#312d7b6b] to-[100%] rounded-2xl h-[75vh]">
 					<div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
-						<div className="text-xl font-semibold leading-7 text-center text-white drop-shadow-md">
-							Enrich news articles with insights
-							<br />
-							from the latest research papers.
+						<div className="text-xl lg:text-3xl font-semibold w-4/5 lg:w-1/2 leading-7 text-center text-white drop-shadow-md">
+							Enrich news articles with insights from the latest research
+							papers.
 						</div>
 						<div className="flex gap-1 justify-center items-center w-full px-6">
 							<form
@@ -60,10 +80,10 @@ export function AnnotateForm() {
 									<input
 										type="url"
 										name="url"
-										placeholder="Paste news article URL"
+										placeholder={currentPlaceholder}
 										pattern="https?://.*"
 										title="Please enter a valid URL starting with http:// or https://"
-										className="font-normal text-white/50 text-sm leading-[14px] bg-transparent border-none outline-none w-full"
+										className="font-normal placeholder:text-white/50 text-white/90 text-sm leading-[14px] bg-transparent border-none outline-none w-full"
 										onChange={(e) => setUrl(e.target.value)}
 										value={url}
 										required
@@ -82,10 +102,10 @@ export function AnnotateForm() {
 						</div>
 					</div>
 					<div className="w-full text-base pb-4 font-semibold leading-7 text-center text-white/60 drop-shadow-md">
-						...latest articles enriched by other users:
+						Latest articles enriched by other users 👇
 					</div>
 				</div>
-			)}
+			}
 		</>
 	);
 }
