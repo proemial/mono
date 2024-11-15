@@ -10,11 +10,14 @@ import {
 } from "ai";
 import { NextRequest, NextResponse } from "next/server";
 import { z, ZodType } from "zod";
-import { rephraseQuestionPrompt, systemPrompt } from "./prompts";
+import {
+	followUpQuestionsPrompt,
+	rephraseQuestionPrompt,
+	systemPrompt,
+} from "./prompts";
 import { Time } from "@proemial/utils/time";
 import { QdrantPaper } from "../../news/annotate/fetch/steps/fetch";
 import { AnswerEngineStreamData } from "../answer-engine/answer-engine";
-import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { prettySlug } from "@proemial/utils/pretty-slug";
 import { answers } from "@proemial/data/repository/answer";
 
@@ -37,6 +40,7 @@ export const POST = async (req: NextRequest) => {
 		if (!success) {
 			return NextResponse.json({ error: "Rate limited" }, { status: 429 });
 		}
+
 		const requestData = await req.json();
 		const { messages, slug: existingSlug } =
 			RequestDataSchema.parse(requestData);
@@ -91,9 +95,10 @@ export const POST = async (req: NextRequest) => {
 				});
 			},
 			onFinish: async ({ text: answer, toolResults }) => {
-				const followUps = await followUpQuestionChain().invoke({
-					question: userQuestion.content,
-					answer: answer,
+				const { text: followUps } = await generateText({
+					model: anthropic("claude-3-5-sonnet-20240620"),
+					system: followUpQuestionsPrompt(userQuestion.content, answer),
+					messages: coreMessages,
 				});
 				streamingData.append({
 					type: "follow-up-questions-generated",
@@ -103,13 +108,16 @@ export const POST = async (req: NextRequest) => {
 						.filter(Boolean)
 						.map((question) => ({ question: `${question.trim()}?` })),
 				});
+
 				const papers = toolResults
 					.filter((res) => res.toolName === "getPapers")
 					.flatMap((res) => {
 						const { result: papers } = res;
 						return papers;
 					});
+
 				const { userId } = auth();
+
 				const savedAnswer = await answers.create({
 					slug,
 					question: userQuestion.content,

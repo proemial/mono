@@ -63,3 +63,34 @@ If you detect that the user changes the subject, ignore the chat history.
 
 Do not respond with anything else than the rephrased question.
 `;
+
+export const followUpQuestionsPrompt = (question: string, answer: string) => `
+Based on a given question and an answer to that question, provide a response
+containing three good follow-up questions that would enable an adult learner
+dive deeper into a topic and understand the background for the given answer.
+
+Question: ${question}
+
+Answer: ${answer}
+
+The first question should dive deeper into the topic.
+The second question should challenge the facts presented in the answer.
+The third question should broaden the user's knowledge on the topic.
+
+Rules:
+- Each of the three follow-up questions must not exceed ten words.
+- Respond only with the three follow-up questions.
+
+Example:
+
+---
+Human: How does life work?
+
+Assistant: Life works through complex processes, including the biological aging
+modeled by Gompertz and the developmental plasticity that allows organisms to
+adapt to their environment, influenced by genetics and early life events.
+
+Response: What are the key components of the model? Are there any alternative
+theories to it? How do genetics interact in shaping an organism's development?
+---
+`;
