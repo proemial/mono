@@ -1,13 +1,15 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { generateText } from "ai";
 
+const model = () => anthropic("claude-3-5-sonnet-20240620");
+
 export const generateIndexSearchQuery = async (
 	transcript: string,
 	title: string,
 ): Promise<string> => {
 	try {
 		const { text, usage } = await generateText({
-			model: anthropic("claude-3-5-sonnet-20240620"),
+			model: model(),
 			messages: [
 				{
 					role: "user",

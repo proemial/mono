@@ -1,6 +1,9 @@
 import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
+
+const model = () => anthropic("claude-3-5-sonnet-20240620");
+
 export const generateFactsAndQuestions = async (
 	transcript: string,
 	title: string,
@@ -9,7 +12,7 @@ export const generateFactsAndQuestions = async (
 ): Promise<string> => {
 	try {
 		const { text, usage } = await generateText({
-			model: anthropic("claude-3-5-sonnet-20240620"),
+			model: model(),
 			messages: [
 				{
 					role: "user",

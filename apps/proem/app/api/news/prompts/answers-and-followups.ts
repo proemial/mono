@@ -1,4 +1,16 @@
-export function newsAnswerPrompt(
+import { anthropic } from "@ai-sdk/anthropic";
+
+export const LlmAnswer = {
+	prompt: answerPrompt,
+	model: () => anthropic("claude-3-5-sonnet-20240620"),
+};
+
+export const LlmFollowups = {
+	prompt: followupsPrompt,
+	model: () => anthropic("claude-3-5-haiku-latest"),
+};
+
+function answerPrompt(
 	title?: string,
 	transcript?: string,
 	papers?: { abstract: string }[],
@@ -19,7 +31,7 @@ ${papers?.map((abstract, index) => `<abstract_${index + 1}>${abstract.abstract}<
 `;
 }
 
-export function newsFollowupPrompt(
+function followupsPrompt(
 	question: string,
 	answer: string,
 	context: {

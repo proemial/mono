@@ -6,7 +6,7 @@ import {
 } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { Redis } from "@proemial/adapters/redis";
-import { newsAnswerPrompt, newsFollowupPrompt } from "@/app/prompts/news";
+import { LlmAnswer, LlmFollowups } from "../prompts/answers-and-followups";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -25,8 +25,8 @@ export async function POST(req: Request) {
 	const streamingData = new StreamData();
 
 	const result = await streamText({
-		model: anthropic("claude-3-5-sonnet-20240620"),
-		system: newsAnswerPrompt(
+		model: LlmAnswer.model(),
+		system: LlmAnswer.prompt(
 			item?.scrape?.title,
 			item?.scrape?.transcript,
 			item?.papers?.value,
@@ -84,8 +84,8 @@ async function generateFollowups(
 	if (!question || !answer) return;
 
 	const { text } = await generateText({
-		model: anthropic("claude-3-5-haiku-latest"),
-		system: newsFollowupPrompt(question, answer, context),
+		model: LlmFollowups.model(),
+		system: LlmFollowups.prompt(question, answer, context),
 		messages: convertToCoreMessages(messages),
 	});
 
