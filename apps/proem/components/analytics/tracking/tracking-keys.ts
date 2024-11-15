@@ -100,6 +100,8 @@ export const analyticsKeys = {
 			// TODO: cleanup
 			answerCard: "ask:answer-card:click",
 			answerLink: "ask:answer-link:click",
+
+			inlineReference: "ask:inline-reference:click",
 		},
 		submit: {
 			modelEmail: "ask:model:email:submit",

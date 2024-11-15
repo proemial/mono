@@ -159,7 +159,7 @@ export function BotQa({
 	);
 }
 
-export const formatAnswerText = (text?: string) => {
+const formatAnswerText = (text?: string) => {
 	if (!text) return "";
 	return text
 		.replace(/^\s*-\s*/gm, "")

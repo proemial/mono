@@ -2,7 +2,7 @@ import { AIGeneratedIcon } from "@/components/icons/AIGeneratedIcon";
 import { Trackable } from "@/components/trackable";
 import { Header4 } from "@proemial/shadcn-ui";
 import { ModelSelector, ModelSelectorProps } from "./model-selector";
-import { formatAnswerText } from "@/app/(pages)/news/[source]/components/bot/bot-qa";
+import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 
 type ChatArticleProps = {
 	type: "Answer";
@@ -29,9 +29,35 @@ export function ChatArticle({ type, trackingKeys, text }: ChatArticleProps) {
 			</div>
 			<div className="text-base/relaxed break-words flex flex-col gap-2">
 				{text?.map((paragraph) => (
-					<p key={paragraph}>{formatAnswerText(paragraph)}</p>
+					<div key={paragraph}>{formatAnswerTextNoLinks(paragraph)}</div>
 				))}
 			</div>
 		</div>
 	);
 }
+
+const formatAnswerTextNoLinks = (text?: string) => {
+	if (!text) return "";
+	return text
+		.replace(/^\s*-\s*/gm, "")
+		.split(/(\[.*?\])/)
+		.map((segment, i) => {
+			const match = segment.match(/\[(.*?)\]/);
+			if (match) {
+				const numbers = match[1]?.split(",").map((n) => n.trim());
+				return numbers?.map((num, j) => (
+					<Trackable
+						key={`${i}-${j}`}
+						trackingKey={analyticsKeys.ask.click.inlineReference}
+					>
+						<span className="relative inline-block">
+							<div className="relative -top-[2px] inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-default hover:bg-gray-800">
+								{num}
+							</div>
+						</span>
+					</Trackable>
+				));
+			}
+			return segment;
+		});
+};
