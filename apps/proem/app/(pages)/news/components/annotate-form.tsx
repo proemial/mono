@@ -46,7 +46,8 @@ export function AnnotateForm() {
 				<div className="flex flex-col items-center justify-between self-stretch p-2 mb-4 lg:mx-8 bg-gradient-to-b from-[#7DFA86] from-[-25%] via-[#3732916b] via-[75%] to-[#312d7b6b] to-[100%] rounded-2xl h-[75vh]">
 					<div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
 						<div className="text-xl lg:text-3xl font-semibold w-4/5 lg:w-1/2 leading-7 text-center text-white drop-shadow-md">
-							Enrich news articles with insights from the latest <nobr>research papers.</nobr>
+							Enrich news articles with insights from the latest{" "}
+							<span className="whitespace-nowrap">research papers.</span>
 						</div>
 						<div className="flex gap-1 justify-center items-center w-full px-6">
 							<form
