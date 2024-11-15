@@ -71,7 +71,7 @@ export function NewsFeed({
 							}
 						}}
 					/>
-					<div className="rounded-[12px] absolute left-1/2 top-[40px] -translate-x-1/2 h-[90%] w-[500px] bg-white shadow-[0_0_100px_rgba(0,0,0,0.75)] border-white border-8">
+					<div className="rounded-[32px] absolute left-1/2 top-[40px] -translate-x-1/2 h-[90%] w-[500px] bg-white shadow-[0_0_100px_rgba(0,0,0,0.75)] border-white border-[12px]">
 						<iframe
 							data-iframe
 							title="News content"

@@ -112,14 +112,14 @@ export function Scaffold({
 			{scraperError && <ScraperError />}
 			{fatalError && <AnnotationError error={fatalError} />}
 
-			<div className="hidden md:hidden lg:hidden sm:block">
+			<div className="hidden max-[475px]:block min-[477px]:block">
 				<Header />
 			</div>
-			<div className="flex flex-col gap-4 p-2 lg:p-0 md:p-0">
+			<div className="flex flex-col gap-4 p-2 min-[475px]:p-0 min-[477px]:p-2">
 				<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto] text-[#08080a]">
 					<div
 						className={
-							"flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto] p-3 rounded-[20px] border border-black/50"
+							"flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto] p-3 rounded-[20px] border border-black/25"
 						}
 						style={{ background, color }}
 					>
@@ -154,8 +154,8 @@ export function Scaffold({
 					<References papers={data?.papers?.value} url={url} />
 				)}
 
-				<Footer />
 			</div>
+			<Footer />
 		</div>
 	);
 }
