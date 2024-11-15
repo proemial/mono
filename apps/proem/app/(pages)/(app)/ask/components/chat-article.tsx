@@ -3,11 +3,12 @@ import Markdown from "@/components/markdown";
 import { Trackable } from "@/components/trackable";
 import { Header4 } from "@proemial/shadcn-ui";
 import { ModelSelector, ModelSelectorProps } from "./model-selector";
+import { Fragment } from "react";
 
 type ChatArticleProps = {
 	type: "Answer";
 	trackingKeys: ModelSelectorProps["trackingKeys"];
-	text?: string;
+	text: string[] | undefined;
 };
 
 export function ChatArticle({ type, trackingKeys, text }: ChatArticleProps) {
@@ -27,8 +28,12 @@ export function ChatArticle({ type, trackingKeys, text }: ChatArticleProps) {
 					</Trackable>
 				</div>
 			</div>
-			<div className="text-base/relaxed break-words">
-				<Markdown>{text as string}</Markdown>
+			<div className="text-base/relaxed break-words flex flex-col gap-2">
+				{text?.map((paragraph) => (
+					<Fragment key={paragraph}>
+						<Markdown>{paragraph}</Markdown>
+					</Fragment>
+				))}
 			</div>
 		</div>
 	);

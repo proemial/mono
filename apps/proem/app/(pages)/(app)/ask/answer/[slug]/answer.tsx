@@ -41,7 +41,7 @@ export const Answer = ({
 	const { messages, data, append, isLoading, stop } = useChat({
 		sendExtraMessageFields: true,
 		id: initialQuestion,
-		api: "/api/bot/ask2",
+		api: "/api/bot/ask3",
 		initialMessages,
 		onFinish: () => {
 			queryClient.invalidateQueries({
@@ -99,14 +99,16 @@ export const Answer = ({
 	return (
 		<div className="flex flex-col justify-between flex-grow gap-4 relative pt-4">
 			<div className={cn("flex flex-col gap-10")}>
-				{messages
-					.filter((message) => message.role === "user")
-					.map((message, index) => (
+				{messages.map((message, index) => {
+					if (message.role !== "user") {
+						return undefined;
+					}
+					return (
 						<QaPair
 							bookmarks={bookmarks}
 							key={message.id}
 							question={message}
-							answer={getCorrespondingAnswerMessage(index, messages)}
+							answer={getAnswerMessages(index, messages)}
 							data={answerEngineData}
 							className={cn({
 								"opacity-0 pointer-events-none": showInputMode,
@@ -114,7 +116,8 @@ export const Answer = ({
 							followUps={FollowUpComponent}
 							isLatest={index === Math.ceil(messages.length / 2) - 1}
 						/>
-					))}
+					);
+				})}
 			</div>
 			{showInputMode && (
 				<div className="sticky bottom-32">{FollowUpComponent}</div>
@@ -132,6 +135,26 @@ export const Answer = ({
 	);
 };
 
+/**
+ * Get the answer messages that correspond to a given user message.
+ */
+const getAnswerMessages = (userMessageIndex: number, messages: Message[]) => {
+	const answerMessages: Message[] = [];
+	for (let i = userMessageIndex; i < messages.length; i++) {
+		const message = messages[i + 1];
+		if (message && message.role === "assistant") {
+			answerMessages.push(message);
+		} else {
+			break;
+		}
+	}
+	return answerMessages;
+};
+
+/**
+ * This works under the assumption that there is only _one_ answer message per
+ * user message.
+ */
 const getCorrespondingAnswerMessage = (
 	questionMessageIndex: number,
 	messages: Message[],

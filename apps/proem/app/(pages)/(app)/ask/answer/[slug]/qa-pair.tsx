@@ -26,7 +26,7 @@ import { useThrobberStatus } from "./use-throbber-status";
 
 export type QaPairProps = {
 	question: Message;
-	answer: Message | undefined;
+	answer: Message[];
 	data: AnswerEngineEvents[];
 	followUps: ReactNode;
 	isLatest: boolean;
@@ -70,7 +70,7 @@ export const QaPair = ({
 					question={question.content}
 					isQuestionByCurrentUser={isQuestionByCurrentUser}
 				/>
-				{!papers && isLoadingAnswer && !answer && (
+				{!papers && isLoadingAnswer && answer.length === 0 && (
 					<div className="flex items-center gap-3.5 min-h-9">
 						<Paper />
 						<Header4>{throbberStatus}</Header4>
@@ -121,11 +121,11 @@ export const QaPair = ({
 					</CollapsibleSection>
 				)}
 				{/* {isLoadingAnswer && papers && <ChatAnswerSkeleton /> // Relevant once we generate micro titles} */}
-				{answer && (
+				{answer.length > 0 && (
 					<div>
 						<ChatArticle
 							type="Answer"
-							text={answer.content}
+							text={answer.map((message) => message.content)}
 							trackingKeys={analyticsKeys.ask}
 						/>
 						{savedAnswer?.shareId && (

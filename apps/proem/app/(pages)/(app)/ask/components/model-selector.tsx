@@ -22,17 +22,15 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { BottomDrawer } from "@/components/bottom-drawer";
 
-const DEFAULT_MODEL = { "gpt-4-turbo": "GPT-4 Turbo" };
+const DEFAULT_MODEL = { "claude-3.5-sonnet": "Claude 3.5 Sonnet" };
 const DEFAULT_MODEL_ID = Object.keys(DEFAULT_MODEL)[0] as keyof typeof MODELS;
 
 const MODELS = {
 	...DEFAULT_MODEL,
-	"claude-3-haiku": "Claude 3 Haiku",
 	"gemini-1.5-pro": "Gemini 1.5 Pro",
-	"mistral-large": "Mistral Large",
-	"mixtral-8x22b": "Mixtral 8x22B",
-	"llama-3": "Llama 3",
 	"gpt-4-turbo": "GPT-4 Turbo",
+	"llama-3": "Llama 3.2",
+	"mistral-large": "Mistral Large",
 } as const;
 
 const formSchema = z.object({
