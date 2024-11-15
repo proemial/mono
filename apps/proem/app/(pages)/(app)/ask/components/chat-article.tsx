@@ -1,9 +1,8 @@
 import { AIGeneratedIcon } from "@/components/icons/AIGeneratedIcon";
-import Markdown from "@/components/markdown";
 import { Trackable } from "@/components/trackable";
 import { Header4 } from "@proemial/shadcn-ui";
 import { ModelSelector, ModelSelectorProps } from "./model-selector";
-import { Fragment } from "react";
+import { formatAnswerText } from "@/app/(pages)/news/[source]/components/bot/bot-qa";
 
 type ChatArticleProps = {
 	type: "Answer";
@@ -30,9 +29,7 @@ export function ChatArticle({ type, trackingKeys, text }: ChatArticleProps) {
 			</div>
 			<div className="text-base/relaxed break-words flex flex-col gap-2">
 				{text?.map((paragraph) => (
-					<Fragment key={paragraph}>
-						<Markdown>{paragraph}</Markdown>
-					</Fragment>
+					<p key={paragraph}>{formatAnswerText(paragraph)}</p>
 				))}
 			</div>
 		</div>

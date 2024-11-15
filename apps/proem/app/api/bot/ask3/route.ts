@@ -95,18 +95,19 @@ export const POST = async (req: NextRequest) => {
 				});
 			},
 			onFinish: async ({ text: answer, toolResults }) => {
-				const { text: followUps } = await generateText({
+				const { text: followUpsStr } = await generateText({
 					model: anthropic("claude-3-5-sonnet-20240620"),
 					system: followUpQuestionsPrompt(userQuestion.content, answer),
 					messages: coreMessages,
 				});
+				const followUps = followUpsStr
+					.split("?")
+					.filter(Boolean)
+					.map((question) => ({ question: `${question.trim()}?` }));
 				streamingData.append({
 					type: "follow-up-questions-generated",
 					transactionId: userQuestion.id,
-					data: followUps
-						.split("?")
-						.filter(Boolean)
-						.map((question) => ({ question: `${question.trim()}?` })),
+					data: followUps,
 				});
 
 				const papers = toolResults
