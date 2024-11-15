@@ -25,6 +25,8 @@ export const env = createEnv({
 		RATE_LIMITER_PASSWORD: z.string(),
 		REDIS_PAPERS_TOKEN: z.string(),
 		REDIS_PAPERS_URL: z.string(),
+		REDIS_PAPERS_NEW_TOKEN: z.string(),
+		REDIS_PAPERS_NEW_URL: z.string(),
 		SENTRY_AUTH_TOKEN: z.string(),
 		SENTRY_ORG: z.string(),
 	},
