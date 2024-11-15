@@ -124,7 +124,7 @@ export function NewsCard({
 										)
 									: ""
 							}] `}
-						{data?.scrape?.title}
+						{data?.summarise?.engTitle ?? data?.scrape?.title}
 						</div>
 
 					<div className="ppNewsCard__qa flex flex-col items-start gap-2 px-0 pb-3 relative self-stretch w-full flex-[0_0_auto]">
