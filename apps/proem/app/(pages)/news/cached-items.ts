@@ -30,6 +30,7 @@ export async function getItems(flush?: boolean) {
 						},
 						summarise: {
 							questions: item.summarise?.questions,
+							engTitle: item.summarise?.engTitle,
 						},
 					};
 				})
