@@ -11,7 +11,7 @@ type Props = {
 export default async function OAPaperPage({ params }: Props) {
 	void PaperReadsService.increment(params.id);
 	return (
-		<div className="w-full bg-[#F7F7F7]">
+		<div className="w-full bg-[#F7F7F7] mx-auto max-w-[550px]">
 			<Header />
 			<div className="p-4 min-h-[100vh]">
 				<PaperPage paperId={params.id} type="oa" />
