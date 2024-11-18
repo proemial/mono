@@ -58,6 +58,13 @@ export const POST = async (req: NextRequest) => {
 			data: { slug },
 		});
 
+		const papers: Array<{
+			link: string;
+			title: string;
+			abstract: string;
+			publicationDate: string;
+		}> = [];
+
 		const result = await streamText({
 			model: anthropic("claude-3-5-sonnet-20240620"),
 			system: systemPrompt,
@@ -80,42 +87,39 @@ export const POST = async (req: NextRequest) => {
 				},
 			},
 			onStepFinish({ toolResults }) {
-				const papers = toolResults
-					.filter((res) => res.toolName === "getPapers")
-					.flatMap((res) => {
-						const { result: papers } = res;
-						return papers;
+				const matchedPapers = toolResults.find(
+					(r) => r.toolName === "getPapers",
+				)?.result;
+
+				if (matchedPapers) {
+					papers.push(...matchedPapers);
+					streamingData.append({
+						type: "papers-fetched",
+						transactionId: userQuestion.id,
+						data: {
+							papers,
+						},
 					});
-				streamingData.append({
-					type: "papers-fetched",
-					transactionId: userQuestion.id,
-					data: {
-						papers,
-					},
-				});
+				}
 			},
-			onFinish: async ({ text: answer, toolResults }) => {
+			onFinish: async ({ text: answer }) => {
 				const { text: followUpsStr } = await generateText({
 					model: anthropic("claude-3-5-sonnet-20240620"),
 					system: followUpQuestionsPrompt(userQuestion.content, answer),
 					messages: coreMessages,
 				});
-				const followUps = followUpsStr
+				const followUpQuestions = followUpsStr
 					.split("?")
 					.filter(Boolean)
 					.map((question) => ({ question: `${question.trim()}?` }));
-				streamingData.append({
-					type: "follow-up-questions-generated",
-					transactionId: userQuestion.id,
-					data: followUps,
-				});
 
-				const papers = toolResults
-					.filter((res) => res.toolName === "getPapers")
-					.flatMap((res) => {
-						const { result: papers } = res;
-						return papers;
+				if (followUpQuestions?.length) {
+					streamingData.append({
+						type: "follow-up-questions-generated",
+						transactionId: userQuestion.id,
+						data: followUpQuestions,
 					});
+				}
 
 				const { userId } = auth();
 
@@ -125,6 +129,7 @@ export const POST = async (req: NextRequest) => {
 					answer,
 					ownerId: userId,
 					papers: { papers },
+					followUpQuestions,
 				});
 				if (!savedAnswer) {
 					throw new Error("Failed to save answer");
