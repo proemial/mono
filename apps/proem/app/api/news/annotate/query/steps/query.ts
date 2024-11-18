@@ -1,9 +1,11 @@
 import { generateIndexSearchQuery } from "../../../prompts/generate-index-search-query";
+import { Span } from "@/components/analytics/braintrust/llm-trace";
 
 export async function generateQuery(
 	url: string,
 	transcript: string,
 	title: string,
+	trace: Span,
 ) {
 	try {
 		const indexQuery = await generateIndexSearchQuery(transcript, title);
@@ -20,7 +22,16 @@ export async function generateQuery(
 				},
 			});
 		}
-		console.log("[query]", trimNewlines(parsedQuery));
+		console.log("trace", trace.id);
+
+		trace.log({
+			input: title,
+			output: trimNewlines(parsedQuery),
+			metadata: {
+				url,
+			},
+			tags: ["annotate"],
+		});
 
 		return parsedQuery;
 	} catch (e) {

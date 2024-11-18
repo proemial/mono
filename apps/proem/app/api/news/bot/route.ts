@@ -6,12 +6,9 @@ import {
 } from "ai";
 import { Redis } from "@proemial/adapters/redis";
 import { LlmAnswer, LlmFollowups } from "../prompts/answers-and-followups";
-import { initLogger, traced, Span } from "braintrust";
+import { llmTrace, Span } from "@/components/analytics/braintrust/llm-trace";
 
-initLogger({
-	projectName: "proem-news",
-	apiKey: process.env.BRAINTRUST_API_KEY,
-});
+llmTrace.init("proem-news");
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -26,7 +23,7 @@ export async function POST(req: Request) {
 		return new Response("Item not found", { status: 404 });
 	}
 
-	return traced(
+	return llmTrace.trace(
 		(span) => {
 			return answerQuestion(url, messages, span);
 		},
@@ -37,7 +34,7 @@ export async function POST(req: Request) {
 async function answerQuestion(
 	url: string,
 	messages: { role: "user" | "assistant"; content: string }[],
-	span: Span,
+	trace: Span,
 ) {
 	const item = await Redis.news.get(url);
 	const streamingData = new StreamData();
@@ -54,7 +51,11 @@ async function answerQuestion(
 			const question = messages.at(-1)?.content;
 			const answer = event.steps.at(-1)?.text;
 
-			span.log({ input: question, output: answer });
+			trace.log({
+				input: question,
+				output: answer,
+				tags: ["answer"],
+			});
 
 			const followups = await generateFollowups(
 				question,
