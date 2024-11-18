@@ -38,7 +38,7 @@ ${papers.map((paper, index) => `<abstract_${index + 1}>${paper.abstract}</abstra
 ...complete the following three tasks, one after another:
 
 <task_1>
-Create a 60 word commentary reflecting on the main issue of the original article. Readers will see the original article title, so start the commentary from there, without directly restating anything already said in the tile. Use facts and findings from the research papers, rephrased to relate directly to the topics of the original article. Use layman's language intended for a high school audience and include numerical references to the research papers in the commentary using brackets: [#].
+Create a 60 word commentary reflecting on the main issue of the original article. Readers will see the original article title, so start the commentary from there, without restating anything already said in the title or summary. Use facts and findings from the research papers, rephrased to relate directly to the topics of the original article. Use layman's language intended for a high school audience and include numerical references to the research papers in the commentary using brackets: [#].
 </task_1>
 
 <task_2>
