@@ -76,7 +76,12 @@ export function NewsCard({
 							<span
 								key={`${i}-${j}`}
 								className="items-center justify-center rounded-full bg-black text-white text-[10px] font-[1000] cursor-pointer hover:bg-gray-800"
-								style={{ padding: "3px", position: "relative", top: "-2px" }}
+								style={{
+									padding: "3px 4px",
+									marginRight: "1px",
+									position: "relative",
+									top: "-2px",
+								}}
 							>
 								&nbsp;{num}&nbsp;
 							</span>
@@ -125,7 +130,7 @@ export function NewsCard({
 									: ""
 							}] `}
 						{data?.summarise?.engTitle ?? data?.scrape?.title}
-						</div>
+					</div>
 
 					<div className="ppNewsCard__qa flex flex-col items-start gap-2 px-0 pb-3 relative self-stretch w-full flex-[0_0_auto]">
 						<div className="flex items-start gap-1.5 py-0 relative self-stretch w-full flex-[0_0_auto]">
