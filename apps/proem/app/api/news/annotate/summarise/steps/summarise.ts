@@ -1,6 +1,5 @@
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import { generateFactsAndQuestions } from "../../../prompts/generate-facts-and-questions";
-import { Span } from "@/components/analytics/braintrust/llm-trace";
 
 export async function summarise(
 	url: string,
@@ -8,16 +7,13 @@ export async function summarise(
 	transcript: string,
 	title: string,
 	papers: ReferencedPaper[],
-	trace: Span,
 ) {
 	try {
 		const factsAndQuestions = await generateFactsAndQuestions(
-			url,
 			transcript,
 			title,
 			query,
 			papers,
-			trace,
 		);
 		const {
 			commentary,

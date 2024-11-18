@@ -18,18 +18,29 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json(item);
 		}
 
-		const indexQuery = await llmTrace.trace(
-			(span) => {
-				return generateQuery(
+		const { query, traceId } = await llmTrace.trace(
+			async (span) => {
+				const query = await generateQuery(
 					url,
 					item.scrape?.transcript as string,
 					item.scrape?.title as string,
-					span,
 				);
+
+				span.log({
+					input: item.scrape?.title,
+					output: query,
+					metadata: {
+						url,
+					},
+					tags: ["annotate"],
+				});
+
+				const traceId = await llmTrace.traceId();
+				return { query, traceId };
 			},
 			{ name: "News Query" },
 		);
-		const result = await updateRedis(url, indexQuery);
+		const result = await updateRedis(url, query, traceId);
 
 		return NextResponse.json(result);
 	} finally {

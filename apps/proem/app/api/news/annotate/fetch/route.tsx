@@ -19,10 +19,10 @@ export async function POST(req: NextRequest) {
 		}
 
 		const papers = await llmTrace.trace(
-			(span) => {
-				return fetchPapers(url, item.query?.value as string, span);
+			() => {
+				return fetchPapers(url, item.query?.value as string);
 			},
-			{ name: "News Retrieval" },
+			{ parent: item.query?.traceId },
 		);
 
 		if (!papers) {

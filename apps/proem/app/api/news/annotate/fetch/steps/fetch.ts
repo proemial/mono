@@ -1,5 +1,4 @@
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
-import { Span } from "@/components/analytics/braintrust/llm-trace";
 import { wrapTraced } from "braintrust";
 
 export type SearchResult = {
@@ -18,9 +17,9 @@ type Feature = {
 	type: "topic" | "keyword" | "concept";
 };
 
-export async function fetchPapers(url: string, query: string, trace: Span) {
+export async function fetchPapers(url: string, query: string) {
 	try {
-		const papers = await wrapTraced(async function myFunc() {
+		const papers = await wrapTraced(async function myFunc(query: string) {
 			const result = await fetch("https://index.proem.ai/api/search", {
 				method: "POST",
 				body: JSON.stringify({
@@ -31,22 +30,8 @@ export async function fetchPapers(url: string, query: string, trace: Span) {
 			});
 			const { papers } = (await result.json()) as SearchResult;
 
-			trace.log({
-				input: query,
-				output: papers,
-				metadata: {
-					url,
-				},
-			});
-
 			return papers;
-		})();
-		trace.log({
-			tags: ["annotate"],
-			metadata: {
-				url,
-			},
-		});
+		})(query);
 
 		return papers;
 	} catch (e) {

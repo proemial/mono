@@ -1,17 +1,15 @@
 import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
-import { llmTrace, Span } from "@/components/analytics/braintrust/llm-trace";
+import { llmTrace } from "@/components/analytics/braintrust/llm-trace";
 
 const model = () => anthropic("claude-3-5-sonnet-20240620");
 
 export const generateFactsAndQuestions = async (
-	url: string,
 	transcript: string,
 	title: string,
 	query: string,
 	papers: ReferencedPaper[],
-	trace: Span,
 ): Promise<string> => {
 	try {
 		const { text, usage } = await generateText({
@@ -59,14 +57,6 @@ If the title is already in US English, simply output the original title.
 			`,
 				},
 			],
-		});
-		trace.log({
-			input: query,
-			output: text,
-			metadata: {
-				url,
-			},
-			tags: ["annotate"],
 		});
 		console.log("[generateFactsAndQuestions]", usage);
 		return text;

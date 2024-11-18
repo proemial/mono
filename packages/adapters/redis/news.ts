@@ -144,6 +144,7 @@ export type NewsAnnotatorQueryInputStep = NewsAnnotatorQueryStep & {
 };
 export type NewsAnnotatorQueryStep = {
 	value: string;
+	traceId?: string;
 };
 export type NewsAnnotatorPapersInputStep = NewsAnnotatorPapersStep & {
 	name: "papers";

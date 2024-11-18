@@ -7,7 +7,7 @@ import { llmTrace } from "@/components/analytics/braintrust/llm-trace";
 
 export const maxDuration = 300; // seconds
 
-llmTrace.init("proem-news");
+const logger = llmTrace.init("proem-news");
 
 export async function POST(req: NextRequest) {
 	const { url } = (await req.json()) as { url: string };
@@ -25,17 +25,24 @@ export async function POST(req: NextRequest) {
 		}
 
 		const summary = await llmTrace.trace(
-			(span) => {
-				return summarise(
+			async (span) => {
+				const summary = await summarise(
 					url,
 					item.query?.value as string,
 					item.scrape?.transcript as string,
 					item.scrape?.title as string,
 					item.papers?.value as ReferencedPaper[],
-					span,
 				);
+
+				// Should work, but removes everything but the output
+				// logger.updateSpan({
+				// 	id: item.query?.traceId as string,
+				// 	output: summary.commentary,
+				// });
+
+				return summary;
 			},
-			{ name: "News Summary" },
+			{ parent: item.query?.traceId },
 		);
 
 		const result = await updateRedis(url, summary);
