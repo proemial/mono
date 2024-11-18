@@ -4,9 +4,14 @@ import {
 	generateText,
 	streamText,
 } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
 import { Redis } from "@proemial/adapters/redis";
 import { LlmAnswer, LlmFollowups } from "../prompts/answers-and-followups";
+import { initLogger, traced, Span } from "braintrust";
+
+initLogger({
+	projectName: "proem-news",
+	apiKey: process.env.BRAINTRUST_API_KEY,
+});
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -21,6 +26,19 @@ export async function POST(req: Request) {
 		return new Response("Item not found", { status: 404 });
 	}
 
+	return traced(
+		(span) => {
+			return answerQuestion(url, messages, span);
+		},
+		{ name: "News Bot" },
+	);
+}
+
+async function answerQuestion(
+	url: string,
+	messages: { role: "user" | "assistant"; content: string }[],
+	span: Span,
+) {
 	const item = await Redis.news.get(url);
 	const streamingData = new StreamData();
 
@@ -35,6 +53,8 @@ export async function POST(req: Request) {
 		async onFinish(event) {
 			const question = messages.at(-1)?.content;
 			const answer = event.steps.at(-1)?.text;
+
+			span.log({ input: question, output: answer });
 
 			const followups = await generateFollowups(
 				question,
