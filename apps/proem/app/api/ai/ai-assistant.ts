@@ -1,4 +1,4 @@
-import { anthropic } from "@ai-sdk/anthropic";
+import { openai } from "@ai-sdk/openai";
 import { CoreTool, LanguageModel } from "ai";
 import { wrapAISDKModel } from "langsmith/wrappers/vercel";
 
@@ -66,7 +66,7 @@ type Assistant = (
 };
 
 export const assistant: Assistant = (context, title, abstract) => ({
-	model: wrapAISDKModel(anthropic("claude-3-5-sonnet-20240620")),
+	model: wrapAISDKModel(openai("gpt-4o")) as ReturnType<typeof openai>,
 	system: systemPrompt(context, title, abstract),
 	// experimental_toolCallStreaming: true,
 	// maxTokens: 512,

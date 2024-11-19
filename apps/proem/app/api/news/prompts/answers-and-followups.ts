@@ -1,14 +1,14 @@
 import { wrapAISDKModel } from "@/components/analytics/braintrust/llm-trace";
-import { anthropic } from "@ai-sdk/anthropic";
+import { openai } from "@ai-sdk/openai";
 
 export const LlmAnswer = {
 	prompt: answerPrompt,
-	model: () => wrapAISDKModel(anthropic("claude-3-5-sonnet-20240620")),
+	model: () => wrapAISDKModel(openai("gpt-4o")) as ReturnType<typeof openai>,
 };
 
 export const LlmFollowups = {
 	prompt: followupsPrompt,
-	model: () => wrapAISDKModel(anthropic("claude-3-5-haiku-latest")),
+	model: () => wrapAISDKModel(openai("gpt-4o")) as ReturnType<typeof openai>,
 };
 
 function answerPrompt(

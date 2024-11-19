@@ -1,8 +1,8 @@
 import { wrapAISDKModel } from "@/components/analytics/braintrust/llm-trace";
-import { anthropic } from "@ai-sdk/anthropic";
+import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 
-const model = () => anthropic("claude-3-5-sonnet-20240620");
+const model = () => openai("gpt-4o");
 
 export const generateIndexSearchQuery = async (
 	transcript: string,

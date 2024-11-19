@@ -1,5 +1,5 @@
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
-import { anthropic } from "@ai-sdk/anthropic";
+import { openai } from "@ai-sdk/openai";
 import { auth } from "@clerk/nextjs/server";
 import {
 	convertToCoreMessages,
@@ -94,7 +94,7 @@ async function streamAnswer(
 	}> = [];
 
 	const result = await streamText({
-		model: wrapAISDKModel(anthropic("claude-3-5-sonnet-20240620")),
+		model: wrapAISDKModel(openai("gpt-4o")),
 		system: systemPrompt,
 		messages: coreMessages,
 		maxSteps: 5,
@@ -106,7 +106,7 @@ async function streamAnswer(
 				}),
 				execute: wrapTraced(async ({ question }) => {
 					const { text: rephrasedQuestion } = await generateText({
-						model: anthropic("claude-3-5-sonnet-20240620"),
+						model: wrapAISDKModel(openai("gpt-4o")),
 						system: rephraseQuestionPrompt(question),
 						messages: coreMessages,
 					});
@@ -132,7 +132,7 @@ async function streamAnswer(
 		},
 		onFinish: async ({ text: answer }) => {
 			const { object: followUpQuestions } = await generateObject({
-				model: wrapAISDKModel(anthropic("claude-3-5-sonnet-20240620")),
+				model: wrapAISDKModel(openai("gpt-4o")),
 				output: "array",
 				schema: z.object({
 					question: z

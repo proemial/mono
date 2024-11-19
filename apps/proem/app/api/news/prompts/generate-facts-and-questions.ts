@@ -1,9 +1,9 @@
 import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { openai } from "@ai-sdk/openai";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import { wrapAISDKModel } from "@/components/analytics/braintrust/llm-trace";
 
-const model = () => anthropic("claude-3-5-sonnet-20240620");
+const model = () => openai("gpt-4o");
 
 export const generateFactsAndQuestions = async (
 	transcript: string,
