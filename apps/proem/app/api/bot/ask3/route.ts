@@ -20,6 +20,12 @@ import { QdrantPaper } from "../../news/annotate/fetch/steps/fetch";
 import { AnswerEngineStreamData } from "../answer-engine/answer-engine";
 import { prettySlug } from "@proemial/utils/pretty-slug";
 import { answers } from "@proemial/data/repository/answer";
+import {
+	llmTrace,
+	Span,
+	wrapAISDKModel,
+	wrapTraced,
+} from "@/components/analytics/braintrust/llm-trace";
 
 export const maxDuration = 30;
 
@@ -33,6 +39,8 @@ const RequestDataSchema = z.object({
 	) satisfies ZodType<Array<Message>>,
 	slug: z.string().optional(),
 });
+
+llmTrace.init(llmTrace.projects.Ask);
 
 export const POST = async (req: NextRequest) => {
 	try {
@@ -48,113 +56,134 @@ export const POST = async (req: NextRequest) => {
 		if (!userQuestion) {
 			return new Response("No user question found", { status: 400 });
 		}
-		const coreMessages = convertToCoreMessages(messages);
 		const slug = existingSlug ?? prettySlug(userQuestion.content);
 
-		const streamingData = new StreamData() as AnswerEngineStreamData;
-		streamingData.append({
-			type: "answer-slug-generated",
-			transactionId: userQuestion.id,
-			data: { slug },
-		});
-
-		const papers: Array<{
-			link: string;
-			title: string;
-			abstract: string;
-			publicationDate: string;
-		}> = [];
-
-		const result = await streamText({
-			model: anthropic("claude-3-5-sonnet-20240620"),
-			system: systemPrompt,
-			messages: coreMessages,
-			maxSteps: 5,
-			tools: {
-				getPapers: {
-					description: "Get scientific research papers relevant to a question",
-					parameters: z.object({
-						question: z.string(),
-					}),
-					execute: async ({ question }) => {
-						const { text: rephrasedQuestion } = await generateText({
-							model: anthropic("claude-3-5-sonnet-20240620"),
-							system: rephraseQuestionPrompt(question),
-							messages: coreMessages,
-						});
-						return await getPapersFromQdrant(rephrasedQuestion);
-					},
-				},
+		return llmTrace.trace(
+			(span) => {
+				return streamAnswer(userQuestion, messages, slug, span);
 			},
-			onStepFinish({ toolResults }) {
-				const matchedPapers = toolResults.find(
-					(r) => r.toolName === "getPapers",
-				)?.result;
-
-				if (matchedPapers) {
-					papers.push(...matchedPapers);
-					streamingData.append({
-						type: "papers-fetched",
-						transactionId: userQuestion.id,
-						data: {
-							papers,
-						},
-					});
-				}
-			},
-			onFinish: async ({ text: answer }) => {
-				const { text: followUpsStr } = await generateText({
-					model: anthropic("claude-3-5-sonnet-20240620"),
-					system: followUpQuestionsPrompt(userQuestion.content, answer),
-					messages: coreMessages,
-				});
-				const followUpQuestions = followUpsStr
-					.split("?")
-					.filter(Boolean)
-					.map((question) => ({ question: `${question.trim()}?` }));
-
-				if (followUpQuestions?.length) {
-					streamingData.append({
-						type: "follow-up-questions-generated",
-						transactionId: userQuestion.id,
-						data: followUpQuestions,
-					});
-				}
-
-				const { userId } = auth();
-
-				const savedAnswer = await answers.create({
-					slug,
-					question: userQuestion.content,
-					answer,
-					ownerId: userId,
-					papers: { papers },
-					followUpQuestions,
-				});
-				if (!savedAnswer) {
-					throw new Error("Failed to save answer");
-				}
-				streamingData.append({
-					type: "answer-saved",
-					transactionId: userQuestion.id,
-					data: {
-						shareId: savedAnswer.shareId,
-						runId: "deprecated",
-					},
-				});
-
-				streamingData.close();
-			},
-		});
-
-		return result.toDataStreamResponse({
-			data: streamingData,
-		});
+			{ name: "ASK Answer" },
+		);
 	} catch (e) {
 		console.error(e);
 		return NextResponse.json(e, { status: 500 });
 	}
 };
+
+async function streamAnswer(
+	userQuestion: Message,
+	messages: Array<Message>,
+	slug: string,
+	trace: Span,
+) {
+	const coreMessages = convertToCoreMessages(messages);
+
+	const streamingData = new StreamData() as AnswerEngineStreamData;
+	streamingData.append({
+		type: "answer-slug-generated",
+		transactionId: userQuestion.id,
+		data: { slug },
+	});
+
+	const papers: Array<{
+		link: string;
+		title: string;
+		abstract: string;
+		publicationDate: string;
+	}> = [];
+
+	const result = await streamText({
+		model: wrapAISDKModel(anthropic("claude-3-5-sonnet-20240620")),
+		system: systemPrompt,
+		messages: coreMessages,
+		maxSteps: 5,
+		tools: {
+			getPapers: {
+				description: "Get scientific research papers relevant to a question",
+				parameters: z.object({
+					question: z.string(),
+				}),
+				execute: wrapTraced(async ({ question }) => {
+					const { text: rephrasedQuestion } = await generateText({
+						model: anthropic("claude-3-5-sonnet-20240620"),
+						system: rephraseQuestionPrompt(question),
+						messages: coreMessages,
+					});
+					return await getPapersFromQdrant(rephrasedQuestion);
+				}),
+			},
+		},
+		onStepFinish({ toolResults }) {
+			const matchedPapers = toolResults.find(
+				(r) => r.toolName === "getPapers",
+			)?.result;
+
+			if (matchedPapers) {
+				papers.push(...matchedPapers);
+				streamingData.append({
+					type: "papers-fetched",
+					transactionId: userQuestion.id,
+					data: {
+						papers,
+					},
+				});
+			}
+		},
+		onFinish: async ({ text: answer }) => {
+			const { text: followUpsStr } = await generateText({
+				model: wrapAISDKModel(anthropic("claude-3-5-sonnet-20240620")),
+				system: followUpQuestionsPrompt(userQuestion.content, answer),
+				messages: coreMessages,
+			});
+			const followUpQuestions = followUpsStr
+				.split("?")
+				.filter(Boolean)
+				.map((question) => ({ question: `${question.trim()}?` }));
+
+			if (followUpQuestions?.length) {
+				streamingData.append({
+					type: "follow-up-questions-generated",
+					transactionId: userQuestion.id,
+					data: followUpQuestions,
+				});
+			}
+
+			const { userId } = auth();
+
+			const savedAnswer = await answers.create({
+				slug,
+				question: userQuestion.content,
+				answer,
+				ownerId: userId,
+				papers: { papers },
+				followUpQuestions,
+			});
+			if (!savedAnswer) {
+				throw new Error("Failed to save answer");
+			}
+			streamingData.append({
+				type: "answer-saved",
+				transactionId: userQuestion.id,
+				data: {
+					shareId: savedAnswer.shareId,
+					runId: "deprecated",
+				},
+			});
+
+			trace.log({
+				input: userQuestion.content,
+				output: answer,
+				tags: ["answer"],
+			});
+
+			streamingData.close();
+		},
+	});
+
+	return result.toDataStreamResponse({
+		data: streamingData,
+	});
+}
 
 const getMostRecentUserMessage = (messages: Array<Message>) => {
 	const userMessages = messages.filter((message) => message.role === "user");
