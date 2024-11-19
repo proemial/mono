@@ -1,5 +1,5 @@
+import { wrapAISDKModel } from "@/components/analytics/braintrust/llm-trace";
 import { anthropic } from "@ai-sdk/anthropic";
-import { wrapAISDKModel } from "braintrust";
 
 export const LlmAnswer = {
 	prompt: answerPrompt,

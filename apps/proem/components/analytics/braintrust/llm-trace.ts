@@ -3,21 +3,20 @@ import {
 	traced,
 	Span,
 	wrapAISDKModel,
+	wrapTraced,
 	currentSpan,
 } from "braintrust";
 
 export const llmTrace = {
-	init: initBraintrust,
+	init: (projectName: string) => {
+		return initLogger({
+			projectName,
+			apiKey: process.env.BRAINTRUST_API_KEY,
+		});
+	},
 	trace: traced as typeof traced,
-	wrap: wrapAISDKModel as typeof wrapAISDKModel,
 	traceId: () => currentSpan().export(),
 };
 
-function initBraintrust(projectName: string) {
-	return initLogger({
-		projectName,
-		apiKey: process.env.BRAINTRUST_API_KEY,
-	});
-}
-
+export { wrapTraced, wrapAISDKModel };
 export type { Span };

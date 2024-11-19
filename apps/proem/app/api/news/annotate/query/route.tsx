@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 				const traceId = await llmTrace.traceId();
 				return { query, traceId };
 			},
-			{ name: "News Query" },
+			{ name: "News Scraper" },
 		);
 		const result = await updateRedis(url, query, traceId);
 

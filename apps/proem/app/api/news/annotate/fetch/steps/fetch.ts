@@ -1,5 +1,5 @@
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
-import { wrapTraced } from "braintrust";
+import { wrapTraced } from "@/components/analytics/braintrust/llm-trace";
 
 export type SearchResult = {
 	papers: QdrantPaper[];
@@ -19,7 +19,7 @@ type Feature = {
 
 export async function fetchPapers(url: string, query: string) {
 	try {
-		const papers = await wrapTraced(async function myFunc(query: string) {
+		const papers = await wrapTraced(async function fetchPapers(query: string) {
 			const result = await fetch("https://index.proem.ai/api/search", {
 				method: "POST",
 				body: JSON.stringify({
