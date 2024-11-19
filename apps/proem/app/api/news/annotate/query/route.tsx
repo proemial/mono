@@ -6,7 +6,7 @@ import { llmTrace } from "@/components/analytics/braintrust/llm-trace";
 
 export const maxDuration = 300; // seconds
 
-llmTrace.init("proem-news");
+llmTrace.init(llmTrace.projects.News);
 
 export async function POST(req: NextRequest) {
 	const { url } = (await req.json()) as { url: string };

@@ -7,11 +7,6 @@ POST https://api.braintrust.dev/v1/project_logs/1c2c6025-edae-4bb4-80cb-d2800c04
 Authorization: Bearer sk-LHf9FSljJRXuba15Gl9y0XE07b0andBSu0OJYPgKarMz1mA8
 Content-Type: application/json
 
-{
-  "cursor":"7f306cda-7126-4e8c-9bb6-82927304a88d",
-}
-
-
 # {
 #   "filters": [
 #       {
@@ -23,3 +18,12 @@ Content-Type: application/json
 #       }
 #     ]
 # }
+
+###
+POST https://api.braintrust.dev/btql
+Authorization: Bearer sk-LHf9FSljJRXuba15Gl9y0XE07b0andBSu0OJYPgKarMz1mA8
+Content-Type: application/json
+
+{
+  "query": "select: * | from: project_logs('1c2c6025-edae-4bb4-80cb-d2800c042826') | filter: is_root = true and tags includes 'annotate'"
+}

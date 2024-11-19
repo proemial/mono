@@ -8,7 +8,7 @@ import { Redis } from "@proemial/adapters/redis";
 import { LlmAnswer, LlmFollowups } from "../prompts/answers-and-followups";
 import { llmTrace, Span } from "@/components/analytics/braintrust/llm-trace";
 
-llmTrace.init("proem-news");
+llmTrace.init(llmTrace.projects.News);
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
