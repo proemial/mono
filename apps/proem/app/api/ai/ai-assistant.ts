@@ -1,6 +1,5 @@
 import { google } from "@ai-sdk/google";
 import { CoreTool, LanguageModel } from "ai";
-import { wrapAISDKModel } from "langsmith/wrappers/vercel";
 
 const appContexts = ["paper", "global", "space"] as const;
 export type UserContext = (typeof appContexts)[number];
@@ -66,9 +65,7 @@ type Assistant = (
 };
 
 export const assistant: Assistant = (context, title, abstract) => ({
-	model: wrapAISDKModel(google("gemini-1.5-flash")) as ReturnType<
-		typeof google
-	>,
+	model: google("gemini-1.5-flash"),
 	system: systemPrompt(context, title, abstract),
 	// experimental_toolCallStreaming: true,
 	// maxTokens: 512,

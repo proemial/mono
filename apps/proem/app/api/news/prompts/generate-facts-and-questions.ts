@@ -1,7 +1,6 @@
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
-import { wrapAISDKModel } from "@/components/analytics/braintrust/llm-trace";
 
 const model = () => google("gemini-1.5-flash");
 
@@ -13,7 +12,7 @@ export const generateFactsAndQuestions = async (
 ): Promise<string> => {
 	try {
 		const { text, usage } = await generateText({
-			model: wrapAISDKModel(model()),
+			model: model(),
 			messages: [
 				{
 					role: "user",

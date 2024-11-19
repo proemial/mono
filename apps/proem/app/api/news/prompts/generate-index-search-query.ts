@@ -1,4 +1,3 @@
-import { wrapAISDKModel } from "@/components/analytics/braintrust/llm-trace";
 import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
 
@@ -10,7 +9,7 @@ export const generateIndexSearchQuery = async (
 ): Promise<string> => {
 	try {
 		const { text, usage } = await generateText({
-			model: wrapAISDKModel(model()),
+			model: model(),
 			messages: [
 				{
 					role: "user",

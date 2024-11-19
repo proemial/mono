@@ -6,9 +6,6 @@ import {
 } from "ai";
 import { Redis } from "@proemial/adapters/redis";
 import { LlmAnswer, LlmFollowups } from "../prompts/answers-and-followups";
-import { llmTrace, Span } from "@/components/analytics/braintrust/llm-trace";
-
-llmTrace.init(llmTrace.projects.News);
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -23,18 +20,12 @@ export async function POST(req: Request) {
 		return new Response("Item not found", { status: 404 });
 	}
 
-	return llmTrace.trace(
-		(span) => {
-			return answerQuestion(url, messages, span);
-		},
-		{ name: "News Bot" },
-	);
+	return answerQuestion(url, messages);
 }
 
 async function answerQuestion(
 	url: string,
 	messages: { role: "user" | "assistant"; content: string }[],
-	trace: Span,
 ) {
 	const item = await Redis.news.get(url);
 	const streamingData = new StreamData();
@@ -50,12 +41,6 @@ async function answerQuestion(
 		async onFinish(event) {
 			const question = messages.at(-1)?.content;
 			const answer = event.steps.at(-1)?.text;
-
-			trace.log({
-				input: question,
-				output: answer,
-				tags: ["answer"],
-			});
 
 			const followups = await generateFollowups(
 				question,

@@ -2,11 +2,8 @@ import { Time } from "@proemial/utils/time";
 import { NextRequest, NextResponse } from "next/server";
 import { generateQuery } from "./steps/query";
 import { getFromRedis, updateRedis } from "./steps/redis";
-import { llmTrace } from "@/components/analytics/braintrust/llm-trace";
 
 export const maxDuration = 300; // seconds
-
-llmTrace.init(llmTrace.projects.News);
 
 export async function POST(req: NextRequest) {
 	const { url } = (await req.json()) as { url: string };
@@ -18,29 +15,12 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json(item);
 		}
 
-		const { query, traceId } = await llmTrace.trace(
-			async (span) => {
-				const query = await generateQuery(
-					url,
-					item.scrape?.transcript as string,
-					item.scrape?.title as string,
-				);
-
-				span.log({
-					input: item.scrape?.title,
-					output: query,
-					metadata: {
-						url,
-					},
-					tags: ["annotate"],
-				});
-
-				const traceId = await llmTrace.traceId();
-				return { query, traceId };
-			},
-			{ name: "News Scraper" },
+		const query = await generateQuery(
+			url,
+			item.scrape?.transcript as string,
+			item.scrape?.title as string,
 		);
-		const result = await updateRedis(url, query, traceId);
+		const result = await updateRedis(url, query);
 
 		return NextResponse.json(result);
 	} finally {

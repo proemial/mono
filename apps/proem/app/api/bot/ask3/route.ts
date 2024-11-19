@@ -21,12 +21,6 @@ import { QdrantPaper } from "../../news/annotate/fetch/steps/fetch";
 import { AnswerEngineStreamData } from "../answer-engine/answer-engine";
 import { prettySlug } from "@proemial/utils/pretty-slug";
 import { answers } from "@proemial/data/repository/answer";
-import {
-	llmTrace,
-	Span,
-	wrapAISDKModel,
-	wrapTraced,
-} from "@/components/analytics/braintrust/llm-trace";
 
 export const maxDuration = 30;
 
@@ -40,8 +34,6 @@ const RequestDataSchema = z.object({
 	) satisfies ZodType<Array<Message>>,
 	slug: z.string().optional(),
 });
-
-llmTrace.init(llmTrace.projects.Ask);
 
 export const POST = async (req: NextRequest) => {
 	try {
@@ -59,12 +51,7 @@ export const POST = async (req: NextRequest) => {
 		}
 		const slug = existingSlug ?? prettySlug(userQuestion.content);
 
-		return llmTrace.trace(
-			(span) => {
-				return streamAnswer(userQuestion, messages, slug, span);
-			},
-			{ name: "ASK Answer" },
-		);
+		return streamAnswer(userQuestion, messages, slug);
 	} catch (e) {
 		console.error(e);
 		return NextResponse.json(e, { status: 500 });
@@ -75,7 +62,6 @@ async function streamAnswer(
 	userQuestion: Message,
 	messages: Array<Message>,
 	slug: string,
-	trace: Span,
 ) {
 	const coreMessages = convertToCoreMessages(messages);
 
@@ -94,7 +80,7 @@ async function streamAnswer(
 	}> = [];
 
 	const result = await streamText({
-		model: wrapAISDKModel(google("gemini-1.5-flash")),
+		model: google("gemini-1.5-pro"),
 		system: systemPrompt,
 		messages: coreMessages,
 		maxSteps: 5,
@@ -104,15 +90,15 @@ async function streamAnswer(
 				parameters: z.object({
 					question: z.string(),
 				}),
-				execute: wrapTraced(async ({ question }) => {
+				execute: async ({ question }) => {
 					const { text: rephrasedQuestion } = await generateText({
-						model: wrapAISDKModel(google("gemini-1.5-flash")),
+						model: google("gemini-1.5-flash"),
 						system: rephraseQuestionPrompt(question),
 						messages: coreMessages,
 					});
 					console.log("rephrasedQuestion", rephrasedQuestion);
 					return await getPapersFromQdrant(rephrasedQuestion);
-				}),
+				},
 			},
 		},
 		onStepFinish({ toolResults }) {
@@ -134,7 +120,7 @@ async function streamAnswer(
 		onFinish: async ({ text: answer }) => {
 			console.log("answer", answer);
 			const { object: followUpQuestions } = await generateObject({
-				model: wrapAISDKModel(google("gemini-1.5-flash")),
+				model: google("gemini-1.5-flash"),
 				output: "array",
 				schema: z.object({
 					question: z
@@ -173,12 +159,6 @@ async function streamAnswer(
 					shareId: savedAnswer.shareId,
 					runId: "deprecated",
 				},
-			});
-
-			trace.log({
-				input: userQuestion.content,
-				output: answer,
-				tags: ["answer"],
 			});
 
 			streamingData.close();
