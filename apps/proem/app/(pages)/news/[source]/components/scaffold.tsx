@@ -21,7 +21,14 @@ import logo from "../../components/images/logo.svg";
 import Image from "next/image";
 import { Header } from "../../components/header";
 import { Footer } from "../../components/footer";
-import { extractHostName } from "@/utils/url";
+import {
+	Button,
+	Card,
+	CardHeader,
+	CardTitle,
+	CardDescription,
+	CardFooter,
+} from "@proemial/shadcn-ui/components/ui/button";
 
 export function Scaffold({
 	url,
@@ -109,8 +116,9 @@ export function Scaffold({
 				/>
 			)}
 
-			{scraperError && <ScraperError />}
-			{fatalError && <AnnotationError error={fatalError} />}
+			{/* {scraperError && <ScraperError />} */}
+			<ScraperError />
+			{fatalError && <AnnotationError />}
 
 			<div className="hidden max-[475px]:block min-[477px]:block">
 				<Header />
@@ -165,33 +173,24 @@ function ScraperError() {
 			<div className="w-full max-w-lg mx-4 p-8 bg-white rounded-lg shadow-lg">
 				<div className="flex flex-col space-y-4">
 					<div className="space-y-2">
-						<h2 className="text-xl font-bold tracking-tight">
-							We can't access this article 🔎
+						<h2 className="text-2xl font-bold tracking-tight">
+							We couldn't read this article
 						</h2>
 						<p className="text-muted-foreground">
-							We had trouble reading the article you want annotated. This could
-							be because it's not an article, there's a paywall, or the website
-							is not very welcoming to our robots.
+							We encountered an error while trying to analyze this article. This
+							could be due to the article format or access restrictions.
 						</p>
 					</div>
 					<div className="flex justify-end space-x-2">
 						<button
 							type="button"
-							className="flex items-center rounded-md text-sm font-medium h-9 px-4 disabled:opacity-80"
-							onClick={(e) => {
-								(e.target as HTMLButtonElement).disabled = true;
-								window.location.href = "/news";
-							}}
+							className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 px-4"
 						>
-							Dismiss
+							Cancel
 						</button>
 						<button
 							type="button"
-							className="flex items-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 disabled:opacity-80"
-							onClick={(e) => {
-								(e.target as HTMLButtonElement).disabled = true;
-								window.location.reload();
-							}}
+							className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4"
 						>
 							Try Again
 						</button>
