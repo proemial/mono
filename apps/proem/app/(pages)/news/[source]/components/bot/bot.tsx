@@ -78,7 +78,7 @@ export function Bot({ url, questions }: Props) {
 	return (
 		<>
 			{messages?.length > 0 && (
-				<div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
+				<div className="flex flex-col items-start gap-6 relative self-stretch w-full flex-[0_0_auto]">
 					{messages.map((message, index) => {
 						if (message.role === "assistant") return null;
 
@@ -94,14 +94,13 @@ export function Bot({ url, questions }: Props) {
 				</div>
 			)}
 
-			<BotHeader />
-
 			<div
 				id="askform"
 				className="flex-col pb-2 items-start gap-2 self-stretch w-full flex-[0_0_auto] flex relative overflow-hidden"
 			>
+				<BotHeader />
 				<div
-					className="flex-col items-start gap-2 px-3 py-0 w-full flex"
+					className="flex-col items-start gap-2 px-3 pt-3 w-full flex"
 					style={{
 						maxHeight: hidden ? "0px" : "1000px",
 						transition: "all 0.9s ease-in-out",

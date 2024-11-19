@@ -115,7 +115,7 @@ export function Scaffold({
 			<div className="hidden max-[475px]:block min-[477px]:block">
 				<Header />
 			</div>
-			<div className="flex flex-col gap-4 p-2 min-[475px]:p-0 min-[477px]:p-2">
+			<div className="flex flex-col gap-8 p-2 min-[475px]:p-0 min-[477px]:p-2">
 				<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto] text-[#08080a]">
 					<div
 						className={
@@ -128,7 +128,7 @@ export function Scaffold({
 								title={data?.summarise?.engTitle ?? data?.scrape?.title}
 								image={data?.scrape?.artworkUrl}
 								url={url}
-								summary={data?.query?.value ?? ''} // Add nullish coalescing operator
+								summary={data?.query?.value ?? ""} // Add nullish coalescing operator
 							/>
 						</div>
 					</div>
@@ -150,10 +150,9 @@ export function Scaffold({
 					<Bot questions={data?.summarise?.questions} url={url} />
 				)}
 
-				{data?.papers?.value && (
+				{/* {data?.papers?.value && (
 					<References papers={data?.papers?.value} url={url} />
-				)}
-
+				)} */}
 			</div>
 			<Footer />
 		</div>

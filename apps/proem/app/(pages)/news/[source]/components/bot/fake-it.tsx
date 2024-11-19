@@ -21,7 +21,7 @@ export function CommunityQuestions({
 	return (
 		<div className="flex flex-col gap-3">
 			<CommunityHeader />
-			<div className="flex flex-col-reverse items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
+			<div className="flex flex-col-reverse items-start gap-4 relative self-stretch w-full">
 				{questionsToShow?.map((question, index) => {
 					return (
 						<BotQa
@@ -50,11 +50,9 @@ export function DummyButton({ url }: { url: string }) {
 				trackingKey={analyticsKeys.experiments.news.item.qa.clickShowMore}
 				properties={{ sourceUrl: url }}
 			>
-				<div className="inline-flex h-8 gap-1 px-3 py-2 rounded-[19px] border border-solid active:bg-theme-600 hover:cursor-pointer">
-					<div className="inline-flex gap-1.5 relative">
-						<div className="relative w-fit mt-[-1.00px] font-normal text-[13px] tracking-[0] leading-[normal] select-none">
-							Show more
-						</div>
+				<div className="flex px-3 py-2 my-4 rounded-full border hover:cursor-pointer hover:bg-gray-100">
+					<div className="flex gap-1.5">
+						<div className="text-sm select-none">Show more</div>
 					</div>
 				</div>
 			</Trackable>

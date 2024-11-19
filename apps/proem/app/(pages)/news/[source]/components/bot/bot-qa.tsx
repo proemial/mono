@@ -10,6 +10,52 @@ import { useIsApp } from "@/utils/app";
 
 const showFollowups = false;
 
+const references = [
+	// {
+	// 	title: "Evaluating the impact of U.S. protectionist trade policies",
+	// 	date: "2024-09-23",
+	// 	journal: "Journal of Infrastructure Policy and Development",
+	// 	author: "Dr. Sarah Chen",
+	// 	university: "Stanford University",
+	// },
+	// {
+	// 	title: "Current World-System and Conflicts",
+	// 	date: "2024-08-30",
+	// 	journal: "Journal of World-Systems Research",
+	// 	author: "Dr. Michael Rodriguez",
+	// 	university: "London School of Economics",
+	// },
+	// {
+	// 	title:
+	// 		"Impact of Trade Wars on the Global Economy and on the Macroeconomic an...",
+	// 	date: "2024-10-31",
+	// 	journal: "Economic Policy",
+	// 	author: "Dr. James Wilson",
+	// 	university: "Harvard University",
+	// },
+	// {
+	// 	title: "Global Supply Chain Disruptions in Modern Trade",
+	// 	date: "2024-11-15",
+	// 	journal: "International Journal of Economics",
+	// 	author: "Dr. Emily Zhang",
+	// 	university: "MIT",
+	// },
+	{
+		title: "Emerging Markets Response to Trade Tensions",
+		date: "2024-10-05",
+		journal: "Development Economics Review",
+		author: "Dr. Robert Kumar",
+		university: "Oxford University",
+	},
+	{
+		title: "Digital Trade and Cross-Border Data Flows",
+		date: "2024-09-15",
+		journal: "Technology Policy Review",
+		author: "Dr. Lisa Anderson",
+		university: "UC Berkeley",
+	},
+];
+
 export function BotQa({
 	question,
 	answer,
@@ -42,62 +88,88 @@ export function BotQa({
 	}, [scrollTo, isApp]);
 
 	return (
-		<div ref={qaRef} className="flex flex-col w-full gap-2">
-			<div className="flex items-start gap-1.5 px-3 w-full">
-				{user?.avatar ? (
-					<div className="w-10 h-10 rounded-full text-2xl flex items-center justify-center bg-black">
-						<span>{user?.avatar ?? "*"}</span>
-					</div>
-				) : (
-					<Avatar seed="6" />
-				)}
-
-				<div className="flex flex-col gap-1 flex-1">
-					<div className="flex flex-col gap-1 p-3 w-full bg-[#e9eaee] rounded-xl">
-						<div className="flex items-start gap-1 w-full">
-							<div className="font-bold text-[#08080a] text-sm leading-[14px]">
-								{user?.name ?? "You"}
-							</div>
-							<div className="px-1.5 py-0.5 ml-0.5 -mt-0.5 bg-white rounded-full border border-gray-300">
-								<div className="font-semibold text-gray-500 text-xs leading-3">
-									Anonymous user
+		<div ref={qaRef} className="flex flex-col mx-3">
+			<div className=" bg-gradient-to-b to-[#e9ecec] from-[#e1e7ea] rounded-xl">
+				<div className="flex flex-col flex-1">
+					<div className="flex flex-col gap-2 p-3 w-full ">
+						<div className="flex items-start w-full ">
+							{user?.avatar ? (
+								<div className="w-6 h-6 rounded-sm text-2xl flex items-center justify-center bg-[#0A161C]">
+									<span className="text-[11px]">{user?.avatar ?? "*"}</span>
 								</div>
+							) : (
+								<Avatar seed="6" />
+							)}
+
+							<div className="text-[#606567] text-sm leading-[14px] h-6 flex items-center ml-2 mb-1">
+								{user?.name ?? "You"} asked
 							</div>
 						</div>
 
-						<div className="font-medium text-[#08080a] text-[15px] leading-5">
+						<div className="font-medium text-[#08080a] text-[19px] leading-6">
 							{question}
 						</div>
 					</div>
 				</div>
-			</div>
 
-			<div className="flex flex-col gap-2 pl-[58px] pr-3 w-full">
-				<div className="flex gap-2 w-full">
-					<div className="mt-1 w-6 h-6 rounded-full bg-black flex items-center justify-center">
-						<Image className="w-3 h-3" alt="Frame" src={logo} />
-					</div>
+				<div className="flex flex-col gap-2 w-full ">
+					<div className="flex gap-2">
+						<div className="flex flex-col gap-1 flex-1 w-full overflow-hidden">
+							<div className="flex flex-col gap-1 p-3 w-full">
+								{answer ? (
+									<>
+										<div className="font-medium text-[#131316] text-[16px] leading-6 ">
+											{formatAnswerText(answer)}
+										</div>
+										<div className="flex items-start w-full mt-2 mb-2">
+											<div className="relative flex-[0_0_auto] w-6 h-6 rounded-sm bg-[#0A161C] flex items-center justify-center">
+												<Image className="w-3 h-3" alt="Frame" src={logo} />
+											</div>
+											<div className="text-[#606567] font-normal text-sm leading-[14px] h-6 flex items-center ml-2 w-full">
+												<div className="flex-1">Answer by Proem</div>
+												<a
+													href="#"
+													className=" text-[#99a1a3] hover:underline hover:text-[#5b6668]"
+													title="Learn how our Science bot works"
+												>
+													How it works?
+												</a>
+											</div>
+										</div>
 
-					<div className="flex flex-col gap-1 flex-1">
-						<div className="flex flex-col gap-1 p-3 w-full bg-[#e9eaee] rounded-xl">
-							<div className="flex items-start gap-1 w-full">
-								<div className="font-bold text-[#08080a] text-sm leading-[14px]">
-									proem.ai
-								</div>
+										<div className="flex justify-start gap-2 overflow-x-auto">
+											{references?.map((ref, index) => (
+												<div
+													key={index}
+													className="flex flex-col p-2 bg-[#cfd5d8] shadow-sm rounded-md w-[30%] md:w-[20%] flex-shrink-0"
+												>
+													<div className="flex flex-row w-full justify-between mt-1 mb-4">
+														<a
+															href="#1"
+															className="items-center justify-center rounded-full bg-[#0A161C] text-white text-[10px] font-[1000] cursor-pointer hover:bg-gray-800"
+															style={{
+																padding: "1px 4px",
+															}}
+														>
+															&nbsp;{index + 1}&nbsp;
+														</a>
+														<div className="text-[10px] text-[#4d595f]">
+															{ref.date &&
+																`${new Date(ref.date).toLocaleString("default", { month: "short" })} ${new Date(ref.date).getFullYear()}`}
+														</div>
+													</div>
 
-								<div className="px-1.5 py-0.5 ml-0.5 -mt-0.5 bg-black rounded-full">
-									<div className="font-semibold text-[#6aba6f] text-xs leading-3">
-										Science bot
-									</div>
-								</div>
-							</div>
+													<div className="text-[11px] text-[#131316] line-clamp-2">
+														{ref.title}
+													</div>
+													<div className="text-[10px] italic text-[#4d595f] mt-1 mb-1">
+														<div className="line-clamp-2">{ref.university}</div>
+													</div>
+												</div>
+											))}
+										</div>
 
-							{answer ? (
-								<>
-									<div className="font-medium text-[#08080a] text-[15px] leading-5">
-										{formatAnswerText(answer)}
-									</div>
-									<Trackable
+										{/* <Trackable
 										trackingKey={
 											analyticsKeys.experiments.news.item.qa.clickViewAllSources
 										}
@@ -114,47 +186,32 @@ export function BotQa({
 											Based on scientific papers ·{" "}
 											<span className="underline">View sources</span>
 										</div>
-									</Trackable>
-								</>
-							) : (
-								<Throbber className="h-10 pb-0 sm:pb-3" />
-							)}
+									</Trackable> */}
+									</>
+								) : (
+									<Throbber className="h-10 pb-0 sm:pb-3" />
+								)}
+							</div>
 						</div>
 					</div>
 				</div>
+
+				{showFollowups && (
+					<div className="flex flex-col gap-2 pl-[58px] pr-3 w-full">
+						<div>Followups: {followups?.length}</div>
+
+						{followups?.map((followup, i) => (
+							<BotSuggestion
+								key={i}
+								qa={[followup, ""]}
+								isLoading={false}
+								isAsked={false}
+								handleSuggestionClick={() => {}}
+							/>
+						))}
+					</div>
+				)}
 			</div>
-
-			<div className="flex items-center justify-end gap-4 pr-6 w-full">
-				<div className="font-normal text-[#65686d] text-[13px]">
-					<Trackable
-						trackingKey={analyticsKeys.experiments.news.item.clickAnswerLike}
-					>
-						<span className="font-bold">Like</span>
-					</Trackable>
-				</div>
-
-				<Trackable
-					trackingKey={analyticsKeys.experiments.news.item.clickAnswerShare}
-				>
-					<div className="font-bold text-[#65686d] text-[13px]">Share</div>
-				</Trackable>
-			</div>
-
-			{showFollowups && (
-				<div className="flex flex-col gap-2 pl-[58px] pr-3 w-full">
-					<div>Followups: {followups?.length}</div>
-
-					{followups?.map((followup, i) => (
-						<BotSuggestion
-							key={i}
-							qa={[followup, ""]}
-							isLoading={false}
-							isAsked={false}
-							handleSuggestionClick={() => {}}
-						/>
-					))}
-				</div>
-			)}
 		</div>
 	);
 }
@@ -184,7 +241,13 @@ const formatAnswerText = (text?: string) => {
 										.getElementById("sources")
 										?.scrollIntoView({ behavior: "smooth" })
 								}
-								className="relative -top-[2px] inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-pointer hover:bg-gray-800"
+								className="items-center justify-center rounded-full bg-[#0A161C] text-white text-[10px] font-[1000] cursor-pointer hover:bg-gray-800"
+								style={{
+									padding: "2px 5px",
+									marginRight: "2px",
+									position: "relative",
+									top: "-2px",
+								}}
 							>
 								{num}
 							</a>
