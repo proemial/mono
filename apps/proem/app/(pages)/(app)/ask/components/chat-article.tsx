@@ -7,7 +7,7 @@ import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 type ChatArticleProps = {
 	type: "Answer";
 	trackingKeys: ModelSelectorProps["trackingKeys"];
-	text: string[] | undefined;
+	text: string | undefined;
 };
 
 export function ChatArticle({ type, trackingKeys, text }: ChatArticleProps) {
@@ -28,9 +28,7 @@ export function ChatArticle({ type, trackingKeys, text }: ChatArticleProps) {
 				</div>
 			</div>
 			<div className="text-base/relaxed break-words flex flex-col gap-2">
-				{text?.map((paragraph) => (
-					<div key={paragraph}>{formatAnswerTextNoLinks(paragraph)}</div>
-				))}
+				<div>{formatAnswerTextNoLinks(text)}</div>
 			</div>
 		</div>
 	);

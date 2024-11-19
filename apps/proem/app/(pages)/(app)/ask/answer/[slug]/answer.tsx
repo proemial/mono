@@ -108,13 +108,15 @@ export const Answer = ({
 							bookmarks={bookmarks}
 							key={message.id}
 							question={message}
-							answer={getAnswerMessages(index, messages)}
+							answer={getAnswerMessage(index, messages)}
 							data={answerEngineData}
 							className={cn({
 								"opacity-0 pointer-events-none": showInputMode,
 							})}
 							followUps={FollowUpComponent}
-							isLatest={index === Math.ceil(messages.length / 2) - 1}
+							isLatest={
+								message === messages.filter((m) => m.role === "user").at(-1)
+							}
 						/>
 					);
 				})}
@@ -136,9 +138,9 @@ export const Answer = ({
 };
 
 /**
- * Get the answer messages that correspond to a given user message.
+ * Get the last answer message that correspond to a given user message.
  */
-const getAnswerMessages = (userMessageIndex: number, messages: Message[]) => {
+const getAnswerMessage = (userMessageIndex: number, messages: Message[]) => {
 	const answerMessages: Message[] = [];
 	for (let i = userMessageIndex; i < messages.length; i++) {
 		const message = messages[i + 1];
@@ -148,7 +150,9 @@ const getAnswerMessages = (userMessageIndex: number, messages: Message[]) => {
 			break;
 		}
 	}
-	return answerMessages;
+	// Note: We _could_ return all the `assistant` messages, but decided not to
+	// shown intermediate steps (i.e. all but the last one).
+	return answerMessages.at(-1);
 };
 
 /**
