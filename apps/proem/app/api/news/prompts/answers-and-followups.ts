@@ -1,14 +1,16 @@
 import { wrapAISDKModel } from "@/components/analytics/braintrust/llm-trace";
-import { openai } from "@ai-sdk/openai";
+import { google } from "@ai-sdk/google";
 
 export const LlmAnswer = {
 	prompt: answerPrompt,
-	model: () => wrapAISDKModel(openai("gpt-4o")) as ReturnType<typeof openai>,
+	model: () =>
+		wrapAISDKModel(google("gemini-1.5-flash")) as ReturnType<typeof google>,
 };
 
 export const LlmFollowups = {
 	prompt: followupsPrompt,
-	model: () => wrapAISDKModel(openai("gpt-4o")) as ReturnType<typeof openai>,
+	model: () =>
+		wrapAISDKModel(google("gemini-1.5-flash")) as ReturnType<typeof google>,
 };
 
 function answerPrompt(

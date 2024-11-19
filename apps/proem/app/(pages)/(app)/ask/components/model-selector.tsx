@@ -22,12 +22,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { BottomDrawer } from "@/components/bottom-drawer";
 
-const DEFAULT_MODEL = { "claude-3.5-sonnet": "Claude 3.5 Sonnet" };
+const DEFAULT_MODEL = { "gemini-1.5-flash": "Gemini 1.5 Flash" };
 const DEFAULT_MODEL_ID = Object.keys(DEFAULT_MODEL)[0] as keyof typeof MODELS;
 
 const MODELS = {
 	...DEFAULT_MODEL,
-	"gemini-1.5-pro": "Gemini 1.5 Pro",
+
+	"claude-3.5-sonnet": "Claude 3.5 Sonnet",
 	"gpt-4-turbo": "GPT-4 Turbo",
 	"llama-3": "Llama 3.2",
 	"mistral-large": "Mistral Large",

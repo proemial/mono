@@ -1,8 +1,8 @@
 import { wrapAISDKModel } from "@/components/analytics/braintrust/llm-trace";
-import { openai } from "@ai-sdk/openai";
+import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
 
-const model = () => openai("gpt-4o");
+const model = () => google("gemini-1.5-flash");
 
 export const generateIndexSearchQuery = async (
 	transcript: string,

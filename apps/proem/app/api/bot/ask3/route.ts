@@ -1,5 +1,5 @@
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
-import { openai } from "@ai-sdk/openai";
+import { google } from "@ai-sdk/google";
 import { auth } from "@clerk/nextjs/server";
 import {
 	convertToCoreMessages,
@@ -94,7 +94,7 @@ async function streamAnswer(
 	}> = [];
 
 	const result = await streamText({
-		model: wrapAISDKModel(openai("gpt-4o")),
+		model: wrapAISDKModel(google("gemini-1.5-flash")),
 		system: systemPrompt,
 		messages: coreMessages,
 		maxSteps: 5,
@@ -106,10 +106,11 @@ async function streamAnswer(
 				}),
 				execute: wrapTraced(async ({ question }) => {
 					const { text: rephrasedQuestion } = await generateText({
-						model: wrapAISDKModel(openai("gpt-4o")),
+						model: wrapAISDKModel(google("gemini-1.5-flash")),
 						system: rephraseQuestionPrompt(question),
 						messages: coreMessages,
 					});
+					console.log("rephrasedQuestion", rephrasedQuestion);
 					return await getPapersFromQdrant(rephrasedQuestion);
 				}),
 			},
@@ -131,8 +132,9 @@ async function streamAnswer(
 			}
 		},
 		onFinish: async ({ text: answer }) => {
+			console.log("answer", answer);
 			const { object: followUpQuestions } = await generateObject({
-				model: wrapAISDKModel(openai("gpt-4o")),
+				model: wrapAISDKModel(google("gemini-1.5-flash")),
 				output: "array",
 				schema: z.object({
 					question: z
@@ -141,6 +143,7 @@ async function streamAnswer(
 				}),
 				prompt: followUpQuestionsPrompt(userQuestion.content, answer),
 			});
+			console.log("followUpQuestions", followUpQuestions);
 
 			if (followUpQuestions?.length) {
 				streamingData.append({

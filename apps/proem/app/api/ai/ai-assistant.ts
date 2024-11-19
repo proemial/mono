@@ -1,4 +1,4 @@
-import { openai } from "@ai-sdk/openai";
+import { google } from "@ai-sdk/google";
 import { CoreTool, LanguageModel } from "ai";
 import { wrapAISDKModel } from "langsmith/wrappers/vercel";
 
@@ -66,7 +66,9 @@ type Assistant = (
 };
 
 export const assistant: Assistant = (context, title, abstract) => ({
-	model: wrapAISDKModel(openai("gpt-4o")) as ReturnType<typeof openai>,
+	model: wrapAISDKModel(google("gemini-1.5-flash")) as ReturnType<
+		typeof google
+	>,
 	system: systemPrompt(context, title, abstract),
 	// experimental_toolCallStreaming: true,
 	// maxTokens: 512,
