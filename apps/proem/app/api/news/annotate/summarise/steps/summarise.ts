@@ -11,11 +11,15 @@ export async function summarise(
 	try {
 		const factsAndQuestions = await generateFactsAndQuestions(
 			transcript,
-			query,
 			title,
+			query,
 			papers,
 		);
-		const { commentary, questions: qaString, engTitle } = parseOutput(factsAndQuestions);
+		const {
+			commentary,
+			questions: qaString,
+			engTitle,
+		} = parseOutput(factsAndQuestions);
 		const questions = qaFromString(qaString);
 
 		return { commentary, questions, engTitle };
@@ -31,10 +35,10 @@ function parseOutput(factsAndQuestions: string) {
 	const rawCommentary = factsAndQuestions
 		.split("<task_1>")[1]
 		?.split("</task_1>")[0];
-		const rawQuestions = factsAndQuestions
+	const rawQuestions = factsAndQuestions
 		.split("<task_2>")[1]
 		?.split("</task_2>")[0];
-		const rawEnglishTitle = factsAndQuestions
+	const rawEnglishTitle = factsAndQuestions
 		.split("<task_3>")[1]
 		?.split("</task_3>")[0];
 

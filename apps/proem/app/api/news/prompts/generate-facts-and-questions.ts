@@ -1,6 +1,7 @@
 import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
+import { wrapAISDKModel } from "@/components/analytics/braintrust/llm-trace";
 
 const model = () => anthropic("claude-3-5-sonnet-20240620");
 
@@ -12,7 +13,7 @@ export const generateFactsAndQuestions = async (
 ): Promise<string> => {
 	try {
 		const { text, usage } = await generateText({
-			model: model(),
+			model: wrapAISDKModel(model()),
 			messages: [
 				{
 					role: "user",
@@ -37,11 +38,11 @@ ${papers.map((paper, index) => `<abstract_${index + 1}>${paper.abstract}</abstra
 ...complete the following three tasks, one after another:
 
 <task_1>
-Create a 60 word commentary reflecting on the main issue of the original article. Readers will see the original article title, so start the commentary from there, without directly restating anything already said in the tile. Use facts and findings from the research papers, rephrased to relate directly to the topics of the original article. Use layman's language intended for a high school audience and include numerical references to the research papers in the commentary using brackets: [#].
+Create a 60 word commentary reflecting on the main issue of the original article. Readers will see the original article title, so start the commentary from there, without restating anything already said in the title or summary. Use facts and findings from the research papers, rephrased to relate directly to the topics of the original article. Use layman's language intended for a high school audience and include numerical references to the research papers in the commentary using brackets: [#].
 </task_1>
 
 <task_2>
-Create six questions that relate directly to the topic of the transcript, and can be answered using facts and findings from the research papers. Use layman's language intended for a high school audience, and ensure that the questions reflect common (mis)conceptions about the topic, and use a maximum of 10 words for each question.
+Create six follow-up questions that let readers of the commentary dive deeper into the topic, and which can be answered using facts and findings from the research papers. Use layman's language intended for a high school audience, and ensure that the questions reflect a broad range of angles into the topic, with both critical and more celebratory question. Use a maximum of 10 words for each question.
 
 Then, for each question, write a short and concise answer in two or three sentences, based on the facts and findings from the research papers. Use layman's terminology and include numerical references to the research papers using brackets: [#].
 

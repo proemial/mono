@@ -15,11 +15,12 @@ export async function getFromRedis(url: string) {
 	}
 }
 
-export async function updateRedis(url: string, query: string) {
+export async function updateRedis(url: string, query: string, traceId: string) {
 	try {
 		const result = await Redis.news.update(url, {
 			name: "query",
 			value: query,
+			traceId,
 		} as NewsAnnotatorQueryInputStep);
 
 		return result;

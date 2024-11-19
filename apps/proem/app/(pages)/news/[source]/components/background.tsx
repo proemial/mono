@@ -37,7 +37,12 @@ export function Background({ text, url }: { text?: string; url: string }) {
 											?.scrollIntoView({ behavior: "smooth" })
 									}
 									className="items-center justify-center rounded-full bg-black text-white text-[10px] font-[1000] cursor-pointer hover:bg-gray-800"
-									style={{ padding: "3px", position: "relative", top: "-2px" }}
+									style={{
+										padding: "3px 4px",
+										marginRight: "1px",
+										position: "relative",
+										top: "-2px",
+									}}
 								>
 									&nbsp;{num}&nbsp;
 								</a>

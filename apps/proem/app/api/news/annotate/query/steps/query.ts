@@ -20,7 +20,6 @@ export async function generateQuery(
 				},
 			});
 		}
-		console.log("[query]", trimNewlines(parsedQuery));
 
 		return parsedQuery;
 	} catch (e) {

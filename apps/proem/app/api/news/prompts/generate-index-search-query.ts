@@ -1,3 +1,4 @@
+import { wrapAISDKModel } from "@/components/analytics/braintrust/llm-trace";
 import { anthropic } from "@ai-sdk/anthropic";
 import { generateText } from "ai";
 
@@ -9,7 +10,7 @@ export const generateIndexSearchQuery = async (
 ): Promise<string> => {
 	try {
 		const { text, usage } = await generateText({
-			model: model(),
+			model: wrapAISDKModel(model()),
 			messages: [
 				{
 					role: "user",

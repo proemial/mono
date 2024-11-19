@@ -2,8 +2,12 @@ import { Time } from "@proemial/utils/time";
 import { NextRequest, NextResponse } from "next/server";
 import { getFromRedis, updateRedis } from "./steps/redis";
 import { summarise } from "./steps/summarise";
+import { ReferencedPaper } from "@proemial/adapters/redis/news";
+import { llmTrace } from "@/components/analytics/braintrust/llm-trace";
 
 export const maxDuration = 300; // seconds
+
+llmTrace.init(llmTrace.projects.News);
 
 export async function POST(req: NextRequest) {
 	const { url } = (await req.json()) as { url: string };
@@ -20,12 +24,25 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json(item);
 		}
 
-		const summary = await summarise(
-			url,
-			item.query.value,
-			item.scrape.transcript,
-			item.scrape?.title as string,
-			item.papers.value,
+		const summary = await llmTrace.trace(
+			async (span) => {
+				const summary = await summarise(
+					url,
+					item.query?.value as string,
+					item.scrape?.transcript as string,
+					item.scrape?.title as string,
+					item.papers?.value as ReferencedPaper[],
+				);
+
+				// Should work, but removes everything but the output
+				// logger.updateSpan({
+				// 	id: item.query?.traceId as string,
+				// 	output: summary.commentary,
+				// });
+
+				return summary;
+			},
+			{ parent: item.query?.traceId },
 		);
 
 		const result = await updateRedis(url, summary);
