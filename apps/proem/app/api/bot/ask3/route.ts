@@ -3,6 +3,7 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { auth } from "@clerk/nextjs/server";
 import {
 	convertToCoreMessages,
+	generateObject,
 	generateText,
 	Message,
 	StreamData,
@@ -130,15 +131,16 @@ async function streamAnswer(
 			}
 		},
 		onFinish: async ({ text: answer }) => {
-			const { text: followUpsStr } = await generateText({
+			const { object: followUpQuestions } = await generateObject({
 				model: wrapAISDKModel(anthropic("claude-3-5-sonnet-20240620")),
-				system: followUpQuestionsPrompt(userQuestion.content, answer),
-				messages: coreMessages,
+				output: "array",
+				schema: z.object({
+					question: z
+						.string()
+						.describe("A follow up question to the user's question"),
+				}),
+				prompt: followUpQuestionsPrompt(userQuestion.content, answer),
 			});
-			const followUpQuestions = followUpsStr
-				.split("?")
-				.filter(Boolean)
-				.map((question) => ({ question: `${question.trim()}?` }));
 
 			if (followUpQuestions?.length) {
 				streamingData.append({
