@@ -128,7 +128,7 @@ export function BotQa({
 											<div className="text-[#606567] font-normal text-sm leading-[14px] h-6 flex items-center ml-2 w-full">
 												<div className="flex-1">Answer by Proem</div>
 												<a
-													href="#"
+													href="/"
 													className=" text-[#99a1a3] hover:underline hover:text-[#5b6668]"
 													title="Learn how our Science bot works"
 												>
