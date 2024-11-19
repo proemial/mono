@@ -1,5 +1,4 @@
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
-import { google } from "@ai-sdk/google";
 import { auth } from "@clerk/nextjs/server";
 import {
 	convertToCoreMessages,
@@ -21,6 +20,7 @@ import { QdrantPaper } from "../../news/annotate/fetch/steps/fetch";
 import { AnswerEngineStreamData } from "../answer-engine/answer-engine";
 import { prettySlug } from "@proemial/utils/pretty-slug";
 import { answers } from "@proemial/data/repository/answer";
+import LlmModels from "../../ai/models";
 
 export const maxDuration = 30;
 
@@ -80,7 +80,7 @@ async function streamAnswer(
 	}> = [];
 
 	const result = await streamText({
-		model: google("gemini-1.5-pro"),
+		model: LlmModels.ask.answer(),
 		system: systemPrompt,
 		messages: coreMessages,
 		maxSteps: 5,
@@ -92,7 +92,7 @@ async function streamAnswer(
 				}),
 				execute: async ({ question }) => {
 					const { text: rephrasedQuestion } = await generateText({
-						model: google("gemini-1.5-flash"),
+						model: LlmModels.ask.rephrase(),
 						system: rephraseQuestionPrompt(question),
 						messages: coreMessages,
 					});
@@ -120,7 +120,7 @@ async function streamAnswer(
 		onFinish: async ({ text: answer }) => {
 			console.log("answer", answer);
 			const { object: followUpQuestions } = await generateObject({
-				model: google("gemini-1.5-flash"),
+				model: LlmModels.ask.followups(),
 				output: "array",
 				schema: z.object({
 					question: z

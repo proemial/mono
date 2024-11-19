@@ -1,13 +1,13 @@
-import { google } from "@ai-sdk/google";
+import LlmModels, { LlmModel } from "../../ai/models";
 
 export const LlmAnswer = {
 	prompt: answerPrompt,
-	model: () => google("gemini-1.5-flash") as ReturnType<typeof google>,
+	model: () => LlmModels.news.answer() as LlmModel,
 };
 
 export const LlmFollowups = {
 	prompt: followupsPrompt,
-	model: () => google("gemini-1.5-flash") as ReturnType<typeof google>,
+	model: () => LlmModels.news.followups() as LlmModel,
 };
 
 function answerPrompt(

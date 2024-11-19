@@ -1,5 +1,5 @@
-import { google } from "@ai-sdk/google";
 import { CoreTool, LanguageModel } from "ai";
+import LlmModels from "./models";
 
 const appContexts = ["paper", "global", "space"] as const;
 export type UserContext = (typeof appContexts)[number];
@@ -65,7 +65,7 @@ type Assistant = (
 };
 
 export const assistant: Assistant = (context, title, abstract) => ({
-	model: google("gemini-1.5-flash"),
+	model: LlmModels.assistant.answer(),
 	system: systemPrompt(context, title, abstract),
 	// experimental_toolCallStreaming: true,
 	// maxTokens: 512,

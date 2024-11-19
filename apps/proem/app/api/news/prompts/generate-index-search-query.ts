@@ -1,7 +1,5 @@
-import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
-
-const model = () => google("gemini-1.5-flash");
+import LlmModels from "../../ai/models";
 
 export const generateIndexSearchQuery = async (
 	transcript: string,
@@ -9,7 +7,7 @@ export const generateIndexSearchQuery = async (
 ): Promise<string> => {
 	try {
 		const { text, usage } = await generateText({
-			model: model(),
+			model: LlmModels.news.rephrase(),
 			messages: [
 				{
 					role: "user",

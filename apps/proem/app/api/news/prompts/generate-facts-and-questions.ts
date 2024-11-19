@@ -1,8 +1,6 @@
 import { generateText } from "ai";
-import { google } from "@ai-sdk/google";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
-
-const model = () => google("gemini-1.5-flash");
+import LlmModels from "../../ai/models";
 
 export const generateFactsAndQuestions = async (
 	transcript: string,
@@ -12,7 +10,7 @@ export const generateFactsAndQuestions = async (
 ): Promise<string> => {
 	try {
 		const { text, usage } = await generateText({
-			model: model(),
+			model: LlmModels.news.summarise(),
 			messages: [
 				{
 					role: "user",
