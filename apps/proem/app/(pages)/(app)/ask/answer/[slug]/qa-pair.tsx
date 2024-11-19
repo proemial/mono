@@ -104,6 +104,7 @@ export const QaPair = ({
 								return (
 									<Link
 										key={index}
+										id={`${encodeURIComponent(question.content)}-paper-${index + 1}`}
 										href={`/paper/${paper.link}`}
 										onClick={trackHandler(analyticsKeys.ask.click.paper)}
 									>
@@ -128,6 +129,7 @@ export const QaPair = ({
 							type="Answer"
 							text={answer.content}
 							trackingKeys={analyticsKeys.ask}
+							question={question.content}
 						/>
 						{isLoadingAnswer && <Throbber />}
 						{savedAnswer?.shareId && (

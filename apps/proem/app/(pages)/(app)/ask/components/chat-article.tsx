@@ -8,9 +8,15 @@ type ChatArticleProps = {
 	type: "Answer";
 	trackingKeys: ModelSelectorProps["trackingKeys"];
 	text: string | undefined;
+	question: string;
 };
 
-export function ChatArticle({ type, trackingKeys, text }: ChatArticleProps) {
+export function ChatArticle({
+	type,
+	trackingKeys,
+	text,
+	question,
+}: ChatArticleProps) {
 	return (
 		<div className="space-y-3 text-pretty">
 			<div className="flex items-center place-content-between">
@@ -28,13 +34,13 @@ export function ChatArticle({ type, trackingKeys, text }: ChatArticleProps) {
 				</div>
 			</div>
 			<div className="text-base/relaxed break-words flex flex-col gap-2">
-				<div>{formatAnswerTextNoLinks(text)}</div>
+				<div>{formatAnswerTextNoLinks(question, text)}</div>
 			</div>
 		</div>
 	);
 }
 
-const formatAnswerTextNoLinks = (text?: string) => {
+const formatAnswerTextNoLinks = (question: string, text?: string) => {
 	if (!text) return "";
 	return text
 		.replace(/^\s*-\s*/gm, "")
@@ -49,7 +55,20 @@ const formatAnswerTextNoLinks = (text?: string) => {
 						trackingKey={analyticsKeys.ask.click.inlineReference}
 					>
 						<span className="relative inline-block">
-							<div className="relative -top-[2px] inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-default hover:bg-gray-800">
+							<div
+								className="relative -top-[2px] inline-flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-[9px] font-bold cursor-pointer hover:bg-gray-800"
+								onClick={() =>
+									document
+										.getElementById(
+											`${encodeURIComponent(question)}-paper-${num}`,
+										)
+										?.scrollIntoView({
+											behavior: "smooth",
+											block: "center",
+											inline: "center",
+										})
+								}
+							>
 								{num}
 							</div>
 						</span>
