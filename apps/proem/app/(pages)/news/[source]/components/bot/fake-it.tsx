@@ -19,9 +19,9 @@ export function CommunityQuestions({
 	const rndUser = getRandomUserSeed(url, users);
 
 	return (
-		<div className="flex flex-col gap-3">
+		<div className="flex flex-col gap-3 mt-3">
 			<CommunityHeader />
-			<div className="flex flex-col-reverse items-start gap-4 relative self-stretch w-full">
+			<div className="flex relative flex-col-reverse gap-4 items-start self-stretch w-full">
 				{questionsToShow?.map((question, index) => {
 					return (
 						<BotQa
@@ -45,12 +45,12 @@ export function CommunityQuestions({
 
 export function DummyButton({ url }: { url: string }) {
 	return (
-		<div className="flex text-center items-center w-full justify-center">
+		<div className="flex justify-center items-center w-full text-center">
 			<Trackable
 				trackingKey={analyticsKeys.experiments.news.item.qa.clickShowMore}
 				properties={{ sourceUrl: url }}
 			>
-				<div className="flex px-3 py-2 my-4 rounded-full border hover:cursor-pointer hover:bg-gray-100">
+				<div className="hover:cursor-pointer hover:bg-gray-100 flex px-3 py-2 my-4 rounded-full border">
 					<div className="flex gap-1.5">
 						<div className="text-sm select-none">Show more</div>
 					</div>

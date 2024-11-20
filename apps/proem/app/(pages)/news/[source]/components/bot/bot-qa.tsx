@@ -88,11 +88,11 @@ export function BotQa({
 	}, [scrollTo, isApp]);
 
 	return (
-		<div ref={qaRef} className="flex flex-col mx-3">
-			<div className=" bg-gradient-to-b to-[#e9ecec] from-[#e1e7ea] rounded-xl">
+		<div ref={qaRef} className="flex flex-col">
+			<div className=" bg-gradient-to-b to-[#e9ecec] from-[#e1e7ea] rounded-xl pb-4 w-full">
 				<div className="flex flex-col flex-1">
-					<div className="flex flex-col gap-2 p-3 w-full ">
-						<div className="flex items-start w-full ">
+					<div className="flex flex-col gap-2 p-3 w-full">
+						<div className="flex items-start w-full">
 							{user?.avatar ? (
 								<div className="w-6 h-6 rounded-sm text-2xl flex items-center justify-center bg-[#0A161C]">
 									<span className="text-[11px]">{user?.avatar ?? "*"}</span>
@@ -106,44 +106,78 @@ export function BotQa({
 							</div>
 						</div>
 
-						<div className="font-medium text-[#08080a] text-[19px] leading-6">
+						<div className="font-medium text-[#08080a] text-[19px] leading-6 w-full">
 							{question}
 						</div>
 					</div>
 				</div>
 
-				<div className="flex flex-col gap-2 w-full ">
+				<div className="flex flex-col gap-2 w-full">
 					<div className="flex gap-2">
-						<div className="flex flex-col gap-1 flex-1 w-full overflow-hidden">
-							<div className="flex flex-col gap-1 p-3 w-full">
+						<div className="flex overflow-hidden flex-col flex-1 gap-1 w-full">
+							<div className="flex flex-col gap-1 px-3 w-full">
 								{answer ? (
 									<>
-										<div className="font-medium text-[#131316] text-[16px] leading-6 ">
+										<div className="font-medium text-[#131316] text-[16px] leading-6">
 											{formatAnswerText(answer)}
 										</div>
-										<div className="flex items-start w-full mt-2 mb-2">
-											<div className="relative flex-[0_0_auto] w-6 h-6 rounded-sm bg-[#0A161C] flex items-center justify-center">
+										<div className="flex items-start mt-2 mb-6 w-full">
+											<div className=" w-6 h-6 rounded-sm bg-[#0A161C] flex items-center justify-center">
 												<Image className="w-3 h-3" alt="Frame" src={logo} />
 											</div>
-											<div className="text-[#606567] font-normal text-sm leading-[14px] h-6 flex items-center ml-2 w-full">
-												<div className="flex-1">Answer by Proem</div>
+											<div className="text-[#606567] font-normal text-sm leading-[14px] h-6 flex items-center ml-2 w-full gap-1">
+												<div className="flex-1">Explained by Proem</div>
+
 												<a
 													href="/"
-													className=" text-[#99a1a3] hover:underline hover:text-[#5b6668]"
+													onClick={(e) => e.preventDefault()}
+													className="inline-flex items-center px-2 py-1 rounded-full border border-[#99a1a3] text-[#606567] hover:text-white hover:bg-[#99a1a3] transition-colors"
 													title="Learn how our Science bot works"
 												>
-													How it works?
+													<svg
+														className="mr-1 w-3 h-3"
+														viewBox="0 0 24 24"
+														fill="none"
+														stroke="currentColor"
+														strokeWidth="1"
+														strokeLinecap="round"
+														strokeLinejoin="round"
+													>
+														<path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+													</svg>
+													<div className="text-[11px]">Like</div>
+												</a>
+												<a
+													href="/"
+													onClick={(e) => e.preventDefault()}
+													className="inline-flex items-center px-2 py-1 rounded-full border border-[#99a1a3] text-[#606567] hover:text-white hover:bg-[#99a1a3] transition-colors"
+													title="Share this answer"
+												>
+													<svg
+														className="mr-1 w-3 h-3"
+														viewBox="0 0 24 24"
+														fill="none"
+														stroke="currentColor"
+														strokeWidth="1"
+														strokeLinecap="round"
+														strokeLinejoin="round"
+													>
+														<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+														<polyline points="16 6 12 2 8 6" />
+														<line x1="12" y1="2" x2="12" y2="15" />
+													</svg>
+													<div className="text-[11px]">Share</div>
 												</a>
 											</div>
 										</div>
 
-										<div className="flex justify-start gap-2 overflow-x-auto">
+										<div className="flex overflow-x-auto gap-2 justify-start">
 											{references?.map((ref, index) => (
 												<div
 													key={index}
 													className="flex flex-col p-2 bg-[#cfd5d8] shadow-sm rounded-md w-[30%] md:w-[20%] flex-shrink-0"
 												>
-													<div className="flex flex-row w-full justify-between mt-1 mb-4">
+													<div className="flex flex-row justify-between mt-1 mb-4 w-full">
 														<a
 															href="#1"
 															className="items-center justify-center rounded-full bg-[#0A161C] text-white text-[10px] font-[1000] cursor-pointer hover:bg-gray-800"
@@ -189,7 +223,7 @@ export function BotQa({
 									</Trackable> */}
 									</>
 								) : (
-									<Throbber className="h-10 pb-0 sm:pb-3" />
+									<Throbber className="sm:pb-3 pb-0 h-10" />
 								)}
 							</div>
 						</div>
@@ -197,7 +231,7 @@ export function BotQa({
 				</div>
 
 				{showFollowups && (
-					<div className="flex flex-col gap-2 pl-[58px] pr-3 w-full">
+					<div className="flex flex-col gap-2 pr-3 w-full">
 						<div>Followups: {followups?.length}</div>
 
 						{followups?.map((followup, i) => (
@@ -232,7 +266,7 @@ const formatAnswerText = (text?: string) => {
 							analyticsKeys.experiments.news.item.clickInlineReference
 						}
 					>
-						<span className="relative inline-block">
+						<span className="inline-block relative">
 							<a
 								href={`#${num}`}
 								key={`${i}-${j}`}

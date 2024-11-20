@@ -119,9 +119,16 @@ export function Scaffold({
 				<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto] text-[#08080a]">
 					<div
 						className={
-							"flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto] p-3 rounded-[20px] border border-black/25"
+							"flex-[0_0_auto] rounded-[20px] border-black/25 flex relative flex-col gap-2 items-start self-stretch p-3 w-full border"
 						}
-						style={{ background, color }}
+						style={
+							{
+								"--newsBackground": background,
+								"--newsColor": color,
+								background: "var(--newsBackground)",
+								color: "var(--newsColor)",
+							} as React.CSSProperties
+						}
 					>
 						<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto rounded-[8px]">
 							<Legend
@@ -161,8 +168,8 @@ export function Scaffold({
 
 function ScraperError() {
 	return (
-		<div className="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-50">
-			<div className="w-full max-w-lg mx-4 p-8 bg-white rounded-lg shadow-lg">
+		<div className="bg-black/80 flex fixed inset-0 z-50 justify-center items-center backdrop-blur-sm">
+			<div className="p-8 mx-4 w-full max-w-lg bg-white rounded-lg shadow-lg">
 				<div className="flex flex-col space-y-4">
 					<div className="space-y-2">
 						<h2 className="text-xl font-bold tracking-tight">
@@ -177,7 +184,7 @@ function ScraperError() {
 					<div className="flex justify-end space-x-2">
 						<button
 							type="button"
-							className="flex items-center rounded-md text-sm font-medium h-9 px-4 disabled:opacity-80"
+							className="disabled:opacity-80 flex items-center px-4 h-9 text-sm font-medium rounded-md"
 							onClick={(e) => {
 								(e.target as HTMLButtonElement).disabled = true;
 								window.location.href = "/news";
@@ -187,7 +194,7 @@ function ScraperError() {
 						</button>
 						<button
 							type="button"
-							className="flex items-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 disabled:opacity-80"
+							className="bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-80 flex items-center px-4 h-9 text-sm font-medium rounded-md"
 							onClick={(e) => {
 								(e.target as HTMLButtonElement).disabled = true;
 								window.location.reload();
@@ -206,16 +213,16 @@ function AnnotationError({ error }: { error: Error }) {
 	console.error("error", error);
 
 	return (
-		<div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 font-mono">
-			<div className="bg-black/90 border border-green-500/30 rounded-lg shadow-lg p-8 max-w-lg w-full mx-4">
+		<div className="bg-black/80 flex fixed inset-0 z-50 justify-center items-center font-mono backdrop-blur-sm">
+			<div className="bg-black/90 border-green-500/30 p-8 mx-4 w-full max-w-lg rounded-lg border shadow-lg">
 				<div className="flex justify-between mb-6">
-					<div className="text-green-500 text-sm overflow-hidden" />
+					<div className="overflow-hidden text-sm text-green-500" />
 					<button
 						type="button"
 						onClick={() => {
 							window.location.href = "/news";
 						}}
-						className="text-green-500 hover:text-green-400 cursor-pointer"
+						className="hover:text-green-400 text-green-500 cursor-pointer"
 					>
 						<svg
 							width="24"
@@ -233,8 +240,8 @@ function AnnotationError({ error }: { error: Error }) {
 					</button>
 				</div>
 
-				<div className="mb-6 text-center space-y-3">
-					<div className="text-green-500 text-xl font-bold tracking-wider animate-pulse">
+				<div className="mb-6 space-y-3 text-center">
+					<div className="text-xl font-bold tracking-wider text-green-500 animate-pulse">
 						SYSTEM OVERLOAD
 					</div>
 					<div className="text-green-400/80">
@@ -249,7 +256,7 @@ function AnnotationError({ error }: { error: Error }) {
 					<button
 						type="button"
 						onClick={() => window.location.reload()}
-						className="bg-black border border-green-500 text-green-500 px-4 py-2 rounded hover:bg-green-500/10 transition-colors flex items-center gap-2 animate-pulse"
+						className="hover:bg-green-500/10 flex gap-2 items-center px-4 py-2 text-green-500 bg-black rounded border border-green-500 transition-colors animate-pulse"
 					>
 						<svg
 							className="w-4 h-4 animate-spin"
@@ -287,8 +294,8 @@ function AnnotationLoader({
 	data?: NewsAnnotatorSteps;
 }) {
 	return (
-		<div className="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-50">
-			<div className="w-full max-w-lg mx-4 p-8 bg-white rounded-lg shadow-lg">
+		<div className="bg-black/80 flex fixed inset-0 z-50 justify-center items-center backdrop-blur-sm">
+			<div className="p-8 mx-4 w-full max-w-lg bg-white rounded-lg shadow-lg">
 				<div className="flex flex-col space-y-4">
 					{isScraperLoading && (
 						<ScheduledLoaderMessage>
@@ -316,7 +323,7 @@ function AnnotationLoader({
 						<ScheduledLoaderMessage
 							fallback={
 								<div className="flex gap-3 items-center">
-									<div className="w-8 h-8 rounded-full bg-black flex items-center justify-center animate-bounce">
+									<div className="flex justify-center items-center w-8 h-8 bg-black rounded-full animate-bounce">
 										<Image className="w-4 h-4" alt="Frame" src={logo} />
 									</div>
 									<div>Waving our magic wand</div>
@@ -357,7 +364,7 @@ const ScheduledLoaderMessage = ({
 				fallback
 			) : (
 				<>
-					<Throbber className="h-8 w-8" />
+					<Throbber className="w-8 h-8" />
 					{children}
 				</>
 			)}
