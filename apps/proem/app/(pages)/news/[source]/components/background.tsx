@@ -6,6 +6,7 @@ import logo from "../../components/images/logo.svg";
 import { AnnotatedText } from "./references/annotated-text";
 import { Paper } from "./references/paper";
 import { useEffect, useState } from "react";
+import { Icons } from "@proemial/shadcn-ui";
 
 type Props = {
 	text?: string;
@@ -47,9 +48,11 @@ export function Background({ text, papers }: Props) {
 							</div> */}
 						</div>
 
-						<div className="font-medium text-[#08080a] text-[19px] leading-6">
-							What is the factual background?
-							{streamedText?.length !== text?.length && "..."}
+						<div className="flex content-between items-center font-medium text-[#08080a] text-[19px] leading-6">
+							<div className="flex-1">What is the factual background?</div>
+							{streamedText?.length !== text?.length && (
+								<Icons.loader className="h-4 w-4 fill-theme-800/70 mr-2" />
+							)}
 						</div>
 					</div>
 				</div>
