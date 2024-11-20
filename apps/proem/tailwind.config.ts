@@ -89,7 +89,7 @@ const config = {
 				"accordion-down": "accordion-down 0.2s ease-out",
 				"accordion-up": "accordion-up 0.2s ease-out",
 				"slide-down": "slide-down 0.5s ease-out",
-				"fade-in": "fade-in 0.5s ease-in-out",
+				"fade-in": "fade-in 0.5s ease-in",
 			},
 			fontSize: {
 				"2xs": "0.625rem",

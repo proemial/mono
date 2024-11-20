@@ -22,6 +22,12 @@ export function NewsFeed({ sorted, error, debug }: Props) {
 	const iframe = useRef<HTMLIFrameElement>(null);
 	const overlay = useRef<HTMLDivElement>(null);
 
+	const [loading, setLoading] = useState(false);
+	useEffect(() => {
+		// Clear loading state on back in mobile browsers
+		setLoading(false);
+	}, []);
+
 	const [overlayVisible, setOverlayVisible] = useState(false);
 	useScrollToggle(overlayVisible);
 
@@ -30,6 +36,7 @@ export function NewsFeed({ sorted, error, debug }: Props) {
 			const url = `/news/${encodeURIComponent(targetUrl)}?p=1`;
 
 			if (domWindow && domWindow.innerWidth < 1024) {
+				setLoading(true);
 				setOverlayVisible(false);
 				router.push(url);
 			} else {
@@ -47,47 +54,54 @@ export function NewsFeed({ sorted, error, debug }: Props) {
 	};
 
 	return (
-		<div className="ppNewsFeed flex relative flex-col items-start self-stretch w-full">
-			{error && <ErrorModal error={error} />}
-			<Header />
-			<AnnotateForm />
-			<div className="columns-[300px] gap-[30px] w-full lg:px-8">
-				{sorted.map((item, i) => (
-					<Trackable
-						key={i}
-						trackingKey={analyticsKeys.experiments.news.feed.clickCard}
-						properties={{ sourceUrl: item.init?.url as string }}
-					>
-						<div
-							className="inline-flex w-full mb-8 break-inside-avoid-page cursor-pointer"
-							data-url={item.init?.url}
-							onClick={() => handleClick(item.init?.url)}
+		<>
+			{loading && (
+				<div className="fixed inset-0 bg-black/30 z-10 flex items-center justify-center text-white/90 animate-[fadeIn_1s_ease-in]">
+					<div className="animate-spin h-8 w-8 border-4 border-white/50 border-t-transparent rounded-full" />
+				</div>
+			)}
+			<div className="ppNewsFeed flex relative flex-col items-start self-stretch w-full">
+				{error && <ErrorModal error={error} />}
+				<Header />
+				<AnnotateForm />
+				<div className="columns-[300px] gap-[30px] w-full lg:px-8">
+					{sorted.map((item, i) => (
+						<Trackable
+							key={i}
+							trackingKey={analyticsKeys.experiments.news.feed.clickCard}
+							properties={{ sourceUrl: item.init?.url as string }}
 						>
-							<NewsCard
-								url={item.init?.url as string}
-								data={item}
-								debug={debug}
-							/>
-						</div>
-					</Trackable>
-				))}
-			</div>
+							<div
+								className="inline-flex w-full mb-8 break-inside-avoid-page cursor-pointer"
+								data-url={item.init?.url}
+								onClick={() => handleClick(item.init?.url)}
+							>
+								<NewsCard
+									url={item.init?.url as string}
+									data={item}
+									debug={debug}
+								/>
+							</div>
+						</Trackable>
+					))}
+				</div>
 
-			<div
-				ref={overlay}
-				className={cn("fixed inset-0 z-50", overlayVisible ? "" : "hidden")}
-			>
-				<div className="absolute inset-0 bg-black/65" onClick={handleClose} />
-				<div className="rounded-[32px] absolute left-1/2 top-[40px] -translate-x-1/2 h-[90%] w-[500px] bg-white shadow-[0_0_100px_rgba(0,0,0,0.75)] border-white border-[12px]">
-					<iframe
-						ref={iframe}
-						title="News content"
-						className="w-full h-full border-0"
-						src="about:blank"
-					/>
+				<div
+					ref={overlay}
+					className={cn("fixed inset-0 z-50", overlayVisible ? "" : "hidden")}
+				>
+					<div className="absolute inset-0 bg-black/65" onClick={handleClose} />
+					<div className="rounded-[32px] absolute left-1/2 top-[40px] -translate-x-1/2 h-[90%] w-[500px] bg-white shadow-[0_0_100px_rgba(0,0,0,0.75)] border-white border-[12px]">
+						<iframe
+							ref={iframe}
+							title="News content"
+							className="w-full h-full border-0"
+							src="about:blank"
+						/>
+					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 }
 
