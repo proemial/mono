@@ -18,7 +18,6 @@ import { Bot } from "./bot/bot";
 import { AnnotationError, ScraperError } from "./errors";
 import { Legend } from "./legend";
 import { AnnotationLoader } from "./loader";
-import { References } from "./references/references";
 
 export function Scaffold({
 	url,
@@ -128,15 +127,14 @@ export function Scaffold({
 				</div>
 
 				{data?.summarise?.commentary && (
-					<Background text={data?.summarise?.commentary} url={url} />
+					<Background
+						text={data?.summarise?.commentary}
+						papers={data?.papers?.value}
+					/>
 				)}
 
 				{data?.summarise?.questions && (
 					<Bot questions={data?.summarise?.questions} url={url} />
-				)}
-
-				{data?.papers?.value && (
-					<References papers={data?.papers?.value} url={url} />
 				)}
 			</div>
 			<Footer />
