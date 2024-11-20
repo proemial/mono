@@ -6,95 +6,92 @@ import { ErrorModal } from "./error-modal";
 import { Header } from "./header";
 import { AnnotateForm } from "./annotate-form";
 import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { cn } from "@proemial/shadcn-ui/lib/utils";
+import { useRouter } from "next/navigation";
+
+function useScrollToggle(disabled: boolean) {
+	useEffect(() => {
+		if (typeof document !== "undefined") {
+			document.body.style.overflow = disabled ? "hidden" : "auto"; // enable/disable scrolling
+		}
+	}, [disabled]);
+}
 
 export function NewsFeed({
 	sorted,
 	error,
 	debug,
 }: { sorted: NewsAnnotatorSteps[]; error?: string; debug?: boolean }) {
-	const [loading, setLoading] = useState(false);
+	const router = useRouter();
+	const iframe = useRef<HTMLIFrameElement>(null);
+	const overlay = useRef<HTMLDivElement>(null);
 
-	useEffect(() => {
-		setLoading(false);
-	}, []);
+	const [overlayVisible, setOverlayVisible] = useState(false);
+	useScrollToggle(overlayVisible);
+
+	const handleClick = (targetUrl?: string) => {
+		if (targetUrl && iframe.current) {
+			const url = `/news/${encodeURIComponent(targetUrl)}?p=1`;
+
+			if (window.innerWidth < 1024) {
+				setOverlayVisible(false);
+				router.push(url);
+			} else {
+				setOverlayVisible(true);
+				iframe.current.src = url;
+			}
+		}
+	};
+
+	const handleClose = () => {
+		if (iframe.current) {
+			setOverlayVisible(false);
+			iframe.current.src = "about:blank";
+		}
+	};
 
 	return (
-		<>
-			{loading && (
-				<div className="fixed inset-0 bg-black/30 z-10 flex items-center justify-center text-white/90 animate-[fadeIn_1s_ease-in-out]">
-					<div className="animate-spin h-8 w-8 border-4 border-white/50 border-t-transparent rounded-full" />
-				</div>
-			)}
-			<div className="ppNewsFeed flex relative flex-col items-start self-stretch w-full">
-				{error && <ErrorModal error={error} />}
-				<Header />
-				<AnnotateForm />
-				<div className="columns-[300px] gap-[30px] w-full lg:px-8">
-					{sorted.map((item, i) => (
-						<Trackable
-							key={i}
-							trackingKey={analyticsKeys.experiments.news.feed.clickCard}
-							properties={{ sourceUrl: item.init?.url as string }}
+		<div className="ppNewsFeed flex relative flex-col items-start self-stretch w-full">
+			{error && <ErrorModal error={error} />}
+			<Header />
+			<AnnotateForm />
+			<div className="columns-[300px] gap-[30px] w-full lg:px-8">
+				{sorted.map((item, i) => (
+					<Trackable
+						key={i}
+						trackingKey={analyticsKeys.experiments.news.feed.clickCard}
+						properties={{ sourceUrl: item.init?.url as string }}
+					>
+						<div
+							className="inline-flex w-full mb-8 break-inside-avoid-page cursor-pointer"
+							data-url={item.init?.url}
+							onClick={() => handleClick(item.init?.url)}
 						>
-							<div
-								className="inline-flex w-full mb-8 break-inside-avoid-page cursor-pointer"
-								data-url={item.init?.url}
-								onClick={(e) => {
-									const target = e.currentTarget;
-									const url = `/news/${encodeURIComponent(target.getAttribute("data-url") as string)}?p=1`;
-									const overlay = document.querySelector("[data-overlay]");
-									const iframe = document.querySelector(
-										"[data-iframe]",
-									) as HTMLIFrameElement;
+							<NewsCard
+								url={item.init?.url as string}
+								data={item}
+								debug={debug}
+							/>
+						</div>
+					</Trackable>
+				))}
+			</div>
 
-									if (window.innerWidth < 1024) {
-										if (overlay) overlay.classList.add("hidden");
-										setLoading(true);
-										window.location.href = url;
-									} else if (overlay && iframe && url) {
-										overlay.classList.remove("hidden");
-										iframe.src = url;
-										document.body.style.overflow = "hidden"; // Disable scrolling
-									}
-								}}
-							>
-								<NewsCard
-									url={item.init?.url as string}
-									data={item}
-									debug={debug}
-								/>
-							</div>
-						</Trackable>
-					))}
-				</div>
-
-				{/* Overlay and iframe - hidden by default */}
-				<div data-overlay className="hidden fixed inset-0 z-50">
-					<div
-						className="absolute inset-0 bg-black/65"
-						onClick={() => {
-							const overlay = document.querySelector("[data-overlay]");
-							const iframe = document.querySelector(
-								"[data-iframe]",
-							) as HTMLIFrameElement;
-							if (overlay && iframe) {
-								overlay.classList.add("hidden");
-								iframe.src = "about:blank";
-								document.body.style.overflow = "auto"; // Re-enable scrolling
-							}
-						}}
+			<div
+				ref={overlay}
+				className={cn("fixed inset-0 z-50", overlayVisible ? "" : "hidden")}
+			>
+				<div className="absolute inset-0 bg-black/65" onClick={handleClose} />
+				<div className="rounded-[32px] absolute left-1/2 top-[40px] -translate-x-1/2 h-[90%] w-[500px] bg-white shadow-[0_0_100px_rgba(0,0,0,0.75)] border-white border-[12px]">
+					<iframe
+						ref={iframe}
+						title="News content"
+						className="w-full h-full border-0"
+						src="about:blank"
 					/>
-					<div className="rounded-[32px] absolute left-1/2 top-[40px] -translate-x-1/2 h-[90%] w-[500px] bg-white shadow-[0_0_100px_rgba(0,0,0,0.75)] border-white border-[12px]">
-						<iframe
-							data-iframe
-							title="News content"
-							className="w-full h-full border-0"
-							src="about:blank"
-						/>
-					</div>
 				</div>
 			</div>
-		</>
+		</div>
 	);
 }
