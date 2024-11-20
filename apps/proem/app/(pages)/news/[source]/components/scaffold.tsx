@@ -112,7 +112,7 @@ export function Scaffold({
 			{scraperError && <ScraperError />}
 			{fatalError && <AnnotationError error={fatalError} />}
 
-			<div className="hidden max-[475px]:block min-[477px]:block">
+			<div className="hidden max-[475px]:block min-[477px]:block sticky top-0 z-50">
 				<Header />
 			</div>
 			<div className="flex flex-col gap-4 p-2 min-[475px]:p-0 min-[477px]:p-2">
@@ -128,7 +128,7 @@ export function Scaffold({
 								title={data?.summarise?.engTitle ?? data?.scrape?.title}
 								image={data?.scrape?.artworkUrl}
 								url={url}
-								summary={data?.query?.value ?? ''} // Add nullish coalescing operator
+								summary={data?.query?.value ?? ""} // Add nullish coalescing operator
 							/>
 						</div>
 					</div>
@@ -153,7 +153,6 @@ export function Scaffold({
 				{data?.papers?.value && (
 					<References papers={data?.papers?.value} url={url} />
 				)}
-
 			</div>
 			<Footer />
 		</div>
