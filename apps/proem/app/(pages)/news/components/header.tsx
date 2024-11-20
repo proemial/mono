@@ -1,7 +1,7 @@
 "use client";
 import logo from "./images/logo.svg";
 import Image from "next/image";
-import { XClose } from "@untitled-ui/icons-react";
+import { ArrowLeft, XClose } from "@untitled-ui/icons-react";
 import { useState, useRef, useEffect } from "react";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
@@ -177,23 +177,25 @@ function AnnotateForm({
 }
 
 function BackButton() {
+	const goBackwards = () => {
+		if (
+			window.location.pathname.startsWith("/news") &&
+			window.location.pathname.length < 7
+		) {
+			window.location.href = "/news";
+		} else {
+			history.back();
+		}
+	};
+
 	return (
 		<Trackable trackingKey={analyticsKeys.experiments.news.header.clickBack}>
 			<button
 				type="button"
-				onClick={() => {
-					if (
-						window.location.pathname.startsWith("/news") &&
-						window.location.pathname.length < 7
-					) {
-						window.location.href = "/news";
-					} else {
-						history.back();
-					}
-				}}
+				onClick={goBackwards}
 				className="text-[#f6f5e8] hover:text-[#d4d3c8]"
 			>
-				<XClose className="size-6" />
+				<ArrowLeft className="size-6" />
 			</button>
 		</Trackable>
 	);
