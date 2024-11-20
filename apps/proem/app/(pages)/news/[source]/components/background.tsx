@@ -5,6 +5,7 @@ import Image from "next/image";
 import logo from "../../components/images/logo.svg";
 import { AnnotatedText } from "./references/annotated-text";
 import { Paper } from "./references/paper";
+import { useEffect, useState } from "react";
 
 type Props = {
 	text?: string;
@@ -13,23 +14,42 @@ type Props = {
 };
 
 export function Background({ text, papers }: Props) {
+	const [streamedText, setStreamedText] = useState<string>();
+	useEffect(() => {
+		if (!text) return;
+
+		let currentLength = 0;
+		const interval = setInterval(() => {
+			if (currentLength >= text.length) {
+				clearInterval(interval);
+				return;
+			}
+
+			currentLength += 5; // Add 5 characters at a time
+			setStreamedText(text.slice(0, currentLength));
+		}, 30);
+
+		return () => clearInterval(interval);
+	}, [text]);
+
 	return (
 		<div className="flex flex-col">
 			<div className=" bg-gradient-to-b to-[#e9ecec] from-[#e1e7ea] rounded-xl mb-0 mt-4">
 				<div className="flex flex-col flex-1">
 					<div className="flex flex-col gap-2 p-3 w-full">
 						<div className="flex items-start w-full">
-							<div className="flex justify-center items-center w-6 h-6 text-2xl bg-[#0A161C] rounded-sm">
+							{/* <div className="flex justify-center items-center w-6 h-6 text-2xl bg-[#0A161C] rounded-sm">
 								<span className="text-[11px]">👤</span>
 							</div>
 
 							<div className="text-[#606567] text-sm leading-[14px] h-6 flex items-center ml-2 mb-1">
 								You asked
-							</div>
+							</div> */}
 						</div>
 
 						<div className="font-medium text-[#08080a] text-[19px] leading-6">
-							What is factual background?
+							What is the factual background?
+							{streamedText?.length !== text?.length && "..."}
 						</div>
 					</div>
 				</div>
@@ -40,7 +60,7 @@ export function Background({ text, papers }: Props) {
 							<div className="flex flex-col gap-1 px-3 pb-3 w-full">
 								<>
 									<div className="font-medium text-[#131316] text-[16px] leading-6">
-										<AnnotatedText>{text}</AnnotatedText>
+										<AnnotatedText>{streamedText}</AnnotatedText>
 									</div>
 									<div className="flex items-start mt-2 mb-6 w-full">
 										<div className="w-6 h-6 rounded-sm text-2xl flex items-center justify-center bg-[#0A161C]">
