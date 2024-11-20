@@ -106,7 +106,7 @@ export function Background({ text, url }: { text?: string; url: string }) {
 
 	return (
 		<div className="flex flex-col">
-			<div className=" bg-gradient-to-b to-[#e9ecec] from-[#e1e7ea] rounded-xl mb-0">
+			<div className=" bg-gradient-to-b to-[#e9ecec] from-[#e1e7ea] rounded-xl mb-0 mt-4">
 				<div className="flex flex-col flex-1">
 					<div className="flex flex-col gap-2 p-3 w-full">
 						<div className="flex items-start w-full">
