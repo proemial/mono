@@ -4,15 +4,15 @@ import { extractHostName } from "@/utils/url";
 import { useState } from "react";
 
 export function Legend({
+	url,
 	title,
 	image,
-	url,
 	summary,
 }: {
+	url: string;
 	title?: string;
 	image?: string;
-	url: string;
-	summary: string;
+	summary?: string;
 }) {
 	const [showMore, setShowMore] = useState(false);
 
@@ -30,7 +30,7 @@ export function Legend({
 				<p
 					className={`relative self-stretch text-sm tracking-[0] leading-5 overflow-hidden text-ellipsis transition-all duration-300 ease-in-out ${showMore ? "pb-5" : "line-clamp-4"}`}
 				>
-					{summary}
+					{summary ?? ""}
 				</p>
 
 				<button
