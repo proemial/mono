@@ -6,14 +6,23 @@ import { ErrorModal } from "./error-modal";
 import { Header } from "./header";
 import { AnnotateForm } from "./annotate-form";
 import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news";
+import { useState } from "react";
+import { Throbber } from "@/components/throbber";
 
 export function NewsFeed({
 	sorted,
 	error,
 	debug,
 }: { sorted: NewsAnnotatorSteps[]; error?: string; debug?: boolean }) {
+	const [loading, setLoading] = useState(false);
+
 	return (
 		<>
+			{loading && (
+				<div className="fixed inset-0 bg-black/30 z-10 flex items-center justify-center text-white">
+					<Throbber throbberStyle="fill-white/70 h-16 w-16" />
+				</div>
+			)}
 			<div className="ppNewsFeed flex relative flex-col items-start self-stretch w-full">
 				{error && <ErrorModal error={error} />}
 				<Header />
@@ -35,8 +44,10 @@ export function NewsFeed({
 									const iframe = document.querySelector(
 										"[data-iframe]",
 									) as HTMLIFrameElement;
+
 									if (window.innerWidth < 1024) {
 										if (overlay) overlay.classList.add("hidden");
+										setLoading(true);
 										window.location.href = url;
 									} else if (overlay && iframe && url) {
 										overlay.classList.remove("hidden");

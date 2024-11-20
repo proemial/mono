@@ -3,7 +3,6 @@ import {
 	backgroundColor,
 	foregroundColor,
 } from "@proemial/adapters/redis/news";
-import { ActionBar } from "../../components/actionbar";
 import {
 	usePapers,
 	useQueryBuilder,
@@ -21,7 +20,6 @@ import logo from "../../components/images/logo.svg";
 import Image from "next/image";
 import { Header } from "../../components/header";
 import { Footer } from "../../components/footer";
-import { extractHostName } from "@/utils/url";
 
 export function Scaffold({
 	url,
