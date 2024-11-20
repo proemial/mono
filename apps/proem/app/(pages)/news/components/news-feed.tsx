@@ -10,12 +10,15 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "@proemial/shadcn-ui/lib/utils";
 import { useRouter } from "next/navigation";
 
-export function NewsFeed({
-	sorted,
-	error,
-	debug,
-}: { sorted: NewsAnnotatorSteps[]; error?: string; debug?: boolean }) {
+type Props = {
+	sorted: NewsAnnotatorSteps[];
+	error?: string;
+	debug?: boolean;
+};
+
+export function NewsFeed({ sorted, error, debug }: Props) {
 	const router = useRouter();
+	const domWindow = useDomElement(window);
 	const iframe = useRef<HTMLIFrameElement>(null);
 	const overlay = useRef<HTMLDivElement>(null);
 
@@ -26,7 +29,7 @@ export function NewsFeed({
 		if (targetUrl && iframe.current) {
 			const url = `/news/${encodeURIComponent(targetUrl)}?p=1`;
 
-			if (window.innerWidth < 1024) {
+			if (domWindow && domWindow.innerWidth < 1024) {
 				setOverlayVisible(false);
 				router.push(url);
 			} else {
@@ -89,9 +92,16 @@ export function NewsFeed({
 }
 
 function useScrollToggle(disabled: boolean) {
+	const domDocument = useDomElement(document);
+
 	useEffect(() => {
-		if (typeof document !== "undefined") {
-			document.body.style.overflow = disabled ? "hidden" : "auto"; // enable/disable scrolling
+		if (domDocument) {
+			// enable/disable scrolling
+			domDocument.body.style.overflow = disabled ? "hidden" : "auto";
 		}
-	}, [disabled]);
+	}, [disabled, domDocument]);
+}
+
+function useDomElement<T>(element: T) {
+	return typeof element !== "undefined" ? element : undefined;
 }
