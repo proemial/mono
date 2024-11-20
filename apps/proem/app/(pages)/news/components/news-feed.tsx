@@ -1,7 +1,7 @@
 "use client";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Trackable } from "@/components/trackable";
-import { NewsCard } from "../news-card";
+import { NewsCard } from "./news-card";
 import { ErrorModal } from "./error-modal";
 import { Header } from "./header";
 import { AnnotateForm } from "./annotate-form";
