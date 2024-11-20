@@ -4,7 +4,7 @@ import { MoodSelector } from "./components/mood-selector";
 import { Suggestions } from "./components/suggestions";
 import { Metadata } from "next";
 import { getItems } from "../../news/cached-items";
-import { getThreeRandomStarters } from "./starters";
+import { getThreeRandomStarters, STARTERS } from "./starters";
 
 export const metadata: Metadata = {
 	robots: {
@@ -45,7 +45,7 @@ export default async function AskPage() {
  */
 const getStarters = async () => {
 	const newsItems = await getItems();
-	const fallbackStarters = getThreeRandomStarters();
+	const fallbackStarters = STARTERS;
 
 	const uniqueRandomIndices = new Set<number>();
 	while (uniqueRandomIndices.size < 3) {
@@ -70,14 +70,14 @@ const getStarters = async () => {
 
 const containsAnaphors = (text: string) => {
 	const anaphors = [
-		"this",
-		"that",
-		"these",
-		"those",
-		"he",
-		"she",
-		"it",
-		"they",
+		" this ",
+		" that ",
+		" these ",
+		" those ",
+		" he ",
+		" she ",
+		" it ",
+		" they",
 	];
 	return anaphors.some((anaphor) => text.toLowerCase().includes(anaphor));
 };
