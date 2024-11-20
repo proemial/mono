@@ -18,7 +18,6 @@ type Props = {
 
 export function NewsFeed({ sorted, error, debug }: Props) {
 	const router = useRouter();
-	const domWindow = useDomElement(window);
 	const iframe = useRef<HTMLIFrameElement>(null);
 	const overlay = useRef<HTMLDivElement>(null);
 
@@ -35,7 +34,7 @@ export function NewsFeed({ sorted, error, debug }: Props) {
 		if (targetUrl && iframe.current) {
 			const url = `/news/${encodeURIComponent(targetUrl)}?p=1`;
 
-			if (domWindow && domWindow.innerWidth < 1024) {
+			if (typeof window !== "undefined" && window.innerWidth < 1024) {
 				setLoading(true);
 				setOverlayVisible(false);
 				router.push(url);
@@ -106,16 +105,10 @@ export function NewsFeed({ sorted, error, debug }: Props) {
 }
 
 function useScrollToggle(disabled: boolean) {
-	const domDocument = useDomElement(document);
-
 	useEffect(() => {
-		if (domDocument) {
+		if (typeof document !== "undefined") {
 			// enable/disable scrolling
-			domDocument.body.style.overflow = disabled ? "hidden" : "auto";
+			document.body.style.overflow = disabled ? "hidden" : "auto";
 		}
-	}, [disabled, domDocument]);
-}
-
-function useDomElement<T>(element: T) {
-	return typeof element !== "undefined" ? element : undefined;
+	}, [disabled]);
 }
