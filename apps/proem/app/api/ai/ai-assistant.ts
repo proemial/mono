@@ -16,7 +16,7 @@ ${
 		? `
 	<paper>
 		<title>${title}</title>
-		<abstract>${abstract}</abstract>
+		<content>${abstract}</content>
 	</paper>
 	`
 		: ""
@@ -44,7 +44,7 @@ ${
 	context === "paper"
 		? `
 - Answer in a single sentence.
-- Enclose all technical concepts relevant to the title and abstract with double parenthesis.
+- Enclose all technical concepts relevant to the paper's title and content with double parenthesis.
 	`
 		: `
 - Use layman's terminology instead of scientific jargon.
