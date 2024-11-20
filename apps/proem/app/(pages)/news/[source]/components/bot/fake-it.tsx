@@ -3,6 +3,7 @@ import { Trackable } from "@/components/trackable";
 import { User, users } from "@/app/(pages)/news/components/users";
 import { CommunityHeader } from "./headers";
 import { BotQa } from "./bot-qa";
+import { useEffect, useMemo, useState } from "react";
 
 export function CommunityQuestions({
 	url,
@@ -13,10 +14,10 @@ export function CommunityQuestions({
 	questions?: Array<[string, string]>;
 	isFromFeed?: boolean;
 }) {
-	if (!isFromFeed) return <></>;
+	const rndUser = useRandomUser(url);
+	const questionsToShow = useQuestions(questions);
 
-	const questionsToShow = questions?.slice(0, 3);
-	const rndUser = getRandomUserSeed(url, users);
+	if (!isFromFeed) return <></>;
 
 	return (
 		<div className="flex flex-col gap-3 mt-3">
@@ -60,7 +61,26 @@ export function DummyButton({ url }: { url: string }) {
 	);
 }
 
-export function getRandomUserSeed(title: string, users: User[]) {
+function useRandomUser(url: string) {
+	const [user, setUser] = useState(0);
+
+	useEffect(() => {
+		setUser(getSeed(url, users));
+	}, [url]);
+
+	return user;
+}
+function useQuestions(allQuestions?: Array<[string, string]>) {
+	const [questions, setQuestions] = useState<Array<[string, string]>>([]);
+
+	useEffect(() => {
+		setQuestions(allQuestions?.slice(0, 3) ?? []);
+	}, [allQuestions]);
+
+	return questions;
+}
+
+function getSeed(title: string, users: User[]) {
 	// Create a consistent hash from the title
 	let hash = 0;
 	for (let i = 0; i < title.length; i++) {

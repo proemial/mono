@@ -136,6 +136,8 @@ export function Bot({ url, questions }: Props) {
 }
 
 const scrollToQa = async (index: string) => {
+	if (typeof document === "undefined") return;
+
 	await new Promise((resolve) => setTimeout(resolve, 100));
 	document.getElementById(`qa-${index}`)?.scrollIntoView({
 		behavior: "smooth",
