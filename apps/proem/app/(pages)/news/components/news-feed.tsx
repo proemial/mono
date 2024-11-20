@@ -18,7 +18,9 @@ export function NewsFeed({
 	return (
 		<>
 			{loading && (
-				<div className="fixed inset-0 bg-black/30 z-10 flex items-center justify-center text-white/90" />
+				<div className="fixed inset-0 bg-black/30 z-10 flex items-center justify-center text-white/90 animate-[fadeIn_1s_ease-in-out]">
+					<div className="animate-spin h-8 w-8 border-4 border-white/50 border-t-transparent rounded-full" />
+				</div>
 			)}
 			<div className="ppNewsFeed flex relative flex-col items-start self-stretch w-full">
 				{error && <ErrorModal error={error} />}
