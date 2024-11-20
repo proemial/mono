@@ -3,7 +3,8 @@ import { ProemLogo } from "@/components/icons/brand/logo";
 import { MoodSelector } from "./components/mood-selector";
 import { Suggestions } from "./components/suggestions";
 import { Metadata } from "next";
-import { getThreeRandomStarters } from "./starters";
+import { getItems } from "../../news/cached-items";
+import { getThreeRandomStarters, STARTERS } from "./starters";
 
 export const metadata: Metadata = {
 	robots: {
@@ -12,9 +13,8 @@ export const metadata: Metadata = {
 	},
 };
 
-export default function AskPage() {
-	// TODO: Fetch top nice starters from DB
-	const starters = getThreeRandomStarters();
+export default async function AskPage() {
+	const starters = await getStarters();
 
 	return (
 		<div className="flex flex-col justify-between flex-grow gap-4">
@@ -39,3 +39,45 @@ export default function AskPage() {
 		</div>
 	);
 }
+
+/**
+ * Use random news item questions as starters.
+ */
+const getStarters = async () => {
+	const newsItems = await getItems();
+	const fallbackStarters = STARTERS;
+
+	const uniqueRandomIndices = new Set<number>();
+	while (uniqueRandomIndices.size < 3) {
+		uniqueRandomIndices.add(Math.floor(Math.random() * newsItems.length));
+	}
+	const noOfQuestionsPerItem = 6;
+	const questionIndex = Math.floor(Math.random() * noOfQuestionsPerItem);
+	const newsStarters = Array.from(uniqueRandomIndices).map((index) => {
+		const question =
+			newsItems[index]?.summarise?.questions?.[questionIndex]?.[0];
+		const randomFallback = fallbackStarters[
+			Math.floor(Math.random() * fallbackStarters.length)
+		] as string;
+		if (!question || containsAnaphors(question)) {
+			return randomFallback;
+		}
+		return question;
+	});
+
+	return newsStarters;
+};
+
+const containsAnaphors = (text: string) => {
+	const anaphors = [
+		" this ",
+		" that ",
+		" these ",
+		" those ",
+		" he ",
+		" she ",
+		" it ",
+		" they",
+	];
+	return anaphors.some((anaphor) => text.toLowerCase().includes(anaphor));
+};

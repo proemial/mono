@@ -3,7 +3,6 @@ import {
 	backgroundColor,
 	foregroundColor,
 } from "@proemial/adapters/redis/news";
-import { ActionBar } from "../../components/actionbar";
 import {
 	usePapers,
 	useQueryBuilder,
@@ -21,7 +20,6 @@ import logo from "../../components/images/logo.svg";
 import Image from "next/image";
 import { Header } from "../../components/header";
 import { Footer } from "../../components/footer";
-import { extractHostName } from "@/utils/url";
 
 export function Scaffold({
 	url,
@@ -112,7 +110,7 @@ export function Scaffold({
 			{scraperError && <ScraperError />}
 			{fatalError && <AnnotationError error={fatalError} />}
 
-			<div className="hidden max-[475px]:block min-[477px]:block">
+			<div className="hidden max-[475px]:block min-[477px]:block sticky top-0 z-50">
 				<Header />
 			</div>
 			<div className="flex flex-col gap-4 p-2 min-[475px]:p-0 min-[477px]:p-2">
@@ -157,9 +155,9 @@ export function Scaffold({
 					<Bot questions={data?.summarise?.questions} url={url} />
 				)}
 
-				{/* {data?.papers?.value && (
+				{data?.papers?.value && (
 					<References papers={data?.papers?.value} url={url} />
-				)} */}
+				)}
 			</div>
 			<Footer />
 		</div>

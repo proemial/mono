@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { Scaffold } from "./components/scaffold";
 import { Redis } from "@proemial/adapters/redis";
 import { revalidateTag, unstable_cache } from "next/cache";
+import { scrapingDone } from "@/app/api/news/annotate/scraper";
 
 type Props = {
 	params: {
@@ -38,7 +39,7 @@ export default async function UrlPage(props: Props) {
 	return <Scaffold url={url} data={item} />;
 }
 
-const cacheDisabled = true;
+const cacheDisabled = false;
 async function fetchItem({ params, searchParams }: Props) {
 	const url =
 		params.source === "annotate" && searchParams?.url
@@ -46,11 +47,7 @@ async function fetchItem({ params, searchParams }: Props) {
 			: decodeURIComponent(params.source);
 
 	const cacheKey = `news:${url}`;
-	if (
-		searchParams.flush ||
-		cacheDisabled ||
-		process.env.NODE_ENV === "development"
-	) {
+	if (searchParams.flush || cacheDisabled) {
 		console.log("Revalidating news-item");
 		revalidateTag(cacheKey);
 	}
@@ -62,10 +59,17 @@ async function fetchItem({ params, searchParams }: Props) {
 		},
 		[cacheKey],
 		{
-			revalidate: 300, // 5 minutes
+			revalidate: 3600, // 1 hour
 			tags: ["news-item", cacheKey],
 		},
 	)();
+
+	if (!scrapingDone(item)) {
+		console.log("Scraping not done");
+		revalidateTag(cacheKey);
+
+		return { url };
+	}
 
 	return { url, item };
 }

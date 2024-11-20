@@ -11,19 +11,19 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { ChatActionBarAsk } from "../../components/chat-action-bar-ask";
-import { ChatArticle } from "../../components/chat-article";
-import { ChatQuestion } from "../../components/chat-question";
 import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { Paper } from "@/components/icons/Paper";
-import { PaperCardAsk } from "../../components/paper-card-ask";
+import { Throbber } from "@/components/throbber";
 import { Header4, Icons, cn } from "@proemial/shadcn-ui";
 import { Message } from "ai/react";
 import Link from "next/link";
 import { ReactNode, useRef } from "react";
+import { ChatActionBarAsk } from "../../components/chat-action-bar-ask";
+import { ChatArticle } from "../../components/chat-article";
+import { ChatQuestion } from "../../components/chat-question";
+import { PaperCardAsk } from "../../components/paper-card-ask";
 import { useThrobberStatus } from "./use-throbber-status";
-import { Throbber } from "@/components/throbber";
 
 export type QaPairProps = {
 	question: Message;
@@ -131,7 +131,7 @@ export const QaPair = ({
 							trackingKeys={analyticsKeys.ask}
 							question={question.content}
 						/>
-						{isLoadingAnswer && <Throbber />}
+						{/* {isLoadingAnswer && <Throbber />} */}
 						{savedAnswer?.shareId && (
 							<ChatActionBarAsk
 								shareId={savedAnswer.shareId}

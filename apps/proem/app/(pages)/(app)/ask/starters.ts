@@ -1,4 +1,4 @@
-const STARTERS = [
+export const STARTERS = [
 	"Do vaccines cause autism spectrum disorder?",
 	"Is a daily glass of wine healthy?",
 	"Do cell phones cause brain cancer?",

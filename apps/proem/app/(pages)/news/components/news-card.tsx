@@ -9,8 +9,8 @@ import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news";
 import dayjs from "dayjs";
 import Image from "next/image";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import logo from "./components/images/logo.svg";
-import { users } from "./components/users";
+import logo from "./images/logo.svg";
+import { users } from "./users";
 import { extractHostName } from "@/utils/url";
 
 function ppMouseMove(

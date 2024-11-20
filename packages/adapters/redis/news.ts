@@ -49,6 +49,10 @@ export const RedisNews = {
 					count: 400,
 				})
 			)[1];
+
+			if (!keys.length) {
+				return [];
+			}
 		} finally {
 			Time.log(begin, "[redis][news][scan]");
 		}

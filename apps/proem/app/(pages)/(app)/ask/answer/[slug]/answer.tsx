@@ -18,6 +18,7 @@ import { cn } from "@proemial/shadcn-ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { Message, useChat } from "ai/react";
 import { useEffect, useState } from "react";
+import { LLMError } from "./llm-error";
 
 type Props = Pick<QaPairProps, "bookmarks"> & {
 	initialQuestion?: string;
@@ -38,7 +39,7 @@ export const Answer = ({
 	);
 	const queryClient = useQueryClient();
 	const { user } = useUser();
-	const { messages, data, append, isLoading, stop } = useChat({
+	const { messages, data, append, isLoading, stop, error } = useChat({
 		sendExtraMessageFields: true,
 		id: initialQuestion,
 		api: "/api/bot/ask3",
@@ -49,6 +50,7 @@ export const Answer = ({
 			});
 		},
 		body: { slug: sessionSlug, userId: user?.id },
+		keepLastMessageOnError: true,
 	}) as Omit<ReturnType<typeof useChat>, "data"> & {
 		data: AnswerEngineEvents[];
 	};
@@ -120,6 +122,7 @@ export const Answer = ({
 						/>
 					);
 				})}
+				<LLMError error={error} />
 			</div>
 			{showInputMode && (
 				<div className="sticky bottom-32">{FollowUpComponent}</div>

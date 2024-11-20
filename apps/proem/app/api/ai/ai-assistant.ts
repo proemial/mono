@@ -1,6 +1,5 @@
-import { anthropic } from "@ai-sdk/anthropic";
 import { CoreTool, LanguageModel } from "ai";
-import { wrapAISDKModel } from "langsmith/wrappers/vercel";
+import LlmModels from "./models";
 
 const appContexts = ["paper", "global", "space"] as const;
 export type UserContext = (typeof appContexts)[number];
@@ -17,7 +16,7 @@ ${
 		? `
 	<paper>
 		<title>${title}</title>
-		<abstract>${abstract}</abstract>
+		<content>${abstract}</content>
 	</paper>
 	`
 		: ""
@@ -45,7 +44,7 @@ ${
 	context === "paper"
 		? `
 - Answer in a single sentence.
-- Enclose all technical concepts relevant to the title and abstract with double parenthesis.
+- Enclose all technical concepts relevant to the paper's title and content with double parenthesis.
 	`
 		: `
 - Use layman's terminology instead of scientific jargon.
@@ -66,7 +65,7 @@ type Assistant = (
 };
 
 export const assistant: Assistant = (context, title, abstract) => ({
-	model: wrapAISDKModel(anthropic("claude-3-5-sonnet-20240620")),
+	model: LlmModels.assistant.answer(),
 	system: systemPrompt(context, title, abstract),
 	// experimental_toolCallStreaming: true,
 	// maxTokens: 512,

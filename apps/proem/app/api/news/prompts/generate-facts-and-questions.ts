@@ -1,9 +1,6 @@
 import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
-import { wrapAISDKModel } from "@/components/analytics/braintrust/llm-trace";
-
-const model = () => anthropic("claude-3-5-sonnet-20240620");
+import LlmModels from "../../ai/models";
 
 export const generateFactsAndQuestions = async (
 	transcript: string,
@@ -13,7 +10,7 @@ export const generateFactsAndQuestions = async (
 ): Promise<string> => {
 	try {
 		const { text, usage } = await generateText({
-			model: wrapAISDKModel(model()),
+			model: LlmModels.news.summarise(),
 			messages: [
 				{
 					role: "user",

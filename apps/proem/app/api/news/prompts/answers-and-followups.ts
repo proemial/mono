@@ -1,14 +1,13 @@
-import { wrapAISDKModel } from "@/components/analytics/braintrust/llm-trace";
-import { anthropic } from "@ai-sdk/anthropic";
+import LlmModels, { LlmModel } from "../../ai/models";
 
 export const LlmAnswer = {
 	prompt: answerPrompt,
-	model: () => wrapAISDKModel(anthropic("claude-3-5-sonnet-20240620")),
+	model: () => LlmModels.news.answer() as LlmModel,
 };
 
 export const LlmFollowups = {
 	prompt: followupsPrompt,
-	model: () => wrapAISDKModel(anthropic("claude-3-5-haiku-latest")),
+	model: () => LlmModels.news.followups() as LlmModel,
 };
 
 function answerPrompt(

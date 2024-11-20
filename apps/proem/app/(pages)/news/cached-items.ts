@@ -6,7 +6,7 @@ const cacheKey = "news-feed";
 const cacheDisabled = false;
 
 export async function getItems(flush?: boolean) {
-	if (flush || cacheDisabled || process.env.NODE_ENV === "development") {
+	if (flush || cacheDisabled) {
 		console.log("Revalidating news-list");
 		revalidateTag(cacheKey);
 	}
