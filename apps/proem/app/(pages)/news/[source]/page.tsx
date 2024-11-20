@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { Scaffold } from "./components/scaffold";
 import { Redis } from "@proemial/adapters/redis";
 import { revalidateTag, unstable_cache } from "next/cache";
+import { scrapingDone } from "@/app/api/news/annotate/scraper";
 
 type Props = {
 	params: {
@@ -58,10 +59,17 @@ async function fetchItem({ params, searchParams }: Props) {
 		},
 		[cacheKey],
 		{
-			revalidate: 300, // 5 minutes
+			revalidate: 3600, // 1 hour
 			tags: ["news-item", cacheKey],
 		},
 	)();
+
+	if (!scrapingDone(item)) {
+		console.log("Scraping not done");
+		revalidateTag(cacheKey);
+
+		return { url };
+	}
 
 	return { url, item };
 }
