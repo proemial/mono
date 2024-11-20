@@ -6,7 +6,7 @@ import { ErrorModal } from "./error-modal";
 import { Header } from "./header";
 import { AnnotateForm } from "./annotate-form";
 import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function NewsFeed({
 	sorted,
@@ -14,6 +14,10 @@ export function NewsFeed({
 	debug,
 }: { sorted: NewsAnnotatorSteps[]; error?: string; debug?: boolean }) {
 	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		setLoading(false);
+	}, []);
 
 	return (
 		<>
