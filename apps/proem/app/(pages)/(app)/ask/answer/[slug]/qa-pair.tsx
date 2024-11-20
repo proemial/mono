@@ -15,18 +15,7 @@ import { CollapsibleSection } from "@/components/collapsible-section";
 import { HorisontalScrollArea } from "@/components/horisontal-scroll-area";
 import { Paper } from "@/components/icons/Paper";
 import { Throbber } from "@/components/throbber";
-import {
-	Alert,
-	AlertDescription,
-	AlertTitle,
-	Collapsible,
-	CollapsibleContent,
-	CollapsibleTrigger,
-	Header4,
-	Icons,
-	cn,
-} from "@proemial/shadcn-ui";
-import { AlertCircle } from "@untitled-ui/icons-react";
+import { Header4, Icons, cn } from "@proemial/shadcn-ui";
 import { Message } from "ai/react";
 import Link from "next/link";
 import { ReactNode, useRef } from "react";
@@ -44,7 +33,6 @@ export type QaPairProps = {
 	isLatest: boolean;
 	className?: string;
 	bookmarks?: Bookmarks;
-	error: Error | undefined;
 };
 
 export const QaPair = ({
@@ -55,7 +43,6 @@ export const QaPair = ({
 	isLatest,
 	className,
 	bookmarks,
-	error,
 }: QaPairProps) => {
 	const isQuestionByCurrentUser = question.id !== SHARED_ANSWER_TRANSACTION_ID;
 	const { papers } = findByEventType(data, "papers-fetched", question.id) ?? {};
@@ -144,7 +131,7 @@ export const QaPair = ({
 							trackingKeys={analyticsKeys.ask}
 							question={question.content}
 						/>
-						{isLoadingAnswer && <Throbber />}
+						{/* {isLoadingAnswer && <Throbber />} */}
 						{savedAnswer?.shareId && (
 							<ChatActionBarAsk
 								shareId={savedAnswer.shareId}
@@ -153,40 +140,8 @@ export const QaPair = ({
 						)}
 					</div>
 				)}
-				<ErrorMessage error={error} />
 			</div>
 			{isLatest && !isLoadingAnswer && followUps}
 		</div>
-	);
-};
-
-const ErrorMessage = ({ error }: { error: Error | undefined }) => {
-	if (!error) {
-		return undefined;
-	}
-
-	return (
-		<Alert variant="destructive">
-			<AlertCircle className="h-4 w-4" />
-			<AlertTitle>Error</AlertTitle>
-			<AlertDescription>
-				<div className="flex flex-col gap-2">
-					<p>
-						An error occurred while generating your answer. Please try again
-						later.
-					</p>
-					<Collapsible>
-						<CollapsibleTrigger className="text-xs pb-2">
-							Show details
-						</CollapsibleTrigger>
-						<CollapsibleContent>
-							<pre className="text-xs overflow-auto text-wrap">
-								{error.message}
-							</pre>
-						</CollapsibleContent>
-					</Collapsible>
-				</div>
-			</AlertDescription>
-		</Alert>
 	);
 };

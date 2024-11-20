@@ -18,6 +18,7 @@ import { cn } from "@proemial/shadcn-ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { Message, useChat } from "ai/react";
 import { useEffect, useState } from "react";
+import { LLMError } from "./llm-error";
 
 type Props = Pick<QaPairProps, "bookmarks"> & {
 	initialQuestion?: string;
@@ -118,10 +119,10 @@ export const Answer = ({
 							isLatest={
 								message === messages.filter((m) => m.role === "user").at(-1)
 							}
-							error={error}
 						/>
 					);
 				})}
+				<LLMError error={error} />
 			</div>
 			{showInputMode && (
 				<div className="sticky bottom-32">{FollowUpComponent}</div>
