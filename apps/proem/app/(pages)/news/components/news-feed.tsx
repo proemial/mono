@@ -7,7 +7,6 @@ import { Header } from "./header";
 import { AnnotateForm } from "./annotate-form";
 import { NewsAnnotatorSteps } from "@proemial/adapters/redis/news";
 import { useState } from "react";
-import { Throbber } from "@/components/throbber";
 
 export function NewsFeed({
 	sorted,
@@ -19,9 +18,7 @@ export function NewsFeed({
 	return (
 		<>
 			{loading && (
-				<div className="fixed inset-0 bg-black/30 z-10 flex items-center justify-center text-white">
-					<Throbber throbberStyle="fill-white/70 h-16 w-16" />
-				</div>
+				<div className="fixed inset-0 bg-black/30 z-10 flex items-center justify-center text-white/90" />
 			)}
 			<div className="ppNewsFeed flex relative flex-col items-start self-stretch w-full">
 				{error && <ErrorModal error={error} />}
