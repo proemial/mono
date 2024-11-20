@@ -56,11 +56,28 @@ const getStarters = async () => {
 	const newsStarters = Array.from(uniqueRandomIndices).map((index) => {
 		const question =
 			newsItems[index]?.summarise?.questions?.[questionIndex]?.[0];
-		const fallback = fallbackStarters[
+		const randomFallback = fallbackStarters[
 			Math.floor(Math.random() * fallbackStarters.length)
 		] as string;
-		return question ?? fallback;
+		if (!question || containsAnaphors(question)) {
+			return randomFallback;
+		}
+		return question;
 	});
 
 	return newsStarters;
+};
+
+const containsAnaphors = (text: string) => {
+	const anaphors = [
+		"this",
+		"that",
+		"these",
+		"those",
+		"he",
+		"she",
+		"it",
+		"they",
+	];
+	return anaphors.some((anaphor) => text.toLowerCase().includes(anaphor));
 };
