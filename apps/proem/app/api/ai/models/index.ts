@@ -9,7 +9,7 @@ export type LlmModel =
 
 const flash = google("gemini-1.5-flash");
 const gpt4o = openai("gpt-4o");
-const sonnet = anthropic("claude-3-5-sonnet-latest");
+const sonnet = anthropic("claude-3-5-sonnet-20240620");
 
 const defaultModel = gpt4o;
 const answersModel = sonnet;
