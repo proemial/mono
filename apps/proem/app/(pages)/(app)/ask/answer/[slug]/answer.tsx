@@ -38,7 +38,7 @@ export const Answer = ({
 	);
 	const queryClient = useQueryClient();
 	const { user } = useUser();
-	const { messages, data, append, isLoading, stop } = useChat({
+	const { messages, data, append, isLoading, stop, error } = useChat({
 		sendExtraMessageFields: true,
 		id: initialQuestion,
 		api: "/api/bot/ask3",
@@ -49,6 +49,7 @@ export const Answer = ({
 			});
 		},
 		body: { slug: sessionSlug, userId: user?.id },
+		keepLastMessageOnError: true,
 	}) as Omit<ReturnType<typeof useChat>, "data"> & {
 		data: AnswerEngineEvents[];
 	};
@@ -117,6 +118,7 @@ export const Answer = ({
 							isLatest={
 								message === messages.filter((m) => m.role === "user").at(-1)
 							}
+							error={error}
 						/>
 					);
 				})}
