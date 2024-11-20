@@ -10,14 +10,6 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "@proemial/shadcn-ui/lib/utils";
 import { useRouter } from "next/navigation";
 
-function useScrollToggle(disabled: boolean) {
-	useEffect(() => {
-		if (typeof document !== "undefined") {
-			document.body.style.overflow = disabled ? "hidden" : "auto"; // enable/disable scrolling
-		}
-	}, [disabled]);
-}
-
 export function NewsFeed({
 	sorted,
 	error,
@@ -94,4 +86,12 @@ export function NewsFeed({
 			</div>
 		</div>
 	);
+}
+
+function useScrollToggle(disabled: boolean) {
+	useEffect(() => {
+		if (typeof document !== "undefined") {
+			document.body.style.overflow = disabled ? "hidden" : "auto"; // enable/disable scrolling
+		}
+	}, [disabled]);
 }
