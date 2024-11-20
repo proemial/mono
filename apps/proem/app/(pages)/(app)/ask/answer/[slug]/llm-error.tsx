@@ -27,7 +27,7 @@ export const LLMError = ({ error }: Props) => {
 						An error occurred while generating your answer. Please try again
 						later.
 					</p>
-					<Collapsible>
+					{/* <Collapsible>
 						<CollapsibleTrigger className="text-xs pb-2">
 							Show details
 						</CollapsibleTrigger>
@@ -36,7 +36,7 @@ export const LLMError = ({ error }: Props) => {
 								{error.message}
 							</pre>
 						</CollapsibleContent>
-					</Collapsible>
+					</Collapsible> */}
 				</div>
 			</AlertDescription>
 		</Alert>
