@@ -12,7 +12,7 @@ const gpt4o = openai("gpt-4o");
 const sonnet = anthropic("claude-3-5-sonnet-20240620");
 
 const defaultModel = gpt4o;
-const answersModel = flash;
+const answersModel = sonnet;
 
 const LlmModels = {
 	ask: {
