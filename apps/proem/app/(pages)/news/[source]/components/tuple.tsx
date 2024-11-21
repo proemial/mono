@@ -18,9 +18,9 @@ type Props = {
 	scrollTo?: boolean;
 };
 
-type User = {
-	avatar: string;
-	name?: string;
+export type User = {
+	name: string;
+	avatar?: string;
 	backgroundColor?: string;
 };
 

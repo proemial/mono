@@ -3,16 +3,19 @@ import {
 	StreamData,
 	generateText,
 	streamText,
+	Message,
 } from "ai";
 import { Redis } from "@proemial/adapters/redis";
+import { z } from "zod";
+import { qdrantQuery } from "../../bot/ask2/tools";
 import { LlmAnswer, LlmFollowups } from "../prompts/answers-and-followups";
 
-// Allow streaming responses up to 30 seconds
-export const maxDuration = 30;
+// Allow streaming responses up to two minutes
+export const maxDuration = 120;
 
 export async function POST(req: Request) {
 	const { messages, url } = (await req.json()) as {
-		messages: { role: "user" | "assistant"; content: string }[];
+		messages: Message[];
 		url: string;
 	};
 
@@ -23,10 +26,7 @@ export async function POST(req: Request) {
 	return answerQuestion(url, messages);
 }
 
-async function answerQuestion(
-	url: string,
-	messages: { role: "user" | "assistant"; content: string }[],
-) {
+async function answerQuestion(url: string, messages: Message[]) {
 	const item = await Redis.news.get(url);
 	const streamingData = new StreamData();
 
@@ -38,9 +38,39 @@ async function answerQuestion(
 			item?.papers?.value,
 		),
 		messages: convertToCoreMessages(messages),
+		tools: {
+			searchPapers: {
+				description: "Find specific research papers matching a user query",
+				parameters: z.object({
+					question: z.string().describe("The actual user question"),
+					query: z.string().describe("The search query"),
+				}),
+				execute: async ({ question, query }) => {
+					streamingData.append({
+						type: "retrieval-begin",
+						value: JSON.stringify({ question }),
+					});
+
+					const papers = await qdrantQuery(query);
+
+					streamingData.append({
+						type: "retrieval-end",
+						value: JSON.stringify({ question, papers }),
+					});
+
+					return papers;
+				},
+			},
+		},
+		maxSteps: 5,
 		async onFinish(event) {
 			const question = messages.at(-1)?.content;
 			const answer = event.steps.at(-1)?.text;
+
+			streamingData.append({
+				type: "followups-begin",
+				value: JSON.stringify({ question }),
+			});
 
 			const followups = await generateFollowups(
 				question,
@@ -55,8 +85,8 @@ async function answerQuestion(
 
 			if (followups) {
 				streamingData.append({
-					type: "followups",
-					value: JSON.stringify({ question, answer, followups }),
+					type: "followups-end",
+					value: JSON.stringify({ question, followups }),
 				});
 			}
 
@@ -85,14 +115,17 @@ async function generateFollowups(
 		transcript?: string;
 		papers?: { abstract: string }[];
 	},
-	messages: { role: "user" | "assistant"; content: string }[],
+	messages: Message[],
 ) {
 	if (!question || !answer) return;
+
+	// Handle claude error: Requests which include `tool_use` or `tool_result` blocks must define tools.
+	const toolLessMessages = messages.filter((m) => !m.toolInvocations);
 
 	const { text } = await generateText({
 		model: LlmFollowups.model(),
 		system: LlmFollowups.prompt(question, answer, context),
-		messages: convertToCoreMessages(messages),
+		messages: convertToCoreMessages(toolLessMessages),
 	});
 
 	const followups =

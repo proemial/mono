@@ -10,9 +10,11 @@ export type LlmModel =
 const flash = google("gemini-1.5-flash");
 const gpt4o = openai("gpt-4o");
 const sonnet = anthropic("claude-3-5-sonnet-20240620");
+const haiku = anthropic("claude-3-5-haiku-latest");
 
 const defaultModel = gpt4o;
 const answersModel = sonnet;
+const followupsModel = haiku;
 
 const LlmModels = {
 	ask: {
@@ -24,7 +26,7 @@ const LlmModels = {
 		rephrase: () => logModel("news.rephrase", defaultModel) as LlmModel,
 		summarise: () => logModel("news.summarise", answersModel) as LlmModel,
 		answer: () => logModel("news.answer", answersModel) as LlmModel,
-		followups: () => logModel("news.followups", defaultModel) as LlmModel,
+		followups: () => logModel("news.followups", followupsModel) as LlmModel,
 	},
 	assistant: {
 		answer: () => logModel("assistant.answer", answersModel) as LlmModel,

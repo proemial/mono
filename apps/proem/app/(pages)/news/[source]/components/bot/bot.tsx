@@ -2,7 +2,7 @@ import {
 	analyticsKeys,
 	trackHandler,
 } from "@/components/analytics/tracking/tracking-keys";
-import { useChat } from "ai/react";
+import { Message, useChat } from "ai/react";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useFromFeedSearchParam } from "../../../components/use-published";
 import { BotForm } from "./bot-form";
@@ -10,15 +10,16 @@ import { BotQa } from "./bot-qa";
 import { BotSuggestion } from "./bot-suggestion";
 import { CommunityQuestions } from "./fake-it";
 import { BotHeader } from "./headers";
+import { ReferencedPaper } from "@proemial/adapters/redis/news";
 
 type StreamingData = { type: string; value: string };
 
 type Props = {
 	url: string;
-	questions: Array<[string, string]>;
+	starters: Array<[string, string]>;
 };
 
-export function Bot({ url, questions }: Props) {
+export function Bot({ url, starters }: Props) {
 	const { fromFeedParam: isFromFeed } = useFromFeedSearchParam();
 
 	const {
@@ -31,7 +32,6 @@ export function Bot({ url, questions }: Props) {
 		data,
 	} = useChat({
 		api: "/api/news/bot",
-		id: url,
 		keepLastMessageOnError: true,
 		body: {
 			url,
@@ -39,7 +39,7 @@ export function Bot({ url, questions }: Props) {
 	});
 
 	const { suggestions, hidden } = useSuggestions(
-		questions,
+		starters,
 		data as StreamingData[],
 		isFromFeed,
 	);
@@ -77,23 +77,27 @@ export function Bot({ url, questions }: Props) {
 
 	return (
 		<>
-			{messages?.length > 0 && (
-				<div className="flex relative flex-col gap-4 items-start self-stretch w-full">
-					{messages.map((message, index) => {
-						if (message.role === "assistant") return null;
+			{messages?.map((message, index) => {
+				if (message.role === "assistant") return null;
 
-						return (
-							<BotQa
-								key={index}
-								question={message.content}
-								answer={messages.at(index + 1)?.content}
-								scrollTo={index === messages.length - 1}
-								isLoading={isLoading}
-							/>
-						);
-					})}
-				</div>
-			)}
+				const question = message.content;
+				const answers = findAnswers(index, messages);
+				const events = findMessageEvents(question, data as StreamingData[]);
+
+				const papers = events?.["retrieval-end"]?.papers;
+				const answerComplete = !!events?.["followups-begin"] || !isLoading;
+
+				return (
+					<BotQa
+						key={index}
+						question={question}
+						answer={answers.at(-1)?.content}
+						papers={answerComplete ? papers : undefined}
+						user={{ name: "You" }}
+						scrollTo={index === messages.length - 1}
+					/>
+				);
+			})}
 
 			<div
 				id="askform"
@@ -128,7 +132,7 @@ export function Bot({ url, questions }: Props) {
 			</div>
 
 			<CommunityQuestions
-				questions={questions}
+				questions={starters}
 				isFromFeed={isFromFeed}
 				url={url}
 			/>
@@ -146,6 +150,48 @@ const scrollToQa = async (index: string) => {
 	});
 };
 
+function findAnswers(index: number, messages: Message[]) {
+	const answers: Message[] = [];
+
+	let i = 1;
+	while (i < 10) {
+		// Safety limit of 10 messages
+		const nextMessage = messages[index + i] as Message | undefined;
+		if (!nextMessage || nextMessage.role !== "assistant") break;
+
+		answers.push(nextMessage);
+		i++;
+	}
+
+	return answers;
+}
+
+function findMessageEvents(question: string, data?: StreamingData[]) {
+	return data
+		?.map(({ type, value }) => {
+			const { question, ...rest } = JSON.parse(value);
+			const papers = rest.papers ? JSON.parse(rest.papers) : undefined;
+
+			return { type, question, papers };
+		})
+		.filter((d) => d.question === question)
+		?.reduce(
+			(acc, d, index) => {
+				acc[d.type] = JSON.parse(JSON.stringify({ ...d, index }));
+				return acc;
+			},
+			{} as Record<
+				string,
+				{
+					type: string;
+					question: string;
+					papers?: Array<ReferencedPaper>;
+					index: number;
+				}
+			>,
+		);
+}
+
 function useSuggestions(
 	questions: Array<[string, string]>,
 	data?: StreamingData[],
@@ -158,12 +204,14 @@ function useSuggestions(
 	);
 	useEffect(() => {
 		if (memoizedData) {
-			setHidden(memoizedData?.type === "followups");
+			if (memoizedData?.type === "followups-begin") setHidden(true);
 
-			setTimeout(() => {
-				setSuggestions(JSON.parse(memoizedData.value).followups);
-				setHidden(false);
-			}, 1000);
+			if (memoizedData?.type === "followups-end") {
+				setTimeout(() => {
+					setSuggestions(JSON.parse(memoizedData.value).followups);
+					setHidden(false);
+				}, 1000);
+			}
 		}
 	}, [memoizedData]);
 

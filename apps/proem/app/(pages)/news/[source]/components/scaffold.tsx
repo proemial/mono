@@ -101,7 +101,7 @@ export function Scaffold({
 				<Header />
 			</div>
 			<div className="flex flex-col gap-4 p-2 min-[475px]:p-0 min-[477px]:p-2">
-				<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto] text-[#08080a]">
+				<div className="flex flex-col items-start self-stretch w-full flex-[0_0_auto] text-[#08080a]">
 					<div
 						className={
 							"flex-[0_0_auto] rounded-[20px] border-black/25 flex relative flex-col gap-2 items-start self-stretch p-3 w-full border"
@@ -115,7 +115,7 @@ export function Scaffold({
 							} as React.CSSProperties
 						}
 					>
-						<div className="flex flex-col items-start relative self-stretch w-full flex-[0_0_auto rounded-[8px]">
+						<div className="flex flex-col items-start self-stretch w-full flex-[0_0_auto] rounded-[8px]">
 							<Legend
 								title={data?.summarise?.engTitle ?? data?.scrape?.title}
 								image={data?.scrape?.artworkUrl}
@@ -134,7 +134,7 @@ export function Scaffold({
 				)}
 
 				{data?.summarise?.questions && (
-					<Bot questions={data?.summarise?.questions} url={url} />
+					<Bot starters={data?.summarise?.questions} url={url} />
 				)}
 			</div>
 			<Footer />

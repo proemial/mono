@@ -61,7 +61,7 @@ const openAlexQuery = async (input: string): Promise<string> => {
 	}
 };
 
-const qdrantQuery = async (input: string): Promise<string> => {
+export const qdrantQuery = async (input: string): Promise<string> => {
 	const begin = Time.now();
 
 	try {
