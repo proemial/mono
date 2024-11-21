@@ -133,7 +133,5 @@ async function generateFollowups(
 			.match(/<[^>]*?>(.*?)<\/[^>]*?>/g)
 			?.map((match) => match.replace(/<\/?[^>]*?>/g, "")) || undefined;
 
-	console.log("followups", question, answer, followups);
-
 	return followups;
 }

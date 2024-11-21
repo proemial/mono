@@ -15,7 +15,6 @@ export function useTextWithReferences(text?: string) {
 	useEffect(() => {
 		if (text) {
 			const { markup, references } = processTextWithReferences(text);
-			console.log("references", references);
 			setWithReferences({ markup, references });
 		}
 	}, [text]);
