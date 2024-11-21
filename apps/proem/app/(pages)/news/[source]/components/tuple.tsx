@@ -134,23 +134,25 @@ export function QaTuple({
 										</div>
 									</div>
 
-									<div className="flex overflow-x-auto gap-2 justify-start">
-										{papers?.map((paper, index) => (
-											<Trackable
-												key={index}
-												trackingKey={
-													analyticsKeys.experiments.news.item.sources
-														.clickPaperSource
-												}
-												properties={{
-													// sourceUrl: url,
-													paperId: paper.id,
-												}}
-											>
-												<Paper paper={paper} index={index} />
-											</Trackable>
-										))}
-									</div>
+									{papers && (
+										<div className="flex overflow-x-auto gap-2 justify-start duration-500 animate-fade-in">
+											{papers?.map((paper, index) => (
+												<Trackable
+													key={index}
+													trackingKey={
+														analyticsKeys.experiments.news.item.sources
+															.clickPaperSource
+													}
+													properties={{
+														// sourceUrl: url,
+														paperId: paper.id,
+													}}
+												>
+													<Paper paper={paper} index={index} />
+												</Trackable>
+											))}
+										</div>
+									)}
 								</>
 							</div>
 						</div>

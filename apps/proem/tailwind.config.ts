@@ -84,6 +84,11 @@ const config = {
 					"0%": { opacity: "0" },
 					"100%": { opacity: "1" },
 				},
+				// TODO: merge with fadeIn
+				"fade-in": {
+					"0%": { opacity: "0" },
+					"100%": { opacity: "1" },
+				},
 			},
 			animation: {
 				"accordion-down": "accordion-down 0.2s ease-out",
