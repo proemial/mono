@@ -35,6 +35,7 @@ export function BotQa({
 		backgroundColor: string;
 	};
 	scrollTo?: boolean;
+	isLoading?: boolean;
 }) {
 	const isApp = useIsApp();
 	const qaRef = useRef<HTMLDivElement>(null);
