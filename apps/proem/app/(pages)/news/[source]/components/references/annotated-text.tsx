@@ -1,12 +1,7 @@
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Trackable } from "@/components/trackable";
+import { uuid } from "@proemial/utils/uid";
 import { useEffect, useState } from "react";
-
-export function AnnotatedText({ children }: { children?: string }) {
-	const { markup } = useTextWithReferences(children);
-
-	return <>{markup}</>;
-}
 
 export function useTextWithReferences(text?: string) {
 	const [withReferences, setWithReferences] =
@@ -14,16 +9,23 @@ export function useTextWithReferences(text?: string) {
 
 	useEffect(() => {
 		if (text) {
-			const { markup, references } = processTextWithReferences(text);
-			setWithReferences({ markup, references });
+			const { markup, prefix, references } = processTextWithReferences(text);
+			setWithReferences({ markup, prefix, references });
 		}
 	}, [text]);
 
-	return withReferences ?? { markup: undefined, references: [] as number[] };
+	return (
+		withReferences ?? {
+			markup: undefined,
+			prefix: "",
+			references: [] as number[],
+		}
+	);
 }
 
 function processTextWithReferences(children: string) {
 	const references = new Set<number>();
+	const prefix = uuid();
 
 	const markup = children
 		.replace(/^\s*-\s*/gm, "")
@@ -43,7 +45,7 @@ function processTextWithReferences(children: string) {
 					>
 						<span className="">
 							<a
-								href={`#${num}`}
+								href={`#${prefix}-${num}`}
 								key={`${i}-${j}`}
 								onClick={() =>
 									document
@@ -68,5 +70,5 @@ function processTextWithReferences(children: string) {
 			return segment;
 		});
 
-	return { markup, references: Array.from(references) };
+	return { markup, prefix, references: Array.from(references) };
 }

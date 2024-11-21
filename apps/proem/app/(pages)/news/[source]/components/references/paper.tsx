@@ -1,15 +1,44 @@
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import dayjs from "dayjs";
+import { useEffect, useState } from "react";
 
 export function Paper({
 	paper,
 	index,
-}: { paper?: ReferencedPaper; index: number }) {
+	prefix,
+}: { paper?: ReferencedPaper; index: number; prefix?: string }) {
+	const [isActive, setIsActive] = useState(false);
+	const anchor = `${prefix}-${index + 1}`;
+
+	useEffect(() => {
+		if (typeof window === "undefined") return;
+
+		const handleHashChange = () => {
+			if (window.location.hash.includes(anchor)) {
+				const element = document.getElementById(anchor);
+				if (element) {
+					const yOffset = -300;
+					const y =
+						element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+					window.scrollTo({ top: y, behavior: "smooth" });
+				}
+			}
+			setIsActive(window.location.hash.includes(anchor));
+		};
+		handleHashChange();
+
+		window.addEventListener("hashchange", handleHashChange, false);
+		return () => {
+			window.removeEventListener("hashchange", handleHashChange, false);
+		};
+	}, [anchor]);
+
 	return (
 		<>
 			<a
 				href={`/news/paper/oa/${paper?.id?.split("/").at(-1)}`}
-				className="flex flex-col p-2 bg-[#cfd5d8] shadow-sm rounded-md w-[30%] md:w-[20%] flex-shrink-0"
+				className={`flex flex-col p-2 ${isActive ? "bg-[#7DFA86]" : "bg-[#cfd5d8]"} shadow-sm rounded-md w-[30%] md:w-[20%] flex-shrink-0`}
+				id={anchor}
 			>
 				<div className="flex flex-row justify-between mt-1 mb-4 w-full">
 					<span

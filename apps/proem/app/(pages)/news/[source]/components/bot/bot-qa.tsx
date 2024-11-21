@@ -19,7 +19,7 @@ export function BotQa({
 }) {
 	const isApp = useIsApp();
 	const qaRef = useRef<HTMLDivElement>(null);
-	const { markup, references } = useTextWithReferences(answer);
+	const { markup, references, prefix } = useTextWithReferences(answer);
 
 	useEffect(() => {
 		if (typeof window !== "undefined" && scrollTo && qaRef.current) {
@@ -41,6 +41,7 @@ export function BotQa({
 				indexPapers(papers, (paper) => references.includes(paper?.index + 1))
 			}
 			scrollTo={scrollTo}
+			prefix={prefix}
 		>
 			{markup}
 		</QaTuple>

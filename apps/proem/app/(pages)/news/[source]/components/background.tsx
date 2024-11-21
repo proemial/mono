@@ -1,9 +1,6 @@
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import { useStreamer } from "./bot/fake-it";
-import {
-	AnnotatedText,
-	useTextWithReferences,
-} from "./references/annotated-text";
+import { useTextWithReferences } from "./references/annotated-text";
 import { indexPapers, QaTuple } from "./tuple";
 
 type Props = {
@@ -14,7 +11,7 @@ type Props = {
 export function Background({ text, papers }: Props) {
 	const streamedText = useStreamer(text);
 	const isLoading = streamedText?.length !== text?.length;
-	const { markup, references } = useTextWithReferences(streamedText);
+	const { markup, references, prefix } = useTextWithReferences(streamedText);
 
 	return (
 		<QaTuple
@@ -23,6 +20,7 @@ export function Background({ text, papers }: Props) {
 				papers &&
 				indexPapers(papers, (paper) => references.includes(paper?.index + 1))
 			}
+			prefix={prefix}
 			throbber={isLoading}
 		>
 			{markup}

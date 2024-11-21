@@ -16,6 +16,7 @@ type Props = {
 	papers?: IndexedReferencedPaper[];
 	throbber?: boolean;
 	scrollTo?: boolean;
+	prefix?: string;
 };
 
 export function QaTuple({
@@ -25,6 +26,7 @@ export function QaTuple({
 	papers,
 	throbber,
 	scrollTo,
+	prefix,
 }: Props) {
 	const isApp = useIsApp();
 	const qaRef = useRef<HTMLDivElement>(null);
@@ -142,7 +144,11 @@ export function QaTuple({
 														paperId: paper.id,
 													}}
 												>
-													<Paper paper={paper} index={paper.index ?? index} />
+													<Paper
+														paper={paper}
+														index={paper.index ?? index}
+														prefix={prefix}
+													/>
 												</Trackable>
 											))}
 										</div>
