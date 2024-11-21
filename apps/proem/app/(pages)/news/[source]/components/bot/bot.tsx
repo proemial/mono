@@ -88,6 +88,7 @@ export function Bot({ url, questions }: Props) {
 								question={message.content}
 								answer={messages.at(index + 1)?.content}
 								scrollTo={index === messages.length - 1}
+								isLoading={isLoading}
 							/>
 						);
 					})}

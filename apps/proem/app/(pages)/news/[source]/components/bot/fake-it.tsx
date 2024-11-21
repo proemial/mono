@@ -3,7 +3,7 @@ import { Trackable } from "@/components/trackable";
 import { User, users } from "@/app/(pages)/news/components/users";
 import { CommunityHeader } from "./headers";
 import { BotQa } from "./bot-qa";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 export function CommunityQuestions({
 	url,
