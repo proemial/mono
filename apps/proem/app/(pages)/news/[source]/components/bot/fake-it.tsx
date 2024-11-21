@@ -4,13 +4,16 @@ import { User, users } from "@/app/(pages)/news/components/users";
 import { CommunityHeader } from "./headers";
 import { BotQa } from "./bot-qa";
 import { useEffect, useState } from "react";
+import { ReferencedPaper } from "@proemial/adapters/redis/news";
 
 export function CommunityQuestions({
 	url,
 	questions,
 	isFromFeed,
+	papers,
 }: {
 	url: string;
+	papers?: ReferencedPaper[];
 	questions?: Array<[string, string]>;
 	isFromFeed?: boolean;
 }) {
@@ -34,6 +37,7 @@ export function CommunityQuestions({
 							}
 							question={question[0]}
 							answer={question[1]}
+							papers={papers}
 						/>
 					);
 				})}

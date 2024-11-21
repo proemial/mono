@@ -134,7 +134,11 @@ export function Scaffold({
 				)}
 
 				{data?.summarise?.questions && (
-					<Bot starters={data?.summarise?.questions} url={url} />
+					<Bot
+						starters={data?.summarise?.questions}
+						url={url}
+						backgroundPapers={data?.papers?.value}
+					/>
 				)}
 			</div>
 			<Footer />

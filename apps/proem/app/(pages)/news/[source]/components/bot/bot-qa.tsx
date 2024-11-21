@@ -2,7 +2,7 @@ import { useIsApp } from "@/utils/app";
 import { useEffect, useRef } from "react";
 import { QaTuple, User, indexPapers } from "../tuple";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
-import { useTextWithReferences } from "../references/annotated-text";
+import { useTextWithReferences } from "../references/parse-references";
 
 export function BotQa({
 	question,

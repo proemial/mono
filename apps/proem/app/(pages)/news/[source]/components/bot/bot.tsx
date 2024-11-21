@@ -17,9 +17,10 @@ type StreamingData = { type: string; value: string };
 type Props = {
 	url: string;
 	starters: Array<[string, string]>;
+	backgroundPapers?: ReferencedPaper[];
 };
 
-export function Bot({ url, starters }: Props) {
+export function Bot({ url, starters, backgroundPapers }: Props) {
 	const { fromFeedParam: isFromFeed } = useFromFeedSearchParam();
 
 	const {
@@ -134,6 +135,7 @@ export function Bot({ url, starters }: Props) {
 				questions={starters}
 				isFromFeed={isFromFeed}
 				url={url}
+				papers={backgroundPapers}
 			/>
 		</>
 	);

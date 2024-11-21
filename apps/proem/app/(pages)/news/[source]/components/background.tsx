@@ -1,6 +1,6 @@
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import { useStreamer } from "./bot/fake-it";
-import { useTextWithReferences } from "./references/annotated-text";
+import { useTextWithReferences } from "./references/parse-references";
 import { indexPapers, QaTuple } from "./tuple";
 
 type Props = {
