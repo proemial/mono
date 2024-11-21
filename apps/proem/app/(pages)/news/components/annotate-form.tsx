@@ -35,7 +35,7 @@ export function AnnotateForm() {
 		const interval = setInterval(() => {
 			const randomUrl = urls[Math.floor(Math.random() * urls.length)];
 			setCurrentPlaceholder(randomUrl);
-		}, 5000);
+		}, 2000);
 
 		return () => clearInterval(interval);
 	}, []);
@@ -45,9 +45,12 @@ export function AnnotateForm() {
 			{
 				<div className="flex flex-col items-center justify-between self-stretch p-2 mb-4 lg:mx-8 bg-gradient-to-b from-[#7DFA86] from-[-25%] via-[#3732916b] via-[75%] to-[#312d7b6b] to-[100%] rounded-2xl h-[75vh]">
 					<div className="flex-1 flex flex-col items-center justify-center gap-8 w-full">
-						<div className="text-xl lg:text-3xl font-semibold w-4/5 lg:w-1/2 leading-7 text-center text-white drop-shadow-md">
-							Enrich news articles with insights from the latest{" "}
-							<span className="whitespace-nowrap">research papers.</span>
+						<div className="text-2xl lg:text-4xl font-semibold w-4/5 lg:w-1/2 leading-7 text-center text-white drop-shadow-md">
+							Trustworthy Perspectives
+						</div>
+						<div className="text-lg lg:text-xl font-semibold w-4/5 lg:w-1/2 mt-[-12px] leading-7 text-center text-white/60 drop-shadow-md">
+							<span className="whitespace-nowrap">Paste a link to a news article</span>{" "}
+							and explore{" "}<span className="whitespace-nowrap">the facts behind the news</span>
 						</div>
 						<div className="flex gap-1 justify-center items-center w-full px-6">
 							<form
@@ -93,8 +96,8 @@ export function AnnotateForm() {
 									</button>
 								</div>
 								{isApp && (
-									<div className="text-center italic text-xs mt-[-12px] text-gray-500">
-										Pro tip: Share to proem directly from your browser.
+									<div className="text-center italic text-xs mt-[-8px] text-gray-500">
+										Pro tip: Share to proem from your phone's browser.
 									</div>
 								)}
 								<div className="error-message text-sm text-red-500" />
@@ -102,7 +105,7 @@ export function AnnotateForm() {
 						</div>
 					</div>
 					<div className="w-full text-base pb-4 font-semibold leading-7 text-center text-white/60 drop-shadow-md">
-						Latest articles enriched by other users 👇
+						Articles explored by other users 👇
 					</div>
 				</div>
 			}
