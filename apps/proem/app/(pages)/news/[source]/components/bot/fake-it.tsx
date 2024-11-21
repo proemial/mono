@@ -90,3 +90,32 @@ function getSeed(title: string, users: User[]) {
 	// return random-looking but consistent user number
 	return Math.abs(hash % (users.length - 3));
 }
+
+export function useStreamer(text?: string) {
+	const [streamedText, setStreamedText] = useState<string>();
+
+	useEffect(() => {
+		if (!text) return;
+
+		let currentLength = 0;
+		const updateText = () => {
+			if (currentLength >= text.length) {
+				clearInterval(interval);
+				return;
+			}
+
+			currentLength += 10; // Add 10 characters at a time
+			setStreamedText(text.slice(0, currentLength));
+
+			// Set a new random interval for the next update
+			const newInterval = Math.floor(Math.random() * 120);
+			clearInterval(interval);
+			interval = setInterval(updateText, newInterval);
+		};
+		let interval = setInterval(updateText, Math.floor(Math.random() * 120));
+
+		return () => clearInterval(interval);
+	}, [text]);
+
+	return streamedText;
+}

@@ -5,8 +5,8 @@ import Image from "next/image";
 import logo from "../../components/images/logo.svg";
 import { AnnotatedText } from "./references/annotated-text";
 import { Paper } from "./references/paper";
-import { useEffect, useState } from "react";
 import { Icons } from "@proemial/shadcn-ui";
+import { useStreamer } from "./bot/fake-it";
 
 type Props = {
 	text?: string;
@@ -15,29 +15,7 @@ type Props = {
 };
 
 export function Background({ text, papers }: Props) {
-	const [streamedText, setStreamedText] = useState<string>();
-	useEffect(() => {
-		if (!text) return;
-
-		let currentLength = 0;
-		const updateText = () => {
-			if (currentLength >= text.length) {
-				clearInterval(interval);
-				return;
-			}
-
-			currentLength += 10; // Add 10 characters at a time
-			setStreamedText(text.slice(0, currentLength));
-
-			// Set a new random interval for the next update
-			const newInterval = Math.floor(Math.random() * 120);
-			clearInterval(interval);
-			interval = setInterval(updateText, newInterval);
-		};
-		let interval = setInterval(updateText, Math.floor(Math.random() * 120));
-
-		return () => clearInterval(interval);
-	}, [text]);
+	const streamedText = useStreamer(text);
 
 	return (
 		<div className="flex flex-col">
