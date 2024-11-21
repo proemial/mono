@@ -1,6 +1,6 @@
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export function Paper({
 	paper,
@@ -8,20 +8,15 @@ export function Paper({
 	prefix,
 }: { paper?: ReferencedPaper; index: number; prefix?: string }) {
 	const [isActive, setIsActive] = useState(false);
+	const ref = useRef<HTMLAnchorElement>(null);
 	const anchor = `${prefix}-${index + 1}`;
 
 	useEffect(() => {
 		if (typeof window === "undefined") return;
 
 		const handleHashChange = () => {
-			if (window.location.hash.includes(anchor)) {
-				const element = document.getElementById(anchor);
-				if (element) {
-					const yOffset = -300;
-					const y =
-						element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-					window.scrollTo({ top: y, behavior: "smooth" });
-				}
+			if (ref.current && window.location.hash.includes(anchor)) {
+				ref.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
 			}
 			setIsActive(window.location.hash.includes(anchor));
 		};
@@ -38,7 +33,7 @@ export function Paper({
 			<a
 				href={`/news/paper/oa/${paper?.id?.split("/").at(-1)}`}
 				className={`flex flex-col p-2 ${isActive ? "bg-[#7DFA86]" : "bg-[#cfd5d8]"} shadow-sm rounded-md w-[30%] md:w-[20%] flex-shrink-0`}
-				id={anchor}
+				ref={ref}
 			>
 				<div className="flex flex-row justify-between mt-1 mb-4 w-full">
 					<span
