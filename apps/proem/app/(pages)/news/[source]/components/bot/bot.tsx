@@ -85,16 +85,13 @@ export function Bot({ url, starters }: Props) {
 				const events = findMessageEvents(question, data as StreamingData[]);
 
 				const papers = events?.["retrieval-end"]?.papers;
-				const answerComplete = !!events?.["followups-begin"] || !isLoading;
-
-				if (answerComplete) console.log("papers", papers);
 
 				return (
 					<BotQa
 						key={index}
 						question={question}
 						answer={answers.at(-1)?.content}
-						papers={answerComplete ? papers : undefined}
+						papers={papers}
 						user={{ name: "You" }}
 						scrollTo={index === messages.length - 1}
 					/>
