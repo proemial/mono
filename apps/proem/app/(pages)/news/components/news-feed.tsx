@@ -30,18 +30,27 @@ export function NewsFeed({ sorted, error, debug }: Props) {
 	const [overlayVisible, setOverlayVisible] = useState(false);
 	useScrollToggle(overlayVisible);
 
-	const handleClick = (targetUrl?: string) => {
-		if (targetUrl && iframe.current) {
-			const url = `/news/${encodeURIComponent(targetUrl)}`;
-
-			if (typeof window !== "undefined" && window.innerWidth < 1024) {
-				setLoading(true);
-				setOverlayVisible(false);
-				router.push(url);
-			} else {
+	const handleNavigate = (encodedUrl: string) => {
+		if (typeof window !== "undefined" && window.innerWidth < 1024) {
+			setLoading(true);
+			setOverlayVisible(false);
+			router.push(`/news/${encodedUrl}`);
+		} else {
+			if (iframe.current) {
 				setOverlayVisible(true);
-				iframe.current.src = url;
+				iframe.current.src = `/news/${encodedUrl}`;
 			}
+		}
+	};
+
+	const handleSubmit = (targetUrl?: string) => {
+		if (targetUrl && iframe.current) {
+			handleNavigate(encodeURIComponent(targetUrl));
+		}
+	};
+	const handleClick = (targetUrl?: string) => {
+		if (targetUrl) {
+			handleNavigate(`${encodeURIComponent(targetUrl)}?p=1`);
 		}
 	};
 
@@ -62,7 +71,7 @@ export function NewsFeed({ sorted, error, debug }: Props) {
 			<div className="ppNewsFeed flex relative flex-col items-start self-stretch w-full">
 				{error && <ErrorModal error={error} />}
 				<Header />
-				<AnnotateForm onSubmit={handleClick} />
+				<AnnotateForm onSubmit={handleSubmit} />
 				<div className="columns-[300px] gap-[30px] w-full lg:px-8">
 					{sorted.map((item, i) => (
 						<Trackable
@@ -73,7 +82,7 @@ export function NewsFeed({ sorted, error, debug }: Props) {
 							<div
 								className="inline-flex w-full mb-8 break-inside-avoid-page cursor-pointer"
 								data-url={item.init?.url}
-								onClick={() => handleClick(`${item.init?.url}?p=1`)}
+								onClick={() => handleClick(`${item.init?.url}`)}
 							>
 								<NewsCard
 									url={item.init?.url as string}
