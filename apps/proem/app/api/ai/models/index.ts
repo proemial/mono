@@ -1,20 +1,23 @@
 import { google } from "@ai-sdk/google";
 import { openai } from "@ai-sdk/openai";
 import { anthropic } from "@ai-sdk/anthropic";
+import { mistral } from "@ai-sdk/mistral";
 
 export type LlmModel =
 	| ReturnType<typeof google>
 	| ReturnType<typeof openai>
-	| ReturnType<typeof anthropic>;
+	| ReturnType<typeof anthropic>
+	| ReturnType<typeof mistral>;
 
 const flash = google("gemini-1.5-flash");
 const gpt4o = openai("gpt-4o");
 const sonnet = anthropic("claude-3-5-sonnet-20240620");
 const haiku = anthropic("claude-3-5-haiku-latest");
+const mist = mistral("mistral-large-latest");
 
 const defaultModel = gpt4o;
-const answersModel = sonnet;
-const followupsModel = haiku;
+const answersModel = gpt4o;
+const followupsModel = gpt4o;
 
 const LlmModels = {
 	ask: {
