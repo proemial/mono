@@ -11,8 +11,7 @@ import { fetchPapers } from "../annotate/fetch/steps/fetch";
 import { LlmAnswer, LlmFollowups } from "../prompts/answers-and-followups";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 
-// Allow streaming responses up to two minutes
-export const maxDuration = 120;
+export const maxDuration = 300;
 
 export async function POST(req: Request) {
 	const { messages, url } = (await req.json()) as {
