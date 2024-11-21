@@ -6,7 +6,9 @@ import { useIsApp } from "@/utils/app";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
 import { Tracker } from "@/components/analytics/tracking/tracker";
 
-export function AnnotateForm() {
+export function AnnotateForm({
+	onSubmit,
+}: { onSubmit: (url: string) => void }) {
 	const isApp = useIsApp();
 	const [isOpen, setIsOpen] = useState(false);
 	const [url, setUrl] = useState("");
@@ -49,8 +51,13 @@ export function AnnotateForm() {
 							Trustworthy Perspectives
 						</div>
 						<div className="text-lg lg:text-xl font-semibold w-4/5 lg:w-1/2 mt-[-12px] leading-7 text-center text-white/60 drop-shadow-md">
-							<span className="whitespace-nowrap">Paste a link to a news article</span>{" "}
-							and explore{" "}<span className="whitespace-nowrap">the facts behind the news</span>
+							<span className="whitespace-nowrap">
+								Paste a link to a news article
+							</span>{" "}
+							and explore{" "}
+							<span className="whitespace-nowrap">
+								the facts behind the news
+							</span>
 						</div>
 						<div className="flex gap-1 justify-center items-center w-full px-6">
 							<form
@@ -72,10 +79,8 @@ export function AnnotateForm() {
 										return;
 									}
 
-									form.querySelectorAll("button, input").forEach((el) => {
-										(el as HTMLElement).setAttribute("disabled", "true");
-									});
-									window.location.href = `/news/${encodeURIComponent(url)}`;
+									onSubmit(url);
+									setUrl("");
 								}}
 								className="flex flex-col gap-4 w-full max-w-[500px]"
 							>

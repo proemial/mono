@@ -32,7 +32,7 @@ export function NewsFeed({ sorted, error, debug }: Props) {
 
 	const handleClick = (targetUrl?: string) => {
 		if (targetUrl && iframe.current) {
-			const url = `/news/${encodeURIComponent(targetUrl)}?p=1`;
+			const url = `/news/${encodeURIComponent(targetUrl)}`;
 
 			if (typeof window !== "undefined" && window.innerWidth < 1024) {
 				setLoading(true);
@@ -62,7 +62,7 @@ export function NewsFeed({ sorted, error, debug }: Props) {
 			<div className="ppNewsFeed flex relative flex-col items-start self-stretch w-full">
 				{error && <ErrorModal error={error} />}
 				<Header />
-				<AnnotateForm />
+				<AnnotateForm onSubmit={handleClick} />
 				<div className="columns-[300px] gap-[30px] w-full lg:px-8">
 					{sorted.map((item, i) => (
 						<Trackable
@@ -73,7 +73,7 @@ export function NewsFeed({ sorted, error, debug }: Props) {
 							<div
 								className="inline-flex w-full mb-8 break-inside-avoid-page cursor-pointer"
 								data-url={item.init?.url}
-								onClick={() => handleClick(item.init?.url)}
+								onClick={() => handleClick(`${item.init?.url}?p=1`)}
 							>
 								<NewsCard
 									url={item.init?.url as string}
