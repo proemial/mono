@@ -87,6 +87,8 @@ export function Bot({ url, starters }: Props) {
 				const papers = events?.["retrieval-end"]?.papers;
 				const answerComplete = !!events?.["followups-begin"] || !isLoading;
 
+				if (answerComplete) console.log("papers", papers);
+
 				return (
 					<BotQa
 						key={index}
@@ -167,6 +169,7 @@ function findAnswers(index: number, messages: Message[]) {
 }
 
 function findMessageEvents(question: string, data?: StreamingData[]) {
+	console.log("[findMessageEvents]", question, data);
 	return data
 		?.map(({ type, value }) => {
 			const { question, ...rest } = JSON.parse(value);

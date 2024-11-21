@@ -1,14 +1,15 @@
+import { Redis } from "@proemial/adapters/redis";
 import {
 	convertToCoreMessages,
-	StreamData,
 	generateText,
-	streamText,
 	Message,
+	StreamData,
+	streamText,
 } from "ai";
-import { Redis } from "@proemial/adapters/redis";
 import { z } from "zod";
-import { qdrantQuery } from "../../bot/ask2/tools";
+import { fetchPapers } from "../annotate/fetch/steps/fetch";
 import { LlmAnswer, LlmFollowups } from "../prompts/answers-and-followups";
+import { ReferencedPaper } from "@proemial/adapters/redis/news";
 
 // Allow streaming responses up to two minutes
 export const maxDuration = 120;
@@ -51,11 +52,26 @@ async function answerQuestion(url: string, messages: Message[]) {
 						value: JSON.stringify({ question }),
 					});
 
-					const papers = await qdrantQuery(query);
+					console.log("[searchPapers]", query);
+					const papers = await fetchPapers(url, query);
+					console.log("[searchPapers] result", papers.length);
+
+					const mapped = papers.map(
+						(paper) =>
+							({
+								id: paper.id,
+								title: paper.title,
+								abstract: paper.abstract,
+								primary_location: paper.primary_location,
+								authorships: paper.authorships,
+								created: paper.created,
+								published: paper.published,
+							}) as ReferencedPaper,
+					);
 
 					streamingData.append({
 						type: "retrieval-end",
-						value: JSON.stringify({ question, papers }),
+						value: JSON.stringify({ question, papers: JSON.stringify(mapped) }),
 					});
 
 					return papers;
