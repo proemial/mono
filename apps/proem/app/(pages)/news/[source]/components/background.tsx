@@ -26,15 +26,15 @@ export function Background({ text, papers }: Props) {
 				return;
 			}
 
-			currentLength += 5; // Add 5 characters at a time
+			currentLength += 10; // Add 10 characters at a time
 			setStreamedText(text.slice(0, currentLength));
 
 			// Set a new random interval for the next update
-			const newInterval = Math.floor(Math.random() * 240);
+			const newInterval = Math.floor(Math.random() * 120);
 			clearInterval(interval);
 			interval = setInterval(updateText, newInterval);
 		};
-		let interval = setInterval(updateText, Math.floor(Math.random() * 240));
+		let interval = setInterval(updateText, Math.floor(Math.random() * 120));
 
 		return () => clearInterval(interval);
 	}, [text]);
