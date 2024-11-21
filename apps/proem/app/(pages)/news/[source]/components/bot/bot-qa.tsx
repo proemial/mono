@@ -1,8 +1,8 @@
 import { useIsApp } from "@/utils/app";
 import { useEffect, useRef } from "react";
-import { QaTuple, User } from "../tuple";
+import { QaTuple, User, indexPapers } from "../tuple";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
-import { AnnotatedText } from "../references/annotated-text";
+import { useTextWithReferences } from "../references/annotated-text";
 
 export function BotQa({
 	question,
@@ -19,6 +19,7 @@ export function BotQa({
 }) {
 	const isApp = useIsApp();
 	const qaRef = useRef<HTMLDivElement>(null);
+	const { markup, references } = useTextWithReferences(answer);
 
 	useEffect(() => {
 		if (typeof window !== "undefined" && scrollTo && qaRef.current) {
@@ -35,10 +36,13 @@ export function BotQa({
 		<QaTuple
 			question={question}
 			user={user}
-			papers={papers}
+			papers={
+				papers &&
+				indexPapers(papers, (paper) => references.includes(paper?.index + 1))
+			}
 			scrollTo={scrollTo}
 		>
-			<AnnotatedText>{answer}</AnnotatedText>
+			{markup}
 		</QaTuple>
 	);
 }

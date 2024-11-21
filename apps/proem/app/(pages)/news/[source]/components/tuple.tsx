@@ -13,15 +13,9 @@ type Props = {
 	question: string;
 	children?: React.ReactNode;
 	user?: User;
-	papers?: ReferencedPaper[];
+	papers?: IndexedReferencedPaper[];
 	throbber?: boolean;
 	scrollTo?: boolean;
-};
-
-export type User = {
-	name: string;
-	avatar?: string;
-	backgroundColor?: string;
 };
 
 export function QaTuple({
@@ -148,7 +142,7 @@ export function QaTuple({
 														paperId: paper.id,
 													}}
 												>
-													<Paper paper={paper} index={index} />
+													<Paper paper={paper} index={paper.index ?? index} />
 												</Trackable>
 											))}
 										</div>
@@ -161,4 +155,19 @@ export function QaTuple({
 			</div>
 		</div>
 	);
+}
+
+export type User = {
+	name: string;
+	avatar?: string;
+	backgroundColor?: string;
+};
+
+export type IndexedReferencedPaper = ReferencedPaper & { index: number };
+
+export function indexPapers(
+	papers: ReferencedPaper[],
+	callback: (paper: IndexedReferencedPaper) => boolean,
+) {
+	return papers.map((paper, index) => ({ ...paper, index })).filter(callback);
 }

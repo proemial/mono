@@ -1,7 +1,10 @@
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import { useStreamer } from "./bot/fake-it";
-import { AnnotatedText } from "./references/annotated-text";
-import { QaTuple } from "./tuple";
+import {
+	AnnotatedText,
+	useTextWithReferences,
+} from "./references/annotated-text";
+import { indexPapers, QaTuple } from "./tuple";
 
 type Props = {
 	text?: string;
@@ -11,14 +14,18 @@ type Props = {
 export function Background({ text, papers }: Props) {
 	const streamedText = useStreamer(text);
 	const isLoading = streamedText?.length !== text?.length;
+	const { markup, references } = useTextWithReferences(streamedText);
 
 	return (
 		<QaTuple
 			question="What is the factual background?"
-			papers={isLoading ? undefined : papers}
+			papers={
+				papers &&
+				indexPapers(papers, (paper) => references.includes(paper?.index + 1))
+			}
 			throbber={isLoading}
 		>
-			<AnnotatedText>{streamedText}</AnnotatedText>
+			{markup}
 		</QaTuple>
 	);
 }
