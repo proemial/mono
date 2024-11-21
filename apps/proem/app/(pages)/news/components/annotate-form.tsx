@@ -48,7 +48,7 @@ export function AnnotateForm() {
 						<div className="text-2xl lg:text-4xl font-semibold w-4/5 lg:w-1/2 leading-7 text-center text-white drop-shadow-md">
 							Trustworthy Perspectives
 						</div>
-						<div className="text-xl lg:text-2xl font-semibold w-4/5 lg:w-1/2 mt-[-12px] leading-7 text-center text-white/60 drop-shadow-md">
+						<div className="text-lg lg:text-xl font-semibold w-4/5 lg:w-1/2 mt-[-12px] leading-7 text-center text-white/60 drop-shadow-md">
 							<span className="whitespace-nowrap">Paste a link to a news article</span>{" "}
 							and explore{" "}<span className="whitespace-nowrap">the facts behind the news</span>
 						</div>
