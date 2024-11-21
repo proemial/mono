@@ -9,7 +9,7 @@ export function Paper({
 }: { paper?: ReferencedPaper; index: number; prefix?: string }) {
 	const [isActive, setIsActive] = useState(false);
 	const ref = useRef<HTMLAnchorElement>(null);
-	const anchor = `${prefix}-${index + 1}`;
+	const anchor = `#${prefix}-${index + 1}`;
 
 	useEffect(() => {
 		if (typeof window === "undefined") return;
@@ -18,7 +18,7 @@ export function Paper({
 			if (ref.current && window.location.hash.includes(anchor)) {
 				ref.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
 			}
-			setIsActive(window.location.hash.includes(anchor));
+			setIsActive(window.location.hash === anchor);
 		};
 		handleHashChange();
 
