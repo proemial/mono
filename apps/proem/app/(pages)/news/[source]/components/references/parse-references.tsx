@@ -29,6 +29,7 @@ function processTextWithReferences(children: string) {
 
 	const markup = children
 		.replace(/^\s*-\s*/gm, "")
+		.replace(/\[#(\d+)\]/g, "[$1]")
 		.split(/(\[.*?\])/)
 		.map((segment, i) => {
 			const match = segment.match(/\[(.*?)\]/);
