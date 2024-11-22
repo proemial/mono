@@ -31,6 +31,8 @@ function processTextWithReferences(children: string) {
 		.replace(/^\s*-\s*/gm, "")
 		.replace(/\[#(\d+)\]/g, "[$1]")
 		.split(/(\[.*?\])/)
+		// Untested: replace static hashes [#] with a running index in brackets, ie. [#], [#], [#]  should become [1], [2], [3]
+		.map((segment, i) => segment.replace("[#]", `[${i + 1}]`))
 		.map((segment, i) => {
 			const match = segment.match(/\[(.*?)\]/);
 			if (match) {
