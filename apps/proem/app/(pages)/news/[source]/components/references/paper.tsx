@@ -58,13 +58,27 @@ export function Paper({
 					>
 						&nbsp;{index + 1}&nbsp;
 					</span>
-					<div className="text-[10px] text-gray-500">
+					<div
+						className="text-[10px]"
+						style={{
+							color: isActive
+								? `${activeColors?.foreground ?? "#6b7280"}70`
+								: "#6b728080",
+						}}
+					>
 						{paper?.published && `${dayjs(paper.published).format("MMM YYYY")}`}
 					</div>
 				</div>
 
 				<div className="text-[11px] line-clamp-2">{paper?.title}</div>
-				<div className="text-[10px] italic text-gray-500 mt-1 mb-1">
+				<div
+					className="text-[10px] italic mt-1 mb-1"
+					style={{
+						color: isActive
+							? `${activeColors?.foreground ?? "#6b7280"}90`
+							: "#6b728080",
+					}}
+				>
 					<div className="line-clamp-2">
 						{paper?.primary_location?.source?.host_organization_name}
 					</div>
