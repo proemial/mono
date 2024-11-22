@@ -23,13 +23,13 @@ import { z } from "zod";
 import { BottomDrawer } from "@/components/bottom-drawer";
 
 const DEFAULT_MODEL = {
-	"claude-3.5-sonnet": "Claude 3.5 Sonnet",
+	"gpt-4o": "GPT-4o",
 };
 const DEFAULT_MODEL_ID = Object.keys(DEFAULT_MODEL)[0] as keyof typeof MODELS;
 
 const MODELS = {
 	...DEFAULT_MODEL,
-	"gpt-4o": "GPT-4o",
+	"claude-3.5-sonnet": "Claude 3.5 Sonnet",
 	"gemini-1.5-flash": "Gemini 1.5 Flash",
 	"llama-3": "Llama 3.2",
 	"mistral-large": "Mistral Large",
