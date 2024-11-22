@@ -6,7 +6,13 @@ export function Paper({
 	paper,
 	index,
 	prefix,
-}: { paper?: ReferencedPaper; index: number; prefix?: string }) {
+	activeColors,
+}: {
+	paper?: ReferencedPaper;
+	index: number;
+	prefix?: string;
+	activeColors?: { foreground?: string; background?: string };
+}) {
 	const [isActive, setIsActive] = useState(false);
 	const ref = useRef<HTMLAnchorElement>(null);
 	const anchor = `#${prefix}-${index + 1}`;
@@ -32,7 +38,15 @@ export function Paper({
 		<>
 			<a
 				href={`/news/paper/oa/${paper?.id?.split("/").at(-1)}`}
-				className={`flex flex-col p-2 ${isActive ? "bg-[#7DFA86]" : "bg-[#cfd5d8]"} shadow-sm rounded-md w-[30%] md:w-[20%] flex-shrink-0`}
+				className={
+					"flex flex-col p-2 shadow-sm rounded-md w-[30%] md:w-[20%] flex-shrink-0"
+				}
+				style={{
+					backgroundColor: isActive
+						? activeColors?.background ?? "#7DFA86"
+						: "#cfd5d8",
+					color: activeColors?.foreground ?? undefined,
+				}}
 				ref={ref}
 			>
 				<div className="flex flex-row justify-between mt-1 mb-4 w-full">

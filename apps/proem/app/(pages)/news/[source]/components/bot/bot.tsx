@@ -18,9 +18,10 @@ type Props = {
 	url: string;
 	starters: Array<[string, string]>;
 	backgroundPapers?: ReferencedPaper[];
+	activeColors?: { foreground?: string; background?: string };
 };
 
-export function Bot({ url, starters, backgroundPapers }: Props) {
+export function Bot({ url, starters, backgroundPapers, activeColors }: Props) {
 	const { fromFeedParam: isFromFeed } = useFromFeedSearchParam();
 
 	const {
@@ -95,6 +96,7 @@ export function Bot({ url, starters, backgroundPapers }: Props) {
 						papers={papers}
 						user={{ name: "You" }}
 						scrollTo={index === messages.length - 1}
+						activeColors={activeColors}
 					/>
 				);
 			})}
@@ -136,6 +138,7 @@ export function Bot({ url, starters, backgroundPapers }: Props) {
 				isFromFeed={isFromFeed}
 				url={url}
 				papers={backgroundPapers}
+				activeColors={activeColors}
 			/>
 		</>
 	);

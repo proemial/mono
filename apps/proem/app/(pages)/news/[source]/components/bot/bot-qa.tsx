@@ -10,12 +10,14 @@ export function BotQa({
 	user,
 	papers,
 	scrollTo,
+	activeColors,
 }: {
 	question: string;
 	answer?: string;
 	user?: User;
 	papers?: ReferencedPaper[];
 	scrollTo?: boolean;
+	activeColors?: { foreground?: string; background?: string };
 }) {
 	const isApp = useIsApp();
 	const qaRef = useRef<HTMLDivElement>(null);
@@ -42,6 +44,7 @@ export function BotQa({
 			}
 			scrollTo={scrollTo}
 			prefix={prefix}
+			activeColors={activeColors}
 		>
 			{markup}
 		</QaTuple>

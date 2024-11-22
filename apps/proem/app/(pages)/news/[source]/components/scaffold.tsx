@@ -80,7 +80,7 @@ export function Scaffold({
 	const fatalError = queryError ?? papersError ?? summariseError ?? undefined;
 
 	const background = backgroundColor(data?.init?.background);
-	const color = foregroundColor(data?.init?.foreground);
+	const foreground = foregroundColor(data?.init?.foreground);
 
 	return (
 		<div className="relative self-stretch w-full bg-white mx-auto max-w-[550px]">
@@ -109,7 +109,7 @@ export function Scaffold({
 						style={
 							{
 								"--newsBackground": background,
-								"--newsColor": color,
+								"--newsColor": foreground,
 								background: "var(--newsBackground)",
 								color: "var(--newsColor)",
 							} as React.CSSProperties
@@ -130,6 +130,7 @@ export function Scaffold({
 					<Background
 						text={data?.summarise?.commentary}
 						papers={data?.papers?.value}
+						activeColors={{ foreground, background }}
 					/>
 				)}
 
@@ -138,6 +139,7 @@ export function Scaffold({
 						starters={data?.summarise?.questions}
 						url={url}
 						backgroundPapers={data?.papers?.value}
+						activeColors={{ foreground, background }}
 					/>
 				)}
 			</div>

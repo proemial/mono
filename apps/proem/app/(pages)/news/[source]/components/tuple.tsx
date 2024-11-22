@@ -17,6 +17,7 @@ type Props = {
 	throbber?: boolean;
 	scrollTo?: boolean;
 	prefix?: string;
+	activeColors?: { foreground?: string; background?: string };
 };
 
 export function QaTuple({
@@ -27,6 +28,7 @@ export function QaTuple({
 	throbber,
 	scrollTo,
 	prefix,
+	activeColors,
 }: Props) {
 	const isApp = useIsApp();
 	const qaRef = useRef<HTMLDivElement>(null);
@@ -148,6 +150,7 @@ export function QaTuple({
 														paper={paper}
 														index={paper.index ?? index}
 														prefix={prefix}
+														activeColors={activeColors}
 													/>
 												</Trackable>
 											))}

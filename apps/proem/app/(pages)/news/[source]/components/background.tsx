@@ -6,9 +6,10 @@ import { indexPapers, QaTuple } from "./tuple";
 type Props = {
 	text?: string;
 	papers?: ReferencedPaper[];
+	activeColors?: { foreground?: string; background?: string };
 };
 
-export function Background({ text, papers }: Props) {
+export function Background({ text, papers, activeColors }: Props) {
 	const streamedText = useStreamer(text);
 	const isLoading = streamedText?.length !== text?.length;
 	const { markup, references, prefix } = useTextWithReferences(streamedText);
@@ -22,6 +23,7 @@ export function Background({ text, papers }: Props) {
 			}
 			prefix={prefix}
 			throbber={isLoading}
+			activeColors={activeColors}
 		>
 			{markup}
 		</QaTuple>

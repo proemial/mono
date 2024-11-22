@@ -11,11 +11,13 @@ export function CommunityQuestions({
 	questions,
 	isFromFeed,
 	papers,
+	activeColors,
 }: {
 	url: string;
 	papers?: ReferencedPaper[];
 	questions?: Array<[string, string]>;
 	isFromFeed?: boolean;
+	activeColors?: { foreground?: string; background?: string };
 }) {
 	const rndUser = useRandomUser(url);
 	const questionsToShow = useQuestions(questions);
@@ -38,6 +40,7 @@ export function CommunityQuestions({
 							question={question[0]}
 							answer={question[1]}
 							papers={papers}
+							activeColors={activeColors}
 						/>
 					);
 				})}
