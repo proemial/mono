@@ -39,46 +39,32 @@ export function Paper({
 			<a
 				href={`/news/paper/oa/${paper?.id?.split("/").at(-1)}`}
 				className={
-					"flex flex-col p-2 shadow-sm rounded-md w-[30%] md:w-[20%] flex-shrink-0"
+					"flex flex-col p-2 rounded-md w-[30%] md:w-[20%] flex-shrink-0 cursor-pointer hover:shadow-sm active:shadow-none hover:-translate-y-[1px] active:-translate-y-[0] transition-transform"
 				}
 				style={{
-					backgroundColor: isActive
-						? activeColors?.background ?? "#7DFA86"
-						: "#cfd5d8",
-					color: isActive ? activeColors?.foreground ?? undefined : undefined,
+					backgroundColor: isActive ? "#0a161c" : "white",
+					color: isActive ? "white" : "#0a161c",
 				}}
 				ref={ref}
 			>
 				<div className="flex flex-row justify-between mt-1 mb-4 w-full">
 					<span
-						className="items-center justify-center rounded-full bg-[#0A161C] text-white text-[10px] font-[1000] cursor-pointer hover:bg-gray-800"
+						className="items-center justify-center rounded-full text-[10px] font-[1000]"
 						style={{
 							padding: "1px 4px",
+							color: isActive ? "#0a161c" : "white",
+							backgroundColor: isActive ? "white" : "#0a161c",
 						}}
 					>
 						&nbsp;{index + 1}&nbsp;
 					</span>
-					<div
-						className="text-[10px]"
-						style={{
-							color: isActive
-								? `${activeColors?.foreground ?? "#6b7280"}70`
-								: "#6b728080",
-						}}
-					>
+					<div className="text-[10px] text-[#6d7e86]">
 						{paper?.published && `${dayjs(paper.published).format("MMM YYYY")}`}
 					</div>
 				</div>
 
 				<div className="text-[11px] line-clamp-2">{paper?.title}</div>
-				<div
-					className="text-[10px] italic mt-1 mb-1"
-					style={{
-						color: isActive
-							? `${activeColors?.foreground ?? "#6b7280"}90`
-							: "#6b728080",
-					}}
-				>
+				<div className="text-[10px] italic mt-1 mb-1 text-[#6d7e86]">
 					<div className="line-clamp-2">
 						{paper?.primary_location?.source?.host_organization_name}
 					</div>

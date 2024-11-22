@@ -25,9 +25,9 @@ export function CommunityQuestions({
 	if (!isFromFeed) return <></>;
 
 	return (
-		<div className="flex flex-col gap-3 mt-3">
+		<div className="flex flex-col mt-3">
 			<CommunityHeader />
-			<div className="flex relative flex-col-reverse gap-4 items-start self-stretch w-full">
+			<div className="flex relative flex-col-reverse items-start self-stretch w-full">
 				{questionsToShow?.map((question, index) => {
 					return (
 						<BotQa

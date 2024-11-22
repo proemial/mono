@@ -68,7 +68,7 @@ export function QaTuple({
 						<div className="flex content-between items-center font-medium text-[#08080a] text-[19px] leading-6">
 							<div className="flex-1">{question}</div>
 							{throbber && (
-								<Icons.loader className="h-4 w-4 fill-theme-800/70 mr-2" />
+								<Icons.loader className="fill-theme-800/70 mr-2 w-4 h-4" />
 							)}
 						</div>
 					</div>
@@ -133,7 +133,7 @@ export function QaTuple({
 									</div>
 
 									{papers && (
-										<div className="flex overflow-x-auto gap-2 justify-start duration-500 animate-fade-in">
+										<div className="flex overflow-x-auto gap-2 justify-start duration-500 animate-fade-in pt-[1px]">
 											{papers?.map((paper, index) => (
 												<Trackable
 													key={index}

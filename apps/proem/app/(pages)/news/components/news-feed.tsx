@@ -65,7 +65,7 @@ export function NewsFeed({ sorted, error, debug }: Props) {
 		<>
 			{loading && (
 				<div className="fixed inset-0 bg-black/30 z-10 flex items-center justify-center text-white/90 animate-[fadeIn_1s_ease-in]">
-					<div className="animate-spin h-8 w-8 border-4 border-white/50 border-t-transparent rounded-full" />
+					<div className="border-white/50 border-t-transparent w-8 h-8 rounded-full border-4 animate-spin" />
 				</div>
 			)}
 			<div className="ppNewsFeed flex relative flex-col items-start self-stretch w-full">
@@ -80,7 +80,7 @@ export function NewsFeed({ sorted, error, debug }: Props) {
 							properties={{ sourceUrl: item.init?.url as string }}
 						>
 							<div
-								className="inline-flex w-full mb-8 break-inside-avoid-page cursor-pointer"
+								className="break-inside-avoid-page inline-flex mb-8 w-full cursor-pointer"
 								data-url={item.init?.url}
 								onClick={() => handleClick(`${item.init?.url}`)}
 							>
@@ -96,14 +96,14 @@ export function NewsFeed({ sorted, error, debug }: Props) {
 
 				<div
 					ref={overlay}
-					className={cn("fixed inset-0 z-50", overlayVisible ? "" : "hidden")}
+					className={cn("fixed inset-0 z-50", overlayVisible ? "":"hidden")}
 				>
-					<div className="absolute inset-0 bg-black/65" onClick={handleClose} />
+					<div className="bg-black/65 absolute inset-0" onClick={handleClose} />
 					<div className="rounded-[32px] absolute left-1/2 top-[40px] -translate-x-1/2 h-[90%] w-[500px] bg-white shadow-[0_0_100px_rgba(0,0,0,0.75)] border-white border-[12px]">
 						<iframe
 							ref={iframe}
 							title="News content"
-							className="w-full h-full border-0"
+							className="w-full h-full border-0 rounded-[24px]"
 							src="about:blank"
 						/>
 					</div>
