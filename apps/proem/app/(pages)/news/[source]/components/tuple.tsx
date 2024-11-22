@@ -79,61 +79,78 @@ export function QaTuple({
 						<div className="flex overflow-hidden flex-col flex-1 gap-1 w-full">
 							<div className="flex flex-col gap-1 px-3 pb-3 w-full">
 								<>
-									<div className="font-medium text-[#131316] text-[16px] leading-6">
+									<div className="font-medium text-[#131316] text-[16px] leading-6 min-h-[160px]">
 										{children}
 									</div>
-									<div className="flex items-start mt-2 mb-6 w-full">
-										<div className="w-6 h-6 rounded-sm text-2xl flex items-center justify-center bg-[#0A161C]">
-											<Image className="w-3 h-3" alt="Frame" src={logo} />
-										</div>
-										<div className="text-[#606567] font-normal text-sm leading-[14px] h-6 flex items-center ml-2 w-full gap-1">
-											<div className="flex-1">Explained by Proem</div>
+									<div className="mt-2 mb-6 h-6 ">
+										{!throbber && (
+											<div className="opacity-0 flex items-start w-full animate-[fadeIn_1s_ease-in_2s_forwards]">
+												<div className="w-6 h-6 rounded-sm text-2xl flex items-center justify-center bg-[#0A161C]">
+													<Image className="w-3 h-3" alt="Frame" src={logo} />
+												</div>
+												<div className="text-[#606567] font-normal text-sm leading-[14px] h-6 flex items-center ml-2 w-full gap-1 ">
+													<div className="flex-1">Explained by Proem</div>
 
-											<a
-												href="/"
-												onClick={(e) => e.preventDefault()}
-												className="inline-flex items-center px-2 py-1 rounded-full border border-[#99a1a3] text-[#606567] hover:text-white hover:bg-[#99a1a3] transition-colors"
-												title="Learn how our Science bot works"
-											>
-												<svg
-													className="mr-1 w-3 h-3"
-													viewBox="0 0 24 24"
-													fill="none"
-													stroke="currentColor"
-													strokeWidth="1"
-													strokeLinecap="round"
-													strokeLinejoin="round"
-												>
-													<path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
-												</svg>
-												<div className="text-[11px]">Like</div>
-											</a>
-											<a
-												href="/"
-												onClick={(e) => e.preventDefault()}
-												className="inline-flex items-center px-2 py-1 rounded-full border border-[#99a1a3] text-[#606567] hover:text-white hover:bg-[#99a1a3] transition-colors"
-												title="Share this answer"
-											>
-												<svg
-													className="mr-1 w-3 h-3"
-													viewBox="0 0 24 24"
-													fill="none"
-													stroke="currentColor"
-													strokeWidth="1"
-													strokeLinecap="round"
-													strokeLinejoin="round"
-												>
-													<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-													<polyline points="16 6 12 2 8 6" />
-													<line x1="12" y1="2" x2="12" y2="15" />
-												</svg>
-												<div className="text-[11px]">Share</div>
-											</a>
-										</div>
+													<a
+														href="/"
+														onClick={(e) => e.preventDefault()}
+														className="inline-flex items-center px-2 py-1 rounded-full border border-[#99a1a3] text-[#606567] hover:text-white hover:bg-[#99a1a3] transition-colors"
+														title="Learn how our Science bot works"
+													>
+														<svg
+															className="mr-1 w-3 h-3"
+															viewBox="0 0 24 24"
+															fill="none"
+															stroke="currentColor"
+															strokeWidth="1"
+															strokeLinecap="round"
+															strokeLinejoin="round"
+														>
+															<path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+														</svg>
+														<div className="text-[11px]">Like</div>
+													</a>
+													<a
+														href="/"
+														onClick={(e) => e.preventDefault()}
+														className="inline-flex items-center px-2 py-1 rounded-full border border-[#99a1a3] text-[#606567] hover:text-white hover:bg-[#99a1a3] transition-colors"
+														title="Share this answer"
+													>
+														<svg
+															className="mr-1 w-3 h-3"
+															viewBox="0 0 24 24"
+															fill="none"
+															stroke="currentColor"
+															strokeWidth="1"
+															strokeLinecap="round"
+															strokeLinejoin="round"
+														>
+															<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+															<polyline points="16 6 12 2 8 6" />
+															<line x1="12" y1="2" x2="12" y2="15" />
+														</svg>
+														<div className="text-[11px]">Share</div>
+													</a>
+												</div>
+											</div>
+										)}
 									</div>
 
-									{papers && (
-										<div className="flex overflow-x-auto gap-2 justify-start duration-500 animate-fade-in pt-[1px]">
+									{throbber ? (
+										<div className="flex overflow-x-auto gap-2 justify-start duration-500 animate-fade-in">
+											{[...Array(4)].map((_, i) => (
+												<div
+													key={i}
+													className="flex flex-col p-2 rounded-md w-[30%] md:w-[20%] flex-shrink-0 h-[120px] bg-slate-400 animate-pulse"
+													style={{
+														opacity: 0.1 + i * 0.3,
+														animationDelay: `${i * 300}ms`,
+													}}
+												/>
+											))}
+										</div>
+									) : (
+										<div className="flex overflow-x-auto gap-2 justify-start">
 											{papers?.map((paper, index) => (
 												<Trackable
 													key={index}
@@ -142,7 +159,6 @@ export function QaTuple({
 															.clickPaperSource
 													}
 													properties={{
-														// sourceUrl: url,
 														paperId: paper.id,
 													}}
 												>

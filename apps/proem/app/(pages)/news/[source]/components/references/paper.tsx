@@ -39,11 +39,12 @@ export function Paper({
 			<a
 				href={`/news/paper/oa/${paper?.id?.split("/").at(-1)}`}
 				className={
-					"flex flex-col p-2 rounded-md w-[30%] md:w-[20%] flex-shrink-0 cursor-pointer hover:shadow-sm active:shadow-none hover:-translate-y-[1px] active:-translate-y-[0] transition-transform"
+					"flex flex-col p-2 h-[120px] duration-500 rounded-md w-[30%] md:w-[20%] flex-shrink-0 cursor-pointer hover:shadow-sm active:shadow-none animate-[fadeIn_1s_ease-in_forwards] opacity-0"
 				}
 				style={{
 					backgroundColor: isActive ? "#0a161c" : "white",
 					color: isActive ? "white" : "#0a161c",
+					animationDelay: `${index * 300}ms`,
 				}}
 				ref={ref}
 			>

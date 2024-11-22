@@ -96,14 +96,14 @@ export function NewsFeed({ sorted, error, debug }: Props) {
 
 				<div
 					ref={overlay}
-					className={cn("fixed inset-0 z-50", overlayVisible ? "":"hidden")}
+					className={cn("fixed inset-0 z-50", overlayVisible ? "" : "hidden")}
 				>
 					<div className="bg-black/65 absolute inset-0" onClick={handleClose} />
 					<div className="rounded-[32px] absolute left-1/2 top-[40px] -translate-x-1/2 h-[90%] w-[500px] bg-white shadow-[0_0_100px_rgba(0,0,0,0.75)] border-white border-[12px]">
 						<iframe
 							ref={iframe}
 							title="News content"
-							className="w-full h-full border-0 rounded-[24px]"
+							className="w-full h-full border-0 rounded-[20px]"
 							src="about:blank"
 						/>
 					</div>
