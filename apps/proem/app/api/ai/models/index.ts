@@ -16,8 +16,8 @@ const haiku = anthropic("claude-3-5-haiku-latest");
 const mist = mistral("mistral-large-latest");
 
 const defaultModel = gpt4o;
-const answersModel = sonnet;
-const followupsModel = haiku;
+const answersModel = gpt4o;
+const followupsModel = gpt4o;
 
 const LlmModels = {
 	ask: {
