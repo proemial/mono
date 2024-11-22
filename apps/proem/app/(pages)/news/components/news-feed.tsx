@@ -103,7 +103,7 @@ export function NewsFeed({ sorted, error, debug }: Props) {
 						<iframe
 							ref={iframe}
 							title="News content"
-							className="w-full h-full border-0"
+							className="w-full h-full border-0 rounded-[24px]"
 							src="about:blank"
 						/>
 					</div>
