@@ -45,7 +45,7 @@ export function Paper({
 					backgroundColor: isActive
 						? activeColors?.background ?? "#7DFA86"
 						: "#cfd5d8",
-					color: activeColors?.foreground ?? undefined,
+					color: isActive ? activeColors?.foreground ?? undefined : undefined,
 				}}
 				ref={ref}
 			>
