@@ -86,6 +86,7 @@ export function Bot({ url, starters, backgroundPapers, activeColors }: Props) {
 				const answers = findAnswers(index, messages);
 				const events = findMessageEvents(question, data as StreamingData[]);
 
+				const done = !isLoading && !!events?.["followups-end"];
 				const papers = events?.["retrieval-end"]?.papers;
 
 				return (
@@ -97,6 +98,7 @@ export function Bot({ url, starters, backgroundPapers, activeColors }: Props) {
 						user={{ name: "You" }}
 						scrollTo={index === messages.length - 1}
 						activeColors={activeColors}
+						throbber={!done}
 					/>
 				);
 			})}

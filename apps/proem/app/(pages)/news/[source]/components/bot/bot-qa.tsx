@@ -11,6 +11,7 @@ export function BotQa({
 	papers,
 	scrollTo,
 	activeColors,
+	throbber,
 }: {
 	question: string;
 	answer?: string;
@@ -18,10 +19,12 @@ export function BotQa({
 	papers?: ReferencedPaper[];
 	scrollTo?: boolean;
 	activeColors?: { foreground?: string; background?: string };
+	throbber?: boolean;
 }) {
 	const isApp = useIsApp();
 	const qaRef = useRef<HTMLDivElement>(null);
 	const { markup, references, prefix } = useTextWithReferences(answer);
+	console.log(references, papers?.length);
 
 	useEffect(() => {
 		if (typeof window !== "undefined" && scrollTo && qaRef.current) {
@@ -45,6 +48,7 @@ export function BotQa({
 			scrollTo={scrollTo}
 			prefix={prefix}
 			activeColors={activeColors}
+			throbber={throbber}
 		>
 			{markup}
 		</QaTuple>
