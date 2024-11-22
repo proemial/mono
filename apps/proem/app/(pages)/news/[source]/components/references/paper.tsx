@@ -63,7 +63,7 @@ export function Paper({
 					</div>
 				</div>
 
-				<div className="text-[11px] line-clamp-2">{paper?.title}</div>
+				<div className="text-[11px] line-clamp-2 break-all">{paper?.title}</div>
 				<div className="text-[10px] italic mt-1 mb-1 text-[#6d7e86]">
 					<div className="line-clamp-2">
 						{paper?.primary_location?.source?.host_organization_name}
