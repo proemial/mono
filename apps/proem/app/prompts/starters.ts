@@ -7,7 +7,7 @@ const model = "gpt-3.5-turbo-0125";
 export async function generateStarters(title: string, abstract: string) {
 	const openai = new OpenAI({
 		apiKey: env.OPENAI_API_KEY,
-		organization: openaiOrganizations.summarization,
+		// organization: openaiOrganizations.summarization,
 	});
 
 	const completion = await openai.chat.completions.create({

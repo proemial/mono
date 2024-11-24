@@ -29,7 +29,7 @@ Now, output the headline. Nothing else:
 
 const openai = createOpenAI({
 	apiKey: process.env.OPENAI_API_KEY,
-	organization: openaiOrganizations.summarization,
+	organization: openaiOrganizations.read,
 });
 
 export async function summariseTitle(title: string, abstract: string) {

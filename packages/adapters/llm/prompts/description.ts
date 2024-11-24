@@ -20,7 +20,7 @@ Now, output the summary. Nothing else:
 
 const openai = createOpenAI({
 	apiKey: process.env.OPENAI_API_KEY,
-	organization: openaiOrganizations.summarization,
+	organization: openaiOrganizations.read,
 });
 
 export const descriptionPrompt = {
