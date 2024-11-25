@@ -135,6 +135,7 @@ function mapToResult(
 					author: {
 						id: a.author.id,
 						display_name: a.author?.display_name,
+						institution: a.institutions?.at(0)?.display_name,
 					},
 				})),
 				primary_location: {

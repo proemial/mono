@@ -46,7 +46,7 @@ export function QaTuple({
 
 	return (
 		<div ref={qaRef} className="flex flex-col">
-			<div className=" bg-gradient-to-b to-[#e9ecec] from-[#e1e7ea] rounded-xl mb-0 mt-4">
+			<div className="transition-all duration-600 ease-in-out bg-gradient-to-b to-[#e9ecec] from-[#e1e7ea] rounded-2xl mb-0 mt-4">
 				<div className="flex flex-col flex-1">
 					<div className="flex flex-col gap-2 p-3 w-full">
 						{user && (
@@ -77,12 +77,12 @@ export function QaTuple({
 				<div className="flex flex-col gap-2 w-full">
 					<div className="flex gap-2">
 						<div className="flex overflow-hidden flex-col flex-1 gap-1 w-full">
-							<div className="flex flex-col gap-1 px-3 pb-3 w-full">
+							<div className="flex flex-col gap-3 px-3 pb-3 w-full">
 								<>
-									<div className="font-medium text-[#131316] text-[16px] leading-6">
+									<div className="font-medium text-[#131316] text-[16px] leading-6 min-h-32">
 										{children}
 									</div>
-									<div className="flex items-start mt-2 mb-6 w-full">
+									<div className="flex items-start w-full">
 										<div className="w-6 h-6 rounded-sm text-2xl flex items-center justify-center bg-[#0A161C]">
 											<Image className="w-3 h-3" alt="Frame" src={logo} />
 										</div>
@@ -133,27 +133,30 @@ export function QaTuple({
 									</div>
 
 									{papers && (
-										<div className="flex overflow-x-auto gap-2 justify-start duration-500 animate-fade-in pt-[1px]">
-											{papers?.map((paper, index) => (
-												<Trackable
-													key={index}
-													trackingKey={
-														analyticsKeys.experiments.news.item.sources
-															.clickPaperSource
-													}
-													properties={{
-														// sourceUrl: url,
-														paperId: paper.id,
-													}}
-												>
-													<Paper
-														paper={paper}
-														index={paper.index ?? index}
-														prefix={prefix}
-														activeColors={activeColors}
-													/>
-												</Trackable>
-											))}
+										<div className="relative">
+											<div className="flex mr-[-10px] overflow-x-auto gap-2 justify-start duration-500 animate-fade-in pt-[1px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+												{papers?.map((paper, index) => (
+													<Trackable
+														key={index}
+														trackingKey={
+															analyticsKeys.experiments.news.item.sources
+																.clickPaperSource
+														}
+														properties={{
+															// sourceUrl: url,
+															paperId: paper.id,
+														}}
+													>
+														<Paper
+															paper={paper}
+															index={paper.index ?? index}
+															prefix={prefix}
+															activeColors={activeColors}
+														/>
+													</Trackable>
+												))}
+											</div>
+											<div className="absolute top-0 right-[-10px] bottom-0 w-12 bg-gradient-to-l from-[#e9ecec] to-transparent pointer-events-none" />
 										</div>
 									)}
 								</>

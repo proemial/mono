@@ -9,9 +9,10 @@ export function splitAndSanitize(text: string) {
 			// [#1], [#2], [#3] > [1], [2], [3]
 			.replace(/\[#(\d+)\]/g, "[$1]")
 
-			.split(/(\[.*?\])/)
-
 			// [#], [#], [#] > [1], [2], [3]
-			.map((segment, i) => segment.replace("[#]", () => `[${++index}]`))
+			.replace("[#]", () => `[${++index}]`)
+
+			// split into segments retaining matched patterns as separate segments
+			.split(/(\[.*?\])/)
 	);
 }

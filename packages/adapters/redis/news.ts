@@ -180,6 +180,7 @@ export type ReferencedPaper = {
 		author: {
 			id: string;
 			display_name: string;
+			institution: string;
 		};
 	}>;
 	created: string;
