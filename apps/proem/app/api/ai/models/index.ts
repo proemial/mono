@@ -1,7 +1,8 @@
-import { google } from "@ai-sdk/google";
-import { openai } from "@ai-sdk/openai";
 import { anthropic } from "@ai-sdk/anthropic";
+import { google } from "@ai-sdk/google";
 import { mistral } from "@ai-sdk/mistral";
+import { openai } from "@ai-sdk/openai";
+import { galadrielProvider } from "./galadriel";
 
 export type LlmModel =
 	| ReturnType<typeof google>
@@ -14,6 +15,7 @@ const gpt4o = openai("gpt-4o");
 const sonnet = anthropic("claude-3-5-sonnet-20240620");
 const haiku = anthropic("claude-3-5-haiku-latest");
 const mist = mistral("mistral-large-latest");
+const galadrielLlama3_1 = galadrielProvider("llama3.1:405b");
 
 const defaultModel = gpt4o;
 const answersModel = gpt4o;
