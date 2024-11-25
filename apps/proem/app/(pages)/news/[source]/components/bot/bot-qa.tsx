@@ -24,7 +24,6 @@ export function BotQa({
 	const isApp = useIsApp();
 	const qaRef = useRef<HTMLDivElement>(null);
 	const { markup, references, prefix } = useTextWithReferences(answer);
-	console.log(references, papers?.length);
 
 	useEffect(() => {
 		if (typeof window !== "undefined" && scrollTo && qaRef.current) {
