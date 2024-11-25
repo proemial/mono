@@ -100,7 +100,7 @@ export function Scaffold({
 			<div className="hidden max-[475px]:block min-[477px]:block sticky top-0 z-50">
 				<Header />
 			</div>
-			<div className="flex flex-col gap-4 p-2 min-[475px]:p-0 min-[477px]:p-2">
+			<div className="flex flex-col gap-0 p-2 min-[475px]:p-0 min-[477px]:p-2">
 				<div className="flex flex-col items-start self-stretch w-full flex-[0_0_auto] text-[#08080a]">
 					<div
 						className={

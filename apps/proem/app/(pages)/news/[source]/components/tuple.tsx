@@ -46,7 +46,7 @@ export function QaTuple({
 
 	return (
 		<div ref={qaRef} className="flex flex-col">
-			<div className="transition-all duration-600 ease-in-out bg-gradient-to-b to-[#e9ecec] from-[#e1e7ea] rounded-2xl mb-0 mt-4">
+			<div className="transition-all duration-600 ease-in-out bg-gradient-to-b to-[#e9ecec] from-[#e1e7ea] rounded-2xl mb-0 mt-3">
 				<div className="flex flex-col flex-1">
 					<div className="flex flex-col gap-2 p-3 w-full">
 						{user && (

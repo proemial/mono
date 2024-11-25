@@ -29,6 +29,11 @@ export function BotForm({
 							onChange={handleInputChange}
 							className="w-full h-full py-3 bg-transparent outline-none placeholder:text-[#999999]"
 						/>
+						<button type="submit" className="hover:opacity-70">
+							<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M10.5 8.19202H2.7659C2.6529 7.93402 0.388897 2.81402 0.388897 2.81402C-0.371106 1.09402 1.4469 -0.627979 3.1229 0.22302L16.9039 7.21702C18.3639 7.95702 18.3639 10.043 16.9039 10.783L3.1239 17.777C1.4469 18.628 -0.371106 16.905 0.388897 15.186L2.7639 9.808H10.5" fill="#666"/>
+							</svg>
+						</button>
 					</Trackable>
 				</div>
 			</form>
