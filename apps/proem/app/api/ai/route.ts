@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
 	)?.content!;
 
 	const data = new StreamData() as AnswerEngineStreamData;
-	const result = await streamText({
+	const result = streamText({
 		...currentAssistant,
 		messages: convertedMessages,
 		tools:

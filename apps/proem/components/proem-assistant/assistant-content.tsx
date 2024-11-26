@@ -14,7 +14,7 @@ import {
 } from "@proemial/shadcn-ui/components/ui/dialog";
 import { useQueryClient } from "@tanstack/react-query";
 import { X } from "@untitled-ui/icons-react";
-import { nanoid } from "ai";
+import { generateId } from "ai";
 import { Message, useChat } from "ai/react";
 import { motion } from "framer-motion";
 import { useEffect, useMemo } from "react";
@@ -92,7 +92,7 @@ export const AssistantContent = ({ spaceId, paperId, data }: Props) => {
 			spaceId,
 		},
 		api: "/api/ai",
-		maxToolRoundtrips: 2,
+		maxSteps: 2,
 		// initialMessages,
 	});
 
@@ -227,7 +227,7 @@ const toInitialMessages = (posts: PostWithCommentsAndAuthor[]) => {
 	const messages: MessageWithMetadata[] = [];
 	for (const post of posts) {
 		messages.push({
-			id: nanoid(),
+			id: generateId(),
 			role: "user",
 			content: post.content,
 			createdAt: new Date(post.createdAt),
@@ -244,7 +244,7 @@ const toInitialMessages = (posts: PostWithCommentsAndAuthor[]) => {
 		} satisfies MessageWithMetadata);
 		for (const comment of post.comments) {
 			messages.push({
-				id: nanoid(),
+				id: generateId(),
 				role: comment.authorId === PAPER_BOT_USER_ID ? "assistant" : "user",
 				content: comment.content,
 				createdAt: new Date(comment.createdAt),
@@ -271,7 +271,7 @@ const toTuplePosts = (
 			.map(
 				(post) =>
 					({
-						id: nanoid(),
+						id: generateId(),
 						createdAt: new Date(post.createdAt),
 						content: post.content,
 						author: {

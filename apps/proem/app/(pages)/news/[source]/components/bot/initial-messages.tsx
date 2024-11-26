@@ -1,4 +1,4 @@
-import { Message, nanoid } from "ai";
+import { Message, generateId } from "ai";
 import { useMemo } from "react";
 
 export function useInitialMessages(
@@ -12,32 +12,32 @@ export function useInitialMessages(
 						{
 							role: "user",
 							content: questions?.at(0)?.at(0) ?? "",
-							id: nanoid(),
+							id: generateId(),
 						},
 						{
 							role: "assistant",
 							content: questions?.at(0)?.at(1) ?? "",
-							id: nanoid(),
+							id: generateId(),
 						},
 						{
 							role: "user",
 							content: questions?.at(1)?.at(0) ?? "",
-							id: nanoid(),
+							id: generateId(),
 						},
 						{
 							role: "assistant",
 							content: questions?.at(1)?.at(1) ?? "",
-							id: nanoid(),
+							id: generateId(),
 						},
 						{
 							role: "user",
 							content: questions?.at(2)?.at(0) ?? "",
-							id: nanoid(),
+							id: generateId(),
 						},
 						{
 							role: "assistant",
 							content: questions?.at(2)?.at(1) ?? "",
-							id: nanoid(),
+							id: generateId(),
 						},
 					]
 				: [],

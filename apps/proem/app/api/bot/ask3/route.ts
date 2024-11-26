@@ -79,7 +79,7 @@ async function streamAnswer(
 		publicationDate: string;
 	}> = [];
 
-	const result = await streamText({
+	const result = streamText({
 		model: LlmModels.ask.answer(),
 		system: systemPrompt,
 		messages: coreMessages,

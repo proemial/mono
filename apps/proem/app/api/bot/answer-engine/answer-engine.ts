@@ -11,11 +11,7 @@ import { toLangChainChatHistory } from "@/app/llm/utils";
 import { BytesOutputParser } from "@langchain/core/output_parsers";
 import { answers } from "@proemial/data/repository/answer";
 import { prettySlug } from "@proemial/utils/pretty-slug";
-import {
-	StreamData,
-	StreamingTextResponse,
-	createStreamDataTransformer,
-} from "ai";
+import { createStreamDataTransformer, StreamData } from "ai";
 import { z } from "zod";
 
 export const AIMessage = z.object({
@@ -48,7 +44,10 @@ export async function askAnswerEngine({
 	tags,
 	transactionId,
 	userId,
-}: AnswerEngineParams) {
+}: AnswerEngineParams): Promise<{
+	stream: ReadableStream<Uint8Array>;
+	data: AnswerEngineStreamData;
+}> {
 	const data = new StreamData() as AnswerEngineStreamData;
 	const isFollowUpQuestion = Boolean(existingSlug);
 	const slug = existingSlug ?? prettySlug(question);
@@ -158,9 +157,8 @@ export async function askAnswerEngine({
 			},
 		);
 
-	return new StreamingTextResponse(
-		stream.pipeThrough(createStreamDataTransformer()),
-		{},
+	return {
+		stream: stream.pipeThrough(createStreamDataTransformer()),
 		data,
-	);
+	};
 }

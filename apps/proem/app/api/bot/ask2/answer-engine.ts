@@ -2,11 +2,7 @@ import { AnswerEngineStreamData } from "@/app/api/bot/answer-engine/answer-engin
 import { LangChainChatHistoryMessage } from "@/app/llm/utils";
 import { answers } from "@proemial/data/repository/answer";
 import { prettySlug } from "@proemial/utils/pretty-slug";
-import {
-	StreamData,
-	StreamingTextResponse,
-	createStreamDataTransformer,
-} from "ai";
+import { StreamData, createStreamDataTransformer } from "ai";
 import { AgentExecutor } from "langchain/agents";
 import {
 	handleAnswerEngineEvents,
@@ -127,9 +123,8 @@ export const answerEngine = async ({
 		},
 	});
 
-	return new StreamingTextResponse(
-		transformStream.pipeThrough(createStreamDataTransformer()),
-		undefined,
+	return {
+		stream: transformStream.pipeThrough(createStreamDataTransformer()),
 		data,
-	);
+	};
 };

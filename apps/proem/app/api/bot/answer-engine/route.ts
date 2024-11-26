@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
 		throw new Error("No question found");
 	}
 
-	const stream = askAnswerEngine({
+	const { stream, data } = await askAnswerEngine({
 		chatHistory,
 		userId,
 		transactionId: newestQuestion.id,
@@ -50,7 +50,10 @@ export async function POST(req: NextRequest) {
 		tags: name ? [name] : undefined,
 	});
 
-	return stream;
+	return NextResponse.json(
+		{ error: "This answer engine is no longer supported (since AI SDK v4.0)" },
+		{ status: 404 },
+	);
 }
 
 function nameAndIdFromCookie(userIdFromHeader?: string) {

@@ -12,7 +12,14 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json({ error: "Rate limited" }, { status: 429 });
 		}
 
-		return await handleAskRequest(requestData);
+		const { stream, data } = await handleAskRequest(requestData);
+
+		return NextResponse.json(
+			{
+				error: "This answer engine is no longer supported (since AI SDK v4.0)",
+			},
+			{ status: 404 },
+		);
 	} catch (e) {
 		return NextResponse.json(e, { status: 500 });
 	}

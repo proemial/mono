@@ -5,22 +5,14 @@ import {
 } from "@/app/constants";
 import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chain";
 import { context, model, question } from "@/app/prompts/chat";
-import { openaiOrganizations } from "@proemial/adapters/llm/prompts/openai-keys";
-import { env } from "@/env/server";
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { auth } from "@clerk/nextjs/server";
 import { findCollection } from "@proemial/data/repository/collection";
 import { savePostWithComment } from "@proemial/data/repository/post";
 import { prettySlug } from "@proemial/utils/pretty-slug";
-import { OpenAIStream, StreamData, StreamingTextResponse } from "ai";
+import { StreamData, streamText } from "ai";
 import { type NextRequest, NextResponse } from "next/server";
-import { Configuration, OpenAIApi } from "openai-edge";
-
-const config = new Configuration({
-	apiKey: env.OPENAI_API_KEY,
-	organization: openaiOrganizations.read,
-});
-const openai = new OpenAIApi(config);
+import { openai } from "@ai-sdk/openai";
 
 export const runtime = "edge";
 
@@ -51,21 +43,16 @@ export async function POST(req: NextRequest) {
 		else lastMessage.content = lastMessage.content.substring(2); // Remove the `!!`
 	}
 
-	// Ask OpenAI for a streaming completion given the prompt
-	const response = await openai.createChatCompletion({
-		model,
-		stream: true,
-		messages: moddedMessages,
-	});
 	const streamData = new StreamData();
 
-	// Convert the response into a friendly text-stream
-	const stream = OpenAIStream(response, {
-		onFinal: async (completion) => {
+	const result = streamText({
+		model: openai(model),
+		messages: moddedMessages,
+		onFinish: async (completion) => {
 			// Generate follow-ups
 			const followUps = await followUpQuestionChain().invoke({
 				question: postContent,
-				answer: completion,
+				answer: completion.text,
 			});
 			streamData.append({
 				type: "follow-up-questions-generated",
@@ -95,7 +82,7 @@ export async function POST(req: NextRequest) {
 						slug: prettySlug(postContent),
 					},
 					{
-						content: completion,
+						content: completion.text,
 						authorId: PAPER_BOT_USER_ID,
 						followUps: followUps
 							.split("?")
@@ -106,6 +93,6 @@ export async function POST(req: NextRequest) {
 			}
 		},
 	});
-	// Respond with the stream
-	return new StreamingTextResponse(stream, undefined, streamData);
+
+	return result.toDataStreamResponse({ data: streamData });
 }
