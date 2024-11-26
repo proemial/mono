@@ -1,7 +1,7 @@
 "use client";
 import logo from "./images/logo.svg";
 import Image from "next/image";
-import { ArrowLeft, XClose } from "@untitled-ui/icons-react";
+import { ArrowLeft, XClose, MessagePlusSquare } from "@untitled-ui/icons-react";
 import { useState, useRef, useEffect } from "react";
 import { Trackable } from "@/components/trackable";
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
@@ -225,6 +225,14 @@ function LogoAndName({ isApp }: { isApp: boolean }) {
 					trustworthy perspectives
 				</div>
 			)}
+			<div className="flex justify-end">
+				<a
+					href="/news/"
+					className="  text-[#f6f5e8] hover:text-[#d4d3c8] transition-colors"
+				>
+					<MessagePlusSquare className="size-6" />
+				</a>
+			</div>
 		</div>
 	);
 }

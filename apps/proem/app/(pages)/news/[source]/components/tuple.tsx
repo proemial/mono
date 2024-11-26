@@ -46,7 +46,7 @@ export function QaTuple({
 
 	return (
 		<div ref={qaRef} className="flex flex-col">
-			<div className=" bg-gradient-to-b to-[#e9ecec] from-[#e1e7ea] rounded-xl mb-0 mt-4">
+			<div className=" bg-gradient-to-b to-[#e9ecec] from-[#e1e7ea] rounded-xl">
 				<div className="flex flex-col flex-1">
 					<div className="flex flex-col gap-2 p-3 w-full">
 						{user && (
@@ -87,35 +87,16 @@ export function QaTuple({
 											<Image className="w-3 h-3" alt="Frame" src={logo} />
 										</div>
 										<div className="text-[#606567] font-normal text-sm leading-[14px] h-6 flex items-center ml-2 w-full gap-1">
-											<div className="flex-1">Explained by Proem</div>
+											<div className="flex-1">Proem answered</div>
 
 											<a
 												href="/"
 												onClick={(e) => e.preventDefault()}
 												className="inline-flex items-center px-2 py-1 rounded-full border border-[#99a1a3] text-[#606567] hover:text-white hover:bg-[#99a1a3] transition-colors"
-												title="Learn how our Science bot works"
+												title="Share"
 											>
 												<svg
-													className="mr-1 w-3 h-3"
-													viewBox="0 0 24 24"
-													fill="none"
-													stroke="currentColor"
-													strokeWidth="1"
-													strokeLinecap="round"
-													strokeLinejoin="round"
-												>
-													<path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
-												</svg>
-												<div className="text-[11px]">Like</div>
-											</a>
-											<a
-												href="/"
-												onClick={(e) => e.preventDefault()}
-												className="inline-flex items-center px-2 py-1 rounded-full border border-[#99a1a3] text-[#606567] hover:text-white hover:bg-[#99a1a3] transition-colors"
-												title="Share this answer"
-											>
-												<svg
-													className="mr-1 w-3 h-3"
+													className="mr-1 w-4 h-4"
 													viewBox="0 0 24 24"
 													fill="none"
 													stroke="currentColor"
@@ -127,7 +108,7 @@ export function QaTuple({
 													<polyline points="16 6 12 2 8 6" />
 													<line x1="12" y1="2" x2="12" y2="15" />
 												</svg>
-												<div className="text-[11px]">Share</div>
+												<div className="text-[12px]">Share</div>
 											</a>
 										</div>
 									</div>

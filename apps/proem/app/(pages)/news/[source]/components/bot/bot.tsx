@@ -135,13 +135,13 @@ export function Bot({ url, starters, backgroundPapers, activeColors }: Props) {
 				/>
 			</div>
 
-			<CommunityQuestions
+			{/* <CommunityQuestions
 				questions={starters}
 				isFromFeed={isFromFeed}
 				url={url}
 				papers={backgroundPapers}
 				activeColors={activeColors}
-			/>
+			/> */}
 		</>
 	);
 }

@@ -13,7 +13,7 @@ export function BotForm({
 	url: string;
 }) {
 	return (
-		<div className="items-center gap-1.5 py-0 flex w-full">
+		<div className="items-center gap-1.5 py-0 flex w-full mb-6">
 			<form onSubmit={handleSubmitWithInputCheck} className="flex w-full">
 				<div className="w-full bg-white px-3 rounded-xl mt-0.5 text-[15px] flex gap-2 items-center border border-gray-400">
 					<Trackable
@@ -24,7 +24,7 @@ export function BotForm({
 					>
 						<input
 							id="bot-input"
-							placeholder="Ask your own question..."
+							placeholder="Ask a follow-up question…"
 							value={input}
 							onChange={handleInputChange}
 							className="w-full h-full py-3 bg-transparent outline-none placeholder:text-[#999999]"

@@ -1,7 +1,7 @@
 export function BotHeader() {
 	return (
 		<div className="font-semibold text-[#0a161c] text-lg tracking-[0] leading-4 whitespace-nowrap px-3">
-			Keep Exploring
+			Suggested questions
 		</div>
 	);
 }
