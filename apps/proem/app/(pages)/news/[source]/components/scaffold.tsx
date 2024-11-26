@@ -136,7 +136,10 @@ export function Scaffold({
 
 				{data?.summarise?.questions && (
 					<Bot
-						starters={data?.summarise?.questions}
+						starters={data?.summarise?.questions.map((q) => [
+							q.question,
+							q.answer,
+						])}
 						url={url}
 						backgroundPapers={data?.papers?.value}
 						activeColors={{ foreground, background }}

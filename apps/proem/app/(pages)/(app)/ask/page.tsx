@@ -4,7 +4,7 @@ import { MoodSelector } from "./components/mood-selector";
 import { Suggestions } from "./components/suggestions";
 import { Metadata } from "next";
 import { getItems } from "../../news/cached-items";
-import { getThreeRandomStarters, STARTERS } from "./starters";
+import { STARTERS } from "./starters";
 
 export const metadata: Metadata = {
 	robots: {
@@ -55,7 +55,7 @@ const getStarters = async () => {
 	const questionIndex = Math.floor(Math.random() * noOfQuestionsPerItem);
 	const newsStarters = Array.from(uniqueRandomIndices).map((index) => {
 		const question =
-			newsItems[index]?.summarise?.questions?.[questionIndex]?.[0];
+			newsItems[index]?.summarise?.questions?.[questionIndex]?.question;
 		const randomFallback = fallbackStarters[
 			Math.floor(Math.random() * fallbackStarters.length)
 		] as string;

@@ -161,7 +161,7 @@ export type NewsAnnotatorSummariseInputStep = NewsAnnotatorSummariseStep & {
 };
 export type NewsAnnotatorSummariseStep = {
 	commentary?: string;
-	questions?: Array<[string, string]>;
+	questions?: { question: string; answer: string }[];
 	engTitle?: string;
 };
 

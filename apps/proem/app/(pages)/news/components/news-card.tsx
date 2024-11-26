@@ -151,7 +151,7 @@ export function NewsCard({
 									</div>
 
 									<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
-										{data.summarise?.questions?.at(randomIndex)?.[0]}
+										{data.summarise?.questions?.at(randomIndex)?.question}
 									</p>
 								</div>
 							</div>
@@ -179,7 +179,7 @@ export function NewsCard({
 
 										<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5 overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]">
 											{formatAnswerText(
-												data.summarise?.questions?.at(randomIndex)?.[1],
+												data.summarise?.questions?.at(randomIndex)?.answer,
 											)}
 										</p>
 									</div>

@@ -15,10 +15,10 @@ export function ReadOpenGraphCard({
 		[classNameAttr]: tailwindClasses,
 	});
 
-	const question = item.summarise?.questions?.at(0)?.at(0) as string;
+	const question = item.summarise?.questions?.at(0)?.question as string;
 	const [truncatedQuestion, questionIsTruncated] = sanitizeQuestion(question);
 
-	const answer = item.summarise?.questions?.at(0)?.at(1) as string;
+	const answer = item.summarise?.questions?.at(0)?.answer as string;
 	const [truncatedAnswer, answerIsTruncated] = sanitizeQuestion(answer);
 
 	return (
