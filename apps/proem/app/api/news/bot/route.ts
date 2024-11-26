@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 	};
 
 	if (!url) {
-		return new Response("Item not found", { status: 404 });
+		return new Response("News URL not found", { status: 404 });
 	}
 
 	return answerQuestion(url, messages);
@@ -28,15 +28,15 @@ export async function POST(req: Request) {
 
 async function answerQuestion(url: string, messages: Message[]) {
 	const item = await Redis.news.get(url);
+	if (!item) {
+		return new Response("News item not found", { status: 404 });
+	}
+
 	const streamingData = new StreamData();
 
 	const result = await streamText({
 		model: LlmAnswer.model(),
-		system: LlmAnswer.prompt(
-			item?.scrape?.title,
-			item?.scrape?.transcript,
-			item?.papers?.value,
-		),
+		system: LlmAnswer.prompt(item.scrape?.title, item.scrape?.transcript),
 		messages: convertToCoreMessages(messages),
 		tools: {
 			searchPapers: {
