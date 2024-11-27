@@ -1,7 +1,6 @@
 import { getSummaries } from "@proemial/adapters/llm/cache/summaries";
 import { QdrantPapers } from "@proemial/adapters/qdrant/papers";
 import { QdrantSearchHit } from "@proemial/adapters/qdrant/search/papers-search";
-import { defaultVectorSpace } from "@proemial/adapters/qdrant/vector-spaces";
 import { Redis } from "@proemial/adapters/redis";
 import { findCollectionBySlugs } from "@proemial/data/repository/collection";
 import dayjs from "dayjs";
@@ -12,7 +11,6 @@ export async function rssFeed(url: string, slug0: string, slug1: string) {
 	const baseUrl = await getBaseUrl(url, slug0, slug1);
 
 	const response = await QdrantPapers.search(
-		defaultVectorSpace.collection,
 		[space?.vectors.like, space?.vectors.unlike].filter(
 			(v) => !!v,
 		) as number[][],

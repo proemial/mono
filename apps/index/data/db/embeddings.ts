@@ -109,13 +109,13 @@ async function generateOpenAiEmbedding(
 ): Promise<number[][]> {
 	const begin = Time.now();
 	try {
-		return (
-			await openai.embeddings.create({
-				model: vectorSpace.model,
-				dimensions: vectorSpace.dimensions,
-				input: text.filter((t) => t?.length),
-			})
-		).data.map((d) => d.embedding);
+		const response = await openai.embeddings.create({
+			model: vectorSpace.model,
+			dimensions: vectorSpace.dimensions,
+			input: text.filter((t) => t?.length),
+		});
+
+		return response.data.map((d) => d.embedding);
 	} finally {
 		Time.log(begin, `generateOpenAiEmbedding(${text?.length})`);
 	}

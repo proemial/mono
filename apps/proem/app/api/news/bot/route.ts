@@ -34,7 +34,7 @@ async function answerQuestion(url: string, messages: Message[]) {
 
 	const streamingData = new StreamData();
 
-	const result = streamText({
+	const result = await streamText({
 		model: LlmAnswer.model(),
 		system: LlmAnswer.prompt(item.scrape?.title, item.scrape?.transcript),
 		messages: convertToCoreMessages(messages),

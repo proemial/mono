@@ -5,14 +5,14 @@
 	"types": "./index.ts",
 	"license": "MIT",
 	"dependencies": {
-		"@ai-sdk/anthropic": "^0.0.41",
-		"@ai-sdk/openai": "^0.0.46",
+		"@ai-sdk/anthropic": "^1.0.2",
+		"@ai-sdk/openai": "^1.0.5",
 		"@proemial/repositories": "workspace:*",
 		"@proemial/utils": "workspace:*",
 		"@upstash/redis": "^1.34.0",
 		"@qdrant/js-client-rest": "^1.11.0",
 		"@mistralai/mistralai": "^1.1.0",
-		"ai": "3.3.7",
+		"ai": "^3.4.33",
 		"openai": "^4.65.0",
 		"dayjs": "^1.11.12"
 	},

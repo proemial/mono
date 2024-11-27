@@ -1,7 +1,6 @@
 import PaperCard, { FeedPaper } from "./components/card";
 import { getSummaries as getCacheSummaries } from "@proemial/adapters/llm/cache/summaries";
 import { QdrantPapers } from "@proemial/adapters/qdrant/papers";
-import { defaultVectorSpace } from "@proemial/adapters/qdrant/vector-spaces";
 import { Redis } from "@proemial/adapters/redis";
 import { OpenAlexPaperWithAbstract } from "@proemial/repositories/oa/models/oa-paper";
 import { findCollectionBySlugs } from "@proemial/data/repository/collection";
@@ -107,7 +106,6 @@ async function findPapers(
 ) {
 	const space = await Redis.spaces.get([slug0, slug1]);
 	const result = await QdrantPapers.search(
-		defaultVectorSpace.collection,
 		[space?.vectors.like, space?.vectors.unlike].filter(
 			(v) => !!v,
 		) as number[][],

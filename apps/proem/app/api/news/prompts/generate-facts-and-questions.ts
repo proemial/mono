@@ -1,6 +1,6 @@
 import { generateObject } from "ai";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
-import LlmModels from "../../ai/models";
+import LlmModels from "@proemial/adapters/llm/models";
 import { z } from "zod";
 
 const summarisationPrompt = (
@@ -55,7 +55,7 @@ export const generateFactsAndQuestions = async (
 ) => {
 	try {
 		const { object, usage } = await generateObject({
-			model: LlmModels.news.summarise(),
+			model: LlmModels.news.summariseBackground(),
 			prompt: summarisationPrompt(title, transcript, query, papers),
 			output: "object",
 			schema: z.object({

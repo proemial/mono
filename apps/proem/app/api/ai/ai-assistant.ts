@@ -1,5 +1,5 @@
 import { CoreTool, LanguageModel } from "ai";
-import LlmModels from "./models";
+import LlmModels from "@proemial/adapters/llm/models";
 
 const appContexts = ["paper", "global", "space"] as const;
 export type UserContext = (typeof appContexts)[number];

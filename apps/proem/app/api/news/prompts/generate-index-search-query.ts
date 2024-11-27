@@ -1,5 +1,5 @@
 import { generateText } from "ai";
-import LlmModels from "../../ai/models";
+import LlmModels from "@proemial/adapters/llm/models";
 
 export const generateIndexSearchQuery = async (
 	transcript: string,

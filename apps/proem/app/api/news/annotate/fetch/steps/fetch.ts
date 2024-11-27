@@ -18,6 +18,8 @@ type Feature = {
 
 export async function fetchPapers(url: string, query: string) {
 	try {
+		// const embeddings = await generateEmbedding(LlmModels.news.embeddings(), [query]);
+		// const { papers } = await QdrantPapers.search(embeddings);
 		const result = await fetch("https://index.proem.ai/api/search", {
 			method: "POST",
 			body: JSON.stringify({

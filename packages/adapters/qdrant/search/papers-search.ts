@@ -1,29 +1,30 @@
 import { OpenAlexPaperWithAbstract } from "@proemial/repositories/oa/models/oa-paper";
-import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-topics-compact";
 import { Time } from "@proemial/utils/time";
 import { generateEmbedding } from "../../llm/embeddings";
 
 import {
 	VectorSpace,
 	VectorSpaceName,
+	defaultVectorSpace,
 	vectorSpace as getVectorSpace,
 } from "../vector-spaces";
 import { qdrant } from "../papers";
 import dayjs from "dayjs";
+import LlmModels from "../../llm/models";
 
 export async function qdrantPapersSearch(
-	name: VectorSpaceName,
 	queries: string[] | number[][],
 	period?: number,
 	quantization?: "binary" | undefined,
 	limit = 10,
+	space: VectorSpaceName = defaultVectorSpace.collection,
 	// offset?: string,
 ): Promise<SearchResult> {
 	if (queries.length === 0) {
 		return {};
 	}
 
-	const vectorSpace = getVectorSpace(name) as VectorSpace;
+	const vectorSpace = getVectorSpace(space) as VectorSpace;
 
 	const metrics = {
 		embeddings: -1,
@@ -33,7 +34,11 @@ export async function qdrantPapersSearch(
 	let begin = Time.now();
 	const embeddings =
 		Array.isArray(queries) && typeof queries[0] === "string"
-			? await generateEmbedding(queries as string[], vectorSpace)
+			? await generateEmbedding(
+					LlmModels.index.embeddings(),
+					queries as string[],
+					vectorSpace,
+				)
 			: (queries as number[][]);
 	metrics.embeddings = Time.elapsed(begin);
 

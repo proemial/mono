@@ -16,11 +16,12 @@ import {
 	systemPrompt,
 } from "./prompts";
 import { Time } from "@proemial/utils/time";
-import { QdrantPaper } from "../../news/annotate/fetch/steps/fetch";
+import { QdrantPapers } from "@proemial/adapters/qdrant/papers";
 import { AnswerEngineStreamData } from "../answer-engine/answer-engine";
 import { prettySlug } from "@proemial/utils/pretty-slug";
 import { answers } from "@proemial/data/repository/answer";
-import LlmModels from "../../ai/models";
+import LlmModels from "@proemial/adapters/llm/models";
+import { generateEmbedding } from "@proemial/adapters/llm/embeddings";
 
 export const maxDuration = 30;
 
@@ -79,7 +80,7 @@ async function streamAnswer(
 		publicationDate: string;
 	}> = [];
 
-	const result = streamText({
+	const result = await streamText({
 		model: LlmModels.ask.answer(),
 		system: systemPrompt,
 		messages: coreMessages,
@@ -179,23 +180,16 @@ const getPapersFromQdrant = async (query: string) => {
 	const begin = Time.now();
 
 	try {
-		const papersResult = await fetch("https://index.proem.ai/api/search", {
-			method: "POST",
-			body: JSON.stringify({
-				query: query,
-				from: "2024-01-01",
-				extended: true,
-			}),
-		});
+		const embeddings = await generateEmbedding(LlmModels.ask.embeddings(), [
+			query,
+		]);
+		const result = await QdrantPapers.search(embeddings);
 
-		const { papers } = (await papersResult.json()) as { papers: QdrantPaper[] };
-		console.log("Papers", papers.length);
-
-		return papers.map((paper) => ({
-			link: `oa/${paper.id.split("/").at(-1)}`,
-			title: paper.title,
-			abstract: paper.abstract,
-			publicationDate: paper.published,
+		return result.papers?.map((paper) => ({
+			link: `oa/${paper.paper.id.split("/").at(-1)}`,
+			title: paper.paper.title,
+			abstract: paper.paper.abstract ?? "",
+			publicationDate: paper.paper.publication_date ?? "",
 		}));
 	} finally {
 		Time.log(begin, `[qdrantQuery] ${query}`);
