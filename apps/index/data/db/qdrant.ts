@@ -1,13 +1,11 @@
 import { Time } from "@proemial/utils/time";
 import { QdrantClient } from "@qdrant/js-client-rest";
-import { v5 as uuid } from "uuid";
 import { QdrantPaper } from "../../inngest/helpers/qdrant.model";
 import { VectorSpace } from "./vector-spaces";
-
-const namespace = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
+import { uuid5 } from "@proemial/utils/uuid";
 
 export function qdrantId(id: string) {
-	return uuid(id, namespace);
+	return uuid5(id, "qdrant");
 }
 
 type Callback = (count: number, elapsed: number) => Promise<void>;

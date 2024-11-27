@@ -8,37 +8,40 @@ export type EmbeddingsModel = OpenAI.Embeddings;
 const LlmModels = {
 	ask: {
 		embeddings: () => openaiEmbeddings("ask", "embeddings") as EmbeddingsModel,
-		rephrase: (id?: string) => getModel("ask", "rephrase", id) as LlmModel,
-		answer: (id?: string) => getModel("ask", "answer", id) as LlmModel,
-		followups: (id?: string) => getModel("ask", "followups", id) as LlmModel,
-		summarisePapers: (id?: string) =>
-			getModel("ask", "summarisePapers", id) as LlmModel,
+		rephrase: (traceId?: string) =>
+			getModel("ask", "rephrase", traceId) as LlmModel,
+		answer: (traceId?: string) =>
+			getModel("ask", "answer", traceId) as LlmModel,
+		followups: (traceId?: string) =>
+			getModel("ask", "followups", traceId) as LlmModel,
 	},
 	index: {
 		embeddings: () =>
 			openaiEmbeddings("index", "embeddings") as EmbeddingsModel,
 	},
 	news: {
-		embeddings: () => openaiEmbeddings("news", "embeddings") as EmbeddingsModel,
-		rephrase: (id?: string) => getModel("news", "rephrase", id) as LlmModel,
-		answer: (id?: string) => getModel("news", "answer", id) as LlmModel,
-		followups: (id?: string) => getModel("news", "followups", id) as LlmModel,
-		summarisePapers: (id?: string) =>
-			getModel("news", "summarisePapers", id) as LlmModel,
-		summariseBackground: (id?: string) =>
-			getModel("news", "summariseBackground", id) as LlmModel,
+		answer: (traceId?: string) =>
+			getModel("news", "answer", traceId) as LlmModel,
+		followups: (traceId?: string) =>
+			getModel("news", "followups", traceId) as LlmModel,
+
+		// Annotation
+		query: (traceId?: string) => getModel("news", "query", traceId) as LlmModel,
+		background: (traceId?: string) =>
+			getModel("news", "background", traceId) as LlmModel,
 	},
 	assistant: {
-		answer: (id?: string) => getModel("spaces", "answer", id) as LlmModel,
+		answer: (traceId?: string) =>
+			getModel("spaces", "answer", traceId) as LlmModel,
 	},
 };
 
 function getModel(
 	project: keyof typeof openaiConfig.projects,
 	operation: string,
-	id?: string,
+	traceId?: string,
 ) {
-	return openaiChat(project, operation, "gpt-4o", id) as LlmModel;
+	return openaiChat(project, operation, "gpt-4o", traceId) as LlmModel;
 }
 
 export const openaiConfig = {
@@ -56,13 +59,13 @@ const openaiChat = (
 	project: keyof typeof openaiConfig.projects,
 	operation: string,
 	model: string,
-	id?: string,
+	traceId?: string,
 ) => {
 	console.log(
 		`[llm][openai][chat][${project}]${operation ? `[${operation}]` : ""} ${model}`,
 	);
 
-	const heliconeHeaders = (id?: string): Record<string, string> => {
+	const heliconeHeaders = (traceId?: string): Record<string, string> => {
 		const headers = {
 			"Helicone-Auth": `Bearer ${process.env.HELICONE_API_KEY}`,
 			"Helicone-Property-Project": project,
@@ -70,11 +73,11 @@ const openaiChat = (
 			"Helicone-Property-Environment": process.env.NODE_ENV || "production",
 		};
 
-		return id && ["ask", "news"].includes(project)
+		return traceId && ["ask", "news"].includes(project)
 			? {
 					...headers,
-					"Helicone-Session-Id": id,
-					"Helicone-Session-Name": `${project}: answer`,
+					"Helicone-Session-Id": traceId,
+					"Helicone-Session-Name": `${project}: ${["background", "query"].includes(operation) ? "annotation" : "answer"}`,
 					"Helicone-Session-Path": `${project}/${operation}`,
 				}
 			: headers;
@@ -82,7 +85,7 @@ const openaiChat = (
 
 	const provider = createOpenAI({
 		baseURL: "https://oai.helicone.ai/v1",
-		headers: heliconeHeaders(id),
+		headers: heliconeHeaders(traceId),
 		// Passed on to OpenAI by Helicone
 		apiKey: process.env.OPENAI_API_KEY || "",
 		organization: openaiConfig.org,

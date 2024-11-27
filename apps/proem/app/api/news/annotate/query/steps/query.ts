@@ -1,3 +1,4 @@
+import { uuid5 } from "@proemial/utils/uuid";
 import { generateIndexSearchQuery } from "../../../prompts/generate-index-search-query";
 
 export async function generateQuery(
@@ -6,7 +7,11 @@ export async function generateQuery(
 	title: string,
 ) {
 	try {
-		const indexQuery = await generateIndexSearchQuery(transcript, title);
+		const indexQuery = await generateIndexSearchQuery(
+			transcript,
+			title,
+			uuid5(url, "helicone"),
+		);
 
 		const parsedQuery = indexQuery
 			.split("<summary>")[1]

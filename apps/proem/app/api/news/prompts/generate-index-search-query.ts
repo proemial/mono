@@ -4,10 +4,11 @@ import LlmModels from "@proemial/adapters/llm/models";
 export const generateIndexSearchQuery = async (
 	transcript: string,
 	title: string,
+	traceId?: string,
 ): Promise<string> => {
 	try {
 		const { text, usage } = await generateText({
-			model: LlmModels.news.rephrase(),
+			model: LlmModels.news.query(traceId),
 			messages: [
 				{
 					role: "user",

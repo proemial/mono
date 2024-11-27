@@ -52,10 +52,11 @@ export const generateFactsAndQuestions = async (
 	title: string,
 	query: string,
 	papers: ReferencedPaper[],
+	traceId?: string,
 ) => {
 	try {
 		const { object, usage } = await generateObject({
-			model: LlmModels.news.summariseBackground(),
+			model: LlmModels.news.background(traceId),
 			prompt: summarisationPrompt(title, transcript, query, papers),
 			output: "object",
 			schema: z.object({
