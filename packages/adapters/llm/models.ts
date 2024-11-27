@@ -104,7 +104,10 @@ const openaiEmbeddings = (
 		`[llm][openai][embeddings][${project}]${operation ? `[${operation}]` : ""}`,
 	);
 	const provider = new OpenAI({
-		...heliconeConfig(project, operation),
+		// Disable Helicone for embeddings, as it is so cheap
+		// ...heliconeConfig(project, operation),
+		organization: openaiConfig.org,
+		project: openaiConfig.projects[project],
 	});
 
 	return provider.embeddings;
