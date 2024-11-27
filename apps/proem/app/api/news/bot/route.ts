@@ -10,6 +10,7 @@ import { z } from "zod";
 import { fetchPapers } from "../annotate/fetch/steps/fetch";
 import { LlmAnswer, LlmFollowups } from "../prompts/answers-and-followups";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
+import { uuid } from "@proemial/utils/uid";
 
 export const maxDuration = 300;
 
@@ -34,8 +35,10 @@ async function answerQuestion(url: string, messages: Message[]) {
 
 	const streamingData = new StreamData();
 
+	const id = uuid();
+
 	const result = await streamText({
-		model: LlmAnswer.model(),
+		model: LlmAnswer.model(id),
 		system: LlmAnswer.prompt(item.scrape?.title, item.scrape?.transcript),
 		messages: convertToCoreMessages(messages),
 		tools: {
@@ -96,6 +99,7 @@ async function answerQuestion(url: string, messages: Message[]) {
 					papers: item?.papers?.value,
 				},
 				messages,
+				id,
 			);
 
 			if (followups) {
@@ -131,6 +135,7 @@ async function generateFollowups(
 		papers?: { abstract: string }[];
 	},
 	messages: Message[],
+	id: string,
 ) {
 	if (!question || !answer) return;
 
@@ -138,7 +143,7 @@ async function generateFollowups(
 	const toolLessMessages = messages.filter((m) => !m.toolInvocations);
 
 	const { text } = await generateText({
-		model: LlmFollowups.model(),
+		model: LlmFollowups.model(id),
 		system: LlmFollowups.prompt(question, answer, context),
 		messages: convertToCoreMessages(toolLessMessages),
 	});

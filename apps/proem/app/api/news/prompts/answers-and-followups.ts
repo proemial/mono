@@ -2,12 +2,12 @@ import LlmModels, { LlmModel } from "@proemial/adapters/llm/models";
 
 export const LlmAnswer = {
 	prompt: answerPrompt,
-	model: () => LlmModels.news.answer() as LlmModel,
+	model: (id: string) => LlmModels.news.answer(id) as LlmModel,
 };
 
 export const LlmFollowups = {
 	prompt: followupsPrompt,
-	model: () => LlmModels.news.followups() as LlmModel,
+	model: (id: string) => LlmModels.news.followups(id) as LlmModel,
 };
 
 function answerPrompt(title?: string, transcript?: string) {

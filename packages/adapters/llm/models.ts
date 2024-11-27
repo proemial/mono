@@ -1,31 +1,18 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import OpenAI from "openai";
-// import { anthropic } from "@ai-sdk/anthropic";
-// import { google } from "@ai-sdk/google";
-// import { mistral } from "@ai-sdk/mistral";
-// import { galadrielProvider } from "./galadriel";
 
-export type LlmModel =
-	// | ReturnType<typeof google>
-	// | ReturnType<typeof anthropic>
-	// | ReturnType<typeof mistral>
-	ReturnType<typeof openaiChat>;
+export type LlmModel = ReturnType<typeof openaiChat>;
 
 export type EmbeddingsModel = OpenAI.Embeddings;
-
-// const flash = google("gemini-1.5-flash");;
-// const sonnet = anthropic("claude-3-5-sonnet-20240620");
-// const haiku = anthropic("claude-3-5-haiku-latest");
-// const mist = mistral("mistral-large-latest");
-// const galadrielLlama3_1 = galadrielProvider("llama3.1:405b");
 
 const LlmModels = {
 	ask: {
 		embeddings: () => openaiEmbeddings("ask", "embeddings") as EmbeddingsModel,
-		rephrase: () => getChatModel("ask", "rephrase") as LlmModel,
-		answer: () => getChatModel("ask", "answer") as LlmModel,
-		followups: () => getChatModel("ask", "followups") as LlmModel,
-		summarisePapers: () => getChatModel("ask", "summarisePapers") as LlmModel,
+		rephrase: (id?: string) => getModel("ask", "rephrase", id) as LlmModel,
+		answer: (id?: string) => getModel("ask", "answer", id) as LlmModel,
+		followups: (id?: string) => getModel("ask", "followups", id) as LlmModel,
+		summarisePapers: (id?: string) =>
+			getModel("ask", "summarisePapers", id) as LlmModel,
 	},
 	index: {
 		embeddings: () =>
@@ -33,23 +20,25 @@ const LlmModels = {
 	},
 	news: {
 		embeddings: () => openaiEmbeddings("news", "embeddings") as EmbeddingsModel,
-		rephrase: () => getChatModel("news", "rephrase") as LlmModel,
-		answer: () => getChatModel("news", "answer") as LlmModel,
-		followups: () => getChatModel("news", "followups") as LlmModel,
-		summarisePapers: () => getChatModel("news", "summarisePapers") as LlmModel,
-		summariseBackground: () =>
-			getChatModel("news", "summariseBackground") as LlmModel,
+		rephrase: (id?: string) => getModel("news", "rephrase", id) as LlmModel,
+		answer: (id?: string) => getModel("news", "answer", id) as LlmModel,
+		followups: (id?: string) => getModel("news", "followups", id) as LlmModel,
+		summarisePapers: (id?: string) =>
+			getModel("news", "summarisePapers", id) as LlmModel,
+		summariseBackground: (id?: string) =>
+			getModel("news", "summariseBackground", id) as LlmModel,
 	},
 	assistant: {
-		answer: () => getChatModel("spaces", "answer") as LlmModel,
+		answer: (id?: string) => getModel("spaces", "answer", id) as LlmModel,
 	},
 };
 
-function getChatModel(
+function getModel(
 	project: keyof typeof openaiConfig.projects,
 	operation: string,
+	id?: string,
 ) {
-	return openaiChat(project, operation, "gpt-4o") as LlmModel;
+	return openaiChat(project, operation, "gpt-4o", id) as LlmModel;
 }
 
 export const openaiConfig = {
@@ -67,20 +56,35 @@ const openaiChat = (
 	project: keyof typeof openaiConfig.projects,
 	operation: string,
 	model: string,
+	id?: string,
 ) => {
 	console.log(
 		`[llm][openai][chat][${project}]${operation ? `[${operation}]` : ""} ${model}`,
 	);
-	const provider = createOpenAI({
-		baseURL: "https://oai.helicone.ai/v1",
-		headers: {
+
+	const heliconeHeaders = (id?: string): Record<string, string> => {
+		const headers = {
 			"Helicone-Auth": `Bearer ${process.env.HELICONE_API_KEY}`,
 			"Helicone-Property-Project": project,
 			"Helicone-Property-Operation": operation,
 			"Helicone-Property-Environment": process.env.NODE_ENV || "production",
-		},
+		};
+
+		return id && ["ask", "news"].includes(project)
+			? {
+					...headers,
+					"Helicone-Session-Id": id,
+					"Helicone-Session-Name": `${project}: answer`,
+					"Helicone-Session-Path": `${project}/${operation}`,
+				}
+			: headers;
+	};
+
+	const provider = createOpenAI({
+		baseURL: "https://oai.helicone.ai/v1",
+		headers: heliconeHeaders(id),
 		// Passed on to OpenAI by Helicone
-		apiKey: process.env.OPENAI_API_KEY,
+		apiKey: process.env.OPENAI_API_KEY || "",
 		organization: openaiConfig.org,
 		project: openaiConfig.projects[project],
 		compatibility: "strict", // Required for usage to be streamed

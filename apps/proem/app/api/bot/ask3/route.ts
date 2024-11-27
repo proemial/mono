@@ -22,6 +22,7 @@ import { prettySlug } from "@proemial/utils/pretty-slug";
 import { answers } from "@proemial/data/repository/answer";
 import LlmModels from "@proemial/adapters/llm/models";
 import { generateEmbedding } from "@proemial/adapters/llm/embeddings";
+import { uuid } from "@proemial/utils/uid";
 
 export const maxDuration = 30;
 
@@ -80,8 +81,10 @@ async function streamAnswer(
 		publicationDate: string;
 	}> = [];
 
+	const id = uuid();
+
 	const result = await streamText({
-		model: LlmModels.ask.answer(),
+		model: LlmModels.ask.answer(id),
 		system: systemPrompt,
 		messages: coreMessages,
 		maxSteps: 5,
@@ -93,7 +96,7 @@ async function streamAnswer(
 				}),
 				execute: async ({ question }) => {
 					const { text: rephrasedQuestion } = await generateText({
-						model: LlmModels.ask.rephrase(),
+						model: LlmModels.ask.rephrase(id),
 						system: rephraseQuestionPrompt(question),
 						messages: coreMessages,
 					});
@@ -121,7 +124,7 @@ async function streamAnswer(
 		onFinish: async ({ text: answer }) => {
 			console.log("answer", answer);
 			const { object: followUpQuestions } = await generateObject({
-				model: LlmModels.ask.followups(),
+				model: LlmModels.ask.followups(id),
 				output: "array",
 				schema: z.object({
 					question: z
