@@ -63,23 +63,6 @@ export const openaiConfig = {
 	},
 };
 
-const heliconeConfig = (
-	project: keyof typeof openaiConfig.projects,
-	operation: string,
-) => ({
-	baseURL: "https://oai.helicone.ai/v1",
-	defaultHeaders: {
-		"Helicone-Auth": `Bearer ${process.env.HELICONE_API_KEY}`,
-		"Helicone-Property-Project": project,
-		"Helicone-Property-Operation": operation,
-		"Helicone-Property-Environment": process.env.NODE_ENV || "production",
-	},
-	// Passed on to OpenAI by Helicone
-	apiKey: process.env.OPENAI_API_KEY,
-	organization: openaiConfig.org,
-	project: openaiConfig.projects[project],
-});
-
 const openaiChat = (
 	project: keyof typeof openaiConfig.projects,
 	operation: string,
@@ -89,7 +72,17 @@ const openaiChat = (
 		`[llm][openai][chat][${project}]${operation ? `[${operation}]` : ""} ${model}`,
 	);
 	const provider = createOpenAI({
-		...heliconeConfig(project, operation),
+		baseURL: "https://oai.helicone.ai/v1",
+		headers: {
+			"Helicone-Auth": `Bearer ${process.env.HELICONE_API_KEY}`,
+			"Helicone-Property-Project": project,
+			"Helicone-Property-Operation": operation,
+			"Helicone-Property-Environment": process.env.NODE_ENV || "production",
+		},
+		// Passed on to OpenAI by Helicone
+		apiKey: process.env.OPENAI_API_KEY,
+		organization: openaiConfig.org,
+		project: openaiConfig.projects[project],
 		compatibility: "strict", // Required for usage to be streamed
 	});
 
@@ -104,8 +97,7 @@ const openaiEmbeddings = (
 		`[llm][openai][embeddings][${project}]${operation ? `[${operation}]` : ""}`,
 	);
 	const provider = new OpenAI({
-		// Disable Helicone for embeddings, as it is so cheap
-		// ...heliconeConfig(project, operation),
+		// No Helicone for embeddings, as it is cheap and becomes noisy
 		organization: openaiConfig.org,
 		project: openaiConfig.projects[project],
 	});
