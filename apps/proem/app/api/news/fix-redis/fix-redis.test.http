@@ -1,0 +1,2 @@
+GET http://localhost:4242/api/news/fix-redis
+Content-Type: application/json
