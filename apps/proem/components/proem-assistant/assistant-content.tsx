@@ -9,6 +9,7 @@ import { useUser } from "@clerk/nextjs";
 import { Comment, Post } from "@proemial/data/neon/schema";
 import { Button, DrawerClose, DrawerContent } from "@proemial/shadcn-ui";
 import {
+	Dialog,
 	DialogDescription,
 	DialogTitle,
 } from "@proemial/shadcn-ui/components/ui/dialog";
@@ -169,8 +170,10 @@ export const AssistantContent = ({ spaceId, paperId, data }: Props) => {
 					</Button>
 				</DrawerClose>
 			</div>
-			<DialogTitle className="hidden" />
-			<DialogDescription className="hidden" />
+			<Dialog>
+				<DialogTitle className="hidden" />
+				<DialogDescription className="hidden" />
+			</Dialog>
 			<div
 				className="flex flex-col justify-between h-[calc(100%-24px)]"
 				ref={contentRef}
