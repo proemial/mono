@@ -93,6 +93,7 @@ export function heliconeHeaders(
 		"Helicone-Property-Project": properties.source,
 		"Helicone-Property-Operation": properties.operation,
 		"Helicone-Property-Environment": process.env.NODE_ENV || "production",
+		"Helicone-Cache-Enabled": "true",
 	} as Record<string, string>;
 
 	if (id) headers["Helicone-User-Id"] = id as string;
