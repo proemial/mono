@@ -10,6 +10,7 @@ import { followUpQuestionChain } from "@/app/llm/chains/follow-up-questions-chai
 import { searchToolConfig } from "@/app/prompts/ask_agent";
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { auth } from "@clerk/nextjs/server";
+import { logBotBegin } from "@proemial/adapters/analytics/helicone";
 import { findCollection } from "@proemial/data/repository/collection";
 import { savePostWithComment } from "@proemial/data/repository/post";
 import { prettySlug } from "@proemial/utils/pretty-slug";
@@ -49,7 +50,9 @@ export async function POST(req: NextRequest) {
 	console.log({ currentAssistant });
 	const question = messages.findLast(
 		(message: Message) => message.role === "user",
-	)?.content!;
+	)?.content as string;
+
+	await logBotBegin("spaces", question, traceId);
 
 	const data = new StreamData() as AnswerEngineStreamData;
 	const result = streamText({

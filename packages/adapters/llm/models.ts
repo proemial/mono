@@ -1,3 +1,4 @@
+import { heliconeHeaders } from "../analytics/helicone";
 import { createOpenAI } from "@ai-sdk/openai";
 import OpenAI from "openai";
 
@@ -80,31 +81,19 @@ const openaiChat = (
 		`[llm][openai][chat][${source}]${operation ? `[${operation}]` : ""} ${model}`,
 	);
 
-	const heliconeHeaders = (traceId?: string): Record<string, string> => {
-		const headers = {
-			"Helicone-Auth": `Bearer ${process.env.HELICONE_API_KEY}`,
-			"Helicone-Property-Project": source,
-			"Helicone-Property-Operation": operation,
-			"Helicone-Property-Environment": process.env.NODE_ENV || "production",
-		};
-
-		return traceId
-			? {
-					...headers,
-					"Helicone-Session-Id": traceId,
-					"Helicone-Session-Name": `${source}: ${["background", "query"].includes(operation) ? "annotation" : "answer"}`,
-					"Helicone-Session-Path": `${source}/${operation}`,
-				}
-			: headers;
-	};
-
 	const provider = createOpenAI({
 		baseURL: "https://oai.helicone.ai/v1",
-		headers: heliconeHeaders(traceId),
+		headers: heliconeHeaders({
+			traceId,
+			source,
+			operation,
+			sessionName: traceId
+				? `${source}: ${["background", "query"].includes(operation) ? "annotation" : "answer"}`
+				: undefined,
+		}),
 		// Passed on to OpenAI by Helicone
 		apiKey: process.env.OPENAI_API_KEY || "",
 		organization: llmConfig.org,
-		project: llmConfig.sources[source],
 		compatibility: "strict", // Required for usage to be streamed
 	});
 

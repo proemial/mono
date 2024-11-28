@@ -23,6 +23,7 @@ import { answers } from "@proemial/data/repository/answer";
 import LlmModels from "@proemial/adapters/llm/models";
 import { generateEmbedding } from "@proemial/adapters/llm/embeddings";
 import { uuid } from "@proemial/utils/uid";
+import { logBotBegin } from "@proemial/adapters/analytics/helicone";
 
 export const maxDuration = 30;
 
@@ -82,6 +83,8 @@ async function streamAnswer(
 	}> = [];
 
 	const traceId = uuid();
+
+	await logBotBegin("ask", userQuestion.content, traceId);
 
 	const result = await streamText({
 		model: LlmModels.ask.answer(traceId),

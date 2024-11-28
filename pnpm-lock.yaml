@@ -630,6 +630,9 @@ importers:
       '@ai-sdk/openai':
         specifier: ^1.0.5
         version: 1.0.5(zod@3.23.8)
+      '@helicone/helpers':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@mistralai/mistralai':
         specifier: ^1.1.0
         version: 1.1.0(zod@3.23.8)
@@ -2485,6 +2488,10 @@ packages:
     transitivePeerDependencies:
       - encoding
       - supports-color
+    dev: false
+
+  /@helicone/helpers@1.0.0:
+    resolution: {integrity: sha512-YZDGIsOe19+tADpM4ggOPsS3RmapjM8BHfaFBcpfOsNtedU/YGUmqK03wtVHjPZu0PHE9QHR/bXhiVlmTPCtvQ==}
     dev: false
 
   /@highlight-run/cloudflare@2.1.8(@opentelemetry/api@1.9.0):

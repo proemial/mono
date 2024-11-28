@@ -11,6 +11,7 @@ import { fetchPapers } from "../annotate/fetch/steps/fetch";
 import { LlmAnswer, LlmFollowups } from "../prompts/answers-and-followups";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import { uuid } from "@proemial/utils/uid";
+import { logBotBegin } from "@proemial/adapters/analytics/helicone";
 
 export const maxDuration = 300;
 
@@ -36,6 +37,11 @@ async function answerQuestion(url: string, messages: Message[]) {
 	const streamingData = new StreamData();
 
 	const traceId = uuid();
+
+	const question = messages.findLast(
+		(message: Message) => message.role === "user",
+	)?.content as string;
+	await logBotBegin("news", question, traceId);
 
 	const result = await streamText({
 		model: LlmAnswer.model(traceId),
