@@ -7,11 +7,14 @@ import {
 	streamText,
 } from "ai";
 import { z } from "zod";
-import { fetchPapers } from "../annotate/fetch/steps/fetch";
+import { fetchPapers, QdrantPaper } from "../annotate/fetch/steps/fetch";
 import { LlmAnswer, LlmFollowups } from "../prompts/answers-and-followups";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import { uuid } from "@proemial/utils/uid";
-import { logBotBegin } from "@proemial/adapters/analytics/helicone";
+import {
+	logBotBegin,
+	logRetrieval,
+} from "@proemial/adapters/analytics/helicone";
 
 export const maxDuration = 300;
 
@@ -43,6 +46,8 @@ async function answerQuestion(url: string, messages: Message[]) {
 	)?.content as string;
 	await logBotBegin("news", question, traceId);
 
+	type RetrievalResult = Array<QdrantPaper>;
+
 	const result = await streamText({
 		model: LlmAnswer.model(traceId),
 		system: LlmAnswer.prompt(item.scrape?.title, item.scrape?.transcript),
@@ -60,9 +65,14 @@ async function answerQuestion(url: string, messages: Message[]) {
 						value: JSON.stringify({ question }),
 					});
 
-					console.log("[searchPapers]", query);
-					const papers = await fetchPapers(url, query);
-					console.log("[searchPapers] result", papers.length);
+					const papers = (await logRetrieval(
+						"news",
+						query,
+						async <RetrievalResult>() => {
+							return (await fetchPapers(url, query)) as RetrievalResult;
+						},
+						traceId,
+					)) as RetrievalResult;
 
 					const mapped = papers.map(
 						(paper) =>

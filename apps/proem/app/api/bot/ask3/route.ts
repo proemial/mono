@@ -23,7 +23,10 @@ import { answers } from "@proemial/data/repository/answer";
 import LlmModels from "@proemial/adapters/llm/models";
 import { generateEmbedding } from "@proemial/adapters/llm/embeddings";
 import { uuid } from "@proemial/utils/uid";
-import { logBotBegin } from "@proemial/adapters/analytics/helicone";
+import {
+	logBotBegin,
+	logRetrieval,
+} from "@proemial/adapters/analytics/helicone";
 
 export const maxDuration = 30;
 
@@ -86,6 +89,12 @@ async function streamAnswer(
 
 	await logBotBegin("ask", userQuestion.content, traceId);
 
+	type RetrievalResult = Array<{
+		link: string;
+		title: string;
+		abstract: string;
+		publicationDate: string;
+	}>;
 	const result = await streamText({
 		model: LlmModels.ask.answer(traceId),
 		system: systemPrompt,
@@ -103,8 +112,17 @@ async function streamAnswer(
 						system: rephraseQuestionPrompt(question),
 						messages: coreMessages,
 					});
-					console.log("rephrasedQuestion", rephrasedQuestion);
-					return await getPapersFromQdrant(rephrasedQuestion);
+
+					return (await logRetrieval(
+						"ask",
+						rephrasedQuestion,
+						async <RetrievalResult>() => {
+							return (await getPapersFromQdrant(
+								rephrasedQuestion,
+							)) as RetrievalResult;
+						},
+						traceId,
+					)) as RetrievalResult;
 				},
 			},
 		},

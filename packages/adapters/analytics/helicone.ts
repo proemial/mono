@@ -24,6 +24,33 @@ export async function logBotBegin(
 	);
 }
 
+export async function logRetrieval(
+	source: string,
+	question: string,
+	callback: <T>() => Promise<T>,
+	traceId?: string,
+) {
+	const logger = heliconeLogger({
+		traceId: traceId,
+		source: source,
+		operation: "search",
+		sessionName: `${source}: search`,
+	});
+	return await logger.logRequest(
+		{
+			_type: "tool",
+			toolName: "search",
+			input: question,
+		},
+		async (resultRecorder) => {
+			const data = await callback();
+			resultRecorder.appendResults({ result: data });
+
+			return data;
+		},
+	);
+}
+
 export async function logHeliconeEvent(
 	properties: Properties,
 	message: string,
