@@ -58,14 +58,15 @@ type Assistant = (
 	context: UserContext,
 	title: string,
 	abstract: string,
+	traceId: string,
 ) => {
 	model: LanguageModel;
 	system: string;
 	tools?: Record<string, CoreTool>;
 };
 
-export const assistant: Assistant = (context, title, abstract) => ({
-	model: LlmModels.assistant.answer(),
+export const assistant: Assistant = (context, title, abstract, traceId) => ({
+	model: LlmModels.assistant.answer(traceId),
 	system: systemPrompt(context, title, abstract),
 	// experimental_toolCallStreaming: true,
 	// maxTokens: 512,

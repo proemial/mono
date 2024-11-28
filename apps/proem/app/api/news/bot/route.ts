@@ -35,10 +35,10 @@ async function answerQuestion(url: string, messages: Message[]) {
 
 	const streamingData = new StreamData();
 
-	const id = uuid();
+	const traceId = uuid();
 
 	const result = await streamText({
-		model: LlmAnswer.model(id),
+		model: LlmAnswer.model(traceId),
 		system: LlmAnswer.prompt(item.scrape?.title, item.scrape?.transcript),
 		messages: convertToCoreMessages(messages),
 		tools: {
@@ -99,7 +99,7 @@ async function answerQuestion(url: string, messages: Message[]) {
 					papers: item?.papers?.value,
 				},
 				messages,
-				id,
+				traceId,
 			);
 
 			if (followups) {

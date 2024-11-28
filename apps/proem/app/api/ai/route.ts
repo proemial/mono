@@ -13,6 +13,7 @@ import { auth } from "@clerk/nextjs/server";
 import { findCollection } from "@proemial/data/repository/collection";
 import { savePostWithComment } from "@proemial/data/repository/post";
 import { prettySlug } from "@proemial/utils/pretty-slug";
+import { uuid } from "@proemial/utils/uid";
 import { Message, StreamData, convertToCoreMessages, streamText } from "ai";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -41,8 +42,10 @@ export async function POST(req: NextRequest) {
 			? "space"
 			: "global";
 
+	const traceId = uuid();
+
 	const convertedMessages = convertToCoreMessages(messages as any);
-	const currentAssistant = assistant(userContext, title, abstract);
+	const currentAssistant = assistant(userContext, title, abstract, traceId);
 	console.log({ currentAssistant });
 	const question = messages.findLast(
 		(message: Message) => message.role === "user",

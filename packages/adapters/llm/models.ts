@@ -73,7 +73,7 @@ const openaiChat = (
 			"Helicone-Property-Environment": process.env.NODE_ENV || "production",
 		};
 
-		return traceId && ["ask", "news"].includes(source)
+		return traceId
 			? {
 					...headers,
 					"Helicone-Session-Id": traceId,

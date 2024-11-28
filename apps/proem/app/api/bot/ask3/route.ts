@@ -81,10 +81,10 @@ async function streamAnswer(
 		publicationDate: string;
 	}> = [];
 
-	const id = uuid();
+	const traceId = uuid();
 
 	const result = await streamText({
-		model: LlmModels.ask.answer(id),
+		model: LlmModels.ask.answer(traceId),
 		system: systemPrompt,
 		messages: coreMessages,
 		maxSteps: 5,
@@ -96,7 +96,7 @@ async function streamAnswer(
 				}),
 				execute: async ({ question }) => {
 					const { text: rephrasedQuestion } = await generateText({
-						model: LlmModels.ask.rephrase(id),
+						model: LlmModels.ask.rephrase(traceId),
 						system: rephraseQuestionPrompt(question),
 						messages: coreMessages,
 					});
@@ -124,7 +124,7 @@ async function streamAnswer(
 		onFinish: async ({ text: answer }) => {
 			console.log("answer", answer);
 			const { object: followUpQuestions } = await generateObject({
-				model: LlmModels.ask.followups(id),
+				model: LlmModels.ask.followups(traceId),
 				output: "array",
 				schema: z.object({
 					question: z
