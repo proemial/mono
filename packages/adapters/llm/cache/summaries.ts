@@ -23,11 +23,11 @@ export async function getSummaries(
 
 	return await RedisSummaries.insert(identifier, {
 		title: {
-			summary: await summariseTitle(title, abstract),
+			summary: await summariseTitle(title, abstract, "embed"),
 			hash: hashSummary(title, abstract, titleModel, titlePrompt),
 		},
 		description: {
-			summary: await summariseDescription(title, abstract),
+			summary: await summariseDescription(title, abstract, "embed"),
 			hash: hashSummary(title, abstract, descriptionModel, descriptionPrompt),
 		},
 	});

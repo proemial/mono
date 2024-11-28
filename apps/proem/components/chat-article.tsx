@@ -22,6 +22,7 @@ import {
 } from "@untitled-ui/icons-react";
 import { Suspense } from "react";
 import { EngagementIndicator } from "./engagement-indicator";
+import { SourceProduct } from "@proemial/adapters/llm/models";
 
 type ChatArticleProps = Pick<
 	AddToCollectionButtonProps,
@@ -33,6 +34,7 @@ type ChatArticleProps = Pick<
 	paper?: OpenAlexPaper;
 	paperPosts: PostWithCommentsAndAuthor[];
 	readers: BasicReaderUserData[];
+	source?: SourceProduct;
 };
 
 export function ChatArticle({
@@ -44,6 +46,7 @@ export function ChatArticle({
 	customCollectionId,
 	paperPosts,
 	readers,
+	source,
 }: ChatArticleProps) {
 	const title = paper?.generated?.title;
 	const authors = paper?.data.authorships;
@@ -148,7 +151,7 @@ export function ChatArticle({
 			)}
 			{paper && (
 				<Suspense fallback={<Spinner />}>
-					<MicroAbstract paper={paper} />
+					<MicroAbstract paper={paper} source={source} />
 				</Suspense>
 			)}
 			{paper && (
@@ -183,7 +186,7 @@ export function ChatArticle({
 
 			{paper && !spaceId && (
 				<Suspense fallback={<Spinner />}>
-					<PaperList ids={paper.data.related_works} limit={3}>
+					<PaperList ids={paper.data.related_works} limit={3} source={source}>
 						Related papers
 					</PaperList>
 				</Suspense>

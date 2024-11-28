@@ -26,5 +26,12 @@ export default async function OAPaperPage({
 	}
 
 	void PaperReadsService.increment(paperId);
-	return <PaperPage paperId={paperId} type="oa" collectionId={collectionId} />;
+	return (
+		<PaperPage
+			paperId={paperId}
+			type="oa"
+			collectionId={collectionId}
+			source="spaces"
+		/>
+	);
 }

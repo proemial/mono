@@ -97,7 +97,11 @@ async function fetchFeedByInstitution(
 			const generatedTitle = paper?.generated?.title;
 
 			if (!generatedTitle && paperTitle && abstract) {
-				const title = (await summariseTitle(paperTitle, abstract)) as string;
+				const title = (await summariseTitle(
+					paperTitle,
+					abstract,
+					"spaces",
+				)) as string;
 				const generated = paper.generated
 					? { ...paper.generated, title }
 					: { title };

@@ -3,8 +3,15 @@ import { summariseDescription } from "@proemial/adapters/llm/prompts/description
 import { Redis } from "@proemial/adapters/redis";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import Markdown from "./markdown";
+import { SourceProduct } from "@proemial/adapters/llm/models";
 
-export async function MicroAbstract({ paper }: { paper: OpenAlexPaper }) {
+export async function MicroAbstract({
+	paper,
+	source,
+}: {
+	paper: OpenAlexPaper;
+	source?: SourceProduct;
+}) {
 	if (!paper.data.title || !paper.data.abstract) return;
 
 	if (paper.generated?.abstract) {
@@ -18,6 +25,7 @@ export async function MicroAbstract({ paper }: { paper: OpenAlexPaper }) {
 	const microAbstract = await summariseDescription(
 		paper.data.title,
 		paper.data.abstract,
+		source,
 	);
 
 	await Redis.papers.upsert(paper.id, (existingPaper) => {

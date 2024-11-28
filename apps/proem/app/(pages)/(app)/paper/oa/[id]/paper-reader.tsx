@@ -7,6 +7,7 @@ import { Collection } from "@proemial/data/neon/schema";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { use } from "react";
 import { addPaperActivity } from "./paper-activity";
+import { SourceProduct } from "@proemial/adapters/llm/models";
 
 type PaperReaderProps = Pick<AddToCollectionButtonProps, "isBookmarked"> & {
 	fetchedPaperPromise: Promise<Omit<OpenAlexPaper, "generated">>;
@@ -15,6 +16,7 @@ type PaperReaderProps = Pick<AddToCollectionButtonProps, "isBookmarked"> & {
 	type: "oa" | "arxiv";
 	collectionId?: Collection["id"];
 	readers: BasicReaderUserData[];
+	source?: SourceProduct;
 };
 
 export function PaperReader({
@@ -25,6 +27,7 @@ export function PaperReader({
 	collectionId,
 	isBookmarked,
 	readers,
+	source,
 }: PaperReaderProps) {
 	const fetchedPaper = use(fetchedPaperPromise);
 	const generatedPaper = use(generatedPaperPromise);
@@ -45,6 +48,7 @@ export function PaperReader({
 				isBookmarked={isBookmarked}
 				paperPosts={paperPosts}
 				readers={readers}
+				source={source}
 			/>
 		</div>
 	);

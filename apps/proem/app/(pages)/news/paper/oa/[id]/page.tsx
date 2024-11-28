@@ -16,7 +16,7 @@ export default async function OAPaperPage({ params }: Props) {
 				<Header />
 			</div>
 			<div className="p-4 min-h-[100vh]">
-				<PaperPage paperId={params.id} type="oa" />
+				<PaperPage paperId={params.id} type="oa" source="news" />
 				<ProemAssistant />
 			</div>
 			<Footer />

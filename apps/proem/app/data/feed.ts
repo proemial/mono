@@ -481,7 +481,11 @@ export module Feed {
 
 				if (!generatedTitle && paperTitle && abstract) {
 					console.log("Enhancing paper", currentPaper.id);
-					const title = (await summariseTitle(paperTitle, abstract)) as string;
+					const title = (await summariseTitle(
+						paperTitle,
+						abstract,
+						"spaces",
+					)) as string;
 					const generated = currentPaper.generated
 						? { ...currentPaper.generated, title }
 						: { title };

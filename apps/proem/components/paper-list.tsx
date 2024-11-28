@@ -9,16 +9,18 @@ import React, { ReactNode } from "react";
 import { ThemeColoredCard } from "./theme-colored-card";
 import { OpenAlexPaper } from "@proemial/repositories/oa/models/oa-paper";
 import { Header4 } from "@proemial/shadcn-ui";
+import { SourceProduct } from "@proemial/adapters/llm/models";
 
 type Props = {
 	ids: string[];
 	limit?: number;
 	children: string | ReactNode;
+	source?: SourceProduct;
 };
 
-export async function PaperList({ ids: urls, limit, children }: Props) {
+export async function PaperList({ ids: urls, limit, children, source }: Props) {
 	const ids = urls.map((url) => url.split("/").at(-1) as string);
-	const papers = await fromIds(ids);
+	const papers = await fromIds(ids, source);
 
 	// TODO: Fix deduplication
 	const dedupedPapersWithAbstracts = papers

@@ -1,8 +1,6 @@
-import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
-import { openaiOrganizations } from "./openai-keys";
+import LlmModels, { SourceProduct } from "../models";
 
-export const model = "gpt-3.5-turbo-0125";
 export const prompt = (title: string, abstract: string) =>
 	`
 You will be summarizing research papers into captivating headlines. The goal is to capture the societal impact of the main finding of the paper in a concise, news worthy, tweet-like, and attention-grabbing sentence.
@@ -27,14 +25,16 @@ Then, create a captivating news headline for the paper by following these guidel
 Now, output the headline. Nothing else:
 `.trim();
 
-const openai = createOpenAI({
-	apiKey: process.env.OPENAI_API_KEY,
-	organization: openaiOrganizations.read,
-});
-
-export async function summariseTitle(title: string, abstract: string) {
+export async function summariseTitle(
+	title: string,
+	abstract: string,
+	source?: SourceProduct,
+	related?: boolean,
+) {
 	const res = await generateText({
-		model: openai(model),
+		model: related
+			? LlmModels.read.related(source)
+			: LlmModels.read.title(source),
 		prompt: prompt(title, abstract),
 	});
 

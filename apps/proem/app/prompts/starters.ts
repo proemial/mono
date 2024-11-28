@@ -1,42 +1,32 @@
-import { openaiOrganizations } from "@proemial/adapters/llm/prompts/openai-keys";
-import { env } from "@/env/server";
-import OpenAI from "openai";
+import LlmModels, { SourceProduct } from "@proemial/adapters/llm/models";
+import { generateText } from "ai";
 
-const model = "gpt-3.5-turbo-0125";
+export const prompt = (title: string, abstract: string) =>
+	`
+You are a helpful assistant who can explain scientific concepts in terms that allow researchers from one scientific domain to grasp and be inspired by ideas from another domain.
 
-export async function generateStarters(title: string, abstract: string) {
-	const openai = new OpenAI({
-		apiKey: env.OPENAI_API_KEY,
-		// organization: openaiOrganizations.summarization,
+Analyse the following scientific article with title: \"${title}\" and abstract: \"${abstract}\". Respond to this message with "OK".. Respond to this message with "OK".
+
+Produce three straightforward, one-line questions about this abstract that you can answer yourself, using plain language.
+`.trim();
+
+export async function summariseStarters(
+	title: string,
+	abstract: string,
+	source?: SourceProduct,
+) {
+	const res = await generateText({
+		model: LlmModels.read.starters(source),
+		prompt: prompt(title, abstract),
 	});
 
-	const completion = await openai.chat.completions.create({
-		model,
-		messages: [
-			{
-				role: "assistant",
-				content:
-					'You are a helpful assistant who can explain scientific concepts in terms that allow researchers from one scientific domain to grasp and be inspired by ideas from another domain. Respond to this message with "OK"',
-			},
-			{
-				role: "system",
-				content: `Analyse the following scientific article with title: \"${title}\" and abstract: \"${abstract}\". Respond to this message with "OK".. Respond to this message with "OK".`,
-			},
-			{
-				role: "user",
-				content:
-					"Produce three straightforward, one-line questions about this abstract that you can answer yourself, using plain language.",
-			},
-		],
-	});
+	const starters = asArray(res.text);
 
-	return asArray(completion.choices[0]?.message.content as string);
+	return starters;
 }
 
 // {text: "1. xxx\n2. xxx\n 3. xxx"} > ["xxx", "xxx", "xxx"]
 function asArray(text: string) {
-	console.log("READ starters string: ", text);
-
 	if (!text[0]?.match(/^\d/)) {
 		return [text];
 	}
@@ -44,8 +34,6 @@ function asArray(text: string) {
 		.split("\n")
 		.map((str) => str.substring(3))
 		.filter((str) => str.includes("?"));
-
-	console.log("READ starters array: ", array);
 
 	return array;
 }

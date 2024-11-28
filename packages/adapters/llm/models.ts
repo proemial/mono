@@ -5,6 +5,8 @@ export type LlmModel = ReturnType<typeof openaiChat>;
 
 export type EmbeddingsModel = OpenAI.Embeddings;
 
+export type SourceProduct = "ask" | "news" | "spaces" | "embed";
+
 const LlmModels = {
 	ask: {
 		embeddings: () => openaiEmbeddings("ask", "embeddings") as EmbeddingsModel,
@@ -34,6 +36,16 @@ const LlmModels = {
 		answer: (traceId?: string) =>
 			getModel("spaces", "answer", traceId) as LlmModel,
 	},
+	read: {
+		title: (source?: SourceProduct) =>
+			getModel(source ?? "read", "paper:title") as LlmModel,
+		description: (source?: SourceProduct) =>
+			getModel(source ?? "read", "paper:description") as LlmModel,
+		starters: (source?: SourceProduct) =>
+			getModel(source ?? "read", "paper:starters") as LlmModel,
+		related: (source?: SourceProduct) =>
+			getModel(source ?? "read", "paper:related") as LlmModel,
+	},
 };
 
 function getModel(
@@ -41,7 +53,8 @@ function getModel(
 	operation: string,
 	traceId?: string,
 ) {
-	return openaiChat(source, operation, "gpt-4o", traceId) as LlmModel;
+	const model = operation.includes("paper") ? "gpt-3.5-turbo-0125" : "gpt-4o";
+	return openaiChat(source, operation, model, traceId) as LlmModel;
 }
 
 export const llmConfig = {
@@ -52,6 +65,8 @@ export const llmConfig = {
 		index: "proj_Pq2CtfZHHyVKJCo0slBwvwLy",
 		news: "proj_91doOP0NSL4H24OS14TpCBtf",
 		spaces: "proj_GKsXGiCSfpjvcCxLr2sUCmbf",
+		read: "proj_IC2HhSCTrkYccm2ry8Ub7f4L",
+		embed: "proj_evqPpJ4bydRLaiNas3pa8WFe",
 	},
 };
 

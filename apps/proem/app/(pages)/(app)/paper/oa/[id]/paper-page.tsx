@@ -9,17 +9,20 @@ import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { fetchArxivPaper } from "../../arxiv/[id]/fetch-arxiv-paper";
+import { SourceProduct } from "@proemial/adapters/llm/models";
 
 type Props = {
 	paperId: string;
 	type: "oa" | "arxiv";
 	collectionId?: string;
+	source?: SourceProduct;
 };
 
 export default async function PaperPage({
 	paperId,
 	type,
 	collectionId,
+	source,
 }: Props) {
 	const fetchPaperFn = type === "oa" ? fetchPaper : fetchArxivPaper;
 	const fetchedPaperPromise = fetchPaperFn(paperId).then((paper) => {
@@ -30,7 +33,7 @@ export default async function PaperPage({
 	});
 
 	const generatedPaperPromise = fetchedPaperPromise.then((paper) => {
-		return generate(paper, type === "oa" ? "oa" : "arxiv");
+		return generate(paper, type === "oa" ? "oa" : "arxiv", source);
 	});
 	const paperPostsPromise = PostService.getPostsWithCommentsAndAuthors(
 		collectionId,
@@ -55,6 +58,7 @@ export default async function PaperPage({
 				type={type}
 				collectionId={collectionId}
 				readers={readers}
+				source={source}
 			/>
 		</Suspense>
 	);

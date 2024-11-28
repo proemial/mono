@@ -105,7 +105,7 @@ export const QaPair = ({
 									<Link
 										key={index}
 										id={`${encodeURIComponent(question.content)}-paper-${index + 1}`}
-										href={`/paper/${paper.link}`}
+										href={`/ask/paper/${paper.link}`}
 										onClick={trackHandler(analyticsKeys.ask.click.paper)}
 									>
 										<PaperCardAsk

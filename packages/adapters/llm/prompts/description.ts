@@ -1,8 +1,6 @@
-import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
-import { openaiOrganizations } from "./openai-keys";
+import LlmModels, { SourceProduct } from "../models";
 
-export const model = "gpt-3.5-turbo-0125";
 export const prompt = (title: string, abstract: string) =>
 	`
 You are a skilled assistant adept at distilling complex scientific information into concise, clear summaries that 
@@ -18,21 +16,16 @@ rather stating the finding as a statement of fact. Do not refer to the article i
 Now, output the summary. Nothing else:
 `.trim();
 
-const openai = createOpenAI({
-	apiKey: process.env.OPENAI_API_KEY,
-	organization: openaiOrganizations.read,
-});
-
-export const descriptionPrompt = {
-	model,
-	prompt,
-};
-
-export async function summariseDescription(title: string, abstract: string) {
+export async function summariseDescription(
+	title: string,
+	abstract: string,
+	source?: SourceProduct,
+) {
 	const res = await generateText({
-		model: openai(model),
+		model: LlmModels.read.description(source),
 		prompt: prompt(title, abstract),
 	});
+	console.log("description generated: ", res.text);
 
 	return res.text;
 }
