@@ -85,7 +85,6 @@
 		"tailwind-scrollbar-hide": "1.1.7",
 		"zod-to-json-schema": "3.23.2",
 		"zustand": "^4.5.5",
-		"braintrust": "^0.0.169",
 		"autoevals": "^0.0.104"
 	},
 	"devDependencies": {

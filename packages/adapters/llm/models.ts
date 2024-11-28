@@ -37,16 +37,16 @@ const LlmModels = {
 };
 
 function getModel(
-	project: keyof typeof openaiConfig.projects,
+	source: keyof typeof llmConfig.sources,
 	operation: string,
 	traceId?: string,
 ) {
-	return openaiChat(project, operation, "gpt-4o", traceId) as LlmModel;
+	return openaiChat(source, operation, "gpt-4o", traceId) as LlmModel;
 }
 
-export const openaiConfig = {
+export const llmConfig = {
 	org: "org-aMpPztUAkETkCQYK6QhW25A4",
-	projects: {
+	sources: {
 		default: "proj_mX23TYmhdJcPjnFy0sliSLwj",
 		ask: "proj_UpT8sB3CWNtxqezfqm2AY8tZ",
 		index: "proj_Pq2CtfZHHyVKJCo0slBwvwLy",
@@ -56,29 +56,29 @@ export const openaiConfig = {
 };
 
 const openaiChat = (
-	project: keyof typeof openaiConfig.projects,
+	source: keyof typeof llmConfig.sources,
 	operation: string,
 	model: string,
 	traceId?: string,
 ) => {
 	console.log(
-		`[llm][openai][chat][${project}]${operation ? `[${operation}]` : ""} ${model}`,
+		`[llm][openai][chat][${source}]${operation ? `[${operation}]` : ""} ${model}`,
 	);
 
 	const heliconeHeaders = (traceId?: string): Record<string, string> => {
 		const headers = {
 			"Helicone-Auth": `Bearer ${process.env.HELICONE_API_KEY}`,
-			"Helicone-Property-Project": project,
+			"Helicone-Property-Project": source,
 			"Helicone-Property-Operation": operation,
 			"Helicone-Property-Environment": process.env.NODE_ENV || "production",
 		};
 
-		return traceId && ["ask", "news"].includes(project)
+		return traceId && ["ask", "news"].includes(source)
 			? {
 					...headers,
 					"Helicone-Session-Id": traceId,
-					"Helicone-Session-Name": `${project}: ${["background", "query"].includes(operation) ? "annotation" : "answer"}`,
-					"Helicone-Session-Path": `${project}/${operation}`,
+					"Helicone-Session-Name": `${source}: ${["background", "query"].includes(operation) ? "annotation" : "answer"}`,
+					"Helicone-Session-Path": `${source}/${operation}`,
 				}
 			: headers;
 	};
@@ -88,8 +88,8 @@ const openaiChat = (
 		headers: heliconeHeaders(traceId),
 		// Passed on to OpenAI by Helicone
 		apiKey: process.env.OPENAI_API_KEY || "",
-		organization: openaiConfig.org,
-		project: openaiConfig.projects[project],
+		organization: llmConfig.org,
+		project: llmConfig.sources[source],
 		compatibility: "strict", // Required for usage to be streamed
 	});
 
@@ -97,16 +97,16 @@ const openaiChat = (
 };
 
 const openaiEmbeddings = (
-	project: keyof typeof openaiConfig.projects,
+	source: keyof typeof llmConfig.sources,
 	operation: string,
 ) => {
 	console.log(
-		`[llm][openai][embeddings][${project}]${operation ? `[${operation}]` : ""}`,
+		`[llm][openai][embeddings][${source}]${operation ? `[${operation}]` : ""}`,
 	);
 	const provider = new OpenAI({
 		// No Helicone for embeddings, as it is cheap and becomes noisy
-		organization: openaiConfig.org,
-		project: openaiConfig.projects[project],
+		organization: llmConfig.org,
+		project: llmConfig.sources[source],
 	});
 
 	return provider.embeddings;
