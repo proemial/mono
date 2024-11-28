@@ -39,7 +39,6 @@ export const fromIds = async (ids: string[], source?: SourceProduct) => {
 					paperTitle,
 					abstract,
 					source,
-					true,
 				)) as string;
 				const generated = { title };
 

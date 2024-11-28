@@ -44,8 +44,8 @@ const LlmModels = {
 			getModel(source ?? "read", "paper:description") as LlmModel,
 		starters: (source?: SourceProduct) =>
 			getModel(source ?? "read", "paper:starters") as LlmModel,
-		related: (source?: SourceProduct) =>
-			getModel(source ?? "read", "paper:related") as LlmModel,
+		// related: (source?: SourceProduct) =>
+		// 	getModel(source ?? "read", "paper:related") as LlmModel,
 	},
 };
 

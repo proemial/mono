@@ -31,12 +31,9 @@ export async function summariseTitle(
 	title: string,
 	abstract: string,
 	source?: SourceProduct,
-	related?: boolean,
 ) {
 	const res = await generateText({
-		model: related
-			? LlmModels.read.related(source)
-			: LlmModels.read.title(source),
+		model: LlmModels.read.title(source),
 		prompt: prompt(title, abstract),
 	});
 
