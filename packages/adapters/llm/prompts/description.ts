@@ -16,6 +16,8 @@ rather stating the finding as a statement of fact. Do not refer to the article i
 Now, output the summary. Nothing else:
 `.trim();
 
+export const model = LlmModels.read.description().modelId;
+
 export async function summariseDescription(
 	title: string,
 	abstract: string,
