@@ -1,0 +1,29 @@
+{
+	"extends": "@proemial/typescript-config/nextjs.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./*"]
+		},
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
+		"types": ["vitest/globals"],
+		"resolveJsonModule": true
+	},
+	"include": [
+		"next-env.d.ts",
+		"next.config.js",
+		".next/types/**/*.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		"../../packages/data/**/*.ts",
+		"../../packages/models/**/*.ts",
+		"../../packages/repositories/**/*.ts",
+		"../../packages/utils/**/*.ts", 
+		"../../packages/adapters/**/*.ts",	
+	],
+	"exclude": ["node_modules"]
+}
