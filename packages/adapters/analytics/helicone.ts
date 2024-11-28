@@ -1,4 +1,5 @@
 import { HeliconeManualLogger } from "@helicone/helpers";
+import { idFromCookie } from "./userid";
 
 type Properties = {
 	source: string;
@@ -85,12 +86,17 @@ export function heliconeLogger(properties: Properties) {
 export function heliconeHeaders(
 	properties: Properties,
 ): Record<string, string> {
+	const { id, internal } = idFromCookie() ?? {};
+
 	const headers = {
 		"Helicone-Auth": `Bearer ${process.env.HELICONE_API_KEY}`,
 		"Helicone-Property-Project": properties.source,
 		"Helicone-Property-Operation": properties.operation,
 		"Helicone-Property-Environment": process.env.NODE_ENV || "production",
-	};
+	} as Record<string, string>;
+
+	if (id) headers["Helicone-User-Id"] = id as string;
+	if (internal) headers["Helicone-Property-Internal"] = "true";
 
 	return properties.traceId && properties.sessionName
 		? {

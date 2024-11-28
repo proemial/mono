@@ -8,6 +8,6 @@
       ]
     }
   },
-  "include": ["."],
+  "include": [".", "../../apps/proem/app/llm/helicone.ts", "../../apps/proem/app/llm/userid.ts", "../../apps/proem/app/llm/models.ts"],
   "exclude": ["node_modules"]
 }

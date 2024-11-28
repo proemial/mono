@@ -1,6 +1,5 @@
 import { fetchPaper } from "@/app/(pages)/(app)/paper/oa/[id]/fetch-paper";
 import { generate } from "@/app/(pages)/(app)/paper/oa/[id]/llm-generate";
-import { PaperReader } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader";
 import { PaperReaderSkeleton } from "@/app/(pages)/(app)/paper/oa/[id]/paper-reader-skeleton";
 import { getBookmarksByCollectionId } from "@/app/(pages)/(app)/space/(discover)/get-bookmarks-by-collection-id";
 import { PaperReadsService } from "@/services/paper-reads-service";
@@ -10,7 +9,13 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { fetchArxivPaper } from "../../arxiv/[id]/fetch-arxiv-paper";
 import { SourceProduct } from "@proemial/adapters/llm/models";
+import dynamic from "next/dynamic";
 
+const PaperReader = dynamic(() =>
+	import("@/app/(pages)/(app)/paper/oa/[id]/paper-reader").then(
+		(mod) => mod.PaperReader,
+	),
+);
 type Props = {
 	paperId: string;
 	type: "oa" | "arxiv";
