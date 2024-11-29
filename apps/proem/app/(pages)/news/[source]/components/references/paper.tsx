@@ -1,5 +1,6 @@
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import dayjs from "dayjs";
+import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 
 export function Paper({
@@ -36,7 +37,7 @@ export function Paper({
 
 	return (
 		<>
-			<a
+			<Link
 				href={`/news/paper/oa/${paper?.id?.split("/").at(-1)}`}
 				className={
 					"flex flex-col p-2 rounded-md animate-fade-in w-[100px] flex-shrink-0 cursor-pointer hover:shadow-sm active:shadow-none hover:-translate-y-[1px] active:-translate-y-[0] transition-transform"
@@ -46,6 +47,7 @@ export function Paper({
 					color: isActive ? "white" : "#0a161c",
 				}}
 				ref={ref}
+				prefetch={false}
 			>
 				<div className="flex flex-row justify-between mt-1 mb-4 w-full">
 					<span
@@ -63,18 +65,20 @@ export function Paper({
 					</div>
 				</div>
 
-				<div className="text-[11px] line-clamp-3 capitalize">{paper?.title?.toLowerCase()}</div>
+				<div className="text-[11px] line-clamp-3 capitalize">
+					{paper?.title?.toLowerCase()}
+				</div>
 				<div className="text-[10px] italic mt-1 mb-1 text-[#6d7e86]">
 					<div className="line-clamp-2 capitalize">
 						{(
-							paper?.primary_location?.source?.host_organization_name ?? 
+							paper?.primary_location?.source?.host_organization_name ??
 							paper?.primary_location?.source?.display_name ??
 							paper?.authorships?.at(0)?.author?.institution ??
 							paper?.authorships?.at(0)?.author?.display_name
 						)?.toLowerCase()}
 					</div>
 				</div>
-			</a>
+			</Link>
 		</>
 	);
 }
