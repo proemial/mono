@@ -513,8 +513,8 @@ importers:
         specifier: ^1
         version: 1.2.2
       posthog-js:
-        specifier: ^1.184.1
-        version: 1.184.1
+        specifier: ^1.194.0
+        version: 1.194.0
       posthog-node:
         specifier: ^4.2.1
         version: 4.2.1
@@ -14278,8 +14278,8 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
-  /posthog-js@1.184.1:
-    resolution: {integrity: sha512-q/1Kdard5SZnL2smrzeKcD+RuUi2PnbidiN4D3ThK20bNrhy5Z2heIy9SnRMvEiARY5lcQ7zxmDCAKPBKGSOtQ==}
+  /posthog-js@1.194.0:
+    resolution: {integrity: sha512-9yjYjHYlT6hh6/OlEJmz/wEjMZI1cRghxmYirwq60uHK93nbbxFP1VE7LqjWFLM8jSTXRw//lpU23EvU7QjvxQ==}
     dependencies:
       core-js: 3.39.0
       fflate: 0.4.8
