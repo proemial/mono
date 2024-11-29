@@ -25,8 +25,6 @@ Then, create a captivating news headline for the paper by following these guidel
 Now, output the headline. Nothing else:
 `.trim();
 
-export const model = LlmModels.read.title().modelId;
-
 export async function summariseTitle(
 	title: string,
 	abstract: string,

@@ -1,12 +1,7 @@
 import { RedisSummaries } from "../../redis/summaries";
 import { Redis } from "../../redis";
+import { summariseTitle, prompt as titlePrompt } from "../prompts/microtitle";
 import {
-	summariseTitle,
-	model as titleModel,
-	prompt as titlePrompt,
-} from "../prompts/microtitle";
-import {
-	model as descriptionModel,
 	prompt as descriptionPrompt,
 	summariseDescription,
 } from "../prompts/description";
@@ -24,24 +19,21 @@ export async function getSummaries(
 	return await RedisSummaries.insert(identifier, {
 		title: {
 			summary: await summariseTitle(title, abstract, "embed"),
-			hash: hashSummary(title, abstract, titleModel, titlePrompt),
+			hash: hashSummary(title, abstract, titlePrompt),
 		},
 		description: {
 			summary: await summariseDescription(title, abstract, "embed"),
-			hash: hashSummary(title, abstract, descriptionModel, descriptionPrompt),
+			hash: hashSummary(title, abstract, descriptionPrompt),
 		},
 	});
 }
 
 function isValid(cached: RedisSummaries, title: string, abstract: string) {
-	if (
-		hashSummary(title, abstract, titleModel, titlePrompt) !== cached.title?.hash
-	) {
+	if (hashSummary(title, abstract, titlePrompt) !== cached.title?.hash) {
 		return false;
 	}
 	if (
-		hashSummary(title, abstract, descriptionModel, descriptionPrompt) !==
-		cached.description?.hash
+		hashSummary(title, abstract, descriptionPrompt) !== cached.description?.hash
 	) {
 		return false;
 	}
@@ -52,10 +44,9 @@ function isValid(cached: RedisSummaries, title: string, abstract: string) {
 function hashSummary(
 	title: string,
 	abstract: string,
-	model: string,
 	prompt: (title: string, abstract: string) => string,
 ): string {
-	const input = `${model}${prompt(title, abstract)}`;
+	const input = `${prompt(title, abstract)}`;
 
 	return require("node:crypto")
 		.createHash("sha256")
