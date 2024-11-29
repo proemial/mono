@@ -27,7 +27,6 @@ export async function summariseDescription(
 		model: LlmModels.read.description(source),
 		prompt: prompt(title, abstract),
 	});
-	console.log("description generated: ", res.text);
 
 	return res.text;
 }
