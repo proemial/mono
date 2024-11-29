@@ -48,6 +48,7 @@ export function Paper({
 				}}
 				ref={ref}
 				prefetch={false}
+				rel="nofollow"
 			>
 				<div className="flex flex-row justify-between mt-1 mb-4 w-full">
 					<span
