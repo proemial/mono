@@ -173,7 +173,7 @@ export function ChatArticle({
 				</>
 			)}
 
-			{paper && spaceId && (
+			{/* {paper && spaceId && (
 				<Suspense fallback={<Spinner />}>
 					<SpacePapers
 						space={spaceId}
@@ -190,7 +190,7 @@ export function ChatArticle({
 						Related papers
 					</PaperList>
 				</Suspense>
-			)}
+			)} */}
 		</div>
 	);
 }

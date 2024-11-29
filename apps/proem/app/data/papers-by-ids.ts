@@ -34,7 +34,7 @@ export const fromIds = async (ids: string[], source?: SourceProduct) => {
 				const paperTitle = currentPaper?.data.title;
 				const abstract = currentPaper?.data.abstract as string;
 
-				console.log("Enhancing paper", currentPaper.id);
+				// console.log("Enhancing paper", currentPaper.id);
 				const title = (await summariseTitle(
 					paperTitle,
 					abstract,
