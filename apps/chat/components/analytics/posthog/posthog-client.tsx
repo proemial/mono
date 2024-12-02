@@ -22,8 +22,7 @@ export function PostHogClient({
 }
 
 function useInit(trackingInput?: TrackingInput) {
-	const { trackingProfile, user, organisation } =
-		useTrackingProfile(trackingInput);
+	const { trackingProfile } = useTrackingProfile(trackingInput);
 	const [initialized, setInitialized] = useState(false);
 	const [identified, setIdentified] = useState(false);
 	const { pathname, trackingKey } = usePathNames();
@@ -37,46 +36,19 @@ function useInit(trackingInput?: TrackingInput) {
 		// memory: do not persist in cookies/local storage for anonymous eu citizens
 		const persistence = trackingProfile !== "tracked" ? "memory" : undefined;
 
-		// false: do not capture events for internal users
-		const disableTracking = user?.isInternal;
-
 		const token = process.env.NEXT_PUBLIC_POSTHOG_KEY as string;
 		const api_host = process.env.NEXT_PUBLIC_POSTHOG_HOST as string;
 
 		analyticsTrace(
 			"[PosthogClient] initializing",
-			`persistence: ${persistence}, disableTracking: ${disableTracking}`,
+			`persistence: ${persistence}`,
 		);
 		posthog.init(token, {
 			api_host,
 			persistence,
-			autocapture: !disableTracking,
-			capture_pageview: !disableTracking,
-			capture_pageleave: !disableTracking,
-			// loaded: (posthog) => {
-			// 	if (process.env.NODE_ENV === "development") posthog.debug();
-			// },
 		});
 		setInitialized(true);
-	}, [user, trackingProfile, initialized]);
-
-	useEffect(() => {
-		// we may need to stop overwriting the default distinctID, if we want to keep trafic after initial login
-		const distinctID = user?.email || user?.id;
-
-		const props = organisation
-			? { organisation: organisation.name }
-			: undefined;
-		if (!user?.isInternal && distinctID) {
-			analyticsTrace(
-				"[PosthogClient] identifying",
-				`distinctID: ${distinctID}`,
-				`organisation: ${organisation}`,
-			);
-			posthog.identify(distinctID, props);
-			setIdentified(true);
-		}
-	}, [user?.isInternal, user?.email, user?.id, organisation]);
+	}, [trackingProfile, initialized]);
 
 	useEffect(() => {
 		if (initialized) {
