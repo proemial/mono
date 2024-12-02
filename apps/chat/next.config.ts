@@ -12,6 +12,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  env: {
+    POSTGRES_URL: "postgres://default:twEv1pBlR9Jd@ep-curly-snowflake-a2kop02b-pooler.eu-central-1.aws.neon.tech/verceldb?sslmode=require",
+  },
 };
 
 export default nextConfig;
