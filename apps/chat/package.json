@@ -62,7 +62,9 @@
 		"tailwind-merge": "^2.5.2",
 		"tailwindcss-animate": "^1.0.7",
 		"usehooks-ts": "^3.1.0",
-		"zod": "^3.23.8"
+		"zod": "^3.23.8",
+		"posthog-js": "^1.194.2",
+		"cookies-next": "^5.0.2"
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",
