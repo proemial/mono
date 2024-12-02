@@ -62,6 +62,9 @@ export function NewsCard({
 	const color = foregroundColor(data.init?.foreground);
 	const { randomUser, randomIndex } = useRandomUser(url);
 
+	// Make 50% question cards and 50% default cards
+	const cardType = Math.random() < 0.5 ? "default" : "question";
+
 	const formatAnswerText = (text?: string) => {
 		if (!text) return "";
 		return text
@@ -95,107 +98,159 @@ export function NewsCard({
 	return (
 		<>
 			<OldSchoolStyling />
-
-			<div
-				ref={cardRef}
-				className="ppNewsCard inline-flex relative"
-				onMouseMove={(e) => ppMouseMove(cardRef, e)}
-				onMouseLeave={(e) => ppMouseLeave(cardRef)}
-				// onMouseEnter={(e) => ppMouseMove(cardRef, e)}
-			>
+			{cardType === "default" && (
 				<div
-					className="rounded-[20px] px-3 pt-3 overflow-hidden"
-					style={{ background, color }}
+					ref={cardRef}
+					className="ppNewsCard inline-flex relative"
+					onMouseMove={(e) => ppMouseMove(cardRef, e)}
+					onMouseLeave={(e) => ppMouseLeave(cardRef)}
+					// onMouseEnter={(e) => ppMouseMove(cardRef, e)}
 				>
-					<div className="ppNewsCard__gradient cover rounded-[20px]" />
 					<div
-						className="ppNewsCard__pic relative self-stretch w-full h-[220px] bg-cover bg-top rounded-[14px] shadow-[inset_0_0_40px_rgba(0,0,0,0.7)]"
-						style={{ backgroundImage: `url(${data?.scrape?.artworkUrl})` }}
-					/>
-					<Trackable
-						trackingKey={analyticsKeys.experiments.news.item.clickSource}
-						properties={{ sourceUrl: url }}
+						className="rounded-[20px] px-3 pt-3 overflow-hidden"
+						style={{ background, color }}
 					>
-						<div className="ppNewsCard__host inline-flex items-start px-3 py-1 absolute top-[188px] left-[26px] bg-[#ffffffe6] text-black rounded-[26px]">
-							{extractHostName(url)}
-						</div>
-					</Trackable>
-					<div className="ppNewsCard__title relative flex flex-col pt-3 pb-3 mt-[-4.00px] leading-[normal] font-semibold text-xl flex-[0_0_auto] drop-shadow-md">
-						{debug &&
-							`[${
-								data?.scrape?.date ?? data.init?.createdAt
-									? dayjs(data?.scrape?.date ?? data.init?.createdAt).format(
-											"DD.MM.YYYY HH:mm",
-										)
-									: ""
-							}] `}
-						{data?.summarise?.engTitle ?? data?.scrape?.title}
-					</div>
-
-					<div className="ppNewsCard__qa flex flex-col items-start gap-2 px-0 pb-3 relative self-stretch w-full flex-[0_0_auto]">
-						<div className="flex items-start gap-1.5 py-0 relative self-stretch w-full flex-[0_0_auto]">
-							<div className="relative w-10 h-10 object-cover rounded-full text-2xl flex items-center justify-center bg-[#000000]">
-								<span>{users[randomUser]?.avatar}</span>
+						<div className="ppNewsCard__gradient cover rounded-[20px]" />
+						<div
+							className="ppNewsCard__pic relative self-stretch w-full h-[220px] bg-cover bg-top rounded-[14px] shadow-[inset_0_0_40px_rgba(0,0,0,0.7)]"
+							style={{ backgroundImage: `url(${data?.scrape?.artworkUrl})` }}
+						/>
+						<Trackable
+							trackingKey={analyticsKeys.experiments.news.item.clickSource}
+							properties={{ sourceUrl: url }}
+						>
+							<div className="ppNewsCard__host inline-flex items-start px-3 py-1 absolute top-[188px] left-[26px] bg-[#ffffffe6] text-black rounded-[26px]">
+								{extractHostName(url)}
 							</div>
-							<div className="flex flex-col items-start gap-1 relative flex-1 grow">
-								<div className="flex flex-col items-center justify-center gap-1 px-3 py-2 relative self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] rounded-xl shadow-[0_0px_10px_1px_rgba(0,0,0,0.2)]">
-									<div className="flex items-start gap-1 relative self-stretch w-full flex-[0_0_auto]">
-										<div className="relative w-fit mt-[-1.00px] font-bold text-[#08080a] text-sm tracking-[0] leading-[14px] whitespace-nowrap">
-											{users[randomUser]?.name ?? "Anonymous"}
-										</div>
-										<div className="px-1.5 py-0.5 ml-0.5 mt-[-2px] relative bg-white rounded-full border border-gray-300">
-											<div className="relative w-fit font-semibold text-gray-500 text-xs leading-3 whitespace-nowrap overflow-hidden text-ellipsis">
-												Anonymous user
-											</div>
-										</div>
-									</div>
-
-									<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
-										{data.summarise?.questions?.at(randomIndex)?.question}
-									</p>
-								</div>
-							</div>
+						</Trackable>
+						<div
+							className="ppNewsCard__title relative flex flex-col pt-3 pb-3 mt-[-4.00px] leading-[normal] font-semibold text-xl flex-[0_0_auto]"
+							style={{ filter: "drop-shadow(0px 1px 1px rgba(0,0,0,0.25))" }}
+						>
+							{debug &&
+								`[${
+									data?.scrape?.date ?? data.init?.createdAt
+										? dayjs(data?.scrape?.date ?? data.init?.createdAt).format(
+												"DD.MM.YYYY HH:mm",
+											)
+										: ""
+								}] `}
+							{data?.summarise?.engTitle ?? data?.scrape?.title}
 						</div>
 
-						<div className="flex flex-col items-start gap-2 pl-[44px] py-0 relative self-stretch w-full flex-[0_0_auto]">
-							<div className="flex items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
-								<div className="relative flex-[0_0_auto] w-8 h-8 rounded-full bg-black flex items-center justify-center">
-									<Image className="w-4 h-4" alt="Frame" src={logo} />
+						<div className="ppNewsCard__qa flex flex-col items-start gap-2 px-0 pb-3 relative self-stretch w-full flex-[0_0_auto]">
+							<div className="flex items-start gap-1.5 py-0 relative self-stretch w-full flex-[0_0_auto]">
+								<div className="relative w-10 h-10 object-cover rounded-full text-2xl flex items-center justify-center bg-[#000000]">
+									<span>{users[randomUser]?.avatar}</span>
 								</div>
-
 								<div className="flex flex-col items-start gap-1 relative flex-1 grow">
 									<div className="flex flex-col items-center justify-center gap-1 px-3 py-2 relative self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] rounded-xl shadow-[0_0px_10px_1px_rgba(0,0,0,0.2)]">
 										<div className="flex items-start gap-1 relative self-stretch w-full flex-[0_0_auto]">
 											<div className="relative w-fit mt-[-1.00px] font-bold text-[#08080a] text-sm tracking-[0] leading-[14px] whitespace-nowrap">
-												proem.ai
+												{users[randomUser]?.name ?? "Anonymous"}
 											</div>
-
-											<div className="px-1.5 py-0.5 ml-0.5 mt-[-2px] relative bg-black rounded-full  ">
-												<div className="relative w-fit font-semibold text-[#6aba6f] text-xs leading-3 whitespace-nowrap">
-													Science bot
+											<div className="px-1.5 py-0.5 ml-0.5 mt-[-2px] relative bg-white rounded-full border border-gray-300">
+												<div className="relative w-fit font-semibold text-gray-500 text-xs leading-3 whitespace-nowrap overflow-hidden text-ellipsis">
+													Anonymous user
 												</div>
 											</div>
 										</div>
 
-										<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5 overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]">
-											{formatAnswerText(
-												data.summarise?.questions?.at(randomIndex)?.answer,
-											)}
+										<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5">
+											{data.summarise?.questions?.at(randomIndex)?.question}
 										</p>
 									</div>
 								</div>
 							</div>
+
+							<div className="flex flex-col items-start gap-2 pl-[44px] py-0 relative self-stretch w-full flex-[0_0_auto]">
+								<div className="flex items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
+									<div className="relative flex-[0_0_auto] w-8 h-8 rounded-full bg-black flex items-center justify-center">
+										<Image className="w-4 h-4" alt="Frame" src={logo} />
+									</div>
+
+									<div className="flex flex-col items-start gap-1 relative flex-1 grow">
+										<div className="flex flex-col items-center justify-center gap-1 px-3 py-2 relative self-stretch w-full flex-[0_0_auto] bg-[#e9eaee] rounded-xl shadow-[0_0px_10px_1px_rgba(0,0,0,0.2)]">
+											<div className="flex items-start gap-1 relative self-stretch w-full flex-[0_0_auto]">
+												<div className="relative w-fit mt-[-1.00px] font-bold text-[#08080a] text-sm tracking-[0] leading-[14px] whitespace-nowrap">
+													proem.ai
+												</div>
+
+												<div className="px-1.5 py-0.5 ml-0.5 mt-[-2px] relative bg-black rounded-full  ">
+													<div className="relative w-fit font-semibold text-[#6aba6f] text-xs leading-3 whitespace-nowrap">
+														Science bot
+													</div>
+												</div>
+											</div>
+
+											<p className="relative self-stretch font-medium text-[#08080a] text-[15px] tracking-[0] leading-5 overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]">
+												{formatAnswerText(
+													data.summarise?.questions?.at(randomIndex)?.answer,
+												)}
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
+						<div
+							className="ppGradientOverlay absolute top-[0] left-[0] w-full h-full rounded-[20px]"
+							style={{
+								background: `linear-gradient(to bottom, transparent 50%, ${background})`,
+								color,
+							}}
+						/>
 					</div>
-					<div
-						className="ppGradientOverlay absolute top-[0] left-[0] w-full h-full rounded-[20px]"
-						style={{
-							background: `linear-gradient(to bottom, transparent 50%, ${background})`,
-							color,
-						}}
-					/>
 				</div>
-			</div>
+			)}
+			{cardType === "question" && (
+				<div
+					ref={cardRef}
+					className="ppNewsCard inline-flex relative"
+					onMouseMove={(e) => ppMouseMove(cardRef, e)}
+					onMouseLeave={(e) => ppMouseLeave(cardRef)}
+					// onMouseEnter={(e) => ppMouseMove(cardRef, e)}
+				>
+					<div
+						className="rounded-[20px] px-3 py-3 overflow-hidden"
+						style={{ background, color }}
+					>
+						<div className="relative flex flex-col py-3 font-semibold text-3xl drop-shadow-[0_1px_0px_rgba(0,0,0,0.3)]">
+							{debug &&
+								`[${
+									data?.scrape?.date ?? data.init?.createdAt
+										? dayjs(data?.scrape?.date ?? data.init?.createdAt).format(
+												"DD.MM.YYYY HH:mm",
+											)
+										: ""
+								}] `}
+							{data.summarise?.questions?.at(randomIndex)?.question}
+						</div>
+						<div className="relative inline-block text-l mb-3 drop-shadow-[0_1px_1px_rgba(0,0,0,0.3)]">
+							{formatAnswerText(
+								data.summarise?.questions?.at(randomIndex)?.answer,
+							)}
+						</div>
+
+						<div
+							className="ppNewsCard__pic relative self-stretch w-full h-[220px] bg-cover bg-top rounded-[14px] shadow-[inset_0_0_40px_rgba(0,0,0,0.7)]"
+							style={{ backgroundImage: `url(${data?.scrape?.artworkUrl})` }}
+						/>
+						<Trackable
+							trackingKey={analyticsKeys.experiments.news.item.clickSource}
+							properties={{ sourceUrl: url }}
+						>
+							<div className="inline-flex items-start px-3 py-1 absolute bottom-[20px] left-[26px] bg-[#ffffffe6] text-black rounded-[26px] max-w-[250px] whitespace-nowrap overflow-hidden text-ellipsis ">
+								<div className="overflow-hidden relative">
+									{extractHostName(url)} —{" "}
+									{data?.summarise?.engTitle ?? data?.scrape?.title}
+									<div className="absolute right-0 top-0 h-full w-8 bg-gradient-to-r from-transparent to-[#ffffffe6]" />
+								</div>
+							</div>
+						</Trackable>
+					</div>
+				</div>
+			)}
 		</>
 	);
 }
