@@ -3,8 +3,9 @@ import { LanguageModelV1 } from "ai";
 
 // https://console.groq.com/docs/models
 type ModelId =
-	| "llama-3.1-70b-specdec"
+	| "llama-3.1-8b-instant"
 	| "llama-3.1-70b-versatile"
+	| "llama-3.2-3b-preview"
 	| "llama-3.2-90b-vision-preview";
 
 export const groqProvider = (modelId: ModelId): LanguageModelV1 =>
