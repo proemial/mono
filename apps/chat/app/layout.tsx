@@ -6,9 +6,9 @@ import { Analytics } from "@/components/analytics";
 import { headers } from "next/headers";
 
 export const metadata: Metadata = {
-	metadataBase: new URL("https://chat.vercel.ai"),
-	title: "Next.js Chatbot Template",
-	description: "Next.js chatbot template using the AI SDK.",
+	metadataBase: new URL("https://chat.proem.ai"),
+	title: "Proem Chat",
+	description: "Trustworthy answers backed by research",
 };
 
 export const viewport = {
