@@ -1,52 +1,54 @@
 import {
-	convertToCoreMessages,
 	Message,
 	StreamData,
-	streamObject,
+	convertToCoreMessages,
+	generateObject,
+	generateText,
 	streamText,
 } from "ai";
 import { z } from "zod";
 
-import { customModel } from "@/ai";
 import { models } from "@/ai/models";
-import { systemPrompt } from "@/ai/prompts";
 import {
 	deleteChatById,
 	getChatById,
-	getDocumentById,
 	saveChat,
-	saveDocument,
 	saveMessages,
-	saveSuggestions,
 } from "@/db/queries";
-import { Suggestion } from "@/db/schema";
 import {
 	generateUUID,
 	getMostRecentUserMessage,
 	sanitizeResponseMessages,
 } from "@/lib/utils";
 
-import { generateTitleFromUserMessage } from "../../actions";
-import LlmModels from "@proemial/adapters/llm/models";
 import { getSessionId } from "@/app/(auth)/sessionid";
+import {
+	logBotBegin,
+	logRetrieval,
+} from "@proemial/adapters/analytics/helicone";
+import { generateEmbedding } from "@proemial/adapters/llm/embeddings";
+import LlmModels from "@proemial/adapters/llm/models";
+import { QdrantPapers } from "@proemial/adapters/qdrant/papers";
+import { Time } from "../../../../../../packages/utils/time";
+import { generateTitleFromUserMessage } from "../../actions";
+import {
+	followUpQuestionsPrompt,
+	rephraseQuestionPrompt,
+	systemPrompt,
+} from "./prompts";
 
 export const maxDuration = 60;
 
-type AllowedTools =
-	| "createDocument"
-	| "updateDocument"
-	| "requestSuggestions"
-	| "getWeather";
+export type RetrievalResult = Array<{
+	link: string;
+	title: string;
+	abstract: string;
+	publicationDate: string;
+}>;
 
-const blocksTools: AllowedTools[] = [
-	"createDocument",
-	"updateDocument",
-	"requestSuggestions",
-];
+type AllowedTools = "getPapers";
 
-const weatherTools: AllowedTools[] = ["getWeather"];
-
-const allTools: AllowedTools[] = [...blocksTools, ...weatherTools];
+const allTools: AllowedTools[] = ["getPapers"];
 
 export async function POST(request: Request) {
 	const {
@@ -74,6 +76,11 @@ export async function POST(request: Request) {
 	if (!userMessage) {
 		return new Response("No user message found", { status: 400 });
 	}
+	// We only support text messages for now
+	if (typeof userMessage.content !== "string") {
+		return new Response("User message must be a string", { status: 400 });
+	}
+	const question = userMessage.content;
 
 	const chat = await getChatById({ id });
 
@@ -82,253 +89,94 @@ export async function POST(request: Request) {
 		await saveChat({ id, userId: sessionId, title });
 	}
 
+	const userMessageId = generateUUID();
 	await saveMessages({
 		messages: [
-			{ ...userMessage, id: generateUUID(), createdAt: new Date(), chatId: id },
+			{ ...userMessage, id: userMessageId, createdAt: new Date(), chatId: id },
 		],
 	});
 
 	const streamingData = new StreamData();
 
+	const papers: Array<{
+		link: string;
+		title: string;
+		abstract: string;
+		publicationDate: string;
+	}> = [];
+
 	const traceId = generateUUID();
 
+	await logBotBegin("ask", userMessage.content, traceId);
+
 	const result = await streamText({
-		// model: customModel(model.apiIdentifier),
 		model: await LlmModels.chat.answer(traceId),
 		system: systemPrompt,
-		messages: coreMessages,
-		maxSteps: 5,
-		experimental_activeTools: allTools,
 		tools: {
-			getWeather: {
-				description: "Get the current weather at a location",
+			getPapers: {
+				description: "Get scientific research papers relevant to a question",
 				parameters: z.object({
-					latitude: z.number(),
-					longitude: z.number(),
+					question: z.string(),
 				}),
-				execute: async ({ latitude, longitude }) => {
-					const response = await fetch(
-						`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m&hourly=temperature_2m&daily=sunrise,sunset&timezone=auto`,
-					);
-
-					const weatherData = await response.json();
-					return weatherData;
-				},
-			},
-			createDocument: {
-				description: "Create a document for a writing activity",
-				parameters: z.object({
-					title: z.string(),
-				}),
-				execute: async ({ title }) => {
-					const id = generateUUID();
-					let draftText: string = "";
-
-					streamingData.append({
-						type: "id",
-						content: id,
+				execute: async ({ question }) => {
+					const { text: rephrasedQuestion } = await generateText({
+						model: await LlmModels.ask.rephrase(traceId),
+						system: rephraseQuestionPrompt(question),
+						messages: coreMessages,
 					});
 
-					streamingData.append({
-						type: "title",
-						content: title,
-					});
-
-					streamingData.append({
-						type: "clear",
-						content: "",
-					});
-
-					const { fullStream } = await streamText({
-						model: customModel(model.apiIdentifier),
-						system:
-							"Write about the given topic. Markdown is supported. Use headings wherever appropriate.",
-						prompt: title,
-					});
-
-					for await (const delta of fullStream) {
-						const { type } = delta;
-
-						if (type === "text-delta") {
-							const { textDelta } = delta;
-
-							draftText += textDelta;
-							streamingData.append({
-								type: "text-delta",
-								content: textDelta,
-							});
-						}
-					}
-
-					streamingData.append({ type: "finish", content: "" });
-
-					if (sessionId) {
-						await saveDocument({
-							id,
-							title,
-							content: draftText,
-							userId: sessionId,
-						});
-					}
-
-					return {
-						id,
-						title,
-						content: "A document was created and is now visible to the user.",
-					};
-				},
-			},
-			updateDocument: {
-				description: "Update a document with the given description",
-				parameters: z.object({
-					id: z.string().describe("The ID of the document to update"),
-					description: z
-						.string()
-						.describe("The description of changes that need to be made"),
-				}),
-				execute: async ({ id, description }) => {
-					const document = await getDocumentById({ id });
-
-					if (!document) {
-						return {
-							error: "Document not found",
-						};
-					}
-
-					const { content: currentContent } = document;
-					let draftText: string = "";
-
-					streamingData.append({
-						type: "clear",
-						content: document.title,
-					});
-
-					const { fullStream } = await streamText({
-						model: customModel(model.apiIdentifier),
-						system:
-							"You are a helpful writing assistant. Based on the description, please update the piece of writing.",
-						experimental_providerMetadata: {
-							openai: {
-								prediction: {
-									type: "content",
-									content: currentContent,
-								},
-							},
+					return (await logRetrieval(
+						"ask",
+						rephrasedQuestion,
+						async <RetrievalResult>() => {
+							return (await getPapersFromQdrant(
+								rephrasedQuestion,
+							)) as RetrievalResult;
 						},
-						messages: [
-							{
-								role: "user",
-								content: description,
-							},
-							{ role: "user", content: currentContent },
-						],
-					});
-
-					for await (const delta of fullStream) {
-						const { type } = delta;
-
-						if (type === "text-delta") {
-							const { textDelta } = delta;
-
-							draftText += textDelta;
-							streamingData.append({
-								type: "text-delta",
-								content: textDelta,
-							});
-						}
-					}
-
-					streamingData.append({ type: "finish", content: "" });
-
-					if (sessionId) {
-						await saveDocument({
-							id,
-							title: document.title,
-							content: draftText,
-							userId: sessionId,
-						});
-					}
-
-					return {
-						id,
-						title: document.title,
-						content: "The document has been updated successfully.",
-					};
-				},
-			},
-			requestSuggestions: {
-				description: "Request suggestions for a document",
-				parameters: z.object({
-					documentId: z
-						.string()
-						.describe("The ID of the document to request edits"),
-				}),
-				execute: async ({ documentId }) => {
-					const document = await getDocumentById({ id: documentId });
-
-					if (!document || !document.content) {
-						return {
-							error: "Document not found",
-						};
-					}
-
-					let suggestions: Array<
-						Omit<Suggestion, "userId" | "createdAt" | "documentCreatedAt">
-					> = [];
-
-					const { elementStream } = await streamObject({
-						model: customModel(model.apiIdentifier),
-						system:
-							"You are a help writing assistant. Given a piece of writing, please offer suggestions to improve the piece of writing and describe the change. It is very important for the edits to contain full sentences instead of just words. Max 5 suggestions.",
-						prompt: document.content,
-						output: "array",
-						schema: z.object({
-							originalSentence: z.string().describe("The original sentence"),
-							suggestedSentence: z.string().describe("The suggested sentence"),
-							description: z
-								.string()
-								.describe("The description of the suggestion"),
-						}),
-					});
-
-					for await (const element of elementStream) {
-						const suggestion = {
-							originalText: element.originalSentence,
-							suggestedText: element.suggestedSentence,
-							description: element.description,
-							id: generateUUID(),
-							documentId: documentId,
-							isResolved: false,
-						};
-
-						streamingData.append({
-							type: "suggestion",
-							content: suggestion,
-						});
-
-						suggestions.push(suggestion);
-					}
-
-					if (sessionId) {
-						await saveSuggestions({
-							suggestions: suggestions.map((suggestion) => ({
-								...suggestion,
-								userId: sessionId,
-								createdAt: new Date(),
-								documentCreatedAt: document.createdAt,
-							})),
-						});
-					}
-
-					return {
-						id: documentId,
-						title: document.title,
-						message: "Suggestions have been added to the document",
-					};
+						traceId,
+					)) as RetrievalResult;
 				},
 			},
 		},
-		onFinish: async ({ responseMessages }) => {
+		experimental_activeTools: allTools,
+		messages: coreMessages,
+		maxSteps: 5,
+		onStepFinish({ toolResults }) {
+			const matchedPapers = toolResults.find(
+				(r) => r.toolName === "getPapers",
+			)?.result;
+
+			if (matchedPapers) {
+				papers.push(...matchedPapers);
+				streamingData.append({
+					type: "papers-fetched",
+					transactionId: userMessageId,
+					data: {
+						papers,
+					},
+				});
+			}
+		},
+		onFinish: async ({ responseMessages, text: answer }) => {
+			const { object: followUpQuestions } = await generateObject({
+				model: await LlmModels.ask.followups(traceId),
+				output: "array",
+				schema: z.object({
+					question: z
+						.string()
+						.describe("A follow up question to the user's question"),
+				}),
+				prompt: followUpQuestionsPrompt(question, answer),
+			});
+
+			if (followUpQuestions?.length) {
+				streamingData.append({
+					type: "follow-up-questions-generated",
+					transactionId: userMessageId,
+					data: followUpQuestions,
+				});
+			}
+
 			if (sessionId) {
 				try {
 					const responseMessagesWithoutIncompleteToolCalls =
@@ -403,3 +251,26 @@ export async function DELETE(request: Request) {
 		});
 	}
 }
+
+const getPapersFromQdrant = async (query: string) => {
+	const begin = Time.now();
+
+	try {
+		const embeddings = await generateEmbedding(LlmModels.ask.embeddings(), [
+			query,
+		]);
+		const result = await QdrantPapers.search(embeddings);
+		if (!result.papers) {
+			return [];
+		}
+
+		return result.papers.map((paper) => ({
+			link: `oa/${paper.paper.id.split("/").at(-1)}`,
+			title: paper.paper.title,
+			abstract: paper.paper.abstract ?? "",
+			publicationDate: paper.paper.publication_date ?? "",
+		}));
+	} finally {
+		Time.log(begin, `[qdrantQuery] ${query}`);
+	}
+};
