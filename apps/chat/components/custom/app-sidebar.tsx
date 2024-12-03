@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type User } from "next-auth";
 
-import { PlusIcon } from "@/components/custom/icons";
+import { PlusIcon, ProemIcon } from "@/components/custom/icons";
 import { SidebarHistory } from "@/components/custom/sidebar-history";
 import { SidebarUserNav } from "@/components/custom/sidebar-user-nav";
 import { Button } from "@/components/ui/button";
@@ -37,7 +37,8 @@ export function AppSidebar({ sessionId }: { sessionId: string }) {
 							}}
 							className="flex flex-row gap-3 items-center"
 						>
-							<span className="text-lg font-semibold px-2 hover:bg-muted rounded-md cursor-pointer">
+							<span className="text-lg font-semibold px-2 hover:bg-muted rounded-md cursor-pointer inline-flex items-center gap-1">
+								<ProemIcon size={16} />
 								proem
 							</span>
 						</div>
