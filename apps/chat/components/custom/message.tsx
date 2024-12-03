@@ -9,7 +9,7 @@ import { Vote } from "@/db/schema";
 
 import { UIBlock } from "./block";
 import { DocumentToolCall, DocumentToolResult } from "./document";
-import { ProemIcon } from "./icons"; // Add this import at the top with other icons
+import { ProemIcon, SparklesIcon } from "./icons"; // Add this import at the top with other icons
 import { Markdown } from "./markdown";
 import { MessageActions } from "./message-actions";
 import { PreviewAttachment } from "./preview-attachment";
