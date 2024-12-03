@@ -10,7 +10,6 @@ import { z } from "zod";
 import { customModel } from "@/ai";
 import { models } from "@/ai/models";
 import { systemPrompt } from "@/ai/prompts";
-import { auth } from "@/app/(auth)/auth";
 import {
 	deleteChatById,
 	getChatById,
@@ -29,6 +28,7 @@ import {
 
 import { generateTitleFromUserMessage } from "../../actions";
 import LlmModels from "@proemial/adapters/llm/models";
+import { getSessionId } from "@/app/(auth)/sessionid";
 
 export const maxDuration = 60;
 
@@ -56,9 +56,9 @@ export async function POST(request: Request) {
 	}: { id: string; messages: Array<Message>; modelId: string } =
 		await request.json();
 
-	const session = await auth();
+	const sessionId = await getSessionId();
 
-	if (!session || !session.user || !session.user.id) {
+	if (!sessionId) {
 		return new Response("Unauthorized", { status: 401 });
 	}
 
@@ -79,7 +79,7 @@ export async function POST(request: Request) {
 
 	if (!chat) {
 		const title = await generateTitleFromUserMessage({ message: userMessage });
-		await saveChat({ id, userId: session.user.id, title });
+		await saveChat({ id, userId: sessionId, title });
 	}
 
 	await saveMessages({
@@ -162,19 +162,19 @@ export async function POST(request: Request) {
 
 					streamingData.append({ type: "finish", content: "" });
 
-					if (session.user && session.user.id) {
+					if (sessionId) {
 						await saveDocument({
 							id,
 							title,
 							content: draftText,
-							userId: session.user.id,
+							userId: sessionId,
 						});
 					}
 
 					return {
 						id,
 						title,
-						content: `A document was created and is now visible to the user.`,
+						content: "A document was created and is now visible to the user.",
 					};
 				},
 			},
@@ -240,12 +240,12 @@ export async function POST(request: Request) {
 
 					streamingData.append({ type: "finish", content: "" });
 
-					if (session.user && session.user.id) {
+					if (sessionId) {
 						await saveDocument({
 							id,
 							title: document.title,
 							content: draftText,
-							userId: session.user.id,
+							userId: sessionId,
 						});
 					}
 
@@ -309,13 +309,11 @@ export async function POST(request: Request) {
 						suggestions.push(suggestion);
 					}
 
-					if (session.user && session.user.id) {
-						const userId = session.user.id;
-
+					if (sessionId) {
 						await saveSuggestions({
 							suggestions: suggestions.map((suggestion) => ({
 								...suggestion,
-								userId,
+								userId: sessionId,
 								createdAt: new Date(),
 								documentCreatedAt: document.createdAt,
 							})),
@@ -331,7 +329,7 @@ export async function POST(request: Request) {
 			},
 		},
 		onFinish: async ({ responseMessages }) => {
-			if (session.user && session.user.id) {
+			if (sessionId) {
 				try {
 					const responseMessagesWithoutIncompleteToolCalls =
 						sanitizeResponseMessages(responseMessages);
@@ -383,16 +381,16 @@ export async function DELETE(request: Request) {
 		return new Response("Not Found", { status: 404 });
 	}
 
-	const session = await auth();
+	const sessionId = await getSessionId();
 
-	if (!session || !session.user) {
+	if (!sessionId) {
 		return new Response("Unauthorized", { status: 401 });
 	}
 
 	try {
 		const chat = await getChatById({ id });
 
-		if (chat.userId !== session.user.id) {
+		if (chat.userId !== sessionId) {
 			return new Response("Unauthorized", { status: 401 });
 		}
 

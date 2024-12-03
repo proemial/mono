@@ -5,7 +5,8 @@
 	"scripts": {
 		"dev": "next dev --port 5252",
 		"build": "next build",
-		"start": "next start"
+		"start": "next start",
+		"migrate": "tsx db/migrate.ts"
 	},
 	"dependencies": {
 		"@ai-sdk/openai": "^0.0.60",
