@@ -94,7 +94,7 @@ export async function POST(request: Request) {
 
 	const result = await streamText({
 		// model: customModel(model.apiIdentifier),
-		model: LlmModels.chat.answer(traceId),
+		model: await LlmModels.chat.answer(traceId),
 		system: systemPrompt,
 		messages: coreMessages,
 		maxSteps: 5,

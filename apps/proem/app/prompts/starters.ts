@@ -16,7 +16,7 @@ export async function summariseStarters(
 	source?: SourceProduct,
 ) {
 	const res = await generateText({
-		model: LlmModels.read.starters(source),
+		model: await LlmModels.read.starters(source),
 		prompt: prompt(title, abstract),
 	});
 

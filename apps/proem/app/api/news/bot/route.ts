@@ -49,7 +49,7 @@ async function answerQuestion(url: string, messages: Message[]) {
 	type RetrievalResult = Array<QdrantPaper>;
 
 	const result = await streamText({
-		model: LlmAnswer.model(traceId),
+		model: await LlmAnswer.model(traceId),
 		system: LlmAnswer.prompt(item.scrape?.title, item.scrape?.transcript),
 		messages: convertToCoreMessages(messages),
 		tools: {
@@ -159,7 +159,7 @@ async function generateFollowups(
 	const toolLessMessages = messages.filter((m) => !m.toolInvocations);
 
 	const { text } = await generateText({
-		model: LlmFollowups.model(id),
+		model: await LlmFollowups.model(id),
 		system: LlmFollowups.prompt(question, answer, context),
 		messages: convertToCoreMessages(toolLessMessages),
 	});

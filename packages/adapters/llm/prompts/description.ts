@@ -22,7 +22,7 @@ export async function summariseDescription(
 	source?: SourceProduct,
 ) {
 	const res = await generateText({
-		model: LlmModels.read.description(source),
+		model: await LlmModels.read.description(source),
 		prompt: prompt(title, abstract),
 	});
 

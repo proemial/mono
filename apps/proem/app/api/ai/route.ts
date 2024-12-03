@@ -46,7 +46,12 @@ export async function POST(req: NextRequest) {
 	const traceId = uuid();
 
 	const convertedMessages = convertToCoreMessages(messages as any);
-	const currentAssistant = assistant(userContext, title, abstract, traceId);
+	const currentAssistant = await assistant(
+		userContext,
+		title,
+		abstract,
+		traceId,
+	);
 	console.log({ currentAssistant });
 	const question = messages.findLast(
 		(message: Message) => message.role === "user",

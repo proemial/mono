@@ -31,7 +31,7 @@ export async function logRetrieval(
 	callback: <T>() => Promise<T>,
 	traceId?: string,
 ) {
-	const logger = heliconeLogger({
+	const logger = await heliconeLogger({
 		traceId: traceId,
 		source: source,
 		operation: "search",
@@ -56,7 +56,7 @@ export async function logHeliconeEvent(
 	properties: Properties,
 	message: string,
 ) {
-	const logger = heliconeLogger({
+	const logger = await heliconeLogger({
 		traceId: properties.traceId,
 		source: properties.source,
 		operation: properties.operation,
@@ -76,17 +76,17 @@ export async function logHeliconeEvent(
 	);
 }
 
-export function heliconeLogger(properties: Properties) {
+export async function heliconeLogger(properties: Properties) {
 	return new HeliconeManualLogger({
 		apiKey: process.env.HELICONE_API_KEY as string,
-		headers: heliconeHeaders(properties),
+		headers: await heliconeHeaders(properties),
 	});
 }
 
-export function heliconeHeaders(
+export async function heliconeHeaders(
 	properties: Properties,
-): Record<string, string> {
-	const { id, internal } = idFromCookie() ?? {};
+): Promise<Record<string, string>> {
+	const { id, internal } = (await idFromCookie()) ?? {};
 
 	const headers = {
 		"Helicone-Auth": `Bearer ${process.env.HELICONE_API_KEY}`,

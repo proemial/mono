@@ -1,13 +1,13 @@
 import { cookies } from "next/headers";
 
-export function idFromCookie() {
+export async function idFromCookie() {
 	try {
-		const internalUserId = getInternalUserId();
+		const internalUserId = await getInternalUserId();
 		if (internalUserId) {
 			return { id: internalUserId, internal: true };
 		}
 
-		const posthogDistinctId = getPsothogDistinctId();
+		const posthogDistinctId = await getPsothogDistinctId();
 		if (posthogDistinctId) {
 			return { id: posthogDistinctId };
 		}
@@ -18,18 +18,17 @@ export function idFromCookie() {
 	return undefined;
 }
 
-function getInternalUserId() {
-	const cookie = cookies().get("internalUser")?.value ?? "";
+async function getInternalUserId() {
+	const cookie = (await cookies()).get("internalUser")?.value ?? "";
 	const parsed = cookie ? JSON.parse(decodeURIComponent(cookie)) : undefined;
 
 	return parsed?.email ?? parsed?.userId;
 }
 
-function getPsothogDistinctId() {
+async function getPsothogDistinctId() {
 	const cookie =
-		cookies()
-			.getAll()
-			.find((c) => c.name.startsWith("ph_phc_"))?.value ?? "";
+		(await cookies()).getAll().find((c) => c.name.startsWith("ph_phc_"))
+			?.value ?? "";
 	const parsed = cookie ? JSON.parse(decodeURIComponent(cookie)) : undefined;
 
 	return parsed?.distinct_id;

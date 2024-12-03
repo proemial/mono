@@ -1,5 +1,6 @@
 import { heliconeHeaders } from "../analytics/helicone";
 import { createOpenAI } from "@ai-sdk/openai";
+import { LanguageModelV1 } from "ai";
 import OpenAI from "openai";
 
 export type LlmModel = ReturnType<typeof openaiChat>;
@@ -76,19 +77,19 @@ export const llmConfig = {
 	},
 };
 
-const openaiChat = (
+const openaiChat = async (
 	source: keyof typeof llmConfig.sources,
 	operation: string,
 	model: string,
 	traceId?: string,
-) => {
+): Promise<LanguageModelV1> => {
 	console.log(
 		`[llm][openai][chat][${source}]${operation ? `[${operation}]` : ""} ${model}`,
 	);
 
 	const provider = createOpenAI({
 		baseURL: `https://oai.${process.env.HELICONE_BASE_URL}`,
-		headers: heliconeHeaders({
+		headers: await heliconeHeaders({
 			traceId,
 			source,
 			operation,

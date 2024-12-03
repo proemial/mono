@@ -59,14 +59,19 @@ type Assistant = (
 	title: string,
 	abstract: string,
 	traceId: string,
-) => {
+) => Promise<{
 	model: LanguageModel;
 	system: string;
 	tools?: Record<string, CoreTool>;
-};
+}>;
 
-export const assistant: Assistant = (context, title, abstract, traceId) => ({
-	model: LlmModels.assistant.answer(traceId),
+export const assistant: Assistant = async (
+	context,
+	title,
+	abstract,
+	traceId,
+) => ({
+	model: await LlmModels.assistant.answer(traceId),
 	system: systemPrompt(context, title, abstract),
 	// experimental_toolCallStreaming: true,
 	// maxTokens: 512,

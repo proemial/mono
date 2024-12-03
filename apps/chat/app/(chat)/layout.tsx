@@ -20,7 +20,7 @@ export default async function Layout({
 
 	return (
 		<SidebarProvider defaultOpen={!isCollapsed}>
-			<AppSidebar user={sessionId} />
+			<AppSidebar sessionId={sessionId} />
 			<SidebarInset>{children}</SidebarInset>
 		</SidebarProvider>
 	);

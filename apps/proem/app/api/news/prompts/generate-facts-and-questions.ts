@@ -56,7 +56,7 @@ export const generateFactsAndQuestions = async (
 ) => {
 	try {
 		const { object, usage } = await generateObject({
-			model: LlmModels.news.background(traceId),
+			model: await LlmModels.news.background(traceId),
 			prompt: summarisationPrompt(title, transcript, query, papers),
 			output: "object",
 			schema: z.object({
