@@ -38,7 +38,7 @@ export function AppSidebar({ sessionId }: { sessionId: string }) {
 							className="flex flex-row gap-3 items-center"
 						>
 							<span className="text-lg font-semibold px-2 hover:bg-muted rounded-md cursor-pointer">
-								Chatbot
+								proem
 							</span>
 						</div>
 						<BetterTooltip content="New Chat" align="start">
