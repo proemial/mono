@@ -4,7 +4,7 @@ import { ollamaProvider } from "../../ai/models/ollama";
 import { QdrantPaper } from "../../news/annotate/fetch/steps/fetch";
 import { z } from "zod";
 
-const MAX_ITERATIONS = 2;
+const MAX_ITERATIONS = 10;
 
 export const maxDuration = 60;
 
@@ -48,7 +48,7 @@ const loop = async (question: string) => {
 						prompt: `Question: ${question}\n\nPapers:\n${paperAbstracts.map((abstract, index) => `- Paper ${index + 1}: ${abstract}`).join("\n")}`,
 						maxRetries: 0,
 					});
-					console.log(`[generate:answer][${state.iterations}] ${text}`);
+					console.log(`[${state.iterations}:generate:answer]\n${text}`);
 					state = {
 						action: "review",
 						iterations: state.iterations + 1,
@@ -83,7 +83,7 @@ const loop = async (question: string) => {
 						maxRetries: 0,
 					});
 					console.log(
-						`[review:result:${object.result}][${state.iterations}] ${object.feedback}`,
+						`[${state.iterations}:review:result:${object.result}]\n${object.feedback}`,
 					);
 					state = {
 						...state,
