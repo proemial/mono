@@ -82,7 +82,7 @@ const openaiChat = (
 	);
 
 	const provider = createOpenAI({
-		baseURL: "https://oai.helicone.ai/v1",
+		baseURL: `https://oai.${process.env.HELICONE_BASE_URL}`,
 		headers: heliconeHeaders({
 			traceId,
 			source,
