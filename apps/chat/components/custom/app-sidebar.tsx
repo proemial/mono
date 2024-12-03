@@ -37,7 +37,7 @@ export function AppSidebar({ sessionId }: { sessionId: string }) {
 							}}
 							className="flex flex-row gap-3 items-center"
 						>
-							<span className="text-lg font-semibold px-2 hover:bg-muted rounded-md cursor-pointer inline-flex items-center gap-1">
+							<span className="text-lg font-semibold px-2 hover:bg-muted rounded-md cursor-pointer inline-flex items-center gap-2">
 								<ProemIcon size={16} />
 								proem
 							</span>
