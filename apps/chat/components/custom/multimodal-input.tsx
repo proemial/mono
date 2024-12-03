@@ -23,110 +23,32 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 
 const suggestedActions = [
-	{
-		title: "Do vaccines cause autism spectrum disorder?",
-		action: "Do vaccines cause autism spectrum disorder?",
-	},
-	{
-		title: "Is a daily glass of wine healthy?",
-		action: "Is a daily glass of wine healthy?",
-	},
-	{
-		title: "Do cell phones cause brain cancer?",
-		action: "Do cell phones cause brain cancer?",
-	},
-	{
-		title: "What is the universe made of?",
-		action: "What is the universe made of?",
-	},
-	{
-		title: "How can I lower my blood pressure?",
-		action: "How can I lower my blood pressure?",
-	},
-	{
-		title: "What can I do for heartburn relief?",
-		action: "What can I do for heartburn relief?",
-	},
-	{
-		title: "Is microwaved food unsafe?",
-		action: "Is microwaved food unsafe?",
-	},
-	{
-		title: "Why do we dream?",
-		action: "Why do we dream?",
-	},
-	{
-		title: "What is the theory of evolution by natural selection?",
-		action: "What is the theory of evolution by natural selection?",
-	},
-	{
-		title: "What is the structure of DNA?",
-		action: "What is the structure of DNA?",
-	},
-	{
-		title: "What causes the seasons?",
-		action: "What causes the seasons?",
-	},
-	{
-		title: "How do vaccines work?",
-		action: "How do vaccines work?",
-	},
-	{
-		title: "What is photosynthesis?",
-		action: "What is photosynthesis?",
-	},
-	{
-		title: "What are the laws of thermodynamics?",
-		action: "What are the laws of thermodynamics?",
-	},
-	{
-		title: "What is the Big Bang Theory?",
-		action: "What is the Big Bang Theory?",
-	},
-	{
-		title: "How does antibiotic resistance develop?",
-		action: "How does antibiotic resistance develop?",
-	},
-	{
-		title: "What is plate tectonics?",
-		action: "What is plate tectonics?",
-	},
-	{
-		title: "How do black holes form?",
-		action: "How do black holes form?",
-	},
-	{
-		title: "What is quantum mechanics?",
-		action: "What is quantum mechanics?",
-	},
-	{
-		title: "What causes earthquakes?",
-		action: "What causes earthquakes?",
-	},
-	{
-		title: "What is the greenhouse effect?",
-		action: "What is the greenhouse effect?",
-	},
-	{
-		title: "What are stem cells?",
-		action: "What are stem cells?",
-	},
-	{
-		title: "What is the process of natural selection?",
-		action: "What is the process of natural selection?",
-	},
-	{
-		title: "How does the water cycle work?",
-		action: "How does the water cycle work?",
-	},
-	{
-		title: "What is relativity theory?",
-		action: "What is relativity theory?",
-	},
-	{
-		title: "What causes global warming?",
-		action: "What causes global warming?",
-	},
+	"Do vaccines cause autism spectrum disorder?",
+	"Is a daily glass of wine healthy?",
+	"Do cell phones cause brain cancer?",
+	"What is the universe made of?",
+	"How can I lower my blood pressure?",
+	"What can I do for heartburn relief?",
+	"Is microwaved food unsafe?",
+	"Why do we dream?",
+	"What is the theory of evolution by natural selection?",
+	"What is the structure of DNA?",
+	"What causes the seasons?",
+	"How do vaccines work?",
+	"What is photosynthesis?",
+	"What are the laws of thermodynamics?",
+	"What is the Big Bang Theory?",
+	"How does antibiotic resistance develop?",
+	"What is plate tectonics?",
+	"How do black holes form?",
+	"What is quantum mechanics?",
+	"What causes earthquakes?",
+	"What is the greenhouse effect?",
+	"What are stem cells?",
+	"What is the process of natural selection?",
+	"How does the water cycle work?",
+	"What is relativity theory?",
+	"What causes global warming?",
 ];
 
 export function MultimodalInput({
@@ -200,6 +122,13 @@ export function MultimodalInput({
 	useEffect(() => {
 		setLocalStorageInput(input);
 	}, [input, setLocalStorageInput]);
+
+	const [suggestions, setSuggestions] = useState<string[]>([]);
+	useEffect(() => {
+		setSuggestions(
+			suggestedActions.sort(() => Math.random() - 0.5).slice(0, 4),
+		);
+	}, []);
 
 	const handleInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setInput(event.target.value);
@@ -291,37 +220,34 @@ export function MultimodalInput({
 				attachments.length === 0 &&
 				uploadQueue.length === 0 && (
 					<div className="grid sm:grid-cols-2 gap-2 w-full">
-						{suggestedActions
-							.sort(() => Math.random() - 0.5)
-							.slice(0, 4)
-							.map((suggestedAction, index) => (
-								<motion.div
-									initial={{ opacity: 0, y: 20 }}
-									animate={{ opacity: 1, y: 0 }}
-									exit={{ opacity: 0, y: 20 }}
-									transition={{ delay: 0.05 * index }}
-									key={index}
-									className={index > 1 ? "hidden sm:block" : "block"}
-								>
-									<Button
-										variant="ghost"
-										onClick={async () => {
-											window.history.replaceState({}, "", `/chat/${chatId}`);
+						{suggestions.map((suggestion, index) => (
+							<motion.div
+								initial={{ opacity: 0, y: 20 }}
+								animate={{ opacity: 1, y: 0 }}
+								exit={{ opacity: 0, y: 20 }}
+								transition={{ delay: 0.05 * index }}
+								key={index}
+								className={index > 1 ? "hidden sm:block" : "block"}
+							>
+								<Button
+									variant="ghost"
+									onClick={async () => {
+										window.history.replaceState({}, "", `/chat/${chatId}`);
 
-											append({
-												role: "user",
-												content: suggestedAction.action,
-											});
-										}}
-										className="text-left border rounded-xl px-4 py-3.5 text-sm flex-1 gap-1 sm:flex-col w-full h-auto justify-start items-start"
-									>
-										<span className="font-medium">{suggestedAction.title}</span>
-										{/* <span className="text-muted-foreground">
+										append({
+											role: "user",
+											content: suggestion,
+										});
+									}}
+									className="text-left border rounded-xl px-4 py-3.5 text-sm flex-1 gap-1 sm:flex-col w-full h-auto justify-start items-start"
+								>
+									<span className="font-medium">{suggestion}</span>
+									{/* <span className="text-muted-foreground">
                     {suggestedAction.label}
                   </span> */}
-									</Button>
-								</motion.div>
-							))}
+								</Button>
+							</motion.div>
+						))}
 					</div>
 				)}
 
