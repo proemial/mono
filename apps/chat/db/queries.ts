@@ -17,8 +17,6 @@ import {
 	vote,
 } from "./schema";
 
-console.log("process.env.POSTGRES_URL", process.env.POSTGRES_URL);
-
 // Optionally, if not using email/pass login, you can
 // use the Drizzle adapter for Auth.js / NextAuth
 // https://authjs.dev/reference/adapter/drizzle

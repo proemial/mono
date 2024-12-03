@@ -6,9 +6,13 @@ export type LlmModel = ReturnType<typeof openaiChat>;
 
 export type EmbeddingsModel = OpenAI.Embeddings;
 
-export type SourceProduct = "ask" | "news" | "spaces" | "embed";
+export type SourceProduct = "chat" | "ask" | "news" | "spaces" | "embed";
 
 const LlmModels = {
+	chat: {
+		answer: (traceId?: string) =>
+			getModel("chat", "answer", traceId) as LlmModel,
+	},
 	ask: {
 		embeddings: () => openaiEmbeddings("ask", "embeddings") as EmbeddingsModel,
 		rephrase: (traceId?: string) =>
@@ -62,6 +66,7 @@ export const llmConfig = {
 	org: "org-aMpPztUAkETkCQYK6QhW25A4",
 	sources: {
 		default: "proj_mX23TYmhdJcPjnFy0sliSLwj",
+		chat: "proj_sqtkX7X2Xy5S0TEzHNomUILt",
 		ask: "proj_UpT8sB3CWNtxqezfqm2AY8tZ",
 		index: "proj_Pq2CtfZHHyVKJCo0slBwvwLy",
 		news: "proj_91doOP0NSL4H24OS14TpCBtf",
