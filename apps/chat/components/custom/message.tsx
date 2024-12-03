@@ -8,12 +8,10 @@ import { Dispatch, SetStateAction } from "react";
 import { Vote } from "@/db/schema";
 
 import { UIBlock } from "./block";
-import { DocumentToolCall, DocumentToolResult } from "./document";
 import { ProemIcon, SparklesIcon } from "./icons"; // Add this import at the top with other icons
 import { Markdown } from "./markdown";
 import { MessageActions } from "./message-actions";
 import { PreviewAttachment } from "./preview-attachment";
-import { Weather } from "./weather";
 import { PaperReferences } from "./paper-references";
 
 export const PreviewMessage = ({
@@ -59,63 +57,18 @@ export const PreviewMessage = ({
 					{message.toolInvocations && message.toolInvocations.length > 0 && (
 						<div className="flex flex-col gap-4">
 							{message.toolInvocations.map((toolInvocation) => {
-								const { toolName, toolCallId, state, args } = toolInvocation;
+								const { toolName, toolCallId, state } = toolInvocation;
 
 								if (state === "result") {
 									const { result } = toolInvocation;
 
 									return (
 										<div key={toolCallId}>
-											{toolName === "getWeather" ? (
-												<Weather weatherAtLocation={result} />
-											) : toolName === "createDocument" ? (
-												<DocumentToolResult
-													type="create"
-													result={result}
-													block={block}
-													setBlock={setBlock}
-												/>
-											) : toolName === "updateDocument" ? (
-												<DocumentToolResult
-													type="update"
-													result={result}
-													block={block}
-													setBlock={setBlock}
-												/>
-											) : toolName === "requestSuggestions" ? (
-												<DocumentToolResult
-													type="request-suggestions"
-													result={result}
-													block={block}
-													setBlock={setBlock}
-												/>
-											) : toolName === "getPapers" ? (
+											{toolName === "getPapers" ? (
 												<PaperReferences result={result} />
 											) : (
 												<pre>{JSON.stringify(result, null, 2)}</pre>
 											)}
-										</div>
-									);
-								} else {
-									return (
-										<div
-											key={toolCallId}
-											className={cx({
-												skeleton: ["getWeather"].includes(toolName),
-											})}
-										>
-											{toolName === "getWeather" ? (
-												<Weather />
-											) : toolName === "createDocument" ? (
-												<DocumentToolCall type="create" args={args} />
-											) : toolName === "updateDocument" ? (
-												<DocumentToolCall type="update" args={args} />
-											) : toolName === "requestSuggestions" ? (
-												<DocumentToolCall
-													type="request-suggestions"
-													args={args}
-												/>
-											) : null}
 										</div>
 									);
 								}
