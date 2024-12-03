@@ -80,7 +80,7 @@ export function Chat({
 				<ChatHeader />
 				<div
 					ref={messagesContainerRef}
-					className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4 justify-center"
+					className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4"
 				>
 					{messages.length === 0 && <Overview />}
 
