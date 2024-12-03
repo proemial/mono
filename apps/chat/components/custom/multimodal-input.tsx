@@ -23,15 +23,109 @@ import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 
 const suggestedActions = [
-  {
-    title: 'What is the weather',
-    label: 'in San Francisco?',
-    action: 'What is the weather in San Francisco?',
+	{
+    title: "Do vaccines cause autism spectrum disorder?",
+    action: "Do vaccines cause autism spectrum disorder?",
+  },
+	{
+    title: "Is a daily glass of wine healthy?",
+    action: "Is a daily glass of wine healthy?",
+  },
+	{
+    title: "Do cell phones cause brain cancer?",
+    action: "Do cell phones cause brain cancer?",
+  },
+	{
+    title: "What is the universe made of?",
+    action: "What is the universe made of?",
+  },
+	{
+    title: "How can I lower my blood pressure?",
+    action: "How can I lower my blood pressure?",
+  },
+	{
+    title: "What can I do for heartburn relief?",
+    action: "What can I do for heartburn relief?",
+  },
+	{
+    title: "Is microwaved food unsafe?",
+    action: "Is microwaved food unsafe?",
+  },
+	{
+    title: "Why do we dream?",
+    action: "Why do we dream?",
+  },
+	{
+    title: "What is the theory of evolution by natural selection?",
+    action: "What is the theory of evolution by natural selection?",
+  },
+	{
+    title: "What is the structure of DNA?",
+    action: "What is the structure of DNA?",
+  },
+	{
+    title: "What causes the seasons?",
+    action: "What causes the seasons?",
+  },
+	{
+    title: "How do vaccines work?",
+    action: "How do vaccines work?",
+  },
+	{
+    title: "What is photosynthesis?",
+    action: "What is photosynthesis?",
+  },
+	{
+    title: "What are the laws of thermodynamics?",
+    action: "What are the laws of thermodynamics?",
+  },
+	{
+    title: "What is the Big Bang Theory?",
+    action: "What is the Big Bang Theory?",
+  },
+	{
+    title: "How does antibiotic resistance develop?",
+    action: "How does antibiotic resistance develop?",
+  },
+	{
+    title: "What is plate tectonics?",
+    action: "What is plate tectonics?",
+  },
+	{
+    title: "How do black holes form?",
+    action: "How do black holes form?",
+  },
+	{
+    title: "What is quantum mechanics?",
+    action: "What is quantum mechanics?",
+  },
+	{
+    title: "What causes earthquakes?",
+    action: "What causes earthquakes?",
+  },
+	{
+    title: "What is the greenhouse effect?",
+    action: "What is the greenhouse effect?",
+  },
+	{
+    title: "What are stem cells?",
+    action: "What are stem cells?",
+  },
+	{
+    title: "What is the process of natural selection?",
+    action: "What is the process of natural selection?",
+  },
+	{
+    title: "How does the water cycle work?",
+    action: "How does the water cycle work?",
   },
   {
-    title: 'Help me draft an essay',
-    label: 'about Silicon Valley',
-    action: 'Help me draft a short essay about Silicon Valley',
+    title: "What is relativity theory?",
+    action: "What is relativity theory?",
+  },
+  {
+    title: "What causes global warming?",
+    action: "What causes global warming?",
   },
 ];
 
@@ -197,7 +291,7 @@ export function MultimodalInput({
         attachments.length === 0 &&
         uploadQueue.length === 0 && (
           <div className="grid sm:grid-cols-2 gap-2 w-full">
-            {suggestedActions.map((suggestedAction, index) => (
+            {suggestedActions.sort(() => Math.random() - 0.5).slice(0, 4).map((suggestedAction, index) => (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
