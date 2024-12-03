@@ -44,7 +44,7 @@ export const PreviewMessage = ({
 				)}
 			>
 				{message.role === "assistant" && (
-					<div className="size-7 flex items-center rounded-full justify-center shrink-0 bg-black dark:bg-white text-white dark:text-black">
+					<div className="size-7 flex items-center rounded-full justify-center shrink-0 bg-black dark:bg-white text-white dark:text-black -mt-1">
 						<ProemIcon size={14} />
 					</div>
 				)}
