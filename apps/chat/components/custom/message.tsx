@@ -3,29 +3,27 @@
 import { Message } from "ai";
 import cx from "classnames";
 import { motion } from "framer-motion";
-import { Dispatch, SetStateAction } from "react";
 
 import { Vote } from "@/db/schema";
 
-import { UIBlock } from "./block";
 import { ProemIcon, SparklesIcon } from "./icons"; // Add this import at the top with other icons
 import { Markdown } from "./markdown";
 import { MessageActions } from "./message-actions";
 import { PreviewAttachment } from "./preview-attachment";
 import { PaperReferences } from "./paper-references";
+import { ActiveReference } from "./reference";
+import { Dispatch, SetStateAction } from "react";
 
-export const PreviewMessage = ({
+export const Answer = ({
 	chatId,
 	message,
-	block,
-	setBlock,
+	setSelectedReference,
 	vote,
 	isLoading,
 }: {
 	chatId: string;
 	message: Message;
-	block: UIBlock;
-	setBlock: Dispatch<SetStateAction<UIBlock>>;
+	setSelectedReference: Dispatch<SetStateAction<ActiveReference>>;
 	vote: Vote | undefined;
 	isLoading: boolean;
 }) => {
@@ -65,7 +63,10 @@ export const PreviewMessage = ({
 									return (
 										<div key={toolCallId}>
 											{toolName === "getPapers" ? (
-												<PaperReferences result={result} />
+												<PaperReferences
+													result={result}
+													setSelectedReference={setSelectedReference}
+												/>
 											) : (
 												<pre>{JSON.stringify(result, null, 2)}</pre>
 											)}
@@ -100,7 +101,7 @@ export const PreviewMessage = ({
 	);
 };
 
-export const ThinkingMessage = () => {
+export const LoadingMessage = () => {
 	const role = "assistant";
 
 	return (

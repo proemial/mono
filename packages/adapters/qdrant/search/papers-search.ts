@@ -147,6 +147,7 @@ function asSearchHit(
 	score: number,
 	payload: OpenAlexPaperWithAbstract,
 ): QdrantSearchHit {
+	console.log("asSearchHit", score, payload);
 	return {
 		score: score,
 		paper: payload,

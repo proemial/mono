@@ -1,9 +1,8 @@
-import { CoreMessage } from "ai";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { DEFAULT_MODEL_NAME, models } from "@/ai/models";
-import { Chat as PreviewChat } from "@/components/custom/chat";
+import { Chat } from "@/components/custom/chat";
 import { getChatById, getMessagesByChatId } from "@/db/queries";
 import { convertToUIMessages } from "@/lib/utils";
 import { getSessionId } from "@/app/(auth)/sessionid";
@@ -38,7 +37,7 @@ export default async function Page(props: { params: Promise<any> }) {
 		DEFAULT_MODEL_NAME;
 
 	return (
-		<PreviewChat
+		<Chat
 			id={chat.id}
 			initialMessages={convertToUIMessages(messagesFromDb)}
 			selectedModelId={selectedModelId}

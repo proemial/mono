@@ -8,7 +8,7 @@ import useSWR, { useSWRConfig } from "swr";
 import { useWindowSize } from "usehooks-ts";
 
 import { ChatHeader } from "@/components/custom/chat-header";
-import { PreviewMessage, ThinkingMessage } from "@/components/custom/message";
+import { Answer, LoadingMessage } from "@/components/custom/message";
 import { useScrollToBottom } from "@/components/custom/use-scroll-to-bottom";
 import { Vote } from "@/db/schema";
 import { fetcher } from "@/lib/utils";
@@ -16,7 +16,9 @@ import { fetcher } from "@/lib/utils";
 import { Block, UIBlock } from "./block";
 import { BlockStreamHandler } from "./block-stream-handler";
 import { MultimodalInput } from "./multimodal-input";
-import { Overview } from "./overview";
+import { Welcome } from "./welcome";
+import { Reference, ReferencePreview } from "./reference";
+import { ActiveReference } from "./reference";
 
 export function Chat({
 	id,
@@ -63,6 +65,22 @@ export function Chat({
 			height: 50,
 		},
 	});
+	const [selectedReference, setSelectedReference] = useState<ActiveReference>({
+		isVisible: false,
+	});
+	// const handleReferenceClick = (reference: ReferencePreview) => {
+	// 	console.log(reference);
+	// 	setSelectedReference({
+	// 		preview: reference,
+	// 		isVisible: true,
+	// 		boundingBox: {
+	// 			top: 0,
+	// 			left: 0,
+	// 			width: 0,
+	// 			height: 0,
+	// 		},
+	// 	});
+	// };
 
 	const { data: votes } = useSWR<Array<Vote>>(
 		`/api/vote?chatId=${id}`,
@@ -82,15 +100,14 @@ export function Chat({
 					ref={messagesContainerRef}
 					className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4"
 				>
-					{messages.length === 0 && <Overview />}
+					{messages.length === 0 && <Welcome />}
 
 					{messages.map((message, index) => (
-						<PreviewMessage
+						<Answer
 							key={message.id}
 							chatId={id}
 							message={message}
-							block={block}
-							setBlock={setBlock}
+							setSelectedReference={setSelectedReference}
 							isLoading={isLoading && messages.length - 1 === index}
 							vote={
 								votes
@@ -102,9 +119,7 @@ export function Chat({
 
 					{isLoading &&
 						messages.length > 0 &&
-						messages[messages.length - 1].role === "user" && (
-							<ThinkingMessage />
-						)}
+						messages[messages.length - 1].role === "user" && <LoadingMessage />}
 
 					<div
 						ref={messagesEndRef}
@@ -142,6 +157,27 @@ export function Chat({
 						append={append}
 						block={block}
 						setBlock={setBlock}
+						messages={messages}
+						setMessages={setMessages}
+						votes={votes}
+					/>
+				)}
+			</AnimatePresence>
+
+			<AnimatePresence>
+				{selectedReference.isVisible && (
+					<Reference
+						chatId={id}
+						input={input}
+						setInput={setInput}
+						handleSubmit={handleSubmit}
+						isLoading={isLoading}
+						stop={stop}
+						attachments={attachments}
+						setAttachments={setAttachments}
+						append={append}
+						reference={selectedReference as ActiveReference}
+						setReference={setSelectedReference}
 						messages={messages}
 						setMessages={setMessages}
 						votes={votes}
