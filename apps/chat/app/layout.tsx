@@ -9,6 +9,37 @@ export const metadata: Metadata = {
 	metadataBase: new URL("https://chat.proem.ai"),
 	title: "Proem Chat",
 	description: "Trustworthy answers backed by research",
+	icons: [
+		{
+			rel: "icon",
+			url: "/favicon.ico",
+			media: "(prefers-color-scheme: light)",
+			type: "image/x-icon",
+		},
+		{
+			rel: "icon",
+			url: "/favicon-darkmode.ico",
+			media: "(prefers-color-scheme: dark)",
+			type: "image/x-icon",
+		},
+		{
+			rel: "apple-touch-icon",
+			url: "/apple-touch-icon.png",
+			sizes: "180x180",
+		},
+		{
+			rel: "icon",
+			url: "/android-chrome-192x192.png",
+			sizes: "192x192",
+			type: "image/png",
+		},
+		{
+			rel: "icon",
+			url: "/android-chrome-512x512.png",
+			sizes: "512x512",
+			type: "image/png",
+		},
+	],
 };
 
 export const viewport = {
