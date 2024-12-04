@@ -9,17 +9,22 @@ import { BetterTooltip } from "@/components/ui/tooltip";
 
 import { PlusIcon } from "./icons";
 import { useSidebar } from "../ui/sidebar";
+import { useEffect, useState } from "react";
 
 export function ChatHeader() {
 	const router = useRouter();
 	const { open } = useSidebar();
 
 	const { width: windowWidth } = useWindowSize();
+	const [isMobile, setIsMobile] = useState(false);
+	useEffect(() => {
+		setIsMobile(windowWidth ? windowWidth < 768 : false);
+	}, [windowWidth]);
 
 	return (
 		<header className="flex sticky top-0 bg-background py-1.5 items-center px-2 md:px-2 gap-2">
 			<SidebarToggle />
-			{(!open || windowWidth < 768) && (
+			{(!open || isMobile) && (
 				<BetterTooltip content="New Chat">
 					<Button
 						variant="outline"
