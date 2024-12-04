@@ -3,41 +3,32 @@
 import { Message } from "ai";
 import cx from "classnames";
 import { motion } from "framer-motion";
+import { Dispatch, SetStateAction } from "react";
 
 import { Vote } from "@/db/schema";
 
-import { ProemIcon, SparklesIcon } from "./icons"; // Add this import at the top with other icons
+import { UIBlock } from "./block";
+import { DocumentToolCall, DocumentToolResult } from "./document";
+import { SparklesIcon } from "./icons";
+import { Markdown } from "./markdown";
 import { MessageActions } from "./message-actions";
 import { PreviewAttachment } from "./preview-attachment";
-import { PaperReferences } from "./paper-references";
-import { ActiveReference, ReferencePreview } from "./reference";
-import { Dispatch, SetStateAction } from "react";
-import { indexPapers, useTextWithReferences } from "./reference-parser";
 
-type Props = {
-	chatId: string;
-	message: Message;
-	papers?: ReferencePreview[];
-	setSelectedReference: Dispatch<SetStateAction<ActiveReference>>;
-	vote: Vote | undefined;
-	isLoading: boolean;
-};
-
-export const Answer = ({
+export const BlockMessage = ({
 	chatId,
 	message,
-	papers,
-	setSelectedReference,
+	block,
+	setBlock,
 	vote,
 	isLoading,
-}: Props) => {
-	const { markup, references } = useTextWithReferences(
-		message.content as string,
-	);
-	const indexedPapers =
-		papers &&
-		indexPapers(papers, (paper) => references.includes(paper?.index + 1));
-
+}: {
+	chatId: string;
+	message: Message;
+	block: UIBlock;
+	setBlock: Dispatch<SetStateAction<UIBlock>>;
+	vote: Vote | undefined;
+	isLoading: boolean;
+}) => {
 	return (
 		<motion.div
 			className="w-full mx-auto max-w-3xl px-4 group/message"
@@ -51,19 +42,57 @@ export const Answer = ({
 				)}
 			>
 				{message.role === "assistant" && (
-					<div className="size-7 flex items-center rounded-full justify-center shrink-0 bg-black dark:bg-white text-white dark:text-black -mt-1">
-						<ProemIcon size={14} />
+					<div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border">
+						<SparklesIcon size={14} />
 					</div>
 				)}
 
 				<div className="flex flex-col gap-2 w-full">
-					<div>{markup}</div>
+					{message.content && (
+						<div className="flex flex-col gap-4">
+							<Markdown>{message.content as string}</Markdown>
+						</div>
+					)}
 
-					{indexedPapers?.at(0) && (
-						<PaperReferences
-							papers={indexedPapers}
-							setSelectedReference={setSelectedReference}
-						/>
+					{message.toolInvocations && message.toolInvocations.length > 0 && (
+						<div className="flex flex-col gap-4">
+							{message.toolInvocations.map((toolInvocation) => {
+								const { toolName, toolCallId, state, args } = toolInvocation;
+
+								if (state === "result") {
+									const { result } = toolInvocation;
+
+									return (
+										<div key={toolCallId}>
+											{toolName === "createDocument" ? (
+												<DocumentToolResult
+													type="create"
+													result={result}
+													block={block}
+													setBlock={setBlock}
+												/>
+											) : toolName === "updateDocument" ? (
+												<DocumentToolResult
+													type="update"
+													result={result}
+													block={block}
+													setBlock={setBlock}
+												/>
+											) : toolName === "requestSuggestions" ? (
+												<DocumentToolResult
+													type="request-suggestions"
+													result={result}
+													block={block}
+													setBlock={setBlock}
+												/>
+											) : (
+												<pre>{JSON.stringify(result, null, 2)}</pre>
+											)}
+										</div>
+									);
+								}
+							})}
+						</div>
 					)}
 
 					{message.experimental_attachments && (
@@ -90,32 +119,7 @@ export const Answer = ({
 	);
 };
 
-export const Question = ({
-	message,
-}: {
-	message: Message;
-}) => {
-	return (
-		<motion.div
-			className="w-full mx-auto max-w-3xl px-4 group/message"
-			initial={{ y: 5, opacity: 0 }}
-			animate={{ y: 0, opacity: 1 }}
-			data-role={message.role}
-		>
-			<div
-				className={cx(
-					"bg-primary text-primary-foreground flex gap-4 px-3 w-fit ml-auto max-w-2xl py-2 rounded-xl",
-				)}
-			>
-				<div className="flex flex-col gap-2 w-full">
-					<div>{message.content}</div>
-				</div>
-			</div>
-		</motion.div>
-	);
-};
-
-export const LoadingMessage = () => {
+export const ThinkingMessage = () => {
 	const role = "assistant";
 
 	return (
@@ -133,7 +137,7 @@ export const LoadingMessage = () => {
 					},
 				)}
 			>
-				<div className="size-7 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border">
+				<div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border">
 					<SparklesIcon size={14} />
 				</div>
 

@@ -1,5 +1,5 @@
 import { analyticsKeys } from "@/components/analytics/tracking/tracking-keys";
-import { Trackable } from "@/components/trackable";
+import { Trackable } from "@/components/analytics/tracking/trackable";
 import { uuid } from "@proemial/utils/uid";
 import { useEffect, useState } from "react";
 import { splitAndSanitize } from "@proemial/utils/references/santise-references";
@@ -24,6 +24,15 @@ export function useTextWithReferences(text?: string) {
 	);
 }
 
+export type IndexedReferencedPaper<T> = T & { index: number };
+
+export function indexPapers<T>(
+	papers: T[],
+	callback: (paper: IndexedReferencedPaper<T>) => boolean,
+) {
+	return papers.map((paper, index) => ({ ...paper, index })).filter(callback);
+}
+
 export function processTextWithReferences(text: string) {
 	const references = new Set<number>();
 	const prefix = uuid();
@@ -37,7 +46,7 @@ export function processTextWithReferences(text: string) {
 			return numbers?.map((num, j) => (
 				<Trackable
 					key={`${i}-${j}`}
-					trackingKey={analyticsKeys.experiments.news.item.clickInlineReference}
+					trackingKey={analyticsKeys.chat.click.reference}
 				>
 					<span className="">
 						<a

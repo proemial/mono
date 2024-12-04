@@ -1,20 +1,20 @@
-import { RetrievalResult } from "@/app/(chat)/api/chat/route";
 import { ActiveReference, ReferencePreview } from "./reference";
 import { Dispatch, SetStateAction } from "react";
+import { IndexedReferencedPaper } from "./reference-parser";
 
 type Props = {
-	result: RetrievalResult;
+	papers: IndexedReferencedPaper<ReferencePreview>[];
 	setSelectedReference: Dispatch<SetStateAction<ActiveReference>>;
 };
 
-export const PaperReferences = ({ result, setSelectedReference }: Props) => {
+export const PaperReferences = ({ papers, setSelectedReference }: Props) => {
 	return (
 		<div className="flex flex-col gap-2">
-			<div className="flex flex-col gap-4 text-muted-foreground">
-				Relevant research papers scanned
+			<div className="flex flex-col mt-2 gap-4 text-muted-foreground">
+				Relevant research papers:
 			</div>
 			<div className="flex gap-4 py-1 overflow-x-auto">
-				{result.slice(0, 2).map((paper, index) => (
+				{papers.map((paper) => (
 					<div
 						key={paper.link}
 						className="flex flex-col gap-2 p-3 border w-[100px] rounded-md shadow-sm bg-neutral-50 dark:bg-neutral-800 cursor-pointer"
@@ -34,7 +34,7 @@ export const PaperReferences = ({ result, setSelectedReference }: Props) => {
 						}}
 					>
 						<div className="text-xs text-sidebar-foreground/50 text-center">
-							{index + 1}
+							{paper.index + 1}
 						</div>
 						<div className="line-clamp-5 text-sm">{paper.title}</div>
 					</div>

@@ -8,7 +8,7 @@ import useSWR, { useSWRConfig } from "swr";
 import { useWindowSize } from "usehooks-ts";
 
 import { ChatHeader } from "@/components/custom/chat-header";
-import { Answer, LoadingMessage } from "@/components/custom/message";
+import { Question, Answer, LoadingMessage } from "@/components/custom/message";
 import { useScrollToBottom } from "@/components/custom/use-scroll-to-bottom";
 import { Vote } from "@/db/schema";
 import { fetcher } from "@/lib/utils";
@@ -102,20 +102,39 @@ export function Chat({
 				>
 					{messages.length === 0 && <Welcome />}
 
-					{messages.map((message, index) => (
-						<Answer
-							key={message.id}
-							chatId={id}
-							message={message}
-							setSelectedReference={setSelectedReference}
-							isLoading={isLoading && messages.length - 1 === index}
-							vote={
-								votes
-									? votes.find((vote) => vote.messageId === message.id)
-									: undefined
-							}
-						/>
-					))}
+					{messages.map((message, index) => {
+						if (message.toolInvocations?.length) {
+							return undefined;
+						}
+
+						if (message.role === "user") {
+							return <Question key={message.id} message={message} />;
+						}
+
+						const papers = messages
+							.at(index - 1)
+							?.toolInvocations?.filter(
+								(t) => t.state === "result" && t.toolName === "getPapers",
+							)
+							.flatMap((t) =>
+								t.state === "result" ? (t.result as ReferencePreview[]) : [],
+							);
+						return (
+							<Answer
+								key={message.id}
+								chatId={id}
+								message={message}
+								papers={papers}
+								setSelectedReference={setSelectedReference}
+								isLoading={isLoading && messages.length - 1 === index}
+								vote={
+									votes
+										? votes.find((vote) => vote.messageId === message.id)
+										: undefined
+								}
+							/>
+						);
+					})}
 
 					{isLoading &&
 						messages.length > 0 &&

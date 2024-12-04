@@ -225,16 +225,17 @@ export function Reference({
 						</Button>
 
 						<div className="flex flex-col">
-							<div className="font-medium">{reference?.preview?.title}</div>
-
-							<div className="text-sm text-muted-foreground">
-								{reference?.preview?.publicationDate}
+							<div className="text-2xl text-muted-foreground">
+								Research paper
 							</div>
 						</div>
 					</div>
 				</div>
-				<div className="prose dark:prose-invert dark:bg-muted bg-background h-full overflow-y-scroll px-4 py-8 md:p-20 !max-w-full pb-40 items-center">
-					<div className="flex flex-row max-w-[600px] mx-auto">
+				<div className="prose dark:prose-invert dark:bg-muted bg-background h-full overflow-y-scroll px-4 md:p-20 !max-w-full pb-40 items-center">
+					<div className="flex flex-col gap-2 max-w-[600px] mx-auto">
+						<div className="text-2xl font-bold">
+							{reference?.preview?.title}
+						</div>
 						{reference?.preview?.abstract}
 					</div>
 				</div>

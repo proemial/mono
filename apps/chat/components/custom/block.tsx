@@ -20,17 +20,17 @@ import {
 import { Document, Suggestion, Vote } from "@/db/schema";
 import { fetcher } from "@/lib/utils";
 
+import { Button } from "../ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { BlockMessage } from "./block-message";
 import { DiffView } from "./diffview";
 import { DocumentSkeleton } from "./document-skeleton";
 import { Editor } from "./editor";
 import { CopyIcon, CrossIcon, DeltaIcon, RedoIcon, UndoIcon } from "./icons";
-import { Answer } from "./message";
 import { MultimodalInput } from "./multimodal-input";
 import { Toolbar } from "./toolbar";
 import { useScrollToBottom } from "./use-scroll-to-bottom";
 import { VersionFooter } from "./version-footer";
-import { Button } from "../ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 export interface UIBlock {
 	title: string;
 	documentId: string;
@@ -291,7 +291,7 @@ export function Block({
 							className="flex flex-col gap-4 h-full items-center overflow-y-scroll px-4 pt-20"
 						>
 							{messages.map((message, index) => (
-								<Answer
+								<BlockMessage
 									chatId={chatId}
 									key={message.id}
 									message={message}
