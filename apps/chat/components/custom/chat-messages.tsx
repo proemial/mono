@@ -59,9 +59,7 @@ export const ChatMessages = ({
 				);
 			})}
 
-			{isLoading &&
-				messages.length > 0 &&
-				messages[messages.length - 1].role === "user" && <LoadingMessage />}
+			{isLoading && messages.length > 0 && <LoadingMessage />}
 		</>
 	);
 };
