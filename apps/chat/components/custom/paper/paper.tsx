@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { OpenAlexPaperWithAbstract } from "@proemial/repositories/oa/models/oa-paper";
 import { useObject } from "@/lib/use-object";
 import { FeedItemField } from "./feed-item-field";
@@ -42,35 +43,61 @@ export function ResearchPaper({ id }: { id: string }) {
 			) : (
 				<div>
 					<div className="flex flex-col gap-2 items-start p-4 -mx-4 sm:mx-auto sm:rounded-lg bg-blue-500/10">
-						<div className="text-muted-foreground">
+						<div className="font-light">
 							<Stars02 className="inline-block mr-2 size-4 top-[-1px] relative" />
 							summary
 						</div>
 						<div className="text-lg font-semibold">
 							{paper?.generated?.title}
 						</div>
-						<div className="text">{paper?.generated?.description}</div>
-					</div>
+						<div className="text">
+							{(() => {
+								const isMobile =
+									typeof window !== "undefined" && window.innerWidth < 640;
 
-					<div className="font-semibold text-3xl mt-8 mb-2">
-						{paper?.data?.title}
+								if (!isMobile) return paper?.generated?.description;
+
+								return (
+									<>
+										{paper?.generated?.description?.slice(0, 200)}...{" "}
+										<a
+											href="#"
+											className="text-blue-500 hover:underline cursor-pointer"
+											onClick={(e) => {
+												e.preventDefault();
+												const element = document.querySelector(".text");
+												if (element) {
+													element.textContent =
+														paper?.generated?.description || "";
+												}
+											}}
+										>
+											Read more
+										</a>
+									</>
+								);
+							})()}
+						</div>
 					</div>
-					<div className="text-muted-foreground text-sm mb-1">
-						Published {formatDate(paper?.data?.publication_date, "relative")}
-						{publisher && (
-							<>
-								in{" "}
+					<div className="flex justify-between text-muted-foreground uppercase mt-8 font-light">
+						<div>
+							{publisher && (
 								<a
 									href={paper?.data?.primary_location?.landing_page_url}
 									target="_blank"
 									rel="noreferrer"
-									className="font-semi-bold hover:underline hover:text-foreground no-underline text-foreground/65 transition"
+									className="hover:underline hover:text-foreground no-underline font-light transition text-muted-foreground"
 								>
 									{publisher}
 								</a>
-							</>
-						)}
+							)}
+						</div>
+						<div>{formatDate(paper?.data?.publication_date, "relative")}</div>
 					</div>
+					<div className="font-semibold text-3xl mt-2 mb-2">
+						{paper?.data?.title}
+					</div>
+
 					<div className="text-sm text-muted-foreground mb-1">
 						Written by{" "}
 						{paper?.data?.authorships
