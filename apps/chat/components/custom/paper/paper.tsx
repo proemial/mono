@@ -35,54 +35,52 @@ export function ResearchPaper({ id }: { id: string }) {
 
 	return (
 		<div className="">
-			{/* <FeedItemField topics={paper?.data?.topics} /> */}
-			<div className="text-muted-foreground">
-				<Stars02 className="inline-block mr-2 size-4 top-[-2px] relative" />
-				summary
-			</div>
-			<div className="text-xl font-semibold my-2">
-				<Skeletal isLoading={isLoading}>{paper?.generated?.title}</Skeletal>
-			</div>
-			<div className="text-xl">
-				<Skeletal isLoading={isLoading}>
-					{paper?.generated?.description}
-				</Skeletal>
-			</div>
+			{isLoading ? (
+				<div className="flex flex-col gap-4 animate-pulse">
+					<div className="h-32 bg-muted-foreground rounded-lg" />
+					<div className="h-6 w-3/4 bg-muted-foreground rounded" />
+					<div className="h-4 w-1/2 bg-muted-foreground rounded" />
+					<div className="h-4 w-1/3 bg-muted-foreground rounded" />
+				</div>
+			) : (
+				<div className="flex flex-col gap-2 items-start p-4 rounded-lg bg-blue-500/10">
+					<div className="text-muted-foreground">
+						<Stars02 className="inline-block mr-2 size-4 top-[-1px] relative" />
+						summary
+					</div>
+					<div className="text-lg font-semibold">{paper?.generated?.title}</div>
+					<div className="text">{paper?.generated?.description}</div>
+				</div>
+			)}
 
-			{/* <hr className="border-t border-solid border-/20 my-8" /> */}
-
-			<div className="text-muted-foreground italic mt-12">
-				Published{" "}
-				<Skeletal isLoading={isLoading}>
-					{formatDate(paper?.data?.publication_date, "relative")}
-				</Skeletal>{" "}
-				in{" "}
-				<Skeletal isLoading={isLoading}>
-					<a
-						href={paper?.data?.primary_location?.landing_page_url}
-						target="_blank"
-						rel="noreferrer"
-						className="font-semi-bold hover:underline hover:text-foreground no-underline text-foreground/65 transition"
-					>
-						{publisher}
-					</a>
-				</Skeletal>
+			<div className="font-semibold text-3xl mt-6 mb-2">
+				{paper?.data?.title}
 			</div>
-
-			<div className="font-semibold text-lg my-2">
-				<Skeletal isLoading={isLoading}>{paper?.data?.title}</Skeletal>
+			<div className="text-muted-foreground text-sm mb-1">
+				Published {formatDate(paper?.data?.publication_date, "relative")}
+				{publisher && (
+					<>
+						in{" "}
+						<a
+							href={paper?.data?.primary_location?.landing_page_url}
+							target="_blank"
+							rel="noreferrer"
+							className="font-semi-bold hover:underline hover:text-foreground no-underline text-foreground/65 transition"
+						>
+							{publisher}
+						</a>
+					</>
+				)}
 			</div>
-
-			<div className="text-lg">
-				<Skeletal isLoading={isLoading}>{paper?.data?.abstract}</Skeletal>
-			</div>
-			<div className="text-sm text-muted-foreground mt-4">
+			<div className="text-sm text-muted-foreground mb-1">
 				Written by{" "}
-				<Skeletal isLoading={isLoading}>
-					{paper?.data?.authorships
-						?.map((author) => author.author.display_name)
-						.join(", ")}
-				</Skeletal>
+				{paper?.data?.authorships
+					?.map((author) => author.author.display_name)
+					.join(", ")}
+			</div>
+
+			<div className="text-lg mt-4">
+				{paper?.data?.abstract || "Abstract not found"}
 			</div>
 
 			{paper && (
@@ -104,15 +102,4 @@ export function ResearchPaper({ id }: { id: string }) {
 			)}
 		</div>
 	);
-}
-
-function Skeletal({
-	isLoading,
-	children,
-}: { isLoading: boolean; children?: React.ReactNode | string }) {
-	if (isLoading) {
-		return <div className="w-full bg-slate-400 animate-pulse">&nbsp;</div>;
-	}
-
-	return children;
 }

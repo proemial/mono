@@ -224,7 +224,7 @@ export function Reference({
 						</div>
 					</div>
 				</div>
-				<div className="prose dark:prose-invert dark:bg-muted bg-background h-full overflow-y-scroll px-4 md:p-20 max-w-[800px] mx-auto pb-40 items-center">
+				<div className="prose dark:prose-invert dark:bg-muted bg-background h-full overflow-y-scroll px-4 lg:p-10 xl:p-20 max-w-[800px] mx-auto pb-40 items-center">
 					{openedReference?.preview && (
 						<ResearchPaper
 							id={openedReference.preview.link.split("/").pop() || ""}
