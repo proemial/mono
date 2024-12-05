@@ -54,49 +54,72 @@ export function processTextWithReferences(
 ) {
 	const references = new Set<number>();
 	const prefix = uuid();
+	// Create a mapping for renumbering
+	const referenceMap = new Map<number, number>();
+	let currentIndex = 1;
 
-	const hasIndex = (index: string) =>
-		(papers?.length ?? 0) >= Number.parseInt(index);
+	const isValidReference = (index: string) => {
+		const num = Number.parseInt(index);
+		return num > 0 && num <= (papers?.length ?? 0);
+	};
+
+	// First pass to collect and map references
+	splitAndSanitize(text).forEach((segment) => {
+		const match = segment.match(/\[(.*?)\]/);
+		if (match) {
+			const nums = match[1]
+				?.split(",")
+				.map((n) => n.trim())
+				.filter(isValidReference)
+				.map((n) => Number.parseInt(n));
+
+			nums?.forEach((num) => {
+				if (!referenceMap.has(num)) {
+					referenceMap.set(num, currentIndex++);
+				}
+				references.add(num);
+			});
+		}
+	});
+
+	const createReferenceLink = (originalNum: string, i: number, j: number) => {
+		const index = referenceMap.get(Number.parseInt(originalNum)) ?? 0;
+		return (
+			<Trackable
+				key={`${i}-${j}`}
+				trackingKey={analyticsKeys.chat.click.reference}
+			>
+				<a
+					href={`#${prefix}-${index - 1}`}
+					onClick={() =>
+						document
+							.getElementById("sources")
+							?.scrollIntoView({ behavior: "smooth" })
+					}
+					className="inline-flex items-center rounded-full bg-[#0A161C] hover:bg-gray-800 text-white text-[10px] font-[1000] px-[5px] py-[2px] -top-[2px] mr-[2px] mb-4 relative cursor-pointer"
+				>
+					{index}
+				</a>
+			</Trackable>
+		);
+	};
 
 	const markup = splitAndSanitize(text).map((segment, i) => {
 		const match = segment.match(/\[(.*?)\]/);
-		if (match) {
-			const numbers = match[1]?.split(",").map((n) => n.trim());
-			numbers?.forEach(
-				(n) => hasIndex(n) && references.add(Number.parseInt(n)),
-			);
+		if (!match) return segment;
 
-			return numbers?.filter(hasIndex).map((num, j) => (
-				<Trackable
-					key={`${i}-${j}`}
-					trackingKey={analyticsKeys.chat.click.reference}
-				>
-					<span className="">
-						<a
-							href={`#${prefix}-${num}`}
-							key={`${i}-${j}`}
-							onClick={() =>
-								document
-									.getElementById("sources")
-									?.scrollIntoView({ behavior: "smooth" })
-							}
-							className="items-center justify-center rounded-full bg-[#0A161C] text-white text-[10px] font-[1000] cursor-pointer hover:bg-gray-800 mb-4"
-							style={{
-								padding: "2px 5px",
-								marginRight: "2px",
-								position: "relative",
-								top: "-2px",
-							}}
-						>
-							{num}
-						</a>
-					</span>
-				</Trackable>
-			));
-		}
-		// Return regular text for non-link segments
-		return segment;
+		const nums = match[1]
+			?.split(",")
+			.map((n) => n.trim())
+			.filter(isValidReference);
+		nums?.forEach((n) => references.add(Number.parseInt(n)));
+
+		return nums?.map((num, j) => createReferenceLink(num, i, j));
 	});
 
-	return { markup, prefix, references: Array.from(references) };
+	return {
+		markup,
+		prefix,
+		references: Array.from(references).map((ref) => referenceMap.get(ref)),
+	};
 }
