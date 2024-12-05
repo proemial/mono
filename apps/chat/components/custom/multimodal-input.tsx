@@ -281,6 +281,7 @@ export function MultimodalInput({
 			)}
 
 			<Textarea
+				maxLength={1024}
 				ref={textareaRef}
 				placeholder="Send a message..."
 				value={input}
