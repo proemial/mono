@@ -41,6 +41,7 @@ export function Reference({
 	messages,
 	setMessages,
 	votes,
+	followups,
 }: {
 	chatId: string;
 	input: string;
@@ -64,6 +65,7 @@ export function Reference({
 		},
 		chatRequestOptions?: ChatRequestOptions,
 	) => void;
+	followups?: string[];
 }) {
 	const [messagesContainerRef, messagesEndRef] =
 		useScrollToBottom<HTMLDivElement>();
@@ -133,6 +135,7 @@ export function Reference({
 								append={append}
 								className="bg-background dark:bg-muted"
 								setMessages={setMessages}
+								followups={followups}
 							/>
 						</form>
 					</div>

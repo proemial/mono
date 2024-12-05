@@ -86,7 +86,9 @@ export function Chat({
 		: undefined;
 	const followups =
 		latestStreamingData?.type === "follow-up-questions-generated"
-			? (latestStreamingData?.data as Array<{ question: string }>)
+			? (latestStreamingData?.data as Array<{ question: string }>)?.map(
+					(f) => f.question,
+				)
 			: undefined;
 
 	return (
@@ -125,7 +127,7 @@ export function Chat({
 						messages={messages}
 						setMessages={setMessages}
 						append={append}
-						followups={followups?.map((f) => f.question)}
+						followups={followups}
 					/>
 				</form>
 			</div>
@@ -168,6 +170,7 @@ export function Chat({
 						messages={messages}
 						setMessages={setMessages}
 						votes={votes}
+						followups={followups}
 					/>
 				)}
 			</AnimatePresence>
