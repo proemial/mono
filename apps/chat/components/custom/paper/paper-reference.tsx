@@ -36,7 +36,7 @@ export default function PaperReference({
 
 	return (
 		<div
-			className="flex flex-col gap-2 p-3 border w-[100px] rounded-md shadow-sm bg-neutral-50 dark:bg-neutral-800 cursor-pointer"
+			className="flex flex-col gap-2 p-3 border w-[94px] rounded-md shadow-sm bg-neutral-50 dark:bg-neutral-800 cursor-pointer"
 			style={{
 				backgroundColor: isActive ? "#0a161c" : "white",
 				color: isActive ? "white" : "#0a161c",

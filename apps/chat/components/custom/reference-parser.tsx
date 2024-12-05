@@ -96,7 +96,7 @@ export function processTextWithReferences(
 							.getElementById("sources")
 							?.scrollIntoView({ behavior: "smooth" })
 					}
-					className="inline-flex items-center rounded-full bg-[#0A161C] hover:bg-gray-800 text-white text-[10px] font-[1000] px-[5px] py-[2px] -top-[2px] mr-[2px] mb-4 relative cursor-pointer"
+					className="inline-flex items-center rounded-full bg-[#0A161C] hover:bg-gray-800 text-white text-[10px] font-[1000] px-[5px] py-[2px] -top-[2px] mr-[2px] relative cursor-pointer"
 				>
 					{index}
 				</a>
