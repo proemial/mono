@@ -1,26 +1,14 @@
 "use client";
-import { useTheme } from "next-themes";
-import { Toggle } from "@proemial/shadcn-ui/components/ui/toggle";
+import dynamic from "next/dynamic";
+import { SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 
-import {
-	SidebarMenu,
-	SidebarMenuButton,
-	SidebarMenuItem,
-} from "@/components/ui/sidebar";
+const ThemeToggle = dynamic(() => import("./theme-toggle"), { ssr: false });
 
 export function SidebarUserNav({ sessionId }: { sessionId: string }) {
-	const { setTheme, theme } = useTheme();
-
 	return (
 		<SidebarMenu>
 			<SidebarMenuItem>
-				<Toggle
-					variant="outline"
-					className="w-full"
-					onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-				>
-					{`Toggle ${theme === "light" ? "dark" : "light"} mode`}
-				</Toggle>
+				<ThemeToggle />
 			</SidebarMenuItem>
 		</SidebarMenu>
 	);
