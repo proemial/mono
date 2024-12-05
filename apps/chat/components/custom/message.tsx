@@ -12,7 +12,7 @@ import { PreviewAttachment } from "./preview-attachment";
 import { PaperReferences } from "./paper/paper-references";
 import { OpenReference, ReferencePreview } from "./reference";
 import { Dispatch, SetStateAction } from "react";
-import { indexPapers, useTextWithReferences } from "./reference-parser";
+import { useTextWithReferences } from "./reference-parser";
 
 type Props = {
 	chatId: string;
@@ -31,7 +31,7 @@ export const Answer = ({
 	vote,
 	isLoading,
 }: Props) => {
-	const { markup, indexedPapers } = useTextWithReferences(
+	const { markup, indexedPapers, prefix } = useTextWithReferences(
 		message.content,
 		papers,
 	);
@@ -60,7 +60,8 @@ export const Answer = ({
 					{indexedPapers?.at(0) && (
 						<PaperReferences
 							papers={indexedPapers}
-							setSelectedReference={setOpenedReference}
+							setOpenedReference={setOpenedReference}
+							prefix={prefix}
 						/>
 					)}
 
