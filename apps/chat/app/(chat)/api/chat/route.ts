@@ -126,7 +126,7 @@ export async function POST(request: Request) {
 					});
 
 					return (await logRetrieval(
-						"ask",
+						"chat",
 						rephrasedQuestion,
 						async <RetrievalResult>() => {
 							return (await getPapersFromQdrant(

@@ -23,6 +23,14 @@ export const ChatMessages = ({
 	votes,
 	setOpenedReference,
 }: Props) => {
+	const latest = messages.at(-1);
+	const showLoading =
+		isLoading &&
+		!(
+			latest?.role === "assistant" &&
+			latest?.toolInvocations?.length === undefined
+		);
+
 	return (
 		<>
 			{messages.map((message, index) => {
@@ -59,7 +67,7 @@ export const ChatMessages = ({
 				);
 			})}
 
-			{isLoading && messages.length > 0 && <LoadingMessage />}
+			{showLoading && <LoadingMessage />}
 		</>
 	);
 };
