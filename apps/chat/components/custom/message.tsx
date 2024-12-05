@@ -31,12 +31,10 @@ export const Answer = ({
 	vote,
 	isLoading,
 }: Props) => {
-	const { markup, references } = useTextWithReferences(
-		message.content as string,
+	const { markup, indexedPapers } = useTextWithReferences(
+		message.content,
+		papers,
 	);
-	const indexedPapers =
-		papers &&
-		indexPapers(papers, (paper) => references.includes(paper?.index + 1));
 
 	return (
 		<motion.div

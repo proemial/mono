@@ -3,25 +3,40 @@ import { Trackable } from "@/components/analytics/tracking/trackable";
 import { uuid } from "@proemial/utils/uid";
 import { useEffect, useState } from "react";
 import { splitAndSanitize } from "@proemial/utils/references/santise-references";
+import { ReferencePreview } from "./reference";
 
-export function useTextWithReferences(text?: string) {
-	const [withReferences, setWithReferences] =
-		useState<ReturnType<typeof processTextWithReferences>>();
+type TextWithReferences = ReturnType<typeof processTextWithReferences> & {
+	indexedPapers?: IndexedReferencedPaper<ReferencePreview>[];
+};
+
+export function useTextWithReferences(
+	text?: string,
+	papers?: ReferencePreview[],
+) {
+	const [withReferences, setWithReferences] = useState<TextWithReferences>();
 
 	useEffect(() => {
 		if (text) {
-			const { markup, prefix, references } = processTextWithReferences(text);
-			setWithReferences({ markup, prefix, references });
-		}
-	}, [text]);
+			const { markup, prefix, references } = processTextWithReferences(
+				text,
+				papers,
+			);
 
-	return (
-		withReferences ?? {
-			markup: undefined,
-			prefix: "",
-			references: [] as number[],
+			const indexedPapers =
+				papers &&
+				indexPapers(
+					papers,
+					(paper) => references?.includes(paper?.index + 1) ?? false,
+				);
+			setWithReferences({ markup, prefix, references, indexedPapers });
 		}
-	);
+	}, [text, papers]);
+
+	return (withReferences ?? {
+		markup: undefined,
+		prefix: "",
+		references: [] as number[],
+	}) as TextWithReferences;
 }
 
 export type IndexedReferencedPaper<T> = T & { index: number };
@@ -33,17 +48,25 @@ export function indexPapers<T>(
 	return papers.map((paper, index) => ({ ...paper, index })).filter(callback);
 }
 
-export function processTextWithReferences(text: string) {
+export function processTextWithReferences(
+	text: string,
+	papers?: ReferencePreview[],
+) {
 	const references = new Set<number>();
 	const prefix = uuid();
+
+	const hasIndex = (index: string) =>
+		(papers?.length ?? 0) >= Number.parseInt(index);
 
 	const markup = splitAndSanitize(text).map((segment, i) => {
 		const match = segment.match(/\[(.*?)\]/);
 		if (match) {
 			const numbers = match[1]?.split(",").map((n) => n.trim());
-			numbers?.forEach((n) => references.add(Number.parseInt(n)));
+			numbers?.forEach(
+				(n) => hasIndex(n) && references.add(Number.parseInt(n)),
+			);
 
-			return numbers?.map((num, j) => (
+			return numbers?.filter(hasIndex).map((num, j) => (
 				<Trackable
 					key={`${i}-${j}`}
 					trackingKey={analyticsKeys.chat.click.reference}
