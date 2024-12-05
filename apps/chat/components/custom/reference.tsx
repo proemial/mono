@@ -12,6 +12,7 @@ import { Answer, Question } from "./message";
 import { MultimodalInput } from "./multimodal-input";
 import { useScrollToBottom } from "./use-scroll-to-bottom";
 import { ResearchPaper } from "./paper/paper";
+import { ChatMessages } from "./chat-messages";
 
 export type ActiveReference = {
 	isVisible: boolean;
@@ -104,56 +105,13 @@ export function Reference({
 							ref={messagesContainerRef}
 							className="flex flex-col gap-4 h-full items-center overflow-y-scroll px-4 pt-20"
 						>
-							{messages.map((message, index) => {
-								if (message.toolInvocations?.length) {
-									return undefined;
-								}
-
-								if (message.role === "user") {
-									return <Question key={message.id} message={message} />;
-								}
-
-								const papers = messages
-									.at(index - 1)
-									?.toolInvocations?.filter(
-										(t) => t.state === "result" && t.toolName === "getPapers",
-									)
-									.flatMap((t) =>
-										t.state === "result"
-											? (t.result as ReferencePreview[])
-											: [],
-									);
-								return (
-									<Answer
-										key={message.id}
-										chatId={chatId}
-										message={message}
-										papers={papers}
-										setSelectedReference={setReference}
-										isLoading={isLoading && messages.length - 1 === index}
-										vote={
-											votes
-												? votes.find((vote) => vote.messageId === message.id)
-												: undefined
-										}
-									/>
-								);
-							})}
-
-							{/* {messages.map((message, index) => (
-								<Answer
-									chatId={chatId}
-									key={message.id}
-									message={message}
-									setSelectedReference={setReference}
-									isLoading={isLoading && index === messages.length - 1}
-									vote={
-										votes
-											? votes.find((vote) => vote.messageId === message.id)
-											: undefined
-									}
-								/>
-							))} */}
+							<ChatMessages
+								id={chatId}
+								messages={messages}
+								isLoading={isLoading}
+								votes={votes}
+								setSelectedReference={setReference}
+							/>
 
 							<div
 								ref={messagesEndRef}
