@@ -16,7 +16,7 @@ import { Block, UIBlock } from "./block";
 import { BlockStreamHandler } from "./block-stream-handler";
 import { ChatMessages } from "./chat-messages";
 import { MultimodalInput } from "./multimodal-input";
-import { ActiveReference, Reference } from "./reference";
+import { OpenReference, Reference } from "./reference";
 import { Welcome } from "./welcome";
 
 export function Chat({
@@ -64,7 +64,7 @@ export function Chat({
 			height: 50,
 		},
 	});
-	const [selectedReference, setSelectedReference] = useState<ActiveReference>({
+	const [openedReference, setOpenedReference] = useState<OpenReference>({
 		isVisible: false,
 	});
 
@@ -93,7 +93,7 @@ export function Chat({
 						messages={messages}
 						isLoading={isLoading}
 						votes={votes}
-						setSelectedReference={setSelectedReference}
+						setOpenedReference={setOpenedReference}
 					/>
 
 					<div
@@ -140,7 +140,7 @@ export function Chat({
 			</AnimatePresence>
 
 			<AnimatePresence>
-				{selectedReference.isVisible && (
+				{openedReference.isVisible && (
 					<Reference
 						chatId={id}
 						input={input}
@@ -151,8 +151,8 @@ export function Chat({
 						attachments={attachments}
 						setAttachments={setAttachments}
 						append={append}
-						reference={selectedReference as ActiveReference}
-						setReference={setSelectedReference}
+						openedReference={openedReference}
+						setOpenedReference={setOpenedReference}
 						messages={messages}
 						setMessages={setMessages}
 						votes={votes}

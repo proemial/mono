@@ -1,10 +1,10 @@
-import { ActiveReference, ReferencePreview } from "../reference";
+import { OpenReference, ReferencePreview } from "../reference";
 import { Dispatch, SetStateAction } from "react";
 import { IndexedReferencedPaper } from "../reference-parser";
 
 type Props = {
 	papers: IndexedReferencedPaper<ReferencePreview>[];
-	setSelectedReference: Dispatch<SetStateAction<ActiveReference>>;
+	setSelectedReference: Dispatch<SetStateAction<OpenReference>>;
 };
 
 export const PaperReferences = ({ papers, setSelectedReference }: Props) => {

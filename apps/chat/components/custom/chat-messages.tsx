@@ -6,14 +6,14 @@ import { Answer } from "./message";
 import { LoadingMessage } from "./message";
 import { Vote } from "@/db/schema";
 import { Message } from "ai";
-import { ActiveReference } from "./reference";
+import { OpenReference } from "./reference";
 
 type Props = {
 	id: string;
 	messages: Message[];
 	isLoading: boolean;
 	votes?: Vote[];
-	setSelectedReference: Dispatch<SetStateAction<ActiveReference>>;
+	setOpenedReference: Dispatch<SetStateAction<OpenReference>>;
 };
 
 export const ChatMessages = ({
@@ -21,7 +21,7 @@ export const ChatMessages = ({
 	messages,
 	isLoading,
 	votes,
-	setSelectedReference,
+	setOpenedReference,
 }: Props) => {
 	return (
 		<>
@@ -48,7 +48,7 @@ export const ChatMessages = ({
 						chatId={id}
 						message={message}
 						papers={papers}
-						setSelectedReference={setSelectedReference}
+						setOpenedReference={setOpenedReference}
 						isLoading={isLoading && messages.length - 1 === index}
 						vote={
 							votes

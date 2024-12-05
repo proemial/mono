@@ -14,7 +14,7 @@ import { useScrollToBottom } from "./use-scroll-to-bottom";
 import { ResearchPaper } from "./paper/paper";
 import { ChatMessages } from "./chat-messages";
 
-export type ActiveReference = {
+export type OpenReference = {
 	isVisible: boolean;
 	preview?: ReferencePreview;
 	boundingBox?: {
@@ -36,8 +36,8 @@ export function Reference({
 	attachments,
 	setAttachments,
 	append,
-	reference,
-	setReference,
+	openedReference,
+	setOpenedReference,
 	messages,
 	setMessages,
 	votes,
@@ -49,8 +49,8 @@ export function Reference({
 	stop: () => void;
 	attachments: Array<Attachment>;
 	setAttachments: Dispatch<SetStateAction<Array<Attachment>>>;
-	reference: ActiveReference;
-	setReference: Dispatch<SetStateAction<ActiveReference>>;
+	openedReference: OpenReference;
+	setOpenedReference: Dispatch<SetStateAction<OpenReference>>;
 	messages: Array<Message>;
 	setMessages: Dispatch<SetStateAction<Array<Message>>>;
 	votes: Array<Vote> | undefined;
@@ -110,7 +110,7 @@ export function Reference({
 								messages={messages}
 								isLoading={isLoading}
 								votes={votes}
-								setSelectedReference={setReference}
+								setOpenedReference={setOpenedReference}
 							/>
 
 							<div
@@ -153,10 +153,10 @@ export function Reference({
 							}
 						: {
 								opacity: 0,
-								x: reference?.boundingBox?.left,
-								y: reference?.boundingBox?.top,
-								height: reference?.boundingBox?.height,
-								width: reference?.boundingBox?.width,
+								x: openedReference?.boundingBox?.left,
+								y: openedReference?.boundingBox?.top,
+								height: openedReference?.boundingBox?.height,
+								width: openedReference?.boundingBox?.width,
 								borderRadius: 50,
 							}
 				}
@@ -208,7 +208,7 @@ export function Reference({
 							variant="outline"
 							className="h-fit p-2 dark:hover:bg-zinc-700"
 							onClick={() => {
-								setReference((currentBlock) => ({
+								setOpenedReference((currentBlock) => ({
 									...currentBlock,
 									isVisible: false,
 								}));
@@ -225,8 +225,10 @@ export function Reference({
 					</div>
 				</div>
 				<div className="prose dark:prose-invert dark:bg-muted bg-background h-full overflow-y-scroll px-4 md:p-20 !max-w-full pb-40 items-center">
-					{reference?.preview && (
-						<ResearchPaper id={reference.preview.link.split("/").pop() || ""} />
+					{openedReference?.preview && (
+						<ResearchPaper
+							id={openedReference.preview.link.split("/").pop() || ""}
+						/>
 					)}
 				</div>
 			</motion.div>

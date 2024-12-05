@@ -10,7 +10,7 @@ import { ProemIcon, SparklesIcon } from "./icons"; // Add this import at the top
 import { MessageActions } from "./message-actions";
 import { PreviewAttachment } from "./preview-attachment";
 import { PaperReferences } from "./paper/paper-references";
-import { ActiveReference, ReferencePreview } from "./reference";
+import { OpenReference, ReferencePreview } from "./reference";
 import { Dispatch, SetStateAction } from "react";
 import { indexPapers, useTextWithReferences } from "./reference-parser";
 
@@ -18,7 +18,7 @@ type Props = {
 	chatId: string;
 	message: Message;
 	papers?: ReferencePreview[];
-	setSelectedReference: Dispatch<SetStateAction<ActiveReference>>;
+	setOpenedReference: Dispatch<SetStateAction<OpenReference>>;
 	vote: Vote | undefined;
 	isLoading: boolean;
 };
@@ -27,7 +27,7 @@ export const Answer = ({
 	chatId,
 	message,
 	papers,
-	setSelectedReference,
+	setOpenedReference,
 	vote,
 	isLoading,
 }: Props) => {
@@ -60,7 +60,7 @@ export const Answer = ({
 					{indexedPapers?.at(0) && (
 						<PaperReferences
 							papers={indexedPapers}
-							setSelectedReference={setSelectedReference}
+							setSelectedReference={setOpenedReference}
 						/>
 					)}
 
