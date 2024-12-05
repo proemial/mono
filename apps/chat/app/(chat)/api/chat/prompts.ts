@@ -71,7 +71,7 @@ Do not respond with anything else than the rephrased question.
 
 export const followUpQuestionsPrompt = (question: string, answer: string) => `
 Based on a given question and an answer to that question, provide a response
-containing three good follow-up questions that would enable an adult learner
+containing four good follow-up questions that would enable an adult learner
 dive deeper into a topic and understand the background for the given answer.
 
 <user_question>
@@ -85,6 +85,8 @@ ${answer}
 The first question should dive deeper into the topic.
 The second question should challenge the facts presented in the answer.
 The third question should broaden the user's knowledge on the topic.
+The fourth question should be a question that would enable the user to apply the
+given answer to a real-life scenario.
 
-Each of the three follow-up questions must not exceed ten words.
+Each of the four follow-up questions must not exceed ten words.
 `;

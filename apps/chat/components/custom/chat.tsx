@@ -78,6 +78,17 @@ export function Chat({
 
 	const [attachments, setAttachments] = useState<Array<Attachment>>([]);
 
+	const latestStreamingData = !isLoading
+		? (streamingData?.at(-1) as {
+				type: string;
+				data: unknown;
+			})
+		: undefined;
+	const followups =
+		latestStreamingData?.type === "follow-up-questions-generated"
+			? (latestStreamingData?.data as Array<{ question: string }>)
+			: undefined;
+
 	return (
 		<>
 			<div className="flex flex-col min-w-0 h-dvh bg-background">
@@ -114,6 +125,7 @@ export function Chat({
 						messages={messages}
 						setMessages={setMessages}
 						append={append}
+						followups={followups?.map((f) => f.question)}
 					/>
 				</form>
 			</div>

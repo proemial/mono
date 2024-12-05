@@ -64,6 +64,7 @@ export function MultimodalInput({
 	append,
 	handleSubmit,
 	className,
+	followups,
 }: {
 	chatId: string;
 	input: string;
@@ -85,6 +86,7 @@ export function MultimodalInput({
 		chatRequestOptions?: ChatRequestOptions,
 	) => void;
 	className?: string;
+	followups?: string[];
 }) {
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const { width } = useWindowSize();
@@ -214,42 +216,46 @@ export function MultimodalInput({
 		[setAttachments],
 	);
 
+	const starters = followups
+		? followups
+		: messages.length === 0
+			? suggestions
+			: undefined;
+
 	return (
 		<div className="relative w-full flex flex-col gap-4">
-			{messages.length === 0 &&
-				attachments.length === 0 &&
-				uploadQueue.length === 0 && (
-					<div className="grid sm:grid-cols-2 gap-2 w-full">
-						{suggestions.map((suggestion, index) => (
-							<motion.div
-								initial={{ opacity: 0, y: 20 }}
-								animate={{ opacity: 1, y: 0 }}
-								exit={{ opacity: 0, y: 20 }}
-								transition={{ delay: 0.05 * index }}
-								key={index}
-								className={index > 1 ? "hidden sm:block" : "block"}
-							>
-								<Button
-									variant="ghost"
-									onClick={async () => {
-										window.history.replaceState({}, "", `/chat/${chatId}`);
+			{starters && (
+				<div className="grid sm:grid-cols-2 gap-2 w-full">
+					{starters?.map((suggestion, index) => (
+						<motion.div
+							initial={{ opacity: 0, y: 20 }}
+							animate={{ opacity: 1, y: 0 }}
+							exit={{ opacity: 0, y: 20 }}
+							transition={{ delay: 0.05 * index }}
+							key={index}
+							className={index > 1 ? "hidden sm:block" : "block"}
+						>
+							<Button
+								variant="ghost"
+								onClick={async () => {
+									window.history.replaceState({}, "", `/chat/${chatId}`);
 
-										append({
-											role: "user",
-											content: suggestion,
-										});
-									}}
-									className="text-left border rounded-xl px-4 py-3.5 text-sm flex-1 gap-1 sm:flex-col w-full h-auto justify-start items-start"
-								>
-									<span className="font-medium">{suggestion}</span>
-									{/* <span className="text-muted-foreground">
+									append({
+										role: "user",
+										content: suggestion,
+									});
+								}}
+								className="text-left border rounded-xl px-4 py-3.5 text-sm flex-1 gap-1 sm:flex-col w-full h-auto justify-start items-start"
+							>
+								<span className="font-medium">{suggestion}</span>
+								{/* <span className="text-muted-foreground">
                     {suggestedAction.label}
                   </span> */}
-								</Button>
-							</motion.div>
-						))}
-					</div>
-				)}
+							</Button>
+						</motion.div>
+					))}
+				</div>
+			)}
 
 			<input
 				type="file"
