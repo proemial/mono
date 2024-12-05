@@ -9,11 +9,11 @@ type Props = {
 
 export const PaperReferences = ({ papers, setSelectedReference }: Props) => {
 	return (
-		<div className="flex flex-col gap-2">
-			<div className="flex flex-col mt-2 gap-4 text-muted-foreground">
-				Relevant research papers:
+		<div className="flex flex-col gap-2 overflow-hidden w-full">
+			<div className="flex flex-col mt-2 gap-4 text-sm text-muted-foreground">
+				Relevant research papers
 			</div>
-			<div className="flex gap-4 py-1 overflow-x-auto">
+			<div className="flex gap-4 py-1 min-w-0 overflow-x-scroll w-[calc(100vw-100px)]">
 				{papers.map((paper) => (
 					<div
 						key={paper.link}
