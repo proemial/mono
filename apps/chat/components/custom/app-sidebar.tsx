@@ -1,8 +1,6 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type User } from "next-auth";
 
 import { PlusIcon, ProemIcon } from "@/components/custom/icons";
 import { SidebarHistory } from "@/components/custom/sidebar-history";
@@ -19,10 +17,12 @@ import {
 	useSidebar,
 } from "@/components/ui/sidebar";
 import { BetterTooltip } from "@/components/ui/tooltip";
+import { useIsMobile } from "../layout/use-mobile";
 
 export function AppSidebar({ sessionId }: { sessionId: string }) {
 	const router = useRouter();
 	const { setOpenMobile } = useSidebar();
+	const isMobile = useIsMobile();
 
 	return (
 		<Sidebar className="group-data-[side=left]:border-r-0">
@@ -42,19 +42,21 @@ export function AppSidebar({ sessionId }: { sessionId: string }) {
 								proem
 							</span>
 						</div>
-						<BetterTooltip content="New Chat" align="start">
-							<Button
-								variant="ghost"
-								className="p-2 h-fit"
-								onClick={() => {
-									setOpenMobile(false);
-									router.push("/");
-									router.refresh();
-								}}
-							>
-								<PlusIcon />
-							</Button>
-						</BetterTooltip>
+						{!isMobile && (
+							<BetterTooltip content="New Chat" align="start">
+								<Button
+									variant="ghost"
+									className="p-2 h-fit"
+									onClick={() => {
+										setOpenMobile(false);
+										router.push("/");
+										router.refresh();
+									}}
+								>
+									<PlusIcon />
+								</Button>
+							</BetterTooltip>
+						)}
 					</div>
 				</SidebarMenu>
 			</SidebarHeader>
