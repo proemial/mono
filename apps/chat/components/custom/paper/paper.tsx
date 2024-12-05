@@ -2,15 +2,22 @@ import { OpenAlexPaperWithAbstract } from "@proemial/repositories/oa/models/oa-p
 import { useObject } from "@/lib/use-object";
 import { FeedItemField } from "./feed-item-field";
 import { formatDate } from "@proemial/utils/date";
-import { Button, Header2, Header4 } from "@proemial/shadcn-ui";
+import {
+	Button,
+	Header1,
+	Header2,
+	Header4,
+	Header3,
+} from "@proemial/shadcn-ui";
 import {
 	BookOpen01,
 	ChevronRight,
 	Heading01,
 	LinkExternal02,
 	Users01,
+	Stars02,
+	File06,
 } from "@untitled-ui/icons-react";
-import { AIGeneratedIcon } from "./AIGeneratedIcon";
 
 type StreamedPaper = {
 	data: OpenAlexPaperWithAbstract;
@@ -27,82 +34,57 @@ export function ResearchPaper({ id }: { id: string }) {
 	const publisher = paper?.data?.primary_location?.source?.display_name;
 
 	return (
-		<div className="space-y-3 text-pretty">
-			<div>
-				<div className="flex items-center justify-between gap-2 mb-1">
-					<FeedItemField topics={paper?.data?.topics} />
-					<div className="flex items-center gap-2 ">
-						<div className="uppercase text-2xs text-nowrap">
-							<Skeletal isLoading={isLoading}>
-								{formatDate(paper?.data?.publication_date, "relative")}
-							</Skeletal>
-						</div>
-					</div>
-				</div>
-				<Header2 className="break-words markdown line-clamp-4 m-0">
-					<Skeletal isLoading={isLoading}>{paper?.generated?.title}</Skeletal>
-				</Header2>
+		<div className="">
+			{/* <FeedItemField topics={paper?.data?.topics} /> */}
+			<div className="text-muted-foreground">
+				<Stars02 className="inline-block mr-2 size-4 top-[-2px] relative" />
+				summary
 			</div>
-
-			<a
-				href={paper?.data?.primary_location?.landing_page_url}
-				target="_blank"
-				rel="noreferrer"
-				className="text-gray-600 flex items-center justify-between gap-1 text-xs hover:text-gray-700 transition-opacity"
-			>
-				<div className="flex-grow w-1/2">
-					<Skeletal isLoading={isLoading}>
-						<div className="flex items-center gap-2.5">
-							<div>
-								<BookOpen01 className="size-2.5" />
-							</div>
-							<div className="truncate">{publisher}</div>
-						</div>
-					</Skeletal>
-
-					<div className="flex items-center gap-2.5">
-						<div>
-							<Heading01 className="size-2.5" />
-						</div>
-						<div className="truncate pr-6">
-							<Skeletal isLoading={isLoading}>{paper?.data?.title}</Skeletal>
-						</div>
-					</div>
-
-					<div className="flex items-center gap-2.5">
-						<div>
-							<Users01 className="size-2.5" />
-						</div>
-						<span className="truncate flex-grow">
-							<Skeletal isLoading={isLoading}>
-								{paper?.data?.authorships
-									?.map((author) => author.author.display_name)
-									.join(", ")}
-							</Skeletal>
-						</span>
-					</div>
-				</div>
-
-				<ChevronRight className="size-5 opacity-50" />
-			</a>
-
-			<div className="flex items-center place-content-between">
-				<div className="flex items-center gap-2.5 gap">
-					<AIGeneratedIcon />
-					<Header4>Paper Summary</Header4>
-				</div>
-				<div className="flex justify-end flex-grow -mr-2">
-					{/* <ModelSelector
-                        className="w-full bg-transparent"
-                        trackingKeys={trackingKeys}
-                    /> */}
-				</div>
+			<div className="text-xl font-semibold my-2">
+				<Skeletal isLoading={isLoading}>{paper?.generated?.title}</Skeletal>
 			</div>
-			<div className="text-base/relaxed break-words">
+			<div className="text-xl">
 				<Skeletal isLoading={isLoading}>
 					{paper?.generated?.description}
 				</Skeletal>
 			</div>
+
+			{/* <hr className="border-t border-solid border-/20 my-8" /> */}
+
+			<div className="text-muted-foreground italic mt-12">
+				Published{" "}
+				<Skeletal isLoading={isLoading}>
+					{formatDate(paper?.data?.publication_date, "relative")}
+				</Skeletal>{" "}
+				in{" "}
+				<Skeletal isLoading={isLoading}>
+					<a
+						href={paper?.data?.primary_location?.landing_page_url}
+						target="_blank"
+						rel="noreferrer"
+						className="font-semi-bold hover:underline hover:text-foreground no-underline text-foreground/65 transition"
+					>
+						{publisher}
+					</a>
+				</Skeletal>
+			</div>
+
+			<div className="font-semibold text-lg my-2">
+				<Skeletal isLoading={isLoading}>{paper?.data?.title}</Skeletal>
+			</div>
+
+			<div className="text-lg">
+				<Skeletal isLoading={isLoading}>{paper?.data?.abstract}</Skeletal>
+			</div>
+			<div className="text-sm text-muted-foreground mt-4">
+				Written by{" "}
+				<Skeletal isLoading={isLoading}>
+					{paper?.data?.authorships
+						?.map((author) => author.author.display_name)
+						.join(", ")}
+				</Skeletal>
+			</div>
+
 			{paper && (
 				<div className="flex items-center justify-center w-full my-8">
 					<a
@@ -110,7 +92,10 @@ export function ResearchPaper({ id }: { id: string }) {
 						target="_blank"
 						rel="noreferrer"
 					>
-						<Button className="gap-2">
+						<Button
+							variant="ghost"
+							className="gap-2 hover:bg-muted-foreground/20"
+						>
 							<span>View full article</span>{" "}
 							<LinkExternal02 className="size-4" />
 						</Button>

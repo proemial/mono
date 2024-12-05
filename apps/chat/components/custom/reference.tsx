@@ -219,12 +219,12 @@ export function Reference({
 
 						<div className="flex flex-col">
 							<div className="text-2xl text-muted-foreground">
-								Research paper
+								Title of reference
 							</div>
 						</div>
 					</div>
 				</div>
-				<div className="prose dark:prose-invert dark:bg-muted bg-background h-full overflow-y-scroll px-4 md:p-20 !max-w-full pb-40 items-center">
+				<div className="prose dark:prose-invert dark:bg-muted bg-background h-full overflow-y-scroll px-4 md:p-20 max-w-[800px] mx-auto pb-40 items-center">
 					{openedReference?.preview && (
 						<ResearchPaper
 							id={openedReference.preview.link.split("/").pop() || ""}
