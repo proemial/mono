@@ -1,24 +1,8 @@
-import { useState } from "react";
-import { OpenAlexPaperWithAbstract } from "@proemial/repositories/oa/models/oa-paper";
 import { useObject } from "@/lib/use-object";
-import { FeedItemField } from "./feed-item-field";
+import { OpenAlexPaperWithAbstract } from "@proemial/repositories/oa/models/oa-paper";
+import { Button } from "@proemial/shadcn-ui";
 import { formatDate } from "@proemial/utils/date";
-import {
-	Button,
-	Header1,
-	Header2,
-	Header4,
-	Header3,
-} from "@proemial/shadcn-ui";
-import {
-	BookOpen01,
-	ChevronRight,
-	Heading01,
-	LinkExternal02,
-	Users01,
-	Stars02,
-	File06,
-} from "@untitled-ui/icons-react";
+import { File06, LinkExternal02, Stars02 } from "@untitled-ui/icons-react";
 
 type StreamedPaper = {
 	data: OpenAlexPaperWithAbstract;
