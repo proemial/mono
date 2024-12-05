@@ -36,7 +36,7 @@ export default function PaperReference({
 
 	return (
 		<div
-			className="flex flex-col gap-2 p-3 border w-[94px] rounded-md shadow-sm bg-neutral-50 dark:bg-neutral-800 cursor-pointer"
+			className="flex flex-col gap-2 p-3 border w-[93px] rounded-md shadow-sm bg-neutral-50 dark:bg-neutral-800 cursor-pointer"
 			style={{
 				backgroundColor: isActive ? "#0a161c" : "white",
 				color: isActive ? "white" : "#0a161c",
@@ -56,10 +56,18 @@ export default function PaperReference({
 				});
 			}}
 		>
-			<div className="text-xs text-sidebar-foreground/50 text-center">
-				{paper.index + 1}
+			<div className="flex justify-between">
+				<div className="text-xl relative -top-1">{paper.index + 1}</div>
+				<div className="text-[10px] text-sidebar-foreground/50">
+					{new Date(paper.publicationDate).toLocaleDateString("en-US", {
+						month: "short",
+						year: "numeric",
+					})}
+				</div>
 			</div>
-			<div className="line-clamp-5 text-sm">{paper.title}</div>
+			<div className="line-clamp-3 text-[11px] font-semibold text-sidebar-foreground/80">
+				{paper.title}
+			</div>
 		</div>
 	);
 }

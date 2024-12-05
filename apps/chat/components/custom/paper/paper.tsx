@@ -43,7 +43,7 @@ export function ResearchPaper({ id }: { id: string }) {
 			) : (
 				<div>
 					<div className="flex flex-col gap-2 items-start p-4 -mx-4 sm:mx-auto sm:rounded-lg bg-blue-500/10">
-						<div className="font-light">
+						<div className="font-light text-sm md:text-base">
 							<Stars02 className="inline-block mr-2 size-4 top-[-1px] relative" />
 							summary
 						</div>
@@ -79,7 +79,7 @@ export function ResearchPaper({ id }: { id: string }) {
 							})()}
 						</div>
 					</div>
-					<div className="flex justify-between text-muted-foreground uppercase mt-8 font-light">
+					<div className="flex justify-between text-muted-foreground mt-8 font-light text-sm md:text-base">
 						<div>
 							{publisher && (
 								<a
@@ -94,18 +94,18 @@ export function ResearchPaper({ id }: { id: string }) {
 						</div>
 						<div>{formatDate(paper?.data?.publication_date, "relative")}</div>
 					</div>
-					<div className="font-semibold text-3xl mt-2 mb-2">
+					<div className="font-semibold text-2xl md:text-3xl mt-2 mb-2">
 						{paper?.data?.title}
 					</div>
 
-					<div className="text-sm text-muted-foreground mb-1">
+					<div className="text-sm md:text-base font-light text-muted-foreground mb-1">
 						Written by{" "}
 						{paper?.data?.authorships
 							?.map((author) => author.author.display_name)
 							.join(", ")}
 					</div>
 
-					<div className="text-lg mt-4">
+					<div className="md:text-lg mt-4">
 						{paper?.data?.abstract || "Abstract not found"}
 					</div>
 
