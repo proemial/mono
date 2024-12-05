@@ -107,7 +107,7 @@ export async function POST(request: Request) {
 
 	const traceId = generateUUID();
 
-	await logBotBegin("ask", userMessage.content, traceId);
+	await logBotBegin("chat", userMessage.content, traceId);
 
 	const result = await streamText({
 		model: await LlmModels.chat.answer(traceId),
@@ -120,7 +120,7 @@ export async function POST(request: Request) {
 				}),
 				execute: async ({ question }) => {
 					const { text: rephrasedQuestion } = await generateText({
-						model: await LlmModels.ask.rephrase(traceId),
+						model: await LlmModels.chat.rephrase(traceId),
 						system: rephraseQuestionPrompt(question),
 						messages: coreMessages,
 					});
@@ -159,7 +159,7 @@ export async function POST(request: Request) {
 		},
 		onFinish: async ({ responseMessages, text: answer }) => {
 			const { object: followUpQuestions } = await generateObject({
-				model: await LlmModels.ask.followups(traceId),
+				model: await LlmModels.chat.followups(traceId),
 				output: "array",
 				schema: z.object({
 					question: z
@@ -256,7 +256,7 @@ const getPapersFromQdrant = async (query: string) => {
 	const begin = Time.now();
 
 	try {
-		const embeddings = await generateEmbedding(LlmModels.ask.embeddings(), [
+		const embeddings = await generateEmbedding(LlmModels.chat.embeddings(), [
 			query,
 		]);
 		const result = await QdrantPapers.search(embeddings);

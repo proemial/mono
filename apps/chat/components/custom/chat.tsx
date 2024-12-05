@@ -68,19 +68,6 @@ export function Chat({
 	const [selectedReference, setSelectedReference] = useState<ActiveReference>({
 		isVisible: false,
 	});
-	// const handleReferenceClick = (reference: ReferencePreview) => {
-	// 	console.log(reference);
-	// 	setSelectedReference({
-	// 		preview: reference,
-	// 		isVisible: true,
-	// 		boundingBox: {
-	// 			top: 0,
-	// 			left: 0,
-	// 			width: 0,
-	// 			height: 0,
-	// 		},
-	// 	});
-	// };
 
 	const { data: votes } = useSWR<Array<Vote>>(
 		`/api/vote?chatId=${id}`,

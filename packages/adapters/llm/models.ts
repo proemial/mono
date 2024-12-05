@@ -11,8 +11,13 @@ export type SourceProduct = "chat" | "ask" | "news" | "spaces" | "embed";
 
 const LlmModels = {
 	chat: {
+		embeddings: () => openaiEmbeddings("ask", "embeddings") as EmbeddingsModel,
 		answer: (traceId?: string) =>
 			getModel("chat", "answer", traceId) as LlmModel,
+		rephrase: (traceId?: string) =>
+			getModel("chat", "rephrase", traceId) as LlmModel,
+		followups: (traceId?: string) =>
+			getModel("ask", "followups", traceId) as LlmModel,
 	},
 	ask: {
 		embeddings: () => openaiEmbeddings("ask", "embeddings") as EmbeddingsModel,

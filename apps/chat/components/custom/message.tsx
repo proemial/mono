@@ -9,7 +9,7 @@ import { Vote } from "@/db/schema";
 import { ProemIcon, SparklesIcon } from "./icons"; // Add this import at the top with other icons
 import { MessageActions } from "./message-actions";
 import { PreviewAttachment } from "./preview-attachment";
-import { PaperReferences } from "./paper-references";
+import { PaperReferences } from "./paper/paper-references";
 import { ActiveReference, ReferencePreview } from "./reference";
 import { Dispatch, SetStateAction } from "react";
 import { indexPapers, useTextWithReferences } from "./reference-parser";

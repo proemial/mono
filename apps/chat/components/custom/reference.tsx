@@ -8,9 +8,10 @@ import { Vote } from "@/db/schema";
 import { RetrievalResult } from "@/app/(chat)/api/chat/route";
 import { Button } from "../ui/button";
 import { CrossIcon } from "./icons";
-import { Answer } from "./message";
+import { Answer, Question } from "./message";
 import { MultimodalInput } from "./multimodal-input";
 import { useScrollToBottom } from "./use-scroll-to-bottom";
+import { ResearchPaper } from "./paper/paper";
 
 export type ActiveReference = {
 	isVisible: boolean;
@@ -69,8 +70,6 @@ export function Reference({
 	const { width: windowWidth, height: windowHeight } = useWindowSize();
 	const isMobile = windowWidth ? windowWidth < 768 : false;
 
-	console.log("reference", reference);
-
 	return (
 		<motion.div
 			className="flex flex-row h-dvh w-dvw fixed top-0 left-0 z-50 bg-muted"
@@ -105,7 +104,43 @@ export function Reference({
 							ref={messagesContainerRef}
 							className="flex flex-col gap-4 h-full items-center overflow-y-scroll px-4 pt-20"
 						>
-							{messages.map((message, index) => (
+							{messages.map((message, index) => {
+								if (message.toolInvocations?.length) {
+									return undefined;
+								}
+
+								if (message.role === "user") {
+									return <Question key={message.id} message={message} />;
+								}
+
+								const papers = messages
+									.at(index - 1)
+									?.toolInvocations?.filter(
+										(t) => t.state === "result" && t.toolName === "getPapers",
+									)
+									.flatMap((t) =>
+										t.state === "result"
+											? (t.result as ReferencePreview[])
+											: [],
+									);
+								return (
+									<Answer
+										key={message.id}
+										chatId={chatId}
+										message={message}
+										papers={papers}
+										setSelectedReference={setReference}
+										isLoading={isLoading && messages.length - 1 === index}
+										vote={
+											votes
+												? votes.find((vote) => vote.messageId === message.id)
+												: undefined
+										}
+									/>
+								);
+							})}
+
+							{/* {messages.map((message, index) => (
 								<Answer
 									chatId={chatId}
 									key={message.id}
@@ -118,7 +153,7 @@ export function Reference({
 											: undefined
 									}
 								/>
-							))}
+							))} */}
 
 							<div
 								ref={messagesEndRef}
@@ -232,12 +267,9 @@ export function Reference({
 					</div>
 				</div>
 				<div className="prose dark:prose-invert dark:bg-muted bg-background h-full overflow-y-scroll px-4 md:p-20 !max-w-full pb-40 items-center">
-					<div className="flex flex-col gap-2 max-w-[600px] mx-auto">
-						<div className="text-2xl font-bold">
-							{reference?.preview?.title}
-						</div>
-						{reference?.preview?.abstract}
-					</div>
+					{reference?.preview && (
+						<ResearchPaper id={reference.preview.link.split("/").pop() || ""} />
+					)}
 				</div>
 			</motion.div>
 		</motion.div>
