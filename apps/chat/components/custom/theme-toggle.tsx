@@ -9,7 +9,7 @@ export default function ThemeToggle() {
 		<div className="text-right">
 			<Button
 				variant="ghost"
-				className={`h-8 w-full font-normal flex gap-2 p-2 border justify-start ${theme === "dark" ? "border-[#ffffff18]" : "border-[#00000018]"}`}
+				className={`h-8 w-full font-normal flex gap-2 p-2 border justify-start ${theme === "dark" ? "hover:border-[#ffffffff] active:bg-black border-[#ffffff18]" : "hover:border-[#000000ff] active:bg-white border-[#00000018]"}`}
 				onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
 			>
 				{theme === "dark" ? (

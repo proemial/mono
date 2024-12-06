@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { ProemIcon } from "@/components/custom/icons";
 
 export const Welcome = () => {
 	return (
@@ -11,11 +12,9 @@ export const Welcome = () => {
 			transition={{ delay: 0.5 }}
 		>
 			<div className="h-[calc(100vh-400px)] flex items-center justify-center">
-				<div className="rounded-xl p-6 flex flex-col gap-8 leading-relaxed text-center max-w-xl">
-					<p className="flex flex-row justify-center gap-4 items-center text-3xl">
-						proem chat
-					</p>
-					<p>trustworthy answers backed by research</p>
+				<div className="rounded-xl p-6 flex flex-col gap-8 leading-relaxed text-center text-2xl">
+					<div className="flex justify-center"><ProemIcon size={48} /></div>
+					<p>answers you can trust</p>
 				</div>
 			</div>
 		</motion.div>
