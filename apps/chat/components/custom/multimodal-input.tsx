@@ -237,7 +237,8 @@ export function MultimodalInput({
 						>
 							<Button
 								variant="ghost"
-								onClick={async () => {
+								onClick={(event) => {
+									event.preventDefault();
 									window.history.replaceState({}, "", `/chat/${chatId}`);
 
 									append({
