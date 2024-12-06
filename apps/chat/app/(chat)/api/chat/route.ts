@@ -92,7 +92,13 @@ export async function POST(request: Request) {
 	const userMessageId = generateUUID();
 	await saveMessages({
 		messages: [
-			{ ...userMessage, id: userMessageId, createdAt: new Date(), chatId: id },
+			{
+				...userMessage,
+				id: userMessageId,
+				createdAt: new Date(),
+				chatId: id,
+				extra: null,
+			},
 		],
 	});
 
@@ -193,12 +199,21 @@ export async function POST(request: Request) {
 									});
 								}
 
+								const isAssistantAnswer =
+									message.role === "assistant" &&
+									typeof message.content !== "string" &&
+									message.content[0].type === "text";
+
 								return {
 									id: messageId,
 									chatId: id,
 									role: message.role,
 									content: message.content,
 									createdAt: new Date(),
+									// Only add follow ups if the message is an assistant answer text (e.g. not a tool call)
+									extra: isAssistantAnswer
+										? { followUps: followUpQuestions.map((f) => f.question) }
+										: null,
 								};
 							},
 						),
