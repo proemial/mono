@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Vote } from "@/db/schema";
 
 import { ProemIcon, SparklesIcon } from "./icons"; // Add this import at the top with other icons
+import { SearchMd } from "@untitled-ui/icons-react";
 import { MessageActions } from "./message-actions";
 import { PreviewAttachment } from "./preview-attachment";
 import { PaperReferences } from "./paper/paper-references";
@@ -132,13 +133,15 @@ export const LoadingMessage = () => {
 					},
 				)}
 			>
-				<div className="size-7 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border">
-					<SparklesIcon size={14} />
+				<div className="size-7 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border -mt-1">
+					<SearchMd className="size-3.5 animate-pulse" />
 				</div>
 
 				<div className="flex flex-col gap-2 w-full">
-					<div className="flex flex-col gap-4 text-muted-foreground">
-						Thinking...
+					<div className="text-muted-foreground">
+						<span className="animate-pulse">
+							Searching for related research papers
+						</span>
 					</div>
 				</div>
 			</div>
