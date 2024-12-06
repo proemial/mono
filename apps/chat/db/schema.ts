@@ -9,6 +9,7 @@ import {
 	primaryKey,
 	foreignKey,
 	boolean,
+	jsonb,
 } from "drizzle-orm/pg-core";
 
 export const user = pgTable("User", {
@@ -36,6 +37,7 @@ export const message = pgTable("Message", {
 	role: varchar("role").notNull(),
 	content: json("content").notNull(),
 	createdAt: timestamp("createdAt").notNull(),
+	extra: jsonb("extra").$type<{ followUps?: string[] }>(),
 });
 
 export type Message = InferSelectModel<typeof message>;
