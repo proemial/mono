@@ -26,7 +26,7 @@ export function ResearchPaper({ id }: { id: string }) {
 				</div>
 			) : (
 				<div>
-					<div className="flex flex-col gap-2 items-start p-4 sm:mx-auto rounded-lg bg-blue-500/20 leading-normal">
+					<div className="flex flex-col gap-2 items-start p-4 sm:mx-auto rounded-lg bg-blue-500/10 dark:bg-blue-500/20 leading-normal">
 						<div className="font-light text-sm md:text-base">
 							<Stars02 className="inline-block mr-2 size-4 top-[-1px] relative" />
 							summary
@@ -46,7 +46,7 @@ export function ResearchPaper({ id }: { id: string }) {
 										{paper?.generated?.description?.slice(0, 200)}...{" "}
 										<a
 											href="#"
-											className="text-blue-500/50 hover:underline cursor-pointer"
+											className="font-normal cursor-pointer"
 											onClick={(e) => {
 												e.preventDefault();
 												const element = document.querySelector(".text");

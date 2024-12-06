@@ -205,8 +205,8 @@ export function Reference({
 					},
 				}}
 			>
-				<div className="p-2 flex flex-row justify-between items-start">
-					<div className="flex flex-row gap-4 items-start">
+				<div className="p-2 relative flex flex-row justify-between items-start w-full after:content-[''] after:absolute after:left-0 after:right-0 after:h-4 after:bg-gradient-to-b after:from-background after:to-transperant after:top-12 after:pointer-events-none">
+					<div className="flex flex-row gap-3 items-start w-full">
 						<Button
 							variant="outline"
 							className="h-fit p-2 dark:hover:bg-zinc-700"
@@ -220,14 +220,12 @@ export function Reference({
 							<CrossIcon size={18} />
 						</Button>
 
-						<div className="flex flex-col">
-							<div className="text-2xl text-muted-foreground">
-								{openedReference.preview?.title}
-							</div>
+						<div className="text-base md:text-xl h-8 items-center text-muted-foreground truncate leading-8">
+							{openedReference.preview?.title}
 						</div>
 					</div>
 				</div>
-				<div className="prose dark:prose-invert dark:bg-muted bg-background h-full overflow-y-scroll px-4 lg:p-10 xl:p-20 max-w-[800px] items-center">
+				<div className="prose dark:prose-invert dark:bg-muted bg-background h-full overflow-y-scroll px-4 pt-2 lg:p-10 xl:p-20 max-w-[800px] items-center">
 					{openedReference?.preview && (
 						<ResearchPaper
 							id={openedReference.preview.link.split("/").pop() || ""}

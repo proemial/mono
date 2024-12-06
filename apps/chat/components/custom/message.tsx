@@ -57,6 +57,13 @@ export const Answer = ({
 
 				<div className="flex flex-col gap-2 w-full">
 					<div>{markup}</div>
+					<MessageActions
+						key={`action-${message.id}`}
+						chatId={chatId}
+						message={message}
+						vote={vote}
+						isLoading={isLoading}
+					/>
 
 					{indexedPapers?.at(0) && (
 						<PaperReferences
@@ -76,14 +83,6 @@ export const Answer = ({
 							))}
 						</div>
 					)}
-
-					<MessageActions
-						key={`action-${message.id}`}
-						chatId={chatId}
-						message={message}
-						vote={vote}
-						isLoading={isLoading}
-					/>
 				</div>
 			</div>
 		</motion.div>
