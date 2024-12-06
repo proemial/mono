@@ -49,7 +49,7 @@ export const Answer = ({
 				)}
 			>
 				{message.role === "assistant" && (
-					<div className="size-7 flex items-center rounded-full justify-center shrink-0 bg-black dark:bg-white text-white dark:text-black -mt-1">
+					<div className="size-7 flex items-center rounded-full justify-center shrink-0 bg-foreground/80 text-background -mt-1">
 						<ProemIcon size={14} />
 					</div>
 				)}
@@ -103,7 +103,7 @@ export const Question = ({
 		>
 			<div
 				className={cx(
-					"bg-primary text-primary-foreground flex gap-4 px-3 w-fit ml-auto max-w-2xl py-2 rounded-xl",
+					"bg-primary text-primary-foreground flex gap-4 px-3 w-fit ml-auto max-w-2xl py-2 rounded-xl shadow-sm text-shadow",
 				)}
 			>
 				<div className="flex flex-col gap-2 w-full">

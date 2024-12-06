@@ -16,8 +16,10 @@ export const PaperReferences = ({
 }: Props) => {
 	return (
 		<div className="flex flex-col gap-2 w-full overflow-hidden">
-			<div id="refHeader" className="flex flex-col mt-2 gap-4 text-sm text-muted-foreground">
-
+			<div
+				id="refHeader"
+				className="flex flex-col mt-2 gap-4 text-sm font-light text-muted-foreground"
+			>
 				Relevant research papers
 			</div>
 			<div id="refList" className="relative w-[300px]">
