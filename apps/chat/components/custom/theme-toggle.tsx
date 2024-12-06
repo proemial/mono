@@ -9,13 +9,17 @@ export default function ThemeToggle() {
 		<div className="text-right">
 			<Button
 				variant="ghost"
-				className={`h-8 w-12 p-2 border ${theme === "dark" ? "border-white/50" : "border-black/50"}`}
+				className={`h-8 w-full flex gap-2 p-2 border justify-start ${theme === "dark" ? "border-[#ffffff18]" : "border-[#00000018]"}`}
 				onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
 			>
 				{theme === "dark" ? (
-					<Sun className="w-6 h-6 text-white/70" />
+					<>
+					<Sun className="w-4 h-4 text-white/70" /><div>Switch to light mode</div>
+					</>
 				) : (
-					<Moon01 className="w-4 h-4 text-black/70" />
+					<>
+					<Moon01 className="w-3 h-3 text-black/70" /><div>Switch to dark mode</div>
+					</>
 				)}
 			</Button>
 		</div>
