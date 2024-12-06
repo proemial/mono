@@ -205,7 +205,7 @@ export function Reference({
 					},
 				}}
 			>
-				<div className="p-2 relative flex flex-row justify-between items-start w-full after:content-[''] after:absolute after:left-0 after:right-0 after:h-4 after:bg-gradient-to-b after:from-background after:to-transperant after:top-12 after:pointer-events-none">
+				<div className="p-2 relative flex flex-row justify-between items-start w-full after:content-[''] after:absolute after:left-0 after:right-0 after:h-4 after:bg-gradient-to-b after:from-background dark:after:from-muted after:to-transperant after:top-12 after:pointer-events-none">
 					<div className="flex flex-row gap-3 items-start w-full">
 						<Button
 							variant="outline"
@@ -220,7 +220,7 @@ export function Reference({
 							<CrossIcon size={18} />
 						</Button>
 
-						<div className="text-base md:text-xl h-8 items-center text-muted-foreground truncate leading-8">
+						<div className="text-base md:text-xl h-9 items-center text-muted-foreground truncate leading-9">
 							{openedReference.preview?.title}
 						</div>
 					</div>
