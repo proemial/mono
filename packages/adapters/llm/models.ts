@@ -17,7 +17,7 @@ const LlmModels = {
 		rephrase: (traceId?: string) =>
 			getModel("chat", "rephrase", traceId) as LlmModel,
 		followups: (traceId?: string) =>
-			getModel("ask", "followups", traceId) as LlmModel,
+			getModel("chat", "followups", traceId) as LlmModel,
 	},
 	ask: {
 		embeddings: () => openaiEmbeddings("ask", "embeddings") as EmbeddingsModel,
