@@ -21,7 +21,7 @@ export function ResearchPaper({ id }: { id: string }) {
 	return (
 		<div className="">
 			{isLoading ? (
-				<div className="w-full h-screen flex items-center justify-center">
+				<div className="w-full h-[calc(100vh-200px)] flex items-center justify-center">
 					<File06 className="w-20 h-20 text-foreground/20 animate-pulse motion-safe:animate-[bounce_2s_ease-in-out_infinite]" />
 				</div>
 			) : (
