@@ -1,14 +1,9 @@
 "use client";
 
 import { isToday, isYesterday, subMonths, subWeeks } from "date-fns";
-import Link from "next/link";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import { type User } from "next-auth";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import useSWR from "swr";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 
-import { MoreHorizontalIcon, TrashIcon } from "@/components/custom/icons";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -20,22 +15,15 @@ import {
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
 	SidebarGroup,
 	SidebarGroupContent,
 	SidebarMenu,
-	SidebarMenuAction,
-	SidebarMenuButton,
-	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
 import { Chat } from "@/db/schema";
-import { fetcher } from "@/lib/utils";
+import { useMutation, useQuery } from "@tanstack/react-query";
+
+import { HistoryItem } from "./sidebar-history-item";
 
 type GroupedChats = {
 	today: Chat[];
@@ -45,82 +33,30 @@ type GroupedChats = {
 	older: Chat[];
 };
 
-const ChatItem = ({
-	chat,
-	isActive,
-	onDelete,
-	setOpenMobile,
-}: {
-	chat: Chat;
-	isActive: boolean;
-	onDelete: (chatId: string) => void;
-	setOpenMobile: (open: boolean) => void;
-}) => (
-	<SidebarMenuItem>
-		<SidebarMenuButton asChild isActive={isActive}>
-			<Link href={`/chat/${chat.id}`} onClick={() => setOpenMobile(false)}>
-				<span>{chat.title}</span>
-			</Link>
-		</SidebarMenuButton>
-		<DropdownMenu modal={true}>
-			<DropdownMenuTrigger asChild>
-				<SidebarMenuAction
-					className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground mr-0.5"
-					showOnHover={!isActive}
-				>
-					<MoreHorizontalIcon />
-					<span className="sr-only">More</span>
-				</SidebarMenuAction>
-			</DropdownMenuTrigger>
-			<DropdownMenuContent side="bottom" align="end">
-				<DropdownMenuItem
-					className="cursor-pointer text-destructive focus:bg-destructive/15 focus:text-destructive dark:text-red-500"
-					onSelect={() => onDelete(chat.id)}
-				>
-					<TrashIcon />
-					<span>Delete</span>
-				</DropdownMenuItem>
-			</DropdownMenuContent>
-		</DropdownMenu>
-	</SidebarMenuItem>
-);
-
 export function SidebarHistory({ sessionId }: { sessionId: string }) {
 	const { setOpenMobile } = useSidebar();
 	const { id } = useParams();
-	const pathname = usePathname();
-	const {
-		data: history,
-		isLoading,
-		mutate,
-	} = useSWR<Array<Chat>>(sessionId ? "/api/history" : null, fetcher, {
-		fallbackData: [],
-	});
 
-	useEffect(() => {
-		mutate();
-	}, [pathname, mutate]);
+	const { data: history, isLoading } = useQuery({
+		queryKey: ["history"],
+		queryFn: () => fetch("/api/history").then((res) => res.json()),
+	});
+	const mutation = useMutation({
+		mutationFn: () =>
+			fetch(`/api/chat?id=${deleteId}`, { method: "DELETE" }).then((res) =>
+				res.json(),
+			),
+		onSuccess: (queryClient) => {
+			// Invalidate and refetch
+			queryClient.invalidateQueries({ queryKey: ["history"] });
+		},
+	});
 
 	const [deleteId, setDeleteId] = useState<string | null>(null);
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 	const router = useRouter();
-	const handleDelete = async () => {
-		const deletePromise = fetch(`/api/chat?id=${deleteId}`, {
-			method: "DELETE",
-		});
-
-		toast.promise(deletePromise, {
-			loading: "Deleting chat...",
-			success: () => {
-				mutate((history) => {
-					if (history) {
-						return history.filter((h) => h.id !== id);
-					}
-				});
-				return "Chat deleted successfully";
-			},
-			error: "Failed to delete chat",
-		});
+	const handleDelete = () => {
+		mutation.mutate();
 
 		setShowDeleteDialog(false);
 
@@ -222,134 +158,109 @@ export function SidebarHistory({ sessionId }: { sessionId: string }) {
 			<SidebarGroup>
 				<SidebarGroupContent>
 					<SidebarMenu>
-						{history &&
-							(() => {
-								const groupedChats = groupChatsByDate(history);
-
-								return (
-									<>
-										{groupedChats.today.length > 0 && (
-											<>
-												<div className="px-2 py-1 text-xs text-sidebar-foreground/50">
-													Today
-												</div>
-												{groupedChats.today.map((chat) => (
-													<ChatItem
-														key={chat.id}
-														chat={chat}
-														isActive={chat.id === id}
-														onDelete={(chatId) => {
-															setDeleteId(chatId);
-															setShowDeleteDialog(true);
-														}}
-														setOpenMobile={setOpenMobile}
-													/>
-												))}
-											</>
-										)}
-
-										{groupedChats.yesterday.length > 0 && (
-											<>
-												<div className="px-2 py-1 text-xs text-sidebar-foreground/50 mt-6">
-													Yesterday
-												</div>
-												{groupedChats.yesterday.map((chat) => (
-													<ChatItem
-														key={chat.id}
-														chat={chat}
-														isActive={chat.id === id}
-														onDelete={(chatId) => {
-															setDeleteId(chatId);
-															setShowDeleteDialog(true);
-														}}
-														setOpenMobile={setOpenMobile}
-													/>
-												))}
-											</>
-										)}
-
-										{groupedChats.lastWeek.length > 0 && (
-											<>
-												<div className="px-2 py-1 text-xs text-sidebar-foreground/50 mt-6">
-													Last 7 days
-												</div>
-												{groupedChats.lastWeek.map((chat) => (
-													<ChatItem
-														key={chat.id}
-														chat={chat}
-														isActive={chat.id === id}
-														onDelete={(chatId) => {
-															setDeleteId(chatId);
-															setShowDeleteDialog(true);
-														}}
-														setOpenMobile={setOpenMobile}
-													/>
-												))}
-											</>
-										)}
-
-										{groupedChats.lastMonth.length > 0 && (
-											<>
-												<div className="px-2 py-1 text-xs text-sidebar-foreground/50 mt-6">
-													Last 30 days
-												</div>
-												{groupedChats.lastMonth.map((chat) => (
-													<ChatItem
-														key={chat.id}
-														chat={chat}
-														isActive={chat.id === id}
-														onDelete={(chatId) => {
-															setDeleteId(chatId);
-															setShowDeleteDialog(true);
-														}}
-														setOpenMobile={setOpenMobile}
-													/>
-												))}
-											</>
-										)}
-
-										{groupedChats.older.length > 0 && (
-											<>
-												<div className="px-2 py-1 text-xs text-sidebar-foreground/50 mt-6">
-													Older
-												</div>
-												{groupedChats.older.map((chat) => (
-													<ChatItem
-														key={chat.id}
-														chat={chat}
-														isActive={chat.id === id}
-														onDelete={(chatId) => {
-															setDeleteId(chatId);
-															setShowDeleteDialog(true);
-														}}
-														setOpenMobile={setOpenMobile}
-													/>
-												))}
-											</>
-										)}
-									</>
-								);
-							})()}
+						<HistoryList
+							groupedChats={groupChatsByDate(history)}
+							id={id}
+							setDeleteId={setDeleteId}
+							setShowDeleteDialog={setShowDeleteDialog}
+							setOpenMobile={setOpenMobile}
+						/>
 					</SidebarMenu>
 				</SidebarGroupContent>
 			</SidebarGroup>
-			<AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-				<AlertDialogContent>
-					<AlertDialogHeader>
-						<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-						<AlertDialogDescription>
-							This action cannot be undone. This will permanently delete your
-							chat and remove it from our servers.
-						</AlertDialogDescription>
-					</AlertDialogHeader>
-					<AlertDialogFooter>
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
-						<AlertDialogAction onClick={handleDelete}>
-							Continue
-						</AlertDialogAction>
-					</AlertDialogFooter>
-				</AlertDialogContent>
-			</AlertDialog>
+
+			<Alert
+				open={showDeleteDialog}
+				onOpenChange={setShowDeleteDialog}
+				handleDelete={handleDelete}
+			/>
 		</>
+	);
+}
+
+function HistoryList({
+	groupedChats,
+	id,
+	setDeleteId,
+	setShowDeleteDialog,
+	setOpenMobile,
+}: {
+	groupedChats: GroupedChats;
+	id: string | string[] | undefined;
+	setDeleteId: (id: string) => void;
+	setShowDeleteDialog: (open: boolean) => void;
+	setOpenMobile: (open: boolean) => void;
+}) {
+	const History = ({ group, title }: { group: Chat[]; title: string }) => (
+		<>
+			{group.length > 0 && (
+				<div>
+					<div className="px-2 py-1 text-xs text-sidebar-foreground/50">
+						{title}
+					</div>
+					{group.map((chat) => (
+						<HistoryItem
+							key={chat.id}
+							chat={chat}
+							isActive={chat.id === id}
+							onDelete={(chatId) => {
+								setDeleteId(chatId);
+								setShowDeleteDialog(true);
+							}}
+							setOpenMobile={setOpenMobile}
+						/>
+					))}
+				</div>
+			)}
+		</>
+	);
+
+	return (
+		<>
+			{history &&
+				(() => {
+					return (
+						<div className="flex flex-col gap-6">
+							<History group={groupedChats.today} title="Today" />
+
+							<History group={groupedChats.yesterday} title="Yesterday" />
+
+							<History group={groupedChats.lastWeek} title="Last 7 days" />
+
+							<History group={groupedChats.lastMonth} title="Last 30 days" />
+
+							<History group={groupedChats.older} title="Older" />
+						</div>
+					);
+				})()}
+		</>
+	);
+}
+
+function Alert({
+	open,
+	onOpenChange,
+	handleDelete,
+}: {
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
+	handleDelete: () => void;
+}) {
+	return (
+		<AlertDialog open={open} onOpenChange={onOpenChange}>
+			<AlertDialogContent>
+				<AlertDialogHeader>
+					<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+					<AlertDialogDescription>
+						This action cannot be undone. This will permanently delete your chat
+						and remove it from our servers.
+					</AlertDialogDescription>
+				</AlertDialogHeader>
+				<AlertDialogFooter>
+					<AlertDialogCancel>Cancel</AlertDialogCancel>
+					<AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
+				</AlertDialogFooter>
+			</AlertDialogContent>
+		</AlertDialog>
 	);
 }

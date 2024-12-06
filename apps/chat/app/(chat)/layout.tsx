@@ -4,6 +4,7 @@ import { AppSidebar } from "@/components/custom/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 import { getSessionId } from "../(auth)/sessionid";
+import Wrapper from "./wrapper";
 
 export const experimental_ppr = true;
 
@@ -20,8 +21,10 @@ export default async function Layout({
 
 	return (
 		<SidebarProvider defaultOpen={!isCollapsed}>
-			<AppSidebar sessionId={sessionId} />
-			<SidebarInset>{children}</SidebarInset>
+			<Wrapper>
+				<AppSidebar sessionId={sessionId} />
+				<SidebarInset>{children}</SidebarInset>
+			</Wrapper>
 		</SidebarProvider>
 	);
 }
