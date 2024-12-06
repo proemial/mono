@@ -222,7 +222,7 @@ export function Reference({
 
 						<div className="flex flex-col">
 							<div className="text-2xl text-muted-foreground">
-								Title of reference
+								{openedReference.preview?.title}
 							</div>
 						</div>
 					</div>
