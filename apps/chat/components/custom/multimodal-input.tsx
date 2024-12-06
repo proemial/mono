@@ -247,6 +247,7 @@ export function MultimodalInput({
 									});
 								}}
 								className="text-left border rounded-xl px-4 py-3.5 text-sm flex-1 gap-1 sm:flex-col w-full h-full justify-center items-start whitespace-normal break-words"
+								disabled={isLoading}
 							>
 								<span>{suggestion}</span>
 							</Button>
