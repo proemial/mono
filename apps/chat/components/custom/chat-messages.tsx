@@ -1,12 +1,13 @@
 import { ReferencePreview } from "./reference";
 
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { Question } from "./message";
 import { Answer } from "./message";
 import { LoadingMessage } from "./message";
 import { Vote } from "@/db/schema";
 import { Message } from "ai";
 import { OpenReference } from "./reference";
+import { useQueryClient } from "@tanstack/react-query";
 
 type Props = {
 	id: string;
@@ -30,6 +31,12 @@ export const ChatMessages = ({
 			latest?.role === "assistant" &&
 			latest?.toolInvocations?.length === undefined
 		);
+
+	const queryClient = useQueryClient();
+	// biome-ignore lint/correctness/useExhaustiveDependencies: We want to invalidate the history when the message count changes
+	useEffect(() => {
+		queryClient.invalidateQueries({ queryKey: ["history"] });
+	}, [messages?.length, queryClient]);
 
 	return (
 		<>

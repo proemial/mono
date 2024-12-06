@@ -21,7 +21,7 @@ import {
 	useSidebar,
 } from "@/components/ui/sidebar";
 import { Chat } from "@/db/schema";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { HistoryItem } from "./sidebar-history-item";
 
@@ -37,6 +37,7 @@ export function SidebarHistory({ sessionId }: { sessionId: string }) {
 	const { setOpenMobile: sidebarOpenOnMobile } = useSidebar();
 	const { id } = useParams();
 
+	const queryClient = useQueryClient();
 	const { data: history, isLoading } = useQuery({
 		queryKey: ["history"],
 		queryFn: () => fetch("/api/history").then((res) => res.json()),
@@ -44,11 +45,13 @@ export function SidebarHistory({ sessionId }: { sessionId: string }) {
 	const mutation = useMutation({
 		mutationFn: () =>
 			fetch(`/api/chat?id=${deleteId}`, { method: "DELETE" }).then((res) =>
-				res.json(),
+				res.text(),
 			),
-		onSuccess: (queryClient) => {
-			// Invalidate and refetch
+		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["history"] });
+		},
+		onError: (error) => {
+			console.error("Mutation error:", error);
 		},
 	});
 

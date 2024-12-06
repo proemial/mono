@@ -25,7 +25,7 @@ export function Chat({
 	selectedModelId,
 }: {
 	id: string;
-	initialMessages: Array<Message>;
+	initialMessages: Array<Message & { extra?: { followUps?: string[] } }>;
 	selectedModelId: string;
 }) {
 	const { mutate } = useSWRConfig();
@@ -89,7 +89,7 @@ export function Chat({
 			? (latestStreamingData?.data as Array<{ question: string }>)?.map(
 					(f) => f.question,
 				)
-			: undefined;
+			: initialMessages.at(-1)?.extra?.followUps;
 
 	return (
 		<>
