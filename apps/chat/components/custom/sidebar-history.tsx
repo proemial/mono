@@ -34,7 +34,7 @@ type GroupedChats = {
 };
 
 export function SidebarHistory({ sessionId }: { sessionId: string }) {
-	const { setOpenMobile } = useSidebar();
+	const { setOpenMobile: sidebarOpenOnMobile } = useSidebar();
 	const { id } = useParams();
 
 	const { data: history, isLoading } = useQuery({
@@ -55,9 +55,9 @@ export function SidebarHistory({ sessionId }: { sessionId: string }) {
 	const [deleteId, setDeleteId] = useState<string | null>(null);
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 	const router = useRouter();
+
 	const handleDelete = () => {
 		mutation.mutate();
-
 		setShowDeleteDialog(false);
 
 		if (deleteId === id) {
@@ -163,7 +163,7 @@ export function SidebarHistory({ sessionId }: { sessionId: string }) {
 							id={id}
 							setDeleteId={setDeleteId}
 							setShowDeleteDialog={setShowDeleteDialog}
-							setOpenMobile={setOpenMobile}
+							sidebarOpenOnMobile={sidebarOpenOnMobile}
 						/>
 					</SidebarMenu>
 				</SidebarGroupContent>
@@ -183,13 +183,13 @@ function HistoryList({
 	id,
 	setDeleteId,
 	setShowDeleteDialog,
-	setOpenMobile,
+	sidebarOpenOnMobile,
 }: {
 	groupedChats: GroupedChats;
 	id: string | string[] | undefined;
 	setDeleteId: (id: string) => void;
 	setShowDeleteDialog: (open: boolean) => void;
-	setOpenMobile: (open: boolean) => void;
+	sidebarOpenOnMobile: (open: boolean) => void;
 }) {
 	const History = ({ group, title }: { group: Chat[]; title: string }) => (
 		<>
@@ -207,7 +207,7 @@ function HistoryList({
 								setDeleteId(chatId);
 								setShowDeleteDialog(true);
 							}}
-							setOpenMobile={setOpenMobile}
+							sidebarOpenOnMobile={sidebarOpenOnMobile}
 						/>
 					))}
 				</div>
