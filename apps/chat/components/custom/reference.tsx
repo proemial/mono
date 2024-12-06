@@ -220,7 +220,7 @@ export function Reference({
 							<CrossIcon size={18} />
 						</Button>
 
-						<div className="text-base md:text-xl h-9 items-center text-muted-foreground truncate leading-9">
+						<div className="text-base md:text-xl h-8 items-center text-muted-foreground truncate leading-8">
 							{openedReference.preview?.title}
 						</div>
 					</div>
