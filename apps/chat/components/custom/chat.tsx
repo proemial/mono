@@ -114,7 +114,7 @@ export function Chat({
 						className="shrink-0 min-w-[24px] min-h-[24px]"
 					/>
 				</div>
-				<form className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">
+				<form className="flex relative mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl before:content-[''] before:absolute before:left-0 before:right-0 before:h-10 before:bg-gradient-to-t before:from-background/70 before:to-transperant before:-mt-10 before:pointer-events-none">
 					<MultimodalInput
 						chatId={id}
 						input={input}

@@ -134,12 +134,12 @@ export const LoadingMessage = () => {
 				)}
 			>
 				<div className="size-7 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border -mt-1">
-					<SearchMd className="size-3.5 animate-pulse" />
+					<SearchMd className="size-3.5 motion-safe:animate-pulse" />
 				</div>
 
 				<div className="flex flex-col gap-2 w-full">
 					<div className="text-muted-foreground">
-						<span className="animate-pulse">
+						<span className="motion-safe:animate-pulse">
 							Searching for related research papers
 						</span>
 					</div>

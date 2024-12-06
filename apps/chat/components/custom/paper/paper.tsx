@@ -26,7 +26,7 @@ export function ResearchPaper({ id }: { id: string }) {
 				</div>
 			) : (
 				<div>
-					<div className="flex flex-col gap-2 items-start p-4 -mx-4 sm:mx-auto sm:rounded-lg bg-blue-500/10">
+					<div className="flex flex-col gap-2 items-start p-4 sm:mx-auto rounded-lg bg-blue-500/20">
 						<div className="font-light text-sm md:text-base">
 							<Stars02 className="inline-block mr-2 size-4 top-[-1px] relative" />
 							summary
@@ -64,19 +64,19 @@ export function ResearchPaper({ id }: { id: string }) {
 						</div>
 					</div>
 					<div className="flex justify-between text-muted-foreground mt-8 font-light text-sm md:text-base">
-						<div>
-							{publisher && (
-								<a
-									href={paper?.data?.primary_location?.landing_page_url}
-									target="_blank"
-									rel="noreferrer"
-									className="hover:underline hover:text-foreground no-underline font-light transition text-muted-foreground"
-								>
-									{publisher}
-								</a>
-							)}
+						{publisher && (
+							<a
+								href={paper?.data?.primary_location?.landing_page_url}
+								target="_blank"
+								rel="noreferrer"
+								className="hover:underline hover:text-foreground no-underline font-light transition text-muted-foreground truncate max-w-[80%]"
+							>
+								{publisher}
+							</a>
+						)}
+						<div className="flex-shrink-0">
+							{formatDate(paper?.data?.publication_date, "relative")}
 						</div>
-						<div>{formatDate(paper?.data?.publication_date, "relative")}</div>
 					</div>
 					<div className="font-semibold text-2xl md:text-3xl mt-2 mb-2">
 						{paper?.data?.title}
