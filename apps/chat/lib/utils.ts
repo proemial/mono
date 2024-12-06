@@ -86,44 +86,53 @@ function addToolMessageToChat({
 
 export function convertToUIMessages(
 	messages: Array<DBMessage>,
-): Array<Message> {
-	return messages.reduce((chatMessages: Array<Message>, message) => {
-		if (message.role === "tool") {
-			return addToolMessageToChat({
-				toolMessage: message as CoreToolMessage,
-				messages: chatMessages,
-			});
-		}
+): Array<Message & { extra?: { followUps?: string[] } }> {
+	return messages.reduce(
+		(
+			chatMessages: Array<Message & { extra?: { followUps?: string[] } }>,
+			message,
+		) => {
+			if (message.role === "tool") {
+				return addToolMessageToChat({
+					toolMessage: message as CoreToolMessage,
+					messages: chatMessages,
+				});
+			}
 
-		let textContent = "";
-		let toolInvocations: Array<ToolInvocation> = [];
+			let textContent = "";
+			let toolInvocations: Array<ToolInvocation> = [];
 
-		if (typeof message.content === "string") {
-			textContent = message.content;
-		} else if (Array.isArray(message.content)) {
-			for (const content of message.content) {
-				if (content.type === "text") {
-					textContent += content.text;
-				} else if (content.type === "tool-call") {
-					toolInvocations.push({
-						state: "call",
-						toolCallId: content.toolCallId,
-						toolName: content.toolName,
-						args: content.args,
-					});
+			if (typeof message.content === "string") {
+				textContent = message.content;
+			} else if (Array.isArray(message.content)) {
+				for (const content of message.content) {
+					if (content.type === "text") {
+						textContent += content.text;
+					} else if (content.type === "tool-call") {
+						toolInvocations.push({
+							state: "call",
+							toolCallId: content.toolCallId,
+							toolName: content.toolName,
+							args: content.args,
+						});
+					}
 				}
 			}
-		}
 
-		chatMessages.push({
-			id: message.id,
-			role: message.role as Message["role"],
-			content: textContent,
-			toolInvocations,
-		});
+			chatMessages.push({
+				id: message.id,
+				role: message.role as Message["role"],
+				content: textContent,
+				toolInvocations,
+				extra: {
+					followUps: message.extra?.followUps,
+				},
+			});
 
-		return chatMessages;
-	}, []);
+			return chatMessages;
+		},
+		[],
+	);
 }
 
 export function sanitizeResponseMessages(
