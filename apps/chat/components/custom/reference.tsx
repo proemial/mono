@@ -116,6 +116,7 @@ export function Reference({
 								messages={messages}
 								isLoading={isLoading}
 								votes={votes}
+								openedReference={openedReference}
 								setOpenedReference={setOpenedReference}
 							/>
 

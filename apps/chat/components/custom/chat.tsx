@@ -106,6 +106,7 @@ export function Chat({
 						messages={messages}
 						isLoading={isLoading}
 						votes={votes}
+						openedReference={openedReference}
 						setOpenedReference={setOpenedReference}
 					/>
 

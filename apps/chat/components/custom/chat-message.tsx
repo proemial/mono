@@ -19,6 +19,7 @@ type Props = {
 	chatId: string;
 	message: Message;
 	papers?: ReferencePreview[];
+	openedReference: OpenReference;
 	setOpenedReference: Dispatch<SetStateAction<OpenReference>>;
 	vote: Vote | undefined;
 	isLoading: boolean;
@@ -28,6 +29,7 @@ export const Answer = ({
 	chatId,
 	message,
 	papers,
+	openedReference,
 	setOpenedReference,
 	vote,
 	isLoading,
@@ -68,6 +70,7 @@ export const Answer = ({
 					{indexedPapers?.at(0) && (
 						<PaperReferences
 							papers={indexedPapers}
+							openedReference={openedReference}
 							setOpenedReference={setOpenedReference}
 							prefix={prefix}
 						/>

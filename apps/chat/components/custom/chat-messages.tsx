@@ -14,6 +14,7 @@ type Props = {
 	messages: Message[];
 	isLoading: boolean;
 	votes?: Vote[];
+	openedReference: OpenReference;
 	setOpenedReference: Dispatch<SetStateAction<OpenReference>>;
 };
 
@@ -22,6 +23,7 @@ export const ChatMessages = ({
 	messages,
 	isLoading,
 	votes,
+	openedReference,
 	setOpenedReference,
 }: Props) => {
 	const latest = messages.at(-1);
@@ -63,6 +65,7 @@ export const ChatMessages = ({
 						chatId={id}
 						message={message}
 						papers={papers}
+						openedReference={openedReference}
 						setOpenedReference={setOpenedReference}
 						isLoading={isLoading && messages.length - 1 === index}
 						vote={
