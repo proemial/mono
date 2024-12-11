@@ -12,7 +12,7 @@ import { MessageActions } from "./message-actions";
 import { PreviewAttachment } from "./preview-attachment";
 import { PaperReferences } from "./paper/paper-references";
 import { OpenReference, ReferencePreview } from "./reference";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useRef, useEffect } from "react";
 import { useTextWithReferences } from "./reference-parser";
 
 type Props = {
@@ -94,8 +94,15 @@ export const Question = ({
 }: {
 	message: Message;
 }) => {
+	const messageRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		messageRef.current?.scrollIntoView({ behavior: "smooth" });
+	}, []);
+
 	return (
 		<motion.div
+			ref={messageRef}
 			className="w-full mx-auto max-w-3xl px-4 group/message"
 			initial={{ y: 5, opacity: 0 }}
 			animate={{ y: 0, opacity: 1 }}

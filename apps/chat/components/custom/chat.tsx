@@ -84,17 +84,17 @@ export function Chat({
 			const distFromBottom =
 				container.scrollHeight - container.scrollTop - container.clientHeight;
 
-			if (distFromBottom < 150) {
+			if (distFromBottom < 300) {
 				setScrolledToBottom(true);
-			} else if (distFromBottom > 340) {
+			} else if (distFromBottom > 500) {
 				setScrolledToBottom(false);
 			}
 		}
-	}, []);
+	}, [messagesContainerRef]);
 
 	const handleScroll = useCallback(
 		(e: React.UIEvent<HTMLDivElement>) => {
-			checkScrollPosition(e.currentTarget);
+			checkScrollPosition();
 		},
 		[checkScrollPosition],
 	);
@@ -102,7 +102,7 @@ export function Chat({
 	useEffect(() => {
 		const container = messagesContainerRef.current;
 		if (container) {
-			checkScrollPosition(container);
+			checkScrollPosition();
 		}
 	}, [messagesContainerRef, checkScrollPosition]);
 
@@ -128,7 +128,7 @@ export function Chat({
 				<div
 					ref={messagesContainerRef}
 					onScroll={handleScroll}
-					className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4 pb-[300px]"
+					className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4 pb-[350px]"
 				>
 					{messages.length === 0 && <Welcome />}
 

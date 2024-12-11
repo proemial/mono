@@ -52,8 +52,8 @@ export function Block({
 	handleSubmit,
 	isLoading,
 	stop,
-	attachments,
-	setAttachments,
+	// attachments,
+	// setAttachments,
 	append,
 	block,
 	setBlock,
@@ -129,7 +129,7 @@ export function Block({
 
 	useEffect(() => {
 		mutateDocuments();
-	}, [block.status, mutateDocuments]);
+	}, [mutateDocuments]);
 
 	const { mutate } = useSWRConfig();
 	const [isContentDirty, setIsContentDirty] = useState(false);
@@ -168,8 +168,6 @@ export function Block({
 						};
 
 						return [...currentDocuments, newDocument];
-					} else {
-						return currentDocuments;
 					}
 				},
 				{ revalidate: false },
@@ -320,8 +318,8 @@ export function Block({
 								handleSubmit={handleSubmit}
 								isLoading={isLoading}
 								stop={stop}
-								attachments={attachments}
-								setAttachments={setAttachments}
+								// attachments={attachments}
+								// setAttachments={setAttachments}
 								messages={messages}
 								append={append}
 								className="bg-background dark:bg-muted"
