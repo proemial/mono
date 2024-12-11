@@ -1,6 +1,11 @@
 import { Time } from "@proemial/utils/time";
 import { Redis } from "@upstash/redis";
 
+console.log("Redis config", {
+	url: process.env.REDIS_PAPERS_STATE_URL,
+	token: process.env.REDIS_PAPERS_STATE_TOKEN,
+});
+
 const redis = new Redis({
 	url: process.env.REDIS_PAPERS_STATE_URL,
 	token: process.env.REDIS_PAPERS_STATE_TOKEN,
