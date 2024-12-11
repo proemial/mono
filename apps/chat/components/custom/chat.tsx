@@ -84,9 +84,9 @@ export function Chat({
 			const distFromBottom =
 				container.scrollHeight - container.scrollTop - container.clientHeight;
 
-			if (distFromBottom < 10) {
+			if (distFromBottom < 150) {
 				setScrolledToBottom(true);
-			} else if (distFromBottom > 200) {
+			} else if (distFromBottom > 340) {
 				setScrolledToBottom(false);
 			}
 		}
