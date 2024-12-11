@@ -89,8 +89,8 @@ export function MultimodalInput({
 	) => void;
 	className?: string;
 	followups?: string[];
-	scrolledToBottom: boolean;
-	checkScrollPosition: () => void;
+	scrolledToBottom?: boolean;
+	checkScrollPosition?: () => void;
 	/** Updates the scrolledToBottom state when scroll position changes */
 }) {
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -137,7 +137,7 @@ export function MultimodalInput({
 
 	useEffect(() => {
 		console.log("trigger when followups changes", followups);
-		checkScrollPosition();
+		checkScrollPosition?.();
 	}, [followups, checkScrollPosition]);
 
 	const handleInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {

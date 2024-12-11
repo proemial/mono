@@ -34,8 +34,8 @@ export function Reference({
 	handleSubmit,
 	isLoading,
 	stop,
-	attachments,
-	setAttachments,
+	// attachments,
+	// setAttachments,
 	append,
 	openedReference,
 	setOpenedReference,
@@ -49,8 +49,8 @@ export function Reference({
 	setInput: (input: string) => void;
 	isLoading: boolean;
 	stop: () => void;
-	attachments: Array<Attachment>;
-	setAttachments: Dispatch<SetStateAction<Array<Attachment>>>;
+	// attachments: Array<Attachment>;
+	// setAttachments: Dispatch<SetStateAction<Array<Attachment>>>;
 	openedReference: OpenReference;
 	setOpenedReference: Dispatch<SetStateAction<OpenReference>>;
 	messages: Array<Message>;
@@ -130,8 +130,8 @@ export function Reference({
 								handleSubmit={handleSubmit}
 								isLoading={isLoading}
 								stop={stop}
-								attachments={attachments}
-								setAttachments={setAttachments}
+								// attachments={attachments}
+								// setAttachments={setAttachments}
 								messages={messages}
 								append={append}
 								className="bg-background dark:bg-muted"

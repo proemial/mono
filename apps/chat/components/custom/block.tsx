@@ -66,8 +66,8 @@ export function Block({
 	setInput: (input: string) => void;
 	isLoading: boolean;
 	stop: () => void;
-	attachments: Array<Attachment>;
-	setAttachments: Dispatch<SetStateAction<Array<Attachment>>>;
+	// attachments: Array<Attachment>;
+	// setAttachments: Dispatch<SetStateAction<Array<Attachment>>>;
 	block: UIBlock;
 	setBlock: Dispatch<SetStateAction<UIBlock>>;
 	messages: Array<Message>;
