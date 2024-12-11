@@ -128,7 +128,7 @@ export function Chat({
 				<div
 					ref={messagesContainerRef}
 					onScroll={handleScroll}
-					className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4 pb-[150px]"
+					className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4 pb-[300px]"
 				>
 					{messages.length === 0 && <Welcome />}
 
