@@ -10,7 +10,7 @@ type PaperResponse = {
 	data: AnnotatedPaper;
 };
 
-export function ResearchPaper({ id }: { id: string }) {
+export default function ResearchPaper({ id }: { id: string }) {
 	const { data: response, isLoading } = usePaper(id);
 	const data = response?.data;
 	const publisher = data?.paper?.primary_location?.source?.display_name;

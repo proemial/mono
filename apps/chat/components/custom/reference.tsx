@@ -8,12 +8,16 @@ import { Vote } from "@/db/schema";
 import { RetrievalResult } from "@/app/(chat)/api/chat/route";
 import { Button } from "../ui/button";
 import { CrossIcon } from "./icons";
-import { Answer, Question } from "./chat-message";
 import { MultimodalInput } from "./multimodal-input";
 import { useScrollToBottom } from "./use-scroll-to-bottom";
-import { ResearchPaper } from "./paper/paper";
+// import { ResearchPaper } from "./paper/paper";
 import { ChatMessages } from "./chat-messages";
 import { Markdown } from "./markdown";
+import dynamic from "next/dynamic";
+
+const ResearchPaper = dynamic(() => import("./paper/paper"), {
+	ssr: false,
+});
 
 export type OpenReference = {
 	isVisible: boolean;
