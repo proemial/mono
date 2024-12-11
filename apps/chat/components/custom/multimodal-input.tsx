@@ -57,8 +57,8 @@ export function MultimodalInput({
 	setInput,
 	isLoading,
 	stop,
-	attachments,
-	setAttachments,
+	// attachments,
+	// setAttachments,
 	messages,
 	setMessages,
 	append,
@@ -66,15 +66,15 @@ export function MultimodalInput({
 	className,
 	followups,
 	scrolledToBottom,
-	setScrolledToBottom,
+	checkScrollPosition,
 }: {
 	chatId: string;
 	input: string;
 	setInput: (value: string) => void;
 	isLoading: boolean;
 	stop: () => void;
-	attachments: Array<Attachment>;
-	setAttachments: Dispatch<SetStateAction<Array<Attachment>>>;
+	// attachments: Array<Attachment>;
+	// setAttachments: Dispatch<SetStateAction<Array<Attachment>>>;
 	messages: Array<Message>;
 	setMessages: Dispatch<SetStateAction<Array<Message>>>;
 	append: (
@@ -90,8 +90,8 @@ export function MultimodalInput({
 	className?: string;
 	followups?: string[];
 	scrolledToBottom: boolean;
+	checkScrollPosition: () => void;
 	/** Updates the scrolledToBottom state when scroll position changes */
-	setScrolledToBottom: (value: boolean) => void;
 }) {
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const { width } = useWindowSize();
@@ -102,29 +102,26 @@ export function MultimodalInput({
 		}
 	}, []);
 
-	const adjustHeight = () => {
-		if (textareaRef.current) {
-			textareaRef.current.style.height = "auto";
-			textareaRef.current.style.height = `${textareaRef.current.scrollHeight + 2}px`;
-		}
-	};
-
 	const [localStorageInput, setLocalStorageInput] = useLocalStorage(
 		"input",
 		"",
 	);
 
+	const adjustHeight = useCallback(() => {
+		if (textareaRef.current) {
+			textareaRef.current.style.height = "auto";
+			textareaRef.current.style.height = `${textareaRef.current.scrollHeight + 2}px`;
+		}
+	}, []);
+
 	useEffect(() => {
 		if (textareaRef.current) {
 			const domValue = textareaRef.current.value;
-			// Prefer DOM value over localStorage to handle hydration
 			const finalValue = domValue || localStorageInput || "";
 			setInput(finalValue);
 			adjustHeight();
 		}
-		// Only run once after hydration
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [localStorageInput, setInput, adjustHeight]);
 
 	useEffect(() => {
 		setLocalStorageInput(input);
@@ -132,10 +129,16 @@ export function MultimodalInput({
 
 	const [suggestions, setSuggestions] = useState<string[]>([]);
 	useEffect(() => {
-		setSuggestions(
-			suggestedActions.sort(() => Math.random() - 0.5).slice(0, 4),
-		);
+		const randomSuggestions = suggestedActions
+			.sort(() => Math.random() - 0.5)
+			.slice(0, 4);
+		setSuggestions(randomSuggestions);
 	}, []);
+
+	useEffect(() => {
+		console.log("trigger when followups changes", followups);
+		checkScrollPosition();
+	}, [followups, checkScrollPosition]);
 
 	const handleInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setInput(event.target.value);
@@ -149,12 +152,11 @@ export function MultimodalInput({
 		window.history.replaceState({}, "", `/chat/${chatId}`);
 
 		handleSubmit(undefined, {
-			experimental_attachments: attachments,
+			//experimental_attachments: attachments,
 		});
 
 		//setAttachments([]);
 		setLocalStorageInput("");
-		setScrolledToBottom(true);
 
 		if (width && width > 768) {
 			textareaRef.current?.focus();
@@ -164,7 +166,6 @@ export function MultimodalInput({
 		handleSubmit,
 		//setAttachments,
 		setLocalStorageInput,
-
 		width,
 		chatId,
 	]);

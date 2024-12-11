@@ -3,7 +3,7 @@
 import { Attachment, Message } from "ai";
 import { useChat } from "ai/react";
 import { AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import useSWR, { useSWRConfig } from "swr";
 import { useWindowSize } from "usehooks-ts";
 
@@ -78,32 +78,35 @@ export function Chat({
 
 	const [scrolledToBottom, setScrolledToBottom] = useState(false);
 
-	// Add scroll event listener
-	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-		const container = e.currentTarget;
+	const checkScrollPosition = useCallback(() => {
+		const container = messagesContainerRef.current;
+		if (container) {
+			const distFromBottom =
+				container.scrollHeight - container.scrollTop - container.clientHeight;
 
-		const distFromBottom =
-			container.scrollHeight - container.scrollTop - container.clientHeight;
-
-		if (distFromBottom < 10) {
-			setScrolledToBottom(true);
-		} else if (distFromBottom > 200) {
-			setScrolledToBottom(false);
+			if (distFromBottom < 10) {
+				setScrolledToBottom(true);
+			} else if (distFromBottom > 200) {
+				setScrolledToBottom(false);
+			}
 		}
-	};
+	}, []);
+
+	const handleScroll = useCallback(
+		(e: React.UIEvent<HTMLDivElement>) => {
+			checkScrollPosition(e.currentTarget);
+		},
+		[checkScrollPosition],
+	);
 
 	useEffect(() => {
-		if (messagesContainerRef.current) {
-			// Create a synthetic event object
-			const syntheticEvent = {
-				currentTarget: messagesContainerRef.current,
-			} as React.UIEvent<HTMLDivElement>;
-
-			handleScroll(syntheticEvent);
+		const container = messagesContainerRef.current;
+		if (container) {
+			checkScrollPosition(container);
 		}
-	}, [messagesContainerRef.current]);
+	}, [messagesContainerRef, checkScrollPosition]);
 
-	const [attachments, setAttachments] = useState<Array<Attachment>>([]);
+	//const [attachments, setAttachments] = useState<Array<Attachment>>([]);
 
 	const latestStreamingData = !isLoading
 		? (streamingData?.at(-1) as {
@@ -150,14 +153,14 @@ export function Chat({
 						handleSubmit={handleSubmit}
 						isLoading={isLoading}
 						stop={stop}
-						attachments={attachments}
-						setAttachments={setAttachments}
+						// attachments={attachments}
+						// setAttachments={setAttachments}
 						messages={messages}
 						setMessages={setMessages}
 						append={append}
 						followups={followups}
 						scrolledToBottom={scrolledToBottom}
-						setScrolledToBottom={setScrolledToBottom}
+						checkScrollPosition={checkScrollPosition}
 					/>
 				</form>
 			</div>
@@ -171,8 +174,8 @@ export function Chat({
 						handleSubmit={handleSubmit}
 						isLoading={isLoading}
 						stop={stop}
-						attachments={attachments}
-						setAttachments={setAttachments}
+						// attachments={attachments}
+						// setAttachments={setAttachments}
 						append={append}
 						block={block}
 						setBlock={setBlock}
@@ -192,8 +195,8 @@ export function Chat({
 						handleSubmit={handleSubmit}
 						isLoading={isLoading}
 						stop={stop}
-						attachments={attachments}
-						setAttachments={setAttachments}
+						// attachments={attachments}
+						// setAttachments={setAttachments}
 						append={append}
 						openedReference={openedReference}
 						setOpenedReference={setOpenedReference}
