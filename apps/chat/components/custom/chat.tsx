@@ -3,7 +3,7 @@
 import { Attachment, Message } from "ai";
 import { useChat } from "ai/react";
 import { AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useSWR, { useSWRConfig } from "swr";
 import { useWindowSize } from "usehooks-ts";
 
@@ -76,6 +76,33 @@ export function Chat({
 	const [messagesContainerRef, messagesEndRef] =
 		useScrollToBottom<HTMLDivElement>();
 
+	const [scrolledToBottom, setScrolledToBottom] = useState(false);
+
+	// Add scroll event listener
+	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+		const container = e.currentTarget;
+
+		const distFromBottom =
+			container.scrollHeight - container.scrollTop - container.clientHeight;
+
+		if (distFromBottom < 10) {
+			setScrolledToBottom(true);
+		} else if (distFromBottom > 200) {
+			setScrolledToBottom(false);
+		}
+	};
+
+	useEffect(() => {
+		if (messagesContainerRef.current) {
+			// Create a synthetic event object
+			const syntheticEvent = {
+				currentTarget: messagesContainerRef.current,
+			} as React.UIEvent<HTMLDivElement>;
+
+			handleScroll(syntheticEvent);
+		}
+	}, [messagesContainerRef.current]);
+
 	const [attachments, setAttachments] = useState<Array<Attachment>>([]);
 
 	const latestStreamingData = !isLoading
@@ -97,7 +124,8 @@ export function Chat({
 				<ChatHeader />
 				<div
 					ref={messagesContainerRef}
-					className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4"
+					onScroll={handleScroll}
+					className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4 pb-[150px]"
 				>
 					{messages.length === 0 && <Welcome />}
 
@@ -128,6 +156,8 @@ export function Chat({
 						setMessages={setMessages}
 						append={append}
 						followups={followups}
+						scrolledToBottom={scrolledToBottom}
+						setScrolledToBottom={setScrolledToBottom}
 					/>
 				</form>
 			</div>

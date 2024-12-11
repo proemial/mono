@@ -18,7 +18,7 @@ import { useLocalStorage, useWindowSize } from "usehooks-ts";
 import { sanitizeUIMessages } from "@/lib/utils";
 
 import { ArrowUpIcon, PaperclipIcon, StopIcon } from "./icons";
-import { PreviewAttachment } from "./preview-attachment";
+// import { PreviewAttachment } from "./preview-attachment";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 
@@ -65,6 +65,8 @@ export function MultimodalInput({
 	handleSubmit,
 	className,
 	followups,
+	scrolledToBottom,
+	setScrolledToBottom,
 }: {
 	chatId: string;
 	input: string;
@@ -87,6 +89,9 @@ export function MultimodalInput({
 	) => void;
 	className?: string;
 	followups?: string[];
+	scrolledToBottom: boolean;
+	/** Updates the scrolledToBottom state when scroll position changes */
+	setScrolledToBottom: (value: boolean) => void;
 }) {
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const { width } = useWindowSize();
@@ -147,74 +152,76 @@ export function MultimodalInput({
 			experimental_attachments: attachments,
 		});
 
-		setAttachments([]);
+		//setAttachments([]);
 		setLocalStorageInput("");
+		setScrolledToBottom(true);
 
 		if (width && width > 768) {
 			textareaRef.current?.focus();
 		}
 	}, [
-		attachments,
+		// attachments,
 		handleSubmit,
-		setAttachments,
+		//setAttachments,
 		setLocalStorageInput,
+
 		width,
 		chatId,
 	]);
 
-	const uploadFile = async (file: File) => {
-		const formData = new FormData();
-		formData.append("file", file);
+	// const uploadFile = async (file: File) => {
+	// 	const formData = new FormData();
+	// 	formData.append("file", file);
 
-		try {
-			const response = await fetch(`/api/files/upload`, {
-				method: "POST",
-				body: formData,
-			});
+	// 	try {
+	// 		const response = await fetch(`/api/files/upload`, {
+	// 			method: "POST",
+	// 			body: formData,
+	// 		});
 
-			if (response.ok) {
-				const data = await response.json();
-				const { url, pathname, contentType } = data;
+	// 		if (response.ok) {
+	// 			const data = await response.json();
+	// 			const { url, pathname, contentType } = data;
 
-				return {
-					url,
-					name: pathname,
-					contentType: contentType,
-				};
-			} else {
-				const { error } = await response.json();
-				toast.error(error);
-			}
-		} catch (error) {
-			toast.error("Failed to upload file, please try again!");
-		}
-	};
+	// 			return {
+	// 				url,
+	// 				name: pathname,
+	// 				contentType: contentType,
+	// 			};
+	// 		} else {
+	// 			const { error } = await response.json();
+	// 			toast.error(error);
+	// 		}
+	// 	} catch (error) {
+	// 		toast.error("Failed to upload file, please try again!");
+	// 	}
+	// };
 
-	const handleFileChange = useCallback(
-		async (event: ChangeEvent<HTMLInputElement>) => {
-			const files = Array.from(event.target.files || []);
+	// const handleFileChange = useCallback(
+	// 	async (event: ChangeEvent<HTMLInputElement>) => {
+	// 		const files = Array.from(event.target.files || []);
 
-			setUploadQueue(files.map((file) => file.name));
+	// 		setUploadQueue(files.map((file) => file.name));
 
-			try {
-				const uploadPromises = files.map((file) => uploadFile(file));
-				const uploadedAttachments = await Promise.all(uploadPromises);
-				const successfullyUploadedAttachments = uploadedAttachments.filter(
-					(attachment) => attachment !== undefined,
-				);
+	// 		try {
+	// 			const uploadPromises = files.map((file) => uploadFile(file));
+	// 			const uploadedAttachments = await Promise.all(uploadPromises);
+	// 			const successfullyUploadedAttachments = uploadedAttachments.filter(
+	// 				(attachment) => attachment !== undefined,
+	// 			);
 
-				setAttachments((currentAttachments) => [
-					...currentAttachments,
-					...successfullyUploadedAttachments,
-				]);
-			} catch (error) {
-				console.error("Error uploading files!", error);
-			} finally {
-				setUploadQueue([]);
-			}
-		},
-		[setAttachments],
-	);
+	// 			setAttachments((currentAttachments) => [
+	// 				...currentAttachments,
+	// 				...successfullyUploadedAttachments,
+	// 			]);
+	// 		} catch (error) {
+	// 			console.error("Error uploading files!", error);
+	// 		} finally {
+	// 			setUploadQueue([]);
+	// 		}
+	// 	},
+	// 	[setAttachments],
+	// );
 
 	const starters = followups
 		? followups
@@ -225,47 +232,56 @@ export function MultimodalInput({
 	return (
 		<div className="relative w-full flex flex-col gap-4">
 			{starters && (
-				<div className="grid sm:grid-cols-2 gap-2 w-full">
-					{starters?.map((suggestion, index) => (
-						<motion.div
-							initial={{ opacity: 0, y: 20 }}
-							animate={{ opacity: 1, y: 0 }}
-							exit={{ opacity: 0, y: 20 }}
-							transition={{ delay: 0.05 * index }}
-							key={index}
-							className={index > 1 ? "hidden sm:block" : "block"}
-						>
-							<Button
-								variant="ghost"
-								onClick={(event) => {
-									event.preventDefault();
-									window.history.replaceState({}, "", `/chat/${chatId}`);
-
-									append({
-										role: "user",
-										content: suggestion,
-									});
-								}}
-								className="text-left border rounded-xl px-4 py-3.5 text-sm flex-1 gap-1 sm:flex-col w-full h-full justify-left items-start whitespace-normal break-words"
-								disabled={isLoading}
+				<div
+					className={cx(
+						"transition-all duration-600 overflow-hidden",
+						scrolledToBottom && !isLoading
+							? "h-auto opacity-100"
+							: "max-h-0 h-0 hidden opacity-0",
+					)}
+				>
+					<div className="grid sm:grid-cols-2 gap-2 w-full">
+						{starters?.map((suggestion, index) => (
+							<motion.div
+								initial={{ opacity: 0, y: 20 }}
+								animate={{ opacity: 1, y: 0 }}
+								exit={{ opacity: 0, y: 20 }}
+								transition={{ delay: 0.05 * index }}
+								key={index}
+								className={index > 1 ? "hidden sm:block" : "block"}
 							>
-								<span>{suggestion}</span>
-							</Button>
-						</motion.div>
-					))}
+								<Button
+									variant="ghost"
+									onClick={(event) => {
+										event.preventDefault();
+										window.history.replaceState({}, "", `/chat/${chatId}`);
+
+										append({
+											role: "user",
+											content: suggestion,
+										});
+									}}
+									className="text-left border rounded-xl px-4 py-3.5 text-sm flex-1 gap-1 sm:flex-col w-full h-full justify-left items-start whitespace-normal break-words"
+									disabled={isLoading}
+								>
+									<span>{suggestion}</span>
+								</Button>
+							</motion.div>
+						))}
+					</div>
 				</div>
 			)}
 
-			<input
+			{/* <input
 				type="file"
 				className="fixed -top-4 -left-4 size-0.5 opacity-0 pointer-events-none"
 				ref={fileInputRef}
 				multiple
-				onChange={handleFileChange}
+				// onChange={handleFileChange}
 				tabIndex={-1}
-			/>
+			/> */}
 
-			{(attachments.length > 0 || uploadQueue.length > 0) && (
+			{/* {(attachments.length > 0 || uploadQueue.length > 0) && (
 				<div className="flex flex-row gap-2 overflow-x-scroll items-end">
 					{attachments.map((attachment) => (
 						<PreviewAttachment key={attachment.url} attachment={attachment} />
@@ -283,7 +299,7 @@ export function MultimodalInput({
 						/>
 					))}
 				</div>
-			)}
+			)} */}
 
 			<Textarea
 				maxLength={1024}
