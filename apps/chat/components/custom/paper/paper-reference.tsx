@@ -7,16 +7,23 @@ import { Markdown } from "../markdown";
 
 export default function PaperReference({
 	paper,
+	openedReference,
 	setOpenedReference,
 	prefix,
 }: {
 	paper: IndexedReferencedPaper<ReferencePreview>;
+	openedReference: OpenReference;
 	setOpenedReference: Dispatch<SetStateAction<OpenReference>>;
 	prefix: string;
 }) {
 	const [isActive, setIsActive] = useState(false);
 	const ref = useRef<HTMLAnchorElement>(null);
 	const anchor = `#${prefix}-${paper.index}`;
+
+	const open =
+		openedReference.isVisible &&
+		openedReference?.preview?.link === paper.link &&
+		openedReference?.preview?.index === paper.index;
 
 	useEffect(() => {
 		if (typeof window === "undefined") return;
@@ -25,7 +32,7 @@ export default function PaperReference({
 			if (ref.current && window.location.hash.includes(anchor)) {
 				ref.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
 			}
-			setIsActive(window.location.hash === anchor);
+			setIsActive(open || window.location.hash === anchor);
 		};
 		handleHashChange();
 
@@ -33,7 +40,7 @@ export default function PaperReference({
 		return () => {
 			window.removeEventListener("hashchange", handleHashChange, false);
 		};
-	}, [anchor]);
+	}, [anchor, open]);
 
 	return (
 		<div

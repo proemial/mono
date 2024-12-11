@@ -1,0 +1,2 @@
+GET http://localhost:5252/api/paper/W4405078819
+Content-Type: application/json

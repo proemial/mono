@@ -44,6 +44,7 @@ export type RetrievalResult = Array<{
 	title: string;
 	abstract: string;
 	publicationDate: string;
+	index?: number;
 }>;
 
 type AllowedTools = "getPapers";

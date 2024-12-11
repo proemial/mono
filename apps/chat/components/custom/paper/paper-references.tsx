@@ -5,12 +5,14 @@ import PaperReference from "./paper-reference";
 
 type Props = {
 	papers: IndexedReferencedPaper<ReferencePreview>[];
+	openedReference: OpenReference;
 	setOpenedReference: Dispatch<SetStateAction<OpenReference>>;
 	prefix: string;
 };
 
 export const PaperReferences = ({
 	papers,
+	openedReference,
 	setOpenedReference,
 	prefix,
 }: Props) => {
@@ -28,6 +30,7 @@ export const PaperReferences = ({
 						<PaperReference
 							key={paper.link}
 							paper={paper}
+							openedReference={openedReference}
 							setOpenedReference={setOpenedReference}
 							prefix={prefix}
 						/>

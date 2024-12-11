@@ -1,23 +1,19 @@
-import { useObject } from "@/lib/use-object";
-import { OpenAlexPaperWithAbstract } from "@proemial/repositories/oa/models/oa-paper";
 import { Button } from "@proemial/shadcn-ui";
 import { formatDate } from "@proemial/utils/date";
 import { File06, LinkExternal02, Stars02 } from "@untitled-ui/icons-react";
 import { Markdown } from "../markdown";
+import { useQuery } from "@tanstack/react-query";
+import { AnnotatedPaper } from "@/app/(chat)/api/paper/[id]/route";
 
-type StreamedPaper = {
-	data: OpenAlexPaperWithAbstract;
-	generated?: {
-		title?: string;
-		description?: string;
-	};
+type PaperResponse = {
+	done: boolean;
+	data: AnnotatedPaper;
 };
 
-export function ResearchPaper({ id }: { id: string }) {
-	const { data: paper, isLoading } = useObject<StreamedPaper>(
-		`/api/paper/${id}`,
-	);
-	const publisher = paper?.data?.primary_location?.source?.display_name;
+export default function ResearchPaper({ id }: { id: string }) {
+	const { data: response, isLoading } = usePaper(id);
+	const data = response?.data;
+	const publisher = data?.paper?.primary_location?.source?.display_name;
 
 	return (
 		<div className="">
@@ -33,7 +29,7 @@ export function ResearchPaper({ id }: { id: string }) {
 							summary
 						</div>
 						<div className="text-lg font-semibold">
-							<Markdown>{paper?.generated?.title ?? ""}</Markdown>
+							<Markdown>{data?.generated?.title ?? ""}</Markdown>
 						</div>
 						<div className="text">
 							{(() => {
@@ -42,12 +38,12 @@ export function ResearchPaper({ id }: { id: string }) {
 
 								if (!isMobile)
 									return (
-										<Markdown>{paper?.generated?.description ?? ""}</Markdown>
+										<Markdown>{data?.generated?.description ?? ""}</Markdown>
 									);
 
 								return (
 									<>
-										{paper?.generated?.description?.slice(0, 200)}...{" "}
+										{data?.generated?.description?.slice(0, 200)}...{" "}
 										<a
 											href="#"
 											className="font-normal cursor-pointer"
@@ -56,7 +52,7 @@ export function ResearchPaper({ id }: { id: string }) {
 												const element = document.querySelector(".text");
 												if (element) {
 													element.textContent =
-														paper?.generated?.description || "";
+														data?.generated?.description || "";
 												}
 											}}
 										>
@@ -70,7 +66,7 @@ export function ResearchPaper({ id }: { id: string }) {
 					<div className="flex justify-between text-muted-foreground mt-8 font-light text-sm md:text-base">
 						{publisher && (
 							<a
-								href={paper?.data?.primary_location?.landing_page_url}
+								href={data?.paper?.primary_location?.landing_page_url}
 								target="_blank"
 								rel="noreferrer"
 								className="hover:underline hover:text-foreground no-underline font-light transition text-muted-foreground truncate max-w-[80%]"
@@ -79,32 +75,32 @@ export function ResearchPaper({ id }: { id: string }) {
 							</a>
 						)}
 						<div className="flex-shrink-0">
-							{formatDate(paper?.data?.publication_date, "relative")}
+							{formatDate(data?.paper?.publication_date, "relative")}
 						</div>
 					</div>
 					<div className="font-semibold text-2xl md:text-3xl mt-2 mb-2">
-						<Markdown>{paper?.data?.title ?? ""}</Markdown>
+						<Markdown>{data?.paper?.title ?? ""}</Markdown>
 					</div>
 
 					<div className="text-sm md:text-base font-light text-muted-foreground mb-1">
 						Written by{" "}
-						{paper?.data?.authorships
+						{data?.paper?.authorships
 							?.map((author) => author.author.display_name)
 							.join(", ")}
 					</div>
 
 					<div className="mt-4">
-						{paper?.data?.abstract ? (
-							<Markdown>{paper.data.abstract}</Markdown>
+						{data?.paper?.abstract ? (
+							<Markdown>{data.paper?.abstract}</Markdown>
 						) : (
 							"Abstract not found"
 						)}
 					</div>
 
-					{paper && (
+					{data && (
 						<div className="flex items-center justify-center w-full my-8">
 							<a
-								href={paper?.data?.primary_location?.landing_page_url}
+								href={data?.paper?.primary_location?.landing_page_url}
 								target="_blank"
 								rel="noreferrer"
 							>
@@ -122,4 +118,30 @@ export function ResearchPaper({ id }: { id: string }) {
 			)}
 		</div>
 	);
+}
+
+function usePaper(id: string) {
+	return useQuery<PaperResponse, Error, PaperResponse>({
+		queryKey: ["paper", id],
+		queryFn: async (): Promise<PaperResponse> => {
+			const response = await fetch(`/api/paper/${id}`);
+			const data = await response.json();
+
+			if (response.status === 202) {
+				return { done: false, data };
+			}
+			if (response.status === 200) {
+				return { done: true, data };
+			}
+
+			throw new Error(`Unexpected status: ${response.status}`);
+		},
+		refetchInterval: (query) => {
+			if (query.state.data?.done || query.state.error) {
+				return false;
+			}
+			return 10;
+		},
+		retry: 3,
+	});
 }

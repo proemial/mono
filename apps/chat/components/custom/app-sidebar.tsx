@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 import { PlusIcon, ProemIcon } from "@/components/custom/icons";
 import { SidebarHistory } from "@/components/custom/sidebar-history";
-import { SidebarUserNav } from "@/components/custom/sidebar-user-nav";
+import { SidebarAnonNav } from "@/components/custom/sidebar-anon-nav";
 import { Button } from "@/components/ui/button";
 import {
 	Sidebar,
@@ -69,7 +69,7 @@ export function AppSidebar({ sessionId }: { sessionId: string }) {
 				{sessionId && (
 					<SidebarGroup>
 						<SidebarGroupContent>
-							<SidebarUserNav sessionId={sessionId} />
+							<SidebarAnonNav sessionId={sessionId} />
 						</SidebarGroupContent>
 					</SidebarGroup>
 				)}

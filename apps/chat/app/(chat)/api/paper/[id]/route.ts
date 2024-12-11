@@ -4,13 +4,23 @@ import {
 	oaBaseArgs,
 	oaBaseUrl,
 	openAlexFields,
+	OpenAlexPaperWithAbstract,
 	OpenAlexWorkMetadata,
 } from "@proemial/repositories/oa/models/oa-paper";
 import { fromInvertedIndex } from "@proemial/utils/string";
 import { unstable_cache } from "next/cache";
 import { NextRequest } from "next/server";
+import { RedisPaperState } from "./redis";
 
-export async function POST(
+export type AnnotatedPaper = {
+	paper: OpenAlexPaperWithAbstract;
+	generated?: {
+		title?: string;
+		description?: string;
+	};
+};
+
+export async function GET(
 	_: NextRequest,
 	{ params }: { params: Promise<{ id: string }> },
 ) {
@@ -19,76 +29,98 @@ export async function POST(
 		return new Response("Missing id", { status: 400 });
 	}
 
-	const stream = new ReadableStream({
-		async start(controller) {
-			const data = await fetchPaper(id);
-			controller.enqueue(JSON.stringify({ data }));
+	let state = await RedisPaperState.get(id);
+	const done = () => RedisPaperState.isDone(state);
 
-			if (data) {
-				// TODO: Fix and use cached summariseTitle
-				const title = await summariseTitleWorker(
-					data.title as string,
-					data.abstract as string,
-					"chat",
-				);
+	if (!state.completed.includes("fetch")) {
+		const result = {
+			paper: await fetchPaper(id),
+		} as AnnotatedPaper;
+		state = await RedisPaperState.update(id, {
+			completed: [...state.completed, "fetch"],
+		});
 
-				controller.enqueue(
-					JSON.stringify({
-						data,
-						generated: { title },
-					}),
-				);
+		return new Response(JSON.stringify(result), {
+			headers: { "Content-Type": "application/json" },
+			status: done() ? 200 : 202,
+		});
+	}
 
-				// TODO: Fix and use cached summariseDescription
-				const description = await summariseDescriptionWorker(
-					data.title as string,
-					data.abstract as string,
-					"chat",
-				);
-				controller.enqueue(
-					JSON.stringify({ data, generated: { title, description } }),
-				);
-			}
+	// Get from cache (with fallback)
+	const paper = await fetchPaper(id);
 
-			controller.close();
+	if (paper && !state.completed.includes("title")) {
+		const result = {
+			paper,
+			generated: {
+				title: await summariseTitle(
+					id,
+					paper.title as string,
+					paper.abstract as string,
+				),
+			},
+		} as AnnotatedPaper;
+		state = await RedisPaperState.update(id, {
+			completed: [...state.completed, "title"],
+		});
+
+		return new Response(JSON.stringify(result), {
+			headers: { "Content-Type": "application/json" },
+			status: done() ? 200 : 202,
+		});
+	}
+
+	// Get from cache (with fallback)
+	const title = await summariseTitle(
+		id,
+		paper?.title as string,
+		paper?.abstract as string,
+	);
+
+	if (paper && !state.completed.includes("description")) {
+		const result = {
+			paper,
+			generated: {
+				title,
+				description: await summariseDescription(
+					id,
+					paper.title as string,
+					paper.abstract as string,
+				),
+			},
+		} as AnnotatedPaper;
+		state = await RedisPaperState.update(id, {
+			completed: [...state.completed, "description"],
+		});
+
+		return new Response(JSON.stringify(result), {
+			headers: { "Content-Type": "application/json" },
+			status: done() ? 200 : 202,
+		});
+	}
+
+	const result = {
+		paper,
+		generated: {
+			title,
+			// Get from cache
+			description: await summariseDescription(
+				id,
+				paper?.title as string,
+				paper?.abstract as string,
+			),
 		},
-	});
+	} as AnnotatedPaper;
 
-	return new Response(stream, {
+	return new Response(JSON.stringify(result), {
 		headers: { "Content-Type": "application/json" },
-		status: 200,
+		status: done() ? 200 : 202,
 	});
-}
-
-async function summariseTitle(id: string, title: string, abstract: string) {
-	const summarise = unstable_cache(async () => {
-		console.log("[paper][summarise][title]", id);
-		const result = await summariseTitleWorker(title, abstract, "chat");
-		return result;
-	}, [`paper-title:${id}`]);
-	const cached = await summarise();
-
-	return cached;
-}
-
-async function summariseDescription(
-	id: string,
-	title: string,
-	abstract: string,
-) {
-	const summarise = unstable_cache(async () => {
-		console.log("[paper][summarise][description]", id);
-		const result = await summariseDescriptionWorker(title, abstract, "chat");
-		return result;
-	}, [`paper-description:${id}`]);
-	const cached = await summarise();
-
-	return cached;
 }
 
 async function fetchPaper(id: string) {
 	const fetchWorker = unstable_cache(async () => {
-		console.log("[paper][fetch] ", id);
+		console.log("[api][paper] Fetching ", id);
 		const oaPaper = await fetch(
 			`${oaBaseUrl}/${id}?${oaBaseArgs}&select=${openAlexFields.all}`,
 		);
@@ -106,4 +138,30 @@ async function fetchPaper(id: string) {
 		};
 	}, [`paper-data:${id}`]);
 	return await fetchWorker();
+}
+
+async function summariseTitle(id: string, title: string, abstract: string) {
+	const summarise = unstable_cache(async () => {
+		console.log("[api][paper] Summarising title ", id);
+		const result = await summariseTitleWorker(title, abstract, "chat");
+		return result;
+	}, [`paper-title:${id}`]);
+	const cached = await summarise();
+
+	return cached;
+}
+
+async function summariseDescription(
+	id: string,
+	title: string,
+	abstract: string,
+) {
+	const summarise = unstable_cache(async () => {
+		console.log("[api][paper] Summarising description ", id);
+		const result = await summariseDescriptionWorker(title, abstract, "chat");
+		return result;
+	}, [`paper-description:${id}`]);
+	const cached = await summarise();
+
+	return cached;
 }

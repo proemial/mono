@@ -8,12 +8,15 @@ import { Vote } from "@/db/schema";
 import { RetrievalResult } from "@/app/(chat)/api/chat/route";
 import { Button } from "../ui/button";
 import { CrossIcon } from "./icons";
-import { Answer, Question } from "./chat-message";
 import { MultimodalInput } from "./multimodal-input";
 import { useScrollToBottom } from "./use-scroll-to-bottom";
-import { ResearchPaper } from "./paper/paper";
 import { ChatMessages } from "./chat-messages";
 import { Markdown } from "./markdown";
+import dynamic from "next/dynamic";
+
+const ResearchPaper = dynamic(() => import("./paper/paper"), {
+	ssr: false,
+});
 
 export type OpenReference = {
 	isVisible: boolean;
@@ -113,6 +116,7 @@ export function Reference({
 								messages={messages}
 								isLoading={isLoading}
 								votes={votes}
+								openedReference={openedReference}
 								setOpenedReference={setOpenedReference}
 							/>
 
@@ -226,12 +230,14 @@ export function Reference({
 						</div>
 					</div>
 				</div>
-				<div className="prose dark:prose-invert dark:bg-muted bg-background h-full overflow-y-scroll px-4 pt-2 lg:p-10 xl:p-20 max-w-[800px] items-center">
-					{openedReference?.preview && (
-						<ResearchPaper
-							id={openedReference.preview.link.split("/").pop() || ""}
-						/>
-					)}
+				<div className="h-full flex flex-col overflow-y-auto ">
+					<div className="prose dark:prose-invert dark:bg-muted bg-background flex-1 max-w-[700px] px-4 pt-2 xl:pt-10 lg:mx-auto items-center">
+						{openedReference?.preview && (
+							<ResearchPaper
+								id={openedReference.preview.link.split("/").pop() || ""}
+							/>
+						)}
+					</div>
 				</div>
 			</motion.div>
 		</motion.div>
