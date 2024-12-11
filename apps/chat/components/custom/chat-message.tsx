@@ -9,7 +9,7 @@ import { Vote } from "@/db/schema";
 import { ProemIcon, SparklesIcon } from "./icons"; // Add this import at the top with other icons
 import { SearchMd } from "@untitled-ui/icons-react";
 import { MessageActions } from "./message-actions";
-import { PreviewAttachment } from "./preview-attachment";
+// import { PreviewAttachment } from "./preview-attachment";
 import { PaperReferences } from "./paper/paper-references";
 import { OpenReference, ReferencePreview } from "./reference";
 import { Dispatch, SetStateAction, useRef, useEffect } from "react";
@@ -76,7 +76,7 @@ export const Answer = ({
 						/>
 					)}
 
-					{message.experimental_attachments && (
+					{/* {message.experimental_attachments && (
 						<div className="flex flex-row gap-2">
 							{message.experimental_attachments.map((attachment) => (
 								<PreviewAttachment
@@ -85,7 +85,7 @@ export const Answer = ({
 								/>
 							))}
 						</div>
-					)}
+					)} */}
 				</div>
 			</div>
 		</motion.div>
