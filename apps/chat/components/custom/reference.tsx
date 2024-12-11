@@ -226,12 +226,14 @@ export function Reference({
 						</div>
 					</div>
 				</div>
-				<div className="prose dark:prose-invert dark:bg-muted bg-background h-full overflow-y-scroll px-4 pt-2 lg:p-10 xl:p-20 max-w-[800px] items-center">
-					{openedReference?.preview && (
-						<ResearchPaper
-							id={openedReference.preview.link.split("/").pop() || ""}
-						/>
-					)}
+				<div className="h-full flex flex-col overflow-y-auto ">
+					<div className="prose dark:prose-invert dark:bg-muted bg-background flex-1 max-w-[700px] px-4 pt-2 xl:pt-10 lg:mx-auto items-center">
+						{openedReference?.preview && (
+							<ResearchPaper
+								id={openedReference.preview.link.split("/").pop() || ""}
+							/>
+						)}
+					</div>
 				</div>
 			</motion.div>
 		</motion.div>
