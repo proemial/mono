@@ -10,7 +10,6 @@ import { Button } from "../ui/button";
 import { CrossIcon } from "./icons";
 import { MultimodalInput } from "./multimodal-input";
 import { useScrollToBottom } from "./use-scroll-to-bottom";
-// import { ResearchPaper } from "./paper/paper";
 import { ChatMessages } from "./chat-messages";
 import { Markdown } from "./markdown";
 import dynamic from "next/dynamic";

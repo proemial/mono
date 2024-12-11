@@ -1,22 +1,18 @@
 import { Time } from "@proemial/utils/time";
 import { Redis } from "@upstash/redis";
 
-console.log("Redis config", {
-	url: process.env.UPSTASH_REDIS_REST_URL,
-	token: process.env.UPSTASH_REDIS_REST_TOKEN,
-});
-
-const redis = new Redis({
-	url: process.env.UPSTASH_REDIS_REST_URL,
-	token: process.env.UPSTASH_REDIS_REST_TOKEN,
-});
+const redis = () =>
+	new Redis({
+		url: process.env.UPSTASH_REDIS_REST_URL,
+		token: process.env.UPSTASH_REDIS_REST_TOKEN,
+	});
 
 export const RedisPaperState = {
 	get: async (identifier: string): Promise<RedisPaperState> => {
 		const begin = Time.now();
 
 		try {
-			const state = (await redis.get(`${identifier}`)) as RedisPaperState;
+			const state = (await redis().get(`${identifier}`)) as RedisPaperState;
 
 			return state ?? { completed: [] };
 		} catch (error) {
@@ -31,7 +27,7 @@ export const RedisPaperState = {
 		identifier: string,
 		state: RedisPaperState,
 	): Promise<RedisPaperState> => {
-		await redis.set(identifier, state);
+		await redis().set(identifier, state);
 		console.log("[redis][state] updated: ", state);
 
 		return state;
