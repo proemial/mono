@@ -8,11 +8,12 @@ import { Vote } from "@/db/schema";
 import { RetrievalResult } from "@/app/(chat)/api/chat/route";
 import { Button } from "../ui/button";
 import { CrossIcon } from "./icons";
-import { Answer, Question } from "./message";
+import { Answer, Question } from "./chat-message";
 import { MultimodalInput } from "./multimodal-input";
 import { useScrollToBottom } from "./use-scroll-to-bottom";
 import { ResearchPaper } from "./paper/paper";
 import { ChatMessages } from "./chat-messages";
+import { Markdown } from "./markdown";
 
 export type OpenReference = {
 	isVisible: boolean;
@@ -221,7 +222,7 @@ export function Reference({
 						</Button>
 
 						<div className="text-base md:text-xl h-8 items-center text-muted-foreground truncate leading-8">
-							{openedReference.preview?.title}
+							<Markdown>{openedReference.preview?.title ?? ""}</Markdown>
 						</div>
 					</div>
 				</div>

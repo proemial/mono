@@ -3,6 +3,7 @@ import { OpenAlexPaperWithAbstract } from "@proemial/repositories/oa/models/oa-p
 import { Button } from "@proemial/shadcn-ui";
 import { formatDate } from "@proemial/utils/date";
 import { File06, LinkExternal02, Stars02 } from "@untitled-ui/icons-react";
+import { Markdown } from "../markdown";
 
 type StreamedPaper = {
 	data: OpenAlexPaperWithAbstract;
@@ -32,14 +33,17 @@ export function ResearchPaper({ id }: { id: string }) {
 							summary
 						</div>
 						<div className="text-lg font-semibold">
-							{paper?.generated?.title}
+							<Markdown>{paper?.generated?.title ?? ""}</Markdown>
 						</div>
 						<div className="text">
 							{(() => {
 								const isMobile =
 									typeof window !== "undefined" && window.innerWidth < 640;
 
-								if (!isMobile) return paper?.generated?.description;
+								if (!isMobile)
+									return (
+										<Markdown>{paper?.generated?.description ?? ""}</Markdown>
+									);
 
 								return (
 									<>
@@ -79,7 +83,7 @@ export function ResearchPaper({ id }: { id: string }) {
 						</div>
 					</div>
 					<div className="font-semibold text-2xl md:text-3xl mt-2 mb-2">
-						{paper?.data?.title}
+						<Markdown>{paper?.data?.title ?? ""}</Markdown>
 					</div>
 
 					<div className="text-sm md:text-base font-light text-muted-foreground mb-1">
@@ -90,7 +94,11 @@ export function ResearchPaper({ id }: { id: string }) {
 					</div>
 
 					<div className="mt-4">
-						{paper?.data?.abstract || "Abstract not found"}
+						{paper?.data?.abstract ? (
+							<Markdown>{paper.data.abstract}</Markdown>
+						) : (
+							"Abstract not found"
+						)}
 					</div>
 
 					{paper && (

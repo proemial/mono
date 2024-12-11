@@ -1,9 +1,9 @@
 import { ReferencePreview } from "./reference";
 
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { Question } from "./message";
-import { Answer } from "./message";
-import { LoadingMessage } from "./message";
+import { Question } from "./chat-message";
+import { Answer } from "./chat-message";
+import { LoadingMessage } from "./chat-message";
 import { Vote } from "@/db/schema";
 import { Message } from "ai";
 import { OpenReference } from "./reference";

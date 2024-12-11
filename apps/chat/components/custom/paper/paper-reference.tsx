@@ -3,6 +3,7 @@ import { OpenReference } from "../reference";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { ReferencePreview } from "../reference";
 import { IndexedReferencedPaper } from "../reference-parser";
+import { Markdown } from "../markdown";
 
 export default function PaperReference({
 	paper,
@@ -64,7 +65,7 @@ export default function PaperReference({
 				</div>
 			</div>
 			<div className="line-clamp-3 text-[11px] font-semibold text-foreground/80">
-				{paper.title}
+				<Markdown>{paper.title}</Markdown>
 			</div>
 		</div>
 	);
