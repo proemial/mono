@@ -233,26 +233,41 @@ export function MultimodalInput({
 	return (
 		<div className="relative w-full flex flex-col gap-4">
 			{starters && (
-				<div
-					className={cx(
-						"transition-all duration-600 overflow-hidden",
-						scrolledToBottom && !isLoading
-							? "h-auto opacity-100"
-							: "max-h-0 h-0 hidden opacity-0",
-					)}
-				>
+				<motion.div
+					animate={scrolledToBottom && !isLoading ? "visible" : "hidden"}
+					variants={{
+						visible: {
+							height: "auto",
+							opacity: 1,
+							transition: {
+								height: { duration: 0.4 },
+								opacity: { duration: 0.3, delay: 0.1 }
+							}
+						},
+						hidden: {
+							height: 0,
+							opacity: 0,
+							transition: {
+								height: { duration: 0.3 },
+								opacity: { duration: 0.2 }
+							}
+						}
+					}}
+					initial="hidden"
+					className="overflow-hidden"
+			>
 					<div className="grid sm:grid-cols-2 gap-2 w-full">
 						{starters?.map((suggestion, index) => (
 							<motion.div
 								initial={{ opacity: 0, y: 20 }}
 								animate={{ opacity: 1, y: 0 }}
 								exit={{ opacity: 0, y: 20 }}
-								transition={{ delay: 0.05 * index }}
+								transition={{ duration: 1.0, delay: 0.05 * index }}
 								key={index}
 								className={index > 1 ? "hidden sm:block" : "block"}
 							>
 								<Button
-									variant="ghost"
+									variant="suggestion"
 									onClick={(event) => {
 										event.preventDefault();
 										window.history.replaceState({}, "", `/chat/${chatId}`);
@@ -270,7 +285,7 @@ export function MultimodalInput({
 							</motion.div>
 						))}
 					</div>
-				</div>
+				</motion.div>
 			)}
 
 			{/* <input
