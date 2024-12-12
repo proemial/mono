@@ -44,7 +44,7 @@ export default function PaperReference({
 
 	return (
 		<div
-			className={`flex flex-col gap-2 p-3 border w-[93px] rounded-md shadow-sm bg-card cursor-pointer ${isActive ? "border-foreground bg-foreground/5" : ""}`}
+			className={`flex flex-col gap-2 p-2.5 border min-w-[93px] w-[93px] rounded-md shadow-sm bg-card cursor-pointer active:border-foreground active:bg-foreground/5 ${isActive ? "border-foreground bg-foreground/5" : ""}`}
 			onClick={(event) => {
 				const rect = event.currentTarget.getBoundingClientRect();
 
@@ -64,7 +64,7 @@ export default function PaperReference({
 				<div className="text-xl relative text-foreground/80 -top-1">
 					{paper.index + 1}
 				</div>
-				<div className="text-[10px] text-foreground/80">
+				<div className="text-[10px] text-foreground/80 whitespace-nowrap">
 					{new Date(paper.publicationDate).toLocaleDateString("en-US", {
 						month: "short",
 						year: "numeric",

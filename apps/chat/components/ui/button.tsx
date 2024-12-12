@@ -20,7 +20,7 @@ const buttonVariants = cva(
         ghost: 
           'justify-center hover:bg-accent hover:text-accent-foreground active:bg-primary',
         suggestion: 
-          'hover:bg-accent hover:text-accent-foreground active:bg-primary',
+          'hover:bg-accent hover:text-accent-foreground active:bg-primary border-secondary-foreground/20',
         link: 
           'text-primary underline-offset-4 hover:underline',
       },

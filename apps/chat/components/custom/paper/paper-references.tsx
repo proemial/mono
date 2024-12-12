@@ -22,7 +22,7 @@ export const PaperReferences = ({
 				id="refHeader"
 				className="flex flex-col mt-2 gap-4 text-sm font-light text-muted-foreground"
 			>
-				Relevant research papers
+				Referenced research papers
 			</div>
 			<div id="refList" className="relative w-[300px]">
 				<div className="flex overflow-x-scroll pr-[48px] w-[300px] flex-nowrap gap-2 justify-start duration-500 animate-fade-in [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">

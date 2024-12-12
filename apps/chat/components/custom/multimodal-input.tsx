@@ -23,32 +23,105 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 
 const suggestedActions = [
-	"Do vaccines cause autism spectrum disorder?",
-	"Is a daily glass of wine healthy?",
-	"Do cell phones cause brain cancer?",
-	"What is the universe made of?",
-	"How can I lower my blood pressure?",
-	"What can I do for heartburn relief?",
-	"Is microwaved food unsafe?",
-	"Why do we dream?",
-	"What is the theory of evolution by natural selection?",
-	"What is the structure of DNA?",
-	"What causes the seasons?",
-	"How do vaccines work?",
-	"What is photosynthesis?",
-	"What are the laws of thermodynamics?",
-	"What is the Big Bang Theory?",
-	"How does antibiotic resistance develop?",
-	"What is plate tectonics?",
-	"How do black holes form?",
-	"What is quantum mechanics?",
-	"What causes earthquakes?",
-	"What is the greenhouse effect?",
-	"What are stem cells?",
-	"What is the process of natural selection?",
-	"How does the water cycle work?",
-	"What is relativity theory?",
-	"What causes global warming?",
+"Is solar or nuclear better for CO2?",
+"Do masks lower the spread of viruses?",
+"Does plastic waste impact ocean ecosystems?",
+"Can technology improve learning outcomes?",
+"Could no-till farming improve soil conservation?",
+"Are electric cars better over their lifecycle?",
+"Can greywater recycling improve urban life?",
+"Can urban parks lower temperature and pollution?",
+"Does community policing reduce urban crime?",
+"Are immunotherapy or chemo more effective?",
+"Is online therapy effective?",
+"Do organic foods have fewer pesticides?",
+"Does net neutrality spur innovation?",
+"Can zero-waste policies reduce landfill?",
+"Best way to heal strain injuries?",
+"Do solar subsidies increase adoption?",
+"Explain impacts of rent control on housing markets",
+"Best early warning systems to reduce casualties?",
+"Do fruits and vegetables lower chronic disease?",
+"Do marine protected areas improve biodiversity?",
+"Can reforestation increase carbon emissions?",
+"Do electric cars increase pollution?",
+"Can vaccination lead to spikes in disease?",
+"Will increased health spending reduce total costs?",
+"Can pollution control worsen greenhouse emissions?",
+"Does organic farming increase water usage?",
+"Can homework worsen educational outcomes?",
+"Can smaller classes lead to lower achievement?",
+"Can GMO crops enhance biodiversity?",
+"Does organic farming produce more greenhouse gases?",
+"Is nuclear power safer than solar power?",
+"Do biofuels increase total carbon emissions?",
+"Can desalination worsen water scarcity?",
+"Does water conservation lead to higher water usage?",
+"Does high-density housing have lower energy use?",
+"Can bike lanes increase car traffic?",
+"Can street lights cause higher crime rates?",
+"Does decriminalization reduce overall crime?",
+"Does fast-tracking drugs reduce patient safety?",
+"Do strict drug regulations increase prices?",
+"Can easy access to mental health services increase reported issues?",
+"Does social media decrease loneliness in older adults?",
+"Does strict food safety increase food waste?",
+"Do preservatives reduce foodborne illness?",
+"Can increased internet regulation improve online security?",
+"Do data caps foster internet innovation?",
+"Can recycling increase overall energy consumption?",
+"Is banning plastic bags eco-friendly?",
+"Can ergonomic keyboards cause repetitive strain injuries?",
+"Do subsidies slow innovation in energy storage?",
+"Do renewable energy incentives cause lower gas prices?",
+"Can affordable housing increase housing prices?",
+"Do rent freezes lead to decreased housing quality?",
+"Can early disaster evacuations increase casualties?",
+"Can seawalls increase damage from storm surges?",
+"Can dietary supplements cause health issues?",
+"Do artificial sweeteners pose health risks?",
+"Can sustainable fishing decrease biodiversity?",
+"Do marine sanctuaries cause fishing in more vulnerable areas?",
+"Do solar farms disrupt local ecosystems?",
+"Do park projects cause gentrification?",
+"Do flu vaccinations cause flu-like symptoms?",
+"Have antibiotics decreased vaccine effectiveness?",
+"Do LED lights increase light pollution?",
+"Do electric vehicle batteries pollute landfills?",
+"Has online learning widened the achievement gap?",
+"Does bilingual education delay language proficiency?",
+"Does crop rotation reduce soil quality?",
+"Have biofuel subsidies raised food prices?",
+"Do wind turbines harm bird populations?",
+"Do energy-efficient appliances consume more energy?",
+"Has bottled water consumption degraded municipal systems?",
+"Do water-saving fixtures lead to increased water use?",
+"Do pedestrian zones increase carbon emissions?",
+"Have smart cities raised privacy concerns?",
+"Do gun buyback programs reduce violent crime?",
+"Have body cameras reduced police misconduct?",
+"Do expedited approvals increase drug recalls?",
+"Does off-label use improve patient outcomes?",
+"Has school screening reduced mental health issues?",
+"Do mental health apps increase anxiety?",
+"Has GMO labeling decreased consumer trust?",
+"Do farm-to-table initiatives increase illness?",
+"Has rural broadband spurred economic growth?",
+"Do unlimited plans increase network congestion?",
+"Do composting programs attract urban pests?",
+"Does single-stream recycling increase contamination?",
+"Do open offices spread diseases?",
+"Do standing desks reduce health issues?",
+"Do solar subsidies benefit wealthier households?",
+"Do energy credits reduce greenhouse gas emissions?",
+"Does inclusionary zoning reduce housing development?",
+"Do rental regulations stabilize housing markets?",
+"Do earthquake warnings reduce injuries?",
+"Do recovery funds reinforce inequalities?",
+"Have low-fat diets increased obesity?",
+"Do school programs improve dietary habits?",
+"Do catch share programs lead to overfishing?",
+"Have artificial reefs improved biodiversity?",
 ];
 
 export function MultimodalInput({
@@ -240,16 +313,16 @@ export function MultimodalInput({
 							height: "auto",
 							opacity: 1,
 							transition: {
-								height: { duration: 0.4 },
-								opacity: { duration: 0.3, delay: 0.1 }
+								height: { duration: 0.4, delay: 0.0 },
+								opacity: { duration: 0.3, delay: 0.0 }
 							}
 						},
 						hidden: {
 							height: 0,
 							opacity: 0,
 							transition: {
-								height: { duration: 0.3 },
-								opacity: { duration: 0.2 }
+								height: { duration: 0.3, delay: 0.0 },
+								opacity: { duration: 0.2, delay: 0.0 }
 							}
 						}
 					}}
@@ -280,7 +353,7 @@ export function MultimodalInput({
 									className="text-left border rounded-xl px-4 py-3.5 text-sm flex-1 gap-1 sm:flex-col w-full h-full justify-left items-start whitespace-normal break-words"
 									disabled={isLoading}
 								>
-									<span>{suggestion}</span>
+									<span className="my-auto">{suggestion}</span>
 								</Button>
 							</motion.div>
 						))}
@@ -320,7 +393,7 @@ export function MultimodalInput({
 			<Textarea
 				maxLength={1024}
 				ref={textareaRef}
-				placeholder="Send a message..."
+				placeholder="Ask about anything..."
 				value={input}
 				onChange={handleInput}
 				className={cx(
