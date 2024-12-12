@@ -8,4 +8,5 @@ export const routes = {
 	space: "/space",
 	embed: "/embed",
 	news: "/news",
+	chat: "https://chat.proem.ai",
 };
