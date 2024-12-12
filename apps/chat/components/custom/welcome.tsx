@@ -11,7 +11,7 @@ export const Welcome = () => {
 			exit={{ opacity: 0, scale: 0.98 }}
 			transition={{ duration: 1.0, delay: 0.5 }}
 		>
-			<div className="h-[calc(100vh-360px)] flex items-center justify-center">
+			<div className="h-[260px] md:h-[calc(100vh-360px)] flex items-center justify-center">
 				<div className="rounded-xl p-6 flex flex-col gap-8 leading-relaxed text-center text-2xl">
 					<div className="flex justify-center">
 						<ProemIcon size={48} />
