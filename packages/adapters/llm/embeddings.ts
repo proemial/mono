@@ -74,6 +74,6 @@ async function generateOpenAiEmbedding(
 			})
 		).data.map((d) => d.embedding);
 	} finally {
-		Time.log(begin, `generateOpenAiEmbedding(${text?.length})`);
+		Time.log(begin, `[embeddings] ${text}`);
 	}
 }

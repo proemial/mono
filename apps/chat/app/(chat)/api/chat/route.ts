@@ -36,6 +36,7 @@ import {
 	rephraseQuestionPrompt,
 	systemPrompt,
 } from "./prompts";
+import { SearchResult } from "@proemial/adapters/qdrant/search/papers-search";
 
 export const maxDuration = 60;
 
@@ -271,10 +272,11 @@ export async function DELETE(request: Request) {
 const getPapersFromQdrant = async (query: string) => {
 	const begin = Time.now();
 
+	const embeddings = await generateEmbedding(LlmModels.chat.embeddings(), [
+		query,
+	]);
+
 	try {
-		const embeddings = await generateEmbedding(LlmModels.chat.embeddings(), [
-			query,
-		]);
 		const result = await QdrantPapers.search(embeddings);
 		if (!result.papers) {
 			return [];
@@ -287,6 +289,6 @@ const getPapersFromQdrant = async (query: string) => {
 			publicationDate: paper.paper.publication_date ?? "",
 		}));
 	} finally {
-		Time.log(begin, `[qdrantQuery] ${query}`);
+		Time.log(begin, `[qdrant][search] ${query}`);
 	}
 };

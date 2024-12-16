@@ -70,7 +70,7 @@ async function search(
 	quantization?: "binary",
 	// offset?: string,
 ) {
-	const filter = createFilter(limit, period ?? 5, quantization);
+	const filter = createFilter(limit, period, quantization);
 
 	switch (embeddings.length) {
 		case 1:
@@ -93,11 +93,26 @@ async function search(
 	}
 }
 
-function createFilter(limit: number, period: number, quantization?: string) {
-	const gte = dayjs().subtract(period, "day").format("YYYY-MM-DD");
+function createFilter(limit: number, period?: number, quantization?: string) {
+	const gte = period
+		? dayjs().subtract(period, "day").format("YYYY-MM-DD")
+		: undefined;
 
-	const params =
-		quantization === "binary"
+	const dateParams = gte
+		? {
+				filter: {
+					must: {
+						key: "created_date",
+						range: {
+							gte,
+						},
+					},
+				},
+			}
+		: {};
+
+	const quantParams =
+		quantization && quantization !== "binary"
 			? {
 					params: {
 						quantization: {
@@ -108,16 +123,9 @@ function createFilter(limit: number, period: number, quantization?: string) {
 			: {};
 
 	return {
-		filter: {
-			must: {
-				key: "created_date",
-				range: {
-					gte,
-				},
-			},
-		},
 		limit,
-		...params,
+		...dateParams,
+		...quantParams,
 	};
 }
 
