@@ -36,7 +36,6 @@ import {
 	rephraseQuestionPrompt,
 	systemPrompt,
 } from "./prompts";
-import { SearchResult } from "@proemial/adapters/qdrant/search/papers-search";
 
 export const maxDuration = 60;
 
