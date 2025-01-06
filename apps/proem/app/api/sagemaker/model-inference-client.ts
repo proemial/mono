@@ -13,7 +13,7 @@ const runtimeClient = new SageMakerRuntimeClient({
 
 export module ModelInferenceClient {
 	export const invokeEndpoint = async ({
-		question,
+		prompt,
 		endpointName,
 		modelOptions = {
 			temperature: 0.0,
@@ -21,7 +21,7 @@ export module ModelInferenceClient {
 			details: false,
 		},
 	}: {
-		question: string;
+		prompt: string;
 		endpointName: string;
 		modelOptions?: {
 			temperature?: number;
@@ -29,10 +29,8 @@ export module ModelInferenceClient {
 			details?: boolean;
 		};
 	}) => {
-		const modelInput = `<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\n${question}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n`;
-
 		const requestPayload = {
-			inputs: modelInput,
+			inputs: prompt,
 			parameters: {
 				top_p: 0.9,
 				temperature: modelOptions.temperature,
