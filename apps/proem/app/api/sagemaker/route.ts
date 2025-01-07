@@ -1,8 +1,8 @@
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { ModelInferenceClient } from "./model-inference-client";
 import { PromptFormatter } from "./prompt-formatter";
+import { LLaMA32Client } from "./model-inference/llama32-client";
 
 export const maxDuration = 60;
 
@@ -16,16 +16,18 @@ export const POST = async (req: NextRequest) => {
 		if (!success) {
 			return NextResponse.json({ error: "Rate limited" }, { status: 429 });
 		}
-
 		try {
 			const { question } = RequestBodySchema.parse(await req.json());
-
-			const { generated_text } = await ModelInferenceClient.invokeEndpoint({
+			const { generated_text, details } = await LLaMA32Client.generate({
 				prompt: PromptFormatter.llama32(question),
-				endpointName: process.env.AWS_MODEL_ENDPOINT_NAME as string,
+				modelOptions: {
+					details: true,
+				},
 			});
-
-			return NextResponse.json({ answer: generated_text });
+			return NextResponse.json({
+				answer: generated_text,
+				details,
+			});
 		} catch (error) {
 			console.error(error);
 			return NextResponse.json(error, { status: 400 });

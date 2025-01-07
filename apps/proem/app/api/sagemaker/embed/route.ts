@@ -1,12 +1,12 @@
 import { ratelimitByIpAddress } from "@/utils/ratelimiter";
 import { NextRequest, NextResponse } from "next/server";
-import { ModelInfrastructureClient } from "../model-infrastructure-client";
 import { z } from "zod";
+import { BGEM3Client } from "../model-inference/bgem3-client";
 
 export const maxDuration = 60;
 
 const RequestBodySchema = z.object({
-	endpointName: z.string(),
+	document: z.string(),
 });
 
 export const POST = async (req: NextRequest) => {
@@ -16,13 +16,12 @@ export const POST = async (req: NextRequest) => {
 			return NextResponse.json({ error: "Rate limited" }, { status: 429 });
 		}
 		try {
-			const { endpointName } = RequestBodySchema.parse(await req.json());
-			await ModelInfrastructureClient.stop({
-				endpointName,
+			const { document } = RequestBodySchema.parse(await req.json());
+			const { embedding } = await BGEM3Client.embedDocument({
+				document,
 			});
-			return NextResponse.json({
-				message: "Model stopped",
-			});
+			console.log(`Embedding dimensions: ${embedding.length}`);
+			return NextResponse.json({ embedding });
 		} catch (error) {
 			console.error(error);
 			return NextResponse.json(error, { status: 400 });

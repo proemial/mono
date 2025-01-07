@@ -11,20 +11,15 @@ const runtimeClient = new SageMakerRuntimeClient({
 	},
 });
 
-export module ModelInferenceClient {
-	export const invokeEndpoint = async ({
+export module LLaMA32Client {
+	export const generate = async ({
 		prompt,
-		endpointName,
-		modelOptions = {
-			temperature: 0.0,
-			maxOutputTokens: 1024,
-			details: false,
-		},
+		modelOptions,
 	}: {
 		prompt: string;
-		endpointName: string;
 		modelOptions?: {
 			temperature?: number;
+			topP?: number;
 			maxOutputTokens?: number;
 			details?: boolean;
 		};
@@ -32,10 +27,10 @@ export module ModelInferenceClient {
 		const requestPayload = {
 			inputs: prompt,
 			parameters: {
-				top_p: 0.9,
-				temperature: modelOptions.temperature,
-				max_new_tokens: modelOptions.maxOutputTokens,
-				details: modelOptions.details,
+				temperature: modelOptions?.temperature ?? 0.0,
+				top_p: modelOptions?.topP ?? 0.9,
+				max_new_tokens: modelOptions?.maxOutputTokens ?? 1024,
+				details: modelOptions?.details ?? false,
 			},
 		};
 
@@ -43,12 +38,25 @@ export module ModelInferenceClient {
 			new InvokeEndpointCommand({
 				Accept: "application/json",
 				ContentType: "application/json",
-				EndpointName: endpointName,
+				EndpointName: process.env.AWS_MODEL_ENDPOINT_NAME_LLAMA32 as string,
 				Body: JSON.stringify(requestPayload),
 			}),
 		);
 
 		const jsonString = Buffer.from(response.Body).toString("utf8");
-		return JSON.parse(jsonString) as { generated_text: string };
+		const { generated_text, details } = JSON.parse(jsonString) as {
+			generated_text: string;
+			details?: {
+				generated_tokens?: number;
+				finish_reason?: string;
+			};
+		};
+		return {
+			generated_text,
+			details: {
+				generated_tokens: details?.generated_tokens,
+				finish_reason: details?.finish_reason,
+			},
+		};
 	};
 }
