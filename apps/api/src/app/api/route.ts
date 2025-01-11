@@ -9,7 +9,7 @@ const qdrant = qdrantHelper({
 });
 
 export const GET = async () => {
-	const name = "foo";
+	const name = "foobar";
 
 	const created = await qdrant.spaces.create(name);
 	const collection = await qdrant.spaces.get(name);
