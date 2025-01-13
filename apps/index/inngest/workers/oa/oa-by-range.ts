@@ -18,6 +18,9 @@ export const oaByRangeStream = {
 			if (!payload.space) {
 				payload.space = defaultVectorSpaceName;
 			}
+			if (!payload.limit) {
+				payload.limit = 200;
+			}
 			if (!vectorSpaces[payload.space]) {
 				throw new Error(`Unknown vector space: ${payload.space}`);
 			}
@@ -33,6 +36,7 @@ export const oaByRangeStream = {
 					data: {
 						date: date.format("YYYY-MM-DD"),
 						space: payload.space,
+						limit: payload.limit,
 					},
 				});
 				date = date.add(1, "day");
