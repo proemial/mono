@@ -3,7 +3,8 @@ export type VectorSpace = {
 	model: string;
 	dimensions: number;
 };
-export const vectorSpaces: Record<string, VectorSpace> = {
+export type VectorSpaceId = "nomic768Alpha" | "o3s1536beta";
+export const vectorSpaces: Record<VectorSpaceId, VectorSpace> = {
 	nomic768Alpha: {
 		collection: "nomic768Alpha",
 		model: "nomic-embed-text-v1.5",
@@ -16,7 +17,5 @@ export const vectorSpaces: Record<string, VectorSpace> = {
 	},
 };
 
-export const defaultVectorSpaceName = "o3s1536beta";
-export const defaultVectorSpace = vectorSpaces[
-	defaultVectorSpaceName
-] as VectorSpace;
+export const defaultVectorSpaceName: VectorSpaceId = "o3s1536beta";
+export const defaultVectorSpace = vectorSpaces[defaultVectorSpaceName];

@@ -2,7 +2,7 @@
 import { QdrantClient } from "@qdrant/js-client-rest";
 import { OpenAlexPaperWithAbstract } from "@proemial/repositories/oa/models/oa-paper";
 import { oaTopicsTranslationMap } from "@proemial/repositories/oa/taxonomy/oa-topics-compact";
-import { VectorSpace, vectorSpaces } from "@/data/db/vector-spaces";
+import { VectorSpaceId, vectorSpaces } from "@/data/db/vector-spaces";
 import { generateEmbedding } from "@/data/db/embeddings";
 import { cookies } from "next/headers";
 import { Time } from "@proemial/utils/time";
@@ -41,7 +41,7 @@ export const searchAction = async (
 	const query = formData.get("query") as string;
 	const from = formData.get("from") as string;
 	const count = formData.get("count") as string;
-	const index = formData.get("index") as string;
+	const index = formData.get("index") as VectorSpaceId;
 	const negatedQuery = formData.get("negatedQuery") as string;
 	const fullVectorSearch = formData.get("fullVectorSearch") === "true";
 	const extended = formData.get("extended") === "true";
@@ -68,7 +68,7 @@ export const searchAction = async (
 		search: -1,
 	};
 
-	const vectorSpace = vectorSpaces[index] as VectorSpace;
+	const vectorSpace = vectorSpaces[index];
 	let begin = Time.now();
 	const embeddings = await generateEmbedding(
 		[query, negatedQuery],

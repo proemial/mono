@@ -1,5 +1,6 @@
 import { searchAction } from "@/app/actions/search-action";
 import { NextResponse } from "next/server";
+import { defaultVectorSpaceName } from "../../../data/db/vector-spaces";
 
 export const POST = async (request: Request) => {
 	const { query, from, extended } = (await request.json()) as {
@@ -11,7 +12,7 @@ export const POST = async (request: Request) => {
 	const formData = new FormData();
 	formData.append("query", query);
 	formData.append("count", "10");
-	formData.append("index", "1.5k");
+	formData.append("index", defaultVectorSpaceName);
 	formData.append("negatedQuery", "");
 	formData.append("fullVectorSearch", "false");
 
