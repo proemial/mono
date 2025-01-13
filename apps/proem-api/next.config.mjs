@@ -4,6 +4,9 @@ const nextConfig = {
 		"@proemial/adapters",
 		"@proemial/utils",
 	],
+	experimental: {
+		serverComponentsExternalPackages: ["sharp", "onnxruntime-node"],
+	},
 };
 
 export default nextConfig;
