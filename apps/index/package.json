@@ -10,6 +10,7 @@
 	"dependencies": {
 		"@proemial/repositories": "workspace:*",
 		"@proemial/utils": "workspace:*",
+		"@proemial/adapters": "workspace:*",
 		"@vercel/analytics": "^1.4.1",
 		"@ai-sdk/anthropic": "^1.0.2",
 		"ai": "^3.4.33",

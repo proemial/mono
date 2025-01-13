@@ -62,7 +62,7 @@ export function FormFields({
 		searchInput?.from || dayjs().subtract(7, "day").format("YYYY-MM-DD"),
 	);
 	const [count, setCount] = useState(searchInput?.count || 10);
-	const [index, setIndex] = useState(searchInput?.index || "o3s1536alpha");
+	const [index, setIndex] = useState(searchInput?.index || "o3s1536beta");
 
 	const { pending } = useFormStatus();
 

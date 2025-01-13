@@ -11,7 +11,6 @@ export const POST = async (request: Request) => {
 	const formData = new FormData();
 	formData.append("query", query);
 	formData.append("count", "10");
-	// formData.append("index", "o3s1536alpha");
 	formData.append("index", "1.5k");
 	formData.append("negatedQuery", "");
 	formData.append("fullVectorSearch", "false");

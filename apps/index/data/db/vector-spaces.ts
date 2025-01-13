@@ -4,10 +4,10 @@ export type VectorSpace = {
 	dimensions: number;
 };
 export const vectorSpaces: Record<string, VectorSpace> = {
-	"1.5k": {
-		collection: "o3s1536alpha",
-		model: "text-embedding-3-small",
-		dimensions: 1536,
+	nomic768Alpha: {
+		collection: "nomic768Alpha",
+		model: "nomic-embed-text-v1.5",
+		dimensions: 1024,
 	},
 	o3s1536beta: {
 		collection: "o3s1536beta",

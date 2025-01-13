@@ -2,6 +2,7 @@ import { heliconeHeaders } from "../analytics/helicone";
 import { createOpenAI } from "@ai-sdk/openai";
 import { LanguageModelV1 } from "ai";
 import OpenAI from "openai";
+import { embed } from "@nomic-ai/atlas";
 
 export type LlmModel = ReturnType<typeof openaiChat>;
 
@@ -31,6 +32,7 @@ const LlmModels = {
 	index: {
 		embeddings: () =>
 			openaiEmbeddings("index", "embeddings") as EmbeddingsModel,
+		nomicEmbeddings: () => nomicEmbeddings("index", "embeddings"),
 	},
 	news: {
 		answer: (traceId?: string) =>
@@ -125,6 +127,28 @@ const openaiEmbeddings = (
 	});
 
 	return provider.embeddings;
+};
+
+const nomicEmbeddings = (
+	source: keyof typeof llmConfig.sources,
+	operation: string,
+) => {
+	console.log(
+		`[llm][nomic][embeddings][${source}]${operation ? `[${operation}]` : ""}`,
+	);
+
+	return async (
+		text: string,
+		model: "nomic-embed-text-v1" | "nomic-embed-text-v1.5",
+	) => {
+		return await embed(
+			text,
+			{
+				model: model,
+			},
+			process.env.NOMIC_API_KEY,
+		);
+	};
 };
 
 export default LlmModels;

@@ -5,5 +5,5 @@ import { Inngest } from "inngest";
 
 export const inngest = new Inngest({
 	id: "index",
-	// baseUrl: "http://localhost:8288",
+	baseUrl: "http://localhost:8288",
 });

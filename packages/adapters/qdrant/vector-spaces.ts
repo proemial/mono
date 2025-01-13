@@ -4,13 +4,13 @@ export type VectorSpace = {
 	dimensions: number;
 };
 
-export type VectorSpaceName = "o3s1536alpha" | "o3s1536beta";
+export type VectorSpaceName = "o3s1536beta" | "nomic768Alpha";
 
 export const vectorSpaces: Array<VectorSpace> = [
 	{
-		collection: "o3s1536alpha",
-		model: "text-embedding-3-small",
-		dimensions: 1536,
+		collection: "nomic768Alpha",
+		model: "nomic-embed-text-v1.5",
+		dimensions: 1024,
 	},
 	{
 		collection: "o3s1536beta",

@@ -3,6 +3,7 @@ import { Mistral } from "@mistralai/mistralai";
 import { Time } from "@proemial/utils/time";
 import OpenAI from "openai";
 import { VectorSpace } from "./vector-spaces";
+import LlmModels from "@proemial/adapters/llm/models";
 
 type Callback = (count: number, elapsed: number) => Promise<void>;
 
@@ -16,6 +17,8 @@ export async function generateEmbeddings(
 			return generateOpenAIEmbeddings(papers, vectorSpace, callback);
 		case "mistral-embed":
 			return generateMistralEmbeddings(papers, vectorSpace, callback);
+		case "nomic-embed-text-v1.5":
+			return generateNomicEmbeddings(papers, vectorSpace, callback);
 		default:
 			throw new Error(`Unsupported model: ${vectorSpace.model}`);
 	}
@@ -30,6 +33,8 @@ export async function generateEmbedding(
 			return generateOpenAiEmbedding(text, vectorSpace);
 		case "mistral-embed":
 			return generateMistralEmbedding(text, vectorSpace);
+		case "nomic-embed-text-v1.5":
+			return generateNomicEmbedding(text, vectorSpace);
 		default:
 			throw new Error(`Unsupported model: ${vectorSpace.model}`);
 	}
@@ -177,5 +182,57 @@ async function generateMistralEmbedding(
 			.map((d) => d.embedding);
 	} finally {
 		Time.log(begin, `generateMistralEmbedding(${text.length})`);
+	}
+}
+
+async function generateNomicEmbedding(
+	text: string[],
+	vectorSpace: VectorSpace,
+): Promise<number[][]> {
+	const begin = Time.now();
+
+	try {
+		const embeddings: number[][] = [];
+
+		for (let i = 0; i < text.length; i++) {
+			const response = await LlmModels.index.nomicEmbeddings()(
+				text[i] as string,
+				vectorSpace.model as "nomic-embed-text-v1.5" | "nomic-embed-text-v1",
+			);
+			embeddings.push(response);
+		}
+
+		return embeddings;
+	} finally {
+		Time.log(begin, `generateNomicEmbedding(${text.length})`);
+	}
+}
+
+async function generateNomicEmbeddings(
+	papers: QdrantPaper[],
+	vectorSpace: VectorSpace,
+	callback: Callback,
+): Promise<[QdrantPaper[], number[][]]> {
+	if (!papers.length) {
+		return [papers, []];
+	}
+
+	const begin = Time.now();
+	try {
+		const embeddings: number[][] = [];
+
+		for (let i = 0; i < papers.length; i++) {
+			const paper = papers[i] as QdrantPaper;
+			const response = await LlmModels.index.nomicEmbeddings()(
+				`${paper.payload.title} ${paper.payload.abstract}`,
+				vectorSpace.model as "nomic-embed-text-v1.5" | "nomic-embed-text-v1",
+			);
+			embeddings.push(response);
+		}
+		await callback(embeddings.length, Time.elapsed(begin));
+
+		return [papers, embeddings];
+	} finally {
+		Time.log(begin, `generateNomicEmbeddings(${papers.length})`);
 	}
 }
