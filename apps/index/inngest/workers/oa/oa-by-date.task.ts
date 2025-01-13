@@ -35,6 +35,9 @@ export const oaByDateStream = {
 			if (!payload.count) {
 				payload.count = 0;
 			}
+			if (!payload.limit) {
+				payload.limit = 200;
+			}
 
 			return await fetchDateWorker(payload, event);
 		},
@@ -46,6 +49,7 @@ type Payload = {
 	count?: number;
 	nextCursor?: string;
 	space: string;
+	limit?: number;
 };
 
 async function fetchDateWorker(payload: Payload, event?: EventPayload) {
@@ -126,7 +130,7 @@ async function fetchPapers(payload: Payload) {
 
 		const { date, nextCursor } = payload;
 
-		const limit = 200;
+		const limit = payload.limit ?? 200;
 		const cursor = nextCursor ?? "*";
 
 		const filter = [
