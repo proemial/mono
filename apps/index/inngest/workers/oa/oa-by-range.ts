@@ -1,4 +1,8 @@
-import { defaultVectorSpaceName, vectorSpaces } from "@/data/db/vector-spaces";
+import {
+	defaultVectorSpaceName,
+	VectorSpaceId,
+	vectorSpaces,
+} from "@/data/db/vector-spaces";
 import { inngest } from "../../client";
 import { Time } from "@proemial/utils/time";
 import dayjs from "dayjs";
@@ -21,7 +25,7 @@ export const oaByRangeStream = {
 			if (!payload.limit) {
 				payload.limit = 200;
 			}
-			if (!vectorSpaces[payload.space]) {
+			if (!vectorSpaces[payload.space as VectorSpaceId]) {
 				throw new Error(`Unknown vector space: ${payload.space}`);
 			}
 			if (!event.data?.from || !event.data?.to) {

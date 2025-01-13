@@ -2,6 +2,7 @@ import { Time } from "@proemial/utils/time";
 import {
 	defaultVectorSpaceName,
 	VectorSpace,
+	VectorSpaceId,
 	vectorSpaces,
 } from "../../../data/db/vector-spaces";
 import { inngest } from "../../client";
@@ -28,7 +29,7 @@ export const embedTask = {
 
 			const embeddings = await generateEmbedding(
 				Array.isArray(payload.text) ? payload.text : [payload.text],
-				vectorSpaces[payload.space] as VectorSpace,
+				vectorSpaces[payload.space as VectorSpaceId],
 			);
 
 			return {

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import dayjs from "dayjs";
-import { vectorSpaces } from "@/data/db/vector-spaces";
+import { VectorSpaceId, vectorSpaces } from "@/data/db/vector-spaces";
 import {
 	searchAction,
 	SearchMetrics,
@@ -130,7 +130,7 @@ export function FormFields({
 							.reverse()
 							.map((key, i) => (
 								<option key={i} value={key}>
-									{vectorSpaces[key]?.collection}
+									{vectorSpaces[key as VectorSpaceId]?.collection}
 								</option>
 							))}
 					</select>

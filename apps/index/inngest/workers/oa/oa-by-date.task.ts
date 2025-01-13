@@ -9,6 +9,7 @@ import { logEvent as logMetrics } from "@/inngest/helpers/tinybird";
 import {
 	defaultVectorSpaceName,
 	VectorSpace,
+	VectorSpaceId,
 	vectorSpaces,
 } from "@/data/db/vector-spaces";
 
@@ -26,7 +27,7 @@ export const oaByDateStream = {
 			if (!payload.space) {
 				payload.space = defaultVectorSpaceName;
 			}
-			if (!vectorSpaces[payload.space]) {
+			if (!vectorSpaces[payload.space as VectorSpaceId]) {
 				throw new Error(`Unknown vector space: ${payload.space}`);
 			}
 			if (!payload.date) {
@@ -57,7 +58,7 @@ async function fetchDateWorker(payload: Payload, event?: EventPayload) {
 
 	const begin = Time.now();
 	try {
-		const space = vectorSpaces[payload.space] as VectorSpace;
+		const space = vectorSpaces[payload.space as VectorSpaceId];
 
 		const { meta, papers } = await fetchPapers(payload);
 		result.papers = papers.length;
@@ -126,7 +127,7 @@ async function fetchPapers(payload: Payload) {
 	const begin = Time.now();
 
 	try {
-		const space = vectorSpaces[payload.space] as VectorSpace;
+		const space = vectorSpaces[payload.space as VectorSpaceId];
 
 		const { date, nextCursor } = payload;
 

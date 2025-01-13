@@ -1,6 +1,7 @@
 import {
 	defaultVectorSpaceName,
 	VectorSpace,
+	VectorSpaceId,
 	vectorSpaces,
 } from "@/data/db/vector-spaces";
 import { inngest } from "../../client";
@@ -33,7 +34,10 @@ export const syncIndicesStream = {
 				throw new Error("No target index provided");
 			}
 
-			if (!vectorSpaces[payload.from] || !vectorSpaces[payload.to]) {
+			if (
+				!vectorSpaces[payload.from as VectorSpaceId] ||
+				!vectorSpaces[payload.to as VectorSpaceId]
+			) {
 				throw new Error(
 					`Unknown vector space: ${payload.from} or ${payload.to}`,
 				);
@@ -46,7 +50,7 @@ export const syncIndicesStream = {
 				windowSize,
 			);
 			const unfilteredIdsResponse = await Qdrant.all(
-				vectorSpaces[payload.from] as VectorSpace,
+				vectorSpaces[payload.from as VectorSpaceId],
 				payload.nextPageOffset,
 				windowSize,
 			);
@@ -61,7 +65,7 @@ export const syncIndicesStream = {
 				false,
 			);
 			const matchedIdsResponse = await Qdrant.byIds(
-				vectorSpaces[payload.to] as VectorSpace,
+				vectorSpaces[payload.to as VectorSpaceId],
 				unfilteredIds.map((d) => d.id as string),
 				windowSize,
 				false,
@@ -80,7 +84,7 @@ export const syncIndicesStream = {
 				windowSize,
 			);
 			const unmatchedPapersResponse = await Qdrant.byIds(
-				vectorSpaces[payload.from] as VectorSpace,
+				vectorSpaces[payload.from as VectorSpaceId],
 				unmatchedIds.map((d) => d.id as string),
 				windowSize,
 			);
@@ -96,7 +100,7 @@ export const syncIndicesStream = {
 				);
 				const [embeddingsPapers, embeddings] = await generateEmbeddings(
 					unmatchedPapers,
-					vectorSpaces[payload.to] as VectorSpace,
+					vectorSpaces[payload.to as VectorSpaceId],
 					async (count, elapsed) => {
 						console.log(
 							"[syncIndicesStream][embedded] generated ",
@@ -118,7 +122,7 @@ export const syncIndicesStream = {
 				const upserted = await Qdrant.upsert(
 					embeddingsPapers,
 					embeddings,
-					vectorSpaces[payload.to] as VectorSpace,
+					vectorSpaces[payload.to as VectorSpaceId],
 					async (count, elapsed) => {
 						console.log(
 							"[syncIndicesStream][upserted] upserted ",
