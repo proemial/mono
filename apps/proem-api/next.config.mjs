@@ -4,9 +4,18 @@ const nextConfig = {
 		"@proemial/adapters",
 		"@proemial/utils",
 	],
-	// Indicate that these packages should not be bundled by webpack
+	// LlamaIndex (and Huggingface transformers.js) requires sharp and onnxruntime-node to build
+	// Source: https://huggingface.co/docs/transformers.js/en/tutorials/next
 	experimental: {
 		serverComponentsExternalPackages: ["sharp", "onnxruntime-node"],
+	},
+	webpack: (config) => {
+		config.resolve.alias = {
+			...config.resolve.alias,
+			sharp$: false,
+			"onnxruntime-node$": false,
+		};
+		return config;
 	},
 };
 
