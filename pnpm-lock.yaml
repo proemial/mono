@@ -719,6 +719,12 @@ importers:
       '@types/node':
         specifier: ^22.3.0
         version: 22.5.0
+      onnxruntime-node:
+        specifier: ^1.20.1
+        version: 1.20.1
+      sharp:
+        specifier: ^0.33.3
+        version: 0.33.5
 
   packages/data:
     dependencies:
