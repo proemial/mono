@@ -18,8 +18,14 @@
 		"@types/node": "^20",
 		"@types/react": "^18",
 		"@types/react-dom": "^18",
+		"onnxruntime-node": "^1.20.1",
 		"postcss": "^8",
+		"sharp": "^0.33.3",
 		"tailwindcss": "^3.4.1",
 		"typescript": "^5"
+	},
+	"peerDependencies": {
+		"onnxruntime-node": "^1.20.1",
+		"sharp": "^0.33.3"
 	}
 }
