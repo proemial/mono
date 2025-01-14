@@ -9,6 +9,7 @@ const nextConfig = {
 	experimental: {
 		serverComponentsExternalPackages: ["sharp", "onnxruntime-node"],
 	},
+	output: "standalone"
 };
 
 export default nextConfig;
