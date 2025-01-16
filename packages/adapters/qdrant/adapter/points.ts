@@ -28,7 +28,7 @@ export async function scrollPoints(
 export async function insertPoints(
 	client: QdrantClient,
 	name: string,
-	data: { vector: number[]; payload: unknown }[],
+	data: { vector: number[]; payload: Record<string, unknown> }[],
 ) {
 	return await client.upsert(name, {
 		points: data.map((point) => ({
