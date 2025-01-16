@@ -38,6 +38,9 @@ export default function qdrantHelper(args: { url: string; apiKey: string }) {
 
 			scroll: (name: string, filter?: points.ScrollFilter) =>
 				points.scrollPoints(client, name, filter),
+
+			insert: (name: string, data: { vector: number[]; payload: unknown }[]) =>
+				points.insertPoints(client, name, data),
 		},
 	};
 }

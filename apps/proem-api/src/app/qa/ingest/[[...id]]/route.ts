@@ -44,12 +44,23 @@ export async function POST(
 		const chunks = chunkText(parsed.markdown);
 		console.log(`[qa][ingest] chunks: ${chunks.length}`);
 
-		// const [strings, embeddings] = await generateEmbeddings(chunks);
-		// console.log(`[qa][ingest] embeddings: ${embeddings.length}`);
+		const embeddings = await generateEmbeddings(
+			chunks.map((chunk) => chunk.text),
+		);
+		console.log(`[qa][ingest] embeddings: ${embeddings.length}`);
+
+		const data = embeddings.map((e, i) => ({
+			vector: e,
+			payload: {
+				file: file.name,
+				text: chunks[i].text,
+				position: chunks[i].position,
+			},
+		}));
 
 		// TODO: Insert into Qdrant
-		// await createVectorSpace(id);
-		// await qdrant.points.insert(id, embeddings, metadata);
+		await createVectorSpace(id);
+		await qdrant.points.insert(id, data);
 
 		return NextResponse.json({
 			id,
@@ -63,10 +74,12 @@ export async function POST(
 
 function chunkText(markdown: string) {
 	const chunks = chunkMarkdown(markdown);
-	console.log(`[qa][ingest] chunks: ${chunks.length}`);
-	console.log(chunks.map((chunk) => chunk.metadata));
+	// console.log(chunks.map((chunk) => chunk.metadata));
 
-	return chunks.map((chunk) => chunk.text);
+	return chunks.map((chunk) => ({
+		text: chunk.text,
+		position: [chunk.startCharIdx, chunk.endCharIdx],
+	}));
 }
 
 async function createVectorSpace(id: string) {
@@ -96,7 +109,13 @@ async function generateEmbeddings(strings: string[]) {
 			embeddings.push(response);
 		}
 
-		return [strings, embeddings];
+		if (strings.length !== embeddings.length) {
+			throw new Error(
+				`Embeddings length does not match strings length: ${strings.length} !== ${embeddings.length}`,
+			);
+		}
+
+		return embeddings;
 	} finally {
 		Time.log(begin, `[qa][ingest][embed] ${strings.length} strings`);
 	}
