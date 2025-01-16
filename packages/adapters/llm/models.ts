@@ -134,7 +134,7 @@ const nomicEmbeddings = (
 	operation: string,
 ) => {
 	console.log(
-		`[llm][nomic][embeddings][${source}]${operation ? `[${operation}]` : ""}`,
+		`[${new Date().toLocaleTimeString("en-GB", { hour12: false })}][llm][nomic][embeddings][${source}]${operation ? `[${operation}]` : ""}`,
 	);
 
 	return async (

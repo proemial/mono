@@ -49,8 +49,8 @@ export async function POST(
 		);
 		console.log(`[qa][ingest] embeddings: ${embeddings.length}`);
 
-		const data = embeddings.map((e, i) => ({
-			vector: e,
+		const points = embeddings.map((vector, i) => ({
+			vector,
 			payload: {
 				file: file.name,
 				text: chunks[i].text,
@@ -60,7 +60,7 @@ export async function POST(
 
 		// TODO: Insert into Qdrant
 		await createVectorSpace(id);
-		await qdrant.points.insert(id, data);
+		await qdrant.points.insert(id, points);
 
 		return NextResponse.json({
 			id,
