@@ -102,7 +102,7 @@ async function generateEmbeddings(strings: string[]) {
 
 		for (let i = 0; i < strings.length; i++) {
 			const text = strings[i];
-			const response = await LlmModels.index.nomicEmbeddings()(
+			const response = await LlmModels.api.embeddings()(
 				text,
 				"nomic-embed-text-v1.5",
 			);

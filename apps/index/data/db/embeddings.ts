@@ -195,7 +195,7 @@ async function generateNomicEmbedding(
 		const embeddings: number[][] = [];
 
 		for (let i = 0; i < text.length; i++) {
-			const response = await LlmModels.index.nomicEmbeddings()(
+			const response = await LlmModels.api.embeddings()(
 				text[i] as string,
 				vectorSpace.model as "nomic-embed-text-v1.5" | "nomic-embed-text-v1",
 			);
@@ -223,7 +223,7 @@ async function generateNomicEmbeddings(
 
 		for (let i = 0; i < papers.length; i++) {
 			const paper = papers[i] as QdrantPaper;
-			const response = await LlmModels.index.nomicEmbeddings()(
+			const response = await LlmModels.api.embeddings()(
 				`${paper.payload.title} ${paper.payload.abstract}`,
 				vectorSpace.model as "nomic-embed-text-v1.5" | "nomic-embed-text-v1",
 			);

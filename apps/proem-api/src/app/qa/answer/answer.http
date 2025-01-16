@@ -1,0 +1,7 @@
+POST http://127.0.0.1:3000/qa/answer
+Content-Type: application/json
+
+{
+  "collection": "bunker",
+  "question": "Does the company account for and report on the overall Scopes 1, 2 and 3 emissions derived of and from its business in accordance with the Greenhouse Gas ('GHG') Protocol?"
+}

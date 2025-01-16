@@ -9,6 +9,7 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"ai": "^4.0.5",
 		"@proemial/adapters": "workspace:*",
 		"@proemial/utils": "workspace:*",
 		"next": "^14",

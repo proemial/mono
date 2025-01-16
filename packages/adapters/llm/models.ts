@@ -8,7 +8,13 @@ export type LlmModel = ReturnType<typeof openaiChat>;
 
 export type EmbeddingsModel = OpenAI.Embeddings;
 
-export type SourceProduct = "chat" | "ask" | "news" | "spaces" | "embed";
+export type SourceProduct =
+	| "chat"
+	| "ask"
+	| "news"
+	| "spaces"
+	| "embed"
+	| "api";
 
 const LlmModels = {
 	chat: {
@@ -32,7 +38,10 @@ const LlmModels = {
 	index: {
 		embeddings: () =>
 			openaiEmbeddings("index", "embeddings") as EmbeddingsModel,
-		nomicEmbeddings: () => nomicEmbeddings("index", "embeddings"),
+	},
+	api: {
+		embeddings: () => nomicEmbeddings("api", "embeddings"),
+		answer: () => createOpenAI()("gpt-4o"),
 	},
 	news: {
 		answer: (traceId?: string) =>
@@ -81,6 +90,8 @@ export const llmConfig = {
 		spaces: "proj_GKsXGiCSfpjvcCxLr2sUCmbf",
 		read: "proj_IC2HhSCTrkYccm2ry8Ub7f4L",
 		embed: "proj_evqPpJ4bydRLaiNas3pa8WFe",
+		// TODO: Create openai project
+		api: "proj_Pq2CtfZHHyVKJCo0slBwvwLy",
 	},
 };
 
