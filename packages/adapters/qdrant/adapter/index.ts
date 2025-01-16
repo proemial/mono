@@ -4,7 +4,7 @@ import * as points from "./points";
 
 const spaceDefaults = {
 	vectors: {
-		size: 1536,
+		size: 768,
 		distance: "Cosine",
 	},
 };
@@ -25,6 +25,8 @@ export default function qdrantHelper(args: { url: string; apiKey: string }) {
 			list: () => space.listCollections(client),
 
 			get: (name: string) => space.getCollection(client, name),
+
+			exists: (name: string) => space.collectionExists(client, name),
 		},
 
 		points: {

@@ -20,4 +20,8 @@ export async function deleteCollection(client: QdrantClient, name: string) {
 	return await client.deleteCollection(name);
 }
 
+export async function collectionExists(client: QdrantClient, name: string) {
+	return await client.collectionExists(name);
+}
+
 export type Config = Parameters<QdrantClient["createCollection"]>[1];

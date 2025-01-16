@@ -8,17 +8,7 @@ const qdrant = qdrantHelper({
 	apiKey: process.env.QDRANT_QA_API_KEY as string,
 });
 
+// TODO: Answer question with references
 export const GET = async () => {
-	const name = "foobar";
-
-	const created = await qdrant.spaces.create(name);
-	const collection = await qdrant.spaces.get(name);
-	const points = await qdrant.points.count(name);
-	const deleted = await qdrant.spaces.delete(name);
-
-	return NextResponse.json({
-		result: { create: created, deleted },
-		collection,
-		points,
-	});
+	return NextResponse.json({ status: "TODO" });
 };
