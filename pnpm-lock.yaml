@@ -636,9 +636,6 @@ importers:
 
   apps/proem-api:
     dependencies:
-      '@ai-sdk/openai':
-        specifier: ^1.0.5
-        version: 1.0.5(zod@3.23.8)
       '@proemial/adapters':
         specifier: workspace:*
         version: link:../../packages/adapters
