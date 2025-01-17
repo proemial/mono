@@ -3,7 +3,7 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { LanguageModelV1 } from "ai";
 import OpenAI from "openai";
 import { embed } from "@nomic-ai/atlas";
-import { groqProvider } from "./providers/groq";
+import { ollama } from "ollama-ai-provider";
 
 export type LlmModel = ReturnType<typeof openaiChat>;
 
@@ -42,7 +42,7 @@ const LlmModels = {
 	},
 	api: {
 		embeddings: () => nomicEmbeddings("api", "embeddings"),
-		answer: () => groqProvider("llama-3.1-8b-instant"),
+		answer: () => ollama("llama3.1:8b"),
 	},
 	news: {
 		answer: (traceId?: string) =>
