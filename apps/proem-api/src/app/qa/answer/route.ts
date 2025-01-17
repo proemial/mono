@@ -6,7 +6,7 @@ export const revalidate = 0;
 export const POST = async (request: Request) => {
 	const { question, collection } = await request.json();
 
-	const { answer, references } = await answerQuestion(question, collection);
+	const { answer, references } = await answerQuestion(collection, question);
 
 	return NextResponse.json({ answer, references });
 };
