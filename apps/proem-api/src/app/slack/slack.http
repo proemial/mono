@@ -1,0 +1,15 @@
+POST https://api.proem.ai/slack
+Content-Type: application/json
+
+{
+  "test":  true
+}
+
+###
+
+POST http://127.0.0.1:3000/slack
+Content-Type: application/json
+
+{
+  "test":  true
+}

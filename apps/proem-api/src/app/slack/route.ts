@@ -1,13 +1,23 @@
 import { NextResponse } from "next/server";
 
+export const revalidate = 0;
+
 export async function POST(request: Request) {
-	const body = await request.json();
 	const url = request.url;
-
 	console.log(url);
-	console.log(JSON.stringify(body));
 
-	return NextResponse.json({
+	const text = await request.text();
+	console.log(text);
+
+	let body: unknown;
+	try {
+		body = JSON.parse(text);
+		console.log(JSON.stringify(body));
+	} catch (e) {
+		return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+	}
+
+	const response = {
 		blocks: [
 			{
 				type: "header",
@@ -39,5 +49,18 @@ export async function POST(request: Request) {
 				],
 			},
 		],
-	});
+	};
+
+	const result = await fetch(
+		"https://hooks.slack.com/services/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",
+		{
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(response),
+		},
+	);
+
+	return NextResponse.json({ url, body, result });
 }
