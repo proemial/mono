@@ -146,9 +146,9 @@ const nomicEmbeddings = (
 	source: keyof typeof llmConfig.sources,
 	operation: string,
 ) => {
-	console.log(
-		`[${new Date().toLocaleTimeString("en-GB", { hour12: false })}][llm][nomic][embeddings][${source}]${operation ? `[${operation}]` : ""}`,
-	);
+	// console.log(
+	// 	`[${new Date().toLocaleTimeString("en-GB", { hour12: false })}][llm][nomic][embeddings][${source}]${operation ? `[${operation}]` : ""}`,
+	// );
 
 	return async (
 		text: string,
