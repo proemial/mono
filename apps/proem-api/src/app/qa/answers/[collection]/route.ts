@@ -1,7 +1,8 @@
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { NextRequest, NextResponse } from "next/server";
 import { Time } from "@proemial/utils/time";
 import { answerQuestion } from "../../answer/answer";
-import { generateObject } from "ai";
+import { generateObject, generateText } from "ai";
 import LlmModels from "@proemial/adapters/llm/models";
 import { z } from "zod";
 
@@ -41,7 +42,7 @@ export const POST = async (
 		);
 
 		const results = [];
-		for (const r of result) {
+		for (const r of result.slice(0, 6)) {
 			const { id, automatable, question, options, answer: expectedAnswer } = r;
 
 			if (!automatable) {
@@ -62,7 +63,16 @@ export const POST = async (
 					typeof option === "string" ? option : option.text,
 				),
 			);
-			console.log(`[qa][answers] analyzing similarity for question ${id}…`);
+
+			console.log(`[qa][answers] fact-checking answer to question ${id}…`);
+			const grounded = await factCheck(
+				actualAnswer,
+				references.map((r) => r.source),
+			);
+
+			console.log(
+				`[qa][answers] analyzing similarity of answers to question ${id}…`,
+			);
 			const similarityAnalysis = await analyzeSimilarity(
 				expectedAnswer,
 				actualAnswer,
@@ -71,22 +81,24 @@ export const POST = async (
 			results.push({
 				id,
 				question,
+				options,
 				expectedAnswer,
 				actualAnswer,
 				similarityAnalysis,
 				references,
+				groundedScore: grounded.score,
 			});
 		}
 
 		const resultsWithSimilarityAnalysis = results.filter(
 			(r) => r.similarityAnalysis,
 		);
-		const averageSimilarityScore = (
+		const averageSimilarityScore = toTwoDigits(
 			resultsWithSimilarityAnalysis
 				// biome-ignore lint/style/noNonNullAssertion: We filter out undefined above
 				.reduce((acc, r) => acc + r.similarityAnalysis!.score, 0) /
-			resultsWithSimilarityAnalysis.length
-		).toFixed(2);
+				resultsWithSimilarityAnalysis.length,
+		);
 
 		return NextResponse.json({
 			noOfAutomatableQuestions,
@@ -136,3 +148,49 @@ const analyzeSimilarity = async (
 
 	return object;
 };
+
+const factCheck = async (answer: string, references: string[]) => {
+	// In order to fact-check a multi-sentence claim, the claim should first be broken up into sentences to achieve optimal performance.
+	// Source: https://github.com/Liyan06/MiniCheck
+	const splitter = new RecursiveCharacterTextSplitter({
+		chunkSize: 200,
+		chunkOverlap: 1,
+	});
+	const sentences = (await splitter.createDocuments([answer])).map(
+		(d) => d.pageContent,
+	);
+
+	const generationPromises = sentences.map((sentence) =>
+		generateText({
+			model: LlmModels.api.factChecking(),
+			prompt: `
+					Document: ${references.join("\n\n")}
+					Claim: ${sentence}
+			`,
+		}),
+	);
+	const results = await Promise.all(generationPromises);
+
+	// console.log("sentences", sentences);
+	// console.log(
+	// 	"results",
+	// 	results.map((r) => r.text),
+	// );
+
+	const allClaimsSupported = !results.some(
+		(r) => r.text.toLowerCase() === "no",
+	);
+	const sentenceAverage = toTwoDigits(
+		results.reduce(
+			(acc, r) => acc + (r.text.toLowerCase() === "yes" ? 1 : 0),
+			0,
+		) / results.length,
+	);
+
+	return {
+		result: allClaimsSupported,
+		score: sentenceAverage,
+	};
+};
+
+const toTwoDigits = (n: number) => Number.parseFloat(n.toFixed(2));

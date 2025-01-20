@@ -636,6 +636,9 @@ importers:
 
   apps/proem-api:
     dependencies:
+      '@langchain/textsplitters':
+        specifier: ^0.1.0
+        version: 0.1.0(@langchain/core@0.2.23)
       '@proemial/adapters':
         specifier: workspace:*
         version: link:../../packages/adapters
@@ -745,7 +748,7 @@ importers:
         version: 0.33.0(@neondatabase/serverless@0.9.5)(pg@8.13.1)
       drizzle-zod:
         specifier: 0.5.1
-        version: 0.5.1(drizzle-orm@0.33.0)(zod@3.23.8)
+        version: 0.5.1(drizzle-orm@0.33.0)(zod@3.24.1)
     devDependencies:
       '@proemial/typescript-config':
         specifier: workspace:*
@@ -3474,6 +3477,26 @@ packages:
       - pyodide
     dev: false
 
+  /@langchain/core@0.2.23:
+    resolution: {integrity: sha512-elPg6WpAkxWEIGC9u38F2anbzqfYYEy32lJdsd9dtChcHSFmFLlXqa+SnpO3R772gUuJmcu+Pd+fCvmRFy029w==}
+    engines: {node: '>=18'}
+    dependencies:
+      ansi-styles: 5.2.0
+      camelcase: 6.3.0
+      decamelize: 1.2.0
+      js-tiktoken: 1.0.16
+      langsmith: 0.1.41(@langchain/core@0.2.23)
+      mustache: 4.2.0
+      p-queue: 6.6.2
+      p-retry: 4.6.2
+      uuid: 10.0.0
+      zod: 3.23.8
+      zod-to-json-schema: 3.23.2(zod@3.23.8)
+    transitivePeerDependencies:
+      - langchain
+      - openai
+    dev: false
+
   /@langchain/core@0.2.23(langchain@0.2.15)(openai@4.79.1):
     resolution: {integrity: sha512-elPg6WpAkxWEIGC9u38F2anbzqfYYEy32lJdsd9dtChcHSFmFLlXqa+SnpO3R772gUuJmcu+Pd+fCvmRFy029w==}
     engines: {node: '>=18'}
@@ -3567,6 +3590,16 @@ packages:
     transitivePeerDependencies:
       - langchain
       - openai
+    dev: false
+
+  /@langchain/textsplitters@0.1.0(@langchain/core@0.2.23):
+    resolution: {integrity: sha512-djI4uw9rlkAb5iMhtLED+xJebDdAG935AdP4eRTB02R7OB/act55Bj9wsskhZsvuyQRpO4O1wQOp85s6T6GWmw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@langchain/core': '>=0.2.21 <0.4.0'
+    dependencies:
+      '@langchain/core': 0.2.23
+      js-tiktoken: 1.0.16
     dev: false
 
   /@llamaindex/core@0.4.20(gpt-tokenizer@2.8.1):
@@ -9046,14 +9079,14 @@ packages:
       react: 18.3.1
     dev: false
 
-  /drizzle-zod@0.5.1(drizzle-orm@0.33.0)(zod@3.23.8):
+  /drizzle-zod@0.5.1(drizzle-orm@0.33.0)(zod@3.24.1):
     resolution: {integrity: sha512-C/8bvzUH/zSnVfwdSibOgFjLhtDtbKYmkbPbUCq46QZyZCH6kODIMSOgZ8R7rVjoI+tCj3k06MRJMDqsIeoS4A==}
     peerDependencies:
       drizzle-orm: 0.33.0
       zod: '*'
     dependencies:
       drizzle-orm: 0.33.0(@neondatabase/serverless@0.9.5)(pg@8.13.1)
-      zod: 3.23.8
+      zod: 3.24.1
     dev: false
 
   /dunder-proto@1.0.1:
@@ -11453,6 +11486,29 @@ packages:
     transitivePeerDependencies:
       - encoding
       - openai
+    dev: false
+
+  /langsmith@0.1.41(@langchain/core@0.2.23):
+    resolution: {integrity: sha512-8R7s/225Pxmv0ipMfd6sqmWVsfHLQivYlQZ0vx5K+ReoknummTenQlVK8gapk3kqRMnzkrouuRHMhWjMR6RgUA==}
+    peerDependencies:
+      '@langchain/core': '*'
+      langchain: '*'
+      openai: '*'
+    peerDependenciesMeta:
+      '@langchain/core':
+        optional: true
+      langchain:
+        optional: true
+      openai:
+        optional: true
+    dependencies:
+      '@langchain/core': 0.2.23
+      '@types/uuid': 9.0.8
+      commander: 10.0.1
+      p-queue: 6.6.2
+      p-retry: 4.6.2
+      semver: 7.6.3
+      uuid: 9.0.1
     dev: false
 
   /langsmith@0.1.41(@langchain/core@0.2.23)(langchain@0.2.15)(openai@4.79.1):

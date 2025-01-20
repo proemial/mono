@@ -9,6 +9,7 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@langchain/textsplitters": "^0.1.0",
 		"@proemial/adapters": "workspace:*",
 		"@proemial/utils": "workspace:*",
 		"ai": "^4.0.5",

@@ -44,6 +44,7 @@ const LlmModels = {
 		embeddings: () => nomicEmbeddings("api", "embeddings"),
 		answer: () => ollama("llama3.1:8b"),
 		similarityAnalysis: () => ollama("llama3.1:8b"),
+		factChecking: () => ollama("bespoke-minicheck:7b"),
 	},
 	news: {
 		answer: (traceId?: string) =>
