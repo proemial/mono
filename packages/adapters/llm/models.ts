@@ -43,6 +43,7 @@ const LlmModels = {
 	api: {
 		embeddings: () => nomicEmbeddings("api", "embeddings"),
 		answer: () => ollama("llama3.1:8b"),
+		sentimentAnalysis: () => ollama("llama3.1:8b"),
 	},
 	news: {
 		answer: (traceId?: string) =>
