@@ -1,11 +1,6 @@
-import {
-	CoreAssistantMessage,
-	CoreMessage,
-	CoreToolMessage,
-	generateText,
-} from "ai";
 import LlmModels from "@proemial/adapters/llm/models";
 import qdrantHelper from "@proemial/adapters/qdrant/adapter";
+import { CoreMessage, generateText } from "ai";
 
 const EmbeddingsModel = "nomic-embed-text-v1.5";
 
@@ -28,13 +23,21 @@ export async function answerQuestion(
 		vector: embeddedQuestion,
 	});
 
+	const top3References = references
+		.map((r) => ({
+			source: r.payload?.text as string,
+			score: r.score,
+		}))
+		.sort((a, b) => b.score - a.score)
+		.slice(0, 3);
+
 	const answer = await llmAnswer(
 		question,
-		references.map((p) => p.payload?.text as string),
+		top3References.map((r) => r.source),
 		options,
 	);
 
-	return { answer, references };
+	return { answer, references: top3References };
 }
 
 async function llmAnswer(

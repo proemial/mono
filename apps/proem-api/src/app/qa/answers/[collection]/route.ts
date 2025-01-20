@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Time } from "@proemial/utils/time";
 import { answerQuestion } from "../../answer/answer";
-import { generateText, generateObject } from "ai";
+import { generateObject } from "ai";
 import LlmModels from "@proemial/adapters/llm/models";
 import { z } from "zod";
 
@@ -62,56 +62,48 @@ export const POST = async (
 					typeof option === "string" ? option : option.text,
 				),
 			);
-			console.log(`[qa][answers] analyzing sentiment for question ${id}…`);
-			const sentimentAnalysis = await analyzeSentiment(
+			console.log(`[qa][answers] analyzing similarity for question ${id}…`);
+			const similarityAnalysis = await analyzeSimilarity(
 				expectedAnswer,
 				actualAnswer,
 			);
-
-			const top3References = references
-				.map((r) => ({
-					source: r.payload?.text,
-					score: r.score,
-				}))
-				.sort((a, b) => b.score - a.score)
-				.slice(0, 3);
 
 			results.push({
 				id,
 				question,
 				expectedAnswer,
 				actualAnswer,
-				sentimentAnalysis,
-				references: top3References,
+				similarityAnalysis,
+				references,
 			});
 		}
 
-		const resultsWithSentimentAnalysis = results.filter(
-			(r) => r.sentimentAnalysis,
+		const resultsWithSimilarityAnalysis = results.filter(
+			(r) => r.similarityAnalysis,
 		);
-		const averageSentimentScore = (
-			resultsWithSentimentAnalysis
+		const averageSimilarityScore = (
+			resultsWithSimilarityAnalysis
 				// biome-ignore lint/style/noNonNullAssertion: We filter out undefined above
-				.reduce((acc, r) => acc + r.sentimentAnalysis!.score, 0) /
-			resultsWithSentimentAnalysis.length
+				.reduce((acc, r) => acc + r.similarityAnalysis!.score, 0) /
+			resultsWithSimilarityAnalysis.length
 		).toFixed(2);
 
 		return NextResponse.json({
 			noOfAutomatableQuestions,
 			results,
-			averageSentimentScore,
+			averageSimilarityScore,
 		});
 	} finally {
 		Time.log(begin, `[qa][answers] parsed ${result?.length} questions`);
 	}
 };
 
-const analyzeSentiment = async (
+const analyzeSimilarity = async (
 	expectedAnswer: string,
 	actualAnswer: string,
 ) => {
 	const { object } = await generateObject({
-		model: LlmModels.api.sentimentAnalysis(),
+		model: LlmModels.api.similarityAnalysis(),
 		schema: z.object({
 			similar: z
 				.boolean()
@@ -129,11 +121,11 @@ const analyzeSentiment = async (
 					"A very brief description of the reasoning behind the score, explaining the value given, using a maximum of 40 words or so.",
 				),
 		}),
-		schemaName: "sentimentAnalysis",
+		schemaName: "similarityAnalysis",
 		schemaDescription:
-			"Sentiment analysis of the actual answer compared to the expected answer.",
+			"Similarity analysis of the actual answer compared to the expected answer.",
 		system: `
-			You are a sentiment analysis model that compares an expected answer to an actual answer and returns whether or not they are semantically similar. You also include a score between 0 and 1, with 1 being the highest similarity and 0 being the lowest similarity between the two answers. Finally, you return a very brief description of the reasoning behind the score, explaining the value given, using a maximum of 40 words or so.
+			You are a similarity analysis model that compares an expected answer to an actual answer and returns whether or not they are semantically similar. You also include a score between 0 and 1, with 1 being the highest similarity and 0 being the lowest similarity between the two answers. Finally, you return a very brief description of the reasoning behind the score, explaining the value given, using a maximum of 40 words or so.
 			`,
 		prompt: `
 			Expected answer: ${expectedAnswer}
