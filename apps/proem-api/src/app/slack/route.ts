@@ -52,7 +52,7 @@ export async function POST(request: Request) {
 	};
 
 	const result = await fetch(
-		"https://hooks.slack.com/services/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",
+		"https://hooks.slack.com/services/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",
 		{
 			method: "POST",
 			headers: {
