@@ -11,51 +11,64 @@ export async function POST(request: Request) {
 	const body = JSON.parse(unencoded);
 	console.log(JSON.stringify(body));
 
-	const response = {
-		blocks: [
-			{
-				type: "header",
-				text: {
-					type: "plain_text",
-					text: "This was not what you expected",
-					emoji: true,
-				},
+	if (body.type === "block_actions") {
+		console.log("block_actions");
+		const result = await fetch(body.response_url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
 			},
-			{
-				type: "section",
-				text: {
-					type: "mrkdwn",
-					text: "... neither was this",
-				},
+			body: JSON.stringify({
+				text: "From Do stuff button",
+				thread_ts: body.message.ts,
+			}),
+		});
+
+		return NextResponse.json({ body, result });
+	}
+
+	const result = await fetch(
+		"https://hooks.slack.com/services/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",
+		{
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
 			},
-			{
-				type: "actions",
-				elements: [
+			body: JSON.stringify({
+				blocks: [
 					{
-						type: "button",
+						type: "header",
 						text: {
 							type: "plain_text",
-							text: "↕️ Do stuff",
+							text: "This was not what you expected",
 							emoji: true,
 						},
-						value: "do_stuff",
+					},
+					{
+						type: "section",
+						text: {
+							type: "mrkdwn",
+							text: "... neither was this",
+						},
+					},
+					{
+						type: "actions",
+						elements: [
+							{
+								type: "button",
+								text: {
+									type: "plain_text",
+									text: "↕️ Do stuff",
+									emoji: true,
+								},
+								value: "do_stuff",
+							},
+						],
 					},
 				],
-			},
-		],
-	};
-
-	const url = body.response_url
-		? body.response_url
-		: "https://hooks.slack.com/services/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";
-
-	const result = await fetch(url, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
+			}),
 		},
-		body: JSON.stringify(response),
-	});
+	);
 
 	return NextResponse.json({ body, result });
 }
