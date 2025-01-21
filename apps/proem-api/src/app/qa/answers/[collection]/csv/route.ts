@@ -65,6 +65,14 @@ const generateCsv = (
 		fieldDelimiter: ";",
 	});
 
+	const formatReference = (reference: {
+		filename: string;
+		position: number[];
+		source: string;
+	}) => {
+		return `${reference.filename}, [${reference.position.join("-")}]\n\n${reference.source}`;
+	};
+
 	const records = results.map((result) => ({
 		id: result.id,
 		question: result.question,
@@ -74,9 +82,9 @@ const generateCsv = (
 		similarity: result.similarityAnalysis.similar ? "Yes" : "No",
 		similarityScore: result.similarityAnalysis.score,
 		similarityReasoning: result.similarityAnalysis.reasoning,
-		reference1: result.references[0]?.source,
-		reference2: result.references[1]?.source,
-		reference3: result.references[2]?.source,
+		reference1: formatReference(result.references[0]),
+		reference2: formatReference(result.references[1]),
+		reference3: formatReference(result.references[2]),
 		groundingScore: result.groundingScore,
 	}));
 	records.push({

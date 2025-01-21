@@ -27,6 +27,8 @@ export async function answerQuestion(
 		.map((r) => ({
 			source: r.payload?.text as string,
 			score: r.score,
+			filename: r.payload?.file as string,
+			position: r.payload?.position as number[],
 		}))
 		.sort((a, b) => b.score - a.score)
 		.slice(0, 3);
