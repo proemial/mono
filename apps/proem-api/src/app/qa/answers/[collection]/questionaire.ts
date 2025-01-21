@@ -47,7 +47,7 @@ export const evaluateQuestionaire = async (
 		);
 
 		console.log(`[qa][answers] fact-checking answer to question ${id}…`);
-		const grounded = await factCheck(
+		const grounding = await factCheck(
 			actualAnswer,
 			references.map((r) => r.source),
 		);
@@ -68,7 +68,7 @@ export const evaluateQuestionaire = async (
 			actualAnswer,
 			similarityAnalysis,
 			references,
-			groundedScore: grounded.score,
+			groundingScore: grounding.score,
 		});
 	}
 
