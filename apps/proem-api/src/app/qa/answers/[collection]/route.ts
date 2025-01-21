@@ -42,7 +42,7 @@ export const POST = async (
 		);
 
 		const results = [];
-		for (const r of result.slice(0, 6)) {
+		for (const r of result) {
 			const { id, automatable, question, options, answer: expectedAnswer } = r;
 
 			if (!automatable) {
