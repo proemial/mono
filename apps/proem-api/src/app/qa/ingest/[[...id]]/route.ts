@@ -5,7 +5,10 @@ import { JobResultResponse } from "@proemial/adapters/llamaindex/types";
 import { uuid } from "@proemial/utils/uid";
 import qdrantHelper from "@proemial/adapters/qdrant/adapter";
 import LlmModels from "@proemial/adapters/llm/models";
-import { chunkMarkdown } from "@proemial/adapters/llamaindex/llama-chunker";
+import {
+	chunkMarkdown,
+	chunkSentences,
+} from "@proemial/adapters/llamaindex/llama-chunker";
 
 const qdrant = qdrantHelper({
 	url: process.env.QDRANT_QA_URL as string,
@@ -41,20 +44,19 @@ export async function POST(
 		parsed = await llamaParseClient.parseFile(file);
 		console.log(`[qa][ingest] parsed: ${parsed.markdown.length}`);
 
-		const chunks = chunkText(parsed.markdown);
+		const markdownChunks = chunkMarkdown(parsed.markdown);
+		const fullText = markdownChunks.map((c) => c.text).join("\n\n");
+		const chunks = chunkSentences(fullText);
 		console.log(`[qa][ingest] chunks: ${chunks.length}`);
 
-		const embeddings = await generateEmbeddings(
-			chunks.map((chunk) => chunk.text),
-		);
+		const embeddings = await generateEmbeddings(chunks);
 		console.log(`[qa][ingest] embeddings: ${embeddings.length}`);
 
 		const points = embeddings.map((vector, i) => ({
 			vector,
 			payload: {
 				file: file.name,
-				text: chunks[i].text,
-				position: chunks[i].position,
+				text: chunks[i],
 			},
 		}));
 
