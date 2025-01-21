@@ -14,7 +14,8 @@ export async function POST(request: Request) {
 	if (body.type === "block_actions") {
 		console.log("block_actions");
 		const result = await fetch(
-			"https://proem.app.n8n.cloud/webhook-test/99b44999-b7f8-499b-87f2-645063bbfd99",
+			"https://proem.app.n8n.cloud/webhook/99b44999-b7f8-499b-87f2-645063bbfd99",
+			// "https://proem.app.n8n.cloud/webhook-test/99b44999-b7f8-499b-87f2-645063bbfd99",
 			{
 				method: "POST",
 				headers: {
