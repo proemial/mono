@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body,
+			body: JSON.stringify(body),
 		},
 	);
 	console.log(result);
