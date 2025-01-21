@@ -4,9 +4,11 @@ export const revalidate = 0;
 
 export async function POST(request: Request) {
 	const text = await request.text();
-	const body = text?.startsWith("payload=")
+	const unencoded = text?.startsWith("payload=")
 		? decodeURIComponent(text.slice(8))
 		: text;
+
+	const body = JSON.parse(unencoded);
 	console.log(body);
 
 	const result = await fetch(
