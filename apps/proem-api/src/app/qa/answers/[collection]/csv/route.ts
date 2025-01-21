@@ -67,10 +67,14 @@ const generateCsv = (
 
 	const formatReference = (reference: {
 		filename: string;
-		position: number[];
+		position: number[] | undefined;
 		source: string;
+		score: number;
 	}) => {
-		return `${reference.filename}, [${reference.position.join("-")}]\n\n${reference.source}`;
+		const formattedPosition = reference.position
+			? ` [${reference.position.join("-")}]`
+			: "";
+		return `${reference.filename}${formattedPosition} (${reference.score})\n\n${reference.source}`;
 	};
 
 	const records = results.map((result) => ({
