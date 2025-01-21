@@ -32,7 +32,7 @@ export const evaluateQuestionaire = async (
 		}
 		if (!expectedAnswer) {
 			console.warn(
-				`[qa][answers] No expected answer for question ${id} - skipping`,
+				`[qa][answers] No expected answer for question ${id} - skipped`,
 			);
 			continue;
 		}

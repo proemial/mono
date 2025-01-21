@@ -62,6 +62,7 @@ async function llmAnswer(
 
 		const { text } = await generateText({
 			model: LlmModels.api.answer(),
+			system: options ? systemPromptWithOptions : systemPromptFreeText,
 			messages,
 		});
 
@@ -73,6 +74,18 @@ async function llmAnswer(
 		});
 	}
 }
+
+const systemPromptWithOptions = `
+You are a helpful assistant that answers questions based on the provided sources. More specifically, you are given a list of options to choose from when answering the question, limiting your answer to one of the options provided.
+
+Your answer must be one of the options provided, matching the option exactly to the letter.
+
+Read through the provided sources to discover which option is the correct answer.
+`;
+
+const systemPromptFreeText = `
+You are a helpful assistant that answers questions based on the provided sources. Keep your answers short and concise, not exceeding a single sentence.
+`;
 
 const prompts = {
 	freeText: (question: string, sources: string[]) => {
