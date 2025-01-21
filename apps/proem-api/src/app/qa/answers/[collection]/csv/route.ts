@@ -49,6 +49,7 @@ const generateCsv = (
 		header: [
 			{ id: "id", title: "ID" },
 			{ id: "question", title: "QUESTION" },
+			{ id: "options", title: "OPTIONS" },
 			{ id: "expectedAnswer", title: "EXPECTED ANSWER" },
 			{ id: "actualAnswer", title: "ACTUAL ANSWER" },
 			{ id: "similarity", title: "SIMILARITY" },
@@ -67,6 +68,7 @@ const generateCsv = (
 	const records = results.map((result) => ({
 		id: result.id,
 		question: result.question,
+		options: result.options ? "Yes" : "No",
 		expectedAnswer: result.expectedAnswer,
 		actualAnswer: result.actualAnswer,
 		similarity: result.similarityAnalysis.similar ? "Yes" : "No",
