@@ -648,6 +648,9 @@ importers:
       ai:
         specifier: 4.0.5
         version: 4.0.5(react@18.3.1)(zod@3.24.1)
+      csv-stringify:
+        specifier: ^6.5.2
+        version: 6.5.2
       next:
         specifier: ^14
         version: 14.2.23(@opentelemetry/api@1.9.0)(react-dom@18.3.1)(react@18.3.1)
@@ -8554,6 +8557,10 @@ packages:
   /csv-parse@5.6.0:
     resolution: {integrity: sha512-l3nz3euub2QMg5ouu5U09Ew9Wf6/wQ8I++ch1loQ0ljmzhmfZYrH9fflS22i/PQEvsPvxCwxgz5q7UB8K1JO4Q==}
     dev: true
+
+  /csv-stringify@6.5.2:
+    resolution: {integrity: sha512-RFPahj0sXcmUyjrObAK+DOWtMvMIFV328n4qZJhgX3x2RqkQgOTU2mCUmiFR0CzM6AzChlRSUErjiJeEt8BaQA==}
+    dev: false
 
   /d3-array@0.7.1:
     resolution: {integrity: sha512-Ifi3fH46Bco+Lb1mOlTxbFEuF3NdyElEVVD+EmoK327I0JzKAP4x57cl+HoxHqFcVd8F/uXLC+wtY3n/R1uO2w==}

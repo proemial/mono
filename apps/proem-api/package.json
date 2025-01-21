@@ -13,6 +13,7 @@
 		"@proemial/adapters": "workspace:*",
 		"@proemial/utils": "workspace:*",
 		"ai": "4.0.5",
+		"csv-stringify": "^6.5.2",
 		"next": "^14",
 		"react": "^18",
 		"react-dom": "^18",
