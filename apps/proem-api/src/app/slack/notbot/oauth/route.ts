@@ -57,7 +57,9 @@ export async function GET(request: Request) {
 		// TODO: Store these securely in your database
 
 		// Redirect to a success page or back to your app
-		return NextResponse.redirect(new URL("/slack/oauth/success", request.url));
+		return NextResponse.redirect(
+			new URL("/slack/notbot/oauth/success", request.url),
+		);
 	} catch (error) {
 		console.error("OAuth error:", error);
 		return NextResponse.json(
