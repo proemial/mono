@@ -1,8 +1,8 @@
-POST https://api.proem.ai/slack
+POST https://proem.app.n8n.cloud/webhook/6f4acf1e-b326-4f51-8f0e-e5d0b64eb376
 Content-Type: application/json
 
 {
-  "test":  true
+  "type":  true
 }
 
 ###
