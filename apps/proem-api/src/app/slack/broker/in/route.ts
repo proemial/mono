@@ -10,15 +10,15 @@ export async function POST(request: Request) {
 			? decodeURIComponent(text.slice(10))
 			: text;
 
-	const body = JSON.parse(unencoded);
+	const payload = JSON.parse(unencoded);
 
 	console.log("/slack/broker/in");
-	console.log(JSON.stringify(body));
+	console.log(JSON.stringify(payload));
 
-	if (body.type === "url_verification") {
-		return NextResponse.json({ challenge: body.challenge });
+	if (payload.type === "url_verification") {
+		return NextResponse.json({ challenge: payload.challenge });
 	}
-	if (body.type === "ssl_check") {
+	if (payload.type === "ssl_check") {
 		return NextResponse.json({ status: "ok" });
 	}
 
@@ -29,9 +29,12 @@ export async function POST(request: Request) {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(body),
+			body: JSON.stringify({
+				id: "dummy",
+				payload,
+			}),
 		},
 	);
 
-	return NextResponse.json({ body, result });
+	return NextResponse.json({ body: payload, result });
 }

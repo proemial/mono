@@ -4,10 +4,13 @@ export const revalidate = 0;
 
 export async function POST(request: Request) {
 	const text = await request.text();
-	const body = JSON.parse(text);
+	const data = JSON.parse(text) as {
+		id: string;
+		payload: unknown;
+	};
 
 	console.log("/slack/broker/out");
-	console.log(JSON.stringify(body));
+	console.log(JSON.stringify(data));
 
 	const result = await fetch(
 		"https://hooks.slack.com/services/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",
@@ -16,9 +19,9 @@ export async function POST(request: Request) {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(body),
+			body: JSON.stringify(data.payload),
 		},
 	);
 
-	return NextResponse.json({ body, result });
+	return NextResponse.json({ body: data, result });
 }
