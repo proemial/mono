@@ -13,7 +13,7 @@ export async function POST(request: Request) {
 	console.log(JSON.stringify(data));
 
 	const result = await fetch(
-		"https://hooks.slack.com/services/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",
+		"https://hooks.slack.com/services/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",
 		{
 			method: "POST",
 			headers: {
