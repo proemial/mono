@@ -12,7 +12,7 @@ export async function POST(request: Request) {
 
 	const body = JSON.parse(unencoded);
 
-	console.log("/slack/broker/out");
+	console.log("/slack/broker/in");
 	console.log(JSON.stringify(body));
 
 	if (body.type === "url_verification") {
