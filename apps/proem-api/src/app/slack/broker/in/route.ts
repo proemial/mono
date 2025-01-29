@@ -4,6 +4,8 @@ export const revalidate = 0;
 
 export async function POST(request: Request) {
 	const text = await request.text();
+	console.log("[/slack/broker/in]", text);
+
 	const unencoded = text?.startsWith("payload=")
 		? decodeURIComponent(text.slice(8))
 		: text?.startsWith("ssl_check=")
@@ -11,8 +13,6 @@ export async function POST(request: Request) {
 			: text;
 
 	const payload = JSON.parse(unencoded);
-
-	console.log("/slack/broker/in");
 	console.log(JSON.stringify(payload));
 
 	if (payload.type === "url_verification") {
@@ -22,19 +22,16 @@ export async function POST(request: Request) {
 		return NextResponse.json({ status: "ok" });
 	}
 
-	const result = await fetch(
-		"https://proem.app.n8n.cloud/webhook/fbf6889f-f8d9-4f36-b966-00f38a502a85",
-		{
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				id: "dummy",
-				payload,
-			}),
+	const result = await fetch(process.env.N8N_WEBHOOK_URL as string, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
 		},
-	);
+		body: JSON.stringify({
+			id: "dummy",
+			payload,
+		}),
+	});
 
 	return NextResponse.json({ body: payload, result });
 }
