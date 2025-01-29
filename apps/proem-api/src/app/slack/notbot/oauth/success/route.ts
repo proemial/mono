@@ -31,7 +31,7 @@ export async function GET() {
             </head>
             <body>
                 <div class="container">
-                    <h1>🎉 Installation Successful!</h1>
+                    <h1>Installation Successful!</h1>
                     <p>You can now close this window and start using the app in your Slack workspace.</p>
                 </div>
             </body>

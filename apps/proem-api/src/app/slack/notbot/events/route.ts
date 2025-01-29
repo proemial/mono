@@ -6,26 +6,33 @@ export async function POST(request: Request) {
 	const text = await request.text();
 	const unencoded = text?.startsWith("payload=")
 		? decodeURIComponent(text.slice(8))
-		: text;
+		: text?.startsWith("ssl_check=")
+			? decodeURIComponent(text.slice(10))
+			: text;
 
 	const body = JSON.parse(unencoded);
 	console.log(JSON.stringify(body));
 
-	if (body.type === "block_actions") {
-		console.log("block_actions");
-		const result = await fetch(body.response_url, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				text: "From Do stuff button",
-				thread_ts: body.message.ts,
-			}),
-		});
-
-		return NextResponse.json({ body, result });
+	// Handle Slack URL verification
+	if (body.type === "url_verification") {
+		return NextResponse.json({ challenge: body.challenge });
 	}
+
+	// if (body.type === "block_actions") {
+	// 	console.log("block_actions");
+	// 	const result = await fetch(body.response_url, {
+	// 		method: "POST",
+	// 		headers: {
+	// 			"Content-Type": "application/json",
+	// 		},
+	// 		body: JSON.stringify({
+	// 			text: "From Do stuff button",
+	// 			thread_ts: body.message.ts,
+	// 		}),
+	// 	});
+
+	// 	return NextResponse.json({ body, result });
+	// }
 
 	const result = await fetch(
 		"https://hooks.slack.com/services/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",
