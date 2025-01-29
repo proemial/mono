@@ -1,3 +1,4 @@
+import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { NextResponse } from "next/server";
 
 export const revalidate = 0;
@@ -17,6 +18,17 @@ export async function POST(request: Request) {
 	if (body.type === "url_verification") {
 		return NextResponse.json({ challenge: body.challenge });
 	}
+
+	SlackDb.events.insert({
+		createdAt: new Date(),
+		metadata: {
+			appId: body.api_app_id,
+			eventId: body.event_id,
+		},
+		source: "slack",
+		type: "SlackEventCallback",
+		payload: body,
+	});
 
 	// if (body.type === "block_actions") {
 	// 	console.log("block_actions");
