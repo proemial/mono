@@ -19,10 +19,8 @@ export async function GET(request: Request) {
 		return NextResponse.json({ error: "No code provided" }, { status: 400 });
 	}
 
-	// Why do Slack not pass an app ID :! This prevents a generic oauth endpoint.
-	const app = await SlackDb.entities.get("A08AD1FSPHV");
-	const clientId = app?.metadata?.clientId;
-	const clientSecret = app?.metadata?.clientSecret;
+	const clientId = "5345137174018.8353049907607";
+	const clientSecret = "ffad4f73ece971c344171b11eeea75a4";
 
 	if (!clientId || !clientSecret) {
 		console.error("Missing Slack credentials");
