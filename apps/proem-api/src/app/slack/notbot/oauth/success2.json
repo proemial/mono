@@ -1,47 +1,47 @@
 {
-	"token": "p4urDfOpu9EajG9X4ZWOjzSk",
-	"team_id": "T089HNAFG5D",
 	"api_app_id": "A089EET085R",
-	"event": {
-		"user": "U08AAUY59S5",
-		"type": "app_mention",
-		"ts": "1737711893.854239",
-		"client_msg_id": "81b815a7-04a5-4293-a3de-b2f1fa5e6eff",
-		"text": "<@U08AB1575Q9> Can I add another integration by tagging you?",
-		"team": "T089HNAFG5D",
-		"blocks": [
-			{
-				"type": "rich_text",
-				"block_id": "lVDED",
-				"elements": [
-					{
-						"type": "rich_text_section",
-						"elements": [
-							{ "type": "user", "user_id": "U08AB1575Q9" },
-							{
-								"type": "text",
-								"text": " Can I add another integration by tagging you?"
-							}
-						]
-					}
-				]
-			}
-		],
-		"channel": "C089RKQSVLN",
-		"event_ts": "1737711893.854239"
-	},
-	"type": "event_callback",
-	"event_id": "Ev089PQSSSVD",
-	"event_time": 1737711893,
 	"authorizations": [
 		{
 			"enterprise_id": null,
-			"team_id": "T089HNAFG5D",
-			"user_id": "U08AB1575Q9",
 			"is_bot": true,
-			"is_enterprise_install": false
+			"is_enterprise_install": false,
+			"team_id": "T089HNAFG5D",
+			"user_id": "U08AB1575Q9"
 		}
 	],
+	"event": {
+		"blocks": [
+			{
+				"block_id": "lVDED",
+				"elements": [
+					{
+						"elements": [
+							{ "type": "user", "user_id": "U08AB1575Q9" },
+							{
+								"text": " Can I add another integration by tagging you?",
+								"type": "text"
+							}
+						],
+						"type": "rich_text_section"
+					}
+				],
+				"type": "rich_text"
+			}
+		],
+		"channel": "C089RKQSVLN",
+		"client_msg_id": "81b815a7-04a5-4293-a3de-b2f1fa5e6eff",
+		"event_ts": "1737711893.854239",
+		"team": "T089HNAFG5D",
+		"text": "<@U08AB1575Q9> Can I add another integration by tagging you?",
+		"ts": "1737711893.854239",
+		"type": "app_mention",
+		"user": "U08AAUY59S5"
+	},
+	"event_context": "4-eyJldCI6ImFwcF9tZW50aW9uIiwidGlkIjoiVDA4OUhOQUZHNUQiLCJhaWQiOiJBMDg5RUVUMDg1UiIsImNpZCI6IkMwODlSS1FTVkxOIn0",
+	"event_id": "Ev089PQSSSVD",
+	"event_time": 1737711893,
 	"is_ext_shared_channel": false,
-	"event_context": "4-eyJldCI6ImFwcF9tZW50aW9uIiwidGlkIjoiVDA4OUhOQUZHNUQiLCJhaWQiOiJBMDg5RUVUMDg1UiIsImNpZCI6IkMwODlSS1FTVkxOIn0"
+	"team_id": "T089HNAFG5D",
+	"token": "p4urDfOpu9EajG9X4ZWOjzSk",
+	"type": "event_callback"
 }
