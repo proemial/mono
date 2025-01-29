@@ -84,6 +84,9 @@ export async function GET(request: Request) {
 			type: "team",
 			id: data.team.id,
 			name: data.team.name,
+			metadata: {
+				accessToken: data.access_token,
+			},
 		});
 		console.log("Updated entities", updated);
 

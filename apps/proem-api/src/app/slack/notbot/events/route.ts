@@ -31,96 +31,89 @@ export async function POST(request: Request) {
 	});
 	console.log(updated);
 
-	// if (body.type === "block_actions") {
-	// 	console.log("block_actions");
-	// 	const result = await fetch(body.response_url, {
-	// 		method: "POST",
-	// 		headers: {
-	// 			"Content-Type": "application/json",
-	// 		},
-	// 		body: JSON.stringify({
-	// 			text: "From Do stuff button",
-	// 			thread_ts: body.message.ts,
-	// 		}),
-	// 	});
+	const target = await getTarget(body);
 
-	// 	return NextResponse.json({ body, result });
-	// }
-
-	try {
-		const webhookUrl = await getTargetUrl(body);
-
-		const result = await fetch(webhookUrl, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				blocks: [
-					{
-						type: "header",
-						text: {
-							type: "plain_text",
-							text: "This was not what you expected",
-							emoji: true,
-						},
+	const result = await fetch(target.url, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			...target.headers,
+		},
+		body: JSON.stringify({
+			...target.body,
+			blocks: [
+				{
+					type: "header",
+					text: {
+						type: "plain_text",
+						text: "This was not what you expected",
+						emoji: true,
 					},
-					{
-						type: "section",
-						text: {
-							type: "mrkdwn",
-							text: "... neither was this",
-						},
+				},
+				{
+					type: "section",
+					text: {
+						type: "mrkdwn",
+						text: "... neither was this",
 					},
-					{
-						type: "actions",
-						elements: [
-							{
-								type: "button",
-								text: {
-									type: "plain_text",
-									text: "↕️ Do stuff",
-									emoji: true,
-								},
-								value: "do_stuff",
+				},
+				{
+					type: "actions",
+					elements: [
+						{
+							type: "button",
+							text: {
+								type: "plain_text",
+								text: "↕️ Do stuff",
+								emoji: true,
 							},
-						],
-					},
-				],
-			}),
-		});
+							value: "do_stuff",
+						},
+					],
+				},
+			],
+		}),
+	});
 
-		return NextResponse.json({ body, result });
-	} catch (error) {
-		console.error(error);
-		if (error instanceof Error) {
-			return NextResponse.json({ error: error.message }, { status: 400 });
-		}
-
-		return NextResponse.json({ error }, { status: 500 });
-	}
+	return NextResponse.json({ body, result });
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-async function getTargetUrl(body: any) {
+async function getTarget(body: any): Promise<Target> {
 	if (body.response_url) {
-		return body.response_url;
+		return {
+			url: body.response_url,
+			headers: {},
+			body: {},
+		};
 	}
 
-	const channelId = body.event.channel || (body.event.channel.id as string);
-	if (!channelId) {
-		throw new Error("ChannelId not found");
+	const teamId = (body.event.team ?? body.message.team) as string;
+	if (!teamId) {
+		throw new Error("TeamId not found");
 	}
 
-	const channel = await SlackDb.entities.get(channelId);
-	if (!channel) {
-		throw new Error("Channel not found");
+	const team = await SlackDb.entities.get(teamId);
+	if (!team) {
+		throw new Error("Team not found");
+	}
+	if (!team.metadata?.accessToken) {
+		throw new Error("Token not found");
 	}
 
-	const webhookUrl = channel.metadata?.url;
-	if (!webhookUrl) {
-		throw new Error("Webhook URL not found");
-	}
-
-	return webhookUrl;
+	return {
+		url: "https://slack.com/api/chat.postMessage",
+		headers: {
+			Authorization: `Bearer ${team.metadata?.accessToken}`,
+		},
+		body: {
+			channel: body.event.channel,
+		},
+	};
 }
+
+type Target = {
+	url: string;
+	headers: Partial<Record<string, string>>;
+	body: Partial<Record<string, string>>;
+};
