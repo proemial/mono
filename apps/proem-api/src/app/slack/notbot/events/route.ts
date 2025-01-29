@@ -47,48 +47,66 @@ export async function POST(request: Request) {
 	// 	return NextResponse.json({ body, result });
 	// }
 
-	const result = await fetch(
-		"https://hooks.slack.com/services/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",
-		{
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				blocks: [
-					{
-						type: "header",
-						text: {
-							type: "plain_text",
-							text: "This was not what you expected",
-							emoji: true,
-						},
-					},
-					{
-						type: "section",
-						text: {
-							type: "mrkdwn",
-							text: "... neither was this",
-						},
-					},
-					{
-						type: "actions",
-						elements: [
-							{
-								type: "button",
-								text: {
-									type: "plain_text",
-									text: "↕️ Do stuff",
-									emoji: true,
-								},
-								value: "do_stuff",
-							},
-						],
-					},
-				],
-			}),
+	const channelId = body.event.channel || (body.event.channel.id as string);
+	if (!channelId) {
+		console.error("Channel not found", body.event);
+		return NextResponse.json({ error: "Channel not found" }, { status: 404 });
+	}
+
+	const channel = await SlackDb.entities.get(channelId);
+	if (!channel) {
+		console.error("Channel not found", channelId);
+		return NextResponse.json({ error: "Channel not found" }, { status: 404 });
+	}
+
+	const webhookUrl = channel.metadata?.url;
+	if (!webhookUrl) {
+		console.error("Webhook URL not found", channel);
+		return NextResponse.json(
+			{ error: "Webhook URL not found" },
+			{ status: 404 },
+		);
+	}
+
+	const result = await fetch(webhookUrl, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
 		},
-	);
+		body: JSON.stringify({
+			blocks: [
+				{
+					type: "header",
+					text: {
+						type: "plain_text",
+						text: "This was not what you expected",
+						emoji: true,
+					},
+				},
+				{
+					type: "section",
+					text: {
+						type: "mrkdwn",
+						text: "... neither was this",
+					},
+				},
+				{
+					type: "actions",
+					elements: [
+						{
+							type: "button",
+							text: {
+								type: "plain_text",
+								text: "↕️ Do stuff",
+								emoji: true,
+							},
+							value: "do_stuff",
+						},
+					],
+				},
+			],
+		}),
+	});
 
 	return NextResponse.json({ body, result });
 }
