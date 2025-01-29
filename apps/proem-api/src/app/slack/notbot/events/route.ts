@@ -32,6 +32,7 @@ export async function POST(request: Request) {
 	console.log(updated);
 
 	const target = await getTarget(body);
+	console.log(target);
 
 	const result = await fetch(target.url, {
 		method: "POST",
@@ -74,6 +75,7 @@ export async function POST(request: Request) {
 			],
 		}),
 	});
+	console.log(result);
 
 	return NextResponse.json({ body, result });
 }
