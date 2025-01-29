@@ -33,7 +33,9 @@
 		"REDIS_PAPERS_NEW_URL",
 		"SENTRY_AUTH_TOKEN",
 		"QDRANT_API_KEY",
-		"QDRANT_URL"
+		"QDRANT_URL",
+		"MONGODB_URI",
+		"N8N_WEBHOOK_URL"
 	],
 	"tasks": {
 		"checkly": {},
