@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 		return NextResponse.json({ challenge: body.challenge });
 	}
 
-	SlackDb.events.insert({
+	const updated = await SlackDb.events.insert({
 		createdAt: new Date(),
 		metadata: {
 			appId: body.api_app_id,
@@ -29,6 +29,7 @@ export async function POST(request: Request) {
 		type: "SlackEventCallback",
 		payload: body,
 	});
+	console.log(updated);
 
 	// if (body.type === "block_actions") {
 	// 	console.log("block_actions");

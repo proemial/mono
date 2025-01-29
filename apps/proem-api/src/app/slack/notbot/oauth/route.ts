@@ -57,7 +57,7 @@ export async function GET(request: Request) {
 		// data.team.id - workspace ID
 		// data.team.name - workspace name
 		// TODO: Store these securely in your database
-		SlackDb.events.insert({
+		let updated = await SlackDb.events.insert({
 			createdAt: new Date(),
 			metadata: {
 				appId: data.app_id || data.api_app_id,
@@ -67,7 +67,8 @@ export async function GET(request: Request) {
 			type: "SlackOauthEvent",
 			payload: data,
 		});
-		SlackDb.entities.insert({
+		console.log("Updated events", updated);
+		updated = await SlackDb.entities.insert({
 			createdAt: new Date(),
 			type: "channel",
 			id: data.incoming_webhook.channel_id,
@@ -77,12 +78,14 @@ export async function GET(request: Request) {
 				accessToken: data.access_token,
 			},
 		});
-		SlackDb.entities.insert({
+		console.log("Updated entities", updated);
+		updated = await SlackDb.entities.insert({
 			createdAt: new Date(),
 			type: "team",
 			id: data.team.id,
 			name: data.team.name,
 		});
+		console.log("Updated entities", updated);
 
 		// Redirect to a success page or back to your app
 		return NextResponse.redirect(
