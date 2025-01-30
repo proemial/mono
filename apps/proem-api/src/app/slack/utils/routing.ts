@@ -6,6 +6,7 @@ export async function getTarget(body: any): Promise<Target> {
 	console.log(body);
 
 	if (body.payload.response_url) {
+		// TODO: Add thread_ts
 		return {
 			url: body.response_url,
 			headers: {},

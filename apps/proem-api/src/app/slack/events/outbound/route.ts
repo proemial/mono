@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 			createdAt: new Date(),
 			metadata,
 			source: "n8n",
-			type: "SlackEventCallback",
+			type: "N8nEvent",
 			payload,
 		});
 		console.log(updated);
