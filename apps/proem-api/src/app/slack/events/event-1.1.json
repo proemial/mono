@@ -1,0 +1,44 @@
+{
+	"api_app_id": "A089EET085R",
+	"authorizations": [
+		{
+			"enterprise_id": null,
+			"is_bot": true,
+			"is_enterprise_install": false,
+			"team_id": "T089HNAFG5D",
+			"user_id": "U08AB1575Q9"
+		}
+	],
+	"event": {
+		"blocks": [
+			{
+				"block_id": "Bakkt",
+				"elements": [
+					{
+						"elements": [
+							{ "type": "user", "user_id": "U08AB1575Q9" },
+							{ "text": " Whats up?", "type": "text" }
+						],
+						"type": "rich_text_section"
+					}
+				],
+				"type": "rich_text"
+			}
+		],
+		"channel": "C08AAV08M33",
+		"client_msg_id": "cec16adb-08ca-4775-8c85-6b5d7525ac5c",
+		"event_ts": "1737632468.402629",
+		"team": "T089HNAFG5D",
+		"text": "<@U08AB1575Q9> Whats up?",
+		"ts": "1737632468.402629",
+		"type": "app_mention",
+		"user": "U08AAUY59S5"
+	},
+	"event_context": "4-eyJldCI6ImFwcF9tZW50aW9uIiwidGlkIjoiVDA4OUhOQUZHNUQiLCJhaWQiOiJBMDg5RUVUMDg1UiIsImNpZCI6IkMwOEFBVjA4TTMzIn0",
+	"event_id": "Ev08A0SCT2VA",
+	"event_time": 1737632468,
+	"is_ext_shared_channel": false,
+	"team_id": "T089HNAFG5D",
+	"token": "p4urDfOpu9EajG9X4ZWOjzSk",
+	"type": "event_callback"
+}

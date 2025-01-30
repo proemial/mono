@@ -1,0 +1,44 @@
+{
+	"token": "p4urDfOpu9EajG9X4ZWOjzSk",
+	"team_id": "T089HNAFG5D",
+	"api_app_id": "A089EET085R",
+	"event": {
+		"user": "U08AAUY59S5",
+		"type": "app_mention",
+		"ts": "1737712076.267019",
+		"client_msg_id": "98433132-f655-4b7b-91a7-72f53f12ca4b",
+		"text": "<@U08AB1575Q9> Will I always have the same token?",
+		"team": "T089HNAFG5D",
+		"blocks": [
+			{
+				"type": "rich_text",
+				"block_id": "EAivL",
+				"elements": [
+					{
+						"type": "rich_text_section",
+						"elements": [
+							{ "type": "user", "user_id": "U08AB1575Q9" },
+							{ "type": "text", "text": " Will I always have the same token?" }
+						]
+					}
+				]
+			}
+		],
+		"channel": "C089RKQSVLN",
+		"event_ts": "1737712076.267019"
+	},
+	"type": "event_callback",
+	"event_id": "Ev08A48QQ199",
+	"event_time": 1737712076,
+	"authorizations": [
+		{
+			"enterprise_id": null,
+			"team_id": "T089HNAFG5D",
+			"user_id": "U08AB1575Q9",
+			"is_bot": true,
+			"is_enterprise_install": false
+		}
+	],
+	"is_ext_shared_channel": false,
+	"event_context": "4-eyJldCI6ImFwcF9tZW50aW9uIiwidGlkIjoiVDA4OUhOQUZHNUQiLCJhaWQiOiJBMDg5RUVUMDg1UiIsImNpZCI6IkMwODlSS1FTVkxOIn0"
+}
