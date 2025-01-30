@@ -1,6 +1,6 @@
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { NextResponse } from "next/server";
-import { getTarget } from "../../events/outbound/route";
+import { getTarget } from "../../utils/routing";
 
 export const revalidate = 0;
 
