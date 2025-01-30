@@ -1,27 +1,32 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { uuid } from "@proemial/utils/uid";
 
 export const revalidate = 0;
 
-export async function GET(request: Request) {
+type Props = Promise<{ appid: string }>;
+
+export async function GET(request: NextRequest, { params }: { params: Props }) {
+	const { appid } = await params;
+
 	const { searchParams } = new URL(request.url);
 	const code = searchParams.get("code");
 	const error = searchParams.get("error");
-	console.log("Slack code", code);
 
 	if (error) {
 		console.error("OAuth error:", error);
 		return NextResponse.json({ error }, { status: 400 });
 	}
-
 	if (!code) {
 		return NextResponse.json({ error: "No code provided" }, { status: 400 });
 	}
 
-	const clientId = "5345137174018.8353049907607";
-	const clientSecret = "ffad4f73ece971c344171b11eeea75a4";
+	const app = await SlackDb.entities.get(appid);
+	if (!app || !app.metadata) {
+		return NextResponse.json({ error: "App not found" }, { status: 404 });
+	}
 
+	const { clientId, clientSecret } = app.metadata;
 	if (!clientId || !clientSecret) {
 		console.error("Missing Slack credentials");
 		return NextResponse.json(
