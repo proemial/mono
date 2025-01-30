@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 export const revalidate = 0;
 
+/** @deprecated This endpoint will be removed soon. */
 export async function POST(request: Request) {
 	const text = await request.text();
 	const unencoded = text?.startsWith("payload=")
