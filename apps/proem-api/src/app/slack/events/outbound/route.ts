@@ -7,11 +7,14 @@ export async function POST(request: Request) {
 	try {
 		const text = await request.text();
 		const data = JSON.parse(text) as {
-			id: string;
+			metadata: {
+				appId: string;
+				eventId: string;
+			};
 			payload: unknown;
 		};
 
-		if (!data?.id || !data?.payload) {
+		if (!data?.metadata?.eventId || !data?.payload) {
 			return NextResponse.json(
 				{ error: "Invalid request, missing id or payload" },
 				{ status: 400 },
