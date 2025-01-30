@@ -29,7 +29,7 @@ export async function getTarget(body: any): Promise<Target> {
 			Authorization: `Bearer ${team.metadata?.accessToken}`,
 		},
 		body: {
-			channel: body.event.channel,
+			channel: body.payload.event.channel ?? body.payload.channel,
 		},
 	};
 }
