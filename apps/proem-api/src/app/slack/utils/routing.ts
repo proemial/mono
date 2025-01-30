@@ -2,12 +2,20 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export async function getTarget(body: any): Promise<Target> {
+	console.log("getTarget");
+	console.log(body);
+
 	if (body.payload.response_url) {
 		return {
 			url: body.response_url,
 			headers: {},
 			body: {},
 		};
+	}
+
+	const channel = body.payload.event.channel ?? body.payload.channel;
+	if (!channel) {
+		throw new Error("Channel not found");
 	}
 
 	const teamId = (body.metadata.teamId ?? body.payload.team_id) as string;
@@ -29,7 +37,7 @@ export async function getTarget(body: any): Promise<Target> {
 			Authorization: `Bearer ${team.metadata?.accessToken}`,
 		},
 		body: {
-			channel: body.payload.event.channel ?? body.payload.channel,
+			channel,
 		},
 	};
 }
