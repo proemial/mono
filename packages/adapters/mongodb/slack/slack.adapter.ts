@@ -38,9 +38,12 @@ export const SlackDb = {
 			const begin = Time.now();
 
 			try {
-				return await entities.findOne<SlackEntity>({
-					id,
-				});
+				return await entities.findOne<SlackEntity>(
+					{
+						id,
+					},
+					{ sort: { _id: -1 } },
+				);
 			} finally {
 				Time.log(begin, `[mongodb][slack][entities][get] ${id}`);
 			}

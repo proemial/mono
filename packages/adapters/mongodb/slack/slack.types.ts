@@ -7,7 +7,12 @@ export type SlackEntity = {
 	// url?: string; // incoming_webhook.url
 	// accessToken?: string; // access_token
 };
-type EntityMetadataKeys = "url" | "accessToken" | "clientId" | "clientSecret";
+type EntityMetadataKeys =
+	| "url"
+	| "accessToken"
+	| "clientId"
+	| "clientSecret"
+	| "configurationUrl";
 
 // slack > in:SlackPayload > db:Event > out:{metadata, payload}
 // n8n > in:{metadata, payload} > db:Event > out:payload

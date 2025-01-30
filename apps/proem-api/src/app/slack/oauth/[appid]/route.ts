@@ -81,6 +81,7 @@ export async function GET(request: NextRequest, { params }: { params: Props }) {
 			metadata: {
 				url: data.incoming_webhook.url,
 				accessToken: data.access_token,
+				configurationUrl: data.incoming_webhook.configuration_url,
 			},
 		});
 		console.log("Updated entities", updated);
