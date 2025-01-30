@@ -27,6 +27,7 @@ export async function POST(request: Request) {
 	const metadata = {
 		appId: payload.api_app_id,
 		eventId: payload.event_id,
+		teamId: payload.team_id,
 	};
 
 	const updated = await SlackDb.events.insert({
@@ -70,7 +71,7 @@ export async function POST(request: Request) {
 		},
 	];
 
-	const target = await getTarget(payload);
+	const target = await getTarget({ metadata, payload });
 	console.log(target);
 
 	const result = await fetch(target.url, {

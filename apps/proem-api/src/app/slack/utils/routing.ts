@@ -2,7 +2,7 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export async function getTarget(body: any): Promise<Target> {
-	if (body.response_url) {
+	if (body.payload.response_url) {
 		return {
 			url: body.response_url,
 			headers: {},
@@ -10,7 +10,7 @@ export async function getTarget(body: any): Promise<Target> {
 		};
 	}
 
-	const teamId = (body.event.team ?? body.message.team) as string;
+	const teamId = (body.metadata.teamId ?? body.payload.team_id) as string;
 	if (!teamId) {
 		throw new Error("TeamId not found");
 	}

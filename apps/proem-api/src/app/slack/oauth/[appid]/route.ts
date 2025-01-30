@@ -67,6 +67,7 @@ export async function GET(request: NextRequest, { params }: { params: Props }) {
 			metadata: {
 				appId: data.app_id || data.api_app_id,
 				eventId: uuid(),
+				teamId: data.team.id,
 			},
 			source: "slack",
 			type: "SlackOauthEvent",

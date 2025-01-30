@@ -28,6 +28,7 @@ export type Event = {
 export type EventMetadata = {
 	appId: string; // app_id || api_app_id
 	eventId: string; // generated
+	teamId: string; // team_id
 };
 
 // biome-ignore lint/complexity/noBannedTypes: <explanation>
