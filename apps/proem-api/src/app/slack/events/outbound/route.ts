@@ -44,7 +44,7 @@ export async function POST(request: Request) {
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-async function getTarget(body: any): Promise<Target> {
+export async function getTarget(body: any): Promise<Target> {
 	if (body.response_url) {
 		return {
 			url: body.response_url,
