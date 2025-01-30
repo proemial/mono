@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
 		if (!data?.metadata?.eventId || !data?.payload) {
 			return NextResponse.json(
-				{ error: "Invalid request, missing id or payload" },
+				{ error: "Invalid request, missing metadata.eventId or payload" },
 				{ status: 400 },
 			);
 		}
