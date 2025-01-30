@@ -1,5 +1,6 @@
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { NextResponse } from "next/server";
+import { uuid } from "@proemial/utils/uid";
 
 export const revalidate = 0;
 
@@ -25,8 +26,8 @@ export async function POST(request: Request) {
 
 	const metadata = {
 		appId: payload.api_app_id,
-		eventId: payload.event_id,
-		teamId: payload.team_id,
+		eventId: payload.event_id ?? uuid(),
+		teamId: payload.team_id ?? payload.team?.id ?? payload.message?.team,
 	};
 
 	const updated = await SlackDb.events.insert({
