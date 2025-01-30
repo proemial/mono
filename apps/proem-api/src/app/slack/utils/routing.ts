@@ -13,7 +13,7 @@ export async function getTarget(body: any): Promise<Target> {
 		};
 	}
 
-	const channel = body.payload.event.channel ?? body.payload.channel;
+	const channel = body.payload?.event?.channel ?? body.payload?.channel;
 	if (!channel) {
 		throw new Error("Channel not found");
 	}
