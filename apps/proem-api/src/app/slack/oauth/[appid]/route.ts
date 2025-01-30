@@ -72,19 +72,8 @@ export async function GET(request: NextRequest, { params }: { params: Props }) {
 			type: "SlackOauthEvent",
 			payload: data,
 		});
-		console.log("Updated events", updated);
-		updated = await SlackDb.entities.insert({
-			createdAt: new Date(),
-			type: "channel",
-			id: data.incoming_webhook.channel_id,
-			name: data.incoming_webhook.channel,
-			metadata: {
-				url: data.incoming_webhook.url,
-				accessToken: data.access_token,
-				configurationUrl: data.incoming_webhook.configuration_url,
-			},
-		});
-		console.log("Updated entities", updated);
+		console.log("Inserted oauth event", updated);
+
 		updated = await SlackDb.entities.insert({
 			createdAt: new Date(),
 			type: "team",
@@ -94,7 +83,22 @@ export async function GET(request: NextRequest, { params }: { params: Props }) {
 				accessToken: data.access_token,
 			},
 		});
-		console.log("Updated entities", updated);
+		console.log("Inserted team entity", updated);
+
+		if (data.incoming_webhook?.channel_id) {
+			updated = await SlackDb.entities.insert({
+				createdAt: new Date(),
+				type: "channel",
+				id: data.incoming_webhook.channel_id,
+				name: data.incoming_webhook.channel,
+				metadata: {
+					url: data.incoming_webhook.url,
+					accessToken: data.access_token,
+					configurationUrl: data.incoming_webhook.configuration_url,
+				},
+			});
+			console.log("Inserted channel entity", updated);
+		}
 
 		// Redirect to a success page or back to your app
 		return NextResponse.redirect(new URL("/slack/oauth/success", request.url));
