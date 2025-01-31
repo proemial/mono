@@ -43,7 +43,7 @@ export async function POST(request: Request) {
 		return NextResponse.json({ status: "ok" });
 	}
 	// Do not respond to messages unless they are a naked link
-	if (!isNakedLink(payload)) {
+	if (payload.event?.type === "message" && !isNakedLink(payload)) {
 		console.log("exit[msg]", payload.event.text);
 		return NextResponse.json({ status: "ok" });
 	}
