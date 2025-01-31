@@ -1,9 +1,12 @@
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export function isNakedLink(body: any): boolean {
-	const text = body.payload?.event?.text;
-	return text?.match(/^<https?:\/\/[^\s]+>$/);
+export function isNakedLink(payload: any): boolean {
+	const text = payload?.event?.text;
+	const isNakedLink = text?.match(/^<https?:\/\/[^\s]+>$/);
+	console.log("isNakedLink", text, isNakedLink);
+
+	return isNakedLink;
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>

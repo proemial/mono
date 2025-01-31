@@ -20,6 +20,7 @@ export async function POST(request: Request) {
 		payload.api_app_id,
 		payload.event_id,
 		payload.type,
+		payload.event?.type,
 		payload.event?.subtype,
 		payload.event?.bot_profile?.name,
 	);
