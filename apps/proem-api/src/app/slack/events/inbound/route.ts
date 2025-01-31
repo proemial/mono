@@ -17,10 +17,21 @@ export async function POST(request: Request) {
 	const payload = JSON.parse(unencoded);
 	console.log(JSON.stringify(payload));
 
+	// Handle Slack verification requests
 	if (payload.type === "url_verification") {
 		return NextResponse.json({ challenge: payload.challenge });
 	}
 	if (payload.type === "ssl_check") {
+		return NextResponse.json({ status: "ok" });
+	}
+	// Do not respond to bot messages
+	if (payload.event?.bot_profile) {
+		console.log("exit[botmsg]", payload.event.bot_profile);
+		return NextResponse.json({ status: "ok" });
+	}
+	// Do not respond to message edits
+	if (payload.event.subtype) {
+		console.log("exit[edit]", payload.event.subtype);
 		return NextResponse.json({ status: "ok" });
 	}
 
