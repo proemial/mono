@@ -17,9 +17,15 @@ export async function POST(request: Request) {
 	const payload = JSON.parse(unencoded);
 
 	if (payload.type === "url_verification") {
+		console.log(`exit[${payload.type}]`, { challenge: payload.challenge });
 		return NextResponse.json({ challenge: payload.challenge });
 	}
 	if (payload.type === "ssl_check") {
+		console.log(`exit[${payload.type}]`);
+		return NextResponse.json({ status: "ok" });
+	}
+	if (payload.event?.bot_profile) {
+		console.log("exit[botmsg]", payload.event.bot_profile);
 		return NextResponse.json({ status: "ok" });
 	}
 
