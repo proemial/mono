@@ -2,9 +2,6 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export async function getTarget(body: any): Promise<Target> {
-	console.log("getTarget");
-	console.log(body);
-
 	if (body.payload.response_url) {
 		// TODO: Add thread_ts
 		return {
