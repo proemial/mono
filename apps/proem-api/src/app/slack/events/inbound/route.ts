@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 	const payload = JSON.parse(unencoded);
 
 	console.log(
-		"[/slack/broker/in]",
+		"[/slack/events/inbound]",
 		payload.api_app_id,
 		payload.event_id,
 		payload.type,
