@@ -15,7 +15,6 @@ export async function POST(request: Request) {
 			: text;
 
 	const payload = JSON.parse(unencoded);
-	console.log(JSON.stringify(payload));
 
 	if (payload.type === "url_verification") {
 		return NextResponse.json({ challenge: payload.challenge });
@@ -44,30 +43,9 @@ export async function POST(request: Request) {
 			type: "header",
 			text: {
 				type: "plain_text",
-				text: "This was not what you expected",
+				text: `type: ${payload.type}, eventType: ${payload.event.type}`,
 				emoji: true,
 			},
-		},
-		{
-			type: "section",
-			text: {
-				type: "mrkdwn",
-				text: "... neither was this",
-			},
-		},
-		{
-			type: "actions",
-			elements: [
-				{
-					type: "button",
-					text: {
-						type: "plain_text",
-						text: "↕️ Do stuff",
-						emoji: true,
-					},
-					value: "do_stuff",
-				},
-			],
 		},
 	];
 
