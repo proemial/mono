@@ -6,7 +6,6 @@ export const revalidate = 0;
 
 export async function POST(request: Request) {
 	const text = await request.text();
-	console.log("[/slack/broker/in]", text);
 
 	const unencoded = text?.startsWith("payload=")
 		? decodeURIComponent(text.slice(8))
@@ -15,7 +14,15 @@ export async function POST(request: Request) {
 			: text;
 
 	const payload = JSON.parse(unencoded);
-	console.log(JSON.stringify(payload));
+
+	console.log(
+		"[/slack/broker/in]",
+		payload.api_app_id,
+		payload.event_id,
+		payload.type,
+		payload.event?.subtype,
+		payload.event?.bot_profile?.name,
+	);
 
 	// Handle Slack verification requests
 	if (payload.type === "url_verification") {
@@ -30,10 +37,12 @@ export async function POST(request: Request) {
 		return NextResponse.json({ status: "ok" });
 	}
 	// Do not respond to message edits
-	if (payload.event.subtype) {
+	if (payload.event?.subtype) {
 		console.log("exit[edit]", payload.event.subtype);
 		return NextResponse.json({ status: "ok" });
 	}
+
+	console.log(JSON.stringify(payload));
 
 	const metadata = {
 		appId: payload.api_app_id,
