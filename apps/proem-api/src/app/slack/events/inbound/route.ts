@@ -1,7 +1,7 @@
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { NextResponse } from "next/server";
 import { uuid } from "@proemial/utils/uid";
-import { isNakedLink } from "../../utils/routing";
+import { isNakedLink, isNakedMention } from "../../utils/routing";
 
 export const revalidate = 0;
 
@@ -46,6 +46,11 @@ export async function POST(request: Request) {
 	// Do not respond to messages unless they are a naked link
 	if (payload.event?.type === "message" && !isNakedLink(payload)) {
 		console.log("exit[msg]", payload.event.text);
+		return NextResponse.json({ status: "ok" });
+	}
+	// Do not respond to naked mentions
+	if (isNakedMention(payload)) {
+		console.log("exit[mention]", payload.event.text);
 		return NextResponse.json({ status: "ok" });
 	}
 

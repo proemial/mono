@@ -4,9 +4,16 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 export function isNakedLink(payload: any): boolean {
 	const text = payload?.event?.text;
 	const isNakedLink = text?.match(/^<https?:\/\/[^\s]+>$/);
-	console.log("isNakedLink", text, isNakedLink);
 
 	return isNakedLink;
+}
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+export function isNakedMention(payload: any): boolean {
+	const text = payload?.event?.text;
+	const isNakedMention = text?.match(/^<@[^\s]+>$/);
+
+	return isNakedMention;
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
