@@ -1,6 +1,6 @@
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { NextResponse } from "next/server";
-import { getTarget } from "../../utils/routing";
+import { getTarget, isNakedLink } from "../../utils/routing";
 
 export const revalidate = 0;
 
@@ -39,6 +39,11 @@ export async function POST(request: Request) {
 	// Do not respond to message edits
 	if (payload.event?.subtype) {
 		console.log("exit[edit]", payload.event.subtype);
+		return NextResponse.json({ status: "ok" });
+	}
+	// Do not respond to messages unless they are a naked link
+	if (!isNakedLink(payload)) {
+		console.log("exit[msg]", payload.event.text);
 		return NextResponse.json({ status: "ok" });
 	}
 
