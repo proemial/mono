@@ -1,0 +1,3 @@
+GET https://slack.com/api/conversations.history?channel=C08B911CPT8
+Authorization: Bearer xoxb-8323758526183-8389562051619-ygDuNEe42fOKUkHtPxH8zGKe
+

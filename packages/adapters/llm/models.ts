@@ -1,5 +1,5 @@
 import { heliconeHeaders } from "../analytics/helicone";
-import { createOpenAI } from "@ai-sdk/openai";
+import { createOpenAI, openai } from "@ai-sdk/openai";
 import { LanguageModelV1 } from "ai";
 import OpenAI from "openai";
 import { embed } from "@nomic-ai/atlas";
@@ -45,6 +45,7 @@ const LlmModels = {
 		answer: () => ollama("llama3.1:8b"),
 		similarityAnalysis: () => ollama("llama3.1:8b"),
 		factChecking: () => ollama("bespoke-minicheck:7b"),
+		summariseChannel: () => openai("gpt-4o"),
 	},
 	news: {
 		answer: (traceId?: string) =>
