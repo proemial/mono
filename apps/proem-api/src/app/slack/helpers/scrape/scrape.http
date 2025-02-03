@@ -1,0 +1,6 @@
+POST https://api.proem.ai/slack/helpers/scrape
+Content-Type: application/json
+
+{
+  "url": "https://arxiv.org/html/2402.03686v1"
+}

@@ -10,6 +10,7 @@ export const diffbot = async (url: string): Promise<ScrapedPage> => {
 	const data = await result.json();
 
 	if (!data?.objects?.length) {
+		console.log(data);
 		throw new Error("Scraping failed", { cause: url });
 	}
 
