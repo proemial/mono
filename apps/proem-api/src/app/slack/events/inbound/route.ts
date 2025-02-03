@@ -40,17 +40,17 @@ export async function POST(request: Request) {
 	}
 	// Do not respond to message edits
 	if (payload.event?.subtype) {
-		console.log("exit[edit]", payload.event.subtype);
+		console.log("exit[subtype]", payload.event.subtype);
 		return NextResponse.json({ status: "ok" });
 	}
 	// Do not respond to messages unless they are a naked link
 	if (payload.event?.type === "message" && !isNakedLink(payload)) {
-		console.log("exit[msg]", payload.event.text);
+		console.log("exit[nakedlink]", payload.event.text);
 		return NextResponse.json({ status: "ok" });
 	}
 	// Do not respond to naked mentions
 	if (isNakedMention(payload)) {
-		console.log("exit[mention]", payload.event.text);
+		console.log("exit[nakedmention]", payload.event.text);
 		return NextResponse.json({ status: "ok" });
 	}
 
