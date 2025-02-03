@@ -5,13 +5,16 @@ import { createObjectCsvStringifier } from "csv-writer";
 import { RemoteOllamaClient } from "@proemial/adapters/remote-ollama/remote-ollama-client";
 
 // Usage:
-// curl http://127.0.0.1:3000/qa/answers/bunker/csv -F "file=@/Users/bp/work/repos/proem/apps/proem-api/src/app/qa/answers/[collection]/testdata.json"
+// curl -o foo.csv http://127.0.0.1:3000/qa/answers/bunker/csv \
+//   -F "file=@<absolute path to mono repo>/apps/proem-api/src/app/qa/answers/[collection]/testdata.json"
+//   -F "keepInstanceRunning=true"
+
 export const POST = async (
 	request: NextRequest,
 	{ params }: { params: Promise<{ collection: string }> },
 ) => {
 	const { collection } = await params;
-	console.log(`[qa][answers] collection: ${collection}`);
+	console.log(`Collection: ${collection}`);
 
 	const begin = Time.now();
 	let questions: Question[] | undefined = undefined;
@@ -29,31 +32,34 @@ export const POST = async (
 		const ollamaClient = RemoteOllamaClient.create("slow");
 		await ollamaClient.startInstance();
 
-		const { noOfAutomatableQuestions, results, averageSimilarityScore } =
-			await evaluateQuestionnaire(questions, collection, {
+		const evaluation = await evaluateQuestionnaire(
+			questions.slice(0, 6),
+			collection,
+			{
 				embedding: ollamaClient.getEmbeddingModel("nomic-embed-text:v1.5"),
 				answering: ollamaClient.getChatModel("llama3.1:8b"),
 				grounding: ollamaClient.getChatModel("bespoke-minicheck:7b"),
-			});
-
-		await ollamaClient.stopInstance({ waitForStop: false });
-
-		const csv = generateCsv(
-			noOfAutomatableQuestions,
-			results,
-			averageSimilarityScore,
+			},
 		);
+
+		// Optional flag to keep the instance running after evaluation finishes
+		const keepInstanceRunning = formData.get("keepInstanceRunning") === "true";
+		if (keepInstanceRunning) {
+			console.warn("Instance will continue running after evaluation");
+		} else {
+			await ollamaClient.stopInstance({ waitForStop: false });
+		}
+
+		const csv = generateCsv(evaluation);
 
 		return new NextResponse(csv);
 	} finally {
-		Time.log(begin, `[qa][answers] parsed ${questions?.length} questions`);
+		Time.log(begin, `Parsed ${questions?.length} questions`);
 	}
 };
 
 const generateCsv = (
-	noOfAutomatableQuestions: number,
-	results: Awaited<ReturnType<typeof evaluateQuestionnaire>>["results"],
-	averageSimilarityScore: number,
+	evaluation: Awaited<ReturnType<typeof evaluateQuestionnaire>>,
 ) => {
 	const csvStringifier = createObjectCsvStringifier({
 		header: [
@@ -87,7 +93,7 @@ const generateCsv = (
 		return `${reference.filename}${formattedPosition} (${reference.score})\n\n${reference.source}`;
 	};
 
-	const records = results.map((result) => ({
+	const records = evaluation.results.map((result) => ({
 		id: result.id,
 		question: result.question,
 		options: result.options ? "Yes" : "No",
@@ -103,8 +109,8 @@ const generateCsv = (
 	}));
 	records.push({
 		// @ts-ignore - Fields are not part of the main record type, but needed for the final summary row
-		averageSimilarityScore: averageSimilarityScore,
-		noOfAutomatableQuestions: noOfAutomatableQuestions,
+		averageSimilarityScore: evaluation.averageSimilarityScore,
+		noOfAutomatableQuestions: evaluation.noOfAutomatableQuestions,
 	});
 
 	const headers = csvStringifier.getHeaderString();

@@ -64,7 +64,8 @@ export class RemoteOllamaClient {
 				await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL));
 				state = await this._getInstanceStatus();
 			}
-			console.log(`Instance ${this.instanceId} is ready`);
+			const publicIp = await this._getInstancePublicIp();
+			console.log(`Instance ${this.instanceId} is ready at ${publicIp}`);
 
 			console.log("Waiting for Ollama server to be ready…");
 			while (!(await this._isOllamaServerReady())) {
@@ -72,7 +73,10 @@ export class RemoteOllamaClient {
 			}
 			console.log("Ollama server is ready");
 		} else if (currentState === "running") {
-			console.log(`Instance ${this.instanceId} is already running`);
+			const publicIp = await this._getInstancePublicIp();
+			console.log(
+				`Instance ${this.instanceId} is already running at ${publicIp}`,
+			);
 			const isOllamaServerReady = await this._isOllamaServerReady();
 			if (!isOllamaServerReady) {
 				console.log("Waiting for Ollama server to be ready…");

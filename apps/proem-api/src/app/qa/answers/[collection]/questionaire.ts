@@ -29,9 +29,7 @@ export const evaluateQuestionnaire = async (
 	const noOfAutomatableQuestions = questions.filter(
 		(q) => q.automatable,
 	).length;
-	console.log(
-		`[qa][answers] noOfAutomatableQuestions: ${noOfAutomatableQuestions}`,
-	);
+	console.log(`No. of automatable questions: ${noOfAutomatableQuestions}`);
 
 	const results = [];
 	for (const q of questions) {
@@ -47,7 +45,7 @@ export const evaluateQuestionnaire = async (
 			continue;
 		}
 
-		console.log(`[qa][answers] answering question ${id}…`);
+		console.log(`Answering question ${id}…`);
 		const { answer: actualAnswer, references } = await answerQuestion(
 			collection,
 			question,
@@ -57,16 +55,14 @@ export const evaluateQuestionnaire = async (
 			models,
 		);
 
-		console.log(`[qa][answers] fact-checking answer to question ${id}…`);
+		console.log(`Fact-checking answer to question ${id}…`);
 		const grounding = await factCheck(
 			actualAnswer,
 			references.map((r) => r.source),
 			models?.grounding,
 		);
 
-		console.log(
-			`[qa][answers] analyzing similarity of answers to question ${id}…`,
-		);
+		console.log(`Analyzing similarity of answers to question ${id}…`);
 		const similarityAnalysis = await analyzeSimilarity(
 			expectedAnswer,
 			actualAnswer,
