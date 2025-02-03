@@ -9,7 +9,8 @@ export const maxDuration = 300;
 // Usage:
 // curl -o foo.csv http://127.0.0.1:3000/qa/answers/bunker/csv \
 //   -F "file=@<absolute path to mono repo>/apps/proem-api/src/app/qa/answers/[collection]/testdata.json"
-//   -F "keepInstanceRunning=true"
+//   -F "keepInstanceRunning=false"
+//   -F "fastInstance=false"
 
 export const POST = async (
 	request: NextRequest,
@@ -31,7 +32,10 @@ export const POST = async (
 		const fileText = await file.text();
 		questions = JSON.parse(fileText) as Question[];
 
-		const ollamaClient = RemoteOllamaClient.create("slow");
+		const fastInstance = formData.get("fastInstance") === "true";
+		const ollamaClient = RemoteOllamaClient.create(
+			fastInstance ? "fast" : "slow",
+		);
 		await ollamaClient.startInstance();
 
 		const evaluation = await evaluateQuestionnaire(questions, collection, {
