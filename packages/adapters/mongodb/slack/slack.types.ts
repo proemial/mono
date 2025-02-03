@@ -12,7 +12,8 @@ type EntityMetadataKeys =
 	| "accessToken"
 	| "clientId"
 	| "clientSecret"
-	| "configurationUrl";
+	| "configurationUrl"
+	| "callback";
 
 // slack > in:SlackPayload > db:Event > out:{metadata, payload}
 // n8n > in:{metadata, payload} > db:Event > out:payload

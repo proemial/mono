@@ -53,23 +53,26 @@ export async function POST(request: Request) {
 		console.log("exit[nakedmention]", payload.event.text);
 		return NextResponse.json({ status: "ok" });
 	}
-
 	console.log(JSON.stringify(payload));
+
+	const app = await SlackDb.entities.get(payload.api_app_id);
+	const callbackUrl = app?.metadata?.callback ?? "https://api.proem.ai";
 
 	const metadata = {
 		appId: payload.api_app_id,
 		eventId: payload.event_id ?? uuid(),
 		teamId: payload.team_id ?? payload.team?.id ?? payload.message?.team,
+		callback: `${callbackUrl}/slack/events/outbound`,
 	};
+	console.log(metadata);
 
-	const updated = await SlackDb.events.insert({
+	await SlackDb.events.insert({
 		createdAt: new Date(),
 		metadata,
 		source: "slack",
 		type: "SlackEventCallback",
 		payload,
 	});
-	console.log(updated);
 
 	const result = await fetch(process.env.N8N_WEBHOOK_URL as string, {
 		method: "POST",
