@@ -28,6 +28,8 @@ export const POST = async (
 		if (!file || !(file instanceof File)) {
 			return NextResponse.json({ error: "No file received" }, { status: 400 });
 		}
+		// Optional flag to keep the instance running after evaluation finishes
+		const keepInstanceRunning = formData.get("keepInstanceRunning") === "true";
 
 		const fileText = await file.text();
 		questions = JSON.parse(fileText) as Question[];
@@ -38,21 +40,19 @@ export const POST = async (
 		);
 		await ollamaClient.startInstance();
 
-		const evaluation = await evaluateQuestionnaire(questions, collection, {
-			embedding: ollamaClient.getEmbeddingModel("nomic-embed-text:v1.5"),
-			answering: ollamaClient.getChatModel("llama3.1:8b"),
-			grounding: ollamaClient.getChatModel("bespoke-minicheck:7b"),
-		});
-
-		// Optional flag to keep the instance running after evaluation finishes
-		const keepInstanceRunning = formData.get("keepInstanceRunning") === "true";
-		if (keepInstanceRunning) {
-			console.warn("Instance will continue running after evaluation");
-		} else {
-			await ollamaClient.stopInstance({ waitForStop: false });
+		let csv: Buffer<ArrayBuffer> | undefined = undefined;
+		try {
+			const evaluation = await evaluateQuestionnaire(questions, collection, {
+				embedding: ollamaClient.getEmbeddingModel("nomic-embed-text:v1.5"),
+				answering: ollamaClient.getChatModel("llama3.1:8b"),
+				grounding: ollamaClient.getChatModel("bespoke-minicheck:7b"),
+			});
+			csv = generateCsv(evaluation);
+			await stopInstance(ollamaClient, keepInstanceRunning);
+		} catch (error) {
+			await stopInstance(ollamaClient, keepInstanceRunning);
+			throw error;
 		}
-
-		const csv = generateCsv(evaluation);
 
 		return new NextResponse(csv);
 	} finally {
@@ -120,4 +120,15 @@ const generateCsv = (
 	const blobData = `${headers}${data}`;
 
 	return Buffer.from(blobData, "utf-8");
+};
+
+const stopInstance = async (
+	ollamaClient: RemoteOllamaClient,
+	keepRunning: boolean,
+) => {
+	if (keepRunning) {
+		console.warn("Instance will continue running after evaluation");
+	} else {
+		await ollamaClient.stopInstance({ waitForStop: false });
+	}
 };
