@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a our API for Slack and nexus
 
-## Getting Started
+## Slack
+The slack api consists of an event broker and a set of helper APIs.
 
-First, run the development server:
+### Event Broker
+* The event broker logs events received from slack at `/api/slack/events/inbound` to a mongodb collection and forwards them to `n8n`.
+* It exposes a `/api/slack/events/outbound` endpoint for `n8n` to send events to, which are similar logged to the mongodb collection and forwarded to slack.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Helper APIs
+The helper APIs are a set of APIs that provide helper functions for the slack app.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+* `/api/slack/helpers/history?channelId=...&teamId=...`
+Returns the latest 100 messages from a slack channel.
+* `/api/slack/helpers/history/summarise?channelId=...&teamId=...`
+Returns a single paragraph summary of the latest 100 messages from a slack channel.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Local development
+* Run an ngrok tunnel to expose your local server on the internet.
+* Create a Slack app called `dev-$yourname` with the follwoing properties:
+    - **Basic Information**
+        - App ID: `$APP_ID`
+        - Client ID: `$CLIENT_ID`
+        - Client Secret: `$CLIENT_SECRET`
+        - App icon & Preview: __Logo__
+    - **Interactivity & Shortcuts**
+        - Request URL:  `$NGROK_URL/slack/events/inbound`
+    - **OAuth & Permissions**
+        - Redirect URL: `https://api.proem.ai/slack/oauth/$APP_ID`
+        - Scopes:
+            - app_mentions:read
+            - channels:history
+            - chat:write
+    - **Event Subscriptions:**
+        - Request URL:  `$NGROK_URL/slack/events/inbound`
+        - Subscribe to bot events:
+            - app_mentions:read
+            - message.channels
+    - **Manage Distribution**
+        - Activate Public Distribution
+* Create an object in the mongodb on the entities collection:
+    ```
+    {
+        "type": "app",
+        "id": "$APP_ID",
+        "name": "Proem Dev",
+        "metadata": {
+            "clientId": "$CLIENT_ID",
+            "clientSecret": "$CLIENT_SECRET",
+            "callback": "$NGROK_URL"
+        },
+        "createdAt": {
+            "$date": "2025-01-30T12:49:03.670Z"
+        }
+    }
+    ```
+* Add the Slack app to a slack channel using the install url
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Nexus
+*TODO*
