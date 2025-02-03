@@ -58,11 +58,16 @@ export async function POST(request: Request) {
 	const app = await SlackDb.entities.get(payload.api_app_id);
 	const callbackUrl = app?.metadata?.callback ?? "https://api.proem.ai";
 
+	const teamId = payload.team_id ?? payload.team?.id ?? payload.message?.team;
+	const channelId = payload.event?.channel ?? payload.channel?.id;
+	const channel = await getChannelInfo(teamId, channelId);
+
 	const metadata = {
+		callback: `${callbackUrl}/slack/events/outbound`,
 		appId: payload.api_app_id,
 		eventId: payload.event_id ?? uuid(),
-		teamId: payload.team_id ?? payload.team?.id ?? payload.message?.team,
-		callback: `${callbackUrl}/slack/events/outbound`,
+		teamId,
+		...channel,
 	};
 	console.log(metadata);
 
@@ -86,4 +91,30 @@ export async function POST(request: Request) {
 	});
 
 	return NextResponse.json({ body: payload, result });
+}
+
+async function getChannelInfo(teamId: string, channelId: string) {
+	if (!teamId || !channelId) {
+		return {};
+	}
+	const team = await SlackDb.entities.get(teamId);
+
+	const channel = await fetch(
+		`https://slack.com/api/conversations.info?channel=${channelId}`,
+		{
+			headers: {
+				Authorization: `Bearer ${team?.metadata?.accessToken}`,
+			},
+		},
+	);
+	const channelInfo = await channel.json();
+
+	return {
+		channel: {
+			id: channelId,
+			name: channelInfo.channel.name,
+			description: channelInfo.channel.purpose?.value,
+			topic: channelInfo.channel.topic?.value,
+		},
+	};
 }
