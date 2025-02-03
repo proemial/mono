@@ -4,6 +4,8 @@ import { evaluateQuestionnaire, Question } from "../questionaire";
 import { createObjectCsvStringifier } from "csv-writer";
 import { RemoteOllamaClient } from "@proemial/adapters/remote-ollama/remote-ollama-client";
 
+export const maxDuration = 300;
+
 // Usage:
 // curl -o foo.csv http://127.0.0.1:3000/qa/answers/bunker/csv \
 //   -F "file=@<absolute path to mono repo>/apps/proem-api/src/app/qa/answers/[collection]/testdata.json"
