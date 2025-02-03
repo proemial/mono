@@ -20,7 +20,7 @@ export type Question = {
 export const evaluateQuestionnaire = async (
 	questions: Question[],
 	collection: string,
-	models: {
+	models?: {
 		embedding: EmbeddingModel<string>;
 		answering: LanguageModelV1;
 		grounding: LanguageModelV1;
@@ -61,7 +61,7 @@ export const evaluateQuestionnaire = async (
 		const grounding = await factCheck(
 			actualAnswer,
 			references.map((r) => r.source),
-			models.grounding,
+			models?.grounding,
 		);
 
 		console.log(
@@ -70,7 +70,7 @@ export const evaluateQuestionnaire = async (
 		const similarityAnalysis = await analyzeSimilarity(
 			expectedAnswer,
 			actualAnswer,
-			models.answering,
+			models?.answering,
 		);
 
 		results.push({
