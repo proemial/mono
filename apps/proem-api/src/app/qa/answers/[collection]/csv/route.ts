@@ -32,15 +32,11 @@ export const POST = async (
 		const ollamaClient = RemoteOllamaClient.create("slow");
 		await ollamaClient.startInstance();
 
-		const evaluation = await evaluateQuestionnaire(
-			questions.slice(0, 6),
-			collection,
-			{
-				embedding: ollamaClient.getEmbeddingModel("nomic-embed-text:v1.5"),
-				answering: ollamaClient.getChatModel("llama3.1:8b"),
-				grounding: ollamaClient.getChatModel("bespoke-minicheck:7b"),
-			},
-		);
+		const evaluation = await evaluateQuestionnaire(questions, collection, {
+			embedding: ollamaClient.getEmbeddingModel("nomic-embed-text:v1.5"),
+			answering: ollamaClient.getChatModel("llama3.1:8b"),
+			grounding: ollamaClient.getChatModel("bespoke-minicheck:7b"),
+		});
 
 		// Optional flag to keep the instance running after evaluation finishes
 		const keepInstanceRunning = formData.get("keepInstanceRunning") === "true";
