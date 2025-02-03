@@ -1,7 +1,8 @@
 import { Time } from "@proemial/utils/time";
 import { NextRequest, NextResponse } from "next/server";
-import { evaluateQuestionaire, Question } from "../questionaire";
+import { evaluateQuestionnaire, Question } from "../questionaire";
 import { createObjectCsvStringifier } from "csv-writer";
+import { RemoteOllamaClient } from "@proemial/adapters/remote-ollama/remote-ollama-client";
 
 // Usage:
 // curl http://127.0.0.1:3000/qa/answers/bunker/csv -F "file=@/Users/bp/work/repos/proem/apps/proem-api/src/app/qa/answers/[collection]/testdata.json"
@@ -25,8 +26,17 @@ export const POST = async (
 		const fileText = await file.text();
 		questions = JSON.parse(fileText) as Question[];
 
+		const ollamaClient = RemoteOllamaClient.create("slow");
+		await ollamaClient.startInstance();
+
 		const { noOfAutomatableQuestions, results, averageSimilarityScore } =
-			await evaluateQuestionaire(questions, collection);
+			await evaluateQuestionnaire(questions, collection, {
+				embedding: ollamaClient.getEmbeddingModel("nomic-embed-text:v1.5"),
+				answering: ollamaClient.getChatModel("llama3.1:8b"),
+				grounding: ollamaClient.getChatModel("bespoke-minicheck:7b"),
+			});
+
+		await ollamaClient.stopInstance({ waitForStop: false });
 
 		const csv = generateCsv(
 			noOfAutomatableQuestions,
@@ -42,7 +52,7 @@ export const POST = async (
 
 const generateCsv = (
 	noOfAutomatableQuestions: number,
-	results: Awaited<ReturnType<typeof evaluateQuestionaire>>["results"],
+	results: Awaited<ReturnType<typeof evaluateQuestionnaire>>["results"],
 	averageSimilarityScore: number,
 ) => {
 	const csvStringifier = createObjectCsvStringifier({

@@ -1,6 +1,6 @@
 import LlmModels from "@proemial/adapters/llm/models";
 import qdrantHelper from "@proemial/adapters/qdrant/adapter";
-import { CoreMessage, generateText } from "ai";
+import { CoreMessage, EmbeddingModel, generateText, LanguageModelV1 } from "ai";
 
 const EmbeddingsModel = "nomic-embed-text-v1.5";
 
@@ -13,11 +13,14 @@ export async function answerQuestion(
 	collection: string,
 	question: string,
 	options?: string[],
+	models?: {
+		embedding: EmbeddingModel<string>;
+		answering: LanguageModelV1;
+	},
 ) {
-	const embeddedQuestion = await LlmModels.api.embeddings()(
-		question,
-		EmbeddingsModel,
-	);
+	const embeddedQuestion = models
+		? (await models.embedding.doEmbed({ values: [question] })).embeddings[0]
+		: await LlmModels.api.embeddings()(question, EmbeddingsModel);
 
 	const references = await qdrant.points.search(collection, {
 		vector: embeddedQuestion,
@@ -36,6 +39,7 @@ export async function answerQuestion(
 	const answer = await llmAnswer(
 		question,
 		top3References.map((r) => r.source),
+		models?.answering,
 		options,
 	);
 
@@ -45,6 +49,7 @@ export async function answerQuestion(
 async function llmAnswer(
 	question: string,
 	sources: string[],
+	model?: LanguageModelV1,
 	options?: string[],
 ) {
 	try {
@@ -63,7 +68,7 @@ async function llmAnswer(
 		}
 
 		const { text } = await generateText({
-			model: LlmModels.api.answer(),
+			model: model ?? LlmModels.api.answer(),
 			system: options ? systemPromptWithOptions : systemPromptFreeText,
 			messages,
 		});

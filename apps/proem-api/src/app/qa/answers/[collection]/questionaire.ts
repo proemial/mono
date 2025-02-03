@@ -1,6 +1,11 @@
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import LlmModels from "@proemial/adapters/llm/models";
-import { generateObject, generateText } from "ai";
+import {
+	generateObject,
+	generateText,
+	LanguageModelV1,
+	EmbeddingModel,
+} from "ai";
 import { z } from "zod";
 import { answerQuestion } from "../../answer/answer";
 
@@ -12,9 +17,14 @@ export type Question = {
 	answer?: string;
 };
 
-export const evaluateQuestionaire = async (
+export const evaluateQuestionnaire = async (
 	questions: Question[],
 	collection: string,
+	models: {
+		embedding: EmbeddingModel<string>;
+		answering: LanguageModelV1;
+		grounding: LanguageModelV1;
+	},
 ) => {
 	const noOfAutomatableQuestions = questions.filter(
 		(q) => q.automatable,
@@ -44,12 +54,14 @@ export const evaluateQuestionaire = async (
 			options?.map((option) =>
 				typeof option === "string" ? option : option.text,
 			),
+			models,
 		);
 
 		console.log(`[qa][answers] fact-checking answer to question ${id}…`);
 		const grounding = await factCheck(
 			actualAnswer,
 			references.map((r) => r.source),
+			models.grounding,
 		);
 
 		console.log(
@@ -58,6 +70,7 @@ export const evaluateQuestionaire = async (
 		const similarityAnalysis = await analyzeSimilarity(
 			expectedAnswer,
 			actualAnswer,
+			models.answering,
 		);
 
 		results.push({
@@ -92,9 +105,10 @@ export const evaluateQuestionaire = async (
 const analyzeSimilarity = async (
 	expectedAnswer: string,
 	actualAnswer: string,
+	model?: LanguageModelV1,
 ) => {
 	const { object } = await generateObject({
-		model: LlmModels.api.similarityAnalysis(),
+		model: model ?? LlmModels.api.similarityAnalysis(),
 		schema: z.object({
 			similar: z
 				.boolean()
@@ -128,7 +142,11 @@ const analyzeSimilarity = async (
 	return object;
 };
 
-const factCheck = async (answer: string, references: string[]) => {
+const factCheck = async (
+	answer: string,
+	references: string[],
+	model?: LanguageModelV1,
+) => {
 	// In order to fact-check a multi-sentence claim, the claim should first be broken up into sentences to achieve optimal performance.
 	// Source: https://github.com/Liyan06/MiniCheck
 	const splitter = new RecursiveCharacterTextSplitter({
@@ -141,7 +159,7 @@ const factCheck = async (answer: string, references: string[]) => {
 
 	const generationPromises = sentences.map((sentence) =>
 		generateText({
-			model: LlmModels.api.factChecking(),
+			model: model ?? LlmModels.api.factChecking(),
 			prompt: `
 					Document: ${references.join("\n\n")}
 					Claim: ${sentence}

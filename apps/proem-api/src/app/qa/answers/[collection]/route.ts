@@ -1,6 +1,6 @@
 import { Time } from "@proemial/utils/time";
 import { NextRequest, NextResponse } from "next/server";
-import { evaluateQuestionaire, Question } from "./questionaire";
+import { evaluateQuestionnaire, Question } from "./questionaire";
 
 // Usage:
 // curl http://127.0.0.1:3000/qa/answers/bunker -F "file=@/Users/bp/work/repos/proem/apps/proem-api/src/app/qa/answers/[collection]/testdata.json"
@@ -25,7 +25,7 @@ export const POST = async (
 		questions = JSON.parse(fileText) as Question[];
 
 		const { noOfAutomatableQuestions, results, averageSimilarityScore } =
-			await evaluateQuestionaire(questions, collection);
+			await evaluateQuestionnaire(questions, collection);
 
 		return NextResponse.json({
 			noOfAutomatableQuestions,
