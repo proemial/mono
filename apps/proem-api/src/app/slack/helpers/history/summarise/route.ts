@@ -25,9 +25,11 @@ export async function GET(request: Request) {
 			{
 				role: "user",
 				content: `
-In a single paragraph, summarise the gist of the discussions in this array:
+In a single paragraph, summarise the gist of this slack channel:
 
 ${JSON.stringify(messages)}
+
+Do not refer to it as being discussions in Slack and do not refer to abstract concepts like conversations, channels or similar, just summarise the gist.
         `,
 			},
 		],
