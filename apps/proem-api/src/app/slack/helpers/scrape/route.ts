@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { ScrapedUrl } from "@proemial/adapters/mongodb/slack/scraped.types";
 import { diffbot } from "./scrapers/diffbot";
-import { puppeteerScraper } from "./scrapers/puppeteer";
+// import { puppeteerScraper } from "./scrapers/puppeteer";
 
 export const revalidate = 0;
 
@@ -16,12 +16,12 @@ export async function POST(request: Request) {
 	}
 
 	const content = await diffbot(url);
-	const { openGraph, contentType } = await puppeteerScraper(url);
+	// const { openGraph, contentType } = await puppeteerScraper(url);
 	const scrapedUrl = {
 		url,
 		content,
-		openGraph,
-		contentType,
+		// openGraph,
+		// contentType,
 		createdAt: new Date(),
 	} as ScrapedUrl;
 

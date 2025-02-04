@@ -1,8 +1,8 @@
 export interface ScrapedUrl {
 	createdAt: Date;
 	url: string;
-	contentType: string;
-	openGraph: OpenGraphData;
+	contentType?: string;
+	openGraph?: OpenGraphData;
 	content: ScrapedContent;
 }
 

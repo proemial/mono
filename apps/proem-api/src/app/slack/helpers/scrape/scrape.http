@@ -2,5 +2,5 @@ POST http://127.0.0.1:3000/slack/helpers/scrape
 Content-Type: application/json
 
 {
-  "url": "https://arxiv.org/abs/2412.08270"
+  "url": "https://techcrunch.com/2025/02/04/opera-launches-a-mindfulness-browser-with-break-reminders-and-soundscapes/"
 }
