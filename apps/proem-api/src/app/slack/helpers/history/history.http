@@ -1,3 +1,2 @@
-GET https://slack.com/api/conversations.history?channel=C08B911CPT8
-Authorization: Bearer xoxb-8323758526183-8389562051619-ygDuNEe42fOKUkHtPxH8zGKe
+GET http://127.0.0.1:3000/slack/helpers/history?channelId=C06JA360Z6U&teamId=T05A541540J
 

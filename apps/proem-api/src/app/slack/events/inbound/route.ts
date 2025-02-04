@@ -2,6 +2,7 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { NextResponse } from "next/server";
 import { uuid } from "@proemial/utils/uid";
 import { isNakedLink, isNakedMention } from "../../utils/routing";
+import { getChannelInfo } from "@proemial/adapters/slack/slack";
 
 export const revalidate = 0;
 
@@ -91,30 +92,4 @@ export async function POST(request: Request) {
 	});
 
 	return NextResponse.json({ body: payload, result });
-}
-
-async function getChannelInfo(teamId: string, channelId: string) {
-	if (!teamId || !channelId) {
-		return {};
-	}
-	const team = await SlackDb.entities.get(teamId);
-
-	const channel = await fetch(
-		`https://slack.com/api/conversations.info?channel=${channelId}`,
-		{
-			headers: {
-				Authorization: `Bearer ${team?.metadata?.accessToken}`,
-			},
-		},
-	);
-	const channelInfo = await channel.json();
-
-	return {
-		channel: {
-			id: channelId,
-			name: channelInfo.channel.name,
-			description: channelInfo.channel.purpose?.value,
-			topic: channelInfo.channel.topic?.value,
-		},
-	};
 }
