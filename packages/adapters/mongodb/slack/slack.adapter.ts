@@ -52,13 +52,17 @@ export const SlackDb = {
 			}
 		},
 
-		insert: async (entity: SlackEntity) => {
+		upsert: async (entity: SlackEntity) => {
 			const begin = Time.now();
 
 			try {
-				return await entities.insertOne(entity);
+				return await entities.updateOne(
+					{ id: entity.id },
+					{ $set: entity },
+					{ upsert: true },
+				);
 			} finally {
-				Time.log(begin, `[mongodb][slack][entities][insert] ${entity.id}`);
+				Time.log(begin, `[mongodb][slack][entities][upsert] ${entity.id}`);
 			}
 		},
 	},

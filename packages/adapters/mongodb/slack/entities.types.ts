@@ -1,6 +1,6 @@
 export type SlackEntity = {
 	createdAt: Date;
-	type: "channel" | "team" | "app";
+	type: "team" | "app";
 	id: string; // incoming_webhook.channel_id || team.id
 	name: string; // incoming_webhook.channel || team.name
 	metadata?: Partial<Record<EntityMetadataKeys, string>>;
@@ -9,9 +9,7 @@ export type SlackEntity = {
 };
 
 type EntityMetadataKeys =
-	| "url"
 	| "accessToken"
 	| "clientId"
 	| "clientSecret"
-	| "configurationUrl"
 	| "callback";
