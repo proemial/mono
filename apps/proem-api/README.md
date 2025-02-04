@@ -14,6 +14,8 @@ The helper APIs are a set of APIs that provide helper functions for the slack ap
 Returns the latest 100 messages from a slack channel.
 * `/api/slack/helpers/history/summarise?channelId=...&teamId=...`
 Returns a single paragraph summary of the latest 100 messages from a slack channel.
+* `/api/slack/helpers/scrape`
+Scrapes a url and returns the content. The content is stored in mongodb to speed up future requests.
 
 ### Local development
 * Run an ngrok tunnel to expose your local server on the internet.
@@ -34,11 +36,11 @@ Returns a single paragraph summary of the latest 100 messages from a slack chann
     - **Event Subscriptions:**
         - Request URL:  `$NGROK_URL/slack/events/inbound`
         - Subscribe to bot events:
-            - app_mentions:read
+            - app_mentions
             - message.channels
     - **Manage Distribution**
         - Activate Public Distribution
-* Create an object in the mongodb on the entities collection:
+* Create a mongodb object in the entities collection:
     ```
     {
         "type": "app",
