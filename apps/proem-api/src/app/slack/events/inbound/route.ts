@@ -280,5 +280,5 @@ const STARTERS = [
 	"Have artificial reefs improved biodiversity?",
 ];
 
-export const getThreeRandomStarters = () =>
+const getThreeRandomStarters = () =>
 	[...STARTERS].sort(() => 0.5 - Math.random()).slice(0, 3);
