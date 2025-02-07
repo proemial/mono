@@ -108,6 +108,24 @@ export async function POST(request: Request) {
 		console.log("exit[assistant_thread_context_changed]", payload.event.text);
 		return NextResponse.json({ status: "ok" });
 	}
+	if (channelInfo.channel?.id.startsWith("D")) {
+		const result = await fetch(
+			"https://slack.com/api/assistant.threads.setStatus",
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${channelInfo.token}`,
+				},
+				body: JSON.stringify({
+					channel_id: payload.event.channel,
+					thread_ts: payload.event.ts,
+					status: "Doing it",
+				}),
+			},
+		);
+		console.log("assistant_app_thread", result.status, await result.json());
+	}
 
 	const app = await SlackDb.entities.get(payload.api_app_id);
 	const callbackUrl = app?.metadata?.callback ?? "https://api.proem.ai";
@@ -118,6 +136,7 @@ export async function POST(request: Request) {
 		eventId: payload.event_id ?? uuid(),
 		teamId,
 		channel: channelInfo.channel,
+		team: channelInfo.team,
 	};
 	console.log({
 		metadata,

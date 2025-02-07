@@ -23,6 +23,10 @@ export async function getChannelInfo(teamId: string, channelId: string) {
 			description: channelInfo.channel?.purpose?.value,
 			topic: channelInfo.channel?.topic?.value,
 		},
+		team: {
+			name: team?.name,
+			description: team?.description,
+		},
 		token: team?.metadata?.accessToken,
 	};
 }
