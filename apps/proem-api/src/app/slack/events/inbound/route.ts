@@ -45,7 +45,7 @@ export async function POST(request: Request) {
 		payload.channel?.id ??
 		payload.event?.assistant_thread?.context?.channel_id;
 	const channelInfo = await getChannelInfo(teamId, channelId);
-	// console.log("channelInfo", channelInfo, teamId, channelId);
+	console.log("channelInfo", channelInfo, teamId, channelId);
 
 	if (isNakedLink(payload)) {
 		payload.event.subtype = "link";
@@ -57,11 +57,7 @@ export async function POST(request: Request) {
 		return NextResponse.json({ status: "ok" });
 	}
 	// Do not respond to message edits
-	if (
-		payload.event?.subtype &&
-		payload.event?.subtype !== "link" &&
-		!payload.event?.message?.assistant_app_thread
-	) {
+	if (payload.event?.subtype && payload.event?.subtype !== "link") {
 		console.log("exit[subtype]", payload.event.subtype);
 		return NextResponse.json({ status: "ok" });
 	}
@@ -69,7 +65,7 @@ export async function POST(request: Request) {
 	if (
 		payload.event?.type === "message" &&
 		!isNakedLink(payload) &&
-		!payload.event?.message?.assistant_app_thread
+		!channelInfo.channel?.id.startsWith("D")
 	) {
 		console.log("exit[message]", payload.event.text);
 		return NextResponse.json({ status: "ok" });
