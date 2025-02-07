@@ -19,10 +19,11 @@ export async function getChannelInfo(teamId: string, channelId: string) {
 	return {
 		channel: {
 			id: channelId,
-			name: channelInfo.channel.name,
-			description: channelInfo.channel.purpose?.value,
-			topic: channelInfo.channel.topic?.value,
+			name: channelInfo.channel?.name,
+			description: channelInfo.channel?.purpose?.value,
+			topic: channelInfo.channel?.topic?.value,
 		},
+		token: team?.metadata?.accessToken,
 	};
 }
 
