@@ -47,19 +47,31 @@ export async function POST(request: Request) {
 	const channelInfo = await getChannelInfo(teamId, channelId);
 	// console.log("channelInfo", channelInfo, teamId, channelId);
 
+	if (isNakedLink(payload)) {
+		payload.event.subtype = "link";
+	}
+
 	// Do not respond to bot messages
 	if (payload.event?.bot_profile) {
 		console.log("exit[botmsg]", payload.event.bot_profile);
 		return NextResponse.json({ status: "ok" });
 	}
 	// Do not respond to message edits
-	if (payload.event?.subtype) {
+	if (
+		payload.event?.subtype &&
+		payload.event?.subtype !== "link" &&
+		!payload.event?.message?.assistant_app_thread
+	) {
 		console.log("exit[subtype]", payload.event.subtype);
 		return NextResponse.json({ status: "ok" });
 	}
 	// Do not respond to messages unless they are a naked link
-	if (payload.event?.type === "message" && !isNakedLink(payload)) {
-		console.log("exit[nakedlink]", payload.event.text);
+	if (
+		payload.event?.type === "message" &&
+		!isNakedLink(payload) &&
+		!payload.event?.message?.assistant_app_thread
+	) {
+		console.log("exit[message]", payload.event.text);
 		return NextResponse.json({ status: "ok" });
 	}
 	// Do not respond to naked mentions
@@ -111,7 +123,10 @@ export async function POST(request: Request) {
 		teamId,
 		channel: channelInfo.channel,
 	};
-	console.log(metadata);
+	console.log({
+		metadata,
+		payload,
+	});
 
 	await SlackDb.events.insert({
 		createdAt: new Date(),
