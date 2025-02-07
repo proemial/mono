@@ -16,6 +16,7 @@ export async function POST(request: Request) {
 	}
 
 	const content = await diffbot(url);
+
 	// const { openGraph, contentType } = await puppeteerScraper(url);
 	const scrapedUrl = {
 		url,
@@ -27,5 +28,6 @@ export async function POST(request: Request) {
 
 	await SlackDb.scraped.upsert(scrapedUrl);
 
+	// TODO: Don't summarise if the text is empty
 	return NextResponse.json(scrapedUrl);
 }
