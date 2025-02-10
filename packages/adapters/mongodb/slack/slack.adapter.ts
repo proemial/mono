@@ -1,6 +1,6 @@
 import { Time } from "@proemial/utils/time";
 import Mongo from "../mongodb-client";
-import { SlackEntity } from "./entities.types";
+import { SlackApp, SlackAppInstall, SlackEntity } from "./entities.types";
 import { Event } from "./events.types";
 import { ScrapedUrl } from "./scraped.types";
 
@@ -36,6 +36,53 @@ export const SlackDb = {
 		},
 	},
 
+	apps: {
+		get: async (id: string) => {
+			const begin = Time.now();
+
+			try {
+				return await entities.findOne<SlackApp>({
+					id,
+				});
+			} finally {
+				Time.log(begin, `[mongodb][slack][apps][get] ${id}`);
+			}
+		},
+	},
+
+	installs: {
+		get: async (teamId: string, appId: string) => {
+			const begin = Time.now();
+
+			try {
+				return await entities.findOne<SlackAppInstall>({
+					"team.id": teamId,
+					"app.id": appId,
+				});
+			} finally {
+				Time.log(begin, `[mongodb][slack][installs][get] ${teamId} ${appId}`);
+			}
+		},
+
+		upsert: async (entity: SlackAppInstall) => {
+			const begin = Time.now();
+
+			try {
+				return await entities.updateOne(
+					{ "team.id": entity.team.id, "app.id": entity.app.id },
+					{ $set: entity },
+					{ upsert: true },
+				);
+			} finally {
+				Time.log(
+					begin,
+					`[mongodb][slack][installs][upsert] ${entity.team.id} ${entity.app.id}`,
+				);
+			}
+		},
+	},
+
+	// @deprecated
 	entities: {
 		get: async (id: string) => {
 			const begin = Time.now();

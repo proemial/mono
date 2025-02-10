@@ -40,6 +40,55 @@ importers:
         specifier: ^2.0.5
         version: 2.1.8
 
+  apps/assistant:
+    dependencies:
+      '@langchain/textsplitters':
+        specifier: ^0.1.0
+        version: 0.1.0(@langchain/core@0.2.23)
+      '@proemial/adapters':
+        specifier: workspace:*
+        version: link:../../packages/adapters
+      '@proemial/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
+      ai:
+        specifier: 4.0.5
+        version: 4.0.5(react@18.3.1)(zod@3.24.1)
+      csv-writer:
+        specifier: ^1.6.0
+        version: 1.6.0
+      next:
+        specifier: ^14
+        version: 14.2.23(@opentelemetry/api@1.9.0)(react-dom@18.3.1)(react@18.3.1)
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18
+        version: 18.3.1(react@18.3.1)
+      zod:
+        specifier: ^3.24.1
+        version: 3.24.1
+    devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.17.14
+      '@types/react':
+        specifier: ^18.3.2
+        version: 18.3.18
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.5(@types/react@18.3.18)
+      postcss:
+        specifier: ^8
+        version: 8.5.1
+      tailwindcss:
+        specifier: ^3.4.1
+        version: 3.4.17(ts-node@10.9.2)
+      typescript:
+        specifier: ^5
+        version: 5.7.3
+
   apps/chat:
     dependencies:
       '@ai-sdk/openai':
@@ -1352,13 +1401,13 @@ packages:
       - encoding
     dev: false
 
-  /@asteasolutions/zod-to-openapi@6.4.0(zod@3.23.8):
+  /@asteasolutions/zod-to-openapi@6.4.0(zod@3.24.1):
     resolution: {integrity: sha512-8cxfF7AHHx2PqnN4Cd8/O8CBu/nVYJP9DpnfVLW3BFb66VJDnqI/CczZnkqMc3SNh6J9GiX7JbJ5T4BSP4HZ2Q==}
     peerDependencies:
       zod: ^3.20.2
     dependencies:
       openapi3-ts: 4.4.0
-      zod: 3.23.8
+      zod: 3.24.1
     dev: false
 
   /@auth/core@0.37.2:
@@ -2093,9 +2142,9 @@ packages:
   /@braintrust/core@0.0.65:
     resolution: {integrity: sha512-SgEy1IDqUItRfo5Itq0WWO2PaoB0gYOMkO4Tv5CSIhZ36zyrwOvZDpdzyF4UAZb1Sj02EacPKPh19P/2qtyHJw==}
     dependencies:
-      '@asteasolutions/zod-to-openapi': 6.4.0(zod@3.23.8)
+      '@asteasolutions/zod-to-openapi': 6.4.0(zod@3.24.1)
       uuid: 9.0.1
-      zod: 3.23.8
+      zod: 3.24.1
     dev: false
 
   /@bufbuild/protobuf@2.2.3:
@@ -3537,8 +3586,8 @@ packages:
       '@anthropic-ai/sdk': 0.22.0
       '@langchain/core': 0.2.23(langchain@0.2.15)(openai@4.79.1)
       fast-xml-parser: 4.5.1
-      zod: 3.23.8
-      zod-to-json-schema: 3.23.2(zod@3.23.8)
+      zod: 3.24.1
+      zod-to-json-schema: 3.23.2(zod@3.24.1)
     transitivePeerDependencies:
       - encoding
       - langchain
@@ -3922,8 +3971,8 @@ packages:
       langchain: 0.2.15(@langchain/anthropic@0.2.14)(@langchain/community@0.2.27)(@langchain/groq@0.0.16)(@langchain/mistralai@0.0.28)(openai@4.79.1)
       langsmith: 0.1.41(@langchain/core@0.2.23)(langchain@0.2.15)(openai@4.79.1)
       uuid: 10.0.0
-      zod: 3.23.8
-      zod-to-json-schema: 3.23.2(zod@3.23.8)
+      zod: 3.24.1
+      zod-to-json-schema: 3.23.2(zod@3.24.1)
     transitivePeerDependencies:
       - '@gomomento/sdk-web'
       - '@langchain/anthropic'
@@ -3956,8 +4005,8 @@ packages:
       p-queue: 6.6.2
       p-retry: 4.6.2
       uuid: 10.0.0
-      zod: 3.23.8
-      zod-to-json-schema: 3.23.2(zod@3.23.8)
+      zod: 3.24.1
+      zod-to-json-schema: 3.23.2(zod@3.24.1)
     transitivePeerDependencies:
       - langchain
       - openai
@@ -3976,8 +4025,8 @@ packages:
       p-queue: 6.6.2
       p-retry: 4.6.2
       uuid: 10.0.0
-      zod: 3.23.8
-      zod-to-json-schema: 3.23.2(zod@3.23.8)
+      zod: 3.24.1
+      zod-to-json-schema: 3.23.2(zod@3.24.1)
     transitivePeerDependencies:
       - langchain
       - openai
@@ -3990,8 +4039,8 @@ packages:
       '@langchain/core': 0.2.23(langchain@0.2.15)(openai@4.79.1)
       '@langchain/openai': 0.2.6(langchain@0.2.15)
       groq-sdk: 0.5.0
-      zod: 3.23.8
-      zod-to-json-schema: 3.23.2(zod@3.23.8)
+      zod: 3.24.1
+      zod-to-json-schema: 3.23.2(zod@3.24.1)
     transitivePeerDependencies:
       - encoding
       - langchain
@@ -4006,8 +4055,8 @@ packages:
       '@langchain/core': 0.2.23(langchain@0.2.15)(openai@4.79.1)
       '@mistralai/mistralai': 0.4.0
       uuid: 10.0.0
-      zod: 3.23.8
-      zod-to-json-schema: 3.23.2(zod@3.23.8)
+      zod: 3.24.1
+      zod-to-json-schema: 3.23.2(zod@3.24.1)
     transitivePeerDependencies:
       - encoding
       - langchain
@@ -4056,8 +4105,8 @@ packages:
       '@llamaindex/env': 0.1.25(gpt-tokenizer@2.8.1)
       '@types/node': 22.10.7
       magic-bytes.js: 1.10.0
-      zod: 3.23.8
-      zod-to-json-schema: 3.24.1(zod@3.23.8)
+      zod: 3.24.1
+      zod-to-json-schema: 3.24.1(zod@3.24.1)
     transitivePeerDependencies:
       - '@aws-crypto/sha256-js'
       - '@huggingface/transformers'
@@ -7454,7 +7503,7 @@ packages:
   /@types/node-fetch@2.6.12:
     resolution: {integrity: sha512-8nneRWKCg3rMtF69nLQJnOYUcbafYeFSjqkw3jCRLsqkWFlHaoQrr5mXmofFGOx3DKn7UfmBMyov8ySvLRVldA==}
     dependencies:
-      '@types/node': 20.17.14
+      '@types/node': 22.10.7
       form-data: 4.0.1
     dev: false
 
@@ -7468,6 +7517,7 @@ packages:
     resolution: {integrity: sha512-w6qdYetNL5KRBiSClK/KWai+2IMEJuAj+EujKCumalFOwXtvOXaEan9AuwcRID2IcOIAWSIfR495hBtgKlx2zg==}
     dependencies:
       undici-types: 6.19.8
+    dev: true
 
   /@types/node@20.3.0:
     resolution: {integrity: sha512-cumHmIAf6On83X7yP+LrsEyUOf/YlociZelmpRYaGFydoaPdxdt80MAbu6vWerQT2COCp2nPvHdsbD7tHn/YlQ==}
@@ -8686,8 +8736,8 @@ packages:
       linear-sum-assignment: 1.0.7
       mustache: 4.2.0
       openai: 4.47.1
-      zod: 3.23.8
-      zod-to-json-schema: 3.23.2(zod@3.23.8)
+      zod: 3.24.1
+      zod-to-json-schema: 3.23.2(zod@3.24.1)
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -12600,8 +12650,8 @@ packages:
       p-retry: 4.6.2
       uuid: 10.0.0
       yaml: 2.7.0
-      zod: 3.23.8
-      zod-to-json-schema: 3.23.2(zod@3.23.8)
+      zod: 3.24.1
+      zod-to-json-schema: 3.23.2(zod@3.24.1)
     transitivePeerDependencies:
       - encoding
       - openai
@@ -14896,7 +14946,7 @@ packages:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 20.17.14
+      '@types/node': 22.10.7
       long: 5.2.4
     dev: false
 
@@ -15390,7 +15440,7 @@ packages:
     dependencies:
       debug: 4.4.0(supports-color@8.1.1)
       module-details-from-path: 1.0.3
-      resolve: 1.22.8
+      resolve: 1.22.10
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -16714,6 +16764,7 @@ packages:
 
   /undici-types@6.19.8:
     resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
+    dev: true
 
   /undici-types@6.20.0:
     resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
@@ -17517,14 +17568,6 @@ packages:
 
   /zimmerframe@1.1.2:
     resolution: {integrity: sha512-rAbqEGa8ovJy4pyBxZM70hg4pE6gDgaQ0Sl9M3enG3I0d6H4XSAM3GeNGLKnsBpuijUow064sf7ww1nutC5/3w==}
-    dev: false
-
-  /zod-to-json-schema@3.23.2(zod@3.23.8):
-    resolution: {integrity: sha512-uSt90Gzc/tUfyNqxnjlfBs8W6WSGpNBv0rVsNxP/BVSMHMKGdthPYff4xtCHYloJGM0CFxFsb3NbC0eqPhfImw==}
-    peerDependencies:
-      zod: ^3.23.3
-    dependencies:
-      zod: 3.23.8
     dev: false
 
   /zod-to-json-schema@3.23.2(zod@3.24.1):
