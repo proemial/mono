@@ -36,17 +36,18 @@ interface DiffbotResponseBase {
 		resolvedPageUrl?: string;
 	};
 	humanLanguage: string;
-	type: DiffbotTypes;
+	type: ScraperTypes;
 	title: string;
 }
 
-export type DiffbotTypes =
+export type ScraperTypes =
 	| "article"
 	| "discussion"
 	| "event"
 	| "job"
 	| "list"
-	| "organization";
+	| "organization"
+	| "video";
 
 // Article specific interfaces
 export interface DiffbotArticleObject {

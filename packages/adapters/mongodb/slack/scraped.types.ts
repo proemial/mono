@@ -18,7 +18,7 @@ export interface ScrapedImage {
 export interface ScrapedContent {
 	title: string;
 	text: string;
-	images: ScrapedImage[];
+	images?: ScrapedImage[];
 }
 
 export interface OpenGraphData {

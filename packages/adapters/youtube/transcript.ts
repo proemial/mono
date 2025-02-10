@@ -6,7 +6,12 @@ const youtube = await Innertube.create({
 	retrieve_player: false,
 });
 
-export const fetchTranscript = async (videoId: string) => {
+export const fetchTranscript = async (url: string) => {
+	console.log(`Fetching YouTube transcript for video ${url}…`);
+	const videoId = url.split("v=")[1];
+	if (!videoId) {
+		throw new Error("Invalid YouTube video URL");
+	}
 	try {
 		const info = await youtube.getInfo(videoId);
 		const { title, channel, view_count, like_count } = info.basic_info;
@@ -18,17 +23,17 @@ export const fetchTranscript = async (videoId: string) => {
 		if (!transcript) {
 			throw new Error("No transcript found");
 		}
-		const content = transcript
+		const text = transcript
 			.filter((t) => t !== undefined)
 			.filter((t) => !t.match(/\[.*?\]/)) // Filter out text in square brackets, like "[Music]"
 			.join(" ")
 			.replaceAll("\n", " ");
 		return {
 			title,
+			text,
 			channel,
 			views: view_count,
 			likes: like_count,
-			content,
 		};
 	} catch (error) {
 		console.error("Error fetching transcript:", error);

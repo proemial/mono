@@ -2,14 +2,14 @@ import {
 	DiffbotImage,
 	DiffbotListObject,
 	DiffbotResponseType,
-	DiffbotTypes,
+	ScraperTypes,
 } from "./diffbot.types";
 
 type ScrapeResponse = {
-	type: DiffbotTypes;
+	type: ScraperTypes;
 	title: string;
 	text: string;
-	images: DiffbotImage[];
+	images?: DiffbotImage[];
 };
 
 export const diffbot = async (url: string): Promise<ScrapeResponse> => {
@@ -42,7 +42,7 @@ function parseDiffbotResponse(scraped: DiffbotResponseType): ScrapeResponse {
 		// @ts-ignore
 		text: obj.text,
 		// @ts-ignore
-		images: obj.images ?? [],
+		images: obj.images,
 	};
 
 	if (scraped.type === "list") {

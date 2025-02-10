@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { ScrapedUrl } from "@proemial/adapters/mongodb/slack/scraped.types";
 import { diffbot } from "./scrapers/diffbot";
+import { fetchTranscript } from "@proemial/adapters/youtube/transcript";
 // import { puppeteerScraper } from "./scrapers/puppeteer";
 
 export const revalidate = 0;
@@ -15,7 +16,9 @@ export async function POST(request: Request) {
 		return NextResponse.json(existing);
 	}
 
-	const content = await diffbot(url);
+	const content = isYoutubeUrl(url)
+		? await fetchTranscript(url)
+		: await diffbot(url);
 
 	// const { openGraph, contentType } = await puppeteerScraper(url);
 	const scrapedUrl = {
@@ -31,3 +34,7 @@ export async function POST(request: Request) {
 	// TODO: Don't summarise if the text is empty
 	return NextResponse.json(scrapedUrl);
 }
+
+const isYoutubeUrl = (url: string) => {
+	return url.includes("youtube.com") || url.includes("youtu.be");
+};
