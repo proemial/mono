@@ -1,0 +1,6 @@
+POST http://127.0.0.1:3000/slack/helpers/scrape/yt
+Content-Type: application/json
+
+{
+  "videoId": "oSB4tjuLv2c"
+}
