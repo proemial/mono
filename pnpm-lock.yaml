@@ -716,9 +716,6 @@ importers:
         specifier: ^3.24.1
         version: 3.24.1
     devDependencies:
-      '@types/node':
-        specifier: ^20
-        version: 20.17.14
       '@types/react':
         specifier: ^18.3.2
         version: 18.3.18
