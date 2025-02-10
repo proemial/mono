@@ -21,7 +21,8 @@ export const fetchTranscript = async (videoId: string) => {
 		const content = transcript
 			.filter((t) => t !== undefined)
 			.filter((t) => !t.match(/\[.*?\]/)) // Filter out text in square brackets, like "[Music]"
-			.join(" ");
+			.join(" ")
+			.replaceAll("\n", " ");
 		return {
 			title,
 			channel,
