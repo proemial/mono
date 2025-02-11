@@ -144,10 +144,17 @@ export async function POST(request: Request) {
 	// });
 
 	if (nakedLink(payload)) {
+		const url = findLinkUrl(payload.event.blocks[0].elements);
+		console.log("nakedLink", url);
+		if (!url) {
+			console.error("no url found", payload.event.blocks);
+			return NextResponse.json({ status: "ok" });
+		}
+
 		const result = await inngest.send({
 			name: scrapeEventName,
 			data: {
-				url: nakedLink(payload),
+				url,
 				metadata,
 			},
 		});
@@ -173,3 +180,20 @@ type AssistantThreadStartedEvent = {
 	};
 	event_ts: string;
 };
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+function findLinkUrl(elements: any[]): string | undefined {
+	for (const element of elements) {
+		// Check if current element is a link
+		if (element.type === "link") {
+			return element.url;
+		}
+
+		// Recursively check nested elements
+		if (element.elements && Array.isArray(element.elements)) {
+			const nestedUrl = findLinkUrl(element.elements);
+			if (nestedUrl) return nestedUrl;
+		}
+	}
+	return undefined;
+}
