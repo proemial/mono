@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import LlmModels from "@proemial/adapters/llm/models";
 import { generateText } from "ai";
-import { getChannelHistory } from "@proemial/adapters/slack/slack";
-import { getChannelInfo } from "@proemial/adapters/slack/slack";
+import {
+	getChannelHistory,
+	getChannelInfo,
+} from "@proemial/adapters/slack/channel";
 
 export const revalidate = 0;
 
