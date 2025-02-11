@@ -1,5 +1,4 @@
-import { Colors } from "@/googleapis/vision";
-
+import { Colors } from "../../googleapis/vision";
 export interface ScrapedUrl {
 	createdAt: Date;
 	url: string;
