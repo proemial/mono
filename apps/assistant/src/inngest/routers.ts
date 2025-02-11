@@ -32,14 +32,6 @@ export const AnnotateRouter = {
 	},
 };
 
-// nst result = await inngest.send({
-// 	name: scrapeEventName,
-// 	data: {
-// 		url: nakedLink(payload),
-// 		metadata,
-// 	},
-// });
-
 const enqueue = async (
 	name: string,
 	url: string,

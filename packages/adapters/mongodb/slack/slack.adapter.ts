@@ -10,15 +10,16 @@ const scraped = Mongo.db("slack").collection("scraped");
 
 export const SlackDb = {
 	events: {
-		get: async (id: string) => {
+		get: async (id: string, type?: string) => {
 			const begin = Time.now();
 
 			try {
 				return await events.findOne<Event>({
 					"metadata.eventId": id,
+					...(type ? { type: type } : {}),
 				});
 			} finally {
-				Time.log(begin, `[mongodb][slack][events][get] ${id}`);
+				Time.log(begin, `[mongodb][slack][events][get] ${id} ${type}`);
 			}
 		},
 

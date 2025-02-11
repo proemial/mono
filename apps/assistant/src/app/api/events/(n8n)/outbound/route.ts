@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getTarget } from "@proemial/adapters/slack/routing";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
+import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
 
 export const revalidate = 0;
 
@@ -12,11 +13,7 @@ export async function POST(request: Request) {
 		console.log(text);
 
 		const { metadata, payload } = JSON.parse(text) as {
-			metadata: {
-				appId: string;
-				eventId: string;
-				teamId: string;
-			};
+			metadata: SlackEventMetadata;
 			payload: unknown;
 		};
 

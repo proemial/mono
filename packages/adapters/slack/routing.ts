@@ -1,5 +1,5 @@
 import { SlackDb } from "../mongodb/slack/slack.adapter";
-
+import { SlackEventMetadata } from "./metadata.models";
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function nakedLink(payload: any): string | undefined {
 	const text = payload?.event?.text;
@@ -16,28 +16,31 @@ export function nakedMention(payload: any): boolean {
 	return match;
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export async function getTarget(body: any): Promise<Target> {
+export async function getTarget(body: {
+	metadata: SlackEventMetadata;
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	payload: any;
+}): Promise<Target> {
 	if (body.payload.response_url) {
 		// TODO: Add thread_ts
 		return {
-			url: body.response_url,
+			url: body.payload.response_url,
 			headers: {},
 			body: {},
 		};
 	}
 
-	const channel = body.payload?.event?.channel ?? body.payload?.channel;
-	if (!channel) {
+	const channelId = body.metadata.channel.id;
+	if (!channelId) {
 		throw new Error("Channel not found");
 	}
 
-	const teamId = (body.metadata.teamId ?? body.payload.team_id) as string;
+	const teamId = body.metadata.teamId;
 	if (!teamId) {
 		throw new Error("TeamId not found");
 	}
 
-	const appId = (body.metadata.appId ?? body.payload.api_app_id) as string;
+	const appId = body.metadata.appId;
 	if (!appId) {
 		throw new Error("AppId not found");
 	}
@@ -56,7 +59,7 @@ export async function getTarget(body: any): Promise<Target> {
 			Authorization: `Bearer ${install.metadata?.accessToken}`,
 		},
 		body: {
-			channel,
+			channel: channelId,
 		},
 	};
 }

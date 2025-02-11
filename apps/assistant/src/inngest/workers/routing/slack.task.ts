@@ -23,17 +23,21 @@ export const slackTask = {
 			}
 
 			const scraped = await SlackDb.scraped.get(payload.url);
-			const slackEvent = (await SlackDb.events.get(payload.metadata.eventId))
-				?.payload as SlackEventCallback;
-			if (!scraped?.summaries?.background) {
-				throw new Error("No background found");
+			if (!scraped?.summaries?.query) {
+				throw new Error("No query found");
 			}
 
-			const background = scraped.summaries.query as string;
-			postAnnotation(
+			const slackEvent = (
+				await SlackDb.events.get(payload.metadata.eventId, "SlackEventCallback")
+			)?.payload as SlackEventCallback;
+			if (!slackEvent) {
+				throw new Error("No slack event found");
+			}
+
+			const result = await postAnnotation(
 				payload.metadata,
-				slackEvent.event?.thread_ts,
-				background,
+				slackEvent.event?.event_ts,
+				scraped.summaries.query,
 				"assistant",
 				"AnnotateEvent",
 			);
