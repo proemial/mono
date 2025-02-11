@@ -8,6 +8,7 @@ import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
 import { inngest } from "./client";
 
 export const AnnotateRouter = {
+	// scrapeEvent -> queryEvent -> slackEvent -> fetchEvent -> summarizeEvent
 	next: async (step: string, url: string, metadata?: SlackEventMetadata) => {
 		switch (step) {
 			case scrapeEventName: {
@@ -15,15 +16,15 @@ export const AnnotateRouter = {
 			}
 
 			case queryEventName: {
+				return await enqueue(slackEventName, url, metadata);
+			}
+
+			case slackEventName: {
 				return await enqueue(fetchEventName, url, metadata);
 			}
 
 			case fetchEventName: {
 				return await enqueue(summarizeEventName, url, metadata);
-			}
-
-			case summarizeEventName: {
-				return await enqueue(slackEventName, url, metadata);
 			}
 
 			default:
