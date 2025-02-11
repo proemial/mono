@@ -1,3 +1,5 @@
+import { Colors } from "@/googleapis/vision";
+
 export interface ScrapedUrl {
 	createdAt: Date;
 	url: string;
@@ -19,6 +21,7 @@ export interface ScrapedContent {
 	title: string;
 	text: string;
 	images?: ScrapedImage[];
+	colors?: Colors;
 }
 
 export interface OpenGraphData {

@@ -40,3 +40,6 @@ export const fetchTranscript = async (url: string) => {
 		throw error;
 	}
 };
+export const isYoutubeUrl = (url: string) => {
+	return url.includes("youtube.com") || url.includes("youtu.be");
+};

@@ -14,6 +14,7 @@
 		"@proemial/utils": "workspace:*",
 		"ai": "4.0.5",
 		"csv-writer": "^1.6.0",
+		"inngest": "^3.31.6",
 		"next": "^14",
 		"react": "^18",
 		"react-dom": "^18",

@@ -2,16 +2,15 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { NextResponse } from "next/server";
 import { uuid } from "@proemial/utils/uid";
 import { isNakedLink, isNakedMention } from "@/app/api/events/routing";
-import {
-	getChannelInfo,
-	showSuggestions,
-} from "@proemial/adapters/slack/slack";
+import { getChannelInfo } from "@proemial/adapters/slack/channel";
+import { showSuggestions } from "@proemial/adapters/slack/assistant";
 import { getThreeRandomStarters } from "@/app/api/events/(slack)/inbound/suggestions";
+import { parseMessageSource } from "@proemial/adapters/slack/message";
+import { eventName as scrapeEventName } from "@/inngest/workers/annotate/scrape.task";
+import { inngest } from "@/inngest/client";
 
 export const revalidate = 0;
 
-// https://db59-87-116-0-126.ngrok-free.app/events/inbound
-// https://db59-87-116-0-126.ngrok-free.app/events/oauth/A089EET085R
 export async function POST(request: Request) {
 	const text = await request.text();
 
@@ -41,15 +40,7 @@ export async function POST(request: Request) {
 		return NextResponse.json({ status: "ok" });
 	}
 
-	const teamId =
-		payload.event.team ??
-		payload.team_id ??
-		payload.team?.id ??
-		payload.message?.team;
-	const channelId =
-		payload.event?.channel ??
-		payload.channel?.id ??
-		payload.event?.assistant_thread?.context?.channel_id;
+	const { teamId, channelId } = parseMessageSource(payload);
 	const channelInfo = await getChannelInfo(teamId, channelId);
 	console.log("channelInfo", channelInfo, teamId, channelId);
 
@@ -97,27 +88,27 @@ export async function POST(request: Request) {
 		console.log("exit[assistant_thread_context_changed]", payload.event.text);
 		return NextResponse.json({ status: "ok" });
 	}
-	if (channelInfo.channel?.id.startsWith("D")) {
-		const result = await fetch(
-			"https://slack.com/api/assistant.threads.setStatus",
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${channelInfo.token}`,
-				},
-				body: JSON.stringify({
-					channel_id: payload.event.channel,
-					thread_ts: payload.event.ts,
-					status: "Doing it",
-				}),
-			},
-		);
-		console.log("assistant_app_thread", result.status, await result.json());
-	}
+	// if (channelInfo.channel?.id.startsWith("D")) {
+	// 	const result = await fetch(
+	// 		"https://slack.com/api/assistant.threads.setStatus",
+	// 		{
+	// 			method: "POST",
+	// 			headers: {
+	// 				"Content-Type": "application/json",
+	// 				Authorization: `Bearer ${channelInfo.token}`,
+	// 			},
+	// 			body: JSON.stringify({
+	// 				channel_id: payload.event.channel,
+	// 				thread_ts: payload.event.ts,
+	// 				status: "Doing it",
+	// 			}),
+	// 		},
+	// 	);
+	// 	console.log("assistant_app_thread", result.status, await result.json());
+	// }
 
 	const app = await SlackDb.apps.get(payload.api_app_id);
-	const callbackUrl = app?.metadata?.callback ?? "https://api.proem.ai";
+	const callbackUrl = app?.metadata?.callback ?? "https://assistant.proem.ai";
 
 	const metadata = {
 		callback: `${callbackUrl}/slack/events/outbound`,
@@ -140,18 +131,34 @@ export async function POST(request: Request) {
 		payload,
 	});
 
-	const result = await fetch(process.env.N8N_WEBHOOK_URL as string, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			metadata,
-			payload,
-		}),
-	});
+	// TODO: Handle with inngest
+	// const result = await fetch(process.env.N8N_WEBHOOK_URL as string, {
+	// 	method: "POST",
+	// 	headers: {
+	// 		"Content-Type": "application/json",
+	// 	},
+	// 	body: JSON.stringify({
+	// 		metadata,
+	// 		payload,
+	// 	}),
+	// });
 
-	return NextResponse.json({ body: payload, result });
+	if (isNakedLink(payload)) {
+		const result = await inngest.send({
+			name: scrapeEventName,
+			data: {
+				url: payload.event.text,
+				body: {
+					metadata,
+				},
+			},
+		});
+		console.log("summarize result", result);
+
+		return NextResponse.json({ body: payload, result });
+	}
+
+	return NextResponse.json({ status: "ok" });
 }
 
 type AssistantThreadStartedEvent = {
