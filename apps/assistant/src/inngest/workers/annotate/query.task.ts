@@ -6,6 +6,7 @@ import { generateIndexSearchQuery } from "@/prompts/annotate/generate-index-sear
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { uuid5 } from "@proemial/utils/uuid";
 import { Summaries } from "@proemial/adapters/mongodb/slack/scraped.types";
+
 export const eventName = "annotate/query";
 const eventId = "annotate/query/fn";
 
@@ -57,7 +58,7 @@ export const queryTask = {
 			}
 
 			// Next step from router
-			const next = AnnotateRouter.next(
+			const next = await AnnotateRouter.next(
 				eventName,
 				payload.url,
 				payload.metadata,

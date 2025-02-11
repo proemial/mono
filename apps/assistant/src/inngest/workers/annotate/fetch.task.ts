@@ -41,7 +41,7 @@ export const fetchTask = {
 			}
 
 			// Next step from router
-			const next = AnnotateRouter.next(
+			const next = await AnnotateRouter.next(
 				eventName,
 				payload.url,
 				payload.metadata,
