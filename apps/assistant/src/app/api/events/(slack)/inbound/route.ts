@@ -7,7 +7,7 @@ import { getThreeRandomStarters } from "@/app/api/events/(slack)/inbound/suggest
 import { parseMessageSource } from "@proemial/adapters/slack/message";
 import { eventName as scrapeEventName } from "@/inngest/workers/annotate/scrape.task";
 import { inngest } from "@/inngest/client";
-import { isNakedLink, isNakedMention } from "@proemial/adapters/slack/routing";
+import { nakedLink, nakedMention } from "@proemial/adapters/slack/routing";
 
 export const revalidate = 0;
 
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
 	const channelInfo = await getChannelInfo(teamId, channelId);
 	console.log("channelInfo", channelInfo, teamId, channelId);
 
-	if (isNakedLink(payload)) {
+	if (nakedLink(payload)) {
 		payload.event.subtype = "link";
 	}
 
@@ -61,14 +61,14 @@ export async function POST(request: Request) {
 	// Do not respond to messages unless they are a naked link
 	if (
 		payload.event?.type === "message" &&
-		!isNakedLink(payload) &&
+		!nakedLink(payload) &&
 		!channelInfo.channel?.id.startsWith("D")
 	) {
 		console.log("exit[message]", payload.event.text);
 		return NextResponse.json({ status: "ok" });
 	}
 	// Do not respond to naked mentions
-	if (isNakedMention(payload)) {
+	if (nakedMention(payload)) {
 		console.log("exit[nakedmention]", payload.event.text);
 		return NextResponse.json({ status: "ok" });
 	}
@@ -143,15 +143,15 @@ export async function POST(request: Request) {
 	// 	}),
 	// });
 
-	if (isNakedLink(payload)) {
+	if (nakedLink(payload)) {
 		const result = await inngest.send({
 			name: scrapeEventName,
 			data: {
-				url: payload.event.text,
+				url: nakedLink(payload),
 				metadata,
 			},
 		});
-		console.log("summarize result", result);
+		console.log("scrape enqueue result", scrapeEventName, result);
 
 		return NextResponse.json({ body: payload, result });
 	}

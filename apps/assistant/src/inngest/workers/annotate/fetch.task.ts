@@ -22,15 +22,15 @@ export const fetchTask = {
 			}
 
 			const scraped = await SlackDb.scraped.get(payload.url);
-			if (!scraped?.summaries?.background) {
-				throw new Error("No background found");
+			if (!scraped?.summaries?.query) {
+				throw new Error("No query found");
 			}
 
 			if (!scraped.references) {
 				const result = await fetch("https://index.proem.ai/api/search", {
 					method: "POST",
 					body: JSON.stringify({
-						query: scraped.summaries.background[0] as string,
+						query: scraped.summaries.query as string,
 						extended: true,
 					}),
 				});

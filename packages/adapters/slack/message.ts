@@ -1,4 +1,4 @@
-import { EventType, EventSource } from "@/mongodb/slack/events.types";
+import { EventType, EventSource } from "../mongodb/slack/events.types";
 import { SlackDb } from "../mongodb/slack/slack.adapter";
 import { SlackEventMetadata } from "./metadata.models";
 import { getTarget } from "./routing";

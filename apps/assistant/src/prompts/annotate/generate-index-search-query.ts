@@ -8,7 +8,7 @@ export const generateIndexSearchQuery = async (
 ): Promise<string> => {
 	try {
 		const { text, usage } = await generateText({
-			model: await LlmModels.news.query(traceId),
+			model: await LlmModels.assistant.query(traceId),
 			messages: [
 				{
 					role: "user",

@@ -51,7 +51,7 @@ export const queryTask = {
 					...scraped,
 					summaries: {
 						...summaries,
-						query: [parsedQuery],
+						query: parsedQuery,
 					} as Summaries,
 				});
 			}

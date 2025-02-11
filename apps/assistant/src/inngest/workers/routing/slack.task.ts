@@ -9,8 +9,6 @@ import { SlackEventCallback } from "@proemial/adapters/mongodb/slack/events.type
 export const eventName = "routing/slack";
 const eventId = "routing/slack/fn";
 
-// https://3565-87-116-0-126.ngrok-free.app
-
 export const slackTask = {
 	name: eventName,
 	worker: inngest.createFunction(

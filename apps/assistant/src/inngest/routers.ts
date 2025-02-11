@@ -3,9 +3,9 @@ import { eventName as queryEventName } from "./workers/annotate/query.task";
 import { eventName as fetchEventName } from "./workers/annotate/fetch.task";
 import { eventName as summarizeEventName } from "./workers/annotate/summarize.task";
 import { eventName as slackEventName } from "./workers/routing/slack.task";
+import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
 
 import { inngest } from "./client";
-import { SlackEventMetadata } from "./models";
 
 export const AnnotateRouter = {
 	next: async (step: string, url: string, metadata?: SlackEventMetadata) => {
@@ -32,18 +32,27 @@ export const AnnotateRouter = {
 	},
 };
 
+// nst result = await inngest.send({
+// 	name: scrapeEventName,
+// 	data: {
+// 		url: nakedLink(payload),
+// 		metadata,
+// 	},
+// });
+
 const enqueue = async (
 	name: string,
 	url: string,
 	metadata?: SlackEventMetadata,
 ) => {
-	await inngest.send({
+	const result = await inngest.send({
 		name,
 		data: {
 			url,
 			metadata,
 		},
 	});
+	console.log("router enqueue result", name, result);
 
 	return name;
 };
