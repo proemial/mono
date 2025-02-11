@@ -1,4 +1,4 @@
-import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
+import { SlackDb } from "../mongodb/slack/slack.adapter";
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function isNakedLink(payload: any): boolean {
@@ -61,7 +61,7 @@ export async function getTarget(body: any): Promise<Target> {
 	};
 }
 
-type Target = {
+export type Target = {
 	url: string;
 	headers: Partial<Record<string, string>>;
 	body: Partial<Record<string, string>>;

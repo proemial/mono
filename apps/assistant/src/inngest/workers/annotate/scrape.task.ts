@@ -9,6 +9,7 @@ import { ScrapedUrl } from "@proemial/adapters/mongodb/slack/scraped.types";
 import { diffbot } from "@proemial/adapters/diffbot";
 import { AnnotateRouter } from "@/inngest/routers";
 import { getColors } from "@proemial/adapters/googleapis/vision";
+import { SlackAnnotateEvent } from "../../models";
 
 export const eventName = "annotate/scrape";
 const eventId = "annotate/scrape/fn";
@@ -20,7 +21,7 @@ export const scrapeTask = {
 		{ event: eventName },
 		async ({ event }) => {
 			const begin = Time.now();
-			const payload = { ...event.data };
+			const payload = { ...event.data } as SlackAnnotateEvent;
 
 			if (!payload.url) {
 				throw new Error("No url provided");
@@ -51,11 +52,15 @@ export const scrapeTask = {
 			}
 
 			// Next step from router
-			const next = await AnnotateRouter.next(eventName, payload.url);
+			const next = await AnnotateRouter.next(
+				eventName,
+				payload.url,
+				payload.metadata,
+			);
 			return {
 				event,
 				body: {
-					url: payload.url,
+					payload,
 					actions,
 					steps: {
 						current: eventName,

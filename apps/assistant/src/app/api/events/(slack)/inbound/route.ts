@@ -1,13 +1,13 @@
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { NextResponse } from "next/server";
 import { uuid } from "@proemial/utils/uid";
-import { isNakedLink, isNakedMention } from "@/app/api/events/routing";
 import { getChannelInfo } from "@proemial/adapters/slack/channel";
 import { showSuggestions } from "@proemial/adapters/slack/assistant";
 import { getThreeRandomStarters } from "@/app/api/events/(slack)/inbound/suggestions";
 import { parseMessageSource } from "@proemial/adapters/slack/message";
 import { eventName as scrapeEventName } from "@/inngest/workers/annotate/scrape.task";
 import { inngest } from "@/inngest/client";
+import { isNakedLink, isNakedMention } from "@proemial/adapters/slack/routing";
 
 export const revalidate = 0;
 
@@ -148,9 +148,7 @@ export async function POST(request: Request) {
 			name: scrapeEventName,
 			data: {
 				url: payload.event.text,
-				body: {
-					metadata,
-				},
+				metadata,
 			},
 		});
 		console.log("summarize result", result);

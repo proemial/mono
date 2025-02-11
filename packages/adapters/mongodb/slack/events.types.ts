@@ -1,10 +1,17 @@
 export type Event = {
 	createdAt: Date;
 	metadata: EventMetadata;
-	source: "slack" | "n8n";
-	type: "SlackOauthEvent" | "SlackEventCallback" | "N8nEvent";
-	payload: SlackOauthEvent | SlackEventCallback | N8nEvent;
+	source: EventSource;
+	type: EventType;
+	payload: SlackOauthEvent | SlackEventCallback | N8nEvent | SlackAnnotateEvent;
 };
+
+export type EventSource = "slack" | "n8n" | "assistant";
+export type EventType =
+	| "SlackOauthEvent"
+	| "SlackEventCallback"
+	| "N8nEvent"
+	| "AnnotateEvent";
 
 export type EventMetadata = {
 	appId: string; // app_id || api_app_id
@@ -14,6 +21,9 @@ export type EventMetadata = {
 
 // biome-ignore lint/complexity/noBannedTypes: <explanation>
 export type N8nEvent = {};
+
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
+export type SlackAnnotateEvent = {};
 
 export type SlackEventCallback = {
 	api_app_id: string;
@@ -26,7 +36,7 @@ export type SlackEventCallback = {
 			user_id: string;
 		},
 	];
-	event: unknown;
+	event: { thread_ts: string };
 	event_context: string;
 	event_id: string;
 	event_time: number;

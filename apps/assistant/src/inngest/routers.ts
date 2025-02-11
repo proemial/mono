@@ -1,23 +1,49 @@
 import { eventName as scrapeEventName } from "./workers/annotate/scrape.task";
+import { eventName as queryEventName } from "./workers/annotate/query.task";
+import { eventName as fetchEventName } from "./workers/annotate/fetch.task";
 import { eventName as summarizeEventName } from "./workers/annotate/summarize.task";
+import { eventName as slackEventName } from "./workers/routing/slack.task";
+
 import { inngest } from "./client";
+import { SlackEventMetadata } from "./models";
 
 export const AnnotateRouter = {
-	next: async (step: string, url: string) => {
+	next: async (step: string, url: string, metadata?: SlackEventMetadata) => {
 		switch (step) {
 			case scrapeEventName: {
-				const result = await inngest.send({
-					name: summarizeEventName,
-					data: {
-						url,
-					},
-				});
-				console.log("summarize result", result);
-				return summarizeEventName;
+				return await enqueue(queryEventName, url, metadata);
 			}
-			case summarizeEventName:
-				// TODO: Create event for summarise
-				return "routing/slack";
+
+			case queryEventName: {
+				return await enqueue(fetchEventName, url, metadata);
+			}
+
+			case fetchEventName: {
+				return await enqueue(summarizeEventName, url, metadata);
+			}
+
+			case summarizeEventName: {
+				return await enqueue(slackEventName, url, metadata);
+			}
+
+			default:
+				return undefined;
 		}
 	},
+};
+
+const enqueue = async (
+	name: string,
+	url: string,
+	metadata?: SlackEventMetadata,
+) => {
+	await inngest.send({
+		name,
+		data: {
+			url,
+			metadata,
+		},
+	});
+
+	return name;
 };

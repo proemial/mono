@@ -58,7 +58,7 @@ const LlmModels = {
 		background: (traceId?: string) =>
 			getModel("news", "background", traceId) as LlmModel,
 	},
-	assistant: {
+	spaces: {
 		answer: (traceId?: string) =>
 			getModel("spaces", "answer", traceId) as LlmModel,
 	},
@@ -71,6 +71,18 @@ const LlmModels = {
 			getModel(source ?? "read", "paper:starters") as LlmModel,
 		// related: (source?: SourceProduct) =>
 		// 	getModel(source ?? "read", "paper:related") as LlmModel,
+	},
+	assistant: {
+		answer: (traceId?: string) =>
+			getModel("assistant", "answer", traceId) as LlmModel,
+		followups: (traceId?: string) =>
+			getModel("assistant", "followups", traceId) as LlmModel,
+
+		// Annotation
+		query: (traceId?: string) =>
+			getModel("assistant", "query", traceId) as LlmModel,
+		background: (traceId?: string) =>
+			getModel("assistant", "background", traceId) as LlmModel,
 	},
 };
 
@@ -96,6 +108,7 @@ export const llmConfig = {
 		embed: "proj_evqPpJ4bydRLaiNas3pa8WFe",
 		// TODO: Create openai project
 		api: "proj_Pq2CtfZHHyVKJCo0slBwvwLy",
+		assistant: "proj_Pq2CtfZHHyVKJCo0slBwvwLy",
 	},
 };
 

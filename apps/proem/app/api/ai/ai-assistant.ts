@@ -71,7 +71,7 @@ export const assistant: Assistant = async (
 	abstract,
 	traceId,
 ) => ({
-	model: await LlmModels.assistant.answer(traceId),
+	model: await LlmModels.spaces.answer(traceId),
 	system: systemPrompt(context, title, abstract),
 	// experimental_toolCallStreaming: true,
 	// maxTokens: 512,

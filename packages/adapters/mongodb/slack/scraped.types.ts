@@ -1,11 +1,19 @@
+import { ReferencedPaper } from "../../redis/news";
 import { Colors } from "../../googleapis/vision";
+
 export interface ScrapedUrl {
 	createdAt: Date;
 	url: string;
+	content: ScrapedContent;
 	contentType?: string;
 	openGraph?: OpenGraphData;
-	content: ScrapedContent;
+	summaries?: Summaries;
+	references?: ReferencedPaper[];
+	questions?: { question: string; answer: string }[];
 }
+
+export type SummaryKeys = "query" | "background" | "engTitle";
+export type Summaries = Partial<Record<SummaryKeys, string>>;
 
 export interface ScrapedImage {
 	naturalHeight: number;

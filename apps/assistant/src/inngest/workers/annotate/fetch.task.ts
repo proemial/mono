@@ -3,15 +3,12 @@ import { inngest } from "../../client";
 import { AnnotateRouter } from "@/inngest/routers";
 import { SlackAnnotateEvent } from "../../models";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
-import { postAnnotation } from "@proemial/adapters/slack/message";
-import { SlackEventCallback } from "@proemial/adapters/mongodb/slack/events.types";
+import { ReferencedPaper } from "@proemial/adapters/redis/news";
 
-export const eventName = "routing/slack";
-const eventId = "routing/slack/fn";
+export const eventName = "annotate/fetch";
+const eventId = "annotate/fetch/fn";
 
-// https://3565-87-116-0-126.ngrok-free.app
-
-export const slackTask = {
+export const fetchTask = {
 	name: eventName,
 	worker: inngest.createFunction(
 		{ id: eventId, concurrency: 1 },
@@ -20,25 +17,28 @@ export const slackTask = {
 			const begin = Time.now();
 			const payload = { ...event.data } as SlackAnnotateEvent;
 
-			if (!payload.metadata) {
+			if (!payload.url) {
 				throw new Error("No url provided");
 			}
 
 			const scraped = await SlackDb.scraped.get(payload.url);
-			const slackEvent = (await SlackDb.events.get(payload.metadata.eventId))
-				?.payload as SlackEventCallback;
 			if (!scraped?.summaries?.background) {
 				throw new Error("No background found");
 			}
 
-			const background = scraped.summaries.query as string;
-			postAnnotation(
-				payload.metadata,
-				slackEvent.event?.thread_ts,
-				background,
-				"assistant",
-				"AnnotateEvent",
-			);
+			if (!scraped.references) {
+				const result = await fetch("https://index.proem.ai/api/search", {
+					method: "POST",
+					body: JSON.stringify({
+						query: scraped.summaries.background[0] as string,
+						extended: true,
+					}),
+				});
+				const { papers } = (await result.json()) as SearchResult;
+				scraped.references = papers;
+
+				await SlackDb.scraped.upsert(scraped);
+			}
 
 			// Next step from router
 			const next = AnnotateRouter.next(
@@ -59,4 +59,20 @@ export const slackTask = {
 			};
 		},
 	),
+};
+
+export type SearchResult = {
+	papers: QdrantPaper[];
+};
+
+export type QdrantPaper = ReferencedPaper & {
+	score: number;
+	features: Feature[];
+};
+
+type Feature = {
+	id: string;
+	label: string;
+	score: number;
+	type: "topic" | "keyword" | "concept";
 };
