@@ -111,7 +111,7 @@ export async function POST(request: Request) {
 	const callbackUrl = app?.metadata?.callback ?? "https://assistant.proem.ai";
 
 	const metadata = {
-		callback: `${callbackUrl}/slack/events/outbound`,
+		callback: `${callbackUrl}/api/events/outbound`,
 		appId: payload.api_app_id,
 		eventId: payload.event_id ?? uuid(),
 		teamId,
@@ -130,18 +130,6 @@ export async function POST(request: Request) {
 		type: "SlackEventCallback",
 		payload,
 	});
-
-	// TODO: Handle with inngest
-	// const result = await fetch(process.env.N8N_WEBHOOK_URL as string, {
-	// 	method: "POST",
-	// 	headers: {
-	// 		"Content-Type": "application/json",
-	// 	},
-	// 	body: JSON.stringify({
-	// 		metadata,
-	// 		payload,
-	// 	}),
-	// });
 
 	if (nakedLink(payload)) {
 		const url = findLinkUrl(payload.event.blocks[0].elements);
@@ -162,6 +150,17 @@ export async function POST(request: Request) {
 
 		return NextResponse.json({ body: payload, result });
 	}
+
+	await fetch(process.env.N8N_WEBHOOK_URL as string, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			metadata,
+			payload,
+		}),
+	});
 
 	return NextResponse.json({ status: "ok" });
 }
