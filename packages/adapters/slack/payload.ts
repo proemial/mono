@@ -96,3 +96,35 @@ export function classifyRequest(
 	}
 	return undefined;
 }
+
+export function getNakedLink(payload: EventCallbackPayload) {
+	if (!nakedLink(payload)) {
+		return undefined;
+	}
+
+	const firstBlock = payload.event.blocks?.[0];
+	const url =
+		firstBlock && "elements" in firstBlock
+			? findLinkUrl(firstBlock.elements)
+			: undefined;
+
+	console.log("nakedLink", url);
+	return url;
+}
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+function findLinkUrl(elements: any[]): string | undefined {
+	for (const element of elements) {
+		// Check if current element is a link
+		if (element.type === "link") {
+			return element.url;
+		}
+
+		// Recursively check nested elements
+		if (element.elements && Array.isArray(element.elements)) {
+			const nestedUrl = findLinkUrl(element.elements);
+			if (nestedUrl) return nestedUrl;
+		}
+	}
+	return undefined;
+}

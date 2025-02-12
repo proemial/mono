@@ -7,7 +7,7 @@ export function parseMessageSource(payload: Record<string, any>) {
 	const teamId =
 		payload.team_id ??
 		payload.team?.id ??
-		payload.event.team ??
+		payload.event?.team ??
 		payload.message?.team;
 	const channelId =
 		payload.event?.channel ??

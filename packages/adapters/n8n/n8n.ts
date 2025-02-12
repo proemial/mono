@@ -5,7 +5,7 @@ export async function sendToN8n(
 	payload: EventCallbackPayload,
 	metadata: SlackEventMetadata,
 ) {
-	return await fetch(process.env.N8N_WEBHOOK_URL as string, {
+	const result = await fetch(process.env.N8N_WEBHOOK_URL as string, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -15,4 +15,7 @@ export async function sendToN8n(
 			payload,
 		}),
 	});
+	console.log("setStatus", result.status, await result.json());
+
+	return result.status;
 }
