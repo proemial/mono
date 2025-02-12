@@ -78,6 +78,13 @@ export async function POST(request: Request) {
 	if (payload.event?.type === "assistant_thread_started") {
 		const event = payload.event as AssistantThreadStartedEvent;
 
+		console.log(
+			"showSuggestions",
+			payload.event.channel,
+			payload.event.ts,
+			channelInfo.token,
+			"Trustworthy answers to any question, such as:",
+		);
 		const result = await fetch(
 			"https://slack.com/api/assistant.threads.setSuggestedPrompts",
 			{
