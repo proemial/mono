@@ -5,6 +5,7 @@ export async function showSuggestions(
 	suggestions: string[],
 	title?: string,
 ) {
+	console.log("showSuggestions", channel_id, thread_ts, accessToken, title);
 	const result = await fetch(
 		"https://slack.com/api/assistant.threads.setSuggestedPrompts",
 		{
