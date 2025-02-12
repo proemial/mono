@@ -1,5 +1,6 @@
+import { uuid } from "@proemial/utils/uid";
 import { SlackDb } from "../mongodb/slack/slack.adapter";
-import { SlackEventMetadata } from "./metadata.models";
+import { SlackThread } from "./event.model";
 
 export async function getChannelInfo(teamId: string, channelId: string) {
 	if (!teamId || !channelId) {
@@ -53,4 +54,44 @@ export async function getChannelHistory(channelId: string, teamId: string) {
 		.map((message: { text: string }) => message.text);
 
 	return messages;
+}
+
+export async function getThreadMessages(
+	channelId: string,
+	threadTs: string,
+	teamId: string,
+	appId: string,
+) {
+	const install = await SlackDb.installs.get(teamId, appId);
+
+	const response = await fetch(
+		`https://slack.com/api/conversations.replies?channel=${channelId}&ts=${threadTs}`,
+		{
+			headers: {
+				Authorization: `Bearer ${install?.metadata?.accessToken}`,
+			},
+		},
+	);
+	const thread = (await response.json()) as SlackThread;
+	console.log("thread", JSON.stringify(thread));
+
+	return thread.messages;
+}
+
+export async function getThreadMessagesForAi(
+	channelId: string,
+	threadTs: string,
+	teamId: string,
+	appId: string,
+) {
+	const messages = await getThreadMessages(channelId, threadTs, teamId, appId);
+
+	return messages
+		.filter((m) => m.subtype !== "assistant_app_thread" && m.text)
+		.map((m) => ({
+			id: uuid(),
+			createdAt: new Date(Number.parseFloat(m.ts) * 1000),
+			content: (m.text ?? "").replaceAll("\n", " ").replaceAll('"', " "),
+			role: m.bot_id ? "assistant" : "user",
+		}));
 }

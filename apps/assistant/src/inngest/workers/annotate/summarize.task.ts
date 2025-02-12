@@ -6,6 +6,7 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { uuid5 } from "@proemial/utils/uuid";
 import { generateFactsAndQuestions } from "@/prompts/annotate/generate-facts-and-questions";
 import { Summaries } from "@proemial/adapters/mongodb/slack/scraped.types";
+
 export const eventName = "annotate/summarize";
 const eventId = "annotate/summarize/fn";
 

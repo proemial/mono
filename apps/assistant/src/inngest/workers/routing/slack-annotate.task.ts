@@ -6,10 +6,10 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { postAnnotation } from "@proemial/adapters/slack/message";
 import { SlackEventCallback } from "@proemial/adapters/mongodb/slack/events.types";
 
-export const eventName = "routing/slack";
-const eventId = "routing/slack/fn";
+export const eventName = "routing/annotate/slack";
+const eventId = "routing/annotate/slack/fn";
 
-export const slackTask = {
+export const slackAnnotateResponseTask = {
 	name: eventName,
 	worker: inngest.createFunction(
 		{ id: eventId, concurrency: 1 },
@@ -19,7 +19,7 @@ export const slackTask = {
 			const payload = { ...event.data } as SlackAnnotateEvent;
 
 			if (!payload.metadata) {
-				throw new Error("No url provided");
+				throw new Error("No metadata provided");
 			}
 
 			const scraped = await SlackDb.scraped.get(payload.url);

@@ -29,10 +29,15 @@ export async function parseRequest(text: string) {
 	console.log("teamId", teamId, "channelId", channelId);
 
 	const { channel, team, token } = await getChannelInfo(teamId, channelId);
-	console.log("channelInfo", channel, team, token);
+	console.log(
+		"channelInfo",
+		channel,
+		team,
+		JSON.stringify({ channel, team, token }),
+	);
 
 	const app = await SlackDb.apps.get(payload.api_app_id);
-	console.log("app", app);
+	console.log("app", JSON.stringify(app));
 
 	const callbackUrl = app?.metadata?.callback ?? "https://assistant.proem.ai";
 
@@ -44,13 +49,11 @@ export async function parseRequest(text: string) {
 		channel,
 		team,
 	} as SlackEventMetadata;
-	console.log("metadata", metadata);
+	console.log("metadata", JSON.stringify(metadata));
 
 	const type = classifyRequest(payload, metadata);
 
-	const parsedRequest = { payload, metadata, type, token };
-	console.log("parsedRequest", JSON.stringify(parsedRequest));
-	return parsedRequest;
+	return { payload, metadata, type, token };
 }
 
 export function classifyRequest(

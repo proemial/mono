@@ -2,7 +2,9 @@ import { eventName as scrapeEventName } from "./workers/annotate/scrape.task";
 import { eventName as queryEventName } from "./workers/annotate/query.task";
 import { eventName as fetchEventName } from "./workers/annotate/fetch.task";
 import { eventName as summarizeEventName } from "./workers/annotate/summarize.task";
-import { eventName as slackEventName } from "./workers/routing/slack.task";
+import { eventName as slackAnnotateEventName } from "./workers/routing/slack-annotate.task";
+import { eventName as slackAskEventName } from "./workers/routing/slack-ask.task";
+import { eventName as askEventName } from "./workers/ask/summarize.task";
 import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
 
 import { inngest } from "./client";
@@ -12,19 +14,38 @@ export const AnnotateRouter = {
 	next: async (step: string, url: string, metadata?: SlackEventMetadata) => {
 		switch (step) {
 			case scrapeEventName: {
-				return await enqueue(queryEventName, url, metadata);
+				return await enqueue(queryEventName, { url }, metadata);
 			}
 
 			case queryEventName: {
-				return await enqueue(slackEventName, url, metadata);
+				return await enqueue(slackAnnotateEventName, { url }, metadata);
 			}
 
-			case slackEventName: {
-				return await enqueue(fetchEventName, url, metadata);
+			case slackAnnotateEventName: {
+				return await enqueue(fetchEventName, { url }, metadata);
 			}
 
 			case fetchEventName: {
-				return await enqueue(summarizeEventName, url, metadata);
+				return await enqueue(summarizeEventName, { url }, metadata);
+			}
+
+			default:
+				return undefined;
+		}
+	},
+};
+
+export const AskRouter = {
+	// scrapeEvent -> queryEvent -> slackEvent -> fetchEvent -> summarizeEvent
+	next: async (
+		step: string,
+		thread: string,
+		answer: string,
+		metadata?: SlackEventMetadata,
+	) => {
+		switch (step) {
+			case askEventName: {
+				return await enqueue(slackAskEventName, { thread, answer }, metadata);
 			}
 
 			default:
@@ -35,13 +56,13 @@ export const AnnotateRouter = {
 
 const enqueue = async (
 	name: string,
-	url: string,
+	payload: Record<string, string>,
 	metadata?: SlackEventMetadata,
 ) => {
 	const result = await inngest.send({
 		name,
 		data: {
-			url,
+			...payload,
 			metadata,
 		},
 	});

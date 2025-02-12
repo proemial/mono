@@ -4,3 +4,9 @@ export type SlackAnnotateEvent = {
 	url: string;
 	metadata?: SlackEventMetadata;
 };
+
+export type SlackAskEvent = {
+	thread: string;
+	answer: string;
+	metadata?: SlackEventMetadata;
+};

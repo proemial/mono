@@ -27,3 +27,7 @@ export type EventCallbackPayload = {
 	team_id?: string;
 	event: HackyMessageEvent; // or @slack/types/MessageEvent
 };
+
+export type SlackThread = {
+	messages: GenericMessageEvent[];
+};

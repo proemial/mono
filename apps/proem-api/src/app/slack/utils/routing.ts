@@ -37,18 +37,23 @@ export async function getTarget(body: any): Promise<Target> {
 		throw new Error("TeamId not found");
 	}
 
-	const team = await SlackDb.entities.get(teamId);
-	if (!team) {
-		throw new Error("Team not found");
+	const appId = (body.metadata.appId ?? body.payload.app_id) as string;
+	if (!appId) {
+		throw new Error("AppId not found");
 	}
-	if (!team.metadata?.accessToken) {
+
+	const install = await SlackDb.installs.get(teamId, appId);
+	if (!install) {
+		throw new Error("Install not found");
+	}
+	if (!install.metadata?.accessToken) {
 		throw new Error("Token not found");
 	}
 
 	return {
 		url: "https://slack.com/api/chat.postMessage",
 		headers: {
-			Authorization: `Bearer ${team.metadata?.accessToken}`,
+			Authorization: `Bearer ${install.metadata?.accessToken}`,
 		},
 		body: {
 			channel,

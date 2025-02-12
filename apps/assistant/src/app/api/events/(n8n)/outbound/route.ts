@@ -34,7 +34,6 @@ export async function POST(request: Request) {
 		console.log(updated);
 
 		const target = await getTarget({ metadata, payload });
-		console.log(target);
 
 		const result = await fetch(target.url, {
 			method: "POST",
