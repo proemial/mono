@@ -80,8 +80,8 @@ export async function POST(request: Request) {
 
 		console.log(
 			"showSuggestions",
-			payload.event.channel,
-			payload.event.ts,
+			event.assistant_thread.channel_id,
+			event.assistant_thread.thread_ts,
 			channelInfo.token,
 			"Trustworthy answers to any question, such as:",
 		);
