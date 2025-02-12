@@ -34,6 +34,9 @@ export const scrapeTask = {
 				// const content = isYoutubeUrl(payload.url)
 				// 	? await fetchTranscript(payload.url)
 				// 	: await diffbot(payload.url);
+
+				// TODO: fallback to a different scraper when diffbot fails.
+				// Example: Scraping failed: 'No objects: https://rclone.org/'
 				const content = await diffbot(payload.url);
 
 				scrapedUrl = {

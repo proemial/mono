@@ -1,4 +1,5 @@
 import { SlackDb } from "../mongodb/slack/slack.adapter";
+import { SlackEventMetadata } from "./metadata.models";
 
 export async function getChannelInfo(teamId: string, channelId: string) {
 	if (!teamId || !channelId) {

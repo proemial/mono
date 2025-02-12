@@ -30,7 +30,10 @@ export async function getTarget(body: {
 		};
 	}
 
-	const channelId = body.metadata.channel.id;
+	const channelId =
+		body.metadata.channel.id ??
+		body.payload?.event?.channel ??
+		body.payload?.channel;
 	if (!channelId) {
 		throw new Error("Channel not found");
 	}

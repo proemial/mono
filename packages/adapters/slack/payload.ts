@@ -1,0 +1,98 @@
+import { SlackDb } from "../mongodb/slack/slack.adapter";
+import { getChannelInfo } from "./channel";
+import { parseMessageSource } from "./message";
+import { nakedLink, nakedMention } from "./routing";
+import { uuid } from "@proemial/utils/uid";
+import { EventCallbackPayload } from "./event.model";
+import { SlackEventMetadata } from "./metadata.models";
+
+export async function parseRequest(text: string) {
+	const unencoded = text?.startsWith("payload=")
+		? decodeURIComponent(text.slice(8))
+		: text?.startsWith("ssl_check=")
+			? decodeURIComponent(text.slice(10))
+			: text;
+
+	const payload = JSON.parse(unencoded) as EventCallbackPayload;
+
+	console.log(
+		"[/slack/payload]",
+		payload.api_app_id,
+		payload.event_id,
+		payload.type,
+		payload.event?.type,
+		payload.event?.subtype,
+		payload.event?.bot_profile?.name,
+	);
+
+	const { teamId, channelId } = parseMessageSource(payload);
+	console.log("teamId", teamId, "channelId", channelId);
+
+	const { channel, team, token } = await getChannelInfo(teamId, channelId);
+	console.log("channelInfo", channel, team, token);
+
+	const app = await SlackDb.apps.get(payload.api_app_id);
+	console.log("app", app);
+
+	const callbackUrl = app?.metadata?.callback ?? "https://assistant.proem.ai";
+
+	const metadata = {
+		callback: `${callbackUrl}/api/events/outbound`,
+		appId: payload.api_app_id,
+		eventId: payload.event_id ?? uuid(),
+		teamId,
+		channel,
+		team,
+	} as SlackEventMetadata;
+	console.log("metadata", metadata);
+
+	const type = classifyRequest(payload, metadata);
+
+	const parsedRequest = { payload, metadata, type, token };
+	console.log("parsedRequest", JSON.stringify(parsedRequest));
+	return parsedRequest;
+}
+
+export function classifyRequest(
+	payload: EventCallbackPayload,
+	metadata: SlackEventMetadata,
+) {
+	// Handle Slack verification requests
+	if (payload.type === "url_verification") {
+		console.log("exit[url_verification]", payload.challenge);
+		return "ignore";
+	}
+	if (payload.type === "ssl_check") {
+		console.log("exit[ssl_check]");
+		return "ignore";
+	}
+	if (payload.event?.bot_profile) {
+		console.log("exit[bot_profile]", payload.event.bot_profile);
+		return "ignore";
+	}
+	if (payload.event?.subtype && !nakedLink(payload)) {
+		console.log("exit[subtype]", payload.event.subtype);
+		return "ignore";
+	}
+	if (
+		payload.event?.type === "message" &&
+		!nakedLink(payload) &&
+		!metadata.channel?.id.startsWith("D")
+	) {
+		console.log("exit[message]", payload.event.text);
+		return "ignore";
+	}
+	if (nakedMention(payload)) {
+		console.log("exit[nakedmention]", payload.event.text);
+		return "ignore";
+	}
+	if (payload.event?.type === "assistant_thread_context_changed") {
+		console.log("exit[assistant_thread_context_changed]", payload.event.text);
+		return "ignore";
+	}
+	if (payload.event?.type === "assistant_thread_started") {
+		console.log("exit[assistant_thread_started]", payload.event.text);
+		return "ignore";
+	}
+	return undefined;
+}
