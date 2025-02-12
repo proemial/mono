@@ -75,10 +75,17 @@ export async function POST(request: Request) {
 	if (payload.event?.type === "assistant_thread_started") {
 		const event = payload.event as AssistantThreadStartedEvent;
 
+		console.log("payload", JSON.stringify(payload));
+		const install = await SlackDb.installs.get(
+			payload.team_id,
+			payload.api_app_id,
+		);
+		console.log("install", install);
+
 		const status = await showSuggestions(
 			event.assistant_thread.channel_id,
 			event.assistant_thread.thread_ts,
-			channelInfo.token as string,
+			install?.metadata.accessToken as string,
 			getThreeRandomStarters(),
 			"Trustworthy answers to any question, such as:",
 		);

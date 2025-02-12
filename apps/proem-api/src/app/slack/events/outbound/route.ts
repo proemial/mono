@@ -47,6 +47,7 @@ export async function POST(request: Request) {
 			},
 			body: JSON.stringify({ ...target.body, ...payload }),
 		});
+		console.log(result);
 
 		return NextResponse.json({ metadata, payload, result });
 	} catch (error) {
