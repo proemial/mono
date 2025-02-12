@@ -41,6 +41,11 @@ export const slackTask = {
 				"assistant",
 				"AnnotateEvent",
 			);
+			console.log(
+				"openAssistantView result",
+				result.status,
+				await result.json(),
+			);
 
 			// Next step from router
 			const next = AnnotateRouter.next(

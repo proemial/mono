@@ -45,7 +45,7 @@ export async function postAnnotation(
 
 	const blocks = annotatedLinkBlock(metadata.channel.id, threadTs, summary);
 
-	const updated = await SlackDb.events.insert({
+	await SlackDb.events.insert({
 		createdAt: new Date(),
 		metadata,
 		source,
