@@ -1,8 +1,8 @@
 import { EventCallbackPayload } from "@proemial/adapters/slack/event.model";
 import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
 import { nakedLink } from "@proemial/adapters/slack/routing";
-import { eventName as scrapeEventName } from "@/inngest/workers/annotate/scrape.task";
-import { eventName as askEventName } from "@/inngest/workers/ask/summarize.task";
+import { eventName as scrapeEventName } from "@/inngest/workers/annotate/1-scrape.task";
+import { eventName as askEventName } from "@/inngest/workers/ask/1-summarize.task";
 import { inngest } from "@/inngest/client";
 import { getNakedLink } from "@proemial/adapters/slack/payload";
 

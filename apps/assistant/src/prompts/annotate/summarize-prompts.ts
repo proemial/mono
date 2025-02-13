@@ -1,7 +1,7 @@
 import { generateText } from "ai";
 import LlmModels from "@proemial/adapters/llm/models";
 
-export const generateIndexSearchQuery = async (
+export const generateSummary = async (
 	transcript: string,
 	title: string,
 	traceId?: string,

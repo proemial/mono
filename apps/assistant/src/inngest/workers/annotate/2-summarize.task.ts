@@ -2,15 +2,15 @@ import { Time } from "@proemial/utils/time";
 import { inngest } from "../../client";
 import { AnnotateRouter } from "@/inngest/routers";
 import { SlackAnnotateEvent } from "../../models";
+import { generateSummary } from "@/prompts/annotate/summarize-prompts";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { uuid5 } from "@proemial/utils/uuid";
-import { generateFactsAndQuestions } from "@/prompts/annotate/generate-facts-and-questions";
 import { Summaries } from "@proemial/adapters/mongodb/slack/scraped.types";
 
-export const eventName = "annotate/summarize";
-const eventId = "annotate/summarize/fn";
+export const eventName = "annotate/query";
+const eventId = "annotate/query/fn";
 
-export const summarizeTask = {
+export const queryTask = {
 	name: eventName,
 	worker: inngest.createFunction(
 		{ id: eventId, concurrency: 1 },
@@ -24,29 +24,36 @@ export const summarizeTask = {
 			}
 
 			const scraped = await SlackDb.scraped.get(payload.url);
-			if (!scraped?.references) {
-				throw new Error("No references found");
+			if (!scraped) {
+				throw new Error("No scraped data found");
 			}
-
 			const summaries = scraped.summaries ?? {};
 
-			if (!summaries.background) {
-				const background = await generateFactsAndQuestions(
+			if (!summaries.query) {
+				const indexQuery = await generateSummary(
 					scraped.content.text,
 					scraped.content.title,
-					summaries.query?.[0] as string,
-					scraped.references,
 					uuid5(payload.url, "helicone"),
 				);
 
+				const parsedQuery = indexQuery
+					.split("<summary>")[1]
+					?.split("</summary>")[0];
+
+				if (!parsedQuery) {
+					throw new Error("[news][query] Failed to parse search query", {
+						cause: {
+							url: payload.url,
+							indexQuery,
+						},
+					});
+				}
 				await SlackDb.scraped.upsert({
 					...scraped,
 					summaries: {
 						...summaries,
-						background: background.commentary,
-						engTitle: background.engTitle,
+						query: parsedQuery,
 					} as Summaries,
-					questions: background.questions,
 				});
 			}
 
@@ -56,6 +63,7 @@ export const summarizeTask = {
 				payload.url,
 				payload.metadata,
 			);
+
 			return {
 				event,
 				body: {

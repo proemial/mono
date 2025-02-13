@@ -1,25 +1,30 @@
 import { Time } from "@proemial/utils/time";
 import { inngest } from "../../client";
-import { AskRouter } from "@/inngest/routers";
-import { SlackAskEvent } from "../../models";
+import { AnnotateRouter } from "@/inngest/routers";
+import { SlackAnnotateEvent } from "../../models";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { postAnnotation } from "@proemial/adapters/slack/message";
 import { SlackEventCallback } from "@proemial/adapters/mongodb/slack/events.types";
 
-export const eventName = "routing/ask/slack";
-const eventId = "routing/ask/slack/fn";
+export const eventName = "ask/slack";
+const eventId = "ask/slack/fn";
 
-export const slackAskResponseTask = {
+export const slackAnnotateResponseTask = {
 	name: eventName,
 	worker: inngest.createFunction(
 		{ id: eventId, concurrency: 1 },
 		{ event: eventName },
 		async ({ event }) => {
 			const begin = Time.now();
-			const payload = { ...event.data } as SlackAskEvent;
+			const payload = { ...event.data } as SlackAnnotateEvent;
 
 			if (!payload.metadata) {
 				throw new Error("No metadata provided");
+			}
+
+			const scraped = await SlackDb.scraped.get(payload.url);
+			if (!scraped?.summaries?.query) {
+				throw new Error("No query found");
 			}
 
 			const slackEvent = (
@@ -32,7 +37,7 @@ export const slackAskResponseTask = {
 			const result = await postAnnotation(
 				payload.metadata,
 				slackEvent.event?.event_ts,
-				payload.answer,
+				scraped.summaries.query,
 				"assistant",
 				"AnnotateEvent",
 			);
@@ -43,10 +48,9 @@ export const slackAskResponseTask = {
 			);
 
 			// Next step from router
-			const next = AskRouter.next(
+			const next = AnnotateRouter.next(
 				eventName,
-				payload.thread,
-				payload.answer,
+				payload.url,
 				payload.metadata,
 			);
 			return {

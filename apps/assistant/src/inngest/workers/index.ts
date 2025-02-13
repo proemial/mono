@@ -1,10 +1,10 @@
-import { fetchTask } from "./annotate/fetch.task";
-import { queryTask } from "./annotate/query.task";
-import { scrapeTask } from "./annotate/scrape.task";
-import { summarizeTask } from "./annotate/summarize.task";
-import { slackAnnotateResponseTask } from "./routing/slack-annotate.task";
-import { slackAskResponseTask } from "./routing/slack-ask.task";
-import { askTask } from "./ask/summarize.task";
+import { fetchTask } from "./annotate/4-fetch.task";
+import { queryTask } from "./annotate/2-summarize.task";
+import { scrapeTask } from "./annotate/1-scrape.task";
+import { summarizeTask } from "./annotate/5-annotate.task";
+import { slackAnnotateResponseTask } from "./ask/2-slack.task";
+import { slackAskResponseTask } from "./annotate/3-slack.task";
+import { askTask } from "./ask/1-summarize.task";
 
 export const workers = [
 	scrapeTask.worker,

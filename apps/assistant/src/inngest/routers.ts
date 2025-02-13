@@ -1,10 +1,10 @@
-import { eventName as scrapeEventName } from "./workers/annotate/scrape.task";
-import { eventName as queryEventName } from "./workers/annotate/query.task";
-import { eventName as fetchEventName } from "./workers/annotate/fetch.task";
-import { eventName as summarizeEventName } from "./workers/annotate/summarize.task";
-import { eventName as slackAnnotateEventName } from "./workers/routing/slack-annotate.task";
-import { eventName as slackAskEventName } from "./workers/routing/slack-ask.task";
-import { eventName as askEventName } from "./workers/ask/summarize.task";
+import { eventName as scrapeEventName } from "./workers/annotate/1-scrape.task";
+import { eventName as queryEventName } from "./workers/annotate/2-summarize.task";
+import { eventName as fetchEventName } from "./workers/annotate/4-fetch.task";
+import { eventName as summarizeEventName } from "./workers/annotate/5-annotate.task";
+import { eventName as slackAnnotateEventName } from "./workers/ask/2-slack.task";
+import { eventName as slackAskEventName } from "./workers/annotate/3-slack.task";
+import { eventName as askEventName } from "./workers/ask/1-summarize.task";
 import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
 
 import { inngest } from "./client";
@@ -36,7 +36,7 @@ export const AnnotateRouter = {
 };
 
 export const AskRouter = {
-	// scrapeEvent -> queryEvent -> slackEvent -> fetchEvent -> summarizeEvent
+	// summarizeEvent -> slackEvent
 	next: async (
 		step: string,
 		thread: string,

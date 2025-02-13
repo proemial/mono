@@ -1,5 +1,5 @@
 import { AskRouter } from "@/inngest/routers";
-import { LlmAnswer } from "@/prompts/ask/answers-and-followups";
+import { LlmAnswer } from "@/prompts/ask/summarize-prompts";
 import {
 	logBotBegin,
 	logRetrieval,
