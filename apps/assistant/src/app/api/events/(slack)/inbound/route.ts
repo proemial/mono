@@ -5,6 +5,8 @@ import { getThreeRandomStarters } from "@/app/api/events/(slack)/inbound/suggest
 import * as slack from "@proemial/adapters/slack/payload";
 import { sendToN8n } from "@proemial/adapters/n8n/n8n";
 import { dispatchSlackEvent } from "./dispatch";
+import { EventCallbackPayload } from "@proemial/adapters/slack/event.model";
+import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
 
 export const revalidate = 0;
 
@@ -19,27 +21,17 @@ export async function POST(request: Request) {
 
 		if (payload.event?.type === "assistant_thread_started") {
 			await showSuggestions(
-				payload,
+				metadata,
 				getThreeRandomStarters(),
 				"Trustworthy answers to any question, such as:",
 			);
+			await logEvent(payload, metadata);
 		}
 
 		return success;
 	}
 
-	// TODO: set status on assistant messages
-	// if (channelInfo.channel?.id.startsWith("D")) {
-	// 	const result = await setStatus(payload, "Doing it");
-	// }
-
-	await SlackDb.events.insert({
-		createdAt: new Date(),
-		metadata,
-		source: "slack",
-		type: "SlackEventCallback",
-		payload,
-	});
+	await logEvent(payload, metadata);
 
 	const dispatched = await dispatchSlackEvent(payload, metadata);
 	console.log("dispatched", dispatched);
@@ -52,5 +44,18 @@ export async function POST(request: Request) {
 
 	return success;
 }
+
+const logEvent = async (
+	payload: EventCallbackPayload,
+	metadata: SlackEventMetadata,
+) => {
+	await SlackDb.events.insert({
+		createdAt: new Date(),
+		metadata,
+		source: "slack",
+		type: "SlackEventCallback",
+		payload,
+	});
+};
 
 const success = NextResponse.json({ status: "ok" });

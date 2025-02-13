@@ -48,6 +48,10 @@ export async function parseRequest(text: string) {
 		teamId,
 		channel,
 		team,
+		assistantThread: {
+			channel_id: payload.event?.assistant_thread?.channel_id,
+			thread_ts: payload.event?.assistant_thread?.thread_ts,
+		},
 	} as SlackEventMetadata;
 	console.log("metadata", JSON.stringify(metadata));
 

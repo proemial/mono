@@ -15,35 +15,10 @@ import { SlackAskEvent } from "../../models";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
 import { extractPapers, LlmSteps } from "./extract-references";
+import { setStatus } from "@proemial/adapters/slack/assistant";
 
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
-
-async function getMessages(
-	metadata: SlackEventMetadata,
-	thread?: string,
-	question?: string,
-): Promise<Message[]> {
-	if (thread) {
-		return (await getThreadMessagesForAi(
-			metadata.channel.id,
-			thread,
-			metadata.team.id,
-			metadata.appId,
-		)) as Message[];
-	}
-
-	if (question) {
-		return [
-			{
-				content: question,
-				role: "user",
-			},
-		] as Message[];
-	}
-
-	return [];
-}
 
 export const askTask = {
 	name: eventName,
@@ -54,8 +29,10 @@ export const askTask = {
 			const begin = Time.now();
 			const payload = { ...event.data } as SlackAskEvent;
 
+			const metadata = payload.metadata as SlackEventMetadata;
+
 			const messages = await getMessages(
-				payload.metadata as SlackEventMetadata,
+				metadata,
 				payload.thread,
 				payload.question,
 			);
@@ -78,7 +55,7 @@ export const askTask = {
 				}),
 			)) as Message[];
 
-			let { answer, papers } = await answerQuestion(mappedMessages);
+			let { answer, papers } = await answerQuestion(metadata, mappedMessages);
 			console.log("answer", answer, papers?.length);
 
 			papers?.forEach((p, i) => {
@@ -111,7 +88,11 @@ export const askTask = {
 	),
 };
 
-async function answerQuestion(messages: Message[]) {
+async function answerQuestion(
+	metadata: SlackEventMetadata,
+	messages: Message[],
+) {
+	await setStatus(metadata, "Thinking...");
 	const traceId = uuid();
 
 	const question = messages.findLast(
@@ -132,6 +113,7 @@ async function answerQuestion(messages: Message[]) {
 					query: z.string().describe("The search query"),
 				}),
 				execute: async ({ query }) => {
+					await setStatus(metadata, "Finding research...");
 					console.log("Retrieving papers", query);
 					const papers = (await logRetrieval(
 						"assistant",
@@ -141,6 +123,7 @@ async function answerQuestion(messages: Message[]) {
 						},
 						traceId,
 					)) as RetrievalResult;
+					await setStatus(metadata, "Reasoning...");
 					console.log("Papers retrieved", papers.length);
 
 					return { papers };
@@ -195,4 +178,26 @@ export async function fetchPapers(query: string) {
 			},
 		});
 	}
+}
+
+async function getMessages(
+	metadata: SlackEventMetadata,
+	thread?: string,
+	question?: string,
+): Promise<Message[]> {
+	if (thread) {
+		await setStatus(metadata, "Fetching thread history...");
+		return (await getThreadMessagesForAi(metadata, thread)) as Message[];
+	}
+
+	if (question) {
+		return [
+			{
+				content: question,
+				role: "user",
+			},
+		] as Message[];
+	}
+
+	return [];
 }

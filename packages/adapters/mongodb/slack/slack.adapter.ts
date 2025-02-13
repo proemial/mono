@@ -1,7 +1,7 @@
 import { Time } from "@proemial/utils/time";
 import Mongo from "../mongodb-client";
 import { SlackApp, SlackAppInstall, SlackEntity } from "./entities.types";
-import { Event } from "./events.types";
+import { Event, SlackEventCallback } from "./events.types";
 import { ScrapedUrl } from "./scraped.types";
 
 const events = Mongo.db("slack").collection("events");
@@ -20,6 +20,29 @@ export const SlackDb = {
 				});
 			} finally {
 				Time.log(begin, `[mongodb][slack][events][get] ${id} ${type}`);
+			}
+		},
+
+		getAssistantThread: async (channelId: string) => {
+			const begin = Time.now();
+
+			try {
+				const event = (await events.findOne<Event>(
+					{
+						"payload.event.type": "assistant_thread_started",
+						"payload.event.assistant_thread.channel_id": channelId,
+					},
+					{
+						sort: { createdAt: -1 },
+						projection: { "payload.event.assistant_thread": 1 },
+					},
+				)) as unknown as { payload: SlackEventCallback };
+				return event?.payload.event.assistant_thread;
+			} finally {
+				Time.log(
+					begin,
+					`[mongodb][slack][events][getAssistantThread] ${channelId}`,
+				);
 			}
 		},
 

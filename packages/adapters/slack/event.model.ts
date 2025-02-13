@@ -8,16 +8,19 @@ export type HackyMessageEvent = Omit<GenericMessageEvent, "type"> & {
 		| "assistant_thread_started"
 		| "assistant_thread_context_changed";
 	bot_profile: unknown;
-	assistant_thread?: {
+	assistant_thread?: SlackAssistantThread & {
 		user_id: string;
 		context: {
 			channel_id: string;
 			team_id: string;
 			enterprise_id: string;
 		};
-		channel_id: string;
-		thread_ts: string;
 	};
+};
+
+export type SlackAssistantThread = {
+	channel_id: string;
+	thread_ts: string;
 };
 
 export type EventCallbackPayload = {

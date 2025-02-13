@@ -5,12 +5,19 @@ import { eventName as scrapeEventName } from "@/inngest/workers/annotate/1-scrap
 import { eventName as askEventName } from "@/inngest/workers/ask/1-summarize.task";
 import { inngest } from "@/inngest/client";
 import { getNakedLink } from "@proemial/adapters/slack/payload";
+import { getThreadMessages } from "@proemial/adapters/slack/channel";
+import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 
 export async function dispatchSlackEvent(
 	payload: EventCallbackPayload,
 	metadata: SlackEventMetadata,
 ) {
 	console.log("dispatchSlackEvent", payload.type, payload.event?.type);
+
+	const assistantThread = await SlackDb.events.getAssistantThread(
+		metadata.channel.id,
+	);
+
 	if (nakedLink(payload)) {
 		const url = getNakedLink(payload);
 		if (!url) {
@@ -21,7 +28,7 @@ export async function dispatchSlackEvent(
 			name: scrapeEventName,
 			data: {
 				url,
-				metadata,
+				metadata: { ...metadata, assistantThread },
 			},
 		});
 		console.log("scrape enqueue result", scrapeEventName, result);
@@ -42,7 +49,7 @@ export async function dispatchSlackEvent(
 			data: {
 				thread: payload.event?.thread_ts,
 				question: payload.event?.text,
-				metadata,
+				metadata: { ...metadata, assistantThread },
 			},
 		});
 		console.log("scrape enqueue result", askEventName, result);

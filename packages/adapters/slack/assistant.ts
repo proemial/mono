@@ -1,21 +1,34 @@
 import { SlackDb } from "../mongodb/slack/slack.adapter";
-import { EventCallbackPayload } from "./event.model";
+import { SlackEventMetadata } from "./metadata.models";
 
 export async function showSuggestions(
-	payload: EventCallbackPayload,
+	metadata: SlackEventMetadata | undefined,
 	suggestions: string[],
 	title?: string,
 ) {
-	const install = await SlackDb.installs.get(
-		payload.team_id as string,
-		payload.api_app_id,
+	if (!metadata?.assistantThread) {
+		console.error("No assistant thread found");
+		return;
+	}
+
+	if (!metadata) {
+		console.error("No metadata found");
+		return;
+	}
+
+	const install = await SlackDb.installs.get(metadata.teamId, metadata.appId);
+
+	const channel_id = metadata.assistantThread.channel_id;
+	const thread_ts = metadata.assistantThread.thread_ts;
+	const accessToken = install?.metadata.accessToken as string;
+	console.log(
+		"showSuggestions",
+		metadata,
+		metadata.assistantThread,
+		suggestions,
+		title,
 	);
 
-	const channel_id = payload.event.assistant_thread?.channel_id as string;
-	const thread_ts = payload.event.assistant_thread?.thread_ts as string;
-	const accessToken = install?.metadata.accessToken as string;
-
-	console.log("showSuggestions", channel_id, thread_ts, accessToken, title);
 	const result = await fetch(
 		"https://slack.com/api/assistant.threads.setSuggestedPrompts",
 		{
@@ -40,14 +53,23 @@ export async function showSuggestions(
 	return result.statusText;
 }
 
-export async function setStatus(payload: EventCallbackPayload, status: string) {
-	const install = await SlackDb.installs.get(
-		payload.team_id as string,
-		payload.api_app_id,
-	);
+export async function setStatus(
+	metadata: SlackEventMetadata | undefined,
+	status: string,
+) {
+	if (!metadata) {
+		console.error("No metadata found");
+		return;
+	}
 
-	const channel_id = payload.event.assistant_thread?.channel_id as string;
-	const thread_ts = payload.event.assistant_thread?.thread_ts as string;
+	const install = await SlackDb.installs.get(metadata.teamId, metadata.appId);
+
+	if (!metadata?.assistantThread) {
+		console.error("No assistant thread found");
+		return;
+	}
+	const channel_id = metadata.assistantThread.channel_id;
+	const thread_ts = metadata.assistantThread.thread_ts;
 	const accessToken = install?.metadata.accessToken as string;
 
 	const result = await fetch(

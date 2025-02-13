@@ -1,6 +1,7 @@
 import { uuid } from "@proemial/utils/uid";
 import { SlackDb } from "../mongodb/slack/slack.adapter";
 import { SlackThread } from "./event.model";
+import { SlackEventMetadata } from "./metadata.models";
 
 export async function getChannelInfo(teamId: string, channelId: string) {
 	if (!teamId || !channelId) {
@@ -78,12 +79,15 @@ export async function getThreadMessages(
 }
 
 export async function getThreadMessagesForAi(
-	channelId: string,
+	metadata: SlackEventMetadata,
 	threadTs: string,
-	teamId: string,
-	appId: string,
 ) {
-	const messages = await getThreadMessages(channelId, threadTs, teamId, appId);
+	const messages = await getThreadMessages(
+		metadata.channel.id,
+		threadTs,
+		metadata.team.id,
+		metadata.appId,
+	);
 
 	return messages
 		.filter((m) => m.subtype !== "assistant_app_thread" && m.text)
