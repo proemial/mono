@@ -14,6 +14,7 @@ import { inngest } from "../../client";
 import { SlackAskEvent } from "../../models";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
+import { extractPapers, LlmSteps } from "./extract-references";
 
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
@@ -67,9 +68,7 @@ export const askTask = {
 				messages.map(async (m) => {
 					const link = m.content.slice(1, -1).match(/^https?:\/\/[^\s]+$/);
 					if (link?.length) {
-						console.log("Fetching scraped link", link[0]);
 						const scraped = await SlackDb.scraped.get(link[0]);
-						console.log("scraped", scraped?.content.text);
 						return {
 							...m,
 							content: scraped?.content.text ?? m.content,
@@ -79,18 +78,16 @@ export const askTask = {
 				}),
 			)) as Message[];
 
-			const answer = await answerQuestion(mappedMessages);
-			console.log("answer", answer);
-			// 	await SlackDb.scraped.upsert({
-			// 		...scraped,
-			// 		summaries: {
-			// 			...summaries,
-			// 			background: background.commentary,
-			// 			engTitle: background.engTitle,
-			// 		} as Summaries,
-			// 		questions: background.questions,
-			// 	});
-			// }
+			let { answer, papers } = await answerQuestion(mappedMessages);
+			console.log("answer", answer, papers?.length);
+
+			papers?.forEach((p, i) => {
+				answer = answer.replace(
+					`[${i}]`,
+					`<https://proem.ai/paper/oa/${p.id.split("/").at(-1)}|[${i}]>`,
+				);
+			});
+			console.log("answer with links", answer);
 
 			// Next step from router
 			const next = await AskRouter.next(
@@ -135,6 +132,7 @@ async function answerQuestion(messages: Message[]) {
 					query: z.string().describe("The search query"),
 				}),
 				execute: async ({ query }) => {
+					console.log("Retrieving papers", query);
 					const papers = (await logRetrieval(
 						"assistant",
 						query,
@@ -143,15 +141,19 @@ async function answerQuestion(messages: Message[]) {
 						},
 						traceId,
 					)) as RetrievalResult;
+					console.log("Papers retrieved", papers.length);
 
-					return papers;
+					return { papers };
 				},
 			},
 		},
 		maxSteps: 5,
 	});
 
-	return result.text;
+	return {
+		answer: result.text,
+		papers: extractPapers(result as LlmSteps),
+	};
 }
 
 export type SearchResult = {
