@@ -92,7 +92,6 @@ async function answerQuestion(
 	metadata: SlackEventMetadata,
 	messages: Message[],
 ) {
-	await setStatus(metadata, "Thinking...");
 	const traceId = uuid();
 
 	const question = messages.findLast(
@@ -186,7 +185,7 @@ async function getMessages(
 	question?: string,
 ): Promise<Message[]> {
 	if (thread) {
-		await setStatus(metadata, "Fetching thread history...");
+		await setStatus(metadata, "Thinking...");
 		return (await getThreadMessagesForAi(metadata, thread)) as Message[];
 	}
 
