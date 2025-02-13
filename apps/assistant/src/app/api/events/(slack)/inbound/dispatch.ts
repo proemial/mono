@@ -29,15 +29,19 @@ export async function dispatchSlackEvent(
 		return `dispatch[${scrapeEventName}]: ${result}`;
 	}
 
-	if (payload.event?.type === "message") {
-		if (!payload.event?.thread_ts) {
-			return `dispatch[${askEventName}]: no thread_ts found`;
-		}
+	if (
+		payload.event?.type === "message" ||
+		payload.event?.type === "app_mention"
+	) {
+		// if (!payload.event?.thread_ts) {
+		// 	return `dispatch[${askEventName}]: no thread_ts found`;
+		// }
 
 		const result = await inngest.send({
 			name: askEventName,
 			data: {
 				thread: payload.event?.thread_ts,
+				question: payload.event?.text,
 				metadata,
 			},
 		});

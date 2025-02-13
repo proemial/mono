@@ -4,24 +4,45 @@ import {
 	logBotBegin,
 	logRetrieval,
 } from "@proemial/adapters/analytics/helicone";
-import { Summaries } from "@proemial/adapters/mongodb/slack/scraped.types";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
-import {
-	getThreadMessages,
-	getThreadMessagesForAi,
-} from "@proemial/adapters/slack/channel";
+import { getThreadMessagesForAi } from "@proemial/adapters/slack/channel";
 import { Time } from "@proemial/utils/time";
 import { uuid } from "@proemial/utils/uid";
-import { uuid5 } from "@proemial/utils/uuid";
 import { Message, convertToCoreMessages, generateText } from "ai";
 import { z } from "zod";
 import { inngest } from "../../client";
 import { SlackAskEvent } from "../../models";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
-import { nakedLink } from "@proemial/adapters/slack/routing";
+import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
 
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
+
+async function getMessages(
+	metadata: SlackEventMetadata,
+	thread?: string,
+	question?: string,
+): Promise<Message[]> {
+	if (thread) {
+		return (await getThreadMessagesForAi(
+			metadata.channel.id,
+			thread,
+			metadata.team.id,
+			metadata.appId,
+		)) as Message[];
+	}
+
+	if (question) {
+		return [
+			{
+				content: question,
+				role: "user",
+			},
+		] as Message[];
+	}
+
+	return [];
+}
 
 export const askTask = {
 	name: eventName,
@@ -32,16 +53,11 @@ export const askTask = {
 			const begin = Time.now();
 			const payload = { ...event.data } as SlackAskEvent;
 
-			if (!payload.thread) {
-				throw new Error("No url provided");
-			}
-
-			const messages = (await getThreadMessagesForAi(
-				payload.metadata?.channel.id as string,
+			const messages = await getMessages(
+				payload.metadata as SlackEventMetadata,
 				payload.thread,
-				payload.metadata?.team.id as string,
-				payload.metadata?.appId as string,
-			)) as Message[];
+				payload.question,
+			);
 
 			if (messages.length === 0) {
 				throw new Error("No messages found");

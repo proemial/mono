@@ -73,7 +73,6 @@ export async function getThreadMessages(
 		},
 	);
 	const thread = (await response.json()) as SlackThread;
-	console.log("thread", JSON.stringify(thread));
 
 	return thread.messages;
 }

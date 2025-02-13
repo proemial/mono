@@ -4,6 +4,7 @@ export type HackyMessageEvent = Omit<GenericMessageEvent, "type"> & {
 	// or @slack/types/MessageEvent
 	type:
 		| "message"
+		| "app_mention"
 		| "assistant_thread_started"
 		| "assistant_thread_context_changed";
 	bot_profile: unknown;
