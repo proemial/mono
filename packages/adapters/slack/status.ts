@@ -1,5 +1,6 @@
 import { SlackDb } from "../mongodb/slack/slack.adapter";
 import { setAssistantStatus } from "./assistant";
+import { ephemeralStatus } from "./block-kit/ephemeral-status";
 import { SlackEventMetadata } from "./metadata.models";
 
 export async function setStatus(
@@ -44,6 +45,8 @@ export async function setEphemeralStatusMessage(
 	const channel = channelId;
 	const user = userId;
 
+	const blocks = ephemeralStatus(status);
+
 	const result = await fetch("https://slack.com/api/chat.postEphemeral", {
 		method: "POST",
 		headers: {
@@ -54,7 +57,7 @@ export async function setEphemeralStatusMessage(
 			channel,
 			user,
 			thread_ts: threadTs,
-			text: status,
+			...blocks,
 		}),
 	});
 	console.log("setEphemeralStatusMessage", result.status, await result.json());

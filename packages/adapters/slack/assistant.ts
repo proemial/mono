@@ -1,4 +1,5 @@
 import { SlackDb } from "../mongodb/slack/slack.adapter";
+import { assistantStatus } from "./block-kit/assistant-status";
 import { SlackEventMetadata } from "./metadata.models";
 
 export async function showSuggestions(
@@ -61,6 +62,7 @@ export async function setAssistantStatus(
 ) {
 	const channel_id = channelId;
 	const thread_ts = threadTs;
+	const blocks = assistantStatus(status);
 
 	const result = await fetch(
 		"https://slack.com/api/assistant.threads.setStatus",
@@ -73,7 +75,7 @@ export async function setAssistantStatus(
 			body: JSON.stringify({
 				channel_id,
 				thread_ts,
-				status,
+				...blocks,
 			}),
 		},
 	);

@@ -1,5 +1,6 @@
 import { EventType, EventSource } from "../mongodb/slack/events.types";
 import { SlackDb } from "../mongodb/slack/slack.adapter";
+import { annotatedLink } from "./block-kit/annotated-link";
 import { SlackEventMetadata } from "./metadata.models";
 import { getTarget } from "./routing";
 
@@ -43,7 +44,7 @@ export async function postAnnotation(
 		throw new Error("Type not found");
 	}
 
-	const blocks = annotatedLinkBlock(metadata.channel.id, threadTs, summary);
+	const blocks = annotatedLink(metadata.channel.id, threadTs, summary);
 
 	await SlackDb.events.insert({
 		createdAt: new Date(),
@@ -63,64 +64,3 @@ export async function postAnnotation(
 		body: JSON.stringify(blocks),
 	});
 }
-const annotatedLinkBlock = (
-	channelId: string,
-	threadTs: string,
-	summary: string,
-) => ({
-	channel: channelId,
-	thread_ts: threadTs,
-	unfurl_links: false,
-	blocks: [
-		{
-			type: "section",
-			text: {
-				type: "mrkdwn",
-				text: summary,
-			},
-			accessory: {
-				type: "static_select",
-				placeholder: {
-					type: "plain_text",
-					text: "Actions",
-					emoji: true,
-				},
-				options: [
-					{
-						text: {
-							type: "plain_text",
-							text: "Dive deeper",
-							emoji: true,
-						},
-						value: "expand",
-					},
-					{
-						text: {
-							type: "plain_text",
-							text: "Find relevant research",
-							emoji: true,
-						},
-						value: "expand",
-					},
-					{
-						text: {
-							type: "plain_text",
-							text: "Follow-up questions",
-							emoji: true,
-						},
-						value: "follow-ups",
-					},
-					{
-						text: {
-							type: "plain_text",
-							text: "Counter argument",
-							emoji: true,
-						},
-						value: "counter-argument",
-					},
-				],
-				action_id: "actions",
-			},
-		},
-	],
-});
