@@ -2,10 +2,11 @@ import { Time } from "@proemial/utils/time";
 import { inngest } from "../../client";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { ScrapedUrl } from "@proemial/adapters/mongodb/slack/scraped.types";
-// import {
-// 	fetchTranscript,
-// 	isYoutubeUrl,
-// } from "@proemial/adapters/youtube/transcript";
+import {
+	fetchTranscript,
+	isYouTubeUrl,
+	normalizeYouTubeUrl,
+} from "@proemial/adapters/youtube/transcript";
 import { diffbot } from "@proemial/adapters/diffbot";
 import { AnnotateRouter } from "@/inngest/routing";
 import { getColors } from "@proemial/adapters/googleapis/vision";
@@ -30,20 +31,22 @@ export const scrapeTask = {
 			}
 			await setStatus(payload.metadata, statusMessages.annotate.begin);
 
-			let scrapedUrl = await SlackDb.scraped.get(payload.url);
+			const normalizedUrl = isYouTubeUrl(payload.url)
+				? normalizeYouTubeUrl(payload.url)
+				: payload.url;
+
+			let scrapedUrl = await SlackDb.scraped.get(normalizedUrl);
 			const actions = [scrapedUrl ? "fetch-hit" : "fetch-miss"];
 
 			if (!scrapedUrl) {
-				// const content = isYoutubeUrl(payload.url)
-				// 	? await fetchTranscript(payload.url)
-				// 	: await diffbot(payload.url);
-
 				// TODO: fallback to a different scraper when diffbot fails.
 				// Example: Scraping failed: 'No objects: https://rclone.org/'
-				const content = await diffbot(payload.url);
+				const content = isYouTubeUrl(normalizedUrl)
+					? await fetchTranscript(normalizedUrl)
+					: await diffbot(normalizedUrl);
 
 				scrapedUrl = {
-					url: payload.url,
+					url: normalizedUrl,
 					content,
 					createdAt: new Date(),
 				} as ScrapedUrl;
@@ -55,18 +58,20 @@ export const scrapeTask = {
 				}
 
 				await SlackDb.scraped.upsert(scrapedUrl);
+			} else {
+				console.log(`URL ${normalizedUrl} already scraped - skipping`);
 			}
 
 			// Next step from router
 			const next = await AnnotateRouter.next(
 				eventName,
-				payload.url,
+				normalizedUrl,
 				payload.metadata,
 			);
 			return {
 				event,
 				body: {
-					payload,
+					payload: { ...payload, url: normalizedUrl },
 					actions,
 					steps: {
 						current: eventName,
