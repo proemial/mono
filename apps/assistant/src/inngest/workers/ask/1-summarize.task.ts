@@ -1,4 +1,4 @@
-import { AskRouter } from "@/inngest/routers";
+import { AskRouter } from "@/inngest/routing";
 import { LlmAnswer } from "@/prompts/ask/summarize-prompts";
 import {
 	logBotBegin,
@@ -11,11 +11,12 @@ import { uuid } from "@proemial/utils/uid";
 import { Message, convertToCoreMessages, generateText } from "ai";
 import { z } from "zod";
 import { inngest } from "../../client";
-import { SlackAskEvent } from "../../models";
+import { SlackAskEvent } from "../../workers";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
 import { extractPapers, LlmSteps } from "./extract-references";
 import { setStatus } from "@proemial/adapters/slack/assistant";
+import { statusMessages } from "@/inngest/status-messages";
 
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
@@ -112,7 +113,7 @@ async function answerQuestion(
 					query: z.string().describe("The search query"),
 				}),
 				execute: async ({ query }) => {
-					await setStatus(metadata, "Finding research...");
+					await setStatus(metadata, statusMessages.ask.fetch);
 					console.log("Retrieving papers", query);
 					const papers = (await logRetrieval(
 						"assistant",
@@ -122,7 +123,7 @@ async function answerQuestion(
 						},
 						traceId,
 					)) as RetrievalResult;
-					await setStatus(metadata, "Reasoning...");
+					await setStatus(metadata, statusMessages.ask.summarize);
 					console.log("Papers retrieved", papers.length);
 
 					return { papers };
@@ -185,7 +186,7 @@ async function getMessages(
 	question?: string,
 ): Promise<Message[]> {
 	if (thread) {
-		await setStatus(metadata, "Thinking...");
+		await setStatus(metadata, statusMessages.ask.begin);
 		return (await getThreadMessagesForAi(metadata, thread)) as Message[];
 	}
 

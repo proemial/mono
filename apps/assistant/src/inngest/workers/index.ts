@@ -5,6 +5,7 @@ import { summarizeTask } from "./annotate/5-annotate.task";
 import { slackAnnotateResponseTask } from "./ask/2-slack.task";
 import { slackAskResponseTask } from "./annotate/3-slack.task";
 import { askTask } from "./ask/1-summarize.task";
+import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
 
 export const workers = [
 	scrapeTask.worker,
@@ -17,3 +18,15 @@ export const workers = [
 ];
 
 export const schedulers = [];
+
+export type SlackAnnotateEvent = {
+	url: string;
+	metadata?: SlackEventMetadata;
+};
+
+export type SlackAskEvent = {
+	thread: string;
+	question: string;
+	answer: string;
+	metadata?: SlackEventMetadata;
+};

@@ -1,11 +1,13 @@
 import { Time } from "@proemial/utils/time";
 import { inngest } from "../../client";
-import { AnnotateRouter } from "@/inngest/routers";
-import { SlackAnnotateEvent } from "../../models";
+import { AnnotateRouter } from "@/inngest/routing";
+import { SlackAnnotateEvent } from "../../workers";
 import { generateSummary } from "@/prompts/annotate/summarize-prompts";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { uuid5 } from "@proemial/utils/uuid";
 import { Summaries } from "@proemial/adapters/mongodb/slack/scraped.types";
+import { statusMessages } from "@/inngest/status-messages";
+import { setStatus } from "@proemial/adapters/slack/assistant";
 
 export const eventName = "annotate/query";
 const eventId = "annotate/query/fn";
@@ -22,6 +24,7 @@ export const queryTask = {
 			if (!payload.url) {
 				throw new Error("No url provided");
 			}
+			await setStatus(payload.metadata, statusMessages.annotate.summarize);
 
 			const scraped = await SlackDb.scraped.get(payload.url);
 			if (!scraped) {

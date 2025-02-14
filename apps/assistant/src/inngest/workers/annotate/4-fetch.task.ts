@@ -1,7 +1,7 @@
 import { Time } from "@proemial/utils/time";
 import { inngest } from "../../client";
-import { AnnotateRouter } from "@/inngest/routers";
-import { SlackAnnotateEvent } from "../../models";
+import { AnnotateRouter } from "@/inngest/routing";
+import { SlackAnnotateEvent } from "../../workers";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 

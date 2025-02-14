@@ -7,9 +7,11 @@ import { ScrapedUrl } from "@proemial/adapters/mongodb/slack/scraped.types";
 // 	isYoutubeUrl,
 // } from "@proemial/adapters/youtube/transcript";
 import { diffbot } from "@proemial/adapters/diffbot";
-import { AnnotateRouter } from "@/inngest/routers";
+import { AnnotateRouter } from "@/inngest/routing";
 import { getColors } from "@proemial/adapters/googleapis/vision";
-import { SlackAnnotateEvent } from "../../models";
+import { SlackAnnotateEvent } from "../../workers";
+import { setStatus } from "@proemial/adapters/slack/assistant";
+import { statusMessages } from "@/inngest/status-messages";
 
 export const eventName = "annotate/scrape";
 const eventId = "annotate/scrape/fn";
@@ -26,6 +28,7 @@ export const scrapeTask = {
 			if (!payload.url) {
 				throw new Error("No url provided");
 			}
+			await setStatus(payload.metadata, statusMessages.annotate.begin);
 
 			let scrapedUrl = await SlackDb.scraped.get(payload.url);
 			const actions = [scrapedUrl ? "fetch-hit" : "fetch-miss"];
