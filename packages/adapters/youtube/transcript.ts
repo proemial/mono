@@ -26,6 +26,7 @@ export const fetchTranscript = async (
 	}
 	try {
 		const info = await youtube.getInfo(videoId);
+		console.log(`YOUTUBE VIDEO INFO: ${JSON.stringify(info)}`);
 		const { title, thumbnail } = info.basic_info;
 		if (!title) {
 			throw new Error("No title found");
