@@ -15,7 +15,7 @@ import { SlackAskEvent } from "../../workers";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
 import { extractPapers, LlmSteps } from "./extract-references";
-import { setStatus } from "@proemial/adapters/slack/assistant";
+import { setStatus } from "@proemial/adapters/slack/status";
 import { statusMessages } from "@/inngest/status-messages";
 
 export const eventName = "ask/summarize";

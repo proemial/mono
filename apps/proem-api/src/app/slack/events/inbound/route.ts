@@ -45,7 +45,6 @@ export async function POST(request: Request) {
 		payload.channel?.id ??
 		payload.event?.assistant_thread?.context?.channel_id;
 	const channelInfo = await getChannelInfo(teamId, channelId);
-	console.log("channelInfo", channelInfo, teamId, channelId);
 
 	if (isNakedLink(payload)) {
 		payload.event.subtype = "link";

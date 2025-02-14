@@ -7,7 +7,7 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { uuid5 } from "@proemial/utils/uuid";
 import { Summaries } from "@proemial/adapters/mongodb/slack/scraped.types";
 import { statusMessages } from "@/inngest/status-messages";
-import { setStatus } from "@proemial/adapters/slack/assistant";
+import { setStatus } from "@proemial/adapters/slack/status";
 
 export const eventName = "annotate/query";
 const eventId = "annotate/query/fn";

@@ -10,7 +10,7 @@ import { diffbot } from "@proemial/adapters/diffbot";
 import { AnnotateRouter } from "@/inngest/routing";
 import { getColors } from "@proemial/adapters/googleapis/vision";
 import { SlackAnnotateEvent } from "../../workers";
-import { setStatus } from "@proemial/adapters/slack/assistant";
+import { setStatus } from "@proemial/adapters/slack/status";
 import { statusMessages } from "@/inngest/status-messages";
 
 export const eventName = "annotate/scrape";

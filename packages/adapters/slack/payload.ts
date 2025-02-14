@@ -26,18 +26,13 @@ export async function parseRequest(text: string) {
 	);
 
 	const { teamId, channelId } = parseMessageSource(payload);
-	console.log("teamId", teamId, "channelId", channelId);
+	// console.log("teamId", teamId, "channelId", channelId);
 
 	const { channel, team, token } = await getChannelInfo(teamId, channelId);
-	console.log(
-		"channelInfo",
-		channel,
-		team,
-		JSON.stringify({ channel, team, token }),
-	);
+	// console.log("channelInfo", JSON.stringify({ channel, team, token }));
 
 	const app = await SlackDb.apps.get(payload.api_app_id);
-	console.log("app", JSON.stringify(app));
+	// console.log("app", JSON.stringify(app));
 
 	const callbackUrl = app?.metadata?.callback ?? "https://assistant.proem.ai";
 
@@ -48,7 +43,9 @@ export async function parseRequest(text: string) {
 		teamId,
 		channel,
 		team,
-		assistantThread: {
+		user: payload.event?.user,
+		threadTs: payload.event?.ts,
+		assistantThread: payload.event?.assistant_thread && {
 			channel_id: payload.event?.assistant_thread?.channel_id,
 			thread_ts: payload.event?.assistant_thread?.thread_ts,
 		},

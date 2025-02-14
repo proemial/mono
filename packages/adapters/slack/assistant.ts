@@ -53,24 +53,14 @@ export async function showSuggestions(
 	return result.statusText;
 }
 
-export async function setStatus(
-	metadata: SlackEventMetadata | undefined,
+export async function setAssistantStatus(
+	channelId: string,
+	threadTs: string,
+	accessToken: string,
 	status: string,
 ) {
-	if (!metadata) {
-		console.error("No metadata found");
-		return;
-	}
-
-	const install = await SlackDb.installs.get(metadata.teamId, metadata.appId);
-
-	if (!metadata?.assistantThread) {
-		console.error("No assistant thread found");
-		return;
-	}
-	const channel_id = metadata.assistantThread.channel_id;
-	const thread_ts = metadata.assistantThread.thread_ts;
-	const accessToken = install?.metadata.accessToken as string;
+	const channel_id = channelId;
+	const thread_ts = threadTs;
 
 	const result = await fetch(
 		"https://slack.com/api/assistant.threads.setStatus",
@@ -87,7 +77,7 @@ export async function setStatus(
 			}),
 		},
 	);
-	console.log("setStatus", result.status, await result.json());
+	console.log("setAssistantStatus", result.status, await result.json());
 
 	return result.statusText;
 }
