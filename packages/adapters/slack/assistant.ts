@@ -35,7 +35,7 @@ export async function showSuggestions(
 		{
 			method: "POST",
 			headers: {
-				"Content-Type": "application/json",
+				"Content-Type": "application/json; charset=utf-8",
 				Authorization: `Bearer ${accessToken}`,
 			},
 			body: JSON.stringify({
@@ -69,7 +69,7 @@ export async function setAssistantStatus(
 		{
 			method: "POST",
 			headers: {
-				"Content-Type": "application/json",
+				"Content-Type": "application/json; charset=utf-8",
 				Authorization: `Bearer ${accessToken}`,
 			},
 			body: JSON.stringify({

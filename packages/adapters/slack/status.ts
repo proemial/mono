@@ -50,7 +50,7 @@ export async function setEphemeralStatusMessage(
 	const result = await fetch("https://slack.com/api/chat.postEphemeral", {
 		method: "POST",
 		headers: {
-			"Content-Type": "application/json",
+			"Content-Type": "application/json; charset=utf-8",
 			Authorization: `Bearer ${accessToken}`,
 		},
 		body: JSON.stringify({

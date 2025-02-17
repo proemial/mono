@@ -36,11 +36,8 @@ export const slackAskResponseTask = {
 				"assistant",
 				"AnnotateEvent",
 			);
-			console.log(
-				"openAssistantView result",
-				result.status,
-				await result.json(),
-			);
+			const { message, icons, ...rest } = await result.json();
+			console.log(`${eventName} result`, result.status, rest);
 
 			// Next step from router
 			const next = AskRouter.next(
