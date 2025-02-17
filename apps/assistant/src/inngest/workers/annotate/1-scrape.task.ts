@@ -85,7 +85,7 @@ export const scrapeTask = {
 				};
 			} catch (error) {
 				console.error(error);
-				await logCriticalError(`Error scraping ${payload.url}: ${error}`);
+				await logCriticalError(`Error scraping ${payload.url}: "${error}"`);
 				throw error;
 			}
 		},

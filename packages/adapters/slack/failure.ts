@@ -14,7 +14,7 @@ export async function logCriticalError(message: string) {
 		},
 		body: JSON.stringify({
 			channel: "C078ZRL63FB", // tech-notifications
-			text: message,
+			text: `[${install.team.name}] ${message}`,
 		}),
 	});
 	const json = await result.json();
