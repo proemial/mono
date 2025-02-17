@@ -2,11 +2,11 @@ import { Time } from "@proemial/utils/time";
 import { inngest } from "../../client";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { ScrapedUrl } from "@proemial/adapters/mongodb/slack/scraped.types";
+import { fetchTranscript } from "@proemial/adapters/youtube/oxylabs";
 import {
-	fetchTranscript,
 	isYouTubeUrl,
 	normalizeYouTubeUrl,
-} from "@proemial/adapters/youtube/transcript";
+} from "@proemial/adapters/youtube/shared";
 import { diffbot } from "@proemial/adapters/diffbot";
 import { AnnotateRouter } from "@/inngest/routing";
 import { getColors } from "@proemial/adapters/googleapis/vision";
