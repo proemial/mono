@@ -1,7 +1,7 @@
 import { EventType, EventSource } from "../mongodb/slack/events.types";
 import { SlackDb } from "../mongodb/slack/slack.adapter";
 import { answer } from "./block-kit/answer-blocks";
-import { SlackEventMetadata } from "./metadata.models";
+import { SlackEventMetadata } from "./models/metadata-models";
 import { getTarget } from "./helpers/routing";
 import { postLinkSummary } from "./link-summary";
 

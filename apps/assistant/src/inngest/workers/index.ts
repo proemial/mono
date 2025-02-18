@@ -5,7 +5,7 @@ import { summarizeTask } from "./annotate/5-annotate.task";
 import { slackAnnotateResponseTask } from "./ask/2-slack.task";
 import { slackAskResponseTask } from "./annotate/3-slack.task";
 import { askTask } from "./ask/1-summarize.task";
-import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
+import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 
 export const workers = [
 	scrapeTask.worker,

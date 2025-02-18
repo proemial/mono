@@ -1,7 +1,7 @@
 import { uuid } from "@proemial/utils/uid";
 import { SlackDb } from "../../mongodb/slack/slack.adapter";
-import { SlackThread } from "../event.model";
-import { SlackEventMetadata } from "../metadata.models";
+import { SlackThread } from "../models/event-models";
+import { SlackEventMetadata } from "../models/metadata-models";
 
 export async function getChannelInfo(teamId: string, channelId: string) {
 	if (!teamId || !channelId) {

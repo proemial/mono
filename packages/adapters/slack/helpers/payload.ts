@@ -2,8 +2,8 @@ import { SlackDb } from "../../mongodb/slack/slack.adapter";
 import { getChannelInfo } from "./channel";
 import { nakedLink, nakedMention } from "./routing";
 import { uuid } from "@proemial/utils/uid";
-import { EventCallbackPayload } from "../event.model";
-import { SlackEventMetadata } from "../metadata.models";
+import { EventCallbackPayload } from "../models/event-models";
+import { SlackEventMetadata } from "../models/metadata-models";
 
 export async function parseRequest(text: string) {
 	const unencoded = text?.startsWith("payload=")

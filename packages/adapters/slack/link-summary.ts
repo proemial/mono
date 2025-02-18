@@ -1,6 +1,6 @@
 import { EventType, EventSource } from "../mongodb/slack/events.types";
 import { SlackDb } from "../mongodb/slack/slack.adapter";
-import { SlackEventMetadata } from "./metadata.models";
+import { SlackEventMetadata } from "./models/metadata-models";
 import { getTarget } from "./helpers/routing";
 import { setAssistantStatus } from "./assistant";
 import { link } from "./block-kit/link-blocks";

@@ -1,5 +1,5 @@
-import { EventCallbackPayload } from "../slack/event.model";
-import { SlackEventMetadata } from "../slack/metadata.models";
+import { EventCallbackPayload } from "../slack/models/event-models";
+import { SlackEventMetadata } from "../slack/models/metadata-models";
 
 export async function sendToN8n(
 	payload: EventCallbackPayload,

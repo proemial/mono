@@ -5,7 +5,7 @@ import { eventName as summarizeEventName } from "./workers/annotate/5-annotate.t
 import { eventName as slackAnnotateEventName } from "./workers/ask/2-slack.task";
 import { eventName as slackAskEventName } from "./workers/annotate/3-slack.task";
 import { eventName as askEventName } from "./workers/ask/1-summarize.task";
-import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
+import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 
 import { inngest } from "./client";
 

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getTarget } from "@proemial/adapters/slack/helpers/routing";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
-import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
+import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 
 export const revalidate = 0;
 

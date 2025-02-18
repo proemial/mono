@@ -5,8 +5,8 @@ import { getThreeRandomStarters } from "@/app/api/events/(slack)/inbound/suggest
 import * as slack from "@proemial/adapters/slack/helpers/payload";
 import { sendToN8n } from "@proemial/adapters/n8n/n8n";
 import { dispatchSlackEvent } from "./dispatch";
-import { EventCallbackPayload } from "@proemial/adapters/slack/event.model";
-import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
+import { EventCallbackPayload } from "@proemial/adapters/slack/models/event-models";
+import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 
 export const revalidate = 0;
 

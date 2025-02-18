@@ -13,7 +13,7 @@ import { z } from "zod";
 import { inngest } from "../../client";
 import { SlackAskEvent } from "../../workers";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
-import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
+import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 import { extractPapers, LlmSteps } from "./extract-references";
 import { setStatus } from "@proemial/adapters/slack/answer";
 import { statusMessages } from "@/inngest/status-messages";
