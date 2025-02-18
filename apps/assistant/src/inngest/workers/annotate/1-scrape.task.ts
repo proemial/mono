@@ -3,6 +3,7 @@ import { inngest } from "../../client";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { ScrapedUrl } from "@proemial/adapters/mongodb/slack/scraped.types";
 import { fetchTranscript } from "@proemial/adapters/youtube/oxylabs";
+import { scrape } from "@proemial/adapters/scrapfly/scraper";
 import {
 	isYouTubeUrl,
 	normalizeYouTubeUrl,
@@ -42,11 +43,17 @@ export const scrapeTask = {
 				const actions = [scrapedUrl ? "fetch-hit" : "fetch-miss"];
 
 				if (!scrapedUrl) {
-					// TODO: fallback to a different scraper when diffbot fails.
-					// Example: Scraping failed: 'No objects: https://rclone.org/'
-					const content = isYouTubeUrl(normalizedUrl)
-						? await fetchTranscript(normalizedUrl)
-						: await diffbot(normalizedUrl);
+					let content = undefined;
+					try {
+						content = isYouTubeUrl(normalizedUrl)
+							? await fetchTranscript(normalizedUrl)
+							: await diffbot(normalizedUrl);
+					} catch (error) {
+						console.warn(
+							`Main scraper failed to scrape ${normalizedUrl} - attempting again with fallback scraper…`,
+						);
+						content = await scrape(normalizedUrl);
+					}
 
 					scrapedUrl = {
 						url: normalizedUrl,
