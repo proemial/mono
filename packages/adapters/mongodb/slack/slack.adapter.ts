@@ -92,6 +92,17 @@ export const SlackDb = {
 			const begin = Time.now();
 
 			try {
+				if (entity.user) {
+					return await entities.updateOne(
+						{
+							"team.id": entity.team.id,
+							"app.id": entity.app.id,
+							"user.id": entity.user.id,
+						},
+						{ $set: entity },
+						{ upsert: true },
+					);
+				}
 				return await entities.updateOne(
 					{ "team.id": entity.team.id, "app.id": entity.app.id },
 					{ $set: entity },
@@ -100,7 +111,7 @@ export const SlackDb = {
 			} finally {
 				Time.log(
 					begin,
-					`[mongodb][slack][installs][upsert] ${entity.team.id} ${entity.app.id}`,
+					`[mongodb][slack][installs][upsert] ${entity.team.id} ${entity.app.id} ${entity.user?.id}`,
 				);
 			}
 		},
