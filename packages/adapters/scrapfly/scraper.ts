@@ -7,7 +7,7 @@ type ScrapeResult = {
 };
 
 const client = new ScrapflyClient({
-	key: "scp-live-78db9ca4ff254de78f31bffcfc5a9caa",
+	key: process.env.SCRAPFLY_API_KEY as string,
 });
 
 export const scrape = async (url: string): Promise<ScrapeResult> => {
