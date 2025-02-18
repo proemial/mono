@@ -75,6 +75,11 @@ export async function GET(request: NextRequest, { params }: { params: Props }) {
 		});
 		console.log("Inserted oauth event", insertedEvent);
 
+		const user =
+			data.authed_user?.token_type === "user"
+				? { user: { id: data.authed_user.id, name: data.authed_user.name } }
+				: {};
+
 		const upsertedEntity = await SlackDb.installs.upsert({
 			createdAt: new Date(),
 			type: "install",
@@ -89,6 +94,7 @@ export async function GET(request: NextRequest, { params }: { params: Props }) {
 			metadata: {
 				accessToken: data.access_token,
 			},
+			...user,
 		});
 		console.log("Upserted team entity", upsertedEntity);
 

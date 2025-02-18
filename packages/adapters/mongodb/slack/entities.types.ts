@@ -26,6 +26,10 @@ export type SlackAppInstall = {
 		id: string;
 		name?: string;
 	};
+	user?: {
+		id: string;
+		name?: string;
+	};
 	metadata: {
 		accessToken: string;
 	};
