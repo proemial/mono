@@ -45,9 +45,13 @@ export const scrapeTask = {
 				if (!scrapedUrl) {
 					let content = undefined;
 					try {
-						content = isYouTubeUrl(normalizedUrl)
-							? await fetchTranscript(normalizedUrl)
-							: await diffbot(normalizedUrl);
+						if (isYouTubeUrl(normalizedUrl)) {
+							content = await fetchTranscript(normalizedUrl);
+						} else if (isTwitterUrl(normalizedUrl)) {
+							content = await scrape(normalizedUrl);
+						} else {
+							content = await diffbot(normalizedUrl);
+						}
 					} catch (error) {
 						console.warn(
 							`Main scraper failed to scrape ${normalizedUrl} - attempting again with fallback scraper…`,
@@ -97,4 +101,11 @@ export const scrapeTask = {
 			}
 		},
 	),
+};
+
+const isTwitterUrl = (url: string) => {
+	const urlObj = new URL(url);
+	return (
+		urlObj.hostname.includes("twitter.com") || urlObj.hostname.includes("x.com")
+	);
 };
