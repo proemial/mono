@@ -75,13 +75,21 @@ export const SlackDb = {
 	},
 
 	installs: {
-		get: async (teamId: string, appId: string) => {
+		get: async (teamId: string, appId: string, userId?: string) => {
 			const begin = Time.now();
 
 			try {
+				if (userId) {
+					return await entities.findOne<SlackAppInstall>({
+						"team.id": teamId,
+						"app.id": appId,
+						"user.id": userId,
+					});
+				}
 				return await entities.findOne<SlackAppInstall>({
 					"team.id": teamId,
 					"app.id": appId,
+					"user.id": { $exists: false },
 				});
 			} finally {
 				Time.log(begin, `[mongodb][slack][installs][get] ${teamId} ${appId}`);
