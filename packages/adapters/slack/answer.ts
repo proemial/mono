@@ -1,38 +1,30 @@
 import { EventType, EventSource } from "../mongodb/slack/events.types";
 import { SlackDb } from "../mongodb/slack/slack.adapter";
-import { annotatedLink } from "./block-kit/annotated-link";
+import { answer } from "./block-kit/answer-blocks";
 import { SlackEventMetadata } from "./metadata.models";
-import { getTarget } from "./routing";
+import { getTarget } from "./helpers/routing";
+import { postLinkSummary } from "./link-summary";
 
-export function parseMessageSource(payload: Record<string, any>) {
-	const teamId =
-		payload.team_id ??
-		payload.team?.id ??
-		payload.event?.team ??
-		payload.message?.team;
-	const channelId =
-		payload.event?.channel ??
-		payload.channel?.id ??
-		payload.event?.assistant_thread?.context?.channel_id;
-
-	return {
-		teamId,
-		channelId,
-	};
+export async function setStatus(
+	metadata: SlackEventMetadata | undefined,
+	status: string,
+) {
+	return await postLinkSummary(
+		metadata,
+		{ status },
+		"assistant",
+		"AnnotateEvent",
+	);
 }
 
-export async function postAnnotation(
-	metadata: SlackEventMetadata,
-	threadTs: string,
+export async function postAnswer(
+	metadata: SlackEventMetadata | undefined,
 	summary: string,
 	source: EventSource,
 	type: EventType,
 ) {
 	if (!metadata) {
 		throw new Error("Metadata not found");
-	}
-	if (!threadTs) {
-		throw new Error("Thread TS not found");
 	}
 	if (!summary) {
 		throw new Error("Summary not found");
@@ -44,7 +36,7 @@ export async function postAnnotation(
 		throw new Error("Type not found");
 	}
 
-	const blocks = annotatedLink(metadata.channel.id, threadTs, summary);
+	const blocks = answer(metadata.channel.id, metadata.threadTs, summary);
 
 	await SlackDb.events.insert({
 		createdAt: new Date(),

@@ -3,7 +3,7 @@ import { inngest } from "../../client";
 import { AskRouter } from "@/inngest/routing";
 import { SlackAskEvent } from "../../workers";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
-import { postAnnotation } from "@proemial/adapters/slack/message";
+import { postLinkSummary } from "@proemial/adapters/slack/link-summary";
 import { SlackEventCallback } from "@proemial/adapters/mongodb/slack/events.types";
 
 export const eventName = "annotate/slack";
@@ -29,10 +29,9 @@ export const slackAskResponseTask = {
 				throw new Error("No slack event found");
 			}
 
-			const result = await postAnnotation(
+			const result = await postLinkSummary(
 				payload.metadata,
-				slackEvent.event?.event_ts,
-				payload.answer,
+				{ summary: payload.answer },
 				"assistant",
 				"AnnotateEvent",
 			);

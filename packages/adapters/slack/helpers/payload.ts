@@ -1,10 +1,9 @@
-import { SlackDb } from "../mongodb/slack/slack.adapter";
+import { SlackDb } from "../../mongodb/slack/slack.adapter";
 import { getChannelInfo } from "./channel";
-import { parseMessageSource } from "./message";
 import { nakedLink, nakedMention } from "./routing";
 import { uuid } from "@proemial/utils/uid";
-import { EventCallbackPayload } from "./event.model";
-import { SlackEventMetadata } from "./metadata.models";
+import { EventCallbackPayload } from "../event.model";
+import { SlackEventMetadata } from "../metadata.models";
 
 export async function parseRequest(text: string) {
 	const unencoded = text?.startsWith("payload=")
@@ -131,4 +130,21 @@ function findLinkUrl(elements: any[]): string | undefined {
 		}
 	}
 	return undefined;
+}
+
+export function parseMessageSource(payload: Record<string, any>) {
+	const teamId =
+		payload.team_id ??
+		payload.team?.id ??
+		payload.event?.team ??
+		payload.message?.team;
+	const channelId =
+		payload.event?.channel ??
+		payload.channel?.id ??
+		payload.event?.assistant_thread?.context?.channel_id;
+
+	return {
+		teamId,
+		channelId,
+	};
 }

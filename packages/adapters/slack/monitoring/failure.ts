@@ -1,4 +1,4 @@
-import { SlackDb } from "../mongodb/slack/slack.adapter";
+import { SlackDb } from "../../mongodb/slack/slack.adapter";
 
 export async function logCriticalError(message: string) {
 	const install = await SlackDb.installs.get("T05A541540J", "A08AD1FSPHV"); // proemial, proem

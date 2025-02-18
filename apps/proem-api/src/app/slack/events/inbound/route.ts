@@ -2,7 +2,7 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { NextResponse } from "next/server";
 import { uuid } from "@proemial/utils/uid";
 import { isNakedLink, isNakedMention } from "../../utils/routing";
-import { getChannelInfo } from "@proemial/adapters/slack/channel";
+import { getChannelInfo } from "@proemial/adapters/slack/helpers/channel";
 
 export const revalidate = 0;
 

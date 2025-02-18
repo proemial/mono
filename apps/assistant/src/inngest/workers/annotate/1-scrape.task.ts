@@ -12,9 +12,9 @@ import { diffbot } from "@proemial/adapters/diffbot";
 import { AnnotateRouter } from "@/inngest/routing";
 import { getColors } from "@proemial/adapters/googleapis/vision";
 import { SlackAnnotateEvent } from "../../workers";
-import { setStatus } from "@proemial/adapters/slack/status";
+import { setStatus } from "@proemial/adapters/slack/link-summary";
 import { statusMessages } from "@/inngest/status-messages";
-import { logCriticalError } from "@proemial/adapters/slack/failure";
+import { logCriticalError } from "@proemial/adapters/slack/monitoring/failure";
 
 export const eventName = "annotate/scrape";
 const eventId = "annotate/scrape/fn";

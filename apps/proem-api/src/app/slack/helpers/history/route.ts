@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getChannelHistory } from "@proemial/adapters/slack/channel";
+import { getChannelHistory } from "@proemial/adapters/slack/helpers/channel";
 
 export const revalidate = 0;
 

@@ -1,5 +1,5 @@
-import { SlackDb } from "../mongodb/slack/slack.adapter";
-import { SlackEventMetadata } from "./metadata.models";
+import { SlackDb } from "../../mongodb/slack/slack.adapter";
+import { SlackEventMetadata } from "../metadata.models";
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function nakedLink(payload: any): string | undefined {
 	const text = payload?.event?.text;

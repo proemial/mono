@@ -4,7 +4,7 @@ import { generateText } from "ai";
 import {
 	getChannelHistory,
 	getChannelInfo,
-} from "@proemial/adapters/slack/channel";
+} from "@proemial/adapters/slack/helpers/channel";
 
 export const revalidate = 0;
 

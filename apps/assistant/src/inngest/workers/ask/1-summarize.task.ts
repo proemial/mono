@@ -5,7 +5,7 @@ import {
 	logRetrieval,
 } from "@proemial/adapters/analytics/helicone";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
-import { getThreadMessagesForAi } from "@proemial/adapters/slack/channel";
+import { getThreadMessagesForAi } from "@proemial/adapters/slack/helpers/channel";
 import { Time } from "@proemial/utils/time";
 import { uuid } from "@proemial/utils/uid";
 import { Message, convertToCoreMessages, generateText } from "ai";
@@ -15,7 +15,7 @@ import { SlackAskEvent } from "../../workers";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import { SlackEventMetadata } from "@proemial/adapters/slack/metadata.models";
 import { extractPapers, LlmSteps } from "./extract-references";
-import { setStatus } from "@proemial/adapters/slack/status";
+import { setStatus } from "@proemial/adapters/slack/answer";
 import { statusMessages } from "@/inngest/status-messages";
 
 export const eventName = "ask/summarize";

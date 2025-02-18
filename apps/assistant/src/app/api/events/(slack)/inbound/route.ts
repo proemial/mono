@@ -2,7 +2,7 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { NextResponse } from "next/server";
 import { showSuggestions } from "@proemial/adapters/slack/assistant";
 import { getThreeRandomStarters } from "@/app/api/events/(slack)/inbound/suggestions";
-import * as slack from "@proemial/adapters/slack/payload";
+import * as slack from "@proemial/adapters/slack/helpers/payload";
 import { sendToN8n } from "@proemial/adapters/n8n/n8n";
 import { dispatchSlackEvent } from "./dispatch";
 import { EventCallbackPayload } from "@proemial/adapters/slack/event.model";
