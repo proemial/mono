@@ -45,7 +45,11 @@ export const SlackMessenger = {
 		}
 	},
 
-	sendMessage: async (metadata: SlackEventMetadata, text: string) => {
+	sendMessage: async (
+		metadata: SlackEventMetadata,
+		text: string,
+		title?: string,
+	) => {
 		const id = metadata?.eventId as string;
 		const type = "slack/message";
 
@@ -63,6 +67,7 @@ export const SlackMessenger = {
 				target,
 				text,
 				(userMessage?.payload as SlackEventCallback).event.text,
+				title,
 			);
 
 			await updateEvents(id, type, payload);

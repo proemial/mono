@@ -38,6 +38,7 @@ export const slackAnnotateResponseTask = {
 			await SlackMessenger.sendMessage(
 				payload.metadata,
 				scraped.summaries.query,
+				scraped.content.title,
 			);
 
 			// Next step from router

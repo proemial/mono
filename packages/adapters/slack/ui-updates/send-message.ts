@@ -5,6 +5,7 @@ export async function sendMessage(
 	target: SlackV2MessageTarget,
 	message: string,
 	text: string,
+	title?: string,
 ) {
 	if (!target.channelId) {
 		throw new Error("Channel ID not found");
@@ -19,7 +20,7 @@ export async function sendMessage(
 		throw new Error("Text not found");
 	}
 
-	const blocks = link(message);
+	const blocks = link(message, title);
 	const requestBody = {
 		method: "POST",
 		headers: {

@@ -20,11 +20,31 @@ export async function GET() {
 		},
 		body: JSON.stringify({
 			channel: "C08B4RXM2AE",
-			ts: "1739979763.485219",
-			text: "<https://deeplearn.org/?c=3>",
+			ts: "1739994734.459249",
+			text: "<@U08B132LUBZ> does hedgehogs dream",
 			attachments: [
 				{
-					text: "Doing it...",
+					id: 1,
+					pretext: "summary",
+					color: "#7DFA85",
+					fallback:
+						"No specific research was found on whether hedgehogs dream. However, like many mammals, hedgehogs likely experience REM sleep, a phase associated with dreaming in humans. This suggests they might have dream-like experiences, but more research is needed to confirm this.",
+					text: "No specific research was found on whether hedgehogs dream. However, like many mammals, hedgehogs likely experience REM sleep, a phase associated with dreaming in humans. This suggests they might have dream-like experiences, but more research is needed to confirm this.",
+				},
+			],
+			blocks: [
+				{
+					type: "rich_text",
+					block_id: "g=434",
+					elements: [
+						{
+							type: "rich_text_section",
+							elements: [
+								{ type: "user", user_id: "U08B132LUBZ" },
+								{ type: "text", text: " does hedgehogs dream" },
+							],
+						},
+					],
 				},
 			],
 		}),

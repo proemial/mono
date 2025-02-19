@@ -1,25 +1,13 @@
-export function link(text: string) {
+export function link(text: string, title?: string) {
 	return {
 		attachments: [
 			{
-				text: text,
-			},
-		],
-	};
-}
-
-export function linkOld(channelId: string, threadTs: string, text: string) {
-	return {
-		channel: channelId,
-		thread_ts: threadTs,
-		unfurl_links: false,
-		blocks: [
-			{
-				type: "section",
-				text: {
-					type: "mrkdwn",
-					text: text,
-				},
+				...(title && {
+					pretext: `*${title}*`,
+					mrkdwn_in: ["pretext"],
+				}),
+				color: "#7DFA85",
+				text,
 			},
 		],
 	};
