@@ -1,9 +1,10 @@
 import { SlackDb } from "../../mongodb/slack/slack.adapter";
 import { getChannelInfo } from "./channel";
-import { nakedLink, nakedMention } from "./routing";
+import { nakedMention } from "./routing";
 import { uuid } from "@proemial/utils/uid";
 import { EventCallbackPayload } from "../models/event-models";
 import { SlackEventMetadata } from "../models/metadata-models";
+import { extractLinks } from "./links";
 
 export async function parseRequest(text: string) {
 	const unencoded = text?.startsWith("payload=")
@@ -13,6 +14,7 @@ export async function parseRequest(text: string) {
 			: text;
 
 	const payload = JSON.parse(unencoded) as EventCallbackPayload;
+	console.log("PAYLOAD", JSON.stringify(payload));
 
 	console.log(
 		"[/slack/payload]",
@@ -43,15 +45,33 @@ export async function parseRequest(text: string) {
 		channel,
 		team,
 		user: payload.event?.user,
-		threadTs: payload.event?.ts,
+		ts: payload.event?.ts,
+		threadTs: payload.event?.thread_ts,
+		channelType: payload.event?.channel_type,
 		assistantThread: payload.event?.assistant_thread && {
 			channel_id: payload.event?.assistant_thread?.channel_id,
 			thread_ts: payload.event?.assistant_thread?.thread_ts,
 		},
 	} as SlackEventMetadata;
-	console.log("metadata", JSON.stringify(metadata));
+	console.log("METADATA", JSON.stringify(metadata));
 
 	const type = classifyRequest(payload, metadata);
+
+	// console.log(
+	// 	"METADATA",
+	// 	JSON.stringify({
+	// 		type,
+	// 		teamId,
+	// 		channelId,
+	// 		user: payload.event?.user,
+	// 		ts: payload.event?.ts,
+	// 		threadTs: payload.event?.thread_ts,
+	// 		assistantThread: payload.event?.assistant_thread && {
+	// 			channel_id: payload.event?.assistant_thread?.channel_id,
+	// 			thread_ts: payload.event?.assistant_thread?.thread_ts,
+	// 		},
+	// 	}),
+	// );
 
 	return { payload, metadata, type, token };
 }
@@ -73,13 +93,13 @@ export function classifyRequest(
 		console.log("exit[bot_profile]", payload.event.bot_profile);
 		return "ignore";
 	}
-	if (payload.event?.subtype && !nakedLink(payload)) {
+	if (payload.event?.subtype && !extractLinks(payload.event.text).length) {
 		console.log("exit[subtype]", payload.event.subtype);
 		return "ignore";
 	}
 	if (
 		payload.event?.type === "message" &&
-		!nakedLink(payload) &&
+		!extractLinks(payload.event.text).length &&
 		!metadata.channel?.id.startsWith("D")
 	) {
 		console.log("exit[message]", payload.event.text);
@@ -97,37 +117,15 @@ export function classifyRequest(
 		console.log("exit[assistant_thread_started]", payload.event.text);
 		return "ignore";
 	}
-	return undefined;
-}
-
-export function getNakedLink(payload: EventCallbackPayload) {
-	if (!nakedLink(payload)) {
-		return undefined;
+	if (
+		payload.type === "block_actions" &&
+		payload.actions.at(0)?.action_id === "CKwTE"
+	) {
+		return "ignore";
 	}
-
-	const firstBlock = payload.event.blocks?.[0];
-	const url =
-		firstBlock && "elements" in firstBlock
-			? findLinkUrl(firstBlock.elements)
-			: undefined;
-
-	console.log("nakedLink", url);
-	return url;
-}
-
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-function findLinkUrl(elements: any[]): string | undefined {
-	for (const element of elements) {
-		// Check if current element is a link
-		if (element.type === "link") {
-			return element.url;
-		}
-
-		// Recursively check nested elements
-		if (element.elements && Array.isArray(element.elements)) {
-			const nestedUrl = findLinkUrl(element.elements);
-			if (nestedUrl) return nestedUrl;
-		}
+	if (payload.event?.type === "app_mention" && payload.event?.attachments) {
+		console.log("exit[app_mention_modified]", payload.event.text);
+		return "ignore";
 	}
 	return undefined;
 }

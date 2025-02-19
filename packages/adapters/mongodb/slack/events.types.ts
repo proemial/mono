@@ -42,6 +42,8 @@ export type SlackEventCallback = {
 			channel_id: string;
 			thread_ts: string;
 		};
+		text: string;
+		blocks: any[];
 	};
 	event_context: string;
 	event_id: string;

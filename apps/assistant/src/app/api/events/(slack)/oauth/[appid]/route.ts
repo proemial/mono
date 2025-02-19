@@ -85,6 +85,7 @@ export async function GET(request: NextRequest, { params }: { params: Props }) {
 						metadata: { accessToken: data.authed_user.access_token },
 					}
 				: { metadata: { accessToken: data.access_token } };
+		console.log("AUTH", JSON.stringify(auth));
 
 		const upsertedEntity = await SlackDb.installs.upsert({
 			createdAt: new Date(),

@@ -2,8 +2,8 @@ import { eventName as scrapeEventName } from "./workers/annotate/1-scrape.task";
 import { eventName as queryEventName } from "./workers/annotate/2-summarize.task";
 import { eventName as fetchEventName } from "./workers/annotate/4-fetch.task";
 import { eventName as summarizeEventName } from "./workers/annotate/5-annotate.task";
-import { eventName as slackAnnotateEventName } from "./workers/ask/2-slack.task";
-import { eventName as slackAskEventName } from "./workers/annotate/3-slack.task";
+import { eventName as slackAskEventName } from "./workers/ask/2-slack.task";
+import { eventName as slackAnnotateEventName } from "./workers/annotate/3-slack.task";
 import { eventName as askEventName } from "./workers/ask/1-summarize.task";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 

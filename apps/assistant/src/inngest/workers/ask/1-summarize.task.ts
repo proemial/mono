@@ -15,8 +15,8 @@ import { SlackAskEvent } from "../../workers";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 import { extractPapers, LlmSteps } from "./extract-references";
-import { setStatus } from "@proemial/adapters/slack/answer";
 import { statusMessages } from "@/inngest/status-messages";
+import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
@@ -113,7 +113,7 @@ async function answerQuestion(
 					query: z.string().describe("The search query"),
 				}),
 				execute: async ({ query }) => {
-					await setStatus(metadata, statusMessages.ask.fetch);
+					await SlackMessenger.updateStatus(metadata, statusMessages.ask.fetch);
 					console.log("Retrieving papers", query);
 					const papers = (await logRetrieval(
 						"assistant",
@@ -123,7 +123,10 @@ async function answerQuestion(
 						},
 						traceId,
 					)) as RetrievalResult;
-					await setStatus(metadata, statusMessages.ask.summarize);
+					await SlackMessenger.updateStatus(
+						metadata,
+						statusMessages.ask.summarize,
+					);
 					console.log("Papers retrieved", papers.length);
 
 					return { papers };
@@ -186,7 +189,7 @@ async function getMessages(
 	question?: string,
 ): Promise<Message[]> {
 	if (thread) {
-		await setStatus(metadata, statusMessages.ask.begin);
+		await SlackMessenger.updateStatus(metadata, statusMessages.ask.begin);
 		return (await getThreadMessagesForAi(metadata, thread)) as Message[];
 	}
 

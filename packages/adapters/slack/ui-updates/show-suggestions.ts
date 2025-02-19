@@ -1,5 +1,5 @@
-import { SlackDb } from "../mongodb/slack/slack.adapter";
-import { SlackEventMetadata } from "./models/metadata-models";
+import { SlackDb } from "../../mongodb/slack/slack.adapter";
+import { SlackEventMetadata } from "../models/metadata-models";
 
 export async function showSuggestions(
 	metadata: SlackEventMetadata | undefined,

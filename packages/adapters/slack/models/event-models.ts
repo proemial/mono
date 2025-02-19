@@ -6,7 +6,8 @@ export type HackyMessageEvent = Omit<GenericMessageEvent, "type"> & {
 		| "message"
 		| "app_mention"
 		| "assistant_thread_started"
-		| "assistant_thread_context_changed";
+		| "assistant_thread_context_changed"
+		| "block_actions";
 	bot_profile: unknown;
 	assistant_thread?: SlackAssistantThread & {
 		user_id: string;
@@ -30,6 +31,13 @@ export type EventCallbackPayload = {
 	challenge?: string;
 	team_id?: string;
 	event: HackyMessageEvent; // or @slack/types/MessageEvent
+	actions: {
+		action_id: string;
+		block_id: string;
+		action_ts: string;
+		user_id: string;
+		url: string;
+	}[];
 };
 
 export type SlackThread = {

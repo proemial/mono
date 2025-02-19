@@ -1,11 +1,11 @@
 import { EventCallbackPayload } from "@proemial/adapters/slack/models/event-models";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
-import { nakedLink } from "@proemial/adapters/slack/helpers/routing";
 import { eventName as scrapeEventName } from "@/inngest/workers/annotate/1-scrape.task";
 import { eventName as askEventName } from "@/inngest/workers/ask/1-summarize.task";
 import { inngest } from "@/inngest/client";
-import { getNakedLink } from "@proemial/adapters/slack/helpers/payload";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
+import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
+import { extractLinks } from "@proemial/adapters/slack/helpers/links";
 
 export async function dispatchSlackEvent(
 	payload: EventCallbackPayload,
@@ -17,8 +17,11 @@ export async function dispatchSlackEvent(
 		metadata.channel.id,
 	);
 
-	if (nakedLink(payload)) {
-		const url = getNakedLink(payload);
+	if (extractLinks(payload.event?.text).length > 0) {
+		await SlackMessenger.nudgeUser(metadata);
+
+		// TODO: handle all links, not just the first one
+		const url = extractLinks(payload.event?.text).at(0);
 		if (!url) {
 			return `dispatch[${scrapeEventName}]: no url found`;
 		}
@@ -39,10 +42,6 @@ export async function dispatchSlackEvent(
 		payload.event?.type === "message" ||
 		payload.event?.type === "app_mention"
 	) {
-		// if (!payload.event?.thread_ts) {
-		// 	return `dispatch[${askEventName}]: no thread_ts found`;
-		// }
-
 		const result = await inngest.send({
 			name: askEventName,
 			data: {
@@ -51,7 +50,7 @@ export async function dispatchSlackEvent(
 				metadata: { ...metadata, assistantThread },
 			},
 		});
-		console.log("scrape enqueue result", askEventName, result);
+		console.log("ask enqueue result", askEventName, result);
 
 		return `dispatch[${askEventName}]: ${result}`;
 	}

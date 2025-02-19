@@ -1,25 +1,30 @@
 import { Time } from "@proemial/utils/time";
 import { inngest } from "../../client";
-import { AskRouter } from "@/inngest/routing";
-import { SlackAskEvent } from "../../workers";
+import { AnnotateRouter } from "@/inngest/routing";
+import { SlackAnnotateEvent } from "../../workers";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
-import { postLinkSummary } from "@proemial/adapters/slack/link-summary";
 import { SlackEventCallback } from "@proemial/adapters/mongodb/slack/events.types";
+import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 
-export const eventName = "annotate/slack";
-const eventId = "annotate/slack/fn";
+export const eventName = "ask/slack";
+const eventId = "ask/slack/fn";
 
-export const slackAskResponseTask = {
+export const slackAnnotateResponseTask = {
 	name: eventName,
 	worker: inngest.createFunction(
 		{ id: eventId, concurrency: 1 },
 		{ event: eventName },
 		async ({ event }) => {
 			const begin = Time.now();
-			const payload = { ...event.data } as SlackAskEvent;
+			const payload = { ...event.data } as SlackAnnotateEvent;
 
 			if (!payload.metadata) {
 				throw new Error("No metadata provided");
+			}
+
+			const scraped = await SlackDb.scraped.get(payload.url);
+			if (!scraped?.summaries?.query) {
+				throw new Error("No query found");
 			}
 
 			const slackEvent = (
@@ -29,20 +34,16 @@ export const slackAskResponseTask = {
 				throw new Error("No slack event found");
 			}
 
-			const result = await postLinkSummary(
+			console.log("Sending message", scraped.summaries.query);
+			await SlackMessenger.sendMessage(
 				payload.metadata,
-				{ summary: payload.answer },
-				"assistant",
-				"AnnotateEvent",
+				scraped.summaries.query,
 			);
-			const { message, icons, ...rest } = result;
-			console.log(`${eventName} result`, result.status, rest);
 
 			// Next step from router
-			const next = AskRouter.next(
+			const next = AnnotateRouter.next(
 				eventName,
-				payload.thread,
-				payload.answer,
+				payload.url,
 				payload.metadata,
 			);
 			return {

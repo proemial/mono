@@ -12,9 +12,9 @@ import { diffbot } from "@proemial/adapters/diffbot";
 import { AnnotateRouter } from "@/inngest/routing";
 import { getColors } from "@proemial/adapters/googleapis/vision";
 import { SlackAnnotateEvent } from "../../workers";
-import { setStatus } from "@proemial/adapters/slack/link-summary";
 import { statusMessages } from "@/inngest/status-messages";
 import { logCriticalError } from "@proemial/adapters/slack/monitoring/failure";
+import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 
 export const eventName = "annotate/scrape";
 const eventId = "annotate/scrape/fn";
@@ -33,7 +33,10 @@ export const scrapeTask = {
 
 			try {
 				const begin = Time.now();
-				await setStatus(payload.metadata, statusMessages.annotate.begin);
+				await SlackMessenger.updateStatus(
+					payload.metadata,
+					statusMessages.annotate.begin,
+				);
 
 				const normalizedUrl = isYouTubeUrl(payload.url)
 					? normalizeYouTubeUrl(payload.url)

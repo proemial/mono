@@ -14,6 +14,14 @@ export async function POST(request: Request) {
 	const text = await request.text();
 	const { payload, metadata, type } = await slack.parseRequest(text);
 
+	// if (
+	// 	payload.type === "block_actions" &&
+	// 	payload.actions.at(0)?.action_id === "dismiss_nudge"
+	// ) {
+	// 	console.log("dismiss_nudge invoked");
+	// 	return NextResponse.json({ delete_original: true });
+	// }
+
 	if (type === "ignore") {
 		if (payload.type === "url_verification") {
 			return NextResponse.json({ challenge: payload.challenge });

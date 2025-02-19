@@ -6,7 +6,9 @@ export type SlackEventMetadata = {
 	channel: SlackChannel;
 	team: SlackTeam;
 	user: string;
-	threadTs: string;
+	ts?: string;
+	threadTs?: string;
+	channelType?: string;
 	assistantThread?: SlackAssistantThread;
 };
 

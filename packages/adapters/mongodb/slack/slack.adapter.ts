@@ -3,8 +3,10 @@ import Mongo from "../mongodb-client";
 import { SlackApp, SlackAppInstall, SlackEntity } from "./entities.types";
 import { Event, SlackEventCallback } from "./events.types";
 import { ScrapedUrl } from "./scraped.types";
+import { SlackV2Event, SlackV2EventFromDb } from "./v2.models";
 
 const events = Mongo.db("slack").collection("events");
+const v2Events = Mongo.db("slack").collection("v2events");
 const entities = Mongo.db("slack").collection("entities");
 const scraped = Mongo.db("slack").collection("scraped");
 
@@ -60,6 +62,35 @@ export const SlackDb = {
 		},
 	},
 
+	v2Events: {
+		insert: async (event: SlackV2Event) => {
+			const begin = Time.now();
+
+			try {
+				return await v2Events.insertOne({
+					...event,
+					createdAt: new Date(),
+				});
+			} finally {
+				Time.log(begin, `[mongodb][slack][v2events][insert] ${event.eventId}`);
+			}
+		},
+
+		list: async (eventId?: string) => {
+			const begin = Time.now();
+
+			try {
+				return await v2Events
+					.find<SlackV2EventFromDb>({
+						eventId: eventId,
+					})
+					.toArray();
+			} finally {
+				Time.log(begin, `[mongodb][slack][v2events][list] ${eventId}`);
+			}
+		},
+	},
+
 	apps: {
 		get: async (id: string) => {
 			const begin = Time.now();
@@ -92,7 +123,10 @@ export const SlackDb = {
 					"user.id": { $exists: false },
 				});
 			} finally {
-				Time.log(begin, `[mongodb][slack][installs][get] ${teamId} ${appId}`);
+				Time.log(
+					begin,
+					`[mongodb][slack][installs][get] ${teamId} ${appId} ${userId}`,
+				);
 			}
 		},
 
