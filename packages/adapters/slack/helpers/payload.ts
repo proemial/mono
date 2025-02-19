@@ -118,9 +118,10 @@ export function classifyRequest(
 		return "ignore";
 	}
 	if (
-		payload.type === "block_actions" &&
-		payload.actions.at(0)?.action_id === "CKwTE"
+		payload.type === "block_actions"
+		//  && payload.actions.at(0)?.action_id === "CKwTE"
 	) {
+		console.log("exit[block_actions]", JSON.stringify(payload.actions.at(0)));
 		return "ignore";
 	}
 	if (payload.event?.type === "app_mention" && payload.event?.attachments) {
