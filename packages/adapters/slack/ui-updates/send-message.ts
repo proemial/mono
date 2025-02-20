@@ -20,8 +20,11 @@ export async function sendMessage(
 	if (!text) {
 		throw new Error("Text not found");
 	}
+	if (!summary) {
+		throw new Error("Summary not found");
+	}
 
-	const blocks = link(summary, url, title);
+	const blocks = link(text, summary, url, title);
 	const requestBody = {
 		method: "POST",
 		headers: {

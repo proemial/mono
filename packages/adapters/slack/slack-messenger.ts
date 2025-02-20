@@ -47,7 +47,7 @@ export const SlackMessenger = {
 
 	sendMessage: async (
 		metadata: SlackEventMetadata,
-		text: string,
+		summary: string,
 		url?: string,
 		title?: string,
 	) => {
@@ -55,7 +55,7 @@ export const SlackMessenger = {
 		const type = "slack/message";
 
 		try {
-			const target = await getTarget(metadata, type, text);
+			const target = await getTarget(metadata, type, summary);
 			if (!target) {
 				return;
 			}
@@ -67,7 +67,7 @@ export const SlackMessenger = {
 			const payload = await sendMessage(
 				target,
 				(userMessage?.payload as SlackEventCallback).event.text,
-				text,
+				summary,
 				url,
 				title,
 			);
