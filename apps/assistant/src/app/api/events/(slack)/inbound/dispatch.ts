@@ -42,6 +42,8 @@ export async function dispatchSlackEvent(
 		payload.event?.type === "message" ||
 		payload.event?.type === "app_mention"
 	) {
+		await SlackMessenger.nudgeUser(metadata);
+
 		const result = await inngest.send({
 			name: askEventName,
 			data: {
