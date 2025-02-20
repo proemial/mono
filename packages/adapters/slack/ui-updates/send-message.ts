@@ -3,8 +3,9 @@ import { link } from "../block-kit/link-blocks";
 
 export async function sendMessage(
 	target: SlackV2MessageTarget,
-	message: string,
 	text: string,
+	summary: string,
+	url?: string,
 	title?: string,
 ) {
 	if (!target.channelId) {
@@ -20,7 +21,7 @@ export async function sendMessage(
 		throw new Error("Text not found");
 	}
 
-	const blocks = link(message, title);
+	const blocks = link(summary, url, title);
 	const requestBody = {
 		method: "POST",
 		headers: {

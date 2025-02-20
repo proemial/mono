@@ -48,6 +48,7 @@ export const SlackMessenger = {
 	sendMessage: async (
 		metadata: SlackEventMetadata,
 		text: string,
+		url?: string,
 		title?: string,
 	) => {
 		const id = metadata?.eventId as string;
@@ -65,8 +66,9 @@ export const SlackMessenger = {
 			);
 			const payload = await sendMessage(
 				target,
-				text,
 				(userMessage?.payload as SlackEventCallback).event.text,
+				text,
+				url,
 				title,
 			);
 
