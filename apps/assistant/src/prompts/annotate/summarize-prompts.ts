@@ -2,7 +2,7 @@ import { generateText } from "ai";
 import LlmModels from "@proemial/adapters/llm/models";
 
 export const generateSummary = async (
-	transcript: string,
+	content: string,
 	title: string,
 	traceId?: string,
 ): Promise<string> => {
@@ -13,13 +13,12 @@ export const generateSummary = async (
 				{
 					role: "user",
 					content: `
-Given the following transcript:
+Given the following content:
 
-<article_title>${title}</article_title>
-<article_body>${transcript}</article_body>
+<source_title>${title}</source_title>
+<source_body>${content}</source_body>
 
-Create a 100 word summary that focuses on the key issue of the article, including whatever is alluded to in the title, and format your response in the following way:
-
+Create a 100-word summary that highlights the key issue discussed, ensuring that any key points alluded to in the title are included. Format your response as follows:
 <summary>
 summary goes here
 </summary>
