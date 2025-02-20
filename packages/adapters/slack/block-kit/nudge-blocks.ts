@@ -26,6 +26,7 @@ export function nudge(clientId: string, teamId: string) {
 							type: "plain_text",
 							text: buttonText,
 						},
+						style: "primary",
 						url,
 					},
 				],
