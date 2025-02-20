@@ -1,34 +1,5 @@
-export function link(
-	text: string,
-	summary: string,
-	url?: string,
-	title?: string,
-) {
+export function link(text: string, url?: string, title?: string) {
 	return {
-		blocks: [
-			{
-				type: "section",
-				text: {
-					type: "mrkdwn",
-					text,
-				},
-			},
-			{
-				type: "context",
-				elements: [
-					{
-						type: "image",
-						image_url: "https://u.lillefar.dk/i/VWARSX+",
-						alt_text: "cute cat",
-					},
-					{
-						type: "plain_text",
-						text: url ? "summary" : "answer",
-						emoji: true,
-					},
-				],
-			},
-		],
 		attachments: [
 			{
 				color: "#7DFA85",
@@ -37,7 +8,7 @@ export function link(
 						type: "section",
 						text: {
 							type: "mrkdwn",
-							text: url && title ? `*<${url}|${title}>*\n${summary}` : summary,
+							text: url && title ? `*<${url}|${title}>*\n${text}` : text,
 						},
 					},
 					// {

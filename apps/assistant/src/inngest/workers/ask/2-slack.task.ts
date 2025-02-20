@@ -12,7 +12,7 @@ const eventId = "annotate/slack/fn";
 export const slackAskResponseTask = {
 	name: eventName,
 	worker: inngest.createFunction(
-		{ id: eventId },
+		{ id: eventId, concurrency: 1 },
 		{ event: eventName },
 		async ({ event }) => {
 			const begin = Time.now();
