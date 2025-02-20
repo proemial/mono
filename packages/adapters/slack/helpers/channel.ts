@@ -2,6 +2,8 @@ import { uuid } from "@proemial/utils/uid";
 import { SlackDb } from "../../mongodb/slack/slack.adapter";
 import { SlackThread } from "../models/event-models";
 import { SlackEventMetadata } from "../models/metadata-models";
+import { normalizeYouTubeUrl, isYouTubeUrl } from "../../youtube/shared";
+import { extractLinks } from "./links";
 
 export async function getChannelInfo(teamId: string, channelId: string) {
 	if (!teamId || !channelId) {
@@ -75,26 +77,40 @@ export async function getThreadMessages(
 	);
 	const thread = (await response.json()) as SlackThread;
 
-	return thread.messages;
+	return thread.messages.filter(
+		(m) => m.subtype !== "assistant_app_thread" && m.text,
+	);
 }
 
-export async function getThreadMessagesForAi(
-	metadata: SlackEventMetadata,
-	threadTs: string,
-) {
+export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 	const messages = await getThreadMessages(
 		metadata.channel.id,
-		threadTs,
+		metadata.threadTs as string,
 		metadata.team.id,
 		metadata.appId,
 	);
 
-	return messages
-		.filter((m) => m.subtype !== "assistant_app_thread" && m.text)
-		.map((m) => ({
-			id: uuid(),
-			createdAt: new Date(Number.parseFloat(m.ts) * 1000),
-			content: (m.text ?? "").replaceAll("\n", " ").replaceAll('"', " "),
-			role: m.bot_id ? "assistant" : "user",
-		}));
+	return await Promise.all(
+		messages.map(async (m) => {
+			const sanitized = (m.text ?? "")
+				.replaceAll("\n", " ")
+				.replaceAll('"', " ");
+
+			const links = extractLinks(sanitized);
+			const linkContent = await Promise.all(
+				links.map(async (l) => {
+					const link = isYouTubeUrl(l) ? normalizeYouTubeUrl(l) : l;
+					const result = await SlackDb.scraped.get(link);
+					return `${l}: ${result?.content.title}\n${result?.content.text}`;
+				}),
+			);
+			const content = `${sanitized}\n${linkContent.join("\n")}`;
+			return {
+				id: uuid(),
+				createdAt: new Date(Number.parseFloat(m.ts) * 1000),
+				content,
+				role: m.bot_id ? "assistant" : "user",
+			};
+		}),
+	);
 }

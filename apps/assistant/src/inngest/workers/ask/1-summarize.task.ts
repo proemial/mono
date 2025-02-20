@@ -32,11 +32,7 @@ export const askTask = {
 
 			const metadata = payload.metadata as SlackEventMetadata;
 
-			const messages = await getMessages(
-				metadata,
-				payload.thread,
-				payload.question,
-			);
+			const messages = await getMessages(metadata, payload.question);
 
 			if (messages.length === 0) {
 				throw new Error("No messages found");
@@ -185,12 +181,11 @@ export async function fetchPapers(query: string) {
 
 async function getMessages(
 	metadata: SlackEventMetadata,
-	thread?: string,
 	question?: string,
 ): Promise<Message[]> {
-	if (thread) {
+	if (metadata.threadTs) {
 		await SlackMessenger.updateStatus(metadata, statusMessages.ask.begin);
-		return (await getThreadMessagesForAi(metadata, thread)) as Message[];
+		return (await getThreadMessagesForAi(metadata)) as Message[];
 	}
 
 	if (question) {
