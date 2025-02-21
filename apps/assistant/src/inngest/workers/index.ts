@@ -22,6 +22,7 @@ export const schedulers = [];
 export type SlackAnnotateEvent = {
 	url: string;
 	metadata: SlackEventMetadata;
+	fileMimetype?: string;
 };
 
 export type SlackAskEvent = {

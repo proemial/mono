@@ -17,11 +17,16 @@ export async function dispatchSlackEvent(
 		metadata.channel.id,
 	);
 
-	if (extractLinks(payload.event?.text).length > 0) {
+	const fileUrl =
+		payload.event.subtype === "file_share" && payload.event.files?.length === 1
+			? payload.event.files[0].url_private_download
+			: undefined;
+
+	if (extractLinks(payload.event?.text).length > 0 || fileUrl) {
 		await SlackMessenger.nudgeUser(metadata);
 
 		// TODO: handle all links, not just the first one
-		const url = extractLinks(payload.event?.text).at(0);
+		const url = fileUrl ?? extractLinks(payload.event?.text).at(0);
 		if (!url) {
 			return `dispatch[${scrapeEventName}]: no url found`;
 		}
@@ -30,6 +35,7 @@ export async function dispatchSlackEvent(
 			name: scrapeEventName,
 			data: {
 				url,
+				fileMimetype: fileUrl ? payload.event?.files?.[0]?.mimetype : undefined,
 				metadata: { ...metadata, assistantThread },
 			},
 		});

@@ -41,7 +41,8 @@
 		"HELICONE_API_KEY",
 		"OXYLABS_USERNAME",
 		"OXYLABS_PASSWORD",
-		"SCRAPFLY_API_KEY"
+		"SCRAPFLY_API_KEY",
+		"LLAMA_CLOUD_API_KEY"
 	],
 	"tasks": {
 		"checkly": {},
