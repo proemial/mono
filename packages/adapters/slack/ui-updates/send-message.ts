@@ -17,7 +17,7 @@ export async function sendMessage(
 	if (!target.accessToken) {
 		throw new Error("Access token not found");
 	}
-	if (!text) {
+	if (text === undefined) {
 		throw new Error("Text not found");
 	}
 
