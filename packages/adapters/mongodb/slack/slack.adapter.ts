@@ -130,6 +130,34 @@ export const SlackDb = {
 			}
 		},
 
+		getTokensForUserAndTeam: async (
+			teamId: string,
+			appId: string,
+			userId: string,
+		) => {
+			const begin = Time.now();
+
+			try {
+				const result = entities.find<SlackAppInstall>({
+					"app.name": appId,
+					"team.name": teamId,
+					$or: [{ "user.id": userId }, { "user.id": { $exists: false } }],
+				});
+
+				const installs = await result.toArray();
+
+				return {
+					userToken: installs.find((i) => i.user)?.metadata.accessToken,
+					teamToken: installs.find((i) => !i.user)?.metadata.accessToken,
+				};
+			} finally {
+				Time.log(
+					begin,
+					`[mongodb][slack][installs][get] ${teamId} ${appId} ${userId}`,
+				);
+			}
+		},
+
 		upsert: async (entity: SlackAppInstall) => {
 			const begin = Time.now();
 
