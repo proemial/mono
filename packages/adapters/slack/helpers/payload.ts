@@ -93,6 +93,9 @@ export function classifyRequest(
 		console.log("exit[bot_profile]", payload.event.bot_profile);
 		return "ignore";
 	}
+	if (payload.event?.subtype === "file_share") {
+		return undefined;
+	}
 	if (payload.event?.subtype && !extractLinks(payload.event.text).length) {
 		console.log("exit[subtype]", payload.event.subtype);
 		return "ignore";
