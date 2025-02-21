@@ -38,6 +38,7 @@ export type EventCallbackPayload = {
 		user_id: string;
 		url: string;
 	}[];
+	response_url: string;
 };
 
 export type SlackThread = {

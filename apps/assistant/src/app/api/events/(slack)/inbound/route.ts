@@ -7,20 +7,26 @@ import { sendToN8n } from "@proemial/adapters/n8n/n8n";
 import { dispatchSlackEvent } from "./dispatch";
 import { EventCallbackPayload } from "@proemial/adapters/slack/models/event-models";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
+import { EphemeralMessage } from "@proemial/adapters/slack/ui-updates/ephemeral-message";
 
 export const revalidate = 0;
 
 export async function POST(request: Request) {
 	const text = await request.text();
-	const { payload, metadata, type } = await slack.parseRequest(text);
+	const { payload, metadata, type, token } = await slack.parseRequest(text);
 
-	// if (
-	// 	payload.type === "block_actions" &&
-	// 	payload.actions.at(0)?.action_id === "dismiss_nudge"
-	// ) {
-	// 	console.log("dismiss_nudge invoked");
-	// 	return NextResponse.json({ delete_original: true });
-	// }
+	if (
+		payload.type === "block_actions" &&
+		!!payload.actions.find(
+			(a) => a.action_id === "nudge_reject" || a.action_id === "nudge_accept",
+		)
+	) {
+		await EphemeralMessage.removeOriginal(
+			payload.response_url,
+			token as string,
+		);
+		return success;
+	}
 
 	if (type === "ignore") {
 		if (payload.type === "url_verification") {
