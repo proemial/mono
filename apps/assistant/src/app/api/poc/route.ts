@@ -1,56 +1,51 @@
+import { link } from "@proemial/adapters/slack/block-kit/link-blocks";
+import { nudge } from "@proemial/adapters/slack/block-kit/nudge-blocks";
 import { NextResponse } from "next/server";
 
-// Requirement: https://slack.com/oauth/v2/authorize?user_scope=chat:write&client_id=5345137174018.8389614316194
-// 				https://slack.com/oauth/v2/authorize?user_scope=chat:write&client_id=5345137174018.8389614316194&team=T089HNAFG5D
-// 				https://slack.com/oauth/v2/authorize&user_scope=chat:write&client_id=5345137174018.8389614316194&team=T089HNAFG5D
-
-// 	assistant:dev: TARGET {
-// 	assistant:dev:   channelId: 'C08B4RXM2AE',
-// 	assistant:dev:   ts: '1739979763.485219',
-// 	assistant:dev:   threadTs: '1739979126.307719',
-// 	assistant:dev:   accessToken: 'xoxp-5345137174018-5368833567504-8490114071681-3ece82a9cb11cc930f3b5a46cc33ae74'
+export const revalidate = 0;
 
 export async function GET() {
-	const result = await fetch("https://slack.com/api/chat.update", {
+	const linkBlocks = link(
+		"OpenAI is in the final stages of developing its own AI processor to reduce reliance on Nvidia hardware, as reported by Reuters. The company plans to send its chip designs to TSMC for fabrication soon, although details about the chip's capabilities and timeline remain undisclosed. This move mirrors efforts by other tech giants like Microsoft and Google, who have developed custom AI chips to cut costs and address Nvidia's dominance in the GPU market. OpenAI's initiative aims to provide leverage in supplier negotiations and potentially achieve independence with a proprietary chip design.",
+		"https://arstechnica.com/ai/2025/02/openais-secret-weapon-against-nvidia-dependence-takes-shape/",
+		"OpenAI’s secret weapon against Nvidia dependence takes shape - Ars Technica",
+	);
+	const blocks = nudge("5345137174018.8389614316194", "T05A541540J");
+
+	// const result1 = await fetch("https://slack.com/api/chat.postEphemeral", {
+	// 	method: "POST",
+	// 	headers: {
+	// 		"Content-Type": "application/json; charset=utf-8",
+	// 		Authorization:
+	// 			"Bearer xoxb-5345137174018-8375104708407-ofxehbZdLYYiMLadWas3LtFx",
+	// 	},
+	// 	body: JSON.stringify({
+	// 		channel: "C08B4RXM2AE",
+	// 		user: "U05AUQHGPEU",
+	// 		// threadTs is the timestamp of the message in the thread. Exclude if the message is not in a thread.
+	// 		// ...(metadata.threadTs && { thread_ts: metadata.threadTs }),
+	// 		attachments: {
+	// 			...linkBlocks.attachments,
+	// 		},
+	// 	}),
+	// });
+	const result2 = await fetch("https://slack.com/api/chat.postEphemeral", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json; charset=utf-8",
 			Authorization:
-				"Bearer xoxp-5345137174018-5368833567504-8490114071681-3ece82a9cb11cc930f3b5a46cc33ae74",
+				"Bearer xoxb-5345137174018-8375104708407-ofxehbZdLYYiMLadWas3LtFx",
 		},
 		body: JSON.stringify({
 			channel: "C08B4RXM2AE",
-			ts: "1739994734.459249",
-			text: "<@U08B132LUBZ> does hedgehogs dream",
-			attachments: [
-				{
-					id: 1,
-					pretext: "summary",
-					color: "#7DFA85",
-					fallback:
-						"No specific research was found on whether hedgehogs dream. However, like many mammals, hedgehogs likely experience REM sleep, a phase associated with dreaming in humans. This suggests they might have dream-like experiences, but more research is needed to confirm this.",
-					text: "No specific research was found on whether hedgehogs dream. However, like many mammals, hedgehogs likely experience REM sleep, a phase associated with dreaming in humans. This suggests they might have dream-like experiences, but more research is needed to confirm this.",
-				},
-			],
-			blocks: [
-				{
-					type: "rich_text",
-					block_id: "g=434",
-					elements: [
-						{
-							type: "rich_text_section",
-							elements: [
-								{ type: "user", user_id: "U08B132LUBZ" },
-								{ type: "text", text: " does hedgehogs dream" },
-							],
-						},
-					],
-				},
-			],
+			user: "U05AUQHGPEU",
+			// threadTs is the timestamp of the message in the thread. Exclude if the message is not in a thread.
+			// ...(metadata.threadTs && { thread_ts: metadata.threadTs }),
+			blocks: blocks.blocks,
 		}),
 	});
-	const json = await result.json();
-	console.log("JSON", json);
 
-	return NextResponse.json({ messages: json });
+	// const json1 = await result1.json();
+	const json2 = await result2.json();
+	return NextResponse.json({ json2 });
 }
