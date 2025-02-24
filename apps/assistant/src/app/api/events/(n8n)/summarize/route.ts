@@ -13,6 +13,9 @@ export async function POST(request: Request) {
 		metadata: SlackEventMetadata;
 		payload: unknown;
 	};
+	console.log(metadata, payload);
 
-	return NextResponse.json({ metadata, payload });
+	return NextResponse.json({
+		summary: "The weather in Tokyo is always sunny.",
+	});
 }
