@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
+import { summarizeAnswerTask } from "@/inngest/workers/ask/1-summarize.task";
+import { SlackAskEvent } from "@/inngest/workers";
+import { Message } from "ai";
 
 export const revalidate = 0;
 
@@ -9,13 +12,37 @@ export async function POST(request: Request) {
 	console.log("/slack/events/summarize");
 	console.log(text);
 
-	const { metadata, payload } = JSON.parse(text) as {
+	const { operation, metadata, payload, messages, prompt } = JSON.parse(
+		text,
+	) as {
+		operation: string;
 		metadata: SlackEventMetadata;
-		payload: unknown;
+		payload: SlackAskEvent;
+		messages: Message[];
+		prompt: string;
 	};
-	console.log(metadata, payload);
+	console.log(operation, metadata, payload, messages, prompt);
+
+	if (operation === "answer") {
+		const result = await summarizeAnswerTask(
+			metadata,
+			payload,
+			messages,
+			prompt,
+		);
+		return NextResponse.json(result);
+	}
+	// if (operation === "annotate") {
+	// 	const result = await summarizeAnnotationTask(
+	// 		metadata,
+	// 		payload,
+	// 		messages,
+	// 		prompt,
+	// 	);
+	// 	return NextResponse.json(result);
+	// }
 
 	return NextResponse.json({
-		summary: "The weather in Tokyo is always sunny.",
+		error: "Unknown operation",
 	});
 }

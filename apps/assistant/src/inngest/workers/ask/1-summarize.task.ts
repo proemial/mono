@@ -17,6 +17,7 @@ import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-mod
 import { extractPapers, LlmSteps } from "./extract-references";
 import { statusMessages } from "@/inngest/status-messages";
 import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
+import { proxyToN8n } from "@/app/api/events/(n8n)/n8nProxy";
 
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
@@ -27,13 +28,10 @@ export const askTask = {
 		{ id: eventId, concurrency: 1 },
 		{ event: eventName },
 		async ({ event }) => {
-			const begin = Time.now();
 			const payload = { ...event.data } as SlackAskEvent;
-
 			const metadata = payload.metadata as SlackEventMetadata;
 
 			const messages = await getMessages(metadata, payload.question);
-
 			if (messages.length === 0) {
 				throw new Error("No messages found");
 			}
@@ -52,42 +50,71 @@ export const askTask = {
 				}),
 			)) as Message[];
 
-			let { answer, papers } = await answerQuestion(metadata, mappedMessages);
-			console.log("answer", answer, papers?.length);
-
-			papers?.forEach((p, i) => {
-				answer = answer.replace(
-					`[${i}]`,
-					`<https://proem.ai/paper/oa/${p.id.split("/").at(-1)}|[${i}]>`,
-				);
-			});
-			console.log("answer with links", answer);
-
-			// Next step from router
-			const next = await AskRouter.next(
-				eventName,
-				payload.thread,
-				answer,
-				payload.metadata,
-			);
-			return {
-				event,
-				body: {
+			if (metadata.channel.id === "C08F2GPLT2M") {
+				console.log("proxyToN8n", metadata, payload, mappedMessages);
+				return await proxyToN8n(
+					"answer",
+					metadata,
 					payload,
-					steps: {
-						current: eventName,
-						next,
-					},
-					elapsed: Time.elapsed(begin),
-				},
-			};
+					mappedMessages,
+					LlmAnswer.prompt(),
+				);
+			}
+
+			console.log("summarizeAnswerTask", metadata, payload, mappedMessages);
+			return await summarizeAnswerTask(
+				metadata,
+				payload,
+				mappedMessages,
+				LlmAnswer.prompt(),
+			);
 		},
 	),
 };
 
+export async function summarizeAnswerTask(
+	metadata: SlackEventMetadata,
+	payload: SlackAskEvent,
+	messages: Message[],
+	prompt: string,
+) {
+	const begin = Time.now();
+
+	let { answer, papers } = await answerQuestion(metadata, messages, prompt);
+	console.log("answer", answer, papers?.length);
+
+	papers?.forEach((p, i) => {
+		answer = answer.replace(
+			`[${i}]`,
+			`<https://proem.ai/paper/oa/${p.id.split("/").at(-1)}|[${i}]>`,
+		);
+	});
+	console.log("answer with links", answer);
+
+	// Next step from router
+	const next = await AskRouter.next(
+		eventName,
+		payload.thread,
+		answer,
+		metadata,
+	);
+	return {
+		event: eventName,
+		body: {
+			payload,
+			steps: {
+				current: eventName,
+				next,
+			},
+			elapsed: Time.elapsed(begin),
+		},
+	};
+}
+
 async function answerQuestion(
 	metadata: SlackEventMetadata,
 	messages: Message[],
+	prompt: string,
 ) {
 	const traceId = uuid();
 
@@ -100,7 +127,7 @@ async function answerQuestion(
 
 	const result = await generateText({
 		model: await LlmAnswer.model(traceId),
-		system: LlmAnswer.prompt(),
+		system: prompt,
 		messages: convertToCoreMessages(messages),
 		tools: {
 			searchPapers: {
