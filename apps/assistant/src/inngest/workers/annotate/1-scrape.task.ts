@@ -16,7 +16,7 @@ import { statusMessages } from "@/inngest/status-messages";
 import { logCriticalError } from "@proemial/adapters/slack/monitoring/failure";
 import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { LlamaParseClient } from "@proemial/adapters/llamaindex/llama-parse-client";
-import { isSlackFileUrl, fetchSlackFile } from "@proemial/adapters/slack/files";
+import { isSlackFileUrl, parseSlackFile } from "@proemial/adapters/slack/files";
 
 export const eventName = "annotate/scrape";
 const eventId = "annotate/scrape/fn";
@@ -56,26 +56,15 @@ export const scrapeTask = {
 					let content = undefined;
 					try {
 						if (isSlackFileUrl(normalizedUrl)) {
-							const { teamId, appId } = payload.metadata;
-							const install = await SlackDb.installs.get(teamId, appId);
-							if (!install) {
-								throw new Error("Bot install not found");
-							}
-							const mimetype = payload.fileMimetype;
-							if (!mimetype) {
+							if (!payload.fileMimetype) {
 								throw new Error("File mimetype missing");
 							}
-							const file = await fetchSlackFile(
+							content = await parseSlackFile(
 								normalizedUrl,
-								install.metadata.accessToken,
-								mimetype,
+								payload.fileMimetype,
+								payload.metadata,
+								llamaParseClient,
 							);
-							const { markdown } = await llamaParseClient.parseFile(file);
-							content = {
-								title: file.name,
-								text: markdown,
-								images: [],
-							};
 						} else if (isYouTubeUrl(normalizedUrl)) {
 							content = await fetchTranscript(normalizedUrl);
 						} else if (isTwitterUrl(normalizedUrl)) {
@@ -84,11 +73,17 @@ export const scrapeTask = {
 							content = await diffbot(normalizedUrl);
 						}
 					} catch (error) {
-						console.warn(
-							`Main scraper failed to scrape ${normalizedUrl} - attempting again with fallback scraper…`,
-						);
-						console.error(error);
-						content = await scrape(normalizedUrl);
+						// Don't retry scraping if it's a file or Twitter url (which is already tried with Scrapfly)
+						if (
+							!isSlackFileUrl(normalizedUrl) &&
+							!isTwitterUrl(normalizedUrl)
+						) {
+							console.warn(
+								`Main scraper failed (${normalizedUrl}) - retrying with fallback scraper…`,
+							);
+							console.error(error);
+							content = await scrape(normalizedUrl);
+						}
 					}
 
 					scrapedUrl = {
