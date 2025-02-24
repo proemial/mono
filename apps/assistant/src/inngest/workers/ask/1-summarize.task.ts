@@ -101,6 +101,7 @@ export async function summarizeAnswerTask(
 	return {
 		event: eventName,
 		body: {
+			answer,
 			payload,
 			steps: {
 				current: eventName,
