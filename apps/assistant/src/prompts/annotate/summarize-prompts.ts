@@ -2,7 +2,6 @@ import { Message } from "ai";
 import LlmModels from "@proemial/adapters/llm/models";
 
 export const LlmSummary = {
-	prompt: summaryPrompt,
 	model: async (id: string) => await LlmModels.news.query(id),
 	messages: (title: string, content: string) => [
 		{
@@ -13,10 +12,6 @@ export const LlmSummary = {
 		} as Message,
 	],
 };
-
-function summaryPrompt() {
-	return undefined;
-}
 
 function summaryMessage() {
 	return `Given the following content:

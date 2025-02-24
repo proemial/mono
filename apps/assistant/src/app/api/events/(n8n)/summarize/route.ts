@@ -38,7 +38,6 @@ export async function POST(request: Request) {
 			metadata,
 			payload as SlackAnnotateEvent,
 			messages,
-			prompt,
 		);
 		return NextResponse.json(result);
 	}

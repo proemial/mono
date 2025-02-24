@@ -45,7 +45,6 @@ export const queryTask = {
 					payload.metadata,
 					payload,
 					LlmSummary.messages(scraped.content.title, scraped.content.text),
-					LlmSummary.prompt(),
 				);
 			}
 
@@ -53,7 +52,6 @@ export const queryTask = {
 				payload.metadata,
 				payload,
 				LlmSummary.messages(scraped.content.title, scraped.content.text),
-				LlmSummary.prompt(),
 			);
 
 			await SlackDb.scraped.upsert({
@@ -73,13 +71,11 @@ export async function summarizeAnnotationTask(
 	metadata: SlackEventMetadata,
 	payload: SlackAnnotateEvent,
 	messages: Message[],
-	prompt?: string,
 ) {
 	const begin = Time.now();
 
 	const { text: indexQuery } = await generateText({
 		model: await LlmSummary.model(uuid5(payload.url, "helicone")),
-		prompt,
 		messages,
 	});
 
