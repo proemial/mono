@@ -78,7 +78,7 @@ export async function getThreadMessages(
 	const thread = (await response.json()) as SlackThread;
 
 	return thread.messages.filter(
-		(m) => m.subtype !== "assistant_app_thread" && m.text,
+		(m) => m.subtype !== "assistant_app_thread" && (m.text || m.files?.length),
 	);
 }
 
