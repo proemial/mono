@@ -122,8 +122,8 @@ export const scrapeTask = {
 				await SlackMessenger.updateStatus(
 					payload.metadata,
 					error instanceof Error
-						? error.message
-						: "An unexpected error occurred. Please try again later.",
+						? `${error.message} 😭`
+						: "An unexpected error occurred. Please try again later. 😭",
 					true,
 				);
 				throw error;
