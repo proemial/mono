@@ -96,7 +96,8 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 				.replaceAll("\n", " ")
 				.replaceAll('"', " ");
 
-			const links = extractLinks(sanitized);
+			const fileUrl = m.files?.[0]?.url_private_download;
+			const links = fileUrl ? [fileUrl] : extractLinks(sanitized);
 			const linkContent = await Promise.all(
 				links.map(async (l) => {
 					const link = isYouTubeUrl(l) ? normalizeYouTubeUrl(l) : l;
