@@ -35,7 +35,6 @@ export const queryTask = {
 			if (!scraped) {
 				throw new Error("No scraped data found");
 			}
-			const summaries = scraped.summaries ?? {};
 
 			if (payload.metadata.channel.id === "C08F2GPLT2M") {
 				console.log("proxyToN8n", payload.metadata, payload);
@@ -52,14 +51,6 @@ export const queryTask = {
 				url: payload.url,
 				title: scraped.content.title,
 				text: scraped.content.text,
-			});
-
-			await SlackDb.scraped.upsert({
-				...scraped,
-				summaries: {
-					...summaries,
-					query: result.body.answer,
-				} as Summaries,
 			});
 
 			return result;
@@ -92,6 +83,20 @@ export async function summarizeAnnotationTask(
 			},
 		});
 	}
+
+	const scraped = await SlackDb.scraped.get(payload.url);
+	if (!scraped) {
+		throw new Error("No scraped data found");
+	}
+	const summaries = scraped.summaries ?? {};
+
+	await SlackDb.scraped.upsert({
+		...scraped,
+		summaries: {
+			...summaries,
+			query: parsedQuery,
+		} as Summaries,
+	});
 
 	// Next step from router
 	const next = await AnnotateRouter.next(
