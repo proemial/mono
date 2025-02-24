@@ -139,8 +139,8 @@ export const SlackDb = {
 
 			try {
 				const result = entities.find<SlackAppInstall>({
-					"app.name": appId,
-					"team.name": teamId,
+					"app.id": appId,
+					"team.id": teamId,
 					$or: [{ "user.id": userId }, { "user.id": { $exists: false } }],
 				});
 

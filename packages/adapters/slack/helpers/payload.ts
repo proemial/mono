@@ -52,6 +52,7 @@ export async function parseRequest(text: string) {
 			channel_id: payload.event?.assistant_thread?.channel_id,
 			thread_ts: payload.event?.assistant_thread?.thread_ts,
 		},
+		isAssistant: channel?.id?.startsWith("D"),
 	} as SlackEventMetadata;
 	console.log("METADATA", JSON.stringify(metadata));
 

@@ -10,6 +10,7 @@ export type SlackEventMetadata = {
 	threadTs?: string;
 	channelType?: string;
 	assistantThread?: SlackAssistantThread;
+	isAssistant: boolean;
 };
 
 export type SlackAssistantThread = {
