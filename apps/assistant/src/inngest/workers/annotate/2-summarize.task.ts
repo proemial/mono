@@ -21,7 +21,6 @@ export const queryTask = {
 		{ id: eventId, concurrency: 1 },
 		{ event: eventName },
 		async ({ event }) => {
-			const begin = Time.now();
 			const payload = { ...event.data } as SlackAnnotateEvent;
 
 			if (!payload.url) {
@@ -40,19 +39,20 @@ export const queryTask = {
 
 			if (payload.metadata.channel.id === "C08F2GPLT2M") {
 				console.log("proxyToN8n", payload.metadata, payload);
-				return await proxyToN8n(
-					"annotate",
-					payload.metadata,
-					payload,
-					LlmSummary.messages(scraped.content.title, scraped.content.text),
-				);
+				return await proxyToN8n("annotate", payload.metadata, payload, {
+					prompt: LlmSummary.prompt(),
+					url: payload.url,
+					title: scraped.content.title,
+					text: scraped.content.text,
+				});
 			}
 
-			const result = await summarizeAnnotationTask(
-				payload.metadata,
-				payload,
-				LlmSummary.messages(scraped.content.title, scraped.content.text),
-			);
+			const result = await summarizeAnnotationTask(payload.metadata, payload, {
+				prompt: LlmSummary.prompt(),
+				url: payload.url,
+				title: scraped.content.title,
+				text: scraped.content.text,
+			});
 
 			await SlackDb.scraped.upsert({
 				...scraped,
@@ -70,13 +70,16 @@ export const queryTask = {
 export async function summarizeAnnotationTask(
 	metadata: SlackEventMetadata,
 	payload: SlackAnnotateEvent,
-	messages: Message[],
+	input: { prompt: string; url: string; title: string; text: string },
 ) {
 	const begin = Time.now();
 
 	const { text: indexQuery } = await generateText({
 		model: await LlmSummary.model(uuid5(payload.url, "helicone")),
-		messages,
+		prompt: input.prompt
+			.replace("$url", input.url)
+			.replace("$title", input.title)
+			.replace("$content", input.text),
 	});
 
 	const parsedQuery = indexQuery.split("<summary>")[1]?.split("</summary>")[0];

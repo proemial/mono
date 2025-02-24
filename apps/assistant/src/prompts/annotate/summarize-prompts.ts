@@ -2,18 +2,19 @@ import { Message } from "ai";
 import LlmModels from "@proemial/adapters/llm/models";
 
 export const LlmSummary = {
+	prompt: summaryPrompt,
 	model: async (id: string) => await LlmModels.news.query(id),
-	messages: (title: string, content: string) => [
-		{
-			role: "user",
-			content: summaryMessage()
-				.replace("$title", title)
-				.replace("$content", content),
-		} as Message,
-	],
+	// messages: (title: string, content: string) => [
+	// 	{
+	// 		role: "user",
+	// 		content: summaryMessage()
+	// 			.replace("$title", title)
+	// 			.replace("$content", content),
+	// 	} as Message,
+	// ],
 };
 
-function summaryMessage() {
+function summaryPrompt() {
 	return `Given the following content:
 
 <source_title>$title</source_title>

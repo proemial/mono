@@ -9,10 +9,9 @@ export async function proxyToN8n(
 	operation: string,
 	metadata: SlackEventMetadata,
 	payload: SlackAskEvent | SlackAnnotateEvent,
-	messages: Message[],
-	prompt?: string,
+	input: Record<string, string | Message[]>,
 ) {
-	console.log("proxyToN8n", operation, metadata, payload, messages, prompt);
+	console.log("proxyToN8n", operation, metadata, payload, input);
 
 	const result = await fetch(n8nWebhookUrl, {
 		method: "POST",
@@ -23,8 +22,7 @@ export async function proxyToN8n(
 			operation,
 			metadata,
 			payload,
-			messages,
-			prompt,
+			input,
 		}),
 	});
 	const json = await result.json();

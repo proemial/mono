@@ -52,22 +52,17 @@ export const askTask = {
 
 			if (metadata.channel.id === "C08F2GPLT2M") {
 				console.log("proxyToN8n", metadata, payload, mappedMessages);
-				return await proxyToN8n(
-					"answer",
-					metadata,
-					payload,
-					mappedMessages,
-					LlmAnswer.prompt(),
-				);
+				return await proxyToN8n("answer", metadata, payload, {
+					prompt: LlmAnswer.prompt(),
+					messages: mappedMessages,
+				});
 			}
 
 			console.log("summarizeAnswerTask", metadata, payload, mappedMessages);
-			return await summarizeAnswerTask(
-				metadata,
-				payload,
-				mappedMessages,
-				LlmAnswer.prompt(),
-			);
+			return await summarizeAnswerTask(metadata, payload, {
+				prompt: LlmAnswer.prompt(),
+				messages: mappedMessages,
+			});
 		},
 	),
 };
@@ -75,12 +70,15 @@ export const askTask = {
 export async function summarizeAnswerTask(
 	metadata: SlackEventMetadata,
 	payload: SlackAskEvent,
-	messages: Message[],
-	prompt: string,
+	input: { messages: Message[]; prompt: string },
 ) {
 	const begin = Time.now();
 
-	let { answer, papers } = await answerQuestion(metadata, messages, prompt);
+	let { answer, papers } = await answerQuestion(
+		metadata,
+		input.messages,
+		input.prompt,
+	);
 	console.log("answer", answer, papers?.length);
 
 	papers?.forEach((p, i) => {

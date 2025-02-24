@@ -13,31 +13,37 @@ export async function POST(request: Request) {
 	console.log("/slack/events/summarize");
 	console.log(text);
 
-	const { operation, metadata, payload, messages, prompt } = JSON.parse(
-		text,
-	) as {
+	const { operation, metadata, payload, input } = JSON.parse(text) as {
 		operation: string;
 		metadata: SlackEventMetadata;
 		payload: SlackAskEvent | SlackAnnotateEvent;
-		messages: Message[];
-		prompt: string;
+		input: Record<string, string | Message[]>;
 	};
-	console.log(operation, metadata, payload, messages, prompt);
+	console.log(operation, metadata, payload, input);
 
 	if (operation === "answer") {
+		if (!input.messages || !input.prompt) {
+			return NextResponse.json({
+				error: "Missing messages or prompt in input",
+			});
+		}
 		const result = await summarizeAnswerTask(
 			metadata,
 			payload as SlackAskEvent,
-			messages,
-			prompt,
+			input as { messages: Message[]; prompt: string },
 		);
 		return NextResponse.json(result);
 	}
 	if (operation === "annotate") {
+		if (!input.prompt || !input.url || !input.title || !input.text) {
+			return NextResponse.json({
+				error: "Missing prompt, url, title, or text in input",
+			});
+		}
 		const result = await summarizeAnnotationTask(
 			metadata,
 			payload as SlackAnnotateEvent,
-			messages,
+			input as { prompt: string; url: string; title: string; text: string },
 		);
 		return NextResponse.json(result);
 	}
