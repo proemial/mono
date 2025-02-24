@@ -73,11 +73,7 @@ export const scrapeTask = {
 							content = await diffbot(normalizedUrl);
 						}
 					} catch (error) {
-						// Don't retry scraping if it's a file or Twitter url (which is already tried with Scrapfly)
-						if (
-							!isSlackFileUrl(normalizedUrl) &&
-							!isTwitterUrl(normalizedUrl)
-						) {
+						if (isFallbackable(normalizedUrl)) {
 							console.warn(`Main scraper failed: ${error}\nRetrying…`);
 							content = await scrape(normalizedUrl);
 						}
@@ -139,4 +135,9 @@ const isTwitterUrl = (url: string) => {
 	return (
 		urlObj.hostname.includes("twitter.com") || urlObj.hostname.includes("x.com")
 	);
+};
+
+const isFallbackable = (url: string) => {
+	// Don't retry scraping if it's a file or Twitter url (which is already tried with Scrapfly)
+	return !isSlackFileUrl(url) && !isTwitterUrl(url);
 };
