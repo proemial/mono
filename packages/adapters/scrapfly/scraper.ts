@@ -27,6 +27,18 @@ export const scrape = async (url: string): Promise<ScrapeResult> => {
 		}),
 	);
 
+	if (!apiResponse.result.success) {
+		throw new Error(
+			`Failed to scrape with Scrapfly: ${apiResponse.result.error?.message}`,
+			{
+				cause: {
+					url,
+					error: apiResponse.result.error,
+				},
+			},
+		);
+	}
+
 	return {
 		title: "",
 		text: apiResponse.result.content,
