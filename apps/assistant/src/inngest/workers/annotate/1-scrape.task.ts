@@ -76,6 +76,8 @@ export const scrapeTask = {
 						if (isFallbackable(normalizedUrl)) {
 							console.warn(`Main scraper failed: ${error}\nRetrying…`);
 							content = await scrape(normalizedUrl);
+						} else {
+							throw error;
 						}
 					}
 
