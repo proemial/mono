@@ -106,7 +106,11 @@ export const SlackMessenger = {
 		}
 	},
 
-	updateStatus: async (metadata: SlackEventMetadata, status: string) => {
+	updateStatus: async (
+		metadata: SlackEventMetadata,
+		status: string,
+		isError?: boolean,
+	) => {
 		const id = metadata?.eventId as string;
 		const type = "slack/status";
 
@@ -124,6 +128,7 @@ export const SlackMessenger = {
 				target,
 				status,
 				(userMessage?.payload as SlackEventCallback).event.text,
+				isError,
 			);
 
 			await updateEvents(id, type, payload);

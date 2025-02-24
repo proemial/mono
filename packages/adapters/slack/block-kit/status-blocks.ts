@@ -1,8 +1,10 @@
-export function status(text: string) {
+import { Colors } from "../ui-updates/colors";
+
+export function status(text: string, error?: boolean) {
 	return {
 		attachments: [
 			{
-				color: "#7DFA85",
+				color: error ? Colors.RED : Colors.GREEN,
 				text: text,
 			},
 		],

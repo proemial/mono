@@ -78,10 +78,7 @@ export const scrapeTask = {
 							!isSlackFileUrl(normalizedUrl) &&
 							!isTwitterUrl(normalizedUrl)
 						) {
-							console.warn(
-								`Main scraper failed (${normalizedUrl}) - retrying with fallback scraper…`,
-							);
-							console.error(error);
+							console.warn(`Main scraper failed: ${error}\nRetrying…`);
 							content = await scrape(normalizedUrl);
 						}
 					}
@@ -124,6 +121,13 @@ export const scrapeTask = {
 			} catch (error) {
 				console.error(error);
 				await logCriticalError(`Error scraping ${payload.url}: "${error}"`);
+				await SlackMessenger.updateStatus(
+					payload.metadata,
+					error instanceof Error
+						? error.message
+						: "An unexpected error occurred. Please try again later.",
+					true,
+				);
 				throw error;
 			}
 		},

@@ -5,6 +5,7 @@ export async function updateStatus(
 	target: SlackV2MessageTarget,
 	statusText: string,
 	text: string,
+	isError?: boolean,
 ) {
 	if (!target.channelId) {
 		throw new Error("Channel ID not found");
@@ -19,7 +20,7 @@ export async function updateStatus(
 		throw new Error("Text not found");
 	}
 
-	const blocks = status(statusText);
+	const blocks = status(statusText, isError);
 	const requestBody = {
 		method: "POST",
 		headers: {
