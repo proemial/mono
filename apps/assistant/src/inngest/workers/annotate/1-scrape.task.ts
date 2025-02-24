@@ -87,6 +87,7 @@ export const scrapeTask = {
 						console.warn(
 							`Main scraper failed to scrape ${normalizedUrl} - attempting again with fallback scraper…`,
 						);
+						console.error(error);
 						content = await scrape(normalizedUrl);
 					}
 
