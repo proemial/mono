@@ -102,7 +102,7 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 				links.map(async (l) => {
 					const link = isYouTubeUrl(l) ? normalizeYouTubeUrl(l) : l;
 					const result = await SlackDb.scraped.get(link);
-					return `${l}: ${result?.content.title}\n${result?.content.text}`;
+					return `${l}: Title: ${result?.content.title}\nContent: ${result?.content.text}\nThoughts: ${result?.summaries?.query}`;
 				}),
 			);
 			const content = `${sanitized}\n${linkContent.join("\n")}`;
