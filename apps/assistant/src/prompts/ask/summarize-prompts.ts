@@ -10,7 +10,7 @@ export const LlmFollowups = {
 	model: async (id: string) => await LlmModels.news.followups(id),
 };
 
-function answerPrompt(title?: string, transcript?: string) {
+function answerPrompt() {
 	return `
 You are a helpful assistant identifying as "proem.ai research bot". You are given a one or more external ressources that should be used to answer the user's question
 
@@ -37,9 +37,6 @@ Answer: Knowledge Graph Retrieval-Augmented Generation (RAG) improves upon tradi
 Question: What is the main challenges?
 Answer: Implementing a knowledge graph-based retrieval-augmented generation (RAG) system presents challenges such as higher complexity[1], increased computational overhead, and scalability issues. Constructing and maintaining the graph requires significant processing[2], domain expertise, and storage capacity, making it more resource-intensive than traditional RAG systems. Despite these challenges, knowledge graphs offer superior reasoning and contextual understanding, though at the cost of simplicity and efficiency.
 ---
-
-
-
 `;
 }
 
