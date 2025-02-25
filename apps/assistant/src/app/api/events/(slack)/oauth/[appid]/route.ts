@@ -75,6 +75,12 @@ export async function GET(request: NextRequest, { params }: { params: Props }) {
 		});
 		console.log("Inserted oauth event", insertedEvent);
 
+		console.log("AUTH TOKEN TYPE", JSON.stringify(data.authed_user));
+		if (data.authed_user?.token_type !== "user") {
+			const deletedInstall = await SlackDb.installs.delete(appId, teamId);
+			console.log("Deleted installs", deletedInstall);
+		}
+
 		const auth =
 			data.authed_user?.token_type === "user"
 				? {
@@ -86,9 +92,6 @@ export async function GET(request: NextRequest, { params }: { params: Props }) {
 					}
 				: { metadata: { accessToken: data.access_token } };
 		console.log("AUTH", JSON.stringify(auth));
-
-		const deletedInstall = await SlackDb.installs.delete(appId, teamId);
-		console.log("Deleted installs", deletedInstall);
 
 		const upsertedEntity = await SlackDb.installs.upsert({
 			createdAt: new Date(),
