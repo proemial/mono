@@ -35,7 +35,7 @@ export default function WelcomePage() {
 
 							<p className="relative self-stretch [font-family:'Outfit-Regular',Helvetica] font-normal text-[#d0ebdc9e] text-[15px] tracking-[0] leading-[20.3px] overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:7] [-webkit-box-orient:vertical]">
 								Personal Summaries is now active and working seamlessly in Slack
-								channels where @proem is added.
+								channels where @proem is added. You can now close the window.
 							</p>
 						</div>
 					</div>
