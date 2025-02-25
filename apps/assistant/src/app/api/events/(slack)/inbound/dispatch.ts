@@ -5,6 +5,8 @@ import { eventName as askEventName } from "@/inngest/workers/ask/1-summarize.tas
 import { inngest } from "@/inngest/client";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { extractLinks } from "@proemial/adapters/slack/helpers/links";
+import { isSlackFileUrl } from "@proemial/adapters/slack/files";
+import { isTwitterUrl } from "@proemial/adapters/twitter";
 
 export async function dispatchSlackEvent(
 	payload: EventCallbackPayload,
@@ -27,9 +29,13 @@ export async function dispatchSlackEvent(
 		if (!url) {
 			return `dispatch[${scrapeEventName}]: no url found`;
 		}
-		const probeResponse = await fetch(url);
-		if (!probeResponse.ok) {
-			return `dispatch[${scrapeEventName}]: url ${url} is not accessible`;
+
+		// Check for inaccessible URLs, unless it's a Slack file or Twitter URL
+		if (!isSlackFileUrl(url) && !isTwitterUrl(url)) {
+			const probeResponse = await fetch(url);
+			if (!probeResponse.ok) {
+				return `dispatch[${scrapeEventName}]: url ${url} is not accessible`;
+			}
 		}
 
 		const result = await inngest.send({

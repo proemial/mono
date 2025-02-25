@@ -17,6 +17,7 @@ import { logCriticalError } from "@proemial/adapters/slack/monitoring/failure";
 import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { LlamaParseClient } from "@proemial/adapters/llamaindex/llama-parse-client";
 import { isSlackFileUrl, parseSlackFile } from "@proemial/adapters/slack/files";
+import { isTwitterUrl } from "@proemial/adapters/twitter";
 
 export const eventName = "annotate/scrape";
 const eventId = "annotate/scrape/fn";
@@ -128,13 +129,6 @@ export const scrapeTask = {
 			}
 		},
 	),
-};
-
-const isTwitterUrl = (url: string) => {
-	const urlObj = new URL(url);
-	return (
-		urlObj.hostname.includes("twitter.com") || urlObj.hostname.includes("x.com")
-	);
 };
 
 const isFallbackable = (url: string) => {
