@@ -5,6 +5,8 @@ import { uuid } from "@proemial/utils/uid";
 import { EventCallbackPayload } from "../models/event-models";
 import { SlackEventMetadata } from "../models/metadata-models";
 import { extractLinks } from "./links";
+import { SUPPORTED_MIMETYPES } from "../files/constants";
+import { FILE_SIZE_LIMIT } from "../files/constants";
 
 export async function parseRequest(text: string) {
 	const unencoded = text?.startsWith("payload=")
@@ -95,6 +97,15 @@ export function classifyRequest(
 		return "ignore";
 	}
 	if (payload.event?.subtype === "file_share") {
+		const file = payload.event.files?.[0];
+		if (file && !SUPPORTED_MIMETYPES.includes(file.mimetype)) {
+			console.log("exit[file_share_unsupported]", file.name, file.mimetype);
+			return "ignore";
+		}
+		if (file && file.size > FILE_SIZE_LIMIT) {
+			console.log("exit[file_share_too_large]", file.name, file.size);
+			return "ignore";
+		}
 		return undefined;
 	}
 	if (payload.event?.subtype && !extractLinks(payload.event.text).length) {
