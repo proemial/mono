@@ -20,6 +20,8 @@ function summaryPrompt() {
 <source_title>$title</source_title>
 <source_body>$content</source_body>
 
+The source may be from an article, a report, a file, a website, a video, or something else, so it is best not to make assumptions about the source type.
+
 Create a 100-word summary that highlights the key issue discussed, ensuring that any key points alluded to in the title are included. Format your response as follows:
 <summary>
 summary goes here
