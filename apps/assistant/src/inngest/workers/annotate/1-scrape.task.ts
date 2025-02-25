@@ -17,7 +17,7 @@ import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { LlamaParseClient } from "@proemial/adapters/llamaindex/llama-parse-client";
 import { isSlackFileUrl, parseSlackFile } from "@proemial/adapters/slack/files";
 import { isTwitterUrl } from "@proemial/adapters/twitter";
-
+import { fetchTranscript } from "@proemial/adapters/youtube/oxylabs";
 export const eventName = "annotate/scrape";
 const eventId = "annotate/scrape/fn";
 
@@ -65,10 +65,9 @@ export const scrapeTask = {
 								payload.metadata,
 								llamaParseClient,
 							);
-						} else if (
-							isTwitterUrl(normalizedUrl) ||
-							isYouTubeUrl(normalizedUrl)
-						) {
+						} else if (isYouTubeUrl(normalizedUrl)) {
+							content = await fetchTranscript(normalizedUrl);
+						} else if (isTwitterUrl(normalizedUrl)) {
 							content = await scrape(normalizedUrl);
 						} else {
 							content = await diffbot(normalizedUrl);
