@@ -2,7 +2,6 @@ import { Time } from "@proemial/utils/time";
 import { inngest } from "../../client";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { ScrapedUrl } from "@proemial/adapters/mongodb/slack/scraped.types";
-import { fetchTranscript } from "@proemial/adapters/youtube/oxylabs";
 import { scrape } from "@proemial/adapters/scrapfly/scraper";
 import {
 	isYouTubeUrl,
@@ -66,9 +65,10 @@ export const scrapeTask = {
 								payload.metadata,
 								llamaParseClient,
 							);
-						} else if (isYouTubeUrl(normalizedUrl)) {
-							content = await fetchTranscript(normalizedUrl);
-						} else if (isTwitterUrl(normalizedUrl)) {
+						} else if (
+							isTwitterUrl(normalizedUrl) ||
+							isYouTubeUrl(normalizedUrl)
+						) {
 							content = await scrape(normalizedUrl);
 						} else {
 							content = await diffbot(normalizedUrl);
