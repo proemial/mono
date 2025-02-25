@@ -8,16 +8,20 @@ export async function updateStatus(
 	isError?: boolean,
 ) {
 	if (!target.channelId) {
-		throw new Error("Channel ID not found");
+		console.error("Channel ID not found", target);
+		return;
 	}
 	if (!target.threadTs && !target.ts) {
-		throw new Error("Thread TS not found");
+		console.error("Thread TS not found", target);
+		return;
 	}
-	if (!target.accessToken) {
-		throw new Error("Access token not found");
+	if (!target.accessTokens.userToken) {
+		console.error("Access token not found", target);
+		return;
 	}
-	if (!status) {
-		throw new Error("Text not found");
+	if (text === undefined) {
+		console.error("Text not found", target);
+		return;
 	}
 
 	const blocks = status(statusText, isError);
@@ -25,7 +29,7 @@ export async function updateStatus(
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json; charset=utf-8",
-			Authorization: `Bearer ${target.accessToken}`,
+			Authorization: `Bearer ${target.accessTokens.userToken}`,
 		},
 		body: JSON.stringify({
 			channel: target.channelId,

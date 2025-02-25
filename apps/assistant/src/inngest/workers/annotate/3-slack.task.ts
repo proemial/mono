@@ -35,7 +35,7 @@ export const slackAnnotateResponseTask = {
 			}
 
 			console.log("Sending message", scraped.summaries.query);
-			await SlackMessenger.sendMessage(
+			await SlackMessenger.updateMessage(
 				payload.metadata,
 				scraped.summaries.query,
 				scraped.url,

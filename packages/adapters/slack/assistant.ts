@@ -1,5 +1,6 @@
 import { SlackDb } from "../mongodb/slack/slack.adapter";
 import { SlackEventMetadata } from "./models/metadata-models";
+import { assistantStatus } from "./block-kit/assistant-status";
 
 export async function showSuggestions(
 	metadata: SlackEventMetadata | undefined,
@@ -49,6 +50,46 @@ export async function showSuggestions(
 		},
 	);
 	console.log("showSuggestions", result.status, await result.json());
+
+	return result.statusText;
+}
+
+export async function setAssistantStatus(
+	metadata: SlackEventMetadata | undefined,
+	accessToken: string,
+	status: string,
+) {
+	if (!metadata?.assistantThread) {
+		throw new Error("No assistant thread found");
+	}
+
+	const channel_id = metadata.assistantThread.channel_id;
+	const thread_ts = metadata.assistantThread.thread_ts;
+	const blocks = assistantStatus(status);
+
+	const requestBody = {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json; charset=utf-8",
+			Authorization: `Bearer ${accessToken}`,
+		},
+		body: JSON.stringify({
+			channel_id,
+			thread_ts,
+			...blocks,
+		}),
+	};
+	const result = await fetch(
+		"https://slack.com/api/assistant.threads.setStatus",
+		requestBody,
+	);
+	console.log(
+		"setAssistantStatus",
+		JSON.stringify(requestBody),
+		">",
+		result.status,
+		await result.json(),
+	);
 
 	return result.statusText;
 }

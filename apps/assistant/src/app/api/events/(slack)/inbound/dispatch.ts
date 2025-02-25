@@ -4,7 +4,6 @@ import { eventName as scrapeEventName } from "@/inngest/workers/annotate/1-scrap
 import { eventName as askEventName } from "@/inngest/workers/ask/1-summarize.task";
 import { inngest } from "@/inngest/client";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
-import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { extractLinks } from "@proemial/adapters/slack/helpers/links";
 
 export async function dispatchSlackEvent(
@@ -23,8 +22,6 @@ export async function dispatchSlackEvent(
 			: undefined;
 
 	if (extractLinks(payload.event?.text).length > 0 || fileUrl) {
-		await SlackMessenger.nudgeUser(metadata);
-
 		// TODO: handle all links, not just the first one
 		const url = fileUrl ?? extractLinks(payload.event?.text).at(0);
 		if (!url) {
@@ -48,8 +45,6 @@ export async function dispatchSlackEvent(
 		payload.event?.type === "message" ||
 		payload.event?.type === "app_mention"
 	) {
-		await SlackMessenger.nudgeUser(metadata);
-
 		const result = await inngest.send({
 			name: askEventName,
 			data: {

@@ -1,9 +1,12 @@
 import { SlackV2MessageTarget } from "../../mongodb/slack/v2.models";
+import { link } from "../block-kit/link-blocks";
 
-export async function cleanMessage(
+export async function updateMessage(
 	target: SlackV2MessageTarget,
 	text: string,
-	blocks: any[],
+	summary: string,
+	url?: string,
+	title?: string,
 ) {
 	if (!target.channelId) {
 		throw new Error("Channel ID not found");
@@ -14,13 +17,11 @@ export async function cleanMessage(
 	if (!target.accessTokens.userToken) {
 		throw new Error("Access token not found");
 	}
-	if (!text) {
+	if (text === undefined) {
 		throw new Error("Text not found");
 	}
-	if (!blocks) {
-		throw new Error("Blocks not found");
-	}
 
+	const blocks = link(summary, url, title);
 	const requestBody = {
 		method: "POST",
 		headers: {
@@ -32,16 +33,19 @@ export async function cleanMessage(
 			// Always use ts, but use the one from the channel message if it exists
 			ts: target.ts,
 			text,
-			blocks,
-			attachments: [],
+			...blocks,
 		}),
 	};
-	console.log("REMOVE SUMMARY", JSON.stringify(requestBody));
 
 	const result = await fetch("https://slack.com/api/chat.update", requestBody);
-
 	const response = await result.json();
-	console.log("REMOVE SUMMARY RESPONSE", response);
+	console.log(
+		"ATTACH SUMMARY",
+		JSON.stringify(requestBody),
+		">",
+		result.status,
+		response,
+	);
 
 	return response;
 }

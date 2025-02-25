@@ -14,6 +14,9 @@ export type SlackV2MessageTarget = {
 	channelId: string;
 	ts: string;
 	threadTs?: string;
-	accessToken: string;
+	accessTokens: {
+		userToken: string;
+		teamToken: string;
+	};
 	userId?: string;
 };

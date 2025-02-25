@@ -1,29 +1,26 @@
 import { SlackV2MessageTarget } from "../mongodb/slack/v2.models";
 import { SlackDb } from "../mongodb/slack/slack.adapter";
 import { SlackEventMetadata } from "./models/metadata-models";
-import { sendMessage } from "./ui-updates/send-message";
+import { updateMessage } from "./ui-updates/update-message";
 import { showSuggestions } from "./ui-updates/show-suggestions";
 import { updateStatus } from "./ui-updates/update-status";
 import { nudgeUser } from "./ui-updates/nudge-user";
 import { SlackEventCallback } from "../mongodb/slack/events.types";
 import { cleanMessage } from "./ui-updates/clean-message";
+import { setAssistantStatus } from "./assistant";
+import { sendMessage } from "./ui-updates/send-message";
 
 export const SlackMessenger = {
-	nudgeUser: async (metadata: SlackEventMetadata) => {
+	nudgeUser: async (
+		metadata: SlackEventMetadata,
+		text: string,
+		url?: string,
+		title?: string,
+	) => {
 		const id = metadata?.eventId as string;
 		const type = "slack/nudge";
 
 		try {
-			const userInstall = await SlackDb.installs.get(
-				metadata.teamId,
-				metadata.appId,
-				metadata.user,
-			);
-			if (userInstall) {
-				console.log("User install found, no need to nudge :)");
-				return;
-			}
-
 			const appInstall = await SlackDb.installs.get(
 				metadata.teamId,
 				metadata.appId,
@@ -35,8 +32,55 @@ export const SlackMessenger = {
 			const payload = await nudgeUser(
 				metadata,
 				appInstall.metadata.accessToken,
+				text,
+				url,
+				title,
 			);
 			console.log("nudgeUser result", payload);
+
+			await updateEvents(id, type, payload);
+		} catch (error) {
+			await updateEvents(id, type, error);
+			throw error;
+		}
+	},
+
+	updateMessage: async (
+		metadata: SlackEventMetadata,
+		text: string,
+		url?: string,
+		title?: string,
+	) => {
+		const id = metadata?.eventId as string;
+		const type = "slack/message";
+
+		try {
+			if (metadata.isAssistant) {
+				return await SlackMessenger.sendMessage(metadata, text, url, title);
+			}
+
+			const target = await getTarget(metadata, type, text);
+			if (!target) {
+				return;
+			}
+
+			let payload = {};
+			const userMessage = await SlackDb.events.get(
+				metadata.eventId,
+				"SlackEventCallback",
+			);
+
+			if (target.accessTokens.userToken) {
+				payload = await updateMessage(
+					target,
+					(userMessage?.payload as SlackEventCallback).event.text,
+					text,
+					url,
+					title,
+				);
+			} else {
+				await SlackMessenger.nudgeUser(metadata, text, url, title);
+			}
 
 			await updateEvents(id, type, payload);
 		} catch (error) {
@@ -120,16 +164,25 @@ export const SlackMessenger = {
 				return;
 			}
 
-			const userMessage = await SlackDb.events.get(
-				metadata.eventId,
-				"SlackEventCallback",
-			);
-			const payload = await updateStatus(
-				target,
-				status,
-				(userMessage?.payload as SlackEventCallback).event.text,
-				isError,
-			);
+			let payload = {};
+			if (metadata.isAssistant) {
+				payload = await setAssistantStatus(
+					metadata,
+					target.accessTokens.teamToken,
+					status,
+				);
+			} else {
+				const userMessage = await SlackDb.events.get(
+					metadata.eventId,
+					"SlackEventCallback",
+				);
+				payload = await updateStatus(
+					target,
+					status,
+					(userMessage?.payload as SlackEventCallback).event.text,
+					isError,
+				);
+			}
 
 			await updateEvents(id, type, payload);
 		} catch (error) {
@@ -166,17 +219,13 @@ async function getTarget(
 		return undefined;
 	}
 
-	const install = await SlackDb.installs.get(
+	const accessTokens = await SlackDb.installs.getTokensForUserAndTeam(
 		metadata.teamId,
 		metadata.appId,
 		metadata.user,
 	);
-	if (!install) {
+	if (!accessTokens) {
 		console.log("Install not found");
-		return undefined;
-	}
-	if (!install.metadata?.accessToken) {
-		console.log("Token not found");
 		return undefined;
 	}
 
@@ -184,7 +233,7 @@ async function getTarget(
 		channelId: metadata.channel.id,
 		ts: metadata.ts,
 		threadTs: metadata.threadTs,
-		accessToken: install.metadata?.accessToken,
+		accessTokens,
 	} as SlackV2MessageTarget;
 	console.log("TARGET", target);
 
