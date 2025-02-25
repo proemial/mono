@@ -5,7 +5,17 @@ export function status(text: string, error?: boolean) {
 		attachments: [
 			{
 				color: error ? Colors.RED : Colors.GREEN,
-				text: text,
+				blocks: [
+					{
+						type: "context",
+						elements: [
+							{
+								type: "mrkdwn",
+								text: text,
+							},
+						],
+					},
+				],
 			},
 		],
 	};

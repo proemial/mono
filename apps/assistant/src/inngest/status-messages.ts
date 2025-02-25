@@ -1,11 +1,11 @@
 export const statusMessages = {
 	annotate: {
-		begin: "Scraping...",
-		summarize: "Thinking...",
+		begin: "🔎 Scraping...",
+		summarize: "🤔 Thinking...",
 	},
 	ask: {
-		begin: "Thinking...",
-		fetch: "Fetching...",
-		summarize: "Reasoning...",
+		begin: "🤔 Thinking...",
+		fetch: "⬇️ Fetching...",
+		summarize: "✍️ Reasoning...",
 	},
 };
