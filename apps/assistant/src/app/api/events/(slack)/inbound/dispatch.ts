@@ -27,6 +27,10 @@ export async function dispatchSlackEvent(
 		if (!url) {
 			return `dispatch[${scrapeEventName}]: no url found`;
 		}
+		const probeResponse = await fetch(url);
+		if (!probeResponse.ok) {
+			return `dispatch[${scrapeEventName}]: url ${url} is not accessible`;
+		}
 
 		const result = await inngest.send({
 			name: scrapeEventName,
