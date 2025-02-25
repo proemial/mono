@@ -185,6 +185,22 @@ export const SlackDb = {
 				);
 			}
 		},
+
+		delete: async (appId: string, teamId: string) => {
+			const begin = Time.now();
+
+			try {
+				return await entities.deleteMany({
+					"app.id": appId,
+					"team.id": teamId,
+				});
+			} finally {
+				Time.log(
+					begin,
+					`[mongodb][slack][installs][delete] ${appId} ${teamId}`,
+				);
+			}
+		},
 	},
 
 	// @deprecated

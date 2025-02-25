@@ -87,6 +87,9 @@ export async function GET(request: NextRequest, { params }: { params: Props }) {
 				: { metadata: { accessToken: data.access_token } };
 		console.log("AUTH", JSON.stringify(auth));
 
+		const deletedInstall = await SlackDb.installs.delete(appId, teamId);
+		console.log("Deleted installs", deletedInstall);
+
 		const upsertedEntity = await SlackDb.installs.upsert({
 			createdAt: new Date(),
 			type: "install",
@@ -100,7 +103,7 @@ export async function GET(request: NextRequest, { params }: { params: Props }) {
 			},
 			...auth,
 		});
-		console.log("Upserted team entity", upsertedEntity);
+		console.log("Upserted installs", upsertedEntity);
 
 		// Redirect to a success page or back to your app
 		return NextResponse.redirect(
