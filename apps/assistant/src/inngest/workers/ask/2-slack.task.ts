@@ -5,7 +5,7 @@ import { SlackAskEvent } from "../../workers";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { SlackEventCallback } from "@proemial/adapters/mongodb/slack/events.types";
 import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
-import { logMetrics } from "./metrics";
+import { logEvent } from "./metrics";
 
 export const eventName = "ask/slack";
 const eventId = "ask/slack/fn";
@@ -13,7 +13,7 @@ const eventId = "ask/slack/fn";
 export const slackAskResponseTask = {
 	name: eventName,
 	worker: inngest.createFunction(
-		{ id: eventId, concurrency: 1 },
+		{ id: eventId, retries: 0 },
 		{ event: eventName },
 		async ({ event }) => {
 			const begin = Time.now();
@@ -21,12 +21,12 @@ export const slackAskResponseTask = {
 
 			try {
 				const result = await taskWorker(payload);
-				await logMetrics(eventName, payload, Time.elapsed(begin));
+				await logEvent(eventName, payload, Time.elapsed(begin));
 				// TODO: log totals
 
 				return result;
 			} catch (error) {
-				await logMetrics(
+				await logEvent(
 					eventName,
 					payload,
 					Time.elapsed(begin),
@@ -43,13 +43,6 @@ const taskWorker = async (payload: SlackAskEvent) => {
 
 	if (!payload.metadata) {
 		throw new Error("No metadata provided");
-	}
-
-	const slackEvent = (
-		await SlackDb.events.get(payload.metadata.eventId, "SlackEventCallback")
-	)?.payload as SlackEventCallback;
-	if (!slackEvent) {
-		throw new Error("No slack event found");
 	}
 
 	await SlackMessenger.sendMessage(payload.metadata, payload.answer);

@@ -1,24 +1,50 @@
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { SlackAskEvent } from "../../workers";
 
-export const logMetrics = async (
+export const logEvent = async (
 	step: string,
 	payload: SlackAskEvent,
 	duration: number,
 	error?: string,
 ) => {
+	const { metadata } = payload;
+	await SlackDb.eventLog.upsert({
+		...(error && {
+			status: "failed",
+		}),
+		metadata: {
+			appId: metadata.appId,
+			teamId: metadata.teamId,
+			context: {
+				channelId: metadata.channelId,
+				userId: metadata.user,
+				ts: metadata.ts,
+				threadTs: metadata.threadTs,
+			},
+		},
+		requests: [
+			{
+				type: `worker:${step}`,
+				input: { payload },
+				...(error && {
+					error,
+				}),
+			},
+		],
+	});
+
 	await SlackDb.metrics.insert({
 		ts: new Date(),
 		metadata: {
 			step,
-			operation: "ask",
-			appId: payload.metadata.appId,
-			teamId: payload.metadata.teamId,
+			operation: "answer",
+			appId: metadata.appId,
+			teamId: metadata.teamId,
 			context: {
-				channelId: payload.metadata.channel.id,
-				userId: payload.metadata.user,
-				ts: payload.metadata.ts,
-				threadTs: payload.metadata.threadTs,
+				channelId: metadata.channelId,
+				userId: metadata.user,
+				ts: metadata.ts,
+				threadTs: metadata.threadTs,
 			},
 		},
 		metrics: {

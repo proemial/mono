@@ -7,6 +7,7 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { extractLinks } from "@proemial/adapters/slack/helpers/links";
 import { isSlackFileUrl } from "@proemial/adapters/slack/files";
 import { isTwitterUrl } from "@proemial/adapters/twitter";
+import { EphemeralMessage } from "@proemial/adapters/slack/ui-updates/ephemeral-message";
 
 export async function dispatchSlackEvent(
 	payload: EventCallbackPayload,
@@ -15,15 +16,15 @@ export async function dispatchSlackEvent(
 	console.log("dispatchSlackEvent", payload.type, payload.event?.type);
 
 	const assistantThread = await SlackDb.events.getAssistantThread(
-		metadata.channel.id,
+		metadata.channelId,
 	);
 
-	const fileUrl =
-		payload.event?.subtype === "file_share" && payload.event?.files?.[0]
-			? payload.event.files[0].url_private_download
-			: undefined;
+	if (metadata.target === "annotate") {
+		const fileUrl =
+			payload.event?.subtype === "file_share" && payload.event?.files?.[0]
+				? payload.event.files[0].url_private_download
+				: undefined;
 
-	if (extractLinks(payload.event?.text).length > 0 || fileUrl) {
 		// TODO: handle all links, not just the first one
 		const url = fileUrl ?? extractLinks(payload.event?.text).at(0);
 		if (!url) {
@@ -51,10 +52,7 @@ export async function dispatchSlackEvent(
 		return `dispatch[${scrapeEventName}]: ${result}`;
 	}
 
-	if (
-		payload.event?.type === "message" ||
-		payload.event?.type === "app_mention"
-	) {
+	if (metadata.target === "answer") {
 		const result = await inngest.send({
 			name: askEventName,
 			data: {
@@ -66,6 +64,15 @@ export async function dispatchSlackEvent(
 		console.log("ask enqueue result", askEventName, result);
 
 		return `dispatch[${askEventName}]: ${result}`;
+	}
+
+	if (metadata.target === "dismiss") {
+		const team = await SlackDb.installs.get(metadata.teamId, metadata.appId);
+		await EphemeralMessage.removeOriginal(
+			payload.response_url,
+			team?.metadata?.accessToken as string,
+		);
+		return "dismissed";
 	}
 
 	return undefined;

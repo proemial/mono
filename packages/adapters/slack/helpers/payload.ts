@@ -1,5 +1,4 @@
 import { SlackDb } from "../../mongodb/slack/slack.adapter";
-import { getChannelInfo } from "./channel";
 import { nakedMention } from "./routing";
 import { uuid } from "@proemial/utils/uid";
 import { EventCallbackPayload } from "../models/event-models";
@@ -8,6 +7,8 @@ import { extractLinks } from "./links";
 import { SUPPORTED_MIMETYPES } from "../files/constants";
 import { FILE_SIZE_LIMIT } from "../files/constants";
 
+export const ignored = "ignored";
+
 export async function parseRequest(text: string) {
 	const unencoded = text?.startsWith("payload=")
 		? decodeURIComponent(text.slice(8))
@@ -15,6 +16,7 @@ export async function parseRequest(text: string) {
 			? decodeURIComponent(text.slice(10))
 			: text;
 
+	console.log("UNENCODED", unencoded);
 	const payload = JSON.parse(unencoded) as EventCallbackPayload;
 	console.log("PAYLOAD", JSON.stringify(payload));
 
@@ -29,14 +31,7 @@ export async function parseRequest(text: string) {
 	);
 
 	const { teamId, channelId } = parseMessageSource(payload);
-	// console.log("teamId", teamId, "channelId", channelId);
-
-	const { channel, team, token } = await getChannelInfo(teamId, channelId);
-	// console.log("channelInfo", JSON.stringify({ channel, team, token }));
-
 	const app = await SlackDb.apps.get(payload.api_app_id);
-	// console.log("app", JSON.stringify(app));
-
 	const callbackUrl = app?.metadata?.callback ?? "https://assistant.proem.ai";
 
 	const metadata = {
@@ -44,108 +39,111 @@ export async function parseRequest(text: string) {
 		appId: payload.api_app_id,
 		eventId: payload.event_id ?? uuid(),
 		teamId,
-		channel,
-		team,
-		user: payload.event?.user,
-		ts: payload.event?.ts,
-		threadTs: payload.event?.thread_ts,
+		channelId,
+		// channel,
+		// team,
+		user: payload.event?.message?.user ?? payload.event?.user ?? payload.user,
+		ts:
+			payload.event?.message?.ts ??
+			payload.event?.ts ??
+			payload.container?.message_ts,
+		threadTs: payload.event?.message?.thread_ts ?? payload.event?.thread_ts,
 		channelType: payload.event?.channel_type,
 		assistantThread: payload.event?.assistant_thread && {
 			channel_id: payload.event?.assistant_thread?.channel_id,
 			thread_ts: payload.event?.assistant_thread?.thread_ts,
 		},
-		isAssistant: channel?.id?.startsWith("D"),
+		isAssistant: channelId?.startsWith("D"),
+		target: classifyRequest(payload),
 	} as SlackEventMetadata;
 	console.log("METADATA", JSON.stringify(metadata));
 
-	const type = classifyRequest(payload, metadata);
-
-	// console.log(
-	// 	"METADATA",
-	// 	JSON.stringify({
-	// 		type,
-	// 		teamId,
-	// 		channelId,
-	// 		user: payload.event?.user,
-	// 		ts: payload.event?.ts,
-	// 		threadTs: payload.event?.thread_ts,
-	// 		assistantThread: payload.event?.assistant_thread && {
-	// 			channel_id: payload.event?.assistant_thread?.channel_id,
-	// 			thread_ts: payload.event?.assistant_thread?.thread_ts,
-	// 		},
-	// 	}),
-	// );
-
-	return { payload, metadata, type, token };
+	return { payload, metadata };
 }
 
 export function classifyRequest(
 	payload: EventCallbackPayload,
-	metadata: SlackEventMetadata,
+	// metadata: SlackEventMetadata,
 ) {
 	// Handle Slack verification requests
 	if (payload.type === "url_verification") {
 		console.log("exit[url_verification]", payload.challenge);
-		return "ignored";
+		return ignored;
 	}
 	if (payload.type === "ssl_check") {
 		console.log("exit[ssl_check]");
-		return "ignored";
+		return ignored;
 	}
 	if (payload.event?.bot_profile) {
 		console.log("exit[bot_profile]", payload.event.bot_profile);
-		return "ignored";
+		return ignored;
 	}
 	if (payload.event?.subtype === "file_share") {
 		const file = payload.event.files?.[0];
 		if (file && !SUPPORTED_MIMETYPES.includes(file.mimetype)) {
 			console.log("exit[file_share_unsupported]", file.name, file.mimetype);
-			return "ignored";
+			return ignored;
 		}
 		if (file && file.size > FILE_SIZE_LIMIT) {
 			console.log("exit[file_share_too_large]", file.name, file.size);
-			return "ignored";
+			return ignored;
 		}
 	}
 	if (payload.event?.subtype && !extractLinks(payload.event.text).length) {
 		console.log("exit[subtype]", payload.event.subtype);
-		return "ignored";
+		return ignored;
 	}
 	if (
 		payload.event?.type === "message" &&
 		!extractLinks(payload.event.text).length &&
-		!metadata.channel?.id.startsWith("D")
+		!payload.event?.channel.startsWith("D")
 	) {
 		console.log("exit[message]", payload.event.text);
-		return "ignored";
+		return ignored;
 	}
 	if (nakedMention(payload)) {
 		console.log("exit[nakedmention]", payload.event?.text);
-		return "ignored";
+		return ignored;
 	}
 	if (payload.event?.type === "assistant_thread_context_changed") {
 		console.log("exit[assistant_thread_context_changed]", payload.event.text);
-		return "ignored";
+		return ignored;
 	}
 	if (payload.event?.type === "assistant_thread_started") {
 		console.log("exit[assistant_thread_started]", payload.event.text);
-		return "ignored";
+		return ignored;
 	}
 	if (
-		payload.type === "block_actions"
-		//  && payload.actions.at(0)?.action_id === "CKwTE"
+		payload.type === "block_actions" &&
+		!!payload.actions.find(
+			(a) => a.action_id === "nudge_reject" || a.action_id === "nudge_accept",
+		)
 	) {
+		return "dismiss";
+	}
+	if (payload.type === "block_actions") {
 		console.log("exit[block_actions]", JSON.stringify(payload.actions.at(0)));
-		return "ignored";
+		return ignored;
 	}
 	if (payload.event?.type === "app_mention" && payload.event?.attachments) {
 		console.log("exit[app_mention_modified]", payload.event.text);
-		return "ignored";
+		return ignored;
 	}
-	return (
-		(payload.event?.type ?? payload.type) +
-		(payload.event?.subtype ? `/${payload.event?.subtype as string}` : "")
-	);
+
+	if (
+		extractLinks(payload.event?.text).length > 0 ||
+		(payload.event?.subtype === "file_share" && payload.event?.files?.[0])
+	) {
+		return "annotate";
+	}
+	if (
+		payload.event?.type === "message" ||
+		payload.event?.type === "app_mention"
+	) {
+		return "answer";
+	}
+
+	return "unknown";
 }
 
 export function parseMessageSource(payload: Record<string, any>) {
@@ -155,6 +153,7 @@ export function parseMessageSource(payload: Record<string, any>) {
 		payload.event?.team ??
 		payload.message?.team;
 	const channelId =
+		payload.event?.message?.channel ??
 		payload.event?.channel ??
 		payload.channel?.id ??
 		payload.event?.assistant_thread?.context?.channel_id;

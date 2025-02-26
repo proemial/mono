@@ -6,7 +6,7 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { uuid5 } from "@proemial/utils/uuid";
 import { generateFactsAndQuestions } from "@/prompts/annotate/annotate-prompts";
 import { Summaries } from "@proemial/adapters/mongodb/slack/scraped.types";
-import { logMetrics } from "./metrics";
+import { logEvent } from "./metrics";
 
 export const eventName = "annotate/summarize";
 const eventId = "annotate/summarize/fn";
@@ -14,7 +14,7 @@ const eventId = "annotate/summarize/fn";
 export const summarizeTask = {
 	name: eventName,
 	worker: inngest.createFunction(
-		{ id: eventId, concurrency: 1 },
+		{ id: eventId, retries: 0 },
 		{ event: eventName },
 		async ({ event }) => {
 			const begin = Time.now();
@@ -22,11 +22,11 @@ export const summarizeTask = {
 
 			try {
 				const result = await taskWorker(payload);
-				await logMetrics(eventName, payload, Time.elapsed(begin));
+				await logEvent(eventName, payload, Time.elapsed(begin));
 
 				return result;
 			} catch (error) {
-				await logMetrics(
+				await logEvent(
 					eventName,
 					payload,
 					Time.elapsed(begin),

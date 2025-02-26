@@ -18,7 +18,7 @@ import { extractPapers, LlmSteps } from "./extract-references";
 import { statusMessages } from "@/inngest/status-messages";
 import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { proxyToN8n } from "@/app/api/events/(n8n)/n8nProxy";
-import { logMetrics } from "./metrics";
+import { logEvent } from "./metrics";
 
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
@@ -26,7 +26,7 @@ const eventId = "ask/summarize/fn";
 export const askTask = {
 	name: eventName,
 	worker: inngest.createFunction(
-		{ id: eventId, concurrency: 1 },
+		{ id: eventId, retries: 0 },
 		{ event: eventName },
 		async ({ event }) => {
 			const begin = Time.now();
@@ -34,11 +34,11 @@ export const askTask = {
 
 			try {
 				const result = await taskWorker(payload);
-				await logMetrics(eventName, payload, Time.elapsed(begin));
+				await logEvent(eventName, payload, Time.elapsed(begin));
 
 				return result;
 			} catch (error) {
-				await logMetrics(
+				await logEvent(
 					eventName,
 					payload,
 					Time.elapsed(begin),
@@ -72,7 +72,7 @@ const taskWorker = async (payload: SlackAskEvent) => {
 		}),
 	)) as Message[];
 
-	if (metadata.channel.id === "C08F2GPLT2M") {
+	if (metadata.channelId === "C08F2GPLT2M") {
 		console.log("proxyToN8n", metadata, payload, mappedMessages);
 		return await proxyToN8n("answer", metadata, payload, {
 			prompt: LlmAnswer.prompt(),

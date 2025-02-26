@@ -31,7 +31,7 @@ export async function getTarget(body: {
 	}
 
 	const channelId =
-		body.metadata.channel.id ??
+		body.metadata.channelId ??
 		body.payload?.event?.channel ??
 		body.payload?.channel;
 	if (!channelId) {

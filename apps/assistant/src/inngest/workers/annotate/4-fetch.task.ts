@@ -4,7 +4,7 @@ import { AnnotateRouter } from "@/inngest/routing";
 import { SlackAnnotateEvent } from "../../workers";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
-import { logMetrics } from "./metrics";
+import { logEvent } from "./metrics";
 
 export const eventName = "annotate/fetch";
 const eventId = "annotate/fetch/fn";
@@ -12,7 +12,7 @@ const eventId = "annotate/fetch/fn";
 export const fetchTask = {
 	name: eventName,
 	worker: inngest.createFunction(
-		{ id: eventId, concurrency: 1 },
+		{ id: eventId, retries: 0 },
 		{ event: eventName },
 		async ({ event }) => {
 			const begin = Time.now();
@@ -20,11 +20,11 @@ export const fetchTask = {
 
 			try {
 				const result = await taskWorker(payload);
-				await logMetrics(eventName, payload, Time.elapsed(begin));
+				await logEvent(eventName, payload, Time.elapsed(begin));
 
 				return result;
 			} catch (error) {
-				await logMetrics(
+				await logEvent(
 					eventName,
 					payload,
 					Time.elapsed(begin),

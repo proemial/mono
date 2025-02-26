@@ -38,6 +38,7 @@ export type EventCallbackPayload = {
 	challenge?: string;
 	team_id: string;
 	event?: HackyMessageEvent; // or @slack/types/MessageEvent
+	user?: string;
 	actions: {
 		action_id: string;
 		block_id: string;
@@ -46,6 +47,9 @@ export type EventCallbackPayload = {
 		url: string;
 	}[];
 	response_url: string;
+	container?: {
+		message_ts: string;
+	};
 };
 
 export type SlackThread = {

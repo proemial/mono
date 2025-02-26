@@ -5,12 +5,12 @@ import { Event, SlackEventCallback } from "./events.types";
 import { ScrapedUrl } from "./scraped.types";
 import {
 	EventLogItem,
-	EventLogRequest,
 	EventMetric,
 	SlackV2Event,
 	SlackV2EventFromDb,
 } from "./v2.models";
 import { PushOperator, Document } from "mongodb";
+import { SlackEventMetadata } from "../../slack/models/metadata-models";
 
 const events = Mongo.db("slack").collection("events");
 const v2Events = Mongo.db("slack").collection("v2events");
@@ -35,6 +35,8 @@ export const SlackDb = {
 
 			return await eventLog.updateOne(
 				{
+					"metadata.appId": event.metadata.appId,
+					"metadata.teamId": event.metadata.teamId,
 					"metadata.context.ts": event.metadata.context?.ts,
 					"metadata.context.channelId": event.metadata.context?.channelId,
 				},
@@ -42,15 +44,36 @@ export const SlackDb = {
 					$set: {
 						...rest,
 					},
-					$push: {
-						requests: {
-							...requests.at(-1),
-							createdAt: new Date(),
-						},
-					} as PushOperator<Document>["requests"],
+					...(requests?.length && {
+						$push: {
+							requests: {
+								...requests.at(-1),
+								createdAt: new Date(),
+							},
+						} as PushOperator<Document>["requests"],
+					}),
 				},
 				{ upsert: true },
 			);
+		},
+
+		getUserMessage: async (metadata: SlackEventMetadata) => {
+			const filter = {
+				"metadata.appId": metadata.appId,
+				"metadata.teamId": metadata.teamId,
+				"metadata.context.channelId": metadata.channelId,
+				"metadata.context.ts": metadata.ts,
+			};
+			const event = await eventLog.findOne<EventLogItem>(filter);
+			console.log("USR MESSAGE", filter, event);
+
+			return (
+				event?.requests as {
+					type: string;
+					input: { payload: SlackEventCallback };
+				}[]
+			).find((r) => r.type !== "ignored" && r.input.payload.event.text)?.input
+				.payload.event;
 		},
 	},
 	events: {

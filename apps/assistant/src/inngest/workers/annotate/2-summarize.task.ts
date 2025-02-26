@@ -11,7 +11,7 @@ import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { generateText, Message } from "ai";
 import { proxyToN8n } from "@/app/api/events/(n8n)/n8nProxy";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
-import { logMetrics } from "./metrics";
+import { logEvent } from "./metrics";
 
 export const eventName = "annotate/query";
 const eventId = "annotate/query/fn";
@@ -19,7 +19,7 @@ const eventId = "annotate/query/fn";
 export const queryTask = {
 	name: eventName,
 	worker: inngest.createFunction(
-		{ id: eventId },
+		{ id: eventId, retries: 0 },
 		{ event: eventName },
 		async ({ event }) => {
 			const begin = Time.now();
@@ -27,11 +27,11 @@ export const queryTask = {
 
 			try {
 				const result = await taskWorker(payload);
-				await logMetrics(eventName, payload, Time.elapsed(begin));
+				await logEvent(eventName, payload, Time.elapsed(begin));
 
 				return result;
 			} catch (error) {
-				await logMetrics(
+				await logEvent(
 					eventName,
 					payload,
 					Time.elapsed(begin),
@@ -57,7 +57,7 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 		throw new Error("No scraped data found");
 	}
 
-	if (payload.metadata.channel.id === "C08F2GPLT2M") {
+	if (payload.metadata.channelId === "C08F2GPLT2M") {
 		console.log("proxyToN8n", payload.metadata, payload);
 		return await proxyToN8n("annotate", payload.metadata, payload, {
 			prompt: LlmSummary.prompt(),

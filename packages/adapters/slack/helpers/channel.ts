@@ -84,9 +84,9 @@ export async function getThreadMessages(
 
 export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 	const messages = await getThreadMessages(
-		metadata.channel.id,
+		metadata.channelId,
 		metadata.threadTs as string,
-		metadata.team.id,
+		metadata.teamId,
 		metadata.appId,
 	);
 

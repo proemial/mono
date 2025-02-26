@@ -65,15 +65,15 @@ export const SlackMessenger = {
 			}
 
 			let payload = {};
-			const userMessage = await SlackDb.events.get(
-				metadata.eventId,
-				"SlackEventCallback",
-			);
-
 			if (target.accessTokens.userToken) {
+				const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
+				if (!userMessage) {
+					console.error("User message not found");
+					return;
+				}
 				payload = await updateMessage(
 					target,
-					(userMessage?.payload as SlackEventCallback).event.text,
+					userMessage.text,
 					text,
 					url,
 					title,
@@ -104,13 +104,14 @@ export const SlackMessenger = {
 				return;
 			}
 
-			const userMessage = await SlackDb.events.get(
-				metadata.eventId,
-				"SlackEventCallback",
-			);
+			const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
+			if (!userMessage) {
+				console.error("User message not found");
+				return;
+			}
 			const payload = await sendMessage(
 				target,
-				(userMessage?.payload as SlackEventCallback).event.text,
+				userMessage.text,
 				text,
 				url,
 				title,
@@ -133,14 +134,15 @@ export const SlackMessenger = {
 				return;
 			}
 
-			const userMessage = (
-				await SlackDb.events.get(metadata.eventId, "SlackEventCallback")
-			)?.payload as SlackEventCallback;
-			console.log("CLEAN USER MESSAGE", userMessage);
+			const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
+			if (!userMessage) {
+				console.error("User message not found");
+				return;
+			}
 			const payload = await cleanMessage(
 				target,
-				userMessage.event.text,
-				userMessage.event.blocks,
+				userMessage.text,
+				userMessage.blocks,
 			);
 
 			await updateEvents(id, type, payload);
@@ -172,16 +174,12 @@ export const SlackMessenger = {
 					status,
 				);
 			} else {
-				const userMessage = await SlackDb.events.get(
-					metadata.eventId,
-					"SlackEventCallback",
-				);
-				payload = await updateStatus(
-					target,
-					status,
-					(userMessage?.payload as SlackEventCallback).event.text,
-					isError,
-				);
+				const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
+				if (!userMessage) {
+					console.error("User message not found");
+					return;
+				}
+				payload = await updateStatus(target, status, userMessage.text, isError);
 			}
 
 			await updateEvents(id, type, payload);
@@ -230,7 +228,7 @@ async function getTarget(
 	}
 
 	const target = {
-		channelId: metadata.channel.id,
+		channelId: metadata.channelId,
 		ts: metadata.ts,
 		threadTs: metadata.threadTs,
 		accessTokens,

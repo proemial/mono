@@ -18,8 +18,7 @@ import { LlamaParseClient } from "@proemial/adapters/llamaindex/llama-parse-clie
 import { isSlackFileUrl, parseSlackFile } from "@proemial/adapters/slack/files";
 import { isTwitterUrl } from "@proemial/adapters/twitter";
 import { fetchTranscript } from "@proemial/adapters/youtube/oxylabs";
-import { EventContext } from "@proemial/adapters/mongodb/slack/v2.models";
-import { logMetrics } from "./metrics";
+import { logEvent } from "./metrics";
 
 export const eventName = "annotate/scrape";
 const eventId = "annotate/scrape/fn";
@@ -32,25 +31,19 @@ const llamaParseClient = new LlamaParseClient({
 export const scrapeTask = {
 	name: eventName,
 	worker: inngest.createFunction(
-		{ id: eventId },
+		{ id: eventId, retries: 0 },
 		{ event: eventName },
 		async ({ event }) => {
 			const begin = Time.now();
 			const payload = { ...event.data } as SlackAnnotateEvent;
-			const context: EventContext = {
-				channelId: payload.metadata.channel.id,
-				userId: payload.metadata.user,
-				ts: payload.metadata.ts,
-				threadTs: payload.metadata.threadTs,
-			};
 
 			try {
 				const result = await taskWorker(payload);
-				await logMetrics(eventName, payload, Time.elapsed(begin));
+				await logEvent(eventName, payload, Time.elapsed(begin));
 
 				return result;
 			} catch (error) {
-				await logMetrics(
+				await logEvent(
 					eventName,
 					payload,
 					Time.elapsed(begin),

@@ -1,10 +1,7 @@
 export type EventLogItem = {
-	source: string;
-	metadata: {
-		appId: string;
-		teamId: string;
-		context?: EventContext;
-	};
+	target?: string;
+	status?: string;
+	metadata: EventMetadata;
 	requests: Array<EventLogRequest>;
 };
 
@@ -32,6 +29,12 @@ export type EventMetric = {
 		duration: number;
 		error?: string;
 	};
+};
+
+export type EventMetadata = {
+	appId: string;
+	teamId: string;
+	context?: EventContext;
 };
 
 export type EventContext = {

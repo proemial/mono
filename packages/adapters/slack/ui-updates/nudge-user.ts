@@ -10,7 +10,7 @@ export async function nudgeUser(
 	url?: string,
 	title?: string,
 ) {
-	if (!metadata.channel.id) {
+	if (!metadata.channelId) {
 		throw new Error("Channel ID not found");
 	}
 	if (!metadata.user) {
@@ -32,7 +32,7 @@ export async function nudgeUser(
 			Authorization: `Bearer ${accessToken}`,
 		},
 		body: JSON.stringify({
-			channel: metadata.channel.id,
+			channel: metadata.channelId,
 			user: metadata.user,
 			// threadTs is the timestamp of the message in the thread. Exclude if the message is not in a thread.
 			...(metadata.threadTs && { thread_ts: metadata.threadTs }),

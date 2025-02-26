@@ -8,10 +8,11 @@ import { eventName as askEventName } from "./workers/ask/1-summarize.task";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 
 import { inngest } from "./client";
+import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 
 export const AnnotateRouter = {
 	// scrapeEvent -> queryEvent -> slackEvent -> fetchEvent -> summarizeEvent
-	next: async (step: string, url: string, metadata?: SlackEventMetadata) => {
+	next: async (step: string, url: string, metadata: SlackEventMetadata) => {
 		switch (step) {
 			case scrapeEventName: {
 				return await enqueue(queryEventName, { url }, metadata);
@@ -30,6 +31,7 @@ export const AnnotateRouter = {
 			}
 
 			default:
+				await logCompleted(metadata);
 				return undefined;
 		}
 	},
@@ -41,7 +43,7 @@ export const AskRouter = {
 		step: string,
 		thread: string,
 		answer: string,
-		metadata?: SlackEventMetadata,
+		metadata: SlackEventMetadata,
 	) => {
 		switch (step) {
 			case askEventName: {
@@ -49,6 +51,7 @@ export const AskRouter = {
 			}
 
 			default:
+				await logCompleted(metadata);
 				return undefined;
 		}
 	},
@@ -57,7 +60,7 @@ export const AskRouter = {
 const enqueue = async (
 	name: string,
 	payload: Record<string, string>,
-	metadata?: SlackEventMetadata,
+	metadata: SlackEventMetadata,
 ) => {
 	const result = await inngest.send({
 		name,
@@ -69,4 +72,21 @@ const enqueue = async (
 	console.log("router enqueue result", name, result);
 
 	return name;
+};
+
+export const logCompleted = async (metadata: SlackEventMetadata) => {
+	await SlackDb.eventLog.upsert({
+		status: "completed",
+		metadata: {
+			appId: metadata.appId,
+			teamId: metadata.teamId,
+			context: {
+				channelId: metadata.channelId,
+				userId: metadata.user,
+				ts: metadata.ts,
+				threadTs: metadata.threadTs,
+			},
+		},
+		requests: [],
+	});
 };

@@ -3,14 +3,14 @@ export type SlackEventMetadata = {
 	appId: string;
 	eventId: string;
 	teamId: string;
-	channel: SlackChannel;
-	team: SlackTeam;
+	channelId: string;
 	user: string;
 	ts?: string;
 	threadTs?: string;
 	channelType?: string;
 	assistantThread?: SlackAssistantThread;
 	isAssistant: boolean;
+	target: string;
 };
 
 export type SlackAssistantThread = {

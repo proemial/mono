@@ -7,30 +7,16 @@ import { sendToN8n } from "@proemial/adapters/n8n/n8n";
 import { dispatchSlackEvent } from "./dispatch";
 import { EventCallbackPayload } from "@proemial/adapters/slack/models/event-models";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
-import { EphemeralMessage } from "@proemial/adapters/slack/ui-updates/ephemeral-message";
 
 export const revalidate = 0;
 
 export async function POST(request: Request) {
 	const text = await request.text();
-	const { payload, metadata, type, token } = await slack.parseRequest(text);
+	const { payload, metadata } = await slack.parseRequest(text);
 
-	await upsertToEventLog(payload, metadata, type);
+	await upsertToEventLog(payload, metadata);
 
-	if (
-		payload.type === "block_actions" &&
-		!!payload.actions.find(
-			(a) => a.action_id === "nudge_reject" || a.action_id === "nudge_accept",
-		)
-	) {
-		await EphemeralMessage.removeOriginal(
-			payload.response_url,
-			token as string,
-		);
-		return success;
-	}
-
-	if (type === "ignored") {
+	if (metadata.target === slack.ignored) {
 		if (payload.type === "url_verification") {
 			return NextResponse.json({ challenge: payload.challenge });
 		}
@@ -41,13 +27,10 @@ export async function POST(request: Request) {
 				getThreeRandomStarters(),
 				"Trustworthy answers to any question, such as:",
 			);
-			await logEvent(payload, metadata);
 		}
 
 		return success;
 	}
-
-	await logEvent(payload, metadata);
 
 	const dispatched = await dispatchSlackEvent(payload, metadata);
 	console.log("dispatched", dispatched);
@@ -55,58 +38,47 @@ export async function POST(request: Request) {
 		return success;
 	}
 
+	// Fallback to N8N for unknown events
 	const result = await sendToN8n(payload, metadata);
 	console.log("n8n", result);
 
 	return success;
 }
 
-const logEvent = async (
-	payload: EventCallbackPayload,
-	metadata: SlackEventMetadata,
-) => {
-	await SlackDb.events.insert({
-		createdAt: new Date(),
-		metadata,
-		source: "slack",
-		type: "SlackEventCallback",
-		payload,
-	});
-};
-
 const success = NextResponse.json({ status: "ok" });
 
 async function upsertToEventLog(
 	payload: EventCallbackPayload,
 	metadata: SlackEventMetadata,
-	type: string,
 ) {
 	if (payload.type === "url_verification" || payload.type === "ssl_check") {
 		return;
 	}
 	return await SlackDb.eventLog.upsert({
-		source: "slack/inbound",
+		...(metadata.target !== slack.ignored && {
+			target: metadata.target,
+		}),
+		...(metadata.target !== slack.ignored &&
+			metadata.target !== "dismiss" && {
+				status: "started",
+			}),
 		metadata: {
-			appId: payload.api_app_id,
-			teamId: payload.team_id,
+			appId: metadata.appId,
+			teamId: metadata.teamId,
 			context: {
-				channelId:
-					payload.event?.message?.channel ??
-					payload.event?.channel ??
-					metadata.channel.id,
-				userId:
-					payload.event?.message?.user ?? payload.event?.user ?? metadata.user,
-				ts: payload.event?.message?.ts ?? payload.event?.ts,
-				threadTs: payload.event?.message?.thread_ts ?? payload.event?.thread_ts,
+				channelId: metadata.channelId,
+				userId: metadata.user,
+				ts: metadata.ts,
+				threadTs: metadata.threadTs,
 			},
 		},
 		requests: [
 			{
 				type:
-					type === "ignored"
-						? "ignored"
+					metadata.target === slack.ignored
+						? slack.ignored
 						: payload.type === "event_callback"
-							? type
+							? metadata.target
 							: payload.type,
 				input: { payload },
 			},
