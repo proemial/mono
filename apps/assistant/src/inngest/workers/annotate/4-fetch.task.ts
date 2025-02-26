@@ -4,6 +4,7 @@ import { AnnotateRouter } from "@/inngest/routing";
 import { SlackAnnotateEvent } from "../../workers";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
+import { logMetrics } from "./metrics";
 
 export const eventName = "annotate/fetch";
 const eventId = "annotate/fetch/fn";
@@ -17,48 +18,67 @@ export const fetchTask = {
 			const begin = Time.now();
 			const payload = { ...event.data } as SlackAnnotateEvent;
 
-			if (!payload.url) {
-				throw new Error("No url provided");
-			}
+			try {
+				const result = await taskWorker(payload);
+				await logMetrics(eventName, payload, Time.elapsed(begin));
 
-			const scraped = await SlackDb.scraped.get(payload.url);
-			if (!scraped?.summaries?.query) {
-				throw new Error("No query found");
-			}
-
-			if (!scraped.references) {
-				const result = await fetch("https://index.proem.ai/api/search", {
-					method: "POST",
-					body: JSON.stringify({
-						query: scraped.summaries.query as string,
-						extended: true,
-					}),
-				});
-				const { papers } = (await result.json()) as SearchResult;
-				scraped.references = papers;
-
-				await SlackDb.scraped.upsert(scraped);
-			}
-
-			// Next step from router
-			const next = await AnnotateRouter.next(
-				eventName,
-				payload.url,
-				payload.metadata,
-			);
-			return {
-				event,
-				body: {
+				return result;
+			} catch (error) {
+				await logMetrics(
+					eventName,
 					payload,
-					steps: {
-						current: eventName,
-						next,
-					},
-					elapsed: Time.elapsed(begin),
-				},
-			};
+					Time.elapsed(begin),
+					(error as Error).message,
+				);
+				throw error;
+			}
 		},
 	),
+};
+
+const taskWorker = async (payload: SlackAnnotateEvent) => {
+	const begin = Time.now();
+
+	if (!payload.url) {
+		throw new Error("No url provided");
+	}
+
+	const scraped = await SlackDb.scraped.get(payload.url);
+	if (!scraped?.summaries?.query) {
+		throw new Error("No query found");
+	}
+
+	if (!scraped.references) {
+		const result = await fetch("https://index.proem.ai/api/search", {
+			method: "POST",
+			body: JSON.stringify({
+				query: scraped.summaries.query as string,
+				extended: true,
+			}),
+		});
+		const { papers } = (await result.json()) as SearchResult;
+		scraped.references = papers;
+
+		await SlackDb.scraped.upsert(scraped);
+	}
+
+	// Next step from router
+	const next = await AnnotateRouter.next(
+		eventName,
+		payload.url,
+		payload.metadata,
+	);
+	return {
+		event: eventName,
+		body: {
+			payload,
+			steps: {
+				current: eventName,
+				next,
+			},
+			elapsed: Time.elapsed(begin),
+		},
+	};
 };
 
 export type SearchResult = {

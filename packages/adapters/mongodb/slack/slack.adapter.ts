@@ -3,14 +3,20 @@ import Mongo from "../mongodb-client";
 import { SlackApp, SlackAppInstall, SlackEntity } from "./entities.types";
 import { Event, SlackEventCallback } from "./events.types";
 import { ScrapedUrl } from "./scraped.types";
-import { SlackV2Event, SlackV2EventFromDb } from "./v2.models";
+import { EventMetric, SlackV2Event, SlackV2EventFromDb } from "./v2.models";
 
 const events = Mongo.db("slack").collection("events");
 const v2Events = Mongo.db("slack").collection("v2events");
 const entities = Mongo.db("slack").collection("entities");
 const scraped = Mongo.db("slack").collection("scraped");
+const metrics = Mongo.db("slack").collection("event-metrics");
 
 export const SlackDb = {
+	metrics: {
+		insert: async (metric: EventMetric) => {
+			return await metrics.insertOne(metric);
+		},
+	},
 	events: {
 		get: async (id: string, type?: string) => {
 			const begin = Time.now();

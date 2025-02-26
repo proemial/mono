@@ -29,5 +29,5 @@ export type SlackAskEvent = {
 	thread: string;
 	question: string;
 	answer: string;
-	metadata?: SlackEventMetadata;
+	metadata: SlackEventMetadata;
 };

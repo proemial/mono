@@ -5,9 +5,10 @@ import { SlackAskEvent } from "../../workers";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { SlackEventCallback } from "@proemial/adapters/mongodb/slack/events.types";
 import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
+import { logMetrics } from "./metrics";
 
-export const eventName = "annotate/slack";
-const eventId = "annotate/slack/fn";
+export const eventName = "ask/slack";
+const eventId = "ask/slack/fn";
 
 export const slackAskResponseTask = {
 	name: eventName,
@@ -18,37 +19,57 @@ export const slackAskResponseTask = {
 			const begin = Time.now();
 			const payload = { ...event.data } as SlackAskEvent;
 
-			if (!payload.metadata) {
-				throw new Error("No metadata provided");
-			}
+			try {
+				const result = await taskWorker(payload);
+				await logMetrics(eventName, payload, Time.elapsed(begin));
+				// TODO: log totals
 
-			const slackEvent = (
-				await SlackDb.events.get(payload.metadata.eventId, "SlackEventCallback")
-			)?.payload as SlackEventCallback;
-			if (!slackEvent) {
-				throw new Error("No slack event found");
-			}
-
-			await SlackMessenger.sendMessage(payload.metadata, payload.answer);
-
-			// Next step from router
-			const next = AskRouter.next(
-				eventName,
-				payload.thread,
-				payload.answer,
-				payload.metadata,
-			);
-			return {
-				event,
-				body: {
+				return result;
+			} catch (error) {
+				await logMetrics(
+					eventName,
 					payload,
-					steps: {
-						current: eventName,
-						next,
-					},
-					elapsed: Time.elapsed(begin),
-				},
-			};
+					Time.elapsed(begin),
+					(error as Error).message,
+				);
+				throw error;
+			}
 		},
 	),
+};
+
+const taskWorker = async (payload: SlackAskEvent) => {
+	const begin = Time.now();
+
+	if (!payload.metadata) {
+		throw new Error("No metadata provided");
+	}
+
+	const slackEvent = (
+		await SlackDb.events.get(payload.metadata.eventId, "SlackEventCallback")
+	)?.payload as SlackEventCallback;
+	if (!slackEvent) {
+		throw new Error("No slack event found");
+	}
+
+	await SlackMessenger.sendMessage(payload.metadata, payload.answer);
+
+	// Next step from router
+	const next = AskRouter.next(
+		eventName,
+		payload.thread,
+		payload.answer,
+		payload.metadata,
+	);
+	return {
+		event: eventName,
+		body: {
+			payload,
+			steps: {
+				current: eventName,
+				next,
+			},
+			elapsed: Time.elapsed(begin),
+		},
+	};
 };

@@ -6,6 +6,7 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { uuid5 } from "@proemial/utils/uuid";
 import { generateFactsAndQuestions } from "@/prompts/annotate/annotate-prompts";
 import { Summaries } from "@proemial/adapters/mongodb/slack/scraped.types";
+import { logMetrics } from "./metrics";
 
 export const eventName = "annotate/summarize";
 const eventId = "annotate/summarize/fn";
@@ -19,54 +20,73 @@ export const summarizeTask = {
 			const begin = Time.now();
 			const payload = { ...event.data } as SlackAnnotateEvent;
 
-			if (!payload.url) {
-				throw new Error("No url provided");
-			}
+			try {
+				const result = await taskWorker(payload);
+				await logMetrics(eventName, payload, Time.elapsed(begin));
 
-			const scraped = await SlackDb.scraped.get(payload.url);
-			if (!scraped?.references) {
-				throw new Error("No references found");
-			}
-
-			const summaries = scraped.summaries ?? {};
-
-			if (!summaries.background) {
-				const background = await generateFactsAndQuestions(
-					scraped.content.text,
-					scraped.content.title,
-					summaries.query?.[0] as string,
-					scraped.references,
-					uuid5(payload.url, "helicone"),
-				);
-
-				await SlackDb.scraped.upsert({
-					...scraped,
-					summaries: {
-						...summaries,
-						background: background.commentary,
-						engTitle: background.engTitle,
-					} as Summaries,
-					questions: background.questions,
-				});
-			}
-
-			// Next step from router
-			const next = await AnnotateRouter.next(
-				eventName,
-				payload.url,
-				payload.metadata,
-			);
-			return {
-				event,
-				body: {
+				return result;
+			} catch (error) {
+				await logMetrics(
+					eventName,
 					payload,
-					steps: {
-						current: eventName,
-						next,
-					},
-					elapsed: Time.elapsed(begin),
-				},
-			};
+					Time.elapsed(begin),
+					(error as Error).message,
+				);
+				throw error;
+			}
 		},
 	),
+};
+
+const taskWorker = async (payload: SlackAnnotateEvent) => {
+	const begin = Time.now();
+
+	if (!payload.url) {
+		throw new Error("No url provided");
+	}
+
+	const scraped = await SlackDb.scraped.get(payload.url);
+	if (!scraped?.references) {
+		throw new Error("No references found");
+	}
+
+	const summaries = scraped.summaries ?? {};
+
+	if (!summaries.background) {
+		const background = await generateFactsAndQuestions(
+			scraped.content.text,
+			scraped.content.title,
+			summaries.query?.[0] as string,
+			scraped.references,
+			uuid5(payload.url, "helicone"),
+		);
+
+		await SlackDb.scraped.upsert({
+			...scraped,
+			summaries: {
+				...summaries,
+				background: background.commentary,
+				engTitle: background.engTitle,
+			} as Summaries,
+			questions: background.questions,
+		});
+	}
+
+	// Next step from router
+	const next = await AnnotateRouter.next(
+		eventName,
+		payload.url,
+		payload.metadata,
+	);
+	return {
+		event: eventName,
+		body: {
+			payload,
+			steps: {
+				current: eventName,
+				next,
+			},
+			elapsed: Time.elapsed(begin),
+		},
+	};
 };

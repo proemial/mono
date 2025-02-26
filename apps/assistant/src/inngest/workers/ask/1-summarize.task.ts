@@ -18,6 +18,7 @@ import { extractPapers, LlmSteps } from "./extract-references";
 import { statusMessages } from "@/inngest/status-messages";
 import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { proxyToN8n } from "@/app/api/events/(n8n)/n8nProxy";
+import { logMetrics } from "./metrics";
 
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
@@ -28,43 +29,62 @@ export const askTask = {
 		{ id: eventId, concurrency: 1 },
 		{ event: eventName },
 		async ({ event }) => {
+			const begin = Time.now();
 			const payload = { ...event.data } as SlackAskEvent;
-			const metadata = payload.metadata as SlackEventMetadata;
 
-			const messages = await getMessages(metadata, payload.question);
-			if (messages.length === 0) {
-				throw new Error("No messages found");
+			try {
+				const result = await taskWorker(payload);
+				await logMetrics(eventName, payload, Time.elapsed(begin));
+
+				return result;
+			} catch (error) {
+				await logMetrics(
+					eventName,
+					payload,
+					Time.elapsed(begin),
+					(error as Error).message,
+				);
+				throw error;
 			}
-
-			const mappedMessages = (await Promise.all(
-				messages.map(async (m) => {
-					const link = m.content.slice(1, -1).match(/^https?:\/\/[^\s]+$/);
-					if (link?.length) {
-						const scraped = await SlackDb.scraped.get(link[0]);
-						return {
-							...m,
-							content: scraped?.content.text ?? m.content,
-						};
-					}
-					return m;
-				}),
-			)) as Message[];
-
-			if (metadata.channel.id === "C08F2GPLT2M") {
-				console.log("proxyToN8n", metadata, payload, mappedMessages);
-				return await proxyToN8n("answer", metadata, payload, {
-					prompt: LlmAnswer.prompt(),
-					messages: mappedMessages,
-				});
-			}
-
-			console.log("summarizeAnswerTask", metadata, payload, mappedMessages);
-			return await summarizeAnswerTask(metadata, payload, {
-				prompt: LlmAnswer.prompt(),
-				messages: mappedMessages,
-			});
 		},
 	),
+};
+
+const taskWorker = async (payload: SlackAskEvent) => {
+	const metadata = payload.metadata as SlackEventMetadata;
+
+	const messages = await getMessages(metadata, payload.question);
+	if (messages.length === 0) {
+		throw new Error("No messages found");
+	}
+
+	const mappedMessages = (await Promise.all(
+		messages.map(async (m) => {
+			const link = m.content.slice(1, -1).match(/^https?:\/\/[^\s]+$/);
+			if (link?.length) {
+				const scraped = await SlackDb.scraped.get(link[0]);
+				return {
+					...m,
+					content: scraped?.content.text ?? m.content,
+				};
+			}
+			return m;
+		}),
+	)) as Message[];
+
+	if (metadata.channel.id === "C08F2GPLT2M") {
+		console.log("proxyToN8n", metadata, payload, mappedMessages);
+		return await proxyToN8n("answer", metadata, payload, {
+			prompt: LlmAnswer.prompt(),
+			messages: mappedMessages,
+		});
+	}
+
+	console.log("summarizeAnswerTask", metadata, payload, mappedMessages);
+	return await summarizeAnswerTask(metadata, payload, {
+		prompt: LlmAnswer.prompt(),
+		messages: mappedMessages,
+	});
 };
 
 export async function summarizeAnswerTask(

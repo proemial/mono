@@ -11,6 +11,7 @@ import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { generateText, Message } from "ai";
 import { proxyToN8n } from "@/app/api/events/(n8n)/n8nProxy";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
+import { logMetrics } from "./metrics";
 
 export const eventName = "annotate/query";
 const eventId = "annotate/query/fn";
@@ -18,44 +19,62 @@ const eventId = "annotate/query/fn";
 export const queryTask = {
 	name: eventName,
 	worker: inngest.createFunction(
-		{ id: eventId, concurrency: 1 },
+		{ id: eventId },
 		{ event: eventName },
 		async ({ event }) => {
+			const begin = Time.now();
 			const payload = { ...event.data } as SlackAnnotateEvent;
 
-			if (!payload.url) {
-				throw new Error("No url provided");
+			try {
+				const result = await taskWorker(payload);
+				await logMetrics(eventName, payload, Time.elapsed(begin));
+
+				return result;
+			} catch (error) {
+				await logMetrics(
+					eventName,
+					payload,
+					Time.elapsed(begin),
+					(error as Error).message,
+				);
+				throw error;
 			}
-			await SlackMessenger.updateStatus(
-				payload.metadata,
-				statusMessages.annotate.summarize,
-			);
-
-			const scraped = await SlackDb.scraped.get(payload.url);
-			if (!scraped) {
-				throw new Error("No scraped data found");
-			}
-
-			if (payload.metadata.channel.id === "C08F2GPLT2M") {
-				console.log("proxyToN8n", payload.metadata, payload);
-				return await proxyToN8n("annotate", payload.metadata, payload, {
-					prompt: LlmSummary.prompt(),
-					url: payload.url,
-					title: scraped.content.title,
-					text: scraped.content.text,
-				});
-			}
-
-			const result = await summarizeAnnotationTask(payload.metadata, payload, {
-				prompt: LlmSummary.prompt(),
-				url: payload.url,
-				title: scraped.content.title,
-				text: scraped.content.text,
-			});
-
-			return result;
 		},
 	),
+};
+
+const taskWorker = async (payload: SlackAnnotateEvent) => {
+	if (!payload.url) {
+		throw new Error("No url provided");
+	}
+	await SlackMessenger.updateStatus(
+		payload.metadata,
+		statusMessages.annotate.summarize,
+	);
+
+	const scraped = await SlackDb.scraped.get(payload.url);
+	if (!scraped) {
+		throw new Error("No scraped data found");
+	}
+
+	if (payload.metadata.channel.id === "C08F2GPLT2M") {
+		console.log("proxyToN8n", payload.metadata, payload);
+		return await proxyToN8n("annotate", payload.metadata, payload, {
+			prompt: LlmSummary.prompt(),
+			url: payload.url,
+			title: scraped.content.title,
+			text: scraped.content.text,
+		});
+	}
+
+	const result = await summarizeAnnotationTask(payload.metadata, payload, {
+		prompt: LlmSummary.prompt(),
+		url: payload.url,
+		title: scraped.content.title,
+		text: scraped.content.text,
+	});
+
+	return result;
 };
 
 export async function summarizeAnnotationTask(
