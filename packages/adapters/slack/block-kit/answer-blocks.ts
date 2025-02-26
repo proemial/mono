@@ -8,15 +8,6 @@ export function answer(text: string, url?: string, title?: string) {
 						type: "context",
 						elements: [
 							{
-								type: "image",
-								image_url: "https://u.lillefar.dk/i/nS2wQ6+",
-								alt_text: "Logo",
-							},
-							{
-								type: "mrkdwn",
-								text: "summary",
-							},
-							{
 								type: "mrkdwn",
 								text: text,
 							},
