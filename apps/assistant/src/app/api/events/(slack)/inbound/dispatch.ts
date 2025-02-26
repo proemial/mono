@@ -19,7 +19,7 @@ export async function dispatchSlackEvent(
 	);
 
 	const fileUrl =
-		payload.event.subtype === "file_share" && payload.event.files?.[0]
+		payload.event?.subtype === "file_share" && payload.event?.files?.[0]
 			? payload.event.files[0].url_private_download
 			: undefined;
 
