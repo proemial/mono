@@ -42,7 +42,8 @@ export async function parseRequest(text: string) {
 		channelId,
 		// channel,
 		// team,
-		user: payload.event?.message?.user ?? payload.event?.user ?? payload.user,
+		user:
+			payload.event?.message?.user ?? payload.event?.user ?? payload.user?.id,
 		ts:
 			payload.event?.message?.ts ??
 			payload.event?.ts ??
