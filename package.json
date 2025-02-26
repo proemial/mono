@@ -7,7 +7,7 @@
 		"checkly": "turbo checkly",
 		"format": "biome format --write .",
 		"lint": "biome lint --apply .",
-		"vercel-pull-env": "vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/proem --yes;vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/index --yes;vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/chat --yes",
+		"vercel-pull-env": "vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/proem --yes;vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/index --yes;vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/chat --yes;vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/assistant --yes",
 		"test": "turbo run test",
 		"test:watch": "turbo run test:watch"
 	},
