@@ -14,7 +14,7 @@ export function answer(text: string, url?: string, title?: string) {
 							},
 							{
 								type: "mrkdwn",
-								text: " summary",
+								text: "summary",
 							},
 							{
 								type: "mrkdwn",
