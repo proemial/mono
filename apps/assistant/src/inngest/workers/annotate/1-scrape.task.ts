@@ -18,6 +18,8 @@ import { LlamaParseClient } from "@proemial/adapters/llamaindex/llama-parse-clie
 import { isSlackFileUrl, parseSlackFile } from "@proemial/adapters/slack/files";
 import { isTwitterUrl } from "@proemial/adapters/twitter";
 import { fetchTranscript } from "@proemial/adapters/youtube/oxylabs";
+import { EventContext } from "@proemial/adapters/mongodb/slack/v2.models";
+import { logMetrics } from "./metrics";
 
 export const eventName = "annotate/scrape";
 const eventId = "annotate/scrape/fn";
@@ -35,14 +37,25 @@ export const scrapeTask = {
 		async ({ event }) => {
 			const begin = Time.now();
 			const payload = { ...event.data } as SlackAnnotateEvent;
+			const context: EventContext = {
+				channelId: payload.metadata.channel.id,
+				userId: payload.metadata.user,
+				ts: payload.metadata.ts,
+				threadTs: payload.metadata.threadTs,
+			};
 
 			try {
 				const result = await taskWorker(payload);
-				await logMetric(payload, Time.elapsed(begin));
+				await logMetrics(eventName, payload, Time.elapsed(begin));
 
 				return result;
 			} catch (error) {
-				await logMetric(payload, Time.elapsed(begin), (error as Error).message);
+				await logMetrics(
+					eventName,
+					payload,
+					Time.elapsed(begin),
+					(error as Error).message,
+				);
 				throw error;
 			}
 		},
@@ -147,24 +160,4 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 const isFallbackable = (url: string) => {
 	// Don't retry scraping if it's a file or Twitter url (which is already tried with Scrapfly)
 	return !isSlackFileUrl(url) && !isTwitterUrl(url);
-};
-
-const logMetric = async (
-	payload: SlackAnnotateEvent,
-	duration: number,
-	error?: string,
-) => {
-	await SlackDb.metrics.insert({
-		ts: new Date(),
-		metadata: {
-			step: eventName,
-			operation: "annotate",
-			appId: payload.metadata.appId,
-			teamId: payload.metadata.teamId,
-		},
-		metrics: {
-			error,
-			duration,
-		},
-	});
 };

@@ -14,6 +14,12 @@ export const logMetrics = async (
 			operation: "ask",
 			appId: payload.metadata.appId,
 			teamId: payload.metadata.teamId,
+			context: {
+				channelId: payload.metadata.channel.id,
+				userId: payload.metadata.user,
+				ts: payload.metadata.ts,
+				threadTs: payload.metadata.threadTs,
+			},
 		},
 		metrics: {
 			error,
