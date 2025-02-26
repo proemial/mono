@@ -15,6 +15,8 @@ export async function POST(request: Request) {
 	const text = await request.text();
 	const { payload, metadata, type, token } = await slack.parseRequest(text);
 
+	await upsertToEventLog(payload, metadata, type);
+
 	if (
 		payload.type === "block_actions" &&
 		!!payload.actions.find(
@@ -28,7 +30,7 @@ export async function POST(request: Request) {
 		return success;
 	}
 
-	if (type === "ignore") {
+	if (type === "ignored") {
 		if (payload.type === "url_verification") {
 			return NextResponse.json({ challenge: payload.challenge });
 		}
@@ -73,3 +75,38 @@ const logEvent = async (
 };
 
 const success = NextResponse.json({ status: "ok" });
+
+async function upsertToEventLog(
+	payload: EventCallbackPayload,
+	metadata: SlackEventMetadata,
+	type: string,
+) {
+	return await SlackDb.eventLog.upsert({
+		source: "slack/inbound",
+		metadata: {
+			appId: payload.api_app_id,
+			teamId: payload.team_id,
+			context: {
+				channelId:
+					payload.event?.message?.channel ??
+					payload.event?.channel ??
+					metadata.channel.id,
+				userId:
+					payload.event?.message?.user ?? payload.event?.user ?? metadata.user,
+				ts: payload.event?.message?.ts ?? payload.event?.ts,
+				threadTs: payload.event?.message?.thread_ts ?? payload.event?.thread_ts,
+			},
+		},
+		requests: [
+			{
+				type:
+					type === "ignored"
+						? "ignored"
+						: payload.type === "event_callback"
+							? type
+							: payload.type,
+				input: { payload },
+			},
+		],
+	});
+}

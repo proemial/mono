@@ -17,6 +17,13 @@ export type HackyMessageEvent = Omit<GenericMessageEvent, "type"> & {
 			enterprise_id: string;
 		};
 	};
+	message?: {
+		ts: string;
+		thread_ts: string;
+		channel: string;
+		user: string;
+	};
+	ts: string;
 };
 
 export type SlackAssistantThread = {
@@ -29,8 +36,8 @@ export type EventCallbackPayload = {
 	event_id: string;
 	type: string;
 	challenge?: string;
-	team_id?: string;
-	event: HackyMessageEvent; // or @slack/types/MessageEvent
+	team_id: string;
+	event?: HackyMessageEvent; // or @slack/types/MessageEvent
 	actions: {
 		action_id: string;
 		block_id: string;

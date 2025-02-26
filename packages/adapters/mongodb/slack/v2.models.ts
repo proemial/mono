@@ -1,24 +1,22 @@
 export type EventLogItem = {
-	createdAt: Date;
-	updatedAt: Date;
 	source: string;
 	metadata: {
 		appId: string;
 		teamId: string;
 		context?: EventContext;
 	};
-	requests: Array<{
-		type: string;
-		createdAt: Date;
-		input: {
-			type: string;
-			payload: unknown;
-		};
-		output: {
-			responseCode: number;
-			payload: unknown;
-		};
-	}>;
+	requests: Array<EventLogRequest>;
+};
+
+export type EventLogRequest = {
+	type: string;
+	input: {
+		payload: unknown;
+	};
+	output?: {
+		responseCode: number;
+		payload: unknown;
+	};
 };
 
 export type EventMetric = {

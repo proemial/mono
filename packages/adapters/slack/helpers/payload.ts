@@ -86,31 +86,30 @@ export function classifyRequest(
 	// Handle Slack verification requests
 	if (payload.type === "url_verification") {
 		console.log("exit[url_verification]", payload.challenge);
-		return "ignore";
+		return "ignored";
 	}
 	if (payload.type === "ssl_check") {
 		console.log("exit[ssl_check]");
-		return "ignore";
+		return "ignored";
 	}
 	if (payload.event?.bot_profile) {
 		console.log("exit[bot_profile]", payload.event.bot_profile);
-		return "ignore";
+		return "ignored";
 	}
 	if (payload.event?.subtype === "file_share") {
 		const file = payload.event.files?.[0];
 		if (file && !SUPPORTED_MIMETYPES.includes(file.mimetype)) {
 			console.log("exit[file_share_unsupported]", file.name, file.mimetype);
-			return "ignore";
+			return "ignored";
 		}
 		if (file && file.size > FILE_SIZE_LIMIT) {
 			console.log("exit[file_share_too_large]", file.name, file.size);
-			return "ignore";
+			return "ignored";
 		}
-		return undefined;
 	}
 	if (payload.event?.subtype && !extractLinks(payload.event.text).length) {
 		console.log("exit[subtype]", payload.event.subtype);
-		return "ignore";
+		return "ignored";
 	}
 	if (
 		payload.event?.type === "message" &&
@@ -118,32 +117,35 @@ export function classifyRequest(
 		!metadata.channel?.id.startsWith("D")
 	) {
 		console.log("exit[message]", payload.event.text);
-		return "ignore";
+		return "ignored";
 	}
 	if (nakedMention(payload)) {
-		console.log("exit[nakedmention]", payload.event.text);
-		return "ignore";
+		console.log("exit[nakedmention]", payload.event?.text);
+		return "ignored";
 	}
 	if (payload.event?.type === "assistant_thread_context_changed") {
 		console.log("exit[assistant_thread_context_changed]", payload.event.text);
-		return "ignore";
+		return "ignored";
 	}
 	if (payload.event?.type === "assistant_thread_started") {
 		console.log("exit[assistant_thread_started]", payload.event.text);
-		return "ignore";
+		return "ignored";
 	}
 	if (
 		payload.type === "block_actions"
 		//  && payload.actions.at(0)?.action_id === "CKwTE"
 	) {
 		console.log("exit[block_actions]", JSON.stringify(payload.actions.at(0)));
-		return "ignore";
+		return "ignored";
 	}
 	if (payload.event?.type === "app_mention" && payload.event?.attachments) {
 		console.log("exit[app_mention_modified]", payload.event.text);
-		return "ignore";
+		return "ignored";
 	}
-	return undefined;
+	return (
+		(payload.event?.type ?? payload.type) +
+		(payload.event?.subtype ? `/${payload.event?.subtype as string}` : "")
+	);
 }
 
 export function parseMessageSource(payload: Record<string, any>) {

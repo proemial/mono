@@ -3,18 +3,54 @@ import Mongo from "../mongodb-client";
 import { SlackApp, SlackAppInstall, SlackEntity } from "./entities.types";
 import { Event, SlackEventCallback } from "./events.types";
 import { ScrapedUrl } from "./scraped.types";
-import { EventMetric, SlackV2Event, SlackV2EventFromDb } from "./v2.models";
+import {
+	EventLogItem,
+	EventLogRequest,
+	EventMetric,
+	SlackV2Event,
+	SlackV2EventFromDb,
+} from "./v2.models";
+import { PushOperator, Document } from "mongodb";
 
 const events = Mongo.db("slack").collection("events");
 const v2Events = Mongo.db("slack").collection("v2events");
 const entities = Mongo.db("slack").collection("entities");
 const scraped = Mongo.db("slack").collection("scraped");
 const metrics = Mongo.db("slack").collection("event-metrics");
+const eventLog = Mongo.db("slack").collection("event-log");
 
 export const SlackDb = {
 	metrics: {
 		insert: async (metric: EventMetric) => {
 			return await metrics.insertOne(metric);
+		},
+	},
+	eventLog: {
+		upsert: async (event: EventLogItem) => {
+			if (!event.metadata.context?.ts || !event.metadata.context?.channelId) {
+				throw new Error("ts and channelId are required");
+			}
+
+			const { requests, ...rest } = event;
+
+			return await eventLog.updateOne(
+				{
+					"metadata.context.ts": event.metadata.context?.ts,
+					"metadata.context.channelId": event.metadata.context?.channelId,
+				},
+				{
+					$set: {
+						...rest,
+					},
+					$push: {
+						requests: {
+							...requests.at(-1),
+							createdAt: new Date(),
+						},
+					} as PushOperator<Document>["requests"],
+				},
+				{ upsert: true },
+			);
 		},
 	},
 	events: {
