@@ -1,32 +1,28 @@
 export function answer(text: string, url?: string, title?: string) {
-	if (url && title) {
-		return {
-			blocks: [
-				{
-					type: "context",
-					elements: [
-						{
-							type: "mrkdwn",
-							text: "*proem summary*",
-						},
-						{
-							type: "mrkdwn",
-							text: url && title ? `*<${url}|${title}>*\n${text}` : text,
-						},
-					],
-				},
-			],
-		};
-	}
-
 	return {
-		blocks: [
+		attachments: [
 			{
-				type: "section",
-				text: {
-					type: "mrkdwn",
-					text,
-				},
+				color: "#66ff66",
+				blocks: [
+					{
+						type: "context",
+						elements: [
+							{
+								type: "image",
+								image_url: "https://u.lillefar.dk/i/nS2wQ6+",
+								alt_text: "Logo",
+							},
+							{
+								type: "mrkdwn",
+								text: " summary",
+							},
+							{
+								type: "mrkdwn",
+								text: text,
+							},
+						],
+					},
+				],
 			},
 		],
 	};
