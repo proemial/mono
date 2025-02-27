@@ -20,6 +20,15 @@ export function status(text: string, error?: boolean) {
 							},
 						],
 					},
+					...(error
+						? []
+						: [
+								{
+									type: "image",
+									image_url: "https://u.lillefar.dk/i/I0Q03K+",
+									alt_text: "Preloader",
+								},
+							]),
 				],
 			},
 		],
