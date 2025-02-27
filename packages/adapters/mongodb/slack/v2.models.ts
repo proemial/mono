@@ -74,4 +74,5 @@ export type SlackV2MessageTarget = {
 		teamToken: string;
 	};
 	userId?: string;
+	target: string;
 };

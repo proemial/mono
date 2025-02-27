@@ -1,6 +1,12 @@
 import { Colors } from "../ui-updates/colors";
+import { SlackV2MessageTarget } from "../../mongodb/slack/v2.models";
 
-export function status(text: string, error?: boolean) {
+export function status(
+	target: SlackV2MessageTarget,
+	text: string,
+	error?: boolean,
+) {
+	const preloader = target.target === "annotate" && !error;
 	return {
 		attachments: [
 			{
@@ -20,15 +26,15 @@ export function status(text: string, error?: boolean) {
 							},
 						],
 					},
-					...(error
-						? []
-						: [
+					...(preloader
+						? [
 								{
 									type: "image",
 									image_url: "https://assistant.proem.ai/slack/preloader.gif",
 									alt_text: "Preloader",
 								},
-							]),
+							]
+						: []),
 				],
 			},
 		],
