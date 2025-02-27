@@ -9,7 +9,7 @@ export function link(text: string, url?: string, title?: string) {
 						elements: [
 							{
 								type: "image",
-								image_url: "https://u.lillefar.dk/i/nS2wQ6+",
+								image_url: "https://assistant.proem.ai/slack/proem-icon.png",
 								alt_text: "Logo",
 							},
 							{

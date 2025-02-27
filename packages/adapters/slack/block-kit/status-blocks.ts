@@ -11,7 +11,7 @@ export function status(text: string, error?: boolean) {
 						elements: [
 							{
 								type: "image",
-								image_url: "https://u.lillefar.dk/i/HGTyaq+",
+								image_url: "https://assistant.proem.ai/slack/spinner.gif",
 								alt_text: "Logo",
 							},
 							{
@@ -25,7 +25,7 @@ export function status(text: string, error?: boolean) {
 						: [
 								{
 									type: "image",
-									image_url: "https://u.lillefar.dk/i/I0Q03K+",
+									image_url: "https://assistant.proem.ai/slack/preloader.gif",
 									alt_text: "Preloader",
 								},
 							]),
