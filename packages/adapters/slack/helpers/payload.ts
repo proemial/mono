@@ -23,6 +23,9 @@ export async function parseRequest(text: string) {
 
 	const fields = parseFields(payload);
 
+	// TODO: return target:ignore if requests has workers
+	// const event = await SlackDb.eventLog.getRequests(payload);
+
 	const metadata = {
 		...fields,
 		appId: payload.api_app_id,
@@ -34,10 +37,7 @@ export async function parseRequest(text: string) {
 	return { payload, metadata };
 }
 
-export function classifyRequest(
-	payload: EventCallbackPayload,
-	// metadata: SlackEventMetadata,
-) {
+export function classifyRequest(payload: EventCallbackPayload) {
 	// Handle Slack verification requests
 	if (payload.type === "url_verification") {
 		console.log("exit[url_verification]", payload.challenge);
@@ -119,7 +119,7 @@ export function classifyRequest(
 	return "unknown";
 }
 
-function parseFields(payload: any) {
+function parseFields(payload: EventCallbackPayload) {
 	const channelId = getChannelId(payload);
 
 	return {
@@ -132,6 +132,7 @@ function parseFields(payload: any) {
 	};
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 function getChannelId(payload: any) {
 	return (
 		payload.event?.message?.channel ??
@@ -142,6 +143,7 @@ function getChannelId(payload: any) {
 	);
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 function getTeamId(payload: any) {
 	return (
 		payload.team_id ??
@@ -150,6 +152,8 @@ function getTeamId(payload: any) {
 		payload.message?.team
 	);
 }
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 function getUserId(payload: any) {
 	return (
 		payload.event?.message?.user ??
@@ -160,6 +164,7 @@ function getUserId(payload: any) {
 	);
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 function getTs(payload: any) {
 	return (
 		payload.event?.message?.ts ??
@@ -168,6 +173,7 @@ function getTs(payload: any) {
 	);
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 function getThreadTs(payload: any) {
 	return (
 		payload.event?.message?.thread_ts ??

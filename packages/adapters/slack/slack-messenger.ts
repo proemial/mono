@@ -78,13 +78,10 @@ export const SlackMessenger = {
 			console.error("User message not found");
 			return;
 		}
-		const payload = await sendMessage(
-			target,
-			userMessage.text,
-			text,
-			url,
-			title,
-		);
+
+		// TODO: cleanMessage triggers an infinite loop
+		// await SlackMessenger.cleanMessage(metadata);
+		return await sendMessage(target, userMessage.text, text, url, title);
 	},
 
 	cleanMessage: async (metadata: SlackEventMetadata) => {
@@ -98,11 +95,7 @@ export const SlackMessenger = {
 			console.error("User message not found");
 			return;
 		}
-		const payload = await cleanMessage(
-			target,
-			userMessage.text,
-			userMessage.blocks,
-		);
+		return await cleanMessage(target, userMessage.text, userMessage.blocks);
 	},
 
 	updateStatus: async (
