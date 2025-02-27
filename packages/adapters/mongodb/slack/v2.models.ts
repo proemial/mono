@@ -3,17 +3,19 @@ export type EventLogItem = {
 	status?: string;
 	metadata: EventMetadata;
 	requests: Array<EventLogRequest>;
+	duration?: number;
+	elapsed?: number;
+	initialLatency?: number;
 };
 
 export type EventLogRequest = {
+	createdAt?: Date;
 	type: string;
 	input: {
 		payload: unknown;
 	};
-	output?: {
-		responseCode: number;
-		payload: unknown;
-	};
+	duration?: number;
+	error?: string;
 };
 
 export type EventMetric = {

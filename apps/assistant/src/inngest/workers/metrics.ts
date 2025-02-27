@@ -1,9 +1,33 @@
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
-import { SlackAskEvent } from "../../workers";
+import { SlackAnnotateEvent, SlackAskEvent } from ".";
 
-export const logEvent = async (
+export const Metrics = {
+	annotate: {
+		log: async (
+			step: string,
+			payload: SlackAnnotateEvent,
+			duration: number,
+			error?: string,
+		) => {
+			return await logEvent("annotate", step, payload, duration, error);
+		},
+	},
+	answer: {
+		log: async (
+			step: string,
+			payload: SlackAskEvent,
+			duration: number,
+			error?: string,
+		) => {
+			return await logEvent("answer", step, payload, duration, error);
+		},
+	},
+};
+
+const logEvent = async (
+	operation: "annotate" | "answer",
 	step: string,
-	payload: SlackAskEvent,
+	payload: SlackAnnotateEvent | SlackAskEvent,
 	duration: number,
 	error?: string,
 ) => {
@@ -29,6 +53,7 @@ export const logEvent = async (
 				...(error && {
 					error,
 				}),
+				duration,
 			},
 		],
 	});
@@ -37,7 +62,7 @@ export const logEvent = async (
 		ts: new Date(),
 		metadata: {
 			step,
-			operation: "answer",
+			operation,
 			appId: metadata.appId,
 			teamId: metadata.teamId,
 			context: {

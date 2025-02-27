@@ -6,7 +6,7 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { uuid5 } from "@proemial/utils/uuid";
 import { generateFactsAndQuestions } from "@/prompts/annotate/annotate-prompts";
 import { Summaries } from "@proemial/adapters/mongodb/slack/scraped.types";
-import { logEvent } from "./metrics";
+import { Metrics } from "../metrics";
 
 export const eventName = "annotate/summarize";
 const eventId = "annotate/summarize/fn";
@@ -22,11 +22,11 @@ export const summarizeTask = {
 
 			try {
 				const result = await taskWorker(payload);
-				await logEvent(eventName, payload, Time.elapsed(begin));
+				await Metrics.annotate.log(eventName, payload, Time.elapsed(begin));
 
 				return result;
 			} catch (error) {
-				await logEvent(
+				await Metrics.annotate.log(
 					eventName,
 					payload,
 					Time.elapsed(begin),

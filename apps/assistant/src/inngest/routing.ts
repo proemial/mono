@@ -1,7 +1,5 @@
 import { eventName as scrapeEventName } from "./workers/annotate/1-scrape.task";
 import { eventName as queryEventName } from "./workers/annotate/2-summarize.task";
-import { eventName as fetchEventName } from "./workers/annotate/4-fetch.task";
-import { eventName as summarizeEventName } from "./workers/annotate/5-annotate.task";
 import { eventName as slackAskEventName } from "./workers/ask/2-slack.task";
 import { eventName as slackAnnotateEventName } from "./workers/annotate/3-slack.task";
 import { eventName as askEventName } from "./workers/ask/1-summarize.task";
@@ -22,13 +20,13 @@ export const AnnotateRouter = {
 				return await enqueue(slackAnnotateEventName, { url }, metadata);
 			}
 
-			case slackAnnotateEventName: {
-				return await enqueue(fetchEventName, { url }, metadata);
-			}
+			// case slackAnnotateEventName: {
+			// 	return await enqueue(fetchEventName, { url }, metadata);
+			// }
 
-			case fetchEventName: {
-				return await enqueue(summarizeEventName, { url }, metadata);
-			}
+			// case fetchEventName: {
+			// 	return await enqueue(summarizeEventName, { url }, metadata);
+			// }
 
 			default:
 				await logCompleted(metadata);
@@ -75,6 +73,21 @@ const enqueue = async (
 };
 
 export const logCompleted = async (metadata: SlackEventMetadata) => {
+	const event = await SlackDb.eventLog.getRequests(metadata);
+	const duration = event.requests.reduce(
+		(acc, r) => acc + (r.duration ?? 0),
+		0,
+	);
+
+	const slackTs = event.metadata?.context?.ts; //1740636943.540109
+	const begin = slackTs
+		? Math.floor(Number.parseFloat(slackTs) * 1000)
+		: undefined;
+
+	const firstSeen = event.requests.at(0)?.createdAt?.getTime();
+	const initialLatency = firstSeen && begin ? firstSeen - begin : undefined;
+	const elapsed = begin ? Date.now() - begin : undefined;
+
 	await SlackDb.eventLog.upsert({
 		status: "completed",
 		metadata: {
@@ -88,5 +101,14 @@ export const logCompleted = async (metadata: SlackEventMetadata) => {
 			},
 		},
 		requests: [],
+		...(duration && {
+			duration,
+		}),
+		...(elapsed && {
+			elapsed,
+		}),
+		...(initialLatency && {
+			initialLatency,
+		}),
 	});
 };

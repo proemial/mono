@@ -22,60 +22,107 @@ const eventLog = Mongo.db("slack").collection("event-log");
 export const SlackDb = {
 	metrics: {
 		insert: async (metric: EventMetric) => {
-			return await metrics.insertOne(metric);
+			const begin = Time.now();
+
+			try {
+				return await metrics.insertOne(metric);
+			} finally {
+				Time.log(begin, "[mongodb][slack][metrics][insert]");
+			}
 		},
 	},
+
 	eventLog: {
 		upsert: async (event: EventLogItem) => {
-			if (!event.metadata.context?.ts || !event.metadata.context?.channelId) {
-				throw new Error("ts and channelId are required");
-			}
+			const begin = Time.now();
 
-			const { requests, ...rest } = event;
+			try {
+				if (!event.metadata.context?.ts || !event.metadata.context?.channelId) {
+					throw new Error("ts and channelId are required");
+				}
 
-			return await eventLog.updateOne(
-				{
-					"metadata.appId": event.metadata.appId,
-					"metadata.teamId": event.metadata.teamId,
-					"metadata.context.ts": event.metadata.context?.ts,
-					"metadata.context.channelId": event.metadata.context?.channelId,
-				},
-				{
-					$set: {
-						...rest,
+				const { requests, ...rest } = event;
+
+				return await eventLog.updateOne(
+					{
+						"metadata.appId": event.metadata.appId,
+						"metadata.teamId": event.metadata.teamId,
+						"metadata.context.ts": event.metadata.context?.ts,
+						"metadata.context.channelId": event.metadata.context?.channelId,
 					},
-					...(requests?.length && {
-						$push: {
-							requests: {
-								...requests.at(-1),
-								createdAt: new Date(),
-							},
-						} as PushOperator<Document>["requests"],
-					}),
-				},
-				{ upsert: true },
-			);
+					{
+						$set: {
+							...rest,
+						},
+						...(requests?.length && {
+							$push: {
+								requests: {
+									createdAt: new Date(),
+									...requests.at(-1),
+								},
+							} as PushOperator<Document>["requests"],
+						}),
+					},
+					{ upsert: true },
+				);
+			} finally {
+				Time.log(
+					begin,
+					`[mongodb][slack][eventLog][upsert] ${event.requests.at(-1)?.type}`,
+				);
+			}
 		},
 
 		getUserMessage: async (metadata: SlackEventMetadata) => {
-			const filter = {
-				"metadata.appId": metadata.appId,
-				"metadata.teamId": metadata.teamId,
-				"metadata.context.channelId": metadata.channelId,
-				"metadata.context.ts": metadata.ts,
-			};
-			const event = await eventLog.findOne<EventLogItem>(filter);
-			console.log("USR MESSAGE", filter, event);
+			const begin = Time.now();
 
-			return (
-				event?.requests as {
-					type: string;
-					input: { payload: SlackEventCallback };
-				}[]
-			).find((r) => r.type !== "ignored" && r.input.payload.event.text)?.input
-				.payload.event;
+			try {
+				const filter = {
+					"metadata.appId": metadata.appId,
+					"metadata.teamId": metadata.teamId,
+					"metadata.context.channelId": metadata.channelId,
+					"metadata.context.ts": metadata.ts,
+				};
+				const event = await eventLog.findOne<EventLogItem>(filter);
+				console.log("USR MESSAGE", filter, event);
+
+				return (
+					event?.requests as {
+						type: string;
+						input: { payload: SlackEventCallback };
+					}[]
+				).find((r) => r.type !== "ignored" && r.input.payload.event.text)?.input
+					.payload.event;
+			} finally {
+				Time.log(begin, "[mongodb][slack][eventLog][getUserMessage]");
+			}
+		},
+
+		getRequests: async (metadata: SlackEventMetadata) => {
+			const begin = Time.now();
+
+			try {
+				const filter = {
+					"metadata.appId": metadata.appId,
+					"metadata.teamId": metadata.teamId,
+					"metadata.context.channelId": metadata.channelId,
+					"metadata.context.ts": metadata.ts,
+				};
+
+				const event = await eventLog.findOne<EventLogItem>(filter);
+				const requests =
+					event?.requests.filter((r) => r.type !== "ignored") ?? [];
+
+				return {
+					metadata: event?.metadata,
+					requests,
+				};
+			} finally {
+				Time.log(begin, "[mongodb][slack][eventLog][getRequests]");
+			}
 		},
 	},
+
 	events: {
 		get: async (id: string, type?: string) => {
 			const begin = Time.now();

@@ -3,9 +3,8 @@ import { inngest } from "../../client";
 import { AnnotateRouter } from "@/inngest/routing";
 import { SlackAnnotateEvent } from "../../workers";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
-import { SlackEventCallback } from "@proemial/adapters/mongodb/slack/events.types";
 import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
-import { logEvent } from "./metrics";
+import { Metrics } from "../metrics";
 
 export const eventName = "annotate/slack";
 const eventId = "annotate/slack/fn";
@@ -21,12 +20,12 @@ export const slackAnnotateResponseTask = {
 
 			try {
 				const result = await taskWorker(payload);
-				await logEvent(eventName, payload, Time.elapsed(begin));
+				await Metrics.annotate.log(eventName, payload, Time.elapsed(begin));
 				// TODO: log totals
 
 				return result;
 			} catch (error) {
-				await logEvent(
+				await Metrics.annotate.log(
 					eventName,
 					payload,
 					Time.elapsed(begin),

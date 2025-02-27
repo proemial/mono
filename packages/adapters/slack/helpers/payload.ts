@@ -16,7 +16,6 @@ export async function parseRequest(text: string) {
 			? decodeURIComponent(text.slice(10))
 			: text;
 
-	console.log("UNENCODED", unencoded);
 	const payload = JSON.parse(unencoded) as EventCallbackPayload;
 	console.log("PAYLOAD", JSON.stringify(payload));
 

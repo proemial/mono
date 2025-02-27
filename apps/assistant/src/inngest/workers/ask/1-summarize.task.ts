@@ -18,7 +18,7 @@ import { extractPapers, LlmSteps } from "./extract-references";
 import { statusMessages } from "@/inngest/status-messages";
 import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { proxyToN8n } from "@/app/api/events/(n8n)/n8nProxy";
-import { logEvent } from "./metrics";
+import { Metrics } from "../metrics";
 
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
@@ -34,11 +34,11 @@ export const askTask = {
 
 			try {
 				const result = await taskWorker(payload);
-				await logEvent(eventName, payload, Time.elapsed(begin));
+				await Metrics.answer.log(eventName, payload, Time.elapsed(begin));
 
 				return result;
 			} catch (error) {
-				await logEvent(
+				await Metrics.answer.log(
 					eventName,
 					payload,
 					Time.elapsed(begin),

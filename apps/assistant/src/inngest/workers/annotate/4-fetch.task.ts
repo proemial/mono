@@ -4,7 +4,7 @@ import { AnnotateRouter } from "@/inngest/routing";
 import { SlackAnnotateEvent } from "../../workers";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
-import { logEvent } from "./metrics";
+import { Metrics } from "../metrics";
 
 export const eventName = "annotate/fetch";
 const eventId = "annotate/fetch/fn";
@@ -20,11 +20,11 @@ export const fetchTask = {
 
 			try {
 				const result = await taskWorker(payload);
-				await logEvent(eventName, payload, Time.elapsed(begin));
+				await Metrics.annotate.log(eventName, payload, Time.elapsed(begin));
 
 				return result;
 			} catch (error) {
-				await logEvent(
+				await Metrics.annotate.log(
 					eventName,
 					payload,
 					Time.elapsed(begin),

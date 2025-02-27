@@ -11,7 +11,7 @@ import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { generateText, Message } from "ai";
 import { proxyToN8n } from "@/app/api/events/(n8n)/n8nProxy";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
-import { logEvent } from "./metrics";
+import { Metrics } from "../metrics";
 
 export const eventName = "annotate/query";
 const eventId = "annotate/query/fn";
@@ -27,11 +27,11 @@ export const queryTask = {
 
 			try {
 				const result = await taskWorker(payload);
-				await logEvent(eventName, payload, Time.elapsed(begin));
+				await Metrics.annotate.log(eventName, payload, Time.elapsed(begin));
 
 				return result;
 			} catch (error) {
-				await logEvent(
+				await Metrics.annotate.log(
 					eventName,
 					payload,
 					Time.elapsed(begin),
