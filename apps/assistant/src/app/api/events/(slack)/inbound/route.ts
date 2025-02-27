@@ -1,13 +1,12 @@
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { NextResponse } from "next/server";
-import { showSuggestions } from "@proemial/adapters/slack/assistant";
-import { getThreeRandomStarters } from "@/app/api/events/(slack)/inbound/suggestions";
 import * as slack from "@proemial/adapters/slack/helpers/payload";
 import { sendToN8n } from "@proemial/adapters/n8n/n8n";
 import { dispatchSlackEvent } from "./dispatch";
 import { EventCallbackPayload } from "@proemial/adapters/slack/models/event-models";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 import { Time } from "@proemial/utils/time";
+import { classifyRequest } from "../../../../../classification/request-classifier";
 
 export const revalidate = 0;
 
@@ -15,22 +14,13 @@ export async function POST(request: Request) {
 	const begin = Time.now();
 
 	const text = await request.text();
-	const { payload, metadata } = await slack.parseRequest(text);
+	const { payload, metadata } = await slack.parseRequest(text, classifyRequest);
 
 	try {
 		if (metadata.target === slack.ignored) {
 			if (payload.type === "url_verification") {
 				return NextResponse.json({ challenge: payload.challenge });
 			}
-
-			if (payload.event?.type === "assistant_thread_started") {
-				await showSuggestions(
-					metadata,
-					getThreeRandomStarters(),
-					"Trustworthy answers to any question, such as:",
-				);
-			}
-
 			return success;
 		}
 
