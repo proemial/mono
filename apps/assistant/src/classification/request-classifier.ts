@@ -3,19 +3,19 @@ import { FILE_SIZE_LIMIT, SUPPORTED_MIMETYPES } from "./file-filters";
 import { EventCallbackPayload } from "@proemial/adapters/slack/models/event-models";
 import { extractLinks } from "@proemial/adapters/slack/helpers/links";
 import { nakedMention } from "@proemial/adapters/slack/helpers/routing";
-
+import { urlFilters } from "./url-filters";
 export function classifyRequest(payload: EventCallbackPayload) {
 	// Annotation of links and files
 	if (
 		payload.event?.type === "message" &&
-		!extractLinks(payload.event.text).length &&
+		!extractLinks(payload.event.text, urlFilters).length &&
 		!payload.event?.channel.startsWith("D")
 	) {
 		console.log("exit[message]", payload.event.text);
 		return ignored;
 	}
 	if (
-		extractLinks(payload.event?.text).length > 0 ||
+		extractLinks(payload.event?.text, urlFilters).length > 0 ||
 		(payload.event?.subtype === "file_share" && payload.event?.files?.[0])
 	) {
 		return "annotate";
