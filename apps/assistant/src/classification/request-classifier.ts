@@ -1,21 +1,22 @@
 import { ignored } from "@proemial/adapters/slack/helpers/payload";
-import { FILE_SIZE_LIMIT, SUPPORTED_MIMETYPES } from "./file-filters";
+import { FILE_SIZE_LIMIT, FILE_TYPE_WHITELIST } from "./file-filters";
 import { EventCallbackPayload } from "@proemial/adapters/slack/models/event-models";
 import { extractLinks } from "@proemial/adapters/slack/helpers/links";
 import { nakedMention } from "@proemial/adapters/slack/helpers/routing";
-import { urlFilters } from "./url-filters";
+import { URL_BLACKLIST } from "./url-filters";
+
 export function classifyRequest(payload: EventCallbackPayload) {
 	// Annotation of links and files
 	if (
 		payload.event?.type === "message" &&
-		!extractLinks(payload.event.text, urlFilters).length &&
+		!extractLinks(payload.event.text, URL_BLACKLIST).length &&
 		!payload.event?.channel.startsWith("D")
 	) {
 		console.log("exit[message]", payload.event.text);
 		return ignored;
 	}
 	if (
-		extractLinks(payload.event?.text, urlFilters).length > 0 ||
+		extractLinks(payload.event?.text, URL_BLACKLIST).length > 0 ||
 		(payload.event?.subtype === "file_share" && payload.event?.files?.[0])
 	) {
 		return "annotate";
@@ -67,7 +68,7 @@ export function classifyRequest(payload: EventCallbackPayload) {
 	}
 	if (payload.event?.subtype === "file_share") {
 		const file = payload.event.files?.[0];
-		if (file && !SUPPORTED_MIMETYPES.includes(file.mimetype)) {
+		if (file && !FILE_TYPE_WHITELIST.includes(file.mimetype)) {
 			console.log("exit[file_share_unsupported]", file.name, file.mimetype);
 			return ignored;
 		}

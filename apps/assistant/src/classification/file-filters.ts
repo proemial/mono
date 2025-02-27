@@ -14,5 +14,5 @@ const XLSX =
 	"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
 // Select a subset of the list above
-export const SUPPORTED_MIMETYPES = [DOC, DOCX, PDF, RTF, TXT];
+export const FILE_TYPE_WHITELIST = [DOC, DOCX, PDF, RTF, TXT];
 export const FILE_SIZE_LIMIT = 5_242_880; // in bytes
