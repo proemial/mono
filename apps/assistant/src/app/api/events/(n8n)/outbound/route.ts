@@ -17,21 +17,12 @@ export async function POST(request: Request) {
 			payload: unknown;
 		};
 
-		if (!metadata?.eventId || !payload) {
+		if (!metadata || !payload) {
 			return NextResponse.json(
-				{ error: "Invalid request, missing metadata.eventId or payload" },
+				{ error: "Invalid request, missing metadata or payload" },
 				{ status: 400 },
 			);
 		}
-
-		const updated = await SlackDb.events.insert({
-			createdAt: new Date(),
-			metadata,
-			source: "n8n",
-			type: "N8nEvent",
-			payload,
-		});
-		console.log(updated);
 
 		const target = await getTarget({ metadata, payload });
 

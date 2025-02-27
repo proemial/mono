@@ -1,14 +1,11 @@
 export type SlackEventMetadata = {
 	callback: string;
 	appId: string;
-	eventId: string;
 	teamId: string;
 	channelId: string;
 	user: string;
 	ts?: string;
 	threadTs?: string;
-	channelType?: string;
-	assistantThread?: SlackAssistantThread;
 	isAssistant: boolean;
 	target: string;
 };

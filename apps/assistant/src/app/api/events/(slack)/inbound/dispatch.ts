@@ -15,10 +15,6 @@ export async function dispatchSlackEvent(
 ) {
 	console.log("dispatchSlackEvent", payload.type, payload.event?.type);
 
-	const assistantThread = await SlackDb.events.getAssistantThread(
-		metadata.channelId,
-	);
-
 	if (metadata.target === "annotate") {
 		const fileUrl =
 			payload.event?.subtype === "file_share" && payload.event?.files?.[0]
@@ -44,7 +40,7 @@ export async function dispatchSlackEvent(
 			data: {
 				url,
 				fileMimetype: fileUrl ? payload.event?.files?.[0]?.mimetype : undefined,
-				metadata: { ...metadata, assistantThread },
+				metadata: { ...metadata },
 			},
 		});
 		console.log("scrape enqueue result", scrapeEventName, result);
@@ -58,7 +54,7 @@ export async function dispatchSlackEvent(
 			data: {
 				thread: payload.event?.thread_ts,
 				question: payload.event?.text,
-				metadata: { ...metadata, assistantThread },
+				metadata: { ...metadata },
 			},
 		});
 		console.log("ask enqueue result", askEventName, result);

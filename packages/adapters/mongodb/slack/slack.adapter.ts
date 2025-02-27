@@ -3,17 +3,11 @@ import Mongo from "../mongodb-client";
 import { SlackApp, SlackAppInstall, SlackEntity } from "./entities.types";
 import { Event, SlackEventCallback } from "./events.types";
 import { ScrapedUrl } from "./scraped.types";
-import {
-	EventLogItem,
-	EventMetric,
-	SlackV2Event,
-	SlackV2EventFromDb,
-} from "./v2.models";
+import { EventLogItem, EventMetric } from "./v2.models";
 import { PushOperator, Document } from "mongodb";
 import { SlackEventMetadata } from "../../slack/models/metadata-models";
 
-const events = Mongo.db("slack").collection("events");
-const v2Events = Mongo.db("slack").collection("v2events");
+const oauthEvents = Mongo.db("slack").collection("events");
 const entities = Mongo.db("slack").collection("entities");
 const scraped = Mongo.db("slack").collection("scraped");
 const metrics = Mongo.db("slack").collection("event-metrics");
@@ -123,82 +117,17 @@ export const SlackDb = {
 		},
 	},
 
-	events: {
-		get: async (id: string, type?: string) => {
-			const begin = Time.now();
-
-			try {
-				return await events.findOne<Event>({
-					"metadata.eventId": id,
-					...(type ? { type: type } : {}),
-				});
-			} finally {
-				Time.log(begin, `[mongodb][slack][events][get] ${id} ${type}`);
-			}
-		},
-
-		getAssistantThread: async (channelId: string) => {
-			const begin = Time.now();
-
-			try {
-				const event = (await events.findOne<Event>(
-					{
-						"payload.event.type": "assistant_thread_started",
-						"payload.event.assistant_thread.channel_id": channelId,
-					},
-					{
-						sort: { createdAt: -1 },
-						projection: { "payload.event.assistant_thread": 1 },
-					},
-				)) as unknown as { payload: SlackEventCallback };
-				return event?.payload.event.assistant_thread;
-			} finally {
-				Time.log(
-					begin,
-					`[mongodb][slack][events][getAssistantThread] ${channelId}`,
-				);
-			}
-		},
-
+	oauth: {
 		insert: async (event: Event) => {
 			const begin = Time.now();
 
 			try {
-				return await events.insertOne(event);
+				return await oauthEvents.insertOne(event);
 			} finally {
 				Time.log(
 					begin,
 					`[mongodb][slack][events][insert] ${event.metadata.eventId}`,
 				);
-			}
-		},
-	},
-
-	v2Events: {
-		insert: async (event: SlackV2Event) => {
-			const begin = Time.now();
-
-			try {
-				return await v2Events.insertOne({
-					...event,
-					createdAt: new Date(),
-				});
-			} finally {
-				Time.log(begin, `[mongodb][slack][v2events][insert] ${event.eventId}`);
-			}
-		},
-
-		list: async (eventId?: string) => {
-			const begin = Time.now();
-
-			try {
-				return await v2Events
-					.find<SlackV2EventFromDb>({
-						eventId: eventId,
-					})
-					.toArray();
-			} finally {
-				Time.log(begin, `[mongodb][slack][v2events][list] ${eventId}`);
 			}
 		},
 	},

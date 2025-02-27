@@ -7,11 +7,6 @@ export async function showSuggestions(
 	suggestions: string[],
 	title?: string,
 ) {
-	if (!metadata?.assistantThread) {
-		console.error("No assistant thread found");
-		return;
-	}
-
 	if (!metadata) {
 		console.error("No metadata found");
 		return;
@@ -19,13 +14,13 @@ export async function showSuggestions(
 
 	const install = await SlackDb.installs.get(metadata.teamId, metadata.appId);
 
-	const channel_id = metadata.assistantThread.channel_id;
-	const thread_ts = metadata.assistantThread.thread_ts;
+	const channel_id = metadata.channelId;
+	const thread_ts = metadata.threadTs;
 	const accessToken = install?.metadata.accessToken as string;
 	console.log(
 		"showSuggestions",
 		metadata,
-		metadata.assistantThread,
+		metadata.threadTs,
 		suggestions,
 		title,
 	);
@@ -59,12 +54,13 @@ export async function setAssistantStatus(
 	accessToken: string,
 	status: string,
 ) {
-	if (!metadata?.assistantThread) {
-		throw new Error("No assistant thread found");
+	if (!metadata) {
+		console.error("No metadata found");
+		return;
 	}
 
-	const channel_id = metadata.assistantThread.channel_id;
-	const thread_ts = metadata.assistantThread.thread_ts;
+	const channel_id = metadata.channelId;
+	const thread_ts = metadata.threadTs;
 	const blocks = assistantStatus(status);
 
 	const requestBody = {

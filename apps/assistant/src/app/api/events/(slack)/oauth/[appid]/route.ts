@@ -62,7 +62,7 @@ export async function GET(request: NextRequest, { params }: { params: Props }) {
 		const teamId = data.team?.id ?? data.team_id;
 		const teamName = data.team?.name;
 
-		const insertedEvent = await SlackDb.events.insert({
+		const insertedEvent = await SlackDb.oauth.insert({
 			createdAt: new Date(),
 			metadata: {
 				appId,

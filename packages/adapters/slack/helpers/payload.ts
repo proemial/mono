@@ -1,6 +1,5 @@
 import { SlackDb } from "../../mongodb/slack/slack.adapter";
 import { nakedMention } from "./routing";
-import { uuid } from "@proemial/utils/uid";
 import { EventCallbackPayload } from "../models/event-models";
 import { SlackEventMetadata } from "../models/metadata-models";
 import { extractLinks } from "./links";
@@ -19,41 +18,15 @@ export async function parseRequest(text: string) {
 	const payload = JSON.parse(unencoded) as EventCallbackPayload;
 	console.log("PAYLOAD", JSON.stringify(payload));
 
-	console.log(
-		"[/slack/payload]",
-		payload.api_app_id,
-		payload.event_id,
-		payload.type,
-		payload.event?.type,
-		payload.event?.subtype,
-		payload.event?.bot_profile?.name,
-	);
-
-	const { teamId, channelId } = parseMessageSource(payload);
 	const app = await SlackDb.apps.get(payload.api_app_id);
 	const callbackUrl = app?.metadata?.callback ?? "https://assistant.proem.ai";
 
+	const fields = parseFields(payload);
+
 	const metadata = {
-		callback: `${callbackUrl}/api/events/outbound`,
+		...fields,
 		appId: payload.api_app_id,
-		eventId: payload.event_id ?? uuid(),
-		teamId,
-		channelId,
-		// channel,
-		// team,
-		user:
-			payload.event?.message?.user ?? payload.event?.user ?? payload.user?.id,
-		ts:
-			payload.event?.message?.ts ??
-			payload.event?.ts ??
-			payload.container?.message_ts,
-		threadTs: payload.event?.message?.thread_ts ?? payload.event?.thread_ts,
-		channelType: payload.event?.channel_type,
-		assistantThread: payload.event?.assistant_thread && {
-			channel_id: payload.event?.assistant_thread?.channel_id,
-			thread_ts: payload.event?.assistant_thread?.thread_ts,
-		},
-		isAssistant: channelId?.startsWith("D"),
+		callback: `${callbackUrl}/api/events/outbound`,
 		target: classifyRequest(payload),
 	} as SlackEventMetadata;
 	console.log("METADATA", JSON.stringify(metadata));
@@ -146,20 +119,60 @@ export function classifyRequest(
 	return "unknown";
 }
 
-export function parseMessageSource(payload: Record<string, any>) {
-	const teamId =
-		payload.team_id ??
-		payload.team?.id ??
-		payload.event?.team ??
-		payload.message?.team;
-	const channelId =
+function parseFields(payload: any) {
+	const channelId = getChannelId(payload);
+
+	return {
+		channelId,
+		teamId: getTeamId(payload),
+		user: getUserId(payload),
+		ts: getTs(payload),
+		threadTs: getThreadTs(payload),
+		isAssistant: channelId?.startsWith("D"),
+	};
+}
+
+function getChannelId(payload: any) {
+	return (
 		payload.event?.message?.channel ??
 		payload.event?.channel ??
 		payload.channel?.id ??
-		payload.event?.assistant_thread?.context?.channel_id;
+		payload.event?.assistant_thread?.channel_id ??
+		payload.event?.assistant_thread?.context?.channel_id
+	);
+}
 
-	return {
-		teamId,
-		channelId,
-	};
+function getTeamId(payload: any) {
+	return (
+		payload.team_id ??
+		payload.team?.id ??
+		payload.event?.team ??
+		payload.message?.team
+	);
+}
+function getUserId(payload: any) {
+	return (
+		payload.event?.message?.user ??
+		payload.event?.user ??
+		payload.user?.id ??
+		payload.event?.assistant_thread?.user_id ??
+		payload.event?.assistant_thread?.context?.user_id
+	);
+}
+
+function getTs(payload: any) {
+	return (
+		payload.event?.message?.ts ??
+		payload.event?.ts ??
+		payload.container?.message_ts
+	);
+}
+
+function getThreadTs(payload: any) {
+	return (
+		payload.event?.message?.thread_ts ??
+		payload.event?.thread_ts ??
+		payload.event?.assistant_thread?.thread_ts ??
+		payload.event?.assistant_thread?.context?.thread_ts
+	);
 }
