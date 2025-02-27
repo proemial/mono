@@ -10,6 +10,11 @@ export function status(text: string, error?: boolean) {
 						type: "context",
 						elements: [
 							{
+								type: "image",
+								image_url: "https://u.lillefar.dk/i/HGTyaq+",
+								alt_text: "Logo",
+							},
+							{
 								type: "mrkdwn",
 								text: text,
 							},
