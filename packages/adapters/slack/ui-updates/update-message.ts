@@ -39,13 +39,6 @@ export async function updateMessage(
 
 	const result = await fetch("https://slack.com/api/chat.update", requestBody);
 	const response = await result.json();
-	console.log(
-		"ATTACH SUMMARY",
-		JSON.stringify(requestBody),
-		">",
-		result.status,
-		response,
-	);
 
 	return response;
 }

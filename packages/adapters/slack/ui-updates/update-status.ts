@@ -39,7 +39,6 @@ export async function updateStatus(
 			...blocks,
 		}),
 	};
-	console.log("ATTACH STATUS", JSON.stringify(requestBody));
 
 	const result = await fetch("https://slack.com/api/chat.update", requestBody);
 	const response = await result.json();

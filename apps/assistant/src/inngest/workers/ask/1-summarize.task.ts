@@ -80,7 +80,6 @@ const taskWorker = async (payload: SlackAskEvent) => {
 		});
 	}
 
-	console.log("summarizeAnswerTask", metadata, payload, mappedMessages);
 	return await summarizeAnswerTask(metadata, payload, {
 		prompt: LlmAnswer.prompt(),
 		messages: mappedMessages,

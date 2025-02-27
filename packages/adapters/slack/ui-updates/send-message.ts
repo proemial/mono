@@ -42,13 +42,6 @@ export async function sendMessage(
 		requestBody,
 	);
 	const response = await result.json();
-	console.log(
-		"POST SUMMARY",
-		JSON.stringify(requestBody),
-		">",
-		result.status,
-		response,
-	);
 
 	return response;
 }

@@ -78,7 +78,6 @@ export const SlackDb = {
 					"metadata.context.ts": metadata.ts,
 				};
 				const event = await eventLog.findOne<EventLogItem>(filter);
-				console.log("USR MESSAGE", filter, event);
 
 				return (
 					event?.requests as {

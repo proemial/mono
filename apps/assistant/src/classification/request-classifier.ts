@@ -12,7 +12,12 @@ export function classifyRequest(payload: EventCallbackPayload) {
 		!extractLinks(payload.event.text, URL_BLACKLIST).length &&
 		!payload.event?.channel.startsWith("D")
 	) {
-		console.log("exit[message]", payload.event.text);
+		log(
+			"exit[message]",
+			payload.event?.type,
+			!extractLinks(payload.event.text, URL_BLACKLIST).length,
+			payload.event?.channel,
+		);
 		return ignored;
 	}
 	if (
@@ -24,11 +29,15 @@ export function classifyRequest(payload: EventCallbackPayload) {
 
 	// Answer to a questions
 	if (nakedMention(payload)) {
-		console.log("exit[nakedmention]", payload.event?.text);
+		log("exit[nakedmention]", nakedMention(payload));
 		return ignored;
 	}
 	if (payload.event?.type === "app_mention" && payload.event?.attachments) {
-		console.log("exit[app_mention_modified]", payload.event.text);
+		log(
+			"exit[app_mention_modified]",
+			payload.event?.type === "app_mention",
+			payload.event?.attachments?.length,
+		);
 		return ignored;
 	}
 	if (
@@ -55,40 +64,48 @@ export function classifyRequest(payload: EventCallbackPayload) {
 
 	// Unhandled event types
 	if (payload.type === "url_verification") {
-		console.log("exit[url_verification]", payload.challenge);
+		log("exit[url_verification]", payload.challenge);
 		return ignored;
 	}
 	if (payload.type === "ssl_check") {
-		console.log("exit[ssl_check]");
+		log("exit[ssl_check]");
 		return ignored;
 	}
 	if (payload.event?.bot_profile) {
-		console.log("exit[bot_profile]", payload.event.bot_profile);
+		log("exit[bot_profile]");
 		return ignored;
 	}
 	if (payload.event?.subtype === "file_share") {
 		const file = payload.event.files?.[0];
 		if (file && !FILE_TYPE_WHITELIST.includes(file.mimetype)) {
-			console.log("exit[file_share_unsupported]", file.name, file.mimetype);
+			log("exit[file_share_unsupported]", file.name, file.mimetype);
 			return ignored;
 		}
 		if (file && file.size > FILE_SIZE_LIMIT) {
-			console.log("exit[file_share_too_large]", file.name, file.size);
+			log("exit[file_share_too_large]", file.name, file.size);
 			return ignored;
 		}
 	}
 	if (payload.event?.subtype && !extractLinks(payload.event.text).length) {
-		console.log("exit[subtype]", payload.event.subtype);
+		log(
+			"exit[subtype]",
+			payload.event.subtype,
+			!extractLinks(payload.event.text).length,
+		);
 		return ignored;
 	}
 	if (payload.event?.type === "assistant_thread_context_changed") {
-		console.log("exit[assistant_thread_context_changed]", payload.event.text);
+		log("assistant_thread_context_changed");
 		return ignored;
 	}
 	if (payload.type === "block_actions") {
-		console.log("exit[block_actions]", JSON.stringify(payload.actions.at(0)));
+		log("exit[block_actions]");
 		return ignored;
 	}
 
 	return "unknown";
+}
+
+function log(message: string, ...args: unknown[]) {
+	console.log(`CLASSIFIER EXIT: ${message}`, ...args);
 }
