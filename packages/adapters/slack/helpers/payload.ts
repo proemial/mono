@@ -1,3 +1,4 @@
+import { EventLogItem } from "../../mongodb/slack/v2.models";
 import { SlackDb } from "../../mongodb/slack/slack.adapter";
 import { EventCallbackPayload } from "../models/event-models";
 import { SlackEventMetadata } from "../models/metadata-models";
@@ -6,7 +7,10 @@ export const ignored = "ignored";
 
 export async function parseRequest(
 	text: string,
-	classifier: (payload: EventCallbackPayload) => string,
+	classifier: (
+		payload: EventCallbackPayload,
+		event: EventLogItem | null,
+	) => string,
 ) {
 	const unencoded = text?.startsWith("payload=")
 		? decodeURIComponent(text.slice(8))
@@ -22,14 +26,18 @@ export async function parseRequest(
 
 	const fields = parseFields(payload);
 
-	// TODO: return target:ignore if requests has workers
-	// const event = await SlackDb.eventLog.getRequests(payload);
-
-	const metadata = {
+	const partial = {
 		...fields,
 		appId: payload.api_app_id,
 		callback: `${callbackUrl}/api/events/outbound`,
-		target: classifier(payload),
+	};
+
+	// TODO: return target:ignore if requests has workers
+	const event = await SlackDb.eventLog.get(partial);
+
+	const metadata = {
+		...partial,
+		target: classifier(payload, event),
 	} as SlackEventMetadata;
 	console.log("METADATA", JSON.stringify(metadata));
 

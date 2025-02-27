@@ -79,8 +79,7 @@ export const SlackMessenger = {
 			return;
 		}
 
-		// TODO: cleanMessage triggers an infinite loop
-		// await SlackMessenger.cleanMessage(metadata);
+		await SlackMessenger.cleanMessage(metadata);
 		return await sendMessage(target, userMessage.text, text, url, title);
 	},
 

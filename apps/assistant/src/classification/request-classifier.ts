@@ -4,8 +4,18 @@ import { EventCallbackPayload } from "@proemial/adapters/slack/models/event-mode
 import { extractLinks } from "@proemial/adapters/slack/helpers/links";
 import { nakedMention } from "@proemial/adapters/slack/helpers/routing";
 import { URL_BLACKLIST } from "./url-filters";
+import { EventLogItem } from "@proemial/adapters/mongodb/slack/v2.models";
 
-export function classifyRequest(payload: EventCallbackPayload) {
+export function classifyRequest(
+	payload: EventCallbackPayload,
+	event: EventLogItem | null,
+) {
+	const workers = event?.requests.filter((r) => r.type.includes("worker:"));
+	if (workers?.length) {
+		log("exit[started]", workers.length);
+		return ignored;
+	}
+
 	// Annotation of links and files
 	if (
 		payload.event?.type === "message" &&

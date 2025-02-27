@@ -91,7 +91,7 @@ export const SlackDb = {
 			}
 		},
 
-		getRequests: async (metadata: SlackEventMetadata) => {
+		get: async (metadata: Omit<SlackEventMetadata, "target">) => {
 			const begin = Time.now();
 
 			try {
@@ -102,16 +102,9 @@ export const SlackDb = {
 					"metadata.context.ts": metadata.ts,
 				};
 
-				const event = await eventLog.findOne<EventLogItem>(filter);
-				const requests =
-					event?.requests.filter((r) => r.type !== "ignored") ?? [];
-
-				return {
-					metadata: event?.metadata,
-					requests,
-				};
+				return await eventLog.findOne<EventLogItem>(filter);
 			} finally {
-				Time.log(begin, "[mongodb][slack][eventLog][getRequests]");
+				Time.log(begin, "[mongodb][slack][eventLog][get]");
 			}
 		},
 	},
