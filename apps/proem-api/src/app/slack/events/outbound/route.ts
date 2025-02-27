@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { getTarget } from "../../utils/routing";
-import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 
 export const revalidate = 0;
 
@@ -26,15 +25,6 @@ export async function POST(request: Request) {
 				{ status: 400 },
 			);
 		}
-
-		const updated = await SlackDb.events.insert({
-			createdAt: new Date(),
-			metadata,
-			source: "n8n",
-			type: "N8nEvent",
-			payload,
-		});
-		console.log(updated);
 
 		const target = await getTarget({ metadata, payload });
 		console.log(target);

@@ -149,14 +149,6 @@ export async function POST(request: Request) {
 		payload,
 	});
 
-	await SlackDb.events.insert({
-		createdAt: new Date(),
-		metadata,
-		source: "slack",
-		type: "SlackEventCallback",
-		payload,
-	});
-
 	const result = await fetch(process.env.N8N_WEBHOOK_URL as string, {
 		method: "POST",
 		headers: {

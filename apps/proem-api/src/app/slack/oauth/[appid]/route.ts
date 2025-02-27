@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
-import { uuid } from "@proemial/utils/uid";
 
 export const revalidate = 0;
 
@@ -57,23 +56,18 @@ export async function GET(request: NextRequest, { params }: { params: Props }) {
 			return NextResponse.json({ error: data.error }, { status: 400 });
 		}
 
-		// Here you should store the access token securely
-		// data.access_token - bot token
-		// data.team.id - workspace ID
-		// data.team.name - workspace name
-		// TODO: Store these securely in your database
-		const insertedEvent = await SlackDb.events.insert({
-			createdAt: new Date(),
-			metadata: {
-				appId: data.app_id || data.api_app_id,
-				eventId: uuid(),
-				teamId: data.team.id,
-			},
-			source: "slack",
-			type: "SlackOauthEvent",
-			payload: data,
-		});
-		console.log("Inserted oauth event", insertedEvent);
+		// const insertedEvent = await SlackDb.events.insert({
+		// 	createdAt: new Date(),
+		// 	metadata: {
+		// 		appId: data.app_id || data.api_app_id,
+		// 		eventId: uuid(),
+		// 		teamId: data.team.id,
+		// 	},
+		// 	source: "slack",
+		// 	type: "SlackOauthEvent",
+		// 	payload: data,
+		// });
+		// console.log("Inserted oauth event", insertedEvent);
 
 		const upsertedEntity = await SlackDb.entities.upsert({
 			createdAt: new Date(),
