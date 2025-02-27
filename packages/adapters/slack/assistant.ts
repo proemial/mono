@@ -56,7 +56,7 @@ export async function setAssistantStatus(
 ) {
 	if (!metadata) {
 		console.error("No metadata found");
-		return;
+		return "No metadata found";
 	}
 
 	const channel_id = metadata.channelId;
