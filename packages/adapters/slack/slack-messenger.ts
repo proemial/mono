@@ -150,6 +150,7 @@ async function getTarget(metadata: SlackEventMetadata) {
 		ts: metadata.ts,
 		threadTs: metadata.threadTs,
 		accessTokens,
+		target: metadata.target,
 	} as SlackV2MessageTarget;
 	console.log("TARGET", target);
 

@@ -1,4 +1,4 @@
-export function extractLinks(slackText?: string): string[] {
+export function extractLinks(slackText?: string, filters?: RegExp[]): string[] {
 	// Match all occurrences of <https://...> or <https://...|...>
 	const matches = (slackText ?? "").match(/<(https?:\/\/[^|>]+)(?:\|[^>]+)?>/g);
 
@@ -11,6 +11,7 @@ export function extractLinks(slackText?: string): string[] {
 			// Extract just the URLs from the matches by removing < > and everything after |
 			.map((match) => match.replace(/<(https?:\/\/[^|>]+)(?:\|[^>]+)?>/, "$1"))
 			// Only filter out Slack workspace URLs
-			.filter((url) => !url.match(/https?:\/\/[^\/]+\.slack\.com\//))
+			// .filter((url) => !url.match(/https?:\/\/[^\/]+\.slack\.com\//))
+			.filter((url) => !filters?.some((filter) => url.match(filter)))
 	);
 }

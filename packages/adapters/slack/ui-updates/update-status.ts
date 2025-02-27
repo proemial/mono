@@ -24,7 +24,7 @@ export async function updateStatus(
 		return;
 	}
 
-	const blocks = status(statusText, isError);
+	const blocks = status(target, statusText, isError);
 	const requestBody = {
 		method: "POST",
 		headers: {
