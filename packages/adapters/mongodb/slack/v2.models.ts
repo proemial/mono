@@ -3,8 +3,14 @@ export type EventLogItem = {
 	status?: string;
 	metadata: EventMetadata;
 	requests: Array<EventLogRequest>;
+
+	// The total duration of all steps executed
 	duration?: number;
+
+	// The time it took from the users perspective
 	elapsed?: number;
+
+	// The time elapsed before receiving the initial request
 	initialLatency?: number;
 };
 

@@ -73,20 +73,8 @@ const enqueue = async (
 };
 
 export const logCompleted = async (metadata: SlackEventMetadata) => {
-	const event = await SlackDb.eventLog.getRequests(metadata);
-	const duration = event.requests.reduce(
-		(acc, r) => acc + (r.duration ?? 0),
-		0,
-	);
-
-	const slackTs = event.metadata?.context?.ts; //1740636943.540109
-	const begin = slackTs
-		? Math.floor(Number.parseFloat(slackTs) * 1000)
-		: undefined;
-
-	const firstSeen = event.requests.at(0)?.createdAt?.getTime();
-	const initialLatency = firstSeen && begin ? firstSeen - begin : undefined;
-	const elapsed = begin ? Date.now() - begin : undefined;
+	const { duration, elapsed, initialLatency } =
+		await calculateMetrics(metadata);
 
 	await SlackDb.eventLog.upsert({
 		status: "completed",
@@ -112,3 +100,28 @@ export const logCompleted = async (metadata: SlackEventMetadata) => {
 		}),
 	});
 };
+
+async function calculateMetrics(metadata: SlackEventMetadata) {
+	const event = await SlackDb.eventLog.getRequests(metadata);
+
+	const slackTs = event.metadata?.context?.ts; //1740636943.540109
+	const begin = slackTs
+		? Math.floor(Number.parseFloat(slackTs) * 1000)
+		: undefined;
+
+	const duration = event.requests.reduce(
+		(acc, r) => acc + (r.duration ?? 0),
+		0,
+	);
+
+	const elapsed = begin ? Date.now() - begin : undefined;
+
+	const firstSeen = event.requests.at(0)?.createdAt?.getTime();
+	const initialLatency = firstSeen && begin ? firstSeen - begin : undefined;
+
+	return {
+		duration,
+		elapsed,
+		initialLatency,
+	};
+}
