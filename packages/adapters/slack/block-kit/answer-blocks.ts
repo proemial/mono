@@ -1,8 +1,16 @@
 export function answer(text: string, url?: string, title?: string) {
 	return {
+		blocks: [
+			{
+				type: "section",
+				text: {
+					type: "mrkdwn",
+					text: "*answer*",
+				},
+			},
+		],
 		attachments: [
 			{
-				fallback: text,
 				color: "#66ff66",
 				blocks: [
 					{

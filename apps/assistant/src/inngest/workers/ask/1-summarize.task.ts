@@ -5,7 +5,7 @@ import {
 	logRetrieval,
 } from "@proemial/adapters/analytics/helicone";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
-import { getThreadMessagesForAi } from "@proemial/adapters/slack/helpers/channel";
+import { getThreadMessagesForAi } from "@proemial/adapters/slack/helpers/thread";
 import { Time } from "@proemial/utils/time";
 import { uuid } from "@proemial/utils/uid";
 import { Message, convertToCoreMessages, generateText } from "ai";
