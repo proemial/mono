@@ -38,6 +38,8 @@ export const queryTask = {
 					(error as Error).message,
 				);
 				throw error;
+			} finally {
+				Time.log(begin, eventName);
 			}
 		},
 	),

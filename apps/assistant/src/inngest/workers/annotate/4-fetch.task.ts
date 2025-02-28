@@ -31,6 +31,8 @@ export const fetchTask = {
 					(error as Error).message,
 				);
 				throw error;
+			} finally {
+				Time.log(begin, eventName);
 			}
 		},
 	),

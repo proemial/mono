@@ -19,16 +19,13 @@ export async function parseRequest(
 			: text;
 
 	const payload = JSON.parse(unencoded) as EventCallbackPayload;
-	console.log("PAYLOAD", JSON.stringify(payload));
+	const fields = parseFields(payload);
 
 	const app = await SlackDb.apps.get(payload.api_app_id);
 	const callbackUrl = app?.metadata?.callback ?? "https://assistant.proem.ai";
 
-	const fields = parseFields(payload);
-
 	const partial = {
 		...fields,
-		appId: payload.api_app_id,
 		callback: `${callbackUrl}/api/events/outbound`,
 	};
 
@@ -39,7 +36,12 @@ export async function parseRequest(
 		...partial,
 		target: classifier(payload, event),
 	} as SlackEventMetadata;
-	console.log("METADATA", JSON.stringify(metadata));
+	console.log({
+		target: metadata.target,
+		query: `{\"metadata.appId\":\"${metadata.appId}\",\"metadata.context.channelId\":\"${metadata.channelId}\",\"metadata.context.ts\":\"${metadata.ts}\"}`,
+		type: `${payload.type}/${payload.event?.type}${payload.event?.subtype ? `/${payload.event?.subtype}` : ""}`,
+		text: `${payload.event?.text ?? payload.event?.message?.text}`,
+	});
 
 	return { payload, metadata };
 }
@@ -53,6 +55,7 @@ function parseFields(payload: EventCallbackPayload) {
 		user: getUserId(payload),
 		ts: getTs(payload),
 		threadTs: getThreadTs(payload),
+		appId: payload.api_app_id,
 		isAssistant: channelId?.startsWith("D"),
 	};
 }

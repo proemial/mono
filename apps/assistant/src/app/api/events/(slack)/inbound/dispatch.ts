@@ -15,8 +15,6 @@ export async function dispatchSlackEvent(
 	payload: EventCallbackPayload,
 	metadata: SlackEventMetadata,
 ) {
-	console.log("dispatchSlackEvent", payload.type, payload.event?.type);
-
 	if (metadata.target === "annotate") {
 		const fileUrl =
 			payload.event?.subtype === "file_share" && payload.event?.files?.[0]
@@ -45,7 +43,6 @@ export async function dispatchSlackEvent(
 				metadata: { ...metadata },
 			},
 		});
-		console.log("scrape enqueue result", scrapeEventName, result);
 
 		return `dispatch[${scrapeEventName}]: ${result}`;
 	}
@@ -59,7 +56,6 @@ export async function dispatchSlackEvent(
 				metadata: { ...metadata },
 			},
 		});
-		console.log("ask enqueue result", askEventName, result);
 
 		return `dispatch[${askEventName}]: ${result}`;
 	}

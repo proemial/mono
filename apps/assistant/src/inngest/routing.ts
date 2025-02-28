@@ -67,7 +67,7 @@ const enqueue = async (
 			metadata,
 		},
 	});
-	console.log("router enqueue result", name, result);
+	console.log("ENQUEUE", name, JSON.stringify(result));
 
 	return name;
 };

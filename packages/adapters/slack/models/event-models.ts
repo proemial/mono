@@ -22,6 +22,7 @@ export type HackyMessageEvent = Omit<GenericMessageEvent, "type"> & {
 		thread_ts: string;
 		channel: string;
 		user: string;
+		text: string;
 	};
 	ts: string;
 };

@@ -32,6 +32,8 @@ export const slackAnnotateResponseTask = {
 					(error as Error).message,
 				);
 				throw error;
+			} finally {
+				Time.log(begin, eventName);
 			}
 		},
 	),
@@ -49,14 +51,6 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 		throw new Error("No query found");
 	}
 
-	// const slackEvent = (
-	// 	await SlackDb.events.get(payload.metadata.eventId, "SlackEventCallback")
-	// )?.payload as SlackEventCallback;
-	// if (!slackEvent) {
-	// 	throw new Error("No slack event found");
-	// }
-
-	console.log("Sending message", scraped.summaries.query);
 	await SlackMessenger.updateMessage(
 		payload.metadata,
 		scraped.summaries.query,

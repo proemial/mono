@@ -45,6 +45,8 @@ export const askTask = {
 					(error as Error).message,
 				);
 				throw error;
+			} finally {
+				Time.log(begin, eventName);
 			}
 		},
 	),

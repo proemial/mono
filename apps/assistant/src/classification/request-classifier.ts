@@ -117,5 +117,5 @@ export function classifyRequest(
 }
 
 function log(message: string, ...args: unknown[]) {
-	console.log(`CLASSIFIER EXIT: ${message}`, ...args);
+	console.log(`EXIT: ${message}`, ...args);
 }

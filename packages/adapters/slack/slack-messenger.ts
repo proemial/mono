@@ -8,6 +8,7 @@ import { nudgeUser } from "./ui-updates/nudge-user";
 import { cleanMessage } from "./ui-updates/clean-message";
 import { setAssistantStatus } from "./assistant";
 import { sendMessage } from "./ui-updates/send-message";
+import { Time } from "@proemial/utils/time";
 
 export const SlackMessenger = {
 	nudgeUser: async (
@@ -16,22 +17,27 @@ export const SlackMessenger = {
 		url?: string,
 		title?: string,
 	) => {
-		const appInstall = await SlackDb.installs.get(
-			metadata.teamId,
-			metadata.appId,
-		);
-		if (!appInstall) {
-			throw new Error("App install not found");
-		}
+		const begin = Time.now();
 
-		const payload = await nudgeUser(
-			metadata,
-			appInstall.metadata.accessToken,
-			text,
-			url,
-			title,
-		);
-		console.log("nudgeUser result", payload);
+		try {
+			const appInstall = await SlackDb.installs.get(
+				metadata.teamId,
+				metadata.appId,
+			);
+			if (!appInstall) {
+				throw new Error("App install not found");
+			}
+
+			await nudgeUser(
+				metadata,
+				appInstall.metadata.accessToken,
+				text,
+				url,
+				title,
+			);
+		} finally {
+			Time.log(begin, "[messenger][nudge]");
+		}
 	},
 
 	updateMessage: async (
@@ -40,25 +46,37 @@ export const SlackMessenger = {
 		url?: string,
 		title?: string,
 	) => {
-		if (metadata.isAssistant) {
-			return await SlackMessenger.sendMessage(metadata, text, url, title);
-		}
+		const begin = Time.now();
 
-		const target = await getTarget(metadata);
-		if (!target) {
-			return;
-		}
+		try {
+			if (metadata.isAssistant) {
+				return await SlackMessenger.sendMessage(metadata, text, url, title);
+			}
 
-		let payload = {};
-		if (target.accessTokens.userToken) {
-			const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
-			if (!userMessage) {
-				console.error("User message not found");
+			const target = await getTarget(metadata);
+			if (!target) {
 				return;
 			}
-			payload = await updateMessage(target, userMessage.text, text, url, title);
-		} else {
-			await SlackMessenger.nudgeUser(metadata, text, url, title);
+
+			let payload = {};
+			if (target.accessTokens.userToken) {
+				const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
+				if (!userMessage) {
+					console.error("User message not found");
+					return;
+				}
+				payload = await updateMessage(
+					target,
+					userMessage.text,
+					text,
+					url,
+					title,
+				);
+			} else {
+				await SlackMessenger.nudgeUser(metadata, text, url, title);
+			}
+		} finally {
+			Time.log(begin, "[messenger][update]");
 		}
 	},
 
@@ -68,33 +86,45 @@ export const SlackMessenger = {
 		url?: string,
 		title?: string,
 	) => {
-		const target = await getTarget(metadata);
-		if (!target) {
-			return;
-		}
+		const begin = Time.now();
 
-		const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
-		if (!userMessage) {
-			console.error("User message not found");
-			return;
-		}
+		try {
+			const target = await getTarget(metadata);
+			if (!target) {
+				return;
+			}
 
-		await SlackMessenger.cleanMessage(metadata);
-		return await sendMessage(target, userMessage.text, text, url, title);
+			const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
+			if (!userMessage) {
+				console.error("User message not found");
+				return;
+			}
+
+			await SlackMessenger.cleanMessage(metadata);
+			return await sendMessage(target, userMessage.text, text, url, title);
+		} finally {
+			Time.log(begin, "[messenger][send]");
+		}
 	},
 
 	cleanMessage: async (metadata: SlackEventMetadata) => {
-		const target = await getTarget(metadata);
-		if (!target) {
-			return;
-		}
+		const begin = Time.now();
 
-		const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
-		if (!userMessage) {
-			console.error("User message not found");
-			return;
+		try {
+			const target = await getTarget(metadata);
+			if (!target) {
+				return;
+			}
+
+			const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
+			if (!userMessage) {
+				console.error("User message not found");
+				return;
+			}
+			return await cleanMessage(target, userMessage.text, userMessage.blocks);
+		} finally {
+			Time.log(begin, "[messenger][clean]");
 		}
-		return await cleanMessage(target, userMessage.text, userMessage.blocks);
 	},
 
 	updateStatus: async (
@@ -102,25 +132,31 @@ export const SlackMessenger = {
 		status: string,
 		isError?: boolean,
 	) => {
-		const target = await getTarget(metadata);
-		if (!target) {
-			return;
-		}
+		const begin = Time.now();
 
-		let payload = {};
-		if (metadata.isAssistant) {
-			payload = await setAssistantStatus(
-				metadata,
-				target.accessTokens.teamToken,
-				status,
-			);
-		} else {
-			const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
-			if (!userMessage) {
-				console.error("User message not found");
+		try {
+			const target = await getTarget(metadata);
+			if (!target) {
 				return;
 			}
-			payload = await updateStatus(target, status, userMessage.text, isError);
+
+			let payload = {};
+			if (metadata.isAssistant) {
+				payload = await setAssistantStatus(
+					metadata,
+					target.accessTokens.teamToken,
+					status,
+				);
+			} else {
+				const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
+				if (!userMessage) {
+					console.error("User message not found");
+					return;
+				}
+				payload = await updateStatus(target, status, userMessage.text, isError);
+			}
+		} finally {
+			Time.log(begin, "[messenger][status]");
 		}
 	},
 
@@ -129,7 +165,13 @@ export const SlackMessenger = {
 		suggestions: string[],
 		title?: string,
 	) => {
-		return await showSuggestions(metadata, suggestions, title);
+		const begin = Time.now();
+
+		try {
+			return await showSuggestions(metadata, suggestions, title);
+		} finally {
+			Time.log(begin, "[messenger][suggestions]");
+		}
 	},
 };
 

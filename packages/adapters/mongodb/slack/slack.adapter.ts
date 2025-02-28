@@ -21,7 +21,7 @@ export const SlackDb = {
 			try {
 				return await metrics.insertOne(metric);
 			} finally {
-				Time.log(begin, "[mongodb][slack][metrics][insert]");
+				Time.log(begin, "[db][metrics][insert]");
 			}
 		},
 	},
@@ -62,7 +62,7 @@ export const SlackDb = {
 			} finally {
 				Time.log(
 					begin,
-					`[mongodb][slack][eventLog][upsert] ${event.requests.at(-1)?.type}`,
+					`[db][eventLog][upsert] ${event.requests.at(-1)?.type}`,
 				);
 			}
 		},
@@ -87,7 +87,7 @@ export const SlackDb = {
 				).find((r) => r.type !== "ignored" && r.input.payload.event.text)?.input
 					.payload.event;
 			} finally {
-				Time.log(begin, "[mongodb][slack][eventLog][getUserMessage]");
+				Time.log(begin, "[db][eventLog][getUserMessage]");
 			}
 		},
 
@@ -104,7 +104,7 @@ export const SlackDb = {
 
 				return await eventLog.findOne<EventLogItem>(filter);
 			} finally {
-				Time.log(begin, "[mongodb][slack][eventLog][get]");
+				Time.log(begin, "[db][eventLog][get]");
 			}
 		},
 	},
@@ -116,10 +116,7 @@ export const SlackDb = {
 			try {
 				return await oauthEvents.insertOne(event);
 			} finally {
-				Time.log(
-					begin,
-					`[mongodb][slack][events][insert] ${event.metadata.eventId}`,
-				);
+				Time.log(begin, `[db][oauth][insert] ${event.metadata.eventId}`);
 			}
 		},
 	},
@@ -133,7 +130,7 @@ export const SlackDb = {
 					id,
 				});
 			} finally {
-				Time.log(begin, `[mongodb][slack][apps][get] ${id}`);
+				Time.log(begin, `[db][apps][get] ${id}`);
 			}
 		},
 	},
@@ -156,10 +153,7 @@ export const SlackDb = {
 					"user.id": { $exists: false },
 				});
 			} finally {
-				Time.log(
-					begin,
-					`[mongodb][slack][installs][get] ${teamId} ${appId} ${userId}`,
-				);
+				Time.log(begin, `[db][installs][get] ${teamId} ${appId} ${userId}`);
 			}
 		},
 
@@ -184,10 +178,7 @@ export const SlackDb = {
 					teamToken: installs.find((i) => !i.user)?.metadata.accessToken,
 				};
 			} finally {
-				Time.log(
-					begin,
-					`[mongodb][slack][installs][get] ${teamId} ${appId} ${userId}`,
-				);
+				Time.log(begin, `[db][installs][get] ${teamId} ${appId} ${userId}`);
 			}
 		},
 
@@ -214,7 +205,7 @@ export const SlackDb = {
 			} finally {
 				Time.log(
 					begin,
-					`[mongodb][slack][installs][upsert] ${entity.team.id} ${entity.app.id} ${entity.user?.id}`,
+					`[db][installs][upsert] ${entity.team.id} ${entity.app.id} ${entity.user?.id}`,
 				);
 			}
 		},
@@ -228,10 +219,7 @@ export const SlackDb = {
 					"team.id": teamId,
 				});
 			} finally {
-				Time.log(
-					begin,
-					`[mongodb][slack][installs][delete] ${appId} ${teamId}`,
-				);
+				Time.log(begin, `[db][installs][delete] ${appId} ${teamId}`);
 			}
 		},
 	},
@@ -249,7 +237,7 @@ export const SlackDb = {
 					{ sort: { _id: -1 } },
 				);
 			} finally {
-				Time.log(begin, `[mongodb][slack][entities][get] ${id}`);
+				Time.log(begin, `[db][entities][get] ${id}`);
 			}
 		},
 
@@ -263,7 +251,7 @@ export const SlackDb = {
 					{ upsert: true },
 				);
 			} finally {
-				Time.log(begin, `[mongodb][slack][entities][upsert] ${entity.id}`);
+				Time.log(begin, `[db][entities][upsert] ${entity.id}`);
 			}
 		},
 	},
@@ -277,7 +265,7 @@ export const SlackDb = {
 					url,
 				});
 			} finally {
-				Time.log(begin, `[mongodb][slack][scraped][get] ${url}`);
+				Time.log(begin, `[db][scraped][get] ${url}`);
 			}
 		},
 
@@ -291,7 +279,7 @@ export const SlackDb = {
 					{ upsert: true },
 				);
 			} finally {
-				Time.log(begin, `[mongodb][slack][scraped][upsert] ${entity.url}`);
+				Time.log(begin, `[db][scraped][upsert] ${entity.url}`);
 			}
 		},
 	},
