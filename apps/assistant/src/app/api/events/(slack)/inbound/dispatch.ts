@@ -27,13 +27,14 @@ export async function dispatchSlackEvent(
 			return `dispatch[${scrapeEventName}]: no url found`;
 		}
 
+		// This breaks blocked URLs
 		// Check for inaccessible URLs, unless it's a Slack file or Twitter URL
-		if (!isSlackFileUrl(url) && !isTwitterUrl(url)) {
-			const probeResponse = await fetch(url);
-			if (!probeResponse.ok) {
-				return `dispatch[${scrapeEventName}]: url ${url} is not accessible`;
-			}
-		}
+		// if (!isSlackFileUrl(url) && !isTwitterUrl(url)) {
+		// 	const probeResponse = await fetch(url);
+		// 	if (!probeResponse.ok) {
+		// 		return `dispatch[${scrapeEventName}]: url ${url} is not accessible`;
+		// 	}
+		// }
 
 		const result = await inngest.send({
 			name: scrapeEventName,
