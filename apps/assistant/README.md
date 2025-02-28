@@ -1,3 +1,18 @@
+## Steps
+- Ask @brian to add slackbot to mongoDB
+- `git pull`
+- `pnpm i`
+- `pnpm run vercel-pull-env` 
+- Run following processes in separate tabs in terminal:
+	- `pnpm --filter assistant run dev`
+	- `npx inngest-cli@latest dev --no-discovery -u http://127.0.0.1:6262/api/inngest`
+	- `ngrok http 6262 --url https://externally-emerging-hermit.ngrok-free.app` (create a user to set a fixed domain https://dashboard.ngrok.com/domains)
+- Send ngrok domain to @brian so he can add it to slackbot
+	- Alternatively get @brian to add you as collaborator on app and change domain here https://api.slack.com/apps/
+	  ![screenshot](https://u.lillefar.dk/i/VT0U5k+)
+- Now add slackbot to a channel og DM it the use your local dev bot
+
+
 # File structure
 
 /apps/assistant
