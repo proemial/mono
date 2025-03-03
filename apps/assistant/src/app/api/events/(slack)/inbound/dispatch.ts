@@ -5,11 +5,11 @@ import { eventName as askEventName } from "@/inngest/workers/ask/1-summarize.tas
 import { inngest } from "@/inngest/client";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { extractLinks } from "@proemial/adapters/slack/helpers/links";
-import { isSlackFileUrl } from "@proemial/adapters/slack/files";
-import { isTwitterUrl } from "@proemial/adapters/twitter";
 import { EphemeralMessage } from "@proemial/adapters/slack/ui-updates/ephemeral-message";
 import { showSuggestions } from "@proemial/adapters/slack/ui-updates/show-suggestions";
 import { getThreeRandomStarters } from "../../../../../prompts/ask/suggestions";
+import { isSlackFileUrl } from "@proemial/adapters/slack/files/file-scraper";
+import { isTwitterUrl } from "@proemial/adapters/twitter";
 
 export async function dispatchSlackEvent(
 	payload: EventCallbackPayload,
