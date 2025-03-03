@@ -5,14 +5,15 @@ import OpenAI from "openai";
 import { embed } from "@nomic-ai/atlas";
 import { ollama } from "ollama-ai-provider";
 import { EnvVars } from "../../utils/env-vars";
+import { google, createGoogleGenerativeAI } from "@ai-sdk/google";
 
-const DEFAULT_MODEL: OpenAIModelId = "gpt-4o";
-const PAPER_MODEL: OpenAIModelId = "gpt-3.5-turbo-0125";
-const INTERNAL_MODEL: OpenAIModelId = "gpt-4o";
+const DEFAULT_MODEL: ModelId = "gpt-4o";
+const PAPER_MODEL: ModelId = "gpt-3.5-turbo-0125";
+const INTERNAL_MODEL: ModelId = "gemini-2.0-flash-001";
 
 type OpenAIModelId = Parameters<typeof openai>[0];
-
-export type LlmModel = ReturnType<typeof openaiChat>;
+type GoogleModelId = Parameters<typeof google>[0];
+type ModelId = OpenAIModelId | GoogleModelId;
 
 export type EmbeddingsModel = OpenAI.Embeddings;
 
@@ -31,21 +32,15 @@ export type AppConfig = {
 const LlmModels = {
 	chat: {
 		embeddings: () => openaiEmbeddings("ask", "embeddings") as EmbeddingsModel,
-		answer: (traceId?: string) =>
-			getModel("chat", "answer", traceId) as LlmModel,
-		rephrase: (traceId?: string) =>
-			getModel("chat", "rephrase", traceId) as LlmModel,
-		followups: (traceId?: string) =>
-			getModel("chat", "followups", traceId) as LlmModel,
+		answer: (traceId?: string) => getModel("chat", "answer", traceId),
+		rephrase: (traceId?: string) => getModel("chat", "rephrase", traceId),
+		followups: (traceId?: string) => getModel("chat", "followups", traceId),
 	},
 	ask: {
 		embeddings: () => openaiEmbeddings("ask", "embeddings") as EmbeddingsModel,
-		rephrase: (traceId?: string) =>
-			getModel("ask", "rephrase", traceId) as LlmModel,
-		answer: (traceId?: string) =>
-			getModel("ask", "answer", traceId) as LlmModel,
-		followups: (traceId?: string) =>
-			getModel("ask", "followups", traceId) as LlmModel,
+		rephrase: (traceId?: string) => getModel("ask", "rephrase", traceId),
+		answer: (traceId?: string) => getModel("ask", "answer", traceId),
+		followups: (traceId?: string) => getModel("ask", "followups", traceId),
 	},
 	index: {
 		embeddings: () =>
@@ -59,42 +54,41 @@ const LlmModels = {
 		summariseChannel: () => openai("gpt-4o"),
 	},
 	spaces: {
-		answer: (traceId?: string) =>
-			getModel("spaces", "answer", traceId) as LlmModel,
+		answer: (traceId?: string) => getModel("spaces", "answer", traceId),
 	},
 	read: {
 		title: (source?: SourceProduct) =>
-			getModel(source ?? "read", "paper:title") as LlmModel,
+			getModel(source ?? "read", "paper:title"),
 		description: (source?: SourceProduct) =>
-			getModel(source ?? "read", "paper:description") as LlmModel,
+			getModel(source ?? "read", "paper:description"),
 		starters: (source?: SourceProduct) =>
-			getModel(source ?? "read", "paper:starters") as LlmModel,
+			getModel(source ?? "read", "paper:starters"),
 		// related: (source?: SourceProduct) =>
-		// 	getModel(source ?? "read", "paper:related") as LlmModel,
+		// 	getModel(source ?? "read", "paper:related"),
 	},
 	news: {
 		answer: (traceId?: string, appConfig?: AppConfig) =>
-			getModel("news", "answer", traceId, appConfig) as LlmModel,
+			getModel("news", "answer", traceId, appConfig),
 		followups: (traceId?: string, appConfig?: AppConfig) =>
-			getModel("news", "followups", traceId, appConfig) as LlmModel,
+			getModel("news", "followups", traceId, appConfig),
 
 		// Annotation
 		query: (traceId?: string, appConfig?: AppConfig) =>
-			getModel("news", "query", traceId, appConfig) as LlmModel,
+			getModel("news", "query", traceId, appConfig),
 		background: (traceId?: string, appConfig?: AppConfig) =>
-			getModel("news", "background", traceId, appConfig) as LlmModel,
+			getModel("news", "background", traceId, appConfig),
 	},
 	assistant: {
 		answer: (traceId?: string, appConfig?: AppConfig) =>
-			getModel("assistant", "answer", traceId, appConfig) as LlmModel,
+			getModel("assistant", "answer", traceId, appConfig),
 		followups: (traceId?: string, appConfig?: AppConfig) =>
-			getModel("assistant", "followups", traceId, appConfig) as LlmModel,
+			getModel("assistant", "followups", traceId, appConfig),
 
 		// Annotation
 		query: (traceId?: string, appConfig?: AppConfig) =>
-			getModel("assistant", "query", traceId, appConfig) as LlmModel,
+			getModel("assistant", "query", traceId, appConfig),
 		background: (traceId?: string, appConfig?: AppConfig) =>
-			getModel("assistant", "background", traceId, appConfig) as LlmModel,
+			getModel("assistant", "background", traceId, appConfig),
 	},
 };
 
@@ -105,12 +99,12 @@ function getModel(
 	appConfig?: AppConfig,
 ) {
 	if (operation.includes("paper")) {
-		return openaiChat(source, operation, PAPER_MODEL, traceId) as LlmModel;
+		return openaiChat(source, operation, PAPER_MODEL, traceId);
 	}
 	if (EnvVars.isInternalSlackTeam(appConfig?.slackTeamId)) {
-		return openaiChat(source, operation, INTERNAL_MODEL, traceId) as LlmModel;
+		return googleChat(source, operation, INTERNAL_MODEL, traceId);
 	}
-	return openaiChat(source, operation, DEFAULT_MODEL, traceId) as LlmModel;
+	return openaiChat(source, operation, DEFAULT_MODEL, traceId);
 }
 
 export const llmConfig = {
@@ -133,7 +127,7 @@ export const llmConfig = {
 const openaiChat = async (
 	source: keyof typeof llmConfig.sources,
 	operation: string,
-	model: string,
+	model: OpenAIModelId,
 	traceId?: string,
 ): Promise<LanguageModelV1> => {
 	console.log(
@@ -156,7 +150,37 @@ const openaiChat = async (
 		compatibility: "strict", // Required for usage to be streamed
 	});
 
-	return provider(model) as ReturnType<typeof provider>;
+	return provider(model);
+};
+
+const googleChat = async (
+	source: keyof typeof llmConfig.sources,
+	operation: string,
+	model: GoogleModelId,
+	traceId?: string,
+): Promise<LanguageModelV1> => {
+	console.log(
+		`[llm][google][chat][${source}]${operation ? `[${operation}]` : ""} ${model}`,
+	);
+
+	const googleProvider = createGoogleGenerativeAI({
+		apiKey: process.env.GOOGLE_API_KEY,
+		baseURL: "https://gateway.helicone.ai/v1beta", // Inspired by https://docs.helicone.ai/integrations/gemini/api/javascript
+		headers: {
+			...(await heliconeHeaders({
+				traceId,
+				source,
+				operation,
+				sessionName: traceId
+					? `${source}: ${["background", "query"].includes(operation) ? "annotation" : "answer"}`
+					: undefined,
+			})),
+			"Content-Type": "application/json",
+			"Helicone-Target-URL": "https://generativelanguage.googleapis.com",
+		},
+	});
+
+	return googleProvider(model);
 };
 
 const openaiEmbeddings = (

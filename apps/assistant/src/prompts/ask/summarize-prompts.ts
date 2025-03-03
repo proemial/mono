@@ -1,4 +1,4 @@
-import LlmModels, { AppConfig, LlmModel } from "@proemial/adapters/llm/models";
+import LlmModels, { AppConfig } from "@proemial/adapters/llm/models";
 
 export const LlmAnswer = {
 	prompt: answerPrompt,
