@@ -12,7 +12,7 @@ const client = new ScrapflyClient({
 });
 
 export const scrape = async (url: string): Promise<ScrapeResult> => {
-	console.log(`Scraping ${url} with Scrapfly…`);
+	console.log(`Scrapfly Scraper: Scraping ${url}…`);
 
 	let siteTitle: string | undefined = undefined;
 	let imageUrl: string | undefined = undefined;

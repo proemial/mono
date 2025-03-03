@@ -1,6 +1,5 @@
 import { SlackDb } from "../../mongodb/slack/slack.adapter";
 import { LlamaParseClient } from "../../llamaindex/llama-parse-client";
-import { SlackEventMetadata } from "../models/metadata-models";
 
 export const isSlackFileUrl = (url: string) => {
 	const urlObj = new URL(url);
@@ -12,10 +11,11 @@ export const isSlackFileUrl = (url: string) => {
 export const parseSlackFile = async (
 	fileUrl: string,
 	mimetype: string,
-	metadata: SlackEventMetadata,
+	teamId: string,
+	appId: string,
 	llamaParseClient: LlamaParseClient,
 ) => {
-	const { teamId, appId } = metadata;
+	console.log(`Slack File Scraper: Scraping file ${fileUrl}…`);
 	const install = await SlackDb.installs.get(teamId, appId);
 	if (!install) {
 		throw new Error("Bot install not found");

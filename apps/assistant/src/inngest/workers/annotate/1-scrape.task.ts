@@ -1,32 +1,21 @@
-import { Time } from "@proemial/utils/time";
-import { inngest } from "../../client";
-import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
+import { AnnotateRouter } from "@/inngest/routing";
+import { statusMessages } from "@/inngest/status-messages";
+import { getColors } from "@proemial/adapters/googleapis/vision";
 import { ScrapedUrl } from "@proemial/adapters/mongodb/slack/scraped.types";
-import { scrape } from "@proemial/adapters/scrapfly/scraper";
+import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
+import { scrapeUrl } from "@proemial/adapters/scraping/scrape-url";
+import { logCriticalError } from "@proemial/adapters/slack/monitoring/failure";
+import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import {
 	isYouTubeUrl,
 	normalizeYouTubeUrl,
 } from "@proemial/adapters/youtube/shared";
-import { diffbot } from "@proemial/adapters/diffbot";
-import { AnnotateRouter } from "@/inngest/routing";
-import { getColors } from "@proemial/adapters/googleapis/vision";
+import { Time } from "@proemial/utils/time";
+import { inngest } from "../../client";
 import { SlackAnnotateEvent } from "../../workers";
-import { statusMessages } from "@/inngest/status-messages";
-import { logCriticalError } from "@proemial/adapters/slack/monitoring/failure";
-import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
-import { LlamaParseClient } from "@proemial/adapters/llamaindex/llama-parse-client";
-import { isSlackFileUrl, parseSlackFile } from "@proemial/adapters/slack/files";
-import { isTwitterUrl } from "@proemial/adapters/twitter";
-import { fetchTranscript } from "@proemial/adapters/youtube/oxylabs";
 import { Metrics } from "../metrics";
-
 export const eventName = "annotate/scrape";
 const eventId = "annotate/scrape/fn";
-
-const llamaParseClient = new LlamaParseClient({
-	apiKey: process.env.LLAMA_CLOUD_API_KEY as string,
-	verbose: true,
-});
 
 export const scrapeTask = {
 	name: eventName,
@@ -77,33 +66,11 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 		const actions = [scrapedUrl ? "fetch-hit" : "fetch-miss"];
 
 		if (!scrapedUrl) {
-			let content = undefined;
-			try {
-				if (isSlackFileUrl(normalizedUrl)) {
-					if (!payload.fileMimetype) {
-						throw new Error("File mimetype missing");
-					}
-					content = await parseSlackFile(
-						normalizedUrl,
-						payload.fileMimetype,
-						payload.metadata,
-						llamaParseClient,
-					);
-				} else if (isYouTubeUrl(normalizedUrl)) {
-					content = await fetchTranscript(normalizedUrl);
-				} else if (isTwitterUrl(normalizedUrl)) {
-					content = await scrape(normalizedUrl);
-				} else {
-					content = await diffbot(normalizedUrl);
-				}
-			} catch (error) {
-				if (isFallbackable(normalizedUrl)) {
-					console.warn(`Main scraper failed: ${error}\nRetrying…`);
-					content = await scrape(normalizedUrl);
-				} else {
-					throw error;
-				}
-			}
+			const content = await scrapeUrl(normalizedUrl, {
+				mimeType: payload.fileMimetype,
+				teamId: payload.metadata.teamId,
+				appId: payload.metadata.appId,
+			});
 
 			scrapedUrl = {
 				url: normalizedUrl,
@@ -150,9 +117,4 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 		);
 		throw error;
 	}
-};
-
-const isFallbackable = (url: string) => {
-	// Don't retry scraping if it's a file or Twitter url (which is already tried with Scrapfly)
-	return !isSlackFileUrl(url) && !isTwitterUrl(url);
 };

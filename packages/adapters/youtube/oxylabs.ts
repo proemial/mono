@@ -12,8 +12,8 @@ type YouTubeTranscriptPayload = {
 export const fetchTranscript = async (
 	url: string,
 ): Promise<YouTubeTranscript> => {
+	console.log(`YouTube Scraper: Scraping ${url}…`);
 	const videoId = getVideoId(url);
-	console.log(`Fetching YouTube transcript for video id ${videoId}…`);
 	if (!videoId) {
 		throw new Error("Invalid YouTube video URL");
 	}
@@ -60,7 +60,7 @@ export const fetchTranscript = async (
 			images: [], // TODO: OxyLabs doesn't provide video thumbnails
 		};
 	} catch (error) {
-		console.error("Error fetching transcript:", error);
+		console.error("Error fetching YouTube transcript:", error);
 		throw error;
 	}
 };
