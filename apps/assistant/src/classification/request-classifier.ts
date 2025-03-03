@@ -16,6 +16,21 @@ export function classifyRequest(
 		return ignored;
 	}
 
+	// Dismissal of nudges
+	if (
+		payload.type === "block_actions" &&
+		!!payload.actions.find(
+			(a) => a.action_id === "nudge_reject" || a.action_id === "nudge_accept",
+		)
+	) {
+		return "dismiss";
+	}
+
+	// Show assistant suggestions
+	if (payload.event?.type === "assistant_thread_started") {
+		return "suggestions";
+	}
+
 	// Unhandled event types
 	if (payload.type === "url_verification") {
 		log("exit[url_verification]", payload.challenge);
@@ -97,21 +112,6 @@ export function classifyRequest(
 		payload.event?.type === "app_mention"
 	) {
 		return "answer";
-	}
-
-	// Dismissal of nudges
-	if (
-		payload.type === "block_actions" &&
-		!!payload.actions.find(
-			(a) => a.action_id === "nudge_reject" || a.action_id === "nudge_accept",
-		)
-	) {
-		return "dismiss";
-	}
-
-	// Show assistant suggestions
-	if (payload.event?.type === "assistant_thread_started") {
-		return "suggestions";
 	}
 
 	return "unknown";
