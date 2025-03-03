@@ -10,6 +10,7 @@ import { showSuggestions } from "@proemial/adapters/slack/ui-updates/show-sugges
 import { getThreeRandomStarters } from "../../../../../prompts/ask/suggestions";
 import { isSlackFileUrl } from "@proemial/adapters/slack/files/file-scraper";
 import { isTwitterUrl } from "@proemial/adapters/twitter";
+import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 
 export async function dispatchSlackEvent(
 	payload: EventCallbackPayload,
@@ -76,6 +77,11 @@ export async function dispatchSlackEvent(
 			getThreeRandomStarters(),
 			"Trustworthy answers to any question, such as:",
 		);
+	}
+
+	if (metadata.target === "nudge") {
+		await SlackMessenger.nudgeUser(metadata);
+		return "nudged";
 	}
 
 	return undefined;

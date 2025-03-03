@@ -55,6 +55,8 @@ export const askTask = {
 const taskWorker = async (payload: SlackAskEvent) => {
 	const metadata = payload.metadata as SlackEventMetadata;
 
+	await SlackMessenger.nudgeUser(payload.metadata);
+
 	const messages = await getMessages(metadata, payload.question);
 	if (messages.length === 0) {
 		throw new Error("No messages found");

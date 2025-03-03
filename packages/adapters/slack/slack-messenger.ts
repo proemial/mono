@@ -11,30 +11,10 @@ import { sendMessage } from "./ui-updates/send-message";
 import { Time } from "@proemial/utils/time";
 
 export const SlackMessenger = {
-	nudgeUser: async (
-		metadata: SlackEventMetadata,
-		text: string,
-		url?: string,
-		title?: string,
-	) => {
+	nudgeUser: async (metadata: SlackEventMetadata) => {
 		const begin = Time.now();
-
 		try {
-			const appInstall = await SlackDb.installs.get(
-				metadata.teamId,
-				metadata.appId,
-			);
-			if (!appInstall) {
-				throw new Error("App install not found");
-			}
-
-			await nudgeUser(
-				metadata,
-				appInstall.metadata.accessToken,
-				text,
-				url,
-				title,
-			);
+			await nudgeUser(metadata);
 		} finally {
 			Time.log(begin, "[messenger][nudge]");
 		}
@@ -72,8 +52,6 @@ export const SlackMessenger = {
 					url,
 					title,
 				);
-			} else {
-				await SlackMessenger.nudgeUser(metadata, text, url, title);
 			}
 		} finally {
 			Time.log(begin, "[messenger][update]");
@@ -112,7 +90,8 @@ export const SlackMessenger = {
 
 		try {
 			const target = await getTarget(metadata);
-			if (!target) {
+			if (!target?.accessTokens.userToken) {
+				console.log("User token not found");
 				return;
 			}
 

@@ -1,4 +1,4 @@
-import { SlackDb } from "@/mongodb/slack/slack.adapter";
+import { SlackDb } from "../../mongodb/slack/slack.adapter";
 
 export async function translateHandles(
 	handles: string[],

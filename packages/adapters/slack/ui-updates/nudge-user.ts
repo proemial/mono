@@ -3,13 +3,7 @@ import { link } from "../block-kit/link-blocks";
 import { nudge } from "../block-kit/nudge-blocks";
 import { SlackEventMetadata } from "../models/metadata-models";
 
-export async function nudgeUser(
-	metadata: SlackEventMetadata,
-	accessToken: string,
-	text?: string,
-	url?: string,
-	title?: string,
-) {
+export async function nudgeUser(metadata: SlackEventMetadata) {
 	if (!metadata.channelId) {
 		throw new Error("Channel ID not found");
 	}
@@ -17,11 +11,22 @@ export async function nudgeUser(
 		throw new Error("User ID not found");
 	}
 
+	const installs = await SlackDb.installs.getTokensForUserAndTeam(
+		metadata.teamId,
+		metadata.appId,
+		metadata.user,
+	);
+	if (installs.userToken) {
+		return;
+	}
+	if (!installs.teamToken) {
+		throw new Error("Team install not found");
+	}
+
 	const app = await SlackDb.apps.get(metadata.appId);
 	if (!app?.metadata.clientId) {
 		throw new Error("Client ID not found");
 	}
-	console.log("app creds", metadata.appId, app?.metadata.clientId);
 
 	const requestBody = (
 		content: ReturnType<typeof link> | ReturnType<typeof nudge>,
@@ -29,7 +34,7 @@ export async function nudgeUser(
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json; charset=utf-8",
-			Authorization: `Bearer ${accessToken}`,
+			Authorization: `Bearer ${installs.teamToken}`,
 		},
 		body: JSON.stringify({
 			channel: metadata.channelId,
@@ -40,13 +45,6 @@ export async function nudgeUser(
 		}),
 	});
 
-	// TODO: Show result as ephemeral message also
-	const blocks1 = link(text as string, url as string, title as string);
-	const preview = await fetch(
-		"https://slack.com/api/chat.postEphemeral",
-		requestBody(blocks1),
-	).then((res) => res.json());
-
 	const blocks = nudge(app?.metadata.clientId, metadata.teamId);
 	const invitation = await fetch(
 		"https://slack.com/api/chat.postEphemeral",
@@ -54,7 +52,6 @@ export async function nudgeUser(
 	).then((res) => res.json());
 
 	return {
-		preview,
 		invitation,
 	};
 }

@@ -49,7 +49,7 @@ export function classifyRequest(
 		return ignored;
 	}
 	if (payload.event?.type === "assistant_thread_context_changed") {
-		log("assistant_thread_context_changed");
+		log("exit[assistant_thread_context_changed]");
 		return ignored;
 	}
 	if (payload.type === "block_actions") {
@@ -71,6 +71,7 @@ export function classifyRequest(
 		);
 		return ignored;
 	}
+
 	if (
 		extractLinks(payload.event?.text, URL_BLACKLIST).length > 0 ||
 		(payload.event?.subtype === "file_share" && payload.event?.files?.[0])
@@ -78,11 +79,11 @@ export function classifyRequest(
 		return "annotate";
 	}
 
-	// Answer to a questions
 	if (nakedMention(payload)) {
-		log("exit[nakedmention]", nakedMention(payload));
-		return ignored;
+		return "nudge";
 	}
+
+	// Answer to a questions
 	if (payload.event?.type === "app_mention" && payload.event?.attachments) {
 		log(
 			"exit[app_mention_modified]",

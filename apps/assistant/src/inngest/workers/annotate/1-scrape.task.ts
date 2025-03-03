@@ -53,6 +53,9 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 
 	try {
 		const begin = Time.now();
+
+		await SlackMessenger.nudgeUser(payload.metadata);
+
 		await SlackMessenger.updateStatus(
 			payload.metadata,
 			statusMessages.annotate.begin,
