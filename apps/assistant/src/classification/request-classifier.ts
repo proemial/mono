@@ -16,6 +16,47 @@ export function classifyRequest(
 		return ignored;
 	}
 
+	// Unhandled event types
+	if (payload.type === "url_verification") {
+		log("exit[url_verification]", payload.challenge);
+		return ignored;
+	}
+	if (payload.type === "ssl_check") {
+		log("exit[ssl_check]");
+		return ignored;
+	}
+	if (payload.event?.bot_profile) {
+		log("exit[bot_profile]");
+		return ignored;
+	}
+	if (payload.event?.subtype === "file_share") {
+		const file = payload.event.files?.[0];
+		if (file && !FILE_TYPE_WHITELIST.includes(file.mimetype)) {
+			log("exit[file_share_unsupported]", file.name, file.mimetype);
+			return ignored;
+		}
+		if (file && file.size > FILE_SIZE_LIMIT) {
+			log("exit[file_share_too_large]", file.name, file.size);
+			return ignored;
+		}
+	}
+	if (payload.event?.subtype && !extractLinks(payload.event.text).length) {
+		log(
+			"exit[subtype]",
+			payload.event.subtype,
+			!extractLinks(payload.event.text).length,
+		);
+		return ignored;
+	}
+	if (payload.event?.type === "assistant_thread_context_changed") {
+		log("assistant_thread_context_changed");
+		return ignored;
+	}
+	if (payload.type === "block_actions") {
+		log("exit[block_actions]");
+		return ignored;
+	}
+
 	// Annotation of links and files
 	if (
 		payload.event?.type === "message" &&
@@ -70,47 +111,6 @@ export function classifyRequest(
 	// Show assistant suggestions
 	if (payload.event?.type === "assistant_thread_started") {
 		return "suggestions";
-	}
-
-	// Unhandled event types
-	if (payload.type === "url_verification") {
-		log("exit[url_verification]", payload.challenge);
-		return ignored;
-	}
-	if (payload.type === "ssl_check") {
-		log("exit[ssl_check]");
-		return ignored;
-	}
-	if (payload.event?.bot_profile) {
-		log("exit[bot_profile]");
-		return ignored;
-	}
-	if (payload.event?.subtype === "file_share") {
-		const file = payload.event.files?.[0];
-		if (file && !FILE_TYPE_WHITELIST.includes(file.mimetype)) {
-			log("exit[file_share_unsupported]", file.name, file.mimetype);
-			return ignored;
-		}
-		if (file && file.size > FILE_SIZE_LIMIT) {
-			log("exit[file_share_too_large]", file.name, file.size);
-			return ignored;
-		}
-	}
-	if (payload.event?.subtype && !extractLinks(payload.event.text).length) {
-		log(
-			"exit[subtype]",
-			payload.event.subtype,
-			!extractLinks(payload.event.text).length,
-		);
-		return ignored;
-	}
-	if (payload.event?.type === "assistant_thread_context_changed") {
-		log("assistant_thread_context_changed");
-		return ignored;
-	}
-	if (payload.type === "block_actions") {
-		log("exit[block_actions]");
-		return ignored;
 	}
 
 	return "unknown";
