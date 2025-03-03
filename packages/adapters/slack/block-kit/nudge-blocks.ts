@@ -1,7 +1,7 @@
 export function nudge(clientId: string, teamId: string) {
 	const text =
-		"Personal Summaries explain why your colleagues might want to read the content you share, and why it matters to your team. This also helps your colleagues prioritize what to read...";
-	const okButtonText = "Enable Personal Summaries";
+		"Hello Coworker! I’m @proem, the new knowledge assistant for this channel. I can enrich the messages, links, and files you share in Slack, and answer your questions.";
+	const okButtonText = "Sounds Great!";
 	const cancelButtonText = "Not right now";
 
 	const url = [
@@ -11,35 +11,39 @@ export function nudge(clientId: string, teamId: string) {
 	].join("&");
 
 	return {
-		color: "#7DFA85",
-		blocks: [
+		attachments: [
 			{
-				type: "section",
-				text: {
-					type: "mrkdwn",
-					text,
-				},
-			},
-			{
-				type: "actions",
-				elements: [
+				color: "#66ff66",
+				blocks: [
 					{
-						type: "button",
+						type: "section",
 						text: {
-							type: "plain_text",
-							text: okButtonText,
+							type: "mrkdwn",
+							text,
 						},
-						style: "primary",
-						action_id: "nudge_accept",
-						url,
 					},
 					{
-						type: "button",
-						text: {
-							type: "plain_text",
-							text: cancelButtonText,
-						},
-						action_id: "nudge_reject",
+						type: "actions",
+						elements: [
+							{
+								type: "button",
+								text: {
+									type: "plain_text",
+									text: okButtonText,
+								},
+								style: "primary",
+								action_id: "nudge_accept",
+								url,
+							},
+							{
+								type: "button",
+								text: {
+									type: "plain_text",
+									text: cancelButtonText,
+								},
+								action_id: "nudge_reject",
+							},
+						],
 					},
 				],
 			},
