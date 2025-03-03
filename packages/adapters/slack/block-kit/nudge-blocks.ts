@@ -19,7 +19,7 @@ export function nudge(clientId: string, teamId: string) {
 						type: "section",
 						text: {
 							type: "mrkdwn",
-							text,
+							text: text,
 						},
 					},
 					{
