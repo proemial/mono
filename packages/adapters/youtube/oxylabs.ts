@@ -9,10 +9,10 @@ type YouTubeTranscriptPayload = {
 	message?: string;
 };
 
-export const fetchTranscript = async (
+export const oxylabsYouTubeScraper = async (
 	url: string,
 ): Promise<YouTubeTranscript> => {
-	console.log(`YouTube Scraper: Scraping ${url}…`);
+	console.log(`Oxylabs YouTube Scraper: Scraping ${url}…`);
 	const videoId = getVideoId(url);
 	if (!videoId) {
 		throw new Error("Invalid YouTube video URL");

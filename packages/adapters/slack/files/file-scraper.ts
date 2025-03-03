@@ -8,7 +8,7 @@ export const isSlackFileUrl = (url: string) => {
 	);
 };
 
-export const parseSlackFile = async (
+export const slackFileScraper = async (
 	fileUrl: string,
 	mimetype: string,
 	teamId: string,

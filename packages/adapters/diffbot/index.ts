@@ -12,7 +12,7 @@ type ScrapeResponse = {
 	images?: DiffbotImage[];
 };
 
-export const diffbot = async (url: string): Promise<ScrapeResponse> => {
+export const diffbotScraper = async (url: string): Promise<ScrapeResponse> => {
 	console.log(`Diffbot Scraper: Scraping ${url}…`);
 	const result = await fetch(
 		`https://api.diffbot.com/v3/analyze?url=${encodeURIComponent(url)}&token=${process.env.DIFFBOT_API_TOKEN}`,

@@ -11,7 +11,7 @@ const client = new ScrapflyClient({
 	key: process.env.SCRAPFLY_API_KEY as string,
 });
 
-export const scrape = async (url: string): Promise<ScrapeResult> => {
+export const scrapflyScraper = async (url: string): Promise<ScrapeResult> => {
 	console.log(`Scrapfly Scraper: Scraping ${url}…`);
 
 	let siteTitle: string | undefined = undefined;

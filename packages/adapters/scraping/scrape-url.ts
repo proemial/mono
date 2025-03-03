@@ -1,9 +1,9 @@
-import { diffbot } from "@/diffbot";
+import { diffbotScraper } from "@/diffbot";
 import { LlamaParseClient } from "@/llamaindex/llama-parse-client";
-import { scrape } from "@/scrapfly/scraper";
-import { isSlackFileUrl, parseSlackFile } from "@/slack/files";
+import { scrapflyScraper } from "@/scrapfly/scraper";
+import { isSlackFileUrl, slackFileScraper } from "@/slack/files/file-scraper";
 import { isTwitterUrl } from "@/twitter";
-import { fetchTranscript } from "@/youtube/oxylabs";
+import { oxylabsYouTubeScraper } from "@/youtube/oxylabs";
 import { isYouTubeUrl } from "@/youtube/shared";
 
 const llamaParseClient = new LlamaParseClient({
@@ -28,7 +28,7 @@ export async function scrapeUrl(
 			if (!fileOptions.mimeType) {
 				throw new Error("Missing file mimetype");
 			}
-			content = await parseSlackFile(
+			content = await slackFileScraper(
 				url,
 				fileOptions.mimeType,
 				fileOptions.teamId,
@@ -36,18 +36,18 @@ export async function scrapeUrl(
 				llamaParseClient,
 			);
 		} else if (isYouTubeUrl(url)) {
-			content = await fetchTranscript(url);
+			content = await oxylabsYouTubeScraper(url);
 		} else if (isTwitterUrl(url)) {
-			content = await scrape(url);
+			content = await scrapflyScraper(url);
 		} else {
-			content = await diffbot(url);
+			content = await diffbotScraper(url);
 		}
 
 		if (isEmptyContent(content)) throw new Error("Scraped content is empty");
 	} catch (error) {
 		if (isFallbackable(url)) {
 			console.warn(`Scraping failed: ${error}\nRetrying…`);
-			content = await scrape(url);
+			content = await scrapflyScraper(url);
 			if (isEmptyContent(content)) throw new Error("Scraped content is empty");
 		} else {
 			throw error;
