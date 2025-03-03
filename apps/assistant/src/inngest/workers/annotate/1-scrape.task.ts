@@ -86,7 +86,7 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 
 			await SlackDb.scraped.upsert(scrapedUrl);
 		} else {
-			console.log(`URL ${normalizedUrl} already scraped - skipping`);
+			console.log(`Already scraped ${normalizedUrl} - skipping`);
 		}
 
 		// Next step from router
