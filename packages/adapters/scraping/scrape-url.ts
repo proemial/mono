@@ -1,10 +1,10 @@
-import { diffbotScraper } from "@/diffbot";
-import { LlamaParseClient } from "@/llamaindex/llama-parse-client";
-import { scrapflyScraper } from "@/scrapfly/scraper";
-import { isSlackFileUrl, slackFileScraper } from "@/slack/files/file-scraper";
-import { isTwitterUrl } from "@/twitter";
-import { oxylabsYouTubeScraper } from "@/youtube/oxylabs";
-import { isYouTubeUrl } from "@/youtube/shared";
+import { diffbotScraper } from "../diffbot";
+import { LlamaParseClient } from "../llamaindex/llama-parse-client";
+import { scrapflyScraper } from "../scrapfly/scraper";
+import { isSlackFileUrl, slackFileScraper } from "../slack/files/file-scraper";
+import { isTwitterUrl } from "../twitter";
+import { oxylabsYouTubeScraper } from "../youtube/oxylabs";
+import { isYouTubeUrl } from "../youtube/shared";
 
 const llamaParseClient = new LlamaParseClient({
 	apiKey: process.env.LLAMA_CLOUD_API_KEY as string,
