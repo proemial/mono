@@ -1,12 +1,15 @@
 export function answer(text: string, url?: string, title?: string) {
 	return {
+		text: text,
 		blocks: [
 			{
-				type: "section",
-				text: {
-					type: "mrkdwn",
-					text: "*answer*",
-				},
+				type: "context",
+				elements: [
+					{
+						type: "mrkdwn",
+						text: "answer",
+					},
+				],
 			},
 		],
 		attachments: [
