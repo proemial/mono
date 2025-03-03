@@ -4,6 +4,13 @@ import { LanguageModelV1 } from "ai";
 import OpenAI from "openai";
 import { embed } from "@nomic-ai/atlas";
 import { ollama } from "ollama-ai-provider";
+import { EnvVars } from "../../utils/env-vars";
+
+const DEFAULT_MODEL: OpenAIModelId = "gpt-4o";
+const PAPER_MODEL: OpenAIModelId = "gpt-3.5-turbo-0125";
+const INTERNAL_MODEL: OpenAIModelId = "gpt-4o";
+
+type OpenAIModelId = Parameters<typeof openai>[0];
 
 export type LlmModel = ReturnType<typeof openaiChat>;
 
@@ -16,6 +23,10 @@ export type SourceProduct =
 	| "spaces"
 	| "embed"
 	| "api";
+
+export type AppConfig = {
+	slackTeamId?: string;
+};
 
 const LlmModels = {
 	chat: {
@@ -47,17 +58,6 @@ const LlmModels = {
 		factChecking: () => ollama("bespoke-minicheck:7b"),
 		summariseChannel: () => openai("gpt-4o"),
 	},
-	news: {
-		answer: (traceId?: string) =>
-			getModel("news", "answer", traceId) as LlmModel,
-		followups: (traceId?: string) =>
-			getModel("news", "followups", traceId) as LlmModel,
-
-		// Annotation
-		query: (traceId?: string) => getModel("news", "query", traceId) as LlmModel,
-		background: (traceId?: string) =>
-			getModel("news", "background", traceId) as LlmModel,
-	},
 	spaces: {
 		answer: (traceId?: string) =>
 			getModel("spaces", "answer", traceId) as LlmModel,
@@ -72,17 +72,29 @@ const LlmModels = {
 		// related: (source?: SourceProduct) =>
 		// 	getModel(source ?? "read", "paper:related") as LlmModel,
 	},
-	assistant: {
-		answer: (traceId?: string) =>
-			getModel("assistant", "answer", traceId) as LlmModel,
-		followups: (traceId?: string) =>
-			getModel("assistant", "followups", traceId) as LlmModel,
+	news: {
+		answer: (traceId?: string, appConfig?: AppConfig) =>
+			getModel("news", "answer", traceId, appConfig) as LlmModel,
+		followups: (traceId?: string, appConfig?: AppConfig) =>
+			getModel("news", "followups", traceId, appConfig) as LlmModel,
 
 		// Annotation
-		query: (traceId?: string) =>
-			getModel("assistant", "query", traceId) as LlmModel,
-		background: (traceId?: string) =>
-			getModel("assistant", "background", traceId) as LlmModel,
+		query: (traceId?: string, appConfig?: AppConfig) =>
+			getModel("news", "query", traceId, appConfig) as LlmModel,
+		background: (traceId?: string, appConfig?: AppConfig) =>
+			getModel("news", "background", traceId, appConfig) as LlmModel,
+	},
+	assistant: {
+		answer: (traceId?: string, appConfig?: AppConfig) =>
+			getModel("assistant", "answer", traceId, appConfig) as LlmModel,
+		followups: (traceId?: string, appConfig?: AppConfig) =>
+			getModel("assistant", "followups", traceId, appConfig) as LlmModel,
+
+		// Annotation
+		query: (traceId?: string, appConfig?: AppConfig) =>
+			getModel("assistant", "query", traceId, appConfig) as LlmModel,
+		background: (traceId?: string, appConfig?: AppConfig) =>
+			getModel("assistant", "background", traceId, appConfig) as LlmModel,
 	},
 };
 
@@ -90,9 +102,15 @@ function getModel(
 	source: keyof typeof llmConfig.sources,
 	operation: string,
 	traceId?: string,
+	appConfig?: AppConfig,
 ) {
-	const model = operation.includes("paper") ? "gpt-3.5-turbo-0125" : "gpt-4o";
-	return openaiChat(source, operation, model, traceId) as LlmModel;
+	if (operation.includes("paper")) {
+		return openaiChat(source, operation, PAPER_MODEL, traceId) as LlmModel;
+	}
+	if (EnvVars.isInternalSlackTeam(appConfig?.slackTeamId)) {
+		return openaiChat(source, operation, INTERNAL_MODEL, traceId) as LlmModel;
+	}
+	return openaiChat(source, operation, DEFAULT_MODEL, traceId) as LlmModel;
 }
 
 export const llmConfig = {

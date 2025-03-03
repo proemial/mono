@@ -148,7 +148,9 @@ async function answerQuestion(
 	type RetrievalResult = Array<QdrantPaper>;
 
 	const result = await generateText({
-		model: await LlmAnswer.model(traceId),
+		model: await LlmAnswer.model(traceId, {
+			slackTeamId: metadata.teamId,
+		}),
 		system: prompt,
 		messages: convertToCoreMessages(messages),
 		tools: {

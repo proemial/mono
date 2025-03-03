@@ -1,9 +1,10 @@
 import { Message } from "ai";
-import LlmModels from "@proemial/adapters/llm/models";
+import LlmModels, { AppConfig } from "@proemial/adapters/llm/models";
 
 export const LlmSummary = {
 	prompt: summaryPrompt,
-	model: async (id: string) => await LlmModels.news.query(id),
+	model: async (id: string, appConfig?: AppConfig) =>
+		await LlmModels.news.query(id, appConfig),
 	// messages: (title: string, content: string) => [
 	// 	{
 	// 		role: "user",

@@ -61,6 +61,7 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 			summaries.query?.[0] as string,
 			scraped.references,
 			uuid5(payload.url, "helicone"),
+			{ slackTeamId: payload.metadata.teamId },
 		);
 
 		await SlackDb.scraped.upsert({
