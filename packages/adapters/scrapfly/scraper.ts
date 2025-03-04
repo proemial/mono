@@ -1,5 +1,5 @@
 import { ScrapflyClient, ScrapeConfig } from "scrapfly-sdk";
-import { getLinkPreview } from "link-preview-js";
+import { fetchOgDetails } from "../scraping/og";
 
 type ScrapeResult = {
 	title: string;
@@ -14,28 +14,7 @@ const client = new ScrapflyClient({
 export const scrapflyScraper = async (url: string): Promise<ScrapeResult> => {
 	console.log(`Scrapfly Scraper: Scraping ${url}…`);
 
-	let siteTitle: string | undefined = undefined;
-	let imageUrl: string | undefined = undefined;
-	try {
-		const preview = await getLinkPreview(url, {
-			followRedirects: "follow",
-			imagesPropertyType: "og",
-			headers: {
-				"user-agent":
-					"Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1",
-				"Accept-Language": "en-US",
-			},
-			timeout: 1000,
-		});
-
-		if (preview.contentType === "text/html") {
-			const { title, images } = preview as { title: string; images: string[] };
-			siteTitle = title;
-			imageUrl = images[0];
-		}
-	} catch (error) {
-		console.error(`Error getting title and thumbnail: ${error}`);
-	}
+	const { title, imageUrl } = await fetchOgDetails(url);
 
 	const apiResponse = await client.scrape(
 		new ScrapeConfig({
@@ -65,7 +44,7 @@ export const scrapflyScraper = async (url: string): Promise<ScrapeResult> => {
 	}
 
 	return {
-		title: siteTitle ?? "",
+		title: title ?? "",
 		text: apiResponse.result.content,
 		images: imageUrl ? [{ url: imageUrl }] : [],
 	};

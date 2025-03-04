@@ -38,9 +38,6 @@ export const fetchTranscript = async (
 			.filter((t) => !t.match(/\[.*?\]/)) // Filter out text in square brackets, like "[Music]"
 			.join(" ")
 			.replaceAll("\n", " ");
-		console.log(
-			`Successfully fetched YouTube transcript for video id ${videoId}…`,
-		);
 		return {
 			title,
 			text,

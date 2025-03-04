@@ -1,3 +1,4 @@
+import { fetchOgDetails } from "../scraping/og";
 import { getVideoId, YouTubeTranscript } from "./shared";
 
 type YouTubeTranscriptPayload = {
@@ -51,13 +52,13 @@ export const oxylabsYouTubeScraper = async (
 		if (!formattedTranscript) {
 			throw new Error("Transcript unavailable");
 		}
-		console.log(
-			`Successfully fetched YouTube transcript for video id ${videoId}…`,
-		);
+
+		const { title, imageUrl } = await fetchOgDetails(url);
+
 		return {
-			title: "", // TODO: OxyLabs doesn't provide a video title
+			title: title ?? "",
 			text: formattedTranscript,
-			images: [], // TODO: OxyLabs doesn't provide video thumbnails
+			images: imageUrl ? [{ url: imageUrl }] : [],
 		};
 	} catch (error) {
 		console.error("Error fetching YouTube transcript:", error);

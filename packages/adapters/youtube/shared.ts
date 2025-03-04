@@ -3,8 +3,8 @@ export type YouTubeTranscript = {
 	text: string;
 	images: Array<{
 		url: string;
-		width: number;
-		height: number;
+		width?: number;
+		height?: number;
 	}>;
 };
 
@@ -29,7 +29,6 @@ export const normalizeYouTubeUrl = (url: string) => {
 	}
 	const videoId = getVideoId(url);
 	const normalizedUrl = `https://youtube.com/v/${videoId}`;
-	console.log(`Normalized YouTube URL: ${normalizedUrl}`);
 	return normalizedUrl;
 };
 
