@@ -8,7 +8,7 @@ export async function GET(
 	{ params }: { params: { teamid: string; userid: string } },
 ) {
 	const { teamid, userid } = params;
-	const app = await SlackDb.installs.get(teamid, "A08BFJ29A5Q");
+	const app = await SlackDb.installs.get(teamid, "A08AD1FSPHV");
 	if (!app) {
 		return NextResponse.json({ error: "App not found" }, { status: 404 });
 	}
