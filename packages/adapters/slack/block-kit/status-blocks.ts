@@ -18,7 +18,7 @@ export function status(
 							{
 								type: "image",
 								image_url: "https://assistant.proem.ai/slack/spinner.gif",
-								alt_text: "Logo",
+								alt_text: "",
 							},
 							{
 								type: "mrkdwn",
@@ -31,7 +31,7 @@ export function status(
 								{
 									type: "image",
 									image_url: "https://assistant.proem.ai/slack/preloader.gif",
-									alt_text: "Preloader",
+									alt_text: "",
 								},
 							]
 						: []),

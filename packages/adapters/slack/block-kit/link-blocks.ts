@@ -17,7 +17,7 @@ export function link(text: string, url?: string, title?: string) {
 							{
 								type: "image",
 								image_url: "https://assistant.proem.ai/slack/proem-icon.png",
-								alt_text: "Logo",
+								alt_text: "",
 							},
 							{
 								type: "mrkdwn",
