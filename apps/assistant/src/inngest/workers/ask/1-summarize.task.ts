@@ -107,14 +107,20 @@ export async function summarizeAnswerTask(
 	);
 	console.log("answer", answer, papers?.length);
 
-	papers?.forEach((p, i) => {
-		answer = answer.replaceAll(
-			`[${i}]`,
-			// TODO: Switch to Markdown syntax once we start translating markdown
-			// `[${i}](https://proem.ai/paper/oa/${p.id.split("/").at(-1)})`,
-			`<https://proem.ai/paper/oa/${p.id.split("/").at(-1)}|[${i}]>`,
-		);
+	// First, find all citation groups (anything within square brackets)
+	const citationRegex = /\[([\d\s,]+)\]/g;
+	answer = answer.replace(citationRegex, (match, numbers) => {
+		// Split the numbers and handle each citation
+		const citations = numbers.split(",").map((num: string) => {
+			const i = Number.parseInt(num.trim());
+			const paper = papers?.[i];
+			return paper ? `[${i}](${paper.url})` : num.trim();
+		});
+
+		// Rejoin with the original separators (commas and spaces)
+		return `[${citations.join(", ")}]`;
 	});
+
 	console.log("answer with links", answer);
 
 	// Next step from router
@@ -179,6 +185,7 @@ async function answerQuestion(
 						metadata,
 						statusMessages.ask.summarize,
 					);
+
 					console.log("Papers retrieved", papers.length);
 
 					return { papers };

@@ -20,8 +20,7 @@ export function extractPapers(result: LlmSteps) {
 		// @ts-ignore
 		const papers = c.result.papers as QdrantPaper[];
 		return papers.map((p) => ({
-			id: p.id,
-			url: p.primary_location.landing_page_url,
+			url: `https://proem.ai/paper/oa/${p.id.split("/").at(-1)}`,
 			title: p.title,
 			abstract: p.abstract,
 		}));
