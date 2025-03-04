@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 import { summarizeAnswerTask } from "@/inngest/workers/ask/1-summarize.task";
 import { SlackAnnotateEvent, SlackAskEvent } from "@/inngest/workers";
-import { Message } from "ai";
 import { summarizeAnnotationTask } from "@/inngest/workers/annotate/2-summarize.task";
+import { CoreMessage } from "ai";
 
 export const revalidate = 0;
 
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
 		operation: string;
 		metadata: SlackEventMetadata;
 		payload: SlackAskEvent | SlackAnnotateEvent;
-		input: Record<string, string | Message[]>;
+		input: Record<string, string | CoreMessage[]>;
 	};
 	console.log(operation, metadata, payload, input);
 
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
 		const result = await summarizeAnswerTask(
 			metadata,
 			payload as SlackAskEvent,
-			input as { messages: Message[]; prompt: string },
+			input as { messages: CoreMessage[]; prompt: string },
 		);
 		return NextResponse.json(result);
 	}

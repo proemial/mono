@@ -1,6 +1,6 @@
 import { SlackAnnotateEvent, SlackAskEvent } from "@/inngest/workers";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
-import { Message } from "ai";
+import { CoreMessage } from "ai";
 
 const n8nWebhookUrl =
 	"https://proem.app.n8n.cloud/webhook/4d121077-cc00-47cd-b1d7-8f249c2c4c6d";
@@ -9,7 +9,7 @@ export async function proxyToN8n(
 	operation: string,
 	metadata: SlackEventMetadata,
 	payload: SlackAskEvent | SlackAnnotateEvent,
-	input: Record<string, string | Message[]>,
+	input: Record<string, string | CoreMessage[]>,
 ) {
 	console.log("proxyToN8n", operation, metadata, payload, input);
 

@@ -1,10 +1,11 @@
-import { uuid } from "@proemial/utils/uid";
 import { SlackDb } from "../../mongodb/slack/slack.adapter";
 import { SlackThread } from "../models/event-models";
 import { SlackEventMetadata } from "../models/metadata-models";
 import { normalizeYouTubeUrl, isYouTubeUrl } from "../../youtube/shared";
 import { extractLinks } from "./links";
 import { ContextBlock, TextObject } from "@slack/types";
+import { CoreAssistantMessage, CoreMessage, CoreUserMessage } from "ai";
+import { LlmUtils } from "../../llm/utils";
 
 export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 	const messages = await getThreadMessages(
@@ -15,7 +16,7 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 	);
 	console.log("input messages", JSON.stringify(messages));
 
-	const outputMessages = [];
+	const outputMessages: CoreMessage[] = [];
 
 	for (const message of messages) {
 		const sanitized = (message.text ?? "")
@@ -26,11 +27,9 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 		if (!message.bot_id) {
 			// user message
 			outputMessages.push({
-				id: uuid(),
-				createdAt: new Date(Number.parseFloat(message.ts) * 1000),
 				content: sanitized,
 				role: "user",
-			});
+			} satisfies CoreUserMessage);
 		} else {
 			const blocks = message.attachments?.[0]?.blocks as
 				| ContextBlock[]
@@ -44,11 +43,9 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 
 			// assistant message
 			outputMessages.push({
-				id: uuid(),
-				createdAt: new Date(Number.parseFloat(message.ts) * 1000),
 				content: `${sanitized}: ${answer}`,
 				role: "assistant",
-			});
+			} satisfies CoreAssistantMessage);
 		}
 
 		// Handle links
@@ -59,18 +56,16 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 			const link = isYouTubeUrl(l) ? normalizeYouTubeUrl(l) : l;
 			const result = await SlackDb.scraped.get(link);
 			if (result) {
-				outputMessages.push({
-					id: uuid(),
-					createdAt: new Date(Number.parseFloat(message.ts) * 1000),
-					content: `This is the full text from the ressource at ${l}: <title>${result.content.title}</title><full-text>${result.content.text}</full-text>`,
-					role: "system",
-				});
-				outputMessages.push({
-					id: uuid(),
-					createdAt: new Date(Number.parseFloat(message.ts) * 1000),
-					content: `This is a summary of the full text from the ressource at ${l}:<summary>${result.summaries?.query}</summary>`,
-					role: "system",
-				});
+				outputMessages.push(
+					...LlmUtils.toToolCallMessagePair({
+						content: `This is the full text from the ressource at ${l}: <title>${result.content.title}</title><full-text>${result.content.text}</full-text>`,
+						toolName: "GetResourceFullText",
+					}),
+					...LlmUtils.toToolCallMessagePair({
+						content: `This is a summary of the full text from the ressource at ${l}:<summary>${result.summaries?.query}</summary>`,
+						toolName: "GetSummary",
+					}),
+				);
 			}
 		}
 	}

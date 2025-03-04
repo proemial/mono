@@ -1,24 +1,24 @@
+import { proxyToN8n } from "@/app/api/events/(n8n)/n8nProxy";
 import { AskRouter } from "@/inngest/routing";
+import { statusMessages } from "@/inngest/status-messages";
 import { LlmAnswer } from "@/prompts/ask/summarize-prompts";
 import {
 	logBotBegin,
 	logRetrieval,
 } from "@proemial/adapters/analytics/helicone";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
+import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import { getThreadMessagesForAi } from "@proemial/adapters/slack/helpers/thread";
+import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
+import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { Time } from "@proemial/utils/time";
 import { uuid } from "@proemial/utils/uid";
-import { Message, convertToCoreMessages, generateText } from "ai";
+import { CoreMessage, CoreUserMessage, generateText } from "ai";
 import { z } from "zod";
 import { inngest } from "../../client";
 import { SlackAskEvent } from "../../workers";
-import { ReferencedPaper } from "@proemial/adapters/redis/news";
-import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
-import { extractPapers, LlmSteps } from "./extract-references";
-import { statusMessages } from "@/inngest/status-messages";
-import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
-import { proxyToN8n } from "@/app/api/events/(n8n)/n8nProxy";
 import { Metrics } from "../metrics";
+import { LlmSteps, extractPapers } from "./extract-references";
 
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
@@ -62,19 +62,22 @@ const taskWorker = async (payload: SlackAskEvent) => {
 		throw new Error("No messages found");
 	}
 
-	const mappedMessages = (await Promise.all(
+	const mappedMessages: CoreMessage[] = await Promise.all(
 		messages.map(async (m) => {
-			const link = m.content.slice(1, -1).match(/^https?:\/\/[^\s]+$/);
+			const link =
+				m.role === "user" && typeof m.content === "string"
+					? m.content.match(/^https?:\/\/[^\s]+$/)
+					: undefined;
 			if (link?.length) {
 				const scraped = await SlackDb.scraped.get(link[0]);
 				return {
-					...m,
-					content: scraped?.content.text ?? m.content,
+					content: scraped?.content.text ?? (m as CoreUserMessage).content,
+					role: "user",
 				};
 			}
 			return m;
 		}),
-	)) as Message[];
+	);
 
 	if (metadata.channelId === "C08F2GPLT2M") {
 		console.log("proxyToN8n", metadata, payload, mappedMessages);
@@ -93,7 +96,7 @@ const taskWorker = async (payload: SlackAskEvent) => {
 export async function summarizeAnswerTask(
 	metadata: SlackEventMetadata,
 	payload: SlackAskEvent,
-	input: { messages: Message[]; prompt: string },
+	input: { messages: CoreMessage[]; prompt: string },
 ) {
 	const begin = Time.now();
 
@@ -135,13 +138,13 @@ export async function summarizeAnswerTask(
 
 async function answerQuestion(
 	metadata: SlackEventMetadata,
-	messages: Message[],
+	messages: CoreMessage[],
 	prompt: string,
 ) {
 	const traceId = uuid();
 
 	const question = messages.findLast(
-		(message: Message) => message.role === "user",
+		(message: CoreMessage) => message.role === "user",
 	)?.content as string;
 	await logBotBegin("assistant", question, traceId);
 
@@ -152,7 +155,7 @@ async function answerQuestion(
 			slackTeamId: metadata.teamId,
 		}),
 		system: prompt,
-		messages: convertToCoreMessages(messages),
+		messages,
 		tools: {
 			searchPapers: {
 				description: "Find specific research papers matching a user query",
@@ -230,13 +233,10 @@ export async function fetchPapers(query: string) {
 	}
 }
 
-async function getMessages(
-	metadata: SlackEventMetadata,
-	question?: string,
-): Promise<Message[]> {
+async function getMessages(metadata: SlackEventMetadata, question?: string) {
 	if (metadata.threadTs) {
 		await SlackMessenger.updateStatus(metadata, statusMessages.ask.begin);
-		return (await getThreadMessagesForAi(metadata)) as Message[];
+		return await getThreadMessagesForAi(metadata);
 	}
 
 	if (question) {
@@ -244,8 +244,8 @@ async function getMessages(
 			{
 				content: question,
 				role: "user",
-			},
-		] as Message[];
+			} satisfies CoreUserMessage,
+		];
 	}
 
 	return [];
