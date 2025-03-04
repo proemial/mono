@@ -10,6 +10,8 @@ import { setAssistantStatus } from "./assistant";
 import { sendMessage } from "./ui-updates/send-message";
 import { Time } from "@proemial/utils/time";
 import { SlackResponse } from "./models/event-models";
+import { EnvVars } from "@proemial/utils/env-vars";
+import slackifyMarkdown from "slackify-markdown";
 
 export const SlackMessenger = {
 	nudgeUser: async (metadata: SlackEventMetadata) => {
@@ -82,10 +84,14 @@ export const SlackMessenger = {
 			}
 
 			await SlackMessenger.cleanMessage(metadata);
+
+			const internal = EnvVars.isInternalSlackApp(metadata.appId);
+			const markdown = internal ? slackifyMarkdown(text) : text;
+
 			const response = await sendMessage(
 				target,
 				userMessage.text,
-				text,
+				markdown,
 				url,
 				title,
 			);
