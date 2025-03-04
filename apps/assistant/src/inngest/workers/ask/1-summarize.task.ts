@@ -108,8 +108,10 @@ export async function summarizeAnswerTask(
 	console.log("answer", answer, papers?.length);
 
 	papers?.forEach((p, i) => {
-		answer = answer.replace(
+		answer = answer.replaceAll(
 			`[${i}]`,
+			// TODO: Switch to Markdown syntax once we start translating markdown
+			// `[${i}](https://proem.ai/paper/oa/${p.id.split("/").at(-1)})`,
 			`<https://proem.ai/paper/oa/${p.id.split("/").at(-1)}|[${i}]>`,
 		);
 	});
