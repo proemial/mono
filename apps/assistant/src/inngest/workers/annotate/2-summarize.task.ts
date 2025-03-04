@@ -88,7 +88,7 @@ export async function summarizeAnnotationTask(
 
 	const { text: indexQuery } = await generateText({
 		model: await LlmSummary.model(uuid5(payload.url, "helicone"), {
-			slackTeamId: payload.metadata.teamId,
+			slackAppId: payload.metadata.appId,
 		}),
 		prompt: input.prompt
 			.replace("$url", input.url)

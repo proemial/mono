@@ -1,10 +1,10 @@
 export namespace EnvVars {
-	export const isInternalSlackTeam = (teamId: string | undefined) => {
-		if (!teamId) {
+	export const isInternalSlackApp = (appId: string | undefined) => {
+		if (!appId) {
 			return false;
 		}
-		const internalTeamIds =
-			process.env.INTERNAL_SLACK_TEAM_IDS?.split(",").filter(Boolean) ?? [];
-		return internalTeamIds.includes(teamId);
+		const internalAppIds =
+			process.env.INTERNAL_SLACK_APP_IDS?.split(",").filter(Boolean) ?? [];
+		return internalAppIds.includes(appId);
 	};
 }

@@ -26,7 +26,7 @@ export type SourceProduct =
 	| "api";
 
 export type AppConfig = {
-	slackTeamId?: string;
+	slackAppId?: string;
 };
 
 const LlmModels = {
@@ -101,7 +101,7 @@ function getModel(
 	if (operation.includes("paper")) {
 		return openaiChat(source, operation, PAPER_MODEL, traceId);
 	}
-	if (EnvVars.isInternalSlackTeam(appConfig?.slackTeamId)) {
+	if (EnvVars.isInternalSlackApp(appConfig?.slackAppId)) {
 		return googleChat(source, operation, INTERNAL_MODEL, traceId);
 	}
 	return openaiChat(source, operation, DEFAULT_MODEL, traceId);

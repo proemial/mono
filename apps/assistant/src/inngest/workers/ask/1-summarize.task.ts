@@ -152,7 +152,7 @@ async function answerQuestion(
 
 	const result = await generateText({
 		model: await LlmAnswer.model(traceId, {
-			slackTeamId: metadata.teamId,
+			slackAppId: metadata.appId,
 		}),
 		system: prompt,
 		messages,
