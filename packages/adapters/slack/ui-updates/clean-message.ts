@@ -6,19 +6,19 @@ export async function cleanMessage(
 	blocks: any[],
 ) {
 	if (!target.channelId) {
-		throw new Error("Channel ID not found");
+		throw new Error("Channel ID not found!");
 	}
 	if (!target.threadTs && !target.ts) {
-		throw new Error("Thread TS not found");
+		throw new Error("Thread TS not found!");
 	}
 	if (!target.accessTokens.userToken) {
-		throw new Error("Access token not found");
+		throw new Error("Access token not found!");
 	}
 	if (!text) {
-		throw new Error("Text not found");
+		throw new Error("Text not found!");
 	}
 	if (!blocks) {
-		throw new Error("Blocks not found");
+		throw new Error("Blocks not found!");
 	}
 
 	const requestBody = {

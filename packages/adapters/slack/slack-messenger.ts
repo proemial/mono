@@ -42,7 +42,7 @@ export const SlackMessenger = {
 			if (target.accessTokens.userToken) {
 				const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
 				if (!userMessage) {
-					console.error("User message not found");
+					console.error("User message not found, aborting.");
 					return;
 				}
 				payload = await updateMessage(
@@ -74,7 +74,7 @@ export const SlackMessenger = {
 
 			const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
 			if (!userMessage) {
-				console.error("User message not found");
+				console.error("User message not found, aborting.");
 				return;
 			}
 
@@ -91,13 +91,13 @@ export const SlackMessenger = {
 		try {
 			const target = await getTarget(metadata);
 			if (!target?.accessTokens.userToken) {
-				console.log("User token not found");
+				console.log("User token not found, aborting.");
 				return;
 			}
 
 			const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
 			if (!userMessage) {
-				console.error("User message not found");
+				console.error("User message not found, aborting.");
 				return;
 			}
 			return await cleanMessage(target, userMessage.text, userMessage.blocks);
@@ -129,7 +129,7 @@ export const SlackMessenger = {
 			} else {
 				const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
 				if (!userMessage) {
-					console.error("User message not found");
+					console.error("User message not found, aborting.");
 					return;
 				}
 				payload = await updateStatus(target, status, userMessage.text, isError);
@@ -161,7 +161,7 @@ async function getTarget(metadata: SlackEventMetadata) {
 		metadata.user,
 	);
 	if (!accessTokens) {
-		console.log("Install not found");
+		console.log("Install not found, aborting.");
 		return undefined;
 	}
 
