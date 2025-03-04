@@ -739,11 +739,14 @@ importers:
   packages/adapters:
     dependencies:
       '@ai-sdk/anthropic':
-        specifier: ^1.0.2
+        specifier: ^1.1.13
         version: 1.1.13(zod@3.24.1)
+      '@ai-sdk/google':
+        specifier: ^1.1.19
+        version: 1.1.19(zod@3.24.1)
       '@ai-sdk/openai':
-        specifier: ^1.0.5
-        version: 1.1.15(zod@3.24.1)
+        specifier: ^1.2.0
+        version: 1.2.0(zod@3.24.1)
       '@aws-sdk/client-ec2':
         specifier: ^3.738.0
         version: 3.738.0
@@ -1051,6 +1054,17 @@ packages:
       zod: 3.24.1
     dev: false
 
+  /@ai-sdk/google@1.1.19(zod@3.24.1):
+    resolution: {integrity: sha512-Q4l2iWAADUf1pGbXX60A2nnUqEtPLtLpXsbjr3hVcgI9M3q9BqUmSoGsoJ/AAwvZU3uarEb0IJuv+7zlitvCBw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.0.0
+    dependencies:
+      '@ai-sdk/provider': 1.0.4
+      '@ai-sdk/provider-utils': 2.1.10(zod@3.24.1)
+      zod: 3.24.1
+    dev: false
+
   /@ai-sdk/mistral@1.1.0(zod@3.24.1):
     resolution: {integrity: sha512-RPOAzk6baQ8R/Cw/N9189tX6CzSOHBNf+r4I5x2H08JCsEx8nycMgwqvVzZ5lhWhaKBvHaD3KoEQSyqyqW82Gg==}
     engines: {node: '>=18'}
@@ -1084,8 +1098,8 @@ packages:
       zod: 3.24.1
     dev: false
 
-  /@ai-sdk/openai@1.1.15(zod@3.24.1):
-    resolution: {integrity: sha512-irGQx5lMrYI9gub7Sy2ZHu49D3Icf7OtfOu3X8fVKMONOyi54RTKRNjVZTewkfRNE44psTbZDO8j8qmPirOTNQ==}
+  /@ai-sdk/openai@1.2.0(zod@3.24.1):
+    resolution: {integrity: sha512-tzxH6OxKL5ffts4zJPdziQSJGGpSrQcJmuSrE92jCt7pJ4PAU5Dx4tjNNFIU8lSfwarLnywejZEt3Fz0uQZZOQ==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.0.0

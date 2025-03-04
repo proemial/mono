@@ -5,8 +5,9 @@
 	"types": "./index.ts",
 	"license": "MIT",
 	"dependencies": {
-		"@ai-sdk/anthropic": "^1.0.2",
-		"@ai-sdk/openai": "^1.0.5",
+		"@ai-sdk/anthropic": "^1.1.13",
+		"@ai-sdk/google": "^1.1.19",
+		"@ai-sdk/openai": "^1.2.0",
 		"@aws-sdk/client-ec2": "^3.738.0",
 		"@helicone/helpers": "^1.0.0",
 		"@llamaindex/core": "^0.4.20",
