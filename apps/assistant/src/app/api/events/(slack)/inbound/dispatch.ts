@@ -11,6 +11,7 @@ import { getThreeRandomStarters } from "../../../../../prompts/ask/suggestions";
 import { isSlackFileUrl } from "@proemial/adapters/slack/files/file-scraper";
 import { isTwitterUrl } from "@proemial/adapters/twitter";
 import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
+import { ScrapflyWebProxy } from "@proemial/adapters/scrapfly/webproxy";
 
 export async function dispatchSlackEvent(
 	payload: EventCallbackPayload,
@@ -28,14 +29,16 @@ export async function dispatchSlackEvent(
 			return `dispatch[${scrapeEventName}]: no url found`;
 		}
 
-		// This breaks blocked URLs
-		// Check for inaccessible URLs, unless it's a Slack file or Twitter URL
-		// if (!isSlackFileUrl(url) && !isTwitterUrl(url)) {
-		// 	const probeResponse = await fetch(url);
-		// 	if (!probeResponse.ok) {
-		// 		return `dispatch[${scrapeEventName}]: url ${url} is not accessible`;
-		// 	}
-		// }
+		// Check that the URL is accessible, unless we're already using the
+		// Scrapfly scraper, or the URL is a Slack file URL
+		if (!isSlackFileUrl(url) && !isTwitterUrl(url)) {
+			const proxy = new ScrapflyWebProxy(process.env.SCRAPFLY_API_KEY);
+			try {
+				await proxy.fetch(url);
+			} catch (error) {
+				return `dispatch[${scrapeEventName}]: url ${url} is inaccessible`;
+			}
+		}
 
 		const result = await inngest.send({
 			name: scrapeEventName,
