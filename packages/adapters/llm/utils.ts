@@ -22,7 +22,9 @@ export namespace LlmUtils {
 						type: "tool-call",
 						toolCallId,
 						toolName: args.toolName,
-						args: undefined,
+						// Args are required by some model providers (e.g. OpenAI), but not
+						// used in this synthetic case, of course.
+						args: { arg: "dummy" },
 					},
 				],
 			} satisfies CoreAssistantMessage,
