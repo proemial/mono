@@ -9,12 +9,15 @@ import { cleanMessage } from "./ui-updates/clean-message";
 import { setAssistantStatus } from "./assistant";
 import { sendMessage } from "./ui-updates/send-message";
 import { Time } from "@proemial/utils/time";
+import { SlackResponse } from "./models/event-models";
 
 export const SlackMessenger = {
 	nudgeUser: async (metadata: SlackEventMetadata) => {
 		const begin = Time.now();
 		try {
-			await nudgeUser(metadata);
+			const response = await nudgeUser(metadata);
+			console.log(response.ok);
+			await logEvent("nudge", { metadata, response }, Time.elapsed(begin));
 		} finally {
 			Time.log(begin, "[messenger][nudge]");
 		}
@@ -38,20 +41,20 @@ export const SlackMessenger = {
 				return;
 			}
 
-			let payload = {};
 			if (target.accessTokens.userToken) {
 				const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
 				if (!userMessage) {
 					console.error("User message not found, aborting.");
 					return;
 				}
-				payload = await updateMessage(
+				const response = await updateMessage(
 					target,
 					userMessage.text,
 					text,
 					url,
 					title,
 				);
+				await logEvent("update", { metadata, response }, Time.elapsed(begin));
 			}
 		} finally {
 			Time.log(begin, "[messenger][update]");
@@ -79,7 +82,14 @@ export const SlackMessenger = {
 			}
 
 			await SlackMessenger.cleanMessage(metadata);
-			return await sendMessage(target, userMessage.text, text, url, title);
+			const response = await sendMessage(
+				target,
+				userMessage.text,
+				text,
+				url,
+				title,
+			);
+			await logEvent("send", { metadata, response }, Time.elapsed(begin));
 		} finally {
 			Time.log(begin, "[messenger][send]");
 		}
@@ -100,7 +110,12 @@ export const SlackMessenger = {
 				console.error("User message not found, aborting.");
 				return;
 			}
-			return await cleanMessage(target, userMessage.text, userMessage.blocks);
+			const response = await cleanMessage(
+				target,
+				userMessage.text,
+				userMessage.blocks,
+			);
+			await logEvent("clean", { metadata, response }, Time.elapsed(begin));
 		} finally {
 			Time.log(begin, "[messenger][clean]");
 		}
@@ -175,3 +190,38 @@ async function getTarget(metadata: SlackEventMetadata) {
 
 	return target;
 }
+
+const logEvent = async (
+	action: string,
+	payload: { metadata: SlackEventMetadata; response: SlackResponse },
+	duration: number,
+) => {
+	const { metadata, response } = payload;
+	const error = response.error;
+
+	await SlackDb.eventLog.upsert({
+		...(error && {
+			status: "failed",
+		}),
+		metadata: {
+			appId: metadata.appId,
+			teamId: metadata.teamId,
+			context: {
+				channelId: metadata.channelId,
+				userId: metadata.user,
+				ts: metadata.ts,
+				threadTs: metadata.threadTs,
+			},
+		},
+		requests: [
+			{
+				type: `slack:${action}`,
+				input: { payload },
+				...(error && {
+					error,
+				}),
+				duration,
+			},
+		],
+	});
+};

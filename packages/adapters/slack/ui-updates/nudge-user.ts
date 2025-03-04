@@ -1,6 +1,7 @@
 import { SlackDb } from "../../mongodb/slack/slack.adapter";
 import { link } from "../block-kit/link-blocks";
 import { nudge } from "../block-kit/nudge-blocks";
+import { SlackResponse } from "../models/event-models";
 import { SlackEventMetadata } from "../models/metadata-models";
 
 export async function nudgeUser(metadata: SlackEventMetadata) {
@@ -17,7 +18,10 @@ export async function nudgeUser(metadata: SlackEventMetadata) {
 		metadata.user,
 	);
 	if (installs.userToken) {
-		return;
+		return {
+			ok: true,
+			status: "ignored",
+		} as SlackResponse;
 	}
 	if (!installs.teamToken) {
 		throw new Error("Team install not found");
@@ -46,12 +50,10 @@ export async function nudgeUser(metadata: SlackEventMetadata) {
 	});
 
 	const blocks = nudge(app?.metadata.clientId, metadata.teamId);
-	const invitation = await fetch(
+	const response = await fetch(
 		"https://slack.com/api/chat.postEphemeral",
 		requestBody(blocks),
 	).then((res) => res.json());
 
-	return {
-		invitation,
-	};
+	return response as SlackResponse;
 }

@@ -56,3 +56,9 @@ export type EventCallbackPayload = {
 export type SlackThread = {
 	messages: GenericMessageEvent[];
 };
+
+export type SlackResponse = {
+	ok: boolean;
+	error?: string;
+	status?: string;
+};

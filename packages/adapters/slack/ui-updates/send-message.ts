@@ -1,6 +1,7 @@
 import { SlackV2MessageTarget } from "../../mongodb/slack/v2.models";
 import { answer } from "../block-kit/answer-blocks";
 import { link } from "../block-kit/link-blocks";
+import { SlackResponse } from "../models/event-models";
 
 export async function sendMessage(
 	target: SlackV2MessageTarget,
@@ -41,7 +42,7 @@ export async function sendMessage(
 		"https://slack.com/api/chat.postMessage",
 		requestBody,
 	);
-	const response = await result.json();
+	const response = (await result.json()) as SlackResponse;
 
 	return response;
 }

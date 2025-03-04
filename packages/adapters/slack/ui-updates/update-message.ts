@@ -1,5 +1,6 @@
 import { SlackV2MessageTarget } from "../../mongodb/slack/v2.models";
 import { link } from "../block-kit/link-blocks";
+import { SlackResponse } from "../models/event-models";
 
 export async function updateMessage(
 	target: SlackV2MessageTarget,
@@ -38,7 +39,7 @@ export async function updateMessage(
 	};
 
 	const result = await fetch("https://slack.com/api/chat.update", requestBody);
-	const response = await result.json();
+	const response = (await result.json()) as SlackResponse;
 
 	return response;
 }

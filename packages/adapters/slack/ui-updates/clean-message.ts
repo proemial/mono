@@ -1,4 +1,5 @@
 import { SlackV2MessageTarget } from "../../mongodb/slack/v2.models";
+import { SlackResponse } from "../models/event-models";
 
 export async function cleanMessage(
 	target: SlackV2MessageTarget,
@@ -40,7 +41,7 @@ export async function cleanMessage(
 
 	const result = await fetch("https://slack.com/api/chat.update", requestBody);
 
-	const response = await result.json();
+	const response = (await result.json()) as SlackResponse;
 	console.log("REMOVE SUMMARY RESPONSE", response);
 
 	return response;
