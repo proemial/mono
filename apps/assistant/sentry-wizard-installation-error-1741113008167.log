@@ -1,0 +1,1 @@
+{"stdout":"","stderr":"npm ERR! code EUNSUPPORTEDPROTOCOL\nnpm ERR! Unsupported URL Type \"workspace:\": workspace:*\n\nnpm ERR! A complete log of this run can be found in: /Users/bp/.npm/_logs/2025-03-04T18_30_05_338Z-debug-0.log\n"}

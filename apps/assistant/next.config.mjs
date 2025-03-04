@@ -1,4 +1,6 @@
+import { withSentryConfig } from "@sentry/nextjs";
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
 	transpilePackages: [
 		"@proemial/adapters",
@@ -13,4 +15,8 @@ const nextConfig = {
 	}
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+	org: "proemial",
+	project: "proem-agent",
+	silent: true,
+});

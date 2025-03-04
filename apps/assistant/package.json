@@ -12,6 +12,7 @@
 		"@langchain/textsplitters": "^0.1.0",
 		"@proemial/adapters": "workspace:*",
 		"@proemial/utils": "workspace:*",
+		"@sentry/nextjs": "^9.3.0",
 		"ai": "4.0.5",
 		"csv-writer": "^1.6.0",
 		"inngest": "^3.31.6",
