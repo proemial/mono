@@ -97,7 +97,9 @@ function getTs(payload: any) {
 	return (
 		payload.event?.message?.ts ??
 		payload.event?.ts ??
-		payload.container?.message_ts
+		payload.container?.message_ts ??
+		payload.event?.assistant_thread?.thread_ts ??
+		payload.event?.assistant_thread?.context?.thread_ts
 	);
 }
 
