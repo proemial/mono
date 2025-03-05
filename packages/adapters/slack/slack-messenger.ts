@@ -1,16 +1,15 @@
-import { SlackV2MessageTarget } from "../mongodb/slack/v2.models";
-import { SlackDb } from "../mongodb/slack/slack.adapter";
-import { SlackEventMetadata } from "./models/metadata-models";
-import { nudgeUser } from "./ui-updates/nudge-user";
-import { Time } from "@proemial/utils/time";
-import { SlackResponse } from "./models/event-models";
 import { EnvVars } from "@proemial/utils/env-vars";
+import { Time } from "@proemial/utils/time";
+import { LogLevel, WebClient } from "@slack/web-api";
 import slackifyMarkdown from "slackify-markdown";
-import { WebClient, LogLevel } from "@slack/web-api";
-import { status as statusBlocks } from "./block-kit/status-blocks";
+import { SlackDb } from "../mongodb/slack/slack.adapter";
+import { answer } from "./block-kit/answer-blocks";
 import { assistantStatus } from "./block-kit/assistant-status";
 import { link } from "./block-kit/link-blocks";
-import { answer } from "./block-kit/answer-blocks";
+import { nudge } from "./block-kit/nudge-blocks";
+import { status as statusBlocks } from "./block-kit/status-blocks";
+import { SlackResponse } from "./models/event-models";
+import { SlackEventMetadata } from "./models/metadata-models";
 
 const logLevel =
 	process.env.NODE_ENV === "production" ? undefined : LogLevel.DEBUG;
@@ -19,8 +18,29 @@ export const SlackMessenger = {
 	nudgeUser: async (metadata: SlackEventMetadata) => {
 		const begin = Time.now();
 		try {
-			const response = await nudgeUser(metadata);
-			console.log(response.ok);
+			const client = await slackClient(metadata);
+			if (client.tokens.userToken) {
+				// User has already acknowledged
+				return;
+			}
+
+			const app = await SlackDb.apps.get(metadata.appId);
+			const clientId = app?.metadata.clientId as string;
+			const {
+				teamId,
+				channelId: channel,
+				user,
+				threadTs: thread_ts,
+			} = metadata;
+
+			const response = await client.asProem.chat.postEphemeral({
+				channel,
+				user,
+				// threadTs is the timestamp of the message in the thread. Exclude if the message is not in a thread.
+				...(thread_ts && { thread_ts }),
+				...nudge(clientId, teamId),
+			});
+
 			await logEvent("nudge", { metadata, response }, Time.elapsed(begin));
 		} finally {
 			Time.log(begin, "[messenger][nudge]");
@@ -179,28 +199,6 @@ async function slackClient(metadata: SlackEventMetadata) {
 function asMarkdown(metadata: SlackEventMetadata, text: string) {
 	const internal = EnvVars.isInternalSlackApp(metadata.appId);
 	return internal ? slackifyMarkdown(text) : text;
-}
-
-async function getTarget(metadata: SlackEventMetadata) {
-	const accessTokens = await SlackDb.installs.getTokensForUserAndTeam(
-		metadata.teamId,
-		metadata.appId,
-		metadata.user,
-	);
-	if (!accessTokens) {
-		console.log("Install not found, aborting.");
-		return undefined;
-	}
-
-	const target = {
-		channelId: metadata.channelId,
-		ts: metadata.ts,
-		threadTs: metadata.threadTs,
-		accessTokens,
-		target: metadata.target,
-	} as SlackV2MessageTarget;
-
-	return target;
 }
 
 const logEvent = async (
