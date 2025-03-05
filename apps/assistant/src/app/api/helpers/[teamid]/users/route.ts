@@ -13,15 +13,18 @@ export async function GET(
 		return NextResponse.json({ error: "App not found" }, { status: 404 });
 	}
 
-	const result = await fetch("https://slack.com/api/users.list", {
+	const result = await fetch("https://slack.com/api/users.list?limit=200", {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json; charset=utf-8",
 			Authorization: `Bearer ${app.metadata.accessToken}`,
 		},
 	});
-
 	const json = await result.json();
+
+	// https://api.slack.com/apis/pagination#methods
+	console.log("response_metadata", json.response_metadata);
+
 	return NextResponse.json(
 		json.members
 			.filter(
