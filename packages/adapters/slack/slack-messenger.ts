@@ -2,16 +2,19 @@ import { SlackV2MessageTarget } from "../mongodb/slack/v2.models";
 import { SlackDb } from "../mongodb/slack/slack.adapter";
 import { SlackEventMetadata } from "./models/metadata-models";
 import { updateMessage } from "./ui-updates/update-message";
-import { showSuggestions } from "./ui-updates/show-suggestions";
-import { updateStatus } from "./ui-updates/update-status";
 import { nudgeUser } from "./ui-updates/nudge-user";
 import { cleanMessage } from "./ui-updates/clean-message";
-import { setAssistantStatus } from "./assistant";
 import { sendMessage } from "./ui-updates/send-message";
 import { Time } from "@proemial/utils/time";
 import { SlackResponse } from "./models/event-models";
 import { EnvVars } from "@proemial/utils/env-vars";
 import slackifyMarkdown from "slackify-markdown";
+import { WebClient, LogLevel } from "@slack/web-api";
+import { status as statusBlocks } from "./block-kit/status-blocks";
+import { assistantStatus } from "./block-kit/assistant-status";
+
+const logLevel =
+	process.env.NODE_ENV === "production" ? undefined : LogLevel.DEBUG;
 
 export const SlackMessenger = {
 	nudgeUser: async (metadata: SlackEventMetadata) => {
@@ -135,25 +138,20 @@ export const SlackMessenger = {
 		const begin = Time.now();
 
 		try {
-			const target = await getTarget(metadata);
-			if (!target) {
-				return;
-			}
+			const client = await slackClient(metadata);
 
-			let payload = {};
 			if (metadata.isAssistant) {
-				payload = await setAssistantStatus(
-					metadata,
-					target.accessTokens.teamToken,
-					status,
-				);
+				await client.asProem.assistant.threads.setStatus({
+					thread_ts: metadata.threadTs as string,
+					channel_id: metadata.channelId,
+					...assistantStatus(status),
+				});
 			} else {
-				const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
-				if (!userMessage) {
-					console.error("User message not found, aborting.");
-					return;
-				}
-				payload = await updateStatus(target, status, userMessage.text, isError);
+				await client.asUser.chat.update({
+					channel: metadata.channelId,
+					ts: metadata.ts as string,
+					...statusBlocks(metadata.target, status, isError),
+				});
 			}
 		} finally {
 			Time.log(begin, "[messenger][status]");
@@ -161,18 +159,47 @@ export const SlackMessenger = {
 	},
 
 	showSuggestions: async (
-		metadata: SlackEventMetadata | undefined,
+		metadata: SlackEventMetadata,
 		suggestions: string[],
 		title?: string,
 	) => {
 		const begin = Time.now();
 
 		try {
-			return await showSuggestions(metadata, suggestions, title);
+			const client = await slackClient(metadata);
+
+			await client.asProem.assistant.threads.setSuggestedPrompts({
+				channel_id: metadata.channelId,
+				thread_ts: metadata.threadTs as string,
+				title,
+				// @ts-ignore
+				prompts: suggestions.map((suggestion) => ({
+					title: suggestion,
+					message: suggestion,
+				})),
+			});
 		} finally {
 			Time.log(begin, "[messenger][suggestions]");
 		}
 	},
+};
+
+const slackClient = async (metadata: SlackEventMetadata) => {
+	const tokens = await SlackDb.installs.getTokensForUserAndTeam(
+		metadata.teamId,
+		metadata.appId,
+		metadata.user,
+	);
+
+	return {
+		asUser: new WebClient(tokens.userToken, {
+			logLevel,
+		}),
+		asProem: new WebClient(tokens.teamToken, {
+			logLevel,
+		}),
+		tokens,
+	};
 };
 
 async function getTarget(metadata: SlackEventMetadata) {

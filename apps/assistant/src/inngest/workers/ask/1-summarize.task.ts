@@ -55,6 +55,7 @@ export const askTask = {
 const taskWorker = async (payload: SlackAskEvent) => {
 	const metadata = payload.metadata as SlackEventMetadata;
 
+	await SlackMessenger.updateStatus(metadata, statusMessages.ask.begin);
 	await SlackMessenger.nudgeUser(payload.metadata);
 
 	const messages = await getMessages(metadata, payload.question);
@@ -244,7 +245,6 @@ export async function fetchPapers(query: string) {
 
 async function getMessages(metadata: SlackEventMetadata, question?: string) {
 	if (metadata.threadTs) {
-		await SlackMessenger.updateStatus(metadata, statusMessages.ask.begin);
 		return await getThreadMessagesForAi(metadata);
 	}
 

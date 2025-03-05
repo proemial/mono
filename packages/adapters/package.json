@@ -17,6 +17,7 @@
 		"@proemial/utils": "workspace:*",
 		"@qdrant/js-client-rest": "^1.11.0",
 		"@slack/types": "^2.14.0",
+		"@slack/web-api": "^7.8.0",
 		"@upstash/redis": "^1.34.0",
 		"ai": "^3.4.33",
 		"dayjs": "^1.11.12",

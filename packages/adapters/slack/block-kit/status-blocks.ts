@@ -1,12 +1,7 @@
 import { Colors } from "../ui-updates/colors";
-import { SlackV2MessageTarget } from "../../mongodb/slack/v2.models";
 
-export function status(
-	target: SlackV2MessageTarget,
-	text: string,
-	error?: boolean,
-) {
-	const preloader = target.target === "annotate" && !error;
+export function status(target: string, text: string, error?: boolean) {
+	const preloader = target === "annotate" && !error;
 	return {
 		attachments: [
 			{
