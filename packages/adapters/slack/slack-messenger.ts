@@ -1,7 +1,6 @@
 import { SlackV2MessageTarget } from "../mongodb/slack/v2.models";
 import { SlackDb } from "../mongodb/slack/slack.adapter";
 import { SlackEventMetadata } from "./models/metadata-models";
-import { updateMessage } from "./ui-updates/update-message";
 import { nudgeUser } from "./ui-updates/nudge-user";
 import { cleanMessage } from "./ui-updates/clean-message";
 import { sendMessage } from "./ui-updates/send-message";
@@ -12,6 +11,7 @@ import slackifyMarkdown from "slackify-markdown";
 import { WebClient, LogLevel } from "@slack/web-api";
 import { status as statusBlocks } from "./block-kit/status-blocks";
 import { assistantStatus } from "./block-kit/assistant-status";
+import { link } from "./block-kit/link-blocks";
 
 const logLevel =
 	process.env.NODE_ENV === "production" ? undefined : LogLevel.DEBUG;
@@ -41,24 +41,15 @@ export const SlackMessenger = {
 				return await SlackMessenger.sendMessage(metadata, text, url, title);
 			}
 
-			const target = await getTarget(metadata);
-			if (!target) {
-				return;
-			}
-
-			if (target.accessTokens.userToken) {
+			const client = await slackClient(metadata);
+			if (client.tokens.userToken) {
 				const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
-				if (!userMessage) {
-					console.error("User message not found, aborting.");
-					return;
-				}
-				const response = await updateMessage(
-					target,
-					userMessage.text,
-					text,
-					url,
-					title,
-				);
+				const response = await client.asUser.chat.update({
+					channel: metadata.channelId,
+					ts: metadata.ts as string,
+					text: userMessage?.text,
+					...link(text, url, title),
+				});
 				await logEvent("update", { metadata, response }, Time.elapsed(begin));
 			}
 		} finally {
