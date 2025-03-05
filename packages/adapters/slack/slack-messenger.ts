@@ -2,7 +2,6 @@ import { SlackV2MessageTarget } from "../mongodb/slack/v2.models";
 import { SlackDb } from "../mongodb/slack/slack.adapter";
 import { SlackEventMetadata } from "./models/metadata-models";
 import { nudgeUser } from "./ui-updates/nudge-user";
-import { cleanMessage } from "./ui-updates/clean-message";
 import { Time } from "@proemial/utils/time";
 import { SlackResponse } from "./models/event-models";
 import { EnvVars } from "@proemial/utils/env-vars";
@@ -84,23 +83,21 @@ export const SlackMessenger = {
 	cleanMessage: async (metadata: SlackEventMetadata) => {
 		const begin = Time.now();
 
+		if (metadata.isAssistant) {
+			return;
+		}
+
 		try {
-			const target = await getTarget(metadata);
-			if (!target?.accessTokens.userToken) {
-				console.log("User token not found, aborting.");
-				return;
-			}
+			const client = await slackClient(metadata);
 
 			const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
-			if (!userMessage) {
-				console.error("User message not found, aborting.");
-				return;
-			}
-			const response = await cleanMessage(
-				target,
-				userMessage.text,
-				userMessage.blocks,
-			);
+			const response = await client.asUser.chat.update({
+				channel: metadata.channelId,
+				ts: metadata.ts as string,
+				text: userMessage?.text,
+				blocks: userMessage?.blocks,
+				attachments: [],
+			});
 			await logEvent("clean", { metadata, response }, Time.elapsed(begin));
 		} finally {
 			Time.log(begin, "[messenger][clean]");
