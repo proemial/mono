@@ -1,4 +1,4 @@
-import { Colors } from "../ui-updates/colors";
+import { Colors } from "./colors";
 
 export function status(target: string, text: string, error?: boolean) {
 	const preloader = target === "annotate" && !error;

@@ -5,7 +5,7 @@ import { eventName as askEventName } from "@/inngest/workers/ask/1-summarize.tas
 import { inngest } from "@/inngest/client";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { extractLinks } from "@proemial/adapters/slack/helpers/links";
-import { EphemeralMessage } from "@proemial/adapters/slack/ui-updates/ephemeral-message";
+import { removeOriginal } from "@proemial/adapters/slack/helpers/remove-ephemeral";
 import { getThreeRandomStarters } from "../../../../../prompts/ask/suggestions";
 import { isSlackFileUrl } from "@proemial/adapters/slack/files/file-scraper";
 import { isTwitterUrl } from "@proemial/adapters/twitter";
@@ -66,7 +66,7 @@ export async function dispatchSlackEvent(
 
 	if (metadata.target === "dismiss") {
 		const team = await SlackDb.installs.get(metadata.teamId, metadata.appId);
-		await EphemeralMessage.removeOriginal(
+		await removeOriginal(
 			payload.response_url,
 			team?.metadata?.accessToken as string,
 		);
