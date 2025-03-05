@@ -3,7 +3,6 @@ import { SlackDb } from "../mongodb/slack/slack.adapter";
 import { SlackEventMetadata } from "./models/metadata-models";
 import { nudgeUser } from "./ui-updates/nudge-user";
 import { cleanMessage } from "./ui-updates/clean-message";
-import { sendMessage } from "./ui-updates/send-message";
 import { Time } from "@proemial/utils/time";
 import { SlackResponse } from "./models/event-models";
 import { EnvVars } from "@proemial/utils/env-vars";
@@ -12,6 +11,7 @@ import { WebClient, LogLevel } from "@slack/web-api";
 import { status as statusBlocks } from "./block-kit/status-blocks";
 import { assistantStatus } from "./block-kit/assistant-status";
 import { link } from "./block-kit/link-blocks";
+import { answer } from "./block-kit/answer-blocks";
 
 const logLevel =
 	process.env.NODE_ENV === "production" ? undefined : LogLevel.DEBUG;
@@ -66,29 +66,15 @@ export const SlackMessenger = {
 		const begin = Time.now();
 
 		try {
-			const target = await getTarget(metadata);
-			if (!target) {
-				return;
-			}
-
-			const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
-			if (!userMessage) {
-				console.error("User message not found, aborting.");
-				return;
-			}
+			const client = await slackClient(metadata);
 
 			await SlackMessenger.cleanMessage(metadata);
 
-			const internal = EnvVars.isInternalSlackApp(metadata.appId);
-			const markdown = internal ? slackifyMarkdown(text) : text;
-
-			const response = await sendMessage(
-				target,
-				userMessage.text,
-				markdown,
-				url,
-				title,
-			);
+			const response = await client.asProem.chat.postMessage({
+				channel: metadata.channelId,
+				thread_ts: metadata.ts as string,
+				...answer(asMarkdown(metadata, text), url, title),
+			});
 			await logEvent("send", { metadata, response }, Time.elapsed(begin));
 		} finally {
 			Time.log(begin, "[messenger][send]");
@@ -175,7 +161,7 @@ export const SlackMessenger = {
 	},
 };
 
-const slackClient = async (metadata: SlackEventMetadata) => {
+async function slackClient(metadata: SlackEventMetadata) {
 	const tokens = await SlackDb.installs.getTokensForUserAndTeam(
 		metadata.teamId,
 		metadata.appId,
@@ -191,7 +177,12 @@ const slackClient = async (metadata: SlackEventMetadata) => {
 		}),
 		tokens,
 	};
-};
+}
+
+function asMarkdown(metadata: SlackEventMetadata, text: string) {
+	const internal = EnvVars.isInternalSlackApp(metadata.appId);
+	return internal ? slackifyMarkdown(text) : text;
+}
 
 async function getTarget(metadata: SlackEventMetadata) {
 	const accessTokens = await SlackDb.installs.getTokensForUserAndTeam(
