@@ -55,21 +55,12 @@ export function classifyRequest(
 			return ignored;
 		}
 	}
-	if (payload.event?.subtype && !extractLinks(payload.event.text).length) {
-		log(
-			"exit[subtype]",
-			payload.event.subtype,
-			!extractLinks(payload.event.text).length,
-		);
-		return ignored;
-	}
-	if (payload.event?.type === "assistant_thread_context_changed") {
-		log("exit[assistant_thread_context_changed]");
-		return ignored;
-	}
-	if (payload.type === "block_actions") {
-		log("exit[block_actions]");
-		return ignored;
+
+	if (
+		extractLinks(payload.event?.text, URL_BLACKLIST).length > 0 ||
+		(payload.event?.subtype === "file_share" && payload.event?.files?.[0])
+	) {
+		return "annotate";
 	}
 
 	// Annotation of links and files
@@ -85,13 +76,6 @@ export function classifyRequest(
 			payload.event?.channel,
 		);
 		return ignored;
-	}
-
-	if (
-		extractLinks(payload.event?.text, URL_BLACKLIST).length > 0 ||
-		(payload.event?.subtype === "file_share" && payload.event?.files?.[0])
-	) {
-		return "annotate";
 	}
 
 	if (nakedMention(payload)) {
@@ -112,6 +96,24 @@ export function classifyRequest(
 		payload.event?.type === "app_mention"
 	) {
 		return "answer";
+	}
+
+	if (payload.event?.subtype && !extractLinks(payload.event.text).length) {
+		log(
+			"exit[subtype]",
+			payload.event.subtype,
+			!extractLinks(payload.event.text).length,
+		);
+		return ignored;
+	}
+	if (payload.event?.type === "assistant_thread_context_changed") {
+		log("exit[assistant_thread_context_changed]");
+		return ignored;
+	}
+	if (payload.type === "block_actions") {
+		log("exit[block_actions]");
+		log(JSON.stringify(payload));
+		return ignored;
 	}
 
 	return "unknown";

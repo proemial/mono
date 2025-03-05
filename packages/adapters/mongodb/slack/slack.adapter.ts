@@ -84,8 +84,8 @@ export const SlackDb = {
 						type: string;
 						input: { payload: SlackEventCallback };
 					}[]
-				).find((r) => r.type !== "ignored" && r.input.payload.event.text)?.input
-					.payload.event;
+				).find((r) => r.type !== "ignored" && r.input.payload.event?.text)
+					?.input.payload.event;
 			} finally {
 				Time.log(begin, "[db][eventLog][getUserMessage]");
 			}
