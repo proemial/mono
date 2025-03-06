@@ -9,8 +9,8 @@ import { removeOriginal } from "@proemial/adapters/slack/helpers/remove-ephemera
 import { getThreeRandomStarters } from "../../../../../prompts/ask/suggestions";
 import { isSlackFileUrl } from "@proemial/adapters/slack/files/file-scraper";
 import { isTwitterUrl } from "@proemial/adapters/twitter";
-import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { ScrapflyWebProxy } from "@proemial/adapters/scrapfly/webproxy";
+import { Slack } from "@/inngest/workers/helpers/slack";
 
 export async function dispatchSlackEvent(
 	payload: EventCallbackPayload,
@@ -74,7 +74,7 @@ export async function dispatchSlackEvent(
 	}
 
 	if (metadata.target === "suggestions") {
-		await SlackMessenger.showSuggestions(
+		await Slack.showSuggestions(
 			metadata,
 			getThreeRandomStarters(),
 			"Trustworthy answers to any question, such as:",
@@ -82,7 +82,7 @@ export async function dispatchSlackEvent(
 	}
 
 	if (metadata.target === "nudge") {
-		await SlackMessenger.nudgeUser(metadata);
+		await Slack.nudgeForPermissions(metadata);
 		return "nudged";
 	}
 

@@ -56,10 +56,6 @@ export const SlackMessenger = {
 		const begin = Time.now();
 
 		try {
-			if (metadata.isAssistant) {
-				return await SlackMessenger.sendMessage(metadata, text, url, title);
-			}
-
 			const client = await slackClient(metadata);
 			if (client.tokens.userToken) {
 				const userMessage = await SlackDb.eventLog.getUserMessage(metadata);
@@ -87,12 +83,14 @@ export const SlackMessenger = {
 		try {
 			const client = await slackClient(metadata);
 
-			await SlackMessenger.cleanMessage(metadata);
+			const body = url
+				? link(text, url, title)
+				: answer(asMarkdown(metadata, text));
 
 			const response = await client.asProem.chat.postMessage({
 				channel: metadata.channelId,
 				thread_ts: metadata.ts as string,
-				...answer(asMarkdown(metadata, text), url, title),
+				...body,
 			});
 			await logEvent("send", { metadata, response }, Time.elapsed(begin));
 		} finally {
@@ -100,7 +98,7 @@ export const SlackMessenger = {
 		}
 	},
 
-	cleanMessage: async (metadata: SlackEventMetadata) => {
+	removeAttachments: async (metadata: SlackEventMetadata) => {
 		const begin = Time.now();
 
 		if (metadata.isAssistant) {

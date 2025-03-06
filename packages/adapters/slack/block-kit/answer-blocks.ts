@@ -1,4 +1,4 @@
-export function answer(text: string, url?: string, title?: string) {
+export function answer(text: string) {
 	return {
 		blocks: [
 			{

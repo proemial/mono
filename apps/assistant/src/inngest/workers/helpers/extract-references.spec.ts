@@ -1,4 +1,4 @@
-import { extractPapers, LlmStep } from "./extract-references";
+import { extractPapers, LlmStep } from "../ask/extract-references";
 import { describe, it, expect } from "vitest";
 
 describe("uuid", () => {

@@ -1,4 +1,4 @@
-import { QdrantPaper } from "./1-summarize.task";
+import { QdrantPaper } from "../ask/1-summarize.task";
 
 export function extractPapers(result: LlmSteps) {
 	const tools = result.steps

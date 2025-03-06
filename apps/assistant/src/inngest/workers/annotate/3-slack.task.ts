@@ -3,8 +3,8 @@ import { inngest } from "../../client";
 import { AnnotateRouter } from "@/inngest/routing";
 import { SlackAnnotateEvent } from "../../workers";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
-import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { Metrics } from "../metrics";
+import { Slack } from "../helpers/slack";
 
 export const eventName = "annotate/slack";
 const eventId = "annotate/slack/fn";
@@ -51,7 +51,7 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 		throw new Error("No query found");
 	}
 
-	await SlackMessenger.updateMessage(
+	await Slack.postSummary(
 		payload.metadata,
 		scraped.summaries.query,
 		scraped.url,

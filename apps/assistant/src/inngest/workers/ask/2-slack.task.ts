@@ -2,10 +2,8 @@ import { Time } from "@proemial/utils/time";
 import { inngest } from "../../client";
 import { AskRouter } from "@/inngest/routing";
 import { SlackAskEvent } from "../../workers";
-import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
-import { SlackEventCallback } from "@proemial/adapters/mongodb/slack/events.types";
-import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { Metrics } from "../metrics";
+import { Slack } from "../helpers/slack";
 
 export const eventName = "ask/slack";
 const eventId = "ask/slack/fn";
@@ -47,7 +45,7 @@ const taskWorker = async (payload: SlackAskEvent) => {
 		throw new Error("No metadata provided");
 	}
 
-	await SlackMessenger.sendMessage(payload.metadata, payload.answer);
+	await Slack.postAnswer(payload.metadata, payload.answer);
 
 	// Next step from router
 	const next = AskRouter.next(

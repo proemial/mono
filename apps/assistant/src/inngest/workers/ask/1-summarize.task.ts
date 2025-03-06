@@ -10,7 +10,6 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
 import { getThreadMessagesForAi } from "@proemial/adapters/slack/helpers/thread";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
-import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { Time } from "@proemial/utils/time";
 import { uuid } from "@proemial/utils/uid";
 import { CoreMessage, CoreUserMessage, generateText } from "ai";
@@ -18,7 +17,8 @@ import { z } from "zod";
 import { inngest } from "../../client";
 import { SlackAskEvent } from "../../workers";
 import { Metrics } from "../metrics";
-import { LlmSteps, extractPapers } from "./extract-references";
+import { LlmSteps, extractPapers } from "../helpers/extract-references";
+import { Slack } from "../helpers/slack";
 
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
@@ -55,8 +55,8 @@ export const askTask = {
 const taskWorker = async (payload: SlackAskEvent) => {
 	const metadata = payload.metadata as SlackEventMetadata;
 
-	await SlackMessenger.updateStatus(metadata, statusMessages.ask.begin);
-	await SlackMessenger.nudgeUser(payload.metadata);
+	await Slack.updateStatus(metadata, statusMessages.ask.begin);
+	await Slack.nudgeForPermissions(payload.metadata);
 
 	const messages = await getMessages(metadata, payload.question);
 	if (messages.length === 0) {
@@ -172,7 +172,7 @@ async function answerQuestion(
 					query: z.string().describe("The search query"),
 				}),
 				execute: async ({ query }) => {
-					await SlackMessenger.updateStatus(metadata, statusMessages.ask.fetch);
+					await Slack.updateStatus(metadata, statusMessages.ask.fetch);
 					console.log("Retrieving papers", query);
 					const papers = (await logRetrieval(
 						"assistant",
@@ -182,10 +182,7 @@ async function answerQuestion(
 						},
 						traceId,
 					)) as RetrievalResult;
-					await SlackMessenger.updateStatus(
-						metadata,
-						statusMessages.ask.summarize,
-					);
+					await Slack.updateStatus(metadata, statusMessages.ask.summarize);
 
 					console.log("Papers retrieved", papers.length);
 

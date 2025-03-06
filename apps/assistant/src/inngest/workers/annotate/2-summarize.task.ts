@@ -7,11 +7,11 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { uuid5 } from "@proemial/utils/uuid";
 import { Summaries } from "@proemial/adapters/mongodb/slack/scraped.types";
 import { statusMessages } from "@/inngest/status-messages";
-import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { generateText, Message } from "ai";
 import { proxyToN8n } from "@/app/api/events/(n8n)/n8nProxy";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 import { Metrics } from "../metrics";
+import { Slack } from "../helpers/slack";
 
 export const eventName = "annotate/query";
 const eventId = "annotate/query/fn";
@@ -49,10 +49,7 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 	if (!payload.url) {
 		throw new Error("No url provided");
 	}
-	await SlackMessenger.updateStatus(
-		payload.metadata,
-		statusMessages.annotate.summarize,
-	);
+	await Slack.updateStatus(payload.metadata, statusMessages.annotate.summarize);
 
 	const scraped = await SlackDb.scraped.get(payload.url);
 	if (!scraped) {
