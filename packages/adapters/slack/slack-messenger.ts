@@ -1,4 +1,3 @@
-import { EnvVars } from "@proemial/utils/env-vars";
 import { Time } from "@proemial/utils/time";
 import { LogLevel, WebClient } from "@slack/web-api";
 import slackifyMarkdown from "slackify-markdown";
@@ -86,7 +85,7 @@ export const SlackMessenger = {
 
 			const body = url
 				? link(text, url, title)
-				: answer(asMarkdown(metadata, text));
+				: answer(slackifyMarkdown(text));
 
 			if (client.tokens.userToken) {
 				const payload = {
@@ -121,7 +120,7 @@ export const SlackMessenger = {
 
 			const body = url
 				? link(text, url, title)
-				: answer(asMarkdown(metadata, text));
+				: answer(slackifyMarkdown(text));
 
 			const payload = {
 				channel: metadata.channelId,
@@ -268,11 +267,6 @@ function logRequest(action: string, payload: any) {
 		return;
 	}
 	console.log("logRequest", JSON.stringify({ action, payload }));
-}
-
-function asMarkdown(metadata: SlackEventMetadata, text: string) {
-	const internal = EnvVars.isInternalSlackApp(metadata.appId);
-	return internal ? slackifyMarkdown(text) : text;
 }
 
 const logEvent = async (
