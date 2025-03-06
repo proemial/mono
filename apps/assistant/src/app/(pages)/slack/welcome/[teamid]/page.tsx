@@ -28,7 +28,7 @@ export default function WelcomePage() {
 
 				<div className="text-center flex gap-6 flex-col">
 					<p className="text-lg text-zinc-700">
-						<span className="font-black">@proem</span> has joined your Slack
+						<span className="font-bold">@proem</span> has joined your Slack
 						workspace.
 					</p>
 
