@@ -31,8 +31,9 @@ export function classifyRequest(
 	}
 
 	if (
-		extractLinks(payload.event?.text, URL_BLACKLIST).length > 0 ||
-		(payload.event?.subtype === "file_share" && payload.event?.files?.[0])
+		!payload.event?.bot_profile &&
+		(extractLinks(payload.event?.text, URL_BLACKLIST).length > 0 ||
+			(payload.event?.subtype === "file_share" && payload.event?.files?.[0]))
 	) {
 		return "annotate";
 	}

@@ -2,16 +2,28 @@ import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-mod
 import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 
 export const Slack = {
-	nudgeForPermissions: async (metadata: SlackEventMetadata) => {
-		await SlackMessenger.nudgeUser(metadata);
-	},
-
 	updateStatus: async (
 		metadata: SlackEventMetadata,
 		status: string,
 		isError?: boolean,
+		begin?: boolean,
 	) => {
-		await SlackMessenger.updateStatus(metadata, status, isError);
+		if (metadata.isAssistant) {
+			return await SlackMessenger.updateAssistantStatus(metadata, status);
+		}
+
+		if (begin) {
+			const showInChannel =
+				metadata.target === "annotate" && !metadata.threadTs && !isError;
+
+			return await SlackMessenger.postStatus(
+				metadata,
+				status,
+				isError,
+				showInChannel,
+			);
+		}
+		return await SlackMessenger.updateStatus(metadata, status, isError);
 	},
 
 	postSummary: async (
@@ -23,12 +35,14 @@ export const Slack = {
 		if (metadata.isAssistant) {
 			return await SlackMessenger.sendMessage(metadata, summary, url, title);
 		}
-		await SlackMessenger.updateMessage(metadata, summary, url, title);
+		return await SlackMessenger.updateMessage(metadata, summary, url, title);
 	},
 
 	postAnswer: async (metadata: SlackEventMetadata, answer: string) => {
-		await SlackMessenger.removeAttachments(metadata);
-		await SlackMessenger.sendMessage(metadata, answer);
+		if (metadata.isAssistant) {
+			return await SlackMessenger.sendMessage(metadata, answer);
+		}
+		return await SlackMessenger.updateMessage(metadata, answer);
 	},
 
 	showSuggestions: async (
@@ -36,6 +50,10 @@ export const Slack = {
 		suggestions: string[],
 		title: string,
 	) => {
-		await SlackMessenger.showSuggestions(metadata, suggestions, title);
+		return await SlackMessenger.showAssistantSuggestions(
+			metadata,
+			suggestions,
+			title,
+		);
 	},
 };

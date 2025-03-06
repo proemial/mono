@@ -81,10 +81,5 @@ export async function dispatchSlackEvent(
 		);
 	}
 
-	if (metadata.target === "nudge") {
-		await Slack.nudgeForPermissions(metadata);
-		return "nudged";
-	}
-
 	return undefined;
 }

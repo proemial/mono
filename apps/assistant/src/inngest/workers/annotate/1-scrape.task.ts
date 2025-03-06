@@ -54,9 +54,13 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 	try {
 		const begin = Time.now();
 
-		await Slack.nudgeForPermissions(payload.metadata);
-
-		await Slack.updateStatus(payload.metadata, statusMessages.annotate.begin);
+		const status = await Slack.updateStatus(
+			payload.metadata,
+			statusMessages.annotate.begin,
+			false,
+			true,
+		);
+		payload.metadata.replyTs = status.ts ?? undefined;
 
 		const normalizedUrl = isYouTubeUrl(payload.url)
 			? normalizeYouTubeUrl(payload.url)

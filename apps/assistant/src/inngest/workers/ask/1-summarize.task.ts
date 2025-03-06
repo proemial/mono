@@ -55,8 +55,13 @@ export const askTask = {
 const taskWorker = async (payload: SlackAskEvent) => {
 	const metadata = payload.metadata as SlackEventMetadata;
 
-	await Slack.updateStatus(metadata, statusMessages.ask.begin);
-	await Slack.nudgeForPermissions(payload.metadata);
+	const status = await Slack.updateStatus(
+		metadata,
+		statusMessages.ask.begin,
+		false,
+		true,
+	);
+	payload.metadata.replyTs = status.ts;
 
 	const messages = await getMessages(metadata, payload.question);
 	if (messages.length === 0) {

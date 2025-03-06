@@ -6,6 +6,7 @@ export type SlackEventMetadata = {
 	user: string;
 	ts?: string;
 	threadTs?: string;
+	replyTs?: string;
 	isAssistant: boolean;
 	target: string;
 };
