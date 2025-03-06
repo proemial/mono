@@ -21,7 +21,7 @@ export const Slack = {
 		title: string,
 	) => {
 		if (metadata.isAssistant) {
-			await SlackMessenger.sendMessage(metadata, summary, url, title);
+			return await SlackMessenger.sendMessage(metadata, summary, url, title);
 		}
 		await SlackMessenger.updateMessage(metadata, summary, url, title);
 	},
