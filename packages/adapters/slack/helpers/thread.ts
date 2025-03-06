@@ -14,7 +14,7 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 		metadata.teamId,
 		metadata.appId,
 	);
-	console.log("input messages", JSON.stringify(messages));
+	// console.log("input messages", JSON.stringify(messages));
 
 	const outputMessages: CoreMessage[] = [];
 
@@ -69,7 +69,7 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 			}
 		}
 	}
-	console.log("output messages", JSON.stringify(outputMessages));
+	// console.log("output messages", JSON.stringify(outputMessages));
 
 	return outputMessages;
 }

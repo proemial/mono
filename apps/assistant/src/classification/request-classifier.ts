@@ -12,7 +12,7 @@ export function classifyRequest(
 ) {
 	const workers = event?.requests.filter((r) => r.type.includes("worker:"));
 	if (workers?.length) {
-		log("exit[started]", workers.length);
+		log("already started", workers.length);
 		return ignored;
 	}
 
@@ -26,34 +26,8 @@ export function classifyRequest(
 		return "dismiss";
 	}
 
-	// Show assistant suggestions
 	if (payload.event?.type === "assistant_thread_started") {
 		return "suggestions";
-	}
-
-	// Unhandled event types
-	if (payload.type === "url_verification") {
-		log("exit[url_verification]", payload.challenge);
-		return ignored;
-	}
-	if (payload.type === "ssl_check") {
-		log("exit[ssl_check]");
-		return ignored;
-	}
-	if (payload.event?.bot_profile) {
-		log("exit[bot_profile]");
-		return ignored;
-	}
-	if (payload.event?.subtype === "file_share") {
-		const file = payload.event.files?.[0];
-		if (file && !FILE_TYPE_WHITELIST.includes(file.mimetype)) {
-			log("exit[file_share_unsupported]", file.name, file.mimetype);
-			return ignored;
-		}
-		if (file && file.size > FILE_SIZE_LIMIT) {
-			log("exit[file_share_too_large]", file.name, file.size);
-			return ignored;
-		}
 	}
 
 	if (
@@ -63,62 +37,20 @@ export function classifyRequest(
 		return "annotate";
 	}
 
-	// Annotation of links and files
+	// Mention or user message in assistant thread
 	if (
-		payload.event?.type === "message" &&
-		!extractLinks(payload.event.text, URL_BLACKLIST).length &&
-		!payload.event?.channel.startsWith("D")
-	) {
-		log(
-			"exit[message]",
-			payload.event?.type,
-			!extractLinks(payload.event.text, URL_BLACKLIST).length,
-			payload.event?.channel,
-		);
-		return ignored;
-	}
-
-	if (nakedMention(payload)) {
-		return "nudge";
-	}
-
-	// Answer to a questions
-	if (payload.event?.type === "app_mention" && payload.event?.attachments) {
-		log(
-			"exit[app_mention_modified]",
-			payload.event?.type === "app_mention",
-			payload.event?.attachments?.length,
-		);
-		return ignored;
-	}
-	if (
-		payload.event?.type === "message" ||
-		payload.event?.type === "app_mention"
+		payload.event?.type === "app_mention" ||
+		(payload.event?.channel.startsWith("D") &&
+			payload.event.user !== payload.event.parent_user_id)
 	) {
 		return "answer";
 	}
 
-	if (payload.event?.subtype && !extractLinks(payload.event.text).length) {
-		log(
-			"exit[subtype]",
-			payload.event.subtype,
-			!extractLinks(payload.event.text).length,
-		);
-		return ignored;
-	}
-	if (payload.event?.type === "assistant_thread_context_changed") {
-		log("exit[assistant_thread_context_changed]");
-		return ignored;
-	}
-	if (payload.type === "block_actions") {
-		log("exit[block_actions]");
-		log(JSON.stringify(payload));
-		return ignored;
-	}
+	log("unhandled", payload.type, payload.event?.type);
 
-	return "unknown";
+	return ignored;
 }
 
 function log(message: string, ...args: unknown[]) {
-	console.log(`EXIT: ${message}`, ...args);
+	console.log(`IGNORE: ${message}`, ...args);
 }
