@@ -30,10 +30,24 @@ export function classifyRequest(
 		return "suggestions";
 	}
 
+	if (payload.event?.subtype === "file_share") {
+		const file = payload.event?.files?.[0];
+		if (file) {
+			if (!FILE_TYPE_WHITELIST.includes(file.mimetype)) {
+				log("unsupported file type", file.mimetype, file.size);
+				return ignored;
+			}
+			if (file.size > FILE_SIZE_LIMIT) {
+				log("file too large", file.mimetype, file.size);
+				return ignored;
+			}
+			return "annotate";
+		}
+	}
+
 	if (
 		!payload.event?.bot_profile &&
-		(extractLinks(payload.event?.text, URL_BLACKLIST).length > 0 ||
-			(payload.event?.subtype === "file_share" && payload.event?.files?.[0]))
+		extractLinks(payload.event?.text, URL_BLACKLIST).length > 0
 	) {
 		return "annotate";
 	}
