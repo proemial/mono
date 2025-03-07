@@ -14,7 +14,7 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 		metadata.teamId,
 		metadata.appId,
 	);
-	// console.log("input messages", JSON.stringify(messages));
+	console.log("input messages", JSON.stringify(messages));
 
 	const outputMessages: CoreMessage[] = [];
 
@@ -27,7 +27,9 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 		const sanitized = message.text.replaceAll("\n", " ").replaceAll('"', " ");
 		// TODO: replace usernames such as <@U08B132LUBZ> with @username
 
-		if (!message.bot_id) {
+		// @ts-ignore We need to ignore this typing error, as username will be there when the
+		// bot is posting with a custom avatar, which is what we do on followups
+		if (!message.bot_id || message.username) {
 			// user message
 			outputMessages.push({
 				content: sanitized,
@@ -70,7 +72,7 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 			}
 		}
 	}
-	// console.log("output messages", JSON.stringify(outputMessages));
+	console.log("output messages", JSON.stringify(outputMessages));
 
 	return outputMessages;
 }
