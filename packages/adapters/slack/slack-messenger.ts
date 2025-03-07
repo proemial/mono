@@ -154,10 +154,18 @@ export const SlackMessenger = {
 					user: metadata.user,
 				});
 
-				return {
-					username: userResult.user?.profile?.display_name,
+				const asUserInfo = {
+					username: userResult.user?.profile?.display_name?.length
+						? userResult.user?.profile?.display_name
+						: userResult.user?.name,
 					icon_url: userResult.user?.profile?.image_192,
 				};
+				console.log(
+					"users.info",
+					JSON.stringify([text, metadata.user, userResult, asUserInfo]),
+				);
+
+				return asUserInfo;
 			};
 
 			const payload = {
