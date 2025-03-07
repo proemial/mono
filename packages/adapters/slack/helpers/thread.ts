@@ -6,6 +6,7 @@ import { extractLinks } from "./links";
 import { ContextBlock, TextObject } from "@slack/types";
 import { CoreAssistantMessage, CoreMessage, CoreUserMessage } from "ai";
 import { LlmUtils } from "../../llm/utils";
+import { isStatusMessage } from "./status-messages";
 
 export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 	const messages = await getThreadMessages(
@@ -19,9 +20,17 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 	const outputMessages: CoreMessage[] = [];
 
 	for (const message of messages) {
-		const sanitized = (message.text ?? "")
-			.replaceAll("\n", " ")
-			.replaceAll('"', " ");
+		// Don't include empty messages (e.g. naked file shares)
+		if (!message.text) {
+			continue;
+		}
+
+		// Gemini models sometimes return an empty string, if we include status messages
+		if (message.bot_id && isStatusMessage(message.text)) {
+			continue;
+		}
+
+		const sanitized = message.text.replaceAll("\n", " ").replaceAll('"', " ");
 		// TODO: replace usernames such as <@U08B132LUBZ> with @username
 
 		if (!message.bot_id) {
