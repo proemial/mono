@@ -56,14 +56,16 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 			const result = await SlackDb.scraped.get(link);
 			if (result) {
 				outputMessages.push(
-					...LlmUtils.toToolCallMessagePair({
-						content: `This is the full text from the ressource at ${l}: <title>${result.content.title}</title><full-text>${result.content.text}</full-text>`,
-						toolName: "GetResourceFullText",
-					}),
-					...LlmUtils.toToolCallMessagePair({
-						content: `This is a summary of the full text from the ressource at ${l}:<summary>${result.summaries?.summary}</summary>`,
-						toolName: "GetSummary",
-					}),
+					...LlmUtils.toToolCallMessagePair(
+						`This is the full text from the ressource at ${l}: <title>${result.content.title}</title><full-text>${result.content.text}</full-text>`,
+						"GetResourceFullText",
+						{ arg: link },
+					),
+					...LlmUtils.toToolCallMessagePair(
+						`This is a summary of the full text from the ressource at ${l}:<summary>${result.summaries?.summary}</summary>`,
+						"GetSummary",
+						{ arg: link },
+					),
 				);
 			}
 		}
