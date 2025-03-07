@@ -19,9 +19,12 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 	const outputMessages: CoreMessage[] = [];
 
 	for (const message of messages) {
-		const sanitized = (message.text ?? "")
-			.replaceAll("\n", " ")
-			.replaceAll('"', " ");
+		// Don't include empty messages (e.g. naked file shares)
+		if (!message.text) {
+			continue;
+		}
+
+		const sanitized = message.text.replaceAll("\n", " ").replaceAll('"', " ");
 		// TODO: replace usernames such as <@U08B132LUBZ> with @username
 
 		if (!message.bot_id) {
@@ -31,11 +34,7 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 				role: "user",
 			} satisfies CoreUserMessage);
 		} else {
-			const blocks = message.attachments?.[0]?.blocks as
-				| ContextBlock[]
-				| undefined;
-			const elements = blocks?.[0]?.elements as TextObject[] | undefined;
-			const answer = elements?.[0]?.text?.replace(
+			const answer = sanitized.replace(
 				// Remove inline linked references;
 				/<https?:\/\/[^|>]+\|?\[?\d*\]?>/g,
 				"",
@@ -43,7 +42,7 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 
 			// assistant message
 			outputMessages.push({
-				content: `${sanitized}: ${answer}`,
+				content: answer,
 				role: "assistant",
 			} satisfies CoreAssistantMessage);
 		}
