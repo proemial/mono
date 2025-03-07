@@ -1,7 +1,7 @@
 import { proxyToN8n } from "@/app/api/events/(n8n)/n8nProxy";
 import { AskRouter } from "@/inngest/routing";
-import { statusMessages } from "@/inngest/status-messages";
 import { LlmAnswer } from "@/prompts/ask/summarize-prompts";
+import { statusMessages } from "@proemial/adapters/slack/helpers/status-messages";
 import {
 	logBotBegin,
 	logRetrieval,
@@ -19,7 +19,6 @@ import { SlackAskEvent } from "../../workers";
 import { Metrics } from "../metrics";
 import { LlmSteps, extractPapers } from "../helpers/extract-references";
 import { Slack } from "../helpers/slack";
-
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
 

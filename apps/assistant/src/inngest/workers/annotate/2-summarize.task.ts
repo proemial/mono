@@ -6,12 +6,12 @@ import { LlmSummary } from "@/prompts/annotate/summarize-prompts";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { uuid5 } from "@proemial/utils/uuid";
 import { Summaries } from "@proemial/adapters/mongodb/slack/scraped.types";
-import { statusMessages } from "@/inngest/status-messages";
 import { generateText, Message } from "ai";
 import { proxyToN8n } from "@/app/api/events/(n8n)/n8nProxy";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 import { Metrics } from "../metrics";
 import { Slack } from "../helpers/slack";
+import { statusMessages } from "@proemial/adapters/slack/helpers/status-messages";
 
 export const eventName = "annotate/query";
 const eventId = "annotate/query/fn";

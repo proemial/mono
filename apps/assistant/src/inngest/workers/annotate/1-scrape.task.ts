@@ -1,5 +1,4 @@
 import { AnnotateRouter } from "@/inngest/routing";
-import { statusMessages } from "@/inngest/status-messages";
 import { getColors } from "@proemial/adapters/googleapis/vision";
 import { ScrapedUrl } from "@proemial/adapters/mongodb/slack/scraped.types";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
@@ -14,6 +13,8 @@ import { inngest } from "../../client";
 import { SlackAnnotateEvent } from "../../workers";
 import { Metrics } from "../metrics";
 import { Slack } from "../helpers/slack";
+import { statusMessages } from "@proemial/adapters/slack/helpers/status-messages";
+
 export const eventName = "annotate/scrape";
 const eventId = "annotate/scrape/fn";
 

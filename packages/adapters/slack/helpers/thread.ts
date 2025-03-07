@@ -6,6 +6,7 @@ import { extractLinks } from "./links";
 import { ContextBlock, TextObject } from "@slack/types";
 import { CoreAssistantMessage, CoreMessage, CoreUserMessage } from "ai";
 import { LlmUtils } from "../../llm/utils";
+import { isStatusMessage } from "./status-messages";
 
 export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 	const messages = await getThreadMessages(
@@ -21,6 +22,11 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 	for (const message of messages) {
 		// Don't include empty messages (e.g. naked file shares)
 		if (!message.text) {
+			continue;
+		}
+
+		// Gemini models sometimes return an empty string, if we include status messages
+		if (message.bot_id && isStatusMessage(message.text)) {
 			continue;
 		}
 
@@ -71,14 +77,6 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 				);
 			}
 		}
-	}
-	// Remove any "thinking..."-like messages
-	const lastMessage = outputMessages.at(-1);
-	if (
-		lastMessage?.role === "assistant" &&
-		lastMessage.content?.toString().endsWith("...")
-	) {
-		outputMessages.pop();
 	}
 	console.log("output messages", JSON.stringify(outputMessages));
 
