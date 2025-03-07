@@ -72,6 +72,14 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 			}
 		}
 	}
+	// Remove any "thinking..."-like messages
+	const lastMessage = outputMessages.at(-1);
+	if (
+		lastMessage?.role === "assistant" &&
+		lastMessage.content?.toString().endsWith("...")
+	) {
+		outputMessages.pop();
+	}
 	console.log("output messages", JSON.stringify(outputMessages));
 
 	return outputMessages;
