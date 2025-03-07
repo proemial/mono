@@ -62,7 +62,7 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 						toolName: "GetResourceFullText",
 					}),
 					...LlmUtils.toToolCallMessagePair({
-						content: `This is a summary of the full text from the ressource at ${l}:<summary>${result.summaries?.query}</summary>`,
+						content: `This is a summary of the full text from the ressource at ${l}:<summary>${result.summaries?.summary}</summary>`,
 						toolName: "GetSummary",
 					}),
 				);

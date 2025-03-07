@@ -47,15 +47,15 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 	}
 
 	const scraped = await SlackDb.scraped.get(payload.url);
-	if (!scraped?.summaries?.query) {
+	if (!scraped?.summaries?.summary) {
 		throw new Error("No query found");
 	}
 
 	await Slack.postSummary(
 		payload.metadata,
-		scraped.summaries.query,
-		scraped.url,
+		scraped.summaries.summary as string,
 		scraped.content.title,
+		scraped.summaries.questions as Array<{ question: string; answer: string }>,
 	);
 
 	// Next step from router

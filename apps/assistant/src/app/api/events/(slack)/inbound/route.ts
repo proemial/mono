@@ -17,7 +17,7 @@ export async function POST(request: Request) {
 	const text = await request.text();
 	const { payload, metadata } = await slack.parseRequest(text, classifyRequest);
 
-	const isDuplicate = await isDuplicateEvent(payload.event_id);
+	const isDuplicate = await isDuplicateEvent(payload);
 	if (isDuplicate) {
 		return NextResponse.json({ status: "ok" });
 	}
@@ -96,12 +96,17 @@ async function upsertToEventLog(
 }
 
 // Slack sometimes send an event twice :/
-async function isDuplicateEvent(eventId: string) {
+async function isDuplicateEvent(payload: EventCallbackPayload) {
 	const begin = Time.now();
 
-	const startedAt = await cache(async () => begin, ["slack:event", eventId])();
-	if (startedAt !== begin) {
-		console.log("event has been started already", eventId);
+	const isAction = payload.type === "block_actions";
+	const startedAt = await cache(
+		async () => begin,
+		["slack:event", payload.event_id],
+	)();
+
+	if (!isAction && startedAt !== begin) {
+		console.log("event has been started already", payload.event_id);
 		return true;
 	}
 	return false;

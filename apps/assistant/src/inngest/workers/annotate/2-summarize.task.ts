@@ -76,6 +76,15 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 	return result;
 };
 
+interface SummaryResponse {
+	summary: string;
+	questions: Array<{
+		question: string;
+		answer: string;
+	}>;
+	translatedTitle: string;
+}
+
 export async function summarizeAnnotationTask(
 	metadata: SlackEventMetadata,
 	payload: SlackAnnotateEvent,
@@ -83,7 +92,7 @@ export async function summarizeAnnotationTask(
 ) {
 	const begin = Time.now();
 
-	const { text: indexQuery } = await generateText({
+	const { text } = await generateText({
 		model: await LlmSummary.model(uuid5(payload.url, "helicone"), {
 			slackAppId: payload.metadata.appId,
 		}),
@@ -93,13 +102,34 @@ export async function summarizeAnnotationTask(
 			.replace("$content", input.text),
 	});
 
-	const parsedQuery = indexQuery.split("<summary>")[1]?.split("</summary>")[0];
+	let parsedResponse: SummaryResponse;
+	try {
+		parsedResponse = JSON.parse(
+			text.replace(/```json\n/, "").replace(/\n```/, ""),
+		);
+	} catch (error) {
+		throw new Error("[news][query] Failed to parse JSON response", {
+			cause: {
+				url: payload.url,
+				text,
+			},
+		});
+	}
 
-	if (!parsedQuery) {
+	if (!parsedResponse.summary) {
 		throw new Error("[news][query] Failed to parse search query", {
 			cause: {
 				url: payload.url,
-				indexQuery,
+				indexQuery: text,
+			},
+		});
+	}
+
+	if (!parsedResponse.summary) {
+		throw new Error("[news][query] Failed to parse search query", {
+			cause: {
+				url: payload.url,
+				indexQuery: text,
 			},
 		});
 	}
@@ -114,7 +144,7 @@ export async function summarizeAnnotationTask(
 		...scraped,
 		summaries: {
 			...summaries,
-			query: parsedQuery,
+			...parsedResponse,
 		} as Summaries,
 	});
 
@@ -128,7 +158,9 @@ export async function summarizeAnnotationTask(
 	return {
 		event: eventName,
 		body: {
-			answer: parsedQuery,
+			answer: parsedResponse.summary,
+			questions: parsedResponse.questions,
+			title: parsedResponse.translatedTitle,
 			payload,
 			steps: {
 				current: eventName,

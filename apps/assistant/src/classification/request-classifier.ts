@@ -16,14 +16,11 @@ export function classifyRequest(
 		return ignored;
 	}
 
-	// Dismissal of nudges
 	if (
 		payload.type === "block_actions" &&
-		!!payload.actions.find(
-			(a) => a.action_id === "nudge_reject" || a.action_id === "nudge_accept",
-		)
+		!!payload.actions.find((a) => a.action_id === "followup-question")
 	) {
-		return "dismiss";
+		return "followup";
 	}
 
 	if (payload.event?.type === "assistant_thread_started") {
@@ -52,9 +49,8 @@ export function classifyRequest(
 		return "annotate";
 	}
 
-	// Mention or user message in assistant thread
 	if (
-		payload.event?.type === "app_mention" ||
+		(!nakedMention(payload) && payload.event?.type === "app_mention") ||
 		(payload.event?.channel.startsWith("D") &&
 			payload.event.user !== payload.event.parent_user_id)
 	) {

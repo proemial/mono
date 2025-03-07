@@ -29,13 +29,27 @@ export const Slack = {
 	postSummary: async (
 		metadata: SlackEventMetadata,
 		summary: string,
-		url: string,
-		title: string,
+		title?: string,
+		questions?: Array<{ question: string; answer: string }>,
 	) => {
 		if (metadata.isAssistant) {
-			return await SlackMessenger.sendMessage(metadata, summary, url, title);
+			return await SlackMessenger.sendMessage(
+				metadata,
+				summary,
+				title,
+				questions,
+			);
 		}
-		return await SlackMessenger.updateMessage(metadata, summary, url, title);
+		return await SlackMessenger.updateMessage(
+			metadata,
+			summary,
+			title,
+			questions,
+		);
+	},
+
+	postQuestion: async (metadata: SlackEventMetadata, answer: string) => {
+		return await SlackMessenger.sendMessageAsUser(metadata, answer);
 	},
 
 	postAnswer: async (metadata: SlackEventMetadata, answer: string) => {
@@ -55,5 +69,9 @@ export const Slack = {
 			suggestions,
 			title,
 		);
+	},
+
+	canPostAsUser: async (metadata: SlackEventMetadata) => {
+		return await SlackMessenger.canPostAsUser(metadata);
 	},
 };

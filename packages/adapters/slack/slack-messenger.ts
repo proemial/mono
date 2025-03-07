@@ -75,33 +75,31 @@ export const SlackMessenger = {
 	updateMessage: async (
 		metadata: SlackEventMetadata,
 		text: string,
-		url?: string,
 		title?: string,
+		questions?: Array<{ question: string; answer: string }>,
 	) => {
 		const begin = Time.now();
 
 		try {
 			const client = await slackClient(metadata);
 
-			const body = url
-				? link(text, url, title)
+			const body = questions
+				? link(text, title, questions)
 				: answer(slackifyMarkdown(text));
 
-			if (client.tokens.userToken) {
-				const payload = {
-					channel: metadata.channelId,
-					ts: (metadata.replyTs ?? metadata.ts) as string,
-					unfurl_media: false,
-					...body,
-				};
+			const payload = {
+				channel: metadata.channelId,
+				ts: (metadata.replyTs ?? metadata.ts) as string,
+				unfurl_media: false,
+				...body,
+			};
 
-				const response = await client.asProem.chat.update(payload);
-				logRequest("chat.update", [payload, response]);
+			const response = await client.asProem.chat.update(payload);
+			logRequest("chat.update", [payload, response]);
 
-				await logEvent("update", { metadata, response }, Time.elapsed(begin));
+			await logEvent("update", { metadata, response }, Time.elapsed(begin));
 
-				return response;
-			}
+			return response;
 		} finally {
 			Time.log(begin, "[messenger][update]");
 		}
@@ -110,16 +108,16 @@ export const SlackMessenger = {
 	sendMessage: async (
 		metadata: SlackEventMetadata,
 		text: string,
-		url?: string,
 		title?: string,
+		questions?: Array<{ question: string; answer: string }>,
 	) => {
 		const begin = Time.now();
 
 		try {
 			const client = await slackClient(metadata);
 
-			const body = url
-				? link(text, url, title)
+			const body = questions
+				? link(text, title, questions)
 				: answer(slackifyMarkdown(text));
 
 			const payload = {
@@ -133,6 +131,47 @@ export const SlackMessenger = {
 			logRequest("chat.postMessage", [payload, response]);
 
 			await logEvent("send", { metadata, response }, Time.elapsed(begin));
+
+			return response;
+		} finally {
+			Time.log(begin, "[messenger][send]");
+		}
+	},
+
+	sendMessageAsUser: async (metadata: SlackEventMetadata, text: string) => {
+		const begin = Time.now();
+
+		try {
+			const client = await slackClient(metadata);
+
+			const asUser = async () => {
+				const canPostAsUser = await SlackMessenger.canPostAsUser(metadata);
+				if (!canPostAsUser) {
+					return {};
+				}
+
+				const userResult = await client.asProem.users.info({
+					user: metadata.user,
+				});
+
+				return {
+					username: userResult.user?.profile?.display_name,
+					icon_url: userResult.user?.profile?.image_192,
+				};
+			};
+
+			const payload = {
+				channel: metadata.channelId,
+				thread_ts: metadata.ts as string,
+				unfurl_links: false,
+				text,
+				...(await asUser()),
+			};
+
+			const response = await client.asProem.chat.postMessage(payload);
+			logRequest("chat.postMessage", [payload, response]);
+
+			await logEvent("sendAsUser", { metadata, response }, Time.elapsed(begin));
 
 			return response;
 		} finally {
@@ -235,6 +274,29 @@ export const SlackMessenger = {
 		} finally {
 			Time.log(begin, "[messenger][suggestions]");
 		}
+	},
+
+	getBotInfo: async (metadata: SlackEventMetadata) => {
+		const begin = Time.now();
+
+		try {
+			const client = await slackClient(metadata);
+
+			const response = await client.asProem.auth.test();
+
+			logRequest("auth.test", [{}, response]);
+			await logEvent("botinfo", { metadata, response }, Time.elapsed(begin));
+
+			return response;
+			// return response.response_metadata?.scopes?.includes(permission);
+		} finally {
+			Time.log(begin, "[messenger][send]");
+		}
+	},
+
+	canPostAsUser: async (metadata: SlackEventMetadata) => {
+		const botInfo = await SlackMessenger.getBotInfo(metadata);
+		return botInfo.response_metadata?.scopes?.includes("chat:write.customize");
 	},
 };
 

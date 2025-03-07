@@ -52,6 +52,9 @@ export type EventCallbackPayload = {
 	container?: {
 		message_ts: string;
 	};
+	message?: {
+		user: string;
+	};
 };
 
 export type SlackThread = {

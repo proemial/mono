@@ -46,6 +46,16 @@ export async function parseRequest(
 	return { payload, metadata };
 }
 
+export function getFollowupQuestion(payload: EventCallbackPayload) {
+	return {
+		// @ts-ignore
+		question: payload.state.values.followups[
+			"followup-question"
+		].selected_option.value?.replaceAll("+", " "),
+		botUser: payload.message?.user,
+	};
+}
+
 function parseFields(payload: EventCallbackPayload) {
 	const channelId = getChannelId(payload);
 

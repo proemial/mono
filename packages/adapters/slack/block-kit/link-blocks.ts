@@ -1,4 +1,8 @@
-export function link(text: string, url?: string, title?: string) {
+export function link(
+	text: string,
+	title?: string,
+	questions?: Array<{ question: string; answer: string }>,
+) {
 	return {
 		attachments: [
 			{
@@ -17,55 +21,33 @@ export function link(text: string, url?: string, title?: string) {
 							},
 						],
 					},
-					// Followups @brian
-					// {
-					// 	type: "actions",
-					// 	elements: [
-					// 		{
-					// 			type: "static_select",
-					// 			placeholder: {
-					// 				type: "plain_text",
-					// 				text: "Ask question",
-					// 				emoji: true,
-					// 			},
-					// 			options: [
-					// 				{
-					// 					text: {
-					// 						type: "plain_text",
-					// 						text: "First followup questions",
-					// 						emoji: true,
-					// 					},
-					// 					value: "value-0",
-					// 				},
-					// 				{
-					// 					text: {
-					// 						type: "plain_text",
-					// 						text: "Second followup question",
-					// 						emoji: true,
-					// 					},
-					// 					value: "value-1",
-					// 				},
-					// 				{
-					// 					text: {
-					// 						type: "plain_text",
-					// 						text: "Third followup question",
-					// 						emoji: true,
-					// 					},
-					// 					value: "value-2",
-					// 				},
-					// 				{
-					// 					text: {
-					// 						type: "plain_text",
-					// 						text: "↔️ Tell me more",
-					// 						emoji: true,
-					// 					},
-					// 					value: "value-3",
-					// 				},
-					// 			],
-					// 			action_id: "static_select-action",
-					// 		},
-					// 	],
-					// },
+					...(questions?.length
+						? [
+								{
+									type: "actions",
+									block_id: "followups",
+									elements: [
+										{
+											type: "static_select",
+											placeholder: {
+												type: "plain_text",
+												text: "Ask question",
+												emoji: true,
+											},
+											options: questions.slice(0, 3).map((question) => ({
+												text: {
+													type: "plain_text",
+													text: question.question,
+													emoji: true,
+												},
+												value: question.question,
+											})),
+											action_id: "followup-question",
+										},
+									],
+								},
+							]
+						: []),
 				],
 			},
 		],
