@@ -24,7 +24,7 @@ export async function dispatchSlackEvent(
 		// TODO: handle all links, not just the first one
 		const url = fileUrl ?? extractLinks(payload.event?.text).at(0);
 		if (!url) {
-			return `dispatch[${scrapeEventName}]: no url found`;
+			throw new Error("No url found");
 		}
 
 		// Check that the URL is accessible, unless we're already using the

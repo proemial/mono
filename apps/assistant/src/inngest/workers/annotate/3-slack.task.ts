@@ -31,6 +31,7 @@ export const slackAnnotateResponseTask = {
 					Time.elapsed(begin),
 					(error as Error).message,
 				);
+				Slack.updateStatus(payload.metadata, (error as Error).message, true);
 				throw error;
 			} finally {
 				Time.log(begin, eventName);
