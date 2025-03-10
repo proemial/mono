@@ -7,6 +7,7 @@ import { ContextBlock, TextObject } from "@slack/types";
 import { CoreAssistantMessage, CoreMessage, CoreUserMessage } from "ai";
 import { LlmUtils } from "../../llm/utils";
 import { isStatusMessage } from "./status-messages";
+import { GenericMessageEvent } from "@slack/types";
 
 export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 	const messages = await getThreadMessages(
@@ -16,70 +17,10 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 		metadata.appId,
 	);
 	console.log("input messages", JSON.stringify(messages));
-
-	const outputMessages: CoreMessage[] = [];
-
-	for (const message of messages) {
-		// Don't include empty messages (e.g. naked file shares)
-		if (!message.text) {
-			continue;
-		}
-
-		// Gemini models sometimes return an empty string, if we include status messages
-		if (message.bot_id && isStatusMessage(message.text)) {
-			continue;
-		}
-
-		const sanitized = message.text.replaceAll("\n", " ").replaceAll('"', " ");
-		// TODO: replace usernames such as <@U08B132LUBZ> with @username
-
-		// @ts-ignore We need to ignore this typing error, as username will be there when the
-		// bot is posting with a custom avatar, which is what we do on followups
-		if (!message.bot_id || message.username) {
-			// user message
-			outputMessages.push({
-				content: sanitized,
-				role: "user",
-			} satisfies CoreUserMessage);
-		} else {
-			const answer = sanitized.replace(
-				// Remove inline linked references;
-				/<https?:\/\/[^|>]+\|?\[?\d*\]?>/g,
-				"",
-			);
-
-			// assistant message
-			outputMessages.push({
-				content: answer,
-				role: "assistant",
-			} satisfies CoreAssistantMessage);
-		}
-
-		// Handle links
-		const fileUrl = message.files?.[0]?.url_private_download;
-		const links = fileUrl ? [fileUrl] : extractLinks(sanitized);
-
-		for (const l of links) {
-			const link = isYouTubeUrl(l) ? normalizeYouTubeUrl(l) : l;
-			const result = await SlackDb.scraped.get(link);
-			if (result) {
-				outputMessages.push(
-					...LlmUtils.toToolCallMessagePair(
-						`This is the full text from the ressource at ${l}: <title>${result.content.title}</title><full-text>${result.content.text}</full-text>`,
-						"GetResourceFullText",
-						{ arg: link },
-					),
-					...LlmUtils.toToolCallMessagePair(
-						`This is a summary of the full text from the ressource at ${l}:<summary>${result.summaries?.summary}</summary>`,
-						"GetSummary",
-						{ arg: link },
-					),
-				);
-			}
-		}
-	}
+	const outputMessages = (await Promise.all(messages.map(toCoreMessages)))
+		.filter((m) => m.length > 0)
+		.flat();
 	console.log("output messages", JSON.stringify(outputMessages));
-
 	return outputMessages;
 }
 
@@ -105,3 +46,85 @@ export async function getThreadMessages(
 		(m) => m.subtype !== "assistant_app_thread" && (m.text || m.files?.length),
 	);
 }
+
+const getMessageUrls = (message: GenericMessageEvent): string[] => {
+	const sanitized = (message.text ?? "")
+		.replaceAll("\n", " ")
+		.replaceAll('"', " ");
+	const fileUrl = message.files?.[0]?.url_private_download;
+	const links = fileUrl ? [fileUrl] : extractLinks(sanitized);
+	return links.map((l) => (isYouTubeUrl(l) ? normalizeYouTubeUrl(l) : l));
+};
+
+const toCoreMessages = async (
+	message: GenericMessageEvent,
+): Promise<CoreMessage[]> => {
+	// User URL messages
+	const urls = getMessageUrls(message);
+	if (urls.length > 0) {
+		const results = await Promise.all(
+			urls.map((url) => SlackDb.scraped.get(url)),
+		);
+		return results
+			.filter((r) => r !== null)
+			.flatMap((r) => [
+				...(message.text
+					? [
+							{
+								content: message.text,
+								role: "user",
+							} satisfies CoreUserMessage,
+						]
+					: []),
+				...LlmUtils.toToolCallMessagePair(
+					`This is the full text from the ressource at ${r.url}: <title>${r.content.title}</title><full-text>${r.content.text}</full-text>`,
+					"GetResourceFullText",
+					{ arg: r.url },
+				),
+				...LlmUtils.toToolCallMessagePair(
+					`This is a summary of the full text from the ressource at ${r.url}:<summary>${r.summaries?.summary}</summary>`,
+					"GetSummary",
+					{ arg: r.url },
+				),
+			]);
+	}
+
+	// Ignore empty messages that are not files (handled above)
+	if (!message.text) {
+		return [];
+	}
+
+	// User plain text messages
+	// @ts-ignore We need to ignore this typing error, as username will be there when the
+	// bot is posting with a custom avatar, which is what we do on followups
+	if (!message.bot_id || message.username) {
+		return [
+			{
+				content: message.text,
+				role: "user",
+			} satisfies CoreUserMessage,
+		];
+	}
+
+	// Assistant messages
+	if (message.bot_id) {
+		// Gemini models sometimes return an empty string, if we include status messages
+		if (isStatusMessage(message.text)) {
+			return [];
+		}
+		const answer = message.text.replace(
+			// Remove inline linked references
+			/<https?:\/\/[^|>]+\|?\[?\d*\]?>/g,
+			"",
+		);
+
+		return [
+			{
+				content: answer,
+				role: "assistant",
+			} satisfies CoreAssistantMessage,
+		];
+	}
+
+	return [];
+};
