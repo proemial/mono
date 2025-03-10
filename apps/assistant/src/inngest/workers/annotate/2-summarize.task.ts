@@ -6,12 +6,12 @@ import { LlmSummary } from "@/prompts/annotate/summarize-prompts";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { uuid5 } from "@proemial/utils/uuid";
 import { Summaries } from "@proemial/adapters/mongodb/slack/scraped.types";
-import { statusMessages } from "@/inngest/status-messages";
 import { generateText, Message } from "ai";
 import { proxyToN8n } from "@/app/api/events/(n8n)/n8nProxy";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 import { Metrics } from "../metrics";
 import { Slack } from "../helpers/slack";
+import { statusMessages } from "@proemial/adapters/slack/helpers/status-messages";
 
 export const eventName = "annotate/query";
 const eventId = "annotate/query/fn";
@@ -37,6 +37,7 @@ export const queryTask = {
 					Time.elapsed(begin),
 					(error as Error).message,
 				);
+				Slack.updateStatus(payload.metadata, (error as Error).message, true);
 				throw error;
 			} finally {
 				Time.log(begin, eventName);
@@ -76,6 +77,15 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 	return result;
 };
 
+interface SummaryResponse {
+	summary: string;
+	questions: Array<{
+		question: string;
+		answer: string;
+	}>;
+	translatedTitle: string;
+}
+
 export async function summarizeAnnotationTask(
 	metadata: SlackEventMetadata,
 	payload: SlackAnnotateEvent,
@@ -83,7 +93,7 @@ export async function summarizeAnnotationTask(
 ) {
 	const begin = Time.now();
 
-	const { text: indexQuery } = await generateText({
+	const { text } = await generateText({
 		model: await LlmSummary.model(uuid5(payload.url, "helicone"), {
 			slackAppId: payload.metadata.appId,
 		}),
@@ -93,13 +103,34 @@ export async function summarizeAnnotationTask(
 			.replace("$content", input.text),
 	});
 
-	const parsedQuery = indexQuery.split("<summary>")[1]?.split("</summary>")[0];
+	let parsedResponse: SummaryResponse;
+	try {
+		parsedResponse = JSON.parse(
+			text.replace(/```json\n/, "").replace(/\n```/, ""),
+		);
+	} catch (error) {
+		throw new Error("[news][query] Failed to parse JSON response", {
+			cause: {
+				url: payload.url,
+				text,
+			},
+		});
+	}
 
-	if (!parsedQuery) {
+	if (!parsedResponse.summary) {
 		throw new Error("[news][query] Failed to parse search query", {
 			cause: {
 				url: payload.url,
-				indexQuery,
+				indexQuery: text,
+			},
+		});
+	}
+
+	if (!parsedResponse.summary) {
+		throw new Error("[news][query] Failed to parse search query", {
+			cause: {
+				url: payload.url,
+				indexQuery: text,
 			},
 		});
 	}
@@ -114,7 +145,7 @@ export async function summarizeAnnotationTask(
 		...scraped,
 		summaries: {
 			...summaries,
-			query: parsedQuery,
+			...parsedResponse,
 		} as Summaries,
 	});
 
@@ -128,7 +159,9 @@ export async function summarizeAnnotationTask(
 	return {
 		event: eventName,
 		body: {
-			answer: parsedQuery,
+			answer: parsedResponse.summary,
+			questions: parsedResponse.questions,
+			title: parsedResponse.translatedTitle,
 			payload,
 			steps: {
 				current: eventName,

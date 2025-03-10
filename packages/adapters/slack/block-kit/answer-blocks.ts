@@ -11,5 +11,6 @@ export function answer(text: string) {
 				],
 			},
 		],
+		attachments: [],
 	};
 }

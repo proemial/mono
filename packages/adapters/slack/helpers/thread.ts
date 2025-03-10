@@ -6,6 +6,7 @@ import { extractLinks } from "./links";
 import { ContextBlock, TextObject } from "@slack/types";
 import { CoreAssistantMessage, CoreMessage, CoreUserMessage } from "ai";
 import { LlmUtils } from "../../llm/utils";
+import { isStatusMessage } from "./status-messages";
 
 export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 	const messages = await getThreadMessages(
@@ -19,23 +20,29 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 	const outputMessages: CoreMessage[] = [];
 
 	for (const message of messages) {
-		const sanitized = (message.text ?? "")
-			.replaceAll("\n", " ")
-			.replaceAll('"', " ");
+		// Don't include empty messages (e.g. naked file shares)
+		if (!message.text) {
+			continue;
+		}
+
+		// Gemini models sometimes return an empty string, if we include status messages
+		if (message.bot_id && isStatusMessage(message.text)) {
+			continue;
+		}
+
+		const sanitized = message.text.replaceAll("\n", " ").replaceAll('"', " ");
 		// TODO: replace usernames such as <@U08B132LUBZ> with @username
 
-		if (!message.bot_id) {
+		// @ts-ignore We need to ignore this typing error, as username will be there when the
+		// bot is posting with a custom avatar, which is what we do on followups
+		if (!message.bot_id || message.username) {
 			// user message
 			outputMessages.push({
 				content: sanitized,
 				role: "user",
 			} satisfies CoreUserMessage);
 		} else {
-			const blocks = message.attachments?.[0]?.blocks as
-				| ContextBlock[]
-				| undefined;
-			const elements = blocks?.[0]?.elements as TextObject[] | undefined;
-			const answer = elements?.[0]?.text?.replace(
+			const answer = sanitized.replace(
 				// Remove inline linked references;
 				/<https?:\/\/[^|>]+\|?\[?\d*\]?>/g,
 				"",
@@ -43,7 +50,7 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 
 			// assistant message
 			outputMessages.push({
-				content: `${sanitized}: ${answer}`,
+				content: answer,
 				role: "assistant",
 			} satisfies CoreAssistantMessage);
 		}
@@ -57,14 +64,16 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 			const result = await SlackDb.scraped.get(link);
 			if (result) {
 				outputMessages.push(
-					...LlmUtils.toToolCallMessagePair({
-						content: `This is the full text from the ressource at ${l}: <title>${result.content.title}</title><full-text>${result.content.text}</full-text>`,
-						toolName: "GetResourceFullText",
-					}),
-					...LlmUtils.toToolCallMessagePair({
-						content: `This is a summary of the full text from the ressource at ${l}:<summary>${result.summaries?.query}</summary>`,
-						toolName: "GetSummary",
-					}),
+					...LlmUtils.toToolCallMessagePair(
+						`This is the full text from the ressource at ${l}: <title>${result.content.title}</title><full-text>${result.content.text}</full-text>`,
+						"GetResourceFullText",
+						{ arg: link },
+					),
+					...LlmUtils.toToolCallMessagePair(
+						`This is a summary of the full text from the ressource at ${l}:<summary>${result.summaries?.summary}</summary>`,
+						"GetSummary",
+						{ arg: link },
+					),
 				);
 			}
 		}

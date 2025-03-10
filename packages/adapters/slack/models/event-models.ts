@@ -23,6 +23,7 @@ export type HackyMessageEvent = Omit<GenericMessageEvent, "type"> & {
 		channel: string;
 		user: string;
 		text: string;
+		assistant_app_thread?: unknown;
 	};
 	ts: string;
 };
@@ -50,6 +51,9 @@ export type EventCallbackPayload = {
 	response_url: string;
 	container?: {
 		message_ts: string;
+	};
+	message?: {
+		user: string;
 	};
 };
 

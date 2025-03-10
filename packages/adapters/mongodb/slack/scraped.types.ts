@@ -12,8 +12,16 @@ export interface ScrapedUrl {
 	questions?: { question: string; answer: string }[];
 }
 
-export type SummaryKeys = "query" | "background" | "engTitle";
-export type Summaries = Partial<Record<SummaryKeys, string>>;
+export type SummaryKeys =
+	| "query"
+	| "background"
+	| "engTitle"
+	| "summary"
+	| "questions"
+	| "translatedTitle";
+export type Summaries = Partial<
+	Record<SummaryKeys, string | Array<{ question: string; answer: string }>>
+>;
 
 export interface ScrapedImage {
 	naturalHeight: number;

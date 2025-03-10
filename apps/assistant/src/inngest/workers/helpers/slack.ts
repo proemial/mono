@@ -2,33 +2,61 @@ import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-mod
 import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 
 export const Slack = {
-	nudgeForPermissions: async (metadata: SlackEventMetadata) => {
-		await SlackMessenger.nudgeUser(metadata);
-	},
-
 	updateStatus: async (
 		metadata: SlackEventMetadata,
 		status: string,
 		isError?: boolean,
+		begin?: boolean,
 	) => {
-		await SlackMessenger.updateStatus(metadata, status, isError);
+		if (metadata.isAssistant) {
+			return await SlackMessenger.updateAssistantStatus(metadata, status);
+		}
+
+		if (begin) {
+			const showInChannel =
+				metadata.target === "annotate" && !metadata.threadTs && !isError;
+
+			return await SlackMessenger.postStatus(
+				metadata,
+				status,
+				isError,
+				showInChannel,
+			);
+		}
+		return await SlackMessenger.updateStatus(metadata, status, isError);
 	},
 
 	postSummary: async (
 		metadata: SlackEventMetadata,
 		summary: string,
-		url: string,
-		title: string,
+		title?: string,
+		questions?: Array<{ question: string; answer: string }>,
 	) => {
 		if (metadata.isAssistant) {
-			return await SlackMessenger.sendMessage(metadata, summary, url, title);
+			return await SlackMessenger.sendMessage(
+				metadata,
+				summary,
+				title,
+				questions,
+			);
 		}
-		await SlackMessenger.updateMessage(metadata, summary, url, title);
+		return await SlackMessenger.updateMessage(
+			metadata,
+			summary,
+			title,
+			questions,
+		);
+	},
+
+	postQuestion: async (metadata: SlackEventMetadata, answer: string) => {
+		return await SlackMessenger.sendMessageAsUser(metadata, answer);
 	},
 
 	postAnswer: async (metadata: SlackEventMetadata, answer: string) => {
-		await SlackMessenger.removeAttachments(metadata);
-		await SlackMessenger.sendMessage(metadata, answer);
+		if (metadata.isAssistant) {
+			return await SlackMessenger.sendMessage(metadata, answer);
+		}
+		return await SlackMessenger.updateMessage(metadata, answer);
 	},
 
 	showSuggestions: async (
@@ -36,6 +64,14 @@ export const Slack = {
 		suggestions: string[],
 		title: string,
 	) => {
-		await SlackMessenger.showSuggestions(metadata, suggestions, title);
+		return await SlackMessenger.showAssistantSuggestions(
+			metadata,
+			suggestions,
+			title,
+		);
+	},
+
+	canPostAsUser: async (metadata: SlackEventMetadata) => {
+		return await SlackMessenger.canPostAsUser(metadata);
 	},
 };

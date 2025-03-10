@@ -31,6 +31,7 @@ export const slackAnnotateResponseTask = {
 					Time.elapsed(begin),
 					(error as Error).message,
 				);
+				Slack.updateStatus(payload.metadata, (error as Error).message, true);
 				throw error;
 			} finally {
 				Time.log(begin, eventName);
@@ -47,15 +48,15 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 	}
 
 	const scraped = await SlackDb.scraped.get(payload.url);
-	if (!scraped?.summaries?.query) {
+	if (!scraped?.summaries?.summary) {
 		throw new Error("No query found");
 	}
 
 	await Slack.postSummary(
 		payload.metadata,
-		scraped.summaries.query,
-		scraped.url,
+		scraped.summaries.summary as string,
 		scraped.content.title,
+		scraped.summaries.questions as Array<{ question: string; answer: string }>,
 	);
 
 	// Next step from router

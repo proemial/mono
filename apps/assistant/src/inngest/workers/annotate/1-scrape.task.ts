@@ -1,5 +1,4 @@
 import { AnnotateRouter } from "@/inngest/routing";
-import { statusMessages } from "@/inngest/status-messages";
 import { getColors } from "@proemial/adapters/googleapis/vision";
 import { ScrapedUrl } from "@proemial/adapters/mongodb/slack/scraped.types";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
@@ -14,6 +13,9 @@ import { inngest } from "../../client";
 import { SlackAnnotateEvent } from "../../workers";
 import { Metrics } from "../metrics";
 import { Slack } from "../helpers/slack";
+import { statusMessages } from "@proemial/adapters/slack/helpers/status-messages";
+import { errorMessage } from "@proemial/adapters/slack/error-messages";
+
 export const eventName = "annotate/scrape";
 const eventId = "annotate/scrape/fn";
 
@@ -54,9 +56,13 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 	try {
 		const begin = Time.now();
 
-		await Slack.nudgeForPermissions(payload.metadata);
-
-		await Slack.updateStatus(payload.metadata, statusMessages.annotate.begin);
+		const status = await Slack.updateStatus(
+			payload.metadata,
+			statusMessages.annotate.begin,
+			false,
+			true,
+		);
+		payload.metadata.replyTs = status.ts ?? undefined;
 
 		const normalizedUrl = isYouTubeUrl(payload.url)
 			? normalizeYouTubeUrl(payload.url)
@@ -112,7 +118,7 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 		await logCriticalError(`Error scraping ${payload.url}: "${error}"`);
 		await Slack.updateStatus(
 			payload.metadata,
-			"Oh no! An error occurred. 😭 The dev team has been notified. 🐹",
+			errorMessage.scrapeError(),
 			true,
 		);
 		throw error;

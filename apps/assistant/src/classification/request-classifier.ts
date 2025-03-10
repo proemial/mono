@@ -1,124 +1,99 @@
-import { ignored } from "@proemial/adapters/slack/helpers/payload";
+import { Classification } from "@proemial/adapters/slack/helpers/payload";
 import { FILE_SIZE_LIMIT, FILE_TYPE_WHITELIST } from "./file-filters";
 import { EventCallbackPayload } from "@proemial/adapters/slack/models/event-models";
 import { extractLinks } from "@proemial/adapters/slack/helpers/links";
 import { nakedMention } from "@proemial/adapters/slack/helpers/routing";
 import { URL_BLACKLIST } from "./url-filters";
 import { EventLogItem } from "@proemial/adapters/mongodb/slack/v2.models";
+import { Time } from "@proemial/utils/time";
+import { unstable_cache as cache } from "next/cache";
+import { errorMessage } from "@proemial/adapters/slack/error-messages";
 
-export function classifyRequest(
+export const ignored = { type: "ignored" } as Classification;
+
+export async function classifyRequest(
 	payload: EventCallbackPayload,
 	event: EventLogItem | null,
-) {
+): Promise<Classification> {
 	const workers = event?.requests.filter((r) => r.type.includes("worker:"));
 	if (workers?.length) {
-		log("exit[started]", workers.length);
+		log("Already started, workers:", workers.length);
+		return ignored;
+	}
+	const isDuplicate = await isDuplicateEvent(payload);
+	if (isDuplicate) {
+		console.log("Already started, eventId:", payload.event_id);
 		return ignored;
 	}
 
-	// Dismissal of nudges
 	if (
 		payload.type === "block_actions" &&
-		!!payload.actions.find(
-			(a) => a.action_id === "nudge_reject" || a.action_id === "nudge_accept",
-		)
+		!!payload.actions.find((a) => a.action_id === "followup-question")
 	) {
-		return "dismiss";
+		return { type: "followup" };
 	}
 
-	// Show assistant suggestions
 	if (payload.event?.type === "assistant_thread_started") {
-		return "suggestions";
+		return { type: "suggestions" };
 	}
 
-	// Unhandled event types
-	if (payload.type === "url_verification") {
-		log("exit[url_verification]", payload.challenge);
-		return ignored;
-	}
-	if (payload.type === "ssl_check") {
-		log("exit[ssl_check]");
-		return ignored;
-	}
-	if (payload.event?.bot_profile) {
-		log("exit[bot_profile]");
-		return ignored;
-	}
 	if (payload.event?.subtype === "file_share") {
-		const file = payload.event.files?.[0];
-		if (file && !FILE_TYPE_WHITELIST.includes(file.mimetype)) {
-			log("exit[file_share_unsupported]", file.name, file.mimetype);
-			return ignored;
+		const file = payload.event?.files?.[0];
+		if (file) {
+			if (!FILE_TYPE_WHITELIST.includes(file.mimetype)) {
+				log("unsupported file type", file.mimetype, file.size);
+				return {
+					type: "error",
+					payload: errorMessage.unsupportedFile(file.mimetype),
+				};
+			}
+			if (file.size > FILE_SIZE_LIMIT) {
+				log("file too large", file.mimetype, file.size);
+				return {
+					type: "error",
+					payload: errorMessage.fileTooLarge(file.size),
+				};
+			}
+			return { type: "annotate" };
 		}
-		if (file && file.size > FILE_SIZE_LIMIT) {
-			log("exit[file_share_too_large]", file.name, file.size);
-			return ignored;
-		}
 	}
 
 	if (
-		extractLinks(payload.event?.text, URL_BLACKLIST).length > 0 ||
-		(payload.event?.subtype === "file_share" && payload.event?.files?.[0])
+		!payload.event?.bot_profile &&
+		extractLinks(payload.event?.text, URL_BLACKLIST).length > 0
 	) {
-		return "annotate";
+		return { type: "annotate" };
 	}
 
-	// Annotation of links and files
 	if (
-		payload.event?.type === "message" &&
-		!extractLinks(payload.event.text, URL_BLACKLIST).length &&
-		!payload.event?.channel.startsWith("D")
+		(!nakedMention(payload) && payload.event?.type === "app_mention") ||
+		(payload.event?.channel.startsWith("D") &&
+			payload.event.user !== payload.event.parent_user_id)
 	) {
-		log(
-			"exit[message]",
-			payload.event?.type,
-			!extractLinks(payload.event.text, URL_BLACKLIST).length,
-			payload.event?.channel,
-		);
-		return ignored;
+		return { type: "answer" };
 	}
 
-	if (nakedMention(payload)) {
-		return "nudge";
-	}
+	log("unhandled", payload.type, payload.event?.type);
 
-	// Answer to a questions
-	if (payload.event?.type === "app_mention" && payload.event?.attachments) {
-		log(
-			"exit[app_mention_modified]",
-			payload.event?.type === "app_mention",
-			payload.event?.attachments?.length,
-		);
-		return ignored;
-	}
-	if (
-		payload.event?.type === "message" ||
-		payload.event?.type === "app_mention"
-	) {
-		return "answer";
-	}
+	return ignored;
+}
 
-	if (payload.event?.subtype && !extractLinks(payload.event.text).length) {
-		log(
-			"exit[subtype]",
-			payload.event.subtype,
-			!extractLinks(payload.event.text).length,
-		);
-		return ignored;
-	}
-	if (payload.event?.type === "assistant_thread_context_changed") {
-		log("exit[assistant_thread_context_changed]");
-		return ignored;
-	}
-	if (payload.type === "block_actions") {
-		log("exit[block_actions]");
-		log(JSON.stringify(payload));
-		return ignored;
-	}
+// Slack sometimes send an event twice :/
+async function isDuplicateEvent(payload: EventCallbackPayload) {
+	const begin = Time.now();
 
-	return "unknown";
+	const isAction = payload.type === "block_actions";
+	const startedAt = await cache(
+		async () => begin,
+		["slack:event", payload.event_id],
+	)();
+
+	if (!isAction && startedAt !== begin) {
+		return true;
+	}
+	return false;
 }
 
 function log(message: string, ...args: unknown[]) {
-	console.log(`EXIT: ${message}`, ...args);
+	console.log(`IGNORE: ${message}`, ...args);
 }

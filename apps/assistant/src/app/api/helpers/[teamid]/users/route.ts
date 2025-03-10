@@ -8,7 +8,7 @@ export async function GET(
 	{ params }: { params: { teamid: string } },
 ) {
 	const { teamid } = params;
-	const app = await SlackDb.installs.get(teamid, "A08AD1FSPHV");
+	const app = await SlackDb.installs.get(teamid, "A08BFJ29A5Q");
 	if (!app) {
 		return NextResponse.json({ error: "App not found" }, { status: 404 });
 	}
@@ -26,21 +26,9 @@ export async function GET(
 	console.log("response_metadata", json.response_metadata);
 
 	return NextResponse.json(
-		json.members
-			.filter(
-				(member: { is_bot: boolean; deleted: boolean; name: string }) =>
-					!member.is_bot && !member.deleted && member.name !== "slackbot",
-			)
-			.map(
-				(member: {
-					id: string;
-					real_name: string;
-					profile: { display_name: string };
-				}) => ({
-					id: member.id,
-					real_name: member.real_name,
-					display_name: member.profile.display_name,
-				}),
-			),
+		json.members.filter(
+			(member: { is_bot: boolean; deleted: boolean; name: string }) =>
+				!member.is_bot && !member.deleted && member.name !== "slackbot",
+		),
 	);
 }

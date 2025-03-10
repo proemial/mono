@@ -3,14 +3,14 @@ import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-mod
 import { eventName as scrapeEventName } from "@/inngest/workers/annotate/1-scrape.task";
 import { eventName as askEventName } from "@/inngest/workers/ask/1-summarize.task";
 import { inngest } from "@/inngest/client";
-import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { extractLinks } from "@proemial/adapters/slack/helpers/links";
-import { removeOriginal } from "@proemial/adapters/slack/helpers/remove-ephemeral";
 import { getThreeRandomStarters } from "../../../../../prompts/ask/suggestions";
 import { isSlackFileUrl } from "@proemial/adapters/slack/files/file-scraper";
 import { isTwitterUrl } from "@proemial/adapters/twitter";
 import { ScrapflyWebProxy } from "@proemial/adapters/scrapfly/webproxy";
 import { Slack } from "@/inngest/workers/helpers/slack";
+import { getFollowupQuestion } from "@proemial/adapters/slack/helpers/payload";
+import { errorMessage } from "@proemial/adapters/slack/error-messages";
 
 export async function dispatchSlackEvent(
 	payload: EventCallbackPayload,
@@ -25,7 +25,7 @@ export async function dispatchSlackEvent(
 		// TODO: handle all links, not just the first one
 		const url = fileUrl ?? extractLinks(payload.event?.text).at(0);
 		if (!url) {
-			return `dispatch[${scrapeEventName}]: no url found`;
+			throw new Error("No url found");
 		}
 
 		// Check that the URL is accessible, unless we're already using the
@@ -35,7 +35,7 @@ export async function dispatchSlackEvent(
 			try {
 				await proxy.fetch(url);
 			} catch (error) {
-				return `dispatch[${scrapeEventName}]: url ${url} is inaccessible`;
+				throw new Error(errorMessage.scrapeBlocked(url));
 			}
 		}
 
@@ -64,13 +64,29 @@ export async function dispatchSlackEvent(
 		return `dispatch[${askEventName}]: ${result}`;
 	}
 
-	if (metadata.target === "dismiss") {
-		const team = await SlackDb.installs.get(metadata.teamId, metadata.appId);
-		await removeOriginal(
-			payload.response_url,
-			team?.metadata?.accessToken as string,
-		);
-		return "dismissed";
+	if (metadata.target === "followup") {
+		const { question, botUser } = getFollowupQuestion(payload);
+
+		const canPostAsUser = await Slack.canPostAsUser(metadata);
+		if (canPostAsUser) {
+			const result = await Slack.postQuestion(
+				metadata,
+				`${question} <@${botUser}>`,
+			);
+			return `followup: ${result}`;
+		}
+
+		// Slack doesn't send a mention event to us, if we tag ourselves
+		// in a thread. So we need to ask the question explicitly.
+		const result = await inngest.send({
+			name: askEventName,
+			data: {
+				thread: payload.event?.thread_ts,
+				question,
+				metadata: { ...metadata },
+			},
+		});
+		return `dispatch[${askEventName}]: ${result}`;
 	}
 
 	if (metadata.target === "suggestions") {
@@ -79,11 +95,6 @@ export async function dispatchSlackEvent(
 			getThreeRandomStarters(),
 			"Trustworthy answers to any question, such as:",
 		);
-	}
-
-	if (metadata.target === "nudge") {
-		await Slack.nudgeForPermissions(metadata);
-		return "nudged";
 	}
 
 	return undefined;

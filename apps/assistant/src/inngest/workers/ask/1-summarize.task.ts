@@ -1,7 +1,7 @@
 import { proxyToN8n } from "@/app/api/events/(n8n)/n8nProxy";
 import { AskRouter } from "@/inngest/routing";
-import { statusMessages } from "@/inngest/status-messages";
 import { LlmAnswer } from "@/prompts/ask/summarize-prompts";
+import { statusMessages } from "@proemial/adapters/slack/helpers/status-messages";
 import {
 	logBotBegin,
 	logRetrieval,
@@ -19,7 +19,6 @@ import { SlackAskEvent } from "../../workers";
 import { Metrics } from "../metrics";
 import { LlmSteps, extractPapers } from "../helpers/extract-references";
 import { Slack } from "../helpers/slack";
-
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
 
@@ -44,6 +43,7 @@ export const askTask = {
 					Time.elapsed(begin),
 					(error as Error).message,
 				);
+				Slack.updateStatus(payload.metadata, (error as Error).message, true);
 				throw error;
 			} finally {
 				Time.log(begin, eventName);
@@ -55,8 +55,13 @@ export const askTask = {
 const taskWorker = async (payload: SlackAskEvent) => {
 	const metadata = payload.metadata as SlackEventMetadata;
 
-	await Slack.updateStatus(metadata, statusMessages.ask.begin);
-	await Slack.nudgeForPermissions(payload.metadata);
+	const status = await Slack.updateStatus(
+		metadata,
+		statusMessages.ask.begin,
+		false,
+		true,
+	);
+	payload.metadata.replyTs = status.ts;
 
 	const messages = await getMessages(metadata, payload.question);
 	if (messages.length === 0) {

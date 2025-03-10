@@ -9,10 +9,13 @@ export namespace LlmUtils {
 	 * Useful for adding content to the chat history. Model providers will accept
 	 * it as legitimate data from a tool.
 	 */
-	export const toToolCallMessagePair = (args: {
-		content: string;
-		toolName: string;
-	}) => {
+	export const toToolCallMessagePair = (
+		result: string,
+		toolName: string,
+		args: {
+			arg: string;
+		},
+	) => {
 		const toolCallId = uuid4();
 		return [
 			{
@@ -21,10 +24,8 @@ export namespace LlmUtils {
 					{
 						type: "tool-call",
 						toolCallId,
-						toolName: args.toolName,
-						// Args are required by some model providers (e.g. OpenAI), but not
-						// used in this synthetic case, of course.
-						args: { arg: "dummy" },
+						toolName,
+						args, // Args are required by some model providers (e.g. OpenAI)
 					},
 				],
 			} satisfies CoreAssistantMessage,
@@ -34,8 +35,8 @@ export namespace LlmUtils {
 					{
 						type: "tool-result",
 						toolCallId,
-						toolName: args.toolName,
-						result: args.content,
+						toolName,
+						result,
 					},
 				],
 			} satisfies CoreToolMessage,
