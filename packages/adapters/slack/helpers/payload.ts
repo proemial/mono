@@ -10,7 +10,7 @@ export async function parseRequest(
 	classifier: (
 		payload: EventCallbackPayload,
 		event: EventLogItem | null,
-	) => string,
+	) => Promise<string>,
 ) {
 	const unencoded = text?.startsWith("payload=")
 		? decodeURIComponent(text.slice(8))
@@ -18,6 +18,7 @@ export async function parseRequest(
 			? decodeURIComponent(text.slice(10))
 			: text;
 
+	console.log("PAYLOAD", unencoded);
 	const payload = JSON.parse(unencoded) as EventCallbackPayload;
 	const fields = parseFields(payload);
 
@@ -34,10 +35,11 @@ export async function parseRequest(
 
 	const metadata = {
 		...partial,
-		target: classifier(payload, event),
+		target: await classifier(payload, event),
 	} as SlackEventMetadata;
 	console.log({
 		target: metadata.target,
+		eventId: payload.event_id,
 		query: `{\"metadata.appId\":\"${metadata.appId}\",\"metadata.context.channelId\":\"${metadata.channelId}\",\"metadata.context.ts\":\"${metadata.ts}\"}`,
 		type: `${payload.type}/${payload.event?.type}${payload.event?.subtype ? `/${payload.event?.subtype}` : ""}`,
 		text: `${payload.event?.text ?? payload.event?.message?.text}`,
