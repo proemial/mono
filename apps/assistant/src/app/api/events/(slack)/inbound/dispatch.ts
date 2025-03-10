@@ -34,7 +34,9 @@ export async function dispatchSlackEvent(
 			try {
 				await proxy.fetch(url);
 			} catch (error) {
-				return `dispatch[${scrapeEventName}]: url ${url} is inaccessible`;
+				throw new Error(
+					`The <${url}|provided url> was possibly blocked by the host.`,
+				);
 			}
 		}
 

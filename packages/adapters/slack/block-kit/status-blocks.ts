@@ -6,11 +6,15 @@ export function status(target: string, text: string, error?: boolean) {
 	const spinner = {
 		type: "context",
 		elements: [
-			{
-				type: "image",
-				image_url: "https://assistant.proem.ai/slack/spinner.gif",
-				alt_text: "",
-			},
+			...(error
+				? []
+				: [
+						{
+							type: "image",
+							image_url: "https://assistant.proem.ai/slack/spinner.gif",
+							alt_text: "",
+						},
+					]),
 			{
 				type: "mrkdwn",
 				text: text,
@@ -18,7 +22,7 @@ export function status(target: string, text: string, error?: boolean) {
 		],
 	};
 
-	if (!preloader) {
+	if (!preloader && !error) {
 		return {
 			blocks: [spinner],
 		};
