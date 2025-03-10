@@ -1,4 +1,4 @@
-import { ignored } from "@proemial/adapters/slack/helpers/payload";
+import { Classification } from "@proemial/adapters/slack/helpers/payload";
 import { FILE_SIZE_LIMIT, FILE_TYPE_WHITELIST } from "./file-filters";
 import { EventCallbackPayload } from "@proemial/adapters/slack/models/event-models";
 import { extractLinks } from "@proemial/adapters/slack/helpers/links";
@@ -7,11 +7,14 @@ import { URL_BLACKLIST } from "./url-filters";
 import { EventLogItem } from "@proemial/adapters/mongodb/slack/v2.models";
 import { Time } from "@proemial/utils/time";
 import { unstable_cache as cache } from "next/cache";
+import { errorMessage } from "@proemial/adapters/slack/error-messages";
+
+export const ignored = { type: "ignored" } as Classification;
 
 export async function classifyRequest(
 	payload: EventCallbackPayload,
 	event: EventLogItem | null,
-) {
+): Promise<Classification> {
 	const workers = event?.requests.filter((r) => r.type.includes("worker:"));
 	if (workers?.length) {
 		log("Already started, workers:", workers.length);
@@ -27,11 +30,11 @@ export async function classifyRequest(
 		payload.type === "block_actions" &&
 		!!payload.actions.find((a) => a.action_id === "followup-question")
 	) {
-		return "followup";
+		return { type: "followup" };
 	}
 
 	if (payload.event?.type === "assistant_thread_started") {
-		return "suggestions";
+		return { type: "suggestions" };
 	}
 
 	if (payload.event?.subtype === "file_share") {
@@ -39,13 +42,19 @@ export async function classifyRequest(
 		if (file) {
 			if (!FILE_TYPE_WHITELIST.includes(file.mimetype)) {
 				log("unsupported file type", file.mimetype, file.size);
-				return ignored;
+				return {
+					type: "error",
+					payload: errorMessage.unsupportedFile(file.mimetype),
+				};
 			}
 			if (file.size > FILE_SIZE_LIMIT) {
 				log("file too large", file.mimetype, file.size);
-				return ignored;
+				return {
+					type: "error",
+					payload: errorMessage.fileTooLarge(file.size),
+				};
 			}
-			return "annotate";
+			return { type: "annotate" };
 		}
 	}
 
@@ -53,7 +62,7 @@ export async function classifyRequest(
 		!payload.event?.bot_profile &&
 		extractLinks(payload.event?.text, URL_BLACKLIST).length > 0
 	) {
-		return "annotate";
+		return { type: "annotate" };
 	}
 
 	if (
@@ -61,7 +70,7 @@ export async function classifyRequest(
 		(payload.event?.channel.startsWith("D") &&
 			payload.event.user !== payload.event.parent_user_id)
 	) {
-		return "answer";
+		return { type: "answer" };
 	}
 
 	log("unhandled", payload.type, payload.event?.type);

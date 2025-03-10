@@ -6,7 +6,10 @@ import { dispatchSlackEvent } from "./dispatch";
 import { EventCallbackPayload } from "@proemial/adapters/slack/models/event-models";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 import { Time } from "@proemial/utils/time";
-import { classifyRequest } from "../../../../../classification/request-classifier";
+import {
+	classifyRequest,
+	ignored,
+} from "../../../../../classification/request-classifier";
 import { Slack } from "@/inngest/workers/helpers/slack";
 
 export const revalidate = 0;
@@ -18,7 +21,7 @@ export async function POST(request: Request) {
 	const { payload, metadata } = await slack.parseRequest(text, classifyRequest);
 
 	try {
-		if (metadata.target === slack.ignored) {
+		if (metadata.target === ignored.type) {
 			if (payload.type === "url_verification") {
 				return NextResponse.json({ challenge: payload.challenge });
 			}
@@ -57,10 +60,10 @@ async function upsertToEventLog(
 		return;
 	}
 	return await SlackDb.eventLog.upsert({
-		...(metadata.target !== slack.ignored && {
+		...(metadata.target !== ignored.type && {
 			target: metadata.target,
 		}),
-		...(metadata.target !== slack.ignored &&
+		...(metadata.target !== ignored.type &&
 			metadata.target !== "dismiss" && {
 				status: "started",
 			}),
@@ -78,8 +81,8 @@ async function upsertToEventLog(
 			{
 				createdAt: new Date(begin),
 				type:
-					metadata.target === slack.ignored
-						? slack.ignored
+					metadata.target === ignored.type
+						? ignored.type
 						: payload.type === "event_callback"
 							? metadata.target
 							: payload.type,

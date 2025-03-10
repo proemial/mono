@@ -2,15 +2,19 @@ import { EventLogItem } from "../../mongodb/slack/v2.models";
 import { SlackDb } from "../../mongodb/slack/slack.adapter";
 import { EventCallbackPayload } from "../models/event-models";
 import { SlackEventMetadata } from "../models/metadata-models";
+import { SlackMessenger } from "../slack-messenger";
 
-export const ignored = "ignored";
+export type Classification = {
+	type: "ignored" | "error" | string;
+	payload?: string;
+};
 
 export async function parseRequest(
 	text: string,
 	classifier: (
 		payload: EventCallbackPayload,
 		event: EventLogItem | null,
-	) => Promise<string>,
+	) => Promise<Classification>,
 ) {
 	const unencoded = text?.startsWith("payload=")
 		? decodeURIComponent(text.slice(8))
@@ -18,6 +22,7 @@ export async function parseRequest(
 			? decodeURIComponent(text.slice(10))
 			: text;
 
+	console.log("PAYLOAD", unencoded);
 	const payload = JSON.parse(unencoded) as EventCallbackPayload;
 	const fields = parseFields(payload);
 
@@ -31,10 +36,11 @@ export async function parseRequest(
 
 	// TODO: return target:ignore if requests has workers
 	const event = await SlackDb.eventLog.get(partial);
+	const classifierResult = await classifier(payload, event);
 
 	const metadata = {
 		...partial,
-		target: await classifier(payload, event),
+		target: classifierResult.type,
 	} as SlackEventMetadata;
 	console.log({
 		target: metadata.target,
@@ -43,6 +49,14 @@ export async function parseRequest(
 		type: `${payload.type}/${payload.event?.type}${payload.event?.subtype ? `/${payload.event?.subtype}` : ""}`,
 		text: `${payload.event?.text ?? payload.event?.message?.text}`,
 	});
+
+	if (classifierResult.type === "error") {
+		SlackMessenger.postStatus(
+			metadata,
+			classifierResult.payload ?? "Error",
+			true,
+		);
+	}
 
 	return { payload, metadata };
 }

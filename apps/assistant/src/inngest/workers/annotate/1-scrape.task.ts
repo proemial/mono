@@ -14,6 +14,7 @@ import { SlackAnnotateEvent } from "../../workers";
 import { Metrics } from "../metrics";
 import { Slack } from "../helpers/slack";
 import { statusMessages } from "@proemial/adapters/slack/helpers/status-messages";
+import { errorMessage } from "@proemial/adapters/slack/error-messages";
 
 export const eventName = "annotate/scrape";
 const eventId = "annotate/scrape/fn";
@@ -117,7 +118,7 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 		await logCriticalError(`Error scraping ${payload.url}: "${error}"`);
 		await Slack.updateStatus(
 			payload.metadata,
-			"Oh no! An error occurred. 😭 The dev team has been notified. 🐹",
+			errorMessage.scrapeError(),
 			true,
 		);
 		throw error;

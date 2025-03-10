@@ -5,6 +5,7 @@ import { isSlackFileUrl, slackFileScraper } from "../slack/files/file-scraper";
 import { isTwitterUrl } from "../twitter";
 import { oxylabsYouTubeScraper } from "../youtube/oxylabs";
 import { isYouTubeUrl } from "../youtube/shared";
+import { errorMessage } from "../slack/error-messages";
 
 const llamaParseClient = new LlamaParseClient({
 	apiKey: process.env.LLAMA_CLOUD_API_KEY as string,
@@ -26,7 +27,7 @@ export async function scrapeUrl(
 	try {
 		if (isSlackFileUrl(url)) {
 			if (!fileOptions.mimeType) {
-				throw new Error("Missing file mimetype");
+				throw new Error(errorMessage.missingFileMimetype());
 			}
 			content = await slackFileScraper(
 				url,
@@ -43,12 +44,12 @@ export async function scrapeUrl(
 			content = await diffbotScraper(url);
 		}
 
-		if (isEmptyContent(content)) throw new Error("Scraped content is empty");
+		if (isEmptyContent(content)) throw new Error(errorMessage.scrapeEmpty());
 	} catch (error) {
 		if (isFallbackable(url)) {
 			console.warn(`Scraping failed: ${error}\nRetrying…`);
 			content = await scrapflyScraper(url);
-			if (isEmptyContent(content)) throw new Error("Scraped content is empty");
+			if (isEmptyContent(content)) throw new Error(errorMessage.scrapeEmpty());
 		} else {
 			throw error;
 		}

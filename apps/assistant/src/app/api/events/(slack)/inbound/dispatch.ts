@@ -10,6 +10,7 @@ import { isTwitterUrl } from "@proemial/adapters/twitter";
 import { ScrapflyWebProxy } from "@proemial/adapters/scrapfly/webproxy";
 import { Slack } from "@/inngest/workers/helpers/slack";
 import { getFollowupQuestion } from "@proemial/adapters/slack/helpers/payload";
+import { errorMessage } from "@proemial/adapters/slack/error-messages";
 
 export async function dispatchSlackEvent(
 	payload: EventCallbackPayload,
@@ -34,9 +35,7 @@ export async function dispatchSlackEvent(
 			try {
 				await proxy.fetch(url);
 			} catch (error) {
-				throw new Error(
-					`The <${url}|provided url> was possibly blocked by the host.`,
-				);
+				throw new Error(errorMessage.scrapeBlocked(url));
 			}
 		}
 
