@@ -179,7 +179,10 @@ async function answerQuestion(
 				}),
 				execute: async ({ question, query }) => {
 					console.log("PAPER QUERY", question, query);
-					await Slack.postDebug(metadata, `Fetch query: _"${query}"_`);
+					await Slack.postDebug(
+						metadata,
+						`Fetching papers using query: "${query}"`,
+					);
 					await Slack.updateStatus(metadata, statusMessages.ask.fetch);
 
 					const papers = (await logRetrieval(

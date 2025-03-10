@@ -6,7 +6,7 @@ export function debug(text: string) {
 				elements: [
 					{
 						type: "mrkdwn",
-						text: `:proem: ${text} :proem:`,
+						text: `:proem: Debug message: \`\`\`${text}\`\`\``,
 					},
 				],
 			},
