@@ -7,7 +7,6 @@ import { EventCallbackPayload } from "@proemial/adapters/slack/models/event-mode
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 import { Time } from "@proemial/utils/time";
 import { classifyRequest } from "../../../../../classification/request-classifier";
-import { unstable_cache as cache } from "next/cache";
 
 export const revalidate = 0;
 
@@ -16,11 +15,6 @@ export async function POST(request: Request) {
 
 	const text = await request.text();
 	const { payload, metadata } = await slack.parseRequest(text, classifyRequest);
-
-	const isDuplicate = await isDuplicateEvent(payload);
-	if (isDuplicate) {
-		return NextResponse.json({ status: "ok" });
-	}
 
 	try {
 		if (metadata.target === slack.ignored) {
@@ -93,21 +87,4 @@ async function upsertToEventLog(
 			},
 		],
 	});
-}
-
-// Slack sometimes send an event twice :/
-async function isDuplicateEvent(payload: EventCallbackPayload) {
-	const begin = Time.now();
-
-	const isAction = payload.type === "block_actions";
-	const startedAt = await cache(
-		async () => begin,
-		["slack:event", payload.event_id],
-	)();
-
-	if (!isAction && startedAt !== begin) {
-		console.log("event has been started already", payload.event_id);
-		return true;
-	}
-	return false;
 }

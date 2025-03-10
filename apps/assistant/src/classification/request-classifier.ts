@@ -5,14 +5,21 @@ import { extractLinks } from "@proemial/adapters/slack/helpers/links";
 import { nakedMention } from "@proemial/adapters/slack/helpers/routing";
 import { URL_BLACKLIST } from "./url-filters";
 import { EventLogItem } from "@proemial/adapters/mongodb/slack/v2.models";
+import { Time } from "@proemial/utils/time";
+import { unstable_cache as cache } from "next/cache";
 
-export function classifyRequest(
+export async function classifyRequest(
 	payload: EventCallbackPayload,
 	event: EventLogItem | null,
 ) {
 	const workers = event?.requests.filter((r) => r.type.includes("worker:"));
 	if (workers?.length) {
-		log("already started", workers.length);
+		log("Already started, workers:", workers.length);
+		return ignored;
+	}
+	const isDuplicate = await isDuplicateEvent(payload);
+	if (isDuplicate) {
+		console.log("Already started, eventId:", payload.event_id);
 		return ignored;
 	}
 
@@ -60,6 +67,22 @@ export function classifyRequest(
 	log("unhandled", payload.type, payload.event?.type);
 
 	return ignored;
+}
+
+// Slack sometimes send an event twice :/
+async function isDuplicateEvent(payload: EventCallbackPayload) {
+	const begin = Time.now();
+
+	const isAction = payload.type === "block_actions";
+	const startedAt = await cache(
+		async () => begin,
+		["slack:event", payload.event_id],
+	)();
+
+	if (!isAction && startedAt !== begin) {
+		return true;
+	}
+	return false;
 }
 
 function log(message: string, ...args: unknown[]) {
