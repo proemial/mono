@@ -174,11 +174,14 @@ async function answerQuestion(
 			searchPapers: {
 				description: "Find specific research papers matching a user query",
 				parameters: z.object({
+					question: z.string().describe("The actual user question"),
 					query: z.string().describe("The search query"),
 				}),
-				execute: async ({ query }) => {
+				execute: async ({ question, query }) => {
+					console.log("PAPER QUERY", question, query);
+					await Slack.postDebug(metadata, `Fetch query: _"${query}"_`);
 					await Slack.updateStatus(metadata, statusMessages.ask.fetch);
-					console.log("Retrieving papers", query);
+
 					const papers = (await logRetrieval(
 						"assistant",
 						query,
@@ -187,8 +190,8 @@ async function answerQuestion(
 						},
 						traceId,
 					)) as RetrievalResult;
-					await Slack.updateStatus(metadata, statusMessages.ask.summarize);
 
+					await Slack.updateStatus(metadata, statusMessages.ask.summarize);
 					console.log("Papers retrieved", papers.length);
 
 					return { papers };
