@@ -25,19 +25,20 @@ export async function POST(request: Request) {
 			if (payload.type === "url_verification") {
 				return NextResponse.json({ challenge: payload.challenge });
 			}
+			console.log("IGNORED", payload);
 			return success;
 		}
 
 		const dispatched = await dispatchSlackEvent(payload, metadata);
 		await upsertToEventLog(payload, metadata, begin, dispatched?.error);
 
-		console.log("dispatched", dispatched);
 		if (dispatched) {
+			console.log("DISPATCHED", dispatched);
 			return success;
 		}
 
 		const result = await sendToN8n(payload, metadata);
-		console.log("n8n", result);
+		console.log("N8N", result);
 		return success;
 	} catch (error) {
 		await upsertToEventLog(payload, metadata, begin, (error as Error).message);
