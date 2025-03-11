@@ -33,3 +33,6 @@ export const getBookmarkCacheTag = (collectionId: Collection["id"]) =>
 
 export const getBookmarkedPapersCacheTag = (collectionId: Collection["id"]) =>
 	`bookmarked-papers:${collectionId}`;
+
+export const fingerprintCacheTag = (collectionId: Collection["id"]) =>
+	`fingerprint:${collectionId}`;
