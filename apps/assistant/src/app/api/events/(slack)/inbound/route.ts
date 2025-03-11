@@ -29,7 +29,7 @@ export async function POST(request: Request) {
 		}
 
 		const dispatched = await dispatchSlackEvent(payload, metadata);
-		await upsertToEventLog(payload, metadata, begin);
+		await upsertToEventLog(payload, metadata, begin, dispatched?.error);
 
 		console.log("dispatched", dispatched);
 		if (dispatched) {
@@ -65,7 +65,7 @@ async function upsertToEventLog(
 		}),
 		...(metadata.target !== ignored.type &&
 			metadata.target !== "dismiss" && {
-				status: "started",
+				status: error ? "failed" : "started",
 			}),
 		metadata: {
 			appId: metadata.appId,

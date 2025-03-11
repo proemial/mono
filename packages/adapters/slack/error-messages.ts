@@ -16,12 +16,6 @@ const scrapeErrors = [
 	"Yikes! That’s on us. Our team has been notified. 😬",
 ];
 
-const blockedErrors = [
-	"Well, that’s awkward. The site might not want to talk to us.",
-	"🚧 Looks like <{url}|the URL> isn’t playing nice. The host might be blocking us.",
-	"We knocked, but the site didn’t answer. It might be blocking requests.",
-];
-
 const missingMimiTypeErrors = [
 	"We couldn’t figure out what kind of file that is. Can you check and try again?",
 	"🤔 Something’s missing! We need a file type to process this.",
@@ -42,8 +36,6 @@ export const errorMessage = {
 		return randomItem(fileSizeErrors).replace("{size}", size.toString());
 	},
 	scrapeError: () => randomItem(scrapeErrors),
-	scrapeBlocked: (url: string) =>
-		randomItem(blockedErrors).replace("{url}", url),
 	missingFileMimetype: () => randomItem(missingMimiTypeErrors),
 	scrapeEmpty: () => randomItem(emptyErrors),
 };
