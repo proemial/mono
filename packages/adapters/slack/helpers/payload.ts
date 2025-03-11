@@ -50,13 +50,14 @@ export async function parseRequest(
 		text: `${payload.event?.text ?? payload.event?.message?.text}`,
 	});
 
-	if (classifierResult.type === "error") {
-		SlackMessenger.postStatus(
-			metadata,
-			classifierResult.payload ?? "Error",
-			true,
-		);
-	}
+	// Do not spam the thread with the errors
+	// if (classifierResult.type === "error") {
+	// 	SlackMessenger.postStatus(
+	// 		metadata,
+	// 		classifierResult.payload ?? "Error",
+	// 		true,
+	// 	);
+	// }
 
 	return { payload, metadata };
 }
