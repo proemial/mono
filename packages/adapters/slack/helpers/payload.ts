@@ -2,7 +2,6 @@ import { EventLogItem } from "../../mongodb/slack/v2.models";
 import { SlackDb } from "../../mongodb/slack/slack.adapter";
 import { EventCallbackPayload } from "../models/event-models";
 import { SlackEventMetadata } from "../models/metadata-models";
-import { SlackMessenger } from "../slack-messenger";
 
 export type Classification = {
 	type: "ignored" | "error" | string;
