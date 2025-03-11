@@ -30,8 +30,8 @@ export function newId(prefix: keyof typeof PREFIXES) {
 }
 
 export function isId(id: string) {
-	return Object.entries(PREFIXES).some(([_, [prefix, length]]) => {
-		const pattern = new RegExp(`^${prefix}_\\w{${length}}$`);
+	return Object.values(PREFIXES).some(([prefix, suffixLength]) => {
+		const pattern = new RegExp(`^${prefix}_\\w{${suffixLength}}$`);
 		return pattern.test(id);
 	});
 }

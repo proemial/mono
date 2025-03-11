@@ -17,9 +17,13 @@ import { z } from "zod";
 import { inngest } from "../../client";
 import { SlackAskEvent } from "../../workers";
 import { Metrics } from "../metrics";
-import { LlmSteps, extractPapers } from "../helpers/extract-references";
+import {
+	LlmSteps,
+	convertSourceRefsToNumberedLinks,
+	extractPapers,
+} from "../helpers/extract-references";
 import { Slack } from "../helpers/slack";
-import { isId, newId } from "@proemial/utils/uuid";
+import { newId } from "@proemial/utils/uuid";
 
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
@@ -265,29 +269,3 @@ async function getMessages(metadata: SlackEventMetadata, question?: string) {
 
 	return [];
 }
-
-export const convertSourceRefsToNumberedLinks = (
-	answer: string,
-	papers: ReturnType<typeof extractPapers>,
-) => {
-	const srcRefMap = new Map<string, number>();
-	let counter = 1;
-
-	return answer.replace(/\[[^\]]+\]/g, (match) => {
-		const srcRefId = match.slice(1, -1);
-		// Verify id validity
-		if (!isId(srcRefId)) {
-			return match;
-		}
-		// Verify paper existence
-		const paper = papers?.find((p) => p.srcRefId === srcRefId);
-		if (!paper) {
-			return match;
-		}
-		if (!srcRefMap.has(srcRefId)) {
-			srcRefMap.set(srcRefId, counter++);
-		}
-		const paperUrl = paper.url;
-		return `[[${srcRefMap.get(srcRefId)}]](${paperUrl})`;
-	});
-};

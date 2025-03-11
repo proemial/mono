@@ -1,3 +1,4 @@
+import { isId } from "@proemial/utils/uuid";
 import { PaperWithSrcRef } from "../ask/1-summarize.task";
 
 export function extractPapers(result: LlmSteps) {
@@ -80,4 +81,39 @@ export type LlmStep = {
 			}[];
 		}[];
 	};
+};
+
+export const convertSourceRefsToNumberedLinks = (
+	answer: string,
+	papers: ReturnType<typeof extractPapers>,
+) => {
+	const srcRefMap = new Map<string, number>();
+	let counter = 1;
+
+	return answer.replace(/\[[^\]]+\]/g, (match) => {
+		const srcRefIds = match
+			.slice(1, -1)
+			.split(",")
+			.map((id) => id.trim());
+
+		// Handle single or multiple refs
+		const links = srcRefIds.map((srcRefId) => {
+			// Verify id validity
+			if (!isId(srcRefId)) {
+				return srcRefId;
+			}
+			// Verify paper existence
+			const paper = papers?.find((p) => p.srcRefId === srcRefId);
+			if (!paper) {
+				return srcRefId;
+			}
+			if (!srcRefMap.has(srcRefId)) {
+				srcRefMap.set(srcRefId, counter++);
+			}
+			return `[${srcRefMap.get(srcRefId)}](${paper.url})`;
+		});
+
+		// Return single link or multiple links wrapped in brackets
+		return links.length === 1 ? `[${links[0]}]` : `[${links.join(", ")}]`;
+	});
 };
