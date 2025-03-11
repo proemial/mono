@@ -29,6 +29,12 @@ export async function POST(request: Request) {
 			return success;
 		}
 
+		if (metadata.target === "error") {
+			// Abandon the request, as it's already been handled
+			console.log("ERROR", metadata);
+			return success;
+		}
+
 		const dispatched = await dispatchSlackEvent(payload, metadata);
 		await upsertToEventLog(payload, metadata, begin, dispatched?.error);
 
