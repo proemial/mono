@@ -19,6 +19,8 @@ import { SlackAskEvent } from "../../workers";
 import { Metrics } from "../metrics";
 import { LlmSteps, extractPapers } from "../helpers/extract-references";
 import { Slack } from "../helpers/slack";
+import { isId, newId } from "@proemial/utils/uuid";
+
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
 
@@ -112,21 +114,7 @@ export async function summarizeAnswerTask(
 		input.prompt,
 	);
 	console.log("answer", answer, papers?.length);
-
-	// First, find all citation groups (anything within square brackets)
-	const citationRegex = /\[([\d\s,]+)\]/g;
-	answer = answer.replace(citationRegex, (match, numbers) => {
-		// Split the numbers and handle each citation
-		const citations = numbers.split(",").map((num: string) => {
-			const i = Number.parseInt(num.trim());
-			const paper = papers?.[i];
-			return paper ? `[${i}](${paper.url})` : num.trim();
-		});
-
-		// Rejoin with the original separators (commas and spaces)
-		return `[${citations.join(", ")}]`;
-	});
-
+	answer = convertSourceRefsToNumberedLinks(answer, papers);
 	console.log("answer with links", answer);
 
 	// Next step from router
@@ -149,6 +137,8 @@ export async function summarizeAnswerTask(
 		},
 	};
 }
+
+export type PaperWithSrcRef = QdrantPaper & { srcRefId: string };
 
 async function answerQuestion(
 	metadata: SlackEventMetadata,
@@ -197,7 +187,15 @@ async function answerQuestion(
 					await Slack.updateStatus(metadata, statusMessages.ask.summarize);
 					console.log("Papers retrieved", papers.length);
 
-					return { papers };
+					return {
+						papers: papers.map(
+							(p) =>
+								({
+									...p,
+									srcRefId: newId("source_reference"),
+								}) satisfies PaperWithSrcRef,
+						),
+					};
 				},
 			},
 		},
@@ -267,3 +265,29 @@ async function getMessages(metadata: SlackEventMetadata, question?: string) {
 
 	return [];
 }
+
+export const convertSourceRefsToNumberedLinks = (
+	answer: string,
+	papers: ReturnType<typeof extractPapers>,
+) => {
+	const srcRefMap = new Map<string, number>();
+	let counter = 1;
+
+	return answer.replace(/\[[^\]]+\]/g, (match) => {
+		const srcRefId = match.slice(1, -1);
+		// Verify id validity
+		if (!isId(srcRefId)) {
+			return match;
+		}
+		// Verify paper existence
+		const paper = papers?.find((p) => p.srcRefId === srcRefId);
+		if (!paper) {
+			return match;
+		}
+		if (!srcRefMap.has(srcRefId)) {
+			srcRefMap.set(srcRefId, counter++);
+		}
+		const paperUrl = paper.url;
+		return `[[${srcRefMap.get(srcRefId)}]](${paperUrl})`;
+	});
+};

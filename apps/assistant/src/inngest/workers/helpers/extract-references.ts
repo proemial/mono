@@ -1,4 +1,4 @@
-import { QdrantPaper } from "../ask/1-summarize.task";
+import { PaperWithSrcRef } from "../ask/1-summarize.task";
 
 export function extractPapers(result: LlmSteps) {
 	const tools = result.steps
@@ -18,11 +18,12 @@ export function extractPapers(result: LlmSteps) {
 
 	const papers = results?.flatMap((c) => {
 		// @ts-ignore
-		const papers = c.result.papers as QdrantPaper[];
+		const papers = c.result.papers as PaperWithSrcRef[];
 		return papers.map((p) => ({
 			url: `https://proem.ai/paper/oa/${p.id.split("/").at(-1)}`,
 			title: p.title,
 			abstract: p.abstract,
+			srcRefId: p.srcRefId,
 		}));
 	});
 	console.log("papers", papers?.length);
