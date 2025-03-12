@@ -66,10 +66,12 @@ export async function getFollowupQuestion(
 	metadata: SlackEventMetadata,
 	payload: EventCallbackPayload,
 ) {
-	const botUser = await SlackMessenger.getBotUser(
-		metadata,
-		payload.message?.bot_id as string,
-	);
+	const botUser =
+		payload.message?.user ??
+		(await SlackMessenger.getBotUser(
+			metadata,
+			payload.message?.bot_id as string,
+		));
 
 	return {
 		// @ts-ignore
