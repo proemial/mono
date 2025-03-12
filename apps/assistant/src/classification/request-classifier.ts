@@ -58,18 +58,20 @@ export async function classifyRequest(
 		}
 	}
 
-	if (
-		!payload.event?.bot_profile &&
-		extractLinks(payload.event?.text, URL_BLACKLIST).length > 0
-	) {
+	const isBot = payload.event?.bot_profile;
+	const hasLinks = extractLinks(payload.event?.text, URL_BLACKLIST).length > 0;
+	const tagged =
+		!nakedMention(payload) && payload.event?.type === "app_mention";
+
+	if (!isBot && !tagged && hasLinks) {
 		return { type: "annotate" };
 	}
 
-	if (
-		(!nakedMention(payload) && payload.event?.type === "app_mention") ||
-		(payload.event?.channel.startsWith("D") &&
-			payload.event.user !== payload.event.parent_user_id)
-	) {
+	const assistant =
+		payload.event?.channel.startsWith("D") &&
+		payload.event.user !== payload.event.parent_user_id;
+
+	if ((tagged || assistant) && !hasLinks) {
 		return { type: "answer" };
 	}
 
