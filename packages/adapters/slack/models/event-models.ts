@@ -54,6 +54,7 @@ export type EventCallbackPayload = {
 	};
 	message?: {
 		user: string;
+		bot_id: string;
 	};
 };
 

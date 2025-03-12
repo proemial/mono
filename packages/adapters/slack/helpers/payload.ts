@@ -2,6 +2,7 @@ import { EventLogItem } from "../../mongodb/slack/v2.models";
 import { SlackDb } from "../../mongodb/slack/slack.adapter";
 import { EventCallbackPayload } from "../models/event-models";
 import { SlackEventMetadata } from "../models/metadata-models";
+import { SlackMessenger } from "../slack-messenger";
 
 export type Classification = {
 	type: "ignored" | "error" | string;
@@ -61,13 +62,21 @@ export async function parseRequest(
 	return { payload, metadata };
 }
 
-export function getFollowupQuestion(payload: EventCallbackPayload) {
+export async function getFollowupQuestion(
+	metadata: SlackEventMetadata,
+	payload: EventCallbackPayload,
+) {
+	const botUser = await SlackMessenger.getBotUser(
+		metadata,
+		payload.message?.bot_id as string,
+	);
+
 	return {
 		// @ts-ignore
 		question: payload.state.values.followups[
 			"followup-question"
 		].selected_option.value?.replaceAll("+", " "),
-		botUser: payload.message?.user,
+		botUser,
 	};
 }
 

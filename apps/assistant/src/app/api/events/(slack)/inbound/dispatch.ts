@@ -78,14 +78,11 @@ export async function dispatchSlackEvent(
 	}
 
 	if (metadata.target === "followup") {
-		const { question, botUser } = getFollowupQuestion(payload);
+		const { question, botUser } = await getFollowupQuestion(metadata, payload);
 
 		const canPostAsUser = await Slack.canPostAsUser(metadata);
 		if (canPostAsUser) {
-			const result = await Slack.postQuestion(
-				metadata,
-				`${question} <@${botUser}>`,
-			);
+			await Slack.postQuestion(metadata, `${question} <@${botUser}>`);
 			return {
 				status: "dispatched",
 				event: "followup",
@@ -94,7 +91,7 @@ export async function dispatchSlackEvent(
 
 		// Slack doesn't send a mention event to us, if we tag ourselves
 		// in a thread. So we need to ask the question explicitly.
-		const result = await inngest.send({
+		await inngest.send({
 			name: askEventName,
 			data: {
 				thread: payload.event?.thread_ts,

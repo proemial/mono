@@ -322,7 +322,23 @@ export const SlackMessenger = {
 			return response;
 			// return response.response_metadata?.scopes?.includes(permission);
 		} finally {
-			Time.log(begin, "[messenger][send]");
+			Time.log(begin, "[messenger][botinfo]");
+		}
+	},
+
+	getBotUser: async (metadata: SlackEventMetadata, bot: string) => {
+		const begin = Time.now();
+
+		try {
+			const client = await slackClient(metadata);
+
+			const response = await client.asProem.bots.info({
+				bot,
+			});
+
+			return response?.bot?.user_id;
+		} finally {
+			Time.log(begin, "[messenger][botuser]");
 		}
 	},
 
