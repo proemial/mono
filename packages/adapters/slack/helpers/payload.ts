@@ -50,24 +50,35 @@ export async function parseRequest(
 		text: `${payload.event?.text ?? payload.event?.message?.text}`,
 	});
 
-	if (classifierResult.type === "error") {
-		SlackMessenger.postStatus(
-			metadata,
-			classifierResult.payload ?? "Error",
-			true,
-		);
-	}
+	// Do not spam the thread with the errors
+	// if (classifierResult.type === "error") {
+	// 	SlackMessenger.postStatus(
+	// 		metadata,
+	// 		classifierResult.payload ?? "Error",
+	// 		true,
+	// 	);
+	// }
 
 	return { payload, metadata };
 }
 
-export function getFollowupQuestion(payload: EventCallbackPayload) {
+export async function getFollowupQuestion(
+	metadata: SlackEventMetadata,
+	payload: EventCallbackPayload,
+) {
+	const botUser =
+		payload.message?.user ??
+		(await SlackMessenger.getBotUser(
+			metadata,
+			payload.message?.bot_id as string,
+		));
+
 	return {
 		// @ts-ignore
 		question: payload.state.values.followups[
 			"followup-question"
 		].selected_option.value?.replaceAll("+", " "),
-		botUser: payload.message?.user,
+		botUser,
 	};
 }
 

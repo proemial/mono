@@ -8,6 +8,7 @@ import { link } from "./block-kit/link-blocks";
 import { status as statusBlocks } from "./block-kit/status-blocks";
 import { SlackResponse } from "./models/event-models";
 import { SlackEventMetadata } from "./models/metadata-models";
+import { debug } from "./block-kit/debug-blocks";
 
 // Internal logging in the slack client library
 const SLACK_LIB_LOGGING = false;
@@ -59,6 +60,29 @@ export const SlackMessenger = {
 				thread_ts: (metadata.replyTs ?? metadata.ts) as string,
 				...statusBlocks(metadata.target, status, isError),
 				reply_broadcast: !!showInChannel,
+			};
+
+			const response = await client.asProem.chat.postMessage(payload);
+			logRequest("chat.postMessage", [payload, response]);
+
+			await logEvent("status", { metadata, response }, Time.elapsed(begin));
+
+			return response;
+		} finally {
+			Time.log(begin, "[messenger][status]");
+		}
+	},
+
+	postDebug: async (metadata: SlackEventMetadata, message: string) => {
+		const begin = Time.now();
+
+		try {
+			const client = await slackClient(metadata);
+
+			const payload = {
+				channel: metadata.channelId,
+				thread_ts: (metadata.replyTs ?? metadata.ts) as string,
+				...debug(message),
 			};
 
 			const response = await client.asProem.chat.postMessage(payload);
@@ -298,7 +322,23 @@ export const SlackMessenger = {
 			return response;
 			// return response.response_metadata?.scopes?.includes(permission);
 		} finally {
-			Time.log(begin, "[messenger][send]");
+			Time.log(begin, "[messenger][botinfo]");
+		}
+	},
+
+	getBotUser: async (metadata: SlackEventMetadata, bot: string) => {
+		const begin = Time.now();
+
+		try {
+			const client = await slackClient(metadata);
+
+			const response = await client.asProem.bots.info({
+				bot,
+			});
+
+			return response?.bot?.user_id;
+		} finally {
+			Time.log(begin, "[messenger][botuser]");
 		}
 	},
 

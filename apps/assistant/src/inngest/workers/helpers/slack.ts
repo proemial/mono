@@ -1,5 +1,6 @@
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
+import { EnvVars } from "@proemial/utils/env-vars";
 
 export const Slack = {
 	updateStatus: async (
@@ -24,6 +25,12 @@ export const Slack = {
 			);
 		}
 		return await SlackMessenger.updateStatus(metadata, status, isError);
+	},
+
+	postDebug: async (metadata: SlackEventMetadata, message: string) => {
+		if (EnvVars.isInternalSlackApp(metadata.appId)) {
+			return await SlackMessenger.postDebug(metadata, message);
+		}
 	},
 
 	postSummary: async (

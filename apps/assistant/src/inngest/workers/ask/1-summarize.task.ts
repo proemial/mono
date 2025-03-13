@@ -17,8 +17,14 @@ import { z } from "zod";
 import { inngest } from "../../client";
 import { SlackAskEvent } from "../../workers";
 import { Metrics } from "../metrics";
-import { LlmSteps, extractPapers } from "../helpers/extract-references";
+import {
+	LlmSteps,
+	convertSourceRefsToNumberedLinks,
+	extractPapers,
+} from "../helpers/extract-references";
 import { Slack } from "../helpers/slack";
+import { newId } from "@proemial/utils/uuid";
+
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
 
@@ -112,21 +118,7 @@ export async function summarizeAnswerTask(
 		input.prompt,
 	);
 	console.log("answer", answer, papers?.length);
-
-	// First, find all citation groups (anything within square brackets)
-	const citationRegex = /\[([\d\s,]+)\]/g;
-	answer = answer.replace(citationRegex, (match, numbers) => {
-		// Split the numbers and handle each citation
-		const citations = numbers.split(",").map((num: string) => {
-			const i = Number.parseInt(num.trim());
-			const paper = papers?.[i];
-			return paper ? `[${i}](${paper.url})` : num.trim();
-		});
-
-		// Rejoin with the original separators (commas and spaces)
-		return `[${citations.join(", ")}]`;
-	});
-
+	answer = convertSourceRefsToNumberedLinks(answer, papers);
 	console.log("answer with links", answer);
 
 	// Next step from router
@@ -149,6 +141,8 @@ export async function summarizeAnswerTask(
 		},
 	};
 }
+
+export type PaperWithSrcRef = QdrantPaper & { srcRefId: string };
 
 async function answerQuestion(
 	metadata: SlackEventMetadata,
@@ -174,11 +168,17 @@ async function answerQuestion(
 			searchPapers: {
 				description: "Find specific research papers matching a user query",
 				parameters: z.object({
+					question: z.string().describe("The actual user question"),
 					query: z.string().describe("The search query"),
 				}),
-				execute: async ({ query }) => {
+				execute: async ({ question, query }) => {
+					console.log("PAPER QUERY", question, query);
+					await Slack.postDebug(
+						metadata,
+						`Fetching papers using query: "${query}"`,
+					);
 					await Slack.updateStatus(metadata, statusMessages.ask.fetch);
-					console.log("Retrieving papers", query);
+
 					const papers = (await logRetrieval(
 						"assistant",
 						query,
@@ -187,11 +187,19 @@ async function answerQuestion(
 						},
 						traceId,
 					)) as RetrievalResult;
-					await Slack.updateStatus(metadata, statusMessages.ask.summarize);
 
+					await Slack.updateStatus(metadata, statusMessages.ask.summarize);
 					console.log("Papers retrieved", papers.length);
 
-					return { papers };
+					return {
+						papers: papers.map(
+							(p) =>
+								({
+									...p,
+									srcRefId: newId("source_reference"),
+								}) satisfies PaperWithSrcRef,
+						),
+					};
 				},
 			},
 		},
