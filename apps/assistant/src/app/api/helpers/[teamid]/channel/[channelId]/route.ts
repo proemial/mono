@@ -4,6 +4,7 @@ import { WebClient } from "@slack/web-api";
 import { MessageElement } from "@slack/web-api/dist/types/response/ConversationsHistoryResponse";
 
 export const revalidate = 0;
+export const maxDuration = 300;
 
 type Message = {
 	ts: string;
@@ -17,6 +18,9 @@ type Message = {
 	}[];
 	replies?: Message[];
 };
+
+let repliesFetched = 0;
+let usersFetched = 0;
 
 export async function GET(
 	request: Request,
@@ -51,6 +55,7 @@ export async function GET(
 		history.messages?.map(async (m) => {
 			let replies: Message[] | undefined;
 			if (!m.subtype && m.thread_ts) {
+				repliesFetched++;
 				const thread = await slack.conversations.replies({
 					channel,
 					ts: m.thread_ts as string,
@@ -70,7 +75,7 @@ export async function GET(
 		}) ?? [],
 	);
 
-	return NextResponse.json({
+	const result = {
 		description: channelDescription,
 		messages: await addUsers(
 			messages
@@ -81,7 +86,11 @@ export async function GET(
 			userIds,
 			slack,
 		),
-	});
+	};
+	console.log("repliesFetched", repliesFetched);
+	console.log("usersFetched", usersFetched);
+
+	return NextResponse.json(result);
 }
 
 function extractMessage(message: MessageElement, userIds: Set<string>) {
@@ -133,6 +142,7 @@ async function addUsers(
 		Array.from(userIds)
 			.filter((userId) => !!userId)
 			.map(async (userId) => {
+				usersFetched++;
 				const user = await slack.users.info({ user: userId });
 				return user.user;
 			}),
