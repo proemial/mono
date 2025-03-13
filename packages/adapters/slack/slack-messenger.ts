@@ -48,7 +48,6 @@ export const SlackMessenger = {
 		metadata: SlackEventMetadata,
 		status: string,
 		isError?: boolean,
-		showInChannel?: boolean,
 	) => {
 		const begin = Time.now();
 
@@ -59,7 +58,6 @@ export const SlackMessenger = {
 				channel: metadata.channelId,
 				thread_ts: (metadata.replyTs ?? metadata.ts) as string,
 				...statusBlocks(metadata.target, status, isError),
-				reply_broadcast: !!showInChannel,
 			};
 
 			const response = await client.asProem.chat.postMessage(payload);

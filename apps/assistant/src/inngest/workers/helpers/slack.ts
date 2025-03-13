@@ -14,15 +14,7 @@ export const Slack = {
 		}
 
 		if (begin) {
-			const showInChannel =
-				metadata.target === "annotate" && !metadata.threadTs && !isError;
-
-			return await SlackMessenger.postStatus(
-				metadata,
-				status,
-				isError,
-				showInChannel,
-			);
+			return await SlackMessenger.postStatus(metadata, status, isError);
 		}
 		return await SlackMessenger.updateStatus(metadata, status, isError);
 	},
