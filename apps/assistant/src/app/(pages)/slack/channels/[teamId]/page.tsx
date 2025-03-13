@@ -51,7 +51,11 @@ export default async function SlackTracePage({ params }: Props) {
 
 	return (
 		<div className="p-4">
-			<h1 className="text-xl font-bold mb-4">Channels with @proem</h1>
+			<div className="text-xl mb-4">
+				<span className="font-bold italic">{app.team.name}</span> has added{" "}
+				<span className="font-bold italic">@proem</span> to the following
+				channels:
+			</div>
 
 			<div className="ml-4 space-y-1">
 				{channels.map((channel: Channel) => (
