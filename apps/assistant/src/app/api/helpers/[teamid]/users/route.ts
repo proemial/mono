@@ -26,9 +26,10 @@ export async function GET(
 	console.log("response_metadata", json.response_metadata);
 
 	return NextResponse.json(
-		json.members.filter(
-			(member: { is_bot: boolean; deleted: boolean; name: string }) =>
-				!member.is_bot && !member.deleted && member.name !== "slackbot",
-		),
+		json.members,
+		// .filter(
+		// 	(member: { is_bot: boolean; deleted: boolean; name: string }) =>
+		// 		!member.is_bot && !member.deleted && member.name !== "slackbot",
+		// ),
 	);
 }

@@ -30,7 +30,10 @@ export async function GET(
 
 	return NextResponse.json(
 		json.channels
-			.filter((channel: { is_archived: boolean }) => !channel.is_archived)
+			.filter(
+				(channel: { is_archived: boolean; is_member: boolean }) =>
+					!channel.is_archived && channel.is_member,
+			)
 			.sort((a: { is_member: boolean }) => {
 				return a.is_member ? -1 : 1;
 			})
