@@ -36,15 +36,6 @@ export function status(target: string, text: string, error?: boolean) {
 					{
 						...spinner,
 					},
-					...(preloader
-						? [
-								{
-									type: "image",
-									image_url: "https://assistant.proem.ai/slack/preloader.gif",
-									alt_text: "",
-								},
-							]
-						: []),
 				],
 			},
 		],
