@@ -1,6 +1,7 @@
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
-import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 import Link from "next/link";
+
+export const maxDuration = 300;
 
 type Props = {
 	params: { appId: string; teamId: string };
@@ -14,7 +15,7 @@ type Channel = {
 	is_member: boolean;
 };
 
-export default async function SlackTracePage({ params }: Props) {
+export default async function SlackChannelsPage({ params }: Props) {
 	const { teamId } = params;
 	const app = await SlackDb.installs.get(teamId, "A08AD1FSPHV");
 	if (!app) {
