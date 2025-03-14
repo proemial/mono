@@ -2,7 +2,6 @@ import { answer } from "@proemial/adapters/slack/block-kit/answer-blocks";
 import { link } from "@proemial/adapters/slack/block-kit/link-blocks";
 import { welcome } from "@proemial/adapters/slack/block-kit/welcome";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
-import { nudgeMessage } from "@proemial/adapters/slack/nudge-messages";
 import {
 	asMrkdwn,
 	SlackMessenger,
@@ -87,12 +86,7 @@ export const Slack = {
 
 		return await SlackMessenger.sendMessage(
 			metadata,
-			welcome(
-				nudgeMessage
-					.welcomeToChannel()
-					.at(0)
-					?.replace("{channel}", channelName ?? metadata.channelId) as string,
-			),
+			welcome(channelName ?? metadata.channelId),
 		);
 	},
 };
