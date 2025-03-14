@@ -117,6 +117,6 @@ export const convertSourceRefsToNumberedLinks = (
 		return links.length === 1 ? `[${links[0]}]` : `[${links.join(", ")}]`;
 	});
 
-	// Remove empty link brackets filtered above
-	return converted?.replace(/\s*\[\]/g, "").replaceAll("  ", " ");
+	// Remove empty link brackets filtered above (these may contain commas)
+	return converted?.replace(/\s*\[(?:,\s*)*\]/g, "");
 };
