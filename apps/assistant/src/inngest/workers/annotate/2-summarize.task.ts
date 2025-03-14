@@ -6,7 +6,7 @@ import { LlmSummary } from "@/prompts/annotate/summarize-prompts";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { uuid5 } from "@proemial/utils/uuid";
 import { Summaries } from "@proemial/adapters/mongodb/slack/scraped.types";
-import { generateText, Message } from "ai";
+import { generateText } from "ai";
 import { proxyToN8n } from "@/app/api/events/(n8n)/n8nProxy";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 import { Metrics } from "../metrics";
@@ -94,9 +94,7 @@ export async function summarizeAnnotationTask(
 	const begin = Time.now();
 
 	const { text } = await generateText({
-		model: await LlmSummary.model(uuid5(payload.url, "helicone"), {
-			slackAppId: payload.metadata.appId,
-		}),
+		model: await LlmSummary.model(uuid5(payload.url, "helicone")),
 		prompt: input.prompt
 			.replace("$url", input.url)
 			.replace("$title", input.title)

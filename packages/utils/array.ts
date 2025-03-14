@@ -19,3 +19,7 @@ export function onLast(index: number, items: any[], styling: string) {
 	}
 	return "";
 }
+
+export function randomElement<T>(array: T[]): T {
+	return array[Math.floor(Math.random() * array.length)] as T;
+}

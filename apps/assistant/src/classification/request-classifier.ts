@@ -102,5 +102,5 @@ async function isDuplicateEvent(payload: EventCallbackPayload) {
 }
 
 function log(message: string, ...args: unknown[]) {
-	console.log(`IGNORE: ${message}`, ...args);
+	console.log(`IGNORE: ${message}`);
 }

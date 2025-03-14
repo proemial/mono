@@ -185,6 +185,36 @@ export const SlackMessenger = {
 		}
 	},
 
+	sendEphemeralMessage: async (
+		metadata: SlackEventMetadata,
+		body:
+			| { blocks: (KnownBlock | Block)[] }
+			| { attachments: MessageAttachment[] },
+	) => {
+		const begin = Time.now();
+
+		try {
+			const client = await slackClient(metadata);
+
+			const payload = {
+				channel: metadata.channelId,
+				ts: metadata.ts as string,
+				user: metadata.user,
+				unfurl_links: false,
+				...body,
+			};
+
+			const response = await client.asProem.chat.postEphemeral(payload);
+			logRequest("chat.postEphemeral", [payload, response]);
+
+			await logEvent("send", { metadata, response }, Time.elapsed(begin));
+
+			return response;
+		} finally {
+			Time.log(begin, "[messenger][send]");
+		}
+	},
+
 	sendMessageAsUser: async (metadata: SlackEventMetadata, text: string) => {
 		const begin = Time.now();
 

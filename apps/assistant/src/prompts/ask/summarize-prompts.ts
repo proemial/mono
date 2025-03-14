@@ -1,15 +1,13 @@
-import LlmModels, { AppConfig } from "@proemial/adapters/llm/models";
+import LlmModels from "@proemial/adapters/llm/models";
 
 export const LlmAnswer = {
 	prompt: answerPrompt,
-	model: async (id: string, appConfig?: AppConfig) =>
-		await LlmModels.news.answer(id, appConfig),
+	model: async (id: string) => await LlmModels.assistant.answer(id),
 };
 
 export const LlmFollowups = {
 	prompt: followupsPrompt,
-	model: async (id: string, appConfig?: AppConfig) =>
-		await LlmModels.news.followups(id, appConfig),
+	model: async (id: string) => await LlmModels.assistant.followups(id),
 };
 
 function answerPrompt() {

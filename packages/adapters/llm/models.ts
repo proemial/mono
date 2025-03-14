@@ -25,10 +25,6 @@ export type SourceProduct =
 	| "embed"
 	| "api";
 
-export type AppConfig = {
-	slackAppId?: string;
-};
-
 const LlmModels = {
 	chat: {
 		embeddings: () => openaiEmbeddings("ask", "embeddings") as EmbeddingsModel,
@@ -67,28 +63,24 @@ const LlmModels = {
 		// 	getModel(source ?? "read", "paper:related"),
 	},
 	news: {
-		answer: (traceId?: string, appConfig?: AppConfig) =>
-			getModel("news", "answer", traceId, appConfig),
-		followups: (traceId?: string, appConfig?: AppConfig) =>
-			getModel("news", "followups", traceId, appConfig),
+		answer: (traceId?: string) => getModel("news", "answer", traceId),
+		followups: (traceId?: string) => getModel("news", "followups", traceId),
 
 		// Annotation
-		query: (traceId?: string, appConfig?: AppConfig) =>
-			getModel("news", "query", traceId, appConfig),
-		background: (traceId?: string, appConfig?: AppConfig) =>
-			getModel("news", "background", traceId, appConfig),
+		query: (traceId?: string) => getModel("news", "query", traceId),
+		background: (traceId?: string) => getModel("news", "background", traceId),
 	},
 	assistant: {
-		answer: (traceId?: string, appConfig?: AppConfig) =>
-			getModel("assistant", "answer", traceId, appConfig),
-		followups: (traceId?: string, appConfig?: AppConfig) =>
-			getModel("assistant", "followups", traceId, appConfig),
+		answer: (traceId?: string) =>
+			googleChat("assistant", "answer", INTERNAL_MODEL, traceId),
+		followups: (traceId?: string) =>
+			googleChat("assistant", "followups", INTERNAL_MODEL, traceId),
 
 		// Annotation
-		query: (traceId?: string, appConfig?: AppConfig) =>
-			getModel("assistant", "query", traceId, appConfig),
-		background: (traceId?: string, appConfig?: AppConfig) =>
-			getModel("assistant", "background", traceId, appConfig),
+		query: (traceId?: string) =>
+			googleChat("assistant", "query", INTERNAL_MODEL, traceId),
+		background: (traceId?: string) =>
+			googleChat("assistant", "background", INTERNAL_MODEL, traceId),
 	},
 };
 
@@ -96,13 +88,9 @@ function getModel(
 	source: keyof typeof llmConfig.sources,
 	operation: string,
 	traceId?: string,
-	appConfig?: AppConfig,
 ) {
 	if (operation.includes("paper")) {
 		return openaiChat(source, operation, PAPER_MODEL, traceId);
-	}
-	if (EnvVars.isInternalSlackApp(appConfig?.slackAppId)) {
-		return googleChat(source, operation, INTERNAL_MODEL, traceId);
 	}
 	return openaiChat(source, operation, DEFAULT_MODEL, traceId);
 }

@@ -1,6 +1,7 @@
 import { answer } from "@proemial/adapters/slack/block-kit/answer-blocks";
 import { link } from "@proemial/adapters/slack/block-kit/link-blocks";
-import { welcome } from "@proemial/adapters/slack/block-kit/welcome";
+import { welcomeAll } from "@proemial/adapters/slack/block-kit/welcome-all";
+import { welcomeUser } from "@proemial/adapters/slack/block-kit/welcome-user";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 import {
 	asMrkdwn,
@@ -84,9 +85,18 @@ export const Slack = {
 		const channelInfo = await getChannelInfo(metadata);
 		const channelName = channelInfo?.name;
 
-		return await SlackMessenger.sendMessage(
-			metadata,
-			welcome(channelName ?? metadata.channelId),
-		);
+		return Promise.all([
+			SlackMessenger.sendMessage(
+				metadata,
+				welcomeAll(channelName ?? metadata.channelId),
+			),
+
+			// TODO: Add ephemeral welcome with links and questions
+
+			// SlackMessenger.sendEphemeralMessage(
+			// 	metadata,
+			// 	welcomeUser(["", ""], ["", ""]),
+			// ),
+		]);
 	},
 };

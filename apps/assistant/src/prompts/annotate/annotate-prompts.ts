@@ -1,6 +1,6 @@
 import { generateObject } from "ai";
 import { ReferencedPaper } from "@proemial/adapters/redis/news";
-import LlmModels, { AppConfig } from "@proemial/adapters/llm/models";
+import LlmModels from "@proemial/adapters/llm/models";
 import { z } from "zod";
 
 const prompt = (
@@ -53,11 +53,10 @@ export const generateFactsAndQuestions = async (
 	query: string,
 	papers: ReferencedPaper[],
 	traceId?: string,
-	appConfig?: AppConfig,
 ) => {
 	try {
 		const { object, usage } = await generateObject({
-			model: await LlmModels.assistant.background(traceId, appConfig),
+			model: await LlmModels.assistant.background(traceId),
 			prompt: prompt(title, transcript, query, papers),
 			output: "object",
 			schema: z.object({
