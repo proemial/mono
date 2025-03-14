@@ -168,8 +168,12 @@ async function answerQuestion(
 			searchPapers: {
 				description: "Find specific research papers matching a user query",
 				parameters: z.object({
-					question: z.string().describe("The actual user question"),
-					query: z.string().describe("The search query"),
+					question: z.string().describe("The user question"),
+					query: z
+						.string()
+						.describe(
+							"You must generate this argument based on the user question, to make it unambiguous and well suited to find relevant supporting information, when vectorized and used as a search query against an article database. Use the original terminology from the user question, but restate the central terms multiple times, and use sysnonyms and adjectives that a researcher would use.",
+						),
 				}),
 				execute: async ({ question, query }) => {
 					console.log("PAPER QUERY", question, query);
