@@ -90,7 +90,7 @@ export const convertSourceRefsToNumberedLinks = (
 	const srcRefMap = new Map<string, number>();
 	let counter = 1;
 
-	return answer.replace(/\[[^\]]+\]/g, (match) => {
+	const converted = answer.replace(/\[[^\]]+\]/g, (match) => {
 		const srcRefIds = match
 			.slice(1, -1)
 			.split(",")
@@ -100,12 +100,12 @@ export const convertSourceRefsToNumberedLinks = (
 		const links = srcRefIds.map((srcRefId) => {
 			// Verify id validity
 			if (!isId(srcRefId)) {
-				return srcRefId;
+				return "";
 			}
 			// Verify paper existence
 			const paper = papers?.find((p) => p.srcRefId === srcRefId);
 			if (!paper) {
-				return srcRefId;
+				return "";
 			}
 			if (!srcRefMap.has(srcRefId)) {
 				srcRefMap.set(srcRefId, counter++);
@@ -116,4 +116,7 @@ export const convertSourceRefsToNumberedLinks = (
 		// Return single link or multiple links wrapped in brackets
 		return links.length === 1 ? `[${links[0]}]` : `[${links.join(", ")}]`;
 	});
+
+	// Remove empty link brackets filtered above
+	return converted?.replace(/\s*\[\]/g, "").replaceAll("  ", " ");
 };

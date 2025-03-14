@@ -74,8 +74,8 @@ reciprocal relations.
 <user_question>Why is this important?</user_question>
 <answer>
 The laws of thermodynamics are crucial because they explain how energy behaves
-and why certain processes occur[src_ref_1a2b3c]. They are fundamental for understanding
-everything from how engines work to the behavior of living organisms[src_ref_4d5e6f].
+and why certain processes occur [src_ref_1a2b3c]. They are fundamental for understanding
+everything from how engines work to the behavior of living organisms [src_ref_4d5e6f].
 </answer>
 </example_2>
 
@@ -83,9 +83,9 @@ everything from how engines work to the behavior of living organisms[src_ref_4d5
 <user_question>What are the laws of thermodynamics?</user_question>
 <answer>
 The laws of thermodynamics, derived from historical principles and refined
-through scientific inquiry, govern energy transfer and entropy[src_ref_1a2b3c]. They are
+through scientific inquiry, govern energy transfer and entropy [src_ref_1a2b3c]. They are
 essential in understanding both equilibrium and non-equilibrium processes, as
-well as the behavior of systems from classical to quantum scales[src_ref_4d5e6f].
+well as the behavior of systems from classical to quantum scales [src_ref_4d5e6f].
 </answer>
 </example_3>
 
