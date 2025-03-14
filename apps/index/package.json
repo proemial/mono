@@ -26,7 +26,7 @@
 		"@highlight-run/next": "^7.5.29",
 		"recharts": "^2.12.7",
 		"feed": "^4.2.2",
-		"@mistralai/mistralai": "^1.1.0"
+		"@mistralai/mistralai": "^1.5.1"
 	},
 	"devDependencies": {
 		"@proemial/typescript-config": "workspace:*",

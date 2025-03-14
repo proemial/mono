@@ -1,5 +1,6 @@
 import { SlackDb } from "../../mongodb/slack/slack.adapter";
 import { LlamaParseClient } from "../../llamaindex/llama-parse-client";
+import ocrParseFile from "../../llm/providers/mistral";
 
 export const isSlackFileUrl = (url: string) => {
 	const urlObj = new URL(url);
@@ -28,10 +29,14 @@ export const slackFileScraper = async (
 		install.metadata.accessToken,
 		mimetype,
 	);
-	const { markdown } = await llamaParseClient.parseFile(file);
+
+	// TODO: Use LlamaParse unless it's the proem-lab bot
+	const { pages } = await ocrParseFile(file);
+	// const { markdown } = await llamaParseClient.parseFile(file);
+
 	return {
-		title: file.name,
-		text: markdown,
+		title: fileUrl.split("/").pop() ?? "Untitled",
+		text: pages.map((page) => page.markdown).join("\n"),
 		images: [],
 	};
 };
