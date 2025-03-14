@@ -25,7 +25,6 @@ export async function POST(request: Request) {
 			if (payload.type === "url_verification") {
 				return NextResponse.json({ challenge: payload.challenge });
 			}
-			console.log("IGNORED", payload);
 			return success;
 		}
 

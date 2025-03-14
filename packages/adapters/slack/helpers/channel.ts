@@ -1,34 +1,21 @@
 import { SlackDb } from "../../mongodb/slack/slack.adapter";
+import { SlackEventMetadata } from "../models/metadata-models";
+import { slackClient } from "../slack-messenger";
 
-export async function getChannelInfo(teamId: string, channelId: string) {
-	if (!teamId || !channelId) {
-		return {};
-	}
-	const team = await SlackDb.entities.get(teamId);
+export async function getChannelInfo(metadata: SlackEventMetadata) {
+	const client = await slackClient(metadata);
 
-	const channel = await fetch(
-		`https://slack.com/api/conversations.info?channel=${channelId}`,
-		{
-			headers: {
-				Authorization: `Bearer ${team?.metadata?.accessToken}`,
-			},
-		},
-	);
-	const channelInfo = await channel.json();
+	const channel = await client.asProem.conversations.info({
+		channel: metadata.channelId,
+	});
+
+	console.log("channelInfo", channel);
 
 	return {
-		channel: {
-			id: channelId,
-			name: channelInfo.channel?.name,
-			description: channelInfo.channel?.purpose?.value,
-			topic: channelInfo.channel?.topic?.value,
-		},
-		team: {
-			id: teamId,
-			name: team?.name,
-			description: team?.description,
-		},
-		token: team?.metadata?.accessToken,
+		id: metadata.channelId,
+		name: channel.channel?.name,
+		description: channel.channel?.purpose?.value,
+		topic: channel.channel?.topic?.value,
 	};
 }
 

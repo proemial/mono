@@ -1,6 +1,14 @@
+import { answer } from "@proemial/adapters/slack/block-kit/answer-blocks";
+import { link } from "@proemial/adapters/slack/block-kit/link-blocks";
+import { welcome } from "@proemial/adapters/slack/block-kit/welcome";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
-import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
+import { nudgeMessage } from "@proemial/adapters/slack/nudge-messages";
+import {
+	asMrkdwn,
+	SlackMessenger,
+} from "@proemial/adapters/slack/slack-messenger";
 import { EnvVars } from "@proemial/utils/env-vars";
+import { getChannelInfo } from "@proemial/adapters/slack/helpers/channel";
 
 export const Slack = {
 	updateStatus: async (
@@ -32,18 +40,14 @@ export const Slack = {
 		questions?: Array<{ question: string; answer: string }>,
 	) => {
 		if (metadata.isAssistant) {
-			return await SlackMessenger.sendMessage(
+			return await SlackMessenger.sendMessageResponse(
 				metadata,
-				summary,
-				title,
-				questions,
+				link(summary, title, questions),
 			);
 		}
 		return await SlackMessenger.updateMessage(
 			metadata,
-			summary,
-			title,
-			questions,
+			link(summary, title, questions),
 		);
 	},
 
@@ -51,11 +55,14 @@ export const Slack = {
 		return await SlackMessenger.sendMessageAsUser(metadata, answer);
 	},
 
-	postAnswer: async (metadata: SlackEventMetadata, answer: string) => {
+	postAnswer: async (metadata: SlackEventMetadata, text: string) => {
 		if (metadata.isAssistant) {
-			return await SlackMessenger.sendMessage(metadata, answer);
+			return await SlackMessenger.sendMessageResponse(
+				metadata,
+				answer(asMrkdwn(text)),
+			);
 		}
-		return await SlackMessenger.updateMessage(metadata, answer);
+		return await SlackMessenger.updateMessage(metadata, answer(asMrkdwn(text)));
 	},
 
 	showSuggestions: async (
@@ -72,5 +79,20 @@ export const Slack = {
 
 	canPostAsUser: async (metadata: SlackEventMetadata) => {
 		return await SlackMessenger.canPostAsUser(metadata);
+	},
+
+	showWelcome: async (metadata: SlackEventMetadata) => {
+		const channelInfo = await getChannelInfo(metadata);
+		const channelName = channelInfo?.name;
+
+		return await SlackMessenger.sendMessage(
+			metadata,
+			welcome(
+				nudgeMessage
+					.welcomeToChannel()
+					.at(0)
+					?.replace("{channel}", channelName ?? metadata.channelId) as string,
+			),
+		);
 	},
 };

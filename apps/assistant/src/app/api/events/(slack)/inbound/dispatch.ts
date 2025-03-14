@@ -118,5 +118,14 @@ export async function dispatchSlackEvent(
 		};
 	}
 
+	if (metadata.target === "welcome") {
+		await Slack.showWelcome(metadata);
+
+		return {
+			status: "executed",
+			event: "welcome",
+		};
+	}
+
 	return undefined;
 }

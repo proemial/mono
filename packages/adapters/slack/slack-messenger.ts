@@ -1,10 +1,14 @@
 import { Time } from "@proemial/utils/time";
-import { LogLevel, WebClient } from "@slack/web-api";
+import {
+	LogLevel,
+	MessageAttachment,
+	KnownBlock,
+	Block,
+	WebClient,
+} from "@slack/web-api";
 import slackifyMarkdown from "slackify-markdown";
 import { SlackDb } from "../mongodb/slack/slack.adapter";
-import { answer } from "./block-kit/answer-blocks";
 import { assistantStatus } from "./block-kit/assistant-status";
-import { link } from "./block-kit/link-blocks";
 import { status as statusBlocks } from "./block-kit/status-blocks";
 import { SlackResponse } from "./models/event-models";
 import { SlackEventMetadata } from "./models/metadata-models";
@@ -96,18 +100,14 @@ export const SlackMessenger = {
 
 	updateMessage: async (
 		metadata: SlackEventMetadata,
-		text: string,
-		title?: string,
-		questions?: Array<{ question: string; answer: string }>,
+		body:
+			| { blocks: (KnownBlock | Block)[] }
+			| { attachments: MessageAttachment[] },
 	) => {
 		const begin = Time.now();
 
 		try {
 			const client = await slackClient(metadata);
-
-			const body = questions
-				? link(text, title, questions)
-				: answer(slackifyMarkdown(text));
 
 			const payload = {
 				channel: metadata.channelId,
@@ -127,24 +127,49 @@ export const SlackMessenger = {
 		}
 	},
 
-	sendMessage: async (
+	sendMessageResponse: async (
 		metadata: SlackEventMetadata,
-		text: string,
-		title?: string,
-		questions?: Array<{ question: string; answer: string }>,
+		body:
+			| { blocks: (KnownBlock | Block)[] }
+			| { attachments: MessageAttachment[] },
 	) => {
 		const begin = Time.now();
 
 		try {
 			const client = await slackClient(metadata);
 
-			const body = questions
-				? link(text, title, questions)
-				: answer(slackifyMarkdown(text));
-
 			const payload = {
 				channel: metadata.channelId,
 				thread_ts: metadata.ts as string,
+				unfurl_links: false,
+				...body,
+			};
+
+			const response = await client.asProem.chat.postMessage(payload);
+			logRequest("chat.postMessage", [payload, response]);
+
+			await logEvent("send", { metadata, response }, Time.elapsed(begin));
+
+			return response;
+		} finally {
+			Time.log(begin, "[messenger][send]");
+		}
+	},
+
+	sendMessage: async (
+		metadata: SlackEventMetadata,
+		body:
+			| { blocks: (KnownBlock | Block)[] }
+			| { attachments: MessageAttachment[] },
+	) => {
+		const begin = Time.now();
+
+		try {
+			const client = await slackClient(metadata);
+
+			const payload = {
+				channel: metadata.channelId,
+				ts: metadata.ts as string,
 				unfurl_links: false,
 				...body,
 			};
@@ -346,7 +371,11 @@ export const SlackMessenger = {
 	},
 };
 
-async function slackClient(metadata: SlackEventMetadata) {
+export function asMrkdwn(text: string) {
+	return slackifyMarkdown(text);
+}
+
+export async function slackClient(metadata: SlackEventMetadata) {
 	const tokens = await SlackDb.installs.getTokensForUserAndTeam(
 		metadata.teamId,
 		metadata.appId,

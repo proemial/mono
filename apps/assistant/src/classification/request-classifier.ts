@@ -69,10 +69,15 @@ export async function classifyRequest(
 
 	const assistant =
 		payload.event?.channel.startsWith("D") &&
-		payload.event.user !== payload.event.parent_user_id;
+		payload.event?.user !== payload.event.parent_user_id;
+	const botRemoved = payload.event?.user === "USLACKBOT";
 
-	if ((tagged || assistant) && !hasLinks) {
+	if ((tagged || assistant) && !hasLinks && !botRemoved) {
 		return { type: "answer" };
+	}
+
+	if (payload.event?.subtype === "channel_join") {
+		return { type: "welcome" };
 	}
 
 	log("unhandled", payload.type, payload.event?.type);
