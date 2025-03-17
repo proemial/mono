@@ -278,9 +278,6 @@ export const SlackDb = {
 					{
 						$set: {
 							...entity,
-							type: entity.url.startsWith("https://files.slack.com")
-								? "file"
-								: "url",
 						},
 					},
 					{ upsert: true },

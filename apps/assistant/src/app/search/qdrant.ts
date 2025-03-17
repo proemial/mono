@@ -43,6 +43,7 @@ async function vectorize(metadata: EventMetadata, scrapedUrl: ScrapedUrl) {
 		payload: {
 			metadata,
 			url: scrapedUrl.url,
+			type: scrapedUrl.type,
 			content: scrapedUrl.content,
 		},
 	}));
