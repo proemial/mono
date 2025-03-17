@@ -40,7 +40,7 @@ export function link(
 													text:
 														// Slack has a max size of 76 characters
 														question.question.length > 76
-															? `${question.question.slice(0, 72)}...?`
+															? `${question.question.slice(0, 71)}...?`
 															: question.question,
 													emoji: true,
 												},
