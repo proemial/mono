@@ -15,4 +15,4 @@ const XLSX =
 
 // Select a subset of the list above
 export const FILE_TYPE_WHITELIST = [DOC, DOCX, PDF, RTF, TXT];
-export const FILE_SIZE_LIMIT = 10_485_760; // in bytes
+export const FILE_SIZE_LIMIT = 52_428_800; // in bytes (50MB)
