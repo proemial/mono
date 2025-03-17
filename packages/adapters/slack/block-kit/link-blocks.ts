@@ -37,7 +37,11 @@ export function link(
 											options: questions.slice(0, 3).map((question) => ({
 												text: {
 													type: "plain_text",
-													text: question.question,
+													text:
+														// Slack has a max size of 76 characters
+														question.question.length > 76
+															? `${question.question.slice(0, 72)}...?`
+															: question.question,
 													emoji: true,
 												},
 												value: question.question,

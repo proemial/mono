@@ -33,7 +33,7 @@ Create a 60 word commentary reflecting on the main issue of the original article
 </task_1>
 
 <task_2>
-Create six follow-up questions that let readers of the commentary dive deeper into the topic, and which can be answered using facts and findings from the research papers. Use layman's language intended for a high school audience, and ensure that the questions reflect a broad range of angles into the topic, with both critical and more celebratory question. Use a maximum of 10 words for each question.
+Create six follow-up questions that let readers of the commentary dive deeper into the topic, and which can be answered using facts and findings from the research papers. Use layman's language intended for a high school audience, and ensure that the questions reflect a broad range of angles into the topic, with both critical and more celebratory question. Use a maximum of 60 characters for each question.
 
 Then, for each question, write a short and concise answer in two or three sentences, based on the facts and findings from the research papers. Use layman's terminology and include numerical references to the research papers using brackets (e.g. [1], [2], etc).
 
