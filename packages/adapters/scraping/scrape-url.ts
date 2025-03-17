@@ -1,16 +1,11 @@
 import { diffbotScraper } from "../diffbot";
-import { LlamaParseClient } from "../llamaindex/llama-parse-client";
+import { SlackDb } from "../mongodb/slack/slack.adapter";
 import { scrapflyScraper } from "../scrapfly/scraper";
+import { errorMessage } from "../slack/error-messages";
 import { isSlackFileUrl, slackFileScraper } from "../slack/files/file-scraper";
 import { isTwitterUrl } from "../twitter";
 import { oxylabsYouTubeScraper } from "../youtube/oxylabs";
 import { isYouTubeUrl } from "../youtube/shared";
-import { errorMessage } from "../slack/error-messages";
-
-const llamaParseClient = new LlamaParseClient({
-	apiKey: process.env.LLAMA_CLOUD_API_KEY as string,
-	verbose: true,
-});
 
 export async function scrapeUrl(
 	url: string,
@@ -29,13 +24,20 @@ export async function scrapeUrl(
 			if (!fileOptions.mimeType) {
 				throw new Error(errorMessage.missingFileMimetype());
 			}
-			content = await slackFileScraper(
-				url,
-				fileOptions.mimeType,
+			const install = await SlackDb.installs.get(
 				fileOptions.teamId,
 				fileOptions.appId,
-				llamaParseClient,
 			);
+			if (!install) {
+				throw new Error("Install not found");
+			}
+			content = await slackFileScraper({
+				file: {
+					url,
+					mimeType: fileOptions.mimeType,
+				},
+				slackAccessToken: install.metadata.accessToken,
+			});
 		} else if (isYouTubeUrl(url)) {
 			content = await oxylabsYouTubeScraper(url);
 		} else if (isTwitterUrl(url)) {

@@ -12,6 +12,7 @@ export class LlamaParseClient {
 	constructor(private readonly options: ClientOptions) {}
 
 	public async parseFile(file: File) {
+		console.log(`LlamaParse: Parsing file ${file.name}…`);
 		this.printIfVerbose(
 			`Parsing document ${file.name} (${file.type}, ${file.size} bytes)`,
 		);
