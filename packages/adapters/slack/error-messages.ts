@@ -1,7 +1,7 @@
 const fileSizeErrors = [
-	"🚀 File's too chunky! We tap out at 5MB. Mind trimming it down a bit?",
-	"Whoa there, big file energy! ({size}MB) is over our 5MB limit. Let's slim it down.",
-	"This file's ambition exceeds our 5MB runway. Ship something smaller?",
+	"🚀 File's too chunky! We tap out at 50MB. Mind trimming it down a bit?",
+	"Whoa there, big file energy! ({size}MB) is over our 50MB limit. Let's slim it down.",
+	"This file's ambition exceeds our 50MB runway. Ship something smaller?",
 ];
 
 const fileTypeErrors = [
