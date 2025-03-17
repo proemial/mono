@@ -100,19 +100,19 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 			} as ScrapedUrl;
 
 			await SlackDb.scraped.upsert(withType);
-			await Qdrant.vectorize(
-				{
-					appId: payload.metadata.appId,
-					teamId: payload.metadata.teamId,
-					context: {
-						channelId: payload.metadata?.channelId,
-						userId: payload.metadata.user,
-						ts: payload.metadata.ts,
-						threadTs: payload.metadata.threadTs,
-					},
-				} as EventMetadata,
-				withType,
-			);
+			// await Qdrant.vectorize(
+			// 	{
+			// 		appId: payload.metadata.appId,
+			// 		teamId: payload.metadata.teamId,
+			// 		context: {
+			// 			channelId: payload.metadata?.channelId,
+			// 			userId: payload.metadata.user,
+			// 			ts: payload.metadata.ts,
+			// 			threadTs: payload.metadata.threadTs,
+			// 		},
+			// 	} as EventMetadata,
+			// 	withType,
+			// );
 		} else {
 			console.log(`Already scraped ${normalizedUrl} - skipping`);
 		}
