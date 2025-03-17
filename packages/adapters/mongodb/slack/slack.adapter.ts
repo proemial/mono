@@ -275,7 +275,14 @@ export const SlackDb = {
 			try {
 				return await scraped.updateOne(
 					{ url: entity.url },
-					{ $set: entity },
+					{
+						$set: {
+							...entity,
+							type: entity.url.startsWith("https://files.slack.com")
+								? "file"
+								: "url",
+						},
+					},
 					{ upsert: true },
 				);
 			} finally {

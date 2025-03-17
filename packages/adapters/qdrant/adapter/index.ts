@@ -43,6 +43,15 @@ export default function qdrantHelper(args: { url: string; apiKey: string }) {
 				name: string,
 				data: { vector: number[]; payload: Record<string, unknown> }[],
 			) => points.insertPoints(client, name, data),
+
+			upsert: (
+				name: string,
+				data: {
+					id: string;
+					vector: number[];
+					payload: Record<string, unknown>;
+				}[],
+			) => points.upsertPoints(client, name, data),
 		},
 	};
 }

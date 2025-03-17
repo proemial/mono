@@ -1,5 +1,5 @@
-export const getThreeRandomStarters = () =>
-	[...STARTERS].sort(() => 0.5 - Math.random()).slice(0, 3);
+export const getRandomStarters = (count = 3) =>
+	[...STARTERS].sort(() => 0.5 - Math.random()).slice(0, count);
 
 const STARTERS = [
 	"Do vaccines cause autism spectrum disorder?",

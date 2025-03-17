@@ -15,6 +15,7 @@ import { Metrics } from "../metrics";
 import { Slack } from "../helpers/slack";
 import { statusMessages } from "@proemial/adapters/slack/helpers/status-messages";
 import { errorMessage } from "@proemial/adapters/slack/error-messages";
+import { Qdrant } from "@/app/search/qdrant";
 
 export const eventName = "annotate/scrape";
 const eventId = "annotate/scrape/fn";
@@ -91,6 +92,7 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 			}
 
 			await SlackDb.scraped.upsert(scrapedUrl);
+			await Qdrant.vectorize(payload.metadata, scrapedUrl);
 		} else {
 			console.log(`Already scraped ${normalizedUrl} - skipping`);
 		}

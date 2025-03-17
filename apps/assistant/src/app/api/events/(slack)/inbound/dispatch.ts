@@ -4,7 +4,6 @@ import { eventName as scrapeEventName } from "@/inngest/workers/annotate/1-scrap
 import { eventName as askEventName } from "@/inngest/workers/ask/1-summarize.task";
 import { inngest } from "@/inngest/client";
 import { extractLinks } from "@proemial/adapters/slack/helpers/links";
-import { getThreeRandomStarters } from "../../../../../prompts/ask/suggestions";
 import { isSlackFileUrl } from "@proemial/adapters/slack/files/file-scraper";
 import { isTwitterUrl } from "@proemial/adapters/twitter";
 import { ScrapflyWebProxy } from "@proemial/adapters/scrapfly/webproxy";
@@ -108,7 +107,6 @@ export async function dispatchSlackEvent(
 	if (metadata.target === "suggestions") {
 		const result = await Slack.showSuggestions(
 			metadata,
-			getThreeRandomStarters(),
 			"Trustworthy answers to any question, such as:",
 		);
 

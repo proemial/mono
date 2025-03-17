@@ -81,6 +81,8 @@ const LlmModels = {
 			googleChat("assistant", "query", INTERNAL_MODEL, traceId),
 		background: (traceId?: string) =>
 			googleChat("assistant", "background", INTERNAL_MODEL, traceId),
+		embeddings: () =>
+			openaiEmbeddings("index", "embeddings") as EmbeddingsModel,
 	},
 };
 

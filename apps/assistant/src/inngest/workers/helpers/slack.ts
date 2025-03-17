@@ -9,6 +9,7 @@ import {
 } from "@proemial/adapters/slack/slack-messenger";
 import { EnvVars } from "@proemial/utils/env-vars";
 import { getChannelInfo } from "@proemial/adapters/slack/helpers/channel";
+import { getRandomStarters } from "../../../prompts/ask/suggestions";
 
 export const Slack = {
 	updateStatus: async (
@@ -65,14 +66,10 @@ export const Slack = {
 		return await SlackMessenger.updateMessage(metadata, answer(asMrkdwn(text)));
 	},
 
-	showSuggestions: async (
-		metadata: SlackEventMetadata,
-		suggestions: string[],
-		title: string,
-	) => {
+	showSuggestions: async (metadata: SlackEventMetadata, title: string) => {
 		return await SlackMessenger.showAssistantSuggestions(
 			metadata,
-			suggestions,
+			getRandomStarters(),
 			title,
 		);
 	},
@@ -92,10 +89,9 @@ export const Slack = {
 			),
 
 			// TODO: Add ephemeral welcome with links and questions
-
 			// SlackMessenger.sendEphemeralMessage(
 			// 	metadata,
-			// 	welcomeUser(["", ""], ["", ""]),
+			// 	welcomeUser(["", ""], getRandomStarters(2) as [string, string]),
 			// ),
 		]);
 	},

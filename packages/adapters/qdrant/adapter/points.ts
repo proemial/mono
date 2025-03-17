@@ -37,7 +37,20 @@ export async function insertPoints(
 			payload: point.payload,
 		})),
 	});
-	// return await client.upsert(name, data);
+}
+
+export async function upsertPoints(
+	client: QdrantClient,
+	name: string,
+	data: { id: string; vector: number[]; payload: Record<string, unknown> }[],
+) {
+	return await client.upsert(name, {
+		points: data.map((point) => ({
+			id: point.id,
+			vector: point.vector,
+			payload: point.payload,
+		})),
+	});
 }
 
 export type CountFilter = Parameters<QdrantClient["count"]>[1];
