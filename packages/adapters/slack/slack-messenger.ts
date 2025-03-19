@@ -15,10 +15,10 @@ import { SlackEventMetadata } from "./models/metadata-models";
 import { debug } from "./block-kit/debug-blocks";
 
 // Internal logging in the slack client library
-const SLACK_LIB_LOGGING = true;
+const SLACK_LIB_LOGGING = false;
 
 // Logging of input and output to the slack client library
-const REQUEST_LOGGING = true;
+const REQUEST_LOGGING = false;
 
 export const SlackMessenger = {
 	updateStatus: async (
