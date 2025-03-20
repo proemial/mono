@@ -4,6 +4,7 @@ export function link(
 	questions?: Array<{ question: string; answer: string }>,
 ) {
 	return {
+		blocks: [],
 		attachments: [
 			{
 				color: "#66ff66",
