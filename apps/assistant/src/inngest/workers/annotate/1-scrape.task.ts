@@ -15,7 +15,7 @@ import { Metrics } from "../metrics";
 import { Slack } from "../helpers/slack";
 import { statusMessages } from "@proemial/adapters/slack/helpers/status-messages";
 import { errorMessage } from "@proemial/adapters/slack/error-messages";
-import { Qdrant } from "@proemial/adapters/qdrant/qdrant";
+import { Qdrant, slackUrlType } from "@proemial/adapters/qdrant/qdrant";
 import { EventMetadata } from "@proemial/adapters/mongodb/slack/v2.models";
 
 export const eventName = "annotate/scrape";
@@ -94,13 +94,11 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 
 			const withType = {
 				...scrapedUrl,
-				type: scrapedUrl.url.startsWith("https://files.slack.com")
-					? "file"
-					: "url",
+				type: slackUrlType(scrapedUrl.url),
 			} satisfies ScrapedUrl;
 
 			await SlackDb.scraped.upsert(withType);
-			await Qdrant.vectorize(
+			await Qdrant.upsert(
 				{
 					appId: payload.metadata.appId,
 					teamId: payload.metadata.teamId,
@@ -111,7 +109,7 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 						threadTs: payload.metadata.threadTs,
 					},
 				} as EventMetadata,
-				withType,
+				scrapedUrl,
 			);
 		} else {
 			console.log(`Already scraped ${normalizedUrl} - skipping`);

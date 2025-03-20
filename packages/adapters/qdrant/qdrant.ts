@@ -13,12 +13,32 @@ const qdrant = qdrantHelper({
 	apiKey: process.env.QDRANT_API_KEY as string,
 });
 
+export type QdrantPoint = {
+	id: string;
+	vector: number[];
+	payload: {
+		metadata: EventMetadata;
+		url: string;
+		content: string;
+		type?: string;
+	};
+};
+
 export const Qdrant = {
 	search: async (metadata: EventMetadata, query: string) => {
 		return await search(metadata, query);
 	},
-	vectorize: async (metadata: EventMetadata, scrapedUrl: ScrapedUrl) => {
-		return await vectorize(metadata, scrapedUrl);
+	upsert: async (
+		metadata: EventMetadata,
+		scrapedUrl: ScrapedUrl,
+		embedding?: number[],
+	) => {
+		return await upsert(
+			metadata,
+			scrapedUrl.url,
+			scrapedUrl.content.text,
+			embedding,
+		);
 	},
 };
 
@@ -27,7 +47,8 @@ async function search(metadata: EventMetadata, query: string) {
 		query,
 	]);
 
-	const references = await qdrant.points.search("scraped", {
+	const collectionId = getCollectionId(metadata);
+	const references = await qdrant.points.search(collectionId, {
 		vector: embeddings.at(0) as number[],
 		limit: 10,
 	});
@@ -35,59 +56,78 @@ async function search(metadata: EventMetadata, query: string) {
 	return references.map((reference) => reference.payload);
 }
 
-async function vectorize(metadata: EventMetadata, scrapedUrl: ScrapedUrl) {
-	const id = getId(metadata, scrapedUrl.url);
-	const exists = await qdrant.points.exists("scraped", id);
-	if (exists) {
+async function upsert(
+	metadata: EventMetadata,
+	url: string,
+	content: string,
+	embedding?: number[],
+) {
+	const collectionId = getCollectionId(metadata);
+	const id = getPointId(url);
+
+	console.log(`Upserting ${id} to ${collectionId}`);
+
+	const collection = await qdrant.spaces.exists(collectionId);
+	if (!collection.exists) {
+		console.log(`Creating collection ${collectionId}`);
+		await qdrant.spaces.create(collectionId, {
+			vectors: {
+				size: 1536,
+				distance: "Cosine",
+			},
+		});
+	}
+
+	const point = await qdrant.points.exists(collectionId, id);
+	console.log(`Point exists: ${JSON.stringify(point)}`);
+	if (point.length > 0) {
 		console.log(`Skipping ${id} because it already exists`);
 		return;
 	}
 
-	const tokenLength = getTokenLength(scrapedUrl.content.text);
-	if (tokenLength > OPENAI_EMBEDDING_MAX_TOKENS) {
-		// Split text into chunks that fit within token limit
-		const averageVector = await computeAverageVector(scrapedUrl.content.text);
+	const vector = embedding ?? (await embed(content));
+	if (!vector) {
+		throw new Error("No vector");
+	}
 
-		const points = [
-			{
-				id,
-				vector: averageVector,
-				payload: {
-					metadata,
-					url: scrapedUrl.url,
-					type: scrapedUrl.type,
-					content: scrapedUrl.content,
-				},
-			},
-		];
-
-		await qdrant.points.upsert("scraped", points);
-	} else {
-		const embeddings = await generateEmbedding(
-			LlmModels.assistant.embeddings(),
-			[scrapedUrl.content.text],
-		);
-
-		const points = embeddings.map((vector, i) => ({
+	await qdrant.points.upsert(collectionId, [
+		{
 			id,
 			vector,
 			payload: {
 				metadata,
-				url: scrapedUrl.url,
-				type: scrapedUrl.type,
-				content: scrapedUrl.content,
+				url,
+				content,
+				type: slackUrlType(url),
 			},
-		}));
-
-		await qdrant.points.upsert("scraped", points);
-	}
+		},
+	]);
 }
 
-function getId(metadata: EventMetadata, url: string) {
-	return uuid(
-		`${metadata.appId}_${metadata.teamId}_${metadata.context?.channelId}_${url}`,
-		"qdrant",
-	);
+async function embed(content: string) {
+	const tokenLength = getTokenLength(content);
+	if (tokenLength > OPENAI_EMBEDDING_MAX_TOKENS) {
+		// Split text into chunks that fit within token limit
+		const averageVector = await computeAverageVector(content);
+		return averageVector;
+	}
+
+	const embeddings = await generateEmbedding(LlmModels.assistant.embeddings(), [
+		content,
+	]);
+	return embeddings.at(0);
+}
+
+export function slackUrlType(url: string) {
+	return url.startsWith("https://files.slack.com") ? "file" : "url";
+}
+
+function getCollectionId(metadata: EventMetadata) {
+	return `${metadata.teamId}_${metadata.context?.channelId}`;
+}
+
+function getPointId(url: string) {
+	return uuid(url, "qdrant");
 }
 
 async function computeAverageVector(text: string) {
