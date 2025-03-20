@@ -11,8 +11,14 @@ export type YouTubeTranscript = {
 export const isYouTubeUrl = (url: string) => {
 	const urlObj = new URL(url);
 	return (
-		urlObj.hostname.includes("youtube.com") ||
-		urlObj.hostname.includes("youtu.be")
+		(urlObj.hostname.includes("youtube.com") ||
+			urlObj.hostname.includes("youtu.be")) &&
+		!(
+			urlObj.hostname.endsWith("youtube.com") ||
+			urlObj.hostname.endsWith("youtu.be") ||
+			urlObj.hostname.endsWith("youtube.com/") ||
+			urlObj.hostname.endsWith("youtu.be/")
+		)
 	);
 };
 
@@ -49,6 +55,6 @@ export const getVideoId = (url: string): string => {
 		}
 		throw new Error("Could not extract video ID from URL");
 	} catch (error) {
-		throw new Error("Invalid YouTube URL");
+		throw new Error(`Invalid YouTube URL: ${url}`);
 	}
 };
