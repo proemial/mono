@@ -19,14 +19,14 @@ export function welcomeUser(
 				type: "section",
 				text: {
 					type: "mrkdwn",
-					text: "Proem Agent added to channel.",
+					text: "Thanks for adding me. Here is some ideas on what to do next:",
 				},
 			},
 			{
 				type: "section",
 				text: {
 					type: "mrkdwn",
-					text: `To show other people what @proem can do, try to post a link: <${links[0]}>`,
+					text: `Post a link: <${links[0]}>`,
 				},
 				accessory: {
 					type: "button",
@@ -60,7 +60,7 @@ export function welcomeUser(
 				type: "section",
 				text: {
 					type: "mrkdwn",
-					text: `...or ask @proem a question: "${questions[0]}"`,
+					text: `Ask question: "${questions[0]}"`,
 				},
 				accessory: {
 					type: "button",
