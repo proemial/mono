@@ -1,6 +1,14 @@
 import { QdrantClient } from "@qdrant/js-client-rest";
 import { uuid4 } from "@proemial/utils/uuid";
 
+export async function existsPoints(
+	client: QdrantClient,
+	name: string,
+	id: string,
+) {
+	return await client.retrieve(name, { ids: [id] });
+}
+
 export async function countPoints(
 	client: QdrantClient,
 	name: string,

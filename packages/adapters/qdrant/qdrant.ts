@@ -36,6 +36,13 @@ async function search(metadata: EventMetadata, query: string) {
 }
 
 async function vectorize(metadata: EventMetadata, scrapedUrl: ScrapedUrl) {
+	const id = getId(metadata, scrapedUrl.url);
+	const exists = await qdrant.points.exists("scraped", id);
+	if (exists) {
+		console.log(`Skipping ${id} because it already exists`);
+		return;
+	}
+
 	const tokenLength = getTokenLength(scrapedUrl.content.text);
 	if (tokenLength > OPENAI_EMBEDDING_MAX_TOKENS) {
 		// Split text into chunks that fit within token limit
@@ -43,7 +50,7 @@ async function vectorize(metadata: EventMetadata, scrapedUrl: ScrapedUrl) {
 
 		const points = [
 			{
-				id: getId(metadata, scrapedUrl.url),
+				id,
 				vector: averageVector,
 				payload: {
 					metadata,
@@ -62,7 +69,7 @@ async function vectorize(metadata: EventMetadata, scrapedUrl: ScrapedUrl) {
 		);
 
 		const points = embeddings.map((vector, i) => ({
-			id: getId(metadata, scrapedUrl.url),
+			id,
 			vector,
 			payload: {
 				metadata,

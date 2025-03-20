@@ -1,6 +1,7 @@
 import { QdrantClient } from "@qdrant/js-client-rest";
 import * as space from "./collections";
 import * as points from "./points";
+import { Time } from "@proemial/utils/time";
 
 const spaceDefaults = {
 	vectors: {
@@ -30,6 +31,9 @@ export default function qdrantHelper(args: { url: string; apiKey: string }) {
 		},
 
 		points: {
+			exists: (name: string, id: string) =>
+				points.existsPoints(client, name, id),
+
 			count: (name: string, filter?: points.CountFilter) =>
 				points.countPoints(client, name, filter),
 
@@ -51,7 +55,14 @@ export default function qdrantHelper(args: { url: string; apiKey: string }) {
 					vector: number[];
 					payload: Record<string, unknown>;
 				}[],
-			) => points.upsertPoints(client, name, data),
+			) => {
+				const begin = Time.now();
+				try {
+					return points.upsertPoints(client, name, data);
+				} finally {
+					Time.log(begin, `Upserted ${data.length} points to ${name}`);
+				}
+			},
 		},
 	};
 }
