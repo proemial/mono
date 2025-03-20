@@ -8,7 +8,10 @@ import { isSlackFileUrl } from "@proemial/adapters/slack/files/file-scraper";
 import { isTwitterUrl } from "@proemial/adapters/twitter";
 import { ScrapflyWebProxy } from "@proemial/adapters/scrapfly/webproxy";
 import { Slack } from "@/inngest/workers/helpers/slack";
-import { getFollowupQuestion } from "@proemial/adapters/slack/helpers/payload";
+import {
+	getButtonValue,
+	getFollowupQuestion,
+} from "@proemial/adapters/slack/helpers/payload";
 
 export async function dispatchSlackEvent(
 	payload: EventCallbackPayload,
@@ -95,12 +98,70 @@ export async function dispatchSlackEvent(
 			data: {
 				thread: payload.event?.thread_ts,
 				question,
-				metadata: { ...metadata },
+				metadata,
 			},
 		});
 		return {
 			status: "dispatched",
 			event: askEventName,
+		};
+	}
+
+	if (metadata.target === "ask_question") {
+		const { question, botUser } = await getButtonValue(metadata, payload);
+
+		const canPostAsUser = await Slack.canPostAsUser(metadata);
+		if (canPostAsUser) {
+			await Slack.postQuestion(metadata, `${question} <@${botUser}>`);
+			return {
+				status: "dispatched",
+				event: metadata.target,
+			};
+		}
+
+		// Slack doesn't send a mention event to us, if we tag ourselves
+		// in a thread. So we need to ask the question explicitly.
+		await inngest.send({
+			name: askEventName,
+			data: {
+				question,
+				metadata,
+			},
+		});
+
+		return {
+			status: "dispatched",
+			event: askEventName,
+		};
+	}
+
+	if (metadata.target === "post_link") {
+		const { question } = await getButtonValue(metadata, payload);
+
+		const canPostAsUser = await Slack.canPostAsUser(metadata);
+		if (canPostAsUser) {
+			const message = await Slack.postQuestion(metadata, question as string);
+			console.log("MESSAGE", JSON.stringify(message));
+
+			// Slack doesn't send a mention event to us, if we tag ourselves
+			// in a thread. So we need to ask the question explicitly.
+			await inngest.send({
+				name: scrapeEventName,
+				data: {
+					url: question,
+					metadata: { ...metadata, ts: message.ts },
+				},
+			});
+			return {
+				status: "dispatched",
+				event: scrapeEventName,
+			};
+		}
+
+		return {
+			status: "failed",
+			event: metadata.target,
+			error: "Cannot post as user",
 		};
 	}
 
@@ -117,7 +178,7 @@ export async function dispatchSlackEvent(
 	}
 
 	if (metadata.target === "welcome") {
-		await Slack.showWelcome(metadata);
+		await Slack.showWelcome(metadata, payload.event?.inviter);
 
 		return {
 			status: "executed",

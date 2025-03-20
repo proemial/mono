@@ -8,6 +8,7 @@ export function welcomeAll(channelName: string) {
 	const text = randomElement(welcomeMessages(channelName));
 
 	return {
+		text,
 		blocks: [
 			{
 				type: "section",

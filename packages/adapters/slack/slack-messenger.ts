@@ -190,6 +190,7 @@ export const SlackMessenger = {
 		body:
 			| { blocks: (KnownBlock | Block)[] }
 			| { attachments: MessageAttachment[] },
+		inviter?: string,
 	) => {
 		const begin = Time.now();
 
@@ -198,7 +199,7 @@ export const SlackMessenger = {
 
 			const payload = {
 				channel: metadata.channelId,
-				user: metadata.user,
+				user: inviter ?? metadata.user,
 				unfurl_links: false,
 				...body,
 			};
@@ -236,10 +237,6 @@ export const SlackMessenger = {
 						: userResult.user?.name,
 					icon_url: userResult.user?.profile?.image_192,
 				};
-				console.log(
-					"users.info",
-					JSON.stringify([text, metadata.user, userResult, asUserInfo]),
-				);
 
 				return asUserInfo;
 			};
@@ -392,6 +389,13 @@ export const SlackMessenger = {
 		} finally {
 			Time.log(begin, "[messenger][botuser]");
 		}
+	},
+
+	getAppUser: async (metadata: SlackEventMetadata) => {
+		const client = await slackClient(metadata);
+
+		const response = await client.asProem.auth.test();
+		return response?.user_id;
 	},
 
 	canPostAsUser: async (metadata: SlackEventMetadata) => {

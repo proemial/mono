@@ -33,6 +33,20 @@ export async function classifyRequest(
 		return { type: "followup" };
 	}
 
+	if (
+		payload.type === "block_actions" &&
+		!!payload.actions.find((a) => a.action_id === "ask_question")
+	) {
+		return { type: "ask_question" };
+	}
+
+	if (
+		payload.type === "block_actions" &&
+		!!payload.actions.find((a) => a.action_id === "post_link")
+	) {
+		return { type: "post_link" };
+	}
+
 	if (payload.event?.type === "assistant_thread_started") {
 		return { type: "suggestions" };
 	}

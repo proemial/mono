@@ -82,6 +82,19 @@ export async function getFollowupQuestion(
 	};
 }
 
+export async function getButtonValue(
+	metadata: SlackEventMetadata,
+	payload: EventCallbackPayload,
+) {
+	const botUser = await SlackMessenger.getAppUser(metadata);
+
+	return {
+		// @ts-ignore
+		question: payload.actions.at(0)?.value?.replaceAll("+", " "),
+		botUser,
+	};
+}
+
 function parseFields(payload: EventCallbackPayload) {
 	const channelId = getChannelId(payload);
 

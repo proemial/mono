@@ -80,26 +80,26 @@ export const Slack = {
 		return await SlackMessenger.canPostAsUser(metadata);
 	},
 
-	showWelcome: async (metadata: SlackEventMetadata) => {
+	showWelcome: async (metadata: SlackEventMetadata, inviter?: string) => {
 		const channelInfo = await getChannelInfo(metadata);
 		const channelName = channelInfo?.name;
+		await SlackMessenger.sendMessage(
+			metadata,
+			welcomeAll(channelName ?? metadata.channelId),
+		);
 
 		const channelSummary = await getChannelSummary(metadata);
 		type tuple = [string, string];
-		const links = (await fetchPapers(channelSummary))
+		const links = (await fetchPapers(channelSummary.summary))
 			.slice(0, 2)
 			.map((paper) => paper.primary_location.landing_page_url) as tuple;
 
-		return Promise.all([
-			SlackMessenger.sendMessage(
-				metadata,
-				welcomeAll(channelName ?? metadata.channelId),
-			),
+		const questions = channelSummary.questions.slice(0, 2) as tuple;
 
-			SlackMessenger.sendEphemeralMessage(
-				metadata,
-				welcomeUser(links, getRandomStarters(2) as [string, string]),
-			),
-		]);
+		await SlackMessenger.sendEphemeralMessage(
+			metadata,
+			welcomeUser(links, questions),
+			inviter,
+		);
 	},
 };

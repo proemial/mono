@@ -26,6 +26,7 @@ export type HackyMessageEvent = Omit<GenericMessageEvent, "type"> & {
 		assistant_app_thread?: unknown;
 	};
 	ts: string;
+	inviter?: string;
 };
 
 export type SlackAssistantThread = {
@@ -47,6 +48,7 @@ export type EventCallbackPayload = {
 		action_ts: string;
 		user_id: string;
 		url: string;
+		value: string;
 	}[];
 	response_url: string;
 	container?: {

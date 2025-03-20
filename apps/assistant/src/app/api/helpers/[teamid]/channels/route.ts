@@ -43,13 +43,11 @@ export async function GET(
 					name: string;
 					topic: { value: string };
 					purpose: { value: string };
-					is_member: boolean;
 				}) => ({
 					id: channel.id,
 					name: channel.name,
 					topic: channel.topic.value,
 					purpose: channel.purpose.value,
-					is_member: channel.is_member,
 				}),
 			),
 	);

@@ -34,5 +34,5 @@ export async function getChannelSummary(metadata: {
 		history.messages?.map((message) => message.text as string) ?? [],
 	);
 
-	return result.summary;
+	return result;
 }
