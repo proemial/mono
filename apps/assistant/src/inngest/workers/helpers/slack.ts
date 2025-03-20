@@ -10,6 +10,8 @@ import {
 import { EnvVars } from "@proemial/utils/env-vars";
 import { getChannelInfo } from "@proemial/adapters/slack/helpers/channel";
 import { getRandomStarters } from "../../../prompts/ask/suggestions";
+import { fetchPapers } from "../ask/1-summarize.task";
+import { getChannelSummary } from "@/app/api/helpers/[teamid]/channel-summary/[channelId]/channel-summary";
 
 export const Slack = {
 	updateStatus: async (
@@ -82,17 +84,22 @@ export const Slack = {
 		const channelInfo = await getChannelInfo(metadata);
 		const channelName = channelInfo?.name;
 
+		const channelSummary = await getChannelSummary(metadata);
+		type tuple = [string, string];
+		const links = (await fetchPapers(channelSummary))
+			.slice(0, 2)
+			.map((paper) => paper.primary_location.landing_page_url) as tuple;
+
 		return Promise.all([
 			SlackMessenger.sendMessage(
 				metadata,
 				welcomeAll(channelName ?? metadata.channelId),
 			),
 
-			// TODO: Add ephemeral welcome with links and questions
-			// SlackMessenger.sendEphemeralMessage(
-			// 	metadata,
-			// 	welcomeUser(["", ""], getRandomStarters(2) as [string, string]),
-			// ),
+			SlackMessenger.sendEphemeralMessage(
+				metadata,
+				welcomeUser(links, getRandomStarters(2) as [string, string]),
+			),
 		]);
 	},
 };

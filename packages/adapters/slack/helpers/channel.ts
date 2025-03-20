@@ -9,8 +9,6 @@ export async function getChannelInfo(metadata: SlackEventMetadata) {
 		channel: metadata.channelId,
 	});
 
-	console.log("channelInfo", channel);
-
 	return {
 		id: metadata.channelId,
 		name: channel.channel?.name,

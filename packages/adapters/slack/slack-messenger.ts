@@ -198,7 +198,6 @@ export const SlackMessenger = {
 
 			const payload = {
 				channel: metadata.channelId,
-				ts: metadata.ts as string,
 				user: metadata.user,
 				unfurl_links: false,
 				...body,
