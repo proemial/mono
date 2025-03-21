@@ -26,6 +26,7 @@ export function welcomeUser(
 			// {
 			// 	type: "image",
 			// 	image_url: "https://chat.proem.ai/images/post-image.gif",
+
 			// 	alt_text: "Proem image",
 			// },
 			{
