@@ -1,5 +1,3 @@
-import { SlackMetadata } from "./metadata.models";
-
 export type SlackActivity = {
 	appId: string;
 	teamId: string;
