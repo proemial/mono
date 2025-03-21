@@ -19,75 +19,82 @@ export function welcomeUser(
 				type: "section",
 				text: {
 					type: "mrkdwn",
-					text: "Thanks for adding me. Here is some ideas on what to do next:",
+					text: "Thanks for adding me. Show everyone how I work by posting a link:",
 				},
 			},
+			// @brian
+			// {
+			// 	type: "image",
+			// 	image_url: "https://chat.proem.ai/images/post-image.gif",
+			// 	alt_text: "Proem image",
+			// },
 			{
 				type: "section",
 				text: {
 					type: "mrkdwn",
-					text: `Post a link: <${links[0]}>`,
+					text: `Paper: <${links[0]}>`,
 				},
 				accessory: {
 					type: "button",
 					text: {
 						type: "plain_text",
-						text: "Post",
+						text: "Post Link",
 						emoji: true,
 					},
 					value: links[0],
 					action_id: "post_link",
 				},
 			},
+			// @brian
 			// {
 			// 	type: "section",
 			// 	text: {
 			// 		type: "mrkdwn",
-			// 		text: `(or maybe ${links[1]})`,
+			// 		text: "*AI-Powered Data Interaction: A Natural Language Chatbot for CSV...*\n<https://irojournals.com/itdw/article/view/7/1/1>",
 			// 	},
 			// 	accessory: {
 			// 		type: "button",
 			// 		text: {
 			// 			type: "plain_text",
-			// 			text: "Post",
+			// 			text: "Post Link",
 			// 			emoji: true,
 			// 		},
-			// 		value: links[1],
-			// 		action_id: "post_link_button",
+			// 		value: links[0],
+			// 		action_id: "post_link",
 			// 	},
 			// },
-			{
-				type: "section",
-				text: {
-					type: "mrkdwn",
-					text: `Ask question: "${questions[0]}"`,
-				},
-				accessory: {
-					type: "button",
-					text: {
-						type: "plain_text",
-						text: "Ask",
-						emoji: true,
-					},
-					value: questions[0],
-					action_id: "ask_question",
-				},
-			},
 			// {
 			// 	type: "section",
 			// 	text: {
 			// 		type: "mrkdwn",
-			// 		text: `"${questions[1]}"`,
+			// 		text: "*Just-in-Time News: An AI Chatbot for the Modern Information Age*\n<https://www.mdpi.com/2673-2688/6/2/22>",
 			// 	},
 			// 	accessory: {
 			// 		type: "button",
 			// 		text: {
 			// 			type: "plain_text",
-			// 			text: "Ask",
+			// 			text: "Post Link",
 			// 			emoji: true,
 			// 		},
-			// 		value: questions[1],
-			// 		action_id: "ask_question_button",
+			// 		value: links[0],
+			// 		action_id: "post_link",
+			// 	},
+			// },
+			// {
+			// 	type: "section",
+			// 	text: {
+			// 		type: "mrkdwn",
+			// 		text: " *Design and Research of Intelligent Chatbot for Campus Information...*\n<https://onlinelibrary.wiley.com/doi/10.1002/eng2.70072>",
+			// 	},
+			// 	accessory: {
+			// 		type: "button",
+			// 		text: {
+			// 			type: "plain_text",
+			// 			text: "Post Link",
+			// 			emoji: true,
+			// 		},
+			// 		value: links[0],
+			// 		action_id: "post_link",
 			// 	},
 			// },
 		],
