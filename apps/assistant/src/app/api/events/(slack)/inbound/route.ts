@@ -65,6 +65,8 @@ async function upsertToEventLog(
 	if (payload.type === "url_verification" || payload.type === "ssl_check") {
 		return;
 	}
+	await SlackDb.activityLog.upsert(metadata);
+
 	return await SlackDb.eventLog.upsert({
 		...(metadata.target !== ignored.type && {
 			target: metadata.target,

@@ -13,7 +13,50 @@ const scraped = Mongo.db("slack").collection("scraped");
 const metrics = Mongo.db("slack").collection("event-metrics");
 const eventLog = Mongo.db("slack").collection("event-log");
 
+const activityLog = Mongo.db("slack").collection("activity-log");
+
 export const SlackDb = {
+	activityLog: {
+		upsert: async (metadata: SlackEventMetadata) => {
+			const begin = Time.now();
+
+			try {
+				if (
+					!metadata.user ||
+					["suggestions", "welcome"].includes(metadata.target)
+				) {
+					// Do not log bot activity
+					return;
+				}
+
+				return await activityLog.updateOne(
+					{
+						appId: metadata.appId,
+						teamId: metadata.teamId,
+						channelId: metadata.channelId,
+						userId: metadata.user,
+						target: metadata.target,
+					},
+					{
+						$setOnInsert: {
+							createdAt: new Date(),
+						},
+						$set: {
+							updatedAt: new Date(),
+							latestAt: {
+								ts: metadata.ts,
+								threadTs: metadata.threadTs,
+							},
+						},
+					},
+					{ upsert: true },
+				);
+			} finally {
+				Time.log(begin, "[db][activityLog][upsert]");
+			}
+		},
+	},
+
 	metrics: {
 		insert: async (metric: EventMetric) => {
 			const begin = Time.now();
