@@ -19,7 +19,7 @@
 		"@slack/types": "^2.14.0",
 		"@slack/web-api": "^7.8.0",
 		"@upstash/redis": "^1.34.0",
-		"ai": "^3.4.33",
+		"ai": "4.1.66",
 		"dayjs": "^1.11.12",
 		"js-tiktoken": "^1.0.19",
 		"link-preview-js": "^3.0.14",

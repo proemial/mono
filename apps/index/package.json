@@ -13,7 +13,7 @@
 		"@proemial/adapters": "workspace:*",
 		"@vercel/analytics": "^1.4.1",
 		"@ai-sdk/anthropic": "^1.0.2",
-		"ai": "^3.4.33",
+		"ai": "4.1.66",
 		"react": "^18",
 		"react-dom": "^18",
 		"next": "^14.2.3",

@@ -14,7 +14,7 @@
 		"@proemial/utils": "workspace:*",
 		"@sentry/nextjs": "^9.3.0",
 		"@slack/web-api": "^7.8.0",
-		"ai": "4.0.5",
+		"ai": "4.1.66",
 		"csv-writer": "^1.6.0",
 		"inngest": "^3.31.6",
 		"next": "^14",
