@@ -30,7 +30,7 @@ type QdrantAttachment = {
 		];
 		colors: { background: string; foreground: string };
 	};
-	type: string;
+	type: "file" | "url";
 };
 
 export const getSearchChannelAttachmentsTool = (metadata: SlackEventMetadata) =>
@@ -77,9 +77,14 @@ export const getSearchChannelAttachmentsTool = (metadata: SlackEventMetadata) =>
 			);
 
 			return relevantAttachments.map((attachment) => ({
-				title: attachment.payload.content.title,
 				text: attachment.payload.content.text,
 				type: attachment.payload.type,
+				...(attachment.payload.type === "file"
+					? { filename: attachment.payload.content.title }
+					: {
+							url: attachment.payload.url,
+							title: attachment.payload.content.title,
+						}),
 			}));
 		},
 	}) satisfies Tool;
