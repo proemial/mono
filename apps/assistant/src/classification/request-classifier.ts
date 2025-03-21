@@ -1,4 +1,7 @@
-import { Classification } from "@proemial/adapters/slack/helpers/payload";
+import {
+	Classification,
+	PartialMetadata,
+} from "@proemial/adapters/slack/helpers/payload";
 import { FILE_SIZE_LIMIT, FILE_TYPE_WHITELIST } from "./file-filters";
 import { EventCallbackPayload } from "@proemial/adapters/slack/models/event-models";
 import { extractLinks } from "@proemial/adapters/slack/helpers/links";
@@ -8,11 +11,16 @@ import { EventLogItem } from "@proemial/adapters/mongodb/slack/v2.models";
 import { Time } from "@proemial/utils/time";
 import { unstable_cache as cache } from "next/cache";
 import { errorMessage } from "@proemial/adapters/slack/error-messages";
+import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
+import { EnvVars } from "@proemial/utils/env-vars";
+import { classifyQuestion } from "@/prompts/question/classify-question";
+import { Slack } from "@/inngest/workers/helpers/slack";
 
 export const ignored = { type: "ignored" } as Classification;
 
 export async function classifyRequest(
 	payload: EventCallbackPayload,
+	metadata: PartialMetadata,
 	event: EventLogItem | null,
 ): Promise<Classification> {
 	const workers = event?.requests.filter((r) => r.type.includes("worker:"));
@@ -32,14 +40,12 @@ export async function classifyRequest(
 	) {
 		return { type: "followup" };
 	}
-
 	if (
 		payload.type === "block_actions" &&
 		!!payload.actions.find((a) => a.action_id === "ask_question")
 	) {
 		return { type: "ask_question" };
 	}
-
 	if (
 		payload.type === "block_actions" &&
 		!!payload.actions.find((a) => a.action_id === "post_link")
@@ -74,8 +80,7 @@ export async function classifyRequest(
 
 	const isBot = payload.event?.bot_profile;
 	const hasLinks = extractLinks(payload.event?.text, URL_BLACKLIST).length > 0;
-	const tagged =
-		!nakedMention(payload) && payload.event?.type === "app_mention";
+	const tagged = await isQuestion(payload, metadata);
 
 	if (!isBot && !tagged && hasLinks) {
 		return { type: "annotate" };
@@ -97,6 +102,33 @@ export async function classifyRequest(
 	log("unhandled", payload.type, payload.event?.type);
 
 	return ignored;
+}
+
+async function isQuestion(
+	payload: EventCallbackPayload,
+	metadata: PartialMetadata,
+) {
+	const tagged =
+		!nakedMention(payload) && payload.event?.type === "app_mention";
+
+	if (tagged) return true;
+
+	const text = payload.event?.text;
+	if (
+		EnvVars.isInternalSlackApp(metadata.appId) &&
+		!payload.event?.bot_profile &&
+		text
+	) {
+		const result = await classifyQuestion(text);
+
+		Slack.postDebug(
+			{ ...metadata, target: "question", callback: "" },
+			`Message classifier: ${JSON.stringify(result)}`,
+		);
+
+		return result.answer;
+	}
+	return false;
 }
 
 // Slack sometimes send an event twice :/

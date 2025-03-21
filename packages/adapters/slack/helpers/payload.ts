@@ -13,6 +13,7 @@ export async function parseRequest(
 	text: string,
 	classifier: (
 		payload: EventCallbackPayload,
+		fields: PartialMetadata,
 		event: EventLogItem | null,
 	) => Promise<Classification>,
 ) {
@@ -36,7 +37,7 @@ export async function parseRequest(
 
 	// TODO: return target:ignore if requests has workers
 	const event = await SlackDb.eventLog.get(partial);
-	const classifierResult = await classifier(payload, event);
+	const classifierResult = await classifier(payload, fields, event);
 
 	const metadata = {
 		...partial,
@@ -95,7 +96,12 @@ export async function getButtonValue(
 	};
 }
 
-function parseFields(payload: EventCallbackPayload) {
+export type PartialMetadata = Pick<
+	SlackEventMetadata,
+	"channelId" | "teamId" | "user" | "ts" | "threadTs" | "appId" | "isAssistant"
+>;
+
+function parseFields(payload: EventCallbackPayload): PartialMetadata {
 	const channelId = getChannelId(payload);
 
 	return {
