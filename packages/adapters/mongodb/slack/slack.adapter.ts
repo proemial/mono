@@ -6,6 +6,9 @@ import { ScrapedUrl } from "./scraped.types";
 import { EventLogItem, EventMetric } from "./v2.models";
 import { PushOperator, Document } from "mongodb";
 import { SlackEventMetadata } from "../../slack/models/metadata-models";
+import { SlackActivity } from "./activity-log.models";
+import { ScheduledNudge } from "./nudge-schedule.models";
+import { LoggedNudge } from "./nudge-log.models";
 
 const oauthEvents = Mongo.db("slack").collection("events");
 const entities = Mongo.db("slack").collection("entities");
@@ -14,17 +17,47 @@ const metrics = Mongo.db("slack").collection("event-metrics");
 const eventLog = Mongo.db("slack").collection("event-log");
 
 const activityLog = Mongo.db("slack").collection("activity-log");
+const nudgeSchedule = Mongo.db("slack").collection("nudge-schedule");
+const nudgeLog = Mongo.db("slack").collection("nudge-log");
 
 export const SlackDb = {
+	nudgeSchedule: {
+		upsert: async (nudge: ScheduledNudge) => {
+			return await nudgeSchedule.updateOne(
+				{
+					appId: nudge.appId,
+					teamId: nudge.teamId,
+					channelId: nudge.channelId,
+					userId: nudge.userId,
+					target: nudge.target,
+				},
+				{
+					$setOnInsert: {
+						createdAt: new Date(),
+					},
+					$set: {
+						updatedAt: new Date(),
+						scheduledAt: nudge.scheduledAt,
+					},
+				},
+				{ upsert: true },
+			);
+		},
+	},
+	nudgeLog: {
+		insert: async (nudge: LoggedNudge) => {
+			return await nudgeLog.insertOne({
+				...nudge,
+				createdAt: new Date(),
+			});
+		},
+	},
 	activityLog: {
 		upsert: async (metadata: SlackEventMetadata) => {
 			const begin = Time.now();
 
 			try {
-				if (
-					!metadata.user ||
-					["suggestions", "welcome"].includes(metadata.target)
-				) {
+				if (!metadata.user || ["suggestions"].includes(metadata.target)) {
 					// Do not log bot activity
 					return;
 				}
@@ -54,6 +87,58 @@ export const SlackDb = {
 			} finally {
 				Time.log(begin, "[db][activityLog][upsert]");
 			}
+		},
+
+		byTarget: async (target: string) => {
+			return await activityLog
+				.find<SlackActivity>({
+					target,
+				})
+				.toArray();
+		},
+
+		updatedSince: async (threshold: Date) => {
+			return activityLog
+				.aggregate<{
+					_id: string;
+					appId: string;
+					teamId: string;
+					channelId: string;
+					latestUpdate: Date;
+				}>([
+					{
+						$match: {
+							target: {
+								$ne: "welcome",
+							},
+						},
+					},
+					{
+						$group: {
+							_id: {
+								appId: "$appId",
+								teamId: "$teamId",
+								channelId: "$channelId",
+							},
+							latestUpdate: { $max: "$updatedAt" },
+						},
+					},
+					{
+						$match: {
+							latestUpdate: { $gt: threshold },
+						},
+					},
+					{
+						$project: {
+							_id: 0,
+							appId: "$_id.appId",
+							teamId: "$_id.teamId",
+							channelId: "$_id.channelId",
+							latestUpdate: 1,
+						},
+					},
+				])
+				.toArray();
 		},
 	},
 
@@ -264,6 +349,15 @@ export const SlackDb = {
 			} finally {
 				Time.log(begin, `[db][installs][delete] ${appId} ${teamId}`);
 			}
+		},
+
+		list: async () => {
+			return await entities
+				.find<SlackAppInstall>({
+					type: "install",
+					user: null,
+				})
+				.toArray();
 		},
 	},
 
