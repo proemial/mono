@@ -89,16 +89,18 @@ export const Slack = {
 		);
 
 		const channelSummary = await getChannelSummary(metadata);
-		type tuple = [string, string];
 		const links = (await fetchPapers(channelSummary.summary))
-			.slice(0, 2)
-			.map((paper) => paper.primary_location.landing_page_url) as tuple;
-
-		const questions = channelSummary.questions.slice(0, 2) as tuple;
+			.slice(0, 3)
+			.map((paper) => {
+				return {
+					url: paper.primary_location.landing_page_url,
+					title: paper.title,
+				};
+			});
 
 		await SlackMessenger.sendEphemeralMessage(
 			metadata,
-			welcomeUser(links, questions),
+			welcomeUser(links),
 			inviter,
 		);
 	},
