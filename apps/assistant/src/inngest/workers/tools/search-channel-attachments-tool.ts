@@ -41,7 +41,7 @@ export const getSearchChannelAttachmentsTool = (metadata: SlackEventMetadata) =>
 			query: z
 				.string()
 				.describe(
-					"You must generate this argument based on a user message or a discussion, to make it unambiguous and well suited to find relevant supporting information when vectorized and used as a search query against a database of file and link content. Use the original terminology from the user message or discussion, but restate the central terms multiple times, for a better match in the vector database.",
+					"You must generate this argument based on a user message or a discussion, to make it unambiguous and well suited to find relevant supporting information when vectorized and used as a search query against a database of file and link content. Use the original terminology from the user message or discussion, but restate the central terms multiple times, for a better match in the vector database. It is important you not use words like 'file', 'link', 'url', 'attachment', etc. in your query, as these words will not be found in the vector database.",
 				),
 		}),
 		execute: async ({ query }) => {

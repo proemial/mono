@@ -40,7 +40,7 @@ The user has access to the research papers you found using the \`searchPapers\`
 tool, so referencing the papers by their \`srcRefId\` is sufficient. Do not
 include a reference list in your answer.
 
-When referencing attachments, it is extremely important you cite the attachment:
+When referencing attachments, it is EXTREMELY important you cite the attachment:
 - When the type is "file", use the \`filename\` property to reference the attachment.
 - When the type is "url", use the \`url\` property to reference the attachment.
 
