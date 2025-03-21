@@ -1,29 +1,24 @@
 import { proxyToN8n } from "@/app/api/events/(n8n)/n8nProxy";
 import { AskRouter } from "@/inngest/routing";
 import { LlmAnswer } from "@/prompts/ask/summarize-prompts";
-import { statusMessages } from "@proemial/adapters/slack/helpers/status-messages";
-import {
-	logBotBegin,
-	logRetrieval,
-} from "@proemial/adapters/analytics/helicone";
+import { logBotBegin } from "@proemial/adapters/analytics/helicone";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
-import { ReferencedPaper } from "@proemial/adapters/redis/news";
+import { statusMessages } from "@proemial/adapters/slack/helpers/status-messages";
 import { getThreadMessagesForAi } from "@proemial/adapters/slack/helpers/thread";
 import { SlackEventMetadata } from "@proemial/adapters/slack/models/metadata-models";
 import { Time } from "@proemial/utils/time";
 import { uuid } from "@proemial/utils/uid";
 import { CoreMessage, CoreUserMessage, generateText } from "ai";
-import { z } from "zod";
 import { inngest } from "../../client";
 import { SlackAskEvent } from "../../workers";
-import { Metrics } from "../metrics";
 import {
 	LlmSteps,
 	convertSourceRefsToNumberedLinks,
 	extractPapers,
 } from "../helpers/extract-references";
 import { Slack } from "../helpers/slack";
-import { newId } from "@proemial/utils/uuid";
+import { Metrics } from "../metrics";
+import { getSearchPapersTool } from "../tools/search-papers-tool";
 
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
@@ -142,8 +137,6 @@ export async function summarizeAnswerTask(
 	};
 }
 
-export type PaperWithSrcRef = QdrantPaper & { srcRefId: string };
-
 async function answerQuestion(
 	metadata: SlackEventMetadata,
 	messages: CoreMessage[],
@@ -156,54 +149,12 @@ async function answerQuestion(
 	)?.content as string;
 	await logBotBegin("assistant", question, traceId);
 
-	type RetrievalResult = Array<QdrantPaper>;
-
 	const result = await generateText({
 		model: await LlmAnswer.model(traceId),
 		system: prompt,
 		messages,
 		tools: {
-			searchPapers: {
-				description: "Find specific research papers matching a user query",
-				parameters: z.object({
-					question: z.string().describe("The user question"),
-					query: z
-						.string()
-						.describe(
-							"You must generate this argument based on the user question, to make it unambiguous and well suited to find relevant supporting information, when vectorized and used as a search query against an article database. Use the original terminology from the user question, but restate the central terms multiple times, and use sysnonyms and adjectives that a researcher would use.",
-						),
-				}),
-				execute: async ({ question, query }) => {
-					console.log("PAPER QUERY", question, query);
-					await Slack.postDebug(
-						metadata,
-						`Fetching papers using query: "${query}"`,
-					);
-					await Slack.updateStatus(metadata, statusMessages.ask.fetch);
-
-					const papers = (await logRetrieval(
-						"assistant",
-						query,
-						async <RetrievalResult>() => {
-							return (await fetchPapers(query)) as RetrievalResult;
-						},
-						traceId,
-					)) as RetrievalResult;
-
-					await Slack.updateStatus(metadata, statusMessages.ask.summarize);
-					console.log("Papers retrieved", papers.length);
-
-					return {
-						papers: papers.map(
-							(p) =>
-								({
-									...p,
-									srcRefId: newId("source_reference"),
-								}) satisfies PaperWithSrcRef,
-						),
-					};
-				},
-			},
+			searchPapers: getSearchPapersTool(metadata, traceId),
 		},
 		maxSteps: 5,
 	});
@@ -212,45 +163,6 @@ async function answerQuestion(
 		answer: result.text,
 		papers: extractPapers(result as LlmSteps),
 	};
-}
-
-export type SearchResult = {
-	papers: QdrantPaper[];
-};
-
-export type QdrantPaper = ReferencedPaper & {
-	score: number;
-	features: Feature[];
-};
-
-type Feature = {
-	id: string;
-	label: string;
-	score: number;
-	type: "topic" | "keyword" | "concept";
-};
-
-export async function fetchPapers(query: string) {
-	try {
-		const result = await fetch("https://index.proem.ai/api/search", {
-			method: "POST",
-			body: JSON.stringify({
-				query: query as string,
-				from: "2024-01-01",
-				extended: true,
-			}),
-		});
-		const { papers } = (await result.json()) as SearchResult;
-
-		return papers;
-	} catch (e) {
-		console.error("[news][fetch] failed to fetch papers", e);
-		throw new Error("[news][fetch] failed to fetch papers", {
-			cause: {
-				error: e,
-			},
-		});
-	}
 }
 
 async function getMessages(metadata: SlackEventMetadata, question?: string) {

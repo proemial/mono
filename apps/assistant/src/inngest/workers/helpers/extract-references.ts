@@ -1,5 +1,5 @@
 import { isId } from "@proemial/utils/uuid";
-import { PaperWithSrcRef } from "../ask/1-summarize.task";
+import { PaperWithSrcRef } from "../tools/search-papers-tool";
 
 export function extractPapers(result: LlmSteps) {
 	const tools = result.steps

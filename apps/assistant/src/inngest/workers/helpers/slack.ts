@@ -10,7 +10,7 @@ import {
 import { EnvVars } from "@proemial/utils/env-vars";
 import { getChannelInfo } from "@proemial/adapters/slack/helpers/channel";
 import { getRandomStarters } from "../../../prompts/ask/suggestions";
-import { fetchPapers } from "../ask/1-summarize.task";
+import { fetchPapers } from "../tools/search-papers-tool";
 import { getChannelSummary } from "@/app/api/helpers/[teamid]/channel-summary/[channelId]/channel-summary";
 
 export const Slack = {
