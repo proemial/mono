@@ -142,24 +142,24 @@ export async function dispatchSlackEvent(
 		if (canPostAsUser) {
 			const message = await Slack.postQuestion(metadata, question as string);
 
-			// return {
-			// 	status: "dispatched",
-			// 	event: metadata.target,
-			// };
+			return {
+				status: "dispatched",
+				event: metadata.target,
+			};
 
 			// Slack doesn't send a mention event to us, if we tag ourselves
 			// in a thread. So we need to ask the question explicitly.
-			await inngest.send({
-				name: scrapeEventName,
-				data: {
-					url: question,
-					metadata: { ...metadata, ts: message.ts },
-				},
-			});
-			return {
-				status: "dispatched",
-				event: scrapeEventName,
-			};
+			// await inngest.send({
+			// 	name: scrapeEventName,
+			// 	data: {
+			// 		url: question,
+			// 		metadata: { ...metadata, ts: message.ts },
+			// 	},
+			// });
+			// return {
+			// 	status: "dispatched",
+			// 	event: scrapeEventName,
+			// };
 		}
 
 		return {
