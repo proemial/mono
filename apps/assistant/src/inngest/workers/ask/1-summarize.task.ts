@@ -19,6 +19,7 @@ import {
 import { Slack } from "../helpers/slack";
 import { Metrics } from "../metrics";
 import { getSearchPapersTool } from "../tools/search-papers-tool";
+import { getSearchChannelAttachmentsTool } from "../tools/search-channel-attachments-tool";
 
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
@@ -155,6 +156,7 @@ async function answerQuestion(
 		messages,
 		tools: {
 			searchPapers: getSearchPapersTool(metadata, traceId),
+			searchChannelAttachments: getSearchChannelAttachmentsTool(metadata),
 		},
 		maxSteps: 5,
 	});

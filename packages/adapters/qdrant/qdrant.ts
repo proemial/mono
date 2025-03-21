@@ -53,7 +53,10 @@ async function search(metadata: EventMetadata, query: string) {
 		limit: 10,
 	});
 
-	return references.map((reference) => reference.payload);
+	return references.map((reference) => ({
+		payload: reference.payload,
+		score: reference.score,
+	}));
 }
 
 async function upsert(

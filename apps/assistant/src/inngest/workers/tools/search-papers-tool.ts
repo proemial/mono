@@ -36,7 +36,7 @@ export const getSearchPapersTool = (
 				),
 		}),
 		execute: async ({ question, query }) => {
-			console.log("PAPER QUERY", question, query);
+			console.log("Tool invocation: Search Papers", question, query);
 			await Slack.postDebug(
 				metadata,
 				`Fetching papers using query: "${query}"`,

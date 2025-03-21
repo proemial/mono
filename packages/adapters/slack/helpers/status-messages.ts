@@ -7,6 +7,7 @@ export const statusMessages = {
 		begin: "analyzing question...",
 		fetch: "looking for research...",
 		summarize: "thinking...",
+		searchChannelAttachments: "searching channel attachments...",
 	},
 };
 

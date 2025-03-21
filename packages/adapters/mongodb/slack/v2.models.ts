@@ -47,7 +47,7 @@ export type EventMetadata = {
 
 export type EventContext = {
 	channelId: string;
-	userId: string;
+	userId?: string;
 	ts?: string;
 	threadTs?: string;
 };
