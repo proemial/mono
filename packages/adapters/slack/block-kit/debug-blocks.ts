@@ -1,3 +1,5 @@
+import { statusMessages } from "../helpers/status-messages";
+
 export function debug(text: string) {
 	return {
 		blocks: [
@@ -6,7 +8,7 @@ export function debug(text: string) {
 				elements: [
 					{
 						type: "mrkdwn",
-						text: `:proem: Debug message: \`\`\`${text}\`\`\``,
+						text: `${statusMessages.debug.prefix} \`\`\`${text}\`\`\``,
 					},
 				],
 			},
