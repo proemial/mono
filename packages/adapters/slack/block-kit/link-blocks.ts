@@ -49,6 +49,17 @@ export function link(
 											})),
 											action_id: "followup-question",
 										},
+										// @jon 👇 Related content button
+										// {
+										// 	type: "button",
+										// 	text: {
+										// 		type: "plain_text",
+										// 		text: "Related Content",
+										// 		emoji: true,
+										// 	},
+										// 	value: "click_me_123",
+										// 	action_id: "related-content",
+										// },
 									],
 								},
 							]
