@@ -17,6 +17,7 @@ import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { asMrkdwn } from "@proemial/adapters/slack/slack-messenger";
 import { fetchPapers } from "@/inngest/workers/tools/search-papers-tool";
 import { toTitleCaseIfAllCaps } from "@proemial/utils/string";
+import { EnvVars } from "@proemial/utils/env-vars";
 
 export async function dispatchSlackEvent(
 	payload: EventCallbackPayload,
@@ -112,7 +113,10 @@ export async function dispatchSlackEvent(
 		};
 	}
 
-	if (metadata.target === "related_content") {
+	if (
+		metadata.target === "related_content" &&
+		EnvVars.isInternalSlackApp(metadata.appId) // Proemial apps only
+	) {
 		return postRelatedContent(payload, metadata);
 	}
 

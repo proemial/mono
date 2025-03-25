@@ -48,12 +48,24 @@ export const Slack = {
 		if (metadata.isAssistant) {
 			return await SlackMessenger.sendMessageResponse(
 				metadata,
-				link(summary, url, title, questions),
+				link(
+					summary,
+					url,
+					title,
+					questions,
+					EnvVars.isInternalSlackApp(metadata.appId),
+				),
 			);
 		}
 		return await SlackMessenger.updateMessage(
 			metadata,
-			link(summary, url, title, questions),
+			link(
+				summary,
+				url,
+				title,
+				questions,
+				EnvVars.isInternalSlackApp(metadata.appId),
+			),
 		);
 	},
 

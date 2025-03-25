@@ -5,6 +5,7 @@ export function link(
 	url: string,
 	title?: string,
 	questions?: Array<{ question: string; answer: string }>,
+	isInternal?: boolean,
 ) {
 	return {
 		blocks: [],
@@ -53,16 +54,20 @@ export function link(
 											})),
 											action_id: "followup-question",
 										},
-										{
-											type: "button",
-											text: {
-												type: "plain_text",
-												text: "Related Content",
-												emoji: true,
-											},
-											value: url,
-											action_id: "related-content",
-										},
+										...(isInternal
+											? [
+													{
+														type: "button",
+														text: {
+															type: "plain_text",
+															text: "Related Content",
+															emoji: true,
+														},
+														value: url,
+														action_id: "related-content",
+													},
+												]
+											: []),
 									],
 								},
 							]
