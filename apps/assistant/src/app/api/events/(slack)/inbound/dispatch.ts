@@ -226,23 +226,34 @@ const postRelatedContent = async (
 	);
 	console.log(`Attachment search results: ${attachmentSearchResults.length}`);
 
-	// Filter attachments by score
+	// Filter attachments by score and remove duplicates
 	const relatedAttachments = attachmentSearchResults.filter(
 		(attachment) =>
 			attachment.score >= similariryScoreThreshold &&
-			attachment.payload.url !== url, // Don't include the original item
+			// Don't include the original item
+			attachment.payload.url !== url &&
+			attachment.payload.content.title !== scrapedUrl.content?.title,
 	);
+	const relatedAttachmentsNoDuplicates = relatedAttachments.filter(
+		(attachment, index) =>
+			relatedAttachments.findIndex(
+				(a) => a.payload.content.text === attachment.payload.content.text,
+			) === index,
+	);
+
 	console.log(
-		`Related attachments: ${relatedAttachments.length} (max score: ${Math.max(...attachmentSearchResults.map((a) => a.score))}, threshold: ${similariryScoreThreshold})`,
+		`Related attachments: ${relatedAttachmentsNoDuplicates.length} (max score: ${Math.max(...attachmentSearchResults.map((a) => a.score))}, threshold: ${similariryScoreThreshold})`,
 	);
 
 	// Fetch relevant scraped content
 	const relatedScraped = await Promise.all(
-		relatedAttachments.map((r) => SlackDb.scraped.get(r.payload.url)),
+		relatedAttachmentsNoDuplicates.map((r) =>
+			SlackDb.scraped.get(r.payload.url),
+		),
 	);
 	const relatedScrapedWithScores = relatedScraped.map((scraped, i) => ({
 		...scraped,
-		score: relatedAttachments[i].score,
+		score: relatedAttachmentsNoDuplicates[i].score,
 	}));
 
 	// Format attachments
@@ -269,7 +280,9 @@ const postRelatedContent = async (
 	const relatedPapers = paperSearchResults.filter(
 		(paper) =>
 			paper.score >= similariryScoreThreshold &&
-			paper.primary_location.landing_page_url !== url, // Don't include the original item
+			// Don't include the original item
+			paper.primary_location.landing_page_url !== url &&
+			paper.title !== scrapedUrl.content?.title,
 	);
 	console.log(
 		`Related papers: ${relatedPapers.length} (max score: ${Math.max(...paperSearchResults.map((p) => p.score))}, threshold: ${similariryScoreThreshold})`,
