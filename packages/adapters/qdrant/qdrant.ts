@@ -13,7 +13,7 @@ const qdrant = qdrantHelper({
 	apiKey: process.env.QDRANT_API_KEY as string,
 });
 
-export type QdrantPoint = {
+type QdrantPoint = {
 	id: string;
 	vector: number[];
 	payload: {
@@ -22,6 +22,21 @@ export type QdrantPoint = {
 		content: string;
 		type?: string;
 	};
+};
+
+type QdrantAttachment = {
+	url: string;
+	content: {
+		title: string;
+		text: string;
+		images: [
+			{
+				url: string;
+			},
+		];
+		colors: { background: string; foreground: string } | undefined;
+	};
+	type: "file" | "url";
 };
 
 export const Qdrant = {
@@ -54,7 +69,7 @@ async function search(metadata: EventMetadata, query: string) {
 	});
 
 	return references.map((reference) => ({
-		payload: reference.payload,
+		payload: reference.payload as QdrantAttachment,
 		score: reference.score,
 	}));
 }

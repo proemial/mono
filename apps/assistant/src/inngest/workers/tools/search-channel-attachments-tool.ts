@@ -8,31 +8,6 @@ import { Qdrant } from "@proemial/adapters/qdrant/qdrant";
 // The score threshold for an attachment to be considered relevant to a query
 const ATTACHMENT_SCORE_THRESHOLD = 0.3;
 
-type QdrantAttachment = {
-	metadata: {
-		appId: string;
-		teamId: string;
-		context: {
-			channelId: string;
-			userId: string;
-			ts: string;
-			threadTs: string | null;
-		};
-	};
-	url: string;
-	content: {
-		title: string;
-		text: string;
-		images: [
-			{
-				url: string;
-			},
-		];
-		colors: { background: string; foreground: string };
-	};
-	type: "file" | "url";
-};
-
 export const getSearchChannelAttachmentsTool = (metadata: SlackEventMetadata) =>
 	({
 		description:
@@ -56,7 +31,7 @@ export const getSearchChannelAttachmentsTool = (metadata: SlackEventMetadata) =>
 			);
 
 			// Filter search results by app, team, and channel id
-			const attachments = (await Qdrant.search(
+			const attachments = await Qdrant.search(
 				{
 					appId: metadata.appId,
 					teamId: metadata.teamId,
@@ -65,7 +40,7 @@ export const getSearchChannelAttachmentsTool = (metadata: SlackEventMetadata) =>
 					},
 				},
 				query,
-			)) as { payload: QdrantAttachment; score: number }[];
+			);
 			console.log("No. of attachments found", attachments.length);
 
 			const relevantAttachments = attachments.filter(
