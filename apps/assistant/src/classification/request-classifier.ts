@@ -46,11 +46,13 @@ export async function classifyRequest(
 	) {
 		return { type: "ask_question" };
 	}
-	if (
-		payload.type === "block_actions" &&
-		!!payload.actions.find((a) => a.action_id === "post_link")
-	) {
-		return { type: "post_link" };
+	if (payload.type === "block_actions") {
+		if (payload.actions.find((a) => a.action_id === "post_link")) {
+			return { type: "post_link" };
+		}
+		if (payload.actions.find((a) => a.action_id === "related-content")) {
+			return { type: "related_content" };
+		}
 	}
 
 	if (payload.event?.type === "assistant_thread_started") {

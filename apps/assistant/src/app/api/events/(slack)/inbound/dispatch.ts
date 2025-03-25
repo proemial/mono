@@ -12,6 +12,10 @@ import {
 	getButtonValue,
 	getFollowupQuestion,
 } from "@proemial/adapters/slack/helpers/payload";
+import { Qdrant } from "@proemial/adapters/qdrant/qdrant";
+import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
+import { asMrkdwn } from "@proemial/adapters/slack/slack-messenger";
+import { fetchPapers } from "@/inngest/workers/tools/search-papers-tool";
 
 export async function dispatchSlackEvent(
 	payload: EventCallbackPayload,
@@ -107,6 +111,10 @@ export async function dispatchSlackEvent(
 		};
 	}
 
+	if (metadata.target === "related_content") {
+		return postRelatedContent(payload, metadata);
+	}
+
 	if (metadata.target === "ask_question") {
 		const { question, botUser } = await getButtonValue(metadata, payload);
 
@@ -178,3 +186,129 @@ export async function dispatchSlackEvent(
 
 	return undefined;
 }
+
+const postRelatedContent = async (
+	payload: EventCallbackPayload,
+	metadata: SlackEventMetadata,
+) => {
+	const url = payload.actions.at(0)?.value;
+	if (!url) {
+		return {
+			status: "failed",
+			event: metadata.target,
+			error: "No URL found",
+		};
+	}
+	const scrapedUrl = await SlackDb.scraped.get(url);
+	if (!scrapedUrl?.summaries?.summary) {
+		return {
+			status: "failed",
+			event: metadata.target,
+			error: "No summary found",
+		};
+	}
+
+	const similariryScoreThreshold = 0.4;
+	const maxAttachments = 4;
+	const maxPapers = 4;
+
+	// Look up relevant content from URLs and files in the channel
+	const attachmentSearchResults = await Qdrant.search(
+		{
+			appId: metadata.appId,
+			teamId: metadata.teamId,
+			context: {
+				channelId: metadata.channelId,
+			},
+		},
+		scrapedUrl.summaries.summary as string,
+	);
+	console.log(`Attachment search results: ${attachmentSearchResults.length}`);
+
+	// Filter attachments by score
+	const relatedAttachments = attachmentSearchResults.filter(
+		(attachment) =>
+			attachment.score >= similariryScoreThreshold &&
+			attachment.payload.url !== url, // Don't include the original item
+	);
+	console.log(
+		`Related attachments: ${relatedAttachments.length} (max score: ${Math.max(...attachmentSearchResults.map((a) => a.score))}, threshold: ${similariryScoreThreshold})`,
+	);
+
+	// Fetch relevant scraped content
+	const relatedScraped = await Promise.all(
+		relatedAttachments.map((r) => SlackDb.scraped.get(r.payload.url)),
+	);
+	const relatedScrapedWithScores = relatedScraped.map((scraped, i) => ({
+		...scraped,
+		score: relatedAttachments[i].score,
+	}));
+
+	// Format attachments
+	const attachments = relatedScrapedWithScores
+		.slice(0, maxAttachments)
+		.map((scraped) =>
+			formatItem(
+				(scraped.summaries?.translatedTitle as string) ??
+					scraped.content?.title ??
+					"",
+				scraped.url ?? "",
+				scraped.score,
+				(scraped.summaries?.summary as string) ?? "",
+			),
+		);
+
+	// Fetch related papers
+	const paperSearchResults = await fetchPapers(
+		scrapedUrl.summaries.summary as string,
+	);
+	console.log(`Paper search results: ${paperSearchResults.length}`);
+
+	// Filter papers by score
+	const relatedPapers = paperSearchResults.filter(
+		(paper) =>
+			paper.score >= similariryScoreThreshold &&
+			paper.primary_location.landing_page_url !== url, // Don't include the original item
+	);
+	console.log(
+		`Related papers: ${relatedPapers.length} (max score: ${Math.max(...paperSearchResults.map((p) => p.score))}, threshold: ${similariryScoreThreshold})`,
+	);
+
+	// Format papers
+	const papers = relatedPapers.slice(0, maxPapers).map((paper) => {
+		return formatItem(
+			paper.title,
+			paper.primary_location.landing_page_url,
+			paper.score,
+			paper.abstract,
+		);
+	});
+
+	await Slack.postRelatedContent(metadata, attachments, papers);
+
+	return {
+		status: "dispatched",
+		event: "related_content",
+	};
+};
+
+const formatItem = (
+	title: string,
+	url: string,
+	score: number,
+	summary: string,
+) => {
+	const maxTitleLength = 50;
+	const maxParagraphLength = 200;
+
+	const trimmedTitle =
+		title.slice(0, maxTitleLength).trimEnd() +
+		(title.length > maxTitleLength ? "…" : "");
+	const trimmedSummary =
+		summary.slice(0, maxParagraphLength).trimEnd() +
+		(summary.length > maxParagraphLength ? "…" : "");
+	const scorePercentage = (score * 100).toFixed(0);
+	return asMrkdwn(
+		`[**${trimmedTitle}**](${url}) · ${scorePercentage}%\n${trimmedSummary}`,
+	);
+};

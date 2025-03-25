@@ -1,5 +1,8 @@
+import { SlackMessenger } from "../slack-messenger";
+
 export function link(
 	text: string,
+	url: string,
 	title?: string,
 	questions?: Array<{ question: string; answer: string }>,
 ) {
@@ -27,6 +30,7 @@ export function link(
 								{
 									type: "actions",
 									block_id: "followups",
+									// @ts-ignore This seems to work, even though the type is wrong
 									elements: [
 										{
 											type: "static_select",
@@ -49,17 +53,16 @@ export function link(
 											})),
 											action_id: "followup-question",
 										},
-										// @jon 👇 Related content button
-										// {
-										// 	type: "button",
-										// 	text: {
-										// 		type: "plain_text",
-										// 		text: "Related Content",
-										// 		emoji: true,
-										// 	},
-										// 	value: "click_me_123",
-										// 	action_id: "related-content",
-										// },
+										{
+											type: "button",
+											text: {
+												type: "plain_text",
+												text: "Related Content",
+												emoji: true,
+											},
+											value: url,
+											action_id: "related-content",
+										},
 									],
 								},
 							]
@@ -67,5 +70,5 @@ export function link(
 				],
 			},
 		],
-	};
+	} satisfies Parameters<typeof SlackMessenger.sendMessageResponse>[1];
 }

@@ -55,6 +55,7 @@ const taskWorker = async (payload: SlackAnnotateEvent) => {
 	await Slack.postSummary(
 		payload.metadata,
 		scraped.summaries.summary as string,
+		scraped.url,
 		scraped.content.title,
 		scraped.summaries.questions as Array<{ question: string; answer: string }>,
 	);

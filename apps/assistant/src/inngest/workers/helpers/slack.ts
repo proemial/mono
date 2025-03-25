@@ -1,4 +1,5 @@
 import { answer } from "@proemial/adapters/slack/block-kit/answer-blocks";
+import { relatedContent } from "@proemial/adapters/slack/block-kit/related-content-blocks";
 import { link } from "@proemial/adapters/slack/block-kit/link-blocks";
 import { welcomeAll } from "@proemial/adapters/slack/block-kit/welcome-all";
 import { welcomeUser } from "@proemial/adapters/slack/block-kit/welcome-user";
@@ -12,6 +13,7 @@ import { getChannelInfo } from "@proemial/adapters/slack/helpers/channel";
 import { getRandomStarters } from "../../../prompts/ask/suggestions";
 import { fetchPapers } from "../tools/search-papers-tool";
 import { getChannelSummary } from "../../../app/api/helpers/[teamid]/channel/[channelId]/summary/channel-summary";
+import { ScrapedUrl } from "@proemial/adapters/mongodb/slack/scraped.types";
 
 export const Slack = {
 	updateStatus: async (
@@ -39,18 +41,19 @@ export const Slack = {
 	postSummary: async (
 		metadata: SlackEventMetadata,
 		summary: string,
+		url: string,
 		title?: string,
 		questions?: Array<{ question: string; answer: string }>,
 	) => {
 		if (metadata.isAssistant) {
 			return await SlackMessenger.sendMessageResponse(
 				metadata,
-				link(summary, title, questions),
+				link(summary, url, title, questions),
 			);
 		}
 		return await SlackMessenger.updateMessage(
 			metadata,
-			link(summary, title, questions),
+			link(summary, url, title, questions),
 		);
 	},
 
@@ -66,6 +69,24 @@ export const Slack = {
 			);
 		}
 		return await SlackMessenger.updateMessage(metadata, answer(asMrkdwn(text)));
+	},
+
+	postRelatedContent: async (
+		metadata: SlackEventMetadata,
+		attachments: string[],
+		papers: string[],
+	) => {
+		if (attachments.length === 0 && papers.length === 0) {
+			return await SlackMessenger.sendMessageResponse(
+				metadata,
+				answer("No related content found."),
+			);
+		}
+
+		return await SlackMessenger.sendMessageResponse(
+			metadata,
+			relatedContent(attachments, papers),
+		);
 	},
 
 	showSuggestions: async (metadata: SlackEventMetadata, title: string) => {
