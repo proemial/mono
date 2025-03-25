@@ -1,4 +1,4 @@
-import { summarizeChannel } from "@/prompts/channel/summarize-channel";
+import { summarizeChannel } from "../../../../../../../prompts/channel/summarize-channel";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { WebClient } from "@slack/web-api";
 

@@ -235,6 +235,71 @@ export const SlackDb = {
 				Time.log(begin, "[db][eventLog][get]");
 			}
 		},
+
+		annotations: async (metadata: Omit<SlackEventMetadata, "target">) => {
+			const begin = Time.now();
+
+			try {
+				const filter = {
+					"metadata.appId": metadata.appId,
+					"metadata.teamId": metadata.teamId,
+					"metadata.context.channelId": metadata.channelId,
+				};
+
+				return await eventLog.aggregate([
+					{
+					  $match:
+						{
+						  ...filter,
+						  target: "annotate",
+						  status: {
+							$eq: "completed"
+						  }
+						}
+					},
+					{
+					  $sort: {
+						_id: -1
+					  }
+					},
+					{
+					  $project: {
+						eventText: {
+						  $arrayElemAt: [
+							"$requests.input.payload.event.text",
+							0
+						  ]
+						},
+						event: {
+						  $first: "$requests.input.payload.event"
+						},
+						createdAt: {
+						  $arrayElemAt: ["$requests.createdAt", 0]
+						},
+						metadata: 1,
+						requests: 1,
+					  }
+					},
+					{
+					  $project: {
+						createdAt: 1,
+						metadata: 1,
+						requests: 1,
+						eventText: 1,
+						eventFile: {
+						  $first:
+							"$event.files.url_private_download"
+						}
+					  }
+					},
+					{$match: {
+						createdAt: { $gt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7) }
+					}}
+				]).toArray();
+			} finally {
+				Time.log(begin, "[db][eventLog][annotations]");
+			}
+		},
 	},
 
 	oauth: {

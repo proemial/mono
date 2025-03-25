@@ -35,7 +35,6 @@ export async function parseRequest(
 		callback: `${callbackUrl}/api/events/outbound`,
 	};
 
-	// TODO: return target:ignore if requests has workers
 	const event = await SlackDb.eventLog.get(partial);
 	const classifierResult = await classifier(payload, fields, event);
 
@@ -50,15 +49,6 @@ export async function parseRequest(
 		type: `${payload.type}/${payload.event?.type}${payload.event?.subtype ? `/${payload.event?.subtype}` : ""}`,
 		text: `${payload.event?.text ?? payload.event?.message?.text}`,
 	});
-
-	// Do not spam the thread with the errors
-	// if (classifierResult.type === "error") {
-	// 	SlackMessenger.postStatus(
-	// 		metadata,
-	// 		classifierResult.payload ?? "Error",
-	// 		true,
-	// 	);
-	// }
 
 	return { payload, metadata };
 }
