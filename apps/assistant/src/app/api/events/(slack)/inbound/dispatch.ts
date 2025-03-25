@@ -16,6 +16,7 @@ import { Qdrant } from "@proemial/adapters/qdrant/qdrant";
 import { SlackDb } from "@proemial/adapters/mongodb/slack/slack.adapter";
 import { asMrkdwn } from "@proemial/adapters/slack/slack-messenger";
 import { fetchPapers } from "@/inngest/workers/tools/search-papers-tool";
+import { toTitleCaseIfAllCaps } from "@proemial/utils/string";
 
 export async function dispatchSlackEvent(
 	payload: EventCallbackPayload,
@@ -277,7 +278,7 @@ const postRelatedContent = async (
 	// Format papers
 	const papers = relatedPapers.slice(0, maxPapers).map((paper) => {
 		return formatItem(
-			paper.title,
+			toTitleCaseIfAllCaps(paper.title),
 			paper.primary_location.landing_page_url,
 			paper.score,
 			paper.abstract,

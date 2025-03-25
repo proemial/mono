@@ -3,7 +3,7 @@ import {
 	AddToCollectionButton,
 	AddToCollectionButtonProps,
 } from "@/app/(pages)/(app)/space/(discover)/add-to-collection-button";
-import { toTitleCaseIfAllCaps } from "@/utils/string-utils";
+import { toTitleCaseIfAllCaps } from "@proemial/utils/string";
 import {
 	Card,
 	CardDescription,
