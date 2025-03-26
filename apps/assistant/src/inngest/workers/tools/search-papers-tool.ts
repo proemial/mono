@@ -6,6 +6,7 @@ import { newId } from "@proemial/utils/uuid";
 import { Tool } from "ai";
 import { z } from "zod";
 import { Slack } from "../helpers/slack";
+import { answerParams } from "@/prompts/ask/summarize-prompt";
 
 type Feature = {
 	id: string;
@@ -21,26 +22,22 @@ type QdrantPaper = ReferencedPaper & {
 
 export type PaperWithSrcRef = QdrantPaper & { srcRefId: string };
 
+const tool = answerParams.tools.searchPapers;
+
 export const getSearchPapersTool = (
 	metadata: SlackEventMetadata,
 	traceId: string,
+	params?: typeof answerParams.tools.searchPapers,
 ) =>
 	({
-		description: "Find specific research papers matching a user query",
+		description: params?.description ?? tool.description,
 		parameters: z.object({
-			question: z.string().describe("The user question"),
 			query: z
 				.string()
-				.describe(
-					"You must generate this argument based on the user question, to make it unambiguous and well suited to find relevant supporting information, when vectorized and used as a search query against an article database. Use the original terminology from the user question, but restate the central terms multiple times, and use sysnonyms and adjectives that a researcher would use.",
-				),
+				.describe(params?.parameters.query ?? tool.parameters.query),
 		}),
-		execute: async ({ question, query }) => {
-			console.log("Tool invocation: Search Papers", question, query);
-			await Slack.postDebug(
-				metadata,
-				`Fetching papers using query: "${query}"`,
-			);
+		execute: async ({ query }) => {
+			console.log("Tool invocation: Search Papers", query);
 			await Slack.updateStatus(metadata, statusMessages.ask.fetch);
 
 			const papers = (await logRetrieval(

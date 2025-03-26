@@ -1,0 +1,21 @@
+[
+	{
+		"content": "is smoking more healthy than drinking <@U08B132LUBZ>",
+		"role": "user"
+	},
+	{
+		"content": "Both smoking and alcohol consumption pose serious health risks, with links to major diseases []. The effects of smoking and alcohol on the brain appear to be similar, generally reducing brain health []. For the same level of mortality risk, 5 drinks a day is equivalent to smoking about 4-5 cigarettes daily [].\n",
+		"role": "assistant"
+	},
+	{ "content": "but which are worse <@U08B132LUBZ>", "role": "user" },
+	{
+		"content": "Both smoking and drinking pose serious health risks, with links to major diseases []. Combining both smoking and alcohol consumption can be particularly harmful []. The risks from consuming a standard drink can equal smoking several cigarettes a day [].\n",
+		"role": "assistant"
+	},
+	{ "content": "tell me more <@U08B132LUBZ>", "role": "user" },
+	{
+		"content": "Both smoking and alcohol consumption pose serious health risks []. The risk of alcohol use on premature death can be equivalent to smoking multiple cigarettes a day []. Combining both smoking and alcohol leads to a greater risk of harm than either alone [].\n",
+		"role": "assistant"
+	},
+	{ "content": "please continue <@U08B132LUBZ>", "role": "user" }
+]

@@ -24,6 +24,11 @@ export async function parseRequest(
 			: text;
 
 	console.log("PAYLOAD", unencoded);
+
+	if (!unencoded) {
+		throw new Error("No payload found");
+	}
+
 	const payload = JSON.parse(unencoded) as EventCallbackPayload;
 	const fields = parseFields(payload);
 

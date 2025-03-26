@@ -1,13 +1,13 @@
 import { SlackDb } from "../../mongodb/slack/slack.adapter";
-import { SlackThread } from "../models/event-models";
 import { SlackEventMetadata } from "../models/metadata-models";
 import { normalizeYouTubeUrl, isYouTubeUrl } from "../../youtube/shared";
 import { extractLinks } from "./links";
-import { ContextBlock, TextObject } from "@slack/types";
 import { CoreAssistantMessage, CoreMessage, CoreUserMessage } from "ai";
 import { LlmUtils } from "../../llm/utils";
 import { isStatusMessage } from "./status-messages";
-import { GenericMessageEvent } from "@slack/types";
+import { ScrapedUrl } from "../../mongodb/slack/scraped.types";
+import { WebClient } from "@slack/web-api";
+import { MessageElement } from "@slack/web-api/dist/types/response/ConversationsRepliesResponse";
 
 export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 	const messages = await getThreadMessages(
@@ -16,11 +16,15 @@ export async function getThreadMessagesForAi(metadata: SlackEventMetadata) {
 		metadata.teamId,
 		metadata.appId,
 	);
-	console.log("input messages", JSON.stringify(messages));
-	const outputMessages = (await Promise.all(messages.map(toCoreMessages)))
+
+	// console.log("input messages", JSON.stringify(messages));
+	const outputMessages = (
+		await Promise.all(messages.map(transformToCoreMessages))
+	)
 		.filter((m) => m.length > 0)
 		.flat();
-	console.log("output messages", JSON.stringify(outputMessages));
+
+	// console.log("output messages", JSON.stringify(outputMessages));
 	return outputMessages;
 }
 
@@ -31,23 +35,21 @@ export async function getThreadMessages(
 	appId: string,
 ) {
 	const install = await SlackDb.installs.get(teamId, appId);
+	console.log("fetching conversations.replies", channelId, threadTs);
+	const slack = new WebClient(install?.metadata?.accessToken);
 
-	const response = await fetch(
-		`https://slack.com/api/conversations.replies?channel=${channelId}&ts=${threadTs}`,
-		{
-			headers: {
-				Authorization: `Bearer ${install?.metadata?.accessToken}`,
-			},
-		},
-	);
-	const thread = (await response.json()) as SlackThread;
+	const thread = await slack.conversations.replies({
+		channel: channelId,
+		ts: threadTs,
+	});
 
-	return thread.messages.filter(
+	return (thread.messages || []).filter(
+		// @ts-ignore
 		(m) => m.subtype !== "assistant_app_thread" && (m.text || m.files?.length),
 	);
 }
 
-const getMessageUrls = (message: GenericMessageEvent): string[] => {
+const getMessageUrls = (message: MessageElement): string[] => {
 	const sanitized = (message.text ?? "")
 		.replaceAll("\n", " ")
 		.replaceAll('"', " ");
@@ -56,16 +58,30 @@ const getMessageUrls = (message: GenericMessageEvent): string[] => {
 	return links.map((l) => (isYouTubeUrl(l) ? normalizeYouTubeUrl(l) : l));
 };
 
-const toCoreMessages = async (
-	message: GenericMessageEvent,
+const transformToCoreMessages = async (
+	message: MessageElement,
 ): Promise<CoreMessage[]> => {
 	// User URL messages
-	const urls = getMessageUrls(message);
+	const urls = await Promise.all(
+		getMessageUrls(message).map(async (url) => {
+			const result = await SlackDb.scraped.get(url);
+			return result;
+		}),
+	);
+
+	return toCoreMessages(
+		message,
+		urls.filter((r) => !!r),
+	);
+};
+
+// TODO: Generate unit test for this function
+export const toCoreMessages = (
+	message: MessageElement,
+	urls: Pick<ScrapedUrl, "url" | "content" | "summaries">[],
+) => {
 	if (urls.length > 0) {
-		const results = await Promise.all(
-			urls.map((url) => SlackDb.scraped.get(url)),
-		);
-		return results
+		return urls
 			.filter((r) => r !== null)
 			.flatMap((r) => [
 				...(message.text

@@ -12,7 +12,7 @@ import { CoreMessage, CoreUserMessage, generateText } from "ai";
 import { inngest } from "../../client";
 import { SlackAskEvent } from "../../workers";
 import {
-	LlmSteps,
+	LlmResponse,
 	convertSourceRefsToNumberedLinks,
 	extractPapers,
 } from "../helpers/extract-references";
@@ -20,6 +20,7 @@ import { Slack } from "../helpers/slack";
 import { Metrics } from "../metrics";
 import { getSearchPapersTool } from "../tools/search-papers-tool";
 import { getSearchChannelAttachmentsTool } from "../tools/search-channel-attachments-tool";
+import { answerParams } from "@/prompts/ask/summarize-prompt";
 
 export const eventName = "ask/summarize";
 const eventId = "ask/summarize/fn";
@@ -90,13 +91,13 @@ const taskWorker = async (payload: SlackAskEvent) => {
 	if (metadata.channelId === "C08F2GPLT2M") {
 		console.log("proxyToN8n", metadata, payload, mappedMessages);
 		return await proxyToN8n("answer", metadata, payload, {
-			prompt: LlmAnswer.prompt(),
+			prompt: answerParams.prompt,
 			messages: mappedMessages,
 		});
 	}
 
 	return await summarizeAnswerTask(metadata, payload, {
-		prompt: LlmAnswer.prompt(),
+		params: answerParams,
 		messages: mappedMessages,
 	});
 };
@@ -104,17 +105,21 @@ const taskWorker = async (payload: SlackAskEvent) => {
 export async function summarizeAnswerTask(
 	metadata: SlackEventMetadata,
 	payload: SlackAskEvent,
-	input: { messages: CoreMessage[]; prompt: string },
+	input: { messages: CoreMessage[]; params: typeof answerParams },
 ) {
 	const begin = Time.now();
 
-	let { answer, papers } = await answerQuestion(
+	const llmResponse = await answerQuestion(
 		metadata,
 		input.messages,
-		input.prompt,
+		input.params,
 	);
-	console.log("answer", answer, papers?.length);
-	answer = convertSourceRefsToNumberedLinks(answer, papers);
+	const papers = extractPapers(llmResponse);
+	console.log("answer", llmResponse.text, papers?.length);
+	const answer = convertSourceRefsToNumberedLinks(
+		llmResponse.text as string,
+		papers,
+	);
 	console.log("answer with links", answer);
 
 	// Next step from router
@@ -138,10 +143,10 @@ export async function summarizeAnswerTask(
 	};
 }
 
-async function answerQuestion(
+export async function answerQuestion(
 	metadata: SlackEventMetadata,
 	messages: CoreMessage[],
-	prompt: string,
+	params: typeof answerParams,
 ) {
 	const traceId = uuid();
 
@@ -150,21 +155,38 @@ async function answerQuestion(
 	)?.content as string;
 	await logBotBegin("assistant", question, traceId);
 
-	const result = await generateText({
-		model: await LlmAnswer.model(traceId),
-		system: prompt,
-		messages,
-		tools: {
-			searchPapers: getSearchPapersTool(metadata, traceId),
-			searchChannelAttachments: getSearchChannelAttachmentsTool(metadata),
-		},
-		maxSteps: 5,
-	});
+	// Create the tools object based on the available tools in params.tools
+	const tools: Record<
+		string,
+		| ReturnType<typeof getSearchPapersTool>
+		| ReturnType<typeof getSearchChannelAttachmentsTool>
+	> = {};
 
-	return {
-		answer: result.text,
-		papers: extractPapers(result as LlmSteps),
+	// Add each tool if it exists in params.tools
+	if ("searchPapers" in params.tools) {
+		tools.searchPapers = getSearchPapersTool(
+			metadata,
+			traceId,
+			params.tools.searchPapers,
+		);
+	}
+
+	if ("searchChannelAttachments" in params.tools) {
+		tools.searchChannelAttachments = getSearchChannelAttachmentsTool(
+			metadata,
+			params.tools.searchChannelAttachments,
+		);
+	}
+
+	const llmParams = {
+		model: await LlmAnswer.model(traceId),
+		system: params.prompt,
+		messages,
+		tools,
+		maxSteps: 5,
 	};
+
+	return (await generateText(llmParams)) as LlmResponse;
 }
 
 async function getMessages(metadata: SlackEventMetadata, question?: string) {

@@ -160,7 +160,8 @@ export const SlackDb = {
 
 			try {
 				if (!event.metadata.context?.ts || !event.metadata.context?.channelId) {
-					throw new Error("ts and channelId are required");
+					console.error("ts and channelId are required", event);
+					return;
 				}
 
 				const { requests, ...rest } = event;
@@ -246,56 +247,57 @@ export const SlackDb = {
 					"metadata.context.channelId": metadata.channelId,
 				};
 
-				return await eventLog.aggregate([
-					{
-					  $match:
+				return await eventLog
+					.aggregate([
 						{
-						  ...filter,
-						  target: "annotate",
-						  status: {
-							$eq: "completed"
-						  }
-						}
-					},
-					{
-					  $sort: {
-						_id: -1
-					  }
-					},
-					{
-					  $project: {
-						eventText: {
-						  $arrayElemAt: [
-							"$requests.input.payload.event.text",
-							0
-						  ]
+							$match: {
+								...filter,
+								target: "annotate",
+								status: {
+									$eq: "completed",
+								},
+							},
 						},
-						event: {
-						  $first: "$requests.input.payload.event"
+						{
+							$sort: {
+								_id: -1,
+							},
 						},
-						createdAt: {
-						  $arrayElemAt: ["$requests.createdAt", 0]
+						{
+							$project: {
+								eventText: {
+									$arrayElemAt: ["$requests.input.payload.event.text", 0],
+								},
+								event: {
+									$first: "$requests.input.payload.event",
+								},
+								createdAt: {
+									$arrayElemAt: ["$requests.createdAt", 0],
+								},
+								metadata: 1,
+								requests: 1,
+							},
 						},
-						metadata: 1,
-						requests: 1,
-					  }
-					},
-					{
-					  $project: {
-						createdAt: 1,
-						metadata: 1,
-						requests: 1,
-						eventText: 1,
-						eventFile: {
-						  $first:
-							"$event.files.url_private_download"
-						}
-					  }
-					},
-					{$match: {
-						createdAt: { $gt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7) }
-					}}
-				]).toArray();
+						{
+							$project: {
+								createdAt: 1,
+								metadata: 1,
+								requests: 1,
+								eventText: 1,
+								eventFile: {
+									$first: "$event.files.url_private_download",
+								},
+							},
+						},
+						{
+							$match: {
+								createdAt: {
+									$gt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
+								},
+							},
+						},
+					])
+					.toArray();
 			} finally {
 				Time.log(begin, "[db][eventLog][annotations]");
 			}

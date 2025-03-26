@@ -4,6 +4,7 @@ import { summarizeAnswerTask } from "@/inngest/workers/ask/1-summarize.task";
 import { SlackAnnotateEvent, SlackAskEvent } from "@/inngest/workers";
 import { summarizeAnnotationTask } from "@/inngest/workers/annotate/2-summarize.task";
 import { CoreMessage } from "ai";
+import { answerParams } from "@/prompts/ask/summarize-prompt";
 
 export const revalidate = 0;
 
@@ -30,7 +31,7 @@ export async function POST(request: Request) {
 		const result = await summarizeAnswerTask(
 			metadata,
 			payload as SlackAskEvent,
-			input as { messages: CoreMessage[]; prompt: string },
+			{ messages: input.messages as CoreMessage[], params: answerParams },
 		);
 		return NextResponse.json(result);
 	}

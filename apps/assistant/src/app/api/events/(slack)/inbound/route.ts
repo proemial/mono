@@ -30,7 +30,7 @@ export async function POST(request: Request) {
 
 		if (metadata.target === "error") {
 			// Abandon the request, as it's already been handled
-			console.log("ERROR", metadata);
+			console.log("ERROR", payload, metadata);
 			return success;
 		}
 

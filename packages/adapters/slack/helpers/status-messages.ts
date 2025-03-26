@@ -10,7 +10,7 @@ export const statusMessages = {
 		searchChannelAttachments: "searching channel attachments...",
 	},
 	debug: {
-		prefix: ":proem: Debug message:",
+		prefix: ":proem: LLM debug page:",
 	},
 };
 

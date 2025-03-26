@@ -1,0 +1,408 @@
+[
+	{
+		"user": "U05AUQHGPEU",
+		"type": "message",
+		"ts": "1742991038.734639",
+		"client_msg_id": "51225b90-4eea-418b-8884-4898a426d391",
+		"text": "is smoking more healthy than drinking <@U08B132LUBZ>",
+		"team": "T05A541540J",
+		"thread_ts": "1742991038.734639",
+		"reply_count": 10,
+		"reply_users_count": 2,
+		"latest_reply": "1743018188.649509",
+		"reply_users": ["U08B132LUBZ", "U05AUQHGPEU"],
+		"is_locked": false,
+		"subscribed": false,
+		"blocks": [
+			{
+				"type": "rich_text",
+				"block_id": "pmIgN",
+				"elements": [
+					{
+						"type": "rich_text_section",
+						"elements": [
+							{
+								"type": "text",
+								"text": "is smoking more healthy than drinking "
+							},
+							{ "type": "user", "user_id": "U08B132LUBZ" }
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"user": "U08B132LUBZ",
+		"type": "message",
+		"ts": "1742991042.549229",
+		"edited": { "user": "B08BU9TBYHF", "ts": "1742991052.000000" },
+		"bot_id": "B08BU9TBYHF",
+		"app_id": "A08BFJ29A5Q",
+		"text": "Both smoking and alcohol consumption pose serious health risks, with links to major diseases [<https://proem.ai/paper/oa/W4402771837|1>]. The effects of smoking and alcohol on the brain appear to be similar, generally reducing brain health [<https://proem.ai/paper/oa/W4402879560|2>]. For the same level of mortality risk, 5 drinks a day is equivalent to smoking about 4-5 cigarettes daily [<https://proem.ai/paper/oa/W4392196568|3>].\n",
+		"team": "T05A541540J",
+		"bot_profile": {
+			"id": "B08BU9TBYHF",
+			"app_id": "A08BFJ29A5Q",
+			"user_id": "U08B132LUBZ",
+			"name": "dev-brian",
+			"icons": {
+				"image_36": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_36.png",
+				"image_48": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_48.png",
+				"image_72": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_72.png"
+			},
+			"deleted": false,
+			"updated": 1741338296,
+			"team_id": "T05A541540J"
+		},
+		"thread_ts": "1742991038.734639",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "context",
+				"block_id": "4/SAm",
+				"elements": [
+					{
+						"type": "mrkdwn",
+						"text": "Both smoking and alcohol consumption pose serious health risks, with links to major diseases [<https://proem.ai/paper/oa/W4402771837|1>]. The effects of smoking and alcohol on the brain appear to be similar, generally reducing brain health [<https://proem.ai/paper/oa/W4402879560|2>]. For the same level of mortality risk, 5 drinks a day is equivalent to smoking about 4-5 cigarettes daily [<https://proem.ai/paper/oa/W4392196568|3>].\n",
+						"verbatim": false
+					}
+				]
+			}
+		]
+	},
+	{
+		"user": "U05AUQHGPEU",
+		"type": "message",
+		"ts": "1742991221.809579",
+		"client_msg_id": "35cec00b-e5cf-4dff-8315-8c6176ea2df7",
+		"text": "but which are worse <@U08B132LUBZ>",
+		"team": "T05A541540J",
+		"thread_ts": "1742991038.734639",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "rich_text",
+				"block_id": "CzSZU",
+				"elements": [
+					{
+						"type": "rich_text_section",
+						"elements": [
+							{ "type": "text", "text": "but which are worse " },
+							{ "type": "user", "user_id": "U08B132LUBZ" }
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"user": "U08B132LUBZ",
+		"type": "message",
+		"ts": "1742991224.252529",
+		"bot_id": "B08BU9TBYHF",
+		"app_id": "A08BFJ29A5Q",
+		"text": ":proem: Debug message: ```Press the button to open an LLM debug page``` Debug :bug: button",
+		"team": "T05A541540J",
+		"bot_profile": {
+			"id": "B08BU9TBYHF",
+			"app_id": "A08BFJ29A5Q",
+			"user_id": "U08B132LUBZ",
+			"name": "dev-brian",
+			"icons": {
+				"image_36": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_36.png",
+				"image_48": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_48.png",
+				"image_72": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_72.png"
+			},
+			"deleted": false,
+			"updated": 1741338296,
+			"team_id": "T05A541540J"
+		},
+		"thread_ts": "1742991038.734639",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "section",
+				"block_id": "Q6qCJ",
+				"text": {
+					"type": "mrkdwn",
+					"text": ":proem: Debug message: ```Press the button to open an LLM debug page```",
+					"verbatim": false
+				},
+				"accessory": {
+					"type": "button",
+					"action_id": "debug_link",
+					"text": {
+						"type": "plain_text",
+						"text": "Debug :bug:",
+						"emoji": true
+					},
+					"url": "http://127.0.0.1:6262/slack/debug?metadata=%7B%22channelId%22%3A%22C08B4RXM2AE%22%2C%22teamId%22%3A%22T05A541540J%22%2C%22user%22%3A%22U05AUQHGPEU%22%2C%22ts%22%3A%221742991221.809579%22%2C%22threadTs%22%3A%221742991038.734639%22%2C%22appId%22%3A%22A08BFJ29A5Q%22%2C%22isAssistant%22%3Afalse%2C%22target%22%3A%22question%22%2C%22callback%22%3A%22%22%7D"
+				}
+			}
+		]
+	},
+	{
+		"user": "U08B132LUBZ",
+		"type": "message",
+		"ts": "1742991224.491959",
+		"edited": { "user": "B08BU9TBYHF", "ts": "1742991239.000000" },
+		"bot_id": "B08BU9TBYHF",
+		"app_id": "A08BFJ29A5Q",
+		"text": "Both smoking and drinking pose serious health risks, with links to major diseases [<https://proem.ai/paper/oa/W4402771837|1>]. Combining both smoking and alcohol consumption can be particularly harmful [<https://proem.ai/paper/oa/W4395957210|2>]. The risks from consuming a standard drink can equal smoking several cigarettes a day [<https://proem.ai/paper/oa/W4392196568|3>].\n",
+		"team": "T05A541540J",
+		"bot_profile": {
+			"id": "B08BU9TBYHF",
+			"app_id": "A08BFJ29A5Q",
+			"user_id": "U08B132LUBZ",
+			"name": "dev-brian",
+			"icons": {
+				"image_36": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_36.png",
+				"image_48": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_48.png",
+				"image_72": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_72.png"
+			},
+			"deleted": false,
+			"updated": 1741338296,
+			"team_id": "T05A541540J"
+		},
+		"thread_ts": "1742991038.734639",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "context",
+				"block_id": "0xYWi",
+				"elements": [
+					{
+						"type": "mrkdwn",
+						"text": "Both smoking and drinking pose serious health risks, with links to major diseases [<https://proem.ai/paper/oa/W4402771837|1>]. Combining both smoking and alcohol consumption can be particularly harmful [<https://proem.ai/paper/oa/W4395957210|2>]. The risks from consuming a standard drink can equal smoking several cigarettes a day [<https://proem.ai/paper/oa/W4392196568|3>].\n",
+						"verbatim": false
+					}
+				]
+			}
+		]
+	},
+	{
+		"user": "U05AUQHGPEU",
+		"type": "message",
+		"ts": "1742991309.764189",
+		"client_msg_id": "ef109037-dd5d-4e04-aeca-86634daa508b",
+		"text": "tell me more <@U08B132LUBZ>",
+		"team": "T05A541540J",
+		"thread_ts": "1742991038.734639",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "rich_text",
+				"block_id": "siA9e",
+				"elements": [
+					{
+						"type": "rich_text_section",
+						"elements": [
+							{ "type": "text", "text": "tell me more " },
+							{ "type": "user", "user_id": "U08B132LUBZ" }
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"user": "U08B132LUBZ",
+		"type": "message",
+		"ts": "1742991312.023419",
+		"bot_id": "B08BU9TBYHF",
+		"app_id": "A08BFJ29A5Q",
+		"text": ":proem: Debug message: ```Press the button to open an LLM debug page``` Debug :bug: button",
+		"team": "T05A541540J",
+		"bot_profile": {
+			"id": "B08BU9TBYHF",
+			"app_id": "A08BFJ29A5Q",
+			"user_id": "U08B132LUBZ",
+			"name": "dev-brian",
+			"icons": {
+				"image_36": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_36.png",
+				"image_48": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_48.png",
+				"image_72": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_72.png"
+			},
+			"deleted": false,
+			"updated": 1741338296,
+			"team_id": "T05A541540J"
+		},
+		"thread_ts": "1742991038.734639",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "section",
+				"block_id": "Hp70s",
+				"text": {
+					"type": "mrkdwn",
+					"text": ":proem: Debug message: ```Press the button to open an LLM debug page```",
+					"verbatim": false
+				},
+				"accessory": {
+					"type": "button",
+					"action_id": "debug_link",
+					"text": {
+						"type": "plain_text",
+						"text": "Debug :bug:",
+						"emoji": true
+					},
+					"url": "http://127.0.0.1:6262/slack/debug?metadata=%7B%22channelId%22%3A%22C08B4RXM2AE%22%2C%22teamId%22%3A%22T05A541540J%22%2C%22user%22%3A%22U05AUQHGPEU%22%2C%22ts%22%3A%221742991309.764189%22%2C%22threadTs%22%3A%221742991038.734639%22%2C%22appId%22%3A%22A08BFJ29A5Q%22%2C%22isAssistant%22%3Afalse%2C%22target%22%3A%22question%22%2C%22callback%22%3A%22%22%7D"
+				}
+			}
+		]
+	},
+	{
+		"user": "U08B132LUBZ",
+		"type": "message",
+		"ts": "1742991312.325039",
+		"edited": { "user": "B08BU9TBYHF", "ts": "1742991319.000000" },
+		"bot_id": "B08BU9TBYHF",
+		"app_id": "A08BFJ29A5Q",
+		"text": "Both smoking and alcohol consumption pose serious health risks [<https://proem.ai/paper/oa/W4402771837|1>]. The risk of alcohol use on premature death can be equivalent to smoking multiple cigarettes a day [<https://proem.ai/paper/oa/W4392196568|2>]. Combining both smoking and alcohol leads to a greater risk of harm than either alone [<https://proem.ai/paper/oa/W4395957210|3>].\n",
+		"team": "T05A541540J",
+		"bot_profile": {
+			"id": "B08BU9TBYHF",
+			"app_id": "A08BFJ29A5Q",
+			"user_id": "U08B132LUBZ",
+			"name": "dev-brian",
+			"icons": {
+				"image_36": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_36.png",
+				"image_48": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_48.png",
+				"image_72": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_72.png"
+			},
+			"deleted": false,
+			"updated": 1741338296,
+			"team_id": "T05A541540J"
+		},
+		"thread_ts": "1742991038.734639",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "context",
+				"block_id": "ilaRH",
+				"elements": [
+					{
+						"type": "mrkdwn",
+						"text": "Both smoking and alcohol consumption pose serious health risks [<https://proem.ai/paper/oa/W4402771837|1>]. The risk of alcohol use on premature death can be equivalent to smoking multiple cigarettes a day [<https://proem.ai/paper/oa/W4392196568|2>]. Combining both smoking and alcohol leads to a greater risk of harm than either alone [<https://proem.ai/paper/oa/W4395957210|3>].\n",
+						"verbatim": false
+					}
+				]
+			}
+		]
+	},
+	{
+		"user": "U05AUQHGPEU",
+		"type": "message",
+		"ts": "1743018186.441899",
+		"client_msg_id": "d936e47e-96dd-4ce6-b05a-cf681446d150",
+		"text": "please continue <@U08B132LUBZ>",
+		"team": "T05A541540J",
+		"thread_ts": "1742991038.734639",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "rich_text",
+				"block_id": "xfSVh",
+				"elements": [
+					{
+						"type": "rich_text_section",
+						"elements": [
+							{ "type": "text", "text": "please continue " },
+							{ "type": "user", "user_id": "U08B132LUBZ" }
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"user": "U08B132LUBZ",
+		"type": "message",
+		"ts": "1743018188.461849",
+		"bot_id": "B08BU9TBYHF",
+		"app_id": "A08BFJ29A5Q",
+		"text": ":proem: Debug message: ```Press the button to open an LLM debug page {\"metadata\":{\"channelId\":\"C08B4RXM2AE\",\"teamId\":\"T05A541540J\",\"user\":\"U05AUQHGPEU\",\"ts\":\"1743018186.441899\",\"threadTs\":\"1742991038.734639\",\"appId\":\"A08BFJ29A5Q\",\"isAssistant\":false}}``` Debug :bug: button",
+		"team": "T05A541540J",
+		"bot_profile": {
+			"id": "B08BU9TBYHF",
+			"app_id": "A08BFJ29A5Q",
+			"user_id": "U08B132LUBZ",
+			"name": "dev-brian",
+			"icons": {
+				"image_36": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_36.png",
+				"image_48": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_48.png",
+				"image_72": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_72.png"
+			},
+			"deleted": false,
+			"updated": 1741338296,
+			"team_id": "T05A541540J"
+		},
+		"thread_ts": "1742991038.734639",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "section",
+				"block_id": "vHphP",
+				"text": {
+					"type": "mrkdwn",
+					"text": ":proem: Debug message: ```Press the button to open an LLM debug page {\"metadata\":{\"channelId\":\"C08B4RXM2AE\",\"teamId\":\"T05A541540J\",\"user\":\"U05AUQHGPEU\",\"ts\":\"1743018186.441899\",\"threadTs\":\"1742991038.734639\",\"appId\":\"A08BFJ29A5Q\",\"isAssistant\":false}}```",
+					"verbatim": false
+				},
+				"accessory": {
+					"type": "button",
+					"action_id": "debug_link",
+					"text": {
+						"type": "plain_text",
+						"text": "Debug :bug:",
+						"emoji": true
+					},
+					"url": "http://127.0.0.1:6262/slack/debug?metadata=%7B%22channelId%22%3A%22C08B4RXM2AE%22%2C%22teamId%22%3A%22T05A541540J%22%2C%22user%22%3A%22U05AUQHGPEU%22%2C%22ts%22%3A%221743018186.441899%22%2C%22threadTs%22%3A%221742991038.734639%22%2C%22appId%22%3A%22A08BFJ29A5Q%22%2C%22isAssistant%22%3Afalse%2C%22target%22%3A%22question%22%2C%22callback%22%3A%22%22%7D"
+				}
+			}
+		]
+	},
+	{
+		"user": "U08B132LUBZ",
+		"type": "message",
+		"ts": "1743018188.649509",
+		"bot_id": "B08BU9TBYHF",
+		"app_id": "A08BFJ29A5Q",
+		"text": " analyzing question...",
+		"team": "T05A541540J",
+		"bot_profile": {
+			"id": "B08BU9TBYHF",
+			"deleted": false,
+			"name": "dev-brian",
+			"updated": 1741338296,
+			"app_id": "A08BFJ29A5Q",
+			"user_id": "U08B132LUBZ",
+			"icons": {
+				"image_36": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_36.png",
+				"image_48": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_48.png",
+				"image_72": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_72.png"
+			},
+			"team_id": "T05A541540J"
+		},
+		"thread_ts": "1742991038.734639",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "context",
+				"block_id": "6/L51",
+				"elements": [
+					{
+						"type": "image",
+						"image_url": "https://assistant.proem.ai/slack/spinner.gif",
+						"alt_text": ""
+					},
+					{
+						"type": "mrkdwn",
+						"text": "analyzing question...",
+						"verbatim": false
+					}
+				]
+			}
+		]
+	}
+]

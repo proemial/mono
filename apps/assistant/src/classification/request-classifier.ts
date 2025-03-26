@@ -11,7 +11,6 @@ import { EventLogItem } from "@proemial/adapters/mongodb/slack/v2.models";
 import { Time } from "@proemial/utils/time";
 import { unstable_cache as cache } from "next/cache";
 import { errorMessage } from "@proemial/adapters/slack/error-messages";
-import { SlackMessenger } from "@proemial/adapters/slack/slack-messenger";
 import { EnvVars } from "@proemial/utils/env-vars";
 import { classifyQuestion } from "@/prompts/question/classify-question";
 import { Slack } from "@/inngest/workers/helpers/slack";
@@ -113,21 +112,24 @@ async function isQuestion(
 
 	if (tagged) return true;
 
-	const text = payload.event?.text;
-	if (
-		EnvVars.isInternalSlackApp(metadata.appId) &&
-		!payload.event?.bot_profile &&
-		text
-	) {
-		const result = await classifyQuestion(text);
+	// Disabled untagged answering for now, as it's not working properly
+	// ---------------------------------------------------------------
+	// const text = payload.event?.text;
+	// if (
+	// 	EnvVars.isInternalSlackApp(metadata.appId) &&
+	// 	!payload.event?.bot_profile &&
+	// 	text
+	// ) {
+	// 	const result = await classifyQuestion(text);
 
-		Slack.postDebug(
-			{ ...metadata, target: "question", callback: "" },
-			`Message classifier: ${JSON.stringify(result)}`,
-		);
+	// 	Slack.postDebug(
+	// 		{ ...metadata, target: "question", callback: "" },
+	// 		`Message classifier: ${JSON.stringify(result)}`,
+	// 	);
 
-		return result.answer;
-	}
+	// 	return result.answer;
+	// }
+
 	return false;
 }
 

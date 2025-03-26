@@ -25,13 +25,32 @@ export const Slack = {
 		}
 
 		if (begin) {
-			return await SlackMessenger.postStatus(metadata, status, isError);
+			const response = await SlackMessenger.postStatus(
+				metadata,
+				status,
+				isError,
+			);
+
+			if (!metadata.threadTs) {
+				Slack.postDebug(
+					{
+						...metadata,
+						threadTs: response.message?.thread_ts,
+					} as SlackEventMetadata,
+					"",
+				);
+			}
+
+			return response;
 		}
 		return await SlackMessenger.updateStatus(metadata, status, isError);
 	},
 
 	postDebug: async (metadata: SlackEventMetadata, message: string) => {
-		if (EnvVars.isInternalSlackApp(metadata.appId)) {
+		if (
+			EnvVars.isInternalSlackApp(metadata.appId) ||
+			metadata.teamId === "T05A541540J"
+		) {
 			return await SlackMessenger.postDebug(metadata, message);
 		}
 	},

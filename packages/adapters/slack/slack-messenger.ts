@@ -84,7 +84,7 @@ export const SlackMessenger = {
 			const payload = {
 				channel: metadata.channelId,
 				thread_ts: (metadata.replyTs ?? metadata.ts) as string,
-				...debug(message),
+				...debug(metadata, message),
 			};
 
 			const response = await client.asProem.chat.postMessage(payload);

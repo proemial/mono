@@ -1,7 +1,7 @@
 import { isId } from "@proemial/utils/uuid";
 import { PaperWithSrcRef } from "../tools/search-papers-tool";
 
-export function extractPapers(result: LlmSteps) {
+export function extractPapers(result: LlmResponse) {
 	const tools = result.steps
 		.at(-1)
 		?.response.messages.filter((m) => m.role === "tool");
@@ -32,10 +32,13 @@ export function extractPapers(result: LlmSteps) {
 	return papers;
 }
 
-export type LlmSteps = { steps: LlmStep[] };
+export type LlmResponse = LlmResponseFields & { steps: LlmStep[] };
 
-export type LlmStep = {
+export type LlmStep = LlmResponseFields & {
 	stepType: string;
+};
+
+export type LlmResponseFields = {
 	text?: string;
 	toolCalls?: {
 		type: string;

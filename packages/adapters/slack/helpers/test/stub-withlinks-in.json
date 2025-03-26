@@ -1,0 +1,412 @@
+[
+	{
+		"user": "U05AUQHGPEU",
+		"type": "message",
+		"ts": "1742992778.200479",
+		"client_msg_id": "2f45b50b-b6df-41e8-b284-42e591862b3d",
+		"text": "<https://www.sciencefocus.com/nature/giraffes-lightning>",
+		"team": "T05A541540J",
+		"thread_ts": "1742992778.200479",
+		"reply_count": 10,
+		"reply_users_count": 3,
+		"latest_reply": "1742993115.206509",
+		"reply_users": ["U08B132LUBZ", "U00", "U05AUQHGPEU"],
+		"is_locked": false,
+		"subscribed": false,
+		"attachments": [
+			{
+				"from_url": "https://www.sciencefocus.com/nature/giraffes-lightning",
+				"ts": 1636714800,
+				"service_icon": "https://eu.cdn2.purplemanager.com/193c804a-a673-47bd-b09b-11baf4822a17/thumbnails/6ab86ca8-b028-4715-93c8-27c92ae62f2a/web_kiosk_favicon_1.ico",
+				"id": 1,
+				"original_url": "https://www.sciencefocus.com/nature/giraffes-lightning",
+				"fallback": "BBC Science Focus Magazine: Are giraffes more at risk of being struck by lightning?",
+				"text": "Giraffes and lightning are both rare but lightning strikes on giraffes aren't unheard of.",
+				"title": "Are giraffes more at risk of being struck by lightning?",
+				"title_link": "https://www.sciencefocus.com/nature/giraffes-lightning",
+				"service_name": "BBC Science Focus Magazine"
+			}
+		],
+		"blocks": [
+			{
+				"type": "rich_text",
+				"block_id": "xvUNP",
+				"elements": [
+					{
+						"type": "rich_text_section",
+						"elements": [
+							{
+								"type": "link",
+								"url": "https://www.sciencefocus.com/nature/giraffes-lightning"
+							}
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"subtype": "bot_message",
+		"text": "Why are giraffe lightning strike statistics so limited? <@U08B132LUBZ>",
+		"username": "brian",
+		"icons": {
+			"image_48": "https://s3-us-west-2.amazonaws.com/slack-files2/bot_icons/2025-03-06/8588457317040_48.png"
+		},
+		"type": "message",
+		"ts": "1742992810.299929",
+		"bot_id": "B08BU9TBYHF",
+		"app_id": "A08BFJ29A5Q",
+		"team": "T05A541540J",
+		"bot_profile": {
+			"id": "B08BU9TBYHF",
+			"app_id": "A08BFJ29A5Q",
+			"user_id": "U08B132LUBZ",
+			"name": "dev-brian",
+			"icons": {
+				"image_36": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_36.png",
+				"image_48": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_48.png",
+				"image_72": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_72.png"
+			},
+			"deleted": false,
+			"updated": 1741338296,
+			"team_id": "T05A541540J"
+		},
+		"thread_ts": "1742992778.200479",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "rich_text",
+				"block_id": "8Jr",
+				"elements": [
+					{
+						"type": "rich_text_section",
+						"elements": [
+							{
+								"type": "text",
+								"text": "Why are giraffe lightning strike statistics so limited? "
+							},
+							{ "type": "user", "user_id": "U08B132LUBZ" }
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"user": "U08B132LUBZ",
+		"type": "message",
+		"ts": "1742992812.712259",
+		"bot_id": "B08BU9TBYHF",
+		"app_id": "A08BFJ29A5Q",
+		"text": ":proem: Debug message: ```Press the button to open an LLM debug page {\"metadata\":{\"channelId\":\"C08B4RXM2AE\",\"teamId\":\"T05A541540J\",\"ts\":\"1742992810.299929\",\"threadTs\":\"1742992778.200479\",\"appId\":\"A08BFJ29A5Q\",\"isAssistant\":false}}``` Debug :bug: button",
+		"team": "T05A541540J",
+		"bot_profile": {
+			"id": "B08BU9TBYHF",
+			"app_id": "A08BFJ29A5Q",
+			"user_id": "U08B132LUBZ",
+			"name": "dev-brian",
+			"icons": {
+				"image_36": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_36.png",
+				"image_48": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_48.png",
+				"image_72": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_72.png"
+			},
+			"deleted": false,
+			"updated": 1741338296,
+			"team_id": "T05A541540J"
+		},
+		"thread_ts": "1742992778.200479",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "section",
+				"block_id": "siOe0",
+				"text": {
+					"type": "mrkdwn",
+					"text": ":proem: Debug message: ```Press the button to open an LLM debug page {\"metadata\":{\"channelId\":\"C08B4RXM2AE\",\"teamId\":\"T05A541540J\",\"ts\":\"1742992810.299929\",\"threadTs\":\"1742992778.200479\",\"appId\":\"A08BFJ29A5Q\",\"isAssistant\":false}}```",
+					"verbatim": false
+				},
+				"accessory": {
+					"type": "button",
+					"action_id": "debug_link",
+					"text": {
+						"type": "plain_text",
+						"text": "Debug :bug:",
+						"emoji": true
+					},
+					"url": "http://127.0.0.1:6262/slack/debug?metadata=%7B%22channelId%22%3A%22C08B4RXM2AE%22%2C%22teamId%22%3A%22T05A541540J%22%2C%22ts%22%3A%221742992810.299929%22%2C%22threadTs%22%3A%221742992778.200479%22%2C%22appId%22%3A%22A08BFJ29A5Q%22%2C%22isAssistant%22%3Afalse%2C%22target%22%3A%22question%22%2C%22callback%22%3A%22%22%7D"
+				}
+			}
+		]
+	},
+	{
+		"user": "U08B132LUBZ",
+		"type": "message",
+		"ts": "1742992812.988759",
+		"edited": { "user": "B08BU9TBYHF", "ts": "1742992816.000000" },
+		"bot_id": "B08BU9TBYHF",
+		"app_id": "A08BFJ29A5Q",
+		"text": "Based on the article at(<https://www.sciencefocus.com/nature/giraffes-lightning|https://www.sciencefocus.com/nature/giraffes-lightning>), giraffe lightning strikes are rare because both giraffes and lightning strikes are fairly rare. There were only five well-documented fatal strikes on giraffes between 1996 and 2010.\n",
+		"team": "T05A541540J",
+		"bot_profile": {
+			"id": "B08BU9TBYHF",
+			"app_id": "A08BFJ29A5Q",
+			"user_id": "U08B132LUBZ",
+			"name": "dev-brian",
+			"icons": {
+				"image_36": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_36.png",
+				"image_48": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_48.png",
+				"image_72": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_72.png"
+			},
+			"deleted": false,
+			"updated": 1741338296,
+			"team_id": "T05A541540J"
+		},
+		"thread_ts": "1742992778.200479",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "context",
+				"block_id": "EyK/E",
+				"elements": [
+					{
+						"type": "mrkdwn",
+						"text": "Based on the article at(<https://www.sciencefocus.com/nature/giraffes-lightning|https://www.sciencefocus.com/nature/giraffes-lightning>), giraffe lightning strikes are rare because both giraffes and lightning strikes are fairly rare. There were only five well-documented fatal strikes on giraffes between 1996 and 2010.\n",
+						"verbatim": false
+					}
+				]
+			}
+		]
+	},
+	{
+		"user": "U05AUQHGPEU",
+		"type": "message",
+		"ts": "1742992868.669019",
+		"client_msg_id": "c298f3f0-f222-4b60-9e3a-6aa96e328c16",
+		"text": "so I shouldn't trust the claims in the article <@U08B132LUBZ>?",
+		"team": "T05A541540J",
+		"thread_ts": "1742992778.200479",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "rich_text",
+				"block_id": "lMPgY",
+				"elements": [
+					{
+						"type": "rich_text_section",
+						"elements": [
+							{
+								"type": "text",
+								"text": "so I shouldn't trust the claims in the article "
+							},
+							{ "type": "user", "user_id": "U08B132LUBZ" },
+							{ "type": "text", "text": "?" }
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"user": "U08B132LUBZ",
+		"type": "message",
+		"ts": "1742992870.697119",
+		"bot_id": "B08BU9TBYHF",
+		"app_id": "A08BFJ29A5Q",
+		"text": ":proem: Debug message: ```Press the button to open an LLM debug page {\"metadata\":{\"channelId\":\"C08B4RXM2AE\",\"teamId\":\"T05A541540J\",\"user\":\"U05AUQHGPEU\",\"ts\":\"1742992868.669019\",\"threadTs\":\"1742992778.200479\",\"appId\":\"A08BFJ29A5Q\",\"isAssistant\":false}}``` Debug :bug: button",
+		"team": "T05A541540J",
+		"bot_profile": {
+			"id": "B08BU9TBYHF",
+			"app_id": "A08BFJ29A5Q",
+			"user_id": "U08B132LUBZ",
+			"name": "dev-brian",
+			"icons": {
+				"image_36": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_36.png",
+				"image_48": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_48.png",
+				"image_72": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_72.png"
+			},
+			"deleted": false,
+			"updated": 1741338296,
+			"team_id": "T05A541540J"
+		},
+		"thread_ts": "1742992778.200479",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "section",
+				"block_id": "GHoVm",
+				"text": {
+					"type": "mrkdwn",
+					"text": ":proem: Debug message: ```Press the button to open an LLM debug page {\"metadata\":{\"channelId\":\"C08B4RXM2AE\",\"teamId\":\"T05A541540J\",\"user\":\"U05AUQHGPEU\",\"ts\":\"1742992868.669019\",\"threadTs\":\"1742992778.200479\",\"appId\":\"A08BFJ29A5Q\",\"isAssistant\":false}}```",
+					"verbatim": false
+				},
+				"accessory": {
+					"type": "button",
+					"action_id": "debug_link",
+					"text": {
+						"type": "plain_text",
+						"text": "Debug :bug:",
+						"emoji": true
+					},
+					"url": "http://127.0.0.1:6262/slack/debug?metadata=%7B%22channelId%22%3A%22C08B4RXM2AE%22%2C%22teamId%22%3A%22T05A541540J%22%2C%22user%22%3A%22U05AUQHGPEU%22%2C%22ts%22%3A%221742992868.669019%22%2C%22threadTs%22%3A%221742992778.200479%22%2C%22appId%22%3A%22A08BFJ29A5Q%22%2C%22isAssistant%22%3Afalse%2C%22target%22%3A%22question%22%2C%22callback%22%3A%22%22%7D"
+				}
+			}
+		]
+	},
+	{
+		"user": "U08B132LUBZ",
+		"type": "message",
+		"ts": "1742992871.072089",
+		"edited": { "user": "B08BU9TBYHF", "ts": "1742992874.000000" },
+		"bot_id": "B08BU9TBYHF",
+		"app_id": "A08BFJ29A5Q",
+		"text": "The article \"Science Focus\" states that giraffe lightning strikes are rare because both giraffes and lightning are rare. There were only five well-documented fatal strikes between 1996 and 2010, about 0.003 deaths per thousand giraffes per year. This risk is still 30 times higher than the human lightning fatality rate in the US.\n",
+		"team": "T05A541540J",
+		"bot_profile": {
+			"id": "B08BU9TBYHF",
+			"app_id": "A08BFJ29A5Q",
+			"user_id": "U08B132LUBZ",
+			"name": "dev-brian",
+			"icons": {
+				"image_36": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_36.png",
+				"image_48": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_48.png",
+				"image_72": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_72.png"
+			},
+			"deleted": false,
+			"updated": 1741338296,
+			"team_id": "T05A541540J"
+		},
+		"thread_ts": "1742992778.200479",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "context",
+				"block_id": "tga8d",
+				"elements": [
+					{
+						"type": "mrkdwn",
+						"text": "The article \"Science Focus\" states that giraffe lightning strikes are rare because both giraffes and lightning are rare. There were only five well-documented fatal strikes between 1996 and 2010, about 0.003 deaths per thousand giraffes per year. This risk is still 30 times higher than the human lightning fatality rate in the US.\n",
+						"verbatim": false
+					}
+				]
+			}
+		]
+	},
+	{
+		"user": "U05AUQHGPEU",
+		"type": "message",
+		"ts": "1742993112.681929",
+		"client_msg_id": "5188821d-9119-4aa8-8196-a30e49225a13",
+		"text": "are there actually any research backing this <@U08B132LUBZ>?",
+		"team": "T05A541540J",
+		"thread_ts": "1742992778.200479",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "rich_text",
+				"block_id": "Ofvjh",
+				"elements": [
+					{
+						"type": "rich_text_section",
+						"elements": [
+							{
+								"type": "text",
+								"text": "are there actually any research backing this "
+							},
+							{ "type": "user", "user_id": "U08B132LUBZ" },
+							{ "type": "text", "text": "?" }
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"user": "U08B132LUBZ",
+		"type": "message",
+		"ts": "1742993114.860669",
+		"bot_id": "B08BU9TBYHF",
+		"app_id": "A08BFJ29A5Q",
+		"text": ":proem: Debug message: ```Press the button to open an LLM debug page {\"metadata\":{\"channelId\":\"C08B4RXM2AE\",\"teamId\":\"T05A541540J\",\"user\":\"U05AUQHGPEU\",\"ts\":\"1742993112.681929\",\"threadTs\":\"1742992778.200479\",\"appId\":\"A08BFJ29A5Q\",\"isAssistant\":false}}``` Debug :bug: button",
+		"team": "T05A541540J",
+		"bot_profile": {
+			"id": "B08BU9TBYHF",
+			"app_id": "A08BFJ29A5Q",
+			"user_id": "U08B132LUBZ",
+			"name": "dev-brian",
+			"icons": {
+				"image_36": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_36.png",
+				"image_48": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_48.png",
+				"image_72": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_72.png"
+			},
+			"deleted": false,
+			"updated": 1741338296,
+			"team_id": "T05A541540J"
+		},
+		"thread_ts": "1742992778.200479",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "section",
+				"block_id": "0pV4R",
+				"text": {
+					"type": "mrkdwn",
+					"text": ":proem: Debug message: ```Press the button to open an LLM debug page {\"metadata\":{\"channelId\":\"C08B4RXM2AE\",\"teamId\":\"T05A541540J\",\"user\":\"U05AUQHGPEU\",\"ts\":\"1742993112.681929\",\"threadTs\":\"1742992778.200479\",\"appId\":\"A08BFJ29A5Q\",\"isAssistant\":false}}```",
+					"verbatim": false
+				},
+				"accessory": {
+					"type": "button",
+					"action_id": "debug_link",
+					"text": {
+						"type": "plain_text",
+						"text": "Debug :bug:",
+						"emoji": true
+					},
+					"url": "http://127.0.0.1:6262/slack/debug?metadata=%7B%22channelId%22%3A%22C08B4RXM2AE%22%2C%22teamId%22%3A%22T05A541540J%22%2C%22user%22%3A%22U05AUQHGPEU%22%2C%22ts%22%3A%221742993112.681929%22%2C%22threadTs%22%3A%221742992778.200479%22%2C%22appId%22%3A%22A08BFJ29A5Q%22%2C%22isAssistant%22%3Afalse%2C%22target%22%3A%22question%22%2C%22callback%22%3A%22%22%7D"
+				}
+			}
+		]
+	},
+	{
+		"user": "U08B132LUBZ",
+		"type": "message",
+		"ts": "1742993115.206509",
+		"bot_id": "B08BU9TBYHF",
+		"app_id": "A08BFJ29A5Q",
+		"text": " analyzing question...",
+		"team": "T05A541540J",
+		"bot_profile": {
+			"id": "B08BU9TBYHF",
+			"deleted": false,
+			"name": "dev-brian",
+			"updated": 1741338296,
+			"app_id": "A08BFJ29A5Q",
+			"user_id": "U08B132LUBZ",
+			"icons": {
+				"image_36": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_36.png",
+				"image_48": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_48.png",
+				"image_72": "https://avatars.slack-edge.com/2025-03-06/8550833458599_2f45de5c66fbdea48a77_72.png"
+			},
+			"team_id": "T05A541540J"
+		},
+		"thread_ts": "1742992778.200479",
+		"parent_user_id": "U05AUQHGPEU",
+		"blocks": [
+			{
+				"type": "context",
+				"block_id": "6/L51",
+				"elements": [
+					{
+						"type": "image",
+						"image_url": "https://assistant.proem.ai/slack/spinner.gif",
+						"alt_text": ""
+					},
+					{
+						"type": "mrkdwn",
+						"text": "analyzing question...",
+						"verbatim": false
+					}
+				]
+			}
+		]
+	}
+]
