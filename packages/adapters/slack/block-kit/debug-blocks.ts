@@ -17,7 +17,7 @@ export function debug(metadata: SlackEventMetadata, text: string) {
 						text: "Debug 🐛",
 						emoji: true,
 					},
-					url: `http://127.0.0.1:6262/slack/debug?metadata=${encodeURIComponent(
+					url: `https://assistant.proem.ai/slack/debug?metadata=${encodeURIComponent(
 						JSON.stringify(metadata),
 					)}`,
 					action_id: "debug_link",
