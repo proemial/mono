@@ -155,6 +155,19 @@ const googleChat = async (
 
 	const googleProvider = createGoogleGenerativeAI({
 		apiKey: process.env.GOOGLE_API_KEY,
+		baseURL: "https://gateway.helicone.ai/v1beta", // Inspired by https://docs.helicone.ai/integrations/gemini/api/javascript
+		headers: {
+			...(await heliconeHeaders({
+				traceId,
+				source,
+				operation,
+				sessionName: traceId
+					? `${source}: ${["background", "query"].includes(operation) ? "annotation" : "answer"}`
+					: undefined,
+			})),
+			"Content-Type": "application/json",
+			"Helicone-Target-URL": "https://generativelanguage.googleapis.com",
+		},
 	});
 
 	return googleProvider(model);
