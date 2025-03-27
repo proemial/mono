@@ -26,9 +26,9 @@ export async function getDigest(metadata: {
 	const messages = await getMessages(metadata);
 	const summaries = await getSummaries(messages);
 
-	const annotations = (await Promise.all(
-		summaries.map((s) => fetchThreads(slack, metadata, s)),
-	)).filter((a) => !!a);
+	const annotations = (
+		await Promise.all(summaries.map((s) => fetchThreads(slack, metadata, s)))
+	).filter((a) => !!a);
 
 	return {
 		channel: channelInfo.channel?.name,
@@ -52,27 +52,28 @@ async function fetchThreads(
 		ts: ${summary.context.ts},
 		threadTs: ${summary.context.threadTs},
 	})`);
-	try	{
+	try {
 		const threadMessages = await slack.conversations.replies({
 			channel: metadata.channelId,
 			ts: summary.context.threadTs ?? summary.context.ts,
 		});
-	
+
 		const replies =
 			threadMessages.messages
 				?.slice(
-					threadMessages.messages.findIndex((m) => m.ts === summary.context.ts) +
-						1,
+					threadMessages.messages.findIndex(
+						(m) => m.ts === summary.context.ts,
+					) + 1,
 				)
 				?.filter((m) => !m.bot_profile) ?? [];
-	
-		const reactions = threadMessages.messages?.find(
-			(m) => m.ts === summary.context.ts,
-		)?.reactions?.map(r => ({
-			name: r.name,
-			count: r.count,
-		}));
-	
+
+		const reactions = threadMessages.messages
+			?.find((m) => m.ts === summary.context.ts)
+			?.reactions?.map((r) => ({
+				name: r.name,
+				count: r.count,
+			}));
+
 		return {
 			...summary,
 			replyCount: replies.length,
