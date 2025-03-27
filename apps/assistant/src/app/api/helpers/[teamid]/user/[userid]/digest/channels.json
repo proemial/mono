@@ -1,0 +1,98 @@
+[
+	{
+		"id": "C08HN9HMT2Q",
+		"name": "market-research",
+		"topic": "",
+		"purpose": ""
+	},
+	{
+		"id": "C08HBV4QEUD",
+		"name": "research",
+		"topic": "",
+		"purpose": ""
+	},
+	{
+		"id": "C08HBFFNU8N",
+		"name": "tech-news",
+		"topic": "",
+		"purpose": ""
+	},
+	{
+		"id": "C08F39R7MFH",
+		"name": "proem-demo",
+		"topic": "",
+		"purpose": ""
+	},
+	{
+		"id": "C08F2GPLT2M",
+		"name": "route-through-n8n",
+		"topic": "",
+		"purpose": ""
+	},
+	{
+		"id": "C08F26WP7KK",
+		"name": "playground",
+		"topic": "",
+		"purpose": ""
+	},
+	{
+		"id": "C08B1SRLSQL",
+		"name": "feat-brain",
+		"topic": "",
+		"purpose": ""
+	},
+	{
+		"id": "C08A4PQL0V8",
+		"name": "slack-event-broker",
+		"topic": "",
+		"purpose": "Proem develops tools to accelerate knowledge-intensive teams by grounding AI output in trusted sources with privacy and personalization."
+	},
+	{
+		"id": "C07AXGDBV99",
+		"name": "popcorntime",
+		"topic": "",
+		"purpose": ""
+	},
+	{
+		"id": "C078ZRL63FB",
+		"name": "tech-notifications",
+		"topic": "",
+		"purpose": ""
+	},
+	{
+		"id": "C074T4TA6T0",
+		"name": "feat-podcast",
+		"topic": "updates, feedback, and issues relating to a specific feature",
+		"purpose": "Let’s ship a first version of AI Weekly :rocket:"
+	},
+	{
+		"id": "C066S2MN8LX",
+		"name": "team-tech",
+		"topic": "",
+		"purpose": "Team chat for <!subteam^S0676K0FRRQ>"
+	},
+	{
+		"id": "C05BMUE8D6V",
+		"name": "models",
+		"topic": "news and knowledge",
+		"purpose": ""
+	},
+	{
+		"id": "C05AUQHK5DW",
+		"name": "random",
+		"topic": "nice to know- whole team",
+		"purpose": "nice to know- whole team"
+	},
+	{
+		"id": "C05APG5RXAB",
+		"name": "ecosystem",
+		"topic": "potential partners, other AI- and science-players",
+		"purpose": "Potential partners, other AI- and science-players. Proem develops tools to accelerate knowledge-intensive teams by grounding AI output in trusted sources with privacy and personalization."
+	},
+	{
+		"id": "C059YDVTXSA",
+		"name": "general",
+		"topic": "need to know - whole team",
+		"purpose": "need to know - whole team"
+	}
+]
