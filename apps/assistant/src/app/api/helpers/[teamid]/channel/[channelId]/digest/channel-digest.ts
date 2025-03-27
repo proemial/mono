@@ -143,6 +143,7 @@ async function getSummaries(
 				url: message.links.at(0),
 				summary:
 					scraped.at(0)?.summaries?.query ?? scraped.at(0)?.summaries?.summary,
+				images: scraped.at(0)?.content.images,
 			};
 		}),
 	);
