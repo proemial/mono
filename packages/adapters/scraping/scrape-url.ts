@@ -1,9 +1,7 @@
-import { diffbotScraper } from "../diffbot";
 import { SlackDb } from "../mongodb/slack/slack.adapter";
 import { scrapflyScraper } from "../scrapfly/scraper";
 import { errorMessage } from "../slack/error-messages";
 import { isSlackFileUrl, slackFileScraper } from "../slack/files/file-scraper";
-import { isTwitterUrl } from "../twitter";
 import { oxylabsYouTubeScraper } from "../youtube/oxylabs";
 import { isYouTubeUrl } from "../youtube/shared";
 
@@ -40,10 +38,8 @@ export async function scrapeUrl(
 			});
 		} else if (isYouTubeUrl(url)) {
 			content = await oxylabsYouTubeScraper(url);
-		} else if (isTwitterUrl(url)) {
-			content = await scrapflyScraper(url);
 		} else {
-			content = await diffbotScraper(url);
+			content = await scrapflyScraper(url);
 		}
 
 		if (isEmptyContent(content)) throw new Error(errorMessage.scrapeEmpty());
@@ -61,8 +57,7 @@ export async function scrapeUrl(
 }
 
 const isFallbackable = (url: string) => {
-	// Don't retry scraping if it's a file or Twitter url (which is already tried with Scrapfly)
-	return !isSlackFileUrl(url) && !isTwitterUrl(url);
+	return isYouTubeUrl(url);
 };
 
 const isEmptyContent = (content: { text: string | undefined }) =>
