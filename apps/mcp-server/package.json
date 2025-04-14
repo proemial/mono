@@ -1,0 +1,19 @@
+{
+	"name": "mcp-server",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"build": "tsc",
+		"inspect": "tsc && mcp-inspector node dist/server.js"
+	},
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "1.9.0",
+		"express": "5.1.0",
+		"zod": "3.24.2"
+	},
+	"devDependencies": {
+		"@modelcontextprotocol/inspector": "0.8.2",
+		"@types/express": "5.0.1",
+		"typescript": "5.8.3"
+	}
+}
