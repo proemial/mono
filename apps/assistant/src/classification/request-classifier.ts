@@ -94,9 +94,9 @@ export async function classifyRequest(
 		return { type: "answer" };
 	}
 
-	if (payload.event?.subtype === "channel_join") {
-		return { type: "welcome" };
-	}
+	// if (payload.event?.subtype === "channel_join") {
+	// 	return { type: "welcome" };
+	// }
 
 	log("unhandled", payload.type, payload.event?.type);
 
