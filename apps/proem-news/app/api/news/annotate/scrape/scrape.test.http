@@ -1,0 +1,28 @@
+POST http://localhost:4242/api/news/annotate/scrape
+Content-Type: application/json
+
+{
+    "url": "https://edition.cnn.com/2024/11/01/china/satellite-imagery-china-aircraft-carrier-intl-hnk-ml/index.html"
+}
+
+###
+POST https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCAUoYE05Mz6i52ooojtoD5oZk7P3YCK8w
+Content-Type: application/json
+
+{
+  "requests": [
+    {
+      "features": [
+        {
+          "maxResults": 10,
+          "type": "IMAGE_PROPERTIES"
+        }
+      ],
+      "image": {
+        "source": {
+          "imageUri": "https://asset.dr.dk/imagescaler/?protocol=https&server=www.dr.dk&file=%2Fimages%2Fcrop%2F2024%2F11%2F03%2F1730636031_scanpix-20240930-212120-l.jpg&scaleAfter=crop&quality=40&w=960&h=540"
+        }
+      }
+    }
+  ]
+}

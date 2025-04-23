@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+Fixes the scrollbar jumping issue when opening a modal/dropdown caused by Radix UI & ShadcnUI
+https://github.com/radix-ui/primitives/issues/1925#issuecomment-2007554729
+ */
+html {
+  scrollbar-gutter: stable;
+}
+
+body[style] {
+  margin: 0 auto !important;
+}
+
+body[data-scroll-locked] {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+h1, h2, h3 {
+  margin: 8px 0;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: x-large;
+}
+
+h2 {
+  font-size: larger;
+}
+
+h3 {
+  font-size: large;
+}
+
+.max-w-screen-md {
+  max-width: 550px;
+}
+body { @apply !min-w-full; }
+
+.markdown > * > a {
+  color: #0842A1;
+  text-decoration: underline;
+}
+
+@layer base {
+  :root {
+    --background: 245 245 245;
+    --foreground: 43 43 43;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 0 0% 92%;
+    --primary-foreground: 0 0% 17%;
+
+    --secondary: 127 32% 90%;
+    --secondary-foreground: 123 94% 34%;
+
+    --muted: 60 0% 92%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}

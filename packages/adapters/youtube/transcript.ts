@@ -1,11 +1,19 @@
 import { Innertube } from "youtubei.js/web";
 import { getVideoId, YouTubeTranscript } from "./shared";
 
-const youtube = await Innertube.create({
-	lang: "en",
-	location: "US",
-	retrieve_player: false,
-});
+// Initialize YouTube client lazily to avoid top-level await
+let youtubeClient: Innertube | null = null;
+
+const getYouTubeClient = async () => {
+	if (!youtubeClient) {
+		youtubeClient = await Innertube.create({
+			lang: "en",
+			location: "US",
+			retrieve_player: false,
+		});
+	}
+	return youtubeClient;
+};
 
 /**
  * Uses a library to fetch the transcript from YouTube's API.
@@ -20,6 +28,7 @@ export const fetchTranscript = async (
 		throw new Error("Invalid YouTube video URL");
 	}
 	try {
+		const youtube = await getYouTubeClient();
 		const info = await youtube.getInfo(videoId);
 		const { title, thumbnail } = info.basic_info;
 		if (!title) {
