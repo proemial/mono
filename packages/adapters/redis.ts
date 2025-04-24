@@ -3,23 +3,23 @@
 import { OpenAlexPaper } from "../repositories/oa/models/oa-paper";
 import { RedisPapers } from "./redis/papers";
 
-import { z } from "zod";
+// import { z } from "zod";
 import { RedisSpaces } from "./redis/spaces";
 import { RedisSummaries } from "./redis/summaries";
 import { RedisNews } from "./redis/news";
 
-export const envVariables = z.object({
-	REDIS_PAPERS_NEW_TOKEN: z.string(),
-	REDIS_PAPERS_NEW_URL: z.string(),
-});
+// export const envVariables = z.object({
+// 	REDIS_PAPERS_NEW_TOKEN: z.string(),
+// 	REDIS_PAPERS_NEW_URL: z.string(),
+// });
 
-envVariables.parse(process.env);
+// envVariables.parse(process.env);
 
-declare global {
-	namespace NodeJS {
-		interface ProcessEnv extends z.infer<typeof envVariables> {}
-	}
-}
+// declare global {
+// 	namespace NodeJS {
+// 		interface ProcessEnv extends z.infer<typeof envVariables> {}
+// 	}
+// }
 
 export const Redis = {
 	papers: RedisPapers,
