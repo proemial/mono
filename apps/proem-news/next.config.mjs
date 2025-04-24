@@ -4,6 +4,7 @@ import { withSentryConfig } from "@sentry/nextjs";
 const nextConfig = {
 	transpilePackages: [
 		"@proemial/adapters",
+		"@proemial/shadcn-ui",
 		"@proemial/utils",
 	],
 };

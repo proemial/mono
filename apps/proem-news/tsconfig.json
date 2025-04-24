@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -25,15 +25,10 @@
   },
   "include": [
     "next-env.d.ts",
-    "next.config.js",
+    "next.config.mjs",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx",
-    "../../packages/data/**/*.ts",
-    "../../packages/models/**/*.ts",
-    "../../packages/repositories/**/*.ts",
-    "../../packages/utils/**/*.ts", 
-    "../../packages/adapters/**/*.ts"
+    "**/*.tsx"
   ],
   "exclude": ["node_modules"]
 }

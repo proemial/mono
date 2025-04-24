@@ -1,4 +1,4 @@
-import { getItems } from "@/app/(pages)/news/cached-items";
+import { getItems } from "@/app/(pages)/cached-items";
 import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 

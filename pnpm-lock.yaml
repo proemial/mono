@@ -851,6 +851,9 @@ importers:
       postcss:
         specifier: ^8.4.41
         version: 8.5.1
+      tailwind-scrollbar-hide:
+        specifier: 1.1.7
+        version: 1.1.7
       tailwindcss:
         specifier: ^3.4.10
         version: 3.4.17(ts-node@10.9.2)
@@ -18980,7 +18983,6 @@ packages:
 
   /tailwind-scrollbar-hide@1.1.7:
     resolution: {integrity: sha512-X324n9OtpTmOMqEgDUEA/RgLrNfBF/jwJdctaPZDzB3mppxJk7TLIDmOreEDm1Bq4R9LSPu4Epf8VSdovNU+iA==}
-    dev: false
 
   /tailwind@4.0.0:
     resolution: {integrity: sha512-LlUNoD/5maFG1h5kQ6/hXfFPdcnYw+1Z7z+kUD/W/E71CUMwcnrskxiBM8c3G8wmPsD1VvCuqGYMHviI8+yrmg==}
