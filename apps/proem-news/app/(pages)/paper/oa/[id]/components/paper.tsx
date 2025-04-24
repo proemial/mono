@@ -93,7 +93,34 @@ export default function ResearchPaper({ id }: { id: string }) {
 
 					<div className="mt-4">
 						{data?.paper?.abstract ? (
-							<Markdown>{data.paper?.abstract}</Markdown>
+							<div className="abstract">
+								{(() => {
+									const isMobile =
+										typeof window !== "undefined" && window.innerWidth < 640;
+
+									if (!isMobile)
+										return <Markdown>{data?.paper?.abstract ?? ""}</Markdown>;
+
+									return (
+										<>
+											{data?.paper?.abstract?.slice(0, 200)}...{" "}
+											<a
+												href="#"
+												className="font-normal cursor-pointer"
+												onClick={(e) => {
+													e.preventDefault();
+													const element = document.querySelector(".abstract");
+													if (element) {
+														element.textContent = data?.paper?.abstract || "";
+													}
+												}}
+											>
+												Read more
+											</a>
+										</>
+									);
+								})()}
+							</div>
 						) : (
 							"Abstract not found"
 						)}

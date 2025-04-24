@@ -1,6 +1,6 @@
 import { Header } from "@/app/(pages)/components/header";
 import { Footer } from "../../../components/footer";
-import ResearchPaper from "./paper";
+import ResearchPaper from "./components/paper";
 
 type Props = {
 	params: { id: string };
