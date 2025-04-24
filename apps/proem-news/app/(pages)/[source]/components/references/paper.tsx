@@ -38,7 +38,7 @@ export function Paper({
 	return (
 		<>
 			<Link
-				href={`/news/paper/oa/${paper?.id?.split("/").at(-1)}`}
+				href={`/paper/oa/${paper?.id?.split("/").at(-1)}`}
 				className={
 					"flex flex-col p-2 rounded-md animate-fade-in w-[100px] flex-shrink-0 cursor-pointer hover:shadow-sm active:shadow-none hover:-translate-y-[1px] active:-translate-y-[0] transition-transform"
 				}
