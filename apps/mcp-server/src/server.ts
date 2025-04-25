@@ -1,6 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { runHTTPServer } from "./transport/http-with-sse";
 import { runStdioServer } from "./transport/stdio";
 import { fetchPapers } from "./helpers/fetch-papers";
 
@@ -16,13 +15,12 @@ server.tool(
 	async ({ query }) => {
 		try {
 			const papers = await fetchPapers(query);
-			const formattedPapers: string = papers
-				.map((paper) => {
-					return `Title: ${paper.title}\nURL: ${paper.primary_location.landing_page_url}\n${paper.abstract}`;
-				})
-				.join("\n\n");
+
 			return {
-				content: [{ type: "text", text: formattedPapers }],
+				content: papers.map((paper) => ({
+					type: "text",
+					text: `Title: ${paper.title}\n\nURL: ${paper.primary_location.landing_page_url}\n\nAbstract: ${paper.abstract}`,
+				})),
 				_meta: {
 					query,
 				},
