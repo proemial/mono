@@ -1,10 +1,10 @@
-import express, { Request, Response } from "express";
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
+import express, { Request, Response } from "express";
 
 const HTTP_PORT = 3001;
 
-export const runHTTPServer = async (mcpServer: McpServer) => {
+export const runHTTPServer = async (mcpServer: Server) => {
 	const app = express();
 
 	// To support multiple simultaneous connections we have a lookup object from
