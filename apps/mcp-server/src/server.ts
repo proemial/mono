@@ -19,7 +19,7 @@ server.tool(
 			return {
 				content: papers.map((paper) => ({
 					type: "text",
-					text: `Title: ${paper.title}\n\nURL: ${paper.primary_location.landing_page_url}\n\nAbstract: ${paper.abstract}`,
+					text: `**[${paper.title}](${paper.primary_location.landing_page_url})**\n\n${paper.abstract}`,
 				})),
 				_meta: {
 					query,
