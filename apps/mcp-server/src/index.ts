@@ -4,17 +4,16 @@ import { Hono } from "hono";
 import { getMcpServer } from "./mcp-server";
 
 const app = new Hono<{ Bindings: Env }>();
-app.get("/", async (c) => c.text("Hello Node.js!"));
+app.get("/", async (c) => c.text("Proem MCP Server v1.0"));
 
 app.post("/mcp", async (c) => {
 	const { req, res } = toReqRes(c.req.raw);
 	const body = await c.req.json();
 	const server = getMcpServer();
 	try {
-		const transport: StreamableHTTPServerTransport =
-			new StreamableHTTPServerTransport({
-				sessionIdGenerator: undefined,
-			});
+		const transport = new StreamableHTTPServerTransport({
+			sessionIdGenerator: undefined,
+		});
 		await server.connect(transport);
 		await transport.handleRequest(req, res, body);
 		res.on("close", () => {

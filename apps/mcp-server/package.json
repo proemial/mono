@@ -4,7 +4,6 @@
 	"private": true,
 	"scripts": {
 		"dev": "wrangler dev",
-		"start": "wrangler dev",
 		"test": "node node_modules/@modelcontextprotocol/sdk/dist/esm/examples/client/simpleStreamableHttp.js",
 		"auth": "wrangler login",
 		"deploy": "wrangler deploy",

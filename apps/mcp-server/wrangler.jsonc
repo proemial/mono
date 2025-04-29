@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "test",
+	"name": "mcp-server",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-04-29",
 	"compatibility_flags": ["nodejs_compat"],

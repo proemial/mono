@@ -1,19 +1,42 @@
 # Gettings Started
 
-## Building the Project
+## Starting the Server
 
 ```shell
-pnpm --filter mcp-server run build
+pnpm --filter mcp-server run dev
 ```
 
-## Using the Inspector
+## Manually Testing the Server
+
+Uses a CLI MCP client.
 
 ```shell
-pnpm --filter mcp-server run inspect
+pnpm --filter mcp-server run test
 ```
 
-Open [http://127.0.0.1:6274](http://127.0.0.1:6274) in a browser to use the
-inspector.
+Try these commands to test tools/resources/prompts:
 
-Note: When making changes to the source code, it must be recompiled. Rerunning
-the `inspect` task includes this step.
+```shell
+list-tools
+call-tool search-papers {"query":"foo bar baz"}
+```
+
+## Deploying the Server to Cloudflare
+
+```shell
+pnpm --filter mcp-server run deploy
+```
+
+## Testing the Server on Cloudflare
+
+```shell
+pnpm --filter mcp-server run test
+```
+
+Disconnect from any `localhost` server. Then, connect to the remote server:
+
+```shell
+connect https://mcp-server.proemial.workers.dev/mcp
+list-tools
+call-tool search-papers {"query":"foo bar baz"}
+```
