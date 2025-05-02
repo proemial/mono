@@ -9,7 +9,8 @@
 		"lint": "biome lint --apply .",
 		"vercel-pull-env": "vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/proem --yes;vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/index --yes;vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/chat --yes;vercel env pull --environment preview --git-branch \"$(git branch --show-current)\" --cwd apps/assistant --yes",
 		"test": "turbo run test",
-		"test:watch": "turbo run test:watch"
+		"test:watch": "turbo run test:watch",
+		"prepare": "husky"
 	},
 	"dependencies": {
 		"zod": "3.23.8"
@@ -17,11 +18,12 @@
 	"devDependencies": {
 		"@biomejs/biome": "1.8.3",
 		"@vitest/coverage-v8": "^2.0.5",
+		"dotenv": "16.4.5",
+		"husky": "9.1.7",
 		"turbo": "^2.0.14",
 		"typescript": "^5.5.4",
 		"vite-tsconfig-paths": "^5.0.1",
-		"vitest": "^2.0.5",
-		"dotenv": "16.4.5"
+		"vitest": "^2.0.5"
 	},
 	"packageManager": "pnpm@8.9.0",
 	"engines": {

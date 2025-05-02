@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+set +e
+
+#
+# Git hook that auto-deploys changes to the MCP server.
+#
+
+# Check if any changes were made in the `apps/mcp-server` directory
+worker_changes=$(git diff --name-only HEAD^ HEAD | grep "^apps/mcp-server/")
+
+if [ -n "$worker_changes" ]; then
+    echo "MCP server changes detected, deploying…"
+    pnpm --filter mcp-server run deploy
+else
+    echo "No MCP server changes detected, skipping deployment"
+fi
+
