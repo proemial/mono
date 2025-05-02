@@ -24,6 +24,7 @@ call-tool search-papers {"query":"foo bar baz"}
 ## Deploying the Server to Cloudflare
 
 ```shell
+pnpm --filter mcp-server run auth
 pnpm --filter mcp-server run deploy
 ```
 
@@ -33,7 +34,8 @@ pnpm --filter mcp-server run deploy
 pnpm --filter mcp-server run test
 ```
 
-Disconnect from any `localhost` server. Then, connect to the remote server:
+Disconnect from any `localhost` server. Then, connect to the remote server
+(notice the trailing `/mcp` in the worker URL below):
 
 ```shell
 connect https://mcp-server.proemial.workers.dev/mcp
