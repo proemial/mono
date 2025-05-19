@@ -22,12 +22,14 @@ export const getMcpServer = () => {
 		async ({ query }): Promise<CallToolResult> => {
 			try {
 				console.log("Searching for papers…");
+				console.log(`Query: ${query}`);
 				const papers = await fetchPapers(query);
-				console.log("Found", papers.length, "papers");
+				console.log(`Found ${papers.length} papers`);
 				const formattedPapers: string[] = papers.map(
 					(paper) =>
 						`**[${paper.title}] (${paper.primary_location.landing_page_url})**\n\n${paper.abstract}`,
 				);
+				console.log(formattedPapers);
 				return {
 					content: formattedPapers.map((paper) => ({
 						type: "text",
