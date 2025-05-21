@@ -51,7 +51,7 @@ export function SearchForm({
 	};
 
 	return (
-		<div className="max-w-3xl mx-auto mt-8 mb-8 p-6 rounded-2xl shadow-xl bg-gradient-to-br from-[#181c1f] via-[#232a36] to-[#1a2220] border border-[#232a36] relative">
+		<div className="max-w-3xl min-h-screen md:min-h-0 mx-auto p-6 rounded-none md:rounded-2xl shadow-xl md:bg-[#181c1f] md:bg-gradient-to-br md:from-[#181c1f] md:via-[#232a36] md:to-[#1a2220] md:border md:border-[#232a36] relative">
 			{selectedPaper ? (
 				<PaperDetail paper={selectedPaper} onClose={handleCloseDetail} />
 			) : (
