@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import dayjs from "dayjs";
 import { VectorSpaceId, vectorSpaces } from "@/data/db/vector-spaces";
@@ -7,9 +7,10 @@ import {
 	searchAction,
 	SearchMetrics,
 	SearchResult,
+	QdrantPaper,
 } from "../actions/search-action";
 import { SearchResult as PaperCard } from "../components/search-result";
-
+import { PaperDetail } from "../components/paper-detail";
 export function SearchForm({
 	searchInput,
 	stats,
@@ -18,34 +19,109 @@ export function SearchForm({
 	stats: { name: string; count: number }[];
 }) {
 	const [formState, action] = useFormState(searchAction, {} as SearchResult);
+	const [selectedPaper, setSelectedPaper] = useState<{
+		paper: QdrantPaper;
+		summary: string;
+	} | null>(null);
+	const [isMobile, setIsMobile] = useState(false);
+	const [formCollapsed, setFormCollapsed] = useState(false);
+
+	const { pending } = useFormStatus();
+
+	useEffect(() => {
+		const checkMobile = () => setIsMobile(window.innerWidth < 768);
+		checkMobile();
+		window.addEventListener("resize", checkMobile);
+		return () => window.removeEventListener("resize", checkMobile);
+	}, []);
+
+	// Collapse form after search result is received, but not while search is running
+	useEffect(() => {
+		if (formState?.papers?.length) {
+			setFormCollapsed(true);
+		}
+	}, [formState]);
+
+	const handleSelectPaper = (paper: QdrantPaper, summary: string) => {
+		setSelectedPaper({ paper, summary });
+	};
+
+	const handleCloseDetail = () => {
+		setSelectedPaper(null);
+	};
 
 	return (
 		<div className="max-w-3xl mx-auto mt-8 mb-8 p-6 rounded-2xl shadow-xl bg-gradient-to-br from-[#181c1f] via-[#232a36] to-[#1a2220] border border-[#232a36] relative">
-			<form action={action} className="flex flex-col gap-2 md:gap-4">
-				<FormFields
-					searchInput={searchInput}
-					metrics={formState.metrics}
-					stats={stats}
-				/>
-
-				<SearchResults results={formState} />
-			</form>
-			<img
-				src="/logo.png"
-				alt="Proem logo"
-				className="h-8 w-auto absolute bottom-4 right-4 opacity-80 pointer-events-none select-none"
-			/>
+			{selectedPaper ? (
+				<PaperDetail paper={selectedPaper} onClose={handleCloseDetail} />
+			) : (
+				<>
+					{/* Only collapse the form fields, not the results */}
+					{formCollapsed ? (
+						<div className="flex flex-col items-center mb-4">
+							<button
+								onClick={() => setFormCollapsed(false)}
+								type="button"
+								className="px-4 py-2 bg-green-300 text-black rounded-full font-semibold shadow hover:bg-green-200 transition-all duration-200"
+							>
+								New Search
+							</button>
+						</div>
+					) : (
+						<form
+							action={action}
+							className="flex flex-col gap-2 md:gap-4"
+							// Collapse form on submit only if not pending
+							// onSubmit={() => {
+							// 	if (!pending) setFormCollapsed(true);
+							// }}
+						>
+							<FormFields
+								searchInput={searchInput}
+								metrics={formState.metrics}
+								stats={stats}
+							/>
+						</form>
+					)}
+					{/* Results always visible if present */}
+					<div className="w-full flex flex-col md:flex-row md:gap-6">
+						<div className={`flex-1 ${selectedPaper ? "md:w-1/2" : "w-full"}`}>
+							{/* Results column */}
+							<SearchResults
+								results={formState}
+								onSelectPaper={handleSelectPaper}
+							/>
+						</div>
+						{/* Desktop: side column INSIDE content area */}
+						{/* {selectedPaper && !isMobile && (
+							<div className="hidden md:block md:w-1/2 h-full sticky top-0">
+								<PaperDetail
+									paper={selectedPaper}
+									onClose={handleCloseDetail}
+								/>
+							</div>
+						)} */}
+					</div>
+					<img
+						src="/logo.png"
+						alt="Proem logo"
+						className="h-8 w-auto absolute bottom-4 right-4 opacity-80 pointer-events-none select-none"
+					/>
+				</>
+			)}
 		</div>
 	);
 }
 
 function SearchResults({
 	results,
+	onSelectPaper,
 }: {
 	results: SearchResult;
+	onSelectPaper: (paper: QdrantPaper, summary: string) => void;
 }) {
 	return results?.papers?.map((result, i) => (
-		<PaperCard key={i} item={result} />
+		<PaperCard key={i} item={result} onSelect={onSelectPaper} />
 	));
 }
 

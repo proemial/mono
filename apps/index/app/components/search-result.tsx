@@ -3,7 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { Feature, QdrantPaper } from "../actions/search-action";
 import { summariseAction } from "../actions/summarise-action";
 
-export function SearchResult({ item }: { item: QdrantPaper }) {
+export function SearchResult({
+	item,
+	onSelect,
+}: {
+	item: QdrantPaper;
+	onSelect?: (item: QdrantPaper, summary: string) => void;
+}) {
 	const { data: summary, isLoading } = useQuery({
 		queryKey: ["summary", item.title, item.abstract],
 		queryFn: async () => {
@@ -40,15 +46,11 @@ export function SearchResult({ item }: { item: QdrantPaper }) {
 						summarising...
 					</div>
 				) : summary ? (
-					<div className="text-xl font-semibold mb-3 text-white leading-tight">
-						<a
-							target="_blank"
-							rel="noreferrer"
-							href={`http://proem.ai/paper/oa/${item.id.split("/").at(-1)}`}
-							className="hover:text-green-300 transition-colors duration-200"
-						>
-							{summary}
-						</a>
+					<div
+						className="text-xl font-semibold mb-3 text-white leading-tight hover:text-green-300 transition-colors duration-200 cursor-pointer"
+						onClick={() => onSelect?.(item, summary)}
+					>
+						{summary}
 					</div>
 				) : null}
 
@@ -67,10 +69,10 @@ export function SearchResult({ item }: { item: QdrantPaper }) {
 							<a
 								target="_blank"
 								rel="noreferrer"
-								href={item.primary_location.landing_page_url}
+								href={item.primary_location?.landing_page_url}
 							>
-								{item.primary_location.source.display_name ??
-									item.primary_location.source.host_organization_name ??
+								{item.primary_location?.source?.display_name ??
+									item.primary_location?.source?.host_organization_name ??
 									item.authorships?.at(0)?.author.institution ??
 									item.authorships?.at(0)?.author.display_name}
 							</a>
