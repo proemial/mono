@@ -24,6 +24,21 @@ export type QdrantPaper = {
 	abstract: string;
 	id: string;
 	features: Feature[];
+	authorships?: {
+		author: {
+			id: string;
+			display_name: string;
+			institution?: string;
+		};
+	}[];
+	published?: string;
+	primary_location: {
+		source: {
+			display_name: string;
+			host_organization_name: string;
+		};
+		landing_page_url: string;
+	};
 };
 
 export type Feature = {
@@ -129,26 +144,24 @@ function mapToResult(
 	payload: OpenAlexPaperWithAbstract,
 	extended?: boolean,
 ): QdrantPaper {
-	const extra = extended
-		? {
-				authorships: payload.authorships.map((a) => ({
-					author: {
-						id: a.author.id,
-						display_name: a.author?.display_name,
-						institution: a.institutions?.at(0)?.display_name,
-					},
-				})),
-				primary_location: {
-					source: {
-						display_name: payload.primary_location?.source?.display_name,
-						host_organization_name:
-							payload.primary_location?.source?.host_organization_name,
-					},
-					landing_page_url: payload.primary_location?.landing_page_url,
-				},
-				published: payload.publication_date,
-			}
-		: {};
+	const extra = {
+		authorships: payload.authorships.map((a) => ({
+			author: {
+				id: a.author.id,
+				display_name: a.author?.display_name,
+				institution: a.institutions?.at(0)?.display_name,
+			},
+		})),
+		primary_location: {
+			source: {
+				display_name: payload.primary_location?.source?.display_name,
+				host_organization_name:
+					payload.primary_location?.source?.host_organization_name,
+			},
+			landing_page_url: payload.primary_location?.landing_page_url,
+		},
+		published: payload.publication_date,
+	};
 
 	return {
 		score: score,
@@ -158,7 +171,7 @@ function mapToResult(
 		abstract: payload.abstract as string,
 		features: features(payload),
 		...extra,
-	};
+	} as QdrantPaper;
 }
 
 function createFilter(count: string, from: string, fullVectorSearch: boolean) {
@@ -177,7 +190,7 @@ function createFilter(count: string, from: string, fullVectorSearch: boolean) {
 		filter: from
 			? {
 					must: {
-						key: "created_date",
+						key: "publication_date",
 						range: {
 							gte: from,
 						},
@@ -220,7 +233,11 @@ function features(payload: OpenAlexPaperWithAbstract): Feature[] {
 				}) as Feature,
 		) ?? [];
 
-	return [...topics, ...keywords, ...concepts].sort(
+	const aggregate = [...topics, ...keywords, ...concepts].sort(
 		(a, b) => b.score - a.score,
 	);
+
+	return Array.from(new Set(aggregate.map((f) => f.label)))
+		.map((label) => aggregate.find((f) => f.label === label))
+		.filter((f): f is Feature => !!f);
 }

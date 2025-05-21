@@ -12,14 +12,30 @@ import { SearchResult as PaperCard } from "../components/search-result";
 
 export function SearchForm({
 	searchInput,
-}: { searchInput?: Record<string, string> }) {
+	stats,
+}: {
+	searchInput?: Record<string, string>;
+	stats: { name: string; count: number }[];
+}) {
 	const [formState, action] = useFormState(searchAction, {} as SearchResult);
 
 	return (
-		<form action={action} className="flex flex-col gap-1 mx-2">
-			<FormFields searchInput={searchInput} metrics={formState.metrics} />
-			<SearchResults results={formState} />
-		</form>
+		<div className="max-w-3xl mx-auto mt-8 mb-8 p-6 rounded-2xl shadow-xl bg-gradient-to-br from-[#181c1f] via-[#232a36] to-[#1a2220] border border-[#232a36] relative">
+			<form action={action} className="flex flex-col gap-2 md:gap-4">
+				<FormFields
+					searchInput={searchInput}
+					metrics={formState.metrics}
+					stats={stats}
+				/>
+
+				<SearchResults results={formState} />
+			</form>
+			<img
+				src="/logo.png"
+				alt="Proem logo"
+				className="h-8 w-auto absolute bottom-4 right-4 opacity-80 pointer-events-none select-none"
+			/>
+		</div>
 	);
 }
 
@@ -28,38 +44,30 @@ function SearchResults({
 }: {
 	results: SearchResult;
 }) {
-	return (
-		<div className="grid grid-cols-[auto_auto_1fr] gap-4">
-			{!!results?.papers?.length && (
-				<>
-					<div className="font-bold">Score</div>
-					<div className="font-bold">Created Date</div>
-					<div className="font-bold">Title</div>
-					{results?.papers?.map((result, i) => (
-						<PaperCard key={i} item={result} />
-					))}
-				</>
-			)}
-		</div>
-	);
+	return results?.papers?.map((result, i) => (
+		<PaperCard key={i} item={result} />
+	));
 }
 
 export function FormFields({
 	searchInput,
 	metrics,
-}: { searchInput?: Record<string, string>; metrics?: SearchMetrics }) {
+	stats,
+}: {
+	searchInput?: Record<string, string>;
+	metrics?: SearchMetrics;
+	stats: { name: string; count: number }[];
+}) {
 	const [query, setQuery] = useState(
 		searchInput?.query !== undefined
 			? searchInput?.query
-			: "Women's health encompasses a broad spectrum of topics, including maternal health, contraception, gynecology, and breastfeeding support. Key areas include cesarean outcomes, maternal nutrition, and breast cancer screening, focusing on conditions like urinary infections, cancer patterns, polycystic ovary syndrome, uterine fibroids, and vaginal microbiomes. Hormonal aspects such as estrogen, testosterone effects, menopause, and hormone therapy play a significant role, alongside topics like menstrual health, fertility preservation, family planning, and reproductive rights. Maternal mental health, pregnancy-related issues like prenatal stress and cardiovascular risks, along with lactation and breastfeeding promotion, are also essential areas of focus. Gender bias, norms, and diversity are recurring themes, as well as conditions like endometriosis, vaginal atrophy, vesicovaginal fistulas, and anemia. Other key areas include sexual health, reproductive health, menopause, unintended pregnancy, sleep quality, and gender studies, alongside research on oxytocin, BRCA, fetal programming, and pediatrics.",
+			: "Verifying claims in LLM-generated content through extraction techniques",
 	);
 	const [negatedQuery, setNegatedQuery] = useState(
-		searchInput?.negatedQuery !== undefined
-			? searchInput?.negatedQuery
-			: "Challenges and opportunities in developing countries, often referred to as the third world, focusing on economic growth, infrastructure development, education, and healthcare improvements.",
+		searchInput?.negatedQuery !== undefined ? searchInput?.negatedQuery : "",
 	);
 	const [from, setFrom] = useState(
-		searchInput?.from || dayjs().subtract(7, "day").format("YYYY-MM-DD"),
+		searchInput?.from || dayjs().subtract(1, "year").format("YYYY-MM-DD"),
 	);
 	const [count, setCount] = useState(searchInput?.count || 10);
 	const [index, setIndex] = useState(searchInput?.index || "o3s1536beta");
@@ -68,11 +76,26 @@ export function FormFields({
 
 	return (
 		<>
-			<div className="flex mb-4">
-				<div className="w-1/4 mr-2">
+			<div className="mb-4 text-2xl font-extrabold text-center text-white drop-shadow-sm">
+				Search{" "}
+				<span className="text-green-300">
+					{Number(stats.find((s) => s.name === index)?.count).toLocaleString()}
+				</span>{" "}
+				research papers <br /> published since 2024-01-01
+			</div>
+
+			<input type="hidden" className="md:hidden" name="index" value={index} />
+			<input
+				type="hidden"
+				className="md:hidden"
+				name="fullVectorSearch"
+				value="false"
+			/>
+			<div className="flex flex-flex-row mb-2 gap-2 md:gap-4">
+				<div className="w-1/2 md:w-1/3">
 					<label
 						htmlFor="date"
-						className="block mb-1 text-sm font-medium text-gray-700"
+						className="block mb-1 text-sm font-semibold text-green-200"
 					>
 						Since
 					</label>
@@ -80,7 +103,7 @@ export function FormFields({
 						id="from"
 						type="date"
 						name="from"
-						className="w-full p-2 border rounded"
+						className="w-full p-2 border-2 border-[#2e3a3f] bg-[#181c1f] text-white rounded-lg focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"
 						disabled={pending}
 						defaultValue={from}
 						onChange={(e) => {
@@ -88,10 +111,10 @@ export function FormFields({
 						}}
 					/>
 				</div>
-				<div className="w-1/4 mr-2">
+				<div className="w-1/2 md:w-1/3">
 					<label
 						htmlFor="count"
-						className="block mb-1 text-sm font-medium text-gray-700"
+						className="block mb-1 text-sm font-semibold text-green-200"
 					>
 						Count
 					</label>
@@ -99,7 +122,7 @@ export function FormFields({
 						id="count"
 						type="number"
 						name="count"
-						className="w-full p-2 border rounded"
+						className="w-full p-2 border-2 border-[#2e3a3f] bg-[#181c1f] text-white rounded-lg focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"
 						min={1}
 						max={30}
 						disabled={pending}
@@ -109,43 +132,17 @@ export function FormFields({
 						}}
 					/>
 				</div>
-				<div className="w-1/4 mr-2">
-					<label
-						htmlFor="index"
-						className="block mb-1 text-sm font-medium text-gray-700"
-					>
-						Index
-					</label>
-					<select
-						id="index"
-						name="index"
-						className="w-full p-2 border rounded"
-						disabled={pending}
-						defaultValue={index}
-						onChange={(e) => {
-							setIndex(e.target.value);
-						}}
-					>
-						{Object.keys(vectorSpaces)
-							.reverse()
-							.map((key, i) => (
-								<option key={i} value={key}>
-									{vectorSpaces[key as VectorSpaceId]?.collection}
-								</option>
-							))}
-					</select>
-				</div>
-				<div className="w-1/4">
+				<div className="md:w-1/3 hidden md:block">
 					<label
 						htmlFor="fullVectorSearch"
-						className="block mb-1 text-sm font-medium text-gray-700"
+						className="block mb-1 text-sm font-semibold text-green-200"
 					>
 						Quantization
 					</label>
 					<select
 						id="fullVectorSearch"
 						name="fullVectorSearch"
-						className="w-full p-2 border rounded"
+						className="w-full p-2 border-2 border-[#2e3a3f] bg-[#181c1f] text-white rounded-lg focus:ring-2 focus:ring-green-300 focus:border-green-400 transition"
 						disabled={pending}
 					>
 						<option value="false">Binary</option>
@@ -153,10 +150,10 @@ export function FormFields({
 					</select>
 				</div>
 			</div>
-			<div>
+			<div className="mb-1">
 				<label
 					htmlFor="query"
-					className="block mb-1 text-sm font-medium text-gray-700"
+					className="block mb-1 text-sm font-semibold text-green-200"
 				>
 					Similar to:
 				</label>
@@ -164,7 +161,7 @@ export function FormFields({
 					id="query"
 					name="query"
 					rows={6}
-					className="w-full p-2 border rounded disabled:bg-slate-100"
+					className="w-full p-3 border-2 border-[#2e3a3f] bg-[#181c1f] text-white rounded-lg focus:ring-2 focus:ring-green-300 focus:border-green-400 transition disabled:bg-slate-800"
 					placeholder="Enter your text here..."
 					disabled={pending}
 					defaultValue={query}
@@ -176,7 +173,7 @@ export function FormFields({
 			<div>
 				<label
 					htmlFor="negatedQuery"
-					className="block mb-1 text-sm font-medium text-gray-700"
+					className="block mb-1 text-sm font-semibold text-green-200"
 				>
 					Different from:
 				</label>
@@ -184,7 +181,7 @@ export function FormFields({
 					id="negatedQuery"
 					name="negatedQuery"
 					rows={2}
-					className="w-full p-2 border rounded disabled:bg-slate-100"
+					className="w-full p-3 border-2 border-[#2e3a3f] bg-[#181c1f] text-white rounded-lg focus:ring-2 focus:ring-green-300 focus:border-green-400 transition disabled:bg-slate-800"
 					placeholder="Enter terms to exclude..."
 					disabled={pending}
 					defaultValue={negatedQuery}
@@ -193,11 +190,11 @@ export function FormFields({
 					}}
 				/>
 			</div>
-			<div className="flex justify-begin items-center gap-4">
+			<div className="flex justify-start items-center gap-2 md:gap-4 mt-2">
 				<button
 					type="submit"
 					disabled={pending}
-					className="my-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-white disabled:border disabled:border-slate-300 disabled:text-slate-300"
+					className="my-2 px-6 py-2 bg-green-300 text-black rounded-full font-semibold shadow hover:bg-green-200 transition-all duration-200 disabled:bg-[#232a36] disabled:border disabled:border-slate-700 disabled:text-slate-500"
 				>
 					Search
 				</button>

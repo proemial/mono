@@ -40,7 +40,7 @@ export default function RootLayout({
 			/>
 			<html lang="en">
 				<body
-					className={`${geistSans.variable} ${geistMono.variable} antialiased p-4`}
+					className={`${geistSans.variable} ${geistMono.variable} antialiased p-4 bg-slate-100`}
 				>
 					<TanstackWrapper>{children}</TanstackWrapper>
 					<Analytics />
