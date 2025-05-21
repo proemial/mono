@@ -1,6 +1,6 @@
 import { Markdown } from "./markdown";
 import { QdrantPaper } from "../actions/search-action";
-import { useRef } from "react";
+import { useRef, useMemo, useState, useEffect } from "react";
 import { useChat } from "ai/react";
 import { Throbber } from "./throbber";
 
@@ -11,6 +11,7 @@ export function PaperBot({ paper }: { paper: QdrantPaper }) {
     <paper>
         <title>${paper.title}</title>
         <abstract>${paper.abstract}</abstract>
+        <authors>${paper.authorships?.map((a) => a.author.display_name).join(", ")}</authors>
     </paper>
 
     Your capabilities include:
@@ -41,6 +42,46 @@ export function PaperBot({ paper }: { paper: QdrantPaper }) {
 		],
 	});
 
+	const [isMobile, setIsMobile] = useState(false);
+
+	useEffect(() => {
+		const checkMobile = () => setIsMobile(window.innerWidth < 640);
+		checkMobile();
+		window.addEventListener("resize", checkMobile);
+		return () => window.removeEventListener("resize", checkMobile);
+	}, []);
+
+	// Suggested questions based on the paper
+	const suggestedQuestions = [
+		"What is the main contribution of this paper?",
+		"Can you summarize the abstract?",
+		"What problem does this paper address?",
+		"What methods are used in this research?",
+		"What are the key findings?",
+		"Who are the authors?",
+	];
+
+	const displayedQuestions = isMobile
+		? suggestedQuestions.slice(0, 3)
+		: suggestedQuestions;
+
+	const isBotInactive = !isLoading && !error;
+	// messages.filter((m) => m.role === "assistant" || m.role === "user")
+	// 	.length === 0;
+
+	const handleSuggestedClick = (q: string) => {
+		// handleInputChange({
+		// 	target: { value: q },
+		// } as React.ChangeEvent<HTMLInputElement>);
+		// if (inputRef.current) inputRef.current.focus();
+		// handleSubmit();
+		append({
+			id: "user",
+			role: "user",
+			content: q,
+		});
+	};
+
 	return (
 		<div className="mt-8 rounded-lg p-4 shadow-inner">
 			<div className="flex flex-col gap-4 mb-4">
@@ -59,13 +100,6 @@ export function PaperBot({ paper }: { paper: QdrantPaper }) {
 								}`}
 							>
 								<Markdown>{m.content}</Markdown>
-								<div
-									className={`absolute top-3 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent ${
-										m.role === "user"
-											? "right-[-10px] border-l-8 border-l-green-900"
-											: "left-[-10px] border-r-8 border-r-[#232a36]"
-									}`}
-								/>
 							</div>
 						</div>
 					))}
@@ -75,6 +109,23 @@ export function PaperBot({ paper }: { paper: QdrantPaper }) {
 				{error && (
 					<div className="text-red-500">
 						Sorry, there was an error getting the answer.
+					</div>
+				)}
+				{/* Suggested questions */}
+				{isBotInactive && (
+					<div className="mb-4">
+						<div className="flex flex-wrap gap-2">
+							{displayedQuestions.map((q, i) => (
+								<button
+									key={i}
+									type="button"
+									className="px-3 py-1 rounded-full shadow border border-green-200 text-green-200 transition-all duration-200 text-sm"
+									onClick={() => handleSuggestedClick(q)}
+								>
+									{q}
+								</button>
+							))}
+						</div>
 					</div>
 				)}
 			</div>
