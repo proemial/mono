@@ -348,6 +348,9 @@ importers:
       '@ai-sdk/anthropic':
         specifier: ^1.0.2
         version: 1.1.0(zod@3.24.2)
+      '@ai-sdk/openai':
+        specifier: ^1.2.0
+        version: 1.2.0(zod@3.24.2)
       '@highlight-run/next':
         specifier: ^7.5.29
         version: 7.7.0(@opentelemetry/api@1.9.0)(next@14.2.23)(react-dom@18.3.1)(react@18.3.1)
@@ -1387,7 +1390,7 @@ packages:
         optional: true
     dependencies:
       '@ai-sdk/provider': 1.0.4
-      eventsource-parser: 3.0.0
+      eventsource-parser: 3.0.1
       nanoid: 3.3.8
       secure-json-parse: 2.7.0
       zod: 3.24.2

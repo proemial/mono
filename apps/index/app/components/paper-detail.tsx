@@ -1,7 +1,8 @@
 import { QdrantPaper } from "../actions/search-action";
 import ResearchPaper from "./paper";
 import { X } from "@untitled-ui/icons-react";
-
+import { Markdown } from "./markdown";
+import { PaperBot } from "./paper-bot";
 export function PaperDetail({
 	paper,
 	onClose,
@@ -17,11 +18,9 @@ export function PaperDetail({
 			>
 				<X className="w-6 h-6 text-white" />
 			</button>
-			{/* <h2 className="text-2xl font-bold mb-4">{paper.paper.title}</h2>
-			<p className="mb-2 text-sm text-gray-400">{paper.paper.published}</p>
-			<p className="mb-4">{paper.paper.abstract}</p> */}
-			{/* Add more details as needed */}
 			<ResearchPaper paper={paper.paper} summary={paper.summary} />
+
+			<PaperBot paper={paper.paper} />
 		</div>
 	);
 }
