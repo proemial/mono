@@ -25,6 +25,7 @@ export function SearchForm({
 	} | null>(null);
 	const [isMobile, setIsMobile] = useState(false);
 	const [formCollapsed, setFormCollapsed] = useState(false);
+	const [showMcpModal, setShowMcpModal] = useState(false);
 
 	const { pending } = useFormStatus();
 
@@ -56,6 +57,11 @@ export function SearchForm({
 				<PaperDetail paper={selectedPaper} onClose={handleCloseDetail} />
 			) : (
 				<>
+					{/* <img
+						src="/logo.png"
+						alt="Proem logo"
+						className="h-8 w-auto absolute top-4 right-4 z-20 opacity-80 pointer-events-none select-none"
+					/> */}
 					{/* Only collapse the form fields, not the results */}
 					{formCollapsed ? (
 						<div className="flex flex-col items-center mb-4">
@@ -109,11 +115,61 @@ export function SearchForm({
 							Search: {formState.metrics.search}ms)
 						</div>
 					)}
-					<img
-						src="/logo.png"
-						alt="Proem logo"
-						className="h-8 w-auto absolute bottom-4 right-4 opacity-80 pointer-events-none select-none"
-					/>
+					<div className="absolute bottom-4 right-4" style={{ lineHeight: 0 }}>
+						<a
+							href="#"
+							onClick={(e) => {
+								e.preventDefault();
+								setShowMcpModal(true);
+							}}
+							className="flex justify-center items-center gap-2 text-white underline underline-offset-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
+							style={{ lineHeight: 1 }}
+						>
+							<img
+								src="/mcp-trans.png"
+								alt="Connect with MCP"
+								className="mr-[-2px] h-6 w-auto invert"
+								// style={{
+								// 	filter:
+								// 		"invert(56%) sepia(97%) saturate(747%) hue-rotate(90deg) brightness(90%) contrast(90%)",
+								// }}
+							/>
+							Connect with MCP
+						</a>
+					</div>
+
+					{showMcpModal && (
+						<div
+							className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
+							onClick={() => setShowMcpModal(false)}
+						>
+							<div
+								className="bg-white text-black rounded-lg shadow-lg p-6 max-w-lg w-full relative"
+								onClick={(e) => e.stopPropagation()}
+							>
+								<button
+									className="absolute top-2 right-2 text-xl font-bold"
+									type="button"
+									onClick={() => setShowMcpModal(false)}
+								>
+									×
+								</button>
+								<h2 className="text-lg font-bold mb-4">MCP Config</h2>
+								<pre className="bg-gray-100 p-2 rounded text-xs overflow-x-auto">
+									{JSON.stringify(
+										{
+											papers: {
+												command: "npx",
+												args: ["mcp-remote", "https://mcp.proem.ai/api/sse"],
+											},
+										},
+										null,
+										2,
+									)}
+								</pre>
+							</div>
+						</div>
+					)}
 				</>
 			)}
 		</div>
