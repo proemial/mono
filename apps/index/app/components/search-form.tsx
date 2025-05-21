@@ -60,7 +60,9 @@ export function SearchForm({
 					{formCollapsed ? (
 						<div className="flex flex-col items-center mb-4">
 							<button
-								onClick={() => setFormCollapsed(false)}
+								onClick={() => {
+									setFormCollapsed(false);
+								}}
 								type="button"
 								className="px-4 py-2 bg-green-300 text-black rounded-full font-semibold shadow hover:bg-green-200 transition-all duration-200"
 							>
@@ -83,17 +85,19 @@ export function SearchForm({
 							/>
 						</form>
 					)}
-					{/* Results always visible if present */}
-					<div className="w-full flex flex-col md:flex-row md:gap-6">
-						<div className={`flex-1 ${selectedPaper ? "md:w-1/2" : "w-full"}`}>
-							{/* Results column */}
-							<SearchResults
-								results={formState}
-								onSelectPaper={handleSelectPaper}
-							/>
-						</div>
-						{/* Desktop: side column INSIDE content area */}
-						{/* {selectedPaper && !isMobile && (
+					{formCollapsed && (
+						<div className="w-full flex flex-col md:flex-row md:gap-6">
+							<div
+								className={`flex-1 ${selectedPaper ? "md:w-1/2" : "w-full"}`}
+							>
+								{/* Results column */}
+								<SearchResults
+									results={formState}
+									onSelectPaper={handleSelectPaper}
+								/>
+							</div>
+							{/* Desktop: side column INSIDE content area */}
+							{/* {selectedPaper && !isMobile && (
 							<div className="hidden md:block md:w-1/2 h-full sticky top-0">
 								<PaperDetail
 									paper={selectedPaper}
@@ -101,7 +105,8 @@ export function SearchForm({
 								/>
 							</div>
 						)} */}
-					</div>
+						</div>
+					)}
 					<img
 						src="/logo.png"
 						alt="Proem logo"
