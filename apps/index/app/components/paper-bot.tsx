@@ -2,6 +2,7 @@ import { Markdown } from "./markdown";
 import { QdrantPaper } from "../actions/search-action";
 import { useRef } from "react";
 import { useChat } from "ai/react";
+import { Throbber } from "./throbber";
 
 export function PaperBot({ paper }: { paper: QdrantPaper }) {
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -69,12 +70,7 @@ export function PaperBot({ paper }: { paper: QdrantPaper }) {
 						</div>
 					))}
 				{isLoading && (
-					<div className="flex justify-start">
-						<div className="max-w-[75%] bg-[#232a36] text-white rounded-2xl rounded-bl-sm px-4 py-2 shadow-md self-start relative italic opacity-70">
-							Loading...
-							<div className="absolute left-[-10px] top-3 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-[#232a36]" />
-						</div>
-					</div>
+					<Throbber className="w-full" throbberStyle="w-6 h-6 text-green-300" />
 				)}
 				{error && (
 					<div className="text-red-500">
