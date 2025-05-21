@@ -78,11 +78,7 @@ export function SearchForm({
 							// 	if (!pending) setFormCollapsed(true);
 							// }}
 						>
-							<FormFields
-								searchInput={searchInput}
-								metrics={formState.metrics}
-								stats={stats}
-							/>
+							<FormFields searchInput={searchInput} stats={stats} />
 						</form>
 					)}
 					{formCollapsed && (
@@ -105,6 +101,12 @@ export function SearchForm({
 								/>
 							</div>
 						)} */}
+						</div>
+					)}
+					{formCollapsed && formState.metrics?.search && (
+						<div className="text-xs text-slate-400 italic mb-[-16px] ml-[-8px]">
+							Elapsed: (Embeddings: {formState.metrics.embeddings}ms , Vector
+							Search: {formState.metrics.search}ms)
 						</div>
 					)}
 					<img
@@ -132,11 +134,9 @@ function SearchResults({
 
 export function FormFields({
 	searchInput,
-	metrics,
 	stats,
 }: {
 	searchInput?: Record<string, string>;
-	metrics?: SearchMetrics;
 	stats: { name: string; count: number }[];
 }) {
 	const [query, setQuery] = useState(
@@ -279,12 +279,6 @@ export function FormFields({
 				>
 					Search
 				</button>
-				{metrics?.search && (
-					<div className="text-sm text-slate-400 italic">
-						Elapsed: (Embeddings: {metrics.embeddings}ms , Vector Search:{" "}
-						{metrics.search}ms)
-					</div>
-				)}
 			</div>
 		</>
 	);
