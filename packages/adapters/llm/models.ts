@@ -136,7 +136,7 @@ const openaiChat = async (
 		}),
 		// Passed on to OpenAI by Helicone
 		apiKey: process.env.OPENAI_API_KEY || "",
-		organization: llmConfig.org,
+		// organization: llmConfig.org,
 		compatibility: "strict", // Required for usage to be streamed
 	});
 
@@ -182,8 +182,8 @@ const openaiEmbeddings = (
 	);
 	const provider = new OpenAI({
 		// No Helicone for embeddings, as it is cheap and becomes noisy
-		organization: llmConfig.org,
-		project: llmConfig.sources[source],
+		// organization: llmConfig.org,
+		// project: llmConfig.sources[source],
 	});
 
 	return provider.embeddings;
