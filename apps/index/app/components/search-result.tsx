@@ -58,7 +58,7 @@ export function SearchResult({
 					<a
 						target="_blank"
 						rel="noreferrer"
-						href={`http://proem.ai/paper/oa/${item.id.split("/").at(-1)}`}
+						href={item.primary_location?.landing_page_url}
 						className="text-green-200 hover:text-green-300 font-medium transition-colors duration-200"
 					>
 						{item.title}
