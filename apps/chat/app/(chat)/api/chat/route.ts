@@ -22,10 +22,6 @@ import {
 } from "@/lib/utils";
 
 import { getSessionId } from "@/app/(auth)/sessionid";
-import {
-	logBotBegin,
-	logRetrieval,
-} from "@proemial/adapters/analytics/helicone";
 import { generateEmbedding } from "@proemial/adapters/llm/embeddings";
 import LlmModels from "@proemial/adapters/llm/models";
 import { QdrantPapers } from "@proemial/adapters/qdrant/papers";
@@ -112,12 +108,8 @@ export async function POST(request: Request) {
 		publicationDate: string;
 	}> = [];
 
-	const traceId = generateUUID();
-
-	await logBotBegin("chat", userMessage.content, traceId);
-
 	const result = await streamText({
-		model: await LlmModels.chat.answer(traceId),
+		model: await LlmModels.chat.answer(),
 		system: systemPrompt,
 		tools: {
 			getPapers: {
@@ -127,21 +119,14 @@ export async function POST(request: Request) {
 				}),
 				execute: async ({ question }) => {
 					const { text: rephrasedQuestion } = await generateText({
-						model: await LlmModels.chat.rephrase(traceId),
+						model: await LlmModels.chat.rephrase(),
 						system: rephraseQuestionPrompt(question),
 						messages: coreMessages,
 					});
 
-					return (await logRetrieval(
-						"chat",
+					return await getPapersFromQdrant(
 						rephrasedQuestion,
-						async <RetrievalResult>() => {
-							return (await getPapersFromQdrant(
-								rephrasedQuestion,
-							)) as RetrievalResult;
-						},
-						traceId,
-					)) as RetrievalResult;
+					) as RetrievalResult;
 				},
 			},
 		},
@@ -166,7 +151,7 @@ export async function POST(request: Request) {
 		},
 		onFinish: async ({ responseMessages, text: answer }) => {
 			const { object: followUpQuestions } = await generateObject({
-				model: await LlmModels.chat.followups(traceId),
+				model: await LlmModels.chat.followups(),
 				output: "array",
 				schema: z.object({
 					question: z

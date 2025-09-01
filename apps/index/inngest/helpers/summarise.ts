@@ -1,6 +1,6 @@
-import { anthropic } from "@ai-sdk/anthropic";
 import { Time } from "@proemial/utils/time";
 import { generateText } from "ai";
+import LlmModels from "@proemial/adapters/llm/models";
 
 export async function summariseTitle(title: string, abstract: string) {
 	const prompt = `
@@ -36,7 +36,7 @@ Guidelines for creating the headline:
 	const begin = Time.now();
 	try {
 		const res = await generateText({
-			model: anthropic("claude-3-haiku-20240307"),
+			model: await LlmModels.index.summarize(),
 			prompt,
 		});
 
@@ -72,7 +72,7 @@ Guidelines for creating the summary:
 	const begin = Time.now();
 	try {
 		const res = await generateText({
-			model: anthropic("claude-3-haiku-20240307"),
+			model: await LlmModels.index.summarize(),
 			prompt,
 		});
 

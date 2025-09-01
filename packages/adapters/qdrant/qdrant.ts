@@ -58,7 +58,7 @@ export const Qdrant = {
 };
 
 async function search(metadata: EventMetadata, query: string) {
-	const embeddings = await generateEmbedding(LlmModels.assistant.embeddings(), [
+	const embeddings = await generateEmbedding(LlmModels.index.embeddings(), [
 		query,
 	]);
 
@@ -130,7 +130,7 @@ async function embed(content: string) {
 		return averageVector;
 	}
 
-	const embeddings = await generateEmbedding(LlmModels.assistant.embeddings(), [
+	const embeddings = await generateEmbedding(LlmModels.index.embeddings(), [
 		content,
 	]);
 	return embeddings.at(0);
@@ -174,7 +174,7 @@ async function computeAverageVector(text: string) {
 
 	const embeddings = await Promise.all(
 		chunks.map((chunk) =>
-			generateEmbedding(LlmModels.assistant.embeddings(), [chunk]),
+			generateEmbedding(LlmModels.index.embeddings(), [chunk]),
 		),
 	);
 

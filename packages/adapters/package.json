@@ -6,13 +6,10 @@
 	"license": "MIT",
 	"dependencies": {
 		"@ai-sdk/anthropic": "^1.1.13",
-		"@ai-sdk/google": "^1.1.19",
 		"@ai-sdk/openai": "^1.2.0",
 		"@aws-sdk/client-ec2": "^3.738.0",
-		"@helicone/helpers": "^1.0.0",
 		"@llamaindex/core": "^0.4.20",
 		"@mistralai/mistralai": "^1.5.1",
-		"@nomic-ai/atlas": "^0.12.0",
 		"@proemial/repositories": "workspace:*",
 		"@proemial/utils": "workspace:*",
 		"@qdrant/js-client-rest": "^1.11.0",
