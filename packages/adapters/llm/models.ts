@@ -41,7 +41,6 @@ export const llmConfig = {
 		default: "proj_lfurJ2XHjqgtbghbSmJIJFk2",
 		chat: "proj_EPbn2RCF40KH2ju9AneODT6c",
 		index: "proj_V5dAXcmwEkPj9m476Dw7gEui",
-		read: "proj_nIdf91wGl5Z7swLWGlbvvQLn",
 	},
 };
 
