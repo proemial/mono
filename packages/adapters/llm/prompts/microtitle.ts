@@ -1,5 +1,4 @@
-import { generateText } from "ai";
-import LlmModels, { SourceProduct } from "../models";
+import { generateText, LanguageModelV1 } from "ai";
 
 export const prompt = (title: string, abstract: string) =>
 	`
@@ -28,10 +27,11 @@ Now, output the headline. Nothing else:
 export async function summariseTitle(
 	title: string,
 	abstract: string,
-	source?: SourceProduct,
+	// source?: SourceProduct,
+	model: LanguageModelV1,
 ) {
 	const res = await generateText({
-		model: await LlmModels.read.title(source),
+		model,
 		prompt: prompt(title, abstract),
 	});
 

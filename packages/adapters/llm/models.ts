@@ -9,33 +9,19 @@ type OpenAIModelId = Parameters<typeof openai>[0];
 
 export type EmbeddingsModel = OpenAI.Embeddings;
 
-export type SourceProduct =
-	| "chat"
-	| "ask"
-	| "news"
-	| "spaces"
-	| "embed"
-	| "api";
-
 const LlmModels = {
 	chat: {
-		embeddings: () => openaiEmbeddings("ask", "embeddings") as EmbeddingsModel,
+		embeddings: () => openaiEmbeddings("chat", "embeddings") as EmbeddingsModel,
 		answer: () => getModel("chat", "answer"),
 		rephrase: () => getModel("chat", "rephrase"),
 		followups: () => getModel("chat", "followups"),
+		description: () => getModel("chat", "paper:description"),
+		title: () => getModel("chat", "paper:title"),
 	},
 	index: {
 		summarize: () => getModel("index", "summarize"),
 		embeddings: () =>
 			openaiEmbeddings("index", "embeddings") as EmbeddingsModel,
-	},
-	read: {
-		title: (source?: SourceProduct) =>
-			getModel(source ?? "read", "paper:title"),
-		description: (source?: SourceProduct) =>
-			getModel(source ?? "read", "paper:description"),
-		starters: (source?: SourceProduct) =>
-			getModel(source ?? "read", "paper:starters"),
 	},
 };
 
@@ -50,19 +36,12 @@ function getModel(
 }
 
 export const llmConfig = {
-	org: "org-aMpPztUAkETkCQYK6QhW25A4",
+	org: "org-H6CcBBVdWURJ01YnJ0t9wZaH",
 	sources: {
-		default: "proj_mX23TYmhdJcPjnFy0sliSLwj",
-		chat: "proj_sqtkX7X2Xy5S0TEzHNomUILt",
-		ask: "proj_UpT8sB3CWNtxqezfqm2AY8tZ",
-		index: "proj_Pq2CtfZHHyVKJCo0slBwvwLy",
-		news: "proj_91doOP0NSL4H24OS14TpCBtf",
-		spaces: "proj_GKsXGiCSfpjvcCxLr2sUCmbf",
-		read: "proj_IC2HhSCTrkYccm2ry8Ub7f4L",
-		embed: "proj_evqPpJ4bydRLaiNas3pa8WFe",
-		// TODO: Create openai project
-		api: "proj_Pq2CtfZHHyVKJCo0slBwvwLy",
-		assistant: "proj_Pq2CtfZHHyVKJCo0slBwvwLy",
+		default: "proj_lfurJ2XHjqgtbghbSmJIJFk2",
+		chat: "proj_EPbn2RCF40KH2ju9AneODT6c",
+		index: "proj_V5dAXcmwEkPj9m476Dw7gEui",
+		read: "proj_nIdf91wGl5Z7swLWGlbvvQLn",
 	},
 };
 
@@ -76,7 +55,9 @@ const openaiChat = async (
 	);
 
 	const provider = createOpenAI({
-		apiKey: process.env.OPENAI_API_KEY || "",
+		apiKey: source === llmConfig.sources.chat && process.env.OPENAI_API_KEY_CHAT
+			|| source === llmConfig.sources.index && process.env.OPENAI_API_KEY_INDEX
+			|| process.env.OPENAI_API_KEY || "",
 	});
 
 	return provider(model);

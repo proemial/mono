@@ -1,5 +1,5 @@
 import { generateText } from "ai";
-import LlmModels, { SourceProduct } from "../models";
+import { LanguageModelV1 } from "ai";
 
 export const prompt = (title: string, abstract: string) =>
 	`
@@ -19,10 +19,10 @@ Now, output the summary. Nothing else:
 export async function summariseDescription(
 	title: string,
 	abstract: string,
-	source?: SourceProduct,
+	model: LanguageModelV1,
 ) {
 	const res = await generateText({
-		model: await LlmModels.read.description(source),
+		model,
 		prompt: prompt(title, abstract),
 	});
 

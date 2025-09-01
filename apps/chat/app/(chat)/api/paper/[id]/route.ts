@@ -11,6 +11,7 @@ import { fromInvertedIndex } from "@proemial/utils/string";
 import { unstable_cache } from "next/cache";
 import { NextRequest } from "next/server";
 import { RedisPaperState } from "./redis";
+import LlmModels from "@proemial/adapters/llm/models";
 
 export type AnnotatedPaper = {
 	paper: OpenAlexPaperWithAbstract;
@@ -143,7 +144,7 @@ async function fetchPaper(id: string) {
 async function summariseTitle(id: string, title: string, abstract: string) {
 	const summarise = unstable_cache(async () => {
 		console.log("[api][paper] Summarising title ", id);
-		const result = await summariseTitleWorker(title, abstract, "chat");
+		const result = await summariseTitleWorker(title, abstract, await LlmModels.chat.title());
 		return result;
 	}, [`paper-title:${id}`]);
 	const cached = await summarise();
@@ -158,7 +159,7 @@ async function summariseDescription(
 ) {
 	const summarise = unstable_cache(async () => {
 		console.log("[api][paper] Summarising description ", id);
-		const result = await summariseDescriptionWorker(title, abstract, "chat");
+		const result = await summariseDescriptionWorker(title, abstract, await LlmModels.chat.description());
 		return result;
 	}, [`paper-description:${id}`]);
 	const cached = await summarise();
