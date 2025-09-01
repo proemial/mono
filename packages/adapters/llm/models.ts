@@ -54,11 +54,18 @@ const openaiChat = async (
 		`[llm][openai][chat][${source}]${operation ? `[${operation}]` : ""} ${model}`,
 	);
 
-	const provider = createOpenAI({
-		apiKey: source === llmConfig.sources.chat && process.env.OPENAI_API_KEY_CHAT
-			|| source === llmConfig.sources.index && process.env.OPENAI_API_KEY_INDEX
-			|| process.env.OPENAI_API_KEY || "",
-	});
+	const config = {
+		apiKey:
+			source === "chat"
+				? process.env.OPENAI_API_KEY_CHAT
+				: source === "index"
+					? process.env.OPENAI_API_KEY_INDEX
+					: process.env.OPENAI_API_KEY || "",
+		organization: llmConfig.org,
+		project: llmConfig.sources[source],
+	};
+	console.log(config);
+	const provider = createOpenAI(config);
 
 	return provider(model);
 };
@@ -70,11 +77,19 @@ const openaiEmbeddings = (
 	console.log(
 		`[llm][openai][embeddings][${source}]${operation ? `[${operation}]` : ""}`,
 	);
-	const provider = new OpenAI({
-		// No Helicone for embeddings, as it is cheap and becomes noisy
-		// organization: llmConfig.org,
-		// project: llmConfig.sources[source],
-	});
+
+	const config = {
+		apiKey:
+			source === "chat"
+				? process.env.OPENAI_API_KEY_CHAT
+				: source === "index"
+					? process.env.OPENAI_API_KEY_INDEX
+					: process.env.OPENAI_API_KEY || "",
+		organization: llmConfig.org,
+		project: llmConfig.sources[source],
+	};
+	console.log(config);
+	const provider = new OpenAI(config);
 
 	return provider.embeddings;
 };
