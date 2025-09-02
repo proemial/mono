@@ -2,6 +2,7 @@ import { QdrantPaper } from "@/inngest/helpers/qdrant.model";
 import { Time } from "@proemial/utils/time";
 import OpenAI from "openai";
 import { VectorSpace } from "./vector-spaces";
+import { llmConfig } from "@proemial/adapters/llm/models";
 
 type Callback = (count: number, elapsed: number) => Promise<void>;
 
@@ -54,7 +55,12 @@ async function generateOpenAIEmbeddings(
 
 		do {
 			try {
-				const response = await openai.embeddings.create({
+				const provider = new OpenAI({
+					apiKey: process.env.OPENAI_API_KEY_INDEX,
+					organization: llmConfig.org,
+					project: llmConfig.sources.index,
+				});
+				const response = await provider.embeddings.create({
 					model: vectorSpace.model,
 					dimensions: vectorSpace.dimensions,
 					input,
@@ -104,7 +110,12 @@ async function generateOpenAiEmbedding(
 ): Promise<number[][]> {
 	const begin = Time.now();
 	try {
-		const response = await openai.embeddings.create({
+		const provider = new OpenAI({
+			apiKey: process.env.OPENAI_API_KEY_INDEX,
+			organization: llmConfig.org,
+			project: llmConfig.sources.index,
+		});
+		const response = await provider.embeddings.create({
 			model: vectorSpace.model,
 			dimensions: vectorSpace.dimensions,
 			input: text.filter((t) => t?.length),
